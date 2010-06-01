@@ -76,6 +76,16 @@ public interface GraphEventContainer {
      * @return the report set for this container or <code>null</code> if no report is defined
      */
     public Report getReport();
+
+    /**
+     * Stops the current container, releasing the resources (closing threads, ...)
+     */
+    public void stop();
+
+    /**
+     * Wait until all events in this container are dispatched
+     */
+    public void waitForDispatchAllEvents();
     
 //
 //    public void setHierarchicalGraph(boolean b);

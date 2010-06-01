@@ -25,7 +25,7 @@ import java.net.URL;
 
 import org.gephi.project.api.ProjectController;
 import org.gephi.project.api.Workspace;
-import org.gephi.streaming.impl.DefaultGraphStreamingEventProcessor;
+import org.gephi.streaming.api.DefaultGraphStreamingEventProcessor;
 import org.junit.Test;
 import org.openide.util.Lookup;
 

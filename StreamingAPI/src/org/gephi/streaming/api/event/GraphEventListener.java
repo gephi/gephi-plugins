@@ -26,6 +26,9 @@ package org.gephi.streaming.api.event;
  */
 public interface GraphEventListener {
     
+    /**
+     * @param event
+     */
     public void onGraphEvent(GraphEvent event);
 
 }

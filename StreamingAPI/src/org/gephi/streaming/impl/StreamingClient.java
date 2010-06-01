@@ -24,6 +24,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import org.gephi.streaming.api.StreamProcessor;
 
@@ -31,53 +32,40 @@ import org.gephi.streaming.api.StreamProcessor;
  *
  * @author panisson
  */
-public class StreamingClient implements Runnable {
+public class StreamingClient {
     
-    private URL url;
-    private StreamProcessor dataProcessor;
-    private InputStream inputStream;
-    private boolean started = false;
-    
-    public StreamingClient() {}
-
-    /**
-     * @param url
-     * @param dataProcessor
-     */
-    public StreamingClient(URL url, StreamProcessor dataProcessor) {
-        this.url = url;
-        this.dataProcessor = dataProcessor;
-    }
-    
-    public void run() {
-        try {
-            URLConnection connection = this.url.openConnection();
-            connection.connect();
-            
-            InputStream inputStream = connection.getInputStream();
-            started = true;
-            this.dataProcessor.processStream(inputStream);
-            
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-    }
+    private final AtomicInteger inProcessCount = new AtomicInteger();
     
     public void connectToEndpoint(final URL endpoint, final StreamProcessor streamProcessor) {
         
-        new Thread() {
+        inProcessCount.incrementAndGet();
+        
+        new Thread(endpoint.toString()) {
             public void run() {
+                
+                final URLConnection connection;
+
                 try {
-                    URLConnection connection = endpoint.openConnection();
+                    connection = endpoint.openConnection();
                     connection.connect();
+                } catch (IOException e) {
+                    // Exception in connect: Unable to connect to stream
+                    throw new RuntimeException("Unable to connect to stream", e);
+                }
+
+                try {
+                    
                     
                     InputStream inputStream = connection.getInputStream();
-                    started = true;
                     streamProcessor.processStream(inputStream);
                     
+                    inProcessCount.decrementAndGet();
+                    synchronized (inProcessCount) {
+                        inProcessCount.notifyAll();
+                    }
+                    
                 } catch (IOException e) {
-                    // TODO Auto-generated catch block
+                    // Exception during processing
                     e.printStackTrace();
                 }
             }
@@ -85,15 +73,13 @@ public class StreamingClient implements Runnable {
         
     }
     
-    /**
-     * 
-     */
-    public void stop() {
-        if(started) {
+    public void waitForFinish() {
+        while (inProcessCount.get() > 0) {
             try {
-                inputStream.close();
-            }
-            catch(IOException e) {e.printStackTrace();}
+                synchronized (inProcessCount) {
+                    inProcessCount.wait();
+                }
+            } catch (InterruptedException e) {}
         }
     }
 

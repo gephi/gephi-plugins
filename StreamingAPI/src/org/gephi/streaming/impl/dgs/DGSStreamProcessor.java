@@ -22,6 +22,7 @@ package org.gephi.streaming.impl.dgs;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import org.gephi.data.attributes.api.AttributeColumn;
 import org.gephi.data.attributes.api.AttributeController;
@@ -49,13 +50,10 @@ public class DGSStreamProcessor implements StreamProcessor, DGSParserListener {
     public DGSStreamProcessor() {
         AttributeController attributeController = Lookup.getDefault().lookup(AttributeController.class);
         this.attributeModel = attributeController.getModel();
-        GraphEventContainerFactory factory = Lookup.getDefault().lookup(GraphEventContainerFactory.class);
-        this.container = factory.newGraphEventContainer(this);
-        this.containerLoader = container.getLoader();
     }
     
     @Override
-    public void processStream(InputStream inputStream) throws IOException {
+    public void processStream(InputStream inputStream) {
         
         DGSParser parser = new DGSParser(inputStream, this);
         try {
@@ -64,11 +62,11 @@ public class DGSStreamProcessor implements StreamProcessor, DGSParserListener {
             this.onStreamClosed();
         }
 
+        System.out.println("Stream finished");
     }
     
     public void stop() {
-        //TODO
-        System.out.println("DGSStreamProcessor.stop: not implemented");
+        this.container.stop();
     }
 
     private void onStreamClosed() {
@@ -180,5 +178,16 @@ public class DGSStreamProcessor implements StreamProcessor, DGSParserListener {
     @Override
     public GraphEventContainer getContainer() {
         return container;
+    }
+    
+    @Override
+    public void setContainer(GraphEventContainer container) {
+        this.container = container;
+        this.containerLoader = container.getLoader();
+    }
+
+    @Override
+    public String toString() {
+        return "DGSStreamProcessor";
     }
 }

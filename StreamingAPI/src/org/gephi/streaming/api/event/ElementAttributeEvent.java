@@ -26,7 +26,7 @@ import org.gephi.data.attributes.api.AttributeColumn;
  * @author panisson
  *
  */
-public class AttributeEvent extends GraphEvent {
+public class ElementAttributeEvent extends ElementEvent {
     
     private static final long serialVersionUID = 1L;
     
@@ -42,7 +42,7 @@ public class AttributeEvent extends GraphEvent {
      * @param attributeColumn 
      * @param attributeValue 
      */
-    public AttributeEvent(Object source, EventType eventType,
+    public ElementAttributeEvent(Object source, EventType eventType,
             ElementType elementType, String elementId,
             AttributeColumn attributeColumn, Object attributeValue) {
         super(source, eventType, elementType, elementId);
@@ -67,10 +67,11 @@ public class AttributeEvent extends GraphEvent {
     @Override
     public String toString() {
         return new StringBuffer("AttributeEvent[")
-            .append(this.getEventType()).append(" Attribute ")
-            .append(this.attributeColumn).append(" on ")
-            .append(this.getElementType()).append(" ")
-            .append(this.getElementId()).append("]").toString();
+            .append(this.eventType).append(" Attribute ")
+            .append(this.attributeColumn).append(" value ")
+            .append(this.attributeValue).append(" on ")
+            .append(this.elementType).append(" ")
+            .append(this.elementId).append("]").toString();
     }
 
 }

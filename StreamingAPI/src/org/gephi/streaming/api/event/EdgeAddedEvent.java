@@ -24,7 +24,7 @@ package org.gephi.streaming.api.event;
  * @author panisson
  *
  */
-public final class EdgeAddedEvent extends GraphEvent{
+public final class EdgeAddedEvent extends ElementEvent {
     
     private static final long serialVersionUID = 1L;
     

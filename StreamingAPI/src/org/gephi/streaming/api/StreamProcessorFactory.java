@@ -26,4 +26,6 @@ package org.gephi.streaming.api;
  */
 public interface StreamProcessorFactory {
     public StreamProcessor createStreamProcessor(String streamType);
+
+    public StreamProcessor createStreamProcessor(StreamType streamType);
 }

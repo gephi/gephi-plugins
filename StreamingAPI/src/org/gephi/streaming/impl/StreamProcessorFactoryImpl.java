@@ -22,6 +22,7 @@ package org.gephi.streaming.impl;
 
 import java.util.Collection;
 
+import org.gephi.streaming.api.GraphEventContainerFactory;
 import org.gephi.streaming.api.StreamProcessor;
 import org.gephi.streaming.api.StreamProcessorFactory;
 import org.gephi.streaming.api.StreamType;
@@ -43,16 +44,30 @@ public class StreamProcessorFactoryImpl implements StreamProcessorFactory {
         Collection<? extends StreamType> streamTypes = Lookup.getDefault().lookupAll(StreamType.class);
         for (StreamType type: streamTypes) {
             if(type.getType().equalsIgnoreCase(streamType)) {
-                try {
-                    return type.getStreamProcessorClass().newInstance();
-                } catch (InstantiationException e) {
-                    throw new IllegalArgumentException("Error loading stream processor for type " + streamType, e);
-                } catch (IllegalAccessException e) {
-                    throw new IllegalArgumentException("Error loading stream processor for type " + streamType, e);
-                }
+                return createStreamProcessor(type);
             }
         }
         throw new IllegalArgumentException("Type " + streamType + " not registered as a valid stream type.");
+    }
+
+    /* (non-Javadoc)
+     * @see org.gephi.streaming.api.StreamProcessorFactory#createStreamProcessor(java.lang.String)
+     */
+    @Override
+    public StreamProcessor createStreamProcessor(StreamType streamType) {
+        try {
+            StreamProcessor processor = streamType.getStreamProcessorClass().newInstance();
+
+            GraphEventContainerFactory factory = Lookup.getDefault().lookup(GraphEventContainerFactory.class);
+            processor.setContainer(factory.newGraphEventContainer(processor));
+
+            return processor;
+
+        } catch (InstantiationException e) {
+            throw new IllegalArgumentException("Error loading stream processor for type " + streamType, e);
+        } catch (IllegalAccessException e) {
+            throw new IllegalArgumentException("Error loading stream processor for type " + streamType, e);
+        }
     }
 
 }

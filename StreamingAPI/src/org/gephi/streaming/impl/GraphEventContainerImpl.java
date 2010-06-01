@@ -9,8 +9,9 @@ import org.gephi.streaming.api.ContainerLoader;
 import org.gephi.streaming.api.GraphEventContainer;
 import org.gephi.streaming.api.GraphEventDispatcher;
 import org.gephi.streaming.api.Report;
-import org.gephi.streaming.api.event.AttributeEvent;
+import org.gephi.streaming.api.event.ElementAttributeEvent;
 import org.gephi.streaming.api.event.EdgeAddedEvent;
+import org.gephi.streaming.api.event.ElementEvent;
 import org.gephi.streaming.api.event.ElementType;
 import org.gephi.streaming.api.event.EventType;
 import org.gephi.streaming.api.event.GraphEvent;
@@ -25,11 +26,17 @@ public class GraphEventContainerImpl  implements ContainerLoader, GraphEventCont
     
     private LinkedBlockingQueue<GraphEvent> eventQueue = new LinkedBlockingQueue<GraphEvent>();
     
-    private List<GraphEventListener> listeners = new ArrayList<GraphEventListener>();
+    protected List<GraphEventListener> listeners = new ArrayList<GraphEventListener>();
 
     private Report report;
     
     private Object source;
+
+    private boolean stopped = false;
+    
+    private EventDispatcher dispatcher;
+    
+    private Object emptyQueueLock = new Object();
     
     /**
      * @param source 
@@ -39,7 +46,7 @@ public class GraphEventContainerImpl  implements ContainerLoader, GraphEventCont
         this.report = new Report();
         this.source = source;
         
-        EventDispatcher dispatcher = new EventDispatcher();
+        dispatcher = new EventDispatcher(source);
         dispatcher.start();
     }
     
@@ -77,86 +84,90 @@ public class GraphEventContainerImpl  implements ContainerLoader, GraphEventCont
     public void edgeAdded(String edgeId, String fromNodeId, String toNodeId,
             boolean directed) {
         EdgeAddedEvent event = new EdgeAddedEvent(source, edgeId, fromNodeId, toNodeId, directed);
-        eventQueue.offer(event);
+        fireEvent(event);
     }
 
     @Override
     public void edgeAttributeAdded(String edgeId, AttributeColumn attributeColumn, Object value) {
-        AttributeEvent event = new AttributeEvent(source, EventType.ADD, ElementType.EDGE, edgeId, attributeColumn, value);
-        eventQueue.offer(event);
+        ElementAttributeEvent event = new ElementAttributeEvent(source, EventType.ADD, ElementType.EDGE, edgeId, attributeColumn, value);
+        fireEvent(event);
     }
 
     @Override
     public void edgeAttributeChanged(String edgeId,
             AttributeColumn attributeColumn, Object newValue) {
-        AttributeEvent event = new AttributeEvent(source, EventType.CHANGE, ElementType.EDGE, edgeId, attributeColumn, newValue);
-        eventQueue.offer(event);
+        ElementAttributeEvent event = new ElementAttributeEvent(source, EventType.CHANGE, ElementType.EDGE, edgeId, attributeColumn, newValue);
+        fireEvent(event);
     }
 
     @Override
     public void edgeAttributeRemoved(String edgeId,
             AttributeColumn attributeColumn) {
-        AttributeEvent event = new AttributeEvent(source, EventType.REMOVE, ElementType.EDGE, edgeId, attributeColumn, null);
-        eventQueue.offer(event);
+        ElementAttributeEvent event = new ElementAttributeEvent(source, EventType.REMOVE, ElementType.EDGE, edgeId, attributeColumn, null);
+        fireEvent(event);
     }
 
     @Override
     public void edgeRemoved(String edgeId) {
-        GraphEvent event = new GraphEvent(source, EventType.REMOVE, ElementType.EDGE, edgeId);
-        eventQueue.offer(event);
+        GraphEvent event = new ElementEvent(source, EventType.REMOVE, ElementType.EDGE, edgeId);
+        fireEvent(event);
     }
 
     @Override
     public void graphAttributeAdded(AttributeColumn attributeColumn,
             Object value) {
-        AttributeEvent event = new AttributeEvent(source, EventType.ADD, ElementType.GRAPH, null, attributeColumn, value);
-        eventQueue.offer(event);
+        ElementAttributeEvent event = new ElementAttributeEvent(source, EventType.ADD, ElementType.GRAPH, null, attributeColumn, value);
+        fireEvent(event);
         
     }
 
     @Override
     public void graphAttributeChanged(AttributeColumn attributeColumn,
             Object newValue) {
-        AttributeEvent event = new AttributeEvent(source, EventType.CHANGE, ElementType.GRAPH, null, attributeColumn, newValue);
-        eventQueue.offer(event);
+        ElementAttributeEvent event = new ElementAttributeEvent(source, EventType.CHANGE, ElementType.GRAPH, null, attributeColumn, newValue);
+        fireEvent(event);
     }
 
     @Override
     public void graphAttributeRemoved(AttributeColumn attributeColumn) {
-        AttributeEvent event = new AttributeEvent(source, EventType.CHANGE, ElementType.GRAPH, null, attributeColumn, null);
-        eventQueue.offer(event);
+        ElementAttributeEvent event = new ElementAttributeEvent(source, EventType.CHANGE, ElementType.GRAPH, null, attributeColumn, null);
+        fireEvent(event);
     }
 
     @Override
     public void nodeAdded(String nodeId) {
-        GraphEvent event = new GraphEvent(source, EventType.ADD, ElementType.NODE, nodeId);
-        eventQueue.offer(event);
+        GraphEvent event = new ElementEvent(source, EventType.ADD, ElementType.NODE, nodeId);
+        fireEvent(event);
     }
 
     @Override
     public void nodeAttributeAdded(String nodeId,
             AttributeColumn attributeColumn, Object value) {
-        AttributeEvent event = new AttributeEvent(source, EventType.ADD, ElementType.NODE, nodeId, attributeColumn, value);
-        eventQueue.offer(event);
+        ElementAttributeEvent event = new ElementAttributeEvent(source, EventType.ADD, ElementType.NODE, nodeId, attributeColumn, value);
+        fireEvent(event);
     }
 
     @Override
     public void nodeAttributeChanged(String nodeId,
             AttributeColumn attributeColumn, Object newValue) {
-        AttributeEvent event = new AttributeEvent(source, EventType.CHANGE, ElementType.NODE, nodeId, attributeColumn, newValue);
-        eventQueue.offer(event);
+        ElementAttributeEvent event = new ElementAttributeEvent(source, EventType.CHANGE, ElementType.NODE, nodeId, attributeColumn, newValue);
+        fireEvent(event);
     }
 
     @Override
     public void nodeAttributeRemoved(String nodeId,
             AttributeColumn attributeColumn) {
-        AttributeEvent event = new AttributeEvent(source, EventType.REMOVE, ElementType.NODE, nodeId, attributeColumn, null);
-        eventQueue.offer(event);
+        ElementAttributeEvent event = new ElementAttributeEvent(source, EventType.REMOVE, ElementType.NODE, nodeId, attributeColumn, null);
+        fireEvent(event);
     }
 
     @Override
     public void nodeRemoved(String nodeId) {
-        GraphEvent event = new GraphEvent(source, EventType.REMOVE, ElementType.NODE, nodeId);
+        GraphEvent event = new ElementEvent(source, EventType.REMOVE, ElementType.NODE, nodeId);
+        fireEvent(event);
+    }
+    
+    protected void fireEvent(GraphEvent event) {
         eventQueue.offer(event);
     }
 
@@ -177,18 +188,44 @@ public class GraphEventContainerImpl  implements ContainerLoader, GraphEventCont
     public void removeEventListener(GraphEventListener listener) {
         listeners.remove(listener);
     }
+
+    public void stop() {
+        stopped = true;
+        dispatcher.interrupt();
+    }
+    
+    public void waitForDispatchAllEvents() {
+        while (eventQueue.size() > 0) {
+            try {
+                synchronized(emptyQueueLock) {
+                    emptyQueueLock.wait();
+                }
+            } catch (InterruptedException e) {}
+        }
+    }
     
     private class EventDispatcher extends Thread {
+
+        public EventDispatcher(Object source) {
+            super("EventDispatcher-"+source.toString());
+        }
+
         public void run() {
-            while (true) {
+            while (!stopped) {
                 try {
                     GraphEvent event = eventQueue.take();
                     for (GraphEventListener listener: listeners) {
                         listener.onGraphEvent(event);
                     }
                 } catch (InterruptedException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
+                    // Container was closed
+                    //e.printStackTrace();
+                } finally {
+                    // notify threads that are waiting for empty queue
+                    if (eventQueue.size() == 0)
+                        synchronized(emptyQueueLock) {
+                            emptyQueueLock.notifyAll();
+                        }
                 }
             }
         }

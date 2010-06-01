@@ -1,0 +1,6 @@
+Manifest-Version: 1.0
+OpenIDE-Module: org.gephi.desktop.streaming
+OpenIDE-Module-Layer: org/gephi/desktop/streaming/layer.xml
+OpenIDE-Module-Localizing-Bundle: org/gephi/desktop/streaming/Bundle.properties
+OpenIDE-Module-Specification-Version: 1.0
+

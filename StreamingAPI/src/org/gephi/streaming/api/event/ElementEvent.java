@@ -20,57 +20,44 @@ along with Gephi.  If not, see <http://www.gnu.org/licenses/>.
  */
 package org.gephi.streaming.api.event;
 
-import java.util.EventObject;
-
 /**
  * @author panisson
  *
  */
-public class GraphEvent extends EventObject {
-
+public class ElementEvent extends GraphEvent {
+    
     private static final long serialVersionUID = 1L;
     
-    protected final EventType eventType;
-    protected final ElementType elementType;
-    
+    protected final String elementId;
 
     /**
-     * Constructs a graph Event.
-     *
-     * @param    source    The object on which the Event initially occurred.
-     * @param eventType 
+     * @param source
+     * @param eventType
      * @param elementType
-     * @exception  IllegalArgumentException  if source is null.
+     * @param elementId
      */
-    public GraphEvent(Object source, EventType eventType, 
-            ElementType elementType) {
-        super(source);
-        this.eventType = eventType;
-        this.elementType = elementType;
+    public ElementEvent(Object source, EventType eventType,
+            ElementType elementType, String elementId) {
+        super(source, eventType, elementType);
+        this.elementId = elementId;
     }
-
+    
     /**
-     * @return the eventType
+     * @return the elementId
      */
-    public EventType getEventType() {
-        return eventType;
+    public String getElementId() {
+        return elementId;
     }
-
-    /**
-     * @return the elementType
-     */
-    public ElementType getElementType() {
-        return elementType;
-    }
-
+    
     /* (non-Javadoc)
      * @see java.util.EventObject#toString()
      */
     @Override
     public String toString() {
-        return new StringBuffer("GraphEvent[")
+        return new StringBuffer("ElementEvent[")
             .append(this.eventType).append(" ")
-            .append(this.elementType).append("]").toString();
+            .append(this.elementType).append(" ")
+            .append(this.elementId).append("]").toString();
     }
 
 }

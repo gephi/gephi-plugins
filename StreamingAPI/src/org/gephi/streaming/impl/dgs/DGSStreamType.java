@@ -41,4 +41,9 @@ public class DGSStreamType implements StreamType {
         return DGSStreamProcessor.class;
     }
 
+    @Override
+    public String toString() {
+        return getType();
+    }
+
 }

@@ -36,6 +36,9 @@ public class StreamingClientTest {
 
             @Override
             public void stop() { }
+
+            @Override
+            public void setContainer(GraphEventContainer container) { }
         };
         URL url = this.getClass().getResource(DGS_RESOURCE);
         

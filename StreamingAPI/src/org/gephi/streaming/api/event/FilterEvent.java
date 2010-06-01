@@ -18,23 +18,38 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with Gephi.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.gephi.streaming.api;
+package org.gephi.streaming.api.event;
 
-import java.io.IOException;
-import java.io.InputStream;
+import org.gephi.filters.spi.Filter;
 
 /**
- *
  * @author panisson
+ *
  */
-public interface StreamProcessor {
+public class FilterEvent extends GraphEvent {
+    
+    private static final long serialVersionUID = 1L;
+    
+    private final Filter filter;
 
-    public void processStream(InputStream inputStream) throws IOException;
-    
-    public GraphEventContainer getContainer();
-    
-    void setContainer(GraphEventContainer container);
-    
-    public void stop();
+    /**
+     * @param source
+     * @param eventType
+     * @param elementType
+     * @param elementId
+     * @param filter 
+     */
+    public FilterEvent(Object source, EventType eventType,
+            ElementType elementType, Filter filter) {
+        super(source, eventType, elementType);
+        this.filter = filter;
+    }
+
+    /**
+     * @return the filter
+     */
+    public Filter getFilter() {
+        return filter;
+    }
 
 }
