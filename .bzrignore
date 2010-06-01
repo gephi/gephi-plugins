@@ -5,3 +5,6 @@ nbproject/project.properties
 **/dist
 nbproject/private/platform-private.properties
 .DS_Store
+.classpath
+.project
+.settings
