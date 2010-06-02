@@ -90,6 +90,16 @@ public class DefaultGraphStreamingEventProcessor implements GraphEventListener {
         client.connectToEndpoint(url, processor);
     }
     
+    public void process(GraphStreamingEndpoint endpoint) {
+        StreamProcessorFactory processorFactory = Lookup.getDefault().lookup(StreamProcessorFactory.class);
+        StreamProcessor processor = processorFactory.createStreamProcessor(endpoint.getStreamType());
+
+        processor.getContainer().getGraphEventDispatcher().addEventListener(this);
+
+        StreamingClient client = new StreamingClient();
+        client.connectToEndpoint(endpoint.getUrl(), processor);
+    }
+    
     @Override
     public void onGraphEvent(GraphEvent event) {
 
@@ -223,16 +233,6 @@ public class DefaultGraphStreamingEventProcessor implements GraphEventListener {
         }
 
         graph.writeUnlock();
-    }
-
-    public void process(GraphStreamingEndpoint endpoint) {
-        StreamProcessorFactory processorFactory = Lookup.getDefault().lookup(StreamProcessorFactory.class);
-        StreamProcessor processor = processorFactory.createStreamProcessor(endpoint.getStreamType());
-
-        processor.getContainer().getGraphEventDispatcher().addEventListener(this);
-
-        StreamingClient client = new StreamingClient();
-        client.connectToEndpoint(endpoint.getUrl(), processor);
     }
 
 }

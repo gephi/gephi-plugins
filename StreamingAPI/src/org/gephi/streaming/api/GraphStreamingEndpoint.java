@@ -21,20 +21,19 @@ along with Gephi.  If not, see <http://www.gnu.org/licenses/>.
 
 package org.gephi.streaming.api;
 
+import java.io.Serializable;
 import java.net.URL;
 
 /**
  *
  * @author panisson
  */
-public class GraphStreamingEndpoint {
+public class GraphStreamingEndpoint implements Serializable {
+    
+    private static final long serialVersionUID = 1L;
     
     private URL url;
     private StreamType streamType;
-
-    public GraphStreamingEndpoint() {
-
-    }
 
     public URL getUrl() {
         return url;
