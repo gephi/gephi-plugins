@@ -18,54 +18,42 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with Gephi.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package org.gephi.streaming.api;
 
-import java.io.Serializable;
-import java.net.URL;
+import java.io.OutputStream;
 
 /**
- * A streaming endpoint, with the information required to connect to it
- * and process it.
- *
+ * A sub-type of OperationSupport that writes to an OutputStream
+ * when each operation is called. Can be used to implement 
+ * stream exporters or to expose the events to a socket
+ * in a specific format.
+ * 
  * @author Andre' Panisson
+ *
  */
-public class GraphStreamingEndpoint implements Serializable {
+public interface StreamWriter extends OperationSupport {
     
-    private static final long serialVersionUID = 1L;
-    
-    private URL url;
-    private StreamType streamType;
-
     /**
-     * @return the URL to connect to
-     */
-    public URL getUrl() {
-        return url;
-    }
-
-    /**
-     * sets the URL to connect to
-     * @param url the URL to connect to
-     */
-    public void setUrl(URL url) {
-        this.url = url;
-    }
-
-    /**
-     * @return the stream type
-     */
-    public StreamType getStreamType() {
-        return streamType;
-    }
-
-    /**
-     * Sets the stream type
+     * Sets the OutputStream to write to
      * 
-     * @param streamType the stream type
+     * @param out
      */
-    public void setStreamType(StreamType streamType) {
-        this.streamType = streamType;
-    }
+    public void setOutputStream(OutputStream out);
+    
+    /**
+     * @return the OutputStream to write to
+     */
+    public OutputStream getOutputStream();
 
+    /**
+     * Called before start processing the operations (to write 
+     * headers, etc.)
+     */
+    public void startStream();
+
+    /**
+     * Called after end processing the operations (to write 
+     * footers, etc.)
+     */
+    public void endStream();
 }

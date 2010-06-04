@@ -18,7 +18,7 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with Gephi.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.gephi.streaming.impl;
+package org.gephi.streaming.api;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -26,7 +26,6 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import org.gephi.streaming.api.StreamProcessor;
 
 /**
  *
@@ -36,11 +35,12 @@ public class StreamingClient {
     
     private final AtomicInteger inProcessCount = new AtomicInteger();
     
-    public void connectToEndpoint(final URL endpoint, final StreamProcessor streamProcessor) {
+    public void connectToEndpoint(final URL endpoint, final StreamReader streamProcessor) {
         
         inProcessCount.incrementAndGet();
         
         new Thread(endpoint.toString()) {
+            @Override
             public void run() {
                 
                 final URLConnection connection;
@@ -55,18 +55,17 @@ public class StreamingClient {
 
                 try {
                     
-                    
                     InputStream inputStream = connection.getInputStream();
                     streamProcessor.processStream(inputStream);
-                    
-                    inProcessCount.decrementAndGet();
-                    synchronized (inProcessCount) {
-                        inProcessCount.notifyAll();
-                    }
                     
                 } catch (IOException e) {
                     // Exception during processing
                     e.printStackTrace();
+                } finally {
+                    inProcessCount.decrementAndGet();
+                    synchronized (inProcessCount) {
+                        inProcessCount.notifyAll();
+                    }
                 }
             }
         }.start();

@@ -30,7 +30,7 @@ public class ElementAttributeEvent extends ElementEvent {
     
     private static final long serialVersionUID = 1L;
     
-    private final AttributeColumn attributeColumn;
+    private final String attributeName;
     
     private final Object attributeValue;
 
@@ -39,22 +39,22 @@ public class ElementAttributeEvent extends ElementEvent {
      * @param eventType
      * @param elementType
      * @param elementId
-     * @param attributeColumn 
+     * @param attributeName 
      * @param attributeValue 
      */
     public ElementAttributeEvent(Object source, EventType eventType,
             ElementType elementType, String elementId,
-            AttributeColumn attributeColumn, Object attributeValue) {
+            String attributeName, Object attributeValue) {
         super(source, eventType, elementType, elementId);
-        this.attributeColumn = attributeColumn;
+        this.attributeName = attributeName;
         this.attributeValue = attributeValue;
     }
 
     /**
      * @return the attributeColumn
      */
-    public AttributeColumn getAttributeColumn() {
-        return attributeColumn;
+    public String getAttributeName() {
+        return attributeName;
     }
 
     /**
@@ -68,7 +68,7 @@ public class ElementAttributeEvent extends ElementEvent {
     public String toString() {
         return new StringBuffer("AttributeEvent[")
             .append(this.eventType).append(" Attribute ")
-            .append(this.attributeColumn).append(" value ")
+            .append(this.attributeName).append(" value ")
             .append(this.attributeValue).append(" on ")
             .append(this.elementType).append(" ")
             .append(this.elementId).append("]").toString();

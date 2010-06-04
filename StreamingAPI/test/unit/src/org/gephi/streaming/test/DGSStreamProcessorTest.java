@@ -20,27 +20,32 @@ along with Gephi.  If not, see <http://www.gnu.org/licenses/>.
  */
 package org.gephi.streaming.test;
 
+import java.io.ByteArrayOutputStream;
 import static org.junit.Assert.*;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
-import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import org.gephi.project.api.ProjectController;
 import org.gephi.project.api.Workspace;
-import org.gephi.streaming.api.StreamProcessor;
-import org.gephi.streaming.api.StreamProcessorFactory;
+import org.gephi.streaming.api.StreamReader;
+import org.gephi.streaming.api.StreamReaderFactory;
+import org.gephi.streaming.api.StreamingClient;
 import org.gephi.streaming.api.event.ElementAttributeEvent;
 import org.gephi.streaming.api.event.ElementType;
 import org.gephi.streaming.api.event.EventType;
 import org.gephi.streaming.api.event.GraphEvent;
 import org.gephi.streaming.api.event.GraphEventListener;
 import org.gephi.streaming.api.DefaultGraphStreamingEventProcessor;
+import org.gephi.streaming.api.GraphEventOperationSupport;
+import org.gephi.streaming.api.GraphEventContainerFactory;
+import org.gephi.streaming.api.StreamType;
+import org.gephi.streaming.api.StreamWriter;
+import org.gephi.streaming.api.StreamWriterFactory;
 import org.gephi.streaming.impl.GraphEventContainerImpl;
-import org.gephi.streaming.impl.StreamingClient;
-import org.gephi.streaming.impl.dgs.DGSStreamProcessor;
+import org.gephi.streaming.impl.dgs.DGSStreamType;
 import org.junit.Test;
 import org.openide.util.Lookup;
 
@@ -50,20 +55,23 @@ import org.openide.util.Lookup;
  * @author panisson
  *
  */
-public class DGSDataProcessorTest {
+public class DGSStreamProcessorTest {
     
     private static final String DGS_RESOURCE = "amazon_0201485419_400.dgs";
 
     @Test
-    public void testProcess() throws IOException {
-        
-        ProjectController projectController = Lookup.getDefault().lookup(ProjectController.class);
-        projectController.newProject();
+    public void testStreamReader() throws IOException {
         
         InputStream inputStream = this.getClass().getResourceAsStream(DGS_RESOURCE);
         
-        StreamProcessorFactory factory = Lookup.getDefault().lookup(StreamProcessorFactory.class);
-        StreamProcessor streamProcessor = factory.createStreamProcessor("DGS");
+        StreamReaderFactory factory = Lookup.getDefault().lookup(StreamReaderFactory.class);
+        StreamReader streamReader = factory.createStreamReader("DGS");
+        
+        // set event operation support
+        GraphEventOperationSupport operator = new GraphEventOperationSupport();
+        GraphEventContainerFactory containerfactory = Lookup.getDefault().lookup(GraphEventContainerFactory.class);
+        operator.setContainer(containerfactory.newGraphEventContainer(operator));
+        streamReader.setOperationSupport(operator);
         
         final AtomicInteger count = new AtomicInteger();
         
@@ -73,21 +81,80 @@ public class DGSDataProcessorTest {
                 count.incrementAndGet();
             }
         };
-        streamProcessor.getContainer().getGraphEventDispatcher().addEventListener(listener);
+        operator.getContainer().getGraphEventDispatcher().addEventListener(listener);
         
-        streamProcessor.processStream(inputStream);
+        streamReader.processStream(inputStream);
         
-        streamProcessor.getContainer().waitForDispatchAllEvents();
+        operator.getContainer().waitForDispatchAllEvents();
         assertEquals(2422, count.get());
 //        System.out.println(count.get() + " Events");
     }
+
+    @Test
+    public void testStreamWriter() throws IOException {
+
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        StreamWriterFactory factory = Lookup.getDefault().lookup(StreamWriterFactory.class);
+        StreamWriter streamWriter = factory.createStreamWriter("DGS");
+        streamWriter.setOutputStream(out);
+
+        // write triangle
+        streamWriter.startStream();
+        streamWriter.nodeAdded("A");
+        streamWriter.nodeAdded("B");
+        streamWriter.nodeAdded("C");
+        streamWriter.edgeAdded("AB", "A", "B", false);
+        streamWriter.edgeAdded("BC", "B", "C", false);
+        streamWriter.edgeAdded("CA", "C", "A", false);
+        streamWriter.endStream();
+
+        System.out.println(new String(out.toByteArray()));
+    }
     
     @Test
-    public void testFactory() throws IOException {
+    public void testStreamReaderFactory() throws IOException {
         
-        StreamProcessorFactory factory = Lookup.getDefault().lookup(StreamProcessorFactory.class);
-        StreamProcessor processor = factory.createStreamProcessor("DGS");
+        StreamReaderFactory factory = Lookup.getDefault().lookup(StreamReaderFactory.class);
+        StreamReader processor = factory.createStreamReader("DGS");
         assertNotNull(processor);
+
+        StreamType streamType = new DGSStreamType();
+        processor = factory.createStreamReader(streamType.getType());
+        assertNotNull(processor);
+    }
+
+    @Test
+    public void testStreamWriterFactory() throws IOException {
+
+        StreamWriterFactory factory = Lookup.getDefault().lookup(StreamWriterFactory.class);
+        StreamWriter processor = factory.createStreamWriter("DGS");
+        assertNotNull(processor);
+
+        StreamType streamType = new DGSStreamType();
+        processor = factory.createStreamWriter(streamType.getType());
+        assertNotNull(processor);
+    }
+    
+    @Test
+    public void testChaining() throws IOException {
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        StreamWriterFactory writerFactory = Lookup.getDefault().lookup(StreamWriterFactory.class);
+        StreamWriter streamWriter = writerFactory.createStreamWriter("DGS");
+        streamWriter.setOutputStream(out);
+
+        InputStream inputStream = this.getClass().getResourceAsStream(DGS_RESOURCE);
+        
+        StreamReaderFactory readerfactory = Lookup.getDefault().lookup(StreamReaderFactory.class);
+        StreamReader streamReader = readerfactory.createStreamReader("DGS");
+        streamReader.setOperationSupport(streamWriter);
+        
+        streamWriter.startStream();
+        streamReader.processStream(inputStream);
+        streamWriter.endStream();
+        
+        assertTrue(out.toByteArray().length>0);
+
+//        System.out.println(new String(out.toByteArray()));
     }
     
     @Test
@@ -125,8 +192,8 @@ public class DGSDataProcessorTest {
             }
         }.start();
         
-        StreamProcessorFactory factory = Lookup.getDefault().lookup(StreamProcessorFactory.class);
-        StreamProcessor dataProcessor = factory.createStreamProcessor("DGS");
+        StreamReaderFactory factory = Lookup.getDefault().lookup(StreamReaderFactory.class);
+        StreamReader dataProcessor = factory.createStreamReader("DGS");
         
         final AtomicInteger count = new AtomicInteger();
         
@@ -136,11 +203,18 @@ public class DGSDataProcessorTest {
                 count.incrementAndGet();
             }
         };
-        dataProcessor.getContainer().getGraphEventDispatcher().addEventListener(listener);
+        
+        // set event operation support
+        GraphEventOperationSupport operator = new GraphEventOperationSupport();
+        GraphEventContainerFactory containerfactory = Lookup.getDefault().lookup(GraphEventContainerFactory.class);
+        operator.setContainer(containerfactory.newGraphEventContainer(operator));
+        dataProcessor.setOperationSupport(operator);
+        
+        operator.getContainer().getGraphEventDispatcher().addEventListener(listener);
         
         dataProcessor.processStream(inputStream);
         
-        dataProcessor.getContainer().waitForDispatchAllEvents();
+        operator.getContainer().waitForDispatchAllEvents();
         System.out.println(count.get() + " Events");
     }
     
@@ -149,8 +223,8 @@ public class DGSDataProcessorTest {
         ProjectController projectController = Lookup.getDefault().lookup(ProjectController.class);
         projectController.newProject();
         
-        StreamProcessorFactory factory = Lookup.getDefault().lookup(StreamProcessorFactory.class);
-        StreamProcessor processor = factory.createStreamProcessor("DGS");
+        StreamReaderFactory factory = Lookup.getDefault().lookup(StreamReaderFactory.class);
+        StreamReader processor = factory.createStreamReader("DGS");
         assertNotNull(processor);
         
         final AtomicInteger nodeCount = new AtomicInteger();
@@ -168,7 +242,14 @@ public class DGSDataProcessorTest {
                 }
             }
         };
-        processor.getContainer().getGraphEventDispatcher().addEventListener(listener);
+        
+        // set event operation support
+        GraphEventOperationSupport operator = new GraphEventOperationSupport();
+        GraphEventContainerFactory containerfactory = Lookup.getDefault().lookup(GraphEventContainerFactory.class);
+        operator.setContainer(containerfactory.newGraphEventContainer(operator));
+        processor.setOperationSupport(operator);
+        
+        operator.getContainer().getGraphEventDispatcher().addEventListener(listener);
         
         URL url = this.getClass().getResource(DGS_RESOURCE);
         
@@ -176,7 +257,7 @@ public class DGSDataProcessorTest {
         client.connectToEndpoint(url, processor);
         
         client.waitForFinish();
-        processor.getContainer().waitForDispatchAllEvents();
+        operator.getContainer().waitForDispatchAllEvents();
         
         assertEquals(402, nodeCount.get());
         assertEquals(788, edgeCount.get());
@@ -189,24 +270,26 @@ public class DGSDataProcessorTest {
         projectController.newProject();
         Workspace workspace = projectController.newWorkspace(projectController.getCurrentProject());
         
-        StreamProcessorFactory factory = Lookup.getDefault().lookup(StreamProcessorFactory.class);
-        StreamProcessor processor = factory.createStreamProcessor("DGS");
+        StreamReaderFactory factory = Lookup.getDefault().lookup(StreamReaderFactory.class);
+        StreamReader processor = factory.createStreamReader("DGS");
+        assertNotNull(processor);
         
-        processor.setContainer(new GraphEventContainerImpl(processor){
+        // set event operation support
+        GraphEventOperationSupport operator = new GraphEventOperationSupport();
+        operator.setContainer(new GraphEventContainerImpl(processor){
 
            @Override
-            protected void fireEvent(GraphEvent event) {
+            public void fireEvent(GraphEvent event) {
                for (GraphEventListener listener: listeners) {
                    listener.onGraphEvent(event);
                }
             }
             
         });
-        
-        assertNotNull(processor);
+        processor.setOperationSupport(operator);
         
         DefaultGraphStreamingEventProcessor listener = new DefaultGraphStreamingEventProcessor(workspace);
-        processor.getContainer().getGraphEventDispatcher().addEventListener(listener);
+        operator.getContainer().getGraphEventDispatcher().addEventListener(listener);
         
         URL url = this.getClass().getResource(DGS_RESOURCE);
         
@@ -225,12 +308,18 @@ public class DGSDataProcessorTest {
         projectController.newProject();
         Workspace workspace = projectController.newWorkspace(projectController.getCurrentProject());
         
-        StreamProcessorFactory factory = Lookup.getDefault().lookup(StreamProcessorFactory.class);
-        StreamProcessor processor = factory.createStreamProcessor("DGS");
+        StreamReaderFactory factory = Lookup.getDefault().lookup(StreamReaderFactory.class);
+        StreamReader processor = factory.createStreamReader("DGS");
         assertNotNull(processor);
         
+        // set event operation support
+        GraphEventOperationSupport operator = new GraphEventOperationSupport();
+        GraphEventContainerFactory containerfactory = Lookup.getDefault().lookup(GraphEventContainerFactory.class);
+        operator.setContainer(containerfactory.newGraphEventContainer(operator));
+        processor.setOperationSupport(operator);
+        
         DefaultGraphStreamingEventProcessor listener = new DefaultGraphStreamingEventProcessor(workspace);
-        processor.getContainer().getGraphEventDispatcher().addEventListener(listener);
+        operator.getContainer().getGraphEventDispatcher().addEventListener(listener);
         
         URL url = this.getClass().getResource(DGS_RESOURCE);
         
@@ -238,20 +327,20 @@ public class DGSDataProcessorTest {
         client.connectToEndpoint(url, processor);
         
         client.waitForFinish();
-        processor.getContainer().waitForDispatchAllEvents();
+        operator.getContainer().waitForDispatchAllEvents();
         
         assertEquals(402, listener.getGraph().getNodeCount());
         assertEquals(788, listener.getGraph().getEdgeCount());
     }
     
-    @Test
+//    @Test
     public void getTimesSynchFire() throws IOException {
         for (int i=0; i<30; i++) {
             testSynchFire();
         }
     }
     
-    @Test
+//    @Test
     public void getTimesAsynchFire() throws IOException {
         for (int i=0; i<30; i++) {
             testAsynchFire();

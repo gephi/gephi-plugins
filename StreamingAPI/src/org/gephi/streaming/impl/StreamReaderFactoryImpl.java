@@ -22,9 +22,8 @@ package org.gephi.streaming.impl;
 
 import java.util.Collection;
 
-import org.gephi.streaming.api.GraphEventContainerFactory;
-import org.gephi.streaming.api.StreamProcessor;
-import org.gephi.streaming.api.StreamProcessorFactory;
+import org.gephi.streaming.api.StreamReader;
+import org.gephi.streaming.api.StreamReaderFactory;
 import org.gephi.streaming.api.StreamType;
 import org.openide.util.Lookup;
 import org.openide.util.lookup.ServiceProvider;
@@ -33,18 +32,18 @@ import org.openide.util.lookup.ServiceProvider;
  * @author panisson
  *
  */
-@ServiceProvider(service = StreamProcessorFactory.class)
-public class StreamProcessorFactoryImpl implements StreamProcessorFactory {
+@ServiceProvider(service = StreamReaderFactory.class)
+public class StreamReaderFactoryImpl implements StreamReaderFactory {
 
     /* (non-Javadoc)
      * @see org.gephi.streaming.api.StreamProcessorFactory#createStreamProcessor(java.lang.String)
      */
     @Override
-    public StreamProcessor createStreamProcessor(String streamType) {
+    public StreamReader createStreamReader(String streamType) {
         Collection<? extends StreamType> streamTypes = Lookup.getDefault().lookupAll(StreamType.class);
         for (StreamType type: streamTypes) {
             if(type.getType().equalsIgnoreCase(streamType)) {
-                return createStreamProcessor(type);
+                return createStreamReader(type);
             }
         }
         throw new IllegalArgumentException("Type " + streamType + " not registered as a valid stream type.");
@@ -54,13 +53,9 @@ public class StreamProcessorFactoryImpl implements StreamProcessorFactory {
      * @see org.gephi.streaming.api.StreamProcessorFactory#createStreamProcessor(java.lang.String)
      */
     @Override
-    public StreamProcessor createStreamProcessor(StreamType streamType) {
+    public StreamReader createStreamReader(StreamType streamType) {
         try {
-            StreamProcessor processor = streamType.getStreamProcessorClass().newInstance();
-
-            GraphEventContainerFactory factory = Lookup.getDefault().lookup(GraphEventContainerFactory.class);
-            processor.setContainer(factory.newGraphEventContainer(processor));
-
+            StreamReader processor = streamType.getStreamReaderClass().newInstance();
             return processor;
 
         } catch (InstantiationException e) {

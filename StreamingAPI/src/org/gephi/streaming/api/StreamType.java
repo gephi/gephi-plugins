@@ -21,11 +21,23 @@ along with Gephi.  If not, see <http://www.gnu.org/licenses/>.
 package org.gephi.streaming.api;
 
 /**
- * @author panisson
+ * Defines a Stream Type
+ * 
+ * @author Andre' Panisson
  *
  */
 public interface StreamType {
 
+    /**
+     * @return the String representing this stream type
+     */
     public String getType();
-    public Class<? extends StreamProcessor> getStreamProcessorClass();
+    /**
+     * @return the StreamReader class implementation for this stream type
+     */
+    public Class<? extends StreamReader> getStreamReaderClass();
+    /**
+     * @return the StreamWriter class implementation for this stream type
+     */
+    public Class<? extends StreamWriter> getStreamWriterClass();
 }

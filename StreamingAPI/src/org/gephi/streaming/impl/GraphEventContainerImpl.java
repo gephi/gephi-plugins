@@ -4,16 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.LinkedBlockingQueue;
 
-import org.gephi.data.attributes.api.AttributeColumn;
-import org.gephi.streaming.api.ContainerLoader;
 import org.gephi.streaming.api.GraphEventContainer;
 import org.gephi.streaming.api.GraphEventDispatcher;
 import org.gephi.streaming.api.Report;
-import org.gephi.streaming.api.event.ElementAttributeEvent;
-import org.gephi.streaming.api.event.EdgeAddedEvent;
-import org.gephi.streaming.api.event.ElementEvent;
-import org.gephi.streaming.api.event.ElementType;
-import org.gephi.streaming.api.event.EventType;
 import org.gephi.streaming.api.event.GraphEvent;
 import org.gephi.streaming.api.event.GraphEventListener;
 
@@ -22,7 +15,7 @@ import org.gephi.streaming.api.event.GraphEventListener;
  *
  */
 
-public class GraphEventContainerImpl  implements ContainerLoader, GraphEventContainer, GraphEventDispatcher {
+public class GraphEventContainerImpl implements GraphEventContainer, GraphEventDispatcher {
     
     private LinkedBlockingQueue<GraphEvent> eventQueue = new LinkedBlockingQueue<GraphEvent>();
     
@@ -61,11 +54,6 @@ public class GraphEventContainerImpl  implements ContainerLoader, GraphEventCont
     }
 
     @Override
-    public ContainerLoader getLoader() {
-        return this;
-    }
-
-    @Override
     public Report getReport() {
         return this.report;
     }
@@ -79,95 +67,8 @@ public class GraphEventContainerImpl  implements ContainerLoader, GraphEventCont
     public GraphEventDispatcher getGraphEventDispatcher() {
         return this;
     }
-
-    @Override
-    public void edgeAdded(String edgeId, String fromNodeId, String toNodeId,
-            boolean directed) {
-        EdgeAddedEvent event = new EdgeAddedEvent(source, edgeId, fromNodeId, toNodeId, directed);
-        fireEvent(event);
-    }
-
-    @Override
-    public void edgeAttributeAdded(String edgeId, AttributeColumn attributeColumn, Object value) {
-        ElementAttributeEvent event = new ElementAttributeEvent(source, EventType.ADD, ElementType.EDGE, edgeId, attributeColumn, value);
-        fireEvent(event);
-    }
-
-    @Override
-    public void edgeAttributeChanged(String edgeId,
-            AttributeColumn attributeColumn, Object newValue) {
-        ElementAttributeEvent event = new ElementAttributeEvent(source, EventType.CHANGE, ElementType.EDGE, edgeId, attributeColumn, newValue);
-        fireEvent(event);
-    }
-
-    @Override
-    public void edgeAttributeRemoved(String edgeId,
-            AttributeColumn attributeColumn) {
-        ElementAttributeEvent event = new ElementAttributeEvent(source, EventType.REMOVE, ElementType.EDGE, edgeId, attributeColumn, null);
-        fireEvent(event);
-    }
-
-    @Override
-    public void edgeRemoved(String edgeId) {
-        GraphEvent event = new ElementEvent(source, EventType.REMOVE, ElementType.EDGE, edgeId);
-        fireEvent(event);
-    }
-
-    @Override
-    public void graphAttributeAdded(AttributeColumn attributeColumn,
-            Object value) {
-        ElementAttributeEvent event = new ElementAttributeEvent(source, EventType.ADD, ElementType.GRAPH, null, attributeColumn, value);
-        fireEvent(event);
-        
-    }
-
-    @Override
-    public void graphAttributeChanged(AttributeColumn attributeColumn,
-            Object newValue) {
-        ElementAttributeEvent event = new ElementAttributeEvent(source, EventType.CHANGE, ElementType.GRAPH, null, attributeColumn, newValue);
-        fireEvent(event);
-    }
-
-    @Override
-    public void graphAttributeRemoved(AttributeColumn attributeColumn) {
-        ElementAttributeEvent event = new ElementAttributeEvent(source, EventType.CHANGE, ElementType.GRAPH, null, attributeColumn, null);
-        fireEvent(event);
-    }
-
-    @Override
-    public void nodeAdded(String nodeId) {
-        GraphEvent event = new ElementEvent(source, EventType.ADD, ElementType.NODE, nodeId);
-        fireEvent(event);
-    }
-
-    @Override
-    public void nodeAttributeAdded(String nodeId,
-            AttributeColumn attributeColumn, Object value) {
-        ElementAttributeEvent event = new ElementAttributeEvent(source, EventType.ADD, ElementType.NODE, nodeId, attributeColumn, value);
-        fireEvent(event);
-    }
-
-    @Override
-    public void nodeAttributeChanged(String nodeId,
-            AttributeColumn attributeColumn, Object newValue) {
-        ElementAttributeEvent event = new ElementAttributeEvent(source, EventType.CHANGE, ElementType.NODE, nodeId, attributeColumn, newValue);
-        fireEvent(event);
-    }
-
-    @Override
-    public void nodeAttributeRemoved(String nodeId,
-            AttributeColumn attributeColumn) {
-        ElementAttributeEvent event = new ElementAttributeEvent(source, EventType.REMOVE, ElementType.NODE, nodeId, attributeColumn, null);
-        fireEvent(event);
-    }
-
-    @Override
-    public void nodeRemoved(String nodeId) {
-        GraphEvent event = new ElementEvent(source, EventType.REMOVE, ElementType.NODE, nodeId);
-        fireEvent(event);
-    }
     
-    protected void fireEvent(GraphEvent event) {
+    public void fireEvent(GraphEvent event) {
         eventQueue.offer(event);
     }
 

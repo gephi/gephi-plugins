@@ -23,24 +23,25 @@ package org.gephi.streaming.api;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
-import org.gephi.data.attributes.api.AttributeRow;
 
+import org.gephi.data.attributes.api.AttributeRow;
 import org.gephi.graph.api.Edge;
+import org.gephi.graph.api.Graph;
 import org.gephi.graph.api.GraphController;
 import org.gephi.graph.api.GraphFactory;
 import org.gephi.graph.api.GraphModel;
-import org.gephi.graph.api.HierarchicalGraph;
 import org.gephi.graph.api.Node;
+import org.gephi.graph.api.NodeData;
 import org.gephi.project.api.ProjectController;
 import org.gephi.project.api.Workspace;
-import org.gephi.streaming.api.event.ElementAttributeEvent;
+import org.gephi.streaming.api.PropertiesAssociations.EdgeProperties;
+import org.gephi.streaming.api.PropertiesAssociations.NodeProperties;
 import org.gephi.streaming.api.event.EdgeAddedEvent;
+import org.gephi.streaming.api.event.ElementAttributeEvent;
 import org.gephi.streaming.api.event.ElementEvent;
 import org.gephi.streaming.api.event.ElementType;
 import org.gephi.streaming.api.event.GraphEvent;
 import org.gephi.streaming.api.event.GraphEventListener;
-//import org.gephi.timeline.api.TimelineController;
-import org.gephi.streaming.impl.StreamingClient;
 import org.openide.util.Lookup;
 
 /**
@@ -49,12 +50,14 @@ import org.openide.util.Lookup;
  */
 public class DefaultGraphStreamingEventProcessor implements GraphEventListener {
     
-    private Workspace workspace;
     private GraphFactory factory;
-    private HierarchicalGraph graph;
+    private Graph graph;
 
     private Map<String, Integer> nodeStringToInt = new HashMap<String, Integer>();
     private Map<String, Integer> edgeStringToInt = new HashMap<String, Integer>();
+    
+    //PropertiesAssociations
+    protected PropertiesAssociations properties = new PropertiesAssociations();
     
     public DefaultGraphStreamingEventProcessor(Workspace workspace) {
         ProjectController pc = Lookup.getDefault().lookup(ProjectController.class);
@@ -62,7 +65,6 @@ public class DefaultGraphStreamingEventProcessor implements GraphEventListener {
             workspace = pc.newWorkspace(pc.getCurrentProject());
             pc.openWorkspace(workspace);
         }
-        this.workspace = workspace;
         
       //Architecture
         GraphController graphController = Lookup.getDefault().lookup(GraphController.class);
@@ -71,39 +73,53 @@ public class DefaultGraphStreamingEventProcessor implements GraphEventListener {
 
         graph = graphModel.getHierarchicalMixedGraph();
         factory = graphModel.factory();
+        
+        //Default node associations
+        properties.addNodePropertyAssociation(NodeProperties.ID, "id");
+        properties.addNodePropertyAssociation(NodeProperties.LABEL, "label");
+        properties.addNodePropertyAssociation(NodeProperties.X, "x");
+        properties.addNodePropertyAssociation(NodeProperties.Y, "y");
+        properties.addNodePropertyAssociation(NodeProperties.SIZE, "size");
+
+        //Default edge associations
+        properties.addEdgePropertyAssociation(EdgeProperties.ID, "id");
+        properties.addEdgePropertyAssociation(EdgeProperties.SOURCE, "source");
+        properties.addEdgePropertyAssociation(EdgeProperties.TARGET, "target");
+        properties.addEdgePropertyAssociation(EdgeProperties.LABEL, "label");
+        properties.addEdgePropertyAssociation(EdgeProperties.WEIGHT, "weight");
     }
     
     /**
      * @return the graph
      */
-    public HierarchicalGraph getGraph() {
+    public Graph getGraph() {
         return graph;
     }
     
     public void process(URL url, String streamType) {
-        StreamProcessorFactory processorFactory = Lookup.getDefault().lookup(StreamProcessorFactory.class);
-        StreamProcessor processor = processorFactory.createStreamProcessor(streamType);
+        StreamReaderFactory processorFactory = Lookup.getDefault().lookup(StreamReaderFactory.class);
+        StreamReader processor = processorFactory.createStreamReader(streamType);
+
+        GraphEventOperationSupport eventOperationSupport = new GraphEventOperationSupport();
+        GraphEventContainerFactory containerfactory = Lookup.getDefault().lookup(GraphEventContainerFactory.class);
+        GraphEventContainer container = containerfactory.newGraphEventContainer(eventOperationSupport);
+        eventOperationSupport.setContainer(container);
         
-        processor.getContainer().getGraphEventDispatcher().addEventListener(this);
+        container.getGraphEventDispatcher().addEventListener(this);
+        processor.setOperationSupport(eventOperationSupport);
         
         StreamingClient client = new StreamingClient();
         client.connectToEndpoint(url, processor);
     }
     
     public void process(GraphStreamingEndpoint endpoint) {
-        StreamProcessorFactory processorFactory = Lookup.getDefault().lookup(StreamProcessorFactory.class);
-        StreamProcessor processor = processorFactory.createStreamProcessor(endpoint.getStreamType());
-
-        processor.getContainer().getGraphEventDispatcher().addEventListener(this);
-
-        StreamingClient client = new StreamingClient();
-        client.connectToEndpoint(endpoint.getUrl(), processor);
+        this.process(endpoint.getUrl(), endpoint.getStreamType().getType());
     }
     
     @Override
     public void onGraphEvent(GraphEvent event) {
 
-        System.out.println(event);
+//        System.out.println(event);
 
         graph.writeLock();
         
@@ -126,10 +142,14 @@ public class DefaultGraphStreamingEventProcessor implements GraphEventListener {
 
                     case ADD:
                     case CHANGE: {
-
-                        if (node.getNodeData().getAttributes() != null) {
+                        
+                        NodeProperties p = properties.getNodeProperty(attributeEvent.getAttributeName());
+                        if (p != null) {
+                            injectNodeProperty(p, attributeEvent.getAttributeValue(), node.getNodeData());
+                        }
+                        else if (node.getNodeData().getAttributes() != null) {
                             AttributeRow row = (AttributeRow) node.getNodeData().getAttributes();
-                            row.setValue(attributeEvent.getAttributeColumn(), attributeEvent.getAttributeValue());
+                            row.setValue(attributeEvent.getAttributeName(), attributeEvent.getAttributeValue());
                         }
 
                     } break;
@@ -137,7 +157,7 @@ public class DefaultGraphStreamingEventProcessor implements GraphEventListener {
                     case REMOVE: {
                         if (node.getNodeData().getAttributes() != null) {
                             AttributeRow row = (AttributeRow) node.getNodeData().getAttributes();
-                            row.setValue(attributeEvent.getAttributeColumn(), null);
+                            row.setValue(attributeEvent.getAttributeName(), null);
                         }
                     }
                     }
@@ -156,7 +176,7 @@ public class DefaultGraphStreamingEventProcessor implements GraphEventListener {
                         case CHANGE: {
                             if (edge.getEdgeData().getAttributes() != null) {
                                 AttributeRow row = (AttributeRow) edge.getEdgeData().getAttributes();
-                                row.setValue(attributeEvent.getAttributeColumn(), attributeEvent.getAttributeValue());
+                                row.setValue(attributeEvent.getAttributeName(), attributeEvent.getAttributeValue());
                             }
 
                         } break;
@@ -164,7 +184,7 @@ public class DefaultGraphStreamingEventProcessor implements GraphEventListener {
                         case REMOVE: {
                             if (edge.getEdgeData().getAttributes() != null) {
                                 AttributeRow row = (AttributeRow) edge.getEdgeData().getAttributes();
-                                row.setValue(attributeEvent.getAttributeColumn(), null);
+                                row.setValue(attributeEvent.getAttributeName(), null);
                             }
                         }
                         }
@@ -233,6 +253,47 @@ public class DefaultGraphStreamingEventProcessor implements GraphEventListener {
         }
 
         graph.writeUnlock();
+    }
+    
+    private void injectNodeProperty(NodeProperties p, Object value, NodeData nodeData) {
+        switch (p) {
+            case ID:
+                String id = value.toString();
+                if (id != null) {
+                    nodeData.setId(id);
+                }
+                break;
+            case LABEL:
+                String label = value.toString();
+                if (label != null) {
+                    nodeData.setLabel(label);
+                }
+                break;
+            case X:
+                float x = Float.valueOf(value.toString());
+                if (x != 0) {
+                    nodeData.setX(x);
+                }
+                break;
+            case Y:
+                float y = Float.valueOf(value.toString());
+                if (y != 0) {
+                    nodeData.setY(y);
+                }
+                break;
+            case Z:
+                float z = Float.valueOf(value.toString());
+                if (z != 0) {
+                    nodeData.setZ(z);
+                }
+                break;
+            case R:
+                break;
+            case G:
+                break;
+            case B:
+                break;
+        }
     }
 
 }

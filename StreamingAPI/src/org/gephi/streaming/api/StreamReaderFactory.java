@@ -18,54 +18,29 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with Gephi.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package org.gephi.streaming.api;
 
-import java.io.Serializable;
-import java.net.URL;
-
 /**
- * A streaming endpoint, with the information required to connect to it
- * and process it.
- *
+ * A factory for StreamReaders
+ * 
  * @author Andre' Panisson
+ *
  */
-public class GraphStreamingEndpoint implements Serializable {
+public interface StreamReaderFactory {
     
-    private static final long serialVersionUID = 1L;
-    
-    private URL url;
-    private StreamType streamType;
-
     /**
-     * @return the URL to connect to
-     */
-    public URL getUrl() {
-        return url;
-    }
-
-    /**
-     * sets the URL to connect to
-     * @param url the URL to connect to
-     */
-    public void setUrl(URL url) {
-        this.url = url;
-    }
-
-    /**
-     * @return the stream type
-     */
-    public StreamType getStreamType() {
-        return streamType;
-    }
-
-    /**
-     * Sets the stream type
+     * Create a StreamReader based on the specified stream type
      * 
-     * @param streamType the stream type
+     * @param streamType
+     * @return the StreamReader able to process the specified stream type
      */
-    public void setStreamType(StreamType streamType) {
-        this.streamType = streamType;
-    }
+    public StreamReader createStreamReader(String streamType);
 
+    /**
+     * Create a StreamReader based on the specified stream type
+     * 
+     * @param streamType
+     * @return the StreamReader able to process the specified stream type
+     */
+    public StreamReader createStreamReader(StreamType streamType);
 }

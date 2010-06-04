@@ -22,18 +22,8 @@ package org.gephi.streaming.impl.dgs;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.concurrent.atomic.AtomicInteger;
 
-import org.gephi.data.attributes.api.AttributeColumn;
-import org.gephi.data.attributes.api.AttributeController;
-import org.gephi.data.attributes.api.AttributeModel;
-import org.gephi.data.attributes.api.AttributeTable;
-import org.gephi.data.attributes.api.AttributeType;
-import org.gephi.streaming.api.ContainerLoader;
-import org.gephi.streaming.api.GraphEventContainer;
-import org.gephi.streaming.api.GraphEventContainerFactory;
-import org.gephi.streaming.api.StreamProcessor;
-import org.openide.util.Lookup;
+import org.gephi.streaming.impl.AbstractStreamReader;
 
 /**
  * A stream processor for the GraphStream DSG file format.
@@ -41,16 +31,7 @@ import org.openide.util.Lookup;
  * @author panisson
  *
  */
-public class DGSStreamProcessor implements StreamProcessor, DGSParserListener {
-    
-    private ContainerLoader containerLoader;
-    private GraphEventContainer container;
-    private AttributeModel attributeModel;
-    
-    public DGSStreamProcessor() {
-        AttributeController attributeController = Lookup.getDefault().lookup(AttributeController.class);
-        this.attributeModel = attributeController.getModel();
-    }
+public class DGSStreamReader extends AbstractStreamReader implements DGSParserListener {
     
     @Override
     public void processStream(InputStream inputStream) {
@@ -64,10 +45,6 @@ public class DGSStreamProcessor implements StreamProcessor, DGSParserListener {
 
         System.out.println("Stream finished");
     }
-    
-    public void stop() {
-        this.container.stop();
-    }
 
     private void onStreamClosed() {
       //TODO
@@ -77,30 +54,30 @@ public class DGSStreamProcessor implements StreamProcessor, DGSParserListener {
     @Override
     public void onEdgeAdded(String graphName, String edgeId, String fromTag,
             String toTag, boolean directed) {
-      containerLoader.edgeAdded(edgeId, fromTag, toTag, directed);
+        operator.edgeAdded(edgeId, fromTag, toTag, directed);
     }
 
     @Override
     public void onEdgeAttributeAdded(String graphName, String tag,
             String attribute, Object value) {
-        containerLoader.edgeAttributeAdded(tag, getEdgeAttributeColumn(attribute), value);
+        operator.edgeAttributeAdded(tag, attribute, value);
     }
 
     @Override
     public void onEdgeAttributeChanged(String graphName, String tag,
             String attribute, Object object, Object value) {
-        containerLoader.edgeAttributeChanged(tag, getEdgeAttributeColumn(attribute), value);
+        operator.edgeAttributeChanged(tag, attribute, value);
     }
 
     @Override
     public void onEdgeAttributeRemoved(String sourceId, String edgeId,
             String attribute) {
-        containerLoader.edgeAttributeRemoved(edgeId, getEdgeAttributeColumn(attribute));
+        operator.edgeAttributeRemoved(edgeId, attribute);
     }
 
     @Override
     public void onEdgeRemoved(String sourceId, String edgeId) {
-        containerLoader.edgeRemoved(edgeId);
+        operator.edgeRemoved(edgeId);
     }
 
     @Override
@@ -125,65 +102,36 @@ public class DGSStreamProcessor implements StreamProcessor, DGSParserListener {
 
     @Override
     public void onNodeAdded(String sourceId, String nodeId) {
-        containerLoader.nodeAdded(nodeId);
+        operator.nodeAdded(nodeId);
     }
 
     @Override
     public void onNodeAttributeAdded(String sourceId, String nodeId,
             String attribute, Object value) {
-        containerLoader.nodeAttributeAdded(nodeId, getNodeAttributeColumn(attribute), value);
+        operator.nodeAttributeAdded(nodeId, attribute, value);
     }
 
     @Override
     public void onNodeAttributeChanged(String sourceId, String nodeId,
             String attribute, Object oldValue, Object newValue) {
-        containerLoader.nodeAttributeChanged(nodeId, getNodeAttributeColumn(attribute), newValue);
+        operator.nodeAttributeChanged(nodeId, attribute, newValue);
     }
 
     @Override
     public void onNodeAttributeRemoved(String sourceId, String nodeId,
             String attribute) {
-        containerLoader.nodeAttributeRemoved(nodeId, getNodeAttributeColumn(attribute));
+        operator.nodeAttributeRemoved(nodeId, attribute);
     }
 
     @Override
     public void onNodeRemoved(String sourceId, String nodeId) {
-        containerLoader.nodeRemoved(nodeId);
+        operator.nodeRemoved(nodeId);
     }
 
     @Override
     public void onStepBegins(String graphName, double time) {
       //TODO
         System.out.println("onStepBegins: Not implemented");
-    }
-    
-    private AttributeColumn getEdgeAttributeColumn(String id) {
-        AttributeTable edgeTable = attributeModel.getEdgeTable();
-        AttributeColumn attributeColumn = edgeTable.getColumn(id);
-        if (attributeColumn==null) {
-            attributeColumn = edgeTable.addColumn(id, AttributeType.STRING);
-        }
-        return attributeColumn;
-    }
-    
-    private AttributeColumn getNodeAttributeColumn(String id) {
-        AttributeTable nodeTable = attributeModel.getNodeTable();
-        AttributeColumn attributeColumn = nodeTable.getColumn(id);
-        if (attributeColumn==null) {
-            attributeColumn = nodeTable.addColumn(id, AttributeType.STRING);
-        }
-        return attributeColumn;
-    }
-
-    @Override
-    public GraphEventContainer getContainer() {
-        return container;
-    }
-    
-    @Override
-    public void setContainer(GraphEventContainer container) {
-        this.container = container;
-        this.containerLoader = container.getLoader();
     }
 
     @Override

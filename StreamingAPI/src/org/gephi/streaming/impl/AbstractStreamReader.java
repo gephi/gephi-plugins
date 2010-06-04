@@ -18,14 +18,21 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with Gephi.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.gephi.streaming.api;
+package org.gephi.streaming.impl;
+
+import org.gephi.streaming.api.OperationSupport;
+import org.gephi.streaming.api.StreamReader;
 
 /**
  * @author panisson
  *
  */
-public interface StreamProcessorFactory {
-    public StreamProcessor createStreamProcessor(String streamType);
-
-    public StreamProcessor createStreamProcessor(StreamType streamType);
+public abstract class AbstractStreamReader implements StreamReader {
+    
+    protected OperationSupport operator;
+    
+    public void setOperationSupport(OperationSupport operator) {
+        this.operator = operator;
+    }
+    
 }

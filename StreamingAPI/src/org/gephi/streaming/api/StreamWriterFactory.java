@@ -20,21 +20,27 @@ along with Gephi.  If not, see <http://www.gnu.org/licenses/>.
  */
 package org.gephi.streaming.api;
 
-import java.io.IOException;
-import java.io.InputStream;
-
 /**
+ * A factory for StreamWriters
+ * 
+ * @author Andre' Panisson
  *
- * @author panisson
  */
-public interface StreamProcessor {
+public interface StreamWriterFactory {
+    
+    /**
+     * Create a StreamWriter based on the specified stream type
+     * 
+     * @param streamType
+     * @return the StreamWriter able to write in the specified stream type
+     */
+    public StreamWriter createStreamWriter(String streamType);
 
-    public void processStream(InputStream inputStream) throws IOException;
-    
-    public GraphEventContainer getContainer();
-    
-    void setContainer(GraphEventContainer container);
-    
-    public void stop();
-
+    /**
+     * Create a StreamWriter based on the specified stream type
+     * 
+     * @param streamType
+     * @return the StreamWriter able to write in the specified stream type
+     */
+    public StreamWriter createStreamWriter(StreamType streamType);
 }

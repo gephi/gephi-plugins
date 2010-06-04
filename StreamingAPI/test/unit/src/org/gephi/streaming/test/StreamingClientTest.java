@@ -7,9 +7,9 @@ import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-import org.gephi.streaming.api.GraphEventContainer;
-import org.gephi.streaming.api.StreamProcessor;
-import org.gephi.streaming.impl.StreamingClient;
+import org.gephi.streaming.api.StreamReader;
+import org.gephi.streaming.api.StreamingClient;
+import org.gephi.streaming.impl.AbstractStreamReader;
 import org.junit.Test;
 
 
@@ -20,7 +20,8 @@ public class StreamingClientTest {
     @Test
     public void testClientConnection() throws MalformedURLException {
         final StringBuilder buffer = new StringBuilder();
-        StreamProcessor dataProcessor = new StreamProcessor() {
+        StreamReader dataProcessor = new AbstractStreamReader() {
+            
             @Override
             public void processStream(InputStream inputStream) throws IOException {
                 int data;
@@ -28,17 +29,6 @@ public class StreamingClientTest {
                     buffer.append((char)data);
                 }
             }
-
-            @Override
-            public GraphEventContainer getContainer() {
-                return null;
-            }
-
-            @Override
-            public void stop() { }
-
-            @Override
-            public void setContainer(GraphEventContainer container) { }
         };
         URL url = this.getClass().getResource(DGS_RESOURCE);
         

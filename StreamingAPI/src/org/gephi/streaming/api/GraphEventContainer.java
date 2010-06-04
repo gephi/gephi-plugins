@@ -20,23 +20,23 @@ along with Gephi.  If not, see <http://www.gnu.org/licenses/>.
  */
 package org.gephi.streaming.api;
 
+import org.gephi.streaming.api.event.GraphEvent;
+import org.gephi.streaming.api.event.GraphEventListener;
+
 /**
- * A container is created each time data are imported by <b>importers</b>. Its role is to host all data
- * collected by importers during import process. After pushing data in the container, its content can be
- * analysed to verify its validity and then be processed by <b>processors</b>. Thus containers are
- * <b>loaded</b> by importers and <b>unloaded</b> by processors.
- * <p>
- * See {@link ContainerLoader} for how to push graph and attributes data in the container and see
- * {@link  ContainerUnloader} for how to retrieve data in the container.
+ * A container for Graph Event objects. Its role is to host all events collected by one or more
+ * StreamReaders. The events will be dispatched by the GraphEventDispatcher in synchronous or
+ * asynchronous way, and listeners can be registered using the GraphEventDispatcher in order to
+ * react to the collected events.
+ * <p> See {@link GraphEventOperationSupport} for how to load events in the container and see
+ * {@link GraphEventDispatcher} and {@link GraphEventListener} for how to listen to the events.
  *
- * @author Mathieu Bastian
- * @see Importer
- * @see Processor
+ * @author Andre' Panisson
  */
 public interface GraphEventContainer {
 
     /**
-     * Set the source of the data put in the container. Could be a file name.
+     * Set the source of the data put in the container. Could be the stream's URL.
      * @param source the original source of data.
      * @throws NullPointerException if <code>source</code> is <code>null</code>
      */
@@ -49,22 +49,16 @@ public interface GraphEventContainer {
     public Object getSource();
 
     /**
-     * Get containers loading interface. The <b>loader</b> is used by modules which put data in the
-     * container, whereas the <b>unloader</b> interface is used by modules which read containers content.
-     * @return the containers loading interface
-     */
-    public ContainerLoader getLoader();
-
-    /**
-     * Get containers unloading interface. The <b>unloader</b> interface is used by modules which read
-     * containers content, whereas the <b>loader</b> is used for pushing data in the container.
-     * @return the container unloading interface
+     * Get the event dispatcher. This interface is used to register listeners aimed to react
+     * to the loaded events.
+     * 
+     * @return the dispatcher to register listeners
      */
     public GraphEventDispatcher getGraphEventDispatcher();
 
     /**
      * Set a report this container can use to report issues detected when loading the container. Report
-     * are used to log info and issues during import process. Only one report can be associated to a
+     * are used to log info and issues during load process. Only one report can be associated to a
      * container.
      * @param report set <code>report</code> as the default report for this container
      * @throws NullPointerException if <code>report</code> is <code>null</code>
@@ -78,7 +72,7 @@ public interface GraphEventContainer {
     public Report getReport();
 
     /**
-     * Stops the current container, releasing the resources (closing threads, ...)
+     * Stops the current container, releasing its resources (stopping threads, etc...)
      */
     public void stop();
 
@@ -86,21 +80,13 @@ public interface GraphEventContainer {
      * Wait until all events in this container are dispatched
      */
     public void waitForDispatchAllEvents();
+
+    /**
+     * Load an event and fire it to the registered listeners using its
+     * GraphEventDispatcher.
+     *  
+     * @param event the GraphEvent to be fired to the listeners
+     */
+    public void fireEvent(GraphEvent event);
     
-//
-//    public void setHierarchicalGraph(boolean b);
-//    
-//    public void setAutoScale(boolean autoscale);
-//
-//    public boolean isAutoScale();
-//
-//    public void setAllowSelfLoop(boolean value);
-//
-//    public void setAllowAutoNode(boolean value);
-//
-//    public void setAllowParallelEdge(boolean value);
-//    
-//    public boolean isDynamicGraph();
-//
-//    public boolean isHierarchicalGraph();
 }

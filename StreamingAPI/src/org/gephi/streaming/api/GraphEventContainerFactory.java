@@ -21,11 +21,19 @@ along with Gephi.  If not, see <http://www.gnu.org/licenses/>.
 package org.gephi.streaming.api;
 
 /**
- * @author panisson
+ * Factory for GraphEventContainer objects.
+ * 
+ * @author Andre' Panisson
  *
  */
 public interface GraphEventContainerFactory {
     
+    /**
+     * Create a new GraphEventContainer object.
+     * 
+     * @param source the source of the data put in the container. Could be the stream's URL.
+     * @return a new GraphEventContainer
+     */
     public GraphEventContainer newGraphEventContainer(Object source);
 
 }
