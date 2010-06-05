@@ -22,6 +22,8 @@ package org.gephi.streaming.impl.dgs;
 
 import java.io.OutputStream;
 import java.io.PrintStream;
+import java.util.HashMap;
+import java.util.Locale;
 
 import org.gephi.streaming.api.StreamWriter;
 
@@ -29,82 +31,233 @@ import org.gephi.streaming.api.StreamWriter;
  * @author panisson
  *
  */
-public class DGSStreamWriter extends BaseDGSStreamWriter implements StreamWriter {
-
-    private OutputStream outputStream;
+public class DGSStreamWriter extends StreamWriter {
+    
+    public DGSStreamWriter(OutputStream outputStream) {
+        super(outputStream);
+        out = new PrintStream(outputStream, true);
+    }
     
     @Override
-    public OutputStream getOutputStream() {
-        return outputStream;
-    }
-
-    @Override
     public void startStream() {
-        super.outputHeader();
+        outputHeader();
     }
 
     @Override
     public void endStream() {
-        super.outputEndOfFile();
+        outputEndOfFile();
     }
 
-    @Override
-    public void setOutputStream(OutputStream outputStream) {
-        this.outputStream = outputStream;
-        this.out = new PrintStream(outputStream);
+// Attribute
+    
+    /**
+     * A shortcut to the output.
+     */
+    protected PrintStream out;
+    
+    protected String graphName = "";
+    
+// Command
+    
+    protected void outputHeader()
+    {
+        
+        out.printf( "DGS004%n" );
+        
+        if( graphName.length() <= 0 )
+             out.printf( "null 0 0%n" );
+        else out.printf( "\"%s\" 0 0%n", graphName );
     }
 
-    @Override
-    public void edgeAttributeAdded(String edgeId,
-            String attributeName, Object value) {
-        this.edgeAttributeAdded(edgeId, attributeName, value);
+    protected void outputEndOfFile()
+    {
+        // NOP
     }
 
-    @Override
-    public void edgeAttributeChanged(String edgeId,
-            String attributeName, Object newValue) {
-        super.edgeAttributeChanged(edgeId, attributeName, null, newValue);
+    public void edgeAttributeAdded( String edgeId, String attribute, Object value )
+    {
+        edgeAttributeChanged( edgeId, attribute, value );
     }
 
-    @Override
-    public void edgeAttributeRemoved(String edgeId,
-            String attributeName) {
-        super.edgeAttributeRemoved(edgeId, attributeName);
+    public void edgeAttributeChanged( String edgeId, String attribute, Object newValue )
+    {
+        out.printf( "ce \"%s\" %s%n", edgeId, attributeString( attribute, newValue, false ) );
     }
 
-    @Override
-    public void graphAttributeAdded(String attributeName,
-            Object value) {
-        super.graphAttributeAdded(attributeName, value);
+    public void edgeAttributeRemoved( String edgeId, String attribute )
+    {
+        out.printf( "ce \"%s\" %s%n", edgeId, attributeString( attribute, null, true ) );
     }
 
-    @Override
-    public void graphAttributeChanged(String attributeName,
-            Object newValue) {
-        super.graphAttributeChanged(attributeName, null, newValue);
+    public void graphAttributeAdded( String attribute, Object value )
+    {
+        graphAttributeChanged( attribute, null, value );
     }
 
-    @Override
-    public void graphAttributeRemoved(String attributeName) {
-        super.graphAttributeRemoved(attributeName);
+    public void graphAttributeChanged( String attribute, Object oldValue,
+            Object newValue )
+    {
+        out.printf( "cg %s%n", attributeString( attribute, newValue, false ) );
     }
 
-    @Override
-    public void nodeAttributeAdded(String nodeId,
-            String attributeName, Object value) {
-        super.nodeAttributeAdded(nodeId, attributeName, value);
+    public void graphAttributeRemoved( String attribute )
+    {
+        out.printf( "cg %s%n", attributeString( attribute, null, true ) );
     }
 
-    @Override
-    public void nodeAttributeChanged(String nodeId,
-            String attributeName, Object newValue) {
-        super.nodeAttributeChanged(nodeId, attributeName, null, newValue);
+    public void nodeAttributeAdded( String nodeId, String attribute, Object value )
+    {
+        nodeAttributeChanged( nodeId, attribute, value );
     }
 
-    @Override
-    public void nodeAttributeRemoved(String nodeId,
-            String attributeName) {
-        super.nodeAttributeRemoved(nodeId, attributeName);
+    public void nodeAttributeChanged( String nodeId, String attribute, Object newValue )
+    {
+        out.printf( "cn \"%s\" %s%n", nodeId, attributeString( attribute, newValue, false ) );
     }
 
+    public void nodeAttributeRemoved( String nodeId, String attribute )
+    {
+        out.printf( "cn \"%s\" %s%n", nodeId, attributeString( attribute, null, true ) );
+    }
+
+    public void edgeAdded( String edgeId, String fromNodeId, String toNodeId,
+            boolean directed )
+    {
+        out.printf( "ae \"%s\" \"%s\" %s \"%s\"%n", edgeId, fromNodeId, directed ? ">" : "", toNodeId );
+    }
+
+    public void edgeRemoved( String edgeId )
+    {
+        out.printf( "de \"%s\"%n", edgeId );
+    }
+
+    public void graphCleared()
+    {
+        out.printf( "clear%n" );
+    }
+
+    public void nodeAdded( String nodeId )
+    {
+        out.printf( "an \"%s\"%n", nodeId );
+    }
+
+    public void nodeRemoved( String nodeId )
+    {
+        out.printf( "dn \"%s\"%n", nodeId );
+    }
+
+    public void stepBegins( double step )
+    {
+        out.printf( Locale.US, "st %f%n", step );
+    }
+    
+    
+ // Utility
+     
+     protected String attributeString( String key, Object value, boolean remove )
+     {
+         if( key == null || key.length() == 0 )
+             return null;
+         
+         if( remove )
+         {
+             return String.format( " -\"%s\"", key );
+         }
+         else
+         {
+             if( value != null && value.getClass().isArray() )
+             {
+                 Object[] values = (Object[]) value;
+                 StringBuffer sb = new StringBuffer();
+                 
+                 sb.append( String.format( " \"%s\":", key ) );
+                 
+                 if( values.length > 0 )
+                      sb.append( valueString( values[0] ) );
+                 else sb.append( "\"\"" );
+                 
+                 for( int i=1; i<values.length; ++i )
+                     sb.append( String.format( ",%s", valueString( values[i] ) ) );
+                 
+                 return sb.toString();
+             }
+             else
+             {
+                 return String.format( " \"%s\":%s", key, valueString( value ) );
+             }
+         }
+     }
+     
+     protected String valueString( Object value )
+     {
+         if( value instanceof CharSequence )
+         {
+             return String.format( "\"%s\"", (CharSequence)value );
+         }
+         else if( value instanceof Number )
+         {
+             if( value instanceof Integer || value instanceof Short || value instanceof Byte || value instanceof Long )
+             {
+                 return String.format( Locale.US, "%d", ((Number)value).longValue() );
+             }
+             else if( value instanceof Float || value instanceof Double )
+             {
+                 return String.format( Locale.US, "%f", ((Number)value).doubleValue() );
+             }
+             else if( value instanceof Character )
+             {
+                 return String.format( "\"%c\"", ((Character)value).charValue() );
+             }
+             else if( value instanceof Boolean )
+             {
+                 return String.format( Locale.US, "\"%b\"", ((Boolean)value) );
+             }
+             else
+             {
+                 return String.format( Locale.US, " %f", ((Number)value).doubleValue() );
+             }
+         }
+         else if( value == null )
+         {
+             return "\"\"";
+         }
+         else if( value instanceof Object[] )
+         {
+             Object array[] = (Object[]) value;
+             int    n       = array.length;
+             StringBuffer sb = new StringBuffer();
+             
+             if( array.length > 0 )
+                 sb.append( valueString( array[0] ) );
+             
+             for( int i=1; i<n; i++ )
+             {
+                 sb.append( "," );
+                 sb.append( valueString( array[i] ) );
+             }
+                 
+             return sb.toString();
+         }
+         else
+         {
+             return String.format( "\"%s\"", value.toString());
+         }
+     }
+     
+     protected String hashToString( HashMap<?,?> hash )
+     {
+         StringBuffer sb = new StringBuffer();
+         
+         sb.append( "[ " );
+         
+         for( Object key: hash.keySet() )
+         {
+             sb.append( attributeString( key.toString(), hash.get( key ), false ) );
+             sb.append( " " );
+         }
+         
+         sb.append( ']' );
+         
+         return sb.toString();
+     }
 }

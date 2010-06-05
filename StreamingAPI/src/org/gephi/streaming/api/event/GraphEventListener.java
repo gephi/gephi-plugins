@@ -20,11 +20,13 @@ along with Gephi.  If not, see <http://www.gnu.org/licenses/>.
  */
 package org.gephi.streaming.api.event;
 
+import java.util.EventListener;
+
 /**
  * @author panisson
  *
  */
-public interface GraphEventListener {
+public interface GraphEventListener extends EventListener {
     
     /**
      * @param event

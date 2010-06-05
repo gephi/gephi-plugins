@@ -21,21 +21,12 @@ along with Gephi.  If not, see <http://www.gnu.org/licenses/>.
 package org.gephi.streaming.api;
 
 import java.net.URL;
-import java.util.HashMap;
-import java.util.Map;
 
-import org.gephi.data.attributes.api.AttributeRow;
-import org.gephi.graph.api.Edge;
 import org.gephi.graph.api.Graph;
 import org.gephi.graph.api.GraphController;
-import org.gephi.graph.api.GraphFactory;
 import org.gephi.graph.api.GraphModel;
-import org.gephi.graph.api.Node;
-import org.gephi.graph.api.NodeData;
 import org.gephi.project.api.ProjectController;
 import org.gephi.project.api.Workspace;
-import org.gephi.streaming.api.PropertiesAssociations.EdgeProperties;
-import org.gephi.streaming.api.PropertiesAssociations.NodeProperties;
 import org.gephi.streaming.api.event.EdgeAddedEvent;
 import org.gephi.streaming.api.event.ElementAttributeEvent;
 import org.gephi.streaming.api.event.ElementEvent;
@@ -50,43 +41,28 @@ import org.openide.util.Lookup;
  */
 public class DefaultGraphStreamingEventProcessor implements GraphEventListener {
     
-    private GraphFactory factory;
     private Graph graph;
-
-    private Map<String, Integer> nodeStringToInt = new HashMap<String, Integer>();
-    private Map<String, Integer> edgeStringToInt = new HashMap<String, Integer>();
+    private OperationSupport graphUpdaterOperationSupport;
     
-    //PropertiesAssociations
-    protected PropertiesAssociations properties = new PropertiesAssociations();
+//    public DefaultGraphStreamingEventProcessor(Workspace workspace) {
+//        ProjectController pc = Lookup.getDefault().lookup(ProjectController.class);
+//        if (workspace == null) {
+//            workspace = pc.newWorkspace(pc.getCurrentProject());
+//            pc.openWorkspace(workspace);
+//        }
+//        
+//      //Architecture
+//        GraphController graphController = Lookup.getDefault().lookup(GraphController.class);
+//        GraphModel graphModel = graphController.getModel();
+////        TimelineController timelineController = Lookup.getDefault().lookup(TimelineController.class);
+//
+//        graph = graphModel.getHierarchicalMixedGraph();
+//        graphUpdaterOperationSupport = new GraphUpdaterOperationSupport(graph);
+//    }
     
-    public DefaultGraphStreamingEventProcessor(Workspace workspace) {
-        ProjectController pc = Lookup.getDefault().lookup(ProjectController.class);
-        if (workspace == null) {
-            workspace = pc.newWorkspace(pc.getCurrentProject());
-            pc.openWorkspace(workspace);
-        }
-        
-      //Architecture
-        GraphController graphController = Lookup.getDefault().lookup(GraphController.class);
-        GraphModel graphModel = graphController.getModel();
-//        TimelineController timelineController = Lookup.getDefault().lookup(TimelineController.class);
-
-        graph = graphModel.getHierarchicalMixedGraph();
-        factory = graphModel.factory();
-        
-        //Default node associations
-        properties.addNodePropertyAssociation(NodeProperties.ID, "id");
-        properties.addNodePropertyAssociation(NodeProperties.LABEL, "label");
-        properties.addNodePropertyAssociation(NodeProperties.X, "x");
-        properties.addNodePropertyAssociation(NodeProperties.Y, "y");
-        properties.addNodePropertyAssociation(NodeProperties.SIZE, "size");
-
-        //Default edge associations
-        properties.addEdgePropertyAssociation(EdgeProperties.ID, "id");
-        properties.addEdgePropertyAssociation(EdgeProperties.SOURCE, "source");
-        properties.addEdgePropertyAssociation(EdgeProperties.TARGET, "target");
-        properties.addEdgePropertyAssociation(EdgeProperties.LABEL, "label");
-        properties.addEdgePropertyAssociation(EdgeProperties.WEIGHT, "weight");
+    public DefaultGraphStreamingEventProcessor(Graph graph) {
+        this.graph = graph;
+        this.graphUpdaterOperationSupport = new GraphUpdaterOperationSupport(graph);
     }
     
     /**
@@ -97,16 +73,15 @@ public class DefaultGraphStreamingEventProcessor implements GraphEventListener {
     }
     
     public void process(URL url, String streamType) {
-        StreamReaderFactory processorFactory = Lookup.getDefault().lookup(StreamReaderFactory.class);
-        StreamReader processor = processorFactory.createStreamReader(streamType);
-
-        GraphEventOperationSupport eventOperationSupport = new GraphEventOperationSupport();
-        GraphEventContainerFactory containerfactory = Lookup.getDefault().lookup(GraphEventContainerFactory.class);
-        GraphEventContainer container = containerfactory.newGraphEventContainer(eventOperationSupport);
-        eventOperationSupport.setContainer(container);
         
+        
+        GraphEventContainerFactory containerfactory = Lookup.getDefault().lookup(GraphEventContainerFactory.class);
+        GraphEventContainer container = containerfactory.newGraphEventContainer(url);
         container.getGraphEventDispatcher().addEventListener(this);
-        processor.setOperationSupport(eventOperationSupport);
+        GraphEventOperationSupport eventOperationSupport = new GraphEventOperationSupport(container);
+        
+        StreamReaderFactory processorFactory = Lookup.getDefault().lookup(StreamReaderFactory.class);
+        StreamReader processor = processorFactory.createStreamReader(streamType, eventOperationSupport);
         
         StreamingClient client = new StreamingClient();
         client.connectToEndpoint(url, processor);
@@ -118,10 +93,6 @@ public class DefaultGraphStreamingEventProcessor implements GraphEventListener {
     
     @Override
     public void onGraphEvent(GraphEvent event) {
-
-//        System.out.println(event);
-
-        graph.writeLock();
         
         if (event instanceof ElementEvent) {
             if (event instanceof ElementAttributeEvent) {
@@ -130,65 +101,49 @@ public class DefaultGraphStreamingEventProcessor implements GraphEventListener {
 
                 if(event.getElementType() == ElementType.NODE) {
 
-                    Integer id = nodeStringToInt.get(attributeEvent.getElementId());
-                    Node node = graph.getNode(id);
-                    if (node==null) {
-                        node = factory.newNode();
-                        graph.addNode(node);
-                        nodeStringToInt.put(attributeEvent.getElementId(), node.getId());
-                    }
-
                     switch (event.getEventType()) {
 
                     case ADD:
-                    case CHANGE: {
+                        graphUpdaterOperationSupport.nodeAttributeAdded(
+                                attributeEvent.getElementId(), attributeEvent.getAttributeName(), 
+                                attributeEvent.getAttributeValue());
+                        break;
                         
-                        NodeProperties p = properties.getNodeProperty(attributeEvent.getAttributeName());
-                        if (p != null) {
-                            injectNodeProperty(p, attributeEvent.getAttributeValue(), node.getNodeData());
-                        }
-                        else if (node.getNodeData().getAttributes() != null) {
-                            AttributeRow row = (AttributeRow) node.getNodeData().getAttributes();
-                            row.setValue(attributeEvent.getAttributeName(), attributeEvent.getAttributeValue());
-                        }
+                    case CHANGE: 
+                        
+                        graphUpdaterOperationSupport.nodeAttributeChanged(
+                                attributeEvent.getElementId(), attributeEvent.getAttributeName(), 
+                                attributeEvent.getAttributeValue());
+                        break;
 
-                    } break;
-
-                    case REMOVE: {
-                        if (node.getNodeData().getAttributes() != null) {
-                            AttributeRow row = (AttributeRow) node.getNodeData().getAttributes();
-                            row.setValue(attributeEvent.getAttributeName(), null);
-                        }
-                    }
+                    case REMOVE:
+                        graphUpdaterOperationSupport.nodeAttributeRemoved(
+                                attributeEvent.getElementId(), attributeEvent.getAttributeName());
+                        break;
                     }
                 }
                 
                 else if(event.getElementType() == ElementType.EDGE) {
 
-                    Integer id = edgeStringToInt.get(attributeEvent.getElementId());
-                    Edge edge = graph.getEdge(id);
+                    switch (event.getEventType()) {
 
-                    if (edge!=null) {
+                    case ADD:
+                        graphUpdaterOperationSupport.edgeAttributeAdded(
+                                attributeEvent.getElementId(), attributeEvent.getAttributeName(), 
+                                attributeEvent.getAttributeValue());
+                        break;
+                        
+                    case CHANGE: 
+                        
+                        graphUpdaterOperationSupport.edgeAttributeChanged(
+                                attributeEvent.getElementId(), attributeEvent.getAttributeName(), 
+                                attributeEvent.getAttributeValue());
+                        break;
 
-                        switch (event.getEventType()) {
-
-                        case ADD:
-                        case CHANGE: {
-                            if (edge.getEdgeData().getAttributes() != null) {
-                                AttributeRow row = (AttributeRow) edge.getEdgeData().getAttributes();
-                                row.setValue(attributeEvent.getAttributeName(), attributeEvent.getAttributeValue());
-                            }
-
-                        } break;
-
-                        case REMOVE: {
-                            if (edge.getEdgeData().getAttributes() != null) {
-                                AttributeRow row = (AttributeRow) edge.getEdgeData().getAttributes();
-                                row.setValue(attributeEvent.getAttributeName(), null);
-                            }
-                        }
-                        }
-
+                    case REMOVE:
+                        graphUpdaterOperationSupport.edgeAttributeRemoved(
+                                attributeEvent.getElementId(), attributeEvent.getAttributeName());
+                        break;
                     }
 
                 }
@@ -202,97 +157,39 @@ public class DefaultGraphStreamingEventProcessor implements GraphEventListener {
 
                    switch (event.getEventType()) {
 
-                   case ADD: {
-                       Node n = factory.newNode();
-                       graph.addNode(n);
-                       nodeStringToInt.put(elementEvent.getElementId(), n.getId());
-                   } break;
+                   case ADD:
+                       graphUpdaterOperationSupport.nodeAdded(elementEvent.getElementId());
+                       break;
 
-                   case CHANGE: {
+                   case CHANGE:
                        System.out.println("Invalid change operation on node "+elementEvent.getElementId());
+                       break;
 
-                   } break;
-
-                   case REMOVE: {
-                       Integer id = nodeStringToInt.get(elementEvent.getElementId());
-                       Node node = graph.getNode(id);
-                       if (node!=null)
-                           graph.removeNode(node);
-                   }
+                   case REMOVE:
+                       graphUpdaterOperationSupport.nodeRemoved(elementEvent.getElementId());
+                       break;
                    }
                }
                else if(event.getElementType() == ElementType.EDGE) {
-
+                   
                    switch (event.getEventType()) {
 
-                   case ADD: {
+                   case ADD:
                        EdgeAddedEvent edgeAddedEvent = (EdgeAddedEvent) event;
+                       graphUpdaterOperationSupport.edgeAdded(elementEvent.getElementId(), 
+                               edgeAddedEvent.getSourceId(), edgeAddedEvent.getTargetId(), edgeAddedEvent.isDirected());
+                       break;
 
-                       int sourceId = nodeStringToInt.get(edgeAddedEvent.getSourceId());
-                       Node source = graph.getNode(sourceId);
-                       int targetId = nodeStringToInt.get(edgeAddedEvent.getTargetId());
-                       Node target = graph.getNode(targetId);
-                       Edge edge = factory.newEdge(source, target, 1.0f, edgeAddedEvent.isDirected());
-                       graph.addEdge(edge);
-                       edgeStringToInt.put(elementEvent.getElementId(), edge.getId());
-                   } break;
-
-                   case CHANGE: {
+                   case CHANGE:
                        System.out.println("Invalid change operation on edge "+elementEvent.getElementId());
-                   } break;
+                       break;
 
-                   case REMOVE: {
-                       Integer id = edgeStringToInt.get(elementEvent.getElementId());
-                       Edge edge = graph.getEdge(id);
-                       if(edge!=null) graph.removeEdge(edge);
+                   case REMOVE:
+                       graphUpdaterOperationSupport.edgeRemoved(elementEvent.getElementId());
+                       break;
                    }
-                   }
-
                }
             }
-        }
-
-        graph.writeUnlock();
-    }
-    
-    private void injectNodeProperty(NodeProperties p, Object value, NodeData nodeData) {
-        switch (p) {
-            case ID:
-                String id = value.toString();
-                if (id != null) {
-                    nodeData.setId(id);
-                }
-                break;
-            case LABEL:
-                String label = value.toString();
-                if (label != null) {
-                    nodeData.setLabel(label);
-                }
-                break;
-            case X:
-                float x = Float.valueOf(value.toString());
-                if (x != 0) {
-                    nodeData.setX(x);
-                }
-                break;
-            case Y:
-                float y = Float.valueOf(value.toString());
-                if (y != 0) {
-                    nodeData.setY(y);
-                }
-                break;
-            case Z:
-                float z = Float.valueOf(value.toString());
-                if (z != 0) {
-                    nodeData.setZ(z);
-                }
-                break;
-            case R:
-                break;
-            case G:
-                break;
-            case B:
-                break;
         }
     }
 

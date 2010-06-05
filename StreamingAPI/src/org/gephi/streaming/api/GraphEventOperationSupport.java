@@ -35,24 +35,24 @@ import org.gephi.streaming.api.event.GraphEvent;
  * @see GraphEventContainer
  *
  */
-public class GraphEventOperationSupport implements OperationSupport {
+public class GraphEventOperationSupport extends AbstractOperationSupport {
     
     private Object source;
-    private GraphEventContainer container;
+    private final GraphEventContainer container;
+    
+    /**
+     * @param container
+     */
+    public GraphEventOperationSupport(GraphEventContainer container) {
+        this.container = container;
+        this.source = container.getSource();
+    }
     
     /**
      * @return the GraphEventContainer that will contain the events
      */
     public GraphEventContainer getContainer() {
         return container;
-    }
-    
-    /**
-     * @param container
-     */
-    public void setContainer(GraphEventContainer container) {
-        this.container = container;
-        this.source = container.getSource();
     }
 
     @Override

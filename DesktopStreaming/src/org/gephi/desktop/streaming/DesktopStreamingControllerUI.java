@@ -8,6 +8,8 @@ package org.gephi.desktop.streaming;
 import javax.swing.JPanel;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+import org.gephi.graph.api.GraphController;
+import org.gephi.graph.api.GraphModel;
 import org.gephi.project.api.ProjectController;
 import org.gephi.project.api.Workspace;
 import org.gephi.streaming.api.DefaultGraphStreamingEventProcessor;
@@ -68,7 +70,10 @@ public class DesktopStreamingControllerUI {
         Workspace workspace = projectController.newWorkspace(projectController.getCurrentProject());
 //        projectController.openWorkspace(workspace);
 
-        DefaultGraphStreamingEventProcessor eventProcessor = new DefaultGraphStreamingEventProcessor(workspace);
+        GraphController graphController = Lookup.getDefault().lookup(GraphController.class);
+        GraphModel graphModel = graphController.getModel();
+
+        DefaultGraphStreamingEventProcessor eventProcessor = new DefaultGraphStreamingEventProcessor(graphModel.getHierarchicalMixedGraph());
         eventProcessor.process(endpoint);
      }
 

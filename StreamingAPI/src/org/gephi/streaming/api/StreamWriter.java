@@ -31,29 +31,35 @@ import java.io.OutputStream;
  * @author Andre' Panisson
  *
  */
-public interface StreamWriter extends OperationSupport {
+public abstract class StreamWriter extends AbstractOperationSupport {
+    
+    protected final OutputStream outputStream;
     
     /**
      * Sets the OutputStream to write to
      * 
-     * @param out
+     * @param outputStream
      */
-    public void setOutputStream(OutputStream out);
+    public StreamWriter(OutputStream outputStream) {
+        this.outputStream = outputStream;
+    }
     
     /**
      * @return the OutputStream to write to
      */
-    public OutputStream getOutputStream();
+    public OutputStream getOutputStream() {
+        return outputStream;
+    }
 
     /**
      * Called before start processing the operations (to write 
      * headers, etc.)
      */
-    public void startStream();
+    public abstract void startStream();
 
     /**
      * Called after end processing the operations (to write 
      * footers, etc.)
      */
-    public void endStream();
+    public abstract void endStream();
 }

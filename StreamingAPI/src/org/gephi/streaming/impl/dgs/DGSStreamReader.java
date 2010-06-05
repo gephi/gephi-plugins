@@ -23,7 +23,8 @@ package org.gephi.streaming.impl.dgs;
 import java.io.IOException;
 import java.io.InputStream;
 
-import org.gephi.streaming.impl.AbstractStreamReader;
+import org.gephi.streaming.api.OperationSupport;
+import org.gephi.streaming.api.StreamReader;
 
 /**
  * A stream processor for the GraphStream DSG file format.
@@ -31,8 +32,15 @@ import org.gephi.streaming.impl.AbstractStreamReader;
  * @author panisson
  *
  */
-public class DGSStreamReader extends AbstractStreamReader implements DGSParserListener {
+public class DGSStreamReader extends StreamReader implements DGSParserListener {
     
+    /**
+     * @param operator the OperationSupport to which the operations will be delegated
+     */
+    public DGSStreamReader(OperationSupport operator) {
+        super(operator);
+    }
+
     @Override
     public void processStream(InputStream inputStream) {
         

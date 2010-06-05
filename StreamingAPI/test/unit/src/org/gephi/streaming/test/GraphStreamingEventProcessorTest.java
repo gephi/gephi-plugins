@@ -23,6 +23,8 @@ package org.gephi.streaming.test;
 import java.io.IOException;
 import java.net.URL;
 
+import org.gephi.graph.api.GraphController;
+import org.gephi.graph.api.GraphModel;
 import org.gephi.project.api.ProjectController;
 import org.gephi.project.api.Workspace;
 import org.gephi.streaming.api.DefaultGraphStreamingEventProcessor;
@@ -48,7 +50,10 @@ public class GraphStreamingEventProcessorTest {
         String streamType = "DGS";
         URL url = this.getClass().getResource(DGS_RESOURCE);
         
-        DefaultGraphStreamingEventProcessor eventProcessor = new DefaultGraphStreamingEventProcessor(workspace);
+        GraphController graphController = Lookup.getDefault().lookup(GraphController.class);
+        GraphModel graphModel = graphController.getModel();
+        
+        DefaultGraphStreamingEventProcessor eventProcessor = new DefaultGraphStreamingEventProcessor(graphModel.getHierarchicalMixedGraph());
         eventProcessor.process(url, streamType);
         
         try {

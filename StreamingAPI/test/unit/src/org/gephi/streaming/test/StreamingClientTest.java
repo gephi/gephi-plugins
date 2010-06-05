@@ -7,9 +7,9 @@ import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 
+import org.gephi.streaming.api.AbstractOperationSupport;
 import org.gephi.streaming.api.StreamReader;
 import org.gephi.streaming.api.StreamingClient;
-import org.gephi.streaming.impl.AbstractStreamReader;
 import org.junit.Test;
 
 
@@ -20,7 +20,7 @@ public class StreamingClientTest {
     @Test
     public void testClientConnection() throws MalformedURLException {
         final StringBuilder buffer = new StringBuilder();
-        StreamReader dataProcessor = new AbstractStreamReader() {
+        StreamReader dataProcessor = new StreamReader(new AbstractOperationSupport(){}) {
             
             @Override
             public void processStream(InputStream inputStream) throws IOException {

@@ -31,12 +31,16 @@ import java.io.InputStream;
  *
  * @author Andre' Panisson
  */
-public interface StreamReader {
+public abstract class StreamReader {
+    
+    protected final OperationSupport operator;
     
     /**
      * @param operator the OperationSupport to which the operations will be delegated
      */
-    public void setOperationSupport(OperationSupport operator);
+    public StreamReader(OperationSupport operator) {
+        this.operator = operator;
+    }
 
     /**
      * Read from the InputStream and call the appropriate operations
@@ -45,6 +49,6 @@ public interface StreamReader {
      * @param inputStream the InputStream to read from.
      * @throws IOException when unable to connect to the InputStream
      */
-    public void processStream(InputStream inputStream) throws IOException;
+    public abstract void processStream(InputStream inputStream) throws IOException;
 
 }

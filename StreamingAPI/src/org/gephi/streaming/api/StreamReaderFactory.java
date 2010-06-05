@@ -29,18 +29,22 @@ package org.gephi.streaming.api;
 public interface StreamReaderFactory {
     
     /**
-     * Create a StreamReader based on the specified stream type
+     * Create a StreamReader based on the specified stream type.
+     * The read events will be sent to the specified OperationSupport.
      * 
      * @param streamType
+     * @param operationSupport 
      * @return the StreamReader able to process the specified stream type
      */
-    public StreamReader createStreamReader(String streamType);
+    public StreamReader createStreamReader(String streamType, OperationSupport operationSupport);
 
     /**
-     * Create a StreamReader based on the specified stream type
+     * Create a StreamReader based on the specified stream type.
+     * The read events will be sent to the specified OperationSupport.
      * 
      * @param streamType
+     * @param operationSupport 
      * @return the StreamReader able to process the specified stream type
      */
-    public StreamReader createStreamReader(StreamType streamType);
+    public StreamReader createStreamReader(StreamType streamType, OperationSupport operationSupport);
 }

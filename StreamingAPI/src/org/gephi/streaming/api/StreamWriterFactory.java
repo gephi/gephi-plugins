@@ -20,6 +20,8 @@ along with Gephi.  If not, see <http://www.gnu.org/licenses/>.
  */
 package org.gephi.streaming.api;
 
+import java.io.OutputStream;
+
 /**
  * A factory for StreamWriters
  * 
@@ -32,15 +34,17 @@ public interface StreamWriterFactory {
      * Create a StreamWriter based on the specified stream type
      * 
      * @param streamType
+     * @param outputStream 
      * @return the StreamWriter able to write in the specified stream type
      */
-    public StreamWriter createStreamWriter(String streamType);
+    public StreamWriter createStreamWriter(String streamType, OutputStream outputStream);
 
     /**
      * Create a StreamWriter based on the specified stream type
      * 
      * @param streamType
+     * @param outputStream 
      * @return the StreamWriter able to write in the specified stream type
      */
-    public StreamWriter createStreamWriter(StreamType streamType);
+    public StreamWriter createStreamWriter(StreamType streamType, OutputStream outputStream);
 }
