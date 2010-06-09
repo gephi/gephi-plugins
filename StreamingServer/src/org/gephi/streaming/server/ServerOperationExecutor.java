@@ -85,19 +85,26 @@ public class ServerOperationExecutor {
         StreamWriter writer = writerFactory.createStreamWriter(format, outputStream);
         writer.startStream();
         
-        Node node = graph.getNode(id);
-        if (node != null) {
-            String nodeId = node.getNodeData().getId();
-            writer.nodeAdded(nodeId);
-            
-            AttributeRow row = (AttributeRow) node.getNodeData().getAttributes();
+        graph.readLock();
+        try {
+            Node node = graph.getNode(id);
+            if (node != null) {
+                String nodeId = node.getNodeData().getId();
+                writer.nodeAdded(nodeId);
+                
+                AttributeRow row = (AttributeRow) node.getNodeData().getAttributes();
 
-            if (row != null)
-                for (AttributeValue attributeValue: row.getValues()) {
-                    if (attributeValue.getColumn().getIndex()!=PropertiesColumn.NODE_ID.getIndex())
-                        writer.nodeAttributeAdded(nodeId, attributeValue.getColumn().getTitle(), attributeValue.getValue());
-                }
+                if (row != null)
+                    for (AttributeValue attributeValue: row.getValues()) {
+                        if (attributeValue.getColumn().getIndex()!=PropertiesColumn.NODE_ID.getIndex())
+                            writer.nodeAttributeAdded(nodeId, 
+                                    attributeValue.getColumn().getTitle(), attributeValue.getValue());
+                    }
+            }
+        } finally {
+            graph.readUnlock();
         }
+        
         writer.endStream();
         outputStream.close();
     }
@@ -116,20 +123,26 @@ public class ServerOperationExecutor {
         StreamWriter writer = writerFactory.createStreamWriter(format, outputStream);
         writer.startStream();
         
-        Edge edge = graph.getEdge(id);
-        if (edge != null) {
-            String edgeId = edge.getEdgeData().getId();
-            String sourceId = edge.getSource().getNodeData().getId();
-            String targetId = edge.getTarget().getNodeData().getId();
-            writer.edgeAdded(edgeId, sourceId, targetId, edge.isDirected());
-            
-            AttributeRow row = (AttributeRow) edge.getEdgeData().getAttributes();
+        graph.readLock();
+        try {
+            Edge edge = graph.getEdge(id);
+            if (edge != null) {
+                String edgeId = edge.getEdgeData().getId();
+                String sourceId = edge.getSource().getNodeData().getId();
+                String targetId = edge.getTarget().getNodeData().getId();
+                writer.edgeAdded(edgeId, sourceId, targetId, edge.isDirected());
+                
+                AttributeRow row = (AttributeRow) edge.getEdgeData().getAttributes();
 
-            if (row != null)
-                for (AttributeValue attributeValue: row.getValues()) {
-                    if (attributeValue.getColumn().getIndex()!=PropertiesColumn.NODE_ID.getIndex())
-                        writer.edgeAttributeAdded(edgeId, attributeValue.getColumn().getTitle(), attributeValue.getValue());
-                }
+                if (row != null)
+                    for (AttributeValue attributeValue: row.getValues()) {
+                        if (attributeValue.getColumn().getIndex()!=PropertiesColumn.NODE_ID.getIndex())
+                            writer.edgeAttributeAdded(edgeId, 
+                                    attributeValue.getColumn().getTitle(), attributeValue.getValue());
+                    }
+            }
+        } finally {
+            graph.readUnlock();
         }
         writer.endStream();
         outputStream.close();
@@ -150,7 +163,8 @@ public class ServerOperationExecutor {
      * @param outputStream
      * @throws IOException
      */
-    public void executeUpdateGraph(String format, InputStream inputStream, OutputStream outputStream) throws IOException {
+    public void executeUpdateGraph(String format, InputStream inputStream, OutputStream outputStream) 
+    throws IOException {
         
 //        BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
 //        

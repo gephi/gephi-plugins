@@ -11,8 +11,11 @@ public final class ConnectToStreamAction implements ActionListener {
 
     public void actionPerformed(ActionEvent e) {
 
-        DesktopStreamingControllerUI controller = new DesktopStreamingControllerUI();
-        controller.connectToStream();
+//        DesktopStreamingControllerUI controller = new DesktopStreamingControllerUI();
+//        controller.connectToStream();
+        
+        DesktopStreamingController controller = new DesktopStreamingController();
+        controller.exposeWorkspaceAsStream();
 
     }
 }

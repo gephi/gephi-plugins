@@ -31,8 +31,11 @@ import java.security.NoSuchAlgorithmException;
 import java.security.UnrecoverableKeyException;
 import java.security.cert.CertificateException;
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.net.ssl.KeyManagerFactory;
 import javax.net.ssl.SSLContext;
@@ -52,37 +55,67 @@ import org.simpleframework.transport.connect.SocketConnection;
 @ServiceProvider(service = StreamingServer.class)
 public class StreamingServer {
     
+    private static Logger logger =  Logger.getLogger(StreamingServer.class.getName());
+    
     private int port = 8080;
     private boolean useSSL = true;
     private int sslPort = 8443;
+    private boolean started = false;
+    private String user;
+    private String password;
     
     private Map<String, ServerController> controllers = Collections.synchronizedMap(new HashMap<String, ServerController>());
     private Connection serverConnection;
     private ContextContainer contextContainer;
+    private AuthenticationFilter authenticationFilter;
     
     public StreamingServer() {
         contextContainer = new ContextContainer();
+        authenticationFilter = new AuthenticationFilter();
+        authenticationFilter.setUser("gephi");
+        authenticationFilter.setPassword("gephi");
     }
     
     public void register(ServerController controller, String context) {
+        logger.info("Registering controller at context "+context);
         controllers.put(context, controller);
     }
     
     public void unregister(String context) {
+        logger.info("Unregistering controller at context "+context);
         controllers.remove(context);
     }
     
-    public void start() throws IOException {
-        serverConnection = new SocketConnection(contextContainer);
-        SocketAddress address = new InetSocketAddress(port);
-        serverConnection.connect(address);
-        
-        if (useSSL)
-            startSSL();
+    public synchronized void start() throws IOException {
+        if (!started) {
+            logger.info("Starting StreamingServer...");
+            serverConnection = new SocketConnection(contextContainer);
+            SocketAddress address = new InetSocketAddress(port);
+            serverConnection.connect(address);
+            
+            logger.info("HTTP Listening at port " + port);
+            
+            if (useSSL)
+                startSSL();
+            
+            started = true;
+            if (logger.isLoggable(Level.INFO)) {
+                logger.info("StreamingServer started at " + new Date());
+                
+            }
+        }
     }
     
-    public void stop() throws IOException {
-        serverConnection.close();
+    public synchronized void stop() throws IOException {
+        if (started) {
+            serverConnection.close();
+            started = false;
+            
+            if (logger.isLoggable(Level.INFO)) {
+                logger.info("StreamingServer stopped at " + new Date());
+                
+            }
+        }
     }
     
     public int getPort() {
@@ -109,22 +142,37 @@ public class StreamingServer {
         this.sslPort = sslPort;
     }
 
+    public boolean isStarted() {
+        return started;
+    }
+
     private class ContextContainer implements Container {
+        
+        private Logger logger =  Logger.getLogger(ContextContainer.class.getName());
 
         @Override
         public void handle(Request request, Response response) {
+            
+            if (!authenticationFilter.authenticate(request, response))
+                return;
+            
             String context = request.getPath().getPath();
             ServerController controller = controllers.get(context);
             if (controller==null) {
-                System.out.println("Invalid context: "+context);
-                response.setCode(401);
+                logger.warning("Invalid context: "+context);
+                response.setCode(404);
+                
                 try {
+                    response.getPrintStream().println("HTTP 404: Context "+context+" not found.");
                     response.close();
                 } catch (IOException e) {}
+                
             } else {
                 controller.handle(request, response);
             }
         }
+
+        
     }
     
     private void startSSL() throws IOException {
@@ -148,7 +196,7 @@ public class StreamingServer {
             kmf.init(keyStore, "12345678".toCharArray());
 
             TrustManagerFactory tmf = null;
-            // Uncomment this to use a different trust manager.
+            // Uncomment this to use a non-default trust manager.
             // tmf = TrustManagerFactory.getInstance("PKIX");
             // tmf.init(keyStore);
 
@@ -157,6 +205,9 @@ public class StreamingServer {
                     tmf != null ? tmf.getTrustManagers() : null, null);
 
             connection.connect(address, sslContext);
+            
+            logger.info("HTTPS Listening at port " + sslPort);
+            
         } catch (UnrecoverableKeyException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();

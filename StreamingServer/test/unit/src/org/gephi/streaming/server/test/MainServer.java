@@ -34,7 +34,7 @@ public class MainServer {
         GraphController graphController = Lookup.getDefault().lookup(GraphController.class);
         GraphModel graphModel = graphController.getModel();
 
-        StreamingServer server = new StreamingServer();
+        StreamingServer server = Lookup.getDefault().lookup(StreamingServer.class);
 
         ServerController serverController = new ServerController(graphModel.getHierarchicalMixedGraph());
         server.register(serverController, "/graphstream");
