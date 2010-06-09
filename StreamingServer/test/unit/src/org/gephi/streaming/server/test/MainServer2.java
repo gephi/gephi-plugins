@@ -13,6 +13,8 @@ import org.gephi.project.api.Workspace;
 import org.gephi.streaming.api.StreamReader;
 import org.gephi.streaming.api.StreamReaderFactory;
 import org.gephi.streaming.server.ServerController;
+import org.gephi.streaming.server.impl.RequestWrapper;
+import org.gephi.streaming.server.impl.ResponseWrapper;
 import org.openide.util.Lookup;
 import org.simpleframework.http.Request;
 import org.simpleframework.http.Response;
@@ -90,7 +92,7 @@ public class MainServer2 implements Container {
 	   response.setDate("Last-Modified", time);
 	   
 	   try {
-		   serverController.handle(request, response);
+		   serverController.handle(new RequestWrapper(request), new ResponseWrapper(response));
 		   
 	   } catch (Exception e) {
 		   // TODO Auto-generated catch block

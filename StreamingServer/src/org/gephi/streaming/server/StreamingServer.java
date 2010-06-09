@@ -21,209 +21,124 @@ along with Gephi.  If not, see <http://www.gnu.org/licenses/>.
 package org.gephi.streaming.server;
 
 import java.io.IOException;
-import java.io.InputStream;
-import java.net.InetSocketAddress;
-import java.net.SocketAddress;
-import java.security.KeyManagementException;
-import java.security.KeyStore;
-import java.security.KeyStoreException;
-import java.security.NoSuchAlgorithmException;
-import java.security.UnrecoverableKeyException;
-import java.security.cert.CertificateException;
-import java.util.Collections;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
-import javax.net.ssl.KeyManagerFactory;
-import javax.net.ssl.SSLContext;
-import javax.net.ssl.TrustManagerFactory;
-
-import org.openide.util.lookup.ServiceProvider;
-import org.simpleframework.http.Request;
-import org.simpleframework.http.Response;
-import org.simpleframework.http.core.Container;
-import org.simpleframework.transport.connect.Connection;
-import org.simpleframework.transport.connect.SocketConnection;
 
 /**
+ * The streaming server instance.
+ * 
  * @author panisson
  *
  */
-@ServiceProvider(service = StreamingServer.class)
-public class StreamingServer {
-    
-    private static Logger logger =  Logger.getLogger(StreamingServer.class.getName());
-    
-    private int port = 8080;
-    private boolean useSSL = true;
-    private int sslPort = 8443;
-    private boolean started = false;
-    private String user;
-    private String password;
-    
-    private Map<String, ServerController> controllers = Collections.synchronizedMap(new HashMap<String, ServerController>());
-    private Connection serverConnection;
-    private ContextContainer contextContainer;
-    private AuthenticationFilter authenticationFilter;
-    
-    public StreamingServer() {
-        contextContainer = new ContextContainer();
-        authenticationFilter = new AuthenticationFilter();
-        authenticationFilter.setUser("gephi");
-        authenticationFilter.setPassword("gephi");
-    }
-    
-    public void register(ServerController controller, String context) {
-        logger.info("Registering controller at context "+context);
-        controllers.put(context, controller);
-    }
-    
-    public void unregister(String context) {
-        logger.info("Unregistering controller at context "+context);
-        controllers.remove(context);
-    }
-    
-    public synchronized void start() throws IOException {
-        if (!started) {
-            logger.info("Starting StreamingServer...");
-            serverConnection = new SocketConnection(contextContainer);
-            SocketAddress address = new InetSocketAddress(port);
-            serverConnection.connect(address);
-            
-            logger.info("HTTP Listening at port " + port);
-            
-            if (useSSL)
-                startSSL();
-            
-            started = true;
-            if (logger.isLoggable(Level.INFO)) {
-                logger.info("StreamingServer started at " + new Date());
-                
-            }
-        }
-    }
-    
-    public synchronized void stop() throws IOException {
-        if (started) {
-            serverConnection.close();
-            started = false;
-            
-            if (logger.isLoggable(Level.INFO)) {
-                logger.info("StreamingServer stopped at " + new Date());
-                
-            }
-        }
-    }
-    
-    public int getPort() {
-        return port;
-    }
+public interface StreamingServer {
 
-    public void setPort(int port) {
-        this.port = port;
-    }
+    /**
+     * This is used to register a ServerController under a given server
+     * context. 
+     * <p>For example, registering a ServerController under the
+     * context <code>/streaming</code> will result that the ServerController
+     * will be accessible under the address 
+     * <code>http://localhost:8080/streaming</code>
+     * 
+     * @param controller - the ServerController to be accessible under the 
+     * context
+     * @param context - the context that the controller will be accessible
+     */
+    public void register(ServerController controller, String context);
 
-    public boolean isUseSSL() {
-        return useSSL;
-    }
+    /**
+     * This is used to unregister a ServerController already registered
+     * under the given context.
+     * 
+     * @param context - the context to be unregistered
+     */
+    public void unregister(String context);
 
-    public void setUseSSL(boolean useSSL) {
-        this.useSSL = useSSL;
-    }
+    /**
+     * Start the server with the configured parameters.
+     * 
+     * @throws IOException
+     */
+    public void start() throws IOException;
 
-    public int getSSLPort() {
-        return sslPort;
-    }
+    /**
+     * Stop the server.
+     * 
+     * @throws IOException
+     */
+    public void stop() throws IOException;
 
-    public void setSSLPort(int sslPort) {
-        this.sslPort = sslPort;
-    }
+    /**
+     * This is used to get the currently configured HTTP port.
+     * 
+     * @return the configured HTTP port
+     */
+    public int getPort();
 
-    public boolean isStarted() {
-        return started;
-    }
+    /**
+     * This is used to set the HTTP port to be used by the server.
+     * Note that setting the HTTP port does not immediately change the
+     * port the server is listening, for this you should 
+     * call stop() and start()
+     * 
+     * @param port the port to configure.
+     */
+    public void setPort(int port);
 
-    private class ContextContainer implements Container {
-        
-        private Logger logger =  Logger.getLogger(ContextContainer.class.getName());
+    /**
+     * This is used to verify if the server is configured to use
+     * SSL connections.
+     * 
+     * @return true if the server uses SSL
+     */
+    public boolean isUseSSL();
 
-        @Override
-        public void handle(Request request, Response response) {
-            
-            if (!authenticationFilter.authenticate(request, response))
-                return;
-            
-            String context = request.getPath().getPath();
-            ServerController controller = controllers.get(context);
-            if (controller==null) {
-                logger.warning("Invalid context: "+context);
-                response.setCode(404);
-                
-                try {
-                    response.getPrintStream().println("HTTP 404: Context "+context+" not found.");
-                    response.close();
-                } catch (IOException e) {}
-                
-            } else {
-                controller.handle(request, response);
-            }
-        }
+    /**
+     * This is used to set the server configuration to use 
+     * SSL connections
+     * 
+     * @param useSSL - set it to true if the server should use SSL
+     */
+    public void setUseSSL(boolean useSSL);
 
-        
-    }
-    
-    private void startSSL() throws IOException {
-        SocketAddress address = new InetSocketAddress(sslPort);
-        Connection connection = new SocketConnection(contextContainer);
-        
-        try {
-            KeyManagerFactory kmf = null;
-            KeyStore keyStore = KeyStore.getInstance("PKCS12");
-            InputStream keyStoreInputStream = null;
-            try {
-                keyStoreInputStream = this.getClass().getResourceAsStream("localhost.p12");
-                keyStore.load(keyStoreInputStream, "12345678".toCharArray());
-            } finally {
-                if (keyStoreInputStream != null) {
-                    keyStoreInputStream.close();
-                }
-            }
+    /**
+     * This is used to get the currently configured HTTPS port.
+     * 
+     * @return the configured HTTPS port
+     */
+    public int getSSLPort();
 
-            kmf = KeyManagerFactory.getInstance("SunX509");
-            kmf.init(keyStore, "12345678".toCharArray());
+    /**
+     * This is used to set the HTTPS port to be used by the server.
+     * Note that setting the HTTPS port does not immediately change the
+     * port the server is listening, for this you should 
+     * call stop() and start()
+     * 
+     * @param sslPort the port to configure HTTPS.
+     */
+    public void setSSLPort(int sslPort);
 
-            TrustManagerFactory tmf = null;
-            // Uncomment this to use a non-default trust manager.
-            // tmf = TrustManagerFactory.getInstance("PKIX");
-            // tmf.init(keyStore);
+    /**
+     * This is used to verify if the server is currently started.
+     * 
+     * @return true if the server is started
+     */
+    public boolean isStarted();
 
-            SSLContext sslContext = SSLContext.getInstance("TLS");
-            sslContext.init(kmf != null ? kmf.getKeyManagers() : null,
-                    tmf != null ? tmf.getTrustManagers() : null, null);
+    /**
+     * This is used to get the currently configured authentication filter.
+     * With the returning object it is possible to set the user
+     * and password for authentication.
+     * 
+     * @return the filter that makes the authentication
+     */
+    public AuthenticationFilter getAuthenticationFilter();
 
-            connection.connect(address, sslContext);
-            
-            logger.info("HTTPS Listening at port " + sslPort);
-            
-        } catch (UnrecoverableKeyException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (KeyManagementException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (NoSuchAlgorithmException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (CertificateException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (KeyStoreException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-    }
+    /**
+     * This is used to set the authentication filter to be used.
+     * 
+     * @param authenticationFilter the authentication filter to be used.
+     */
+    public void setAuthenticationFilter(
+            AuthenticationFilter authenticationFilter);
 
 }

@@ -1,74 +1,82 @@
+/*
+Copyright 2008 WebAtlas
+Authors : Mathieu Bastian, Mathieu Jacomy, Julian Bilcke
+Website : http://www.gephi.org
+
+This file is part of Gephi.
+
+Gephi is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+Gephi is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with Gephi.  If not, see <http://www.gnu.org/licenses/>.
+ */
 package org.gephi.streaming.server;
 
-import java.io.IOException;
 
-import org.simpleframework.http.Request;
-import org.simpleframework.http.Response;
-
-public class AuthenticationFilter {
+/**
+ * Filter for server authentication.
+ * 
+ * @author panisson
+ *
+ */
+public interface AuthenticationFilter {
     
-    private String user;
-    private String password;
+    /**
+     * This is used to enable or disable the authentication filter. 
+     * 
+     * @param enabled set it to true if the filter should be enabled, 
+     * false to disable it
+     */
+    public void setAuthenticationEnabled(boolean enabled);
     
-    public String getUser() {
-        return user;
-    }
-    public void setUser(String user) {
-        this.user = user;
-    }
-    public String getPassword() {
-        return password;
-    }
-    public void setPassword(String password) {
-        this.password = password;
-    }
+    /**
+     * This is used to get the user currently configured in this 
+     * AuthenticationFilter
+     * 
+     * @return the configured user
+     */
+    public String getUser();
     
-    public boolean authenticate(Request request, Response response) {
-        if (!doAuthenticate(request, response)) {
-            send401(request, response);
-            return false;
-        } else 
-            return true;
-    }
+    /**
+    * This is used to set the user currently configured in this 
+     * AuthenticationFilter
+     * 
+     * @param user - the user to be used by this filter
+     */
+    public void setUser(String user);
     
-    private boolean doAuthenticate(Request request, Response response) {
-        
-        String encoded = request.getValue("Authorization");
-        
-        if (encoded==null) {
-            return false;
-        }
-        
-        encoded = encoded.replace("Basic ", "");
-        
-        String decoded = null;
-        try {
-            decoded = new String(Base64.decode(encoded));
-        } catch (Exception e) {
-            e.printStackTrace();
-            return false;
-        }
-        
-        String[] userpass = decoded.split(":");
-        if(userpass.length < 2) {
-            return false;
-        }
-        
-        if(userpass[0].equals(user) && userpass[1].equals(password))
-            return true;
-        else
-            return false;
-    }
+    /**
+     * This is used to get the password currently configured in this 
+     * AuthenticationFilter
+     * 
+     * @return the configured password
+     */
+    public String getPassword();
     
-    private void send401(Request request, Response response) {
-        response.setCode(401);
-        response.setText("Authorization Required");
-        response.add("WWW-Authenticate", "Basic realm=\"Gephi GraphStreaming\"");
-        
-        try {
-            response.getPrintStream().println("HTTP 401: Authorization Required");
-            response.close();
-        } catch (IOException e) {}
-    }
+    /**
+     * This is used to set the password currently configured in this 
+      * AuthenticationFilter
+      * 
+      * @param password - the password to be used by this filter
+      */
+    public void setPassword(String password);
+    
+    /**
+     * This is used to verify the user and password provided by the client
+     * against the currently configured user and password. 
+     * 
+     * @param request - the request to be used to check
+     * @param response - the response to send errors
+     * @return true if the user and password are valid, false otherwise
+     */
+    public boolean authenticate(Request request, Response response);
 
 }

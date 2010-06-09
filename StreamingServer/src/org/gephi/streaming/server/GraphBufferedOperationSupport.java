@@ -34,12 +34,12 @@ import org.gephi.streaming.api.OperationSupport;
  * @author panisson
  *
  */
-public class GraphBufferedOpperationSupport extends CompositeOperationSupport {
+public class GraphBufferedOperationSupport extends CompositeOperationSupport {
     
     private Graph graph;
     private GraphUpdaterOperationSupport updater;
 
-    public GraphBufferedOpperationSupport(Graph graph) {
+    public GraphBufferedOperationSupport(Graph graph) {
         this.graph = graph;
         this.updater = new GraphUpdaterOperationSupport(graph);
     }

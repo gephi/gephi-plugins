@@ -24,15 +24,12 @@ import java.io.IOException;
 import java.io.OutputStream;
 
 import org.gephi.graph.api.Graph;
-import org.simpleframework.http.Request;
-import org.simpleframework.http.Response;
-import org.simpleframework.http.core.Container;
 
 /**
  * @author panisson
  *
  */
-public class ServerController implements Container {
+public class ServerController {
     
     private final ServerOperationExecutor executor;
     
@@ -44,8 +41,8 @@ public class ServerController implements Container {
         
         long time = System.currentTimeMillis();
 
-        response.set("Content-Type", "text/plain");
-        response.set("Server", "Gephi/0.7 alpha4");
+        response.add("Content-Type", "text/plain");
+        response.add("Server", "Gephi/0.7 alpha4");
         response.setDate("Date", time);
         response.setDate("Last-Modified", time);
         

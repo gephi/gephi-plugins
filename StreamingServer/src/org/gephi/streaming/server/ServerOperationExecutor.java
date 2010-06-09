@@ -44,14 +44,14 @@ import org.openide.util.Lookup;
  */
 public class ServerOperationExecutor {
     
-    private final GraphBufferedOpperationSupport graphBufferedOperationSupport;
+    private final GraphBufferedOperationSupport graphBufferedOperationSupport;
     private final GraphUpdaterOperationSupport graphUpdaterOperationSupport;
     private final Graph graph;
     private final StreamWriterFactory writerFactory;
     private final StreamReaderFactory readerFactory;
     
     public ServerOperationExecutor(Graph graph) {
-        graphBufferedOperationSupport = new GraphBufferedOpperationSupport(graph);
+        graphBufferedOperationSupport = new GraphBufferedOperationSupport(graph);
         graphUpdaterOperationSupport = new GraphUpdaterOperationSupport(graph);
         this.graph = graph;
         writerFactory = Lookup.getDefault().lookup(StreamWriterFactory.class);

@@ -35,6 +35,10 @@ public class MainServer {
         GraphModel graphModel = graphController.getModel();
 
         StreamingServer server = Lookup.getDefault().lookup(StreamingServer.class);
+        
+        server.getAuthenticationFilter().setUser("gephi");
+        server.getAuthenticationFilter().setPassword("gephi");
+        server.getAuthenticationFilter().setAuthenticationEnabled(true);
 
         ServerController serverController = new ServerController(graphModel.getHierarchicalMixedGraph());
         server.register(serverController, "/graphstream");
