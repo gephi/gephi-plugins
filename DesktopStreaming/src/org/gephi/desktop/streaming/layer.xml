@@ -10,6 +10,14 @@
                 <attr name="noIconInMenu" boolvalue="false"/>
             </file>
         </folder>
+        <folder name="Window">
+            <file name="org-gephi-desktop-streaming-StreamingAction.instance">
+                <attr name="component" methodvalue="org.gephi.desktop.streaming.StreamingTopComponent.findInstance"/>
+                <attr name="displayName" bundlevalue="org.gephi.desktop.streaming.Bundle#CTL_StreamingAction"/>
+                <attr name="iconBase" stringvalue="org/gephi/desktop/streaming/media-stream.png"/>
+                <attr name="instanceCreate" methodvalue="org.openide.windows.TopComponent.openAction"/>
+            </file>
+        </folder>
     </folder>
     <folder name="Menu">
         <folder name="File">
@@ -17,6 +25,21 @@
                 <attr name="originalFile" stringvalue="Actions/File/org-gephi-desktop-streaming-ConnectToStreamAction.instance"/>
                 <attr name="position" intvalue="650"/>
             </file>
+        </folder>
+        <folder name="Window">
+            <file name="StreamingAction.shadow">
+                <attr name="originalFile" stringvalue="Actions/Window/org-gephi-desktop-streaming-StreamingAction.instance"/>
+            </file>
+        </folder>
+    </folder>
+    <folder name="Windows2">
+        <folder name="Components">
+            <file name="StreamingTopComponent.settings" url="StreamingTopComponentSettings.xml"/>
+        </folder>
+        <folder name="Modes">
+            <folder name="layoutmode">
+                <file name="StreamingTopComponent.wstcref" url="StreamingTopComponentWstcref.xml"/>
+            </folder>
         </folder>
     </folder>
 </filesystem>

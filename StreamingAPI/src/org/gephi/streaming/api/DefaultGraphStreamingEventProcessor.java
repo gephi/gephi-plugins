@@ -20,7 +20,10 @@ along with Gephi.  If not, see <http://www.gnu.org/licenses/>.
  */
 package org.gephi.streaming.api;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.net.URL;
+import java.net.URLConnection;
 
 import org.gephi.graph.api.Graph;
 import org.gephi.graph.api.GraphController;
@@ -44,22 +47,6 @@ public class DefaultGraphStreamingEventProcessor implements GraphEventListener {
     private Graph graph;
     private OperationSupport graphUpdaterOperationSupport;
     
-//    public DefaultGraphStreamingEventProcessor(Workspace workspace) {
-//        ProjectController pc = Lookup.getDefault().lookup(ProjectController.class);
-//        if (workspace == null) {
-//            workspace = pc.newWorkspace(pc.getCurrentProject());
-//            pc.openWorkspace(workspace);
-//        }
-//        
-//      //Architecture
-//        GraphController graphController = Lookup.getDefault().lookup(GraphController.class);
-//        GraphModel graphModel = graphController.getModel();
-////        TimelineController timelineController = Lookup.getDefault().lookup(TimelineController.class);
-//
-//        graph = graphModel.getHierarchicalMixedGraph();
-//        graphUpdaterOperationSupport = new GraphUpdaterOperationSupport(graph);
-//    }
-    
     public DefaultGraphStreamingEventProcessor(Graph graph) {
         this.graph = graph;
         this.graphUpdaterOperationSupport = new GraphUpdaterOperationSupport(graph);
@@ -72,7 +59,7 @@ public class DefaultGraphStreamingEventProcessor implements GraphEventListener {
         return graph;
     }
     
-    public void process(URL url, String streamType) {
+    public StreamingConnection process(URL url, String streamType) {
         
         
         GraphEventContainerFactory containerfactory = Lookup.getDefault().lookup(GraphEventContainerFactory.class);
@@ -83,12 +70,20 @@ public class DefaultGraphStreamingEventProcessor implements GraphEventListener {
         StreamReaderFactory processorFactory = Lookup.getDefault().lookup(StreamReaderFactory.class);
         StreamReader processor = processorFactory.createStreamReader(streamType, eventOperationSupport);
         
-        StreamingClient client = new StreamingClient();
-        client.connectToEndpoint(url, processor);
+        StreamingConnection connection = null;
+        try {
+            connection = new StreamingConnection(url, processor);
+            connection.start();
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        
+        return connection;
     }
     
-    public void process(GraphStreamingEndpoint endpoint) {
-        this.process(endpoint.getUrl(), endpoint.getStreamType().getType());
+    public StreamingConnection process(GraphStreamingEndpoint endpoint) {
+        return this.process(endpoint.getUrl(), endpoint.getStreamType().getType());
     }
     
     @Override

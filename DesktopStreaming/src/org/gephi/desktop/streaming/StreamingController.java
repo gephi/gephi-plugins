@@ -21,6 +21,8 @@ along with Gephi.  If not, see <http://www.gnu.org/licenses/>.
 package org.gephi.desktop.streaming;
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.URLConnection;
 
 import org.gephi.graph.api.Graph;
 import org.gephi.graph.api.GraphController;
@@ -28,17 +30,65 @@ import org.gephi.graph.api.GraphModel;
 import org.gephi.project.api.Project;
 import org.gephi.project.api.ProjectController;
 import org.gephi.project.api.Workspace;
+import org.gephi.project.api.WorkspaceInformation;
+import org.gephi.project.api.WorkspaceListener;
 import org.gephi.streaming.api.DefaultGraphStreamingEventProcessor;
 import org.gephi.streaming.api.GraphStreamingEndpoint;
+import org.gephi.streaming.api.StreamingConnection;
 import org.gephi.streaming.server.ServerController;
 import org.gephi.streaming.server.StreamingServer;
 import org.openide.util.Lookup;
+import org.openide.util.lookup.ServiceProvider;
 
 /**
  * @author panisson
  *
  */
-public class DesktopStreamingController {
+@ServiceProvider(service = StreamingController.class)
+public class StreamingController {
+    
+    private StreamingModel model;
+    
+    public StreamingController() {
+      //Workspace events
+        ProjectController pc = Lookup.getDefault().lookup(ProjectController.class);
+        pc.addWorkspaceListener(new WorkspaceListener() {
+
+            public void initialize(Workspace workspace) {
+                workspace.add(new StreamingModel());
+            }
+
+            public void select(Workspace workspace) {
+                model = workspace.getLookup().lookup(StreamingModel.class);
+                if (model == null) {
+                    model = new StreamingModel();
+                    workspace.add(model);
+                }
+            }
+
+            public void unselect(Workspace workspace) {
+            }
+
+            public void close(Workspace workspace) {
+            }
+
+            public void disable() {
+                model = null;
+            }
+        });
+
+        if (pc.getCurrentWorkspace() != null) {
+            model = pc.getCurrentWorkspace().getLookup().lookup(StreamingModel.class);
+            if (model == null) {
+                model = new StreamingModel();
+                pc.getCurrentWorkspace().add(model);
+            }
+        }
+    }
+    
+    public StreamingModel getStreamingModel() {
+        return model;
+    }
     
     public void connectToStream(GraphStreamingEndpoint endpoint) {
         ProjectController projectController = Lookup.getDefault().lookup(ProjectController.class);
@@ -53,9 +103,22 @@ public class DesktopStreamingController {
         GraphController graphController = Lookup.getDefault().lookup(GraphController.class);
         GraphModel graphModel = graphController.getModel();
 
-        DefaultGraphStreamingEventProcessor eventProcessor = new DefaultGraphStreamingEventProcessor(graphModel.getHierarchicalMixedGraph());
-        eventProcessor.process(endpoint);
+        DefaultGraphStreamingEventProcessor eventProcessor = 
+            new DefaultGraphStreamingEventProcessor(graphModel.getHierarchicalMixedGraph());
+        StreamingConnection connection = eventProcessor.process(endpoint);
+        
+        model.getActiveConnections().add(connection);
      }
+    
+    public void disconnect(StreamingConnection connection) {
+        try {
+            connection.close();
+            model.getActiveConnections().remove(connection);
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+    }
     
     public void exposeWorkspaceAsStream() {
         ProjectController projectController = Lookup.getDefault().lookup(ProjectController.class);
@@ -74,11 +137,14 @@ public class DesktopStreamingController {
 //        GraphController graphController = workspace.getLookup().lookup(GraphController.class);
         GraphController graphController = Lookup.getDefault().lookup(GraphController.class);
         Graph graph = graphController.getModel().getMixedGraph();
+
+        WorkspaceInformation wi = workspace.getLookup().lookup(WorkspaceInformation.class);
+        String context = "/"+wi.getName().replaceAll(" ", "").toLowerCase();
         
         StreamingServer server = Lookup.getDefault().lookup(StreamingServer.class);
         ServerController serverController = new ServerController(graph);
-        
-        server.register(serverController, /*TODO: workspace.toString()*/ "/graphstream");
+
+        server.register(serverController, context);
 
         try {
             server.start();
@@ -86,5 +152,14 @@ public class DesktopStreamingController {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
+
+        model.setServerContext(context);
+        model.setServerRunning(true);
+    }
+    
+    public void stopServer() {
+        model.setServerRunning(false);
+        StreamingServer server = Lookup.getDefault().lookup(StreamingServer.class);
+        server.unregister(model.getServerContext());
     }
 }

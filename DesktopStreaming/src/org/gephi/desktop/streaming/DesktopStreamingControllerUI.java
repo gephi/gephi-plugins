@@ -28,7 +28,7 @@ import org.openide.util.NbBundle;
  */
 public class DesktopStreamingControllerUI {
 
-    private StreamingEndpointPanel panel = null;
+    private StreamingClientPanel panel = null;
 
     public DesktopStreamingControllerUI() {
         
@@ -60,9 +60,9 @@ public class DesktopStreamingControllerUI {
 
     private JPanel getPanel() {
         if (panel == null) {
-            panel = new StreamingEndpointPanel();
+            panel = new StreamingClientPanel();
         }
-        return StreamingEndpointPanel.createValidationPanel(panel);
+        return StreamingClientPanel.createValidationPanel(panel);
     }
 
      public void connectToStream(GraphStreamingEndpoint endpoint) {
