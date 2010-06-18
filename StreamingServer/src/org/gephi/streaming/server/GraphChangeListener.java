@@ -141,11 +141,9 @@ public class GraphChangeListener implements GraphListener, AttributeListener {
 //        }
         
         switch (event.getEventType()) {
-        case EDGES_UPDATED:
+            case ADD_EDGES:
             break;
-        case NODES_UPDATED:
-            break;
-        case NODES_AND_EDGES_UPDATED:
+            case ADD_NODES:
             break;
         }
         

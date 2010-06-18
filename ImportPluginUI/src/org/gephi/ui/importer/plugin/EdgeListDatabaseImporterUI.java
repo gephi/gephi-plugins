@@ -8,6 +8,7 @@ import javax.swing.JPanel;
 import org.gephi.io.database.drivers.SQLDriver;
 import org.gephi.io.importer.api.Database;
 import org.gephi.io.importer.plugin.database.ImporterBuilderEdgeList;
+import org.gephi.io.importer.plugin.database.ImporterEdgeList;
 import org.gephi.io.importer.spi.DatabaseImporter;
 import org.gephi.io.importer.spi.Importer;
 import org.gephi.io.importer.spi.ImporterUI;
@@ -45,9 +46,11 @@ public class EdgeListDatabaseImporterUI implements ImporterUI {
         return EdgeListPanel.createValidationPanel(panel);
     }
 
-    public void unsetup() {
-        Database database = panel.getSelectedDatabase();
-        importer.setDatabase(database);
+    public void unsetup(boolean update) {
+        if (update) {
+            Database database = panel.getSelectedDatabase();
+            importer.setDatabase(database);
+        }
         panel = null;
         importer = null;
     }
@@ -58,5 +61,9 @@ public class EdgeListDatabaseImporterUI implements ImporterUI {
 
     public String getIdentifier() {
         return ImporterBuilderEdgeList.IDENTIFER;
+    }
+
+    public boolean isUIForImporter(Importer importer) {
+        return importer instanceof ImporterEdgeList;
     }
 }

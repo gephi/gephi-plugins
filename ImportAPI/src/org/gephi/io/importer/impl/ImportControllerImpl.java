@@ -9,8 +9,6 @@ import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.io.Reader;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 import org.gephi.io.importer.api.Container;
 import org.gephi.io.importer.api.ContainerFactory;
 import org.gephi.io.importer.api.Database;
@@ -22,8 +20,10 @@ import org.gephi.io.importer.spi.DatabaseImporter;
 import org.gephi.io.importer.spi.DatabaseImporterBuilder;
 import org.gephi.io.importer.spi.FileImporter;
 import org.gephi.io.importer.spi.FileImporterBuilder;
-import org.gephi.io.importer.spi.ImporterBuilder;
+import org.gephi.io.importer.spi.Importer;
 import org.gephi.io.importer.spi.ImporterUI;
+import org.gephi.io.importer.spi.SpigotImporter;
+import org.gephi.io.importer.spi.SpigotImporterBuilder;
 import org.gephi.io.processor.spi.Processor;
 import org.gephi.io.processor.spi.Scaler;
 import org.gephi.project.api.Workspace;
@@ -41,7 +41,8 @@ public class ImportControllerImpl implements ImportController {
 
     private final FileImporterBuilder[] fileImporterBuilders;
     private final DatabaseImporterBuilder[] databaseImporterBuilders;
-    private final Map<String, ImporterUI> uis;
+    private final SpigotImporterBuilder[] spigotImporterBuilders;
+    private final ImporterUI[] uis;
 
     public ImportControllerImpl() {
         //Get FileFormatImporters
@@ -50,11 +51,11 @@ public class ImportControllerImpl implements ImportController {
         //Get DatabaseImporters
         databaseImporterBuilders = Lookup.getDefault().lookupAll(DatabaseImporterBuilder.class).toArray(new DatabaseImporterBuilder[0]);
 
+        //Get Spigots
+        spigotImporterBuilders = Lookup.getDefault().lookupAll(SpigotImporterBuilder.class).toArray(new SpigotImporterBuilder[0]);
+
         //Get UIS
-        uis = new HashMap<String, ImporterUI>();
-        for (ImporterUI ui : Lookup.getDefault().lookupAll(ImporterUI.class)) {
-            uis.put(ui.getIdentifier(), ui);
-        }
+        uis = Lookup.getDefault().lookupAll(ImporterUI.class).toArray(new ImporterUI[0]);
     }
 
     public FileImporter getFileImporter(File file) {
@@ -62,7 +63,7 @@ public class ImportControllerImpl implements ImportController {
         fileObject = getArchivedFile(fileObject);   //Unzip and return content file
         FileImporterBuilder builder = getMatchingImporter(fileObject);
         if (fileObject != null && builder != null) {
-            return builder.getImporter();
+            return builder.buildImporter();
         }
         return null;
     }
@@ -70,7 +71,7 @@ public class ImportControllerImpl implements ImportController {
     public FileImporter getFileImporter(String importerName) {
         FileImporterBuilder builder = getMatchingImporter(importerName);
         if (builder != null) {
-            return builder.getImporter();
+            return builder.buildImporter();
         }
         return null;
     }
@@ -81,7 +82,7 @@ public class ImportControllerImpl implements ImportController {
             fileObject = getArchivedFile(fileObject);   //Unzip and return content file
             FileImporterBuilder builder = getMatchingImporter(fileObject);
             if (fileObject != null && builder != null) {
-                return importFile(fileObject.getInputStream(), builder.getImporter());
+                return importFile(fileObject.getInputStream(), builder.buildImporter());
             }
         }
         return null;
@@ -107,11 +108,12 @@ public class ImportControllerImpl implements ImportController {
         container.setReport(report);
 
         importer.setReader(reader);
-        importer.setContainer(container.getLoader());
-        importer.setReport(report);
 
         try {
-            if (importer.execute()) {
+            if (importer.execute(container.getLoader())) {
+                if (importer.getReport() != null) {
+                    report.append(importer.getReport());
+                }
                 return container;
             }
         } catch (RuntimeException ex) {
@@ -123,8 +125,12 @@ public class ImportControllerImpl implements ImportController {
     }
 
     public Container importFile(InputStream stream, FileImporter importer) {
-        Reader reader = ImportUtils.getTextReader(stream);
-        return importFile(reader, importer);
+        try {
+            Reader reader = ImportUtils.getTextReader(stream);
+            return importFile(reader, importer);
+        } catch (Exception ex) {
+            throw new RuntimeException(ex);
+        }
     }
 
     public Container importDatabase(Database database, DatabaseImporter importer) {
@@ -136,11 +142,35 @@ public class ImportControllerImpl implements ImportController {
         container.setReport(report);
 
         importer.setDatabase(database);
-        importer.setContainer(container.getLoader());
-        importer.setReport(report);
 
         try {
-            if (importer.execute()) {
+            if (importer.execute(container.getLoader())) {
+                if (importer.getReport() != null) {
+                    report.append(importer.getReport());
+                }
+                return container;
+            }
+        } catch (RuntimeException ex) {
+            throw ex;
+        } catch (Exception ex) {
+            throw new RuntimeException(ex);
+        }
+        return null;
+    }
+
+    public Container importSpigot(SpigotImporter importer) {
+        //Create Container
+        final Container container = Lookup.getDefault().lookup(ContainerFactory.class).newContainer();
+
+        //Report
+        Report report = new Report();
+        container.setReport(report);
+
+        try {
+            if (importer.execute(container.getLoader())) {
+                if (importer.getReport() != null) {
+                    report.append(importer.getReport());
+                }
                 return container;
             }
         } catch (RuntimeException ex) {
@@ -229,7 +259,12 @@ public class ImportControllerImpl implements ImportController {
         return false;
     }
 
-    public ImporterUI getUI(ImporterBuilder builder) {
-        return uis.get(builder.getIdentifier());
+    public ImporterUI getUI(Importer importer) {
+        for (ImporterUI ui : uis) {
+            if (ui.isUIForImporter(importer)) {
+                return ui;
+            }
+        }
+        return null;
     }
 }

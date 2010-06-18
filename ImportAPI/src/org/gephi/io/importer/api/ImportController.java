@@ -26,8 +26,9 @@ import java.io.InputStream;
 import java.io.Reader;
 import org.gephi.io.importer.spi.DatabaseImporter;
 import org.gephi.io.importer.spi.FileImporter;
-import org.gephi.io.importer.spi.ImporterBuilder;
+import org.gephi.io.importer.spi.Importer;
 import org.gephi.io.importer.spi.ImporterUI;
+import org.gephi.io.importer.spi.SpigotImporter;
 import org.gephi.io.processor.spi.Processor;
 import org.gephi.project.api.Workspace;
 
@@ -48,6 +49,8 @@ public interface ImportController {
 
     public Container importFile(InputStream stream, FileImporter importer);
 
+    public Container importSpigot(SpigotImporter importer);
+
     public FileImporter getFileImporter(File file);
 
     public FileImporter getFileImporter(String importerName);
@@ -62,5 +65,5 @@ public interface ImportController {
 
     public boolean isFileSupported(File file);
 
-    public ImporterUI getUI(ImporterBuilder builder);
+    public ImporterUI getUI(Importer importer);
 }
