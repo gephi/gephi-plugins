@@ -100,7 +100,7 @@ public class GraphChangeListener implements GraphListener, AttributeListener {
 
     @Override
     public void graphChanged(GraphEvent event) {
-        System.out.println(event.getEventType());
+//        System.out.println(event.getEventType());
         
 //        try {
 //            graph.readLock();
@@ -142,8 +142,30 @@ public class GraphChangeListener implements GraphListener, AttributeListener {
         
         switch (event.getEventType()) {
             case ADD_EDGES:
+                for (Edge edge: event.getData().addedEdges()) {
+                    String edgeId = edge.getEdgeData().getId();
+                    System.out.println("Edge added: " + edgeId);
+                    
+                    AttributeRow row = (AttributeRow) edge.getEdgeData().getAttributes();
+                    for (AttributeValue attributeValue: row.getValues()) {
+//                        operationSupport.edgeAttributeAdded(edgeId, attributeValue.getColumn().getTitle(), attributeValue.getValue());
+                         System.out.println("Attribute added: " +  attributeValue.getColumn().getTitle() + "="+attributeValue.getValue());
+                    }
+                }
             break;
             case ADD_NODES:
+                for (Node node: event.getData().addedNodes()) {
+                    System.out.println("Node added: "+node.getNodeData().getId());
+
+                    AttributeRow row = (AttributeRow) node.getNodeData().getAttributes();
+                    for (AttributeValue attributeValue: row.getValues()) {
+//                        operationSupport.edgeAttributeAdded(edgeId, attributeValue.getColumn().getTitle(), attributeValue.getValue());
+                         System.out.println("Attribute added: " +  attributeValue.getColumn().getTitle() + "="+attributeValue.getValue());
+                         if ("STREAMING_SOURCE".equals(attributeValue.getColumn().getTitle())) {
+                             node.getNodeData().getAttributes().setValue("STREAMING_SOURCE", null);
+                         }
+                    }
+                }
             break;
         }
         
