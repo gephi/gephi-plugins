@@ -84,8 +84,9 @@ public class JSONStreamWriter extends StreamWriter {
 					new JSONObject()
 						.put(Fields.TYPE.value(), Types.CE.value())
 						.put(Fields.ID.value(), edgeId)
-						.put(Fields.ATTRIBUTE.value(), attribute)
-						.put(Fields.VALUE.value(), newValue)
+						.put(attribute, newValue)
+//						.put(Fields.ATTRIBUTE.value(), attribute)
+//						.put(Fields.VALUE.value(), newValue)
 						.toString() + '\r');
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
@@ -100,8 +101,9 @@ public class JSONStreamWriter extends StreamWriter {
 					new JSONObject()
 						.put(Fields.TYPE.value(), Types.CE.value())
 						.put(Fields.ID.value(), edgeId)
-						.put(Fields.ATTRIBUTE.value(), attribute)
-						.put(Fields.VALUE.value(), "NULL")
+						.put(attribute, "NULL")
+//						.put(Fields.ATTRIBUTE.value(), attribute)
+//						.put(Fields.VALUE.value(), "NULL")
 						.toString() + '\r');
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
@@ -121,8 +123,9 @@ public class JSONStreamWriter extends StreamWriter {
 			out.print(
 					new JSONObject()
 						.put(Fields.TYPE.value(), Types.CG.value())
-						.put(Fields.ATTRIBUTE.value(), attribute)
-						.put(Fields.VALUE.value(), newValue)
+						.put(attribute, newValue)
+//						.put(Fields.ATTRIBUTE.value(), attribute)
+//						.put(Fields.VALUE.value(), newValue)
 						.toString() + '\r');
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
@@ -136,8 +139,9 @@ public class JSONStreamWriter extends StreamWriter {
 			out.print(
 					new JSONObject()
 						.put(Fields.TYPE.value(), Types.CG.value())
-						.put(Fields.ATTRIBUTE.value(), attribute)
-						.put(Fields.VALUE.value(), "NULL")
+						.put(attribute, "NULL")
+//						.put(Fields.ATTRIBUTE.value(), attribute)
+//						.put(Fields.VALUE.value(), "NULL")
 						.toString() + '\r');
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
@@ -157,8 +161,9 @@ public class JSONStreamWriter extends StreamWriter {
 					new JSONObject()
 						.put(Fields.TYPE.value(), Types.CN.value())
 						.put(Fields.ID.value(), nodeId)
-						.put(Fields.ATTRIBUTE.value(), attribute)
-						.put(Fields.VALUE.value(), newValue)
+						.put(attribute, newValue)
+//						.put(Fields.ATTRIBUTE.value(), attribute)
+//						.put(Fields.VALUE.value(), newValue)
 						.toString() + '\r');
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
@@ -173,8 +178,9 @@ public class JSONStreamWriter extends StreamWriter {
 					new JSONObject()
 						.put(Fields.TYPE.value(), Types.CN.value())
 						.put(Fields.ID.value(), nodeId)
-						.put(Fields.ATTRIBUTE.value(), attribute)
-						.put(Fields.VALUE.value(), "NULL")
+						.put(attribute, "NULL")
+//						.put(Fields.ATTRIBUTE.value(), attribute)
+//						.put(Fields.VALUE.value(), "NULL")
 						.toString() + '\r');
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block

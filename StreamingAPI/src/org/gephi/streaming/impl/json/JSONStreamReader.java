@@ -22,6 +22,7 @@ package org.gephi.streaming.impl.json;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Iterator;
 
 import org.gephi.streaming.api.OperationSupport;
 import org.gephi.streaming.api.StreamReader;
@@ -82,10 +83,16 @@ public class JSONStreamReader extends StreamReader {
 				operator.nodeAdded(o.getString(Fields.ID.value()));
 				
 			} else if (Types.CN.value().equals(type)) {
-				operator.nodeAttributeChanged(
-						o.getString(Fields.ID.value()), 
-						o.getString(Fields.ATTRIBUTE.value()), 
-						o.get(Fields.VALUE.value()));
+				String id = o.getString(Fields.ID.value());
+				Iterator i = o.keys();
+				while (i.hasNext()) {
+					String key = (String)i.next();
+					if (!key.equals(Fields.ID.value()) && !key.equals(Fields.TYPE.value())) {
+						Object value = o.get(key);
+						operator.nodeAttributeChanged(id, key, value);
+					}
+					
+				}
 				
 			} else if (Types.DN.value().equals(type)) {
 				operator.nodeRemoved(o.getString(Fields.ID.value()));
@@ -97,10 +104,16 @@ public class JSONStreamReader extends StreamReader {
 						Boolean.valueOf(o.getString(Fields.DIRECTED.value())));
 				
 			} else if (Types.CE.value().equals(type)) {
-				operator.edgeAttributeChanged(o.getString(
-						Fields.ID.value()), 
-						o.getString(Fields.ATTRIBUTE.value()), 
-						o.get(Fields.VALUE.value()));
+				String id = o.getString(Fields.ID.value());
+				Iterator i = o.keys();
+				while (i.hasNext()) {
+					String key = (String)i.next();
+					if (!key.equals(Fields.ID.value()) && !key.equals(Fields.TYPE.value())) {
+						Object value = o.get(key);
+						operator.edgeAttributeChanged(id, key, value);
+					}
+					
+				}
 				
 			} else if (Types.DE.value().equals(type)) {
 				operator.edgeRemoved(o.getString(Fields.ID.value()));
