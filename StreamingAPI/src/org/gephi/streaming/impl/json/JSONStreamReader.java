@@ -76,47 +76,73 @@ public class JSONStreamReader extends StreamReader {
     
     private void parse(String content) {
     	try {
-			JSONObject o = new JSONObject(content);
+			JSONObject jo = new JSONObject(content);
+			String type = (String)jo.keys().next();
+			JSONObject gObjs = (JSONObject)jo.get(type);
 			
-			String type = (String)o.get(Fields.TYPE.value());
 			if (Types.AN.value().equals(type)) {
-				operator.nodeAdded(o.getString(Fields.ID.value()));
+				Iterator i = gObjs.keys();
+				while (i.hasNext()) {
+					String id = (String)i.next();
+					operator.nodeAdded(id);
+					JSONObject gObj = (JSONObject)gObjs.get(id);
+				}
 				
 			} else if (Types.CN.value().equals(type)) {
-				String id = o.getString(Fields.ID.value());
-				Iterator i = o.keys();
+				
+				Iterator i = gObjs.keys();
 				while (i.hasNext()) {
-					String key = (String)i.next();
-					if (!key.equals(Fields.ID.value()) && !key.equals(Fields.TYPE.value())) {
-						Object value = o.get(key);
+					String id = (String)i.next();
+					JSONObject gObj = (JSONObject)gObjs.get(id);
+					
+					Iterator i2 = gObj.keys();
+					while (i2.hasNext()) {
+						String key = (String)i2.next();
+						Object value = gObj.get(key);
 						operator.nodeAttributeChanged(id, key, value);
 					}
-					
 				}
 				
 			} else if (Types.DN.value().equals(type)) {
-				operator.nodeRemoved(o.getString(Fields.ID.value()));
+				Iterator i = gObjs.keys();
+				while (i.hasNext()) {
+					String id = (String)i.next();
+					operator.nodeRemoved(id);
+				}
 				
 			} else if (Types.AE.value().equals(type)) {
-				operator.edgeAdded(o.getString(Fields.ID.value()),
-						o.getString(Fields.SOURCE.value()),
-						o.getString(Fields.TARGET.value()),
-						Boolean.valueOf(o.getString(Fields.DIRECTED.value())));
-				
-			} else if (Types.CE.value().equals(type)) {
-				String id = o.getString(Fields.ID.value());
-				Iterator i = o.keys();
+				Iterator i = gObjs.keys();
 				while (i.hasNext()) {
-					String key = (String)i.next();
-					if (!key.equals(Fields.ID.value()) && !key.equals(Fields.TYPE.value())) {
-						Object value = o.get(key);
-						operator.edgeAttributeChanged(id, key, value);
-					}
+					String id = (String)i.next();
+					JSONObject gObj = (JSONObject)gObjs.get(id);
+					operator.edgeAdded(id,
+							gObj.getString(Fields.SOURCE.value()),
+							gObj.getString(Fields.TARGET.value()),
+							Boolean.valueOf(gObj.getString(Fields.DIRECTED.value())));
 					
 				}
 				
+			} else if (Types.CE.value().equals(type)) {
+				
+				Iterator i = gObjs.keys();
+				while (i.hasNext()) {
+					String id = (String)i.next();
+					JSONObject gObj = (JSONObject)gObjs.get(id);
+					
+					Iterator i2 = gObj.keys();
+					while (i2.hasNext()) {
+						String key = (String)i2.next();
+						Object value = gObj.get(key);
+						operator.edgeAttributeChanged(id, key, value);
+					}
+				}
+				
 			} else if (Types.DE.value().equals(type)) {
-				operator.edgeRemoved(o.getString(Fields.ID.value()));
+				Iterator i = gObjs.keys();
+				while (i.hasNext()) {
+					String id = (String)i.next();
+					operator.edgeRemoved(id);
+				}
 				
 			} else if (Types.CG.value().equals(type)) {
 				

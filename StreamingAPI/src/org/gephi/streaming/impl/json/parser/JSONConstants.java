@@ -22,10 +22,7 @@ public class JSONConstants {
 	}
 	
 	public enum Fields {
-		TYPE("type"),
 		ID("id"),
-		ATTRIBUTE("attribute"),
-		VALUE("value"),
 		SOURCE("source"),
 		TARGET("target"),
 		DIRECTED("directed");
