@@ -20,7 +20,7 @@ along with Gephi.  If not, see <http://www.gnu.org/licenses/>.
  */
 package org.gephi.streaming.test;
 
-public class JsonStreamProcessorTest extends DGSStreamProcessorTest {
+public class JsonStreamProcessorTest extends AbstractStreamProcessorTest {
 	
 	private static final String JSON_RESOURCE = "amazon.json";
 

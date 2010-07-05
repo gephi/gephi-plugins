@@ -30,13 +30,12 @@ public class FilterEvent extends GraphEvent {
     
     private static final long serialVersionUID = 1L;
     
-    private final Filter filter;
+    protected final Filter filter;
 
     /**
      * @param source
      * @param eventType
      * @param elementType
-     * @param elementId
      * @param filter 
      */
     public FilterEvent(Object source, EventType eventType,
@@ -51,5 +50,21 @@ public class FilterEvent extends GraphEvent {
     public Filter getFilter() {
         return filter;
     }
+    
+	@Override
+	public boolean equals(Object obj) {
+		if ( this == obj ) return true;
+		if ( obj == null || obj.getClass() != this.getClass() ) return false;
+		
+		FilterEvent e = (FilterEvent)obj;
+		return this.elementType == e.elementType
+			&& this.eventType == e.eventType
+			&& this.filter.equals(e.filter);
+	}
+
+	@Override
+	public int hashCode() {
+		return elementType.hashCode() * 31 + eventType.hashCode();
+	}
 
 }

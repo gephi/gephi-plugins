@@ -59,5 +59,21 @@ public class ElementEvent extends GraphEvent {
             .append(this.elementType).append(" ")
             .append(this.elementId).append("]").toString();
     }
+    
+	@Override
+	public boolean equals(Object obj) {
+		if ( this == obj ) return true;
+		if ( obj == null || obj.getClass() != this.getClass() ) return false;
+		
+		ElementEvent e = (ElementEvent)obj;
+		return this.elementType == e.elementType
+			&& this.eventType == e.eventType
+			&& this.elementId.equals(e.elementId);
+	}
+
+	@Override
+	public int hashCode() {
+		return (elementType.hashCode() * 31 + eventType.hashCode()) * 31 + elementId.hashCode();
+	}
 
 }

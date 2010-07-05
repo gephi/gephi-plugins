@@ -20,7 +20,6 @@ along with Gephi.  If not, see <http://www.gnu.org/licenses/>.
  */
 package org.gephi.streaming.api.event;
 
-import org.gephi.data.attributes.api.AttributeColumn;
 import org.gephi.filters.spi.Filter;
 
 /**
@@ -31,7 +30,7 @@ public class FilterAttributeEvent extends FilterEvent {
     
     private static final long serialVersionUID = 1L;
     
-    private final AttributeColumn attributeColumn;
+    private final String attributeName;
     
     private final Object attributeValue;
 
@@ -39,23 +38,23 @@ public class FilterAttributeEvent extends FilterEvent {
      * @param source
      * @param eventType
      * @param elementType
-     * @param elementId
-     * @param attributeColumn 
+     * @param filter 
+     * @param attributeName 
      * @param attributeValue 
      */
     public FilterAttributeEvent(Object source, EventType eventType,
             ElementType elementType, Filter filter,
-            AttributeColumn attributeColumn, Object attributeValue) {
+            String attributeName, Object attributeValue) {
         super(source, eventType, elementType, filter);
-        this.attributeColumn = attributeColumn;
+        this.attributeName = attributeName;
         this.attributeValue = attributeValue;
     }
 
     /**
      * @return the attributeColumn
      */
-    public AttributeColumn getAttributeColumn() {
-        return attributeColumn;
+    public String getAttributeName() {
+        return attributeName;
     }
 
     /**
@@ -69,8 +68,31 @@ public class FilterAttributeEvent extends FilterEvent {
     public String toString() {
         return new StringBuffer("FilterAttributeEvent[")
             .append(this.getEventType()).append(" Attribute ")
-            .append(this.attributeColumn).append(" on ")
+            .append(this.attributeName).append(" on ")
             .append(this.getElementType()).append("]").toString();
     }
+    
+	@Override
+	public boolean equals(Object obj) {
+		if ( this == obj ) return true;
+		if ( obj == null || obj.getClass() != this.getClass() ) return false;
+		
+		FilterAttributeEvent e = (FilterAttributeEvent)obj;
+		return this.elementType == e.elementType
+			&& this.eventType == e.eventType
+			&& this.filter.equals(e.filter)
+			&& this.attributeName.equals(e.attributeName)
+			&& (this.attributeValue==null)?e.attributeValue==null:this.attributeValue.equals(e.attributeValue);
+	}
+
+	@Override
+	public int hashCode() {
+		int hash = 1;
+		hash = hash * 31 + elementType.hashCode();
+		hash = hash * 31 + eventType.hashCode();
+		hash = hash * 31 + attributeName.hashCode();
+		hash = hash * 31 + (attributeValue == null ? 0 : attributeValue.hashCode());
+		return hash;
+	}
 
 }

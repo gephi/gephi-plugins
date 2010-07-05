@@ -73,5 +73,29 @@ public class ElementAttributeEvent extends ElementEvent {
             .append(this.elementType).append(" ")
             .append(this.elementId).append("]").toString();
     }
+    
+	@Override
+	public boolean equals(Object obj) {
+		if ( this == obj ) return true;
+		if ( obj == null || obj.getClass() != this.getClass() ) return false;
+		
+		ElementAttributeEvent e = (ElementAttributeEvent)obj;
+		return this.elementType == e.elementType
+			&& this.eventType == e.eventType
+			&& this.elementId.equals(e.elementId)
+			&& this.attributeName.equals(e.attributeName)
+			&& (this.attributeValue==null)?e.attributeValue==null:this.attributeValue.equals(e.attributeValue);
+	}
+
+	@Override
+	public int hashCode() {
+		int hash = 1;
+		hash = hash * 31 + elementType.hashCode();
+		hash = hash * 31 + eventType.hashCode();
+		hash = hash * 31 + elementId.hashCode();
+		hash = hash * 31 + attributeName.hashCode();
+		hash = hash * 31 + (attributeValue == null ? 0 : attributeValue.hashCode());
+		return hash;
+	}
 
 }
