@@ -220,19 +220,12 @@ public class JSONStreamWriter extends StreamWriter {
 
     public void nodeAdded( String nodeId, Map<String, Object> attributes )
     {
+        JSONObject nodeData = createNodeData(nodeId, attributes);
+        
         try {
-            JSONObject attributesJObject = new JSONObject();
-            if (attributes!=null && attributes.size()>0) {
-                for(Map.Entry<String, Object> entry: attributes.entrySet()) {
-                    attributesJObject.put(entry.getKey(), entry.getValue());
-                }
-            }
-
             out.print(
                     new JSONObject()
-                        .put(Types.AN.value(), new JSONObject()
-                            .put(nodeId, attributesJObject)
-                            )
+                        .put(Types.AN.value(), nodeData)
                         .toString() + '\r');
         } catch (JSONException e) {
             // TODO Auto-generated catch block
@@ -242,19 +235,12 @@ public class JSONStreamWriter extends StreamWriter {
     
     public void nodeChanged( String nodeId, Map<String, Object> attributes )
     {
+        JSONObject nodeData = createNodeData(nodeId, attributes);
+        
         try {
-            JSONObject attributesJObject = new JSONObject();
-            if (attributes!=null && attributes.size()>0) {
-                for(Map.Entry<String, Object> entry: attributes.entrySet()) {
-                    attributesJObject.put(entry.getKey(), entry.getValue());
-                }
-            }
-
             out.print(
                     new JSONObject()
-                        .put(Types.CN.value(), new JSONObject()
-                            .put(nodeId, attributesJObject)
-                            )
+                        .put(Types.CN.value(), nodeData)
                         .toString() + '\r');
         } catch (JSONException e) {
             // TODO Auto-generated catch block
@@ -275,5 +261,26 @@ public class JSONStreamWriter extends StreamWriter {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
+    }
+    
+    private JSONObject createNodeData(String nodeId, Map<String, Object> attributes) {
+        
+        JSONObject nodeData = new JSONObject();
+        
+        try {
+            JSONObject attributesJObject = new JSONObject();
+            if (attributes!=null && attributes.size()>0) {
+                for(Map.Entry<String, Object> entry: attributes.entrySet()) {
+                    attributesJObject.put(entry.getKey(), entry.getValue());
+                }
+            }
+            
+            nodeData.put(nodeId, attributesJObject);
+        } catch (JSONException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        
+        return nodeData;
     }
 }
