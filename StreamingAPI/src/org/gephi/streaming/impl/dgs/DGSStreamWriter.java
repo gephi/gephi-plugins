@@ -24,6 +24,7 @@ import java.io.OutputStream;
 import java.io.PrintStream;
 import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 
 import org.gephi.streaming.api.StreamWriter;
 
@@ -136,9 +137,17 @@ public class DGSStreamWriter extends StreamWriter {
         out.printf( "clear%n" );
     }
 
-    public void nodeAdded( String nodeId )
+    public void nodeAdded( String nodeId, Map<String, Object> attributes )
     {
-        out.printf( "an \"%s\"%n", nodeId );
+        if (attributes==null || attributes.size()==0){
+            out.printf( "an \"%s\"%n", nodeId );
+        } else {
+            out.printf( "an \"%s\"", nodeId );
+            for(Map.Entry<String, Object> entry: attributes.entrySet()) {
+                out.printf(" \"%s\":\"%s\"", entry.getKey(), entry.getValue());
+            }
+            out.printf("%n");
+        }
     }
 
     public void nodeRemoved( String nodeId )

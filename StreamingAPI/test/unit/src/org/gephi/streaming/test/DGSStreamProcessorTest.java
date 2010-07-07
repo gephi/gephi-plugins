@@ -42,14 +42,14 @@ public class DGSStreamProcessorTest extends AbstractStreamProcessorTest {
     
     @Test
     public void testDGS2JSON() throws IOException {
-    	
-    	OutputStream out = new FileOutputStream("/tmp/a.json");
-    	
-    	StreamWriterFactory writerFactory = Lookup.getDefault().lookup(StreamWriterFactory.class);
-//    	 ByteArrayOutputStream out = new ByteArrayOutputStream();
-    	StreamWriter streamWriter = writerFactory.createStreamWriter("JSON", out);
-    	
-    	StreamReaderFactory factory = Lookup.getDefault().lookup(StreamReaderFactory.class);
+
+        OutputStream out = new FileOutputStream("/tmp/a.json");
+
+        StreamWriterFactory writerFactory = Lookup.getDefault().lookup(StreamWriterFactory.class);
+//       ByteArrayOutputStream out = new ByteArrayOutputStream();
+        StreamWriter streamWriter = writerFactory.createStreamWriter("JSON", out);
+
+        StreamReaderFactory factory = Lookup.getDefault().lookup(StreamReaderFactory.class);
         StreamReader processor = factory.createStreamReader(streamType, streamWriter);
         
         InputStream inputStream = this.getClass().getResourceAsStream(resource);

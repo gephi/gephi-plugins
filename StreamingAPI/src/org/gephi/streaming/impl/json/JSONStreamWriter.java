@@ -22,6 +22,7 @@ package org.gephi.streaming.impl.json;
 
 import java.io.OutputStream;
 import java.io.PrintStream;
+import java.util.Map;
 
 import org.gephi.streaming.api.StreamWriter;
 import org.gephi.streaming.impl.json.parser.JSONException;
@@ -70,41 +71,41 @@ public class JSONStreamWriter extends StreamWriter {
 
     public void edgeAttributeAdded( String edgeId, String attribute, Object value )
     {
-    	edgeAttributeChanged( edgeId, attribute, value );
+        edgeAttributeChanged( edgeId, attribute, value );
     }
 
     public void edgeAttributeChanged( String edgeId, String attribute, Object newValue )
     {
-    	try {
-			out.print(
-					new JSONObject()
-						.put(Types.CE.value(), new JSONObject()
-							.put(edgeId, new JSONObject()
-								.put(attribute, newValue)
-								)
-							)
-						.toString() + '\r');
-		} catch (JSONException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+        try {
+            out.print(
+                    new JSONObject()
+                        .put(Types.CE.value(), new JSONObject()
+                            .put(edgeId, new JSONObject()
+                                .put(attribute, newValue)
+                                )
+                            )
+                        .toString() + '\r');
+        } catch (JSONException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
     }
 
     public void edgeAttributeRemoved( String edgeId, String attribute )
     {
-    	try {
-			out.print(
-					new JSONObject()
-						.put(Types.CE.value(), new JSONObject()
-							.put(edgeId,new JSONObject()
-								.put(attribute, JSONObject.NULL)
-								)
-							)
-						.toString() + '\r');
-		} catch (JSONException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+        try {
+            out.print(
+                    new JSONObject()
+                        .put(Types.CE.value(), new JSONObject()
+                            .put(edgeId,new JSONObject()
+                                .put(attribute, JSONObject.NULL)
+                                )
+                            )
+                        .toString() + '\r');
+        } catch (JSONException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
     }
 
     public void graphAttributeAdded( String attribute, Object value )
@@ -115,32 +116,32 @@ public class JSONStreamWriter extends StreamWriter {
     public void graphAttributeChanged( String attribute, Object oldValue,
             Object newValue )
     {
-    	try {
-			out.print(
-					new JSONObject()
-						.put(Types.CG.value(), new JSONObject()
-							.put(attribute, newValue)
-							)
-						.toString() + '\r');
-		} catch (JSONException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+        try {
+            out.print(
+                    new JSONObject()
+                        .put(Types.CG.value(), new JSONObject()
+                            .put(attribute, newValue)
+                            )
+                        .toString() + '\r');
+        } catch (JSONException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
     }
 
     public void graphAttributeRemoved( String attribute )
     {
-    	try {
-			out.print(
-					new JSONObject()
-						.put(Types.CG.value(), new JSONObject()
-							.put(attribute, JSONObject.NULL)
-							)
-						.toString() + '\r');
-		} catch (JSONException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+        try {
+            out.print(
+                    new JSONObject()
+                        .put(Types.CG.value(), new JSONObject()
+                            .put(attribute, JSONObject.NULL)
+                            )
+                        .toString() + '\r');
+        } catch (JSONException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
     }
 
     public void nodeAttributeAdded( String nodeId, String attribute, Object value )
@@ -150,100 +151,107 @@ public class JSONStreamWriter extends StreamWriter {
 
     public void nodeAttributeChanged( String nodeId, String attribute, Object newValue )
     {
-    	try {
-			out.print(
-					new JSONObject()
-						.put(Types.CN.value(), new JSONObject()
-							.put(nodeId, new JSONObject()
-								.put(attribute, newValue)
-								)
-							)
-						.toString() + '\r');
-		} catch (JSONException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+        try {
+            out.print(
+                    new JSONObject()
+                        .put(Types.CN.value(), new JSONObject()
+                            .put(nodeId, new JSONObject()
+                                .put(attribute, newValue)
+                                )
+                            )
+                        .toString() + '\r');
+        } catch (JSONException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
     }
 
     public void nodeAttributeRemoved( String nodeId, String attribute )
     {
-    	try {
-			out.print(
-					new JSONObject()
-						.put(Types.CN.value(), new JSONObject()
-							.put(nodeId, new JSONObject()
-								.put(attribute, JSONObject.NULL)
-								)
-							)
-						.toString() + '\r');
-		} catch (JSONException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+        try {
+            out.print(
+                    new JSONObject()
+                        .put(Types.CN.value(), new JSONObject()
+                            .put(nodeId, new JSONObject()
+                                .put(attribute, JSONObject.NULL)
+                                )
+                            )
+                        .toString() + '\r');
+        } catch (JSONException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
     }
 
     public void edgeAdded( String edgeId, String fromNodeId, String toNodeId,
             boolean directed )
     {
-    	try {
-			out.print(
-					new JSONObject()
-						.put(Types.AE.value(), new JSONObject()
-							.put(edgeId, new JSONObject()
-								.put(Fields.SOURCE.value(), fromNodeId)
-								.put(Fields.TARGET.value(), toNodeId)
-								.put(Fields.DIRECTED.value(), directed)
-								)
-							)
-						.toString() + '\r');
-		} catch (JSONException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+        try {
+            out.print(
+                    new JSONObject()
+                        .put(Types.AE.value(), new JSONObject()
+                            .put(edgeId, new JSONObject()
+                                .put(Fields.SOURCE.value(), fromNodeId)
+                                .put(Fields.TARGET.value(), toNodeId)
+                                .put(Fields.DIRECTED.value(), directed)
+                                )
+                            )
+                        .toString() + '\r');
+        } catch (JSONException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
     }
 
     public void edgeRemoved( String edgeId )
     {
-    	try {
-			out.print(
-					new JSONObject()
-						.put(Types.DE.value(), new JSONObject()
-							.put(edgeId, new JSONObject())
-							)
-						.toString() + '\r');
-		} catch (JSONException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+        try {
+            out.print(
+                    new JSONObject()
+                        .put(Types.DE.value(), new JSONObject()
+                            .put(edgeId, new JSONObject())
+                            )
+                        .toString() + '\r');
+        } catch (JSONException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
     }
 
-    public void nodeAdded( String nodeId )
+    public void nodeAdded( String nodeId, Map<String, Object> attributes )
     {
-    	try {
-			out.print(
-					new JSONObject()
-						.put(Types.AN.value(), new JSONObject()
-							.put(nodeId, new JSONObject())
-							)
-						.toString() + '\r');
-		} catch (JSONException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+        try {
+            JSONObject attributesJObject = new JSONObject();
+            if (attributes!=null && attributes.size()>0) {
+                for(Map.Entry<String, Object> entry: attributes.entrySet()) {
+                    attributesJObject.put(entry.getKey(), entry.getValue());
+                }
+            }
+
+            out.print(
+                    new JSONObject()
+                        .put(Types.AN.value(), new JSONObject()
+                            .put(nodeId, attributesJObject)
+                            )
+                        .toString() + '\r');
+        } catch (JSONException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
     }
 
     public void nodeRemoved( String nodeId )
     {
-    	try {
-			out.print(
-					new JSONObject()
-						.put(Types.DN.value(), new JSONObject()
-							.put(nodeId, new JSONObject())
-							)
-						.toString() + '\r');
-		} catch (JSONException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+        try {
+            out.print(
+                    new JSONObject()
+                        .put(Types.DN.value(), new JSONObject()
+                            .put(nodeId, new JSONObject())
+                            )
+                        .toString() + '\r');
+        } catch (JSONException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
     }
 }

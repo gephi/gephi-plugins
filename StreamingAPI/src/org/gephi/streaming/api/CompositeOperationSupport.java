@@ -22,6 +22,7 @@ package org.gephi.streaming.api;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * A simple OperationSupport implementation that is able to
@@ -141,9 +142,9 @@ public class CompositeOperationSupport extends AbstractOperationSupport {
      * @see org.gephi.streaming.api.OperationSupport#nodeAdded(java.lang.String)
      */
     @Override
-    public void nodeAdded(String nodeId) {
+    public void nodeAdded(String nodeId, Map<String, Object> attributes) {
         for (OperationSupport writer: operationSupports) {
-            writer.nodeAdded(nodeId);
+            writer.nodeAdded(nodeId, attributes);
         }
     }
 

@@ -20,6 +20,8 @@ along with Gephi.  If not, see <http://www.gnu.org/licenses/>.
  */
 package org.gephi.streaming.api.event;
 
+import java.util.Map;
+
 /**
  * @author panisson
  *
@@ -29,17 +31,20 @@ public class ElementEvent extends GraphEvent {
     private static final long serialVersionUID = 1L;
     
     protected final String elementId;
+    protected final Map<String, Object> attributes;
 
     /**
      * @param source
      * @param eventType
      * @param elementType
      * @param elementId
+     * @param attributes 
      */
     public ElementEvent(Object source, EventType eventType,
-            ElementType elementType, String elementId) {
+            ElementType elementType, String elementId, Map<String, Object> attributes) {
         super(source, eventType, elementType);
         this.elementId = elementId;
+        this.attributes = attributes;
     }
     
     /**
@@ -60,20 +65,20 @@ public class ElementEvent extends GraphEvent {
             .append(this.elementId).append("]").toString();
     }
     
-	@Override
-	public boolean equals(Object obj) {
-		if ( this == obj ) return true;
-		if ( obj == null || obj.getClass() != this.getClass() ) return false;
-		
-		ElementEvent e = (ElementEvent)obj;
-		return this.elementType == e.elementType
-			&& this.eventType == e.eventType
-			&& this.elementId.equals(e.elementId);
-	}
+    @Override
+    public boolean equals(Object obj) {
+        if ( this == obj ) return true;
+        if ( obj == null || obj.getClass() != this.getClass() ) return false;
 
-	@Override
-	public int hashCode() {
-		return (elementType.hashCode() * 31 + eventType.hashCode()) * 31 + elementId.hashCode();
-	}
+        ElementEvent e = (ElementEvent)obj;
+        return this.elementType == e.elementType
+            && this.eventType == e.eventType
+            && this.elementId.equals(e.elementId);
+    }
+
+    @Override
+    public int hashCode() {
+        return (elementType.hashCode() * 31 + eventType.hashCode()) * 31 + elementId.hashCode();
+    }
 
 }

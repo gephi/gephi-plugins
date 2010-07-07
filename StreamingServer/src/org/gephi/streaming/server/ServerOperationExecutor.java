@@ -90,7 +90,7 @@ public class ServerOperationExecutor {
             Node node = graph.getNode(id);
             if (node != null) {
                 String nodeId = node.getNodeData().getId();
-                writer.nodeAdded(nodeId);
+                writer.nodeAdded(nodeId, null);
                 
                 AttributeRow row = (AttributeRow) node.getNodeData().getAttributes();
 

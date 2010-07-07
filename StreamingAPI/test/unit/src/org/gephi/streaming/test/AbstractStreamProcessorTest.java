@@ -94,7 +94,8 @@ public abstract class AbstractStreamProcessorTest {
         streamReader.processStream(inputStream);
         
         operator.getContainer().waitForDispatchAllEvents();
-        assertEquals(2422, count.get());
+//        assertEquals(2422, count.get());
+        assertEquals(1620, count.get());
 //        System.out.println(count.get() + " Events");
     }
 
@@ -107,9 +108,9 @@ public abstract class AbstractStreamProcessorTest {
 
         // write triangle
         streamWriter.startStream();
-        streamWriter.nodeAdded("A");
-        streamWriter.nodeAdded("B");
-        streamWriter.nodeAdded("C");
+        streamWriter.nodeAdded("A", null);
+        streamWriter.nodeAdded("B", null);
+        streamWriter.nodeAdded("C", null);
         streamWriter.edgeAdded("AB", "A", "B", false);
         streamWriter.edgeAdded("BC", "B", "C", false);
         streamWriter.edgeAdded("CA", "C", "A", false);

@@ -20,6 +20,9 @@ along with Gephi.  If not, see <http://www.gnu.org/licenses/>.
  */
 package org.gephi.streaming.server;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.gephi.data.attributes.api.AttributeRow;
 import org.gephi.data.attributes.api.AttributeValue;
 import org.gephi.data.properties.PropertiesColumn;
@@ -102,9 +105,9 @@ public class GraphBufferedOperationSupport extends CompositeOperationSupport {
     }
 
     @Override
-    public void nodeAdded(String nodeId) {
-        updater.nodeAdded(nodeId);
-        super.nodeAdded(nodeId);
+    public void nodeAdded(String nodeId, Map<String, Object> attributes) {
+        updater.nodeAdded(nodeId, attributes);
+        super.nodeAdded(nodeId, attributes);
     }
 
     @Override
@@ -139,16 +142,19 @@ public class GraphBufferedOperationSupport extends CompositeOperationSupport {
             graph.readLock();
             
             for (Node node: graph.getNodes()) {
-                String nodeId = node.getNodeData().getId();
-                operationSupport.nodeAdded(nodeId);
                 
+                String nodeId = node.getNodeData().getId();
+                
+                Map<String, Object> attributes = new HashMap<String, Object>();
                 AttributeRow row = (AttributeRow) node.getNodeData().getAttributes();
 
                 if (row != null)
                     for (AttributeValue attributeValue: row.getValues()) {
                         if (attributeValue.getColumn().getIndex()!=PropertiesColumn.NODE_ID.getIndex())
-                            operationSupport.nodeAttributeAdded(nodeId, attributeValue.getColumn().getTitle(), attributeValue.getValue());
+                            attributes.put(attributeValue.getColumn().getTitle(), attributeValue.getValue());
                     }
+                
+                operationSupport.nodeAdded(nodeId, attributes);
             }
             
             for (Edge edge: graph.getEdges()) {

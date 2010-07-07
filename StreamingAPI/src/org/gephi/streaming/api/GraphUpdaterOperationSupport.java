@@ -20,6 +20,8 @@ along with Gephi.  If not, see <http://www.gnu.org/licenses/>.
  */
 package org.gephi.streaming.api;
 
+import java.util.Map;
+
 import org.gephi.graph.api.Edge;
 import org.gephi.graph.api.Graph;
 import org.gephi.graph.api.GraphFactory;
@@ -178,11 +180,18 @@ public class GraphUpdaterOperationSupport extends AbstractOperationSupport {
      * @see org.gephi.streaming.api.OperationSupport#nodeAdded(java.lang.String)
      */
     @Override
-    public void nodeAdded(String nodeId) {
+    public void nodeAdded(String nodeId, Map<String, Object> attributes) {
         Node node = graph.getNode(nodeId);
         if (node==null) {
-            graph.writeLock();
             node = factory.newNode();
+            
+            if (attributes!=null && attributes.size() > 0) {
+                for(Map.Entry<String, Object> entry: attributes.entrySet()) {
+                    this.addNodeAttribute(node, entry.getKey(), entry.getValue());
+                }
+            }
+            
+            graph.writeLock();
             graph.addNode(node);
             graph.setId(node, nodeId);
             graph.writeUnlock();
@@ -209,15 +218,7 @@ public class GraphUpdaterOperationSupport extends AbstractOperationSupport {
         if (node==null) return;
         
         graph.writeLock();
-        
-        NodeProperties p = properties.getNodeProperty(attributeName);
-        if (p != null) {
-            injectNodeProperty(p, newValue, node);
-        }
-        else if (node.getNodeData().getAttributes() != null) {
-            node.getNodeData().getAttributes().setValue(attributeName, newValue);
-        }
-        
+        this.addNodeAttribute(node, attributeName, newValue);
         graph.writeUnlock();
     }
 
@@ -248,6 +249,16 @@ public class GraphUpdaterOperationSupport extends AbstractOperationSupport {
             graph.writeLock();
             graph.removeNode(node);
             graph.writeUnlock();
+    }
+    
+    private void addNodeAttribute(Node node, String attributeName, Object value) {
+        NodeProperties p = properties.getNodeProperty(attributeName);
+        if (p != null) {
+            injectNodeProperty(p, value, node);
+        }
+        else if (node.getNodeData().getAttributes() != null) {
+            node.getNodeData().getAttributes().setValue(attributeName, value);
+        }
     }
     
     private void injectNodeProperty(NodeProperties p, Object value, Node node) {

@@ -21,12 +21,12 @@ along with Gephi.  If not, see <http://www.gnu.org/licenses/>.
 package org.gephi.streaming.test;
 
 public class JsonStreamProcessorTest extends AbstractStreamProcessorTest {
-	
-	private static final String JSON_RESOURCE = "amazon.json";
 
-	public JsonStreamProcessorTest() {
-		this.streamType = "JSON";
-		this.resource = JSON_RESOURCE;
-	}
-	
+    private static final String JSON_RESOURCE = "amazon.json";
+
+    public JsonStreamProcessorTest() {
+        this.streamType = "JSON";
+        this.resource = JSON_RESOURCE;
+    }
+
 }

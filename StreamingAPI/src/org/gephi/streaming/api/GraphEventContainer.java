@@ -91,6 +91,6 @@ public interface GraphEventContainer {
      */
     public void fireEvent(GraphEvent event);
 
-	public Set<GraphEvent> getProcessedEvents();
+    public Set<GraphEvent> getProcessedEvents();
     
 }

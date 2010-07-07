@@ -309,13 +309,7 @@ public class DGSParser extends BaseParser {
         
         readAttributes( attributes );
 
-        listener.onNodeAdded( graphName, tag );
-
-        for( String key: attributes.keySet() )
-        {
-            Object value = attributes.get( key );
-            listener.onNodeAttributeAdded( graphName, tag, key, value );
-        }
+        listener.onNodeAdded( graphName, tag, attributes );
         
         if( eatEolOrEof() == StreamTokenizer.TT_EOF )
             pushBack();

@@ -20,6 +20,8 @@ along with Gephi.  If not, see <http://www.gnu.org/licenses/>.
  */
 package org.gephi.streaming.impl.dgs;
 
+import java.util.Map;
+
 /**
  * A parser listener for the GraphStream DSG file format.
  * 
@@ -28,7 +30,7 @@ package org.gephi.streaming.impl.dgs;
  */
 public interface DGSParserListener {
     
-    void onNodeAdded( String sourceId, String nodeId );
+    void onNodeAdded( String sourceId, String nodeId, Map<String, Object> attributes );
 //    void onNodeAdded( String sourceId, long timeId, String nodeId );
     void onNodeRemoved( String sourceId, String nodeId );
 //    void onNodeRemoved( String sourceId, long timeId, String nodeId );

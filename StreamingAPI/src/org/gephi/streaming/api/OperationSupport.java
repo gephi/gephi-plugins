@@ -20,6 +20,8 @@ along with Gephi.  If not, see <http://www.gnu.org/licenses/>.
  */
 package org.gephi.streaming.api;
 
+import java.util.Map;
+
 /**
  * Defines the operations of the Graph Streaming API.<br>
  * Implementations of this interface can be used to implement 
@@ -34,8 +36,9 @@ public interface OperationSupport {
     /**
      * A node is added
      * @param nodeId the node identifier
+     * @param attributes the node attributes
      */
-    void nodeAdded(String nodeId);
+    void nodeAdded(String nodeId, Map<String, Object> attributes);
 
     /**
      * A node is removed

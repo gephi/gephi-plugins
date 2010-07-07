@@ -41,7 +41,7 @@ public final class EdgeAddedEvent extends ElementEvent {
      */
     public EdgeAddedEvent(Object source, String elementId,
             String sourceId, String targetId, boolean directed) {
-        super(source, EventType.ADD, ElementType.EDGE, elementId);
+        super(source, EventType.ADD, ElementType.EDGE, elementId, null);
         this.sourceId = sourceId;
         this.targetId = targetId;
         this.directed = directed;
@@ -68,29 +68,29 @@ public final class EdgeAddedEvent extends ElementEvent {
         return directed;
     }
     
-	@Override
-	public boolean equals(Object obj) {
-		if ( this == obj ) return true;
-		if ( obj == null || obj.getClass() != this.getClass() ) return false;
-		
-		EdgeAddedEvent e = (EdgeAddedEvent)obj;
-		return this.elementType == e.elementType
-			&& this.eventType == e.eventType
-			&& this.elementId.equals(e.elementId)
-			&& this.sourceId.equals(e.sourceId)
-			&& this.targetId.equals(e.targetId)
-			&& this.directed == e.directed;
-	}
+    @Override
+    public boolean equals(Object obj) {
+        if ( this == obj ) return true;
+        if ( obj == null || obj.getClass() != this.getClass() ) return false;
 
-	@Override
-	public int hashCode() {
-		int hash = 1;
-		hash = hash * 31 + elementType.hashCode();
-		hash = hash * 31 + eventType.hashCode();
-		hash = hash * 31 + elementId.hashCode();
-		hash = hash * 31 + sourceId.hashCode();
-		hash = hash * 31 + targetId.hashCode();
-		hash = hash << 1 + (directed?1:0);
-		return hash;
-	}
+        EdgeAddedEvent e = (EdgeAddedEvent)obj;
+        return this.elementType == e.elementType
+            && this.eventType == e.eventType
+            && this.elementId.equals(e.elementId)
+            && this.sourceId.equals(e.sourceId)
+            && this.targetId.equals(e.targetId)
+            && this.directed == e.directed;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 1;
+        hash = hash * 31 + elementType.hashCode();
+        hash = hash * 31 + eventType.hashCode();
+        hash = hash * 31 + elementId.hashCode();
+        hash = hash * 31 + sourceId.hashCode();
+        hash = hash * 31 + targetId.hashCode();
+        hash = hash << 1 + (directed?1:0);
+        return hash;
+    }
 }

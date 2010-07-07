@@ -66,7 +66,7 @@ public class GraphChangeListener implements GraphListener, AttributeListener {
             
             for (Node node: graph.getNodes()) {
                 String nodeId = node.getNodeData().getId();
-                operationSupport.nodeAdded(nodeId);
+                operationSupport.nodeAdded(nodeId, null);
                 
                 AttributeRow row = (AttributeRow) node.getNodeData().getAttributes();
                 for (AttributeValue attributeValue: row.getValues()) {
@@ -107,26 +107,26 @@ public class GraphChangeListener implements GraphListener, AttributeListener {
                 for (Edge edge: event.getData().addedEdges()) {
                     String edgeId = edge.getEdgeData().getId();
                     operationSupport.edgeAdded(edgeId, edge.getSource().getNodeData().getId(), 
-                    		edge.getTarget().getNodeData().getId(), edge.isDirected());
+                            edge.getTarget().getNodeData().getId(), edge.isDirected());
                     
                     AttributeRow row = (AttributeRow) edge.getEdgeData().getAttributes();
                     for (AttributeValue attributeValue: row.getValues()) {
-                    	if (attributeValue.getColumn().getIndex()!=PropertiesColumn.EDGE_ID.getIndex()
-                    		&& attributeValue.getValue() != null && !"".equals(attributeValue.getValue()))
-                    		operationSupport.edgeAttributeAdded(edgeId, attributeValue.getColumn().getTitle().toLowerCase(), attributeValue.getValue());
+                        if (attributeValue.getColumn().getIndex()!=PropertiesColumn.EDGE_ID.getIndex()
+                            && attributeValue.getValue() != null && !"".equals(attributeValue.getValue()))
+                            operationSupport.edgeAttributeAdded(edgeId, attributeValue.getColumn().getTitle().toLowerCase(), attributeValue.getValue());
                     }
                 }
             break;
             case ADD_NODES:
                 for (Node node: event.getData().addedNodes()) {
-                	String nodeId = node.getNodeData().getId();
-                	operationSupport.nodeAdded(nodeId);
+                    String nodeId = node.getNodeData().getId();
+                    operationSupport.nodeAdded(nodeId, null);
 
                     AttributeRow row = (AttributeRow) node.getNodeData().getAttributes();
                     for (AttributeValue attributeValue: row.getValues()) {
-                    	if (attributeValue.getColumn().getIndex()!=PropertiesColumn.NODE_ID.getIndex()
-                    		&& attributeValue.getValue() != null && !"".equals(attributeValue.getValue()))
-                    		operationSupport.nodeAttributeAdded(nodeId, attributeValue.getColumn().getTitle().toLowerCase(), attributeValue.getValue());
+                        if (attributeValue.getColumn().getIndex()!=PropertiesColumn.NODE_ID.getIndex()
+                            && attributeValue.getValue() != null && !"".equals(attributeValue.getValue()))
+                            operationSupport.nodeAttributeAdded(nodeId, attributeValue.getColumn().getTitle().toLowerCase(), attributeValue.getValue());
                     }
                 }
             break;

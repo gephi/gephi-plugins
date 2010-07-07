@@ -51,20 +51,20 @@ public class FilterEvent extends GraphEvent {
         return filter;
     }
     
-	@Override
-	public boolean equals(Object obj) {
-		if ( this == obj ) return true;
-		if ( obj == null || obj.getClass() != this.getClass() ) return false;
-		
-		FilterEvent e = (FilterEvent)obj;
-		return this.elementType == e.elementType
-			&& this.eventType == e.eventType
-			&& this.filter.equals(e.filter);
-	}
+    @Override
+    public boolean equals(Object obj) {
+        if ( this == obj ) return true;
+        if ( obj == null || obj.getClass() != this.getClass() ) return false;
 
-	@Override
-	public int hashCode() {
-		return elementType.hashCode() * 31 + eventType.hashCode();
-	}
+        FilterEvent e = (FilterEvent)obj;
+        return this.elementType == e.elementType
+            && this.eventType == e.eventType
+            && this.filter.equals(e.filter);
+    }
+
+    @Override
+    public int hashCode() {
+        return elementType.hashCode() * 31 + eventType.hashCode();
+    }
 
 }

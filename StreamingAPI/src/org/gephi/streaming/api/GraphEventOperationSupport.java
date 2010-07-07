@@ -20,6 +20,8 @@ along with Gephi.  If not, see <http://www.gnu.org/licenses/>.
  */
 package org.gephi.streaming.api;
 
+import java.util.Map;
+
 import org.gephi.streaming.api.event.EdgeAddedEvent;
 import org.gephi.streaming.api.event.ElementAttributeEvent;
 import org.gephi.streaming.api.event.ElementEvent;
@@ -84,7 +86,7 @@ public class GraphEventOperationSupport extends AbstractOperationSupport {
 
     @Override
     public void edgeRemoved(String edgeId) {
-        GraphEvent event = new ElementEvent(source, EventType.REMOVE, ElementType.EDGE, edgeId);
+        GraphEvent event = new ElementEvent(source, EventType.REMOVE, ElementType.EDGE, edgeId, null);
         fireEvent(event);
     }
 
@@ -110,8 +112,8 @@ public class GraphEventOperationSupport extends AbstractOperationSupport {
     }
 
     @Override
-    public void nodeAdded(String nodeId) {
-        GraphEvent event = new ElementEvent(source, EventType.ADD, ElementType.NODE, nodeId);
+    public void nodeAdded(String nodeId, Map<String, Object> attributes) {
+        GraphEvent event = new ElementEvent(source, EventType.ADD, ElementType.NODE, nodeId, attributes);
         fireEvent(event);
     }
 
@@ -138,7 +140,7 @@ public class GraphEventOperationSupport extends AbstractOperationSupport {
 
     @Override
     public void nodeRemoved(String nodeId) {
-        GraphEvent event = new ElementEvent(source, EventType.REMOVE, ElementType.NODE, nodeId);
+        GraphEvent event = new ElementEvent(source, EventType.REMOVE, ElementType.NODE, nodeId, null);
         fireEvent(event);
     }
     

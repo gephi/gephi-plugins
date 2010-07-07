@@ -70,6 +70,7 @@
             </test-dependencies>
             <public-packages>
                 <package>org.gephi.streaming.api</package>
+                <package>org.gephi.streaming.api.event</package>
             </public-packages>
         </data>
     </configuration>

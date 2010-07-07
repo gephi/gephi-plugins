@@ -20,6 +20,7 @@ along with Gephi.  If not, see <http://www.gnu.org/licenses/>.
  */
 package org.gephi.streaming.api;
 
+import java.util.Map;
 import java.util.logging.Logger;
 
 /**
@@ -115,7 +116,7 @@ public class AbstractOperationSupport implements OperationSupport {
      * @see org.gephi.streaming.api.OperationSupport#nodeAdded(java.lang.String)
      */
     @Override
-    public void nodeAdded(String nodeId) {
+    public void nodeAdded(String nodeId, Map<String, Object> attributes) {
         logger.warning("Operation nodeAdded not supported in the class " + this.getClass().getSimpleName());
 
     }

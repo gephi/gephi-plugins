@@ -64,12 +64,12 @@ public class DefaultGraphStreamingEventProcessor implements GraphEventListener {
     }
     
     public Set<GraphEvent> getProcessedEvents() {
-    	return container.getProcessedEvents();
+        return container.getProcessedEvents();
     }
     
     public StreamingConnection process(URL url, String streamType) {
         
-    	container.setSource(url);
+        container.setSource(url);
         container.getGraphEventDispatcher().addEventListener(this);
         GraphEventOperationSupport eventOperationSupport = new GraphEventOperationSupport(container);
         
@@ -159,7 +159,7 @@ public class DefaultGraphStreamingEventProcessor implements GraphEventListener {
                    switch (event.getEventType()) {
 
                    case ADD:
-                       graphUpdaterOperationSupport.nodeAdded(elementEvent.getElementId());
+                       graphUpdaterOperationSupport.nodeAdded(elementEvent.getElementId(), null);
                        break;
 
                    case CHANGE:

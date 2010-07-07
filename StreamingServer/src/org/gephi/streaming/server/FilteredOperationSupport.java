@@ -3,6 +3,7 @@
  */
 package org.gephi.streaming.server;
 
+import java.util.Map;
 import java.util.Set;
 
 import org.gephi.streaming.api.AbstractOperationSupport;
@@ -19,97 +20,97 @@ import org.gephi.streaming.api.event.GraphEvent;
  *
  */
 public class FilteredOperationSupport extends AbstractOperationSupport {
-	
-	private Set<GraphEvent> filteredEvents;
-	private OperationSupport operationSupport;
-	private Object source = this;
-	
-	public FilteredOperationSupport(OperationSupport operationSupport, Set<GraphEvent> filteredEvents) {
-		this.operationSupport = operationSupport;
-		this.filteredEvents = filteredEvents;
-	}
 
-	public void edgeAdded(String edgeId, String fromNodeId, String toNodeId,
-			boolean directed) {
-		EdgeAddedEvent event = new EdgeAddedEvent(this, edgeId, fromNodeId, toNodeId, directed);
-		if(!filteredEvents.contains(event))
-			operationSupport.edgeAdded(edgeId, fromNodeId, toNodeId, directed);
-	}
+    private Set<GraphEvent> filteredEvents;
+    private OperationSupport operationSupport;
+    private Object source = this;
 
-	public void edgeAttributeAdded(String edgeId, String attributeName,
-			Object value) {
-		ElementAttributeEvent event = new ElementAttributeEvent(source, EventType.ADD, ElementType.EDGE, edgeId, attributeName, value);
-		if(!filteredEvents.contains(event))
-			operationSupport.edgeAttributeAdded(edgeId, attributeName, value);
-	}
+    public FilteredOperationSupport(OperationSupport operationSupport, Set<GraphEvent> filteredEvents) {
+        this.operationSupport = operationSupport;
+        this.filteredEvents = filteredEvents;
+    }
 
-	public void edgeAttributeChanged(String edgeId, String attributeName,
-			Object newValue) {
-		ElementAttributeEvent event = new ElementAttributeEvent(source, EventType.CHANGE, ElementType.EDGE, edgeId, attributeName, newValue);
-		if(!filteredEvents.contains(event))
-			operationSupport.edgeAttributeChanged(edgeId, attributeName, newValue);
-	}
+    public void edgeAdded(String edgeId, String fromNodeId, String toNodeId,
+            boolean directed) {
+        EdgeAddedEvent event = new EdgeAddedEvent(this, edgeId, fromNodeId, toNodeId, directed);
+        if(!filteredEvents.contains(event))
+            operationSupport.edgeAdded(edgeId, fromNodeId, toNodeId, directed);
+    }
 
-	public void edgeAttributeRemoved(String edgeId, String attributeName) {
-		ElementAttributeEvent event = new ElementAttributeEvent(source, EventType.REMOVE, ElementType.EDGE, edgeId, attributeName, null);
-		if(!filteredEvents.contains(event))
-			operationSupport.edgeAttributeRemoved(edgeId, attributeName);
-	}
+    public void edgeAttributeAdded(String edgeId, String attributeName,
+            Object value) {
+        ElementAttributeEvent event = new ElementAttributeEvent(source, EventType.ADD, ElementType.EDGE, edgeId, attributeName, value);
+        if(!filteredEvents.contains(event))
+            operationSupport.edgeAttributeAdded(edgeId, attributeName, value);
+    }
 
-	public void edgeRemoved(String edgeId) {
-		ElementEvent event = new ElementEvent(source, EventType.REMOVE, ElementType.EDGE, edgeId);
-		if(!filteredEvents.contains(event))
-			operationSupport.edgeRemoved(edgeId);
-	}
+    public void edgeAttributeChanged(String edgeId, String attributeName,
+            Object newValue) {
+        ElementAttributeEvent event = new ElementAttributeEvent(source, EventType.CHANGE, ElementType.EDGE, edgeId, attributeName, newValue);
+        if(!filteredEvents.contains(event))
+            operationSupport.edgeAttributeChanged(edgeId, attributeName, newValue);
+    }
 
-	public void graphAttributeAdded(String attributeName, Object value) {
-		ElementAttributeEvent event = new ElementAttributeEvent(source, EventType.ADD, ElementType.GRAPH, null, attributeName, value);
-		if(!filteredEvents.contains(event))
-			operationSupport.graphAttributeAdded(attributeName, value);
-	}
+    public void edgeAttributeRemoved(String edgeId, String attributeName) {
+        ElementAttributeEvent event = new ElementAttributeEvent(source, EventType.REMOVE, ElementType.EDGE, edgeId, attributeName, null);
+        if(!filteredEvents.contains(event))
+            operationSupport.edgeAttributeRemoved(edgeId, attributeName);
+    }
 
-	public void graphAttributeChanged(String attributeName, Object newValue) {
-		ElementAttributeEvent event = new ElementAttributeEvent(source, EventType.CHANGE, ElementType.GRAPH, null, attributeName, newValue);
-		if(!filteredEvents.contains(event))
-			operationSupport.graphAttributeChanged(attributeName, newValue);
-	}
+    public void edgeRemoved(String edgeId) {
+        ElementEvent event = new ElementEvent(source, EventType.REMOVE, ElementType.EDGE, edgeId, null);
+        if(!filteredEvents.contains(event))
+            operationSupport.edgeRemoved(edgeId);
+    }
 
-	public void graphAttributeRemoved(String attributeName) {
-		ElementAttributeEvent event = new ElementAttributeEvent(source, EventType.CHANGE, ElementType.GRAPH, null, attributeName, null);
-		if(!filteredEvents.contains(event))
-			operationSupport.graphAttributeRemoved(attributeName);
-	}
+    public void graphAttributeAdded(String attributeName, Object value) {
+        ElementAttributeEvent event = new ElementAttributeEvent(source, EventType.ADD, ElementType.GRAPH, null, attributeName, value);
+        if(!filteredEvents.contains(event))
+            operationSupport.graphAttributeAdded(attributeName, value);
+    }
 
-	public void nodeAdded(String nodeId) {
-		ElementEvent event = new ElementEvent(source, EventType.ADD, ElementType.NODE, nodeId);
-		if(!filteredEvents.contains(event))
-			operationSupport.nodeAdded(nodeId);
-	}
+    public void graphAttributeChanged(String attributeName, Object newValue) {
+        ElementAttributeEvent event = new ElementAttributeEvent(source, EventType.CHANGE, ElementType.GRAPH, null, attributeName, newValue);
+        if(!filteredEvents.contains(event))
+            operationSupport.graphAttributeChanged(attributeName, newValue);
+    }
 
-	public void nodeAttributeAdded(String nodeId, String attributeName,
-			Object value) {
-		ElementAttributeEvent event = new ElementAttributeEvent(source, EventType.ADD, ElementType.NODE, nodeId, attributeName, value);
-		if(!filteredEvents.contains(event))
-			operationSupport.nodeAttributeAdded(nodeId, attributeName, value);
-	}
+    public void graphAttributeRemoved(String attributeName) {
+        ElementAttributeEvent event = new ElementAttributeEvent(source, EventType.CHANGE, ElementType.GRAPH, null, attributeName, null);
+        if(!filteredEvents.contains(event))
+            operationSupport.graphAttributeRemoved(attributeName);
+    }
 
-	public void nodeAttributeChanged(String nodeId, String attributeName,
-			Object newValue) {
-		ElementAttributeEvent event = new ElementAttributeEvent(source, EventType.CHANGE, ElementType.NODE, nodeId, attributeName, newValue);
-		if(!filteredEvents.contains(event))
-			operationSupport.nodeAttributeChanged(nodeId, attributeName, newValue);
-	}
+    public void nodeAdded(String nodeId, Map<String, Object> attributes) {
+        ElementEvent event = new ElementEvent(source, EventType.ADD, ElementType.NODE, nodeId, attributes);
+        if(!filteredEvents.contains(event))
+            operationSupport.nodeAdded(nodeId, attributes);
+    }
 
-	public void nodeAttributeRemoved(String nodeId, String attributeName) {
-		ElementAttributeEvent event = new ElementAttributeEvent(source, EventType.REMOVE, ElementType.NODE, nodeId, attributeName, null);
-		if(!filteredEvents.contains(event))
-			operationSupport.nodeAttributeRemoved(nodeId, attributeName);
-	}
+    public void nodeAttributeAdded(String nodeId, String attributeName,
+            Object value) {
+        ElementAttributeEvent event = new ElementAttributeEvent(source, EventType.ADD, ElementType.NODE, nodeId, attributeName, value);
+        if(!filteredEvents.contains(event))
+            operationSupport.nodeAttributeAdded(nodeId, attributeName, value);
+    }
 
-	public void nodeRemoved(String nodeId) {
-		ElementEvent event = new ElementEvent(source, EventType.REMOVE, ElementType.NODE, nodeId);
-		if(!filteredEvents.contains(event))
-			operationSupport.nodeRemoved(nodeId);
-	}
+    public void nodeAttributeChanged(String nodeId, String attributeName,
+            Object newValue) {
+        ElementAttributeEvent event = new ElementAttributeEvent(source, EventType.CHANGE, ElementType.NODE, nodeId, attributeName, newValue);
+        if(!filteredEvents.contains(event))
+            operationSupport.nodeAttributeChanged(nodeId, attributeName, newValue);
+    }
+
+    public void nodeAttributeRemoved(String nodeId, String attributeName) {
+        ElementAttributeEvent event = new ElementAttributeEvent(source, EventType.REMOVE, ElementType.NODE, nodeId, attributeName, null);
+        if(!filteredEvents.contains(event))
+            operationSupport.nodeAttributeRemoved(nodeId, attributeName);
+    }
+
+    public void nodeRemoved(String nodeId) {
+        ElementEvent event = new ElementEvent(source, EventType.REMOVE, ElementType.NODE, nodeId, null);
+        if(!filteredEvents.contains(event))
+            operationSupport.nodeRemoved(nodeId);
+    }
 
 }

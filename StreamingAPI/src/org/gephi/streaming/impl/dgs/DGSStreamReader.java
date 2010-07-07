@@ -22,6 +22,7 @@ package org.gephi.streaming.impl.dgs;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Map;
 
 import org.gephi.streaming.api.OperationSupport;
 import org.gephi.streaming.api.StreamReader;
@@ -109,8 +110,8 @@ public class DGSStreamReader extends StreamReader implements DGSParserListener {
     }
 
     @Override
-    public void onNodeAdded(String sourceId, String nodeId) {
-        operator.nodeAdded(nodeId);
+    public void onNodeAdded(String sourceId, String nodeId, Map<String, Object> attributes) {
+        operator.nodeAdded(nodeId, attributes);
     }
 
     @Override
