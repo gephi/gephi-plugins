@@ -95,7 +95,7 @@ public abstract class AbstractStreamProcessorTest {
         
         operator.getContainer().waitForDispatchAllEvents();
 //        assertEquals(2422, count.get());
-        assertEquals(1620, count.get());
+        assertEquals(1405, count.get());
 //        System.out.println(count.get() + " Events");
     }
 

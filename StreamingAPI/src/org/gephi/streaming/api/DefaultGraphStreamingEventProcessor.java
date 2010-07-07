@@ -159,11 +159,11 @@ public class DefaultGraphStreamingEventProcessor implements GraphEventListener {
                    switch (event.getEventType()) {
 
                    case ADD:
-                       graphUpdaterOperationSupport.nodeAdded(elementEvent.getElementId(), null);
+                       graphUpdaterOperationSupport.nodeAdded(elementEvent.getElementId(), elementEvent.getAttributes());
                        break;
 
                    case CHANGE:
-                       System.out.println("Invalid change operation on node "+elementEvent.getElementId());
+                       graphUpdaterOperationSupport.nodeChanged(elementEvent.getElementId(), elementEvent.getAttributes());
                        break;
 
                    case REMOVE:

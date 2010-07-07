@@ -34,7 +34,7 @@ import java.util.logging.Logger;
  * @author Andre' Panisson
  *
  */
-public class AbstractOperationSupport implements OperationSupport {
+public abstract class AbstractOperationSupport implements OperationSupport {
     
     private static Logger logger =  Logger.getLogger(AbstractOperationSupport.class.getName());
 
@@ -120,6 +120,16 @@ public class AbstractOperationSupport implements OperationSupport {
         logger.warning("Operation nodeAdded not supported in the class " + this.getClass().getSimpleName());
 
     }
+    
+    /* (non-Javadoc)
+     * @see org.gephi.streaming.api.OperationSupport#nodeChanged(java.lang.String)
+     */
+    @Override
+    public void nodeChanged(String nodeId, Map<String, Object> attributes) {
+        logger.warning("Operation nodeChanged not supported in the class " + this.getClass().getSimpleName());
+
+    }
+//    public abstract void nodeChanged(String nodeId, Map<String, Object> attributes);
 
     /* (non-Javadoc)
      * @see org.gephi.streaming.api.OperationSupport#nodeAttributeAdded(java.lang.String, java.lang.String, java.lang.Object)

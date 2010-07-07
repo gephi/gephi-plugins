@@ -113,6 +113,11 @@ public class DGSStreamReader extends StreamReader implements DGSParserListener {
     public void onNodeAdded(String sourceId, String nodeId, Map<String, Object> attributes) {
         operator.nodeAdded(nodeId, attributes);
     }
+    
+    @Override
+    public void onNodeChanged(String sourceId, String nodeId, Map<String, Object> attributes) {
+        operator.nodeChanged(nodeId, attributes);
+    }
 
     @Override
     public void onNodeAttributeAdded(String sourceId, String nodeId,

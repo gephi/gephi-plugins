@@ -239,6 +239,28 @@ public class JSONStreamWriter extends StreamWriter {
             e.printStackTrace();
         }
     }
+    
+    public void nodeChanged( String nodeId, Map<String, Object> attributes )
+    {
+        try {
+            JSONObject attributesJObject = new JSONObject();
+            if (attributes!=null && attributes.size()>0) {
+                for(Map.Entry<String, Object> entry: attributes.entrySet()) {
+                    attributesJObject.put(entry.getKey(), entry.getValue());
+                }
+            }
+
+            out.print(
+                    new JSONObject()
+                        .put(Types.CN.value(), new JSONObject()
+                            .put(nodeId, attributesJObject)
+                            )
+                        .toString() + '\r');
+        } catch (JSONException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+    }
 
     public void nodeRemoved( String nodeId )
     {

@@ -197,6 +197,26 @@ public class GraphUpdaterOperationSupport extends AbstractOperationSupport {
             graph.writeUnlock();
         }
     }
+    
+    /* (non-Javadoc)
+     * @see org.gephi.streaming.api.OperationSupport#nodeChanged(java.lang.String)
+     */
+    @Override
+    public void nodeChanged(String nodeId, Map<String, Object> attributes) {
+        Node node = graph.getNode(nodeId);
+        if (node!=null) {
+            
+            graph.writeLock();
+            
+            if (attributes!=null && attributes.size() > 0) {
+                for(Map.Entry<String, Object> entry: attributes.entrySet()) {
+                    this.addNodeAttribute(node, entry.getKey(), entry.getValue());
+                }
+            }
+            
+            graph.writeUnlock();
+        }
+    }
 
     /* (non-Javadoc)
      * @see org.gephi.streaming.api.OperationSupport#nodeAttributeAdded(java.lang.String, java.lang.String, java.lang.Object)

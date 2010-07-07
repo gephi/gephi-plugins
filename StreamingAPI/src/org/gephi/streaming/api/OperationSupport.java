@@ -39,6 +39,13 @@ public interface OperationSupport {
      * @param attributes the node attributes
      */
     void nodeAdded(String nodeId, Map<String, Object> attributes);
+    
+    /**
+     * A node is changed
+     * @param nodeId the node identifier
+     * @param attributes the node attributes
+     */
+    void nodeChanged(String nodeId, Map<String, Object> attributes);
 
     /**
      * A node is removed

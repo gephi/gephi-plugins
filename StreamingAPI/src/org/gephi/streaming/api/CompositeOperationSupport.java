@@ -147,6 +147,16 @@ public class CompositeOperationSupport extends AbstractOperationSupport {
             writer.nodeAdded(nodeId, attributes);
         }
     }
+    
+    /* (non-Javadoc)
+     * @see org.gephi.streaming.api.OperationSupport#nodeChanged(java.lang.String)
+     */
+    @Override
+    public void nodeChanged(String nodeId, Map<String, Object> attributes) {
+        for (OperationSupport writer: operationSupports) {
+            writer.nodeChanged(nodeId, attributes);
+        }
+    }
 
     /* (non-Javadoc)
      * @see org.gephi.streaming.api.OperationSupport#nodeAttributeAdded(java.lang.String, java.lang.String, java.lang.Object)

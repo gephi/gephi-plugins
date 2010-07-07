@@ -20,6 +20,7 @@ along with Gephi.  If not, see <http://www.gnu.org/licenses/>.
  */
 package org.gephi.streaming.api.event;
 
+import java.util.Collections;
 import java.util.Map;
 
 /**
@@ -79,6 +80,13 @@ public class ElementEvent extends GraphEvent {
     @Override
     public int hashCode() {
         return (elementType.hashCode() * 31 + eventType.hashCode()) * 31 + elementId.hashCode();
+    }
+    
+    /**
+     * @return the node attributes
+     */
+    public Map<String, Object> getAttributes() {
+        return Collections.unmodifiableMap(attributes);
     }
 
 }

@@ -149,6 +149,17 @@ public class DGSStreamWriter extends StreamWriter {
             out.printf("%n");
         }
     }
+    
+    public void nodeChanged( String nodeId, Map<String, Object> attributes )
+    {
+        if (attributes!=null && attributes.size()>0){
+            out.printf( "cn \"%s\"", nodeId );
+            for(Map.Entry<String, Object> entry: attributes.entrySet()) {
+                out.printf(" \"%s\":\"%s\"", entry.getKey(), entry.getValue());
+            }
+            out.printf("%n");
+        }
+    }
 
     public void nodeRemoved( String nodeId )
     {

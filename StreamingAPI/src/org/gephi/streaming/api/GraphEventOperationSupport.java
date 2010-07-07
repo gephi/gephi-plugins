@@ -116,6 +116,12 @@ public class GraphEventOperationSupport extends AbstractOperationSupport {
         GraphEvent event = new ElementEvent(source, EventType.ADD, ElementType.NODE, nodeId, attributes);
         fireEvent(event);
     }
+    
+    @Override
+    public void nodeChanged(String nodeId, Map<String, Object> attributes) {
+        GraphEvent event = new ElementEvent(source, EventType.CHANGE, ElementType.NODE, nodeId, attributes);
+        fireEvent(event);
+    }
 
     @Override
     public void nodeAttributeAdded(String nodeId,

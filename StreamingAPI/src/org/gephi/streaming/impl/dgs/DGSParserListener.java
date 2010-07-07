@@ -31,6 +31,7 @@ import java.util.Map;
 public interface DGSParserListener {
     
     void onNodeAdded( String sourceId, String nodeId, Map<String, Object> attributes );
+    void onNodeChanged(String sourceId, String nodeId, Map<String, Object> attributes);
 //    void onNodeAdded( String sourceId, long timeId, String nodeId );
     void onNodeRemoved( String sourceId, String nodeId );
 //    void onNodeRemoved( String sourceId, long timeId, String nodeId );
