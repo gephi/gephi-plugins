@@ -46,7 +46,7 @@ public class ElementAttributeEvent extends ElementEvent {
             ElementType elementType, String elementId,
             String attributeName, Object attributeValue) {
         super(source, eventType, elementType, elementId);
-        this.attributeName = attributeName;
+        this.attributeName = attributeName.toLowerCase();
         this.attributeValue = attributeValue;
     }
 
@@ -81,7 +81,7 @@ public class ElementAttributeEvent extends ElementEvent {
 		
 		ElementAttributeEvent e = (ElementAttributeEvent)obj;
 		return this.elementType == e.elementType
-			&& this.eventType == e.eventType
+			//&& this.eventType == e.eventType
 			&& this.elementId.equals(e.elementId)
 			&& this.attributeName.equals(e.attributeName)
 			&& (this.attributeValue==null)?e.attributeValue==null:this.attributeValue.equals(e.attributeValue);
@@ -91,7 +91,7 @@ public class ElementAttributeEvent extends ElementEvent {
 	public int hashCode() {
 		int hash = 1;
 		hash = hash * 31 + elementType.hashCode();
-		hash = hash * 31 + eventType.hashCode();
+		//hash = hash * 31 + eventType.hashCode();
 		hash = hash * 31 + elementId.hashCode();
 		hash = hash * 31 + attributeName.hashCode();
 		hash = hash * 31 + (attributeValue == null ? 0 : attributeValue.hashCode());

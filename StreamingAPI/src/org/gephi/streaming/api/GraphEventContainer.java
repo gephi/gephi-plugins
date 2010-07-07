@@ -20,6 +20,8 @@ along with Gephi.  If not, see <http://www.gnu.org/licenses/>.
  */
 package org.gephi.streaming.api;
 
+import java.util.Set;
+
 import org.gephi.streaming.api.event.GraphEvent;
 import org.gephi.streaming.api.event.GraphEventListener;
 
@@ -88,5 +90,7 @@ public interface GraphEventContainer {
      * @param event the GraphEvent to be fired to the listeners
      */
     public void fireEvent(GraphEvent event);
+
+	public Set<GraphEvent> getProcessedEvents();
     
 }

@@ -25,6 +25,7 @@ import org.gephi.data.attributes.api.AttributeEvent;
 import org.gephi.data.attributes.api.AttributeListener;
 import org.gephi.data.attributes.api.AttributeRow;
 import org.gephi.data.attributes.api.AttributeValue;
+import org.gephi.data.properties.PropertiesColumn;
 import org.gephi.graph.api.Attributes;
 import org.gephi.graph.api.Edge;
 import org.gephi.graph.api.Graph;
@@ -100,70 +101,32 @@ public class GraphChangeListener implements GraphListener, AttributeListener {
 
     @Override
     public void graphChanged(GraphEvent event) {
-//        System.out.println(event.getEventType());
-        
-//        try {
-//            graph.readLock();
-//            
-//            for (Node node: graph.getNodes()) {
-//                String nodeId = node.getNodeData().getId();
-//                
-//                Boolean fired = (Boolean)node.getNodeData().getAttributes().getValue("EVENT_FIRED");
-//                
-//                if(!fired) {
-//                    operationSupport.nodeAdded(nodeId);
-//                
-//                    AttributeRow row = (AttributeRow) node.getNodeData().getAttributes();
-//                    for (AttributeValue attributeValue: row.getValues()) {
-//                        operationSupport.nodeAttributeAdded(nodeId, attributeValue.getColumn().getTitle(), attributeValue.getValue());
-//                    }
-//                } else {
-//                    AttributeRow row = (AttributeRow) node.getNodeData().getAttributes();
-//                    for (AttributeValue attributeValue: row.getValues()) {
-//                        operationSupport.nodeAttributeChanged(nodeId, attributeValue.getColumn().getTitle(), attributeValue.getValue());
-//                    }
-//                }
-//            }
-//            
-//            for (Edge edge: graph.getEdges()) {
-//                String edgeId = edge.getEdgeData().getId();
-//                String sourceId = edge.getSource().getNodeData().getId();
-//                String targetId = edge.getTarget().getNodeData().getId();
-//                operationSupport.edgeAdded(edgeId, sourceId, targetId, edge.isDirected());
-//                
-//                AttributeRow row = (AttributeRow) edge.getEdgeData().getAttributes();
-//                for (AttributeValue attributeValue: row.getValues()) {
-//                    operationSupport.edgeAttributeAdded(edgeId, attributeValue.getColumn().getTitle(), attributeValue.getValue());
-//                }
-//            }
-//        } finally {
-//            graph.readUnlock();
-//        }
         
         switch (event.getEventType()) {
             case ADD_EDGES:
                 for (Edge edge: event.getData().addedEdges()) {
                     String edgeId = edge.getEdgeData().getId();
-                    System.out.println("Edge added: " + edgeId);
+                    operationSupport.edgeAdded(edgeId, edge.getSource().getNodeData().getId(), 
+                    		edge.getTarget().getNodeData().getId(), edge.isDirected());
                     
                     AttributeRow row = (AttributeRow) edge.getEdgeData().getAttributes();
                     for (AttributeValue attributeValue: row.getValues()) {
-//                        operationSupport.edgeAttributeAdded(edgeId, attributeValue.getColumn().getTitle(), attributeValue.getValue());
-                         System.out.println("Attribute added: " +  attributeValue.getColumn().getTitle() + "="+attributeValue.getValue());
+                    	if (attributeValue.getColumn().getIndex()!=PropertiesColumn.EDGE_ID.getIndex()
+                    		&& attributeValue.getValue() != null && !"".equals(attributeValue.getValue()))
+                    		operationSupport.edgeAttributeAdded(edgeId, attributeValue.getColumn().getTitle().toLowerCase(), attributeValue.getValue());
                     }
                 }
             break;
             case ADD_NODES:
                 for (Node node: event.getData().addedNodes()) {
-                    System.out.println("Node added: "+node.getNodeData().getId());
+                	String nodeId = node.getNodeData().getId();
+                	operationSupport.nodeAdded(nodeId);
 
                     AttributeRow row = (AttributeRow) node.getNodeData().getAttributes();
                     for (AttributeValue attributeValue: row.getValues()) {
-//                        operationSupport.edgeAttributeAdded(edgeId, attributeValue.getColumn().getTitle(), attributeValue.getValue());
-                         System.out.println("Attribute added: " +  attributeValue.getColumn().getTitle() + "="+attributeValue.getValue());
-                         if ("STREAMING_SOURCE".equals(attributeValue.getColumn().getTitle())) {
-                             node.getNodeData().getAttributes().setValue("STREAMING_SOURCE", null);
-                         }
+                    	if (attributeValue.getColumn().getIndex()!=PropertiesColumn.NODE_ID.getIndex()
+                    		&& attributeValue.getValue() != null && !"".equals(attributeValue.getValue()))
+                    		operationSupport.nodeAttributeAdded(nodeId, attributeValue.getColumn().getTitle().toLowerCase(), attributeValue.getValue());
                     }
                 }
             break;

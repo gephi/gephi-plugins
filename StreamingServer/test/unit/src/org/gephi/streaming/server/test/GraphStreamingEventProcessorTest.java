@@ -29,7 +29,11 @@ import org.gephi.graph.api.GraphController;
 import org.gephi.graph.api.GraphModel;
 import org.gephi.project.api.ProjectController;
 import org.gephi.project.api.Workspace;
+import org.gephi.streaming.api.AbstractOperationSupport;
 import org.gephi.streaming.api.DefaultGraphStreamingEventProcessor;
+import org.gephi.streaming.api.StreamWriter;
+import org.gephi.streaming.api.StreamWriterFactory;
+import org.gephi.streaming.server.FilteredOperationSupport;
 import org.gephi.streaming.server.GraphChangeListener;
 import org.junit.Test;
 import org.openide.util.Lookup;
@@ -61,14 +65,20 @@ public class GraphStreamingEventProcessorTest {
         
         Graph graph = graphModel.getHierarchicalMixedGraph();
         GraphChangeListener listener = new GraphChangeListener(graph);
+        
 
         graphModel.addGraphListener(listener);
         
+        StreamWriterFactory factory = Lookup.getDefault().lookup(StreamWriterFactory.class);
+        StreamWriter streamWriter = factory.createStreamWriter(streamType, System.out);
+        
         DefaultGraphStreamingEventProcessor eventProcessor = new DefaultGraphStreamingEventProcessor(graph);
+        listener.setOperationSupport(new FilteredOperationSupport(streamWriter, eventProcessor.getProcessedEvents()));
+//        listener.setOperationSupport(streamWriter);
         eventProcessor.process(url, streamType);
         
         try {
-            Thread.sleep(10000);
+            Thread.sleep(1000000);
         }catch(InterruptedException e) {};
         
     }

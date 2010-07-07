@@ -24,6 +24,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.Set;
 
 import org.gephi.graph.api.Graph;
 import org.gephi.graph.api.GraphController;
@@ -46,10 +47,13 @@ public class DefaultGraphStreamingEventProcessor implements GraphEventListener {
     
     private Graph graph;
     private OperationSupport graphUpdaterOperationSupport;
+    private GraphEventContainer container;
     
     public DefaultGraphStreamingEventProcessor(Graph graph) {
         this.graph = graph;
         this.graphUpdaterOperationSupport = new GraphUpdaterOperationSupport(graph);
+        GraphEventContainerFactory containerfactory = Lookup.getDefault().lookup(GraphEventContainerFactory.class);
+        this.container = containerfactory.newGraphEventContainer(this);
     }
     
     /**
@@ -59,11 +63,13 @@ public class DefaultGraphStreamingEventProcessor implements GraphEventListener {
         return graph;
     }
     
+    public Set<GraphEvent> getProcessedEvents() {
+    	return container.getProcessedEvents();
+    }
+    
     public StreamingConnection process(URL url, String streamType) {
         
-        
-        GraphEventContainerFactory containerfactory = Lookup.getDefault().lookup(GraphEventContainerFactory.class);
-        GraphEventContainer container = containerfactory.newGraphEventContainer(url);
+    	container.setSource(url);
         container.getGraphEventDispatcher().addEventListener(this);
         GraphEventOperationSupport eventOperationSupport = new GraphEventOperationSupport(container);
         
