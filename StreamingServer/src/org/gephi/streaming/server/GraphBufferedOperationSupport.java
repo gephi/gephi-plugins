@@ -150,7 +150,8 @@ public class GraphBufferedOperationSupport extends CompositeOperationSupport {
 
                 if (row != null)
                     for (AttributeValue attributeValue: row.getValues()) {
-                        if (attributeValue.getColumn().getIndex()!=PropertiesColumn.NODE_ID.getIndex())
+                        if (attributeValue.getColumn().getIndex()!=PropertiesColumn.NODE_ID.getIndex()
+                                && attributeValue.getValue()!=null)
                             attributes.put(attributeValue.getColumn().getTitle(), attributeValue.getValue());
                     }
                 
@@ -166,7 +167,8 @@ public class GraphBufferedOperationSupport extends CompositeOperationSupport {
                 AttributeRow row = (AttributeRow) edge.getEdgeData().getAttributes();
                 if (row != null)
                     for (AttributeValue attributeValue: row.getValues()) {
-                        if (attributeValue.getColumn().getIndex()!=PropertiesColumn.EDGE_ID.getIndex())
+                        if (attributeValue.getColumn().getIndex()!=PropertiesColumn.EDGE_ID.getIndex()
+                                && attributeValue.getValue()!=null)
                             operationSupport.edgeAttributeAdded(edgeId, attributeValue.getColumn().getTitle(), attributeValue.getValue());
                     }
             }

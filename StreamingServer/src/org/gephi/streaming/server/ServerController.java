@@ -31,6 +31,23 @@ import org.gephi.graph.api.Graph;
  */
 public class ServerController {
     
+    private enum Operations {
+        GET_GRAPH("getGraph"),
+        GET_NODE("getNode"), 
+        GET_EDGE("getEdge"),
+        UPDATE_GRAPH("updateGraph")
+        ;
+        
+        private final String url;
+        private Operations(String url) {
+            this.url = url;
+        }
+        
+        public String getURL() {
+            return url;
+        }
+    }
+    
     private final ServerOperationExecutor executor;
     
     public ServerController(Graph graph) {
@@ -49,21 +66,21 @@ public class ServerController {
         try {
             String operation = request.getParameter("operation");
             if(operation==null) {
-                executeError(response, "Invalid operation");
-                return;
+                // Default operation is GET_GRAPH
+                operation = Operations.GET_GRAPH.getURL();
             }
             String format = request.getParameter("format");
             if(format==null) {
-                executeError(response, "Invalid format");
-                return;
+                // Default format is JSON
+                format = "JSON";
             }
             OutputStream outputStream = response.getOutputStream();
             System.out.println("Handling request for operation "+operation+", format "+format);
             
-            if (operation.equals("getGraph")) {
+            if (operation.equals(Operations.GET_GRAPH.getURL())) {
                 executor.executeGetGraph(format, outputStream);
                 
-            } else if (operation.equals("getNode")) {
+            } else if (operation.equals(Operations.GET_NODE.getURL())) {
                 // gets the node id and write info to output stream
                 String id = request.getParameter("id");
                 if(id==null) {
@@ -72,7 +89,7 @@ public class ServerController {
                 }
                 executor.executeGetNode(id, format, outputStream);
                 
-            } else if (operation.equals("getEdge")) {
+            } else if (operation.equals(Operations.GET_EDGE.getURL())) {
                 // gets the edge id and write info to output stream
                 String id = request.getParameter("id");
                 if(id==null) {
@@ -81,7 +98,7 @@ public class ServerController {
                 }
                 executor.executeGetEdge(id, format, outputStream);
                 
-            } else if (operation.equals("updateGraph")) {
+            } else if (operation.equals(Operations.UPDATE_GRAPH.getURL())) {
                 executor.executeUpdateGraph(format, request.getInputStream(), outputStream);
             } else {
                 executeError(response, "Invalid operation: "+operation);
