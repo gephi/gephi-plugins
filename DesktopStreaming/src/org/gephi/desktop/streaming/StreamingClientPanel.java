@@ -32,32 +32,32 @@ import org.openide.util.Lookup;
  */
 public class StreamingClientPanel extends javax.swing.JPanel {
 
-    private static final String DGS_RESOURCE = "amazon_0201485419_400.dgs";
-
     private StreamingController controller;
-
     private GraphStreamingEndpoint endpoint;
-    private URL defaultUrl;
 
     /** Creates new form StreamingClientPanel */
     public StreamingClientPanel() {
         initComponents();
         controller = Lookup.getDefault().lookup(StreamingController.class);
 
-        defaultUrl = this.getClass().getResource(DGS_RESOURCE);
-
         streamTypeComboBox.setModel(new StreamTypeComboBoxModel());
-        streamUrlTextField.setText(defaultUrl.toString());
-
         endpoint = new GraphStreamingEndpoint();
         endpoint.setStreamType((StreamType)streamTypeComboBox.getSelectedItem());
-        endpoint.setUrl(defaultUrl);
     }
 
     private static class StreamTypeComboBoxModel extends DefaultComboBoxModel {
 
         public StreamTypeComboBoxModel() {
             super(getStreamTypes());
+            
+            // Default selected type is JSON
+            for (int i=0; i<this.getSize(); i++) {
+                StreamType type = (StreamType)this.getElementAt(i);
+                if (type.getType().equalsIgnoreCase("JSON")) {
+                    this.setSelectedItem(type);
+                    break;
+                }
+            }
         }
 
         private static StreamType[] getStreamTypes() {

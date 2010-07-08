@@ -119,8 +119,12 @@ public class StreamingController {
         DefaultGraphStreamingEventProcessor eventProcessor = 
             new DefaultGraphStreamingEventProcessor(graphModel.getHierarchicalMixedGraph());
         StreamingConnection connection = eventProcessor.process(endpoint);
-        
+
+        System.out.println(model.toString());
+
         model.getActiveConnections().add(connection);
+
+        refreshModel();
      }
     
     public void disconnect(StreamingConnection connection) {
@@ -131,6 +135,7 @@ public class StreamingController {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
+        refreshModel();
     }
     
     public void exposeWorkspaceAsStream() {
@@ -168,11 +173,13 @@ public class StreamingController {
 
         model.setServerContext(context);
         model.setServerRunning(true);
+        refreshModel();
     }
     
     public void stopServer() {
         model.setServerRunning(false);
         StreamingServer server = Lookup.getDefault().lookup(StreamingServer.class);
         server.unregister(model.getServerContext());
+        refreshModel();
     }
 }
