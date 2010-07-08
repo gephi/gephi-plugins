@@ -81,6 +81,9 @@ public class JSONStreamReader extends StreamReader {
     }
 
     private void parse(String content) {
+        content = content.trim();
+        if (content.length() == 0) return;
+        
         try {
             JSONObject jo = new JSONObject(content);
             String type = (String)jo.keys().next();

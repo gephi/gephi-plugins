@@ -52,6 +52,9 @@ public class GraphUpdaterOperationSupport extends AbstractOperationSupport {
         properties.addNodePropertyAssociation(NodeProperties.X, "x");
         properties.addNodePropertyAssociation(NodeProperties.Y, "y");
         properties.addNodePropertyAssociation(NodeProperties.SIZE, "size");
+        properties.addNodePropertyAssociation(NodeProperties.R, "r");
+        properties.addNodePropertyAssociation(NodeProperties.G, "g");
+        properties.addNodePropertyAssociation(NodeProperties.B, "b");
 
         //Default edge associations
         properties.addEdgePropertyAssociation(EdgeProperties.ID, "id");
@@ -98,7 +101,7 @@ public class GraphUpdaterOperationSupport extends AbstractOperationSupport {
         
         EdgeProperties p = properties.getEdgeProperty(attributeName);
         if (p != null) {
-            injectEdgeProperty(p, attributeName, edge);
+            injectEdgeProperty(p, value, edge);
         }
         else if (edge.getEdgeData().getAttributes() != null) {
             edge.getEdgeData().getAttributes().setValue(attributeName, value);
@@ -324,6 +327,10 @@ public class GraphUpdaterOperationSupport extends AbstractOperationSupport {
             case B:
                 float b = Float.valueOf(value.toString());
                 node.getNodeData().setB(b);
+                break;
+            case SIZE:
+                float size = Float.valueOf(value.toString());
+                node.getNodeData().setSize(size);
                 break;
         }
     }
