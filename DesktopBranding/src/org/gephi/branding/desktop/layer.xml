@@ -161,6 +161,7 @@
             <folder name="OverviewGroup">
                 <file name="GraphTopComponent.wstcgrp" url="GraphTopComponent.wstcgrp"/>
                 <file name="LayoutTopComponent.wstcgrp" url="LayoutTopComponent.wstcgrp"/>
+                <file name="StreamingTopComponent.wstcgrp" url="StreamingTopComponent.wstcgrp"/>
                 <file name="StatisticsTopComponent.wstcgrp" url="StatisticsTopComponent.wstcgrp"/>
                 <file name="FiltersTopComponent.wstcgrp" url="FiltersTopComponent.wstcgrp"/>
                 <file name="RankingTopComponent.wstcgrp" url="RankingTopComponent.wstcgrp"/>

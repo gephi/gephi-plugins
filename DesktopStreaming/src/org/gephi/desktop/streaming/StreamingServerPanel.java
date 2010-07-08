@@ -25,6 +25,29 @@ public class StreamingServerPanel extends javax.swing.JPanel {
     public StreamingServerPanel() {
         initComponents();
         controller = Lookup.getDefault().lookup(StreamingController.class);
+        controller.setServerPanel(this);
+    }
+
+    public void refreshModel() {
+        StreamingModel model = controller.getStreamingModel();
+        if (model.isServerRunning()) {
+            startStopButton.setText("Stop");
+
+            StringBuilder labelText = new StringBuilder("Streaming Server listening at<br>");
+            //TODO: test if http or https and listening port
+            String url = "http://localhost:8080/"+model.getServerContext();
+//            labelText.append("<a href=\"")
+//                    .append(url)
+//                    .append("\"")
+//                    .append(url)
+//                    .append("</a>");
+            labelText.append(url);
+
+            streamingUrlTextPane.setText(labelText.toString());
+        } else {
+            startStopButton.setText(org.openide.util.NbBundle.getMessage(StreamingServerPanel.class, "StreamingServerPanel.startStopButton.text"));
+            streamingUrlTextPane.setText("");
+        }
     }
 
     /** This method is called from within the constructor to
@@ -38,6 +61,8 @@ public class StreamingServerPanel extends javax.swing.JPanel {
 
         startStopButton = new javax.swing.JButton();
         configureButton = new javax.swing.JButton();
+        streamingUrlScrollPane = new javax.swing.JScrollPane();
+        streamingUrlTextPane = new javax.swing.JTextPane();
 
         startStopButton.setText(org.openide.util.NbBundle.getMessage(StreamingServerPanel.class, "StreamingServerPanel.startStopButton.text")); // NOI18N
         startStopButton.setToolTipText(org.openide.util.NbBundle.getMessage(StreamingServerPanel.class, "StreamingServerPanel.startStopButton.toolTipText")); // NOI18N
@@ -50,15 +75,25 @@ public class StreamingServerPanel extends javax.swing.JPanel {
         configureButton.setText(org.openide.util.NbBundle.getMessage(StreamingServerPanel.class, "StreamingServerPanel.configureButton.text")); // NOI18N
         configureButton.setToolTipText(org.openide.util.NbBundle.getMessage(StreamingServerPanel.class, "StreamingServerPanel.configureButton.toolTipText")); // NOI18N
 
+        streamingUrlScrollPane.setBorder(null);
+        streamingUrlScrollPane.setViewportBorder(null);
+
+        streamingUrlTextPane.setBorder(null);
+        streamingUrlTextPane.setContentType(org.openide.util.NbBundle.getMessage(StreamingServerPanel.class, "StreamingServerPanel.streamingUrlTextPane.contentType")); // NOI18N
+        streamingUrlScrollPane.setViewportView(streamingUrlTextPane);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+            .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(startStopButton, javax.swing.GroupLayout.PREFERRED_SIZE, 82, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 208, Short.MAX_VALUE)
-                .addComponent(configureButton)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(streamingUrlScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 232, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(startStopButton, javax.swing.GroupLayout.PREFERRED_SIZE, 82, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 208, Short.MAX_VALUE)
+                        .addComponent(configureButton)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -68,7 +103,9 @@ public class StreamingServerPanel extends javax.swing.JPanel {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(startStopButton)
                     .addComponent(configureButton))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(streamingUrlScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 63, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(32, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -76,10 +113,12 @@ public class StreamingServerPanel extends javax.swing.JPanel {
         StreamingModel model = controller.getStreamingModel();
         if (model.isServerRunning()) {
             controller.stopServer();
-            startStopButton.setText(org.openide.util.NbBundle.getMessage(StreamingServerPanel.class, "StreamingServerPanel.startStopButton.text"));
+            refreshModel();
+
         } else {
+            streamingUrlTextPane.setText("Starting...");
             controller.exposeWorkspaceAsStream();
-            startStopButton.setText("Stop");
+            refreshModel();
         }
     }//GEN-LAST:event_startStopButtonActionPerformed
 
@@ -87,6 +126,8 @@ public class StreamingServerPanel extends javax.swing.JPanel {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton configureButton;
     private javax.swing.JButton startStopButton;
+    private javax.swing.JScrollPane streamingUrlScrollPane;
+    private javax.swing.JTextPane streamingUrlTextPane;
     // End of variables declaration//GEN-END:variables
 
 }

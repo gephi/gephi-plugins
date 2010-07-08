@@ -48,6 +48,7 @@ import org.openide.util.lookup.ServiceProvider;
 public class StreamingController {
     
     private StreamingModel model;
+    private StreamingServerPanel serverPanel;
     
     public StreamingController() {
       //Workspace events
@@ -55,7 +56,8 @@ public class StreamingController {
         pc.addWorkspaceListener(new WorkspaceListener() {
 
             public void initialize(Workspace workspace) {
-                workspace.add(new StreamingModel());
+                model = new StreamingModel();
+                workspace.add(model);
             }
 
             public void select(Workspace workspace) {
@@ -64,6 +66,7 @@ public class StreamingController {
                     model = new StreamingModel();
                     workspace.add(model);
                 }
+                refreshModel();
             }
 
             public void unselect(Workspace workspace) {
@@ -86,6 +89,16 @@ public class StreamingController {
         }
     }
     
+    public void setServerPanel(StreamingServerPanel panel) {
+        this.serverPanel = panel;
+    }
+
+    public void refreshModel() {
+        if (serverPanel!=null) {
+            serverPanel.refreshModel();
+        }
+    }
+    
     public StreamingModel getStreamingModel() {
         return model;
     }
@@ -95,9 +108,9 @@ public class StreamingController {
         Project project = projectController.getCurrentProject();
         if (project==null)
             projectController.newProject();
-//        Workspace workspace = projectController.getCurrentWorkspace();
-//        if (workspace==null)
-          Workspace   workspace = projectController.newWorkspace(projectController.getCurrentProject());
+        Workspace workspace = projectController.getCurrentWorkspace();
+        if (workspace==null)
+            workspace = projectController.newWorkspace(projectController.getCurrentProject());
 //        projectController.openWorkspace(workspace);
 
         GraphController graphController = Lookup.getDefault().lookup(GraphController.class);
