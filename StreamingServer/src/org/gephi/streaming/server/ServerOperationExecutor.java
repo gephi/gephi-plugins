@@ -20,9 +20,13 @@ along with Gephi.  If not, see <http://www.gnu.org/licenses/>.
  */
 package org.gephi.streaming.server;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.gephi.data.attributes.api.AttributeRow;
 import org.gephi.data.attributes.api.AttributeValue;
@@ -90,16 +94,18 @@ public class ServerOperationExecutor {
             Node node = graph.getNode(id);
             if (node != null) {
                 String nodeId = node.getNodeData().getId();
-                writer.nodeAdded(nodeId, null);
-                
+
+                Map<String, Object> attributes = new HashMap<String, Object>();
                 AttributeRow row = (AttributeRow) node.getNodeData().getAttributes();
 
                 if (row != null)
                     for (AttributeValue attributeValue: row.getValues()) {
-                        if (attributeValue.getColumn().getIndex()!=PropertiesColumn.NODE_ID.getIndex())
-                            writer.nodeAttributeAdded(nodeId, 
-                                    attributeValue.getColumn().getTitle(), attributeValue.getValue());
+                        if (attributeValue.getColumn().getIndex()!=PropertiesColumn.NODE_ID.getIndex()
+                                && attributeValue.getValue()!=null)
+                            attributes.put(attributeValue.getColumn().getTitle(), attributeValue.getValue());
                     }
+                
+                writer.nodeAdded(nodeId, attributes);
             }
         } finally {
             graph.readUnlock();
@@ -136,7 +142,8 @@ public class ServerOperationExecutor {
 
                 if (row != null)
                     for (AttributeValue attributeValue: row.getValues()) {
-                        if (attributeValue.getColumn().getIndex()!=PropertiesColumn.NODE_ID.getIndex())
+                        if (attributeValue.getColumn().getIndex()!=PropertiesColumn.EDGE_ID.getIndex()
+                                && attributeValue.getValue()!=null)
                             writer.edgeAttributeAdded(edgeId, 
                                     attributeValue.getColumn().getTitle(), attributeValue.getValue());
                     }
@@ -167,7 +174,7 @@ public class ServerOperationExecutor {
     throws IOException {
         
 //        BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
-//        
+//
 //        String line;
 //        while ((line=reader.readLine())!=null)
 //            System.out.println(line);

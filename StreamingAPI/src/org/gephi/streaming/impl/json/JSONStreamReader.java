@@ -68,6 +68,10 @@ public class JSONStreamReader extends StreamReader {
             System.out.println("Stream closed");
         }
 
+        if (content.length() > 0) {
+            parse(content.toString());
+        }
+
         System.out.println("Stream finished");
     }
 
@@ -170,9 +174,9 @@ public class JSONStreamReader extends StreamReader {
 
             } else if (Types.CG.value().equals(type)) {
 
-            };
+            }
         } catch (JSONException e) {
-            // TODO Auto-generated catch block
+            System.out.println("Error parsing JSON object: " + content);
             e.printStackTrace();
         }
     }

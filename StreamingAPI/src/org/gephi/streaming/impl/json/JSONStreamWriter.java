@@ -35,6 +35,8 @@ import org.gephi.streaming.impl.json.parser.JSONConstants.Types;
  *
  */
 public class JSONStreamWriter extends StreamWriter {
+
+    private static String EOL = "\r\n";
     
     /**
      * @param outputStream
@@ -84,7 +86,7 @@ public class JSONStreamWriter extends StreamWriter {
                                 .put(attribute, newValue)
                                 )
                             )
-                        .toString() + '\r');
+                        .toString() + EOL);
         } catch (JSONException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -101,7 +103,7 @@ public class JSONStreamWriter extends StreamWriter {
                                 .put(attribute, JSONObject.NULL)
                                 )
                             )
-                        .toString() + '\r');
+                        .toString() + EOL);
         } catch (JSONException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -122,7 +124,7 @@ public class JSONStreamWriter extends StreamWriter {
                         .put(Types.CG.value(), new JSONObject()
                             .put(attribute, newValue)
                             )
-                        .toString() + '\r');
+                        .toString() + EOL);
         } catch (JSONException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -137,7 +139,7 @@ public class JSONStreamWriter extends StreamWriter {
                         .put(Types.CG.value(), new JSONObject()
                             .put(attribute, JSONObject.NULL)
                             )
-                        .toString() + '\r');
+                        .toString() + EOL);
         } catch (JSONException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -159,7 +161,7 @@ public class JSONStreamWriter extends StreamWriter {
                                 .put(attribute, newValue)
                                 )
                             )
-                        .toString() + '\r');
+                        .toString() + EOL);
         } catch (JSONException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -176,7 +178,7 @@ public class JSONStreamWriter extends StreamWriter {
                                 .put(attribute, JSONObject.NULL)
                                 )
                             )
-                        .toString() + '\r');
+                        .toString() + EOL);
         } catch (JSONException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -196,7 +198,7 @@ public class JSONStreamWriter extends StreamWriter {
                                 .put(Fields.DIRECTED.value(), directed)
                                 )
                             )
-                        .toString() + '\r');
+                        .toString() + EOL);
         } catch (JSONException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -211,7 +213,7 @@ public class JSONStreamWriter extends StreamWriter {
                         .put(Types.DE.value(), new JSONObject()
                             .put(edgeId, new JSONObject())
                             )
-                        .toString() + '\r');
+                        .toString() + EOL);
         } catch (JSONException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -226,7 +228,7 @@ public class JSONStreamWriter extends StreamWriter {
             out.print(
                     new JSONObject()
                         .put(Types.AN.value(), nodeData)
-                        .toString() + '\r');
+                        .toString() + EOL);
         } catch (JSONException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -241,7 +243,7 @@ public class JSONStreamWriter extends StreamWriter {
             out.print(
                     new JSONObject()
                         .put(Types.CN.value(), nodeData)
-                        .toString() + '\r');
+                        .toString() + EOL);
         } catch (JSONException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -256,7 +258,7 @@ public class JSONStreamWriter extends StreamWriter {
                         .put(Types.DN.value(), new JSONObject()
                             .put(nodeId, new JSONObject())
                             )
-                        .toString() + '\r');
+                        .toString() + EOL);
         } catch (JSONException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
