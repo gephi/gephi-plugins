@@ -23,6 +23,8 @@ package org.gephi.streaming.impl.json;
 import java.io.OutputStream;
 import java.io.PrintStream;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.gephi.streaming.api.StreamWriter;
 import org.gephi.streaming.impl.json.parser.JSONException;
@@ -31,15 +33,20 @@ import org.gephi.streaming.impl.json.parser.JSONConstants.Fields;
 import org.gephi.streaming.impl.json.parser.JSONConstants.Types;
 
 /**
+ * StreamWriter implementation to output graph data in JSON format.
+ *
  * @author panisson
  *
  */
 public class JSONStreamWriter extends StreamWriter {
 
+    private static final Logger logger =
+            Logger.getLogger(JSONStreamWriter.class.getName());
+
     private static String EOL = "\r\n";
     
     /**
-     * @param outputStream
+     * @param outputStream - the OutputStream to send formatted data.
      */
     public JSONStreamWriter(OutputStream outputStream) {
         super(outputStream);
@@ -63,21 +70,19 @@ public class JSONStreamWriter extends StreamWriter {
     
     protected String graphName = "";
     
-    protected void outputHeader()
-    {
+    protected void outputHeader() {
     }
 
-    protected void outputEndOfFile()
-    {
+    protected void outputEndOfFile() {
     }
 
-    public void edgeAttributeAdded( String edgeId, String attribute, Object value )
-    {
-        edgeAttributeChanged( edgeId, attribute, value );
+    @Override
+    public void edgeAttributeAdded(String edgeId, String attribute, Object value) {
+        edgeAttributeChanged(edgeId, attribute, value);
     }
 
-    public void edgeAttributeChanged( String edgeId, String attribute, Object newValue )
-    {
+    @Override
+    public void edgeAttributeChanged(String edgeId, String attribute, Object newValue) {
         try {
             out.print(
                     new JSONObject()
@@ -88,13 +93,15 @@ public class JSONStreamWriter extends StreamWriter {
                             )
                         .toString() + EOL);
         } catch (JSONException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            logger.log(Level.WARNING, "Unable to write JSONObject for "
+                    + "edgeAttributeChanged event, "
+                    + "edge {0}, attribute {1} with value {2}: {3}",
+                    new Object[]{edgeId, attribute, newValue.toString(), e.getMessage()});
         }
     }
 
-    public void edgeAttributeRemoved( String edgeId, String attribute )
-    {
+    @Override
+    public void edgeAttributeRemoved(String edgeId, String attribute) {
         try {
             out.print(
                     new JSONObject()
@@ -105,19 +112,19 @@ public class JSONStreamWriter extends StreamWriter {
                             )
                         .toString() + EOL);
         } catch (JSONException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            logger.log(Level.WARNING, "Unable to write JSONObject for "
+                    + "edgeAttributeRemoved event, edge {0}, attribute {1}: {2}",
+                    new Object[]{edgeId, attribute, e.getMessage()});
         }
     }
 
-    public void graphAttributeAdded( String attribute, Object value )
-    {
-        graphAttributeChanged( attribute, null, value );
+    @Override
+    public void graphAttributeAdded(String attribute, Object value) {
+        graphAttributeChanged(attribute, null, value);
     }
 
-    public void graphAttributeChanged( String attribute, Object oldValue,
-            Object newValue )
-    {
+    public void graphAttributeChanged(String attribute, Object oldValue,
+            Object newValue) {
         try {
             out.print(
                     new JSONObject()
@@ -126,13 +133,15 @@ public class JSONStreamWriter extends StreamWriter {
                             )
                         .toString() + EOL);
         } catch (JSONException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            logger.log(Level.WARNING, "Unable to write JSONObject for "
+                    + "graphAttributeChanged event, "
+                    + "attribute {0} with value {1}: {2}",
+                    new Object[]{attribute, newValue.toString(), e.getMessage()});
         }
     }
 
-    public void graphAttributeRemoved( String attribute )
-    {
+    @Override
+    public void graphAttributeRemoved(String attribute) {
         try {
             out.print(
                     new JSONObject()
@@ -141,18 +150,19 @@ public class JSONStreamWriter extends StreamWriter {
                             )
                         .toString() + EOL);
         } catch (JSONException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            logger.log(Level.WARNING, "Unable to write JSONObject for "
+                    + "graphAttributeRemoved event, attribute {0}: {1}",
+                    new Object[]{attribute, e.getMessage()});
         }
     }
 
-    public void nodeAttributeAdded( String nodeId, String attribute, Object value )
-    {
-        nodeAttributeChanged( nodeId, attribute, value );
+    @Override
+    public void nodeAttributeAdded(String nodeId, String attribute, Object value) {
+        nodeAttributeChanged(nodeId, attribute, value);
     }
 
-    public void nodeAttributeChanged( String nodeId, String attribute, Object newValue )
-    {
+    @Override
+    public void nodeAttributeChanged(String nodeId, String attribute, Object newValue) {
         try {
             out.print(
                     new JSONObject()
@@ -163,13 +173,15 @@ public class JSONStreamWriter extends StreamWriter {
                             )
                         .toString() + EOL);
         } catch (JSONException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            logger.log(Level.WARNING, "Unable to write JSONObject for "
+                    + "nodeAttributeChanged event, "
+                    + "node {0}, attribute {1} with value {2}: {3}",
+                    new Object[]{nodeId, attribute, newValue.toString(), e.getMessage()});
         }
     }
 
-    public void nodeAttributeRemoved( String nodeId, String attribute )
-    {
+    @Override
+    public void nodeAttributeRemoved(String nodeId, String attribute) {
         try {
             out.print(
                     new JSONObject()
@@ -180,14 +192,15 @@ public class JSONStreamWriter extends StreamWriter {
                             )
                         .toString() + EOL);
         } catch (JSONException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            logger.log(Level.WARNING, "Unable to write JSONObject for "
+                    + "nodeAttributeRemoved event, node {0}, attribute {1}: {2}",
+                    new Object[]{nodeId, attribute, e.getMessage()});
         }
     }
 
-    public void edgeAdded( String edgeId, String fromNodeId, String toNodeId,
-            boolean directed )
-    {
+    @Override
+    public void edgeAdded(String edgeId, String fromNodeId, String toNodeId,
+            boolean directed) {
         try {
             out.print(
                     new JSONObject()
@@ -200,13 +213,14 @@ public class JSONStreamWriter extends StreamWriter {
                             )
                         .toString() + EOL);
         } catch (JSONException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            logger.log(Level.WARNING, "Unable to write JSONObject for "
+                    + "edgeAdded event, edge {0}: {1}",
+                    new Object[]{edgeId, e.getMessage()});
         }
     }
 
-    public void edgeRemoved( String edgeId )
-    {
+    @Override
+    public void edgeRemoved(String edgeId) {
         try {
             out.print(
                     new JSONObject()
@@ -215,43 +229,44 @@ public class JSONStreamWriter extends StreamWriter {
                             )
                         .toString() + EOL);
         } catch (JSONException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            logger.log(Level.WARNING, "Unable to write JSONObject for "
+                    + "edgeRemoved event, edge {0}: {1}",
+                    new Object[]{edgeId, e.getMessage()});
         }
     }
 
-    public void nodeAdded( String nodeId, Map<String, Object> attributes )
-    {
-        JSONObject nodeData = createNodeData(nodeId, attributes);
-        
+    @Override
+    public void nodeAdded(String nodeId, Map<String, Object> attributes) {
         try {
+            JSONObject nodeData = createNodeData(nodeId, attributes);
             out.print(
                     new JSONObject()
                         .put(Types.AN.value(), nodeData)
                         .toString() + EOL);
         } catch (JSONException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            logger.log(Level.WARNING, "Unable to write JSONObject for "
+                    + "nodeAdded event, node {0}: {1}",
+                    new Object[]{nodeId, e.getMessage()});
         }
     }
     
-    public void nodeChanged( String nodeId, Map<String, Object> attributes )
-    {
-        JSONObject nodeData = createNodeData(nodeId, attributes);
-        
+    @Override
+    public void nodeChanged(String nodeId, Map<String, Object> attributes) {
         try {
+            JSONObject nodeData = createNodeData(nodeId, attributes);
             out.print(
                     new JSONObject()
                         .put(Types.CN.value(), nodeData)
                         .toString() + EOL);
         } catch (JSONException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            logger.log(Level.WARNING, "Unable to write JSONObject for "
+                    + "nodeChanged event, node {0}: {1}",
+                    new Object[]{nodeId, e.getMessage()});
         }
     }
 
-    public void nodeRemoved( String nodeId )
-    {
+    @Override
+    public void nodeRemoved(String nodeId) {
         try {
             out.print(
                     new JSONObject()
@@ -260,29 +275,25 @@ public class JSONStreamWriter extends StreamWriter {
                             )
                         .toString() + EOL);
         } catch (JSONException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            logger.log(Level.WARNING, "Unable to write JSONObject for "
+                    + "nodeRemoved event, node {0}: {1}",
+                    new Object[]{nodeId, e.getMessage()});
         }
     }
     
-    private JSONObject createNodeData(String nodeId, Map<String, Object> attributes) {
-        
-        JSONObject nodeData = new JSONObject();
-        
-        try {
-            JSONObject attributesJObject = new JSONObject();
-            if (attributes!=null && attributes.size()>0) {
-                for(Map.Entry<String, Object> entry: attributes.entrySet()) {
-                    attributesJObject.put(entry.getKey(), entry.getValue());
-                }
+    private JSONObject createNodeData(String nodeId,
+            Map<String, Object> attributes) throws JSONException {
+
+        JSONObject attributesJObject = new JSONObject();
+        if (attributes != null && attributes.size() > 0) {
+            for (Map.Entry<String, Object> entry : attributes.entrySet()) {
+                attributesJObject.put(entry.getKey(), entry.getValue());
             }
-            
-            nodeData.put(nodeId, attributesJObject);
-        } catch (JSONException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
         }
-        
+
+        JSONObject nodeData = new JSONObject();
+        nodeData.put(nodeId, attributesJObject);
+
         return nodeData;
     }
 }

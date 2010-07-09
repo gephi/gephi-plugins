@@ -31,38 +31,35 @@ import java.util.Map;
 public interface DGSParserListener {
     
     void onNodeAdded( String sourceId, String nodeId, Map<String, Object> attributes );
+    
     void onNodeChanged(String sourceId, String nodeId, Map<String, Object> attributes);
-//    void onNodeAdded( String sourceId, long timeId, String nodeId );
+
     void onNodeRemoved( String sourceId, String nodeId );
-//    void onNodeRemoved( String sourceId, long timeId, String nodeId );
+
     void onEdgeAdded( String sourceId, String edgeId, String fromNodeId, String toNodeId, boolean directed );
-//    void onEdgeAdded( String sourceId, long timeId, String edgeId, String fromNodeId, String toNodeId, boolean directed );
+
     void onEdgeRemoved( String sourceId, String edgeId );
-//    void onEdgeRemoved( String sourceId, long timeId, String edgeId );
+
     void onEdgeAttributeAdded( String sourceId, String edgeId, String attribute, Object value );
-//    void onEdgeAttributeAdded( String sourceId, long timeId, String edgeId, String attribute, Object value );
+
     void onEdgeAttributeChanged( String sourceId, String edgeId, String attribute,
             Object oldValue, Object newValue );
-//    void onEdgeAttributeChanged( String sourceId, long timeId, String edgeId, String attribute,
-//            Object oldValue, Object newValue );
+
     void onEdgeAttributeRemoved( String sourceId, String edgeId, String attribute );
-//    void onEdgeAttributeRemoved( String sourceId, long timeId, String edgeId, String attribute );
+
     void onGraphAttributeAdded( String sourceId, String attribute, Object value );
-//    void onGraphAttributeAdded( String sourceId, long timeId, String attribute, Object value )
+
     void onGraphAttributeChanged( String sourceId, String attribute, Object oldValue,
             Object newValue );
-//    void onGraphAttributeChanged( String sourceId, long timeId, String attribute, Object oldValue,
-//            Object newValue );
+
     void onGraphAttributeRemoved( String sourceId, String attribute );
-//    void onGraphAttributeRemoved( String sourceId, long timeId, String attribute );
+
     void onNodeAttributeAdded( String sourceId, String nodeId, String attribute, Object value );
-//    void onNodeAttributeAdded( String sourceId, long timeId, String nodeId, String attribute, Object value );
+
     void onNodeAttributeChanged( String sourceId, String nodeId, String attribute,
             Object oldValue, Object newValue );
-//    void onNodeAttributeChanged( String sourceId, long timeId, String nodeId, String attribute,
-//            Object oldValue, Object newValue );
+
     void onNodeAttributeRemoved( String sourceId, String nodeId, String attribute );
-//    void onNodeAttributeRemoved( String sourceId, long timeId, String nodeId, String attribute );
     
     void onStepBegins(String graphName, double time);
 
