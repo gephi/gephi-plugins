@@ -81,7 +81,7 @@ public class DGSParser extends BaseParser {
     
     public void parse() throws IOException {
         this.begin();
-        while(this.next(true, true)) {};
+        while(this.next(false, false)) {}
     }
     
     protected void begin() throws IOException

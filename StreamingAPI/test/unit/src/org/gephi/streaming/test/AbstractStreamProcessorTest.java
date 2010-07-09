@@ -55,6 +55,7 @@ import org.gephi.streaming.api.event.GraphEvent;
 import org.gephi.streaming.api.event.GraphEventListener;
 import org.gephi.streaming.impl.GraphEventContainerImpl;
 import org.gephi.streaming.impl.dgs.DGSStreamType;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.openide.util.Lookup;
 
@@ -64,6 +65,7 @@ import org.openide.util.Lookup;
  * @author panisson
  *
  */
+@Ignore
 public abstract class AbstractStreamProcessorTest {
     
     protected String resource = "amazon_0201485419_400.dgs";

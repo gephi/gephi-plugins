@@ -59,7 +59,7 @@ public class Main3 implements Container {
         		   System.out.println("Sending data");
         		   out.flush();
         		   try {
-					Thread.sleep(100);
+					Thread.sleep(40);
 				} catch (InterruptedException e) { }
         	   }
         	   

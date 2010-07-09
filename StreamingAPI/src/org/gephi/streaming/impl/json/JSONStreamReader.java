@@ -25,6 +25,8 @@ import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.gephi.streaming.api.OperationSupport;
 import org.gephi.streaming.api.StreamReader;
@@ -40,6 +42,8 @@ import org.gephi.streaming.impl.json.parser.JSONConstants.Types;
  *
  */
 public class JSONStreamReader extends StreamReader {
+
+     private static final Logger logger =  Logger.getLogger(JSONStreamReader.class.getName());
 
     /**
      * @param operator the OperationSupport to which the operations will be delegated
@@ -179,8 +183,7 @@ public class JSONStreamReader extends StreamReader {
 
             }
         } catch (JSONException e) {
-            System.out.println("Error parsing JSON object: " + content);
-            e.printStackTrace();
+            logger.log(Level.WARNING, "JSON object ignored: \"{0}\": {1}", new String[]{content, e.getMessage()});
         }
     }
 }
