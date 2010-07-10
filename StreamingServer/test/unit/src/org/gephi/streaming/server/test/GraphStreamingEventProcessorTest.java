@@ -78,7 +78,7 @@ public class GraphStreamingEventProcessorTest {
         eventProcessor.process(url, streamType);
         
         try {
-            Thread.sleep(1000000);
+            Thread.sleep(10000);
         }catch(InterruptedException e) {};
         
     }

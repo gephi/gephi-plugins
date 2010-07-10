@@ -1,10 +1,7 @@
 package org.gephi.streaming.impl;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import java.util.concurrent.LinkedBlockingQueue;
 
 import org.gephi.streaming.api.GraphEventContainer;
@@ -21,7 +18,6 @@ import org.gephi.streaming.api.event.GraphEventListener;
 public class GraphEventContainerImpl implements GraphEventContainer, GraphEventDispatcher {
     
     private LinkedBlockingQueue<GraphEvent> eventQueue = new LinkedBlockingQueue<GraphEvent>();
-    private final Set<GraphEvent> processedEvents = Collections.synchronizedSet(new HashSet<GraphEvent>());
 
 	protected List<GraphEventListener> listeners = new ArrayList<GraphEventListener>();
 
@@ -82,10 +78,6 @@ public class GraphEventContainerImpl implements GraphEventContainer, GraphEventD
     public List<GraphEvent> getAllEvents() {
         return new ArrayList<GraphEvent>(this.eventQueue);
     }
-    
-    public Set<GraphEvent> getProcessedEvents() {
-		return processedEvents;
-	}
 
     @Override
     public void addEventListener(GraphEventListener listener) {
@@ -126,7 +118,6 @@ public class GraphEventContainerImpl implements GraphEventContainer, GraphEventD
                     for (GraphEventListener listener: listeners) {
                         listener.onGraphEvent(event);
                     }
-                    processedEvents.add(event);
                 } catch (InterruptedException e) {
                     // Container was closed
                     //e.printStackTrace();

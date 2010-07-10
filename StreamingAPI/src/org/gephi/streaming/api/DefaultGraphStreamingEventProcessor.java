@@ -24,6 +24,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.Set;
 
 import org.gephi.graph.api.Graph;
@@ -49,6 +51,8 @@ public class DefaultGraphStreamingEventProcessor implements GraphEventListener {
     private OperationSupport graphUpdaterOperationSupport;
     private GraphEventContainer container;
     
+    private final Set<GraphEvent> processedEvents = Collections.synchronizedSet(new HashSet<GraphEvent>());
+    
     public DefaultGraphStreamingEventProcessor(Graph graph) {
         this.graph = graph;
         this.graphUpdaterOperationSupport = new GraphUpdaterOperationSupport(graph);
@@ -64,7 +68,7 @@ public class DefaultGraphStreamingEventProcessor implements GraphEventListener {
     }
     
     public Set<GraphEvent> getProcessedEvents() {
-        return container.getProcessedEvents();
+        return processedEvents;
     }
     
     public StreamingConnection process(URL url, String streamType) {
@@ -94,6 +98,8 @@ public class DefaultGraphStreamingEventProcessor implements GraphEventListener {
     
     @Override
     public void onGraphEvent(GraphEvent event) {
+        
+        processedEvents.add(event);
         
         if (event instanceof ElementEvent) {
                     
