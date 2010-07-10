@@ -62,26 +62,6 @@ public class GraphBufferedOperationSupport extends CompositeOperationSupport {
     }
 
     @Override
-    public void edgeAttributeAdded(String edgeId, String attributeName,
-            Object value) {
-        updater.edgeAttributeAdded(edgeId, attributeName, value);
-        super.edgeAttributeAdded(edgeId, attributeName, value);
-    }
-
-    @Override
-    public void edgeAttributeChanged(String edgeId, String attributeName,
-            Object newValue) {
-        updater.edgeAttributeChanged(edgeId, attributeName, newValue);
-        super.edgeAttributeChanged(edgeId, attributeName, newValue);
-    }
-
-    @Override
-    public void edgeAttributeRemoved(String edgeId, String attributeName) {
-        updater.edgeAttributeRemoved(edgeId, attributeName);
-        super.edgeAttributeRemoved(edgeId, attributeName);
-    }
-
-    @Override
     public void edgeRemoved(String edgeId) {
         updater.edgeRemoved(edgeId);
         super.edgeRemoved(edgeId);
@@ -109,26 +89,6 @@ public class GraphBufferedOperationSupport extends CompositeOperationSupport {
     public void nodeAdded(String nodeId, Map<String, Object> attributes) {
         updater.nodeAdded(nodeId, attributes);
         super.nodeAdded(nodeId, attributes);
-    }
-
-    @Override
-    public void nodeAttributeAdded(String nodeId, String attributeName,
-            Object value) {
-        updater.nodeAttributeAdded(nodeId, attributeName, value);
-        super.nodeAttributeAdded(nodeId, attributeName, value);
-    }
-
-    @Override
-    public void nodeAttributeChanged(String nodeId, String attributeName,
-            Object newValue) {
-        updater.nodeAttributeChanged(nodeId, attributeName, newValue);
-        super.nodeAttributeChanged(nodeId, attributeName, newValue);
-    }
-
-    @Override
-    public void nodeAttributeRemoved(String nodeId, String attributeName) {
-        updater.nodeAttributeRemoved(nodeId, attributeName);
-        super.nodeAttributeRemoved(nodeId, attributeName);
     }
 
     @Override

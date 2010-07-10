@@ -71,26 +71,6 @@ public class GraphEventOperationSupport extends AbstractOperationSupport {
     }
 
     @Override
-    public void edgeAttributeAdded(String edgeId, String attributeName, Object value) {
-        ElementAttributeEvent event = new ElementAttributeEvent(source, EventType.ADD, ElementType.EDGE, edgeId, attributeName, value);
-        fireEvent(event);
-    }
-
-    @Override
-    public void edgeAttributeChanged(String edgeId,
-            String attributeName, Object newValue) {
-        ElementAttributeEvent event = new ElementAttributeEvent(source, EventType.CHANGE, ElementType.EDGE, edgeId, attributeName, newValue);
-        fireEvent(event);
-    }
-
-    @Override
-    public void edgeAttributeRemoved(String edgeId,
-            String attributeName) {
-        ElementAttributeEvent event = new ElementAttributeEvent(source, EventType.REMOVE, ElementType.EDGE, edgeId, attributeName, null);
-        fireEvent(event);
-    }
-
-    @Override
     public void edgeRemoved(String edgeId) {
         GraphEvent event = new ElementEvent(source, EventType.REMOVE, ElementType.EDGE, edgeId, null);
         fireEvent(event);
@@ -126,27 +106,6 @@ public class GraphEventOperationSupport extends AbstractOperationSupport {
     @Override
     public void nodeChanged(String nodeId, Map<String, Object> attributes) {
         GraphEvent event = new ElementEvent(source, EventType.CHANGE, ElementType.NODE, nodeId, attributes);
-        fireEvent(event);
-    }
-
-    @Override
-    public void nodeAttributeAdded(String nodeId,
-            String attributeName, Object value) {
-        ElementAttributeEvent event = new ElementAttributeEvent(source, EventType.ADD, ElementType.NODE, nodeId, attributeName, value);
-        fireEvent(event);
-    }
-
-    @Override
-    public void nodeAttributeChanged(String nodeId,
-            String attributeName, Object newValue) {
-        ElementAttributeEvent event = new ElementAttributeEvent(source, EventType.CHANGE, ElementType.NODE, nodeId, attributeName, newValue);
-        fireEvent(event);
-    }
-
-    @Override
-    public void nodeAttributeRemoved(String nodeId,
-            String attributeName) {
-        ElementAttributeEvent event = new ElementAttributeEvent(source, EventType.REMOVE, ElementType.NODE, nodeId, attributeName, null);
         fireEvent(event);
     }
 

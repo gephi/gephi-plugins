@@ -113,40 +113,6 @@ public class GraphUpdaterOperationSupport extends AbstractOperationSupport {
     }
 
     /* (non-Javadoc)
-     * @see org.gephi.streaming.api.OperationSupport#edgeAttributeAdded(java.lang.String, java.lang.String, java.lang.Object)
-     */
-    @Override
-    public void edgeAttributeAdded(String edgeId, String attributeName,
-            Object value) {
-        
-        Edge edge = graph.getEdge(edgeId);
-        if (edge==null) return;
-        
-        graph.writeLock();
-        this.addEdgeAttribute(edge, attributeName, value);
-        graph.writeUnlock();
-
-    }
-
-    /* (non-Javadoc)
-     * @see org.gephi.streaming.api.OperationSupport#edgeAttributeChanged(java.lang.String, java.lang.String, java.lang.Object)
-     */
-    @Override
-    public void edgeAttributeChanged(String edgeId, String attributeName,
-            Object newValue) {
-        
-        edgeAttributeAdded(edgeId, attributeName, newValue);
-    }
-
-    /* (non-Javadoc)
-     * @see org.gephi.streaming.api.OperationSupport#edgeAttributeRemoved(java.lang.String, java.lang.String)
-     */
-    @Override
-    public void edgeAttributeRemoved(String edgeId, String attributeName) {
-        edgeAttributeAdded(edgeId, attributeName, null);
-    }
-
-    /* (non-Javadoc)
      * @see org.gephi.streaming.api.OperationSupport#edgeRemoved(java.lang.String)
      */
     @Override
@@ -227,47 +193,6 @@ public class GraphUpdaterOperationSupport extends AbstractOperationSupport {
             
             graph.writeUnlock();
         }
-    }
-
-    /* (non-Javadoc)
-     * @see org.gephi.streaming.api.OperationSupport#nodeAttributeAdded(java.lang.String, java.lang.String, java.lang.Object)
-     */
-    @Override
-    public void nodeAttributeAdded(String nodeId, String attributeName,
-            Object value) {
-        nodeAttributeChanged(nodeId, attributeName, value);
-    }
-
-    /* (non-Javadoc)
-     * @see org.gephi.streaming.api.OperationSupport#nodeAttributeChanged(java.lang.String, java.lang.String, java.lang.Object)
-     */
-    @Override
-    public void nodeAttributeChanged(String nodeId, String attributeName,
-            Object newValue) {
-        
-        Node node = graph.getNode(nodeId);
-        if (node==null) return;
-        
-        graph.writeLock();
-        this.addNodeAttribute(node, attributeName, newValue);
-        graph.writeUnlock();
-    }
-
-    /* (non-Javadoc)
-     * @see org.gephi.streaming.api.OperationSupport#nodeAttributeRemoved(java.lang.String, java.lang.String)
-     */
-    @Override
-    public void nodeAttributeRemoved(String nodeId, String attributeName) {
-        Node node = graph.getNode(nodeId);
-        if (node==null) return;
-        
-        graph.writeLock();
-        
-        if (node.getNodeData().getAttributes() != null) {
-            node.getNodeData().getAttributes().setValue(attributeName, null);
-        }
-        
-        graph.writeUnlock();
     }
 
     /* (non-Javadoc)

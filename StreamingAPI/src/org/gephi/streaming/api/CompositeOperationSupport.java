@@ -76,38 +76,6 @@ public class CompositeOperationSupport extends AbstractOperationSupport {
     }
 
     /* (non-Javadoc)
-     * @see org.gephi.streaming.api.OperationSupport#edgeAttributeAdded(java.lang.String, java.lang.String, java.lang.Object)
-     */
-    @Override
-    public void edgeAttributeAdded(String edgeId, String attributeName,
-            Object value) {
-        for (OperationSupport writer: operationSupports) {
-            writer.edgeAttributeAdded(edgeId, attributeName, value);
-        }
-    }
-
-    /* (non-Javadoc)
-     * @see org.gephi.streaming.api.OperationSupport#edgeAttributeChanged(java.lang.String, java.lang.String, java.lang.Object)
-     */
-    @Override
-    public void edgeAttributeChanged(String edgeId, String attributeName,
-            Object newValue) {
-        for (OperationSupport writer: operationSupports) {
-            writer.edgeAttributeChanged(edgeId, attributeName, newValue);
-        }
-    }
-
-    /* (non-Javadoc)
-     * @see org.gephi.streaming.api.OperationSupport#edgeAttributeRemoved(java.lang.String, java.lang.String)
-     */
-    @Override
-    public void edgeAttributeRemoved(String edgeId, String attributeName) {
-        for (OperationSupport writer: operationSupports) {
-            writer.edgeAttributeRemoved(edgeId, attributeName);
-        }
-    }
-
-    /* (non-Javadoc)
      * @see org.gephi.streaming.api.OperationSupport#edgeRemoved(java.lang.String)
      */
     @Override
@@ -164,38 +132,6 @@ public class CompositeOperationSupport extends AbstractOperationSupport {
     public void nodeChanged(String nodeId, Map<String, Object> attributes) {
         for (OperationSupport writer: operationSupports) {
             writer.nodeChanged(nodeId, attributes);
-        }
-    }
-
-    /* (non-Javadoc)
-     * @see org.gephi.streaming.api.OperationSupport#nodeAttributeAdded(java.lang.String, java.lang.String, java.lang.Object)
-     */
-    @Override
-    public void nodeAttributeAdded(String nodeId, String attributeName,
-            Object value) {
-        for (OperationSupport writer: operationSupports) {
-            writer.nodeAttributeAdded(nodeId, attributeName, value);
-        }
-    }
-
-    /* (non-Javadoc)
-     * @see org.gephi.streaming.api.OperationSupport#nodeAttributeChanged(java.lang.String, java.lang.String, java.lang.Object)
-     */
-    @Override
-    public void nodeAttributeChanged(String nodeId, String attributeName,
-            Object newValue) {
-        for (OperationSupport writer: operationSupports) {
-            writer.nodeAttributeChanged(nodeId, attributeName, newValue);
-        }
-    }
-
-    /* (non-Javadoc)
-     * @see org.gephi.streaming.api.OperationSupport#nodeAttributeRemoved(java.lang.String, java.lang.String)
-     */
-    @Override
-    public void nodeAttributeRemoved(String nodeId, String attributeName) {
-        for (OperationSupport writer: operationSupports) {
-            writer.nodeAttributeRemoved(nodeId, attributeName);
         }
     }
 

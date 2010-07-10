@@ -29,7 +29,6 @@ import org.gephi.data.attributes.api.AttributeListener;
 import org.gephi.data.attributes.api.AttributeRow;
 import org.gephi.data.attributes.api.AttributeValue;
 import org.gephi.data.properties.PropertiesColumn;
-import org.gephi.graph.api.Attributes;
 import org.gephi.graph.api.Edge;
 import org.gephi.graph.api.Graph;
 import org.gephi.graph.api.GraphEvent;
@@ -101,27 +100,13 @@ public class GraphChangeListener implements GraphListener, AttributeListener {
                 for (Edge edge: event.getData().addedEdges()) {
                     String edgeId = edge.getEdgeData().getId();
                     operationSupport.edgeAdded(edgeId, edge.getSource().getNodeData().getId(), 
-                            edge.getTarget().getNodeData().getId(), edge.isDirected(), null);
-                    
-                    AttributeRow row = (AttributeRow) edge.getEdgeData().getAttributes();
-                    for (AttributeValue attributeValue: row.getValues()) {
-                        if (attributeValue.getColumn().getIndex()!=PropertiesColumn.EDGE_ID.getIndex()
-                            && attributeValue.getValue() != null && !"".equals(attributeValue.getValue()))
-                            operationSupport.edgeAttributeAdded(edgeId, attributeValue.getColumn().getTitle().toLowerCase(), attributeValue.getValue());
-                    }
+                            edge.getTarget().getNodeData().getId(), edge.isDirected(), getEdgeAttributes(edge));
                 }
             break;
             case ADD_NODES:
                 for (Node node: event.getData().addedNodes()) {
                     String nodeId = node.getNodeData().getId();
-                    operationSupport.nodeAdded(nodeId, null);
-
-                    AttributeRow row = (AttributeRow) node.getNodeData().getAttributes();
-                    for (AttributeValue attributeValue: row.getValues()) {
-                        if (attributeValue.getColumn().getIndex()!=PropertiesColumn.NODE_ID.getIndex()
-                            && attributeValue.getValue() != null && !"".equals(attributeValue.getValue()))
-                            operationSupport.nodeAttributeAdded(nodeId, attributeValue.getColumn().getTitle().toLowerCase(), attributeValue.getValue());
-                    }
+                    operationSupport.nodeAdded(nodeId, getNodeAttributes(node));
                 }
             break;
         }

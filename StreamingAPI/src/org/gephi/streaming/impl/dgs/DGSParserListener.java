@@ -43,26 +43,12 @@ public interface DGSParserListener {
 
     void onEdgeRemoved( String sourceId, String edgeId );
 
-    void onEdgeAttributeAdded( String sourceId, String edgeId, String attribute, Object value );
-
-    void onEdgeAttributeChanged( String sourceId, String edgeId, String attribute,
-            Object oldValue, Object newValue );
-
-    void onEdgeAttributeRemoved( String sourceId, String edgeId, String attribute );
-
     void onGraphAttributeAdded( String sourceId, String attribute, Object value );
 
     void onGraphAttributeChanged( String sourceId, String attribute, Object oldValue,
             Object newValue );
 
     void onGraphAttributeRemoved( String sourceId, String attribute );
-
-    void onNodeAttributeAdded( String sourceId, String nodeId, String attribute, Object value );
-
-    void onNodeAttributeChanged( String sourceId, String nodeId, String attribute,
-            Object oldValue, Object newValue );
-
-    void onNodeAttributeRemoved( String sourceId, String nodeId, String attribute );
     
     void onStepBegins(String graphName, double time);
 

@@ -70,21 +70,6 @@ public class DGSStreamWriter extends StreamWriter {
     }
 
     @Override
-    public void edgeAttributeAdded(String edgeId, String attribute, Object value) {
-        edgeAttributeChanged(edgeId, attribute, value);
-    }
-
-    @Override
-    public void edgeAttributeChanged(String edgeId, String attribute, Object newValue) {
-        out.printf("ce \"%s\" %s%n", edgeId, attributeString(attribute, newValue, false));
-    }
-
-    @Override
-    public void edgeAttributeRemoved(String edgeId, String attribute) {
-        out.printf("ce \"%s\" %s%n", edgeId, attributeString(attribute, null, true));
-    }
-
-    @Override
     public void graphAttributeAdded(String attribute, Object value) {
         graphAttributeChanged(attribute, null, value);
     }
@@ -97,21 +82,6 @@ public class DGSStreamWriter extends StreamWriter {
     @Override
     public void graphAttributeRemoved(String attribute) {
         out.printf("cg %s%n", attributeString(attribute, null, true));
-    }
-
-    @Override
-    public void nodeAttributeAdded(String nodeId, String attribute, Object value) {
-        nodeAttributeChanged(nodeId, attribute, value);
-    }
-
-    @Override
-    public void nodeAttributeChanged(String nodeId, String attribute, Object newValue) {
-        out.printf("cn \"%s\" %s%n", nodeId, attributeString(attribute, newValue, false));
-    }
-
-    @Override
-    public void nodeAttributeRemoved(String nodeId, String attribute) {
-        out.printf("cn \"%s\" %s%n", nodeId, attributeString(attribute, null, true));
     }
 
     @Override

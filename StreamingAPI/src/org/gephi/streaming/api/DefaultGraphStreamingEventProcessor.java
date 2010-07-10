@@ -96,101 +96,46 @@ public class DefaultGraphStreamingEventProcessor implements GraphEventListener {
     public void onGraphEvent(GraphEvent event) {
         
         if (event instanceof ElementEvent) {
-            if (event instanceof ElementAttributeEvent) {
-
-                ElementAttributeEvent attributeEvent = (ElementAttributeEvent)event;
-
-                if(event.getElementType() == ElementType.NODE) {
-
-                    switch (event.getEventType()) {
-
-                    case ADD:
-                        graphUpdaterOperationSupport.nodeAttributeAdded(
-                                attributeEvent.getElementId(), attributeEvent.getAttributeName(), 
-                                attributeEvent.getAttributeValue());
-                        break;
-                        
-                    case CHANGE: 
-                        
-                        graphUpdaterOperationSupport.nodeAttributeChanged(
-                                attributeEvent.getElementId(), attributeEvent.getAttributeName(), 
-                                attributeEvent.getAttributeValue());
-                        break;
-
-                    case REMOVE:
-                        graphUpdaterOperationSupport.nodeAttributeRemoved(
-                                attributeEvent.getElementId(), attributeEvent.getAttributeName());
-                        break;
-                    }
-                }
-                
-                else if(event.getElementType() == ElementType.EDGE) {
-
-                    switch (event.getEventType()) {
-
-                    case ADD:
-                        graphUpdaterOperationSupport.edgeAttributeAdded(
-                                attributeEvent.getElementId(), attributeEvent.getAttributeName(), 
-                                attributeEvent.getAttributeValue());
-                        break;
-                        
-                    case CHANGE: 
-                        
-                        graphUpdaterOperationSupport.edgeAttributeChanged(
-                                attributeEvent.getElementId(), attributeEvent.getAttributeName(), 
-                                attributeEvent.getAttributeValue());
-                        break;
-
-                    case REMOVE:
-                        graphUpdaterOperationSupport.edgeAttributeRemoved(
-                                attributeEvent.getElementId(), attributeEvent.getAttributeName());
-                        break;
-                    }
-
-                }
-            }
-            
-            else {
                     
-               ElementEvent elementEvent = (ElementEvent)event;
+           ElementEvent elementEvent = (ElementEvent)event;
 
-               if(event.getElementType() == ElementType.NODE) {
+           if(event.getElementType() == ElementType.NODE) {
 
-                   switch (event.getEventType()) {
+               switch (event.getEventType()) {
 
-                   case ADD:
-                       graphUpdaterOperationSupport.nodeAdded(elementEvent.getElementId(), elementEvent.getAttributes());
-                       break;
+               case ADD:
+                   graphUpdaterOperationSupport.nodeAdded(elementEvent.getElementId(), elementEvent.getAttributes());
+                   break;
 
-                   case CHANGE:
-                       graphUpdaterOperationSupport.nodeChanged(elementEvent.getElementId(), elementEvent.getAttributes());
-                       break;
+               case CHANGE:
+                   graphUpdaterOperationSupport.nodeChanged(elementEvent.getElementId(), elementEvent.getAttributes());
+                   break;
 
-                   case REMOVE:
-                       graphUpdaterOperationSupport.nodeRemoved(elementEvent.getElementId());
-                       break;
-                   }
+               case REMOVE:
+                   graphUpdaterOperationSupport.nodeRemoved(elementEvent.getElementId());
+                   break;
                }
-               else if(event.getElementType() == ElementType.EDGE) {
-                   
-                   switch (event.getEventType()) {
+           }
+           else if(event.getElementType() == ElementType.EDGE) {
+               
+               switch (event.getEventType()) {
 
-                   case ADD:
-                       EdgeAddedEvent edgeAddedEvent = (EdgeAddedEvent) event;
-                       graphUpdaterOperationSupport.edgeAdded(elementEvent.getElementId(), 
-                               edgeAddedEvent.getSourceId(), edgeAddedEvent.getTargetId(), edgeAddedEvent.isDirected(), edgeAddedEvent.getAttributes());
-                       break;
+               case ADD:
+                   EdgeAddedEvent edgeAddedEvent = (EdgeAddedEvent) event;
+                   graphUpdaterOperationSupport.edgeAdded(elementEvent.getElementId(), 
+                           edgeAddedEvent.getSourceId(), edgeAddedEvent.getTargetId(), edgeAddedEvent.isDirected(), edgeAddedEvent.getAttributes());
+                   break;
 
-                   case CHANGE:
-                       System.out.println("Invalid change operation on edge "+elementEvent.getElementId());
-                       break;
+               case CHANGE:
+                   System.out.println("Invalid change operation on edge "+elementEvent.getElementId());
+                   break;
 
-                   case REMOVE:
-                       graphUpdaterOperationSupport.edgeRemoved(elementEvent.getElementId());
-                       break;
-                   }
+               case REMOVE:
+                   graphUpdaterOperationSupport.edgeRemoved(elementEvent.getElementId());
+                   break;
                }
-            }
+           }
+            
         }
     }
 

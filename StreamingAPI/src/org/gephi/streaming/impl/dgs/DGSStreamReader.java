@@ -72,24 +72,6 @@ public class DGSStreamReader extends StreamReader implements DGSParserListener {
     }
 
     @Override
-    public void onEdgeAttributeAdded(String graphName, String tag,
-            String attribute, Object value) {
-        operator.edgeAttributeAdded(tag, attribute, value);
-    }
-
-    @Override
-    public void onEdgeAttributeChanged(String graphName, String tag,
-            String attribute, Object object, Object value) {
-        operator.edgeAttributeChanged(tag, attribute, value);
-    }
-
-    @Override
-    public void onEdgeAttributeRemoved(String sourceId, String edgeId,
-            String attribute) {
-        operator.edgeAttributeRemoved(edgeId, attribute);
-    }
-
-    @Override
     public void onEdgeRemoved(String sourceId, String edgeId) {
         operator.edgeRemoved(edgeId);
     }
@@ -122,24 +104,6 @@ public class DGSStreamReader extends StreamReader implements DGSParserListener {
     @Override
     public void onNodeChanged(String sourceId, String nodeId, Map<String, Object> attributes) {
         operator.nodeChanged(nodeId, attributes);
-    }
-
-    @Override
-    public void onNodeAttributeAdded(String sourceId, String nodeId,
-            String attribute, Object value) {
-        operator.nodeAttributeAdded(nodeId, attribute, value);
-    }
-
-    @Override
-    public void onNodeAttributeChanged(String sourceId, String nodeId,
-            String attribute, Object oldValue, Object newValue) {
-        operator.nodeAttributeChanged(nodeId, attribute, newValue);
-    }
-
-    @Override
-    public void onNodeAttributeRemoved(String sourceId, String nodeId,
-            String attribute) {
-        operator.nodeAttributeRemoved(nodeId, attribute);
     }
 
     @Override

@@ -80,33 +80,6 @@ public interface OperationSupport {
     void edgeRemoved(String edgeId);
 
     /**
-     * An edge attribute is added
-     * 
-     * @param edgeId the edge identifier
-     * @param attributeName the name of the attribute to add
-     * @param value the value of the attribute to add
-     */
-    void edgeAttributeAdded(String edgeId, String attributeName, Object value);
-
-    /**
-     * An edge attribute is changed
-     * 
-     * @param edgeId the edge identifier
-     * @param attributeName the name of the attribute to change
-     * @param newValue the new value of the attribute
-     */
-    void edgeAttributeChanged(String edgeId, String attributeName,
-            Object newValue);
-
-    /**
-     * An edge attribute is removed
-     * 
-     * @param edgeId the edge identifier
-     * @param attributeName the name of the attribute to remove
-     */
-    void edgeAttributeRemoved(String edgeId, String attributeName);
-
-    /**
      * A graph attribute is added
      * 
      * @param attributeName the name of the attribute to add
@@ -129,33 +102,5 @@ public interface OperationSupport {
      * @param attributeName the name of the attribute to remove
      */
     void graphAttributeRemoved(String attributeName);
-
-    /**
-     * A node attribute is added
-     * 
-     * @param nodeId the node identifier
-     * @param attributeName the name of the attribute to add
-     * @param value the value of the attribute to add
-     */
-    void nodeAttributeAdded(String nodeId, String attributeName,
-            Object value);
-
-    /**
-     * A node attribute is changed
-     * 
-     * @param nodeId the node identifier
-     * @param attributeName the name of the attribute to change
-     * @param newValue the new value of the attribute
-     */
-    void nodeAttributeChanged(String nodeId, String attributeName,
-            Object newValue);
-
-    /**
-     * A node attribute is removed
-     * 
-     * @param nodeId the node identifier
-     * @param attributeName the name of the attribute to remove
-     */
-    void nodeAttributeRemoved(String nodeId, String attributeName);
 
 }

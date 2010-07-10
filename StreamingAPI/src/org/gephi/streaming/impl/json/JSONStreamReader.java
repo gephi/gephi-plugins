@@ -164,14 +164,17 @@ public class JSONStreamReader extends StreamReader {
                 Iterator i = gObjs.keys();
                 while (i.hasNext()) {
                     String id = (String)i.next();
+                    
+                    Map<String, Object> attributes = new HashMap<String, Object>();
                     JSONObject gObj = (JSONObject)gObjs.get(id);
-
                     Iterator i2 = gObj.keys();
                     while (i2.hasNext()) {
                         String key = (String)i2.next();
                         Object value = gObj.get(key);
-                        operator.edgeAttributeChanged(id, key, value);
+                        attributes.put(key, value);
                     }
+                    
+                    operator.edgeChanged(id, attributes);
                 }
 
             } else if (Types.DE.value().equals(type)) {

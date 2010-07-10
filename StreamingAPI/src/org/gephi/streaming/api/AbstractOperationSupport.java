@@ -57,35 +57,6 @@ public abstract class AbstractOperationSupport implements OperationSupport {
     }
 
     /* (non-Javadoc)
-     * @see org.gephi.streaming.api.OperationSupport#edgeAttributeAdded(java.lang.String, java.lang.String, java.lang.Object)
-     */
-    @Override
-    public void edgeAttributeAdded(String edgeId, String attributeName,
-            Object value) {
-        logger.warning("Operation edgeAttributeAdded not supported in the class " + this.getClass().getSimpleName());
-
-    }
-
-    /* (non-Javadoc)
-     * @see org.gephi.streaming.api.OperationSupport#edgeAttributeChanged(java.lang.String, java.lang.String, java.lang.Object)
-     */
-    @Override
-    public void edgeAttributeChanged(String edgeId, String attributeName,
-            Object newValue) {
-        logger.warning("Operation edgeAttributeChanged not supported in the class " + this.getClass().getSimpleName());
-
-    }
-
-    /* (non-Javadoc)
-     * @see org.gephi.streaming.api.OperationSupport#edgeAttributeRemoved(java.lang.String, java.lang.String)
-     */
-    @Override
-    public void edgeAttributeRemoved(String edgeId, String attributeName) {
-        logger.warning("Operation edgeAttributeRemoved not supported in the class " + this.getClass().getSimpleName());
-
-    }
-
-    /* (non-Javadoc)
      * @see org.gephi.streaming.api.OperationSupport#edgeRemoved(java.lang.String)
      */
     @Override
@@ -136,36 +107,6 @@ public abstract class AbstractOperationSupport implements OperationSupport {
     @Override
     public void nodeChanged(String nodeId, Map<String, Object> attributes) {
         logger.warning("Operation nodeChanged not supported in the class " + this.getClass().getSimpleName());
-
-    }
-//    public abstract void nodeChanged(String nodeId, Map<String, Object> attributes);
-
-    /* (non-Javadoc)
-     * @see org.gephi.streaming.api.OperationSupport#nodeAttributeAdded(java.lang.String, java.lang.String, java.lang.Object)
-     */
-    @Override
-    public void nodeAttributeAdded(String nodeId, String attributeName,
-            Object value) {
-        logger.warning("Operation nodeAttributeAdded not supported in the class " + this.getClass().getSimpleName());
-
-    }
-
-    /* (non-Javadoc)
-     * @see org.gephi.streaming.api.OperationSupport#nodeAttributeChanged(java.lang.String, java.lang.String, java.lang.Object)
-     */
-    @Override
-    public void nodeAttributeChanged(String nodeId, String attributeName,
-            Object newValue) {
-        logger.warning("Operation nodeAttributeChanged not supported in the class " + this.getClass().getSimpleName());
-
-    }
-
-    /* (non-Javadoc)
-     * @see org.gephi.streaming.api.OperationSupport#nodeAttributeRemoved(java.lang.String, java.lang.String)
-     */
-    @Override
-    public void nodeAttributeRemoved(String nodeId, String attributeName) {
-        logger.warning("Operation nodeAttributeRemoved not supported in the class " + this.getClass().getSimpleName());
 
     }
 
