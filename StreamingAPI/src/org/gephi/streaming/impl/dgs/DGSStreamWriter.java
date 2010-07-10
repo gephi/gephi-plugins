@@ -116,8 +116,25 @@ public class DGSStreamWriter extends StreamWriter {
 
     @Override
     public void edgeAdded(String edgeId, String fromNodeId, String toNodeId,
-            boolean directed) {
-        out.printf("ae \"%s\" \"%s\" %s \"%s\"%n", edgeId, fromNodeId, directed ? ">" : "", toNodeId);
+            boolean directed, Map<String, Object> attributes) {
+        out.printf("ae \"%s\" \"%s\" %s \"%s\"", edgeId, fromNodeId, directed ? ">" : "", toNodeId);
+        if (attributes != null && !attributes.isEmpty()) {
+            for (Map.Entry<String, Object> entry : attributes.entrySet()) {
+                out.printf(" %s", attributeString(entry.getKey(), entry.getValue(), false));
+            }
+        }
+        out.printf("%n");
+    }
+    
+    @Override
+    public void edgeChanged(String edgeId, Map<String, Object> attributes) {
+        if (attributes != null && attributes.size() > 0) {
+            out.printf("ce \"%s\"", edgeId);
+            for (Map.Entry<String, Object> entry : attributes.entrySet()) {
+                out.printf(" \"%s\":\"%s\"", entry.getKey(), entry.getValue());
+            }
+            out.printf("%n");
+        }
     }
 
     @Override
@@ -131,15 +148,13 @@ public class DGSStreamWriter extends StreamWriter {
 
     @Override
     public void nodeAdded(String nodeId, Map<String, Object> attributes) {
-        if (attributes == null || attributes.isEmpty()) {
-            out.printf("an \"%s\"%n", nodeId);
-        } else {
-            out.printf("an \"%s\"", nodeId);
+        out.printf("an \"%s\"", nodeId);
+        if (attributes != null && !attributes.isEmpty()) {
             for (Map.Entry<String, Object> entry : attributes.entrySet()) {
-                out.printf(" \"%s\":\"%s\"", entry.getKey(), entry.getValue());
+                out.printf(" %s", attributeString(entry.getKey(), entry.getValue(), false));
             }
-            out.printf("%n");
         }
+        out.printf("%n");
     }
     
     @Override

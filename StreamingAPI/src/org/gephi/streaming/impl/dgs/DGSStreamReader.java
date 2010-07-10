@@ -62,8 +62,13 @@ public class DGSStreamReader extends StreamReader implements DGSParserListener {
 
     @Override
     public void onEdgeAdded(String graphName, String edgeId, String fromTag,
-            String toTag, boolean directed) {
-        operator.edgeAdded(edgeId, fromTag, toTag, directed);
+            String toTag, boolean directed, Map<String, Object>  attributes) {
+        operator.edgeAdded(edgeId, fromTag, toTag, directed, attributes);
+    }
+    
+    @Override
+    public void onEdgeChanged(String sourceId, String edgeId, Map<String, Object> attributes) {
+        operator.edgeChanged(edgeId, attributes);
     }
 
     @Override

@@ -56,9 +56,9 @@ public class GraphBufferedOperationSupport extends CompositeOperationSupport {
 
     @Override
     public void edgeAdded(String edgeId, String fromNodeId, String toNodeId,
-            boolean directed) {
-        updater.edgeAdded(edgeId, fromNodeId, toNodeId, directed);
-        super.edgeAdded(edgeId, fromNodeId, toNodeId, directed);
+            boolean directed, Map<String, Object> attributes) {
+        updater.edgeAdded(edgeId, fromNodeId, toNodeId, directed, attributes);
+        super.edgeAdded(edgeId, fromNodeId, toNodeId, directed, attributes);
     }
 
     @Override
@@ -151,11 +151,9 @@ public class GraphBufferedOperationSupport extends CompositeOperationSupport {
                 String edgeId = edge.getEdgeData().getId();
                 String sourceId = edge.getSource().getNodeData().getId();
                 String targetId = edge.getTarget().getNodeData().getId();
-                operationSupport.edgeAdded(edgeId, sourceId, targetId, edge.isDirected());
+                operationSupport.edgeAdded(edgeId, sourceId, targetId, edge.isDirected(), getEdgeAttributes(edge));
                 
-                for (Map.Entry<String, Object> entry: getEdgeAttributes(edge).entrySet()){
-                    operationSupport.edgeAttributeAdded(edgeId, entry.getKey(), entry.getValue());
-                }
+                
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -201,6 +199,11 @@ public class GraphBufferedOperationSupport extends CompositeOperationSupport {
             }
 
         if (sendVizData) {
+            
+            attributes.put("r", edge.getEdgeData().r());
+            attributes.put("g", edge.getEdgeData().g());
+            attributes.put("b", edge.getEdgeData().b());
+            
             attributes.put("weight", edge.getWeight());
         }
 

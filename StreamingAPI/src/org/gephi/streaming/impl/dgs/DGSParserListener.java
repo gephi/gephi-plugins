@@ -36,7 +36,10 @@ public interface DGSParserListener {
 
     void onNodeRemoved( String sourceId, String nodeId );
 
-    void onEdgeAdded( String sourceId, String edgeId, String fromNodeId, String toNodeId, boolean directed );
+    void onEdgeAdded( String sourceId, String edgeId, String fromNodeId, String toNodeId,
+            boolean directed, Map<String, Object>  attributes );
+    
+    void onEdgeChanged(String graphName, String tag, Map<String, Object> attributes);
 
     void onEdgeRemoved( String sourceId, String edgeId );
 

@@ -204,14 +204,7 @@ public class DGSParser extends BaseParser {
         
         readAttributes( attributes );
         
-        for( String key: attributes.keySet() )
-        {
-            Object value = attributes.get( key );
-                
-            if( value == null )
-                listener.onEdgeAttributeRemoved( graphName, tag, key );
-            else listener.onEdgeAttributeChanged( graphName, tag, key, null, value );
-        }
+        listener.onEdgeChanged( graphName, tag, new HashMap<String, Object>(attributes) );
         
         if( eatEolOrEof() == StreamTokenizer.TT_EOF )
             pushBack();
@@ -284,13 +277,7 @@ public class DGSParser extends BaseParser {
         }
         
         readAttributes( attributes );
-        listener.onEdgeAdded( graphName, tag, fromTag, toTag, directed );
-        
-        for( String key: attributes.keySet() )
-        {
-            Object value = attributes.get( key );
-            listener.onEdgeAttributeAdded( graphName, tag, key, value );
-        }
+        listener.onEdgeAdded( graphName, tag, fromTag, toTag, directed, new HashMap<String, Object>(attributes) );
         
         if( eatEolOrEof() == StreamTokenizer.TT_EOF )
             pushBack();

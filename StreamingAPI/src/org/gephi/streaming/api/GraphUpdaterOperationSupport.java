@@ -69,9 +69,7 @@ public class GraphUpdaterOperationSupport extends AbstractOperationSupport {
      */
     @Override
     public void edgeAdded(String edgeId, String fromNodeId, String toNodeId,
-            boolean directed) {
-        
-        graph.writeLock();
+            boolean directed, Map<String, Object> attributes) {
         
         Edge edge = graph.getEdge(edgeId);
         if (edge!=null) return;
@@ -80,11 +78,38 @@ public class GraphUpdaterOperationSupport extends AbstractOperationSupport {
         Node target = graph.getNode(toNodeId);
         if(source!=null && target!=null) {
             edge = factory.newEdge(source, target, 1.0f, directed);
+            
+            if (attributes!=null && attributes.size() > 0) {
+                for(Map.Entry<String, Object> entry: attributes.entrySet()) {
+                    this.addEdgeAttribute(edge, entry.getKey(), entry.getValue());
+                }
+            }
+            
+            graph.writeLock();
             graph.addEdge(edge);
             graph.setId(edge, edgeId);
+            graph.writeUnlock();
         }
-        
-        graph.writeUnlock();
+    }
+    
+    /* (non-Javadoc)
+     * @see org.gephi.streaming.api.OperationSupport#edgeChanged(java.lang.String, Map)
+     */
+    @Override
+    public void edgeChanged(String edgeId, Map<String, Object> attributes) {
+        Edge edge = graph.getEdge(edgeId);
+        if (edge!=null) {
+            
+            graph.writeLock();
+            
+            if (attributes!=null && attributes.size() > 0) {
+                for(Map.Entry<String, Object> entry: attributes.entrySet()) {
+                    this.addEdgeAttribute(edge, entry.getKey(), entry.getValue());
+                }
+            }
+            
+            graph.writeUnlock();
+        }
     }
 
     /* (non-Javadoc)
@@ -98,15 +123,7 @@ public class GraphUpdaterOperationSupport extends AbstractOperationSupport {
         if (edge==null) return;
         
         graph.writeLock();
-        
-        EdgeProperties p = properties.getEdgeProperty(attributeName);
-        if (p != null) {
-            injectEdgeProperty(p, value, edge);
-        }
-        else if (edge.getEdgeData().getAttributes() != null) {
-            edge.getEdgeData().getAttributes().setValue(attributeName, value);
-        }
-        
+        this.addEdgeAttribute(edge, attributeName, value);
         graph.writeUnlock();
 
     }
@@ -126,16 +143,7 @@ public class GraphUpdaterOperationSupport extends AbstractOperationSupport {
      */
     @Override
     public void edgeAttributeRemoved(String edgeId, String attributeName) {
-        Edge edge = graph.getEdge(edgeId);
-        if (edge==null) return;
-        
-        graph.writeLock();
-        
-        if (edge.getEdgeData().getAttributes() != null) {
-            edge.getEdgeData().getAttributes().setValue(attributeName, null);
-        }
-        
-        graph.writeUnlock();
+        edgeAttributeAdded(edgeId, attributeName, null);
     }
 
     /* (non-Javadoc)
@@ -281,6 +289,16 @@ public class GraphUpdaterOperationSupport extends AbstractOperationSupport {
         }
         else if (node.getNodeData().getAttributes() != null) {
             node.getNodeData().getAttributes().setValue(attributeName, value);
+        }
+    }
+    
+    private void addEdgeAttribute(Edge edge, String attributeName, Object value) {
+        EdgeProperties p = properties.getEdgeProperty(attributeName);
+        if (p != null) {
+            injectEdgeProperty(p, value, edge);
+        }
+        else if (edge.getEdgeData().getAttributes() != null) {
+            edge.getEdgeData().getAttributes().setValue(attributeName, value);
         }
     }
     

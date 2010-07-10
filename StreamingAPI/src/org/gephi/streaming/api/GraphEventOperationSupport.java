@@ -59,8 +59,14 @@ public class GraphEventOperationSupport extends AbstractOperationSupport {
 
     @Override
     public void edgeAdded(String edgeId, String fromNodeId, String toNodeId,
-            boolean directed) {
-        EdgeAddedEvent event = new EdgeAddedEvent(source, edgeId, fromNodeId, toNodeId, directed);
+            boolean directed, Map<String, Object> attributes) {
+        EdgeAddedEvent event = new EdgeAddedEvent(source, edgeId, fromNodeId, toNodeId, directed, attributes);
+        fireEvent(event);
+    }
+    
+    @Override
+    public void edgeChanged(String edgeId, Map<String, Object> attributes) {
+        GraphEvent event = new ElementEvent(source, EventType.CHANGE, ElementType.EDGE, edgeId, attributes);
         fireEvent(event);
     }
 

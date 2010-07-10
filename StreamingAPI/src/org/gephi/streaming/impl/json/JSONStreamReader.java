@@ -139,12 +139,9 @@ public class JSONStreamReader extends StreamReader {
                 Iterator i = gObjs.keys();
                 while (i.hasNext()) {
                     String id = (String)i.next();
+                    
+                    Map<String, Object> attributes = new HashMap<String, Object>();
                     JSONObject gObj = (JSONObject)gObjs.get(id);
-                    operator.edgeAdded(id,
-                            gObj.getString(Fields.SOURCE.value()),
-                            gObj.getString(Fields.TARGET.value()),
-                            Boolean.valueOf(gObj.getString(Fields.DIRECTED.value())));
-
                     Iterator i2 = gObj.keys();
                     while (i2.hasNext()) {
                         String key = (String)i2.next();
@@ -152,9 +149,14 @@ public class JSONStreamReader extends StreamReader {
                                 && !key.equals(Fields.TARGET.value()) 
                                 && !key.equals(Fields.DIRECTED.value())) {
                             Object value = gObj.get(key);
-                            operator.edgeAttributeChanged(id, key, value);
+                            attributes.put(key, value);
                         }
                     }
+                    
+                    operator.edgeAdded(id,
+                            gObj.getString(Fields.SOURCE.value()),
+                            gObj.getString(Fields.TARGET.value()),
+                            Boolean.valueOf(gObj.getString(Fields.DIRECTED.value())), attributes);
                 }
 
             } else if (Types.CE.value().equals(type)) {

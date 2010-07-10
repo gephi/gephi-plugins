@@ -20,6 +20,9 @@ along with Gephi.  If not, see <http://www.gnu.org/licenses/>.
  */
 package org.gephi.streaming.server;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.gephi.data.attributes.api.AttributeController;
 import org.gephi.data.attributes.api.AttributeEvent;
 import org.gephi.data.attributes.api.AttributeListener;
@@ -43,6 +46,7 @@ public class GraphChangeListener implements GraphListener, AttributeListener {
 
     private OperationSupport operationSupport;
     private Graph graph;
+    private boolean sendVizData = true;
     
     public GraphChangeListener(Graph graph) {
         this.graph = graph;
@@ -66,24 +70,14 @@ public class GraphChangeListener implements GraphListener, AttributeListener {
             
             for (Node node: graph.getNodes()) {
                 String nodeId = node.getNodeData().getId();
-                operationSupport.nodeAdded(nodeId, null);
-                
-                AttributeRow row = (AttributeRow) node.getNodeData().getAttributes();
-                for (AttributeValue attributeValue: row.getValues()) {
-                    operationSupport.nodeAttributeAdded(nodeId, attributeValue.getColumn().getTitle(), attributeValue.getValue());
-                }
+                operationSupport.nodeAdded(nodeId, getNodeAttributes(node));
             }
             
             for (Edge edge: graph.getEdges()) {
                 String edgeId = edge.getEdgeData().getId();
                 String sourceId = edge.getSource().getNodeData().getId();
                 String targetId = edge.getTarget().getNodeData().getId();
-                operationSupport.edgeAdded(edgeId, sourceId, targetId, edge.isDirected());
-                
-                AttributeRow row = (AttributeRow) edge.getEdgeData().getAttributes();
-                for (AttributeValue attributeValue: row.getValues()) {
-                    operationSupport.edgeAttributeAdded(edgeId, attributeValue.getColumn().getTitle(), attributeValue.getValue());
-                }
+                operationSupport.edgeAdded(edgeId, sourceId, targetId, edge.isDirected(), getEdgeAttributes(edge));
             }
         } finally {
             graph.readUnlock();
@@ -107,7 +101,7 @@ public class GraphChangeListener implements GraphListener, AttributeListener {
                 for (Edge edge: event.getData().addedEdges()) {
                     String edgeId = edge.getEdgeData().getId();
                     operationSupport.edgeAdded(edgeId, edge.getSource().getNodeData().getId(), 
-                            edge.getTarget().getNodeData().getId(), edge.isDirected());
+                            edge.getTarget().getNodeData().getId(), edge.isDirected(), null);
                     
                     AttributeRow row = (AttributeRow) edge.getEdgeData().getAttributes();
                     for (AttributeValue attributeValue: row.getValues()) {
@@ -145,5 +139,54 @@ public class GraphChangeListener implements GraphListener, AttributeListener {
         }
         
     }
+    
+    private Map<String, Object> getNodeAttributes(Node node) {
+        Map<String, Object> attributes = new HashMap<String, Object>();
+        AttributeRow row = (AttributeRow) node.getNodeData().getAttributes();
+
+        if (row != null)
+            for (AttributeValue attributeValue: row.getValues()) {
+                if (attributeValue.getColumn().getIndex()!=PropertiesColumn.NODE_ID.getIndex()
+                        && attributeValue.getValue()!=null)
+                    attributes.put(attributeValue.getColumn().getTitle(), attributeValue.getValue());
+            }
+
+        if (sendVizData) {
+            attributes.put("x", node.getNodeData().x());
+            attributes.put("y", node.getNodeData().y());
+            attributes.put("z", node.getNodeData().z());
+
+            attributes.put("r", node.getNodeData().r());
+            attributes.put("g", node.getNodeData().g());
+            attributes.put("b", node.getNodeData().b());
+
+            attributes.put("size", node.getNodeData().getSize());
+        }
+
+        return attributes;
+    }
+
+    private Map<String, Object> getEdgeAttributes(Edge edge) {
+        Map<String, Object> attributes = new HashMap<String, Object>();
+        AttributeRow row = (AttributeRow) edge.getEdgeData().getAttributes();
+        if (row != null)
+            for (AttributeValue attributeValue: row.getValues()) {
+                if (attributeValue.getColumn().getIndex()!=PropertiesColumn.EDGE_ID.getIndex()
+                        && attributeValue.getValue()!=null)
+                     attributes.put(attributeValue.getColumn().getTitle(), attributeValue.getValue());
+            }
+
+        if (sendVizData) {
+            
+            attributes.put("r", edge.getEdgeData().r());
+            attributes.put("g", edge.getEdgeData().g());
+            attributes.put("b", edge.getEdgeData().b());
+            
+            attributes.put("weight", edge.getWeight());
+        }
+
+        return attributes;
+    }
+
 
 }

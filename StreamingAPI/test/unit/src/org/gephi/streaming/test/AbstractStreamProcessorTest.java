@@ -113,9 +113,9 @@ public abstract class AbstractStreamProcessorTest {
         streamWriter.nodeAdded("A", null);
         streamWriter.nodeAdded("B", null);
         streamWriter.nodeAdded("C", null);
-        streamWriter.edgeAdded("AB", "A", "B", false);
-        streamWriter.edgeAdded("BC", "B", "C", false);
-        streamWriter.edgeAdded("CA", "C", "A", false);
+        streamWriter.edgeAdded("AB", "A", "B", false, null);
+        streamWriter.edgeAdded("BC", "B", "C", false, null);
+        streamWriter.edgeAdded("CA", "C", "A", false, null);
         streamWriter.endStream();
 
         System.out.println(new String(out.toByteArray()));

@@ -53,6 +53,7 @@ public class ServerOperationExecutor {
     private final Graph graph;
     private final StreamWriterFactory writerFactory;
     private final StreamReaderFactory readerFactory;
+    private boolean sendVizData = true;
     
     public ServerOperationExecutor(Graph graph) {
         graphBufferedOperationSupport = new GraphBufferedOperationSupport(graph);
@@ -94,18 +95,7 @@ public class ServerOperationExecutor {
             Node node = graph.getNode(id);
             if (node != null) {
                 String nodeId = node.getNodeData().getId();
-
-                Map<String, Object> attributes = new HashMap<String, Object>();
-                AttributeRow row = (AttributeRow) node.getNodeData().getAttributes();
-
-                if (row != null)
-                    for (AttributeValue attributeValue: row.getValues()) {
-                        if (attributeValue.getColumn().getIndex()!=PropertiesColumn.NODE_ID.getIndex()
-                                && attributeValue.getValue()!=null)
-                            attributes.put(attributeValue.getColumn().getTitle(), attributeValue.getValue());
-                    }
-                
-                writer.nodeAdded(nodeId, attributes);
+                writer.nodeAdded(nodeId, getNodeAttributes(node));
             }
         } finally {
             graph.readUnlock();
@@ -136,17 +126,7 @@ public class ServerOperationExecutor {
                 String edgeId = edge.getEdgeData().getId();
                 String sourceId = edge.getSource().getNodeData().getId();
                 String targetId = edge.getTarget().getNodeData().getId();
-                writer.edgeAdded(edgeId, sourceId, targetId, edge.isDirected());
-                
-                AttributeRow row = (AttributeRow) edge.getEdgeData().getAttributes();
-
-                if (row != null)
-                    for (AttributeValue attributeValue: row.getValues()) {
-                        if (attributeValue.getColumn().getIndex()!=PropertiesColumn.EDGE_ID.getIndex()
-                                && attributeValue.getValue()!=null)
-                            writer.edgeAttributeAdded(edgeId, 
-                                    attributeValue.getColumn().getTitle(), attributeValue.getValue());
-                    }
+                writer.edgeAdded(edgeId, sourceId, targetId, edge.isDirected(), getEdgeAttributes(edge));
             }
         } finally {
             graph.readUnlock();
@@ -188,5 +168,53 @@ public class ServerOperationExecutor {
         StreamReader reader = readerFactory.createStreamReader(format, cos);
         reader.processStream(inputStream);
         outputStream.close();
+    }
+    
+    private Map<String, Object> getNodeAttributes(Node node) {
+        Map<String, Object> attributes = new HashMap<String, Object>();
+        AttributeRow row = (AttributeRow) node.getNodeData().getAttributes();
+
+        if (row != null)
+            for (AttributeValue attributeValue: row.getValues()) {
+                if (attributeValue.getColumn().getIndex()!=PropertiesColumn.NODE_ID.getIndex()
+                        && attributeValue.getValue()!=null)
+                    attributes.put(attributeValue.getColumn().getTitle(), attributeValue.getValue());
+            }
+
+        if (sendVizData) {
+            attributes.put("x", node.getNodeData().x());
+            attributes.put("y", node.getNodeData().y());
+            attributes.put("z", node.getNodeData().z());
+
+            attributes.put("r", node.getNodeData().r());
+            attributes.put("g", node.getNodeData().g());
+            attributes.put("b", node.getNodeData().b());
+
+            attributes.put("size", node.getNodeData().getSize());
+        }
+
+        return attributes;
+    }
+
+    private Map<String, Object> getEdgeAttributes(Edge edge) {
+        Map<String, Object> attributes = new HashMap<String, Object>();
+        AttributeRow row = (AttributeRow) edge.getEdgeData().getAttributes();
+        if (row != null)
+            for (AttributeValue attributeValue: row.getValues()) {
+                if (attributeValue.getColumn().getIndex()!=PropertiesColumn.EDGE_ID.getIndex()
+                        && attributeValue.getValue()!=null)
+                     attributes.put(attributeValue.getColumn().getTitle(), attributeValue.getValue());
+            }
+
+        if (sendVizData) {
+            
+            attributes.put("r", edge.getEdgeData().r());
+            attributes.put("g", edge.getEdgeData().g());
+            attributes.put("b", edge.getEdgeData().b());
+            
+            attributes.put("weight", edge.getWeight());
+        }
+
+        return attributes;
     }
 }

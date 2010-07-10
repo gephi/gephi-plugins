@@ -43,8 +43,17 @@ public abstract class AbstractOperationSupport implements OperationSupport {
      */
     @Override
     public void edgeAdded(String edgeId, String fromNodeId, String toNodeId,
-            boolean directed) {
+            boolean directed, Map<String, Object> attributes) {
         logger.warning("Operation edgeAdded not supported in the class " + this.getClass().getSimpleName());
+    }
+    
+    /* (non-Javadoc)
+     * @see org.gephi.streaming.api.OperationSupport#edgeChanged(java.lang.String, Map)
+     */
+    @Override
+    public void edgeChanged(String edgeId, Map<String, Object> attributes) {
+        logger.warning("Operation edgeChanged not supported in the class " + this.getClass().getSimpleName());
+
     }
 
     /* (non-Javadoc)

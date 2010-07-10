@@ -20,6 +20,8 @@ along with Gephi.  If not, see <http://www.gnu.org/licenses/>.
  */
 package org.gephi.streaming.api.event;
 
+import java.util.Map;
+
 /**
  * @author panisson
  *
@@ -38,10 +40,11 @@ public final class EdgeAddedEvent extends ElementEvent {
      * @param sourceId
      * @param targetId
      * @param directed 
+     * @param attributes 
      */
     public EdgeAddedEvent(Object source, String elementId,
-            String sourceId, String targetId, boolean directed) {
-        super(source, EventType.ADD, ElementType.EDGE, elementId, null);
+            String sourceId, String targetId, boolean directed, Map<String, Object> attributes) {
+        super(source, EventType.ADD, ElementType.EDGE, elementId, attributes);
         this.sourceId = sourceId;
         this.targetId = targetId;
         this.directed = directed;

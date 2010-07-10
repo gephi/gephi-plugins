@@ -32,10 +32,17 @@ public class FilteredOperationSupport extends AbstractOperationSupport {
 
     @Override
     public void edgeAdded(String edgeId, String fromNodeId, String toNodeId,
-            boolean directed) {
-        EdgeAddedEvent event = new EdgeAddedEvent(this, edgeId, fromNodeId, toNodeId, directed);
+            boolean directed, Map<String, Object> attributes) {
+        EdgeAddedEvent event = new EdgeAddedEvent(this, edgeId, fromNodeId, toNodeId, directed, attributes);
         if(!filteredEvents.contains(event))
-            operationSupport.edgeAdded(edgeId, fromNodeId, toNodeId, directed);
+            operationSupport.edgeAdded(edgeId, fromNodeId, toNodeId, directed, attributes);
+    }
+    
+    @Override
+    public void edgeChanged(String edgeId, Map<String, Object> attributes) {
+        ElementEvent event = new ElementEvent(source, EventType.CHANGE, ElementType.EDGE, edgeId, attributes);
+        if(!filteredEvents.contains(event))
+            operationSupport.nodeAdded(edgeId, attributes);
     }
 
     @Override

@@ -59,11 +59,20 @@ public class CompositeOperationSupport extends AbstractOperationSupport {
      */
     @Override
     public void edgeAdded(String edgeId, String fromNodeId, String toNodeId,
-            boolean directed) {
+            boolean directed, Map<String, Object> attributes) {
         for (OperationSupport writer: operationSupports) {
-            writer.edgeAdded(edgeId, fromNodeId, toNodeId, directed);
+            writer.edgeAdded(edgeId, fromNodeId, toNodeId, directed, attributes);
         }
-
+    }
+    
+    /* (non-Javadoc)
+     * @see org.gephi.streaming.api.OperationSupport#edgeChanged(String, Map)
+     */
+    @Override
+    public void edgeChanged(String edgeId, Map<String, Object> attributes) {
+        for (OperationSupport writer: operationSupports) {
+            writer.edgeChanged(edgeId, attributes);
+        }
     }
 
     /* (non-Javadoc)

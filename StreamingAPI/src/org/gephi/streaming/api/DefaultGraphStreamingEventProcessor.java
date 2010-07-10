@@ -178,7 +178,7 @@ public class DefaultGraphStreamingEventProcessor implements GraphEventListener {
                    case ADD:
                        EdgeAddedEvent edgeAddedEvent = (EdgeAddedEvent) event;
                        graphUpdaterOperationSupport.edgeAdded(elementEvent.getElementId(), 
-                               edgeAddedEvent.getSourceId(), edgeAddedEvent.getTargetId(), edgeAddedEvent.isDirected());
+                               edgeAddedEvent.getSourceId(), edgeAddedEvent.getTargetId(), edgeAddedEvent.isDirected(), edgeAddedEvent.getAttributes());
                        break;
 
                    case CHANGE:

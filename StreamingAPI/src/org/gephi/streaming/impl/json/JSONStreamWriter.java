@@ -200,21 +200,33 @@ public class JSONStreamWriter extends StreamWriter {
 
     @Override
     public void edgeAdded(String edgeId, String fromNodeId, String toNodeId,
-            boolean directed) {
+            boolean directed, Map<String, Object> attributes) {
         try {
+            
+            JSONObject edgeData = createEdgeData(edgeId, fromNodeId, toNodeId, directed, attributes);
+            
             out.print(
                     new JSONObject()
-                        .put(Types.AE.value(), new JSONObject()
-                            .put(edgeId, new JSONObject()
-                                .put(Fields.SOURCE.value(), fromNodeId)
-                                .put(Fields.TARGET.value(), toNodeId)
-                                .put(Fields.DIRECTED.value(), directed)
-                                )
-                            )
+                        .put(Types.AE.value(), edgeData)
                         .toString() + EOL);
         } catch (JSONException e) {
             logger.log(Level.WARNING, "Unable to write JSONObject for "
                     + "edgeAdded event, edge {0}: {1}",
+                    new Object[]{edgeId, e.getMessage()});
+        }
+    }
+    
+    @Override
+    public void edgeChanged(String edgeId, Map<String, Object> attributes) {
+        try {
+            JSONObject edgeData = createEdgeChangedData(edgeId, attributes);
+            out.print(
+                    new JSONObject()
+                        .put(Types.CE.value(), edgeData)
+                        .toString() + EOL);
+        } catch (JSONException e) {
+            logger.log(Level.WARNING, "Unable to write JSONObject for "
+                    + "edgeChanged event, edge {0}: {1}",
                     new Object[]{edgeId, e.getMessage()});
         }
     }
@@ -293,6 +305,42 @@ public class JSONStreamWriter extends StreamWriter {
 
         JSONObject nodeData = new JSONObject();
         nodeData.put(nodeId, attributesJObject);
+
+        return nodeData;
+    }
+    
+    private JSONObject createEdgeData(String edgeId, String fromNodeId, String toNodeId,
+            boolean directed, Map<String, Object> attributes) throws JSONException {
+
+        JSONObject attributesJObject = new JSONObject()
+            .put(Fields.SOURCE.value(), fromNodeId)
+            .put(Fields.TARGET.value(), toNodeId)
+            .put(Fields.DIRECTED.value(), directed);
+        
+        if (attributes != null && attributes.size() > 0) {
+            for (Map.Entry<String, Object> entry : attributes.entrySet()) {
+                attributesJObject.put(entry.getKey(), entry.getValue());
+            }
+        }
+
+        JSONObject nodeData = new JSONObject();
+        nodeData.put(edgeId, attributesJObject);
+
+        return nodeData;
+    }
+    
+    private JSONObject createEdgeChangedData(String edgeId, Map<String, Object> attributes) throws JSONException {
+
+        JSONObject attributesJObject = new JSONObject();
+        
+        if (attributes != null && attributes.size() > 0) {
+            for (Map.Entry<String, Object> entry : attributes.entrySet()) {
+                attributesJObject.put(entry.getKey(), entry.getValue());
+            }
+        }
+
+        JSONObject nodeData = new JSONObject();
+        nodeData.put(edgeId, attributesJObject);
 
         return nodeData;
     }

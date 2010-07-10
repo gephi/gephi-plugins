@@ -60,10 +60,18 @@ public interface OperationSupport {
      * @param fromNodeId the source node identifier
      * @param toNodeId the target node identifier
      * @param directed if the edge is directed
+     * @param attributes the edge attributes
      */
     void edgeAdded(String edgeId, String fromNodeId, String toNodeId,
-            boolean directed);
+            boolean directed, Map<String, Object> attributes);
 
+    /**
+     * An edge is changed
+     * @param edgeId the edge identifier
+     * @param attributes the edge attributes
+     */
+    void edgeChanged(String edgeId, Map<String, Object> attributes);
+    
     /**
      * An edge is removed
      * 
