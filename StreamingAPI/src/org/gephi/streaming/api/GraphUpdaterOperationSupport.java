@@ -201,10 +201,11 @@ public class GraphUpdaterOperationSupport extends AbstractOperationSupport {
     @Override
     public void nodeRemoved(String nodeId) {
         Node node = graph.getNode(nodeId);
-        if (node!=null)
+        if (node!=null) {
             graph.writeLock();
             graph.removeNode(node);
             graph.writeUnlock();
+        }
     }
     
     private void addNodeAttribute(Node node, String attributeName, Object value) {
