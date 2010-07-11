@@ -9,7 +9,6 @@ import java.util.Set;
 import org.gephi.streaming.api.AbstractOperationSupport;
 import org.gephi.streaming.api.OperationSupport;
 import org.gephi.streaming.api.event.EdgeAddedEvent;
-import org.gephi.streaming.api.event.ElementAttributeEvent;
 import org.gephi.streaming.api.event.ElementEvent;
 import org.gephi.streaming.api.event.ElementType;
 import org.gephi.streaming.api.event.EventType;
@@ -50,27 +49,6 @@ public class FilteredOperationSupport extends AbstractOperationSupport {
         ElementEvent event = new ElementEvent(source, EventType.REMOVE, ElementType.EDGE, edgeId, null);
         if(!filteredEvents.contains(event))
             operationSupport.edgeRemoved(edgeId);
-    }
-
-    @Override
-    public void graphAttributeAdded(String attributeName, Object value) {
-        ElementAttributeEvent event = new ElementAttributeEvent(source, EventType.ADD, ElementType.GRAPH, null, attributeName, value);
-        if(!filteredEvents.contains(event))
-            operationSupport.graphAttributeAdded(attributeName, value);
-    }
-
-    @Override
-    public void graphAttributeChanged(String attributeName, Object newValue) {
-        ElementAttributeEvent event = new ElementAttributeEvent(source, EventType.CHANGE, ElementType.GRAPH, null, attributeName, newValue);
-        if(!filteredEvents.contains(event))
-            operationSupport.graphAttributeChanged(attributeName, newValue);
-    }
-
-    @Override
-    public void graphAttributeRemoved(String attributeName) {
-        ElementAttributeEvent event = new ElementAttributeEvent(source, EventType.CHANGE, ElementType.GRAPH, null, attributeName, null);
-        if(!filteredEvents.contains(event))
-            operationSupport.graphAttributeRemoved(attributeName);
     }
 
     @Override

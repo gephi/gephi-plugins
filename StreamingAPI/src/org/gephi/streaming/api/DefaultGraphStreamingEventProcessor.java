@@ -21,20 +21,13 @@ along with Gephi.  If not, see <http://www.gnu.org/licenses/>.
 package org.gephi.streaming.api;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.net.URL;
-import java.net.URLConnection;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
 import org.gephi.graph.api.Graph;
-import org.gephi.graph.api.GraphController;
-import org.gephi.graph.api.GraphModel;
-import org.gephi.project.api.ProjectController;
-import org.gephi.project.api.Workspace;
 import org.gephi.streaming.api.event.EdgeAddedEvent;
-import org.gephi.streaming.api.event.ElementAttributeEvent;
 import org.gephi.streaming.api.event.ElementEvent;
 import org.gephi.streaming.api.event.ElementType;
 import org.gephi.streaming.api.event.GraphEvent;

@@ -5,8 +5,8 @@ package org.gephi.streaming.test;
 
 import java.util.HashSet;
 import java.util.Set;
+import org.gephi.streaming.api.event.ElementEvent;
 
-import org.gephi.streaming.api.event.ElementAttributeEvent;
 import org.gephi.streaming.api.event.ElementType;
 import org.gephi.streaming.api.event.EventType;
 import org.gephi.streaming.api.event.GraphEvent;
@@ -21,7 +21,7 @@ public class EventComparisonTest {
 
     @Test
     public void compareEventTest() {
-        ElementAttributeEvent event = new ElementAttributeEvent(this, EventType.CHANGE, ElementType.NODE, "0321356985", "full-label", "Practical Business Intelligence with SQL Server 2005 (Microsoft Windows Server System Series)");
+        ElementEvent event = new ElementEvent(this, EventType.ADD, ElementType.NODE, "0321356985", null);
         assertTrue(event.equals(event));
         assertTrue(event.hashCode() == event.hashCode());
 
@@ -36,7 +36,7 @@ public class EventComparisonTest {
     @Test
     public void hashSetTest() {
         Set<GraphEvent> set = new HashSet<GraphEvent>();
-        ElementAttributeEvent event = new ElementAttributeEvent(this, EventType.CHANGE, ElementType.NODE, "0321356985", "full-label", "Practical Business Intelligence with SQL Server 2005 (Microsoft Windows Server System Series)");
+        ElementEvent event = new ElementEvent(this, EventType.ADD, ElementType.NODE, "0321356985", null);
         set.add(event);
         assertTrue(set.contains(event));
     }

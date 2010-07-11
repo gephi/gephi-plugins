@@ -23,7 +23,6 @@ package org.gephi.streaming.api;
 import java.util.Map;
 
 import org.gephi.streaming.api.event.EdgeAddedEvent;
-import org.gephi.streaming.api.event.ElementAttributeEvent;
 import org.gephi.streaming.api.event.ElementEvent;
 import org.gephi.streaming.api.event.ElementType;
 import org.gephi.streaming.api.event.EventType;
@@ -73,27 +72,6 @@ public class GraphEventOperationSupport extends AbstractOperationSupport {
     @Override
     public void edgeRemoved(String edgeId) {
         GraphEvent event = new ElementEvent(source, EventType.REMOVE, ElementType.EDGE, edgeId, null);
-        fireEvent(event);
-    }
-
-    @Override
-    public void graphAttributeAdded(String attributeName,
-            Object value) {
-        ElementAttributeEvent event = new ElementAttributeEvent(source, EventType.ADD, ElementType.GRAPH, null, attributeName, value);
-        fireEvent(event);
-        
-    }
-
-    @Override
-    public void graphAttributeChanged(String attributeName,
-            Object newValue) {
-        ElementAttributeEvent event = new ElementAttributeEvent(source, EventType.CHANGE, ElementType.GRAPH, null, attributeName, newValue);
-        fireEvent(event);
-    }
-
-    @Override
-    public void graphAttributeRemoved(String attributeName) {
-        ElementAttributeEvent event = new ElementAttributeEvent(source, EventType.CHANGE, ElementType.GRAPH, null, attributeName, null);
         fireEvent(event);
     }
 

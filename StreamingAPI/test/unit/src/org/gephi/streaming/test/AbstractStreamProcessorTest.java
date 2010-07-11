@@ -48,7 +48,6 @@ import org.gephi.streaming.api.StreamType;
 import org.gephi.streaming.api.StreamWriter;
 import org.gephi.streaming.api.StreamWriterFactory;
 import org.gephi.streaming.api.StreamingClient;
-import org.gephi.streaming.api.event.ElementAttributeEvent;
 import org.gephi.streaming.api.event.ElementType;
 import org.gephi.streaming.api.event.EventType;
 import org.gephi.streaming.api.event.GraphEvent;
@@ -246,13 +245,10 @@ public abstract class AbstractStreamProcessorTest {
         GraphEventListener listener = new GraphEventListener() {
             @Override
             public void onGraphEvent(GraphEvent event) {
-//                System.out.println(event);
-                if (!(event instanceof ElementAttributeEvent)) {
-                    if (event.getElementType() == ElementType.NODE && event.getEventType() == EventType.ADD)
-                        nodeCount.incrementAndGet();
-                    if (event.getElementType() == ElementType.EDGE && event.getEventType() == EventType.ADD)
-                        edgeCount.incrementAndGet();
-                }
+                if (event.getElementType() == ElementType.NODE && event.getEventType() == EventType.ADD)
+                    nodeCount.incrementAndGet();
+                if (event.getElementType() == ElementType.EDGE && event.getEventType() == EventType.ADD)
+                    edgeCount.incrementAndGet();
             }
         };
         
