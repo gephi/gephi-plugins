@@ -51,6 +51,7 @@ public class GraphUpdaterOperationSupport extends AbstractOperationSupport {
         properties.addNodePropertyAssociation(NodeProperties.LABEL, "label");
         properties.addNodePropertyAssociation(NodeProperties.X, "x");
         properties.addNodePropertyAssociation(NodeProperties.Y, "y");
+        properties.addNodePropertyAssociation(NodeProperties.Z, "z");
         properties.addNodePropertyAssociation(NodeProperties.SIZE, "size");
         properties.addNodePropertyAssociation(NodeProperties.R, "r");
         properties.addNodePropertyAssociation(NodeProperties.G, "g");
@@ -77,7 +78,7 @@ public class GraphUpdaterOperationSupport extends AbstractOperationSupport {
         Node source = graph.getNode(fromNodeId);
         Node target = graph.getNode(toNodeId);
         if(source!=null && target!=null) {
-            edge = factory.newEdge(source, target, 1.0f, directed);
+            edge = factory.newEdge(edgeId, source, target, 1.0f, directed);
             
             if (attributes!=null && attributes.size() > 0) {
                 for(Map.Entry<String, Object> entry: attributes.entrySet()) {
@@ -160,7 +161,7 @@ public class GraphUpdaterOperationSupport extends AbstractOperationSupport {
     public void nodeAdded(String nodeId, Map<String, Object> attributes) {
         Node node = graph.getNode(nodeId);
         if (node==null) {
-            node = factory.newNode();
+            node = factory.newNode(nodeId);
             
             if (attributes!=null && attributes.size() > 0) {
                 for(Map.Entry<String, Object> entry: attributes.entrySet()) {
@@ -203,6 +204,11 @@ public class GraphUpdaterOperationSupport extends AbstractOperationSupport {
         Node node = graph.getNode(nodeId);
         if (node!=null) {
             graph.writeLock();
+
+            for (Edge edge: graph.getEdges(node).toArray()) {
+                graph.removeEdge(edge);
+            }
+
             graph.removeNode(node);
             graph.writeUnlock();
         }
@@ -237,10 +243,8 @@ public class GraphUpdaterOperationSupport extends AbstractOperationSupport {
                 }
                 break;
             case LABEL:
-                String label = value.toString();
-                if (label != null) {
-                    node.getNodeData().setLabel(label);
-                }
+                String label = (value!=null)?value.toString():null;
+                node.getNodeData().setLabel(label);
                 break;
             case X:
                 float x = Float.valueOf(value.toString());
