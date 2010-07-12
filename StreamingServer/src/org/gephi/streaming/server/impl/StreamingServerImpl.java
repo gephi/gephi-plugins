@@ -58,7 +58,7 @@ import org.simpleframework.transport.connect.SocketConnection;
 @ServiceProvider(service = StreamingServer.class)
 public class StreamingServerImpl implements StreamingServer {
     
-    private static Logger logger =  Logger.getLogger(StreamingServerImpl.class.getName());
+    private static final Logger logger =  Logger.getLogger(StreamingServerImpl.class.getName());
     
     private int port = 8080;
     private boolean useSSL = true;
@@ -69,6 +69,8 @@ public class StreamingServerImpl implements StreamingServer {
     private Connection serverConnection;
     private ContextContainer contextContainer;
     private AuthenticationFilter authenticationFilter;
+
+    private Connection sslServerConnection;
 
     public StreamingServerImpl() {
         contextContainer = new ContextContainer();
@@ -81,16 +83,32 @@ public class StreamingServerImpl implements StreamingServer {
      * @see org.gephi.streaming.server.impl.StreamingServer#register(org.gephi.streaming.server.ServerController, java.lang.String)
      */
     public void register(ServerController controller, String context) {
-        logger.info("Registering controller at context "+context);
+        logger.log(Level.INFO, "Registering controller at context {0}", context);
         controllers.put(context, controller);
+
+        if (!this.started) {
+            try {
+                this.start();
+            } catch (IOException ex) {
+                logger.log(Level.SEVERE, null, ex);
+            }
+        }
     }
     
     /* (non-Javadoc)
      * @see org.gephi.streaming.server.impl.StreamingServer#unregister(java.lang.String)
      */
     public void unregister(String context) {
-        logger.info("Unregistering controller at context "+context);
+        logger.log(Level.INFO, "Unregistering controller at context {0}", context);
         controllers.remove(context);
+
+        if (controllers.isEmpty()) {
+            try {
+                this.stop();
+            } catch (IOException ex) {
+                logger.log(Level.SEVERE, null, ex);
+            }
+        }
     }
     
     /* (non-Javadoc)
@@ -103,14 +121,14 @@ public class StreamingServerImpl implements StreamingServer {
             SocketAddress address = new InetSocketAddress(port);
             serverConnection.connect(address);
             
-            logger.info("HTTP Listening at port " + port);
+            logger.log(Level.INFO, "HTTP Listening at port {0}", port);
             
             if (useSSL)
                 startSSL();
             
             started = true;
             if (logger.isLoggable(Level.INFO)) {
-                logger.info("StreamingServer started at " + new Date());
+                logger.log(Level.INFO, "StreamingServer started at {0}", new Date());
                 
             }
         }
@@ -122,10 +140,12 @@ public class StreamingServerImpl implements StreamingServer {
     public synchronized void stop() throws IOException {
         if (started) {
             serverConnection.close();
+            if (useSSL)
+                stopSSL();
             started = false;
             
             if (logger.isLoggable(Level.INFO)) {
-                logger.info("StreamingServer stopped at " + new Date());
+                logger.log(Level.INFO, "StreamingServer stopped at {0}", new Date());
                 
             }
         }
@@ -195,8 +215,6 @@ public class StreamingServerImpl implements StreamingServer {
     }
 
     private class ContextContainer implements Container {
-        
-        private Logger logger =  Logger.getLogger(ContextContainer.class.getName());
 
         @Override
         public void handle(org.simpleframework.http.Request request, 
@@ -211,7 +229,7 @@ public class StreamingServerImpl implements StreamingServer {
             String context = request.getPath().getPath();
             ServerController controller = controllers.get(context);
             if (controller==null) {
-                logger.warning("Invalid context: "+context);
+                logger.log(Level.WARNING, "Invalid context: {0}", context);
                 response.setCode(404);
                 
                 try {
@@ -223,13 +241,12 @@ public class StreamingServerImpl implements StreamingServer {
                 controller.handle(requestWrapper, responseWrapper);
             }
         }
-
         
     }
     
     private void startSSL() throws IOException {
         SocketAddress address = new InetSocketAddress(sslPort);
-        Connection connection = new SocketConnection(contextContainer);
+        sslServerConnection = new SocketConnection(contextContainer);
         
         try {
             KeyManagerFactory kmf = null;
@@ -256,9 +273,9 @@ public class StreamingServerImpl implements StreamingServer {
             sslContext.init(kmf != null ? kmf.getKeyManagers() : null,
                     tmf != null ? tmf.getTrustManagers() : null, null);
 
-            connection.connect(address, sslContext);
+            sslServerConnection.connect(address, sslContext);
             
-            logger.info("HTTPS Listening at port " + sslPort);
+            logger.log(Level.INFO, "HTTPS Listening at port {0}", sslPort);
             
         } catch (UnrecoverableKeyException e) {
             // TODO Auto-generated catch block
@@ -276,6 +293,10 @@ public class StreamingServerImpl implements StreamingServer {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
+    }
+
+    private void stopSSL() throws IOException {
+        sslServerConnection.close();
     }
 
 }
