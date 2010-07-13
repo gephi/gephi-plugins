@@ -24,8 +24,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Map;
 
-import org.gephi.streaming.api.OperationSupport;
+import org.gephi.streaming.api.GraphEventHandler;
 import org.gephi.streaming.api.StreamReader;
+import org.gephi.streaming.api.event.ElementType;
+import org.gephi.streaming.api.event.EventType;
 
 /**
  * A stream processor for the GraphStream DSG file format.
@@ -36,10 +38,10 @@ import org.gephi.streaming.api.StreamReader;
 public class DGSStreamReader extends StreamReader implements DGSParserListener {
     
     /**
-     * @param operator the OperationSupport to which the operations will be delegated
+     * @param handler the GraphEventHandler to which the events will be delegated
      */
-    public DGSStreamReader(OperationSupport operator) {
-        super(operator);
+    public DGSStreamReader(GraphEventHandler handler) {
+        super(handler);
     }
 
     @Override
@@ -63,17 +65,17 @@ public class DGSStreamReader extends StreamReader implements DGSParserListener {
     @Override
     public void onEdgeAdded(String graphName, String edgeId, String fromTag,
             String toTag, boolean directed, Map<String, Object>  attributes) {
-        operator.edgeAdded(edgeId, fromTag, toTag, directed, attributes);
+        handler.handleGraphEvent(eventBuilder.edgeAddedEvent(edgeId, fromTag, toTag, directed, attributes));
     }
     
     @Override
     public void onEdgeChanged(String sourceId, String edgeId, Map<String, Object> attributes) {
-        operator.edgeChanged(edgeId, attributes);
+        handler.handleGraphEvent(eventBuilder.graphEvent(ElementType.EDGE, EventType.CHANGE, edgeId, attributes));
     }
 
     @Override
     public void onEdgeRemoved(String sourceId, String edgeId) {
-        operator.edgeRemoved(edgeId);
+        handler.handleGraphEvent(eventBuilder.graphEvent(ElementType.EDGE, EventType.REMOVE, edgeId, null));
     }
 
     @Override
@@ -98,17 +100,17 @@ public class DGSStreamReader extends StreamReader implements DGSParserListener {
 
     @Override
     public void onNodeAdded(String sourceId, String nodeId, Map<String, Object> attributes) {
-        operator.nodeAdded(nodeId, attributes);
+        handler.handleGraphEvent(eventBuilder.graphEvent(ElementType.NODE, EventType.ADD, nodeId, attributes));
     }
     
     @Override
     public void onNodeChanged(String sourceId, String nodeId, Map<String, Object> attributes) {
-        operator.nodeChanged(nodeId, attributes);
+        handler.handleGraphEvent(eventBuilder.graphEvent(ElementType.NODE, EventType.CHANGE, nodeId, attributes));
     }
 
     @Override
     public void onNodeRemoved(String sourceId, String nodeId) {
-        operator.nodeRemoved(nodeId);
+        handler.handleGraphEvent(eventBuilder.graphEvent(ElementType.NODE, EventType.REMOVE, nodeId, null));
     }
 
     @Override

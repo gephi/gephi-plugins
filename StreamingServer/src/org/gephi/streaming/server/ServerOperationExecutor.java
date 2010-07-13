@@ -34,12 +34,15 @@ import org.gephi.data.properties.PropertiesColumn;
 import org.gephi.graph.api.Edge;
 import org.gephi.graph.api.Graph;
 import org.gephi.graph.api.Node;
-import org.gephi.streaming.api.CompositeOperationSupport;
-import org.gephi.streaming.api.GraphUpdaterOperationSupport;
+import org.gephi.streaming.api.CompositeGraphEventHandler;
+import org.gephi.streaming.api.event.GraphEventBuilder;
+import org.gephi.streaming.api.GraphUpdaterEventHandler;
 import org.gephi.streaming.api.StreamReader;
 import org.gephi.streaming.api.StreamReaderFactory;
 import org.gephi.streaming.api.StreamWriter;
 import org.gephi.streaming.api.StreamWriterFactory;
+import org.gephi.streaming.api.event.ElementType;
+import org.gephi.streaming.api.event.EventType;
 import org.openide.util.Lookup;
 
 /**
@@ -48,19 +51,21 @@ import org.openide.util.Lookup;
  */
 public class ServerOperationExecutor {
     
-    private final GraphBufferedOperationSupport graphBufferedOperationSupport;
-    private final GraphUpdaterOperationSupport graphUpdaterOperationSupport;
+    private final GraphBufferedEventHandler graphBufferedOperationSupport;
+    private final GraphUpdaterEventHandler graphUpdaterOperationSupport;
     private final Graph graph;
     private final StreamWriterFactory writerFactory;
     private final StreamReaderFactory readerFactory;
     private boolean sendVizData = true;
+    private final GraphEventBuilder eventBuilder;
     
     public ServerOperationExecutor(Graph graph) {
-        graphBufferedOperationSupport = new GraphBufferedOperationSupport(graph);
-        graphUpdaterOperationSupport = new GraphUpdaterOperationSupport(graph);
+        graphBufferedOperationSupport = new GraphBufferedEventHandler(graph);
+        graphUpdaterOperationSupport = new GraphUpdaterEventHandler(graph);
         this.graph = graph;
         writerFactory = Lookup.getDefault().lookup(StreamWriterFactory.class);
         readerFactory = Lookup.getDefault().lookup(StreamReaderFactory.class);
+        eventBuilder = new GraphEventBuilder(this);
     }
     
     /**
@@ -74,7 +79,7 @@ public class ServerOperationExecutor {
         StreamWriter writer = writerFactory.createStreamWriter(format, outputStream);
         writer.startStream();
         
-        graphBufferedOperationSupport.addOperationSupport(writer);
+        graphBufferedOperationSupport.addHandler(writer);
         if (closeConnection)
             outputStream.close();
     }
@@ -97,7 +102,7 @@ public class ServerOperationExecutor {
             Node node = graph.getNode(id);
             if (node != null) {
                 String nodeId = node.getNodeData().getId();
-                writer.nodeAdded(nodeId, getNodeAttributes(node));
+                writer.handleGraphEvent(eventBuilder.graphEvent(ElementType.NODE, EventType.ADD, nodeId, getNodeAttributes(node)));
             }
         } finally {
             graph.readUnlock();
@@ -128,7 +133,7 @@ public class ServerOperationExecutor {
                 String edgeId = edge.getEdgeData().getId();
                 String sourceId = edge.getSource().getNodeData().getId();
                 String targetId = edge.getTarget().getNodeData().getId();
-                writer.edgeAdded(edgeId, sourceId, targetId, edge.isDirected(), getEdgeAttributes(edge));
+                writer.handleGraphEvent(eventBuilder.edgeAddedEvent(edgeId, sourceId, targetId, edge.isDirected(), getEdgeAttributes(edge)));
             }
         } finally {
             graph.readUnlock();
@@ -163,9 +168,9 @@ public class ServerOperationExecutor {
 //        outputStream.close();
         
         StreamWriter writer = writerFactory.createStreamWriter(format, outputStream);
-        CompositeOperationSupport cos = new CompositeOperationSupport();
-        cos.addOperationSupport(graphUpdaterOperationSupport);
-        cos.addOperationSupport(writer);
+        CompositeGraphEventHandler cos = new CompositeGraphEventHandler();
+        cos.addHandler(graphUpdaterOperationSupport);
+        cos.addHandler(writer);
         
         StreamReader reader = readerFactory.createStreamReader(format, cos);
         reader.processStream(inputStream);

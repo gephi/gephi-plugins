@@ -27,9 +27,6 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.gephi.graph.api.Graph;
-import org.gephi.streaming.api.event.EdgeAddedEvent;
-import org.gephi.streaming.api.event.ElementEvent;
-import org.gephi.streaming.api.event.ElementType;
 import org.gephi.streaming.api.event.GraphEvent;
 import org.gephi.streaming.api.event.GraphEventListener;
 import org.openide.util.Lookup;
@@ -41,14 +38,14 @@ import org.openide.util.Lookup;
 public class DefaultGraphStreamingEventProcessor implements GraphEventListener {
     
     private Graph graph;
-    private OperationSupport graphUpdaterOperationSupport;
+    private GraphEventHandler graphUpdaterHandler;
     private GraphEventContainer container;
     
     private final Set<GraphEvent> processedEvents = Collections.synchronizedSet(new HashSet<GraphEvent>());
     
     public DefaultGraphStreamingEventProcessor(Graph graph) {
         this.graph = graph;
-        this.graphUpdaterOperationSupport = new GraphUpdaterOperationSupport(graph);
+        this.graphUpdaterHandler = new GraphUpdaterEventHandler(graph);
         GraphEventContainerFactory containerfactory = Lookup.getDefault().lookup(GraphEventContainerFactory.class);
         this.container = containerfactory.newGraphEventContainer(this);
     }
@@ -64,28 +61,23 @@ public class DefaultGraphStreamingEventProcessor implements GraphEventListener {
         return processedEvents;
     }
     
-    public StreamingConnection process(URL url, String streamType) {
+    public StreamingConnection process(URL url, String streamType) throws IOException {
         
         container.setSource(url);
         container.getGraphEventDispatcher().addEventListener(this);
-        GraphEventOperationSupport eventOperationSupport = new GraphEventOperationSupport(container);
+        GraphEventContainerHandler eventOperationSupport = new GraphEventContainerHandler(container);
         
         StreamReaderFactory processorFactory = Lookup.getDefault().lookup(StreamReaderFactory.class);
         StreamReader processor = processorFactory.createStreamReader(streamType, eventOperationSupport);
         
         StreamingConnection connection = null;
-        try {
-            connection = new StreamingConnection(url, processor);
-            connection.start();
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
+        connection = new StreamingConnection(url, processor);
+        connection.start();
         
         return connection;
     }
     
-    public StreamingConnection process(GraphStreamingEndpoint endpoint) {
+    public StreamingConnection process(GraphStreamingEndpoint endpoint) throws IOException {
         return this.process(endpoint.getUrl(), endpoint.getStreamType().getType());
     }
     
@@ -93,49 +85,8 @@ public class DefaultGraphStreamingEventProcessor implements GraphEventListener {
     public void onGraphEvent(GraphEvent event) {
         
         processedEvents.add(event);
+        graphUpdaterHandler.handleGraphEvent(event);
         
-        if (event instanceof ElementEvent) {
-                    
-           ElementEvent elementEvent = (ElementEvent)event;
-
-           if(event.getElementType() == ElementType.NODE) {
-
-               switch (event.getEventType()) {
-
-               case ADD:
-                   graphUpdaterOperationSupport.nodeAdded(elementEvent.getElementId(), elementEvent.getAttributes());
-                   break;
-
-               case CHANGE:
-                   graphUpdaterOperationSupport.nodeChanged(elementEvent.getElementId(), elementEvent.getAttributes());
-                   break;
-
-               case REMOVE:
-                   graphUpdaterOperationSupport.nodeRemoved(elementEvent.getElementId());
-                   break;
-               }
-           }
-           else if(event.getElementType() == ElementType.EDGE) {
-               
-               switch (event.getEventType()) {
-
-               case ADD:
-                   EdgeAddedEvent edgeAddedEvent = (EdgeAddedEvent) event;
-                   graphUpdaterOperationSupport.edgeAdded(elementEvent.getElementId(), 
-                           edgeAddedEvent.getSourceId(), edgeAddedEvent.getTargetId(), edgeAddedEvent.isDirected(), edgeAddedEvent.getAttributes());
-                   break;
-
-               case CHANGE:
-                   System.out.println("Invalid change operation on edge "+elementEvent.getElementId());
-                   break;
-
-               case REMOVE:
-                   graphUpdaterOperationSupport.edgeRemoved(elementEvent.getElementId());
-                   break;
-               }
-           }
-            
-        }
     }
 
 }

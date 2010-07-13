@@ -86,6 +86,7 @@ public class ElementEvent extends GraphEvent {
      * @return the node attributes
      */
     public Map<String, Object> getAttributes() {
+        if (attributes==null) return null;
         return Collections.unmodifiableMap(attributes);
     }
 

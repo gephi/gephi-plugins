@@ -24,7 +24,7 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Collection;
 
-import org.gephi.streaming.api.OperationSupport;
+import org.gephi.streaming.api.GraphEventHandler;
 import org.gephi.streaming.api.StreamReader;
 import org.gephi.streaming.api.StreamReaderFactory;
 import org.gephi.streaming.api.StreamType;
@@ -42,11 +42,11 @@ public class StreamReaderFactoryImpl implements StreamReaderFactory {
      * @see org.gephi.streaming.api.StreamProcessorFactory#createStreamProcessor(java.lang.String)
      */
     @Override
-    public StreamReader createStreamReader(String streamType, OperationSupport operationSupport) {
+    public StreamReader createStreamReader(String streamType, GraphEventHandler handler) {
         Collection<? extends StreamType> streamTypes = Lookup.getDefault().lookupAll(StreamType.class);
         for (StreamType type: streamTypes) {
             if(type.getType().equalsIgnoreCase(streamType)) {
-                return createStreamReader(type, operationSupport);
+                return createStreamReader(type, handler);
             }
         }
         throw new IllegalArgumentException("Type " + streamType + " not registered as a valid stream type.");
@@ -56,10 +56,10 @@ public class StreamReaderFactoryImpl implements StreamReaderFactory {
      * @see org.gephi.streaming.api.StreamProcessorFactory#createStreamProcessor(java.lang.String)
      */
     @Override
-    public StreamReader createStreamReader(StreamType streamType, OperationSupport operationSupport) {
+    public StreamReader createStreamReader(StreamType streamType, GraphEventHandler handler) {
         try {
-            Constructor<? extends StreamReader> constructor = streamType.getStreamReaderClass().getConstructor(OperationSupport.class);
-            return constructor.newInstance(operationSupport);
+            Constructor<? extends StreamReader> constructor = streamType.getStreamReaderClass().getConstructor(GraphEventHandler.class);
+            return constructor.newInstance(handler);
 
         } catch (InstantiationException e) {
             throw new IllegalArgumentException("Error loading stream processor for type " + streamType, e);

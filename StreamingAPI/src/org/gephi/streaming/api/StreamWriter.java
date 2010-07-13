@@ -23,15 +23,15 @@ package org.gephi.streaming.api;
 import java.io.OutputStream;
 
 /**
- * A sub-type of OperationSupport that writes to an OutputStream
- * when each operation is called. Can be used to implement 
+ * A sub-type of GraphEventHandler that writes to an OutputStream
+ * when an event arrives. Can be used to implement 
  * stream exporters or to expose the events to a socket
  * in a specific format.
  * 
  * @author Andre' Panisson
  *
  */
-public abstract class StreamWriter extends AbstractOperationSupport {
+public abstract class StreamWriter implements GraphEventHandler {
     
     protected final OutputStream outputStream;
     
@@ -52,13 +52,13 @@ public abstract class StreamWriter extends AbstractOperationSupport {
     }
 
     /**
-     * Called before start processing the operations (to write 
+     * Called before start processing the events (to write 
      * headers, etc.)
      */
     public abstract void startStream();
 
     /**
-     * Called after end processing the operations (to write 
+     * Called after end processing the events (to write 
      * footers, etc.)
      */
     public abstract void endStream();

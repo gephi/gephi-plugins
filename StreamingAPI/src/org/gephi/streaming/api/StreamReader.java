@@ -20,31 +20,34 @@ along with Gephi.  If not, see <http://www.gnu.org/licenses/>.
  */
 package org.gephi.streaming.api;
 
+import org.gephi.streaming.api.event.GraphEventBuilder;
 import java.io.IOException;
 import java.io.InputStream;
 
 /**
  * Read events from a stream.
  * An implementation of this class should read information
- * from the InputStream and call the appropriate
- * OperationSupport operations.
+ * from the InputStream, create the appropriate GraphEvent
+ * and send it to the GraphEventHandler handler.
  *
  * @author Andre' Panisson
  */
 public abstract class StreamReader {
     
-    protected final OperationSupport operator;
+    protected final GraphEventHandler handler;
+    protected final GraphEventBuilder eventBuilder;
     
     /**
-     * @param operator the OperationSupport to which the operations will be delegated
+     * @param handler the GraphEventHandler to which the events will be delegated
      */
-    public StreamReader(OperationSupport operator) {
-        this.operator = operator;
+    public StreamReader(GraphEventHandler handler) {
+        this.handler = handler;
+        this.eventBuilder = new GraphEventBuilder(this);
     }
 
     /**
-     * Read from the InputStream and call the appropriate operations
-     * in the OperationSupport
+     * Read from the InputStream and send the appropriate event
+     * to the GraphEventHandler
      * 
      * @param inputStream the InputStream to read from.
      * @throws IOException when unable to connect to the InputStream

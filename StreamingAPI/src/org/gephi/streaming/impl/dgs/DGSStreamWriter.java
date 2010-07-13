@@ -27,6 +27,9 @@ import java.util.Locale;
 import java.util.Map;
 
 import org.gephi.streaming.api.StreamWriter;
+import org.gephi.streaming.api.event.EdgeAddedEvent;
+import org.gephi.streaming.api.event.ElementEvent;
+import org.gephi.streaming.api.event.GraphEvent;
 
 /**
  * @author panisson
@@ -69,8 +72,47 @@ public class DGSStreamWriter extends StreamWriter {
         // NOP
     }
 
-    @Override
-    public void graphAttributeAdded(String attribute, Object value) {
+    public void handleGraphEvent(GraphEvent event) {
+
+        if (event instanceof ElementEvent) {
+            ElementEvent elementEvent = (ElementEvent)event;
+
+            switch (event.getElementType()) {
+            case NODE:
+                switch (event.getEventType()) {
+                    case ADD:
+                        this.nodeAdded(elementEvent.getElementId(), elementEvent.getAttributes());
+                        break;
+                    case CHANGE:
+                        this.nodeChanged(elementEvent.getElementId(), elementEvent.getAttributes());
+                        break;
+                    case REMOVE:
+                        this.nodeRemoved(elementEvent.getElementId());
+                        break;
+                }
+                break;
+            case EDGE:
+                switch (event.getEventType()) {
+                    case ADD:
+                        EdgeAddedEvent eaEvent = (EdgeAddedEvent)event;
+                        this.edgeAdded(elementEvent.getElementId(), eaEvent.getSourceId(),
+                                eaEvent.getTargetId(), eaEvent.isDirected(),
+                                elementEvent.getAttributes());
+                        break;
+                    case CHANGE:
+                        this.edgeChanged(elementEvent.getElementId(),
+                                elementEvent.getAttributes());
+                        break;
+                    case REMOVE:
+                        this.edgeRemoved(elementEvent.getElementId());
+                        break;
+                }
+                break;
+            }
+        }
+    }
+
+    private void graphAttributeAdded(String attribute, Object value) {
         graphAttributeChanged(attribute, null, value);
     }
 
@@ -79,13 +121,11 @@ public class DGSStreamWriter extends StreamWriter {
         out.printf("cg %s%n", attributeString(attribute, newValue, false));
     }
 
-    @Override
-    public void graphAttributeRemoved(String attribute) {
+    private void graphAttributeRemoved(String attribute) {
         out.printf("cg %s%n", attributeString(attribute, null, true));
     }
 
-    @Override
-    public void edgeAdded(String edgeId, String fromNodeId, String toNodeId,
+    private void edgeAdded(String edgeId, String fromNodeId, String toNodeId,
             boolean directed, Map<String, Object> attributes) {
         out.printf("ae \"%s\" \"%s\" %s \"%s\"", edgeId, fromNodeId, directed ? ">" : "", toNodeId);
         if (attributes != null && !attributes.isEmpty()) {
@@ -96,8 +136,7 @@ public class DGSStreamWriter extends StreamWriter {
         out.printf("%n");
     }
     
-    @Override
-    public void edgeChanged(String edgeId, Map<String, Object> attributes) {
+    private void edgeChanged(String edgeId, Map<String, Object> attributes) {
         if (attributes != null && attributes.size() > 0) {
             out.printf("ce \"%s\"", edgeId);
             for (Map.Entry<String, Object> entry : attributes.entrySet()) {
@@ -107,17 +146,15 @@ public class DGSStreamWriter extends StreamWriter {
         }
     }
 
-    @Override
-    public void edgeRemoved(String edgeId) {
+    private void edgeRemoved(String edgeId) {
         out.printf("de \"%s\"%n", edgeId);
     }
 
-    public void graphCleared() {
+    private void graphCleared() {
         out.printf("clear%n");
     }
 
-    @Override
-    public void nodeAdded(String nodeId, Map<String, Object> attributes) {
+    private void nodeAdded(String nodeId, Map<String, Object> attributes) {
         out.printf("an \"%s\"", nodeId);
         if (attributes != null && !attributes.isEmpty()) {
             for (Map.Entry<String, Object> entry : attributes.entrySet()) {
@@ -127,8 +164,7 @@ public class DGSStreamWriter extends StreamWriter {
         out.printf("%n");
     }
     
-    @Override
-    public void nodeChanged(String nodeId, Map<String, Object> attributes) {
+    private void nodeChanged(String nodeId, Map<String, Object> attributes) {
         if (attributes != null && attributes.size() > 0) {
             out.printf("cn \"%s\"", nodeId);
             for (Map.Entry<String, Object> entry : attributes.entrySet()) {
@@ -138,8 +174,7 @@ public class DGSStreamWriter extends StreamWriter {
         }
     }
 
-    @Override
-    public void nodeRemoved(String nodeId) {
+    private void nodeRemoved(String nodeId) {
         out.printf("dn \"%s\"%n", nodeId);
     }
 

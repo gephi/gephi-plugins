@@ -29,11 +29,10 @@ import org.gephi.graph.api.GraphController;
 import org.gephi.graph.api.GraphModel;
 import org.gephi.project.api.ProjectController;
 import org.gephi.project.api.Workspace;
-import org.gephi.streaming.api.AbstractOperationSupport;
 import org.gephi.streaming.api.DefaultGraphStreamingEventProcessor;
 import org.gephi.streaming.api.StreamWriter;
 import org.gephi.streaming.api.StreamWriterFactory;
-import org.gephi.streaming.server.FilteredOperationSupport;
+import org.gephi.streaming.server.FilteredGraphEventHandler;
 import org.gephi.streaming.server.GraphChangeListener;
 import org.junit.Test;
 import org.openide.util.Lookup;
@@ -73,7 +72,7 @@ public class GraphStreamingEventProcessorTest {
         StreamWriter streamWriter = factory.createStreamWriter(streamType, System.out);
         
         DefaultGraphStreamingEventProcessor eventProcessor = new DefaultGraphStreamingEventProcessor(graph);
-        listener.setOperationSupport(new FilteredOperationSupport(streamWriter, eventProcessor.getProcessedEvents()));
+        listener.setOperationSupport(new FilteredGraphEventHandler(streamWriter, eventProcessor.getProcessedEvents()));
 //        listener.setOperationSupport(streamWriter);
         eventProcessor.process(url, streamType);
         

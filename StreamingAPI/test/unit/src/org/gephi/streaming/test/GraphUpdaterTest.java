@@ -28,7 +28,10 @@ import org.gephi.graph.api.GraphController;
 import org.gephi.graph.api.GraphModel;
 import org.gephi.graph.api.Node;
 import org.gephi.project.api.ProjectController;
-import org.gephi.streaming.api.GraphUpdaterOperationSupport;
+import org.gephi.streaming.api.event.GraphEventBuilder;
+import org.gephi.streaming.api.GraphUpdaterEventHandler;
+import org.gephi.streaming.api.event.ElementType;
+import org.gephi.streaming.api.event.EventType;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -58,31 +61,32 @@ public class GraphUpdaterTest {
     @Test
     public void testUpdateGraph() {
         Graph graph = graphModel.getMixedGraph();
-        GraphUpdaterOperationSupport operationSupport = new GraphUpdaterOperationSupport(graph);
+        GraphUpdaterEventHandler operationSupport = new GraphUpdaterEventHandler(graph);
         Map<String,Object> attributes = new HashMap<String, Object>();
+        GraphEventBuilder eventBuilder = new GraphEventBuilder(this);
 
         attributes.clear();
         attributes.put("label", "1");
-        operationSupport.nodeAdded("1", attributes);
+        operationSupport.handleGraphEvent(eventBuilder.graphEvent(ElementType.NODE, EventType.ADD, "1", attributes));
         Node node1 = graph.getNode("1");
         assertNotNull(node1);
         assertEquals("1", node1.getNodeData().getAttributes().getValue("label"));
 
         attributes.clear();
         attributes.put("label", "2");
-        operationSupport.nodeAdded("2", attributes);
+        operationSupport.handleGraphEvent(eventBuilder.graphEvent(ElementType.NODE, EventType.ADD, "2", attributes));
         Node node2 = graph.getNode("2");
         assertNotNull(node2);
         assertEquals("2", node2.getNodeData().getAttributes().getValue("label"));
 
         attributes.clear();
         attributes.put("weight", 0.5f);
-        operationSupport.edgeAdded("1_2", "1", "2", false, attributes);
+        operationSupport.handleGraphEvent(eventBuilder.edgeAddedEvent("1_2", "1", "2", false, attributes));
         Edge edge1_2 = graph.getEdge("1_2");
         assertNotNull(edge1_2);
         assertEquals(0.5f, edge1_2.getWeight(), 1.0e-5);
 
-        operationSupport.nodeRemoved("1");
+        operationSupport.handleGraphEvent(eventBuilder.graphEvent(ElementType.NODE, EventType.REMOVE, "1", attributes));
         node1 = graph.getNode("1");
         assertNull(node1);
 
@@ -91,27 +95,27 @@ public class GraphUpdaterTest {
 
         attributes.clear();
         attributes.put("label", "1");
-        operationSupport.nodeAdded("1", attributes);
+        operationSupport.handleGraphEvent(eventBuilder.graphEvent(ElementType.NODE, EventType.ADD, "1", attributes));
         node1 = graph.getNode("1");
         assertNotNull(node1);
 
         attributes.clear();
         attributes.put("weight", 0.1f);
-        operationSupport.edgeAdded("1_2", "1", "2", false, attributes);
+        operationSupport.handleGraphEvent(eventBuilder.edgeAddedEvent("1_2", "1", "2", false, attributes));
         edge1_2 = graph.getEdge("1_2");
         assertNotNull(edge1_2);
         assertEquals(0.1f, edge1_2.getWeight(), 1.0e-5);
 
         attributes.clear();
         attributes.put("label", "Node 1");
-        operationSupport.nodeChanged("1", attributes);
+        operationSupport.handleGraphEvent(eventBuilder.graphEvent(ElementType.NODE, EventType.CHANGE, "1", attributes));
         node1 = graph.getNode("1");
         assertNotNull(node1);
         assertEquals("Node 1", node1.getNodeData().getAttributes().getValue("label"));
 
         attributes.clear();
         attributes.put("label", null);
-        operationSupport.nodeChanged("1", attributes);
+        operationSupport.handleGraphEvent(eventBuilder.graphEvent(ElementType.NODE, EventType.CHANGE, "1", attributes));
         node1 = graph.getNode("1");
         assertNotNull(node1);
         assertNull("Label should be null but was "+
@@ -120,11 +124,11 @@ public class GraphUpdaterTest {
 
         attributes.clear();
         attributes.put("label", "Node 1");
-        operationSupport.nodeChanged("1", attributes);
+        operationSupport.handleGraphEvent(eventBuilder.graphEvent(ElementType.NODE, EventType.CHANGE, "1", attributes));
 
         attributes.clear();
         attributes.put("myattribute", "myattributevalue");
-        operationSupport.nodeChanged("1", attributes);
+        operationSupport.handleGraphEvent(eventBuilder.graphEvent(ElementType.NODE, EventType.CHANGE, "1", attributes));
         node1 = graph.getNode("1");
         assertNotNull(node1);
         assertEquals("Node 1", node1.getNodeData().getAttributes().getValue("label"));
@@ -132,7 +136,7 @@ public class GraphUpdaterTest {
 
         attributes.clear();
         attributes.put("myattribute", null);
-        operationSupport.nodeChanged("1", attributes);
+        operationSupport.handleGraphEvent(eventBuilder.graphEvent(ElementType.NODE, EventType.CHANGE, "1", attributes));
         node1 = graph.getNode("1");
         assertNotNull(node1);
         assertEquals("Node 1", node1.getNodeData().getAttributes().getValue("label"));
@@ -147,7 +151,7 @@ public class GraphUpdaterTest {
         attributes.put("x", 1);
         attributes.put("y", 2);
         attributes.put("z", 3);
-        operationSupport.nodeChanged("1", attributes);
+        operationSupport.handleGraphEvent(eventBuilder.graphEvent(ElementType.NODE, EventType.CHANGE, "1", attributes));
         node1 = graph.getNode("1");
         assertNotNull(node1);
         assertEquals("Node 1", node1.getNodeData().getAttributes().getValue("label"));

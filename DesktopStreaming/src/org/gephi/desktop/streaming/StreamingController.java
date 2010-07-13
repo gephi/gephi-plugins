@@ -38,6 +38,9 @@ import org.gephi.streaming.api.StreamingConnection;
 import org.gephi.streaming.api.StreamingConnectionStatusListener;
 import org.gephi.streaming.server.ServerController;
 import org.gephi.streaming.server.StreamingServer;
+import org.openide.DialogDisplayer;
+import org.openide.NotifyDescriptor;
+import org.openide.util.Exceptions;
 import org.openide.util.Lookup;
 import org.openide.util.lookup.ServiceProvider;
 
@@ -127,7 +130,14 @@ public class StreamingController {
 
         DefaultGraphStreamingEventProcessor eventProcessor = 
             new DefaultGraphStreamingEventProcessor(graphModel.getHierarchicalMixedGraph());
-        StreamingConnection connection = eventProcessor.process(endpoint);
+        
+        StreamingConnection connection;
+        try {
+            connection = eventProcessor.process(endpoint);
+        } catch (IOException ex) {
+            notifyError("Unable to connect to stream " + endpoint.getUrl().toString(), ex);
+            return;
+        }
 
         connection.setStreamingConnectionStatusListener(
                 new StreamingConnectionStatusListener() {
@@ -198,5 +208,18 @@ public class StreamingController {
         StreamingServer server = Lookup.getDefault().lookup(StreamingServer.class);
         server.unregister(model.getServerContext());
         refreshModel();
+    }
+
+    public void notifyError(String userMessage, Throwable t) {
+        if (t instanceof OutOfMemoryError) {
+            return;
+        }
+        String message = message = t.toString();
+        NotifyDescriptor.Message msg =
+                new NotifyDescriptor.Message(
+                userMessage+"\n"+message,
+                NotifyDescriptor.WARNING_MESSAGE);
+        DialogDisplayer.getDefault().notify(msg);
+        //Logger.getLogger("").log(Level.WARNING, "", t.getCause());
     }
 }

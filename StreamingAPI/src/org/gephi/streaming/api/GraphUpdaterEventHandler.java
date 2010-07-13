@@ -28,12 +28,15 @@ import org.gephi.graph.api.GraphFactory;
 import org.gephi.graph.api.Node;
 import org.gephi.streaming.api.PropertiesAssociations.EdgeProperties;
 import org.gephi.streaming.api.PropertiesAssociations.NodeProperties;
+import org.gephi.streaming.api.event.EdgeAddedEvent;
+import org.gephi.streaming.api.event.ElementEvent;
+import org.gephi.streaming.api.event.GraphEvent;
 
 /**
  * @author panisson
  *
  */
-public class GraphUpdaterOperationSupport extends AbstractOperationSupport {
+public class GraphUpdaterEventHandler implements GraphEventHandler {
     
     private Graph graph;
     private GraphFactory factory;
@@ -42,7 +45,7 @@ public class GraphUpdaterOperationSupport extends AbstractOperationSupport {
     /**
      * @param graph
      */
-    public GraphUpdaterOperationSupport(Graph graph) {
+    public GraphUpdaterEventHandler(Graph graph) {
         this.graph = graph;
         this.factory = graph.getGraphModel().factory();
         
@@ -65,11 +68,47 @@ public class GraphUpdaterOperationSupport extends AbstractOperationSupport {
         properties.addEdgePropertyAssociation(EdgeProperties.WEIGHT, "weight");
     }
 
-    /* (non-Javadoc)
-     * @see org.gephi.streaming.api.OperationSupport#edgeAdded(java.lang.String, java.lang.String, java.lang.String, boolean)
-     */
-    @Override
-    public void edgeAdded(String edgeId, String fromNodeId, String toNodeId,
+    public void handleGraphEvent(GraphEvent event) {
+
+        if (event instanceof ElementEvent) {
+            ElementEvent elementEvent = (ElementEvent)event;
+
+            switch (event.getElementType()) {
+            case NODE:
+                switch (event.getEventType()) {
+                    case ADD:
+                        this.nodeAdded(elementEvent.getElementId(), elementEvent.getAttributes());
+                        break;
+                    case CHANGE:
+                        this.nodeChanged(elementEvent.getElementId(), elementEvent.getAttributes());
+                        break;
+                    case REMOVE:
+                        this.nodeRemoved(elementEvent.getElementId());
+                        break;
+                }
+                break;
+            case EDGE:
+                switch (event.getEventType()) {
+                    case ADD:
+                        EdgeAddedEvent eaEvent = (EdgeAddedEvent)event;
+                        this.edgeAdded(elementEvent.getElementId(), eaEvent.getSourceId(),
+                                eaEvent.getTargetId(), eaEvent.isDirected(),
+                                elementEvent.getAttributes());
+                        break;
+                    case CHANGE:
+                        this.edgeChanged(elementEvent.getElementId(),
+                                elementEvent.getAttributes());
+                        break;
+                    case REMOVE:
+                        this.edgeRemoved(elementEvent.getElementId());
+                        break;
+                }
+                break;
+            }
+        }
+    }
+
+    private void edgeAdded(String edgeId, String fromNodeId, String toNodeId,
             boolean directed, Map<String, Object> attributes) {
         
         Edge edge = graph.getEdge(edgeId);
@@ -93,11 +132,7 @@ public class GraphUpdaterOperationSupport extends AbstractOperationSupport {
         }
     }
     
-    /* (non-Javadoc)
-     * @see org.gephi.streaming.api.OperationSupport#edgeChanged(java.lang.String, Map)
-     */
-    @Override
-    public void edgeChanged(String edgeId, Map<String, Object> attributes) {
+    private void edgeChanged(String edgeId, Map<String, Object> attributes) {
         Edge edge = graph.getEdge(edgeId);
         if (edge!=null) {
             
@@ -113,11 +148,7 @@ public class GraphUpdaterOperationSupport extends AbstractOperationSupport {
         }
     }
 
-    /* (non-Javadoc)
-     * @see org.gephi.streaming.api.OperationSupport#edgeRemoved(java.lang.String)
-     */
-    @Override
-    public void edgeRemoved(String edgeId) {
+    private void edgeRemoved(String edgeId) {
         Edge edge = graph.getEdge(edgeId);
         if (edge!=null) {
             graph.writeLock();
@@ -125,40 +156,8 @@ public class GraphUpdaterOperationSupport extends AbstractOperationSupport {
             graph.writeUnlock();
         }
     }
-    
-    /*
-     * Unsupported operations
-     */
-    
-//    /* (non-Javadoc)
-//     * @see org.gephi.streaming.api.OperationSupport#graphAttributeAdded(java.lang.String, java.lang.Object)
-//     */
-//    @Override
-//    public void graphAttributeAdded(String attributeName, Object value) {
-//        System.out.println("Unsupported operation: graphAttributeAdded");
-//    }
-//
-//    /* (non-Javadoc)
-//     * @see org.gephi.streaming.api.OperationSupport#graphAttributeChanged(java.lang.String, java.lang.Object)
-//     */
-//    @Override
-//    public void graphAttributeChanged(String attributeName, Object newValue) {
-//        System.out.println("Unsupported operation: graphAttributeChanged");
-//    }
-//
-//    /* (non-Javadoc)
-//     * @see org.gephi.streaming.api.OperationSupport#graphAttributeRemoved(java.lang.String)
-//     */
-//    @Override
-//    public void graphAttributeRemoved(String attributeName) {
-//        System.out.println("Unsupported operation: graphAttributeRemoved");
-//    }
 
-    /* (non-Javadoc)
-     * @see org.gephi.streaming.api.OperationSupport#nodeAdded(java.lang.String)
-     */
-    @Override
-    public void nodeAdded(String nodeId, Map<String, Object> attributes) {
+    private void nodeAdded(String nodeId, Map<String, Object> attributes) {
         Node node = graph.getNode(nodeId);
         if (node==null) {
             node = factory.newNode(nodeId);
@@ -176,11 +175,7 @@ public class GraphUpdaterOperationSupport extends AbstractOperationSupport {
         }
     }
     
-    /* (non-Javadoc)
-     * @see org.gephi.streaming.api.OperationSupport#nodeChanged(java.lang.String)
-     */
-    @Override
-    public void nodeChanged(String nodeId, Map<String, Object> attributes) {
+    private void nodeChanged(String nodeId, Map<String, Object> attributes) {
         Node node = graph.getNode(nodeId);
         if (node!=null) {
             
@@ -196,11 +191,7 @@ public class GraphUpdaterOperationSupport extends AbstractOperationSupport {
         }
     }
 
-    /* (non-Javadoc)
-     * @see org.gephi.streaming.api.OperationSupport#nodeRemoved(java.lang.String)
-     */
-    @Override
-    public void nodeRemoved(String nodeId) {
+    private void nodeRemoved(String nodeId) {
         Node node = graph.getNode(nodeId);
         if (node!=null) {
             graph.writeLock();

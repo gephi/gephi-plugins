@@ -33,7 +33,10 @@ import org.gephi.data.properties.PropertiesColumn;
 import org.gephi.graph.api.Edge;
 import org.gephi.graph.api.Graph;
 import org.gephi.graph.api.Node;
-import org.gephi.streaming.api.OperationSupport;
+import org.gephi.streaming.api.event.GraphEventBuilder;
+import org.gephi.streaming.api.GraphEventHandler;
+import org.gephi.streaming.api.event.ElementType;
+import org.gephi.streaming.api.event.EventType;
 
 /**
  * @author panisson
@@ -43,15 +46,17 @@ public class DynamicGraphWriter extends GraphWriter {
     
     private Graph graph;
     private boolean sendVizData;
+    private GraphEventBuilder eventBuilder;
 
     public DynamicGraphWriter(Graph graph, boolean sendVizData) {
         super(graph, sendVizData);
         this.graph = graph;
         this.sendVizData = sendVizData;
+        eventBuilder = new GraphEventBuilder(this);
     }
     
     @Override
-    public void writeGraph(OperationSupport operationSupport) {
+    public void writeGraph(GraphEventHandler operationSupport) {
 
         try {
             graph.readLock();
@@ -134,7 +139,7 @@ public class DynamicGraphWriter extends GraphWriter {
                             String nodeId = node.getNodeData().getId();
                             Map<String, Object> attributes = getNodeAttributes(node);
                             attributes.put("start", ts);
-                            operationSupport.nodeAdded(nodeId, attributes);
+                            operationSupport.handleGraphEvent(eventBuilder.graphEvent(ElementType.NODE, EventType.ADD, nodeId, attributes));
                         }
                         if (o instanceof Edge) {
                             Edge edge = (Edge)o;
@@ -143,7 +148,8 @@ public class DynamicGraphWriter extends GraphWriter {
                             attributes.put("start", ts);
                             String sourceId = edge.getSource().getNodeData().getId();
                             String targetId = edge.getTarget().getNodeData().getId();
-                            operationSupport.edgeAdded(edgeId, sourceId, targetId, edge.isDirected(), attributes);
+
+                            operationSupport.handleGraphEvent(eventBuilder.edgeAddedEvent(edgeId, sourceId, targetId, edge.isDirected(), attributes));
                         }
                     }
                 }
@@ -154,12 +160,12 @@ public class DynamicGraphWriter extends GraphWriter {
                         if (o instanceof Edge) {
                             Edge edge = (Edge)o;
                             String edgeId = edge.getEdgeData().getId();
-                            operationSupport.edgeRemoved(edgeId);
+                            operationSupport.handleGraphEvent(eventBuilder.graphEvent(ElementType.EDGE, EventType.REMOVE, edgeId, null));
                         }
                         if (o instanceof Node) {
                             Node node = (Node)o;
                             String nodeId = node.getNodeData().getId();
-                            operationSupport.nodeRemoved(nodeId);
+                            operationSupport.handleGraphEvent(eventBuilder.graphEvent(ElementType.NODE, EventType.REMOVE, nodeId, null));
                         }
                     }
                 }

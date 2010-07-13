@@ -34,7 +34,10 @@ import org.gephi.graph.api.Graph;
 import org.gephi.graph.api.GraphEvent;
 import org.gephi.graph.api.GraphListener;
 import org.gephi.graph.api.Node;
-import org.gephi.streaming.api.OperationSupport;
+import org.gephi.streaming.api.event.GraphEventBuilder;
+import org.gephi.streaming.api.GraphEventHandler;
+import org.gephi.streaming.api.event.ElementType;
+import org.gephi.streaming.api.event.EventType;
 import org.openide.util.Lookup;
 
 /**
@@ -43,9 +46,10 @@ import org.openide.util.Lookup;
  */
 public class GraphChangeListener implements GraphListener, AttributeListener {
 
-    private OperationSupport operationSupport;
+    private GraphEventHandler operationSupport;
     private Graph graph;
     private boolean sendVizData = true;
+    private GraphEventBuilder eventBuilder;
     
     public GraphChangeListener(Graph graph) {
         this.graph = graph;
@@ -53,30 +57,31 @@ public class GraphChangeListener implements GraphListener, AttributeListener {
         AttributeController ac = Lookup.getDefault().lookup(AttributeController.class);
         ac.getModel().getEdgeTable().addAttributeListener(this);
         ac.getModel().getNodeTable().addAttributeListener(this);
+        eventBuilder = new GraphEventBuilder(this);
     }
 
     /**
      * @return the operationSupport
      */
-    public OperationSupport getOperationSupport() {
+    public GraphEventHandler getOperationSupport() {
         return operationSupport;
     }
     
-    public void writeGraph(OperationSupport operationSupport) {
+    public void writeGraph(GraphEventHandler operationSupport) {
         
         try {
             graph.readLock();
             
             for (Node node: graph.getNodes()) {
                 String nodeId = node.getNodeData().getId();
-                operationSupport.nodeAdded(nodeId, getNodeAttributes(node));
+                operationSupport.handleGraphEvent(eventBuilder.graphEvent(ElementType.NODE, EventType.ADD, nodeId, getNodeAttributes(node)));
             }
             
             for (Edge edge: graph.getEdges()) {
                 String edgeId = edge.getEdgeData().getId();
                 String sourceId = edge.getSource().getNodeData().getId();
                 String targetId = edge.getTarget().getNodeData().getId();
-                operationSupport.edgeAdded(edgeId, sourceId, targetId, edge.isDirected(), getEdgeAttributes(edge));
+                operationSupport.handleGraphEvent(eventBuilder.edgeAddedEvent(edgeId, sourceId, targetId, edge.isDirected(), getEdgeAttributes(edge)));
             }
         } finally {
             graph.readUnlock();
@@ -88,7 +93,7 @@ public class GraphChangeListener implements GraphListener, AttributeListener {
     /**
      * @param operationSupport the operationSupport to set
      */
-    public void setOperationSupport(OperationSupport operationSupport) {
+    public void setOperationSupport(GraphEventHandler operationSupport) {
         this.operationSupport = operationSupport;
     }
 
@@ -99,14 +104,14 @@ public class GraphChangeListener implements GraphListener, AttributeListener {
             case ADD_EDGES:
                 for (Edge edge: event.getData().addedEdges()) {
                     String edgeId = edge.getEdgeData().getId();
-                    operationSupport.edgeAdded(edgeId, edge.getSource().getNodeData().getId(), 
-                            edge.getTarget().getNodeData().getId(), edge.isDirected(), getEdgeAttributes(edge));
+                    operationSupport.handleGraphEvent(eventBuilder.edgeAddedEvent(edgeId, edge.getSource().getNodeData().getId(),
+                            edge.getTarget().getNodeData().getId(), edge.isDirected(), getEdgeAttributes(edge)));
                 }
             break;
             case ADD_NODES:
                 for (Node node: event.getData().addedNodes()) {
                     String nodeId = node.getNodeData().getId();
-                    operationSupport.nodeAdded(nodeId, getNodeAttributes(node));
+                    operationSupport.handleGraphEvent(eventBuilder.graphEvent(ElementType.NODE, EventType.ADD, nodeId, getNodeAttributes(node)));
                 }
             break;
         }

@@ -27,6 +27,9 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.gephi.streaming.api.StreamWriter;
+import org.gephi.streaming.api.event.EdgeAddedEvent;
+import org.gephi.streaming.api.event.ElementEvent;
+import org.gephi.streaming.api.event.GraphEvent;
 import org.gephi.streaming.impl.json.parser.JSONException;
 import org.gephi.streaming.impl.json.parser.JSONObject;
 import org.gephi.streaming.impl.json.parser.JSONConstants.Fields;
@@ -62,6 +65,46 @@ public class JSONStreamWriter extends StreamWriter {
     public void endStream() {
         outputEndOfFile();
     }
+
+    public void handleGraphEvent(GraphEvent event) {
+
+        if (event instanceof ElementEvent) {
+            ElementEvent elementEvent = (ElementEvent)event;
+
+            switch (event.getElementType()) {
+            case NODE:
+                switch (event.getEventType()) {
+                    case ADD:
+                        this.nodeAdded(elementEvent.getElementId(), elementEvent.getAttributes());
+                        break;
+                    case CHANGE:
+                        this.nodeChanged(elementEvent.getElementId(), elementEvent.getAttributes());
+                        break;
+                    case REMOVE:
+                        this.nodeRemoved(elementEvent.getElementId());
+                        break;
+                }
+                break;
+            case EDGE:
+                switch (event.getEventType()) {
+                    case ADD:
+                        EdgeAddedEvent eaEvent = (EdgeAddedEvent)event;
+                        this.edgeAdded(elementEvent.getElementId(), eaEvent.getSourceId(),
+                                eaEvent.getTargetId(), eaEvent.isDirected(),
+                                elementEvent.getAttributes());
+                        break;
+                    case CHANGE:
+                        this.edgeChanged(elementEvent.getElementId(),
+                                elementEvent.getAttributes());
+                        break;
+                    case REMOVE:
+                        this.edgeRemoved(elementEvent.getElementId());
+                        break;
+                }
+                break;
+            }
+        }
+    }
     
     /**
      * A shortcut to the output.
@@ -76,12 +119,11 @@ public class JSONStreamWriter extends StreamWriter {
     protected void outputEndOfFile() {
     }
 
-    @Override
-    public void graphAttributeAdded(String attribute, Object value) {
+    private void graphAttributeAdded(String attribute, Object value) {
         graphAttributeChanged(attribute, null, value);
     }
 
-    public void graphAttributeChanged(String attribute, Object oldValue,
+    private void graphAttributeChanged(String attribute, Object oldValue,
             Object newValue) {
         try {
             out.print(
@@ -98,8 +140,7 @@ public class JSONStreamWriter extends StreamWriter {
         }
     }
 
-    @Override
-    public void graphAttributeRemoved(String attribute) {
+    private void graphAttributeRemoved(String attribute) {
         try {
             out.print(
                     new JSONObject()
@@ -114,8 +155,7 @@ public class JSONStreamWriter extends StreamWriter {
         }
     }
 
-    @Override
-    public void edgeAdded(String edgeId, String fromNodeId, String toNodeId,
+    private void edgeAdded(String edgeId, String fromNodeId, String toNodeId,
             boolean directed, Map<String, Object> attributes) {
         try {
             
@@ -132,8 +172,7 @@ public class JSONStreamWriter extends StreamWriter {
         }
     }
     
-    @Override
-    public void edgeChanged(String edgeId, Map<String, Object> attributes) {
+    private void edgeChanged(String edgeId, Map<String, Object> attributes) {
         try {
             JSONObject edgeData = createEdgeChangedData(edgeId, attributes);
             out.print(
@@ -147,8 +186,7 @@ public class JSONStreamWriter extends StreamWriter {
         }
     }
 
-    @Override
-    public void edgeRemoved(String edgeId) {
+    private void edgeRemoved(String edgeId) {
         try {
             out.print(
                     new JSONObject()
@@ -163,8 +201,7 @@ public class JSONStreamWriter extends StreamWriter {
         }
     }
 
-    @Override
-    public void nodeAdded(String nodeId, Map<String, Object> attributes) {
+    private void nodeAdded(String nodeId, Map<String, Object> attributes) {
         try {
             JSONObject nodeData = createNodeData(nodeId, attributes);
             out.print(
@@ -178,8 +215,7 @@ public class JSONStreamWriter extends StreamWriter {
         }
     }
     
-    @Override
-    public void nodeChanged(String nodeId, Map<String, Object> attributes) {
+    private void nodeChanged(String nodeId, Map<String, Object> attributes) {
         try {
             JSONObject nodeData = createNodeData(nodeId, attributes);
             out.print(
@@ -193,8 +229,7 @@ public class JSONStreamWriter extends StreamWriter {
         }
     }
 
-    @Override
-    public void nodeRemoved(String nodeId) {
+    private void nodeRemoved(String nodeId) {
         try {
             out.print(
                     new JSONObject()

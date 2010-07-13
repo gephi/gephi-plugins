@@ -20,31 +20,37 @@ along with Gephi.  If not, see <http://www.gnu.org/licenses/>.
  */
 package org.gephi.streaming.api;
 
+
+import org.gephi.streaming.api.event.GraphEvent;
+
 /**
- * A factory for StreamReaders
+ * An GraphEventHandler implementation that send the events to an
+ * GraphEventContainer
  * 
  * @author Andre' Panisson
+ * @see GraphEventContainer
  *
  */
-public interface StreamReaderFactory {
+public class GraphEventContainerHandler implements GraphEventHandler {
+    
+    private final GraphEventContainer container;
     
     /**
-     * Create a StreamReader based on the specified stream type.
-     * The read events will be sent to the specified GraphEventHandler.
-     * 
-     * @param streamType
-     * @param handler 
-     * @return the StreamReader able to process the specified stream type
+     * @param container
      */
-    public StreamReader createStreamReader(String streamType, GraphEventHandler handler);
-
+    public GraphEventContainerHandler(GraphEventContainer container) {
+        this.container = container;
+    }
+    
     /**
-     * Create a StreamReader based on the specified stream type.
-     * The read events will be sent to the specified GraphEventHandler.
-     * 
-     * @param streamType
-     * @param handler 
-     * @return the StreamReader able to process the specified stream type
+     * @return the GraphEventContainer that will contain the events
      */
-    public StreamReader createStreamReader(StreamType streamType, GraphEventHandler handler);
+    public GraphEventContainer getContainer() {
+        return container;
+    }
+
+    public void handleGraphEvent(GraphEvent event) {
+        container.fireEvent(event);
+    }
+    
 }

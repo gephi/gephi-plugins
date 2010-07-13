@@ -20,31 +20,25 @@ along with Gephi.  If not, see <http://www.gnu.org/licenses/>.
  */
 package org.gephi.streaming.api;
 
+import org.gephi.streaming.api.event.GraphEvent;
+
 /**
- * A factory for StreamReaders
+ * Defines the basic event handling of the Graph Streaming API.<br>
+ * Implementations of this interface can be used to hanlde events and implement 
+ * what should be done when an event occurred (update the workspace,
+ * generate an event, export to a specific format, etc.)
  * 
  * @author Andre' Panisson
+ * @see GraphEventOperationSupport
  *
  */
-public interface StreamReaderFactory {
-    
-    /**
-     * Create a StreamReader based on the specified stream type.
-     * The read events will be sent to the specified GraphEventHandler.
-     * 
-     * @param streamType
-     * @param handler 
-     * @return the StreamReader able to process the specified stream type
-     */
-    public StreamReader createStreamReader(String streamType, GraphEventHandler handler);
+public interface GraphEventHandler {
 
     /**
-     * Create a StreamReader based on the specified stream type.
-     * The read events will be sent to the specified GraphEventHandler.
+     * The event handling
      * 
-     * @param streamType
-     * @param handler 
-     * @return the StreamReader able to process the specified stream type
+     * @param event - the event to be handled
      */
-    public StreamReader createStreamReader(StreamType streamType, GraphEventHandler handler);
+    public void handleGraphEvent(GraphEvent event);
+
 }

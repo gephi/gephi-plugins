@@ -29,38 +29,47 @@ import org.gephi.data.properties.PropertiesColumn;
 import org.gephi.graph.api.Edge;
 import org.gephi.graph.api.Graph;
 import org.gephi.graph.api.Node;
-import org.gephi.streaming.api.CompositeOperationSupport;
-import org.gephi.streaming.api.OperationSupport;
+import org.gephi.streaming.api.CompositeGraphEventHandler;
+import org.gephi.streaming.api.event.GraphEventBuilder;
+import org.gephi.streaming.api.GraphEventHandler;
+import org.gephi.streaming.api.event.ElementType;
+import org.gephi.streaming.api.event.EventType;
 
 /**
  * @author panisson
  *
  */
-public class GraphWriter extends CompositeOperationSupport {
+public class GraphWriter extends CompositeGraphEventHandler {
     
     private Graph graph;
     private boolean sendVizData;
+    private final GraphEventBuilder eventBuilder;
 
     public GraphWriter(Graph graph, boolean sendVizData) {
         this.graph = graph;
         this.sendVizData = sendVizData;
+        eventBuilder = new GraphEventBuilder(this);
     }
     
-    public void writeGraph(OperationSupport operationSupport) {
+    public void writeGraph(GraphEventHandler operationSupport) {
         
         try {
             graph.readLock();
             
             for (Node node: graph.getNodes()) {
                 String nodeId = node.getNodeData().getId();
-                operationSupport.nodeAdded(nodeId, getNodeAttributes(node));
+                operationSupport.handleGraphEvent(
+                        eventBuilder.graphEvent(ElementType.NODE,
+                        EventType.ADD, nodeId, getNodeAttributes(node)));
             }
             
             for (Edge edge: graph.getEdges()) {
                 String edgeId = edge.getEdgeData().getId();
                 String sourceId = edge.getSource().getNodeData().getId();
                 String targetId = edge.getTarget().getNodeData().getId();
-                operationSupport.edgeAdded(edgeId, sourceId, targetId, edge.isDirected(), getEdgeAttributes(edge));
+                operationSupport.handleGraphEvent(
+                        eventBuilder.edgeAddedEvent(edgeId, sourceId,
+                        targetId, edge.isDirected(), getEdgeAttributes(edge)));
             }
 
         } catch (Exception e) {
