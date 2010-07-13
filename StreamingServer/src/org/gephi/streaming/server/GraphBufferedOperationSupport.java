@@ -20,15 +20,11 @@ along with Gephi.  If not, see <http://www.gnu.org/licenses/>.
  */
 package org.gephi.streaming.server;
 
-import java.util.HashMap;
 import java.util.Map;
 
-import org.gephi.data.attributes.api.AttributeRow;
-import org.gephi.data.attributes.api.AttributeValue;
-import org.gephi.data.properties.PropertiesColumn;
-import org.gephi.graph.api.Edge;
 import org.gephi.graph.api.Graph;
 import org.gephi.graph.api.Node;
+import org.gephi.graph.api.NodeIterator;
 import org.gephi.streaming.api.CompositeOperationSupport;
 import org.gephi.streaming.api.GraphUpdaterOperationSupport;
 import org.gephi.streaming.api.OperationSupport;
@@ -39,13 +35,21 @@ import org.gephi.streaming.api.OperationSupport;
  */
 public class GraphBufferedOperationSupport extends CompositeOperationSupport {
     
-    private Graph graph;
     private GraphUpdaterOperationSupport updater;
-    private boolean sendVizData = true;
+    private GraphWriter graphWriter;
 
     public GraphBufferedOperationSupport(Graph graph) {
-        this.graph = graph;
         this.updater = new GraphUpdaterOperationSupport(graph);
+
+        Node firstNode = null;
+        NodeIterator iterator = graph.getNodes().iterator();
+        if (iterator.hasNext())
+            firstNode = iterator.next();
+        if (firstNode!=null && firstNode.getNodeData().getAttributes().getValue("dynamicrange")!=null) {
+            this.graphWriter = new DynamicGraphWriter(graph, false);
+        } else {
+            this.graphWriter = new GraphWriter(graph, true);
+        }
     }
     
     @Override
@@ -98,76 +102,6 @@ public class GraphBufferedOperationSupport extends CompositeOperationSupport {
     }
     
     private void writeGraph(OperationSupport operationSupport) {
-        
-        try {
-            graph.readLock();
-            
-            for (Node node: graph.getNodes()) {
-                String nodeId = node.getNodeData().getId();
-                operationSupport.nodeAdded(nodeId, getNodeAttributes(node));
-            }
-            
-            for (Edge edge: graph.getEdges()) {
-                String edgeId = edge.getEdgeData().getId();
-                String sourceId = edge.getSource().getNodeData().getId();
-                String targetId = edge.getTarget().getNodeData().getId();
-                operationSupport.edgeAdded(edgeId, sourceId, targetId, edge.isDirected(), getEdgeAttributes(edge));
-                
-                
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            graph.readUnlock();
-        }
+        graphWriter.writeGraph(operationSupport);
     }
-
-    private Map<String, Object> getNodeAttributes(Node node) {
-        Map<String, Object> attributes = new HashMap<String, Object>();
-        AttributeRow row = (AttributeRow) node.getNodeData().getAttributes();
-
-        if (row != null)
-            for (AttributeValue attributeValue: row.getValues()) {
-                if (attributeValue.getColumn().getIndex()!=PropertiesColumn.NODE_ID.getIndex()
-                        && attributeValue.getValue()!=null)
-                    attributes.put(attributeValue.getColumn().getTitle(), attributeValue.getValue());
-            }
-
-        if (sendVizData) {
-            attributes.put("x", node.getNodeData().x());
-            attributes.put("y", node.getNodeData().y());
-            attributes.put("z", node.getNodeData().z());
-
-            attributes.put("r", node.getNodeData().r());
-            attributes.put("g", node.getNodeData().g());
-            attributes.put("b", node.getNodeData().b());
-
-            attributes.put("size", node.getNodeData().getSize());
-        }
-
-        return attributes;
-    }
-
-    private Map<String, Object> getEdgeAttributes(Edge edge) {
-        Map<String, Object> attributes = new HashMap<String, Object>();
-        AttributeRow row = (AttributeRow) edge.getEdgeData().getAttributes();
-        if (row != null)
-            for (AttributeValue attributeValue: row.getValues()) {
-                if (attributeValue.getColumn().getIndex()!=PropertiesColumn.EDGE_ID.getIndex()
-                        && attributeValue.getValue()!=null)
-                     attributes.put(attributeValue.getColumn().getTitle(), attributeValue.getValue());
-            }
-
-        if (sendVizData) {
-            
-            attributes.put("r", edge.getEdgeData().r());
-            attributes.put("g", edge.getEdgeData().g());
-            attributes.put("b", edge.getEdgeData().b());
-            
-            attributes.put("weight", edge.getWeight());
-        }
-
-        return attributes;
-    }
-
 }

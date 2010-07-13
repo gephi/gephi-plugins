@@ -78,7 +78,8 @@ public class ServerController {
             System.out.println("Handling request for operation "+operation+", format "+format);
             
             if (operation.equals(Operations.GET_GRAPH.getURL())) {
-                executor.executeGetGraph(format, outputStream);
+                String close = request.getParameter("close");
+                executor.executeGetGraph(format, outputStream, close!=null?true:false);
                 
             } else if (operation.equals(Operations.GET_NODE.getURL())) {
                 // gets the node id and write info to output stream

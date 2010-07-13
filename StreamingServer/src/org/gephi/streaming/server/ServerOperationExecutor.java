@@ -70,11 +70,13 @@ public class ServerOperationExecutor {
      * @param format
      * @param outputStream
      */
-    public void executeGetGraph(String format, OutputStream outputStream) {
+    public void executeGetGraph(String format, OutputStream outputStream, boolean closeConnection) throws IOException {
         StreamWriter writer = writerFactory.createStreamWriter(format, outputStream);
         writer.startStream();
         
         graphBufferedOperationSupport.addOperationSupport(writer);
+        if (closeConnection)
+            outputStream.close();
     }
      
     /**
