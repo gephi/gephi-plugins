@@ -35,6 +35,7 @@ import org.gephi.project.api.WorkspaceListener;
 import org.gephi.streaming.api.DefaultGraphStreamingEventProcessor;
 import org.gephi.streaming.api.GraphStreamingEndpoint;
 import org.gephi.streaming.api.StreamingConnection;
+import org.gephi.streaming.api.StreamingConnectionStatusListener;
 import org.gephi.streaming.server.ServerController;
 import org.gephi.streaming.server.StreamingServer;
 import org.openide.util.Lookup;
@@ -49,6 +50,7 @@ public class StreamingController {
     
     private StreamingModel model;
     private StreamingServerPanel serverPanel;
+    private StreamingClientPanel clientPanel;
     
     public StreamingController() {
       //Workspace events
@@ -93,9 +95,16 @@ public class StreamingController {
         this.serverPanel = panel;
     }
 
+    public void setClientPanel(StreamingClientPanel panel) {
+        this.clientPanel = panel;
+    }
+
     public void refreshModel() {
         if (serverPanel!=null) {
             serverPanel.refreshModel();
+        }
+        if (clientPanel!=null) {
+            clientPanel.refreshModel(model);
         }
     }
     
@@ -120,7 +129,13 @@ public class StreamingController {
             new DefaultGraphStreamingEventProcessor(graphModel.getHierarchicalMixedGraph());
         StreamingConnection connection = eventProcessor.process(endpoint);
 
-        System.out.println(model.toString());
+        connection.setStreamingConnectionStatusListener(
+                new StreamingConnectionStatusListener() {
+
+            public void onConnectionClosed(StreamingConnection connection) {
+                disconnect(connection);
+            }
+        });
 
         model.getActiveConnections().add(connection);
 
@@ -129,8 +144,10 @@ public class StreamingController {
     
     public void disconnect(StreamingConnection connection) {
         try {
-            connection.close();
-            model.getActiveConnections().remove(connection);
+            if (!connection.isClosed()) {
+                connection.close();
+            }
+//            model.getActiveConnections().remove(connection);
         } catch (IOException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();

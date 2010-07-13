@@ -16,8 +16,10 @@ import java.net.URL;
 import java.util.Collection;
 import javax.swing.ComboBoxModel;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.table.DefaultTableModel;
 import org.gephi.streaming.api.GraphStreamingEndpoint;
 import org.gephi.streaming.api.StreamType;
+import org.gephi.streaming.api.StreamingConnection;
 import org.netbeans.validation.api.Problems;
 import org.netbeans.validation.api.Validator;
 import org.netbeans.validation.api.builtin.Validators;
@@ -34,41 +36,46 @@ public class StreamingClientPanel extends javax.swing.JPanel {
 
     private StreamingController controller;
     private GraphStreamingEndpoint endpoint;
+    private DefaultTableModel tableModel;
+    private ComboBoxModel streamTypeComboBoxModel;
 
     /** Creates new form StreamingClientPanel */
     public StreamingClientPanel() {
+        
+        tableModel = new DefaultTableModel();
+        tableModel.setColumnCount(2);
+
+        streamTypeComboBoxModel = new DefaultComboBoxModel(getStreamTypes());
+        // Default selected type is JSON
+        for (int i=0; i<streamTypeComboBoxModel.getSize(); i++) {
+            StreamType type = (StreamType)streamTypeComboBoxModel.getElementAt(i);
+            if (type.getType().equalsIgnoreCase("JSON")) {
+                streamTypeComboBoxModel.setSelectedItem(type);
+                break;
+            }
+        }
+
         initComponents();
         controller = Lookup.getDefault().lookup(StreamingController.class);
-
-        streamTypeComboBox.setModel(new StreamTypeComboBoxModel());
+        controller.setClientPanel(this);
+        
         endpoint = new GraphStreamingEndpoint();
         endpoint.setStreamType((StreamType)streamTypeComboBox.getSelectedItem());
     }
 
-    private static class StreamTypeComboBoxModel extends DefaultComboBoxModel {
-
-        public StreamTypeComboBoxModel() {
-            super(getStreamTypes());
-            
-            // Default selected type is JSON
-            for (int i=0; i<this.getSize(); i++) {
-                StreamType type = (StreamType)this.getElementAt(i);
-                if (type.getType().equalsIgnoreCase("JSON")) {
-                    this.setSelectedItem(type);
-                    break;
-                }
-            }
+    void refreshModel(StreamingModel model) {
+        while (tableModel.getRowCount() > 0) {
+            tableModel.removeRow(0);
         }
-
-        private static StreamType[] getStreamTypes() {
-            Collection<? extends StreamType> streamTypes = Lookup.getDefault().lookupAll(StreamType.class);
-            return streamTypes.toArray(new StreamType[0]);
+        for (StreamingConnection connection: model.getActiveConnections()) {
+            tableModel.addRow(new String[]{connection.getUrl().toString(),
+                connection.isClosed()?"Closed":"Streaming"});
         }
-
     }
 
-    private ComboBoxModel getStreamTypeComboBoxModel() {
-        return new StreamTypeComboBoxModel();
+    private static StreamType[] getStreamTypes() {
+        Collection<? extends StreamType> streamTypes = Lookup.getDefault().lookupAll(StreamType.class);
+        return streamTypes.toArray(new StreamType[0]);
     }
 
      public static ValidationPanel createValidationPanel(final StreamingClientPanel innerPanel) {
@@ -118,6 +125,7 @@ public class StreamingClientPanel extends javax.swing.JPanel {
         streamTypeLabel = new javax.swing.JLabel();
         streamTypeComboBox = new javax.swing.JComboBox();
         connectButton = new javax.swing.JButton();
+        connectionsTable = new javax.swing.JTable();
 
         streamUrlLabel.setText(org.openide.util.NbBundle.getMessage(StreamingClientPanel.class, "StreamingClientPanel.streamUrlLabel.text")); // NOI18N
 
@@ -135,7 +143,7 @@ public class StreamingClientPanel extends javax.swing.JPanel {
 
         streamTypeLabel.setText(org.openide.util.NbBundle.getMessage(StreamingClientPanel.class, "StreamingClientPanel.streamTypeLabel.text")); // NOI18N
 
-        streamTypeComboBox.setModel(getStreamTypeComboBoxModel());
+        streamTypeComboBox.setModel(streamTypeComboBoxModel);
         streamTypeComboBox.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 streamTypeComboBoxActionPerformed(evt);
@@ -149,11 +157,16 @@ public class StreamingClientPanel extends javax.swing.JPanel {
             }
         });
 
+        connectionsTable.setModel(tableModel);
+        connectionsTable.setAutoscrolls(false);
+        connectionsTable.setRowMargin(0);
+        connectionsTable.setTableHeader(null);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(streamUrlTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 376, Short.MAX_VALUE)
@@ -165,6 +178,7 @@ public class StreamingClientPanel extends javax.swing.JPanel {
                         .addComponent(connectButton))
                     .addComponent(streamUrlLabel))
                 .addContainerGap())
+            .addComponent(connectionsTable, javax.swing.GroupLayout.DEFAULT_SIZE, 400, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -178,7 +192,9 @@ public class StreamingClientPanel extends javax.swing.JPanel {
                     .addComponent(streamTypeLabel)
                     .addComponent(streamTypeComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(connectButton))
-                .addContainerGap(62, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(connectionsTable, javax.swing.GroupLayout.DEFAULT_SIZE, 14, Short.MAX_VALUE)
+                .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -217,6 +233,7 @@ public class StreamingClientPanel extends javax.swing.JPanel {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton connectButton;
+    private javax.swing.JTable connectionsTable;
     private javax.swing.JComboBox streamTypeComboBox;
     private javax.swing.JLabel streamTypeLabel;
     private javax.swing.JLabel streamUrlLabel;

@@ -30,6 +30,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URL;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import org.gephi.graph.api.GraphController;
@@ -47,7 +48,8 @@ import org.gephi.streaming.api.StreamReaderFactory;
 import org.gephi.streaming.api.StreamType;
 import org.gephi.streaming.api.StreamWriter;
 import org.gephi.streaming.api.StreamWriterFactory;
-import org.gephi.streaming.api.StreamingClient;
+import org.gephi.streaming.api.StreamingConnection;
+import org.gephi.streaming.api.StreamingConnectionStatusListener;
 import org.gephi.streaming.api.event.ElementType;
 import org.gephi.streaming.api.event.EventType;
 import org.gephi.streaming.api.event.GraphEvent;
@@ -253,11 +255,29 @@ public abstract class AbstractStreamProcessorTest {
         };
         
         operator.getContainer().getGraphEventDispatcher().addEventListener(listener);
-        
-        StreamingClient client = new StreamingClient();
-        client.connectToEndpoint(url, processor);
-        
-        client.waitForFinish();
+
+        StreamingConnection connection = new StreamingConnection(url, processor);
+
+        final AtomicBoolean processing = new AtomicBoolean(true);
+        connection.setStreamingConnectionStatusListener(
+            new StreamingConnectionStatusListener() {
+                public void onConnectionClosed(StreamingConnection connection) {
+                    processing.set(false);
+                    synchronized (processing) {
+                        processing.notifyAll();
+                    }
+                }
+            });
+        connection.start();
+
+        while (processing.get()) {
+            try {
+                synchronized (processing) {
+                    processing.wait();
+                }
+            } catch (InterruptedException e) {}
+        }
+
         operator.getContainer().waitForDispatchAllEvents();
         
         assertEquals(402, nodeCount.get());
@@ -296,10 +316,27 @@ public abstract class AbstractStreamProcessorTest {
         
         URL url = this.getClass().getResource(resource);
         
-        StreamingClient client = new StreamingClient();
-        client.connectToEndpoint(url, processor);
-        
-        client.waitForFinish();
+         StreamingConnection connection = new StreamingConnection(url, processor);
+
+        final AtomicBoolean processing = new AtomicBoolean(true);
+        connection.setStreamingConnectionStatusListener(
+            new StreamingConnectionStatusListener() {
+                public void onConnectionClosed(StreamingConnection connection) {
+                    processing.set(false);
+                    synchronized (processing) {
+                        processing.notifyAll();
+                    }
+                }
+            });
+        connection.start();
+
+        while (processing.get()) {
+            try {
+                synchronized (processing) {
+                    processing.wait();
+                }
+            } catch (InterruptedException e) {}
+        }
         
         assertEquals(402, listener.getGraph().getNodeCount());
         assertEquals(788, listener.getGraph().getEdgeCount());
@@ -327,10 +364,27 @@ public abstract class AbstractStreamProcessorTest {
         DefaultGraphStreamingEventProcessor listener = new DefaultGraphStreamingEventProcessor(graphModel.getHierarchicalMixedGraph());
         operator.getContainer().getGraphEventDispatcher().addEventListener(listener);
         
-        StreamingClient client = new StreamingClient();
-        client.connectToEndpoint(url, processor);
-        
-        client.waitForFinish();
+         StreamingConnection connection = new StreamingConnection(url, processor);
+
+        final AtomicBoolean processing = new AtomicBoolean(true);
+        connection.setStreamingConnectionStatusListener(
+            new StreamingConnectionStatusListener() {
+                public void onConnectionClosed(StreamingConnection connection) {
+                    processing.set(false);
+                    synchronized (processing) {
+                        processing.notifyAll();
+                    }
+                }
+            });
+        connection.start();
+
+        while (processing.get()) {
+            try {
+                synchronized (processing) {
+                    processing.wait();
+                }
+            } catch (InterruptedException e) {}
+        }
         operator.getContainer().waitForDispatchAllEvents();
         
         assertEquals(402, listener.getGraph().getNodeCount());

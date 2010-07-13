@@ -24,7 +24,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.net.URLConnection;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 
 /**
@@ -33,15 +32,15 @@ import java.util.concurrent.atomic.AtomicBoolean;
  */
 public class StreamingConnection extends Thread {
     
-    private final AtomicBoolean inProcess = new AtomicBoolean();
     private final URL url;
     private final StreamReader streamProcessor;
     private InputStream inputStream;
+    private StreamingConnectionStatusListener listener;
+    private boolean closed = false;
     
     public StreamingConnection(final URL url, final StreamReader streamProcessor) throws IOException {
         this.url = url;
         this.streamProcessor = streamProcessor;
-        inProcess.set(true);
         
         URLConnection connection = url.openConnection();
         connection.connect();
@@ -54,8 +53,6 @@ public class StreamingConnection extends Thread {
 
     @Override
     public void run() {
-        
-        inProcess.set(true);
 
         try {
             
@@ -65,29 +62,25 @@ public class StreamingConnection extends Thread {
             // Exception during processing
             e.printStackTrace();
         } finally {
-            inProcess.set(false);
-            synchronized (inProcess) {
-                inProcess.notifyAll();
+            closed = true;
+
+            if (listener != null) {
+                listener.onConnectionClosed(this);
             }
         }
     }
     
-    public void waitForFinish() {
-        while (inProcess.get()) {
-            try {
-                synchronized (inProcess) {
-                    inProcess.wait();
-                }
-            } catch (InterruptedException e) {}
-        }
-    }
-    
     public boolean isClosed() {
-        return inProcess.get();
+        return closed;
     }
     
     public void close() throws IOException {
         inputStream.close();
+        closed = true;
+    }
+
+    public void setStreamingConnectionStatusListener(StreamingConnectionStatusListener listener) {
+        this.listener = listener;
     }
 
 }
