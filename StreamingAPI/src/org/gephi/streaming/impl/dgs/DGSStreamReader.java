@@ -30,7 +30,7 @@ import org.gephi.streaming.api.event.ElementType;
 import org.gephi.streaming.api.event.EventType;
 
 /**
- * A stream processor for the GraphStream DSG file format.
+ * A stream reader for the GraphStream DSG file format.
  * 
  * @author panisson
  *
@@ -51,15 +51,8 @@ public class DGSStreamReader extends StreamReader implements DGSParserListener {
         try {
             parser.parse();
         } catch (IOException e) {
-            this.onStreamClosed();
+             System.out.println("Stream closed");
         }
-
-        System.out.println("Stream finished");
-    }
-
-    private void onStreamClosed() {
-      //TODO
-        System.out.println("Stream closed");
     }
 
     @Override

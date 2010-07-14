@@ -46,7 +46,7 @@ public class DefaultGraphStreamingEventProcessor implements GraphEventHandler {
         this.graph = graph;
         this.graphUpdaterHandler = new GraphUpdaterEventHandler(graph);
         GraphEventContainerFactory containerfactory = Lookup.getDefault().lookup(GraphEventContainerFactory.class);
-        this.container = containerfactory.newGraphEventContainer(this);
+        this.container = containerfactory.newGraphEventContainer(this, this);
     }
     
     /**
@@ -63,7 +63,6 @@ public class DefaultGraphStreamingEventProcessor implements GraphEventHandler {
     public StreamingConnection process(URL url, String streamType) throws IOException {
         
         container.setSource(url);
-        container.getGraphEventDispatcher().addEventHandler(this);
         
         StreamReaderFactory processorFactory = Lookup.getDefault().lookup(StreamReaderFactory.class);
         StreamReader processor = processorFactory.createStreamReader(streamType, container);

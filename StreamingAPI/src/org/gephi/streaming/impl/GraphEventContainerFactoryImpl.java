@@ -22,6 +22,7 @@ package org.gephi.streaming.impl;
 
 import org.gephi.streaming.api.GraphEventContainer;
 import org.gephi.streaming.api.GraphEventContainerFactory;
+import org.gephi.streaming.api.GraphEventHandler;
 import org.openide.util.lookup.ServiceProvider;
 
 /**
@@ -36,8 +37,8 @@ public class GraphEventContainerFactoryImpl implements
      * @see org.gephi.streaming.api.GraphEventContainerFactory#newGraphEventContainer(java.lang.Object)
      */
     @Override
-    public GraphEventContainer newGraphEventContainer(Object source) {
-        return new GraphEventContainerImpl(source);
+    public GraphEventContainer newGraphEventContainer(Object source, GraphEventHandler handler) {
+        return new GraphEventContainerImpl(source, handler);
     }
 
 }

@@ -34,6 +34,6 @@ public interface GraphEventContainerFactory {
      * @param source the source of the data put in the container. Could be the stream's URL.
      * @return a new GraphEventContainer
      */
-    public GraphEventContainer newGraphEventContainer(Object source);
+    public GraphEventContainer newGraphEventContainer(Object source, GraphEventHandler handler);
 
 }

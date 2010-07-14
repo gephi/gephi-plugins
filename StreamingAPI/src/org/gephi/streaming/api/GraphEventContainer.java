@@ -46,14 +46,6 @@ public interface GraphEventContainer extends GraphEventHandler {
     public Object getSource();
 
     /**
-     * Get the event dispatcher. This interface is used to register listeners aimed to react
-     * to the loaded events.
-     * 
-     * @return the dispatcher to register listeners
-     */
-    public GraphEventDispatcher getGraphEventDispatcher();
-
-    /**
      * Set a report this container can use to report issues detected when loading the container. Report
      * are used to log info and issues during load process. Only one report can be associated to a
      * container.

@@ -38,7 +38,7 @@ import org.gephi.streaming.impl.json.parser.JSONConstants.Fields;
 import org.gephi.streaming.impl.json.parser.JSONConstants.Types;
 
 /**
- * A stream processor for the GraphStream JSON file format.
+ * A stream reader for the GraphStream JSON file format.
  * 
  * @author panisson
  *
@@ -77,8 +77,6 @@ public class JSONStreamReader extends StreamReader {
         if (content.length() > 0) {
             parse(content.toString());
         }
-
-        System.out.println("Stream finished");
     }
 
     @Override

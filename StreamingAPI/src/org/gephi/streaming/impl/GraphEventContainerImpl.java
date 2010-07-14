@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.concurrent.LinkedBlockingQueue;
 
 import org.gephi.streaming.api.GraphEventContainer;
-import org.gephi.streaming.api.GraphEventDispatcher;
 import org.gephi.streaming.api.GraphEventHandler;
 import org.gephi.streaming.api.Report;
 import org.gephi.streaming.api.event.GraphEvent;
@@ -15,11 +14,11 @@ import org.gephi.streaming.api.event.GraphEvent;
  *
  */
 
-public class GraphEventContainerImpl implements GraphEventContainer, GraphEventDispatcher {
+public class GraphEventContainerImpl implements GraphEventContainer {
     
     private LinkedBlockingQueue<GraphEvent> eventQueue = new LinkedBlockingQueue<GraphEvent>();
 
-    protected List<GraphEventHandler> handlers = new ArrayList<GraphEventHandler>();
+    private final GraphEventHandler handler;
 
     private Report report;
     
@@ -35,9 +34,10 @@ public class GraphEventContainerImpl implements GraphEventContainer, GraphEventD
      * @param source 
      * 
      */
-    public GraphEventContainerImpl(Object source) {
+    public GraphEventContainerImpl(Object source, GraphEventHandler handler) {
         this.report = new Report();
         this.source = source;
+        this.handler = handler;
         
         dispatcher = new EventDispatcher(source);
         dispatcher.start();
@@ -62,11 +62,6 @@ public class GraphEventContainerImpl implements GraphEventContainer, GraphEventD
     public void setReport(Report report) {
         this.report = report;
     }
-
-    @Override
-    public GraphEventDispatcher getGraphEventDispatcher() {
-        return this;
-    }
     
     protected void fireEvent(GraphEvent event) {
         eventQueue.offer(event);
@@ -77,17 +72,6 @@ public class GraphEventContainerImpl implements GraphEventContainer, GraphEventD
      */
     public List<GraphEvent> getAllEvents() {
         return new ArrayList<GraphEvent>(this.eventQueue);
-    }
-
-    @Override
-    public void addEventHandler(GraphEventHandler handler) {
-        if (!handlers.contains(handler))
-            handlers.add(handler);
-    }
-
-    @Override
-    public void removeEventHandler(GraphEventHandler handler) {
-        handlers.remove(handler);
     }
 
     public void stop() {
@@ -115,13 +99,12 @@ public class GraphEventContainerImpl implements GraphEventContainer, GraphEventD
             super("EventDispatcher-"+source.toString());
         }
 
+        @Override
         public void run() {
             while (!stopped) {
                 try {
                     GraphEvent event = eventQueue.take();
-                    for (GraphEventHandler handler: handlers) {
-                        handler.handleGraphEvent(event);
-                    }
+                    handler.handleGraphEvent(event);
                 } catch (InterruptedException e) {
                     // Container was closed
                     //e.printStackTrace();
