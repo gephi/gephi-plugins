@@ -29,6 +29,7 @@ import org.gephi.streaming.api.StreamReader;
 import org.gephi.streaming.api.StreamReaderFactory;
 import org.gephi.streaming.api.StreamWriter;
 import org.gephi.streaming.api.StreamWriterFactory;
+import org.gephi.streaming.api.event.GraphEventBuilder;
 import org.junit.Test;
 import org.openide.util.Lookup;
 
@@ -50,7 +51,8 @@ public class DGSStreamProcessorTest extends AbstractStreamProcessorTest {
         StreamWriter streamWriter = writerFactory.createStreamWriter("JSON", out);
 
         StreamReaderFactory factory = Lookup.getDefault().lookup(StreamReaderFactory.class);
-        StreamReader processor = factory.createStreamReader(streamType, streamWriter);
+        GraphEventBuilder eventBuilder = new GraphEventBuilder(resource);
+        StreamReader processor = factory.createStreamReader(streamType, streamWriter, eventBuilder);
         
         InputStream inputStream = this.getClass().getResourceAsStream(resource);
         processor.processStream(inputStream);

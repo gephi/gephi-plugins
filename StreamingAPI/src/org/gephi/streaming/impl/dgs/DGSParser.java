@@ -25,6 +25,7 @@ import java.io.InputStream;
 import java.io.StreamTokenizer;
 import java.util.ArrayList;
 import java.util.HashMap;
+import org.gephi.streaming.api.Report;
 
 
 /**
@@ -74,8 +75,8 @@ public class DGSParser extends BaseParser {
     
     private DGSParserListener listener;
     
-    public DGSParser(InputStream inputStream, DGSParserListener listener) {
-        super(inputStream);
+    public DGSParser(InputStream inputStream, DGSParserListener listener, Report report) {
+        super(inputStream, report);
         this.listener = listener;
     }
     
@@ -97,8 +98,11 @@ public class DGSParser extends BaseParser {
         eventCountAnnounced = (int)getNumber();//Integer.parseInt( getWord() );
         eatEol();
         
-        if(  graphName != null )
-             listener.onGraphAttributeAdded( graphName, "label", graphName );
+        if(  graphName != null ) {
+            HashMap attributes = new HashMap<String, Object>();
+            listener.onGraphChanged( attributes );
+        }
+             
         else graphName = "DGS_";
         
         graphName = String.format( "%s_%d", graphName, System.currentTimeMillis()+((long)Math.random()*10) );
@@ -225,15 +229,8 @@ public class DGSParser extends BaseParser {
     protected void readCG() throws IOException
     {
         readAttributes( attributes );
-        
-        for( String key: attributes.keySet() )
-        {
-            Object value = attributes.get( key );
-                
-            if( value == null )
-                listener.onGraphAttributeRemoved( graphName, key );
-            else listener.onGraphAttributeChanged( graphName, key, null, value );
-        }
+
+        listener.onGraphChanged(new HashMap<String, Object>(attributes));
         
         if( eatEolOrEof() == StreamTokenizer.TT_EOF )
             pushBack();
@@ -393,7 +390,7 @@ public class DGSParser extends BaseParser {
         {
             HashMap<String,Object> map = new HashMap<String,Object>();
             
-            readAttributes( map );;
+            readAttributes( map );
             eatSymbol( ']' );
             
             value = map;

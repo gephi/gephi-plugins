@@ -20,6 +20,8 @@ along with Gephi.  If not, see <http://www.gnu.org/licenses/>.
  */
 package org.gephi.streaming.api;
 
+import org.gephi.streaming.api.event.GraphEventBuilder;
+
 /**
  * A factory for StreamReaders
  * 
@@ -36,7 +38,8 @@ public interface StreamReaderFactory {
      * @param handler 
      * @return the StreamReader able to process the specified stream type
      */
-    public StreamReader createStreamReader(String streamType, GraphEventHandler handler);
+    public StreamReader createStreamReader(String streamType, GraphEventHandler handler,
+            GraphEventBuilder eventBuilder);
 
     /**
      * Create a StreamReader based on the specified stream type.
@@ -46,5 +49,6 @@ public interface StreamReaderFactory {
      * @param handler 
      * @return the StreamReader able to process the specified stream type
      */
-    public StreamReader createStreamReader(StreamType streamType, GraphEventHandler handler);
+    public StreamReader createStreamReader(StreamType streamType, GraphEventHandler handler,
+            GraphEventBuilder eventBuilder);
 }

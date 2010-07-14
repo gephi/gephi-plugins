@@ -24,6 +24,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.atomic.AtomicInteger;
 import org.gephi.streaming.api.Issue.Level;
 
 /**
@@ -36,6 +37,15 @@ public final class Report {
 
     private final Queue<ReportEntry> entries = new ConcurrentLinkedQueue<ReportEntry>();
     private Issue.Level exceptionLevel = Issue.Level.CRITICAL;
+    private AtomicInteger eventCounter = new AtomicInteger();
+
+    public int incrementEventCounter() {
+        return eventCounter.incrementAndGet();
+    }
+
+    public int getEventCounter() {
+        return eventCounter.get();
+    }
 
     /**
      * Log an information message in the report.
@@ -91,6 +101,9 @@ public final class Report {
                 builder.append("<br>");
             }
         }
+        builder.append(eventCounter.get())
+                .append(" processed events")
+                .append("<br>");
         return builder.toString();
     }
 
@@ -109,6 +122,9 @@ public final class Report {
                 builder.append("\n");
             }
         }
+        builder.append(eventCounter.get())
+                .append(" processed events")
+                .append("\n");
         return builder.toString();
     }
 

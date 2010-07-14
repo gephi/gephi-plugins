@@ -36,13 +36,29 @@ public abstract class StreamReader {
     
     protected final GraphEventHandler handler;
     protected final GraphEventBuilder eventBuilder;
+    protected Report report;
     
     /**
      * @param handler the GraphEventHandler to which the events will be delegated
      */
-    public StreamReader(GraphEventHandler handler) {
+    public StreamReader(GraphEventHandler handler,
+            GraphEventBuilder eventBuilder) {
         this.handler = handler;
-        this.eventBuilder = new GraphEventBuilder(this);
+        this.eventBuilder = eventBuilder;
+    }
+
+    /**
+     * @return the report
+     */
+    public Report getReport() {
+        return report;
+    }
+
+    /**
+     * @param report the report to set
+     */
+    public void setReport(Report report) {
+        this.report = report;
     }
 
     /**

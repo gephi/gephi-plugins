@@ -22,6 +22,7 @@ package org.gephi.streaming.impl.json;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -29,9 +30,11 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.gephi.streaming.api.GraphEventHandler;
+import org.gephi.streaming.api.Issue;
 import org.gephi.streaming.api.StreamReader;
 import org.gephi.streaming.api.event.ElementType;
 import org.gephi.streaming.api.event.EventType;
+import org.gephi.streaming.api.event.GraphEventBuilder;
 import org.gephi.streaming.impl.json.parser.JSONException;
 import org.gephi.streaming.impl.json.parser.JSONObject;
 import org.gephi.streaming.impl.json.parser.JSONConstants.Fields;
@@ -50,8 +53,9 @@ public class JSONStreamReader extends StreamReader {
     /**
      * @param handler the GraphEventHandler to which the events will be delegated
      */
-    public JSONStreamReader(GraphEventHandler handler) {
-        super(handler);
+    public JSONStreamReader(GraphEventHandler handler,
+            GraphEventBuilder eventBuilder) {
+        super(handler, eventBuilder);
     }
 
     @Override
@@ -71,7 +75,8 @@ public class JSONStreamReader extends StreamReader {
                 }
             }
         } catch (IOException e) {
-            System.out.println("Stream closed");
+            if (report!=null)
+                report.log("Stream closed at "+new Date());
         }
 
         if (content.length() > 0) {
@@ -187,7 +192,22 @@ public class JSONStreamReader extends StreamReader {
             } else if (Types.CG.value().equals(type)) {
 
             }
+
+            if (report!=null) {
+                report.incrementEventCounter();
+            }
         } catch (JSONException e) {
+            if (report!=null) {
+                StringBuilder message = new StringBuilder("JSON object ");
+                message.append(report.getEventCounter()+1)
+                        .append(" ignored: \"")
+                        .append(content)
+                        .append("\": ")
+                        .append(e.getMessage());
+
+                Issue issue = new Issue(message.toString(), Issue.Level.WARNING, e);
+                report.logIssue(issue);
+            }
             logger.log(Level.WARNING, "JSON object ignored: \"{0}\": {1}", new String[]{content, e.getMessage()});
         }
     }

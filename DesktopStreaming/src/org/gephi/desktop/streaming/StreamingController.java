@@ -39,6 +39,7 @@ import org.gephi.streaming.api.StreamReader;
 import org.gephi.streaming.api.StreamReaderFactory;
 import org.gephi.streaming.api.StreamingConnection;
 import org.gephi.streaming.api.StreamingConnectionStatusListener;
+import org.gephi.streaming.api.event.GraphEventBuilder;
 import org.gephi.streaming.server.ServerController;
 import org.gephi.streaming.server.StreamingServer;
 import org.openide.DialogDisplayer;
@@ -149,8 +150,9 @@ public class StreamingController {
         final GraphEventContainer container =
                 containerfactory.newGraphEventContainer(graphUpdaterHandler);
 
+        GraphEventBuilder eventBuilder = new GraphEventBuilder(endpoint.getUrl());
         StreamReader reader =
-                readerFactory.createStreamReader(endpoint.getStreamType(), container);
+                readerFactory.createStreamReader(endpoint.getStreamType(), container, eventBuilder);
         
         StreamingConnection connection;
         try {

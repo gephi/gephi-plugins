@@ -22,6 +22,7 @@ package org.gephi.streaming.api;
 
 import java.io.IOException;
 import java.net.URL;
+import org.gephi.streaming.api.event.GraphEventBuilder;
 import org.openide.util.Lookup;
 
 /**
@@ -47,8 +48,12 @@ public class GraphStreamingUtils {
         final GraphEventContainer container =
                 containerfactory.newGraphEventContainer(handler);
 
+        Report report = new Report();
+        GraphEventBuilder eventBuilder = new GraphEventBuilder(url);
         StreamReader reader =
-                readerFactory.createStreamReader(streamType, container);
+                readerFactory.createStreamReader(streamType, container,
+                eventBuilder);
+        reader.setReport(report);
 
         StreamingConnection connection = new StreamingConnection(url, reader);
 
@@ -75,8 +80,12 @@ public class GraphStreamingUtils {
         final GraphEventContainer container =
                 containerfactory.newGraphEventContainer(handler);
 
+        Report report = new Report();
+        GraphEventBuilder eventBuilder = new GraphEventBuilder(url);
         StreamReader reader =
-                readerFactory.createStreamReader(streamType, container);
+                readerFactory.createStreamReader(streamType, container,
+                eventBuilder);
+        reader.setReport(report);
 
         StreamingConnection connection = new StreamingConnection(url, reader);
 

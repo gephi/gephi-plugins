@@ -124,7 +124,7 @@ public class DynamicGraphWriter extends GraphWriter {
                          removedAt = new ArrayList<Object>();
                          remotion.put(removed, removedAt);
                      }
-                     removedAt.add(edge);
+                     removedAt.add(0,edge);
                 }
             }
 

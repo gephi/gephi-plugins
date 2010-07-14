@@ -22,12 +22,14 @@ package org.gephi.streaming.impl.dgs;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Date;
 import java.util.Map;
 
 import org.gephi.streaming.api.GraphEventHandler;
 import org.gephi.streaming.api.StreamReader;
 import org.gephi.streaming.api.event.ElementType;
 import org.gephi.streaming.api.event.EventType;
+import org.gephi.streaming.api.event.GraphEventBuilder;
 
 /**
  * A stream reader for the GraphStream DSG file format.
@@ -40,18 +42,20 @@ public class DGSStreamReader extends StreamReader implements DGSParserListener {
     /**
      * @param handler the GraphEventHandler to which the events will be delegated
      */
-    public DGSStreamReader(GraphEventHandler handler) {
-        super(handler);
+    public DGSStreamReader(GraphEventHandler handler,
+            GraphEventBuilder eventBuilder) {
+        super(handler, eventBuilder);
     }
 
     @Override
     public void processStream(InputStream inputStream) {
         
-        DGSParser parser = new DGSParser(inputStream, this);
+        DGSParser parser = new DGSParser(inputStream, this, report);
         try {
             parser.parse();
         } catch (IOException e) {
-             System.out.println("Stream closed");
+            if (report!=null)
+                 report.log("Stream closed at "+new Date());
         }
     }
 
@@ -59,57 +63,57 @@ public class DGSStreamReader extends StreamReader implements DGSParserListener {
     public void onEdgeAdded(String graphName, String edgeId, String fromTag,
             String toTag, boolean directed, Map<String, Object>  attributes) {
         handler.handleGraphEvent(eventBuilder.edgeAddedEvent(edgeId, fromTag, toTag, directed, attributes));
+        if (report!=null)
+            report.incrementEventCounter();
     }
     
     @Override
     public void onEdgeChanged(String sourceId, String edgeId, Map<String, Object> attributes) {
         handler.handleGraphEvent(eventBuilder.graphEvent(ElementType.EDGE, EventType.CHANGE, edgeId, attributes));
+        if (report!=null)
+            report.incrementEventCounter();
     }
 
     @Override
     public void onEdgeRemoved(String sourceId, String edgeId) {
         handler.handleGraphEvent(eventBuilder.graphEvent(ElementType.EDGE, EventType.REMOVE, edgeId, null));
+        if (report!=null)
+            report.incrementEventCounter();
     }
 
-    @Override
-    public void onGraphAttributeAdded(String sourceId, String attribute,
-            Object value) {
-        //TODO
-        System.out.println("onGraphAttributeAdded: Not implemented");
-    }
-
-    @Override
-    public void onGraphAttributeChanged(String sourceId, String attribute,
-            Object oldValue, Object newValue) {
-      //TODO
-        System.out.println("onGraphAttributeChanged: Not implemented");
-    }
-
-    @Override
-    public void onGraphAttributeRemoved(String sourceId, String attribute) {
-      //TODO
-        System.out.println("onGraphAttributeRemoved: Not implemented");
+    public void onGraphChanged(Map<String, Object> attributes) {
+        handler.handleGraphEvent(eventBuilder.graphEvent(ElementType.GRAPH, EventType.CHANGE, null, attributes));
+        if (report!=null)
+            report.incrementEventCounter();
     }
 
     @Override
     public void onNodeAdded(String sourceId, String nodeId, Map<String, Object> attributes) {
         handler.handleGraphEvent(eventBuilder.graphEvent(ElementType.NODE, EventType.ADD, nodeId, attributes));
+        if (report!=null)
+            report.incrementEventCounter();
     }
     
     @Override
     public void onNodeChanged(String sourceId, String nodeId, Map<String, Object> attributes) {
         handler.handleGraphEvent(eventBuilder.graphEvent(ElementType.NODE, EventType.CHANGE, nodeId, attributes));
+        if (report!=null)
+            report.incrementEventCounter();
     }
 
     @Override
     public void onNodeRemoved(String sourceId, String nodeId) {
         handler.handleGraphEvent(eventBuilder.graphEvent(ElementType.NODE, EventType.REMOVE, nodeId, null));
+        if (report!=null)
+            report.incrementEventCounter();
     }
 
     @Override
     public void onStepBegins(String graphName, double time) {
       //TODO
         System.out.println("onStepBegins: Not implemented");
+        if (report!=null)
+            report.incrementEventCounter();
     }
 
     @Override

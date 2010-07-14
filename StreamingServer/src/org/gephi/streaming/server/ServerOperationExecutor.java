@@ -172,7 +172,7 @@ public class ServerOperationExecutor {
         cos.addHandler(graphUpdaterOperationSupport);
         cos.addHandler(writer);
         
-        StreamReader reader = readerFactory.createStreamReader(format, cos);
+        StreamReader reader = readerFactory.createStreamReader(format, cos, eventBuilder);
         reader.processStream(inputStream);
         outputStream.close();
     }

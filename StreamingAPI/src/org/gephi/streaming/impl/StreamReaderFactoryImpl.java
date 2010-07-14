@@ -28,6 +28,7 @@ import org.gephi.streaming.api.GraphEventHandler;
 import org.gephi.streaming.api.StreamReader;
 import org.gephi.streaming.api.StreamReaderFactory;
 import org.gephi.streaming.api.StreamType;
+import org.gephi.streaming.api.event.GraphEventBuilder;
 import org.openide.util.Lookup;
 import org.openide.util.lookup.ServiceProvider;
 
@@ -42,11 +43,12 @@ public class StreamReaderFactoryImpl implements StreamReaderFactory {
      * @see org.gephi.streaming.api.StreamProcessorFactory#createStreamProcessor(java.lang.String)
      */
     @Override
-    public StreamReader createStreamReader(String streamType, GraphEventHandler handler) {
+    public StreamReader createStreamReader(String streamType, GraphEventHandler handler,
+            GraphEventBuilder eventBuilder) {
         Collection<? extends StreamType> streamTypes = Lookup.getDefault().lookupAll(StreamType.class);
         for (StreamType type: streamTypes) {
             if(type.getType().equalsIgnoreCase(streamType)) {
-                return createStreamReader(type, handler);
+                return createStreamReader(type, handler, eventBuilder);
             }
         }
         throw new IllegalArgumentException("Type " + streamType + " not registered as a valid stream type.");
@@ -56,10 +58,13 @@ public class StreamReaderFactoryImpl implements StreamReaderFactory {
      * @see org.gephi.streaming.api.StreamProcessorFactory#createStreamProcessor(java.lang.String)
      */
     @Override
-    public StreamReader createStreamReader(StreamType streamType, GraphEventHandler handler) {
+    public StreamReader createStreamReader(StreamType streamType, GraphEventHandler handler,
+            GraphEventBuilder eventBuilder) {
         try {
-            Constructor<? extends StreamReader> constructor = streamType.getStreamReaderClass().getConstructor(GraphEventHandler.class);
-            return constructor.newInstance(handler);
+            Constructor<? extends StreamReader> constructor =
+                    streamType.getStreamReaderClass().getConstructor(
+                    GraphEventHandler.class, GraphEventBuilder.class);
+            return constructor.newInstance(handler, eventBuilder);
 
         } catch (InstantiationException e) {
             throw new IllegalArgumentException("Error loading stream processor for type " + streamType, e);
