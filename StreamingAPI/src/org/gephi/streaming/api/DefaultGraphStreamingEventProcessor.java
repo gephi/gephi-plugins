@@ -65,10 +65,9 @@ public class DefaultGraphStreamingEventProcessor implements GraphEventListener {
         
         container.setSource(url);
         container.getGraphEventDispatcher().addEventListener(this);
-        GraphEventContainerHandler eventOperationSupport = new GraphEventContainerHandler(container);
         
         StreamReaderFactory processorFactory = Lookup.getDefault().lookup(StreamReaderFactory.class);
-        StreamReader processor = processorFactory.createStreamReader(streamType, eventOperationSupport);
+        StreamReader processor = processorFactory.createStreamReader(streamType, container);
         
         StreamingConnection connection = null;
         connection = new StreamingConnection(url, processor);

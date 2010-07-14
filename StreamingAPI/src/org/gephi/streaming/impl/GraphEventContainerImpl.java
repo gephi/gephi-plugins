@@ -68,7 +68,7 @@ public class GraphEventContainerImpl implements GraphEventContainer, GraphEventD
         return this;
     }
     
-    public void fireEvent(GraphEvent event) {
+    protected void fireEvent(GraphEvent event) {
         eventQueue.offer(event);
     }
 
@@ -103,6 +103,10 @@ public class GraphEventContainerImpl implements GraphEventContainer, GraphEventD
                 }
             } catch (InterruptedException e) {}
         }
+    }
+
+    public void handleGraphEvent(GraphEvent event) {
+        fireEvent(event);
     }
     
     private class EventDispatcher extends Thread {

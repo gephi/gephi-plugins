@@ -33,7 +33,7 @@ import org.gephi.streaming.api.event.GraphEventListener;
  *
  * @author Andre' Panisson
  */
-public interface GraphEventContainer {
+public interface GraphEventContainer extends GraphEventHandler {
 
     /**
      * Set the source of the data put in the container. Could be the stream's URL.
@@ -80,13 +80,5 @@ public interface GraphEventContainer {
      * Wait until all events in this container are dispatched
      */
     public void waitForDispatchAllEvents();
-
-    /**
-     * Load an event and fire it to the registered listeners using its
-     * GraphEventDispatcher.
-     *  
-     * @param event the GraphEvent to be fired to the listeners
-     */
-    public void fireEvent(GraphEvent event);
     
 }
