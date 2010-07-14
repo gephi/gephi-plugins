@@ -21,6 +21,7 @@ along with Gephi.  If not, see <http://www.gnu.org/licenses/>.
 package org.gephi.streaming.api;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import org.gephi.streaming.api.event.GraphEvent;
 
@@ -35,6 +36,10 @@ import org.gephi.streaming.api.event.GraphEvent;
 public class CompositeGraphEventHandler implements GraphEventHandler {
     
     private List<GraphEventHandler> handlers = new ArrayList<GraphEventHandler>();
+
+    public CompositeGraphEventHandler(GraphEventHandler ... handlers) {
+        this.handlers.addAll(Arrays.asList(handlers));
+    }
     
     /**
      * Add an GraphEventHandler to the list of OperationSupports to delegate the events.

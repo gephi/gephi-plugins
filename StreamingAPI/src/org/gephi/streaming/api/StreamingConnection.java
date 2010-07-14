@@ -24,6 +24,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -35,7 +37,8 @@ public class StreamingConnection extends Thread {
     private final URL url;
     private final StreamReader streamProcessor;
     private InputStream inputStream;
-    private StreamingConnectionStatusListener listener;
+    private List<StreamingConnectionStatusListener> listeners =
+            new ArrayList<StreamingConnectionStatusListener>();
     private boolean closed = false;
     
     public StreamingConnection(final URL url, final StreamReader streamProcessor) throws IOException {
@@ -64,9 +67,10 @@ public class StreamingConnection extends Thread {
         } finally {
             closed = true;
 
-            if (listener != null) {
-                listener.onConnectionClosed(this);
-            }
+            for (StreamingConnectionStatusListener listener: listeners)
+                if (listener != null) {
+                    listener.onConnectionClosed(this);
+                }
         }
     }
     
@@ -79,8 +83,8 @@ public class StreamingConnection extends Thread {
         closed = true;
     }
 
-    public void setStreamingConnectionStatusListener(StreamingConnectionStatusListener listener) {
-        this.listener = listener;
+    public void addStreamingConnectionStatusListener(StreamingConnectionStatusListener listener) {
+        this.listeners.add(listener);
     }
 
 }

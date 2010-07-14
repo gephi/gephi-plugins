@@ -20,8 +20,13 @@ along with Gephi.  If not, see <http://www.gnu.org/licenses/>.
  */
 package org.gephi.streaming.server.test;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.net.URL;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.concurrent.atomic.AtomicBoolean;
 import org.gephi.data.attributes.api.AttributeController;
 
 import org.gephi.graph.api.Graph;
@@ -29,9 +34,15 @@ import org.gephi.graph.api.GraphController;
 import org.gephi.graph.api.GraphModel;
 import org.gephi.project.api.ProjectController;
 import org.gephi.project.api.Workspace;
-import org.gephi.streaming.api.DefaultGraphStreamingEventProcessor;
+import org.gephi.streaming.api.CompositeGraphEventHandler;
+import org.gephi.streaming.api.GraphEventHandler;
+import org.gephi.streaming.api.GraphStreamingUtils;
+import org.gephi.streaming.api.GraphUpdaterEventHandler;
 import org.gephi.streaming.api.StreamWriter;
 import org.gephi.streaming.api.StreamWriterFactory;
+import org.gephi.streaming.api.StreamingConnection;
+import org.gephi.streaming.api.StreamingConnectionStatusListener;
+import org.gephi.streaming.api.event.GraphEvent;
 import org.gephi.streaming.server.FilteredGraphEventHandler;
 import org.gephi.streaming.server.GraphChangeListener;
 import org.junit.Test;
@@ -65,20 +76,51 @@ public class GraphStreamingEventProcessorTest {
         Graph graph = graphModel.getHierarchicalMixedGraph();
         GraphChangeListener listener = new GraphChangeListener(graph);
         
-
         graphModel.addGraphListener(listener);
-        
+
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
         StreamWriterFactory factory = Lookup.getDefault().lookup(StreamWriterFactory.class);
-        StreamWriter streamWriter = factory.createStreamWriter(streamType, System.out);
-        
-        DefaultGraphStreamingEventProcessor eventProcessor = new DefaultGraphStreamingEventProcessor(graph);
-        listener.setOperationSupport(new FilteredGraphEventHandler(streamWriter, eventProcessor.getProcessedEvents()));
+        StreamWriter streamWriter = factory.createStreamWriter(streamType, out);
+
+        GraphEventHandler graphUpdaterHandler = new GraphUpdaterEventHandler(graph);
+
+        final Set<GraphEvent> processedEvents = Collections.synchronizedSet(new HashSet<GraphEvent>());
+        GraphEventHandler eventCollector = new GraphEventHandler() {
+
+            public void handleGraphEvent(GraphEvent event) {
+                processedEvents.add(event);
+            }
+        };
+
+        GraphEventHandler composite = new CompositeGraphEventHandler(graphUpdaterHandler, eventCollector);
+
+        listener.setOperationSupport(new FilteredGraphEventHandler(streamWriter, processedEvents));
 //        listener.setOperationSupport(streamWriter);
-        eventProcessor.process(url, streamType);
+
+        StreamingConnection connection = 
+                GraphStreamingUtils.connectToStream(url, streamType, composite);
         
-        try {
-            Thread.sleep(10000);
-        }catch(InterruptedException e) {};
+        final AtomicBoolean processing = new AtomicBoolean(true);
+        connection.addStreamingConnectionStatusListener(
+            new StreamingConnectionStatusListener() {
+                public void onConnectionClosed(StreamingConnection connection) {
+                    processing.set(false);
+                    synchronized (processing) {
+                        processing.notifyAll();
+                    }
+                }
+            });
+        connection.start();
+
+        synchronized (processing) {
+            try {
+                while (processing.get()) {
+                    processing.wait();
+                }
+            } catch (InterruptedException e) {}
+        }
+
+        System.out.println(out.toString());
         
     }
 

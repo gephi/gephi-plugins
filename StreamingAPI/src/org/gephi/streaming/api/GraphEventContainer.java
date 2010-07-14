@@ -33,19 +33,6 @@ package org.gephi.streaming.api;
 public interface GraphEventContainer extends GraphEventHandler {
 
     /**
-     * Set the source of the data put in the container. Could be the stream's URL.
-     * @param source the original source of data.
-     * @throws NullPointerException if <code>source</code> is <code>null</code>
-     */
-    public void setSource(Object source);
-
-    /**
-     * If exists, returns the source of the data.
-     * @return the source of the data, or <code>null</code> if source is not defined.
-     */
-    public Object getSource();
-
-    /**
      * Set a report this container can use to report issues detected when loading the container. Report
      * are used to log info and issues during load process. Only one report can be associated to a
      * container.

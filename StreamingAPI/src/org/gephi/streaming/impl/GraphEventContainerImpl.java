@@ -21,36 +21,24 @@ public class GraphEventContainerImpl implements GraphEventContainer {
     private final GraphEventHandler handler;
 
     private Report report;
-    
-    private Object source;
 
     private boolean stopped = false;
     
-    private EventDispatcher dispatcher;
+    private Thread dispatcher;
     
     private Object emptyQueueLock = new Object();
-    
+
     /**
-     * @param source 
-     * 
+     * Set the source of the data put in the container. Could be the stream's URL.
+     * @param source the original source of data.
+     * @throws NullPointerException if <code>source</code> is <code>null</code>
      */
-    public GraphEventContainerImpl(Object source, GraphEventHandler handler) {
+    public GraphEventContainerImpl(GraphEventHandler handler) {
         this.report = new Report();
-        this.source = source;
         this.handler = handler;
         
-        dispatcher = new EventDispatcher(source);
+        dispatcher = new Thread(new EventDispatcher(), "EventDispatcher");
         dispatcher.start();
-    }
-    
-    @Override
-    public Object getSource() {
-        return source;
-    }
-    
-    @Override
-    public void setSource(Object source) {
-        this.source = source;
     }
 
     @Override
@@ -93,11 +81,7 @@ public class GraphEventContainerImpl implements GraphEventContainer {
         fireEvent(event);
     }
     
-    private class EventDispatcher extends Thread {
-
-        public EventDispatcher(Object source) {
-            super("EventDispatcher-"+source.toString());
-        }
+    private class EventDispatcher implements Runnable {
 
         @Override
         public void run() {

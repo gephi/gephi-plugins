@@ -31,13 +31,11 @@ import java.net.URL;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import org.gephi.graph.api.Graph;
-
 import org.gephi.graph.api.GraphController;
 import org.gephi.graph.api.GraphModel;
 import org.gephi.project.api.ProjectController;
 import org.gephi.project.api.Workspace;
 import org.gephi.streaming.api.CompositeGraphEventHandler;
-import org.gephi.streaming.api.DefaultGraphStreamingEventProcessor;
 import org.gephi.streaming.api.event.GraphEventBuilder;
 import org.gephi.streaming.api.GraphEventContainer;
 import org.gephi.streaming.api.GraphEventContainerFactory;
@@ -52,7 +50,6 @@ import org.gephi.streaming.api.StreamingConnectionStatusListener;
 import org.gephi.streaming.api.event.ElementType;
 import org.gephi.streaming.api.event.EventType;
 import org.gephi.streaming.api.event.GraphEvent;
-import org.gephi.streaming.impl.GraphEventContainerImpl;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.openide.util.Lookup;
@@ -74,18 +71,11 @@ public abstract class AbstractStreamProcessorTest {
         
         InputStream inputStream = this.getClass().getResourceAsStream(resource);
 
-        final AtomicInteger count = new AtomicInteger();
-
-        GraphEventHandler handler = new GraphEventHandler() {
-            @Override
-            public void handleGraphEvent(GraphEvent event) {
-                count.incrementAndGet();
-            }
-        };
+        MockGraphEventHandler handler = new MockGraphEventHandler();
         
-        // get the event operation support
+        // get the event container
         GraphEventContainerFactory containerfactory = Lookup.getDefault().lookup(GraphEventContainerFactory.class);
-        GraphEventContainer container = containerfactory.newGraphEventContainer(resource, handler);
+        GraphEventContainer container = containerfactory.newGraphEventContainer(handler);
 
         StreamReaderFactory factory = Lookup.getDefault().lookup(StreamReaderFactory.class);
         StreamReader streamReader = factory.createStreamReader(streamType, container);
@@ -93,8 +83,9 @@ public abstract class AbstractStreamProcessorTest {
         streamReader.processStream(inputStream);
         
         container.waitForDispatchAllEvents();
+        container.stop();
 //        assertEquals(2422, count.get());
-        assertEquals(1405, count.get());
+        assertEquals(1405, handler.getEventCount());
 //        System.out.println(count.get() + " Events");
     }
 
@@ -123,10 +114,7 @@ public abstract class AbstractStreamProcessorTest {
     public void testStreamReaderFactory() throws IOException {
         
         StreamReaderFactory factory = Lookup.getDefault().lookup(StreamReaderFactory.class);
-        StreamReader processor = factory.createStreamReader(streamType, new MockOperationSupport());
-        assertNotNull(processor);
-
-        processor = factory.createStreamReader(streamType, new MockOperationSupport());
+        StreamReader processor = factory.createStreamReader(streamType, new MockGraphEventHandler());
         assertNotNull(processor);
     }
 
@@ -135,9 +123,6 @@ public abstract class AbstractStreamProcessorTest {
 
         StreamWriterFactory factory = Lookup.getDefault().lookup(StreamWriterFactory.class);
         StreamWriter processor = factory.createStreamWriter(streamType, new ByteArrayOutputStream());
-        assertNotNull(processor);
-
-        processor = factory.createStreamWriter(streamType, new ByteArrayOutputStream());
         assertNotNull(processor);
     }
     
@@ -196,19 +181,12 @@ public abstract class AbstractStreamProcessorTest {
             }
         }.start();
 
-        final AtomicInteger count = new AtomicInteger();
-
-        GraphEventHandler handler = new GraphEventHandler() {
-            @Override
-            public void handleGraphEvent(GraphEvent event) {
-                count.incrementAndGet();
-            }
-        };
+        MockGraphEventHandler handler = new MockGraphEventHandler();
         
         // get the event operation support
         
         GraphEventContainerFactory containerfactory = Lookup.getDefault().lookup(GraphEventContainerFactory.class);
-        GraphEventContainer container = containerfactory.newGraphEventContainer(resource, handler);
+        GraphEventContainer container = containerfactory.newGraphEventContainer(handler);
         
         StreamReaderFactory factory = Lookup.getDefault().lookup(StreamReaderFactory.class);
         StreamReader dataProcessor = factory.createStreamReader(streamType, container);
@@ -216,7 +194,8 @@ public abstract class AbstractStreamProcessorTest {
         dataProcessor.processStream(inputStream);
         
         container.waitForDispatchAllEvents();
-        System.out.println(count.get() + " Events");
+        container.stop();
+        System.out.println(handler.getEventCount() + " Events");
     }
     
     @Test
@@ -241,7 +220,7 @@ public abstract class AbstractStreamProcessorTest {
 
         // get the event operation support
         GraphEventContainerFactory containerfactory = Lookup.getDefault().lookup(GraphEventContainerFactory.class);
-        GraphEventContainer container = containerfactory.newGraphEventContainer(resource, handler);
+        GraphEventContainer container = containerfactory.newGraphEventContainer(handler);
 
         StreamReaderFactory factory = Lookup.getDefault().lookup(StreamReaderFactory.class);
         StreamReader processor = factory.createStreamReader(streamType, container);
@@ -250,7 +229,7 @@ public abstract class AbstractStreamProcessorTest {
         StreamingConnection connection = new StreamingConnection(url, processor);
 
         final AtomicBoolean processing = new AtomicBoolean(true);
-        connection.setStreamingConnectionStatusListener(
+        connection.addStreamingConnectionStatusListener(
             new StreamingConnectionStatusListener() {
                 public void onConnectionClosed(StreamingConnection connection) {
                     processing.set(false);
@@ -270,6 +249,7 @@ public abstract class AbstractStreamProcessorTest {
         }
 
         container.waitForDispatchAllEvents();
+        container.stop();
         
         assertEquals(402, nodeCount.get());
         assertEquals(788, edgeCount.get());
@@ -297,7 +277,7 @@ public abstract class AbstractStreamProcessorTest {
         StreamingConnection connection = new StreamingConnection(url, processor);
 
         final AtomicBoolean processing = new AtomicBoolean(true);
-        connection.setStreamingConnectionStatusListener(
+        connection.addStreamingConnectionStatusListener(
             new StreamingConnectionStatusListener() {
                 public void onConnectionClosed(StreamingConnection connection) {
                     processing.set(false);
@@ -336,7 +316,7 @@ public abstract class AbstractStreamProcessorTest {
         
         // get the event operation support
         GraphEventContainerFactory containerfactory = Lookup.getDefault().lookup(GraphEventContainerFactory.class);
-        GraphEventContainer container = containerfactory.newGraphEventContainer(resource, graphUpdaterHandler);
+        GraphEventContainer container = containerfactory.newGraphEventContainer(graphUpdaterHandler);
 
         StreamReaderFactory factory = Lookup.getDefault().lookup(StreamReaderFactory.class);
         StreamReader processor = factory.createStreamReader(streamType, container);
@@ -345,7 +325,7 @@ public abstract class AbstractStreamProcessorTest {
         StreamingConnection connection = new StreamingConnection(url, processor);
 
         final AtomicBoolean processing = new AtomicBoolean(true);
-        connection.setStreamingConnectionStatusListener(
+        connection.addStreamingConnectionStatusListener(
             new StreamingConnectionStatusListener() {
                 public void onConnectionClosed(StreamingConnection connection) {
                     processing.set(false);
@@ -365,6 +345,7 @@ public abstract class AbstractStreamProcessorTest {
         }
         
         container.waitForDispatchAllEvents();
+        container.stop();
         
         assertEquals(402, graph.getNodeCount());
         assertEquals(788, graph.getEdgeCount());
@@ -414,9 +395,16 @@ public abstract class AbstractStreamProcessorTest {
         assertTrue(out1.toByteArray().length==out2.toByteArray().length);
     }
 
-    private static class MockOperationSupport implements GraphEventHandler {
+    private static class MockGraphEventHandler implements GraphEventHandler {
+
+        private int eventCount = 0;
 
         public void handleGraphEvent(GraphEvent event) {
+            eventCount++;
+        }
+
+        public int getEventCount() {
+            return eventCount;
         }
 
     }

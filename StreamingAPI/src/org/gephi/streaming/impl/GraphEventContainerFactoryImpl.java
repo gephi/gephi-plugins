@@ -37,8 +37,8 @@ public class GraphEventContainerFactoryImpl implements
      * @see org.gephi.streaming.api.GraphEventContainerFactory#newGraphEventContainer(java.lang.Object)
      */
     @Override
-    public GraphEventContainer newGraphEventContainer(Object source, GraphEventHandler handler) {
-        return new GraphEventContainerImpl(source, handler);
+    public GraphEventContainer newGraphEventContainer(GraphEventHandler handler) {
+        return new GraphEventContainerImpl(handler);
     }
 
 }

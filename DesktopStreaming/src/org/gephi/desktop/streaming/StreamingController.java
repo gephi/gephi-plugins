@@ -21,8 +21,6 @@ along with Gephi.  If not, see <http://www.gnu.org/licenses/>.
 package org.gephi.desktop.streaming;
 
 import java.io.IOException;
-import java.io.InputStream;
-import java.net.URLConnection;
 
 import org.gephi.graph.api.Graph;
 import org.gephi.graph.api.GraphController;
@@ -32,15 +30,19 @@ import org.gephi.project.api.ProjectController;
 import org.gephi.project.api.Workspace;
 import org.gephi.project.api.WorkspaceInformation;
 import org.gephi.project.api.WorkspaceListener;
-import org.gephi.streaming.api.DefaultGraphStreamingEventProcessor;
+import org.gephi.streaming.api.GraphEventContainer;
+import org.gephi.streaming.api.GraphEventContainerFactory;
+import org.gephi.streaming.api.GraphEventHandler;
 import org.gephi.streaming.api.GraphStreamingEndpoint;
+import org.gephi.streaming.api.GraphUpdaterEventHandler;
+import org.gephi.streaming.api.StreamReader;
+import org.gephi.streaming.api.StreamReaderFactory;
 import org.gephi.streaming.api.StreamingConnection;
 import org.gephi.streaming.api.StreamingConnectionStatusListener;
 import org.gephi.streaming.server.ServerController;
 import org.gephi.streaming.server.StreamingServer;
 import org.openide.DialogDisplayer;
 import org.openide.NotifyDescriptor;
-import org.openide.util.Exceptions;
 import org.openide.util.Lookup;
 import org.openide.util.lookup.ServiceProvider;
 
@@ -54,8 +56,18 @@ public class StreamingController {
     private StreamingModel model;
     private StreamingServerPanel serverPanel;
     private StreamingClientPanel clientPanel;
+
+    // Streaming API factories
+    private final GraphEventContainerFactory containerfactory;
+    private final StreamReaderFactory readerFactory;
     
     public StreamingController() {
+
+        containerfactory =
+                Lookup.getDefault().lookup(GraphEventContainerFactory.class);
+
+        readerFactory = Lookup.getDefault().lookup(StreamReaderFactory.class);
+
       //Workspace events
         ProjectController pc = Lookup.getDefault().lookup(ProjectController.class);
         pc.addWorkspaceListener(new WorkspaceListener() {
@@ -116,6 +128,8 @@ public class StreamingController {
     }
     
     public void connectToStream(GraphStreamingEndpoint endpoint) {
+
+        // Get active graph instance - Project and Graph API
         ProjectController projectController = Lookup.getDefault().lookup(ProjectController.class);
         Project project = projectController.getCurrentProject();
         if (project==null)
@@ -127,25 +141,35 @@ public class StreamingController {
 
         GraphController graphController = Lookup.getDefault().lookup(GraphController.class);
         GraphModel graphModel = graphController.getModel();
+        Graph graph = graphModel.getHierarchicalMixedGraph();
 
-        DefaultGraphStreamingEventProcessor eventProcessor = 
-            new DefaultGraphStreamingEventProcessor(graphModel.getHierarchicalMixedGraph());
+        // Connect to stream - Streaming API
+        GraphEventHandler graphUpdaterHandler = new GraphUpdaterEventHandler(graph);
+
+        final GraphEventContainer container =
+                containerfactory.newGraphEventContainer(graphUpdaterHandler);
+
+        StreamReader reader =
+                readerFactory.createStreamReader(endpoint.getStreamType(), container);
         
         StreamingConnection connection;
         try {
-            connection = eventProcessor.process(endpoint);
+            connection = new StreamingConnection(endpoint.getUrl(), reader);
         } catch (IOException ex) {
             notifyError("Unable to connect to stream " + endpoint.getUrl().toString(), ex);
             return;
         }
 
-        connection.setStreamingConnectionStatusListener(
+        connection.addStreamingConnectionStatusListener(
                 new StreamingConnectionStatusListener() {
 
             public void onConnectionClosed(StreamingConnection connection) {
                 disconnect(connection);
+                container.waitForDispatchAllEvents();
+                container.stop();
             }
         });
+        connection.start();
 
         model.getActiveConnections().add(connection);
 
@@ -159,8 +183,7 @@ public class StreamingController {
             }
 //            model.getActiveConnections().remove(connection);
         } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            notifyError("Error disconnecting from connection "+connection.getUrl().toString(), e);
         }
         refreshModel();
     }
@@ -194,8 +217,7 @@ public class StreamingController {
         try {
             server.start();
         } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            notifyError("Error starting streaming server", e);
         }
 
         model.setServerContext(context);
