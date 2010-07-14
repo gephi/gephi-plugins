@@ -20,14 +20,12 @@ along with Gephi.  If not, see <http://www.gnu.org/licenses/>.
  */
 package org.gephi.streaming.api;
 
-import org.gephi.streaming.api.event.GraphEventListener;
-
 /**
  * Graph Events are dispatched by the GraphEventDispatcher in synchronous or
  * asynchronous way, and listeners can be registered using the GraphEventDispatcher in order to
  * react to the collected events.
  * <p> See {@link GraphEventOperationSupport} for how to load events in the container and see
- * {@link GraphEventDispatcher} and {@link GraphEventListener} for how to listen to the events.
+ * {@link GraphEventDispatcher} and {@link GraphEventHandler} for how to listen to the events.
  * 
  * @author panisson
  * @see GraphEventContainer
@@ -36,16 +34,16 @@ import org.gephi.streaming.api.event.GraphEventListener;
 public interface GraphEventDispatcher {
     
     /**
-     * Add a GraphEventListener to the list of listeners
+     * Add a GraphEventHandler to the list of handlers
      * 
      * @param listener
      */
-    public void addEventListener(GraphEventListener listener);
+    public void addEventHandler(GraphEventHandler handler);
     
     /**
-     * Remove an event listener
-     * @param listener the GraphEventListener instance to be removed
+     * Remove an event handler
+     * @param handler the GraphEventHandler instance to be removed
      */
-    public void removeEventListener(GraphEventListener listener);
+    public void removeEventHandler(GraphEventHandler handler);
 
 }

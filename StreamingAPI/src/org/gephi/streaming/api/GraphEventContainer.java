@@ -20,16 +20,13 @@ along with Gephi.  If not, see <http://www.gnu.org/licenses/>.
  */
 package org.gephi.streaming.api;
 
-import org.gephi.streaming.api.event.GraphEvent;
-import org.gephi.streaming.api.event.GraphEventListener;
-
 /**
  * A container for Graph Event objects. Its role is to host all events collected by one or more
  * StreamReaders. The events will be dispatched by the GraphEventDispatcher in synchronous or
  * asynchronous way, and listeners can be registered using the GraphEventDispatcher in order to
  * react to the collected events.
  * <p> See {@link GraphEventOperationSupport} for how to load events in the container and see
- * {@link GraphEventDispatcher} and {@link GraphEventListener} for how to listen to the events.
+ * {@link GraphEventDispatcher} and {@link GraphEventHandler} for how to listen to the events.
  *
  * @author Andre' Panisson
  */

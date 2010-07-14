@@ -6,9 +6,9 @@ import java.util.concurrent.LinkedBlockingQueue;
 
 import org.gephi.streaming.api.GraphEventContainer;
 import org.gephi.streaming.api.GraphEventDispatcher;
+import org.gephi.streaming.api.GraphEventHandler;
 import org.gephi.streaming.api.Report;
 import org.gephi.streaming.api.event.GraphEvent;
-import org.gephi.streaming.api.event.GraphEventListener;
 
 /**
  * @author panisson
@@ -19,7 +19,7 @@ public class GraphEventContainerImpl implements GraphEventContainer, GraphEventD
     
     private LinkedBlockingQueue<GraphEvent> eventQueue = new LinkedBlockingQueue<GraphEvent>();
 
-	protected List<GraphEventListener> listeners = new ArrayList<GraphEventListener>();
+    protected List<GraphEventHandler> handlers = new ArrayList<GraphEventHandler>();
 
     private Report report;
     
@@ -80,14 +80,14 @@ public class GraphEventContainerImpl implements GraphEventContainer, GraphEventD
     }
 
     @Override
-    public void addEventListener(GraphEventListener listener) {
-        if (!listeners.contains(listener))
-            listeners.add(listener);
+    public void addEventHandler(GraphEventHandler handler) {
+        if (!handlers.contains(handler))
+            handlers.add(handler);
     }
 
     @Override
-    public void removeEventListener(GraphEventListener listener) {
-        listeners.remove(listener);
+    public void removeEventHandler(GraphEventHandler handler) {
+        handlers.remove(handler);
     }
 
     public void stop() {
@@ -119,8 +119,8 @@ public class GraphEventContainerImpl implements GraphEventContainer, GraphEventD
             while (!stopped) {
                 try {
                     GraphEvent event = eventQueue.take();
-                    for (GraphEventListener listener: listeners) {
-                        listener.onGraphEvent(event);
+                    for (GraphEventHandler handler: handlers) {
+                        handler.handleGraphEvent(event);
                     }
                 } catch (InterruptedException e) {
                     // Container was closed

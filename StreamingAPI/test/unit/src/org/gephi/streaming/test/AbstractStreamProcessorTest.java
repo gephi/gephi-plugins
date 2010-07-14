@@ -50,7 +50,6 @@ import org.gephi.streaming.api.StreamingConnectionStatusListener;
 import org.gephi.streaming.api.event.ElementType;
 import org.gephi.streaming.api.event.EventType;
 import org.gephi.streaming.api.event.GraphEvent;
-import org.gephi.streaming.api.event.GraphEventListener;
 import org.gephi.streaming.impl.GraphEventContainerImpl;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -82,13 +81,13 @@ public abstract class AbstractStreamProcessorTest {
         
         final AtomicInteger count = new AtomicInteger();
         
-        GraphEventListener listener = new GraphEventListener() {
+        GraphEventHandler handler = new GraphEventHandler() {
             @Override
-            public void onGraphEvent(GraphEvent event) {
+            public void handleGraphEvent(GraphEvent event) {
                 count.incrementAndGet();
             }
         };
-        container.getGraphEventDispatcher().addEventListener(listener);
+        container.getGraphEventDispatcher().addEventHandler(handler);
         
         streamReader.processStream(inputStream);
         
@@ -206,14 +205,14 @@ public abstract class AbstractStreamProcessorTest {
         
         final AtomicInteger count = new AtomicInteger();
         
-        GraphEventListener listener = new GraphEventListener() {
+        GraphEventHandler handler = new GraphEventHandler() {
             @Override
-            public void onGraphEvent(GraphEvent event) {
+            public void handleGraphEvent(GraphEvent event) {
                 count.incrementAndGet();
             }
         };
         
-        container.getGraphEventDispatcher().addEventListener(listener);
+        container.getGraphEventDispatcher().addEventHandler(handler);
         
         dataProcessor.processStream(inputStream);
         
@@ -239,9 +238,9 @@ public abstract class AbstractStreamProcessorTest {
         final AtomicInteger nodeCount = new AtomicInteger();
         final AtomicInteger edgeCount = new AtomicInteger();
         
-        GraphEventListener listener = new GraphEventListener() {
+        GraphEventHandler handler = new GraphEventHandler() {
             @Override
-            public void onGraphEvent(GraphEvent event) {
+            public void handleGraphEvent(GraphEvent event) {
                 if (event.getElementType() == ElementType.NODE && event.getEventType() == EventType.ADD)
                     nodeCount.incrementAndGet();
                 if (event.getElementType() == ElementType.EDGE && event.getEventType() == EventType.ADD)
@@ -249,7 +248,7 @@ public abstract class AbstractStreamProcessorTest {
             }
         };
         
-        container.getGraphEventDispatcher().addEventListener(listener);
+        container.getGraphEventDispatcher().addEventHandler(handler);
 
         StreamingConnection connection = new StreamingConnection(url, processor);
 
@@ -291,8 +290,8 @@ public abstract class AbstractStreamProcessorTest {
 
            @Override
             public void fireEvent(GraphEvent event) {
-               for (GraphEventListener listener: listeners) {
-                   listener.onGraphEvent(event);
+               for (GraphEventHandler handler: handlers) {
+                   handler.handleGraphEvent(event);
                }
             }
             
@@ -305,8 +304,8 @@ public abstract class AbstractStreamProcessorTest {
         GraphController graphController = Lookup.getDefault().lookup(GraphController.class);
         GraphModel graphModel = graphController.getModel();
         
-        DefaultGraphStreamingEventProcessor listener = new DefaultGraphStreamingEventProcessor(graphModel.getHierarchicalMixedGraph());
-        container.getGraphEventDispatcher().addEventListener(listener);
+        DefaultGraphStreamingEventProcessor handler = new DefaultGraphStreamingEventProcessor(graphModel.getHierarchicalMixedGraph());
+        container.getGraphEventDispatcher().addEventHandler(handler);
         
         URL url = this.getClass().getResource(resource);
         
@@ -332,8 +331,8 @@ public abstract class AbstractStreamProcessorTest {
             } catch (InterruptedException e) {}
         }
         
-        assertEquals(402, listener.getGraph().getNodeCount());
-        assertEquals(788, listener.getGraph().getEdgeCount());
+        assertEquals(402, handler.getGraph().getNodeCount());
+        assertEquals(788, handler.getGraph().getEdgeCount());
     }
     
     @Test
@@ -355,8 +354,8 @@ public abstract class AbstractStreamProcessorTest {
         GraphController graphController = Lookup.getDefault().lookup(GraphController.class);
         GraphModel graphModel = graphController.getModel();
         
-        DefaultGraphStreamingEventProcessor listener = new DefaultGraphStreamingEventProcessor(graphModel.getHierarchicalMixedGraph());
-        container.getGraphEventDispatcher().addEventListener(listener);
+        DefaultGraphStreamingEventProcessor handler = new DefaultGraphStreamingEventProcessor(graphModel.getHierarchicalMixedGraph());
+        container.getGraphEventDispatcher().addEventHandler(handler);
         
          StreamingConnection connection = new StreamingConnection(url, processor);
 
@@ -382,8 +381,8 @@ public abstract class AbstractStreamProcessorTest {
         
         container.waitForDispatchAllEvents();
         
-        assertEquals(402, listener.getGraph().getNodeCount());
-        assertEquals(788, listener.getGraph().getEdgeCount());
+        assertEquals(402, handler.getGraph().getNodeCount());
+        assertEquals(788, handler.getGraph().getEdgeCount());
     }
     
 //    @Test

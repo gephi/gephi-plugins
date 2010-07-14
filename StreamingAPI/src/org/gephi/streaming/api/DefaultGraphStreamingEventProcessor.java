@@ -28,14 +28,13 @@ import java.util.Set;
 
 import org.gephi.graph.api.Graph;
 import org.gephi.streaming.api.event.GraphEvent;
-import org.gephi.streaming.api.event.GraphEventListener;
 import org.openide.util.Lookup;
 
 /**
  * @author panisson
  *
  */
-public class DefaultGraphStreamingEventProcessor implements GraphEventListener {
+public class DefaultGraphStreamingEventProcessor implements GraphEventHandler {
     
     private Graph graph;
     private GraphEventHandler graphUpdaterHandler;
@@ -64,7 +63,7 @@ public class DefaultGraphStreamingEventProcessor implements GraphEventListener {
     public StreamingConnection process(URL url, String streamType) throws IOException {
         
         container.setSource(url);
-        container.getGraphEventDispatcher().addEventListener(this);
+        container.getGraphEventDispatcher().addEventHandler(this);
         
         StreamReaderFactory processorFactory = Lookup.getDefault().lookup(StreamReaderFactory.class);
         StreamReader processor = processorFactory.createStreamReader(streamType, container);
@@ -81,7 +80,7 @@ public class DefaultGraphStreamingEventProcessor implements GraphEventListener {
     }
     
     @Override
-    public void onGraphEvent(GraphEvent event) {
+    public void handleGraphEvent(GraphEvent event) {
         
         processedEvents.add(event);
         graphUpdaterHandler.handleGraphEvent(event);
