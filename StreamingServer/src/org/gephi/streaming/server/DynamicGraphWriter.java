@@ -69,9 +69,10 @@ public class DynamicGraphWriter extends GraphWriter {
             for (Node node: graph.getNodes()) {
                 TimeInterval range = (TimeInterval)node.getNodeData().getAttributes().getValue("dynamicrange");
 
-                for(int i=0; i<range.getSliceCount(); i++) {
-                    double created = range.getStart(i);
-                    double removed = range.getEnd(i);
+                List<Double[]> values = range.getValues();
+                for(Double[] rangeValue: values) {
+                    double created = rangeValue[0];
+                    double removed = rangeValue[1];
 
                     if (created < minRange) {
                         minRange = created;
@@ -99,9 +100,10 @@ public class DynamicGraphWriter extends GraphWriter {
             for (Edge edge: graph.getEdges()) {
                 TimeInterval range = (TimeInterval)edge.getEdgeData().getAttributes().getValue("dynamicrange");
 
-                for(int i=0; i<range.getSliceCount(); i++) {
-                    double created = range.getStart(i);
-                    double removed = range.getEnd(i);
+                List<Double[]> values = range.getValues();
+                for(Double[] rangeValue: values) {
+                    double created = rangeValue[0];
+                    double removed = rangeValue[1];
 
                     if (created < minRange) {
                         minRange = created;
