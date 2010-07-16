@@ -35,7 +35,6 @@ import org.gephi.io.importer.api.NodeDraftGetter;
 import org.gephi.io.processor.spi.Processor;
 import org.gephi.project.api.ProjectController;
 import org.gephi.project.api.Workspace;
-import org.gephi.timeline.api.TimelineController;
 import org.openide.util.Lookup;
 import org.openide.util.lookup.ServiceProvider;
 
@@ -64,7 +63,6 @@ public class DefaultProcessor extends AbstractProcessor implements Processor {
 
         //Architecture
         GraphModel graphModel = Lookup.getDefault().lookup(GraphController.class).getModel();
-        this.timelineController = Lookup.getDefault().lookup(TimelineController.class);
 
         HierarchicalGraph graph = null;
         switch (container.getEdgeDefault()) {
@@ -84,14 +82,14 @@ public class DefaultProcessor extends AbstractProcessor implements Processor {
         GraphFactory factory = graphModel.factory();
 
         //Attributes - Creates columns for properties
-        AttributeModel attributeModel = Lookup.getDefault().lookup(AttributeController.class).getModel();
+        attributeModel = Lookup.getDefault().lookup(AttributeController.class).getModel();
         attributeModel.mergeModel(container.getAttributeModel());
 
         //Dynamic
-        if (timelineController != null) {
-            timelineController.setMin(workspace, container.getTimeIntervalMin());
-            timelineController.setMax(workspace, container.getTimeIntervalMax());
-        }
+//        if (timelineController != null) {
+//            timelineController.setMin(workspace, container.getTimeIntervalMin());
+//            timelineController.setMax(workspace, container.getTimeIntervalMax());
+//        }
 
         int nodeCount = 0;
         //Create all nodes
@@ -140,7 +138,6 @@ public class DefaultProcessor extends AbstractProcessor implements Processor {
         }
 
         System.out.println("# Nodes loaded: " + nodeCount + "\n# Edges loaded: " + edgeCount);
-        timelineController = null;
         workspace = null;
     }
 }

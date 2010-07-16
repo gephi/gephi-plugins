@@ -1,18 +1,38 @@
 /*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
+Copyright 2008-2010 Gephi
+Authors : Mathieu Bastian <mathieu.bastian@gephi.org>
+Website : http://www.gephi.org
+
+This file is part of Gephi.
+
+Gephi is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+Gephi is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with Gephi.  If not, see <http://www.gnu.org/licenses/>.
  */
 package org.gephi.io.processor.plugin;
 
 import java.awt.Color;
+import org.gephi.data.attributes.api.AttributeColumn;
+import org.gephi.data.attributes.api.AttributeModel;
+import org.gephi.data.attributes.api.AttributeOrigin;
 import org.gephi.data.attributes.api.AttributeRow;
+import org.gephi.data.attributes.api.AttributeType;
 import org.gephi.data.attributes.api.AttributeValue;
+import org.gephi.dynamic.api.DynamicModel;
 import org.gephi.graph.api.Edge;
 import org.gephi.graph.api.Node;
 import org.gephi.io.importer.api.EdgeDraftGetter;
 import org.gephi.io.importer.api.NodeDraftGetter;
 import org.gephi.project.api.Workspace;
-import org.gephi.timeline.api.TimelineController;
 
 /**
  *
@@ -20,8 +40,8 @@ import org.gephi.timeline.api.TimelineController;
  */
 public abstract class AbstractProcessor {
 
-    protected TimelineController timelineController;
     protected Workspace workspace;
+    protected AttributeModel attributeModel;
 
     protected void flushToNode(NodeDraftGetter nodeDraft, Node node) {
 
@@ -69,19 +89,18 @@ public abstract class AbstractProcessor {
             node.getNodeData().setSize(10f);
         }
 
-        //Dynamic
-        if (timelineController != null && nodeDraft.getSlices() != null) {
-            for (String[] slice : nodeDraft.getSlices()) {
-                String from = slice[0];
-                String to = slice[1];
-                timelineController.pushSlice(workspace, from, to, node);
+        if (nodeDraft.getTimeInterval() != null) {
+            AttributeColumn col = attributeModel.getNodeTable().getColumn(DynamicModel.TIMEINTERVAL_COLUMN);
+            if (col == null) {
+                col = attributeModel.getNodeTable().addColumn(DynamicModel.TIMEINTERVAL_COLUMN, "Time Interval", AttributeType.TIME_INTERVAL, AttributeOrigin.PROPERTY, null);
             }
+            node.getNodeData().getAttributes().setValue(col.getIndex(), nodeDraft.getTimeInterval());
         }
 
         //Attributes
         if (node.getNodeData().getAttributes() != null) {
             AttributeRow row = (AttributeRow) node.getNodeData().getAttributes();
-            for (AttributeValue val : nodeDraft.getAttributeValues()) {
+            for (AttributeValue val : nodeDraft.getAttributeRow().getValues()) {
                 if (val.getValue() != null) {
                     row.setValue(val.getColumn(), val.getValue());
                 }
@@ -117,22 +136,21 @@ public abstract class AbstractProcessor {
             edge.getEdgeData().getTextData().setColor(labelColor.getRed() / 255f, labelColor.getGreen() / 255f, labelColor.getBlue() / 255f, labelColor.getAlpha() / 255f);
         }
 
+        if (edgeDraft.getTimeInterval() != null) {
+            AttributeColumn col = attributeModel.getEdgeTable().getColumn(DynamicModel.TIMEINTERVAL_COLUMN);
+            if (col == null) {
+                col = attributeModel.getEdgeTable().addColumn(DynamicModel.TIMEINTERVAL_COLUMN, "Time Interval", AttributeType.TIME_INTERVAL, AttributeOrigin.PROPERTY, null);
+            }
+            edge.getEdgeData().getAttributes().setValue(col.getIndex(), edgeDraft.getTimeInterval());
+        }
+
         //Attributes
         if (edge.getEdgeData().getAttributes() != null) {
             AttributeRow row = (AttributeRow) edge.getEdgeData().getAttributes();
-            for (AttributeValue val : edgeDraft.getAttributeValues()) {
+            for (AttributeValue val : edgeDraft.getAttributeRow().getValues()) {
                 if (val.getValue() != null) {
                     row.setValue(val.getColumn(), val.getValue());
                 }
-            }
-        }
-
-        //Dynamic
-        if (timelineController != null && edgeDraft.getSlices() != null) {
-            for (String[] slice : edgeDraft.getSlices()) {
-                String from = slice[0];
-                String to = slice[1];
-                timelineController.pushSlice(workspace, from, to, edge);
             }
         }
     }
