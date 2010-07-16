@@ -35,6 +35,7 @@ import org.gephi.streaming.api.GraphEventContainerFactory;
 import org.gephi.streaming.api.GraphEventHandler;
 import org.gephi.streaming.api.GraphStreamingEndpoint;
 import org.gephi.streaming.api.GraphUpdaterEventHandler;
+import org.gephi.streaming.api.Report;
 import org.gephi.streaming.api.StreamReader;
 import org.gephi.streaming.api.StreamReaderFactory;
 import org.gephi.streaming.api.StreamingConnection;
@@ -145,7 +146,10 @@ public class StreamingController {
         Graph graph = graphModel.getHierarchicalMixedGraph();
 
         // Connect to stream - Streaming API
-        GraphEventHandler graphUpdaterHandler = new GraphUpdaterEventHandler(graph);
+        final Report report = new Report();
+
+        GraphUpdaterEventHandler graphUpdaterHandler = new GraphUpdaterEventHandler(graph);
+        graphUpdaterHandler.setReport(report);
 
         final GraphEventContainer container =
                 containerfactory.newGraphEventContainer(graphUpdaterHandler);
@@ -153,7 +157,8 @@ public class StreamingController {
         GraphEventBuilder eventBuilder = new GraphEventBuilder(endpoint.getUrl());
         StreamReader reader =
                 readerFactory.createStreamReader(endpoint.getStreamType(), container, eventBuilder);
-        
+        reader.setReport(report);
+
         StreamingConnection connection;
         try {
             connection = new StreamingConnection(endpoint.getUrl(), reader);
@@ -169,6 +174,9 @@ public class StreamingController {
                 disconnect(connection);
                 container.waitForDispatchAllEvents();
                 container.stop();
+                
+                // TODO: show stream report
+                System.out.println("-- Stream report -----\n"+report.getText()+"--------");
             }
         });
         connection.start();

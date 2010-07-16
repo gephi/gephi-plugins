@@ -50,6 +50,7 @@ public class GraphChangeListener implements GraphListener, AttributeListener {
     private Graph graph;
     private boolean sendVizData = true;
     private GraphEventBuilder eventBuilder;
+    private GraphWriter graphWriter;
     
     public GraphChangeListener(Graph graph) {
         this.graph = graph;
@@ -58,6 +59,7 @@ public class GraphChangeListener implements GraphListener, AttributeListener {
         ac.getModel().getEdgeTable().addAttributeListener(this);
         ac.getModel().getNodeTable().addAttributeListener(this);
         eventBuilder = new GraphEventBuilder(this);
+         graphWriter = new GraphWriter(graph, true);
     }
 
     /**
@@ -68,26 +70,8 @@ public class GraphChangeListener implements GraphListener, AttributeListener {
     }
     
     public void writeGraph(GraphEventHandler operationSupport) {
-        
-        try {
-            graph.readLock();
-            
-            for (Node node: graph.getNodes()) {
-                String nodeId = node.getNodeData().getId();
-                operationSupport.handleGraphEvent(eventBuilder.graphEvent(ElementType.NODE, EventType.ADD, nodeId, getNodeAttributes(node)));
-            }
-            
-            for (Edge edge: graph.getEdges()) {
-                String edgeId = edge.getEdgeData().getId();
-                String sourceId = edge.getSource().getNodeData().getId();
-                String targetId = edge.getTarget().getNodeData().getId();
-                operationSupport.handleGraphEvent(eventBuilder.edgeAddedEvent(edgeId, sourceId, targetId, edge.isDirected(), getEdgeAttributes(edge)));
-            }
-        } finally {
-            graph.readUnlock();
-        }
-        
-        
+
+        graphWriter.writeGraph(operationSupport);
     }
     
     /**
@@ -114,6 +98,23 @@ public class GraphChangeListener implements GraphListener, AttributeListener {
                     operationSupport.handleGraphEvent(eventBuilder.graphEvent(ElementType.NODE, EventType.ADD, nodeId, getNodeAttributes(node)));
                 }
             break;
+            case MOVE_NODES:
+                for (Node node: event.getData().movedNodes()) {
+                    String nodeId = node.getNodeData().getId();
+                    operationSupport.handleGraphEvent(eventBuilder.graphEvent(ElementType.NODE, EventType.CHANGE, nodeId, getNodeAttributes(node)));
+                }
+                break;
+            case REMOVE_EDGES:
+                for (Edge edge: event.getData().removedEdges()) {
+                    String edgeId = edge.getEdgeData().getId();
+                    operationSupport.handleGraphEvent(eventBuilder.graphEvent(ElementType.EDGE, EventType.REMOVE, edgeId, null));
+                }
+                break;
+            case REMOVE_NODES:
+                for (Node node: event.getData().removedNodes()) {
+                    String nodeId = node.getNodeData().getId();
+                    operationSupport.handleGraphEvent(eventBuilder.graphEvent(ElementType.NODE, EventType.REMOVE, nodeId, null));
+                }
         }
         
     }

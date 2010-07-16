@@ -21,6 +21,8 @@ along with Gephi.  If not, see <http://www.gnu.org/licenses/>.
 package org.gephi.streaming.api;
 
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.gephi.graph.api.Edge;
 import org.gephi.graph.api.Graph;
@@ -37,10 +39,13 @@ import org.gephi.streaming.api.event.GraphEvent;
  *
  */
 public class GraphUpdaterEventHandler implements GraphEventHandler {
-    
+
+    private static final Logger logger = Logger.getLogger(GraphUpdaterEventHandler.class.getName());
+
     private Graph graph;
     private GraphFactory factory;
     protected PropertiesAssociations properties = new PropertiesAssociations();
+    protected Report report;
     
     /**
      * @param graph
@@ -68,7 +73,33 @@ public class GraphUpdaterEventHandler implements GraphEventHandler {
         properties.addEdgePropertyAssociation(EdgeProperties.WEIGHT, "weight");
     }
 
+    /**
+     * @return the report
+     */
+    public Report getReport() {
+        return report;
+    }
+
+    /**
+     * @param report the report to set
+     */
+    public void setReport(Report report) {
+        this.report = report;
+    }
+
     public void handleGraphEvent(GraphEvent event) {
+        try {
+            doHandleGraphEvent(event);
+        } catch (RuntimeException e) {
+            logger.log(Level.WARNING, e.getMessage(), e);
+            if (report!=null) {
+                Issue issue = new Issue(e, Issue.Level.WARNING);
+                report.logIssue(issue);
+            }
+        }
+    }
+
+    public void doHandleGraphEvent(GraphEvent event) {
 
         if (event instanceof ElementEvent) {
             ElementEvent elementEvent = (ElementEvent)event;
@@ -108,14 +139,35 @@ public class GraphUpdaterEventHandler implements GraphEventHandler {
         }
     }
 
+    private void log(String message) {
+        if (report!=null) {
+            Issue issue = new Issue(message, Issue.Level.INFO);
+            report.logIssue(issue);
+        }
+        logger.warning(message);
+    }
+
     private void edgeAdded(String edgeId, String fromNodeId, String toNodeId,
             boolean directed, Map<String, Object> attributes) {
         
         Edge edge = graph.getEdge(edgeId);
-        if (edge!=null) return;
+        if (edge!=null) {
+            log("Edge added event ignored for edge "+edgeId+": Edge already exists");
+            return;
+        }
         
         Node source = graph.getNode(fromNodeId);
+        if (source==null) {
+            log("Edge added event ignored for edge "+edgeId+": Source node "+fromNodeId+" not found");
+            return;
+        }
+
         Node target = graph.getNode(toNodeId);
+        if (target==null) {
+            log("Edge added event ignored for edge "+edgeId+": Target node "+toNodeId+" not found");
+            return;
+        }
+
         if(source!=null && target!=null) {
             edge = factory.newEdge(edgeId, source, target, 1.0f, directed);
             
@@ -145,6 +197,8 @@ public class GraphUpdaterEventHandler implements GraphEventHandler {
             }
             
             graph.writeUnlock();
+        } else {
+            log("Edge changed event ignored for edge "+edgeId+": Edge not found");
         }
     }
 
@@ -154,6 +208,8 @@ public class GraphUpdaterEventHandler implements GraphEventHandler {
             graph.writeLock();
             graph.removeEdge(edge);
             graph.writeUnlock();
+        } else {
+            log("Edge removed event ignored for edge "+edgeId+": Edge not found");
         }
     }
 
@@ -172,6 +228,8 @@ public class GraphUpdaterEventHandler implements GraphEventHandler {
             graph.addNode(node);
             graph.setId(node, nodeId);
             graph.writeUnlock();
+        } else {
+            log("Node added event ignored for node "+nodeId+": Node already exists");
         }
     }
     
@@ -188,6 +246,8 @@ public class GraphUpdaterEventHandler implements GraphEventHandler {
             }
             
             graph.writeUnlock();
+        } else {
+            log("Node changed event ignored for node "+nodeId+": Node not found");
         }
     }
 
@@ -202,6 +262,8 @@ public class GraphUpdaterEventHandler implements GraphEventHandler {
 
             graph.removeNode(node);
             graph.writeUnlock();
+        } else {
+            log("Node changed event ignored for node "+nodeId+": Node not found");
         }
     }
     

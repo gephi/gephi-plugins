@@ -66,6 +66,9 @@ public class ServerOperationExecutor {
         writerFactory = Lookup.getDefault().lookup(StreamWriterFactory.class);
         readerFactory = Lookup.getDefault().lookup(StreamReaderFactory.class);
         eventBuilder = new GraphEventBuilder(this);
+
+        GraphChangeListener changeListener = new GraphChangeListener(graph);
+        changeListener.setOperationSupport(graphBufferedOperationSupport);
     }
     
     /**
@@ -171,6 +174,7 @@ public class ServerOperationExecutor {
         CompositeGraphEventHandler cos = new CompositeGraphEventHandler();
         cos.addHandler(graphUpdaterOperationSupport);
         cos.addHandler(writer);
+//        cos.addHandler(graphBufferedOperationSupport);
         
         StreamReader reader = readerFactory.createStreamReader(format, cos, eventBuilder);
         reader.processStream(inputStream);

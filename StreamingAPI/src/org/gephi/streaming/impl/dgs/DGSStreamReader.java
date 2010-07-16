@@ -54,8 +54,9 @@ public class DGSStreamReader extends StreamReader implements DGSParserListener {
         try {
             parser.parse();
         } catch (IOException e) {
+        } finally {
             if (report!=null)
-                 report.log("Stream closed at "+new Date());
+                report.log("Stream closed at "+new Date());
         }
     }
 

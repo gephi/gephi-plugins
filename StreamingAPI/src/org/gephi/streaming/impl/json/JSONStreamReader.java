@@ -75,6 +75,7 @@ public class JSONStreamReader extends StreamReader {
                 }
             }
         } catch (IOException e) {
+        } finally {
             if (report!=null)
                 report.log("Stream closed at "+new Date());
         }
