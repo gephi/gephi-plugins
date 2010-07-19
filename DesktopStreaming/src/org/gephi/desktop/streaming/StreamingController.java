@@ -30,17 +30,10 @@ import org.gephi.project.api.ProjectController;
 import org.gephi.project.api.Workspace;
 import org.gephi.project.api.WorkspaceInformation;
 import org.gephi.project.api.WorkspaceListener;
-import org.gephi.streaming.api.GraphEventContainer;
-import org.gephi.streaming.api.GraphEventContainerFactory;
-import org.gephi.streaming.api.GraphEventHandler;
 import org.gephi.streaming.api.GraphStreamingEndpoint;
-import org.gephi.streaming.api.GraphUpdaterEventHandler;
-import org.gephi.streaming.api.Report;
-import org.gephi.streaming.api.StreamReader;
-import org.gephi.streaming.api.StreamReaderFactory;
+import org.gephi.streaming.api.StreamingClient;
 import org.gephi.streaming.api.StreamingConnection;
 import org.gephi.streaming.api.StreamingConnectionStatusListener;
-import org.gephi.streaming.api.event.GraphEventBuilder;
 import org.gephi.streaming.server.ServerController;
 import org.gephi.streaming.server.StreamingServer;
 import org.openide.DialogDisplayer;
@@ -58,17 +51,8 @@ public class StreamingController {
     private StreamingModel model;
     private StreamingServerPanel serverPanel;
     private StreamingClientPanel clientPanel;
-
-    // Streaming API factories
-    private final GraphEventContainerFactory containerfactory;
-    private final StreamReaderFactory readerFactory;
     
     public StreamingController() {
-
-        containerfactory =
-                Lookup.getDefault().lookup(GraphEventContainerFactory.class);
-
-        readerFactory = Lookup.getDefault().lookup(StreamReaderFactory.class);
 
       //Workspace events
         ProjectController pc = Lookup.getDefault().lookup(ProjectController.class);
@@ -146,45 +130,27 @@ public class StreamingController {
         Graph graph = graphModel.getHierarchicalMixedGraph();
 
         // Connect to stream - Streaming API
-        final Report report = new Report();
-
-        GraphUpdaterEventHandler graphUpdaterHandler = new GraphUpdaterEventHandler(graph);
-        graphUpdaterHandler.setReport(report);
-
-        final GraphEventContainer container =
-                containerfactory.newGraphEventContainer(graphUpdaterHandler);
-
-        GraphEventBuilder eventBuilder = new GraphEventBuilder(endpoint.getUrl());
-        StreamReader reader =
-                readerFactory.createStreamReader(endpoint.getStreamType(), container, eventBuilder);
-        reader.setReport(report);
-
-        StreamingConnection connection;
+        final StreamingClient client = new StreamingClient(graph);
         try {
-            connection = new StreamingConnection(endpoint.getUrl(), reader);
+            StreamingConnection connection = client.process(endpoint,
+                new StreamingConnectionStatusListener() {
+                    public void onConnectionClosed(StreamingConnection connection) {
+                        disconnect(connection);
+
+                        // TODO: show stream report
+                        System.out.println("-- Stream report -----\n" +
+                                client.getReport().getText() + "--------");
+                    }
+                });
+
+            model.getActiveConnections().add(connection);
+            refreshModel();
+
         } catch (IOException ex) {
             notifyError("Unable to connect to stream " + endpoint.getUrl().toString(), ex);
             return;
         }
-
-        connection.addStreamingConnectionStatusListener(
-                new StreamingConnectionStatusListener() {
-
-            public void onConnectionClosed(StreamingConnection connection) {
-                disconnect(connection);
-                container.waitForDispatchAllEvents();
-                container.stop();
-                
-                // TODO: show stream report
-                System.out.println("-- Stream report -----\n"+report.getText()+"--------");
-            }
-        });
-        connection.start();
-
-        model.getActiveConnections().add(connection);
-
-        refreshModel();
-     }
+    }
     
     public void disconnect(StreamingConnection connection) {
         try {
