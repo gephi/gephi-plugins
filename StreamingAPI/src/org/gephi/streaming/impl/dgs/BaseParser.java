@@ -23,8 +23,6 @@ package org.gephi.streaming.impl.dgs;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.StreamTokenizer;
-import org.gephi.streaming.api.Issue;
-import org.gephi.streaming.api.Report;
 
 /**
  * Ths parser is based on the DGS parser implementation
@@ -39,7 +37,7 @@ import org.gephi.streaming.api.Report;
  *  Guilhelm Savin<br>
  *
  */
-public class BaseParser {
+public abstract class BaseParser {
     
     protected final StreamTokenizer st;
     /**
@@ -56,11 +54,9 @@ public class BaseParser {
      * Is EOL significant?.
      */
     protected boolean eol_is_significant = true;
-
-    private Report report;
     
     @SuppressWarnings("deprecation")
-    public BaseParser(InputStream inputStream, Report report) {
+    public BaseParser(InputStream inputStream) {
         // the InputStream constructor is better, as it does not block until the end of stream
 //        StreamTokenizer st = new StreamTokenizer( new InputStreamReader(inputStream) );
         StreamTokenizer st = new StreamTokenizer( inputStream );
@@ -789,15 +785,6 @@ public class BaseParser {
     /**
      * Generate a parse error.
      */
-    protected void parseError( String message ) throws IOException
-    {
-        if (report!=null) {
-            Issue issue = new Issue("parse error: "
-                + st.lineno() + ": " + message, Issue.Level.SEVERE);
-            report.logIssue(issue);
-        }
-        throw new IOException( "parse error: "
-                + st.lineno() + ": " + message );
-    }
+    protected abstract void parseError( String message ) throws IOException;
     
 }

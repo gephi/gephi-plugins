@@ -25,7 +25,9 @@ import java.io.InputStream;
 import java.io.StreamTokenizer;
 import java.util.ArrayList;
 import java.util.HashMap;
+import org.gephi.streaming.api.Issue;
 import org.gephi.streaming.api.Report;
+import org.gephi.streaming.api.StreamReader.StreamReaderStatusListener;
 
 
 /**
@@ -74,10 +76,14 @@ public class DGSParser extends BaseParser {
     protected boolean finished;
     
     private DGSParserListener listener;
+    private StreamReaderStatusListener statusListener;
+    private Report report;
     
-    public DGSParser(InputStream inputStream, DGSParserListener listener, Report report) {
-        super(inputStream, report);
+    public DGSParser(InputStream inputStream, DGSParserListener listener, Report report, StreamReaderStatusListener statusListener) {
+        super(inputStream);
         this.listener = listener;
+        this.statusListener = statusListener;
+        this.report = report;
     }
     
     public void parse() throws IOException {
@@ -196,6 +202,8 @@ public class DGSParser extends BaseParser {
             {
                 parseError( "unknown token '"+key+"'" );
             }
+
+            if(statusListener!=null) statusListener.onDataReceived();
         }
         while( loop );
         
@@ -422,6 +430,21 @@ public class DGSParser extends BaseParser {
         if( vector != null )
              return vector.toArray();
         else return value;
+    }
+
+        /**
+     * Generate a parse error.
+     */
+    protected void parseError( String message ) throws IOException
+    {
+        if(statusListener!=null) statusListener.onError();
+        if (report!=null) {
+            Issue issue = new Issue("parse error: "
+                + st.lineno() + ": " + message, Issue.Level.SEVERE);
+            report.logIssue(issue);
+        }
+        throw new IOException( "parse error: "
+                + st.lineno() + ": " + message );
     }
     
 }

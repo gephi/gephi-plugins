@@ -20,6 +20,7 @@ import org.simpleframework.transport.connect.SocketConnection;
 public class Main3 implements Container {
 
     private static final String DGS_RESOURCE = "amazon_0201485419_400.dgs";
+    private static final String JSON_RESOURCE = "amazon.json";
 
     public void handle(Request request, Response response) {
         PrintStream body;
@@ -55,17 +56,20 @@ public class Main3 implements Container {
                 out.write(data);
 
                 i++;
-                if (i % 10 == 0) {
+                if (i % 1000 == 0) {
                     System.out.println("Sending data");
                     out.flush();
                     try {
-                        Thread.sleep(40);
+                        Thread.sleep(400);
                     } catch (InterruptedException e) {
                     }
                 }
 
             }
             body.flush();
+            inputStream.close();
+            out.close();
+            response.close();
         } catch (IOException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();

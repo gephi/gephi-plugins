@@ -80,7 +80,35 @@ public class StreamingConnection {
     public void synchProcess() {
         try {
 
-            streamProcessor.processStream(inputStream);
+            streamProcessor.processStream(inputStream, new StreamReader.StreamReaderStatusListener() {
+
+                public void onConnectionClosed() {
+                    synchronized (listeners) {
+                        for (StatusListener listener: listeners)
+                            if (listener != null) {
+                                listener.onConnectionClosed(StreamingConnection.this);
+                            }
+                    }
+                }
+
+                public void onDataReceived() {
+                    synchronized (listeners) {
+                        for (StatusListener listener: listeners)
+                            if (listener != null) {
+                                listener.onDataReceived(StreamingConnection.this);
+                            }
+                    }
+                }
+
+                public void onError() {
+                    synchronized (listeners) {
+                        for (StatusListener listener: listeners)
+                            if (listener != null) {
+                                listener.onError(StreamingConnection.this);
+                            }
+                    }
+                }
+            });
 
         } catch (IOException e) {
             // Exception during processing
@@ -100,7 +128,8 @@ public class StreamingConnection {
 
     public interface StatusListener {
         public void onConnectionClosed(StreamingConnection connection);
-        public void onReceivingData(StreamingConnection connection);
+        public void onDataReceived(StreamingConnection connection);
+        public void onError(StreamingConnection connection);
     }
 
 }

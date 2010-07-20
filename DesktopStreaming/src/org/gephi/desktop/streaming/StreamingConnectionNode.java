@@ -17,12 +17,14 @@ public class StreamingConnectionNode extends AbstractNode {
     private enum ConnectionState {
         CONNECTED,
         CLOSED,
-        ERROR, RECEIVING
+        ERROR,
+        RECEIVING
     }
 
     public static Image connectedImage = ImageUtilities.loadImage("org/gephi/desktop/streaming/dot_connected.png", true);
     public static Image disconnectedImage = ImageUtilities.loadImage("org/gephi/desktop/streaming/dot_disconnected.png", true);
     public static Image sendrecImage = ImageUtilities.loadImage("org/gephi/desktop/streaming/dot_sendrec.png", true);
+    public static Image errorImage = ImageUtilities.loadImage("org/gephi/desktop/streaming/dot_error.png", true);
 
     private Image icon;
     private Action[] actions;
@@ -41,8 +43,12 @@ public class StreamingConnectionNode extends AbstractNode {
                 switchToClosed();
             }
             
-            public void onReceivingData(StreamingConnection connection) {
+            public void onDataReceived(StreamingConnection connection) {
                 switchToReceiving();
+            }
+
+            public void onError(StreamingConnection connection) {
+                switchToError();
             }
         });
 
@@ -106,6 +112,34 @@ public class StreamingConnectionNode extends AbstractNode {
         if (lastState!=ConnectionState.RECEIVING) {
             lastState = ConnectionState.RECEIVING;
             icon = sendrecImage;
+            fireIconChange();
+            actions = new Action[]{closeConnectionAction, showReportAction};
+
+            new Thread(){
+                @Override
+                public void run() {
+                    try {
+                        Thread.sleep(100);
+                    } catch (InterruptedException ex) {}
+                    switchToConnected();
+                }
+            }.start();
+        }
+    }
+
+    private void switchToConnected() {
+        if (lastState!=ConnectionState.CONNECTED && lastState!=ConnectionState.CLOSED) {
+            lastState = ConnectionState.CONNECTED;
+            icon = connectedImage;
+            fireIconChange();
+            actions = new Action[]{closeConnectionAction, showReportAction};
+        }
+    }
+
+        private void switchToError() {
+        if (lastState!=ConnectionState.ERROR && lastState!=ConnectionState.CLOSED) {
+            lastState = ConnectionState.ERROR;
+            icon = errorImage;
             fireIconChange();
             actions = new Action[]{closeConnectionAction, showReportAction};
         }

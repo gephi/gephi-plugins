@@ -23,6 +23,7 @@ package org.gephi.streaming.api;
 import org.gephi.streaming.api.event.GraphEventBuilder;
 import java.io.IOException;
 import java.io.InputStream;
+import org.gephi.streaming.api.StreamingConnection.StatusListener;
 
 /**
  * Read events from a stream.
@@ -68,6 +69,16 @@ public abstract class StreamReader {
      * @param inputStream the InputStream to read from.
      * @throws IOException when unable to connect to the InputStream
      */
-    public abstract void processStream(InputStream inputStream) throws IOException;
+    public final void processStream(InputStream inputStream) throws IOException {
+        this.processStream(inputStream, null);
+    }
+
+    public abstract void processStream(InputStream inputStream, StreamReaderStatusListener listener) throws IOException;
+
+    public interface StreamReaderStatusListener {
+        public void onConnectionClosed();
+        public void onDataReceived();
+        public void onError();
+    }
 
 }

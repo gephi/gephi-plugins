@@ -32,6 +32,7 @@ import java.util.logging.Logger;
 import org.gephi.streaming.api.GraphEventHandler;
 import org.gephi.streaming.api.Issue;
 import org.gephi.streaming.api.StreamReader;
+import org.gephi.streaming.api.StreamingConnection.StatusListener;
 import org.gephi.streaming.api.event.ElementType;
 import org.gephi.streaming.api.event.EventType;
 import org.gephi.streaming.api.event.GraphEventBuilder;
@@ -59,7 +60,7 @@ public class JSONStreamReader extends StreamReader {
     }
 
     @Override
-    public void processStream(InputStream inputStream) throws IOException {
+    public void processStream(InputStream inputStream, StreamReaderStatusListener listener) throws IOException {
 
         StringBuilder content = new StringBuilder();
         byte[] buffer = new byte[1024];
@@ -67,6 +68,9 @@ public class JSONStreamReader extends StreamReader {
         try {
             int read;
             while ((read = inputStream.read(buffer))!=-1) {
+                if (listener!=null) {
+                    listener.onDataReceived();
+                }
 
                 for (int i=0; i<read; i++) {
                     char readChar = (char)buffer[i];
@@ -87,6 +91,10 @@ public class JSONStreamReader extends StreamReader {
 
         if (content.length() > 0) {
             parse(content.toString());
+        }
+
+        if (listener!=null) {
+            listener.onConnectionClosed();
         }
     }
 

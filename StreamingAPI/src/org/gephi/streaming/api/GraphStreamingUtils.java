@@ -65,7 +65,8 @@ public class GraphStreamingUtils {
                 container.stop();
             }
 
-            public void onReceivingData(StreamingConnection connection) { }
+            public void onDataReceived(StreamingConnection connection) { }
+            public void onError(StreamingConnection connection) { }
         });
         
         return connection;
@@ -99,7 +100,8 @@ public class GraphStreamingUtils {
                 container.stop();
             }
 
-            public void onReceivingData(StreamingConnection connection) { }
+            public void onDataReceived(StreamingConnection connection) { }
+            public void onError(StreamingConnection connection) { }
         });
 
         return connection;

@@ -48,15 +48,19 @@ public class DGSStreamReader extends StreamReader implements DGSParserListener {
     }
 
     @Override
-    public void processStream(InputStream inputStream) {
+    public void processStream(InputStream inputStream, StreamReaderStatusListener listener) {
         
-        DGSParser parser = new DGSParser(inputStream, this, report);
+        DGSParser parser = new DGSParser(inputStream, this, report, listener);
         try {
             parser.parse();
         } catch (IOException e) {
         } finally {
             if (report!=null)
                 report.log("Stream closed at "+new Date());
+        }
+
+        if (listener!=null) {
+            listener.onConnectionClosed();
         }
     }
 

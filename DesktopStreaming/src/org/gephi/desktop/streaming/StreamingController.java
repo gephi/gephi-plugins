@@ -202,7 +202,8 @@ public class StreamingController {
                                 client.getReport().getText() + "--------");
                     }
 
-                public void onReceivingData(StreamingConnection connection) { }
+                public void onDataReceived(StreamingConnection connection) { }
+                public void onError(StreamingConnection connection) { }
                 });
 
             model.addConnection(connection, client.getReport());

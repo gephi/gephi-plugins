@@ -77,7 +77,8 @@ public class StreamingClient {
                     System.out.println("-- Stream report -----\n"+getReport().getText()+"--------");
                 }
 
-                public void onReceivingData(StreamingConnection connection) { }
+                public void onDataReceived(StreamingConnection connection) { }
+                public void onError(StreamingConnection connection) { }
             });
         if (statusListener!=null) {
             connection.addStatusListener(statusListener);
