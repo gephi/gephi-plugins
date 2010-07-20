@@ -28,4 +28,6 @@ public interface StreamingConnectionStatusListener {
     
     public void onConnectionClosed(StreamingConnection connection);
 
+    public void onReceivingData(StreamingConnection connection);
+
 }

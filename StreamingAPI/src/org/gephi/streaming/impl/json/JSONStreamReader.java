@@ -62,17 +62,22 @@ public class JSONStreamReader extends StreamReader {
     public void processStream(InputStream inputStream) throws IOException {
 
         StringBuilder content = new StringBuilder();
+        byte[] buffer = new byte[1024];
 
         try {
             int read;
-            while ((read = inputStream.read())!=-1) {
-                char readChar = (char)read;
-                if (readChar == '\r') {
-                    parse(content.toString());
-                    content.setLength(0);
-                } else {
-                    content.append(readChar);
+            while ((read = inputStream.read(buffer))!=-1) {
+
+                for (int i=0; i<read; i++) {
+                    char readChar = (char)buffer[i];
+                    if (readChar == '\r') {
+                        parse(content.toString());
+                        content.setLength(0);
+                    } else {
+                        content.append(readChar);
+                    }
                 }
+                
             }
         } catch (IOException e) {
         } finally {

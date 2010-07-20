@@ -244,6 +244,7 @@ public abstract class AbstractStreamProcessorTest {
                         processing.notifyAll();
                     }
                 }
+                public void onReceivingData(StreamingConnection connection) { }
             });
         connection.start();
 
@@ -293,6 +294,7 @@ public abstract class AbstractStreamProcessorTest {
                         processing.notifyAll();
                     }
                 }
+                public void onReceivingData(StreamingConnection connection) { }
             });
         connection.start();
 
@@ -342,6 +344,7 @@ public abstract class AbstractStreamProcessorTest {
                         processing.notifyAll();
                     }
                 }
+                public void onReceivingData(StreamingConnection connection) { }
             });
         connection.start();
 

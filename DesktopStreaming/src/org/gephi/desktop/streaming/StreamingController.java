@@ -36,6 +36,7 @@ import org.gephi.streaming.api.StreamingConnection;
 import org.gephi.streaming.api.StreamingConnectionStatusListener;
 import org.gephi.streaming.server.ServerController;
 import org.gephi.streaming.server.StreamingServer;
+import org.openide.DialogDescriptor;
 import org.openide.DialogDisplayer;
 import org.openide.NotifyDescriptor;
 import org.openide.util.Lookup;
@@ -49,8 +50,7 @@ import org.openide.util.lookup.ServiceProvider;
 public class StreamingController {
     
     private StreamingModel model;
-    private StreamingServerPanel serverPanel;
-    private StreamingClientPanel clientPanel;
+    private StreamingTopComponent component;
     
     public StreamingController() {
 
@@ -91,29 +91,90 @@ public class StreamingController {
             }
         }
     }
-    
-    public void setServerPanel(StreamingServerPanel panel) {
-        this.serverPanel = panel;
-    }
 
-    public void setClientPanel(StreamingClientPanel panel) {
-        this.clientPanel = panel;
+    public void setTopComponent(StreamingTopComponent component) {
+        this.component = component;
     }
 
     public void refreshModel() {
-        if (serverPanel!=null) {
-            serverPanel.refreshModel();
-        }
-        if (clientPanel!=null) {
-            clientPanel.refreshModel(model);
-        }
+        component.refreshModel(model);
     }
     
     public StreamingModel getStreamingModel() {
         return model;
     }
+
+    public void connectToStream() {
+        StreamingClientPanel clientPanel = new StreamingClientPanel();
+        final DialogDescriptor dd = new DialogDescriptor(clientPanel, "Connect to Stream");
+        Object result = DialogDisplayer.getDefault().notify(dd);
+        if (!result.equals(NotifyDescriptor.OK_OPTION)) {
+            return;
+        }
+        GraphStreamingEndpoint endpoint = clientPanel.getGraphStreamingEndpoint();
+        connectToStream(endpoint);
+    }
     
-    public void connectToStream(GraphStreamingEndpoint endpoint) {
+    public void disconnect(StreamingConnection connection) {
+        try {
+            if (!connection.isClosed()) {
+                connection.close();
+            }
+        } catch (IOException e) {
+            notifyError("Error disconnecting from connection "+connection.getUrl().toString(), e);
+        }
+    }
+    
+    public void startMaster() {
+        ProjectController projectController = Lookup.getDefault().lookup(ProjectController.class);
+        Project project = projectController.getCurrentProject();
+        if (project==null) {
+            //TODO: Invalid project
+            return;
+        }
+        
+        Workspace workspace = projectController.getCurrentWorkspace();
+        if (workspace==null) {
+            //TODO: Invalid workspace
+            return;
+        }
+        
+//        GraphController graphController = workspace.getLookup().lookup(GraphController.class);
+        GraphController graphController = Lookup.getDefault().lookup(GraphController.class);
+        Graph graph = graphController.getModel().getMixedGraph();
+
+        WorkspaceInformation wi = workspace.getLookup().lookup(WorkspaceInformation.class);
+        String context = "/"+wi.getName().replaceAll(" ", "").toLowerCase();
+        
+        StreamingServer server = Lookup.getDefault().lookup(StreamingServer.class);
+        ServerController serverController = new ServerController(graph);
+
+        server.register(serverController, context);
+
+        model.setServerContext(context);
+        model.setServerRunning(true);
+    }
+    
+    public void stopMaster() {
+        model.setServerRunning(false);
+        StreamingServer server = Lookup.getDefault().lookup(StreamingServer.class);
+        server.unregister(model.getServerContext());
+    }
+
+    private void notifyError(String userMessage, Throwable t) {
+        if (t instanceof OutOfMemoryError) {
+            return;
+        }
+        String message = message = t.toString();
+        NotifyDescriptor.Message msg =
+                new NotifyDescriptor.Message(
+                userMessage+"\n"+message,
+                NotifyDescriptor.WARNING_MESSAGE);
+        DialogDisplayer.getDefault().notify(msg);
+        //Logger.getLogger("").log(Level.WARNING, "", t.getCause());
+    }
+
+    private void connectToStream(GraphStreamingEndpoint endpoint) {
 
         // Get active graph instance - Project and Graph API
         ProjectController projectController = Lookup.getDefault().lookup(ProjectController.class);
@@ -141,83 +202,15 @@ public class StreamingController {
                         System.out.println("-- Stream report -----\n" +
                                 client.getReport().getText() + "--------");
                     }
+
+                public void onReceivingData(StreamingConnection connection) { }
                 });
 
-            model.getActiveConnections().add(connection);
-            refreshModel();
+            model.addConnection(connection, client.getReport());
 
         } catch (IOException ex) {
             notifyError("Unable to connect to stream " + endpoint.getUrl().toString(), ex);
             return;
         }
-    }
-    
-    public void disconnect(StreamingConnection connection) {
-        try {
-            if (!connection.isClosed()) {
-                connection.close();
-            }
-//            model.getActiveConnections().remove(connection);
-        } catch (IOException e) {
-            notifyError("Error disconnecting from connection "+connection.getUrl().toString(), e);
-        }
-        refreshModel();
-    }
-    
-    public void exposeWorkspaceAsStream() {
-        ProjectController projectController = Lookup.getDefault().lookup(ProjectController.class);
-        Project project = projectController.getCurrentProject();
-        if (project==null) {
-            //TODO: Invalid project
-            return;
-        }
-        
-        Workspace workspace = projectController.getCurrentWorkspace();
-        if (workspace==null) {
-            //TODO: Invalid workspace
-            return;
-        }
-        
-//        GraphController graphController = workspace.getLookup().lookup(GraphController.class);
-        GraphController graphController = Lookup.getDefault().lookup(GraphController.class);
-        Graph graph = graphController.getModel().getMixedGraph();
-
-        WorkspaceInformation wi = workspace.getLookup().lookup(WorkspaceInformation.class);
-        String context = "/"+wi.getName().replaceAll(" ", "").toLowerCase();
-        
-        StreamingServer server = Lookup.getDefault().lookup(StreamingServer.class);
-        ServerController serverController = new ServerController(graph);
-
-        server.register(serverController, context);
-
-        try {
-            server.start();
-        } catch (IOException e) {
-            notifyError("Error starting streaming server", e);
-        }
-
-        model.setServerContext(context);
-        model.setServerRunning(true);
-        refreshModel();
-    }
-    
-    public void stopServer() {
-        model.setServerRunning(false);
-        StreamingServer server = Lookup.getDefault().lookup(StreamingServer.class);
-        server.unregister(model.getServerContext());
-        refreshModel();
-    }
-
-    public void notifyError(String userMessage, Throwable t) {
-        if (t instanceof OutOfMemoryError) {
-            return;
-        }
-        String message = message = t.toString();
-        NotifyDescriptor.Message msg =
-                new NotifyDescriptor.Message(
-                userMessage+"\n"+message,
-                NotifyDescriptor.WARNING_MESSAGE);
-        DialogDisplayer.getDefault().notify(msg);
-        //Logger.getLogger("").log(Level.WARNING, "", t.getCause());
     }
 }

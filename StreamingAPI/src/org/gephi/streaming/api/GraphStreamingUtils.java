@@ -64,6 +64,8 @@ public class GraphStreamingUtils {
                 container.waitForDispatchAllEvents();
                 container.stop();
             }
+
+            public void onReceivingData(StreamingConnection connection) { }
         });
         
         return connection;
@@ -96,6 +98,8 @@ public class GraphStreamingUtils {
                 container.waitForDispatchAllEvents();
                 container.stop();
             }
+
+            public void onReceivingData(StreamingConnection connection) { }
         });
 
         return connection;

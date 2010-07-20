@@ -20,25 +20,69 @@ along with Gephi.  If not, see <http://www.gnu.org/licenses/>.
  */
 package org.gephi.desktop.streaming;
 
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
+import java.awt.Image;
+import java.awt.event.ActionEvent;
+import javax.swing.AbstractAction;
+import javax.swing.Action;
+import org.gephi.streaming.api.Report;
 
 import org.gephi.streaming.api.StreamingConnection;
+import org.openide.nodes.AbstractNode;
+import org.openide.nodes.Children;
+import org.openide.nodes.Node;
+import org.openide.util.ImageUtilities;
+import org.openide.util.Lookup;
 
 /**
  * @author panisson
  *
  */
 public class StreamingModel {
+
+    public static Image emptyImage = ImageUtilities.loadImage("org/gephi/desktop/streaming/empty.png", true);
     
     private boolean serverRunning;
     private String serverContext;
     
-    private final List<StreamingConnection> activeConnections = new ArrayList<StreamingConnection>();
+    private Children connectionChildren = new Children.Array();
 
-    public List<StreamingConnection> getActiveConnections() {
-        return activeConnections;
+    private Node masterNode;
+    private Node clientNode;
+    
+    public StreamingModel() {
+
+        final Action addConnectionAction = new AbstractAction("Connect to Stream") {
+
+            public void actionPerformed(ActionEvent e) {
+                StreamingController controller = Lookup.getDefault().lookup(StreamingController.class);
+                controller.connectToStream();
+            }
+        };
+
+        clientNode = new AbstractNode(connectionChildren) {
+            @Override
+            public Action[] getActions(boolean popup) {
+                return new Action[]{addConnectionAction};
+            }
+            @Override
+            public Image getIcon(int type) {
+                return emptyImage;
+            }
+
+            @Override
+            public Image getOpenedIcon(int i) {
+                return getIcon(i);
+            }
+        };
+        clientNode.setDisplayName("Client Connections");
+
+        masterNode = new StreamingMasterNode();
+    }
+
+    public void addConnection(StreamingConnection connection, Report report) {
+        StreamingConnectionNode node = new StreamingConnectionNode(connection, report);
+        connectionChildren.add(new Node[]{node});
+        
     }
 
     public boolean isServerRunning() {
@@ -63,6 +107,11 @@ public class StreamingModel {
         this.serverContext = serverContext;
     }
 
-    
-    
+    public Node getClientNode() {
+        return clientNode;
+    }
+
+    public Node getMasterNode() {
+        return masterNode;
+    }
 }

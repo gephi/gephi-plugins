@@ -34,16 +34,11 @@ import org.openide.util.Lookup;
  */
 public class StreamingClientPanel extends javax.swing.JPanel {
 
-    private StreamingController controller;
     private GraphStreamingEndpoint endpoint;
-    private DefaultTableModel tableModel;
     private ComboBoxModel streamTypeComboBoxModel;
 
     /** Creates new form StreamingClientPanel */
     public StreamingClientPanel() {
-        
-        tableModel = new DefaultTableModel();
-        tableModel.setColumnCount(2);
 
         streamTypeComboBoxModel = new DefaultComboBoxModel(getStreamTypes());
         // Default selected type is JSON
@@ -56,21 +51,13 @@ public class StreamingClientPanel extends javax.swing.JPanel {
         }
 
         initComponents();
-        controller = Lookup.getDefault().lookup(StreamingController.class);
-        controller.setClientPanel(this);
         
         endpoint = new GraphStreamingEndpoint();
         endpoint.setStreamType((StreamType)streamTypeComboBox.getSelectedItem());
     }
 
-    void refreshModel(StreamingModel model) {
-        while (tableModel.getRowCount() > 0) {
-            tableModel.removeRow(0);
-        }
-        for (StreamingConnection connection: model.getActiveConnections()) {
-            tableModel.addRow(new String[]{connection.getUrl().toString(),
-                connection.isClosed()?"Closed":"Streaming"});
-        }
+    public GraphStreamingEndpoint getGraphStreamingEndpoint() {
+        return endpoint;
     }
 
     private static StreamType[] getStreamTypes() {
@@ -107,10 +94,6 @@ public class StreamingClientPanel extends javax.swing.JPanel {
         return validationPanel;
      }
 
-     public GraphStreamingEndpoint getGraphStreamingEndpoint() {
-         return endpoint;
-     }
-
     /** This method is called from within the constructor to
      * initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is
@@ -124,8 +107,6 @@ public class StreamingClientPanel extends javax.swing.JPanel {
         streamUrlTextField = new javax.swing.JTextField();
         streamTypeLabel = new javax.swing.JLabel();
         streamTypeComboBox = new javax.swing.JComboBox();
-        connectButton = new javax.swing.JButton();
-        connectionsTable = new javax.swing.JTable();
 
         streamUrlLabel.setText(org.openide.util.NbBundle.getMessage(StreamingClientPanel.class, "StreamingClientPanel.streamUrlLabel.text")); // NOI18N
 
@@ -150,18 +131,6 @@ public class StreamingClientPanel extends javax.swing.JPanel {
             }
         });
 
-        connectButton.setText(org.openide.util.NbBundle.getMessage(StreamingClientPanel.class, "StreamingClientPanel.connectButton.text")); // NOI18N
-        connectButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                connectButtonActionPerformed(evt);
-            }
-        });
-
-        connectionsTable.setModel(tableModel);
-        connectionsTable.setAutoscrolls(false);
-        connectionsTable.setRowMargin(0);
-        connectionsTable.setTableHeader(null);
-
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -173,28 +142,21 @@ public class StreamingClientPanel extends javax.swing.JPanel {
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(streamTypeLabel)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(streamTypeComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 90, Short.MAX_VALUE)
-                        .addComponent(connectButton))
+                        .addComponent(streamTypeComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(streamUrlLabel))
                 .addContainerGap())
-            .addComponent(connectionsTable, javax.swing.GroupLayout.DEFAULT_SIZE, 400, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(streamUrlLabel)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(streamUrlTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(12, 12, 12)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(streamTypeLabel)
-                    .addComponent(streamTypeComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(connectButton))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(connectionsTable, javax.swing.GroupLayout.DEFAULT_SIZE, 14, Short.MAX_VALUE)
-                .addContainerGap())
+                    .addComponent(streamTypeComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -226,14 +188,8 @@ public class StreamingClientPanel extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_streamUrlTextFieldFocusLost
 
-    private void connectButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_connectButtonActionPerformed
-        controller.connectToStream(endpoint);
-    }//GEN-LAST:event_connectButtonActionPerformed
-
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton connectButton;
-    private javax.swing.JTable connectionsTable;
     private javax.swing.JComboBox streamTypeComboBox;
     private javax.swing.JLabel streamTypeLabel;
     private javax.swing.JLabel streamUrlLabel;

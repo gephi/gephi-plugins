@@ -109,6 +109,7 @@ public class GraphStreamingEventProcessorTest {
                         processing.notifyAll();
                     }
                 }
+                public void onReceivingData(StreamingConnection connection) { }
             });
         connection.start();
 
