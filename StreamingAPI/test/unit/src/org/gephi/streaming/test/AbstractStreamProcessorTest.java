@@ -246,7 +246,7 @@ public abstract class AbstractStreamProcessorTest {
                 }
                 public void onReceivingData(StreamingConnection connection) { }
             });
-        connection.start();
+        connection.asynchProcess();
 
         synchronized (processing) {
             try {
@@ -296,7 +296,7 @@ public abstract class AbstractStreamProcessorTest {
                 }
                 public void onReceivingData(StreamingConnection connection) { }
             });
-        connection.start();
+        connection.asynchProcess();
 
         synchronized (processing) {
             try {
@@ -346,7 +346,7 @@ public abstract class AbstractStreamProcessorTest {
                 }
                 public void onReceivingData(StreamingConnection connection) { }
             });
-        connection.start();
+        connection.asynchProcess();
 
         synchronized (processing) {
             try {

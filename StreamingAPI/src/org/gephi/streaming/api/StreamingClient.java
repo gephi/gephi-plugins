@@ -82,7 +82,7 @@ public class StreamingClient {
         if (statusListener!=null) {
             connection.addStreamingConnectionStatusListener(statusListener);
         }
-        connection.start();
+        connection.asynchProcess();
 
         final AtomicInteger counter = new AtomicInteger();
         GraphEventHandler eventHandler = new GraphEventHandler() {

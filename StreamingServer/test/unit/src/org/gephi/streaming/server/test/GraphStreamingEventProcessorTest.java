@@ -111,7 +111,7 @@ public class GraphStreamingEventProcessorTest {
                 }
                 public void onReceivingData(StreamingConnection connection) { }
             });
-        connection.start();
+        connection.asynchProcess();
 
         synchronized (processing) {
             try {

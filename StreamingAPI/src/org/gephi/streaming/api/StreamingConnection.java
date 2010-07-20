@@ -28,12 +28,11 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-
 /**
  *
  * @author panisson
  */
-public class StreamingConnection extends Thread {
+public class StreamingConnection {
     
     private final URL url;
     private final StreamReader streamProcessor;
@@ -49,33 +48,20 @@ public class StreamingConnection extends Thread {
         URLConnection connection = url.openConnection();
         connection.connect();
         inputStream = connection.getInputStream();
+
     }
     
     public URL getUrl() {
         return url;
     }
 
-    @Override
-    public void run() {
-
-        try {
-            
-            streamProcessor.processStream(inputStream);
-            
-        } catch (IOException e) {
-            // Exception during processing
-            e.printStackTrace();
-        } finally {
-            closed = true;
-
-            
-            synchronized (listeners) {
-                for (StreamingConnectionStatusListener listener: listeners)
-                    if (listener != null) {
-                        listener.onConnectionClosed(this);
-                    }
+    public void asynchProcess() {
+        new Thread("StreamingConnection") {
+            @Override
+            public void run() {
+                synchProcess();
             }
-        }
+        }.start();
     }
     
     public boolean isClosed() {
@@ -89,6 +75,27 @@ public class StreamingConnection extends Thread {
 
     public void addStreamingConnectionStatusListener(StreamingConnectionStatusListener listener) {
         this.listeners.add(listener);
+    }
+
+    public void synchProcess() {
+        try {
+
+            streamProcessor.processStream(inputStream);
+
+        } catch (IOException e) {
+            // Exception during processing
+            e.printStackTrace();
+        } finally {
+            closed = true;
+
+
+            synchronized (listeners) {
+                for (StreamingConnectionStatusListener listener: listeners)
+                    if (listener != null) {
+                        listener.onConnectionClosed(this);
+                    }
+            }
+        }
     }
 
 }
