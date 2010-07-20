@@ -7,7 +7,6 @@ import javax.swing.AbstractAction;
 import javax.swing.Action;
 import org.gephi.streaming.api.Report;
 import org.gephi.streaming.api.StreamingConnection;
-import org.gephi.streaming.api.StreamingConnectionStatusListener;
 import org.openide.nodes.AbstractNode;
 import org.openide.nodes.Children;
 import org.openide.util.Exceptions;
@@ -35,7 +34,8 @@ public class StreamingConnectionNode extends AbstractNode {
     public StreamingConnectionNode(final StreamingConnection connection, final Report report) {
         super(Children.LEAF);
         setDisplayName(connection.getUrl().toString());
-        connection.addStreamingConnectionStatusListener(new StreamingConnectionStatusListener() {
+        connection.addStatusListener(
+        new StreamingConnection.StatusListener() {
 
             public void onConnectionClosed(StreamingConnection connection) {
                 switchToClosed();

@@ -47,7 +47,7 @@ public class StreamingClient {
     }
 
     public StreamingConnection process(GraphStreamingEndpoint endpoint,
-                StreamingConnectionStatusListener statusListener) throws IOException {
+                StreamingConnection.StatusListener statusListener) throws IOException {
 
 
         GraphUpdaterEventHandler graphUpdaterHandler = new GraphUpdaterEventHandler(graph);
@@ -66,8 +66,8 @@ public class StreamingClient {
         reader.setReport(getReport());
 
         StreamingConnection connection = new StreamingConnection(endpoint.getUrl(), reader);
-        connection.addStreamingConnectionStatusListener(
-                new StreamingConnectionStatusListener() {
+        connection.addStatusListener(
+                new StreamingConnection.StatusListener() {
 
                 public void onConnectionClosed(StreamingConnection connection) {
                     container.waitForDispatchAllEvents();
@@ -80,7 +80,7 @@ public class StreamingClient {
                 public void onReceivingData(StreamingConnection connection) { }
             });
         if (statusListener!=null) {
-            connection.addStreamingConnectionStatusListener(statusListener);
+            connection.addStatusListener(statusListener);
         }
         connection.asynchProcess();
 

@@ -47,7 +47,6 @@ import org.gephi.streaming.api.StreamReaderFactory;
 import org.gephi.streaming.api.StreamWriter;
 import org.gephi.streaming.api.StreamWriterFactory;
 import org.gephi.streaming.api.StreamingConnection;
-import org.gephi.streaming.api.StreamingConnectionStatusListener;
 import org.gephi.streaming.api.event.ElementType;
 import org.gephi.streaming.api.event.EventType;
 import org.gephi.streaming.api.event.GraphEvent;
@@ -236,8 +235,8 @@ public abstract class AbstractStreamProcessorTest {
         StreamingConnection connection = new StreamingConnection(url, streamReader);
 
         final AtomicBoolean processing = new AtomicBoolean(true);
-        connection.addStreamingConnectionStatusListener(
-            new StreamingConnectionStatusListener() {
+        connection.addStatusListener(
+            new StreamingConnection.StatusListener() {
                 public void onConnectionClosed(StreamingConnection connection) {
                     processing.set(false);
                     synchronized (processing) {
@@ -286,8 +285,8 @@ public abstract class AbstractStreamProcessorTest {
         StreamingConnection connection = new StreamingConnection(url, streamReader);
 
         final AtomicBoolean processing = new AtomicBoolean(true);
-        connection.addStreamingConnectionStatusListener(
-            new StreamingConnectionStatusListener() {
+        connection.addStatusListener(
+            new StreamingConnection.StatusListener() {
                 public void onConnectionClosed(StreamingConnection connection) {
                     processing.set(false);
                     synchronized (processing) {
@@ -336,8 +335,8 @@ public abstract class AbstractStreamProcessorTest {
         StreamingConnection connection = new StreamingConnection(url, streamReader);
 
         final AtomicBoolean processing = new AtomicBoolean(true);
-        connection.addStreamingConnectionStatusListener(
-            new StreamingConnectionStatusListener() {
+        connection.addStatusListener(
+            new StreamingConnection.StatusListener() {
                 public void onConnectionClosed(StreamingConnection connection) {
                     processing.set(false);
                     synchronized (processing) {

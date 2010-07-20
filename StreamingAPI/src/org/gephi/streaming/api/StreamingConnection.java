@@ -37,8 +37,8 @@ public class StreamingConnection {
     private final URL url;
     private final StreamReader streamProcessor;
     private InputStream inputStream;
-    private final List<StreamingConnectionStatusListener> listeners =
-            Collections.synchronizedList(new ArrayList<StreamingConnectionStatusListener>());
+    private final List<StatusListener> listeners =
+            Collections.synchronizedList(new ArrayList<StatusListener>());
     private boolean closed = false;
     
     public StreamingConnection(final URL url, final StreamReader streamProcessor) throws IOException {
@@ -73,7 +73,7 @@ public class StreamingConnection {
         closed = true;
     }
 
-    public void addStreamingConnectionStatusListener(StreamingConnectionStatusListener listener) {
+    public void addStatusListener(StatusListener listener) {
         this.listeners.add(listener);
     }
 
@@ -90,12 +90,17 @@ public class StreamingConnection {
 
 
             synchronized (listeners) {
-                for (StreamingConnectionStatusListener listener: listeners)
+                for (StatusListener listener: listeners)
                     if (listener != null) {
                         listener.onConnectionClosed(this);
                     }
             }
         }
+    }
+
+    public interface StatusListener {
+        public void onConnectionClosed(StreamingConnection connection);
+        public void onReceivingData(StreamingConnection connection);
     }
 
 }

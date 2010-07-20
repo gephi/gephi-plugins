@@ -41,7 +41,6 @@ import org.gephi.streaming.api.GraphUpdaterEventHandler;
 import org.gephi.streaming.api.StreamWriter;
 import org.gephi.streaming.api.StreamWriterFactory;
 import org.gephi.streaming.api.StreamingConnection;
-import org.gephi.streaming.api.StreamingConnectionStatusListener;
 import org.gephi.streaming.api.event.GraphEvent;
 import org.gephi.streaming.server.FilteredGraphEventHandler;
 import org.gephi.streaming.server.GraphChangeListener;
@@ -101,8 +100,8 @@ public class GraphStreamingEventProcessorTest {
                 GraphStreamingUtils.connectToStream(url, streamType, composite);
         
         final AtomicBoolean processing = new AtomicBoolean(true);
-        connection.addStreamingConnectionStatusListener(
-            new StreamingConnectionStatusListener() {
+        connection.addStatusListener(
+            new StreamingConnection.StatusListener() {
                 public void onConnectionClosed(StreamingConnection connection) {
                     processing.set(false);
                     synchronized (processing) {

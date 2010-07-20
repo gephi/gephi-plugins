@@ -57,8 +57,8 @@ public class GraphStreamingUtils {
 
         StreamingConnection connection = new StreamingConnection(url, reader);
 
-        connection.addStreamingConnectionStatusListener(
-                new StreamingConnectionStatusListener() {
+        connection.addStatusListener(
+                new StreamingConnection.StatusListener() {
 
             public void onConnectionClosed(StreamingConnection connection) {
                 container.waitForDispatchAllEvents();
@@ -91,8 +91,8 @@ public class GraphStreamingUtils {
 
         StreamingConnection connection = new StreamingConnection(url, reader);
 
-        connection.addStreamingConnectionStatusListener(
-                new StreamingConnectionStatusListener() {
+        connection.addStatusListener(
+                new StreamingConnection.StatusListener() {
 
             public void onConnectionClosed(StreamingConnection connection) {
                 container.waitForDispatchAllEvents();

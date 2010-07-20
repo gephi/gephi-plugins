@@ -33,7 +33,6 @@ import org.gephi.project.api.WorkspaceListener;
 import org.gephi.streaming.api.GraphStreamingEndpoint;
 import org.gephi.streaming.api.StreamingClient;
 import org.gephi.streaming.api.StreamingConnection;
-import org.gephi.streaming.api.StreamingConnectionStatusListener;
 import org.gephi.streaming.server.ServerController;
 import org.gephi.streaming.server.StreamingServer;
 import org.openide.DialogDescriptor;
@@ -194,7 +193,7 @@ public class StreamingController {
         final StreamingClient client = new StreamingClient(graph);
         try {
             StreamingConnection connection = client.process(endpoint,
-                new StreamingConnectionStatusListener() {
+                new StreamingConnection.StatusListener() {
                     public void onConnectionClosed(StreamingConnection connection) {
                         disconnect(connection);
 
