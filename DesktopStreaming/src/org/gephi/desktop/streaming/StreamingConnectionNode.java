@@ -7,10 +7,14 @@ import javax.swing.AbstractAction;
 import javax.swing.Action;
 import org.gephi.streaming.api.Report;
 import org.gephi.streaming.api.StreamingConnection;
+import org.openide.DialogDescriptor;
+import org.openide.DialogDisplayer;
+import org.openide.NotifyDescriptor;
 import org.openide.nodes.AbstractNode;
 import org.openide.nodes.Children;
 import org.openide.util.Exceptions;
 import org.openide.util.ImageUtilities;
+import org.openide.util.NbBundle;
 
 public class StreamingConnectionNode extends AbstractNode {
 
@@ -21,10 +25,10 @@ public class StreamingConnectionNode extends AbstractNode {
         RECEIVING
     }
 
-    public static Image connectedImage = ImageUtilities.loadImage("org/gephi/desktop/streaming/dot_connected.png", true);
-    public static Image disconnectedImage = ImageUtilities.loadImage("org/gephi/desktop/streaming/dot_disconnected.png", true);
-    public static Image sendrecImage = ImageUtilities.loadImage("org/gephi/desktop/streaming/dot_sendrec.png", true);
-    public static Image errorImage = ImageUtilities.loadImage("org/gephi/desktop/streaming/dot_error.png", true);
+    public static Image connectedImage = ImageUtilities.loadImage("org/gephi/desktop/streaming/resources/dot_connected.png", true);
+    public static Image disconnectedImage = ImageUtilities.loadImage("org/gephi/desktop/streaming/resources/dot_disconnected.png", true);
+    public static Image sendrecImage = ImageUtilities.loadImage("org/gephi/desktop/streaming/resources/dot_sendrec.png", true);
+    public static Image errorImage = ImageUtilities.loadImage("org/gephi/desktop/streaming/resources/dot_error.png", true);
 
     private Image icon;
     private Action[] actions;
@@ -69,8 +73,15 @@ public class StreamingConnectionNode extends AbstractNode {
         showReportAction = new AbstractAction("Show Report") {
 
             public void actionPerformed(ActionEvent e) {
-                System.out.println(report.getText());
-            }
+                ReportPanel reportPanel = new ReportPanel();
+                reportPanel.setData(report);
+                DialogDescriptor dd = new DialogDescriptor(reportPanel, NbBundle.getMessage(StreamingController.class, "ReportPanel.title"));
+                if (!DialogDisplayer.getDefault().notify(dd).equals(NotifyDescriptor.OK_OPTION)) {
+                    reportPanel.destroy();
+                    return;
+                }
+                reportPanel.destroy();
+                }
         };
 
         actions = new Action[]{closeConnectionAction, showReportAction};

@@ -5,17 +5,16 @@
 package org.gephi.desktop.streaming;
 
 import java.awt.Image;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseListener;
 import java.util.logging.Logger;
-import org.gephi.streaming.api.GraphStreamingEndpoint;
+import javax.swing.Action;
 import org.openide.nodes.Node;
 import org.openide.util.NbBundle;
 import org.openide.windows.TopComponent;
 import org.openide.windows.WindowManager;
 import org.openide.util.ImageUtilities;
 import org.netbeans.api.settings.ConvertAsProperties;
-import org.openide.DialogDescriptor;
-import org.openide.DialogDisplayer;
-import org.openide.NotifyDescriptor;
 import org.openide.explorer.ExplorerManager;
 import org.openide.explorer.ExplorerUtils;
 import org.openide.explorer.view.BeanTreeView;
@@ -32,18 +31,21 @@ public final class StreamingTopComponent extends TopComponent implements Explore
 
     private static StreamingTopComponent instance;
     /** path to the icon used by the component and its open action */
-    static final String ICON_PATH = "org/gephi/desktop/streaming/media-stream.png";
+    static final String ICON_PATH = "org/gephi/desktop/streaming/resources/media-stream.png";
     private static final String PREFERRED_ID = "StreamingTopComponent";
 
     StreamingController controller;
 
-    public static Image connectedImage = ImageUtilities.loadImage("org/gephi/desktop/streaming/dot_connected.png", true);
-    public static Image disconnectedImage = ImageUtilities.loadImage("org/gephi/desktop/streaming/dot_disconnected.png", true);
+    public static Image connectedImage = ImageUtilities.loadImage("org/gephi/desktop/streaming/resources/dot_connected.png", true);
+    public static Image disconnectedImage = ImageUtilities.loadImage("org/gephi/desktop/streaming/resources/dot_disconnected.png", true);
 
     private Children clientMasterChildren;
-    private BeanTreeView tree;
+    private StreamingTreeView tree;
 
     public StreamingTopComponent() {
+
+        tree = new StreamingTreeView();
+
         initComponents();
         setName(NbBundle.getMessage(StreamingTopComponent.class, "CTL_StreamingTopComponent"));
         setToolTipText(NbBundle.getMessage(StreamingTopComponent.class, "HINT_StreamingTopComponent"));
@@ -55,10 +57,22 @@ public final class StreamingTopComponent extends TopComponent implements Explore
         clientMasterChildren = new Children.Array();
 
         associateLookup (ExplorerUtils.createLookup(mgr, getActionMap()));
-        AbstractNode topnode = new AbstractNode(clientMasterChildren);
+        AbstractNode topnode = new AbstractNode(clientMasterChildren) {
+            @Override
+            public Action[] getActions(boolean context) {
+                return new Action[0];
+            }
+        };
         mgr.setRootContext(topnode);
-        tree = (BeanTreeView)treeView;
-        tree.setRootVisible(false);
+    }
+
+    private class StreamingTreeView extends BeanTreeView {
+
+        public StreamingTreeView() {
+            super();
+            setRootVisible(false);
+            tree.addMouseListener(new MouseAdapter() {});
+        }
     }
 
     public synchronized void refreshModel(StreamingModel model) {
@@ -68,6 +82,7 @@ public final class StreamingTopComponent extends TopComponent implements Explore
         clientMasterChildren.remove(clientMasterChildren.getNodes());
         clientMasterChildren.add(new Node[]{clientNode, masterNode});
         tree.expandNode(clientNode);
+        tree.expandNode(masterNode);
 
     }
 
@@ -85,7 +100,7 @@ public final class StreamingTopComponent extends TopComponent implements Explore
         removeButton = new javax.swing.JButton();
         settingsButton = new javax.swing.JButton();
         separator = new javax.swing.JSeparator();
-        treeView = new BeanTreeView();
+        javax.swing.JScrollPane treeView = tree;
 
         setLayout(new java.awt.GridBagLayout());
 
@@ -152,7 +167,7 @@ public final class StreamingTopComponent extends TopComponent implements Explore
     }// </editor-fold>//GEN-END:initComponents
 
     private void settingsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_settingsActionPerformed
-        
+        controller.setSettings();
     }//GEN-LAST:event_settingsActionPerformed
 
     private void addActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addActionPerformed
@@ -165,7 +180,6 @@ public final class StreamingTopComponent extends TopComponent implements Explore
     private javax.swing.JSeparator separator;
     private javax.swing.JButton settingsButton;
     private javax.swing.JPanel topPanel;
-    private javax.swing.JScrollPane treeView;
     // End of variables declaration//GEN-END:variables
     /**
      * Gets default instance. Do not use directly: reserved for *.settings files only,

@@ -32,7 +32,6 @@ import java.util.logging.Logger;
 import org.gephi.streaming.api.GraphEventHandler;
 import org.gephi.streaming.api.Issue;
 import org.gephi.streaming.api.StreamReader;
-import org.gephi.streaming.api.StreamingConnection.StatusListener;
 import org.gephi.streaming.api.event.ElementType;
 import org.gephi.streaming.api.event.EventType;
 import org.gephi.streaming.api.event.GraphEventBuilder;

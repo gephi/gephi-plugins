@@ -38,6 +38,7 @@ import org.gephi.streaming.server.StreamingServer;
 import org.openide.DialogDescriptor;
 import org.openide.DialogDisplayer;
 import org.openide.NotifyDescriptor;
+import org.openide.util.Exceptions;
 import org.openide.util.Lookup;
 import org.openide.util.lookup.ServiceProvider;
 
@@ -112,6 +113,29 @@ public class StreamingController {
         }
         GraphStreamingEndpoint endpoint = clientPanel.getGraphStreamingEndpoint();
         connectToStream(endpoint);
+    }
+
+    public void setSettings() {
+        StreamingServer server = Lookup.getDefault().lookup(StreamingServer.class);
+
+        StreamingSettingsPanel settingsPanel = new StreamingSettingsPanel(server);
+        settingsPanel.setup();
+        final DialogDescriptor dd = new DialogDescriptor(settingsPanel, "Settings");
+        Object result = DialogDisplayer.getDefault().notify(dd);
+        if (!result.equals(NotifyDescriptor.OK_OPTION)) {
+            return;
+        }
+        settingsPanel.unsetup();
+
+        if (server.isStarted()) {
+            // TODO: show confirmation dialog before stop/start
+            try {
+                server.stop();
+                server.start();
+            } catch (IOException ex) {
+                Exceptions.printStackTrace(ex);
+            }
+        }
     }
     
     public void disconnect(StreamingConnection connection) {

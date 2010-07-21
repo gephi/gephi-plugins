@@ -107,4 +107,8 @@ public class BasicAuthenticationFilter implements AuthenticationFilter {
         this.enabled = enabled;
     }
 
+    public boolean isAuthenticationEnabled() {
+        return enabled;
+    }
+
 }

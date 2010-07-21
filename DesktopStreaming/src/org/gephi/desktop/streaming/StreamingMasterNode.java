@@ -18,7 +18,7 @@ public class StreamingMasterNode extends AbstractNode {
 
     public StreamingMasterNode() {
         super(Children.LEAF);
-        setDisplayName("Master");
+        setDisplayName("Master Server");
 
         masterStarted = false;
         icon = StreamingTopComponent.disconnectedImage;

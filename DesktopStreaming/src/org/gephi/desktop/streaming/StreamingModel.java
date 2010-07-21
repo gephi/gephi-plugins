@@ -45,6 +45,7 @@ public class StreamingModel {
     private String serverContext;
     
     private Children connectionChildren = new Children.Array();
+    private Children masterChildren = new Children.Array();
 
     private Node masterNode;
     private Node clientNode;
@@ -73,10 +74,34 @@ public class StreamingModel {
             public Image getOpenedIcon(int i) {
                 return getIcon(i);
             }
+            @Override
+            public String getHtmlDisplayName() {
+                return "<b>Client<b>";
+            }
         };
         clientNode.setDisplayName("Client Connections");
 
-        masterNode = new StreamingMasterNode();
+        masterNode = new AbstractNode(masterChildren) {
+            @Override
+            public Action[] getActions(boolean popup) {
+                return new Action[]{};
+            }
+            @Override
+            public Image getIcon(int type) {
+                return emptyImage;
+            }
+            @Override
+            public Image getOpenedIcon(int i) {
+                return getIcon(i);
+            }
+            @Override
+            public String getHtmlDisplayName() {
+                return "<b>Master<b>";
+            }
+        };
+        masterNode.setDisplayName("Master");
+
+        masterChildren.add(new Node[]{new StreamingMasterNode()});
     }
 
     public void addConnection(StreamingConnection connection, Report report) {

@@ -36,6 +36,13 @@ public interface AuthenticationFilter {
      * false to disable it
      */
     public void setAuthenticationEnabled(boolean enabled);
+
+    /**
+     * This is used to verify if the filter is enabled
+     *
+     * @return true if the filter is enabled, false otherwise
+     */
+    public boolean isAuthenticationEnabled();
     
     /**
      * This is used to get the user currently configured in this 
