@@ -7,6 +7,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
+import org.gephi.desktop.streaming.StreamingModel.ClientNode;
 import org.gephi.streaming.api.Report;
 import org.gephi.streaming.api.StreamingConnection;
 import org.openide.DialogDescriptor;
@@ -34,6 +35,7 @@ public class StreamingConnectionNode extends AbstractNode {
 
     private Action closeConnectionAction;
     private Action showReportAction;
+    private Action removeFromViewAction;
     private ConnectionState state;
     private Timer timer;
 
@@ -85,6 +87,14 @@ public class StreamingConnectionNode extends AbstractNode {
                 }
         };
 
+        removeFromViewAction = new AbstractAction("Remove from view") {
+
+            public void actionPerformed(ActionEvent e) {
+                ClientNode parent = (ClientNode)getParentNode();
+                parent.removeConnectionNode(StreamingConnectionNode.this);
+            }
+        };
+
         if (!connection.isClosed()) {
             state = ConnectionState.CONNECTED;
         } else {
@@ -113,7 +123,7 @@ public class StreamingConnectionNode extends AbstractNode {
         if (state != ConnectionState.CLOSED) {
             return new Action[]{closeConnectionAction, showReportAction};
         } else {
-            return new Action[]{showReportAction};
+            return new Action[]{showReportAction, removeFromViewAction};
         }
     }
 

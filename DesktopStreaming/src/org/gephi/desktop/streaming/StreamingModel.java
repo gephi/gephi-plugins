@@ -46,7 +46,6 @@ public class StreamingModel {
     private boolean serverRunning;
     private String serverContext;
     
-    private Children clientChildren = new Children.Array();
     private Children masterChildren = new Children.Array();
 
     private Node masterNode;
@@ -62,8 +61,15 @@ public class StreamingModel {
 
     public void addConnection(StreamingConnection connection, Report report) {
         StreamingConnectionNode node = new StreamingConnectionNode(connection, report);
-        clientChildren.add(new Node[]{node});
-        
+        addConnectionNode(node);
+    }
+    
+    public void addConnectionNode(StreamingConnectionNode node) {
+        clientNode.getChildren().add(new Node[]{node});
+    }
+
+    public void removeConnectionNode(StreamingConnectionNode node) {
+        clientNode.getChildren().remove(new Node[]{node});
     }
 
     public boolean isServerRunning() {
@@ -96,12 +102,12 @@ public class StreamingModel {
         return masterNode;
     }
 
-    private class ClientNode extends AbstractNode {
+    public class ClientNode extends AbstractNode {
 
         private final Action addConnectionAction;
 
         public ClientNode() {
-            super(clientChildren);
+            super(new Children.Array());
             setDisplayName("Client");
 
             addConnectionAction = new AbstractAction("Connect to Stream") {
@@ -132,6 +138,14 @@ public class StreamingModel {
         @Override
         public String getHtmlDisplayName() {
             return "<b>Client<b>";
+        }
+
+        public void addConnectionNode(StreamingConnectionNode node) {
+            getChildren().add(new Node[]{node});
+        }
+
+        public void removeConnectionNode(StreamingConnectionNode node) {
+            getChildren().remove(new Node[]{node});
         }
     }
 
