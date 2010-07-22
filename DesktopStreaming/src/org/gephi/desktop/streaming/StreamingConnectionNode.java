@@ -25,17 +25,14 @@ public class StreamingConnectionNode extends AbstractNode {
         RECEIVING
     }
 
-    public static Image connectedImage = ImageUtilities.loadImage("org/gephi/desktop/streaming/resources/dot_connected.png", true);
-    public static Image disconnectedImage = ImageUtilities.loadImage("org/gephi/desktop/streaming/resources/dot_disconnected.png", true);
-    public static Image sendrecImage = ImageUtilities.loadImage("org/gephi/desktop/streaming/resources/dot_sendrec.png", true);
-    public static Image errorImage = ImageUtilities.loadImage("org/gephi/desktop/streaming/resources/dot_error.png", true);
-
-    private Image icon;
-    private Action[] actions;
+    private static Image connectedImage = ImageUtilities.loadImage("org/gephi/desktop/streaming/resources/dot_connected.png", true);
+    private static Image closedImage = ImageUtilities.loadImage("org/gephi/desktop/streaming/resources/dot_disconnected.png", true);
+    private static Image sendrecImage = ImageUtilities.loadImage("org/gephi/desktop/streaming/resources/dot_sendrec.png", true);
+    private static Image errorImage = ImageUtilities.loadImage("org/gephi/desktop/streaming/resources/dot_error.png", true);
 
     private Action closeConnectionAction;
     private Action showReportAction;
-    private ConnectionState lastState;
+    private ConnectionState state;
 
     public StreamingConnectionNode(final StreamingConnection connection, final Report report) {
         super(Children.LEAF);
@@ -44,28 +41,28 @@ public class StreamingConnectionNode extends AbstractNode {
         new StreamingConnection.StatusListener() {
 
             public void onConnectionClosed(StreamingConnection connection) {
-                switchToClosed();
+                setState(ConnectionState.CLOSED);
             }
             
             public void onDataReceived(StreamingConnection connection) {
-                switchToReceiving();
+                setState(ConnectionState.RECEIVING);
             }
 
             public void onError(StreamingConnection connection) {
-                switchToError();
+                setState(ConnectionState.ERROR);
             }
         });
 
         closeConnectionAction = new AbstractAction("Close connection") {
 
             public void actionPerformed(ActionEvent e) {
-                if (lastState!=ConnectionState.CLOSED) {
+                if (state!=ConnectionState.CLOSED) {
                     try {
                         connection.close();
                     } catch (IOException ex) {
                         Exceptions.printStackTrace(ex);
                     }
-                    switchToClosed();
+                    setState(ConnectionState.CLOSED);
                 }
             }
         };
@@ -84,20 +81,22 @@ public class StreamingConnectionNode extends AbstractNode {
                 }
         };
 
-        actions = new Action[]{closeConnectionAction, showReportAction};
-
         if (!connection.isClosed()) {
-            lastState = ConnectionState.CONNECTED;
-            icon = connectedImage;
+            state = ConnectionState.CONNECTED;
         } else {
-            lastState = ConnectionState.CLOSED;
-            icon = disconnectedImage;
+            state = ConnectionState.CLOSED;
         }
     }
 
     @Override
     public Image getIcon(int type) {
-        return icon;
+        switch (state) {
+            case CONNECTED: return connectedImage;
+            case RECEIVING: return sendrecImage;
+            case ERROR: return errorImage;
+            case CLOSED: return closedImage;
+            default: return closedImage;
+        }
     }
 
     @Override
@@ -107,52 +106,38 @@ public class StreamingConnectionNode extends AbstractNode {
 
     @Override
     public Action[] getActions(boolean popup) {
-        return actions;
-    }
-
-    private void switchToClosed() {
-        if (lastState!=ConnectionState.CLOSED) {
-            lastState = ConnectionState.CLOSED;
-            icon = disconnectedImage;
-            fireIconChange();
-            actions = new Action[]{showReportAction};
+        if (state != ConnectionState.CLOSED) {
+            return new Action[]{closeConnectionAction, showReportAction};
+        } else {
+            return new Action[]{showReportAction};
         }
     }
 
-    private void switchToReceiving() {
-        if (lastState!=ConnectionState.RECEIVING) {
-            lastState = ConnectionState.RECEIVING;
-            icon = sendrecImage;
-            fireIconChange();
-            actions = new Action[]{closeConnectionAction, showReportAction};
+    private void setState(ConnectionState newstate) {
+        if (newstate == state) return;
+        if (state == ConnectionState.CLOSED) return;
 
-            new Thread(){
-                @Override
-                public void run() {
-                    try {
-                        Thread.sleep(100);
-                    } catch (InterruptedException ex) {}
-                    switchToConnected();
-                }
-            }.start();
-        }
-    }
+        switch (newstate) {
+            case CONNECTED:
+            case ERROR:
+            case CLOSED:
+                 state = newstate;
+                 fireIconChange();
+                 break;
+            case RECEIVING:
+                state = newstate;
+                fireIconChange();
 
-    private void switchToConnected() {
-        if (lastState!=ConnectionState.CONNECTED && lastState!=ConnectionState.CLOSED) {
-            lastState = ConnectionState.CONNECTED;
-            icon = connectedImage;
-            fireIconChange();
-            actions = new Action[]{closeConnectionAction, showReportAction};
-        }
-    }
-
-        private void switchToError() {
-        if (lastState!=ConnectionState.ERROR && lastState!=ConnectionState.CLOSED) {
-            lastState = ConnectionState.ERROR;
-            icon = errorImage;
-            fireIconChange();
-            actions = new Action[]{closeConnectionAction, showReportAction};
+                new Thread(){
+                    @Override
+                    public void run() {
+                        try {
+                            Thread.sleep(100);
+                        } catch (InterruptedException ex) {}
+                        setState(ConnectionState.CONNECTED);
+                    }
+                }.start();
+                break;
         }
     }
 }

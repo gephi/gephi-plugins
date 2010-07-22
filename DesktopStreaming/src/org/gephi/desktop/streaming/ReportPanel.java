@@ -74,12 +74,13 @@ public class ReportPanel extends javax.swing.JPanel {
     public void setData(Report report) {
         fillIssues(report);
         fillReport(report);
+        fillStats(report);
     }
 
     private void fillIssues(Report report) {
         final List<Issue> issues = report.getIssues();
         if (issues.isEmpty()) {
-            JLabel label = new JLabel("No issue found during import");
+            JLabel label = new JLabel("No issue found");
             label.setHorizontalAlignment(SwingConstants.CENTER);
             tab1ScrollPane.setViewportView(label);
         } else {
@@ -129,6 +130,17 @@ public class ReportPanel extends javax.swing.JPanel {
         }
     }
 
+    private void fillStats(final Report report) {
+        //TODO: Source
+        //sourceLabel.setText(
+
+        // TODO: node and edge count, event count
+        int nodeCount = report.getEventCounter();
+        int edgeCount = report.getEventCounter();
+        nodeCountLabel.setText("" + nodeCount);
+        edgeCountLabel.setText("" + edgeCount);
+    }
+
     public void destroy() {
         fillingThreads.interrupt();
     }
@@ -157,10 +169,6 @@ public class ReportPanel extends javax.swing.JPanel {
         labelEdgeCount = new javax.swing.JLabel();
         nodeCountLabel = new javax.swing.JLabel();
         edgeCountLabel = new javax.swing.JLabel();
-        dynamicLabel = new javax.swing.JLabel();
-        hierarchicalLabel = new javax.swing.JLabel();
-        labelHierarchical = new javax.swing.JLabel();
-        labelDynamic = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
 
         labelSrc.setText(org.openide.util.NbBundle.getMessage(ReportPanel.class, "ReportPanel.labelSrc.text")); // NOI18N
@@ -217,39 +225,6 @@ public class ReportPanel extends javax.swing.JPanel {
         gridBagConstraints.insets = new java.awt.Insets(0, 10, 10, 0);
         jPanel1.add(edgeCountLabel, gridBagConstraints);
 
-        dynamicLabel.setText(org.openide.util.NbBundle.getMessage(ReportPanel.class, "ReportPanel.dynamicLabel.text")); // NOI18N
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 2;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(0, 10, 6, 0);
-        jPanel1.add(dynamicLabel, gridBagConstraints);
-
-        hierarchicalLabel.setText(org.openide.util.NbBundle.getMessage(ReportPanel.class, "ReportPanel.hierarchicalLabel.text")); // NOI18N
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 3;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 0);
-        jPanel1.add(hierarchicalLabel, gridBagConstraints);
-
-        labelHierarchical.setText(org.openide.util.NbBundle.getMessage(ReportPanel.class, "ReportPanel.labelHierarchical.text")); // NOI18N
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 3;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        jPanel1.add(labelHierarchical, gridBagConstraints);
-
-        labelDynamic.setText(org.openide.util.NbBundle.getMessage(ReportPanel.class, "ReportPanel.labelDynamic.text")); // NOI18N
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 2;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.insets = new java.awt.Insets(0, 0, 6, 0);
-        jPanel1.add(labelDynamic, gridBagConstraints);
-
         jLabel1.setText(org.openide.util.NbBundle.getMessage(ReportPanel.class, "ReportPanel.jLabel1.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -266,7 +241,7 @@ public class ReportPanel extends javax.swing.JPanel {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(tabbedPane, javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(tabbedPane, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 843, Short.MAX_VALUE)
                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
                         .addComponent(labelSrc)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -291,22 +266,16 @@ public class ReportPanel extends javax.swing.JPanel {
                     .addGroup(layout.createSequentialGroup()
                         .addGap(79, 79, 79)
                         .addComponent(processorPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 25, Short.MAX_VALUE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel dynamicLabel;
     private javax.swing.JLabel edgeCountLabel;
-    private javax.swing.JLabel hierarchicalLabel;
     private org.netbeans.swing.outline.Outline issuesOutline;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JLabel labelDynamic;
     private javax.swing.JLabel labelEdgeCount;
-    private javax.swing.JLabel labelHierarchical;
     private javax.swing.JLabel labelNodeCount;
     private javax.swing.JLabel labelSrc;
     private javax.swing.JLabel nodeCountLabel;

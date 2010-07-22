@@ -1,21 +1,30 @@
 /*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
+Copyright 2008-2010 Gephi
+Authors : Mathieu Bastian <mathieu.bastian@gephi.org>
+Website : http://www.gephi.org
 
-/*
- * StreamingSettingsPanel.java
- *
- * Created on Jul 21, 2010, 4:02:57 PM
- */
+This file is part of Gephi.
 
+Gephi is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+Gephi is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with Gephi.  If not, see <http://www.gnu.org/licenses/>.
+*/
 package org.gephi.desktop.streaming;
 
-import java.io.IOException;
 import org.gephi.streaming.server.AuthenticationFilter;
 import org.gephi.streaming.server.StreamingServer;
-import org.openide.util.Exceptions;
-import org.openide.util.Lookup;
+import org.netbeans.validation.api.builtin.Validators;
+import org.netbeans.validation.api.ui.ValidationGroup;
+import org.netbeans.validation.api.ui.ValidationPanel;
 
 /**
  *
@@ -30,6 +39,20 @@ public class StreamingSettingsPanel extends javax.swing.JPanel {
         initComponents();
         this.server = server;
     }
+
+     public static ValidationPanel createValidationPanel(final StreamingSettingsPanel innerPanel) {
+        ValidationPanel validationPanel = new ValidationPanel();
+        if (innerPanel == null) {
+            throw new NullPointerException();
+        }
+        validationPanel.setInnerComponent(innerPanel);
+
+        ValidationGroup group = validationPanel.getValidationGroup();
+        group.add(innerPanel.portTextField, Validators.REQUIRE_VALID_INTEGER);
+        group.add(innerPanel.sslPortTextField, Validators.REQUIRE_VALID_INTEGER);
+
+        return validationPanel;
+     }
 
     public void setup() {
          int port = server.getPort();

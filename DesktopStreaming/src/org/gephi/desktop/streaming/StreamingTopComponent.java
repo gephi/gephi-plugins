@@ -1,14 +1,28 @@
 /*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
+Copyright 2008 WebAtlas
+Authors : Mathieu Bastian, Mathieu Jacomy, Julian Bilcke
+Website : http://www.gephi.org
+
+This file is part of Gephi.
+
+Gephi is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+Gephi is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with Gephi.  If not, see <http://www.gnu.org/licenses/>.
  */
 package org.gephi.desktop.streaming;
 
-import java.awt.Image;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseListener;
 import java.util.logging.Logger;
 import javax.swing.Action;
+import javax.swing.SwingUtilities;
 import org.openide.nodes.Node;
 import org.openide.util.NbBundle;
 import org.openide.windows.TopComponent;
@@ -34,11 +48,7 @@ public final class StreamingTopComponent extends TopComponent implements Explore
     static final String ICON_PATH = "org/gephi/desktop/streaming/resources/media-stream.png";
     private static final String PREFERRED_ID = "StreamingTopComponent";
 
-    StreamingController controller;
-
-    public static Image connectedImage = ImageUtilities.loadImage("org/gephi/desktop/streaming/resources/dot_connected.png", true);
-    public static Image disconnectedImage = ImageUtilities.loadImage("org/gephi/desktop/streaming/resources/dot_disconnected.png", true);
-
+    private StreamingController controller;
     private Children clientMasterChildren;
     private StreamingTreeView tree;
 
@@ -71,7 +81,6 @@ public final class StreamingTopComponent extends TopComponent implements Explore
         public StreamingTreeView() {
             super();
             setRootVisible(false);
-            tree.addMouseListener(new MouseAdapter() {});
         }
     }
 
@@ -167,11 +176,20 @@ public final class StreamingTopComponent extends TopComponent implements Explore
     }// </editor-fold>//GEN-END:initComponents
 
     private void settingsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_settingsActionPerformed
-        controller.setSettings();
+        SwingUtilities.invokeLater(new Runnable() {
+            public void run() {
+                controller.setSettings();
+            }
+        });
+
     }//GEN-LAST:event_settingsActionPerformed
 
     private void addActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addActionPerformed
-        controller.connectToStream();
+        SwingUtilities.invokeLater(new Runnable() {
+            public void run() {
+                controller.connectToStream();
+            }
+        });
     }//GEN-LAST:event_addActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

@@ -21,6 +21,8 @@ along with Gephi.  If not, see <http://www.gnu.org/licenses/>.
 package org.gephi.desktop.streaming;
 
 import java.io.IOException;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 import org.gephi.graph.api.Graph;
 import org.gephi.graph.api.GraphController;
@@ -35,6 +37,7 @@ import org.gephi.streaming.api.StreamingClient;
 import org.gephi.streaming.api.StreamingConnection;
 import org.gephi.streaming.server.ServerController;
 import org.gephi.streaming.server.StreamingServer;
+import org.netbeans.validation.api.ui.ValidationPanel;
 import org.openide.DialogDescriptor;
 import org.openide.DialogDisplayer;
 import org.openide.NotifyDescriptor;
@@ -106,7 +109,16 @@ public class StreamingController {
 
     public void connectToStream() {
         StreamingClientPanel clientPanel = new StreamingClientPanel();
-        final DialogDescriptor dd = new DialogDescriptor(clientPanel, "Connect to Stream");
+
+        ValidationPanel vp = StreamingClientPanel.createValidationPanel(clientPanel);
+        final DialogDescriptor dd = new DialogDescriptor(vp, "Connect to Stream");
+        vp.addChangeListener(new ChangeListener() {
+
+            public void stateChanged(ChangeEvent e) {
+                dd.setValid(!((ValidationPanel) e.getSource()).isProblem());
+            }
+        });
+
         Object result = DialogDisplayer.getDefault().notify(dd);
         if (!result.equals(NotifyDescriptor.OK_OPTION)) {
             return;
@@ -120,7 +132,15 @@ public class StreamingController {
 
         StreamingSettingsPanel settingsPanel = new StreamingSettingsPanel(server);
         settingsPanel.setup();
-        final DialogDescriptor dd = new DialogDescriptor(settingsPanel, "Settings");
+        ValidationPanel vp = StreamingSettingsPanel.createValidationPanel(settingsPanel);
+        
+        final DialogDescriptor dd = new DialogDescriptor(vp, "Settings");
+        vp.addChangeListener(new ChangeListener() {
+
+            public void stateChanged(ChangeEvent e) {
+                dd.setValid(!((ValidationPanel) e.getSource()).isProblem());
+            }
+        });
         Object result = DialogDisplayer.getDefault().notify(dd);
         if (!result.equals(NotifyDescriptor.OK_OPTION)) {
             return;

@@ -1,13 +1,23 @@
 /*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
+Copyright 2008-2010 Gephi
+Authors : Mathieu Bastian <mathieu.bastian@gephi.org>
+Website : http://www.gephi.org
 
-/*
- * StreamingClientPanel.java
- *
- * Created on Jun 1, 2010, 4:10:01 PM
- */
+This file is part of Gephi.
+
+Gephi is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+Gephi is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with Gephi.  If not, see <http://www.gnu.org/licenses/>.
+*/
 
 package org.gephi.desktop.streaming;
 
@@ -16,16 +26,14 @@ import java.net.URL;
 import java.util.Collection;
 import javax.swing.ComboBoxModel;
 import javax.swing.DefaultComboBoxModel;
-import javax.swing.table.DefaultTableModel;
 import org.gephi.streaming.api.GraphStreamingEndpoint;
 import org.gephi.streaming.api.StreamType;
-import org.gephi.streaming.api.StreamingConnection;
 import org.netbeans.validation.api.Problems;
 import org.netbeans.validation.api.Validator;
 import org.netbeans.validation.api.builtin.Validators;
 import org.netbeans.validation.api.ui.ValidationGroup;
-import org.netbeans.validation.api.ui.ValidationListener;
 import org.netbeans.validation.api.ui.ValidationPanel;
+import org.openide.util.Exceptions;
 import org.openide.util.Lookup;
 
 /**
@@ -34,7 +42,6 @@ import org.openide.util.Lookup;
  */
 public class StreamingClientPanel extends javax.swing.JPanel {
 
-    private GraphStreamingEndpoint endpoint;
     private ComboBoxModel streamTypeComboBoxModel;
 
     /** Creates new form StreamingClientPanel */
@@ -51,12 +58,16 @@ public class StreamingClientPanel extends javax.swing.JPanel {
         }
 
         initComponents();
-        
-        endpoint = new GraphStreamingEndpoint();
-        endpoint.setStreamType((StreamType)streamTypeComboBox.getSelectedItem());
     }
 
     public GraphStreamingEndpoint getGraphStreamingEndpoint() {
+        GraphStreamingEndpoint endpoint = new GraphStreamingEndpoint();
+        endpoint.setStreamType((StreamType)streamTypeComboBox.getSelectedItem());
+        try {
+            endpoint.setUrl(new URL(streamUrlTextField.getText()));
+        } catch (MalformedURLException ex) {
+            Exceptions.printStackTrace(ex);
+        }
         return endpoint;
     }
 
@@ -74,22 +85,22 @@ public class StreamingClientPanel extends javax.swing.JPanel {
 
         ValidationGroup group = validationPanel.getValidationGroup();
         group.add(innerPanel.streamUrlTextField, Validators.REQUIRE_NON_EMPTY_STRING);
-        group.add(innerPanel.streamUrlTextField, new Validator<String>() {
-            @Override
-            public boolean validate(Problems prblms, String string, String urlString) {
-                try {
-                    URL url = new URL(urlString);
-                    innerPanel.getGraphStreamingEndpoint().setUrl(url);
-                } catch(MalformedURLException e) {
-                    //e.printStackTrace();
-                    innerPanel.getGraphStreamingEndpoint().setUrl(null);
-                    prblms.add("Stream URL: invalid format");
-                    return false;
-                }
-                return true;
-            }
+        group.add(innerPanel.streamUrlTextField, Validators.URL_MUST_BE_VALID);
 
-        });
+//        group.add(innerPanel.streamUrlTextField, new Validator<String>() {
+//            @Override
+//            public boolean validate(Problems prblms, String string, String urlString) {
+//                try {
+//                    URL url = new URL(urlString);
+//                } catch (MalformedURLException ex) {
+//                    prblms.add(org.openide.util.NbBundle.getMessage(StreamingClientPanel.class, "StreamingClientPanel.streamUrlLabel.text")+
+//                            ": invalid format");
+//                    return false;
+//                }
+//                return true;
+//            }
+//
+//        });
 
         return validationPanel;
      }
@@ -107,93 +118,106 @@ public class StreamingClientPanel extends javax.swing.JPanel {
         streamUrlTextField = new javax.swing.JTextField();
         streamTypeLabel = new javax.swing.JLabel();
         streamTypeComboBox = new javax.swing.JComboBox();
+        basicAuthCheckBox = new javax.swing.JCheckBox();
+        usernameLabel = new javax.swing.JLabel();
+        usernameTextField = new javax.swing.JTextField();
+        passwordField = new javax.swing.JPasswordField();
+        passwordLabel = new javax.swing.JLabel();
 
         streamUrlLabel.setText(org.openide.util.NbBundle.getMessage(StreamingClientPanel.class, "StreamingClientPanel.streamUrlLabel.text")); // NOI18N
 
-        streamUrlTextField.setText(org.openide.util.NbBundle.getMessage(StreamingClientPanel.class, "StreamingClientPanel.streamUrlTextField.text")); // NOI18N
-        streamUrlTextField.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                streamUrlTextFieldActionPerformed(evt);
-            }
-        });
-        streamUrlTextField.addFocusListener(new java.awt.event.FocusAdapter() {
-            public void focusLost(java.awt.event.FocusEvent evt) {
-                streamUrlTextFieldFocusLost(evt);
-            }
-        });
+        streamUrlTextField.setText(org.openide.util.NbBundle.getMessage(StreamingClientPanel.class, "StreamingClientPanel.sourceURL.text")); // NOI18N
+        streamUrlTextField.setName("sourceURL"); // NOI18N
 
         streamTypeLabel.setText(org.openide.util.NbBundle.getMessage(StreamingClientPanel.class, "StreamingClientPanel.streamTypeLabel.text")); // NOI18N
 
         streamTypeComboBox.setModel(streamTypeComboBoxModel);
-        streamTypeComboBox.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                streamTypeComboBoxActionPerformed(evt);
+
+        basicAuthCheckBox.setText(org.openide.util.NbBundle.getMessage(StreamingClientPanel.class, "StreamingClientPanel.basicAuthCheckBox.text")); // NOI18N
+        basicAuthCheckBox.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                basicAuthCheckBoxStateChanged(evt);
             }
         });
+
+        usernameLabel.setText(org.openide.util.NbBundle.getMessage(StreamingClientPanel.class, "StreamingClientPanel.usernameLabel.text")); // NOI18N
+        usernameLabel.setEnabled(false);
+
+        usernameTextField.setText(org.openide.util.NbBundle.getMessage(StreamingClientPanel.class, "StreamingClientPanel.usernameTextField.text")); // NOI18N
+        usernameTextField.setEnabled(false);
+
+        passwordField.setText(org.openide.util.NbBundle.getMessage(StreamingClientPanel.class, "StreamingClientPanel.passwordField.text")); // NOI18N
+        passwordField.setEnabled(false);
+
+        passwordLabel.setText(org.openide.util.NbBundle.getMessage(StreamingClientPanel.class, "StreamingClientPanel.passwordLabel.text")); // NOI18N
+        passwordLabel.setEnabled(false);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+            .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(streamUrlTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 376, Short.MAX_VALUE)
+                    .addComponent(streamUrlTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 378, Short.MAX_VALUE)
+                    .addComponent(streamUrlLabel)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(streamTypeLabel)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(streamTypeComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(streamUrlLabel))
+                    .addComponent(basicAuthCheckBox)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(23, 23, 23)
+                        .addComponent(usernameLabel)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(usernameTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(7, 7, 7)
+                        .addComponent(passwordLabel)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(passwordField, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap()
                 .addComponent(streamUrlLabel)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(streamUrlTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(12, 12, 12)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(streamTypeLabel)
-                    .addComponent(streamTypeComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(streamTypeComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(basicAuthCheckBox)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(usernameLabel)
+                    .addComponent(usernameTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(passwordLabel)
+                    .addComponent(passwordField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
-    private void streamUrlTextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_streamUrlTextFieldActionPerformed
-        String urlString = streamUrlTextField.getText();
-        try {
-            URL url = new URL(urlString);
-            this.endpoint.setUrl(url);
-        } catch(MalformedURLException e) {
-            e.printStackTrace();
-            this.endpoint.setUrl(null);
-        }
-        
-    }//GEN-LAST:event_streamUrlTextFieldActionPerformed
-
-    private void streamTypeComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_streamTypeComboBoxActionPerformed
-        StreamType streamType = (StreamType)streamTypeComboBox.getSelectedItem();
-        this.endpoint.setStreamType(streamType);
-    }//GEN-LAST:event_streamTypeComboBoxActionPerformed
-
-    private void streamUrlTextFieldFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_streamUrlTextFieldFocusLost
-        String urlString = streamUrlTextField.getText();
-        try {
-            URL url = new URL(urlString);
-            this.endpoint.setUrl(url);
-        } catch(MalformedURLException e) {
-            e.printStackTrace();
-            this.endpoint.setUrl(null);
-        }
-    }//GEN-LAST:event_streamUrlTextFieldFocusLost
+    private void basicAuthCheckBoxStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_basicAuthCheckBoxStateChanged
+        usernameLabel.setEnabled(basicAuthCheckBox.isSelected());
+        usernameTextField.setEnabled(basicAuthCheckBox.isSelected());
+        passwordLabel.setEnabled(basicAuthCheckBox.isSelected());
+        passwordField.setEnabled(basicAuthCheckBox.isSelected());
+}//GEN-LAST:event_basicAuthCheckBoxStateChanged
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JCheckBox basicAuthCheckBox;
+    private javax.swing.JPasswordField passwordField;
+    private javax.swing.JLabel passwordLabel;
     private javax.swing.JComboBox streamTypeComboBox;
     private javax.swing.JLabel streamTypeLabel;
     private javax.swing.JLabel streamUrlLabel;
     private javax.swing.JTextField streamUrlTextField;
+    private javax.swing.JLabel usernameLabel;
+    private javax.swing.JTextField usernameTextField;
     // End of variables declaration//GEN-END:variables
 
 }

@@ -24,6 +24,7 @@ import java.awt.Image;
 import java.awt.event.ActionEvent;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
+import javax.swing.SwingUtilities;
 import org.gephi.streaming.api.Report;
 
 import org.gephi.streaming.api.StreamingConnection;
@@ -39,12 +40,13 @@ import org.openide.util.Lookup;
  */
 public class StreamingModel {
 
-    public static Image emptyImage = ImageUtilities.loadImage("org/gephi/desktop/streaming/empty.png", true);
+    private Image clientImage = ImageUtilities.loadImage("org/gephi/desktop/streaming/resources/gephiclient.png", true);
+    private Image masterImage = ImageUtilities.loadImage("org/gephi/desktop/streaming/resources/gephimaster.png", true);
     
     private boolean serverRunning;
     private String serverContext;
     
-    private Children connectionChildren = new Children.Array();
+    private Children clientChildren = new Children.Array();
     private Children masterChildren = new Children.Array();
 
     private Node masterNode;
@@ -52,61 +54,15 @@ public class StreamingModel {
     
     public StreamingModel() {
 
-        final Action addConnectionAction = new AbstractAction("Connect to Stream") {
+        clientNode = new ClientNode();
+        masterNode = new MasterNode();
 
-            public void actionPerformed(ActionEvent e) {
-                StreamingController controller = Lookup.getDefault().lookup(StreamingController.class);
-                controller.connectToStream();
-            }
-        };
-
-        clientNode = new AbstractNode(connectionChildren) {
-            @Override
-            public Action[] getActions(boolean popup) {
-                return new Action[]{addConnectionAction};
-            }
-            @Override
-            public Image getIcon(int type) {
-                return emptyImage;
-            }
-
-            @Override
-            public Image getOpenedIcon(int i) {
-                return getIcon(i);
-            }
-            @Override
-            public String getHtmlDisplayName() {
-                return "<b>Client<b>";
-            }
-        };
-        clientNode.setDisplayName("Client Connections");
-
-        masterNode = new AbstractNode(masterChildren) {
-            @Override
-            public Action[] getActions(boolean popup) {
-                return new Action[]{};
-            }
-            @Override
-            public Image getIcon(int type) {
-                return emptyImage;
-            }
-            @Override
-            public Image getOpenedIcon(int i) {
-                return getIcon(i);
-            }
-            @Override
-            public String getHtmlDisplayName() {
-                return "<b>Master<b>";
-            }
-        };
-        masterNode.setDisplayName("Master");
-
-        masterChildren.add(new Node[]{new StreamingMasterNode()});
+        masterChildren.add(new Node[]{new StreamingServerNode()});
     }
 
     public void addConnection(StreamingConnection connection, Report report) {
         StreamingConnectionNode node = new StreamingConnectionNode(connection, report);
-        connectionChildren.add(new Node[]{node});
+        clientChildren.add(new Node[]{node});
         
     }
 
@@ -138,5 +94,68 @@ public class StreamingModel {
 
     public Node getMasterNode() {
         return masterNode;
+    }
+
+    private class ClientNode extends AbstractNode {
+
+        private final Action addConnectionAction;
+
+        public ClientNode() {
+            super(clientChildren);
+            setDisplayName("Client");
+
+            addConnectionAction = new AbstractAction("Connect to Stream") {
+
+                public void actionPerformed(ActionEvent e) {
+                    SwingUtilities.invokeLater(new Runnable() {
+                        public void run() {
+                            StreamingController controller = Lookup.getDefault().lookup(StreamingController.class);
+                            controller.connectToStream();
+                        }
+                    });
+                }
+            };
+        }
+        @Override
+        public Action[] getActions(boolean popup) {
+            return new Action[]{addConnectionAction};
+        }
+        @Override
+        public Image getIcon(int type) {
+            return clientImage;
+        }
+
+        @Override
+        public Image getOpenedIcon(int i) {
+            return getIcon(i);
+        }
+        @Override
+        public String getHtmlDisplayName() {
+            return "<b>Client<b>";
+        }
+    }
+
+    private class MasterNode extends AbstractNode {
+
+        public MasterNode() {
+            super(masterChildren);
+            setDisplayName("Master");
+        }
+        @Override
+        public Action[] getActions(boolean popup) {
+            return new Action[]{};
+        }
+        @Override
+        public Image getIcon(int type) {
+            return masterImage;
+        }
+        @Override
+        public Image getOpenedIcon(int i) {
+            return getIcon(i);
+        }
+        @Override
+        public String getHtmlDisplayName() {
+            return "<b>Master<b>";
+        }
     }
 }
