@@ -108,6 +108,7 @@ public class NodeDraftImpl implements NodeDraft, NodeDraftGetter {
     public void setId(String id) {
         this.id = id;
         this.autoId = false;
+        this.createdAuto = false;
     }
 
     public void setSize(float size) {
@@ -136,6 +137,7 @@ public class NodeDraftImpl implements NodeDraft, NodeDraftGetter {
 
     public void setLabel(String label) {
         this.label = label;
+        this.createdAuto = false;
     }
 
     public void setLabelSize(float size) {
@@ -282,6 +284,10 @@ public class NodeDraftImpl implements NodeDraft, NodeDraftGetter {
             throw new IllegalArgumentException(NbBundle.getMessage(NodeDraftImpl.class, "ImportContainerException_TimeInterval_Empty"));
         }
         timeInterval = new TimeInterval(timeInterval, start, end);
+    }
+
+    public void setTimeInterval(TimeInterval timeInterval) {
+        this.timeInterval = timeInterval;
     }
 
     //GETTERS
