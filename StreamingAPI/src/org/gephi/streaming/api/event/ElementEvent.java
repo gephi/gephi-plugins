@@ -79,7 +79,8 @@ public class ElementEvent extends GraphEvent {
 
     @Override
     public int hashCode() {
-        return (elementType.hashCode() * 31 + eventType.hashCode()) * 31 + elementId.hashCode();
+        return (elementType.hashCode() * 31 + eventType.hashCode()) * 31 
+                + ((elementId!=null)?elementId.hashCode():0);
     }
     
     /**

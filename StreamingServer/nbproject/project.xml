@@ -59,6 +59,10 @@
                         <compile-dependency/>
                     </test-dependency>
                     <test-dependency>
+                        <code-name-base>org.gephi.streaming.impl</code-name-base>
+                        <compile-dependency/>
+                    </test-dependency>
+                    <test-dependency>
                         <code-name-base>org.gephi.utils.collection</code-name-base>
                         <compile-dependency/>
                     </test-dependency>

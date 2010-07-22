@@ -1,0 +1,5 @@
+Manifest-Version: 1.0
+OpenIDE-Module: org.gephi.streaming.impl
+OpenIDE-Module-Localizing-Bundle: org/gephi/streaming/impl/Bundle.properties
+OpenIDE-Module-Specification-Version: 1.0
+

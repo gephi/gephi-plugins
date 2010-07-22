@@ -10,6 +10,7 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.List;
+import org.junit.Ignore;
 
 import org.simpleframework.http.Request;
 import org.simpleframework.http.Response;
@@ -17,6 +18,7 @@ import org.simpleframework.http.core.Container;
 import org.simpleframework.transport.connect.Connection;
 import org.simpleframework.transport.connect.SocketConnection;
 
+@Ignore
 public class StreamingServerTest implements Container {
 	
     private static final String DGS_RESOURCE = "alt_add_remove.dgs";
