@@ -3,6 +3,8 @@ package org.gephi.desktop.streaming;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.io.IOException;
+import java.util.Timer;
+import java.util.TimerTask;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 import org.gephi.streaming.api.Report;
@@ -33,9 +35,11 @@ public class StreamingConnectionNode extends AbstractNode {
     private Action closeConnectionAction;
     private Action showReportAction;
     private ConnectionState state;
+    private Timer timer;
 
     public StreamingConnectionNode(final StreamingConnection connection, final Report report) {
         super(Children.LEAF);
+        timer = new Timer();
         setDisplayName(connection.getUrl().toString());
         connection.addStatusListener(
         new StreamingConnection.StatusListener() {
@@ -120,23 +124,24 @@ public class StreamingConnectionNode extends AbstractNode {
         switch (newstate) {
             case CONNECTED:
             case ERROR:
+                 state = newstate;
+                 fireIconChange();
+                 break;
             case CLOSED:
                  state = newstate;
                  fireIconChange();
+                 timer.cancel();
+                 timer = null;
                  break;
             case RECEIVING:
                 state = newstate;
                 fireIconChange();
-
-                new Thread(){
+                timer.schedule(new TimerTask() {
                     @Override
                     public void run() {
-                        try {
-                            Thread.sleep(100);
-                        } catch (InterruptedException ex) {}
                         setState(ConnectionState.CONNECTED);
                     }
-                }.start();
+                }, 100);
                 break;
         }
     }
