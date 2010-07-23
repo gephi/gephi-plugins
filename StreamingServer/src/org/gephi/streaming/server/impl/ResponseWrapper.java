@@ -99,4 +99,9 @@ public class ResponseWrapper implements Response {
         response.setDate(name, date);
     }
 
+    @Override
+    public void commit() throws IOException {
+        response.commit();
+    }
+
 }

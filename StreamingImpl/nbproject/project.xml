@@ -31,10 +31,6 @@
                         <compile-dependency/>
                     </test-dependency>
                     <test-dependency>
-                        <code-name-base>org.gephi.data.attributes.api</code-name-base>
-                        <compile-dependency/>
-                    </test-dependency>
-                    <test-dependency>
                         <code-name-base>org.gephi.graph.dhns</code-name-base>
                         <compile-dependency/>
                     </test-dependency>

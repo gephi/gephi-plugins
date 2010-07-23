@@ -7,6 +7,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
+import javax.swing.SwingUtilities;
 import org.gephi.desktop.streaming.StreamingModel.ClientNode;
 import org.gephi.streaming.api.Report;
 import org.gephi.streaming.api.StreamingConnection;
@@ -62,14 +63,18 @@ public class StreamingConnectionNode extends AbstractNode {
         closeConnectionAction = new AbstractAction("Close connection") {
 
             public void actionPerformed(ActionEvent e) {
-                if (state!=ConnectionState.CLOSED) {
-                    try {
-                        connection.close();
-                    } catch (IOException ex) {
-                        Exceptions.printStackTrace(ex);
+                SwingUtilities.invokeLater(new Runnable() {
+                    public void run() {
+                        if (state!=ConnectionState.CLOSED) {
+                            try {
+                                connection.close();
+                            } catch (IOException ex) {
+                                Exceptions.printStackTrace(ex);
+                            }
+                            setState(ConnectionState.CLOSED);
+                        }
                     }
-                    setState(ConnectionState.CLOSED);
-                }
+                });
             }
         };
 

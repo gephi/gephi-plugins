@@ -64,6 +64,8 @@ public class ServerController {
         response.setDate("Last-Modified", time);
         
         try {
+            response.commit();
+
             String operation = request.getParameter("operation");
             if(operation==null) {
                 // Default operation is GET_GRAPH

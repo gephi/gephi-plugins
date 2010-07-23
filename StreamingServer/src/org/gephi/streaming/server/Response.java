@@ -108,4 +108,14 @@ public interface Response {
      */
     public void setDate(String name, long date);
 
+    /**
+     * This is used to write the headers that where given to the Response.
+     * Any further attempts to give headers to the Response will be
+     * futile as only the headers that were given at the time of the
+     * first commit will be used in the message header.
+     *
+     * @throws IOException
+     */
+    public void commit() throws IOException;
+
 }

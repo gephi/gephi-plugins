@@ -23,6 +23,7 @@ package org.gephi.streaming.api;
 import org.gephi.streaming.api.event.GraphEventBuilder;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.channels.ReadableByteChannel;
 import org.gephi.streaming.api.StreamingConnection.StatusListener;
 
 /**
@@ -74,6 +75,7 @@ public abstract class StreamReader {
     }
 
     public abstract void processStream(InputStream inputStream, StreamReaderStatusListener listener) throws IOException;
+    public abstract void processStream(ReadableByteChannel channel, StreamReaderStatusListener listener) throws IOException;
 
     public interface StreamReaderStatusListener {
         public void onConnectionClosed();

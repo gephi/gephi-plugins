@@ -22,6 +22,8 @@ package org.gephi.streaming.impl.dgs;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.channels.Channels;
+import java.nio.channels.ReadableByteChannel;
 import java.util.Date;
 import java.util.Map;
 
@@ -124,5 +126,10 @@ public class DGSStreamReader extends StreamReader implements DGSParserListener {
     @Override
     public String toString() {
         return "DGSStreamProcessor";
+    }
+
+    @Override
+    public void processStream(ReadableByteChannel channel, StreamReaderStatusListener listener) throws IOException {
+        this.processStream(Channels.newInputStream(channel), listener);
     }
 }

@@ -21,6 +21,8 @@ along with Gephi.  If not, see <http://www.gnu.org/licenses/>.
 package org.gephi.desktop.streaming;
 
 import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
@@ -51,6 +53,8 @@ import org.openide.util.lookup.ServiceProvider;
  */
 @ServiceProvider(service = StreamingController.class)
 public class StreamingController {
+
+    private static final Logger logger = Logger.getLogger(StreamingController.class.getName());
     
     private StreamingModel model;
     private StreamingTopComponent component;
@@ -234,9 +238,9 @@ public class StreamingController {
         Graph graph = graphModel.getHierarchicalMixedGraph();
 
         // Connect to stream - Streaming API
-        final StreamingClient client = new StreamingClient(graph);
+        final StreamingClient client = new StreamingClient(endpoint, graph);
         try {
-            StreamingConnection connection = client.process(endpoint,
+            StreamingConnection connection = client.process(
                 new StreamingConnection.StatusListener() {
                     public void onConnectionClosed(StreamingConnection connection) {
                         disconnect(connection);
@@ -254,6 +258,7 @@ public class StreamingController {
 
         } catch (IOException ex) {
             notifyError("Unable to connect to stream " + endpoint.getUrl().toString(), ex);
+            logger.log(Level.WARNING, "Unable to connect to stream", ex);
             return;
         }
     }

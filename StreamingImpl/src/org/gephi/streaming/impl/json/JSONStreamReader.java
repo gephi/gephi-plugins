@@ -22,6 +22,12 @@ package org.gephi.streaming.impl.json;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.ByteBuffer;
+import java.nio.CharBuffer;
+import java.nio.channels.Channels;
+import java.nio.channels.ReadableByteChannel;
+import java.nio.charset.Charset;
+import java.nio.charset.CharsetDecoder;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -61,8 +67,10 @@ public class JSONStreamReader extends StreamReader {
     @Override
     public void processStream(InputStream inputStream, StreamReaderStatusListener listener) throws IOException {
 
-        StringBuilder content = new StringBuilder();
-        byte[] buffer = new byte[1024];
+//        this.processStream(Channels.newChannel(inputStream), listener);
+
+         StringBuilder content = new StringBuilder();
+         byte[] buffer = new byte[1024];
 
         try {
             int read;
@@ -80,13 +88,16 @@ public class JSONStreamReader extends StreamReader {
                         content.append(readChar);
                     }
                 }
-                
+
             }
         } catch (IOException e) {
         } finally {
             if (report!=null)
                 report.log("Stream closed at "+new Date());
         }
+
+
+
 
         if (content.length() > 0) {
             parse(content.toString());
@@ -95,6 +106,52 @@ public class JSONStreamReader extends StreamReader {
         if (listener!=null) {
             listener.onConnectionClosed();
         }
+
+    }
+
+    @Override
+    public void processStream(ReadableByteChannel channel, StreamReaderStatusListener listener) throws IOException {
+
+        this.processStream(Channels.newInputStream(channel), listener);
+
+//        StringBuilder content = new StringBuilder();
+
+//        ByteBuffer buffer = ByteBuffer.allocate(4096);
+//        CharsetDecoder decoder = Charset.defaultCharset().newDecoder();
+//
+//        try {
+//            int read;
+//            while ((read = channel.read(buffer))!=-1) {
+//
+//                buffer.flip();
+//
+//                if (listener!=null) {
+//                    listener.onDataReceived();
+//                }
+//                CharBuffer charbuffer = decoder.decode(buffer);
+//                content.append(charbuffer.toString());
+//
+//                int pos;
+//                while ((pos=content.indexOf("\r")) > 0) {
+//                    parse(content.substring(0, pos+1));
+//                    content.delete(0, pos+1);
+//                }
+//
+//                buffer.clear();
+//            }
+//        } catch (IOException e) {
+//        } finally {
+//            if (report!=null)
+//                report.log("Stream closed at "+new Date());
+//        }
+//
+//        if (content.length() > 0) {
+//            parse(content.toString());
+//        }
+//
+//        if (listener!=null) {
+//            listener.onConnectionClosed();
+//        }
     }
 
     @Override
