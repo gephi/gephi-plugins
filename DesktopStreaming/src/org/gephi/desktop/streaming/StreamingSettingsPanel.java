@@ -21,6 +21,7 @@ along with Gephi.  If not, see <http://www.gnu.org/licenses/>.
 package org.gephi.desktop.streaming;
 
 import org.gephi.streaming.server.AuthenticationFilter;
+import org.gephi.streaming.server.ServerSettings;
 import org.gephi.streaming.server.StreamingServer;
 import org.netbeans.validation.api.builtin.Validators;
 import org.netbeans.validation.api.ui.ValidationGroup;
@@ -32,12 +33,12 @@ import org.netbeans.validation.api.ui.ValidationPanel;
  */
 public class StreamingSettingsPanel extends javax.swing.JPanel {
 
-    private StreamingServer server;
+    private ServerSettings settings;
 
     /** Creates new form StreamingSettingsPanel */
-    public StreamingSettingsPanel(StreamingServer server) {
+    public StreamingSettingsPanel(ServerSettings settings) {
         initComponents();
-        this.server = server;
+        this.settings = settings;
     }
 
      public static ValidationPanel createValidationPanel(final StreamingSettingsPanel innerPanel) {
@@ -55,11 +56,11 @@ public class StreamingSettingsPanel extends javax.swing.JPanel {
      }
 
     public void setup() {
-         int port = server.getPort();
+         int port = settings.getPort();
          this.portTextField.setText(port+"");
 
          // Basic Authentication
-         AuthenticationFilter filter = server.getAuthenticationFilter();
+         AuthenticationFilter filter = settings.getAuthenticationFilter();
          boolean filterEnabled = filter.isAuthenticationEnabled();
          basicAuthCheckBox.setSelected(filterEnabled);
          usernameLabel.setEnabled(basicAuthCheckBox.isSelected());
@@ -70,8 +71,8 @@ public class StreamingSettingsPanel extends javax.swing.JPanel {
          passwordField.setText(filter.getPassword());
 
          // SSL
-         boolean sslEnabled = server.isUseSSL();
-         int sslPort = server.getSSLPort();
+         boolean sslEnabled = settings.isUseSSL();
+         int sslPort = settings.getSSLPort();
          sslCheckBox.setSelected(sslEnabled);
          sslPortLabel.setEnabled(sslCheckBox.isSelected());
          sslPortTextField.setEnabled(sslCheckBox.isSelected());
@@ -80,16 +81,16 @@ public class StreamingSettingsPanel extends javax.swing.JPanel {
 
     public void unsetup() {
         int port = Integer.valueOf(portTextField.getText());
-        server.setPort(port);
+        settings.setPort(port);
 
-        AuthenticationFilter filter = server.getAuthenticationFilter();
+        AuthenticationFilter filter = settings.getAuthenticationFilter();
         filter.setAuthenticationEnabled(basicAuthCheckBox.isSelected());
         filter.setUser(usernameTextField.getText());
         filter.setPassword(new String(passwordField.getPassword()));
 
-        server.setUseSSL(sslCheckBox.isSelected());
+        settings.setUseSSL(sslCheckBox.isSelected());
         int sslPort = Integer.valueOf(sslPortTextField.getText());
-        server.setSSLPort(sslPort);
+        settings.setSSLPort(sslPort);
     }
 
     /** This method is called from within the constructor to

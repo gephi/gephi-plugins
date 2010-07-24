@@ -134,7 +134,7 @@ public class StreamingController {
     public void setSettings() {
         StreamingServer server = Lookup.getDefault().lookup(StreamingServer.class);
 
-        StreamingSettingsPanel settingsPanel = new StreamingSettingsPanel(server);
+        StreamingSettingsPanel settingsPanel = new StreamingSettingsPanel(server.getServerSettings());
         settingsPanel.setup();
         ValidationPanel vp = StreamingSettingsPanel.createValidationPanel(settingsPanel);
         

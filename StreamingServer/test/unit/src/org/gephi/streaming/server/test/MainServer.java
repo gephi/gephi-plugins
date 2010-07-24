@@ -7,6 +7,7 @@ import org.gephi.graph.api.GraphController;
 import org.gephi.graph.api.GraphModel;
 import org.gephi.project.api.ProjectController;
 import org.gephi.project.api.Workspace;
+import org.gephi.streaming.server.AuthenticationFilter;
 import org.gephi.streaming.server.ServerController;
 import org.gephi.streaming.server.StreamingServer;
 import org.junit.Test;
@@ -36,9 +37,11 @@ public class MainServer {
 
         StreamingServer server = Lookup.getDefault().lookup(StreamingServer.class);
         
-        server.getAuthenticationFilter().setUser("gephi");
-        server.getAuthenticationFilter().setPassword("gephi");
-        server.getAuthenticationFilter().setAuthenticationEnabled(true);
+        AuthenticationFilter authenticationFilter = server.getServerSettings().getAuthenticationFilter();
+        
+        authenticationFilter.setUser("gephi");
+        authenticationFilter.setPassword("gephi");
+        authenticationFilter.setAuthenticationEnabled(true);
 
         ServerController serverController = new ServerController(graphModel.getHierarchicalMixedGraph());
         server.register(serverController, "/graphstream");

@@ -45,8 +45,10 @@ import org.gephi.streaming.server.AuthenticationFilter;
 import org.gephi.streaming.server.Request;
 import org.gephi.streaming.server.Response;
 import org.gephi.streaming.server.ServerController;
+import org.gephi.streaming.server.ServerSettings;
 import org.gephi.streaming.server.StreamingServer;
 import org.openide.util.lookup.ServiceProvider;
+import org.simpleframework.http.Status;
 import org.simpleframework.http.core.Container;
 import org.simpleframework.transport.connect.Connection;
 import org.simpleframework.transport.connect.SocketConnection;
@@ -60,23 +62,28 @@ public class StreamingServerImpl implements StreamingServer {
     
     private static final Logger logger =  Logger.getLogger(StreamingServerImpl.class.getName());
     
-    private int port = 8080;
-    private boolean useSSL = true;
-    private int sslPort = 8443;
-    private boolean started = false;
+    private ServerSettings settings;
     
     private Map<String, ServerController> controllers = Collections.synchronizedMap(new HashMap<String, ServerController>());
     private Connection serverConnection;
     private ContextContainer contextContainer;
-    private AuthenticationFilter authenticationFilter;
 
     private Connection sslServerConnection;
+    private boolean started = false;
+    private boolean sslStarted = false;
 
     public StreamingServerImpl() {
         contextContainer = new ContextContainer();
-        authenticationFilter = new BasicAuthenticationFilter();
+        AuthenticationFilter authenticationFilter = new BasicAuthenticationFilter();
         authenticationFilter.setUser("gephi");
         authenticationFilter.setPassword("gephi");
+        
+        settings = new ServerSettings();
+        settings.setAuthenticationFilter(authenticationFilter);
+    }
+    
+    public ServerSettings getServerSettings() {
+        return settings;
     }
     
     /* (non-Javadoc)
@@ -100,7 +107,8 @@ public class StreamingServerImpl implements StreamingServer {
      */
     public void unregister(String context) {
         logger.log(Level.INFO, "Unregistering controller at context {0}", context);
-        controllers.remove(context);
+        ServerController controller = controllers.remove(context);
+        controller.stop();
 
         if (controllers.isEmpty()) {
             try {
@@ -118,12 +126,12 @@ public class StreamingServerImpl implements StreamingServer {
         if (!started) {
             logger.info("Starting StreamingServer...");
             serverConnection = new SocketConnection(contextContainer);
-            SocketAddress address = new InetSocketAddress(port);
+            SocketAddress address = new InetSocketAddress(settings.getPort());
             serverConnection.connect(address);
             
-            logger.log(Level.INFO, "HTTP Listening at port {0}", port);
+            logger.log(Level.INFO, "HTTP Listening at port {0}", settings.getPort());
             
-            if (useSSL)
+            if (settings.isUseSSL())
                 startSSL();
             
             started = true;
@@ -140,8 +148,6 @@ public class StreamingServerImpl implements StreamingServer {
     public synchronized void stop() throws IOException {
         if (started) {
             serverConnection.close();
-            if (useSSL)
-                stopSSL();
             started = false;
             
             if (logger.isLoggable(Level.INFO)) {
@@ -149,48 +155,10 @@ public class StreamingServerImpl implements StreamingServer {
                 
             }
         }
-    }
-    
-    /* (non-Javadoc)
-     * @see org.gephi.streaming.server.impl.StreamingServer#getPort()
-     */
-    public int getPort() {
-        return port;
-    }
-
-    /* (non-Javadoc)
-     * @see org.gephi.streaming.server.impl.StreamingServer#setPort(int)
-     */
-    public void setPort(int port) {
-        this.port = port;
-    }
-
-    /* (non-Javadoc)
-     * @see org.gephi.streaming.server.impl.StreamingServer#isUseSSL()
-     */
-    public boolean isUseSSL() {
-        return useSSL;
-    }
-
-    /* (non-Javadoc)
-     * @see org.gephi.streaming.server.impl.StreamingServer#setUseSSL(boolean)
-     */
-    public void setUseSSL(boolean useSSL) {
-        this.useSSL = useSSL;
-    }
-
-    /* (non-Javadoc)
-     * @see org.gephi.streaming.server.impl.StreamingServer#getSSLPort()
-     */
-    public int getSSLPort() {
-        return sslPort;
-    }
-
-    /* (non-Javadoc)
-     * @see org.gephi.streaming.server.impl.StreamingServer#setSSLPort(int)
-     */
-    public void setSSLPort(int sslPort) {
-        this.sslPort = sslPort;
+        if (sslStarted) {
+            sslServerConnection.close();
+            sslStarted = false;
+        }
     }
 
     /* (non-Javadoc)
@@ -198,20 +166,6 @@ public class StreamingServerImpl implements StreamingServer {
      */
     public boolean isStarted() {
         return started;
-    }
-    
-    /* (non-Javadoc)
-     * @see org.gephi.streaming.server.impl.StreamingServer#getAuthenticationFilter()
-     */
-    public AuthenticationFilter getAuthenticationFilter() {
-        return authenticationFilter;
-    }
-
-    /* (non-Javadoc)
-     * @see org.gephi.streaming.server.impl.StreamingServer#setAuthenticationFilter(org.gephi.streaming.server.AuthenticationFilter)
-     */
-    public void setAuthenticationFilter(AuthenticationFilter authenticationFilter) {
-        this.authenticationFilter = authenticationFilter;
     }
 
     private class ContextContainer implements Container {
@@ -223,17 +177,17 @@ public class StreamingServerImpl implements StreamingServer {
             Request requestWrapper = new RequestWrapper(request);
             Response responseWrapper = new ResponseWrapper(response);
             
-            if (!authenticationFilter.authenticate(requestWrapper, responseWrapper))
+            if (!settings.getAuthenticationFilter().authenticate(requestWrapper, responseWrapper))
                 return;
             
             String context = request.getPath().getPath();
             ServerController controller = controllers.get(context);
             if (controller==null) {
                 logger.log(Level.WARNING, "Invalid context: {0}", context);
-                response.setCode(404);
+                response.setCode(Status.NOT_FOUND.getCode());
+                response.setText(Status.NOT_FOUND.getDescription());
                 
                 try {
-                    response.getPrintStream().println("HTTP 404: Context "+context+" not found.");
                     response.close();
                 } catch (IOException e) {}
                 
@@ -245,7 +199,7 @@ public class StreamingServerImpl implements StreamingServer {
     }
     
     private void startSSL() throws IOException {
-        SocketAddress address = new InetSocketAddress(sslPort);
+        SocketAddress address = new InetSocketAddress(settings.getSSLPort());
         sslServerConnection = new SocketConnection(contextContainer);
         
         try {
@@ -275,7 +229,9 @@ public class StreamingServerImpl implements StreamingServer {
 
             sslServerConnection.connect(address, sslContext);
             
-            logger.log(Level.INFO, "HTTPS Listening at port {0}", sslPort);
+            sslStarted = true;
+            
+            logger.log(Level.INFO, "HTTPS Listening at port {0}", settings.getSSLPort());
             
         } catch (UnrecoverableKeyException e) {
             // TODO Auto-generated catch block
@@ -293,10 +249,6 @@ public class StreamingServerImpl implements StreamingServer {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
-    }
-
-    private void stopSSL() throws IOException {
-        sslServerConnection.close();
     }
 
 }

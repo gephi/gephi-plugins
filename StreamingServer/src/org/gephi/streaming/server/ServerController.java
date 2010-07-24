@@ -22,6 +22,9 @@ package org.gephi.streaming.server;
 
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 import org.gephi.graph.api.Graph;
 
@@ -30,6 +33,8 @@ import org.gephi.graph.api.Graph;
  *
  */
 public class ServerController {
+    
+    private List<Response> registeredClients = new ArrayList<Response>();
     
     private enum Operations {
         GET_GRAPH("getGraph"),
@@ -81,6 +86,7 @@ public class ServerController {
             
             if (operation.equals(Operations.GET_GRAPH.getURL())) {
                 String close = request.getParameter("close");
+                registeredClients.add(response);
                 executor.executeGetGraph(format, outputStream, close!=null?true:false);
                 
             } else if (operation.equals(Operations.GET_NODE.getURL())) {
@@ -113,6 +119,18 @@ public class ServerController {
                 executeError(response, "Error: "+e.getMessage());
             } catch (IOException e1) { }
             return;
+        }
+    }
+    
+    public void stop() {
+        Iterator<Response> clients = registeredClients.iterator();
+        while (clients.hasNext()) {
+            Response response = clients.next();
+            try {
+                response.close();
+                response.getOutputStream().close();
+                clients.remove();
+            } catch (IOException e) { }
         }
     }
     
