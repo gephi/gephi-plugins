@@ -65,6 +65,7 @@ public class ServerController {
 
         response.add("Content-Type", "text/plain");
         response.add("Server", "Gephi/0.7 alpha4");
+        response.add("Connection", "close");
         response.setDate("Date", time);
         response.setDate("Last-Modified", time);
         
