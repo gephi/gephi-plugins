@@ -83,7 +83,7 @@ public class StreamingConnectionNode extends AbstractNode {
             public void actionPerformed(ActionEvent e) {
                 ReportPanel reportPanel = new ReportPanel();
                 reportPanel.setData(report);
-                DialogDescriptor dd = new DialogDescriptor(reportPanel, NbBundle.getMessage(StreamingController.class, "ReportPanel.title"));
+                DialogDescriptor dd = new DialogDescriptor(reportPanel, NbBundle.getMessage(StreamingUIController.class, "ReportPanel.title"));
                 if (!DialogDisplayer.getDefault().notify(dd).equals(NotifyDescriptor.OK_OPTION)) {
                     reportPanel.destroy();
                     return;

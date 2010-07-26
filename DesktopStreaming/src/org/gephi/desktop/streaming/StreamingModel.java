@@ -115,7 +115,7 @@ public class StreamingModel {
                 public void actionPerformed(ActionEvent e) {
                     SwingUtilities.invokeLater(new Runnable() {
                         public void run() {
-                            StreamingController controller = Lookup.getDefault().lookup(StreamingController.class);
+                            StreamingUIController controller = Lookup.getDefault().lookup(StreamingUIController.class);
                             controller.connectToStream();
                         }
                     });

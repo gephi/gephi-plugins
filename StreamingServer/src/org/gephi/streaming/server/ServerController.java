@@ -135,7 +135,8 @@ public class ServerController {
     }
     
     private void executeError(Response response, String message) throws IOException {
-        response.setCode(501);
+        response.setCode(500);
+        response.setText("Internal Server Error");
         response.getPrintStream().println(message);
         response.getOutputStream().close();
         

@@ -146,6 +146,13 @@ public class StreamingServerImpl implements StreamingServer {
      * @see org.gephi.streaming.server.impl.StreamingServer#stop()
      */
     public synchronized void stop() throws IOException {
+
+        if (!controllers.isEmpty()) {
+            for (ServerController controller: controllers.values()) {
+                controller.stop();
+            }
+        }
+
         if (started) {
             serverConnection.close();
             started = false;
@@ -186,8 +193,21 @@ public class StreamingServerImpl implements StreamingServer {
                 logger.log(Level.WARNING, "Invalid context: {0}", context);
                 response.setCode(Status.NOT_FOUND.getCode());
                 response.setText(Status.NOT_FOUND.getDescription());
+
+                long time = System.currentTimeMillis();
                 
+                response.add("Content-Type", "text/plain");
+                response.add("Server", "Gephi/0.7 alpha4");
+                response.add("Connection", "close");
+                response.setDate("Date", time);
+                response.setDate("Last-Modified", time);
+
                 try {
+                    response.commit();
+                    response.getPrintStream().println("404 Not Found");
+//                    response.getPrintStream().close();
+                    request.getInputStream().close();
+                    response.getOutputStream().close();
                     response.close();
                 } catch (IOException e) {}
                 

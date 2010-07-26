@@ -34,9 +34,10 @@ import org.gephi.project.api.ProjectController;
 import org.gephi.project.api.Workspace;
 import org.gephi.project.api.WorkspaceInformation;
 import org.gephi.project.api.WorkspaceListener;
-import org.gephi.streaming.api.GraphStreamingEndpoint;
-import org.gephi.streaming.api.StreamingClient;
+import org.gephi.streaming.api.StreamingEndpoint;
+import org.gephi.streaming.api.Report;
 import org.gephi.streaming.api.StreamingConnection;
+import org.gephi.streaming.api.StreamingController;
 import org.gephi.streaming.server.ServerController;
 import org.gephi.streaming.server.StreamingServer;
 import org.netbeans.validation.api.ui.ValidationPanel;
@@ -51,15 +52,15 @@ import org.openide.util.lookup.ServiceProvider;
  * @author panisson
  *
  */
-@ServiceProvider(service = StreamingController.class)
-public class StreamingController {
+@ServiceProvider(service = StreamingUIController.class)
+public class StreamingUIController {
 
-    private static final Logger logger = Logger.getLogger(StreamingController.class.getName());
+    private static final Logger logger = Logger.getLogger(StreamingUIController.class.getName());
     
     private StreamingModel model;
     private StreamingTopComponent component;
     
-    public StreamingController() {
+    public StreamingUIController() {
 
       //Workspace events
         ProjectController pc = Lookup.getDefault().lookup(ProjectController.class);
@@ -127,7 +128,7 @@ public class StreamingController {
         if (!result.equals(NotifyDescriptor.OK_OPTION)) {
             return;
         }
-        GraphStreamingEndpoint endpoint = clientPanel.getGraphStreamingEndpoint();
+        StreamingEndpoint endpoint = clientPanel.getGraphStreamingEndpoint();
         connectToStream(endpoint);
     }
 
@@ -221,7 +222,7 @@ public class StreamingController {
         //Logger.getLogger("").log(Level.WARNING, "", t.getCause());
     }
 
-    private void connectToStream(GraphStreamingEndpoint endpoint) {
+    private void connectToStream(StreamingEndpoint endpoint) {
 
         // Get active graph instance - Project and Graph API
         ProjectController projectController = Lookup.getDefault().lookup(ProjectController.class);
@@ -238,23 +239,25 @@ public class StreamingController {
         Graph graph = graphModel.getHierarchicalMixedGraph();
 
         // Connect to stream - Streaming API
-        final StreamingClient client = new StreamingClient(endpoint, graph);
+        StreamingController controller = Lookup.getDefault().lookup(StreamingController.class);
+//        final StreamingClient client = new StreamingClient(endpoint, graph);
+        final Report report = new Report();
         try {
-            StreamingConnection connection = client.process(
+            StreamingConnection connection = controller.process(endpoint, graph, report,
                 new StreamingConnection.StatusListener() {
                     public void onConnectionClosed(StreamingConnection connection) {
                         disconnect(connection);
 
                         // TODO: show stream report
                         System.out.println("-- Stream report -----\n" +
-                                client.getReport().getText() + "--------");
+                                report.getText() + "--------");
                     }
 
                 public void onDataReceived(StreamingConnection connection) { }
                 public void onError(StreamingConnection connection) { }
                 });
 
-            model.addConnection(connection, client.getReport());
+            model.addConnection(connection, report);
 
         } catch (IOException ex) {
             notifyError("Unable to connect to stream " + endpoint.getUrl().toString(), ex);

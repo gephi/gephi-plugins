@@ -18,56 +18,76 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with Gephi.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.gephi.streaming.api;
+
+package org.gephi.streaming.impl;
 
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.gephi.data.attributes.api.AttributeController;
 import org.gephi.graph.api.Graph;
+import org.gephi.streaming.api.GraphEventContainer;
+import org.gephi.streaming.api.GraphEventContainerFactory;
+import org.gephi.streaming.api.GraphEventHandler;
+import org.gephi.streaming.api.StreamingEndpoint;
+import org.gephi.streaming.api.GraphUpdaterEventHandler;
+import org.gephi.streaming.api.Report;
+import org.gephi.streaming.api.StreamReader;
+import org.gephi.streaming.api.StreamReaderFactory;
+import org.gephi.streaming.api.StreamType;
+import org.gephi.streaming.api.StreamWriter;
+import org.gephi.streaming.api.StreamWriterFactory;
+import org.gephi.streaming.api.StreamingConnection;
+import org.gephi.streaming.api.StreamingController;
 import org.gephi.streaming.api.event.ElementEvent;
 import org.gephi.streaming.api.event.ElementType;
 import org.gephi.streaming.api.event.GraphEvent;
 import org.gephi.streaming.api.event.GraphEventBuilder;
 import org.openide.util.Lookup;
-
+import org.openide.util.lookup.ServiceProvider;
 
 /**
  *
  * @author panisson
  */
-public class StreamingClient {
+@ServiceProvider(service = StreamingController.class)
+public class StreamingControllerImpl implements StreamingController {
 
-    private static final Logger logger = Logger.getLogger(StreamingClient.class.getName());
+    private static final Logger logger = Logger.getLogger(StreamingControllerImpl.class.getName());
 
-    private final Report report;
-    private Graph graph;
-    private GraphStreamingEndpoint endpoint;
-    Set<FilteredEventEntry> filterededIds = new HashSet<FilteredEventEntry>();
-    
-    public StreamingClient(GraphStreamingEndpoint endpoint, Graph graph) {
-        this.graph = graph;
-        this.report = new Report();
-        this.endpoint = endpoint;
+    public StreamType getStreamType(String streamType) {
+        Collection<? extends StreamType> streamTypes = Lookup.getDefault().lookupAll(StreamType.class);
+        for (StreamType type: streamTypes) {
+            if(type.getType().equalsIgnoreCase(streamType)) {
+                return type;
+            }
+        }
+        return null;
     }
 
-    public StreamingConnection process(GraphStreamingEndpoint endpoint) throws IOException {
-        return process((StreamingConnection.StatusListener)null);
+    @Override
+    public StreamingConnection process(StreamingEndpoint endpoint, Graph graph) throws IOException {
+        return process(endpoint, graph, null, null);
     }
 
-    public StreamingConnection process(StreamingConnection.StatusListener statusListener)
-            throws IOException {
-
+    @Override
+    public StreamingConnection process(StreamingEndpoint endpoint, Graph graph,
+            Report report, StreamingConnection.StatusListener statusListener) throws IOException {
         logger.log(Level.FINE, "Connecting to url {0}", endpoint.getUrl().toString());
 
+        final Set<FilteredEventEntry> filterededIds = new HashSet<FilteredEventEntry>();
+
         final GraphUpdaterEventHandler graphUpdaterHandler = new GraphUpdaterEventHandler(graph);
-        graphUpdaterHandler.setReport(getReport());
+        graphUpdaterHandler.setReport(report);
         GraphEventHandler filteredHandler = new GraphEventHandler() {
 
+            @Override
             public void handleGraphEvent(GraphEvent event) {
                 if (event instanceof ElementEvent) {
                     ElementEvent elementEvent = (ElementEvent)event;
@@ -87,56 +107,66 @@ public class StreamingClient {
                 Lookup.getDefault().lookup(StreamReaderFactory.class);
         StreamReader reader =
                 readerFactory.createStreamReader(endpoint.getStreamType(), container, eventBuilder);
-        reader.setReport(getReport());
-        StreamingConnection connection = new StreamingConnection(endpoint.getUrl(), reader);
+        reader.setReport(report);
+        StreamingConnection connection = new StreamingConnectionImpl(endpoint.getUrl(), reader);
         connection.addStatusListener(
                 new StreamingConnection.StatusListener() {
 
+            @Override
                 public void onConnectionClosed(StreamingConnection connection) {
                     container.waitForDispatchAllEvents();
                     container.stop();
                 }
 
+            @Override
                 public void onDataReceived(StreamingConnection connection) { }
+            @Override
                 public void onError(StreamingConnection connection) { }
             });
         if (statusListener!=null) {
             connection.addStatusListener(statusListener);
         }
         connection.asynchProcess();
-        ClientEventHandler handler = new ClientEventHandler();
+        ClientEventHandler handler = new ClientEventHandler(endpoint, filterededIds);
 
         Graph2EventListener graph2EventListener = new Graph2EventListener(graph, handler);
+
+        graph.getGraphModel().addGraphListener(graph2EventListener);
+        AttributeController ac = Lookup.getDefault().lookup(AttributeController.class);
+        ac.getModel().getEdgeTable().addAttributeListener(graph2EventListener);
+        ac.getModel().getNodeTable().addAttributeListener(graph2EventListener);
 
         logger.log(Level.INFO, "Connected to url {0}", endpoint.getUrl().toString());
 
         return connection;
     }
 
-    /**
-     * @return the report
-     */
-    public Report getReport() {
-        return report;
-    }
-
     private class ClientEventHandler implements GraphEventHandler {
+        
+        private StreamingEndpoint endpoint;
+        private Set<FilteredEventEntry> filterededIds;
 
+        public ClientEventHandler(StreamingEndpoint endpoint, Set<FilteredEventEntry> filterededIds) {
+            this.endpoint = endpoint;
+            this.filterededIds = filterededIds;
+        }
+
+        @Override
         public void handleGraphEvent(GraphEvent event) {
             logger.log(Level.INFO, "Handling event {0}", event.toString());
             if (event instanceof ElementEvent) {
                 ElementEvent elementEvent = (ElementEvent)event;
                 if (!filterededIds.contains(new FilteredEventEntry(elementEvent.getElementId(), elementEvent.getElementType(), 0))) {
-                    sendEvent(event);
+                    sendEvent(endpoint, event);
                 }
             }
         }
     }
 
-    private void sendEvent(GraphEvent event) {
+    private void sendEvent(StreamingEndpoint endpoint, GraphEvent event) {
         logger.log(Level.INFO, "Sending event {0}", event.toString());
         try {
-            URL url = new URL(endpoint.getUrl(), 
+            URL url = new URL(endpoint.getUrl(),
                     endpoint.getUrl().getFile()+"?operation=updateGraph&format="
                     + endpoint.getStreamType().getType());
 
@@ -152,7 +182,7 @@ public class StreamingClient {
             out.flush();
             out.close();
             connection.getInputStream().close();
-            
+
         } catch (IOException ex) {
             logger.log(Level.WARNING, null, ex);
         }
@@ -169,7 +199,7 @@ public class StreamingClient {
             this.elementType = elementType;
             this.timestamp = timestamp;
         }
-        
+
         @Override
         public boolean equals(Object obj) {
             if ( this == obj ) return true;

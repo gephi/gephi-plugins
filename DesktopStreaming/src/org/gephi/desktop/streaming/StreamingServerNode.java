@@ -51,8 +51,8 @@ public class StreamingServerNode extends AbstractNode {
                 SwingUtilities.invokeLater(new Runnable() {
                     public void run() {
                         if (!masterStarted) {
-                            StreamingController controller =
-                                    Lookup.getDefault().lookup(StreamingController.class);
+                            StreamingUIController controller =
+                                    Lookup.getDefault().lookup(StreamingUIController.class);
                             controller.startMaster();
                             masterStarted = true;
                             fireIconChange();
@@ -69,8 +69,8 @@ public class StreamingServerNode extends AbstractNode {
                 SwingUtilities.invokeLater(new Runnable() {
                     public void run() {
                         if (masterStarted) {
-                            StreamingController controller =
-                                    Lookup.getDefault().lookup(StreamingController.class);
+                            StreamingUIController controller =
+                                    Lookup.getDefault().lookup(StreamingUIController.class);
                             controller.stopMaster();
                             masterStarted = false;
                             fireIconChange();

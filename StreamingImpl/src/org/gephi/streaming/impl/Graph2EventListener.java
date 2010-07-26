@@ -19,11 +19,10 @@ You should have received a copy of the GNU General Public License
 along with Gephi.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package org.gephi.streaming.api;
+package org.gephi.streaming.impl;
 
 import java.util.HashMap;
 import java.util.Map;
-import org.gephi.data.attributes.api.AttributeController;
 import org.gephi.data.attributes.api.AttributeEvent;
 import org.gephi.data.attributes.api.AttributeListener;
 import org.gephi.data.attributes.api.AttributeRow;
@@ -34,10 +33,10 @@ import org.gephi.graph.api.Graph;
 import org.gephi.graph.api.GraphEvent;
 import org.gephi.graph.api.GraphListener;
 import org.gephi.graph.api.Node;
+import org.gephi.streaming.api.GraphEventHandler;
 import org.gephi.streaming.api.event.ElementType;
 import org.gephi.streaming.api.event.EventType;
 import org.gephi.streaming.api.event.GraphEventBuilder;
-import org.openide.util.Lookup;
 
 /**
  *
@@ -50,10 +49,6 @@ public class Graph2EventListener implements GraphListener, AttributeListener {
     private boolean sendVizData = true;
 
     public Graph2EventListener(Graph graph, GraphEventHandler eventHandler) {
-        graph.getGraphModel().addGraphListener(this);
-        AttributeController ac = Lookup.getDefault().lookup(AttributeController.class);
-        ac.getModel().getEdgeTable().addAttributeListener(this);
-        ac.getModel().getNodeTable().addAttributeListener(this);
         eventBuilder = new GraphEventBuilder(this);
         this.eventHandler = eventHandler;
     }

@@ -50,6 +50,7 @@ import org.gephi.streaming.api.StreamingConnection;
 import org.gephi.streaming.api.event.ElementType;
 import org.gephi.streaming.api.event.EventType;
 import org.gephi.streaming.api.event.GraphEvent;
+import org.gephi.streaming.impl.StreamingConnectionImpl;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.openide.util.Lookup;
@@ -232,7 +233,7 @@ public abstract class AbstractStreamProcessorTest {
         StreamReader streamReader = factory.createStreamReader(streamType, container, eventBuilder);
         assertNotNull(streamReader);
 
-        StreamingConnection connection = new StreamingConnection(url, streamReader);
+        StreamingConnection connection = new StreamingConnectionImpl(url, streamReader);
 
         final AtomicBoolean processing = new AtomicBoolean(true);
         connection.addStatusListener(
@@ -283,7 +284,7 @@ public abstract class AbstractStreamProcessorTest {
         StreamReader streamReader = factory.createStreamReader(streamType, graphUpdaterHandler, eventBuilder);
         assertNotNull(streamReader);
         
-        StreamingConnection connection = new StreamingConnection(url, streamReader);
+        StreamingConnection connection = new StreamingConnectionImpl(url, streamReader);
 
         final AtomicBoolean processing = new AtomicBoolean(true);
         connection.addStatusListener(
@@ -334,7 +335,7 @@ public abstract class AbstractStreamProcessorTest {
         StreamReader streamReader = factory.createStreamReader(streamType, container, eventBuilder);
         assertNotNull(streamReader);
 
-        StreamingConnection connection = new StreamingConnection(url, streamReader);
+        StreamingConnection connection = new StreamingConnectionImpl(url, streamReader);
 
         final AtomicBoolean processing = new AtomicBoolean(true);
         connection.addStatusListener(

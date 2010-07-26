@@ -20,6 +20,7 @@ along with Gephi.  If not, see <http://www.gnu.org/licenses/>.
  */
 package org.gephi.streaming.impl.json;
 
+import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintStream;
 import java.util.Map;
@@ -103,6 +104,11 @@ public class JSONStreamWriter extends StreamWriter {
                 }
                 break;
             }
+        }
+        try {
+            outputStream.flush();
+        } catch (IOException ex) {
+            Logger.getLogger(JSONStreamWriter.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
     

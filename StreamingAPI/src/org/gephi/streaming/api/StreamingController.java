@@ -18,33 +18,25 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with Gephi.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 package org.gephi.streaming.api;
 
 import java.io.IOException;
-import java.net.URL;
+import org.gephi.graph.api.Graph;
 
 /**
  *
  * @author panisson
  */
-public interface StreamingConnection {
-    
-    public URL getUrl();
-    
-    public void close() throws IOException;
-    
-    public boolean isClosed();
-    
-    public void asynchProcess();
+public interface StreamingController {
 
-    public void synchProcess();
+    public StreamType getStreamType(String streamType);
 
-    public void addStatusListener(StatusListener listener);
+    public StreamingConnection process(StreamingEndpoint endpoint, Graph graph)
+            throws IOException;
 
-    public interface StatusListener {
-        public void onConnectionClosed(StreamingConnection connection);
-        public void onDataReceived(StreamingConnection connection);
-        public void onError(StreamingConnection connection);
-    }
+    public StreamingConnection process(StreamingEndpoint endpoint, Graph graph,
+            Report report, StreamingConnection.StatusListener statusListener)
+            throws IOException;
 
 }

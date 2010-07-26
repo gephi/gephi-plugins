@@ -48,7 +48,7 @@ public final class StreamingTopComponent extends TopComponent implements Explore
     static final String ICON_PATH = "org/gephi/desktop/streaming/resources/media-stream.png";
     private static final String PREFERRED_ID = "StreamingTopComponent";
 
-    private StreamingController controller;
+    private StreamingUIController controller;
     private Children clientMasterChildren;
     private StreamingTreeView tree;
 
@@ -61,7 +61,7 @@ public final class StreamingTopComponent extends TopComponent implements Explore
         setToolTipText(NbBundle.getMessage(StreamingTopComponent.class, "HINT_StreamingTopComponent"));
         setIcon(ImageUtilities.loadImage(ICON_PATH, true));
 
-        controller = Lookup.getDefault().lookup(StreamingController.class);
+        controller = Lookup.getDefault().lookup(StreamingUIController.class);
         controller.setTopComponent(this);
 
         clientMasterChildren = new Children.Array();

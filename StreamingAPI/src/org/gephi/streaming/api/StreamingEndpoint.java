@@ -30,12 +30,19 @@ import java.net.URL;
  *
  * @author Andre' Panisson
  */
-public class GraphStreamingEndpoint implements Serializable {
+public class StreamingEndpoint implements Serializable {
     
     private static final long serialVersionUID = 1L;
     
     private URL url;
     private StreamType streamType;
+
+    public StreamingEndpoint() {}
+
+    public StreamingEndpoint(URL url, StreamType streamType) {
+        this.url = url;
+        this.streamType = streamType;
+    }
 
     /**
      * @return the URL to connect to

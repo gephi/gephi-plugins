@@ -35,13 +35,19 @@ import org.gephi.graph.api.GraphModel;
 import org.gephi.project.api.ProjectController;
 import org.gephi.project.api.Workspace;
 import org.gephi.streaming.api.CompositeGraphEventHandler;
+import org.gephi.streaming.api.GraphEventContainer;
+import org.gephi.streaming.api.GraphEventContainerFactory;
 import org.gephi.streaming.api.GraphEventHandler;
-import org.gephi.streaming.api.GraphStreamingUtils;
 import org.gephi.streaming.api.GraphUpdaterEventHandler;
+import org.gephi.streaming.api.Report;
+import org.gephi.streaming.api.StreamReader;
+import org.gephi.streaming.api.StreamReaderFactory;
 import org.gephi.streaming.api.StreamWriter;
 import org.gephi.streaming.api.StreamWriterFactory;
 import org.gephi.streaming.api.StreamingConnection;
 import org.gephi.streaming.api.event.GraphEvent;
+import org.gephi.streaming.api.event.GraphEventBuilder;
+import org.gephi.streaming.impl.StreamingConnectionImpl;
 import org.gephi.streaming.server.FilteredGraphEventHandler;
 import org.gephi.streaming.server.GraphChangeListener;
 import org.junit.Test;
@@ -97,7 +103,7 @@ public class GraphStreamingEventProcessorTest {
 //        listener.setOperationSupport(streamWriter);
 
         StreamingConnection connection = 
-                GraphStreamingUtils.connectToStream(url, streamType, composite);
+                connectToStream(url, streamType, composite);
         
         final AtomicBoolean processing = new AtomicBoolean(true);
         connection.addStatusListener(
@@ -124,5 +130,41 @@ public class GraphStreamingEventProcessorTest {
         System.out.println(out.toString());
         
     }
+
+   public static StreamingConnection connectToStream(
+            URL url, String streamType, GraphEventHandler handler)
+    throws IOException {
+        GraphEventContainerFactory containerfactory =
+                Lookup.getDefault().lookup(GraphEventContainerFactory.class);
+        StreamReaderFactory readerFactory =
+                Lookup.getDefault().lookup(StreamReaderFactory.class);
+
+        final GraphEventContainer container =
+                containerfactory.newGraphEventContainer(handler);
+
+        Report report = new Report();
+        GraphEventBuilder eventBuilder = new GraphEventBuilder(url);
+        StreamReader reader =
+                readerFactory.createStreamReader(streamType, container,
+                eventBuilder);
+        reader.setReport(report);
+
+        StreamingConnection connection = new StreamingConnectionImpl(url, reader);
+
+        connection.addStatusListener(
+                new StreamingConnection.StatusListener() {
+
+            public void onConnectionClosed(StreamingConnection connection) {
+                container.waitForDispatchAllEvents();
+                container.stop();
+            }
+
+            public void onDataReceived(StreamingConnection connection) { }
+            public void onError(StreamingConnection connection) { }
+        });
+
+        return connection;
+    }
+
 
 }

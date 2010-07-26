@@ -26,7 +26,7 @@ import java.net.URL;
 import java.util.Collection;
 import javax.swing.ComboBoxModel;
 import javax.swing.DefaultComboBoxModel;
-import org.gephi.streaming.api.GraphStreamingEndpoint;
+import org.gephi.streaming.api.StreamingEndpoint;
 import org.gephi.streaming.api.StreamType;
 import org.netbeans.validation.api.Problems;
 import org.netbeans.validation.api.Validator;
@@ -60,8 +60,8 @@ public class StreamingClientPanel extends javax.swing.JPanel {
         initComponents();
     }
 
-    public GraphStreamingEndpoint getGraphStreamingEndpoint() {
-        GraphStreamingEndpoint endpoint = new GraphStreamingEndpoint();
+    public StreamingEndpoint getGraphStreamingEndpoint() {
+        StreamingEndpoint endpoint = new StreamingEndpoint();
         endpoint.setStreamType((StreamType)streamTypeComboBox.getSelectedItem());
         try {
             endpoint.setUrl(new URL(streamUrlTextField.getText()));
