@@ -20,6 +20,8 @@ along with Gephi.  If not, see <http://www.gnu.org/licenses/>.
  */
 package org.gephi.desktop.streaming;
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.util.logging.Logger;
 import javax.swing.Action;
 import javax.swing.SwingUtilities;
@@ -51,6 +53,7 @@ public final class StreamingTopComponent extends TopComponent implements Explore
     private StreamingUIController controller;
     private Children clientMasterChildren;
     private StreamingTreeView tree;
+    private StreamingConnectionNode selectedNode = null;
 
     public StreamingTopComponent() {
 
@@ -92,6 +95,22 @@ public final class StreamingTopComponent extends TopComponent implements Explore
         clientMasterChildren.add(new Node[]{clientNode, masterNode});
         tree.expandNode(clientNode);
         tree.expandNode(masterNode);
+
+        mgr.addPropertyChangeListener(new PropertyChangeListener() {
+
+            public void propertyChange(PropertyChangeEvent evt) {
+                if (evt.getPropertyName().equals(ExplorerManager.PROP_SELECTED_NODES)) {
+                    Node[] selected = (Node[])evt.getNewValue();
+                    if (selected!=null && selected.length==1 && selected[0] instanceof StreamingConnectionNode) {
+                        removeButton.setEnabled(true);
+                        selectedNode = (StreamingConnectionNode)selected[0];
+                    } else {
+                        removeButton.setEnabled(false);
+                        selectedNode = null;
+                    }
+                }
+            }
+        });
 
     }
 
@@ -136,6 +155,11 @@ public final class StreamingTopComponent extends TopComponent implements Explore
         removeButton.setMaximumSize(new java.awt.Dimension(29, 29));
         removeButton.setMinimumSize(new java.awt.Dimension(29, 29));
         removeButton.setPreferredSize(new java.awt.Dimension(29, 29));
+        removeButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                removeButtonActionPerformed(evt);
+            }
+        });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
@@ -191,6 +215,17 @@ public final class StreamingTopComponent extends TopComponent implements Explore
             }
         });
     }//GEN-LAST:event_addActionPerformed
+
+    private void removeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_removeButtonActionPerformed
+        SwingUtilities.invokeLater(new Runnable() {
+            public void run() {
+                if (selectedNode!=null) {
+                    selectedNode.closeConnection();
+                    selectedNode.getParentNode().getChildren().remove(new Node[]{selectedNode});
+                }
+            }
+        });
+    }//GEN-LAST:event_removeButtonActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton addButton;

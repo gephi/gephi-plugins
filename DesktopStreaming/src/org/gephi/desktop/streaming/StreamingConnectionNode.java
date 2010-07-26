@@ -39,9 +39,11 @@ public class StreamingConnectionNode extends AbstractNode {
     private Action removeFromViewAction;
     private ConnectionState state;
     private Timer timer;
+    private final StreamingConnection connection;
 
     public StreamingConnectionNode(final StreamingConnection connection, final Report report) {
         super(Children.LEAF);
+        this.connection = connection;
         timer = new Timer();
         setDisplayName(connection.getUrl().toString());
         connection.addStatusListener(
@@ -65,14 +67,7 @@ public class StreamingConnectionNode extends AbstractNode {
             public void actionPerformed(ActionEvent e) {
                 SwingUtilities.invokeLater(new Runnable() {
                     public void run() {
-                        if (state!=ConnectionState.CLOSED) {
-                            try {
-                                connection.close();
-                            } catch (IOException ex) {
-                                Exceptions.printStackTrace(ex);
-                            }
-                            setState(ConnectionState.CLOSED);
-                        }
+                        closeConnection();
                     }
                 });
             }
@@ -104,6 +99,17 @@ public class StreamingConnectionNode extends AbstractNode {
             state = ConnectionState.CONNECTED;
         } else {
             state = ConnectionState.CLOSED;
+        }
+    }
+
+    public void closeConnection() {
+        if (state!=ConnectionState.CLOSED) {
+            try {
+                connection.close();
+            } catch (IOException ex) {
+                Exceptions.printStackTrace(ex);
+            }
+            setState(ConnectionState.CLOSED);
         }
     }
 

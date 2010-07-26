@@ -22,6 +22,7 @@ package org.gephi.desktop.streaming;
 
 import java.awt.Image;
 import java.awt.event.ActionEvent;
+import java.util.logging.Logger;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.SwingUtilities;
@@ -39,6 +40,8 @@ import org.openide.util.Lookup;
  *
  */
 public class StreamingModel {
+
+    private static final Logger logger = Logger.getLogger(StreamingModel.class.getName());
 
     private Image clientImage = ImageUtilities.loadImage("org/gephi/desktop/streaming/resources/gephiclient.png", true);
     private Image masterImage = ImageUtilities.loadImage("org/gephi/desktop/streaming/resources/gephimaster.png", true);
