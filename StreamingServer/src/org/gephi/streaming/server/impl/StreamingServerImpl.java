@@ -24,6 +24,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.InetSocketAddress;
 import java.net.SocketAddress;
+import java.nio.channels.SocketChannel;
 import java.security.KeyManagementException;
 import java.security.KeyStore;
 import java.security.KeyStoreException;
@@ -50,8 +51,14 @@ import org.gephi.streaming.server.StreamingServer;
 import org.openide.util.lookup.ServiceProvider;
 import org.simpleframework.http.Status;
 import org.simpleframework.http.core.Container;
+import org.simpleframework.http.core.ContainerProcessor;
+import org.simpleframework.transport.Processor;
+import org.simpleframework.transport.ProcessorServer;
+import org.simpleframework.transport.Server;
+import org.simpleframework.transport.Socket;
 import org.simpleframework.transport.connect.Connection;
 import org.simpleframework.transport.connect.SocketConnection;
+import org.simpleframework.util.buffer.FileAllocator;
 
 /**
  * @author panisson
@@ -74,6 +81,7 @@ public class StreamingServerImpl implements StreamingServer {
 
     public StreamingServerImpl() {
         contextContainer = new ContextContainer();
+
         AuthenticationFilter authenticationFilter = new BasicAuthenticationFilter();
         authenticationFilter.setUser("gephi");
         authenticationFilter.setPassword("gephi");
@@ -125,9 +133,16 @@ public class StreamingServerImpl implements StreamingServer {
     public synchronized void start() throws IOException {
         if (!started) {
             logger.info("Starting StreamingServer...");
-            serverConnection = new SocketConnection(contextContainer);
+
+            Processor processor = new ContainerProcessor(contextContainer, new FileAllocator(), 1);
+            Server server = new SocketSnoopServer(new ProcessorServer(processor));
+            serverConnection = new SocketConnection(server);
             SocketAddress address = new InetSocketAddress(settings.getPort());
             serverConnection.connect(address);
+
+//            serverConnection = new SocketConnection(contextContainer);
+//            SocketAddress address = new InetSocketAddress(settings.getPort());
+//            serverConnection.connect(address);
             
             logger.log(Level.INFO, "HTTP Listening at port {0}", settings.getPort());
             
@@ -180,9 +195,39 @@ public class StreamingServerImpl implements StreamingServer {
         @Override
         public void handle(org.simpleframework.http.Request request, 
                 org.simpleframework.http.Response response) {
-            
+
+//            boolean a = true;
+//            long time1 = System.currentTimeMillis();
+//            response.add("Content-Type", "text/plain");
+//            response.add("Server", "Gephi/0.7 alpha4");
+//            response.add("Connection", "close");
+//            response.setDate("Date", time1);
+//            response.setDate("Last-Modified", time1);
+//            try {
+//                response.commit();
+//            } catch (IOException ex) {
+//                Logger.getLogger(StreamingServerImpl.class.getName()).log(Level.SEVERE, null, ex);
+//            }
+//
+//
+//            while (a) {
+//
+//                SocketChannel channel = (SocketChannel)request.getAttribute(RequestWrapper.SOCKET_REFERENCE_KEY);
+//                System.out.println(channel.isConnected());
+//                System.out.println(channel.isOpen());
+//
+//                try {
+//
+//                    response.getPrintStream().println("a");
+//                    response.getOutputStream().flush();
+//                } catch (IOException ex) {
+//                    Logger.getLogger(StreamingServerImpl.class.getName()).log(Level.SEVERE, null, ex);
+//                }
+//            }
+
             Request requestWrapper = new RequestWrapper(request);
-            Response responseWrapper = new ResponseWrapper(response);
+            SocketChannel channel = (SocketChannel)request.getAttribute(RequestWrapper.SOCKET_REFERENCE_KEY);
+            Response responseWrapper = new ResponseWrapper(response, channel);
             
             if (!settings.getAuthenticationFilter().authenticate(requestWrapper, responseWrapper))
                 return;
@@ -268,6 +313,29 @@ public class StreamingServerImpl implements StreamingServer {
         } catch (KeyStoreException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
+        }
+    }
+
+    /**
+     * This class is necessary to put the SocketChannel reference
+     * as an attribute that can be accessed from the request
+     * (request.getAttribute("mySocket")). The reference will
+     * be used to verify if the client has closed the connection
+     * in the middle of the streaming.
+     */
+    private class SocketSnoopServer implements Server {
+        private final Server realServer ;
+        public SocketSnoopServer (Server realServer ){
+           this.realServer  = realServer ;
+        }
+        public void process(Socket socket)throws IOException{
+           Map atts = socket.getAttributes();
+           SocketChannel channel = socket.getChannel();
+           atts.put(RequestWrapper.SOCKET_REFERENCE_KEY, channel);
+           realServer.process(socket);
+        }
+        public void stop() throws IOException{
+           realServer.stop();
         }
     }
 

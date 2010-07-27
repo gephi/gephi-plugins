@@ -25,6 +25,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.net.SocketException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -35,6 +36,8 @@ import org.gephi.graph.api.Edge;
 import org.gephi.graph.api.Graph;
 import org.gephi.graph.api.Node;
 import org.gephi.streaming.api.CompositeGraphEventHandler;
+import org.gephi.streaming.api.GraphEventHandler;
+import org.gephi.streaming.api.event.GraphEvent;
 import org.gephi.streaming.api.event.GraphEventBuilder;
 import org.gephi.streaming.api.GraphUpdaterEventHandler;
 import org.gephi.streaming.api.StreamReader;
@@ -58,11 +61,13 @@ public class ServerOperationExecutor {
     private final StreamReaderFactory readerFactory;
     private boolean sendVizData = true;
     private final GraphEventBuilder eventBuilder;
+    private ClientManager clientManager;
     
-    public ServerOperationExecutor(Graph graph) {
+    public ServerOperationExecutor(Graph graph, ClientManager clientManager) {
         graphBufferedOperationSupport = new GraphBufferedEventHandler(graph);
         graphUpdaterOperationSupport = new GraphUpdaterEventHandler(graph);
         this.graph = graph;
+        this.clientManager = clientManager;
         writerFactory = Lookup.getDefault().lookup(StreamWriterFactory.class);
         readerFactory = Lookup.getDefault().lookup(StreamReaderFactory.class);
         eventBuilder = new GraphEventBuilder(this);
@@ -78,12 +83,41 @@ public class ServerOperationExecutor {
      * @param format
      * @param outputStream
      */
-    public void executeGetGraph(String format, OutputStream outputStream, boolean closeConnection) throws IOException {
-        StreamWriter writer = writerFactory.createStreamWriter(format, outputStream);
+    public void executeGetGraph(final Request request, final Response response) throws IOException {
+        String format = request.getParameter("format");
+        if(format==null) {
+            // Default format is JSON
+            format = "JSON";
+        }
+
+        String close = request.getParameter("close");
+        clientManager.add(request, response);
+
+        OutputStream outputStream = response.getOutputStream();
+        final StreamWriter writer = writerFactory.createStreamWriter(format, outputStream);
         writer.startStream();
-        
-        graphBufferedOperationSupport.addHandler(writer);
-        if (closeConnection)
+
+        GraphEventHandler wrapper = new GraphEventHandler() {
+
+            public void handleGraphEvent(GraphEvent event) {
+                try {
+                    writer.handleGraphEvent(event);
+                } catch (RuntimeException e) {
+                    Throwable cause = e.getCause();
+                    if (cause instanceof SocketException) {
+                        System.out.println("*Socket closed*");
+                        graphBufferedOperationSupport.removeHandler(this);
+                        clientManager.remove(request, response);
+                    } else {
+                        throw e;
+                    }
+                }
+            }
+        };
+
+        graphBufferedOperationSupport.addHandler(wrapper);
+
+        if (close!=null)
             outputStream.close();
     }
      

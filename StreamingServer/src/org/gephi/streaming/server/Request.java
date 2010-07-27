@@ -22,6 +22,7 @@ package org.gephi.streaming.server;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Map;
 
 /**
  * The Request is used to provide an interface to the 
@@ -59,5 +60,13 @@ public interface Request {
      * @return this returns the value that the HTTP message header
      */
     public String getValue(String name);
+
+    /**
+     *
+     * @return the String representation of the client address
+     */
+    public String getClientAddress();
+
+    public Map getAttributes();
 
 }

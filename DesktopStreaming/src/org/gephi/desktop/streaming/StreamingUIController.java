@@ -38,12 +38,14 @@ import org.gephi.streaming.api.StreamingEndpoint;
 import org.gephi.streaming.api.Report;
 import org.gephi.streaming.api.StreamingConnection;
 import org.gephi.streaming.api.StreamingController;
+import org.gephi.streaming.server.ClientManager.ClientManagerListener;
 import org.gephi.streaming.server.ServerController;
 import org.gephi.streaming.server.StreamingServer;
 import org.netbeans.validation.api.ui.ValidationPanel;
 import org.openide.DialogDescriptor;
 import org.openide.DialogDisplayer;
 import org.openide.NotifyDescriptor;
+import org.openide.nodes.AbstractNode;
 import org.openide.util.Exceptions;
 import org.openide.util.Lookup;
 import org.openide.util.lookup.ServiceProvider;
@@ -187,7 +189,6 @@ public class StreamingUIController {
             return;
         }
         
-//        GraphController graphController = workspace.getLookup().lookup(GraphController.class);
         GraphController graphController = Lookup.getDefault().lookup(GraphController.class);
         Graph graph = graphController.getModel().getMixedGraph();
 
@@ -196,6 +197,18 @@ public class StreamingUIController {
         
         StreamingServer server = Lookup.getDefault().lookup(StreamingServer.class);
         ServerController serverController = new ServerController(graph);
+        
+        serverController.getClientManager().addClientManagerListener(
+                new ClientManagerListener() {
+
+            public void clientConnected(String client) {
+                 model.addConnected(client);
+            }
+
+            public void clientDisconnected(String client) {
+                model.removeConnected(client);
+            }
+        });
 
         server.register(serverController, context);
 

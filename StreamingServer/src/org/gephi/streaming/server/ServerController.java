@@ -33,8 +33,8 @@ import org.gephi.graph.api.Graph;
  *
  */
 public class ServerController {
-    
-    private List<Response> registeredClients = new ArrayList<Response>();
+
+    private ClientManager clientManager;
     
     private enum Operations {
         GET_GRAPH("getGraph"),
@@ -56,7 +56,13 @@ public class ServerController {
     private final ServerOperationExecutor executor;
     
     public ServerController(Graph graph) {
-        executor = new ServerOperationExecutor(graph);
+        clientManager = new ClientManager();
+        executor = new ServerOperationExecutor(graph, clientManager);
+        
+    }
+
+    public ClientManager getClientManager() {
+        return clientManager;
     }
 
     public void handle(Request request, Response response) {
@@ -86,9 +92,7 @@ public class ServerController {
             System.out.println("Handling request for operation "+operation+", format "+format);
             
             if (operation.equals(Operations.GET_GRAPH.getURL())) {
-                String close = request.getParameter("close");
-                registeredClients.add(response);
-                executor.executeGetGraph(format, outputStream, close!=null?true:false);
+                executor.executeGetGraph(request, response);
                 
             } else if (operation.equals(Operations.GET_NODE.getURL())) {
                 // gets the node id and write info to output stream
@@ -124,15 +128,7 @@ public class ServerController {
     }
     
     public void stop() {
-        Iterator<Response> clients = registeredClients.iterator();
-        while (clients.hasNext()) {
-            Response response = clients.next();
-            try {
-                response.close();
-                response.getOutputStream().close();
-                clients.remove();
-            } catch (IOException e) { }
-        }
+        clientManager.stopAll();
     }
     
     private void executeError(Response response, String message) throws IOException {

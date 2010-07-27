@@ -22,6 +22,8 @@ package org.gephi.desktop.streaming;
 
 import java.awt.Image;
 import java.awt.event.ActionEvent;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.logging.Logger;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
@@ -73,6 +75,22 @@ public class StreamingModel {
 
     public void removeConnectionNode(StreamingConnectionNode node) {
         clientNode.getChildren().remove(new Node[]{node});
+    }
+
+    Map<String, Node> connectedMap = new HashMap<String, Node>();
+
+    public void addConnected(String client) {
+        Node node = new AbstractNode(Children.LEAF);
+        node.setDisplayName(client);
+        masterNode.getChildren().add(new Node[]{node});
+        connectedMap.put(client, node);
+    }
+
+    public void removeConnected(String client) {
+        Node node = connectedMap.remove(client);
+        if (node!=null) {
+            masterNode.getChildren().remove(new Node[]{node});
+        }
     }
 
     public boolean isServerRunning() {

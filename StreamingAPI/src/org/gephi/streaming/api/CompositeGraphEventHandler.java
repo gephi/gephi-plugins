@@ -61,7 +61,7 @@ public class CompositeGraphEventHandler implements GraphEventHandler {
 
     @Override
     public void handleGraphEvent(GraphEvent event) {
-        for (GraphEventHandler handler: handlers) {
+        for (GraphEventHandler handler: handlers.toArray(new GraphEventHandler[0])) {
             handler.handleGraphEvent(event);
         }
     }

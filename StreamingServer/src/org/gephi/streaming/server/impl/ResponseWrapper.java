@@ -23,6 +23,8 @@ package org.gephi.streaming.server.impl;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintStream;
+import java.net.SocketException;
+import java.nio.channels.SocketChannel;
 
 import org.gephi.streaming.server.Response;
 
@@ -36,14 +38,16 @@ import org.gephi.streaming.server.Response;
 public class ResponseWrapper implements Response {
     
     private final org.simpleframework.http.Response response;
+    private SocketChannel channel;
     
     /**
      * Creates a wrapper using this response
      * 
      * @param response - the response to be used as delegate
      */
-    public ResponseWrapper(org.simpleframework.http.Response response) {
+    public ResponseWrapper(org.simpleframework.http.Response response, SocketChannel channel) {
         this.response = response;
+        this.channel = channel;
     }
 
     /* (non-Javadoc)
@@ -57,14 +61,15 @@ public class ResponseWrapper implements Response {
      * @see org.gephi.streaming.server.impl.Response#getOutputStream()
      */
     public OutputStream getOutputStream() throws IOException {
-        return response.getOutputStream();
+        return new OutputStreamWrapper(response.getOutputStream());
     }
 
     /* (non-Javadoc)
      * @see org.gephi.streaming.server.impl.Response#getPrintStream()
      */
     public PrintStream getPrintStream() throws IOException {
-        return response.getPrintStream();
+        return new PrintStream(getOutputStream());
+//        return response.getPrintStream();
     }
 
     /* (non-Javadoc)
@@ -102,6 +107,44 @@ public class ResponseWrapper implements Response {
     @Override
     public void commit() throws IOException {
         response.commit();
+    }
+
+    /**
+     * OutputStream wrapper that is able to detect when the socket
+     * was closed.
+     * Workaround to the fact that the OutputStream in the simpleframework
+     * implementation is buffered and does not throws an exception in the
+     * calling thread when the socket was closed by the client.
+     */
+    private class OutputStreamWrapper extends OutputStream {
+
+        private final OutputStream out;
+
+        public OutputStreamWrapper(OutputStream out) {
+            this.out = out;
+        }
+
+        @Override
+        public void write(int b) throws IOException {
+            if (!channel.isConnected()) {
+                throw new SocketException("Socket closed");
+            }
+            out.write(b);
+        }
+
+        @Override
+        public void close() throws IOException {
+            out.close();
+        }
+
+        @Override
+        public void flush() throws IOException {
+            if (!channel.isConnected()) {
+                throw new SocketException("Socket closed");
+            }
+            out.flush();
+        }
+
     }
 
 }

@@ -108,7 +108,8 @@ public class JSONStreamWriter extends StreamWriter {
         try {
             outputStream.flush();
         } catch (IOException ex) {
-            Logger.getLogger(JSONStreamWriter.class.getName()).log(Level.SEVERE, null, ex);
+            throw new RuntimeException(ex);
+//            Logger.getLogger(JSONStreamWriter.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
     

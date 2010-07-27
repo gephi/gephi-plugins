@@ -92,7 +92,7 @@ public class MainServer2 implements Container {
 	   response.setDate("Last-Modified", time);
 	   
 	   try {
-		   serverController.handle(new RequestWrapper(request), new ResponseWrapper(response));
+		   serverController.handle(new RequestWrapper(request), new ResponseWrapper(response, null));
 		   
 	   } catch (Exception e) {
 		   // TODO Auto-generated catch block

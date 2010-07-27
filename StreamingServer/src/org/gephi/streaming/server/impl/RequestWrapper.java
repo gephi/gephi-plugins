@@ -22,6 +22,7 @@ package org.gephi.streaming.server.impl;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Map;
 
 import org.gephi.streaming.server.Request;
 
@@ -30,6 +31,8 @@ import org.gephi.streaming.server.Request;
  *
  */
 public class RequestWrapper implements Request {
+
+    public final static String SOCKET_REFERENCE_KEY = "SOCKET_REFERENCE_KEY";
     
     private org.simpleframework.http.Request request;
     
@@ -56,6 +59,14 @@ public class RequestWrapper implements Request {
      */
     public String getValue(String arg0) {
         return request.getValue(arg0);
+    }
+
+    public String getClientAddress() {
+        return request.getClientAddress().toString();
+    }
+
+    public Map getAttributes() {
+        return request.getAttributes();
     }
 
 }
