@@ -134,6 +134,7 @@ public final class StreamingTopComponent extends TopComponent implements Explore
 
         topPanel.setLayout(new java.awt.GridBagLayout());
 
+        addButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/org/gephi/desktop/streaming/resources/plus.jpg"))); // NOI18N
         org.openide.awt.Mnemonics.setLocalizedText(addButton, org.openide.util.NbBundle.getMessage(StreamingTopComponent.class, "StreamingTopComponent.addButton.text")); // NOI18N
         addButton.setToolTipText(org.openide.util.NbBundle.getMessage(StreamingTopComponent.class, "StreamingTopComponent.addButton.toolTipText")); // NOI18N
         addButton.setMaximumSize(new java.awt.Dimension(29, 29));
@@ -149,6 +150,7 @@ public final class StreamingTopComponent extends TopComponent implements Explore
         gridBagConstraints.gridy = 0;
         topPanel.add(addButton, gridBagConstraints);
 
+        removeButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/org/gephi/desktop/streaming/resources/minus.jpg"))); // NOI18N
         org.openide.awt.Mnemonics.setLocalizedText(removeButton, org.openide.util.NbBundle.getMessage(StreamingTopComponent.class, "StreamingTopComponent.removeButton.text")); // NOI18N
         removeButton.setToolTipText(org.openide.util.NbBundle.getMessage(StreamingTopComponent.class, "StreamingTopComponent.removeButton.toolTipText")); // NOI18N
         removeButton.setEnabled(false);
