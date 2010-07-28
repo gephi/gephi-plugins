@@ -47,6 +47,7 @@ public class StreamingModel {
 
     private Image clientImage = ImageUtilities.loadImage("org/gephi/desktop/streaming/resources/gephiclient.png", true);
     private Image masterImage = ImageUtilities.loadImage("org/gephi/desktop/streaming/resources/gephimaster.png", true);
+    private Image masterconnImage = ImageUtilities.loadImage("org/gephi/desktop/streaming/resources/masterconnection.jpg", true);
     
     private boolean serverRunning;
     private String serverContext;
@@ -80,7 +81,21 @@ public class StreamingModel {
     Map<String, Node> connectedMap = new HashMap<String, Node>();
 
     public void addConnected(String client) {
-        Node node = new AbstractNode(Children.LEAF);
+        Node node = new AbstractNode(Children.LEAF) {
+            @Override
+            public Action[] getActions(boolean popup) {
+                return new Action[]{};
+            }
+            @Override
+            public Image getIcon(int type) {
+                return masterconnImage;
+            }
+
+            @Override
+            public Image getOpenedIcon(int i) {
+                return getIcon(i);
+            }
+        };
         node.setDisplayName(client);
         masterNode.getChildren().add(new Node[]{node});
         connectedMap.put(client, node);
