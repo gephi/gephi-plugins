@@ -77,6 +77,7 @@ public class ServerController {
         
         try {
             response.commit();
+            response.getOutputStream().flush();
 
             String operation = request.getParameter("operation");
             if(operation==null) {

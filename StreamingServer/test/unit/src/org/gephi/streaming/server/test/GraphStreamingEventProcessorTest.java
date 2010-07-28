@@ -45,6 +45,7 @@ import org.gephi.streaming.api.StreamReaderFactory;
 import org.gephi.streaming.api.StreamWriter;
 import org.gephi.streaming.api.StreamWriterFactory;
 import org.gephi.streaming.api.StreamingConnection;
+import org.gephi.streaming.api.StreamingEndpoint;
 import org.gephi.streaming.api.event.GraphEvent;
 import org.gephi.streaming.api.event.GraphEventBuilder;
 import org.gephi.streaming.impl.StreamingConnectionImpl;
@@ -149,7 +150,9 @@ public class GraphStreamingEventProcessorTest {
                 eventBuilder);
         reader.setReport(report);
 
-        StreamingConnection connection = new StreamingConnectionImpl(url, reader);
+        StreamingEndpoint endpoint = new StreamingEndpoint();
+        endpoint.setUrl(url);
+        StreamingConnection connection = new StreamingConnectionImpl(endpoint, reader);
 
         connection.addStatusListener(
                 new StreamingConnection.StatusListener() {

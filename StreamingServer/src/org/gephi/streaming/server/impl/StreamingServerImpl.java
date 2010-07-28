@@ -196,35 +196,6 @@ public class StreamingServerImpl implements StreamingServer {
         public void handle(org.simpleframework.http.Request request, 
                 org.simpleframework.http.Response response) {
 
-//            boolean a = true;
-//            long time1 = System.currentTimeMillis();
-//            response.add("Content-Type", "text/plain");
-//            response.add("Server", "Gephi/0.7 alpha4");
-//            response.add("Connection", "close");
-//            response.setDate("Date", time1);
-//            response.setDate("Last-Modified", time1);
-//            try {
-//                response.commit();
-//            } catch (IOException ex) {
-//                Logger.getLogger(StreamingServerImpl.class.getName()).log(Level.SEVERE, null, ex);
-//            }
-//
-//
-//            while (a) {
-//
-//                SocketChannel channel = (SocketChannel)request.getAttribute(RequestWrapper.SOCKET_REFERENCE_KEY);
-//                System.out.println(channel.isConnected());
-//                System.out.println(channel.isOpen());
-//
-//                try {
-//
-//                    response.getPrintStream().println("a");
-//                    response.getOutputStream().flush();
-//                } catch (IOException ex) {
-//                    Logger.getLogger(StreamingServerImpl.class.getName()).log(Level.SEVERE, null, ex);
-//                }
-//            }
-
             Request requestWrapper = new RequestWrapper(request);
             SocketChannel channel = (SocketChannel)request.getAttribute(RequestWrapper.SOCKET_REFERENCE_KEY);
             Response responseWrapper = new ResponseWrapper(response, channel);

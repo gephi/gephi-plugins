@@ -23,15 +23,20 @@ package org.gephi.streaming.impl;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.net.Authenticator;
 import java.net.HttpURLConnection;
+import java.net.PasswordAuthentication;
 import java.net.URL;
 import java.net.URLConnection;
 import java.nio.channels.ReadableByteChannel;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.gephi.streaming.api.StreamReader;
 import org.gephi.streaming.api.StreamingConnection;
+import org.gephi.streaming.api.StreamingEndpoint;
 import org.openide.filesystems.FileObject;
 import org.openide.filesystems.FileUtil;
 
@@ -40,8 +45,10 @@ import org.openide.filesystems.FileUtil;
  * @author panisson
  */
 public class StreamingConnectionImpl implements StreamingConnection {
+
+    private static final Logger logger = Logger.getLogger(StreamingConnectionImpl.class.getName());
     
-    private final URL url;
+    private final StreamingEndpoint endpoint;
     private final StreamReader streamProcessor;
     private URLConnection connection;
     private ReadableByteChannel channel;
@@ -49,12 +56,12 @@ public class StreamingConnectionImpl implements StreamingConnection {
             Collections.synchronizedList(new ArrayList<StatusListener>());
     private boolean closed = false;
     
-    public StreamingConnectionImpl(final URL url, final StreamReader streamProcessor) throws IOException {
-        this.url = url;
+    public StreamingConnectionImpl(final StreamingEndpoint endpoint, final StreamReader streamProcessor) throws IOException {
+        this.endpoint = endpoint;
         this.streamProcessor = streamProcessor;
 
         // Workaround to avoid invalid certificate problem
-        if (url.getProtocol().equalsIgnoreCase("https")) {
+        if (endpoint.getUrl().getProtocol().equalsIgnoreCase("https")) {
             FileObject certs = FileUtil.getConfigFile("cacerts");
             if (certs == null) {
                 certs = FileUtil.getConfigRoot().createData("cacerts");
@@ -67,19 +74,35 @@ public class StreamingConnectionImpl implements StreamingConnection {
             System.setProperty("javax.net.ssl.trustStorePassword", "1234567890");
         }
 
-        connection = url.openConnection();
+        connection = endpoint.getUrl().openConnection();
+
+        if (endpoint.getUser()!=null && endpoint.getUser().length()>0) {
+
+            connection.setRequestProperty("Authorization", "Basic " +
+                    (new sun.misc.BASE64Encoder().encode((endpoint.getUser()+":"+endpoint.getPassword()).getBytes())));
+
+            // this option is not optimal, as it sets the same authenticator for all connections
+//            Authenticator.setDefault(new Authenticator() {
+//                @Override
+//                protected PasswordAuthentication getPasswordAuthentication() {
+//                    return new PasswordAuthentication (endpoint.getUser(), endpoint.getPassword().toCharArray());
+//                }
+//            });
+        }
+
+        
         connection.connect();
 
     }
     
     @Override
     public URL getUrl() {
-        return url;
+        return endpoint.getUrl();
     }
 
     @Override
     public void asynchProcess() {
-        new Thread("StreamingConnection["+url.toString()+"]") {
+        new Thread("StreamingConnection["+endpoint.getUrl().toString()+"]") {
             @Override
             public void run() {
                 synchProcess();
@@ -160,11 +183,12 @@ public class StreamingConnectionImpl implements StreamingConnection {
             });
 
         } catch (IOException e) {
+            logger.log(Level.INFO, null, e);
+        } catch (RuntimeException e) {
             // Exception during processing
-            e.printStackTrace();
+            logger.log(Level.INFO, null, e);
         } finally {
             closed = true;
-
 
             synchronized (listeners) {
                 for (StatusListener listener: listeners)

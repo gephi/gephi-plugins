@@ -93,7 +93,7 @@ public class BasicAuthenticationFilter implements AuthenticationFilter {
     
     private void send401(Request request, Response response) {
         response.setCode(401);
-        response.setText("Authorization Required");
+        response.setText("Unauthorized");
         response.add("WWW-Authenticate", "Basic realm=\""+REALM+"\"");
         
         try {

@@ -68,6 +68,10 @@ public class StreamingClientPanel extends javax.swing.JPanel {
         } catch (MalformedURLException ex) {
             Exceptions.printStackTrace(ex);
         }
+        if (basicAuthCheckBox.isEnabled()) {
+            endpoint.setUser(usernameTextField.getText());
+            endpoint.setPassword(new String(passwordField.getPassword()));
+        }
         return endpoint;
     }
 

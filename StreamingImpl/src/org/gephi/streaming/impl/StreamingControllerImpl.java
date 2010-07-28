@@ -23,6 +23,9 @@ package org.gephi.streaming.impl;
 
 import java.io.IOException;
 import java.io.OutputStream;
+import java.net.Authenticator;
+import java.net.HttpURLConnection;
+import java.net.PasswordAuthentication;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.Collection;
@@ -114,7 +117,7 @@ public class StreamingControllerImpl implements StreamingController {
         StreamReader reader =
                 readerFactory.createStreamReader(endpoint.getStreamType(), container, eventBuilder);
         reader.setReport(report);
-        StreamingConnection connection = new StreamingConnectionImpl(endpoint.getUrl(), reader);
+        StreamingConnection connection = new StreamingConnectionImpl(endpoint, reader);
         connection.addStatusListener(
                 new StreamingConnection.StatusListener() {
 
@@ -169,7 +172,7 @@ public class StreamingControllerImpl implements StreamingController {
         }
     }
 
-    private void sendEvent(StreamingEndpoint endpoint, GraphEvent event) {
+    private void sendEvent(final StreamingEndpoint endpoint, GraphEvent event) {
         logger.log(Level.INFO, "Sending event {0}", event.toString());
         try {
             URL url = new URL(endpoint.getUrl(),
@@ -177,6 +180,10 @@ public class StreamingControllerImpl implements StreamingController {
                     + endpoint.getStreamType().getType());
 
             URLConnection connection = url.openConnection();
+
+            connection.setRequestProperty("Authorization", "Basic " +
+                    (new sun.misc.BASE64Encoder().encode((endpoint.getUser()+":"+endpoint.getPassword()).getBytes())));
+            
             connection.setDoOutput(true);
             connection.connect();
 

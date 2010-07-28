@@ -39,9 +39,9 @@ public class MainServer {
         
         AuthenticationFilter authenticationFilter = server.getServerSettings().getAuthenticationFilter();
         
-        authenticationFilter.setUser("gephi");
-        authenticationFilter.setPassword("gephi");
-        authenticationFilter.setAuthenticationEnabled(false);
+        authenticationFilter.setUser("asdf");
+        authenticationFilter.setPassword("asdf");
+        authenticationFilter.setAuthenticationEnabled(true);
 
         ServerController serverController = new ServerController(graphModel.getHierarchicalMixedGraph());
         server.register(serverController, "/graphstream");

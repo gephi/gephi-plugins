@@ -47,6 +47,7 @@ import org.gephi.streaming.api.StreamReaderFactory;
 import org.gephi.streaming.api.StreamWriter;
 import org.gephi.streaming.api.StreamWriterFactory;
 import org.gephi.streaming.api.StreamingConnection;
+import org.gephi.streaming.api.StreamingEndpoint;
 import org.gephi.streaming.api.event.ElementType;
 import org.gephi.streaming.api.event.EventType;
 import org.gephi.streaming.api.event.GraphEvent;
@@ -233,7 +234,10 @@ public abstract class AbstractStreamProcessorTest {
         StreamReader streamReader = factory.createStreamReader(streamType, container, eventBuilder);
         assertNotNull(streamReader);
 
-        StreamingConnection connection = new StreamingConnectionImpl(url, streamReader);
+        StreamingEndpoint endpoint = new StreamingEndpoint();
+        endpoint.setUrl(url);
+
+        StreamingConnection connection = new StreamingConnectionImpl(endpoint, streamReader);
 
         final AtomicBoolean processing = new AtomicBoolean(true);
         connection.addStatusListener(
@@ -283,8 +287,10 @@ public abstract class AbstractStreamProcessorTest {
         GraphEventBuilder eventBuilder = new GraphEventBuilder(resource);
         StreamReader streamReader = factory.createStreamReader(streamType, graphUpdaterHandler, eventBuilder);
         assertNotNull(streamReader);
-        
-        StreamingConnection connection = new StreamingConnectionImpl(url, streamReader);
+
+        StreamingEndpoint endpoint = new StreamingEndpoint();
+        endpoint.setUrl(url);
+        StreamingConnection connection = new StreamingConnectionImpl(endpoint, streamReader);
 
         final AtomicBoolean processing = new AtomicBoolean(true);
         connection.addStatusListener(
@@ -335,7 +341,9 @@ public abstract class AbstractStreamProcessorTest {
         StreamReader streamReader = factory.createStreamReader(streamType, container, eventBuilder);
         assertNotNull(streamReader);
 
-        StreamingConnection connection = new StreamingConnectionImpl(url, streamReader);
+        StreamingEndpoint endpoint = new StreamingEndpoint();
+        endpoint.setUrl(url);
+        StreamingConnection connection = new StreamingConnectionImpl(endpoint, streamReader);
 
         final AtomicBoolean processing = new AtomicBoolean(true);
         connection.addStatusListener(
