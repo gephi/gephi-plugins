@@ -21,7 +21,6 @@ along with Gephi.  If not, see <http://www.gnu.org/licenses/>.
 package org.gephi.desktop.streaming;
 
 import java.awt.Color;
-import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
@@ -38,7 +37,6 @@ import org.netbeans.swing.outline.DefaultOutlineModel;
 import org.netbeans.swing.outline.OutlineModel;
 import org.netbeans.swing.outline.RenderDataProvider;
 import org.netbeans.swing.outline.RowModel;
-import org.openide.util.Exceptions;
 import org.openide.util.NbPreferences;
 
 /**
@@ -131,14 +129,10 @@ public class ReportPanel extends javax.swing.JPanel {
     }
 
     private void fillStats(final Report report) {
-        //TODO: Source
-        //sourceLabel.setText(
+        sourceLabel.setText(report.getSource());
 
-        // TODO: node and edge count, event count
-        int nodeCount = report.getEventCounter();
-        int edgeCount = report.getEventCounter();
-        nodeCountLabel.setText("" + nodeCount);
-        edgeCountLabel.setText("" + edgeCount);
+        int eventCount = report.getEventCounter();
+        eventCountLabel.setText("" + eventCount);
     }
 
     public void destroy() {
@@ -163,12 +157,9 @@ public class ReportPanel extends javax.swing.JPanel {
         issuesOutline = new org.netbeans.swing.outline.Outline();
         tab2ScrollPane = new javax.swing.JScrollPane();
         reportEditor = new javax.swing.JEditorPane();
-        processorPanel = new javax.swing.JPanel();
         jPanel1 = new javax.swing.JPanel();
-        labelNodeCount = new javax.swing.JLabel();
-        labelEdgeCount = new javax.swing.JLabel();
-        nodeCountLabel = new javax.swing.JLabel();
-        edgeCountLabel = new javax.swing.JLabel();
+        labelEventCount = new javax.swing.JLabel();
+        eventCountLabel = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
 
         labelSrc.setText(org.openide.util.NbBundle.getMessage(ReportPanel.class, "ReportPanel.labelSrc.text")); // NOI18N
@@ -183,47 +174,26 @@ public class ReportPanel extends javax.swing.JPanel {
 
         tabbedPane.addTab(org.openide.util.NbBundle.getMessage(ReportPanel.class, "ReportPanel.tab2ScrollPane.TabConstraints.tabTitle"), tab2ScrollPane); // NOI18N
 
-        processorPanel.setLayout(new java.awt.GridBagLayout());
-
         jPanel1.setLayout(new java.awt.GridBagLayout());
 
-        labelNodeCount.setFont(new java.awt.Font("Tahoma", 1, 11));
-        labelNodeCount.setText(org.openide.util.NbBundle.getMessage(ReportPanel.class, "ReportPanel.labelNodeCount.text")); // NOI18N
+        labelEventCount.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        labelEventCount.setText(org.openide.util.NbBundle.getMessage(ReportPanel.class, "ReportPanel.labelEventCount.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.insets = new java.awt.Insets(10, 0, 6, 0);
-        jPanel1.add(labelNodeCount, gridBagConstraints);
+        jPanel1.add(labelEventCount, gridBagConstraints);
 
-        labelEdgeCount.setFont(new java.awt.Font("Tahoma", 1, 11));
-        labelEdgeCount.setText(org.openide.util.NbBundle.getMessage(ReportPanel.class, "ReportPanel.labelEdgeCount.text")); // NOI18N
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.insets = new java.awt.Insets(0, 0, 10, 0);
-        jPanel1.add(labelEdgeCount, gridBagConstraints);
-
-        nodeCountLabel.setFont(new java.awt.Font("Tahoma", 1, 11));
-        nodeCountLabel.setText(org.openide.util.NbBundle.getMessage(ReportPanel.class, "ReportPanel.nodeCountLabel.text")); // NOI18N
+        eventCountLabel.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        eventCountLabel.setText(org.openide.util.NbBundle.getMessage(ReportPanel.class, "ReportPanel.eventCountLabel.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 6, 0);
-        jPanel1.add(nodeCountLabel, gridBagConstraints);
-
-        edgeCountLabel.setFont(new java.awt.Font("Tahoma", 1, 11));
-        edgeCountLabel.setText(org.openide.util.NbBundle.getMessage(ReportPanel.class, "ReportPanel.edgeCountLabel.text")); // NOI18N
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(0, 10, 10, 0);
-        jPanel1.add(edgeCountLabel, gridBagConstraints);
+        jPanel1.add(eventCountLabel, gridBagConstraints);
 
         jLabel1.setText(org.openide.util.NbBundle.getMessage(ReportPanel.class, "ReportPanel.jLabel1.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -238,19 +208,20 @@ public class ReportPanel extends javax.swing.JPanel {
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+            .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(tabbedPane, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 843, Short.MAX_VALUE)
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                        .addComponent(labelSrc)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(sourceLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 788, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 448, Short.MAX_VALUE)
-                        .addGap(188, 188, 188)
-                        .addComponent(processorPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 207, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap())
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(tabbedPane, javax.swing.GroupLayout.DEFAULT_SIZE, 608, Short.MAX_VALUE)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(labelSrc)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(sourceLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 553, Short.MAX_VALUE)))
+                        .addContainerGap())
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 395, Short.MAX_VALUE)
+                        .addGap(225, 225, 225))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -262,24 +233,17 @@ public class ReportPanel extends javax.swing.JPanel {
                 .addGap(18, 18, 18)
                 .addComponent(tabbedPane, javax.swing.GroupLayout.PREFERRED_SIZE, 175, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(79, 79, 79)
-                        .addComponent(processorPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 25, Short.MAX_VALUE))
-                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap())
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel edgeCountLabel;
+    private javax.swing.JLabel eventCountLabel;
     private org.netbeans.swing.outline.Outline issuesOutline;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JLabel labelEdgeCount;
-    private javax.swing.JLabel labelNodeCount;
+    private javax.swing.JLabel labelEventCount;
     private javax.swing.JLabel labelSrc;
-    private javax.swing.JLabel nodeCountLabel;
-    private javax.swing.JPanel processorPanel;
     private javax.swing.ButtonGroup processorStrategyRadio;
     private javax.swing.JEditorPane reportEditor;
     private javax.swing.JLabel sourceLabel;

@@ -38,6 +38,7 @@ public final class Report {
     private final Queue<ReportEntry> entries = new ConcurrentLinkedQueue<ReportEntry>();
     private Issue.Level exceptionLevel = Issue.Level.CRITICAL;
     private AtomicInteger eventCounter = new AtomicInteger();
+    private String source;
 
     public int incrementEventCounter() {
         return eventCounter.incrementAndGet();
@@ -143,6 +144,20 @@ public final class Report {
      */
     public void setExceptionLevel(Level exceptionLevel) {
         this.exceptionLevel = exceptionLevel;
+    }
+
+    /**
+     * @return the source
+     */
+    public String getSource() {
+        return source;
+    }
+
+    /**
+     * @param source the source to set
+     */
+    public void setSource(String source) {
+        this.source = source;
     }
 
     private class ReportEntry {

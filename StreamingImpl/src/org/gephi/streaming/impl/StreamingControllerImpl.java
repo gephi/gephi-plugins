@@ -81,6 +81,10 @@ public class StreamingControllerImpl implements StreamingController {
             Report report, StreamingConnection.StatusListener statusListener) throws IOException {
         logger.log(Level.FINE, "Connecting to url {0}", endpoint.getUrl().toString());
 
+        if (report!=null) {
+            report.setSource(endpoint.getUrl().toString());
+        }
+
         final Set<FilteredEventEntry> filterededIds = new HashSet<FilteredEventEntry>();
 
         final GraphUpdaterEventHandler graphUpdaterHandler = new GraphUpdaterEventHandler(graph);
