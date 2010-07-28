@@ -91,7 +91,9 @@ public class StreamingControllerImpl implements StreamingController {
             public void handleGraphEvent(GraphEvent event) {
                 if (event instanceof ElementEvent) {
                     ElementEvent elementEvent = (ElementEvent)event;
-                    filterededIds.add(new FilteredEventEntry(elementEvent.getElementId(), elementEvent.getElementType(), 0));
+                    if (elementEvent.getElementId()!=null) {
+                        filterededIds.add(new FilteredEventEntry(elementEvent.getElementId(), elementEvent.getElementType(), 0));
+                    }
                 }
 
                 graphUpdaterHandler.handleGraphEvent(event);
