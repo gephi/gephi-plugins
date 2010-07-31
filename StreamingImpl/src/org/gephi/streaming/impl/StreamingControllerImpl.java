@@ -62,6 +62,7 @@ public class StreamingControllerImpl implements StreamingController {
 
     private static final Logger logger = Logger.getLogger(StreamingControllerImpl.class.getName());
 
+    @Override
     public StreamType getStreamType(String streamType) {
         Collection<? extends StreamType> streamTypes = Lookup.getDefault().lookupAll(StreamType.class);
         for (StreamType type: streamTypes) {
@@ -78,15 +79,27 @@ public class StreamingControllerImpl implements StreamingController {
     }
 
     @Override
-    public StreamingConnection process(StreamingEndpoint endpoint, Graph graph,
+    public StreamingConnection process(StreamingEndpoint endpoint, final Graph graph,
             Report report, StreamingConnection.StatusListener statusListener) throws IOException {
         logger.log(Level.FINE, "Connecting to url {0}", endpoint.getUrl().toString());
+        
+        final Set<FilteredEventEntry> filterededIds = new HashSet<FilteredEventEntry>();
+
+        // Register listener for graph events
+
+        ClientEventHandler handler = new ClientEventHandler(endpoint, filterededIds);
+        final Graph2EventListener graph2EventListener = new Graph2EventListener(graph, handler);
+
+        graph.getGraphModel().addGraphListener(graph2EventListener);
+        AttributeController ac = Lookup.getDefault().lookup(AttributeController.class);
+        ac.getModel().getEdgeTable().addAttributeListener(graph2EventListener);
+        ac.getModel().getNodeTable().addAttributeListener(graph2EventListener);
 
         if (report!=null) {
             report.setSource(endpoint.getUrl().toString());
         }
 
-        final Set<FilteredEventEntry> filterededIds = new HashSet<FilteredEventEntry>();
+        // Connect to stream
 
         final GraphUpdaterEventHandler graphUpdaterHandler = new GraphUpdaterEventHandler(graph);
         graphUpdaterHandler.setReport(report);
@@ -118,8 +131,15 @@ public class StreamingControllerImpl implements StreamingController {
 
             @Override
                 public void onConnectionClosed(StreamingConnection connection) {
+                    graph.getGraphModel().removeGraphListener(graph2EventListener);
+                    AttributeController ac = Lookup.getDefault().lookup(AttributeController.class);
+                    ac.getModel().getEdgeTable().removeAttributeListener(graph2EventListener);
+                    ac.getModel().getNodeTable().removeAttributeListener(graph2EventListener);
+
                     container.waitForDispatchAllEvents();
                     container.stop();
+
+                    logger.log(Level.INFO, "Connecion closed");
                 }
 
             @Override
@@ -131,14 +151,6 @@ public class StreamingControllerImpl implements StreamingController {
             connection.addStatusListener(statusListener);
         }
         connection.asynchProcess();
-        ClientEventHandler handler = new ClientEventHandler(endpoint, filterededIds);
-
-        Graph2EventListener graph2EventListener = new Graph2EventListener(graph, handler);
-
-        graph.getGraphModel().addGraphListener(graph2EventListener);
-        AttributeController ac = Lookup.getDefault().lookup(AttributeController.class);
-        ac.getModel().getEdgeTable().addAttributeListener(graph2EventListener);
-        ac.getModel().getNodeTable().addAttributeListener(graph2EventListener);
 
         logger.log(Level.INFO, "Connected to url {0}", endpoint.getUrl().toString());
 

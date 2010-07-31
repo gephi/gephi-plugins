@@ -257,19 +257,20 @@ public class StreamingUIController {
 //        final StreamingClient client = new StreamingClient(endpoint, graph);
         final Report report = new Report();
         try {
-            StreamingConnection connection = controller.process(endpoint, graph, report,
-                new StreamingConnection.StatusListener() {
-                    public void onConnectionClosed(StreamingConnection connection) {
-                        disconnect(connection);
-
-                        // TODO: show stream report
-                        System.out.println("-- Stream report -----\n" +
-                                report.getText() + "--------");
-                    }
-
-                public void onDataReceived(StreamingConnection connection) { }
-                public void onError(StreamingConnection connection) { }
-                });
+            //TODO: verify if this listener is really necessary
+            StreamingConnection connection = controller.process(endpoint, graph, report, null);
+//                new StreamingConnection.StatusListener() {
+//                    public void onConnectionClosed(StreamingConnection connection) {
+//                        disconnect(connection);
+//
+//                        // TODO: show stream report
+//                        System.out.println("-- Stream report -----\n" +
+//                                report.getText() + "--------");
+//                    }
+//
+//                public void onDataReceived(StreamingConnection connection) { }
+//                public void onError(StreamingConnection connection) { }
+//                });
 
             model.addConnection(connection, report);
 
