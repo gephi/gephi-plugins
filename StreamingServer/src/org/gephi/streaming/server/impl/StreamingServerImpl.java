@@ -204,6 +204,10 @@ public class StreamingServerImpl implements StreamingServer {
                 return;
             
             String context = request.getPath().getPath();
+            int endIndex = context.indexOf("/", 1);
+            if (endIndex<0) endIndex=context.length();
+            context = context.substring(0, endIndex);
+
             ServerController controller = controllers.get(context);
             if (controller==null) {
                 logger.log(Level.WARNING, "Invalid context: {0}", context);
@@ -270,20 +274,15 @@ public class StreamingServerImpl implements StreamingServer {
             logger.log(Level.INFO, "HTTPS Listening at port {0}", settings.getSSLPort());
             
         } catch (UnrecoverableKeyException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            logger.log(Level.WARNING, null, e);
         } catch (KeyManagementException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            logger.log(Level.WARNING, null, e);
         } catch (NoSuchAlgorithmException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            logger.log(Level.WARNING, null, e);
         } catch (CertificateException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            logger.log(Level.WARNING, null, e);
         } catch (KeyStoreException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            logger.log(Level.WARNING, null, e);
         }
     }
 

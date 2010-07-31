@@ -40,6 +40,7 @@ import org.gephi.streaming.api.Issue;
 import org.gephi.streaming.api.StreamReader;
 import org.gephi.streaming.api.event.ElementType;
 import org.gephi.streaming.api.event.EventType;
+import org.gephi.streaming.api.event.GraphEvent;
 import org.gephi.streaming.api.event.GraphEventBuilder;
 import org.gephi.streaming.impl.json.parser.JSONException;
 import org.gephi.streaming.impl.json.parser.JSONObject;
@@ -58,6 +59,7 @@ public class JSONStreamReader extends StreamReader {
 
     /**
      * @param handler the GraphEventHandler to which the events will be delegated
+     * @param eventBuilder 
      */
     public JSONStreamReader(GraphEventHandler handler,
             GraphEventBuilder eventBuilder) {
@@ -165,104 +167,21 @@ public class JSONStreamReader extends StreamReader {
         
         try {
             JSONObject jo = new JSONObject(content);
-            String type = (String)jo.keys().next();
-            JSONObject gObjs = (JSONObject)jo.get(type);
-
-            if (Types.AN.value().equals(type)) {
-                Iterator i = gObjs.keys();
-                while (i.hasNext()) {
-                    String id = (String)i.next();
-
-                    Map<String, Object> attributes = new HashMap<String, Object>();
-                    JSONObject gObj = (JSONObject)gObjs.get(id);
-                    Iterator i2 = gObj.keys();
-                    while (i2.hasNext()) {
-                        String key = (String)i2.next();
-                        Object value = gObj.get(key);
-                        attributes.put(key, value);
-                    }
-
-                    handler.handleGraphEvent(eventBuilder.graphEvent(ElementType.NODE, EventType.ADD, id, attributes));
-                }
-
-            } else if (Types.CN.value().equals(type)) {
-
-                Iterator i = gObjs.keys();
-                while (i.hasNext()) {
-                    String id = (String)i.next();
-                    
-                    Map<String, Object> attributes = new HashMap<String, Object>();
-                    JSONObject gObj = (JSONObject)gObjs.get(id);
-                    Iterator i2 = gObj.keys();
-                    while (i2.hasNext()) {
-                        String key = (String)i2.next();
-                        Object value = gObj.get(key);
-                        attributes.put(key, value);
-                    }
-
-                    handler.handleGraphEvent(eventBuilder.graphEvent(ElementType.NODE, EventType.CHANGE, id, attributes));
-                }
-
-            } else if (Types.DN.value().equals(type)) {
-                Iterator i = gObjs.keys();
-                while (i.hasNext()) {
-                    String id = (String)i.next();
-                    handler.handleGraphEvent(eventBuilder.graphEvent(ElementType.NODE, EventType.REMOVE, id, null));
-                }
-
-            } else if (Types.AE.value().equals(type)) {
-                Iterator i = gObjs.keys();
-                while (i.hasNext()) {
-                    String id = (String)i.next();
-                    
-                    Map<String, Object> attributes = new HashMap<String, Object>();
-                    JSONObject gObj = (JSONObject)gObjs.get(id);
-                    Iterator i2 = gObj.keys();
-                    while (i2.hasNext()) {
-                        String key = (String)i2.next();
-                        if (!key.equals(Fields.SOURCE.value()) 
-                                && !key.equals(Fields.TARGET.value()) 
-                                && !key.equals(Fields.DIRECTED.value())) {
-                            Object value = gObj.get(key);
-                            attributes.put(key, value);
-                        }
-                    }
-                    
-                    handler.handleGraphEvent(eventBuilder.edgeAddedEvent(id,
-                            gObj.getString(Fields.SOURCE.value()),
-                            gObj.getString(Fields.TARGET.value()),
-                            Boolean.valueOf(gObj.getString(Fields.DIRECTED.value())), attributes));
-                }
-
-            } else if (Types.CE.value().equals(type)) {
-
-                Iterator i = gObjs.keys();
-                while (i.hasNext()) {
-                    String id = (String)i.next();
-                    
-                    Map<String, Object> attributes = new HashMap<String, Object>();
-                    JSONObject gObj = (JSONObject)gObjs.get(id);
-                    Iterator i2 = gObj.keys();
-                    while (i2.hasNext()) {
-                        String key = (String)i2.next();
-                        Object value = gObj.get(key);
-                        attributes.put(key, value);
-                    }
-
-                    handler.handleGraphEvent(eventBuilder.graphEvent(ElementType.EDGE, EventType.CHANGE, id, attributes));
-                }
-
-            } else if (Types.DE.value().equals(type)) {
-                Iterator i = gObjs.keys();
-                while (i.hasNext()) {
-                    String id = (String)i.next();
-                    handler.handleGraphEvent(eventBuilder.graphEvent(ElementType.EDGE, EventType.REMOVE, id, null));
-                }
-
-            } else if (Types.CG.value().equals(type)) {
-
+            
+            String id = null;
+            if (jo.has(Fields.ID.value())) {
+                id = jo.getString(Fields.ID.value());
             }
-
+            
+            Iterator<String> keys = jo.keys();
+            
+            while (keys.hasNext()) {
+                String key = keys.next();
+                if (Fields.ID.value().equals(key)) continue;
+                JSONObject gObjs = (JSONObject)jo.get(key);
+                parse(key, gObjs, id);
+            }
+            
             if (report!=null) {
                 report.incrementEventCounter();
             }
@@ -285,5 +204,111 @@ public class JSONStreamReader extends StreamReader {
             }
             logger.log(Level.WARNING, "JSON object ignored: \"{0}\": {1}", new String[]{content, e.getMessage()});
         }
+    }
+    
+    private void parse(String type, JSONObject gObjs, String eventId) throws JSONException {
+        GraphEvent event = null;
+        
+        if (Types.AN.value().equals(type)) {
+            Iterator<String> i = gObjs.keys();
+            while (i.hasNext()) {
+                String id = i.next();
+
+                Map<String, Object> attributes = new HashMap<String, Object>();
+                JSONObject gObj = (JSONObject)gObjs.get(id);
+                Iterator<String> i2 = gObj.keys();
+                while (i2.hasNext()) {
+                    String key = i2.next();
+                    Object value = gObj.get(key);
+                    attributes.put(key, value);
+                }
+                event = eventBuilder.graphEvent(ElementType.NODE, EventType.ADD, id, attributes);
+            }
+
+        } else if (Types.CN.value().equals(type)) {
+
+            Iterator<String> i = gObjs.keys();
+            while (i.hasNext()) {
+                String id = i.next();
+                
+                Map<String, Object> attributes = new HashMap<String, Object>();
+                JSONObject gObj = (JSONObject)gObjs.get(id);
+                Iterator<String> i2 = gObj.keys();
+                while (i2.hasNext()) {
+                    String key = i2.next();
+                    Object value = gObj.get(key);
+                    attributes.put(key, value);
+                }
+
+                event = eventBuilder.graphEvent(ElementType.NODE, EventType.CHANGE, id, attributes);
+            }
+
+        } else if (Types.DN.value().equals(type)) {
+            Iterator<String> i = gObjs.keys();
+            while (i.hasNext()) {
+                String id = i.next();
+                event = eventBuilder.graphEvent(ElementType.NODE, EventType.REMOVE, id, null);
+            }
+
+        } else if (Types.AE.value().equals(type)) {
+            Iterator<String> i = gObjs.keys();
+            while (i.hasNext()) {
+                String id = i.next();
+                
+                Map<String, Object> attributes = new HashMap<String, Object>();
+                JSONObject gObj = (JSONObject)gObjs.get(id);
+                Iterator<String> i2 = gObj.keys();
+                while (i2.hasNext()) {
+                    String key = i2.next();
+                    if (!key.equals(Fields.SOURCE.value()) 
+                            && !key.equals(Fields.TARGET.value()) 
+                            && !key.equals(Fields.DIRECTED.value())) {
+                        Object value = gObj.get(key);
+                        attributes.put(key, value);
+                    }
+                }
+                
+                event = eventBuilder.edgeAddedEvent(id,
+                        gObj.getString(Fields.SOURCE.value()),
+                        gObj.getString(Fields.TARGET.value()),
+                        Boolean.valueOf(gObj.getString(Fields.DIRECTED.value())), attributes);
+            }
+
+        } else if (Types.CE.value().equals(type)) {
+
+            Iterator<String> i = gObjs.keys();
+            while (i.hasNext()) {
+                String id = i.next();
+                
+                Map<String, Object> attributes = new HashMap<String, Object>();
+                JSONObject gObj = (JSONObject)gObjs.get(id);
+                Iterator<String> i2 = gObj.keys();
+                while (i2.hasNext()) {
+                    String key = i2.next();
+                    Object value = gObj.get(key);
+                    attributes.put(key, value);
+                }
+
+                event = eventBuilder.graphEvent(ElementType.EDGE, EventType.CHANGE, id, attributes);
+            }
+
+        } else if (Types.DE.value().equals(type)) {
+            Iterator<String> i = gObjs.keys();
+            while (i.hasNext()) {
+                String id = i.next();
+                event = eventBuilder.graphEvent(ElementType.EDGE, EventType.REMOVE, id, null);
+            }
+
+        } else if (Types.CG.value().equals(type)) {
+
+        }
+        
+        if (event != null) {
+            if (eventId!=null) {
+                event.setEventId(eventId);
+            }
+            handler.handleGraphEvent(event);
+        }
+
     }
 }

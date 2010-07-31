@@ -23,6 +23,8 @@ package org.gephi.streaming.api.event;
 import java.util.EventObject;
 
 /**
+ * The basic streaming graph event representation.
+ * 
  * @author panisson
  *
  */
@@ -32,6 +34,7 @@ public class GraphEvent extends EventObject {
     
     protected final EventType eventType;
     protected final ElementType elementType;
+    protected String eventId;
     
 
     /**
@@ -61,6 +64,20 @@ public class GraphEvent extends EventObject {
      */
     public ElementType getElementType() {
         return elementType;
+    }
+    
+    /**
+     * @return the eventId
+     */
+    public String getEventId() {
+        return eventId;
+    }
+
+    /**
+     * @param eventId the eventId to set
+     */
+    public void setEventId(String eventId) {
+        this.eventId = eventId;
     }
 
     /* (non-Javadoc)
