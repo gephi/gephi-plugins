@@ -40,7 +40,7 @@ public class ClientManager {
         }
     }
 
-    void remove(Request request, Response response) {
+    public void remove(Request request, Response response) {
         registeredClients.remove(response);
         String clientId = (String)request.getAttributes().get("CLIENT_IDENTIFIER");
         for (ClientManagerListener listener: listeners) {

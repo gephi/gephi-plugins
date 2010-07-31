@@ -1,7 +1,7 @@
 /**
  * 
  */
-package org.gephi.streaming.server;
+package org.gephi.streaming.server.impl;
 
 import java.util.Set;
 

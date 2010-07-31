@@ -15,6 +15,7 @@ import org.gephi.streaming.api.StreamReaderFactory;
 import org.gephi.streaming.server.ServerController;
 import org.gephi.streaming.server.impl.RequestWrapper;
 import org.gephi.streaming.server.impl.ResponseWrapper;
+import org.gephi.streaming.server.impl.ServerControllerImpl;
 import org.openide.util.Lookup;
 import org.simpleframework.http.Request;
 import org.simpleframework.http.Response;
@@ -47,7 +48,7 @@ public class MainServer2 implements Container {
         GraphController graphController = Lookup.getDefault().lookup(GraphController.class);
         GraphModel graphModel = graphController.getModel();
 	    
-        serverController = new ServerController(graphModel.getHierarchicalMixedGraph());
+        serverController = new ServerControllerImpl(graphModel.getHierarchicalMixedGraph());
 	    
 	    final InputStream fileInputStream = this.getClass().getResourceAsStream(DGS_RESOURCE);
         

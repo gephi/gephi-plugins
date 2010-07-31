@@ -18,7 +18,7 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with Gephi.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.gephi.streaming.server;
+package org.gephi.streaming.server.impl;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -46,6 +46,9 @@ import org.gephi.streaming.api.StreamWriter;
 import org.gephi.streaming.api.StreamWriterFactory;
 import org.gephi.streaming.api.event.ElementType;
 import org.gephi.streaming.api.event.EventType;
+import org.gephi.streaming.server.ClientManager;
+import org.gephi.streaming.server.Request;
+import org.gephi.streaming.server.Response;
 import org.openide.util.Lookup;
 
 /**
@@ -84,6 +87,10 @@ public class ServerOperationExecutor {
      * @param outputStream
      */
     public void executeGetGraph(final Request request, final Response response) throws IOException {
+        
+        response.commit();
+        response.getOutputStream().flush();
+
         String format = request.getParameter("format");
         if(format==null) {
             // Default format is JSON

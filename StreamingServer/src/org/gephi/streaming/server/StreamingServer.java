@@ -22,6 +22,8 @@ package org.gephi.streaming.server;
 
 import java.io.IOException;
 
+import org.gephi.streaming.server.impl.ServerControllerImpl;
+
 
 /**
  * The streaming server instance.

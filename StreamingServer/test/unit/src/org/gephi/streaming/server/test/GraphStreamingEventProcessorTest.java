@@ -48,8 +48,8 @@ import org.gephi.streaming.api.event.GraphEvent;
 import org.gephi.streaming.api.event.GraphEventBuilder;
 import org.gephi.streaming.impl.GraphEventContainer;
 import org.gephi.streaming.impl.StreamingConnectionImpl;
-import org.gephi.streaming.server.FilteredGraphEventHandler;
-import org.gephi.streaming.server.GraphChangeListener;
+import org.gephi.streaming.server.impl.FilteredGraphEventHandler;
+import org.gephi.streaming.server.impl.GraphChangeListener;
 import org.junit.Test;
 import org.openide.util.Lookup;
 

@@ -8,8 +8,8 @@ import org.gephi.graph.api.GraphModel;
 import org.gephi.project.api.ProjectController;
 import org.gephi.project.api.Workspace;
 import org.gephi.streaming.server.AuthenticationFilter;
-import org.gephi.streaming.server.ServerController;
 import org.gephi.streaming.server.StreamingServer;
+import org.gephi.streaming.server.impl.ServerControllerImpl;
 import org.junit.Test;
 import org.openide.util.Lookup;
 
@@ -43,7 +43,7 @@ public class MainServer {
         authenticationFilter.setPassword("asdf");
         authenticationFilter.setAuthenticationEnabled(true);
 
-        ServerController serverController = new ServerController(graphModel.getHierarchicalMixedGraph());
+        ServerControllerImpl serverController = new ServerControllerImpl(graphModel.getHierarchicalMixedGraph());
         server.register(serverController, "/graphstream");
 
         server.start();
