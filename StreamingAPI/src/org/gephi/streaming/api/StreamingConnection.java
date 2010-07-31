@@ -24,23 +24,53 @@ import java.io.IOException;
 import java.net.URL;
 
 /**
+ * This interface represents a connection to a stream.
  *
  * @author panisson
  */
 public interface StreamingConnection {
-    
+
+    /**
+     * This is used to get the URL where this object is connected.
+     * @return the URL
+     */
     public URL getUrl();
-    
+
+    /**
+     * This is used to close the connection
+     * @throws IOException
+     */
     public void close() throws IOException;
-    
+
+    /**
+     * This is used to verify if the connection is closed
+     * @return true if connection closed, false otherwise
+     */
     public boolean isClosed();
-    
+
+    /**
+     * This is used to connect to the URL and process asynchronously the
+     * events received. A new thread will be created and the synchProcess()
+     * will be called.
+     */
     public void asynchProcess();
 
+    /**
+     * This is used to connect to the URL and process the
+     * events received. The method returns only when the connection is closed.
+     */
     public void synchProcess();
 
+    /**
+     * Set a listener to asynchronously receive status notifications.
+     * @param listener the listener to be notifiedConnection
+     */
     public void addStatusListener(StatusListener listener);
 
+    /**
+     * This is the listener interface to asynchronously receive status notifications.
+     * It should be registered using setStatusListener().
+     */
     public interface StatusListener {
         public void onConnectionClosed(StreamingConnection connection);
         public void onDataReceived(StreamingConnection connection);

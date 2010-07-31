@@ -34,12 +34,28 @@ import java.nio.channels.ReadableByteChannel;
  * @author Andre' Panisson
  */
 public abstract class StreamReader {
-    
+
+    /**
+     * The handler that will handle events
+     */
     protected final GraphEventHandler handler;
+    /**
+     * The event builder to create graph events
+     */
     protected final GraphEventBuilder eventBuilder;
+    /**
+     * The report to add useful information
+     */
     protected Report report;
+    /**
+     * A listener to receive status notifications
+     */
+    protected StreamReaderStatusListener listener;
     
     /**
+     * Create a new StreamReader that will send to the handler
+     * the events created using the event builder.
+     *
      * @param handler the GraphEventHandler to which the events will be delegated
      */
     public StreamReader(GraphEventHandler handler,
@@ -49,6 +65,8 @@ public abstract class StreamReader {
     }
 
     /**
+     * Used to get the Report where information is being added.
+     *
      * @return the report
      */
     public Report getReport() {
@@ -56,6 +74,8 @@ public abstract class StreamReader {
     }
 
     /**
+     * Used to set the Report where information will be added.
+     *
      * @param report the report to set
      */
     public void setReport(Report report) {
@@ -69,16 +89,41 @@ public abstract class StreamReader {
      * @param inputStream the InputStream to read from.
      * @throws IOException when unable to connect to the InputStream
      */
-    public final void processStream(InputStream inputStream) throws IOException {
-        this.processStream(inputStream, null);
+    public abstract void processStream(InputStream inputStream) throws IOException;
+
+    /**
+     * Read from the channel and send the appropriate event
+     * to the GraphEventHandler
+     *
+     * @param channel the ReadableByteChannel to read from.
+     * @throws IOException when unable to connect to the InputStream
+     */
+    public abstract void processStream(ReadableByteChannel channel) throws IOException;
+
+    /**
+     * Set a listener to asynchronously receive status notifications.
+     * @param listener the listener to be notifiedConnection
+     */
+    public void setStatusListener(StreamReaderStatusListener listener) {
+        this.listener = listener;
     }
 
-    public abstract void processStream(InputStream inputStream, StreamReaderStatusListener listener) throws IOException;
-    public abstract void processStream(ReadableByteChannel channel, StreamReaderStatusListener listener) throws IOException;
-
+    /**
+     * This is the listener interface to asynchronously receive status notifications.
+     * It should be registered using setStatusListener().
+     */
     public interface StreamReaderStatusListener {
-        public void onConnectionClosed();
+        /**
+         * Called when the stream is closed
+         */
+        public void onStreamClosed();
+        /**
+         * Called when data is received
+         */
         public void onDataReceived();
+        /**
+         * Called when error occurs
+         */
         public void onError();
     }
 

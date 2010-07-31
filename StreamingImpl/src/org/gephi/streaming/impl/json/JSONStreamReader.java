@@ -65,7 +65,7 @@ public class JSONStreamReader extends StreamReader {
     }
 
     @Override
-    public void processStream(InputStream inputStream, StreamReaderStatusListener listener) throws IOException {
+    public void processStream(InputStream inputStream) throws IOException {
 
 //        this.processStream(Channels.newChannel(inputStream), listener);
 
@@ -104,15 +104,15 @@ public class JSONStreamReader extends StreamReader {
         }
 
         if (listener!=null) {
-            listener.onConnectionClosed();
+            listener.onStreamClosed();
         }
 
     }
 
     @Override
-    public void processStream(ReadableByteChannel channel, StreamReaderStatusListener listener) throws IOException {
+    public void processStream(ReadableByteChannel channel) throws IOException {
 
-        this.processStream(Channels.newInputStream(channel), listener);
+        this.processStream(Channels.newInputStream(channel));
 
 //        StringBuilder content = new StringBuilder();
 
@@ -150,7 +150,7 @@ public class JSONStreamReader extends StreamReader {
 //        }
 //
 //        if (listener!=null) {
-//            listener.onConnectionClosed();
+//            listener.onStreamClosed();
 //        }
     }
 
@@ -267,6 +267,11 @@ public class JSONStreamReader extends StreamReader {
                 report.incrementEventCounter();
             }
         } catch (JSONException e) {
+
+            if (listener!=null) {
+                listener.onError();
+            }
+
             if (report!=null) {
                 StringBuilder message = new StringBuilder("JSON object ");
                 message.append(report.getEventCounter()+1)

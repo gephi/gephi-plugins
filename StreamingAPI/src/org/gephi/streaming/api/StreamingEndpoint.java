@@ -25,7 +25,7 @@ import java.io.Serializable;
 import java.net.URL;
 
 /**
- * A streaming endpoint, with the information required to connect to it
+ * A streaming endpoint, with all information required to connect to it
  * and process it.
  *
  * @author Andre' Panisson
@@ -39,14 +39,23 @@ public class StreamingEndpoint implements Serializable {
     private String user;
     private String password;
 
+    /**
+     * Create a new StreamingEndpoint with no information set
+     */
     public StreamingEndpoint() {}
 
+    /**
+     * Create a new StreamingEndpoint setting its URL and streamType
+     * @param url - the URL to set
+     * @param streamType - the streamType to set
+     */
     public StreamingEndpoint(URL url, StreamType streamType) {
         this.url = url;
         this.streamType = streamType;
     }
 
     /**
+     * Get the URL to connect to
      * @return the URL to connect to
      */
     public URL getUrl() {
@@ -54,7 +63,7 @@ public class StreamingEndpoint implements Serializable {
     }
 
     /**
-     * sets the URL to connect to
+     * Sets the URL to connect to
      * @param url the URL to connect to
      */
     public void setUrl(URL url) {
@@ -62,6 +71,7 @@ public class StreamingEndpoint implements Serializable {
     }
 
     /**
+     * Return the stream type
      * @return the stream type
      */
     public StreamType getStreamType() {
@@ -78,6 +88,7 @@ public class StreamingEndpoint implements Serializable {
     }
 
     /**
+     * Return the user to be used in case of authenticated connection
      * @return the user
      */
     public String getUser() {
@@ -85,6 +96,7 @@ public class StreamingEndpoint implements Serializable {
     }
 
     /**
+     * Sets the user to be used in case of authenticated connection
      * @param user the user to set
      */
     public void setUser(String user) {
@@ -92,6 +104,7 @@ public class StreamingEndpoint implements Serializable {
     }
 
     /**
+     * Return the password to be used in case of authenticated connection
      * @return the password
      */
     public String getPassword() {
@@ -99,6 +112,7 @@ public class StreamingEndpoint implements Serializable {
     }
 
     /**
+     * Sets the password to be used in case of authenticated connection
      * @param password the password to set
      */
     public void setPassword(String password) {

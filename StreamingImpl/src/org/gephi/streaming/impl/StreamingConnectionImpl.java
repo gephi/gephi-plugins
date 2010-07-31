@@ -148,11 +148,10 @@ public class StreamingConnectionImpl implements StreamingConnection {
         try {
 
             InputStream inputStream = connection.getInputStream();
-
-            streamProcessor.processStream(inputStream, new StreamReader.StreamReaderStatusListener() {
+            streamProcessor.setStatusListener(new StreamReader.StreamReaderStatusListener() {
 
                 @Override
-                public void onConnectionClosed() {
+                public void onStreamClosed() {
                     synchronized (listeners) {
                         for (StatusListener listener: listeners)
                             if (listener != null) {
@@ -181,6 +180,8 @@ public class StreamingConnectionImpl implements StreamingConnection {
                     }
                 }
             });
+
+            streamProcessor.processStream(inputStream);
 
         } catch (IOException e) {
             logger.log(Level.INFO, null, e);

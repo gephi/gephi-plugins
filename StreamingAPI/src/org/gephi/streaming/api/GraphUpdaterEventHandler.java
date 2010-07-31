@@ -35,6 +35,9 @@ import org.gephi.streaming.api.event.ElementEvent;
 import org.gephi.streaming.api.event.GraphEvent;
 
 /**
+ * This is a GraphEventHandler implementation used to update a graph
+ * when an event is received.
+ *
  * @author panisson
  *
  */
@@ -48,7 +51,10 @@ public class GraphUpdaterEventHandler implements GraphEventHandler {
     protected Report report;
     
     /**
-     * @param graph
+     * This is used to create a new GraphEventHandler that will update a graph
+     * when an event is received.
+     *
+     * @param graph - the Graph to be updated
      */
     public GraphUpdaterEventHandler(Graph graph) {
         this.graph = graph;
@@ -87,6 +93,7 @@ public class GraphUpdaterEventHandler implements GraphEventHandler {
         this.report = report;
     }
 
+    @Override
     public void handleGraphEvent(GraphEvent event) {
         try {
             doHandleGraphEvent(event);
@@ -99,7 +106,7 @@ public class GraphUpdaterEventHandler implements GraphEventHandler {
         }
     }
 
-    public void doHandleGraphEvent(GraphEvent event) {
+    private void doHandleGraphEvent(GraphEvent event) {
 
         if (event instanceof ElementEvent) {
             ElementEvent elementEvent = (ElementEvent)event;

@@ -29,14 +29,17 @@ package org.gephi.streaming.api;
 public interface StreamType {
 
     /**
+     * Used to get the String representing this stream type
      * @return the String representing this stream type
      */
     public String getType();
     /**
+     * Used to get the StreamReader class implementation for this stream type
      * @return the StreamReader class implementation for this stream type
      */
     public Class<? extends StreamReader> getStreamReaderClass();
     /**
+     * Used to get the StreamWriter class implementation for this stream type
      * @return the StreamWriter class implementation for this stream type
      */
     public Class<? extends StreamWriter> getStreamWriterClass();

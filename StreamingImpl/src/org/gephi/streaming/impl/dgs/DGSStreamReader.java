@@ -50,7 +50,7 @@ public class DGSStreamReader extends StreamReader implements DGSParserListener {
     }
 
     @Override
-    public void processStream(InputStream inputStream, StreamReaderStatusListener listener) {
+    public void processStream(InputStream inputStream) {
         
         DGSParser parser = new DGSParser(inputStream, this, report, listener);
         try {
@@ -62,7 +62,7 @@ public class DGSStreamReader extends StreamReader implements DGSParserListener {
         }
 
         if (listener!=null) {
-            listener.onConnectionClosed();
+            listener.onStreamClosed();
         }
     }
 
@@ -88,6 +88,7 @@ public class DGSStreamReader extends StreamReader implements DGSParserListener {
             report.incrementEventCounter();
     }
 
+    @Override
     public void onGraphChanged(Map<String, Object> attributes) {
         handler.handleGraphEvent(eventBuilder.graphEvent(ElementType.GRAPH, EventType.CHANGE, null, attributes));
         if (report!=null)
@@ -129,7 +130,7 @@ public class DGSStreamReader extends StreamReader implements DGSParserListener {
     }
 
     @Override
-    public void processStream(ReadableByteChannel channel, StreamReaderStatusListener listener) throws IOException {
-        this.processStream(Channels.newInputStream(channel), listener);
+    public void processStream(ReadableByteChannel channel) throws IOException {
+        this.processStream(Channels.newInputStream(channel));
     }
 }
