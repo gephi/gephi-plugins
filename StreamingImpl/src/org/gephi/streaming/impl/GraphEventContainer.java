@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.LinkedBlockingQueue;
 
-import org.gephi.streaming.api.GraphEventContainer;
 import org.gephi.streaming.api.GraphEventHandler;
 import org.gephi.streaming.api.Report;
 import org.gephi.streaming.api.event.GraphEvent;
@@ -14,7 +13,7 @@ import org.gephi.streaming.api.event.GraphEvent;
  *
  */
 
-public class GraphEventContainerImpl implements GraphEventContainer {
+public class GraphEventContainer implements GraphEventHandler {
     
     private LinkedBlockingQueue<GraphEvent> eventQueue = new LinkedBlockingQueue<GraphEvent>();
 
@@ -33,7 +32,7 @@ public class GraphEventContainerImpl implements GraphEventContainer {
      * @param source the original source of data.
      * @throws NullPointerException if <code>source</code> is <code>null</code>
      */
-    public GraphEventContainerImpl(GraphEventHandler handler) {
+    public GraphEventContainer(GraphEventHandler handler) {
         this.report = new Report();
         this.handler = handler;
         
@@ -41,12 +40,10 @@ public class GraphEventContainerImpl implements GraphEventContainer {
         dispatcher.start();
     }
 
-    @Override
     public Report getReport() {
         return this.report;
     }
     
-    @Override
     public void setReport(Report report) {
         this.report = report;
     }

@@ -28,8 +28,10 @@ import java.util.concurrent.atomic.AtomicInteger;
 import org.gephi.streaming.api.Issue.Level;
 
 /**
- * Report is a log and issue container. Filled with information, details, minor or major issues, it is stored in an issue list
- * and can be retrieved to present issues to end-users. Behavior is the same as a simple logging library.
+ * Report is a log and issue container. Filled with information, details,
+ * minor or major issues, it is stored in an issue list
+ * and can be retrieved to present issues to end-users.
+ * Behavior is the same as a simple logging library.
  *
  * @author Mathieu Bastian
  */

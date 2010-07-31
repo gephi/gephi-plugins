@@ -35,8 +35,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.gephi.data.attributes.api.AttributeController;
 import org.gephi.graph.api.Graph;
-import org.gephi.streaming.api.GraphEventContainer;
-import org.gephi.streaming.api.GraphEventContainerFactory;
 import org.gephi.streaming.api.GraphEventHandler;
 import org.gephi.streaming.api.StreamingEndpoint;
 import org.gephi.streaming.api.GraphUpdaterEventHandler;
@@ -107,10 +105,7 @@ public class StreamingControllerImpl implements StreamingController {
             }
         };
 
-        GraphEventContainerFactory containerfactory =
-                Lookup.getDefault().lookup(GraphEventContainerFactory.class);
-        final GraphEventContainer container =
-                containerfactory.newGraphEventContainer(filteredHandler);
+        final GraphEventContainer container =  new GraphEventContainer(filteredHandler);
         GraphEventBuilder eventBuilder = new GraphEventBuilder(endpoint.getUrl());
         StreamReaderFactory readerFactory =
                 Lookup.getDefault().lookup(StreamReaderFactory.class);

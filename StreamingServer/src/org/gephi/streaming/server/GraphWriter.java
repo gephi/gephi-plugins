@@ -21,7 +21,9 @@ along with Gephi.  If not, see <http://www.gnu.org/licenses/>.
 package org.gephi.streaming.server;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 import org.gephi.data.attributes.api.AttributeRow;
 import org.gephi.data.attributes.api.AttributeValue;
@@ -52,6 +54,9 @@ public class GraphWriter extends CompositeGraphEventHandler {
     }
     
     public void writeGraph(GraphEventHandler operationSupport) {
+
+        Set<String> writtenNodes = new HashSet<String>();
+        Set<String> writtenEdges = new HashSet<String>();
         
         try {
             graph.readLock();
@@ -61,16 +66,32 @@ public class GraphWriter extends CompositeGraphEventHandler {
                 operationSupport.handleGraphEvent(
                         eventBuilder.graphEvent(ElementType.NODE,
                         EventType.ADD, nodeId, getNodeAttributes(node)));
+                writtenNodes.add(nodeId);
+
+                for (Edge edge: graph.getEdges(node)) {
+                    String edgeId = edge.getEdgeData().getId();
+                    if (writtenEdges.contains(edgeId)) continue;
+                    String sourceId = edge.getSource().getNodeData().getId();
+                    String targetId = edge.getTarget().getNodeData().getId();
+                    if (writtenNodes.contains(sourceId)
+                        && writtenNodes.contains(targetId) ) {
+                        operationSupport.handleGraphEvent(
+                                eventBuilder.edgeAddedEvent(edgeId, sourceId,
+                                targetId, edge.isDirected(), getEdgeAttributes(edge)));
+                        writtenEdges.add(edgeId);
+                    }
+                }
+
             }
             
-            for (Edge edge: graph.getEdges()) {
-                String edgeId = edge.getEdgeData().getId();
-                String sourceId = edge.getSource().getNodeData().getId();
-                String targetId = edge.getTarget().getNodeData().getId();
-                operationSupport.handleGraphEvent(
-                        eventBuilder.edgeAddedEvent(edgeId, sourceId,
-                        targetId, edge.isDirected(), getEdgeAttributes(edge)));
-            }
+//            for (Edge edge: graph.getEdges()) {
+//                String edgeId = edge.getEdgeData().getId();
+//                String sourceId = edge.getSource().getNodeData().getId();
+//                String targetId = edge.getTarget().getNodeData().getId();
+//                operationSupport.handleGraphEvent(
+//                        eventBuilder.edgeAddedEvent(edgeId, sourceId,
+//                        targetId, edge.isDirected(), getEdgeAttributes(edge)));
+//            }
 
         } catch (Exception e) {
             e.printStackTrace();

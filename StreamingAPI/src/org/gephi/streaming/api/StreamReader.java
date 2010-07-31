@@ -24,7 +24,6 @@ import org.gephi.streaming.api.event.GraphEventBuilder;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.channels.ReadableByteChannel;
-import org.gephi.streaming.api.StreamingConnection.StatusListener;
 
 /**
  * Read events from a stream.

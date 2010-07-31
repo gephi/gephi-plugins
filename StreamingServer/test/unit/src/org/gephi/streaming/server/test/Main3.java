@@ -20,7 +20,7 @@ import org.simpleframework.transport.connect.SocketConnection;
 public class Main3 implements Container {
 
     private static final String DGS_RESOURCE = "amazon_0201485419_400.dgs";
-    private static final String JSON_RESOURCE = "amazon.json";
+    private static final String JSON_RESOURCE = "graph.json";
 
     public void handle(Request request, Response response) {
         PrintStream body;
@@ -38,7 +38,7 @@ public class Main3 implements Container {
         response.setDate("Date", time);
         response.setDate("Last-Modified", time);
 
-        URL url = this.getClass().getResource(DGS_RESOURCE);
+        URL url = this.getClass().getResource(JSON_RESOURCE);
 
         try {
             OutputStream out = response.getOutputStream();
@@ -56,7 +56,7 @@ public class Main3 implements Container {
                 out.write(data);
 
                 i++;
-                if (i % 1000 == 0) {
+                if (i % 250 == 0) {
                     System.out.println("Sending data");
                     out.flush();
                     try {

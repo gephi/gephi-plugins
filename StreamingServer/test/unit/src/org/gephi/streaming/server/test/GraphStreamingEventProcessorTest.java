@@ -35,8 +35,6 @@ import org.gephi.graph.api.GraphModel;
 import org.gephi.project.api.ProjectController;
 import org.gephi.project.api.Workspace;
 import org.gephi.streaming.api.CompositeGraphEventHandler;
-import org.gephi.streaming.api.GraphEventContainer;
-import org.gephi.streaming.api.GraphEventContainerFactory;
 import org.gephi.streaming.api.GraphEventHandler;
 import org.gephi.streaming.api.GraphUpdaterEventHandler;
 import org.gephi.streaming.api.Report;
@@ -48,6 +46,7 @@ import org.gephi.streaming.api.StreamingConnection;
 import org.gephi.streaming.api.StreamingEndpoint;
 import org.gephi.streaming.api.event.GraphEvent;
 import org.gephi.streaming.api.event.GraphEventBuilder;
+import org.gephi.streaming.impl.GraphEventContainer;
 import org.gephi.streaming.impl.StreamingConnectionImpl;
 import org.gephi.streaming.server.FilteredGraphEventHandler;
 import org.gephi.streaming.server.GraphChangeListener;
@@ -135,13 +134,11 @@ public class GraphStreamingEventProcessorTest {
    public static StreamingConnection connectToStream(
             URL url, String streamType, GraphEventHandler handler)
     throws IOException {
-        GraphEventContainerFactory containerfactory =
-                Lookup.getDefault().lookup(GraphEventContainerFactory.class);
         StreamReaderFactory readerFactory =
                 Lookup.getDefault().lookup(StreamReaderFactory.class);
 
         final GraphEventContainer container =
-                containerfactory.newGraphEventContainer(handler);
+                new GraphEventContainer(handler);
 
         Report report = new Report();
         GraphEventBuilder eventBuilder = new GraphEventBuilder(url);
