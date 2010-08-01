@@ -133,6 +133,39 @@ public class StreamingUIController {
         connectToStream(endpoint);
     }
 
+    public void synchronize(StreamingConnection connection) {
+
+        // Get active graph instance - Project and Graph API
+        ProjectController projectController = Lookup.getDefault().lookup(ProjectController.class);
+        Project project = projectController.getCurrentProject();
+        if (project==null)
+            projectController.newProject();
+        Workspace workspace = projectController.getCurrentWorkspace();
+        if (workspace==null)
+            workspace = projectController.newWorkspace(projectController.getCurrentProject());
+//        projectController.openWorkspace(workspace);
+
+        GraphController graphController = Lookup.getDefault().lookup(GraphController.class);
+        GraphModel graphModel = graphController.getModel();
+        Graph graph = graphModel.getHierarchicalMixedGraph();
+        graph.clear();
+
+        try {
+            connection.close();
+
+            // Connect to stream - Streaming API
+            StreamingController controller = Lookup.getDefault().lookup(StreamingController.class);
+
+            connection = controller.connect(connection.getStreamingEndpoint(), graph);
+            connection.asynchProcess();
+
+            model.addConnection(connection);
+
+        } catch (IOException ex) {
+            Exceptions.printStackTrace(ex);
+        }
+    }
+
     public void setSettings() {
         StreamingServer server = Lookup.getDefault().lookup(StreamingServer.class);
 
@@ -170,7 +203,7 @@ public class StreamingUIController {
                 connection.close();
             }
         } catch (IOException e) {
-            notifyError("Error disconnecting from connection "+connection.getUrl().toString(), e);
+            notifyError("Error disconnecting from connection "+connection.getStreamingEndpoint().toString(), e);
         }
     }
     

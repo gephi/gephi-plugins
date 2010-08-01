@@ -18,6 +18,7 @@ import org.openide.nodes.AbstractNode;
 import org.openide.nodes.Children;
 import org.openide.util.Exceptions;
 import org.openide.util.ImageUtilities;
+import org.openide.util.Lookup;
 import org.openide.util.NbBundle;
 
 public class StreamingConnectionNode extends AbstractNode {
@@ -37,6 +38,7 @@ public class StreamingConnectionNode extends AbstractNode {
     private Action closeConnectionAction;
     private Action showReportAction;
     private Action removeFromViewAction;
+    private Action synchronizeAction;
     private ConnectionState state;
     private Timer timer;
     private final StreamingConnection connection;
@@ -45,7 +47,7 @@ public class StreamingConnectionNode extends AbstractNode {
         super(Children.LEAF);
         this.connection = connection;
         timer = new Timer();
-        setDisplayName(connection.getUrl().toString());
+        setDisplayName(connection.getStreamingEndpoint().getUrl().toString());
         connection.addStatusListener(
         new StreamingConnection.StatusListener() {
 
@@ -95,6 +97,15 @@ public class StreamingConnectionNode extends AbstractNode {
             }
         };
 
+        synchronizeAction = new AbstractAction("Synchronize") {
+            public void actionPerformed(ActionEvent e) {
+                ClientNode parent = (ClientNode)getParentNode();
+                parent.removeConnectionNode(StreamingConnectionNode.this);
+                StreamingUIController controller = Lookup.getDefault().lookup(StreamingUIController.class);
+                controller.synchronize(connection);
+            }
+        };
+
         if (!connection.isClosed()) {
             state = ConnectionState.CONNECTED;
         } else {
@@ -132,7 +143,7 @@ public class StreamingConnectionNode extends AbstractNode {
     @Override
     public Action[] getActions(boolean popup) {
         if (state != ConnectionState.CLOSED) {
-            return new Action[]{closeConnectionAction, showReportAction};
+            return new Action[]{synchronizeAction, closeConnectionAction, showReportAction};
         } else {
             return new Action[]{showReportAction, removeFromViewAction};
         }

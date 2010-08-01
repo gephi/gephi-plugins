@@ -34,7 +34,7 @@ public interface StreamingConnection {
      * This is used to get the URL where this object is connected.
      * @return the URL
      */
-    public URL getUrl();
+    public StreamingEndpoint getStreamingEndpoint();
 
     /**
      * This is used to get the Report object where information is stored.

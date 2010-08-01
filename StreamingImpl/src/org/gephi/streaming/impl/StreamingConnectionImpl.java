@@ -100,8 +100,8 @@ public class StreamingConnectionImpl implements StreamingConnection {
     }
     
     @Override
-    public URL getUrl() {
-        return endpoint.getUrl();
+    public StreamingEndpoint getStreamingEndpoint() {
+        return endpoint;
     }
 
     @Override
