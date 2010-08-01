@@ -149,7 +149,7 @@ public class GraphStreamingEventProcessorTest {
 
         StreamingEndpoint endpoint = new StreamingEndpoint();
         endpoint.setUrl(url);
-        StreamingConnection connection = new StreamingConnectionImpl(endpoint, reader);
+        StreamingConnection connection = new StreamingConnectionImpl(endpoint, reader, new Report());
 
         connection.addStatusListener(
                 new StreamingConnection.StatusListener() {

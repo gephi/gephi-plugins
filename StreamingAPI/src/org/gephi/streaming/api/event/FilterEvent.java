@@ -20,6 +20,7 @@ along with Gephi.  If not, see <http://www.gnu.org/licenses/>.
  */
 package org.gephi.streaming.api.event;
 
+import java.util.Map;
 import org.gephi.filters.spi.Filter;
 
 /**
@@ -39,8 +40,8 @@ public class FilterEvent extends GraphEvent {
      * @param filter 
      */
     public FilterEvent(Object source, EventType eventType,
-            ElementType elementType, Filter filter) {
-        super(source, eventType, elementType);
+            ElementType elementType, Filter filter, Map<String, Object> attributes) {
+        super(source, eventType, elementType, attributes);
         this.filter = filter;
     }
 

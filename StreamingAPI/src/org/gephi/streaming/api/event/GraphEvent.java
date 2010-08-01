@@ -20,7 +20,9 @@ along with Gephi.  If not, see <http://www.gnu.org/licenses/>.
  */
 package org.gephi.streaming.api.event;
 
+import java.util.Collections;
 import java.util.EventObject;
+import java.util.Map;
 
 /**
  * The basic streaming graph event representation.
@@ -35,7 +37,7 @@ public class GraphEvent extends EventObject {
     protected final EventType eventType;
     protected final ElementType elementType;
     protected String eventId;
-    
+    protected final Map<String, Object> attributes;
 
     /**
      * Constructs a graph Event.
@@ -46,10 +48,11 @@ public class GraphEvent extends EventObject {
      * @exception  IllegalArgumentException  if source is null.
      */
     public GraphEvent(Object source, EventType eventType, 
-            ElementType elementType) {
+            ElementType elementType, Map<String, Object> attributes) {
         super(source);
         this.eventType = eventType;
         this.elementType = elementType;
+        this.attributes = attributes;
     }
 
     /**
@@ -105,4 +108,11 @@ public class GraphEvent extends EventObject {
         return this.elementType.hashCode() * 31 + this.eventType.hashCode();
     }
 
+    /**
+     * @return the node attributes
+     */
+    public Map<String, Object> getAttributes() {
+        if (attributes==null) return null;
+        return Collections.unmodifiableMap(attributes);
+    }
 }

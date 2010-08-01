@@ -35,7 +35,6 @@ import org.gephi.project.api.Workspace;
 import org.gephi.project.api.WorkspaceInformation;
 import org.gephi.project.api.WorkspaceListener;
 import org.gephi.streaming.api.StreamingEndpoint;
-import org.gephi.streaming.api.Report;
 import org.gephi.streaming.api.StreamingConnection;
 import org.gephi.streaming.api.StreamingController;
 import org.gephi.streaming.server.ClientManager.ClientManagerListener;
@@ -254,25 +253,11 @@ public class StreamingUIController {
 
         // Connect to stream - Streaming API
         StreamingController controller = Lookup.getDefault().lookup(StreamingController.class);
-//        final StreamingClient client = new StreamingClient(endpoint, graph);
-        final Report report = new Report();
         try {
-            //TODO: verify if this listener is really necessary
-            StreamingConnection connection = controller.process(endpoint, graph, report, null);
-//                new StreamingConnection.StatusListener() {
-//                    public void onConnectionClosed(StreamingConnection connection) {
-//                        disconnect(connection);
-//
-//                        // TODO: show stream report
-//                        System.out.println("-- Stream report -----\n" +
-//                                report.getText() + "--------");
-//                    }
-//
-//                public void onDataReceived(StreamingConnection connection) { }
-//                public void onError(StreamingConnection connection) { }
-//                });
+            StreamingConnection connection = controller.connect(endpoint, graph);
+            connection.asynchProcess();
 
-            model.addConnection(connection, report);
+            model.addConnection(connection);
 
         } catch (IOException ex) {
             notifyError("Unable to connect to stream " + endpoint.getUrl().toString(), ex);

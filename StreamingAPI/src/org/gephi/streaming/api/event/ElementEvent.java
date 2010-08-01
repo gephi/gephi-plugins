@@ -32,7 +32,6 @@ public class ElementEvent extends GraphEvent {
     private static final long serialVersionUID = 1L;
     
     protected final String elementId;
-    protected final Map<String, Object> attributes;
 
     /**
      * @param source
@@ -43,9 +42,8 @@ public class ElementEvent extends GraphEvent {
      */
     public ElementEvent(Object source, EventType eventType,
             ElementType elementType, String elementId, Map<String, Object> attributes) {
-        super(source, eventType, elementType);
+        super(source, eventType, elementType, attributes);
         this.elementId = elementId;
-        this.attributes = attributes;
     }
     
     /**
@@ -81,14 +79,6 @@ public class ElementEvent extends GraphEvent {
     public int hashCode() {
         return (elementType.hashCode() * 31 + eventType.hashCode()) * 31 
                 + ((elementId!=null)?elementId.hashCode():0);
-    }
-    
-    /**
-     * @return the node attributes
-     */
-    public Map<String, Object> getAttributes() {
-        if (attributes==null) return null;
-        return Collections.unmodifiableMap(attributes);
     }
 
 }

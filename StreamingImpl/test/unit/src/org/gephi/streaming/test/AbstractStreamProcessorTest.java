@@ -233,7 +233,7 @@ public abstract class AbstractStreamProcessorTest {
         StreamingEndpoint endpoint = new StreamingEndpoint();
         endpoint.setUrl(url);
 
-        StreamingConnection connection = new StreamingConnectionImpl(endpoint, streamReader);
+        StreamingConnection connection = new StreamingConnectionImpl(endpoint, streamReader, new Report());
 
         final AtomicBoolean processing = new AtomicBoolean(true);
         connection.addStatusListener(
@@ -289,7 +289,7 @@ public abstract class AbstractStreamProcessorTest {
 
         StreamingEndpoint endpoint = new StreamingEndpoint();
         endpoint.setUrl(url);
-        StreamingConnection connection = new StreamingConnectionImpl(endpoint, streamReader);
+        StreamingConnection connection = new StreamingConnectionImpl(endpoint, streamReader, new Report());
 
         final AtomicBoolean processing = new AtomicBoolean(true);
         connection.addStatusListener(
@@ -344,7 +344,7 @@ public abstract class AbstractStreamProcessorTest {
 
         StreamingEndpoint endpoint = new StreamingEndpoint();
         endpoint.setUrl(url);
-        StreamingConnection connection = new StreamingConnectionImpl(endpoint, streamReader);
+        StreamingConnection connection = new StreamingConnectionImpl(endpoint, streamReader, new Report());
 
         final AtomicBoolean processing = new AtomicBoolean(true);
         connection.addStatusListener(

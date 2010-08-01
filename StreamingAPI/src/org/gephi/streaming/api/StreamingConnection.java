@@ -37,6 +37,12 @@ public interface StreamingConnection {
     public URL getUrl();
 
     /**
+     * This is used to get the Report object where information is stored.
+     * @return the Report object
+     */
+    public Report getReport();
+
+    /**
      * This is used to close the connection
      * @throws IOException
      */
@@ -50,7 +56,7 @@ public interface StreamingConnection {
 
     /**
      * This is used to connect to the URL and process asynchronously the
-     * events received. A new thread will be created and the synchProcess()
+     * events received. A new thread will be created and the process()
      * will be called.
      */
     public void asynchProcess();
@@ -59,7 +65,7 @@ public interface StreamingConnection {
      * This is used to connect to the URL and process the
      * events received. The method returns only when the connection is closed.
      */
-    public void synchProcess();
+    public void process();
 
     /**
      * Set a listener to asynchronously receive status notifications.

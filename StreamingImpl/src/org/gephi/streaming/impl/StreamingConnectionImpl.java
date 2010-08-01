@@ -34,6 +34,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.gephi.streaming.api.Report;
 import org.gephi.streaming.api.StreamReader;
 import org.gephi.streaming.api.StreamingConnection;
 import org.gephi.streaming.api.StreamingEndpoint;
@@ -55,10 +56,13 @@ public class StreamingConnectionImpl implements StreamingConnection {
     private final List<StatusListener> listeners =
             Collections.synchronizedList(new ArrayList<StatusListener>());
     private boolean closed = false;
+    private final Report report;
     
-    public StreamingConnectionImpl(final StreamingEndpoint endpoint, final StreamReader streamProcessor) throws IOException {
+    public StreamingConnectionImpl(final StreamingEndpoint endpoint, 
+            final StreamReader streamProcessor, Report report) throws IOException {
         this.endpoint = endpoint;
         this.streamProcessor = streamProcessor;
+        this.report = report;
 
         // Workaround to avoid invalid certificate problem
         if (endpoint.getUrl().getProtocol().equalsIgnoreCase("https")) {
@@ -105,7 +109,7 @@ public class StreamingConnectionImpl implements StreamingConnection {
         new Thread("StreamingConnection["+endpoint.getUrl().toString()+"]") {
             @Override
             public void run() {
-                synchProcess();
+                process();
             }
         }.start();
     }
@@ -144,7 +148,7 @@ public class StreamingConnectionImpl implements StreamingConnection {
     }
 
     @Override
-    public void synchProcess() {
+    public void process() {
         try {
 
             InputStream inputStream = connection.getInputStream();
@@ -198,6 +202,13 @@ public class StreamingConnectionImpl implements StreamingConnection {
                     }
             }
         }
+    }
+
+    /**
+     * @return the report
+     */
+    public Report getReport() {
+        return report;
     }
 
 }

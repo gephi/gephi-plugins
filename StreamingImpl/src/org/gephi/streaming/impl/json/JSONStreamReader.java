@@ -34,12 +34,20 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.gephi.filters.spi.EdgeFilter;
+import org.gephi.filters.spi.Filter;
+import org.gephi.filters.spi.FilterProperty;
+import org.gephi.filters.spi.NodeFilter;
+import org.gephi.graph.api.Edge;
+import org.gephi.graph.api.Graph;
+import org.gephi.graph.api.Node;
 
 import org.gephi.streaming.api.GraphEventHandler;
 import org.gephi.streaming.api.Issue;
 import org.gephi.streaming.api.StreamReader;
 import org.gephi.streaming.api.event.ElementType;
 import org.gephi.streaming.api.event.EventType;
+import org.gephi.streaming.api.event.FilterEvent;
 import org.gephi.streaming.api.event.GraphEvent;
 import org.gephi.streaming.api.event.GraphEventBuilder;
 import org.gephi.streaming.impl.json.parser.JSONException;
@@ -207,108 +215,151 @@ public class JSONStreamReader extends StreamReader {
     }
     
     private void parse(String type, JSONObject gObjs, String eventId) throws JSONException {
-        GraphEvent event = null;
+
+        Types eventType = Types.fromString(type);
         
-        if (Types.AN.value().equals(type)) {
-            Iterator<String> i = gObjs.keys();
-            while (i.hasNext()) {
-                String id = i.next();
+        if (gObjs.has("filter")) {
+            JSONObject attrObj = gObjs.getJSONObject("attributes");
+            Map<String, Object> attributes = readAttributes(attrObj);
+            
+            handler.handleGraphEvent(
+                    new FilterEvent(this, eventType.getEventType(),
+                    eventType.getElementType(), getFilter(eventType.getElementType(), gObjs), attributes));
+            return;
+        }
 
-                Map<String, Object> attributes = new HashMap<String, Object>();
+        GraphEvent event = null;
+
+        Iterator<String> it = gObjs.keys();
+        while (it.hasNext()) {
+            String id = it.next();
+
+            if (eventType.equals(Types.AN)) {
                 JSONObject gObj = (JSONObject)gObjs.get(id);
-                Iterator<String> i2 = gObj.keys();
-                while (i2.hasNext()) {
-                    String key = i2.next();
-                    Object value = gObj.get(key);
-                    attributes.put(key, value);
-                }
+                Map<String, Object> attributes = readAttributes(gObj);
                 event = eventBuilder.graphEvent(ElementType.NODE, EventType.ADD, id, attributes);
-            }
 
-        } else if (Types.CN.value().equals(type)) {
-
-            Iterator<String> i = gObjs.keys();
-            while (i.hasNext()) {
-                String id = i.next();
-                
-                Map<String, Object> attributes = new HashMap<String, Object>();
+            } else if (eventType.equals(Types.CN)) {
                 JSONObject gObj = (JSONObject)gObjs.get(id);
-                Iterator<String> i2 = gObj.keys();
-                while (i2.hasNext()) {
-                    String key = i2.next();
-                    Object value = gObj.get(key);
-                    attributes.put(key, value);
-                }
-
+                Map<String, Object> attributes = readAttributes(gObj);
                 event = eventBuilder.graphEvent(ElementType.NODE, EventType.CHANGE, id, attributes);
-            }
 
-        } else if (Types.DN.value().equals(type)) {
-            Iterator<String> i = gObjs.keys();
-            while (i.hasNext()) {
-                String id = i.next();
+            } else if (eventType.equals(Types.DN)) {
                 event = eventBuilder.graphEvent(ElementType.NODE, EventType.REMOVE, id, null);
-            }
 
-        } else if (Types.AE.value().equals(type)) {
-            Iterator<String> i = gObjs.keys();
-            while (i.hasNext()) {
-                String id = i.next();
-                
+            } else if (eventType.equals(Types.AE)) {
                 Map<String, Object> attributes = new HashMap<String, Object>();
                 JSONObject gObj = (JSONObject)gObjs.get(id);
                 Iterator<String> i2 = gObj.keys();
                 while (i2.hasNext()) {
                     String key = i2.next();
-                    if (!key.equals(Fields.SOURCE.value()) 
-                            && !key.equals(Fields.TARGET.value()) 
+                    if (!key.equals(Fields.SOURCE.value())
+                            && !key.equals(Fields.TARGET.value())
                             && !key.equals(Fields.DIRECTED.value())) {
                         Object value = gObj.get(key);
                         attributes.put(key, value);
                     }
                 }
-                
                 event = eventBuilder.edgeAddedEvent(id,
                         gObj.getString(Fields.SOURCE.value()),
                         gObj.getString(Fields.TARGET.value()),
                         Boolean.valueOf(gObj.getString(Fields.DIRECTED.value())), attributes);
-            }
 
-        } else if (Types.CE.value().equals(type)) {
-
-            Iterator<String> i = gObjs.keys();
-            while (i.hasNext()) {
-                String id = i.next();
-                
-                Map<String, Object> attributes = new HashMap<String, Object>();
+            } else if (eventType.equals(Types.CE)) {
                 JSONObject gObj = (JSONObject)gObjs.get(id);
-                Iterator<String> i2 = gObj.keys();
-                while (i2.hasNext()) {
-                    String key = i2.next();
-                    Object value = gObj.get(key);
-                    attributes.put(key, value);
-                }
-
+                Map<String, Object> attributes = readAttributes(gObj);
                 event = eventBuilder.graphEvent(ElementType.EDGE, EventType.CHANGE, id, attributes);
-            }
 
-        } else if (Types.DE.value().equals(type)) {
-            Iterator<String> i = gObjs.keys();
-            while (i.hasNext()) {
-                String id = i.next();
+            } else if (eventType.equals(Types.DE)) {
                 event = eventBuilder.graphEvent(ElementType.EDGE, EventType.REMOVE, id, null);
+
+            } else if (eventType.equals(Types.CG)) {
+
             }
 
-        } else if (Types.CG.value().equals(type)) {
-
-        }
-        
-        if (event != null) {
-            if (eventId!=null) {
-                event.setEventId(eventId);
+            if (event != null) {
+                if (eventId!=null) {
+                    event.setEventId(eventId);
+                }
+                handler.handleGraphEvent(event);
             }
-            handler.handleGraphEvent(event);
         }
+    }
 
+    private Map<String, Object> readAttributes(JSONObject gObj) throws JSONException {
+        Map<String, Object> attributes = new HashMap<String, Object>();
+        Iterator<String> it = gObj.keys();
+        while (it.hasNext()) {
+            String key = it.next();
+            Object value = gObj.get(key);
+            attributes.put(key, value);
+        }
+        return attributes;
+    }
+
+    private Filter getFilter(ElementType elementType, JSONObject gObjs) throws JSONException{
+        Object filter = gObjs.get("filter");
+
+        if (filter instanceof String) {
+            String filterName = (String)filter;
+            if (filterName.equalsIgnoreCase("ALL")) {
+                if (elementType.equals(ElementType.NODE)) {
+                    return new NodeFilter() {
+
+                        @Override
+                        public boolean init(Graph graph) {
+                            return true;
+                        }
+
+                        @Override
+                        public boolean evaluate(Graph graph, Node node) {
+                            return true;
+                        }
+
+                        @Override
+                        public void finish() {
+                        }
+
+                        @Override
+                        public String getName() {
+                            return "AllNodes";
+                        }
+
+                        @Override
+                        public FilterProperty[] getProperties() {
+                            return null;
+                        }
+                    };
+                } else if (elementType.equals(ElementType.EDGE)) {
+                    return new EdgeFilter() {
+
+                        @Override
+                        public boolean init(Graph graph) {
+                            return true;
+                        }
+
+                        @Override
+                        public boolean evaluate(Graph graph, Edge edge) {
+                            return true;
+                        }
+
+                        @Override
+                        public void finish() {
+                        }
+
+                        @Override
+                        public String getName() {
+                            return "AllEdges";
+                        }
+
+                        @Override
+                        public FilterProperty[] getProperties() {
+                            return null;
+                        }
+                    };
+                }
+            }
+        }
+        return null;
     }
 }

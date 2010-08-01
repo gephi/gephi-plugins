@@ -23,6 +23,9 @@ package org.gephi.streaming.api;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.gephi.filters.spi.EdgeFilter;
+import org.gephi.filters.spi.Filter;
+import org.gephi.filters.spi.NodeFilter;
 
 import org.gephi.graph.api.Edge;
 import org.gephi.graph.api.Graph;
@@ -32,6 +35,8 @@ import org.gephi.streaming.api.PropertiesAssociations.EdgeProperties;
 import org.gephi.streaming.api.PropertiesAssociations.NodeProperties;
 import org.gephi.streaming.api.event.EdgeAddedEvent;
 import org.gephi.streaming.api.event.ElementEvent;
+import org.gephi.streaming.api.event.EventType;
+import org.gephi.streaming.api.event.FilterEvent;
 import org.gephi.streaming.api.event.GraphEvent;
 
 /**
@@ -143,6 +148,9 @@ public class GraphUpdaterEventHandler implements GraphEventHandler {
                 }
                 break;
             }
+        } else if (event instanceof FilterEvent) {
+            FilterEvent filterEvent = (FilterEvent)event;
+            applyFilter(filterEvent);
         }
     }
 
@@ -395,6 +403,37 @@ public class GraphUpdaterEventHandler implements GraphEventHandler {
                 edge.getEdgeData().setB(b);
                 break;
         }
+    }
+
+    private void applyFilter(FilterEvent filterEvent) {
+        
+        Filter filter = filterEvent.getFilter();
+        if (filter instanceof NodeFilter) {
+            NodeFilter nodeFilter = (NodeFilter)filter;
+            for (Node node: graph.getNodes().toArray()) {
+                if (nodeFilter.evaluate(graph, node)) {
+                    if (filterEvent.getEventType().equals(EventType.REMOVE)) {
+                        graph.writeLock();
+                        graph.removeNode(node);
+                        graph.writeUnlock();
+                    }
+                }
+            }
+        }
+
+        if (filter instanceof EdgeFilter) {
+            EdgeFilter edgeFilter = (EdgeFilter)filter;
+            for (Edge edge: graph.getEdges().toArray()) {
+                if (edgeFilter.evaluate(graph, edge)) {
+                    if (filterEvent.getEventType().equals(EventType.REMOVE)) {
+                        graph.writeLock();
+                        graph.removeEdge(edge);
+                        graph.writeUnlock();
+                    }
+                }
+            }
+        }
+        
     }
 
 }

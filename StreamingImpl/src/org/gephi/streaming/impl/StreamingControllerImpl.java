@@ -74,13 +74,13 @@ public class StreamingControllerImpl implements StreamingController {
     }
 
     @Override
-    public StreamingConnection process(StreamingEndpoint endpoint, Graph graph) throws IOException {
-        return process(endpoint, graph, null, null);
+    public StreamingConnection connect(StreamingEndpoint endpoint, Graph graph) throws IOException {
+        return connect(endpoint, graph, new Report());
     }
 
     @Override
-    public StreamingConnection process(StreamingEndpoint endpoint, final Graph graph,
-            Report report, StreamingConnection.StatusListener statusListener) throws IOException {
+    public StreamingConnection connect(StreamingEndpoint endpoint, final Graph graph,
+            Report report) throws IOException {
         logger.log(Level.FINE, "Connecting to url {0}", endpoint.getUrl().toString());
         
         final Set<FilteredEventEntry> filterededIds = new HashSet<FilteredEventEntry>();
@@ -125,7 +125,7 @@ public class StreamingControllerImpl implements StreamingController {
         StreamReader reader =
                 readerFactory.createStreamReader(endpoint.getStreamType(), container, eventBuilder);
         reader.setReport(report);
-        StreamingConnection connection = new StreamingConnectionImpl(endpoint, reader);
+        StreamingConnection connection = new StreamingConnectionImpl(endpoint, reader, report);
         connection.addStatusListener(
                 new StreamingConnection.StatusListener() {
 
@@ -147,10 +147,6 @@ public class StreamingControllerImpl implements StreamingController {
             @Override
                 public void onError(StreamingConnection connection) { }
             });
-        if (statusListener!=null) {
-            connection.addStatusListener(statusListener);
-        }
-        connection.asynchProcess();
 
         logger.log(Level.INFO, "Connected to url {0}", endpoint.getUrl().toString());
 

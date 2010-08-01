@@ -25,40 +25,41 @@ import java.io.IOException;
 import org.gephi.graph.api.Graph;
 
 /**
- * Controller to connect to graph streams.
+ * Controller to connect to graph streams and update graphs accordingly.
  *
  * @author panisson
  */
 public interface StreamingController {
 
     /**
-     * This is used to connect to a StreamingEndpoint and update the Graph object
-     * with the events received in the stream.
+     * This is used to connect to a StreamingEndpoint. The connection will be
+     * bound with the Graph object: any event received in the stream will cause
+     * an update in the graph, and updates in the graph will cause an event
+     * to be sent to the StreamingEndpoint.
      *
      * @param endpoint - the StreamingEndpoint to connect to
      * @param graph - the Graph that will be updated with the events
      * @return the streaming connection
      * @throws IOException
      */
-    public StreamingConnection process(StreamingEndpoint endpoint, Graph graph)
+    public StreamingConnection connect(StreamingEndpoint endpoint, Graph graph)
             throws IOException;
 
     /**
-     * This is used to connect to a StreamingEndpoint and update the Graph object
-     * with the events received in the stream. The Report object will be updated
-     * with useful information, and a listener can be used to listen to
-     * the status of the connection.
+     * This is used to connect to a StreamingEndpoint. The connection will be
+     * bound with the Graph object: any event received in the stream will cause
+     * an update in the graph, and updates in the graph will cause an event
+     * to be sent to the StreamingEndpoint. The Report object will be updated
+     * with useful information.
      *
      * @param endpoint - the StreamingEndpoint to connect to
      * @param graph - the Graph that will be updated with the events
      * @param report - the Report object that will be updated with information
-     * @param statusListener - the listener that will listen to connection status,
-     * can be null.
      * @return the streaming connection
      * @throws IOException
      */
-    public StreamingConnection process(StreamingEndpoint endpoint, Graph graph,
-            Report report, StreamingConnection.StatusListener statusListener)
+    public StreamingConnection connect(StreamingEndpoint endpoint, Graph graph,
+            Report report)
             throws IOException;
 
     /**

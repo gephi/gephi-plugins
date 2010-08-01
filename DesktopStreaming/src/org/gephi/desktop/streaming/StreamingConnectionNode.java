@@ -41,7 +41,7 @@ public class StreamingConnectionNode extends AbstractNode {
     private Timer timer;
     private final StreamingConnection connection;
 
-    public StreamingConnectionNode(final StreamingConnection connection, final Report report) {
+    public StreamingConnectionNode(final StreamingConnection connection) {
         super(Children.LEAF);
         this.connection = connection;
         timer = new Timer();
@@ -77,7 +77,7 @@ public class StreamingConnectionNode extends AbstractNode {
 
             public void actionPerformed(ActionEvent e) {
                 ReportPanel reportPanel = new ReportPanel();
-                reportPanel.setData(report);
+                reportPanel.setData(connection.getReport());
                 DialogDescriptor dd = new DialogDescriptor(reportPanel, NbBundle.getMessage(StreamingUIController.class, "ReportPanel.title"));
                 if (!DialogDisplayer.getDefault().notify(dd).equals(NotifyDescriptor.OK_OPTION)) {
                     reportPanel.destroy();

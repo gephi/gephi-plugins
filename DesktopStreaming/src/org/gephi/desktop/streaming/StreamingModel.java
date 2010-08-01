@@ -65,8 +65,8 @@ public class StreamingModel {
         masterChildren.add(new Node[]{new StreamingServerNode()});
     }
 
-    public void addConnection(StreamingConnection connection, Report report) {
-        StreamingConnectionNode node = new StreamingConnectionNode(connection, report);
+    public void addConnection(StreamingConnection connection) {
+        StreamingConnectionNode node = new StreamingConnectionNode(connection);
         addConnectionNode(node);
     }
     
