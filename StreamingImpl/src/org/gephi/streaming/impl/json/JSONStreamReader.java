@@ -79,26 +79,21 @@ public class JSONStreamReader extends StreamReader {
 
 //        this.processStream(Channels.newChannel(inputStream), listener);
 
-         StringBuilder content = new StringBuilder();
-         byte[] buffer = new byte[1024];
+         StringBuilder content = new StringBuilder(1024);
 
         try {
             int read;
-            while ((read = inputStream.read(buffer))!=-1) {
-                if (listener!=null) {
-                    listener.onDataReceived();
-                }
-
-                for (int i=0; i<read; i++) {
-                    char readChar = (char)buffer[i];
-                    if (readChar == '\r') {
-                        parse(content.toString());
-                        content.setLength(0);
-                    } else {
-                        content.append(readChar);
+            while ((read = inputStream.read())!=-1) {
+                char readChar = (char)read;
+                if (readChar == '\r') {
+                    if (listener!=null) {
+                        listener.onDataReceived();
                     }
+                    parse(content.toString());
+                    content.setLength(0);
+                } else {
+                    content.append(readChar);
                 }
-
             }
         } catch (IOException e) {
         } finally {
@@ -219,8 +214,12 @@ public class JSONStreamReader extends StreamReader {
         Types eventType = Types.fromString(type);
         
         if (gObjs.has("filter")) {
-            JSONObject attrObj = gObjs.getJSONObject("attributes");
-            Map<String, Object> attributes = readAttributes(attrObj);
+
+            Map<String, Object> attributes = null;
+            if (gObjs.has("attributes")) {
+                JSONObject attrObj = gObjs.getJSONObject("attributes");
+                attributes = readAttributes(attrObj);
+            }
             
             handler.handleGraphEvent(
                     new FilterEvent(this, eventType.getEventType(),
@@ -228,10 +227,16 @@ public class JSONStreamReader extends StreamReader {
             return;
         }
 
-        GraphEvent event = null;
-
+        if (eventType.equals(Types.CG)) {
+            Map<String, Object> attributes = readAttributes(gObjs);
+            handler.handleGraphEvent(eventBuilder.graphEvent(ElementType.GRAPH, EventType.CHANGE,
+                    null, attributes));
+            return;
+        }
+        
         Iterator<String> it = gObjs.keys();
         while (it.hasNext()) {
+            GraphEvent event = null;
             String id = it.next();
 
             if (eventType.equals(Types.AN)) {
@@ -272,8 +277,6 @@ public class JSONStreamReader extends StreamReader {
 
             } else if (eventType.equals(Types.DE)) {
                 event = eventBuilder.graphEvent(ElementType.EDGE, EventType.REMOVE, id, null);
-
-            } else if (eventType.equals(Types.CG)) {
 
             }
 

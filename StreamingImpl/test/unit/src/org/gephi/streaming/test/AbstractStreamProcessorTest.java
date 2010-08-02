@@ -422,20 +422,5 @@ public abstract class AbstractStreamProcessorTest {
         assertTrue(out2.toByteArray().length>0);
         assertTrue(out1.toByteArray().length==out2.toByteArray().length);
     }
-
-    private static class MockGraphEventHandler implements GraphEventHandler {
-
-        private int eventCount = 0;
-
-        @Override
-        public void handleGraphEvent(GraphEvent event) {
-            eventCount++;
-        }
-
-        public int getEventCount() {
-            return eventCount;
-        }
-
-    }
     
 }
