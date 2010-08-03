@@ -46,8 +46,8 @@ import org.gephi.streaming.server.AuthenticationFilter;
 import org.gephi.streaming.server.Request;
 import org.gephi.streaming.server.Response;
 import org.gephi.streaming.server.ServerController;
-import org.gephi.streaming.server.ServerSettings;
 import org.gephi.streaming.server.StreamingServer;
+import org.gephi.streaming.server.StreamingServerConfig;
 import org.openide.util.lookup.ServiceProvider;
 import org.simpleframework.http.Status;
 import org.simpleframework.http.core.Container;
@@ -69,7 +69,8 @@ public class StreamingServerImpl implements StreamingServer {
     
     private static final Logger logger =  Logger.getLogger(StreamingServerImpl.class.getName());
     
-    private ServerSettings settings;
+    private StreamingServerConfig settings;
+    private AuthenticationFilter authenticationFilter;
     
     private Map<String, ServerController> controllers = Collections.synchronizedMap(new HashMap<String, ServerController>());
     private Connection serverConnection;
@@ -82,15 +83,15 @@ public class StreamingServerImpl implements StreamingServer {
     public StreamingServerImpl() {
         contextContainer = new ContextContainer();
 
-        AuthenticationFilter authenticationFilter = new BasicAuthenticationFilter();
-        authenticationFilter.setUser("gephi");
-        authenticationFilter.setPassword("gephi");
-        
-        settings = new ServerSettings();
-        settings.setAuthenticationFilter(authenticationFilter);
+        settings = new StreamingServerConfig();
+
+        authenticationFilter = new BasicAuthenticationFilter();
+        authenticationFilter.setUser(settings.getUser());
+        authenticationFilter.setPassword(settings.getPassword());
+        authenticationFilter.setAuthenticationEnabled(settings.isBasicAuthentication());
     }
     
-    public ServerSettings getServerSettings() {
+    public StreamingServerConfig getServerSettings() {
         return settings;
     }
     
@@ -200,7 +201,7 @@ public class StreamingServerImpl implements StreamingServer {
             SocketChannel channel = (SocketChannel)request.getAttribute(RequestWrapper.SOCKET_REFERENCE_KEY);
             Response responseWrapper = new ResponseWrapper(response, channel);
             
-            if (!settings.getAuthenticationFilter().authenticate(requestWrapper, responseWrapper))
+            if (!authenticationFilter.authenticate(requestWrapper, responseWrapper))
                 return;
             
             String context = request.getPath().getPath();
@@ -239,7 +240,7 @@ public class StreamingServerImpl implements StreamingServer {
     }
     
     private void startSSL() throws IOException {
-        SocketAddress address = new InetSocketAddress(settings.getSSLPort());
+        SocketAddress address = new InetSocketAddress(settings.getSslPort());
         sslServerConnection = new SocketConnection(contextContainer);
         
         try {
@@ -271,7 +272,7 @@ public class StreamingServerImpl implements StreamingServer {
             
             sslStarted = true;
             
-            logger.log(Level.INFO, "HTTPS Listening at port {0}", settings.getSSLPort());
+            logger.log(Level.INFO, "HTTPS Listening at port {0}", settings.getSslPort());
             
         } catch (UnrecoverableKeyException e) {
             logger.log(Level.WARNING, null, e);

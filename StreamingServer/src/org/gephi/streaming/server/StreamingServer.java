@@ -76,6 +76,6 @@ public interface StreamingServer {
      */
     public boolean isStarted();
     
-    public ServerSettings getServerSettings();
+    public StreamingServerConfig getServerSettings();
 
 }
