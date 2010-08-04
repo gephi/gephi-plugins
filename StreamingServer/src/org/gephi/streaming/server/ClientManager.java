@@ -1,60 +1,43 @@
 /*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
+Copyright 2008 WebAtlas
+Authors : Mathieu Bastian, Mathieu Jacomy, Julian Bilcke
+Website : http://www.gephi.org
+
+This file is part of Gephi.
+
+Gephi is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+Gephi is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with Gephi.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 package org.gephi.streaming.server;
-
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
 
 /**
  *
  * @author panisson
  */
-public class ClientManager {
+public interface ClientManager {
 
-    private List<Response> registeredClients = new ArrayList<Response>();
-    private List<ClientManagerListener> listeners = new ArrayList<ClientManagerListener>();
+    void add(Request request, Response response);
 
-    public void add(Request request, Response response) {
-        registeredClients.add(response);
-        String clientId = request.getClientAddress();
-        request.getAttributes().put("CLIENT_IDENTIFIER", clientId);
-        for (ClientManagerListener listener: listeners) {
-            listener.clientConnected(clientId);
-        }
-    }
+    void addClientManagerListener(ClientManagerListener listener);
 
-    public void stopAll() {
-        Iterator<Response> clients = registeredClients.iterator();
-        while (clients.hasNext()) {
-            Response response = clients.next();
-            try {
-                response.close();
-                response.getOutputStream().close();
-                clients.remove();
-            } catch (IOException e) { }
-        }
-    }
+    void remove(Request request, Response response);
 
-    public void remove(Request request, Response response) {
-        registeredClients.remove(response);
-        String clientId = (String)request.getAttributes().get("CLIENT_IDENTIFIER");
-        for (ClientManagerListener listener: listeners) {
-            listener.clientDisconnected(clientId);
-        }
-    }
+    void stopAll();
 
     public interface ClientManagerListener {
         public void clientConnected(String client);
         public void clientDisconnected(String client);
-    }
-
-    public void addClientManagerListener(ClientManagerListener listener) {
-        this.listeners.add(listener);
     }
 
 }

@@ -46,7 +46,6 @@ import org.gephi.streaming.api.StreamWriter;
 import org.gephi.streaming.api.StreamWriterFactory;
 import org.gephi.streaming.api.event.ElementType;
 import org.gephi.streaming.api.event.EventType;
-import org.gephi.streaming.server.ClientManager;
 import org.gephi.streaming.server.Request;
 import org.gephi.streaming.server.Response;
 import org.openide.util.Lookup;
@@ -64,9 +63,9 @@ public class ServerOperationExecutor {
     private final StreamReaderFactory readerFactory;
     private boolean sendVizData = true;
     private final GraphEventBuilder eventBuilder;
-    private ClientManager clientManager;
+    private ClientManagerImpl clientManager;
     
-    public ServerOperationExecutor(Graph graph, ClientManager clientManager) {
+    public ServerOperationExecutor(Graph graph, ClientManagerImpl clientManager) {
         graphBufferedOperationSupport = new GraphBufferedEventHandler(graph);
         graphUpdaterOperationSupport = new GraphUpdaterEventHandler(graph);
         this.graph = graph;

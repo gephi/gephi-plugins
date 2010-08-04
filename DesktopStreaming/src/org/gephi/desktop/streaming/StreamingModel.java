@@ -28,7 +28,6 @@ import java.util.logging.Logger;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.SwingUtilities;
-import org.gephi.streaming.api.Report;
 
 import org.gephi.streaming.api.StreamingConnection;
 import org.openide.nodes.AbstractNode;
@@ -52,17 +51,12 @@ public class StreamingModel {
     private boolean serverRunning;
     private String serverContext;
     
-    private Children masterChildren = new Children.Array();
-
-    private Node masterNode;
+    private MasterNode masterNode;
     private Node clientNode;
     
     public StreamingModel() {
-
         clientNode = new ClientNode();
         masterNode = new MasterNode();
-
-        masterChildren.add(new Node[]{new StreamingServerNode()});
     }
 
     public void addConnection(StreamingConnection connection) {
@@ -76,6 +70,14 @@ public class StreamingModel {
 
     public void removeConnectionNode(StreamingConnectionNode node) {
         clientNode.getChildren().remove(new Node[]{node});
+    }
+
+    public void removeAllConnections() {
+        for (Node node: clientNode.getChildren().getNodes()) {
+            StreamingConnectionNode connNode = (StreamingConnectionNode)node;
+            connNode.closeConnection();
+        }
+        clientNode.getChildren().remove(clientNode.getChildren().getNodes());
     }
 
     Map<String, Node> connectedMap = new HashMap<String, Node>();
@@ -134,7 +136,7 @@ public class StreamingModel {
         return clientNode;
     }
 
-    public Node getMasterNode() {
+    public MasterNode getMasterNode() {
         return masterNode;
     }
 
@@ -185,12 +187,21 @@ public class StreamingModel {
         }
     }
 
-    private class MasterNode extends AbstractNode {
+    public class MasterNode extends AbstractNode {
+
+        StreamingServerNode streamingServerNode;
 
         public MasterNode() {
-            super(masterChildren);
+            super(new Children.Array());
             setDisplayName("Master");
+            streamingServerNode = new StreamingServerNode();
+            this.getChildren().add(new Node[]{streamingServerNode});
         }
+
+        public StreamingServerNode getStreamingServerNode() {
+            return streamingServerNode;
+        }
+
         @Override
         public Action[] getActions(boolean popup) {
             return new Action[]{};

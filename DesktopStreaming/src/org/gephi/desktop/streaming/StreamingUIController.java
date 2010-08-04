@@ -82,6 +82,14 @@ public class StreamingUIController {
             }
 
             public void unselect(Workspace workspace) {
+                model = workspace.getLookup().lookup(StreamingModel.class);
+                if (model != null) {
+                    if (model.isServerRunning()) {
+                        stopMaster();
+                    }
+                    model.removeAllConnections();
+                    refreshModel();
+                }
             }
 
             public void close(Workspace workspace) {
@@ -246,6 +254,7 @@ public class StreamingUIController {
         server.register(serverController, context);
 
         model.setServerContext(context);
+        model.getMasterNode().getStreamingServerNode().start();
         model.setServerRunning(true);
     }
     
@@ -253,6 +262,7 @@ public class StreamingUIController {
         model.setServerRunning(false);
         StreamingServer server = Lookup.getDefault().lookup(StreamingServer.class);
         server.unregister(model.getServerContext());
+        model.getMasterNode().getStreamingServerNode().stop();
     }
 
     private void notifyError(String userMessage, Throwable t) {

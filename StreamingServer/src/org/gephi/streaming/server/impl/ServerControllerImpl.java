@@ -24,7 +24,6 @@ import java.io.IOException;
 import java.io.OutputStream;
 
 import org.gephi.graph.api.Graph;
-import org.gephi.streaming.server.ClientManager;
 import org.gephi.streaming.server.Request;
 import org.gephi.streaming.server.Response;
 import org.gephi.streaming.server.ServerController;
@@ -35,7 +34,7 @@ import org.gephi.streaming.server.ServerController;
  */
 public class ServerControllerImpl implements ServerController {
 
-    private ClientManager clientManager;
+    private ClientManagerImpl clientManager;
     
     private enum Operations {
         GET_GRAPH("getGraph"),
@@ -57,7 +56,7 @@ public class ServerControllerImpl implements ServerController {
     private final ServerOperationExecutor executor;
     
     public ServerControllerImpl(Graph graph) {
-        clientManager = new ClientManager();
+        clientManager = new ClientManagerImpl();
         executor = new ServerOperationExecutor(graph, clientManager);
         
     }
@@ -65,7 +64,7 @@ public class ServerControllerImpl implements ServerController {
     /* (non-Javadoc)
      * @see org.gephi.streaming.server.impl.ServerController#getClientManager()
      */
-    public ClientManager getClientManager() {
+    public ClientManagerImpl getClientManager() {
         return clientManager;
     }
 

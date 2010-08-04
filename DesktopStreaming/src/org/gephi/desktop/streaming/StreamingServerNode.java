@@ -50,13 +50,9 @@ public class StreamingServerNode extends AbstractNode {
             public void actionPerformed(ActionEvent e) {
                 SwingUtilities.invokeLater(new Runnable() {
                     public void run() {
-                        if (!masterStarted) {
-                            StreamingUIController controller =
-                                    Lookup.getDefault().lookup(StreamingUIController.class);
-                            controller.startMaster();
-                            masterStarted = true;
-                            fireIconChange();
-                        }
+                        StreamingUIController controller =
+                                Lookup.getDefault().lookup(StreamingUIController.class);
+                        controller.startMaster();
                     }
                 });
 
@@ -68,18 +64,28 @@ public class StreamingServerNode extends AbstractNode {
             public void actionPerformed(ActionEvent e) {
                 SwingUtilities.invokeLater(new Runnable() {
                     public void run() {
-                        if (masterStarted) {
-                            StreamingUIController controller =
-                                    Lookup.getDefault().lookup(StreamingUIController.class);
-                            controller.stopMaster();
-                            masterStarted = false;
-                            fireIconChange();
-                        }
+                        StreamingUIController controller =
+                                Lookup.getDefault().lookup(StreamingUIController.class);
+                        controller.stopMaster();
                     }
                 });
 
             }
         };
+    }
+
+    public void start() {
+        if (!masterStarted) {
+            masterStarted = true;
+            fireIconChange();
+        }
+    }
+
+    public void stop() {
+        if (masterStarted) {
+            masterStarted = false;
+            fireIconChange();
+        }
     }
 
     @Override
