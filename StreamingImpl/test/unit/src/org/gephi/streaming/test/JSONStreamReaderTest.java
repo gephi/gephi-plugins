@@ -25,6 +25,7 @@ import static org.junit.Assert.*;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URL;
 import java.util.LinkedList;
 import org.gephi.filters.spi.EdgeFilter;
 import org.gephi.filters.spi.NodeFilter;
@@ -62,8 +63,10 @@ public class JSONStreamReaderTest {
 
     @Test
     public void testStreamReader() throws IOException {
-        
-        InputStream inputStream = this.getClass().getResourceAsStream(resource);
+
+        URL url = this.getClass().getResource(resource);
+        url.openConnection();
+        InputStream inputStream = url.openStream();
 
         MockGraphEventHandler handler = new MockGraphEventHandler();
 
@@ -176,6 +179,16 @@ public class JSONStreamReaderTest {
         assertTrue(((FilterEvent)event).getFilter() instanceof EdgeFilter);
         EdgeFilter edgeFilter = (EdgeFilter)((FilterEvent)event).getFilter();
         assertTrue(edgeFilter.evaluate(null, null));
+
+        inputStream.offer("{\"dn\":{\"filter\":{\"NodeAttribute\":{\"attribute\":\"id\",\"value\":\"A\"}}}}\r");
+        event = handler.getGraphEvent();
+        assertNotNull(event);
+        assertEquals(EventType.REMOVE, event.getEventType());
+        assertEquals(ElementType.NODE, event.getElementType());
+        assertTrue(event instanceof FilterEvent);
+        filterEvent = (FilterEvent)event;
+        assertTrue(filterEvent.getFilter() instanceof NodeFilter);
+        nodeFilter = (NodeFilter)filterEvent.getFilter();
 
         // Incomplete event
         inputStream.offer("{\"de\":{\"filter\":\"ALL\"}\r");

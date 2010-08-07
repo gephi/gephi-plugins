@@ -50,6 +50,7 @@ import org.gephi.streaming.api.event.EventType;
 import org.gephi.streaming.api.event.FilterEvent;
 import org.gephi.streaming.api.event.GraphEvent;
 import org.gephi.streaming.api.event.GraphEventBuilder;
+import org.gephi.streaming.impl.FilterFactory;
 import org.gephi.streaming.impl.json.parser.JSONException;
 import org.gephi.streaming.impl.json.parser.JSONObject;
 import org.gephi.streaming.impl.json.parser.JSONConstants.Fields;
@@ -64,6 +65,7 @@ import org.gephi.streaming.impl.json.parser.JSONConstants.Types;
 public class JSONStreamReader extends StreamReader {
 
      private static final Logger logger =  Logger.getLogger(JSONStreamReader.class.getName());
+     private FilterFactory filterFactory = new FilterFactory();
 
     /**
      * @param handler the GraphEventHandler to which the events will be delegated
@@ -305,64 +307,12 @@ public class JSONStreamReader extends StreamReader {
 
         if (filter instanceof String) {
             String filterName = (String)filter;
-            if (filterName.equalsIgnoreCase("ALL")) {
-                if (elementType.equals(ElementType.NODE)) {
-                    return new NodeFilter() {
-
-                        @Override
-                        public boolean init(Graph graph) {
-                            return true;
-                        }
-
-                        @Override
-                        public boolean evaluate(Graph graph, Node node) {
-                            return true;
-                        }
-
-                        @Override
-                        public void finish() {
-                        }
-
-                        @Override
-                        public String getName() {
-                            return "AllNodes";
-                        }
-
-                        @Override
-                        public FilterProperty[] getProperties() {
-                            return null;
-                        }
-                    };
-                } else if (elementType.equals(ElementType.EDGE)) {
-                    return new EdgeFilter() {
-
-                        @Override
-                        public boolean init(Graph graph) {
-                            return true;
-                        }
-
-                        @Override
-                        public boolean evaluate(Graph graph, Edge edge) {
-                            return true;
-                        }
-
-                        @Override
-                        public void finish() {
-                        }
-
-                        @Override
-                        public String getName() {
-                            return "AllEdges";
-                        }
-
-                        @Override
-                        public FilterProperty[] getProperties() {
-                            return null;
-                        }
-                    };
-                }
-            }
+            return filterFactory.getFilter(elementType, filterName, null);
+        } else {
+            JSONObject filterObj = (JSONObject)filter;
+            String filterName = filterObj.keys().next();
+            JSONObject filterAttr = filterObj.getJSONObject(filterName);
+            return filterFactory.getFilter(elementType, filterName, readAttributes(filterAttr));
         }
-        return null;
     }
 }
