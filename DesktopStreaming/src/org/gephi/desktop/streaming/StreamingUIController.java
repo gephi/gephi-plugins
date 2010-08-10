@@ -20,6 +20,8 @@ along with Gephi.  If not, see <http://www.gnu.org/licenses/>.
  */
 package org.gephi.desktop.streaming;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -34,6 +36,7 @@ import org.gephi.project.api.ProjectController;
 import org.gephi.project.api.Workspace;
 import org.gephi.project.api.WorkspaceInformation;
 import org.gephi.project.api.WorkspaceListener;
+import org.gephi.streaming.api.Report;
 import org.gephi.streaming.api.StreamingEndpoint;
 import org.gephi.streaming.api.StreamingConnection;
 import org.gephi.streaming.api.StreamingController;
@@ -47,6 +50,7 @@ import org.openide.DialogDisplayer;
 import org.openide.NotifyDescriptor;
 import org.openide.util.Exceptions;
 import org.openide.util.Lookup;
+import org.openide.util.NbBundle;
 import org.openide.util.lookup.ServiceProvider;
 
 /**
@@ -276,6 +280,42 @@ public class StreamingUIController {
                 NotifyDescriptor.WARNING_MESSAGE);
         DialogDisplayer.getDefault().notify(msg);
         //Logger.getLogger("").log(Level.WARNING, "", t.getCause());
+    }
+
+    public void showReport(final StreamingConnection connection) {
+        final Report report = connection.getReport();
+        final ReportPanel reportPanel = new ReportPanel();
+        reportPanel.setData(report);
+
+        final StreamingConnection.StatusListener listener = new StreamingConnection.StatusListener() {
+
+            public void onConnectionClosed(StreamingConnection connection) {
+                reportPanel.refreshData(report);
+            }
+
+            public void onDataReceived(StreamingConnection connection) {
+                reportPanel.refreshData(report);
+            }
+
+            public void onError(StreamingConnection connection) {
+                reportPanel.refreshData(report);
+            }
+        };
+
+        connection.addStatusListener(listener);
+
+        DialogDescriptor dd =
+                new DialogDescriptor(reportPanel,
+                NbBundle.getMessage(StreamingUIController.class, "ReportPanel.title"),
+                false, DialogDescriptor.OK_CANCEL_OPTION, null, new ActionListener() {
+
+            public void actionPerformed(ActionEvent e) {
+                connection.removeStatusListener(listener);
+            }
+        });
+
+        DialogDisplayer.getDefault().notify(dd);
+        
     }
 
     private void connectToStream(StreamingEndpoint endpoint) {

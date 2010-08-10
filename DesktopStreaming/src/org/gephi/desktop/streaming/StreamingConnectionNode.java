@@ -78,15 +78,13 @@ public class StreamingConnectionNode extends AbstractNode {
         showReportAction = new AbstractAction("Show Report") {
 
             public void actionPerformed(ActionEvent e) {
-                ReportPanel reportPanel = new ReportPanel();
-                reportPanel.setData(connection.getReport());
-                DialogDescriptor dd = new DialogDescriptor(reportPanel, NbBundle.getMessage(StreamingUIController.class, "ReportPanel.title"));
-                if (!DialogDisplayer.getDefault().notify(dd).equals(NotifyDescriptor.OK_OPTION)) {
-                    reportPanel.destroy();
-                    return;
-                }
-                reportPanel.destroy();
-                }
+                SwingUtilities.invokeLater(new Runnable() {
+                    public void run() {
+                        StreamingUIController controller = Lookup.getDefault().lookup(StreamingUIController.class);
+                        controller.showReport(connection);
+                    }
+                });
+            }
         };
 
         removeFromViewAction = new AbstractAction("Remove from view") {

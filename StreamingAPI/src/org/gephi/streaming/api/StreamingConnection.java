@@ -74,6 +74,12 @@ public interface StreamingConnection {
     public void addStatusListener(StatusListener listener);
 
     /**
+     * Remove the StatusListener from the listeners
+     * @param listener the StatusListener to remove
+     */
+    public void removeStatusListener(StatusListener listener);
+
+    /**
      * This is the listener interface to asynchronously receive status notifications.
      * It should be registered using setStatusListener().
      */

@@ -148,6 +148,11 @@ public class StreamingConnectionImpl implements StreamingConnection {
     }
 
     @Override
+    public void removeStatusListener(StatusListener listener) {
+        this.listeners.remove(listener);
+    }
+
+    @Override
     public void process() {
         try {
 

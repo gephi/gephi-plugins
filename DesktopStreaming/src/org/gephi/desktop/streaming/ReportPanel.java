@@ -55,6 +55,8 @@ public class ReportPanel extends javax.swing.JPanel {
     private ImageIcon severeIcon;
     private ImageIcon criticalIcon;
 
+    private long lastRefresh = 0;
+
     public ReportPanel() {
         initComponents();
         initIcons();
@@ -73,6 +75,16 @@ public class ReportPanel extends javax.swing.JPanel {
         fillIssues(report);
         fillReport(report);
         fillStats(report);
+        lastRefresh = System.currentTimeMillis();
+    }
+
+    public void refreshData(Report report) {
+        long now = System.currentTimeMillis();
+        if (lastRefresh < now-500) {
+            fillIssues(report);
+            fillReport(report);
+            fillStats(report);
+        }
     }
 
     private void fillIssues(Report report) {
