@@ -30,6 +30,11 @@ import org.openide.nodes.Children;
 import org.openide.util.ImageUtilities;
 import org.openide.util.Lookup;
 
+/**
+ * A Node that represents the Master Server and its state.
+ *
+ * @author panisson
+ */
 public class StreamingServerNode extends AbstractNode {
 
     private static Image connectedImage = ImageUtilities.loadImage("org/gephi/desktop/streaming/resources/dot_connected.png", true);

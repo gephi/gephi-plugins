@@ -37,6 +37,10 @@ import org.openide.util.ImageUtilities;
 import org.openide.util.Lookup;
 
 /**
+ * Object used to group all information about the GUI state: The Client node,
+ * the Master node, the outgoing streaming connections and the ingoing server
+ * connections.
+ *
  * @author panisson
  *
  */
@@ -48,30 +52,35 @@ public class StreamingModel {
     private Image masterImage = ImageUtilities.loadImage("org/gephi/desktop/streaming/resources/gephimaster.png", true);
     private Image masterconnImage = ImageUtilities.loadImage("org/gephi/desktop/streaming/resources/masterconnection.jpg", true);
     
-    private boolean serverRunning;
+    private boolean masterRunning;
     private String serverContext;
     
     private MasterNode masterNode;
     private Node clientNode;
-    
+
+    /**
+     * Create a StreamingModel object with information about the GUI state:
+     * The Client node,
+     * the Master node, the outgoing streaming connections and the ingoing server
+     * connections.
+     */
     public StreamingModel() {
         clientNode = new ClientNode();
         masterNode = new MasterNode();
     }
 
+    /**
+     * Add a StreamingConnection to the list of outgoing connections.
+     * @param connection
+     */
     public void addConnection(StreamingConnection connection) {
         StreamingConnectionNode node = new StreamingConnectionNode(connection);
-        addConnectionNode(node);
-    }
-    
-    public void addConnectionNode(StreamingConnectionNode node) {
         clientNode.getChildren().add(new Node[]{node});
     }
 
-    public void removeConnectionNode(StreamingConnectionNode node) {
-        clientNode.getChildren().remove(new Node[]{node});
-    }
-
+    /**
+     * Remove all outgoing connections
+     */
     public void removeAllConnections() {
         for (Node node: clientNode.getChildren().getNodes()) {
             StreamingConnectionNode connNode = (StreamingConnectionNode)node;
@@ -80,8 +89,12 @@ public class StreamingModel {
         clientNode.getChildren().remove(clientNode.getChildren().getNodes());
     }
 
-    Map<String, Node> connectedMap = new HashMap<String, Node>();
+    private Map<String, Node> connectedMap = new HashMap<String, Node>();
 
+    /**
+     * Add an ingoing client connection to the master list
+     * @param client the client description to add
+     */
     public void addConnected(String client) {
         Node node = new AbstractNode(Children.LEAF) {
             @Override
@@ -103,6 +116,10 @@ public class StreamingModel {
         connectedMap.put(client, node);
     }
 
+    /**
+     * Remove an ingoing client connection to the master list
+     * @param client the client description to remove
+     */
     public void removeConnected(String client) {
         Node node = connectedMap.remove(client);
         if (node!=null) {
@@ -110,12 +127,21 @@ public class StreamingModel {
         }
     }
 
-    public boolean isServerRunning() {
-        return serverRunning;
+    /**
+     * Used to verify if the master is running.
+     * @return true if the master is running, false otherwise
+     */
+    public boolean isMasterRunning() {
+        return masterRunning;
     }
 
-    public void setServerRunning(boolean serverRunning) {
-        this.serverRunning = serverRunning;
+    /**
+     * Used to set the information about the master is running.
+     *
+     * @param masterRunning true if the master is running, false otherwise
+     */
+    public void setMasterRunning(boolean masterRunning) {
+        this.masterRunning = masterRunning;
     }
 
     /**
@@ -132,14 +158,25 @@ public class StreamingModel {
         this.serverContext = serverContext;
     }
 
+    /**
+     * Used to get the node that represents the Client
+     * @return the Client node
+     */
     public Node getClientNode() {
         return clientNode;
     }
 
+    /**
+     * Used to get the node that represents the Master
+     * @return the Master node
+     */
     public MasterNode getMasterNode() {
         return masterNode;
     }
 
+    /**
+     * A class that represents the Client node information.
+     */
     public class ClientNode extends AbstractNode {
 
         private final Action addConnectionAction;
@@ -187,6 +224,9 @@ public class StreamingModel {
         }
     }
 
+    /**
+     * A class that represents the Master node information.
+     */
     public class MasterNode extends AbstractNode {
 
         StreamingServerNode streamingServerNode;

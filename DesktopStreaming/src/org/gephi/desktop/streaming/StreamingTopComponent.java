@@ -39,7 +39,7 @@ import org.openide.nodes.Children;
 import org.openide.util.Lookup;
 
 /**
- * Top component which displays something.
+ * Top component which displays the Streaming component.
  */
 @ConvertAsProperties(dtd = "-//org.gephi.desktop.streaming//Streaming//EN",
 autostore = false)

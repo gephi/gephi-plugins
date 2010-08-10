@@ -54,6 +54,8 @@ import org.openide.util.NbBundle;
 import org.openide.util.lookup.ServiceProvider;
 
 /**
+ * The UI controller to control the UI state.
+ *
  * @author panisson
  *
  */
@@ -88,7 +90,7 @@ public class StreamingUIController {
             public void unselect(Workspace workspace) {
                 model = workspace.getLookup().lookup(StreamingModel.class);
                 if (model != null) {
-                    if (model.isServerRunning()) {
+                    if (model.isMasterRunning()) {
                         stopMaster();
                     }
                     model.removeAllConnections();
@@ -125,6 +127,10 @@ public class StreamingUIController {
         return model;
     }
 
+    /**
+     * Shows the StreamingClientPanel and connect to a StreamingEndpoint using
+     * the entered info.
+     */
     public void connectToStream() {
         StreamingClientPanel clientPanel = new StreamingClientPanel();
 
@@ -145,6 +151,12 @@ public class StreamingUIController {
         connectToStream(endpoint);
     }
 
+    /**
+     * Synchronize with the Master: disconnect from it, clean the graph and
+     * reconnect.
+     *
+     * @param connection
+     */
     public void synchronize(StreamingConnection connection) {
 
         // Get active graph instance - Project and Graph API
@@ -178,6 +190,10 @@ public class StreamingUIController {
         }
     }
 
+    /**
+     * Show the StreamingSettingsPanel and update the settings with the
+     * entered info.
+     */
     public void setSettings() {
         StreamingServer server = Lookup.getDefault().lookup(StreamingServer.class);
 
@@ -208,17 +224,11 @@ public class StreamingUIController {
             }
         }
     }
-    
-    public void disconnect(StreamingConnection connection) {
-        try {
-            if (!connection.isClosed()) {
-                connection.close();
-            }
-        } catch (IOException e) {
-            notifyError("Error disconnecting from connection "+connection.getStreamingEndpoint().toString(), e);
-        }
-    }
-    
+
+    /**
+     * Start the master associated with the current workspace. Uses the
+     * workspace name as the server context.
+     */
     public void startMaster() {
         ProjectController projectController = Lookup.getDefault().lookup(ProjectController.class);
         Project project = projectController.getCurrentProject();
@@ -259,11 +269,15 @@ public class StreamingUIController {
 
         model.setServerContext(context);
         model.getMasterNode().getStreamingServerNode().start();
-        model.setServerRunning(true);
+        model.setMasterRunning(true);
     }
-    
+
+    /**
+     * Stop the master associated with the current workspace and
+     * unregister its context from the server.
+     */
     public void stopMaster() {
-        model.setServerRunning(false);
+        model.setMasterRunning(false);
         StreamingServer server = Lookup.getDefault().lookup(StreamingServer.class);
         server.unregister(model.getServerContext());
         model.getMasterNode().getStreamingServerNode().stop();
@@ -282,6 +296,13 @@ public class StreamingUIController {
         //Logger.getLogger("").log(Level.WARNING, "", t.getCause());
     }
 
+    /**
+     * Show the ReportPanel for the connection's Report. The ReportPanel
+     * is updated with the Report information, and when some activity occurs in
+     * the connection, the panel is updated.
+     *
+     * @param connection the StreamingConnection to get the Report.
+     */
     public void showReport(final StreamingConnection connection) {
         final Report report = connection.getReport();
         final ReportPanel reportPanel = new ReportPanel();

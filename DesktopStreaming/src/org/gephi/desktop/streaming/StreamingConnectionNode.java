@@ -1,3 +1,23 @@
+/*
+Copyright 2008-2010 Gephi
+Authors : Mathieu Bastian <mathieu.bastian@gephi.org>
+Website : http://www.gephi.org
+
+This file is part of Gephi.
+
+Gephi is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+Gephi is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with Gephi.  If not, see <http://www.gnu.org/licenses/>.
+*/
 package org.gephi.desktop.streaming;
 
 import java.awt.Image;
@@ -9,18 +29,21 @@ import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.SwingUtilities;
 import org.gephi.desktop.streaming.StreamingModel.ClientNode;
-import org.gephi.streaming.api.Report;
 import org.gephi.streaming.api.StreamingConnection;
-import org.openide.DialogDescriptor;
-import org.openide.DialogDisplayer;
-import org.openide.NotifyDescriptor;
 import org.openide.nodes.AbstractNode;
 import org.openide.nodes.Children;
+import org.openide.nodes.Node;
 import org.openide.util.Exceptions;
 import org.openide.util.ImageUtilities;
 import org.openide.util.Lookup;
-import org.openide.util.NbBundle;
 
+/**
+ * A Node representing the connection to the stream.
+ *
+ * @see Node
+ *
+ * @author panisson
+ */
 public class StreamingConnectionNode extends AbstractNode {
 
     private enum ConnectionState {
@@ -43,6 +66,11 @@ public class StreamingConnectionNode extends AbstractNode {
     private Timer timer;
     private final StreamingConnection connection;
 
+    /**
+     * Create a Node from the given connection.
+     *
+     * @param connection - the connection to take the information
+     */
     public StreamingConnectionNode(final StreamingConnection connection) {
         super(Children.LEAF);
         this.connection = connection;
@@ -111,6 +139,9 @@ public class StreamingConnectionNode extends AbstractNode {
         }
     }
 
+    /**
+     * Close the underlying connection and put the state in CLOSED.
+     */
     public void closeConnection() {
         if (state!=ConnectionState.CLOSED) {
             try {
@@ -147,6 +178,10 @@ public class StreamingConnectionNode extends AbstractNode {
         }
     }
 
+    /**
+     * Sets the state of this node.
+     * @param newstate the new state
+     */
     private void setState(ConnectionState newstate) {
         if (newstate == state) return;
         if (state == ConnectionState.CLOSED) return;

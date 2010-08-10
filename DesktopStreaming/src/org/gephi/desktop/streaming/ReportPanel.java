@@ -40,8 +40,10 @@ import org.netbeans.swing.outline.RowModel;
 import org.openide.util.NbPreferences;
 
 /**
+ * A JPanel to show Report information.
+ * @see Report
  *
- * @author Mathieu Bastian
+ * @author Andre Panisson
  */
 public class ReportPanel extends javax.swing.JPanel {
 

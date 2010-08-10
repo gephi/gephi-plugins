@@ -28,8 +28,6 @@ import javax.swing.ComboBoxModel;
 import javax.swing.DefaultComboBoxModel;
 import org.gephi.streaming.api.StreamingEndpoint;
 import org.gephi.streaming.api.StreamType;
-import org.netbeans.validation.api.Problems;
-import org.netbeans.validation.api.Validator;
 import org.netbeans.validation.api.builtin.Validators;
 import org.netbeans.validation.api.ui.ValidationGroup;
 import org.netbeans.validation.api.ui.ValidationPanel;
@@ -37,10 +35,15 @@ import org.openide.util.Exceptions;
 import org.openide.util.Lookup;
 
 /**
+ * A JPanel to fill StreamingEndpoint information in order to connect to a stream.
+ * @see StreamingEndpoint
  *
  * @author panisson
  */
 public class StreamingClientPanel extends javax.swing.JPanel {
+
+    // Default selected type is JSON
+    private static final String DEFAULT_FORMAT = "JSON";
 
     private ComboBoxModel streamTypeComboBoxModel;
 
@@ -48,10 +51,11 @@ public class StreamingClientPanel extends javax.swing.JPanel {
     public StreamingClientPanel() {
 
         streamTypeComboBoxModel = new DefaultComboBoxModel(getStreamTypes());
-        // Default selected type is JSON
+
+        // Sets the default selected format
         for (int i=0; i<streamTypeComboBoxModel.getSize(); i++) {
             StreamType type = (StreamType)streamTypeComboBoxModel.getElementAt(i);
-            if (type.getType().equalsIgnoreCase("JSON")) {
+            if (type.getType().equalsIgnoreCase(DEFAULT_FORMAT)) {
                 streamTypeComboBoxModel.setSelectedItem(type);
                 break;
             }
@@ -60,6 +64,11 @@ public class StreamingClientPanel extends javax.swing.JPanel {
         initComponents();
     }
 
+    /**
+     * Create a StreamingEndpoint instance from the filled information.
+     *
+     * @return the StreamingEndpoint to connect to
+     */
     public StreamingEndpoint getGraphStreamingEndpoint() {
         StreamingEndpoint endpoint = new StreamingEndpoint();
         endpoint.setStreamType((StreamType)streamTypeComboBox.getSelectedItem());
@@ -90,21 +99,6 @@ public class StreamingClientPanel extends javax.swing.JPanel {
         ValidationGroup group = validationPanel.getValidationGroup();
         group.add(innerPanel.streamUrlTextField, Validators.REQUIRE_NON_EMPTY_STRING);
         group.add(innerPanel.streamUrlTextField, Validators.URL_MUST_BE_VALID);
-
-//        group.add(innerPanel.streamUrlTextField, new Validator<String>() {
-//            @Override
-//            public boolean validate(Problems prblms, String string, String urlString) {
-//                try {
-//                    URL url = new URL(urlString);
-//                } catch (MalformedURLException ex) {
-//                    prblms.add(org.openide.util.NbBundle.getMessage(StreamingClientPanel.class, "StreamingClientPanel.streamUrlLabel.text")+
-//                            ": invalid format");
-//                    return false;
-//                }
-//                return true;
-//            }
-//
-//        });
 
         return validationPanel;
      }

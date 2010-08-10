@@ -26,6 +26,7 @@ import org.netbeans.validation.api.ui.ValidationGroup;
 import org.netbeans.validation.api.ui.ValidationPanel;
 
 /**
+ * A JPanel implementation used to change the Streaming Settings.
  *
  * @author panisson
  */
