@@ -23,11 +23,21 @@ package org.gephi.streaming.server;
 import org.gephi.graph.api.Graph;
 
 /**
+ * Used to create a server controller associated with a graph instance.
+ * The controller will handle requests and responses and update the graph
+ * with received information, and will listen to graph changes in order to
+ * send events to connected clients.
+ *
  * @author panisson
  *
  */
 public interface ServerControllerFactory {
-    
+
+    /**
+     * Create a server controller associated with the given graph.
+     * @param graph - the Graph to associate
+     * @return a new server controller instance
+     */
     public ServerController createServerController(Graph graph);
 
 }

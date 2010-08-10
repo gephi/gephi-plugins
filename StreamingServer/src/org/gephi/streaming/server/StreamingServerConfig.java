@@ -24,7 +24,7 @@ package org.gephi.streaming.server;
 import org.openide.util.NbPreferences;
 
 /**
- *
+ * An object that represent the server configuration and preferences.
  * @author panisson
  */
 public class StreamingServerConfig {
@@ -54,13 +54,17 @@ public class StreamingServerConfig {
     protected boolean basicAuthentication = NbPreferences.forModule(StreamingServerConfig.class).getBoolean(BASIC_AUTHENTICATION, DEFAULT_BASIC_AUTHENTICATION);
 
     /**
-     * @return the port
+     * Used to get the HTTP port that the server is configured to listen.
+     *
+     * @return the configured port
      */
     public int getPort() {
         return port;
     }
 
     /**
+     * Used to configure a new HTTP port that the server will listen
+     *
      * @param port the port to set
      */
     public void setPort(int port) {

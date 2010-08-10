@@ -22,9 +22,6 @@ package org.gephi.streaming.server;
 
 import java.io.IOException;
 
-import org.gephi.streaming.server.impl.ServerControllerImpl;
-
-
 /**
  * The streaming server instance.
  * 
@@ -75,7 +72,11 @@ public interface StreamingServer {
      * @return true if the server is started
      */
     public boolean isStarted();
-    
+
+    /**
+     * This is used to get the server settings.
+     * @return the server settings
+     */
     public StreamingServerConfig getServerSettings();
 
 }
