@@ -32,10 +32,15 @@ import org.gephi.graph.api.Graph;
 public interface StreamingController {
 
     /**
-     * This is used to connect to a StreamingEndpoint. The connection will be
+     * <p>This is used to connect to a StreamingEndpoint. The connection will be
      * bound with the Graph object: any event received in the stream will cause
      * an update in the graph, and updates in the graph will cause an event
      * to be sent to the StreamingEndpoint.
+     * <p>Note that the connection will not start to be processed immediately after
+     * created. You should call connection.process() to star processing it:
+     * <pre> StreamingController controller = Lookup.getDefault().lookup(StreamingController.class);
+     * StreamingConnection connection = controller.connect(endpoint, graph);
+     * connection.process(); </pre>
      *
      * @param endpoint - the StreamingEndpoint to connect to
      * @param graph - the Graph that will be updated with the events
@@ -46,11 +51,18 @@ public interface StreamingController {
             throws IOException;
 
     /**
-     * This is used to connect to a StreamingEndpoint. The connection will be
+     * <p>This is used to connect to a StreamingEndpoint. The connection will be
      * bound with the Graph object: any event received in the stream will cause
      * an update in the graph, and updates in the graph will cause an event
-     * to be sent to the StreamingEndpoint. The Report object will be updated
+     * to be sent to the StreamingEndpoint.
+     * The Report object will be updated
      * with useful information.
+     * <p>Note that the connection will not start to be processed immediately after
+     * created. You should call connection.process() to star processing it:
+     * <pre> StreamingController controller = Lookup.getDefault().lookup(StreamingController.class);
+     * Report report = new Report();
+     * StreamingConnection connection = controller.connect(endpoint, graph, report);
+     * connection.process(); </pre>
      *
      * @param endpoint - the StreamingEndpoint to connect to
      * @param graph - the Graph that will be updated with the events
@@ -65,7 +77,7 @@ public interface StreamingController {
     /**
      * Utility function to get the stream implementation for a given stream type.
      *
-     * @param streamType
+     * @param streamType - the String representation of the stream type
      * @return the stream type implementation
      */
     public StreamType getStreamType(String streamType);

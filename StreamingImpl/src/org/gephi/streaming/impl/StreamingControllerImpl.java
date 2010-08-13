@@ -165,18 +165,21 @@ public class StreamingControllerImpl implements StreamingController {
 
         @Override
         public void handleGraphEvent(GraphEvent event) {
-            logger.log(Level.INFO, "Handling event {0}", event.toString());
+            logger.log(Level.FINE, "Handling event {0}", event.toString());
             if (event instanceof ElementEvent) {
                 ElementEvent elementEvent = (ElementEvent)event;
-                if (!filterededIds.contains(new FilteredEventEntry(elementEvent.getElementId(), elementEvent.getElementType(), 0))) {
+                FilteredEventEntry entry = new FilteredEventEntry(elementEvent.getElementId(), elementEvent.getElementType(), 0);
+                if (!filterededIds.contains(entry)) {
                     sendEvent(endpoint, event);
+                } else {
+                    filterededIds.remove(entry);
                 }
             }
         }
     }
 
     private void sendEvent(final StreamingEndpoint endpoint, GraphEvent event) {
-        logger.log(Level.INFO, "Sending event {0}", event.toString());
+        logger.log(Level.FINE, "Sending event {0}", event.toString());
         try {
             URL url = new URL(endpoint.getUrl(),
                     endpoint.getUrl().getFile()+"?operation=updateGraph&format="

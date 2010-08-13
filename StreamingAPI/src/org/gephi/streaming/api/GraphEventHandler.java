@@ -23,11 +23,13 @@ package org.gephi.streaming.api;
 import org.gephi.streaming.api.event.GraphEvent;
 
 /**
- * Defines the basic event handling operation of the Graph Streaming API.<br>
+ * This interface defines the basic event handling operations
+ * of the Graph Streaming API.<br>
  * Implementations of this interface can be used to handle events and implement
  * what should be done when an event occurred (update the workspace, 
- * export to a specific format, etc.). It could be used also to chain several
- * event handlers (does something with the event and dispatches to another
+ * export to a specific format, send through the network etc.).
+ * It could be used also to chain several
+ * event handlers (the handlers does something with the event and dispatches it to another
  * event handler).
  * 
  * @author Andre' Panisson

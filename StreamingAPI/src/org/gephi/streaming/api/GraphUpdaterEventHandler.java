@@ -35,7 +35,6 @@ import org.gephi.streaming.api.PropertiesAssociations.EdgeProperties;
 import org.gephi.streaming.api.PropertiesAssociations.NodeProperties;
 import org.gephi.streaming.api.event.EdgeAddedEvent;
 import org.gephi.streaming.api.event.ElementEvent;
-import org.gephi.streaming.api.event.EventType;
 import org.gephi.streaming.api.event.FilterEvent;
 import org.gephi.streaming.api.event.GraphEvent;
 
@@ -50,8 +49,8 @@ public class GraphUpdaterEventHandler implements GraphEventHandler {
 
     private static final Logger logger = Logger.getLogger(GraphUpdaterEventHandler.class.getName());
 
-    private Graph graph;
-    private GraphFactory factory;
+    private final Graph graph;
+    private final GraphFactory factory;
     protected PropertiesAssociations properties = new PropertiesAssociations();
     protected Report report;
     

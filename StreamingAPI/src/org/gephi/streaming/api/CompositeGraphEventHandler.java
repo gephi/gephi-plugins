@@ -34,15 +34,24 @@ import org.gephi.streaming.api.event.GraphEvent;
  *
  */
 public class CompositeGraphEventHandler implements GraphEventHandler {
-    
+
+    /**
+     * the list of handlers that will receive the events
+     */
     private List<GraphEventHandler> handlers = new ArrayList<GraphEventHandler>();
 
+    /**
+     * Create a new event handler that loops through a list of handlers,
+     * sending the events to them.
+     *
+     * @param handlers
+     */
     public CompositeGraphEventHandler(GraphEventHandler ... handlers) {
         this.handlers.addAll(Arrays.asList(handlers));
     }
     
     /**
-     * Add an GraphEventHandler to the list of OperationSupports to delegate the events.
+     * Add an GraphEventHandler to the list of handlers to delegate the events.
      * 
      * @param handler the GraphEventHandler to add
      */
@@ -51,7 +60,7 @@ public class CompositeGraphEventHandler implements GraphEventHandler {
     }
     
     /**
-     * Remove an GraphEventHandler from the list of OperationSupports
+     * Remove an GraphEventHandler from the list of handlers
      * 
      * @param handler the GraphEventHandler to remove
      */

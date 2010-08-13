@@ -25,7 +25,7 @@ import java.io.Serializable;
 import java.net.URL;
 
 /**
- * A streaming endpoint, with all information required to connect to it
+ * A streaming endpoint, with the information required to connect to a stream
  * and process it.
  *
  * @author Andre' Panisson
@@ -40,7 +40,7 @@ public class StreamingEndpoint implements Serializable {
     private String password;
 
     /**
-     * Create a new StreamingEndpoint with no information set
+     * Create a new StreamingEndpoint with no information on it
      */
     public StreamingEndpoint() {}
 

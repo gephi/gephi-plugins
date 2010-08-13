@@ -1,6 +1,22 @@
 /*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
+Copyright 2008 WebAtlas
+Authors : Mathieu Bastian, Mathieu Jacomy, Julian Bilcke
+Website : http://www.gephi.org
+
+This file is part of Gephi.
+
+Gephi is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+Gephi is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with Gephi.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 package org.gephi.streaming.impl;
@@ -16,30 +32,50 @@ import org.gephi.graph.api.Node;
 import org.gephi.streaming.api.event.ElementType;
 
 /**
+ * A factory to create Filter objects
  *
  * @author panisson
  */
 public class FilterFactory {
 
+    /**
+     * Create a new Filter object. The filter type depends on the element type,
+     * if a node
+     *
+     * @param elementType
+     * @param filterName
+     * @param parameters
+     * @return
+     */
     public Filter getFilter(ElementType elementType, String filterName, Map<String, Object> parameters) {
         Filter filter = null;
 
+        if (elementType.equals(ElementType.NODE)) {
+            filter = getNodeFilter(filterName, parameters);
+        } else if (elementType.equals(ElementType.EDGE)) {
+            filter = getEdgeFilter(filterName, parameters);
+        }
+
+        return filter;
+    }
+
+    /**
+     * Create a new NodeFilter object.
+     *
+     * @param filterName the filter's name
+     * @param parameters the parameters to create the filter
+     * @return a new NodeFilter object
+     */
+    public NodeFilter getNodeFilter(String filterName, Map<String, Object> parameters) {
+        NodeFilter filter = null;
+
         if (filterName.equalsIgnoreCase("ALL")) {
-            if (elementType.equals(ElementType.NODE)) {
-                filter = new AbstractNodeFilter() {
-                    @Override
-                    public boolean evaluate(Graph graph, Node node) {
-                        return true;
-                    }
-                };
-            } else if (elementType.equals(ElementType.EDGE)) {
-                filter = new AbstractEdgeFilter() {
-                    @Override
-                    public boolean evaluate(Graph graph, Edge edge) {
-                        return true;
-                    }
-                };
-            }
+            filter = new AbstractNodeFilter() {
+                @Override
+                public boolean evaluate(Graph graph, Node node) {
+                    return true;
+                }
+            };
         }
 
         if (filterName.equalsIgnoreCase("NodeAttribute")) {
@@ -55,6 +91,28 @@ public class FilterFactory {
                     }
                     String value = attribute.toString();
                     return attributeValue.equals(value);
+                }
+            };
+        }
+
+        return filter;
+    }
+
+    /**
+     * Create a new EdgeFilter object.
+     *
+     * @param filterName the filter's name
+     * @param parameters the parameters to create the filter
+     * @return a new EdgeFilter object
+     */
+    public EdgeFilter getEdgeFilter(String filterName, Map<String, Object> parameters) {
+        EdgeFilter filter = null;
+
+        if (filterName.equalsIgnoreCase("ALL")) {
+            filter = new AbstractEdgeFilter() {
+                @Override
+                public boolean evaluate(Graph graph, Edge edge) {
+                    return true;
                 }
             };
         }
@@ -91,7 +149,7 @@ public class FilterFactory {
 
         @Override
         public String getName() {
-            return "NodeAttribute";
+            return "NodeFilter";
         }
 
         @Override
@@ -113,7 +171,7 @@ public class FilterFactory {
 
         @Override
         public String getName() {
-            return "AllEdges";
+            return "EdgeFilter";
         }
 
         @Override
@@ -121,5 +179,4 @@ public class FilterFactory {
             return null;
         }
     }
-
 }

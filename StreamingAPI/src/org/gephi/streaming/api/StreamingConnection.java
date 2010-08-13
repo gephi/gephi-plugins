@@ -21,7 +21,6 @@ along with Gephi.  If not, see <http://www.gnu.org/licenses/>.
 package org.gephi.streaming.api;
 
 import java.io.IOException;
-import java.net.URL;
 
 /**
  * This interface represents a connection to a stream.
@@ -84,8 +83,20 @@ public interface StreamingConnection {
      * It should be registered using setStatusListener().
      */
     public interface StatusListener {
+        /**
+         * Called when the connection is closed
+         * @param connection - the connection reference
+         */
         public void onConnectionClosed(StreamingConnection connection);
+        /**
+         * Called when some data is received
+         * @param connection - the connection reference
+         */
         public void onDataReceived(StreamingConnection connection);
+        /**
+         * Called when an error occurred
+         * @param connection - the connection reference
+         */
         public void onError(StreamingConnection connection);
     }
 
