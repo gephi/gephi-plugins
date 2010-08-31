@@ -38,8 +38,23 @@ public interface DynamicModel {
      */
     public static final String TIMEINTERVAL_COLUMN = "time_interval";
 
+    /**
+     * Builds a new {@code DynamicGraph} from the given {@code Graph} instance.
+     *
+     * @param graph the underlying graph
+     *
+     * @return a new a new {@code DynamicGraph}.
+     */
     public DynamicGraph createDynamicGraph(Graph graph);
 
+    /**
+     * Builds a new {@code DynamicGraph} from the given {@code Graph} instance
+     * wrapping the given {@code TimeInterval}.
+     *
+     * @param graph the underlying graph
+     *
+     * @return a new a new {@code DynamicGraph}.
+     */
     public DynamicGraph createDynamicGraph(Graph graph, TimeInterval interval);
 
     /**
@@ -50,4 +65,22 @@ public interface DynamicModel {
      * the current workspace.
      */
     public TimeInterval getVisibleInterval();
+
+    /**
+     * Returns the minimum of the time intervals defined in elements (i.e. nodes
+     * and edges) in the current workspace. This minimum is updated when data
+     * change and excludes <code>Double.NEGATIVE_INFINITY</code>.
+     *
+     * @return the minimum time in the current workspace
+     */
+    public double getMin();
+
+    /**
+     * Returns the maximum of the time intervals defined in elements (i.e. nodes
+     * and edges) in the current workspace. This maximum is updated when data
+     * change and excludes <code>Double.POSITIVE_INFINITY</code>.
+     *
+     * @return the maximum time in the current workspace
+     */
+    public double getMax();
 }

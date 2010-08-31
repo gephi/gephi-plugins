@@ -55,15 +55,10 @@ public class DynamicUtilitiesTest {
 	@Test
 	public void testCalendar() {
 		System.out.println("testCalendar()");
-		String date = "2000-01-01";
-		try {
-			double d     = DynamicUtilities.getDoubleFromXMLDateString(date);
-			String date2 = DynamicUtilities.getXMLDateStringFromDouble(d);
-			assertEquals(date, date2);
-		}
-		catch (DatatypeConfigurationException e) {
-			fail(e.getMessage());
-		}
+		String date = "2000-01-01T00:00:00.000";
+		double d     = DynamicUtilities.getDoubleFromXMLDateString(date);
+		String date2 = DynamicUtilities.getXMLDateStringFromDouble(d);
+		assertEquals(date, date2);
 		System.out.println();
 	}
 

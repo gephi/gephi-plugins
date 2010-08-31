@@ -74,18 +74,18 @@ public class ImporterGEXF2 implements FileImporter, LongTask {
     private static final String EDGE_TYPE = "type";
     private static final String EDGE_WEIGHT = "weight";
     private static final String EDGE_START = "start";
-    private static final String EDGE_COLOR = "viz:color";
+    private static final String EDGE_COLOR = "color";
     private static final String EDGE_END = "end";
     private static final String EDGE_SLICE = "slice";
     private static final String ATTRIBUTE = "attribute";
     private static final String ATTRIBUTE_ID = "id";
     private static final String ATTRIBUTE_TITLE = "title";
     private static final String ATTRIBUTE_TYPE = "type";
-    private static final String ATTRIBUTE_TYPE2 = "mode";
     private static final String ATTRIBUTE_DEFAULT = "default";
     private static final String ATTRIBUTES = "attributes";
     private static final String ATTRIBUTES_CLASS = "class";
     private static final String ATTRIBUTES_TYPE = "type";
+    private static final String ATTRIBUTES_TYPE2 = "mode";
     private static final String ATTVALUE = "attvalue";
     private static final String ATTVALUE_FOR = "for";
     private static final String ATTVALUE_FOR2 = "id";
@@ -667,7 +667,7 @@ public class ImporterGEXF2 implements FileImporter, LongTask {
             String attName = reader.getAttributeName(i).getLocalPart();
             if (ATTRIBUTES_CLASS.equalsIgnoreCase(attName)) {
                 classAtt = reader.getAttributeValue(i);
-            } else if (ATTRIBUTES_TYPE.equalsIgnoreCase(attName)) {
+            } else if (ATTRIBUTES_TYPE.equalsIgnoreCase(attName) || ATTRIBUTES_TYPE2.equalsIgnoreCase(attName)) {
                 typeAtt = reader.getAttributeValue(i);
             }
         }
@@ -700,7 +700,7 @@ public class ImporterGEXF2 implements FileImporter, LongTask {
             String attName = reader.getAttributeName(i).getLocalPart();
             if (ATTRIBUTE_ID.equalsIgnoreCase(attName)) {
                 id = reader.getAttributeValue(i);
-            } else if (ATTRIBUTE_TYPE.equalsIgnoreCase(attName) || ATTRIBUTE_TYPE2.equalsIgnoreCase(attName)) {
+            } else if (ATTRIBUTE_TYPE.equalsIgnoreCase(attName)) {
                 type = reader.getAttributeValue(i);
             } else if (ATTRIBUTE_TITLE.equalsIgnoreCase(attName)) {
                 title = reader.getAttributeValue(i);
@@ -748,9 +748,9 @@ public class ImporterGEXF2 implements FileImporter, LongTask {
 
             //Type
             AttributeType attributeType = AttributeType.STRING;
-            if (type.equalsIgnoreCase("boolean")) {
+            if (type.equalsIgnoreCase("boolean") || type.equalsIgnoreCase("bool")) {
                 attributeType = dynamic ? AttributeType.DYNAMIC_BOOLEAN : AttributeType.BOOLEAN;
-            } else if (type.equalsIgnoreCase("integer")) {
+            } else if (type.equalsIgnoreCase("integer") || type.equalsIgnoreCase("int")) {
                 attributeType = dynamic ? AttributeType.DYNAMIC_INT : AttributeType.INT;
             } else if (type.equalsIgnoreCase("long")) {
                 attributeType = dynamic ? AttributeType.DYNAMIC_LONG : AttributeType.LONG;
