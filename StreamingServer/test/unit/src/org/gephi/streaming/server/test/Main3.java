@@ -10,6 +10,7 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.List;
+import org.openide.util.Exceptions;
 
 import org.simpleframework.http.Request;
 import org.simpleframework.http.Response;
@@ -23,6 +24,17 @@ public class Main3 implements Container {
     private static final String JSON_RESOURCE = "graph.json";
 
     public void handle(Request request, Response response) {
+
+        try {
+            String operation = request.getParameter("operation");
+            if (operation!=null && operation.equalsIgnoreCase("updateGraph")) {
+                response.close();
+                return;
+            }
+        } catch (IOException ex) {
+            Exceptions.printStackTrace(ex);
+        }
+
         PrintStream body;
         try {
             body = response.getPrintStream();

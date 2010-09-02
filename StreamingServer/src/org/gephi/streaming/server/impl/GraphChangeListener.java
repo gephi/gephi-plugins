@@ -30,10 +30,12 @@ import org.gephi.data.attributes.api.AttributeRow;
 import org.gephi.data.attributes.api.AttributeValue;
 import org.gephi.data.properties.PropertiesColumn;
 import org.gephi.graph.api.Edge;
+import org.gephi.graph.api.EdgeData;
 import org.gephi.graph.api.Graph;
 import org.gephi.graph.api.GraphEvent;
 import org.gephi.graph.api.GraphListener;
 import org.gephi.graph.api.Node;
+import org.gephi.graph.api.NodeData;
 import org.gephi.streaming.api.event.GraphEventBuilder;
 import org.gephi.streaming.api.GraphEventHandler;
 import org.gephi.streaming.api.event.ElementType;
@@ -56,8 +58,7 @@ public class GraphChangeListener implements GraphListener, AttributeListener {
         this.graph = graph;
         graph.getGraphModel().addGraphListener(this);
         AttributeController ac = Lookup.getDefault().lookup(AttributeController.class);
-        ac.getModel().getEdgeTable().addAttributeListener(this);
-        ac.getModel().getNodeTable().addAttributeListener(this);
+        ac.getModel().addAttributeListener(this);
         eventBuilder = new GraphEventBuilder(this);
          graphWriter = new GraphWriter(graph, true);
     }
@@ -126,6 +127,33 @@ public class GraphChangeListener implements GraphListener, AttributeListener {
         case ADD_COLUMN:
             break;
         case REMOVE_COLUMN:
+            break;
+        case SET_VALUE:
+            for (Object data: event.getData().getTouchedObjects()) {
+                ElementType elementType;
+                String id;
+                if (data instanceof NodeData) {
+                    elementType = ElementType.NODE;
+                    NodeData nodeData = (NodeData)data;
+                    id = nodeData.getId();
+
+                } else if (data instanceof EdgeData) {
+                    elementType = ElementType.EDGE;
+                    EdgeData edgeData = (EdgeData)data;
+                    id = edgeData.getId();
+                } else {
+                    throw new RuntimeException("Unrecognized graph object type");
+                }
+
+                Map<String, Object> attributes = new HashMap<String, Object>();
+                for (AttributeValue value: event.getData().getTouchedValues()) {
+                    attributes.put(value.getColumn().getTitle(), value.getValue());
+                }
+
+                org.gephi.streaming.api.event.GraphEvent streamingEvent =
+                        eventBuilder.graphEvent(elementType, EventType.CHANGE, id, attributes);
+                operationSupport.handleGraphEvent(streamingEvent);
+            }
             break;
         }
         

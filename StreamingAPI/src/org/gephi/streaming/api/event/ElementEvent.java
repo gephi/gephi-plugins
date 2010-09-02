@@ -61,7 +61,8 @@ public class ElementEvent extends GraphEvent {
         return new StringBuffer("ElementEvent[")
             .append(this.eventType).append(" ")
             .append(this.elementType).append(" ")
-            .append(this.elementId).append("]").toString();
+            .append(this.elementId).append(": ")
+            .append(this.attributes).append("]").toString();
     }
     
     @Override

@@ -29,10 +29,12 @@ import org.gephi.data.attributes.api.AttributeRow;
 import org.gephi.data.attributes.api.AttributeValue;
 import org.gephi.data.properties.PropertiesColumn;
 import org.gephi.graph.api.Edge;
+import org.gephi.graph.api.EdgeData;
 import org.gephi.graph.api.Graph;
 import org.gephi.graph.api.GraphEvent;
 import org.gephi.graph.api.GraphListener;
 import org.gephi.graph.api.Node;
+import org.gephi.graph.api.NodeData;
 import org.gephi.streaming.api.GraphEventHandler;
 import org.gephi.streaming.api.event.ElementType;
 import org.gephi.streaming.api.event.EventType;
@@ -91,8 +93,41 @@ public class Graph2EventListener implements GraphListener, AttributeListener {
 
     }
 
+    @Override
     public void attributesChanged(AttributeEvent event) {
-        // TODO
+        switch (event.getEventType()) {
+        case ADD_COLUMN:
+            break;
+        case REMOVE_COLUMN:
+            break;
+        case SET_VALUE:
+            for (Object data: event.getData().getTouchedObjects()) {
+                ElementType elementType;
+                String id;
+                if (data instanceof NodeData) {
+                    elementType = ElementType.NODE;
+                    NodeData nodeData = (NodeData)data;
+                    id = nodeData.getId();
+
+                } else if (data instanceof EdgeData) {
+                    elementType = ElementType.EDGE;
+                    EdgeData edgeData = (EdgeData)data;
+                    id = edgeData.getId();
+                } else {
+                    throw new RuntimeException("Unrecognized graph object type");
+                }
+
+                Map<String, Object> attributes = new HashMap<String, Object>();
+                for (AttributeValue value: event.getData().getTouchedValues()) {
+                    attributes.put(value.getColumn().getTitle(), value.getValue());
+                }
+
+                org.gephi.streaming.api.event.GraphEvent streamingEvent =
+                        eventBuilder.graphEvent(elementType, EventType.CHANGE, id, attributes);
+                eventHandler.handleGraphEvent(streamingEvent);
+            }
+            break;
+        }
     }
 
     private Map<String, Object> getNodeAttributes(Node node) {

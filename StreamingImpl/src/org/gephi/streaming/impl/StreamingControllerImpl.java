@@ -29,6 +29,7 @@ import java.net.PasswordAuthentication;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.Collection;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.logging.Level;
@@ -48,6 +49,7 @@ import org.gephi.streaming.api.StreamingConnection;
 import org.gephi.streaming.api.StreamingController;
 import org.gephi.streaming.api.event.ElementEvent;
 import org.gephi.streaming.api.event.ElementType;
+import org.gephi.streaming.api.event.EventType;
 import org.gephi.streaming.api.event.GraphEvent;
 import org.gephi.streaming.api.event.GraphEventBuilder;
 import org.openide.util.Lookup;
@@ -92,8 +94,7 @@ public class StreamingControllerImpl implements StreamingController {
 
         graph.getGraphModel().addGraphListener(graph2EventListener);
         AttributeController ac = Lookup.getDefault().lookup(AttributeController.class);
-        ac.getModel().getEdgeTable().addAttributeListener(graph2EventListener);
-        ac.getModel().getNodeTable().addAttributeListener(graph2EventListener);
+        ac.getModel().addAttributeListener(graph2EventListener);
 
         if (report!=null) {
             report.setSource(endpoint.getUrl().toString());
@@ -107,6 +108,7 @@ public class StreamingControllerImpl implements StreamingController {
 
             @Override
             public void handleGraphEvent(GraphEvent event) {
+                logger.log(Level.INFO, "Received event {0}", event.toString());
                 if (event instanceof ElementEvent) {
                     ElementEvent elementEvent = (ElementEvent)event;
                     if (elementEvent.getElementId()!=null) {
@@ -133,8 +135,7 @@ public class StreamingControllerImpl implements StreamingController {
                 public void onConnectionClosed(StreamingConnection connection) {
                     graph.getGraphModel().removeGraphListener(graph2EventListener);
                     AttributeController ac = Lookup.getDefault().lookup(AttributeController.class);
-                    ac.getModel().getEdgeTable().removeAttributeListener(graph2EventListener);
-                    ac.getModel().getNodeTable().removeAttributeListener(graph2EventListener);
+                    ac.getModel().removeAttributeListener(graph2EventListener);
 
                     container.waitForDispatchAllEvents();
                     container.stop();
@@ -165,15 +166,17 @@ public class StreamingControllerImpl implements StreamingController {
 
         @Override
         public void handleGraphEvent(GraphEvent event) {
-            logger.log(Level.FINE, "Handling event {0}", event.toString());
+            logger.log(Level.INFO, "{0};{1};Sending event {2}",
+                    new Object[]{Thread.currentThread().getId(), System.currentTimeMillis(), event.toString()});
+            
             if (event instanceof ElementEvent) {
                 ElementEvent elementEvent = (ElementEvent)event;
                 FilteredEventEntry entry = new FilteredEventEntry(elementEvent.getElementId(), elementEvent.getElementType(), 0);
                 if (!filterededIds.contains(entry)) {
                     sendEvent(endpoint, event);
-                } else {
+                } /*else {
                     filterededIds.remove(entry);
-                }
+                }*/
             }
         }
     }
@@ -216,7 +219,11 @@ public class StreamingControllerImpl implements StreamingController {
         public FilteredEventEntry(String elementId, ElementType elementType, long timestamp) {
             this.elementId = elementId;
             this.elementType = elementType;
-            this.timestamp = timestamp;
+            if (timestamp <= 0) {
+                this.timestamp = System.currentTimeMillis();
+            } else {
+                this.timestamp = timestamp;
+            }
         }
 
         @Override
