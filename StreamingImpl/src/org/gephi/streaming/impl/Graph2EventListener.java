@@ -48,9 +48,11 @@ public class Graph2EventListener implements GraphListener, AttributeListener {
 
     private GraphEventHandler eventHandler;
     private GraphEventBuilder eventBuilder;
+    private Graph graph;
     private boolean sendVizData = true;
 
     public Graph2EventListener(Graph graph, GraphEventHandler eventHandler) {
+        this.graph = graph;
         eventBuilder = new GraphEventBuilder(this);
         this.eventHandler = eventHandler;
     }
@@ -101,6 +103,7 @@ public class Graph2EventListener implements GraphListener, AttributeListener {
         case REMOVE_COLUMN:
             break;
         case SET_VALUE:
+
             for (Object data: event.getData().getTouchedObjects()) {
                 ElementType elementType;
                 String id;
@@ -108,23 +111,33 @@ public class Graph2EventListener implements GraphListener, AttributeListener {
                     elementType = ElementType.NODE;
                     NodeData nodeData = (NodeData)data;
                     id = nodeData.getId();
+                    if (graph.getNode(id)==null) {
+                        continue;
+                    }
 
                 } else if (data instanceof EdgeData) {
                     elementType = ElementType.EDGE;
                     EdgeData edgeData = (EdgeData)data;
                     id = edgeData.getId();
+                    if (graph.getEdge(id)==null) {
+                        continue;
+                    }
                 } else {
                     throw new RuntimeException("Unrecognized graph object type");
                 }
 
                 Map<String, Object> attributes = new HashMap<String, Object>();
                 for (AttributeValue value: event.getData().getTouchedValues()) {
-                    attributes.put(value.getColumn().getTitle(), value.getValue());
+                    if (value.getColumn().getIndex() != PropertiesColumn.NODE_ID.getIndex()
+                       && value.getColumn().getIndex() != PropertiesColumn.EDGE_ID.getIndex())
+                        attributes.put(value.getColumn().getTitle(), value.getValue());
                 }
 
-                org.gephi.streaming.api.event.GraphEvent streamingEvent =
-                        eventBuilder.graphEvent(elementType, EventType.CHANGE, id, attributes);
-                eventHandler.handleGraphEvent(streamingEvent);
+                if (!attributes.isEmpty()) {
+                    org.gephi.streaming.api.event.GraphEvent streamingEvent =
+                            eventBuilder.graphEvent(elementType, EventType.CHANGE, id, attributes);
+                    eventHandler.handleGraphEvent(streamingEvent);
+                }
             }
             break;
         }

@@ -239,8 +239,8 @@ public class GraphUpdaterEventHandler implements GraphEventHandler {
             }
             
             graph.writeLock();
-            graph.addNode(node);
             graph.setId(node, nodeId);
+            graph.addNode(node);
             graph.writeUnlock();
         } else {
             log("Node added event ignored for node "+nodeId+": Node already exists");
