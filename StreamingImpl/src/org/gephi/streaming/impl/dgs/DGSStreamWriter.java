@@ -72,7 +72,8 @@ public class DGSStreamWriter extends StreamWriter {
         // NOP
     }
 
-    public void handleGraphEvent(GraphEvent event) {
+    @Override
+    public synchronized void handleGraphEvent(GraphEvent event) {
 
         if (event instanceof ElementEvent) {
             ElementEvent elementEvent = (ElementEvent)event;

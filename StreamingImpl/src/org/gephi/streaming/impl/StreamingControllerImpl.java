@@ -36,6 +36,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.gephi.data.attributes.api.AttributeController;
 import org.gephi.graph.api.Graph;
+import org.gephi.streaming.api.Graph2EventListener;
 import org.gephi.streaming.api.GraphEventHandler;
 import org.gephi.streaming.api.StreamingEndpoint;
 import org.gephi.streaming.api.GraphUpdaterEventHandler;
@@ -157,11 +158,11 @@ public class StreamingControllerImpl implements StreamingController {
     private class ClientEventHandler implements GraphEventHandler {
         
         private StreamingEndpoint endpoint;
-        private Set<FilteredEventEntry> filterededIds;
+        private Set<FilteredEventEntry> filteredEvents;
 
-        public ClientEventHandler(StreamingEndpoint endpoint, Set<FilteredEventEntry> filterededIds) {
+        public ClientEventHandler(StreamingEndpoint endpoint, Set<FilteredEventEntry> filterededEvents) {
             this.endpoint = endpoint;
-            this.filterededIds = filterededIds;
+            this.filteredEvents = filterededEvents;
         }
 
         @Override
@@ -172,11 +173,11 @@ public class StreamingControllerImpl implements StreamingController {
             if (event instanceof ElementEvent) {
                 ElementEvent elementEvent = (ElementEvent)event;
                 FilteredEventEntry entry = new FilteredEventEntry(elementEvent.getElementId(), elementEvent.getElementType(), 0);
-                if (!filterededIds.contains(entry)) {
+                if (!filteredEvents.contains(entry)) {
                     sendEvent(endpoint, event);
-                } /*else {
-                    filterededIds.remove(entry);
-                }*/
+                } else {
+                    filteredEvents.remove(entry);
+                }
             }
         }
     }

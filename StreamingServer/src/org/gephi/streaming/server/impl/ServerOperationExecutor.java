@@ -28,6 +28,7 @@ import java.io.OutputStream;
 import java.net.SocketException;
 import java.util.HashMap;
 import java.util.Map;
+import org.gephi.data.attributes.api.AttributeController;
 
 import org.gephi.data.attributes.api.AttributeRow;
 import org.gephi.data.attributes.api.AttributeValue;
@@ -36,6 +37,7 @@ import org.gephi.graph.api.Edge;
 import org.gephi.graph.api.Graph;
 import org.gephi.graph.api.Node;
 import org.gephi.streaming.api.CompositeGraphEventHandler;
+import org.gephi.streaming.api.Graph2EventListener;
 import org.gephi.streaming.api.GraphEventHandler;
 import org.gephi.streaming.api.event.GraphEvent;
 import org.gephi.streaming.api.event.GraphEventBuilder;
@@ -74,8 +76,10 @@ public class ServerOperationExecutor {
         readerFactory = Lookup.getDefault().lookup(StreamReaderFactory.class);
         eventBuilder = new GraphEventBuilder(this);
 
-        GraphChangeListener changeListener = new GraphChangeListener(graph);
-        changeListener.setOperationSupport(graphBufferedOperationSupport);
+        Graph2EventListener changeListener = new Graph2EventListener(graph, graphBufferedOperationSupport);
+        graph.getGraphModel().addGraphListener(changeListener);
+        AttributeController ac = Lookup.getDefault().lookup(AttributeController.class);
+        ac.getModel().addAttributeListener(changeListener);
     }
     
     /**

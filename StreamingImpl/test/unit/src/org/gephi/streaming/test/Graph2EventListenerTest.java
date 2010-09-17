@@ -30,7 +30,7 @@ import org.gephi.graph.api.GraphModel;
 import org.gephi.graph.api.Node;
 import org.gephi.project.api.ProjectController;
 import org.gephi.project.api.Workspace;
-import org.gephi.streaming.impl.Graph2EventListener;
+import org.gephi.streaming.api.Graph2EventListener;
 import org.junit.Test;
 import org.openide.util.Exceptions;
 import org.openide.util.Lookup;

@@ -26,15 +26,14 @@ import java.net.URL;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.concurrent.atomic.AtomicBoolean;
 import org.gephi.data.attributes.api.AttributeController;
 
 import org.gephi.graph.api.Graph;
 import org.gephi.graph.api.GraphController;
 import org.gephi.graph.api.GraphModel;
 import org.gephi.project.api.ProjectController;
-import org.gephi.project.api.Workspace;
 import org.gephi.streaming.api.CompositeGraphEventHandler;
+import org.gephi.streaming.api.Graph2EventListener;
 import org.gephi.streaming.api.GraphEventHandler;
 import org.gephi.streaming.api.GraphUpdaterEventHandler;
 import org.gephi.streaming.api.Report;
@@ -46,11 +45,10 @@ import org.gephi.streaming.api.StreamingConnection;
 import org.gephi.streaming.api.StreamingEndpoint;
 import org.gephi.streaming.api.event.GraphEvent;
 import org.gephi.streaming.api.event.GraphEventBuilder;
-import org.gephi.streaming.impl.GraphEventContainer;
 import org.gephi.streaming.impl.StreamingConnectionImpl;
 import org.gephi.streaming.server.impl.FilteredGraphEventHandler;
-import org.gephi.streaming.server.impl.GraphChangeListener;
 import org.junit.Test;
+import org.openide.util.Exceptions;
 import org.openide.util.Lookup;
 
 /**
@@ -66,8 +64,7 @@ public class GraphStreamingEventProcessorTest {
         
         ProjectController projectController = Lookup.getDefault().lookup(ProjectController.class);
         projectController.newProject();
-        Workspace workspace = projectController.newWorkspace(projectController.getCurrentProject());
-//        projectController.openWorkspace(workspace);
+        projectController.newWorkspace(projectController.getCurrentProject());
         
         String streamType = "DGS";
         URL url = this.getClass().getResource(DGS_RESOURCE);
@@ -79,9 +76,6 @@ public class GraphStreamingEventProcessorTest {
         GraphModel graphModel = graphController.getModel();
         
         Graph graph = graphModel.getHierarchicalMixedGraph();
-        GraphChangeListener listener = new GraphChangeListener(graph);
-        
-        graphModel.addGraphListener(listener);
 
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         StreamWriterFactory factory = Lookup.getDefault().lookup(StreamWriterFactory.class);
@@ -99,32 +93,20 @@ public class GraphStreamingEventProcessorTest {
 
         GraphEventHandler composite = new CompositeGraphEventHandler(graphUpdaterHandler, eventCollector);
 
-        listener.setOperationSupport(new FilteredGraphEventHandler(streamWriter, processedEvents));
-//        listener.setOperationSupport(streamWriter);
+        Graph2EventListener listener = new Graph2EventListener(graph, new FilteredGraphEventHandler(streamWriter, processedEvents));
+//        Graph2EventListener listener = new Graph2EventListener(graph, streamWriter);
+        graphModel.addGraphListener(listener);
+        ac.getModel().addAttributeListener(listener);
 
         StreamingConnection connection = 
                 connectToStream(url, streamType, composite);
         
-        final AtomicBoolean processing = new AtomicBoolean(true);
-        connection.addStatusListener(
-            new StreamingConnection.StatusListener() {
-                public void onConnectionClosed(StreamingConnection connection) {
-                    processing.set(false);
-                    synchronized (processing) {
-                        processing.notifyAll();
-                    }
-                }
-                public void onDataReceived(StreamingConnection connection) { }
-                public void onError(StreamingConnection connection) { }
-            });
-        connection.asynchProcess();
+        connection.process();
 
-        synchronized (processing) {
-            try {
-                while (processing.get()) {
-                    processing.wait();
-                }
-            } catch (InterruptedException e) {}
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException ex) {
+            Exceptions.printStackTrace(ex);
         }
 
         System.out.println(out.toString());
@@ -137,34 +119,15 @@ public class GraphStreamingEventProcessorTest {
         StreamReaderFactory readerFactory =
                 Lookup.getDefault().lookup(StreamReaderFactory.class);
 
-        final GraphEventContainer container =
-                new GraphEventContainer(handler);
-
-        Report report = new Report();
         GraphEventBuilder eventBuilder = new GraphEventBuilder(url);
         StreamReader reader =
-                readerFactory.createStreamReader(streamType, container,
+                readerFactory.createStreamReader(streamType, handler,
                 eventBuilder);
-        reader.setReport(report);
 
         StreamingEndpoint endpoint = new StreamingEndpoint();
         endpoint.setUrl(url);
         StreamingConnection connection = new StreamingConnectionImpl(endpoint, reader, new Report());
 
-        connection.addStatusListener(
-                new StreamingConnection.StatusListener() {
-
-            public void onConnectionClosed(StreamingConnection connection) {
-                container.waitForDispatchAllEvents();
-                container.stop();
-            }
-
-            public void onDataReceived(StreamingConnection connection) { }
-            public void onError(StreamingConnection connection) { }
-        });
-
         return connection;
     }
-
-
 }

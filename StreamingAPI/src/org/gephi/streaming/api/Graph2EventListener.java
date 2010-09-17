@@ -19,10 +19,14 @@ You should have received a copy of the GNU General Public License
 along with Gephi.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package org.gephi.streaming.impl;
+package org.gephi.streaming.api;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import org.gephi.data.attributes.api.AttributeEvent;
 import org.gephi.data.attributes.api.AttributeListener;
 import org.gephi.data.attributes.api.AttributeRow;
@@ -104,30 +108,63 @@ public class Graph2EventListener implements GraphListener, AttributeListener {
             break;
         case SET_VALUE:
 
-            for (Object data: event.getData().getTouchedObjects()) {
-                ElementType elementType;
+            Map<String, List<AttributeValue>> nodeChangeTable = new HashMap<String, List<AttributeValue>>();
+            Map<String, List<AttributeValue>> edgeChangeTable = new HashMap<String, List<AttributeValue>>();
+
+            for (int i=0; i<event.getData().getTouchedObjects().length; i++) {
+                Object data = event.getData().getTouchedObjects()[i];
+                AttributeValue value = event.getData().getTouchedValues()[i];
+
                 String id;
                 if (data instanceof NodeData) {
-                    elementType = ElementType.NODE;
                     NodeData nodeData = (NodeData)data;
                     id = nodeData.getId();
                     if (graph.getNode(id)==null) {
                         continue;
                     }
+                    List<AttributeValue> values = nodeChangeTable.get(id);
+                    if (values==null) {
+                        values = new ArrayList<AttributeValue>();
+                        nodeChangeTable.put(id, values);
+                    }
+                    values.add(value);
 
                 } else if (data instanceof EdgeData) {
-                    elementType = ElementType.EDGE;
                     EdgeData edgeData = (EdgeData)data;
                     id = edgeData.getId();
                     if (graph.getEdge(id)==null) {
                         continue;
                     }
+
+                    List<AttributeValue> values = edgeChangeTable.get(id);
+                    if (values==null) {
+                        values = new ArrayList<AttributeValue>();
+                        edgeChangeTable.put(id, values);
+                    }
+                    values.add(value);
                 } else {
                     throw new RuntimeException("Unrecognized graph object type");
                 }
-
+            }
+            
+            for (Map.Entry<String, List<AttributeValue>> entry: nodeChangeTable.entrySet()) {
                 Map<String, Object> attributes = new HashMap<String, Object>();
-                for (AttributeValue value: event.getData().getTouchedValues()) {
+                for (AttributeValue value: entry.getValue()) {
+                    if (value.getColumn().getIndex() != PropertiesColumn.NODE_ID.getIndex()
+                       && value.getColumn().getIndex() != PropertiesColumn.EDGE_ID.getIndex())
+                        attributes.put(value.getColumn().getTitle(), value.getValue());
+                }
+                
+                if (!attributes.isEmpty()) {
+                    org.gephi.streaming.api.event.GraphEvent streamingEvent =
+                            eventBuilder.graphEvent(ElementType.NODE, EventType.CHANGE, entry.getKey(), attributes);
+                    eventHandler.handleGraphEvent(streamingEvent);
+                }
+            }
+
+            for (Map.Entry<String, List<AttributeValue>> entry: edgeChangeTable.entrySet()) {
+                Map<String, Object> attributes = new HashMap<String, Object>();
+                for (AttributeValue value: entry.getValue()) {
                     if (value.getColumn().getIndex() != PropertiesColumn.NODE_ID.getIndex()
                        && value.getColumn().getIndex() != PropertiesColumn.EDGE_ID.getIndex())
                         attributes.put(value.getColumn().getTitle(), value.getValue());
@@ -135,10 +172,11 @@ public class Graph2EventListener implements GraphListener, AttributeListener {
 
                 if (!attributes.isEmpty()) {
                     org.gephi.streaming.api.event.GraphEvent streamingEvent =
-                            eventBuilder.graphEvent(elementType, EventType.CHANGE, id, attributes);
+                            eventBuilder.graphEvent(ElementType.EDGE, EventType.CHANGE, entry.getKey(), attributes);
                     eventHandler.handleGraphEvent(streamingEvent);
                 }
             }
+
             break;
         }
     }
