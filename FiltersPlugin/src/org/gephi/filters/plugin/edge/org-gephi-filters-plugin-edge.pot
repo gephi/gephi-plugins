@@ -17,3 +17,6 @@ msgstr ""
 
 msgid "EdgeWeightBuilder.name"
 msgstr "Edge Weight"
+
+msgid "EdgeWeightBuilder.description"
+msgstr "Keep edges within a particular weight range"

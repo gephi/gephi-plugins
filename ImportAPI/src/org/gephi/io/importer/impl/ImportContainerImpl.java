@@ -17,7 +17,7 @@ GNU Affero General Public License for more details.
 
 You should have received a copy of the GNU Affero General Public License
 along with Gephi.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.gephi.io.importer.impl;
 
 import java.util.ArrayList;
@@ -27,15 +27,17 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
+import java.util.List;
 import org.gephi.data.attributes.api.AttributeColumn;
 import org.gephi.data.attributes.api.AttributeController;
 import org.gephi.data.attributes.api.AttributeModel;
-import org.gephi.data.attributes.api.AttributeType;
 import org.gephi.data.attributes.api.AttributeValue;
 import org.gephi.data.attributes.api.AttributeValueFactory;
 import org.gephi.data.attributes.type.DynamicType;
+import org.gephi.data.attributes.type.Interval;
 import org.gephi.data.attributes.type.TimeInterval;
 import org.gephi.dynamic.DynamicUtilities;
+import org.gephi.dynamic.api.DynamicModel.TimeFormat;
 import org.gephi.io.importer.api.EdgeDefault;
 import org.gephi.io.importer.api.EdgeDraft;
 import org.gephi.io.importer.api.Container;
@@ -59,15 +61,15 @@ public class ImportContainerImpl implements Container, ContainerLoader, Containe
     //MetaData
     private String source;
     //Factory
-    private FactoryImpl factory;
+    private final FactoryImpl factory;
     //Parameters
-    private ImportContainerParameters parameters;
+    private final ImportContainerParameters parameters;
     //Maps
     private HashMap<String, NodeDraftImpl> nodeMap;
-    private HashMap<String, EdgeDraftImpl> edgeMap;
-    private HashMap<String, EdgeDraftImpl> edgeSourceTargetMap;
+    private final HashMap<String, EdgeDraftImpl> edgeMap;
+    private final HashMap<String, EdgeDraftImpl> edgeSourceTargetMap;
     //Attributes
-    private AttributeModel attributeModel;
+    private final AttributeModel attributeModel;
     //Management
     private boolean dynamicGraph = false;
     private boolean hierarchicalGraph = false;
@@ -76,6 +78,7 @@ public class ImportContainerImpl implements Container, ContainerLoader, Containe
     private int directedEdgesCount = 0;
     private int undirectedEdgesCount = 0;
     //Dynamic
+    private TimeFormat timeFormat = TimeFormat.DOUBLE;
     private Double timeIntervalMin;
     private Double timeIntervalMax;
 
@@ -342,42 +345,53 @@ public class ImportContainerImpl implements Container, ContainerLoader, Containe
         return timeIntervalMax;
     }
 
+    public TimeFormat getTimeFormat() {
+        return timeFormat;
+    }
+
     public void setTimeIntervalMax(String timeIntervalMax) {
-        try {
-            this.timeIntervalMax = DynamicUtilities.getDoubleFromXMLDateString(timeIntervalMax);
-        } catch (Exception ex) {
+        if (timeFormat.equals(TimeFormat.DATE)) {
+            try {
+                this.timeIntervalMax = DynamicUtilities.getDoubleFromXMLDateString(timeIntervalMax);
+            } catch (Exception ex) {
+                report.logIssue(new Issue(NbBundle.getMessage(ImportContainerImpl.class, "ImportContainerException_TimeInterval_ParseError", timeIntervalMax), Level.SEVERE));
+            }
+        } else {
             try {
                 this.timeIntervalMax = Double.parseDouble(timeIntervalMax);
-            } catch (Exception ex2) {
+            } catch (Exception ex) {
+                report.logIssue(new Issue(NbBundle.getMessage(ImportContainerImpl.class, "ImportContainerException_TimeInterval_ParseError", timeIntervalMax), Level.SEVERE));
             }
-        }
-        if (this.timeIntervalMax == null) {
-            report.logIssue(new Issue(NbBundle.getMessage(ImportContainerImpl.class, "ImportContainerException_TimeInterval_ParseError", timeIntervalMax), Level.SEVERE));
         }
     }
 
     public void setTimeIntervalMin(String timeIntervalMin) {
-        try {
-            this.timeIntervalMin = DynamicUtilities.getDoubleFromXMLDateString(timeIntervalMin);
-        } catch (Exception ex) {
+        if (timeFormat.equals(TimeFormat.DATE)) {
+            try {
+                this.timeIntervalMin = DynamicUtilities.getDoubleFromXMLDateString(timeIntervalMin);
+            } catch (Exception ex) {
+                report.logIssue(new Issue(NbBundle.getMessage(ImportContainerImpl.class, "ImportContainerException_TimeInterval_ParseError", timeIntervalMin), Level.SEVERE));
+            }
+        } else {
             try {
                 this.timeIntervalMin = Double.parseDouble(timeIntervalMin);
-            } catch (Exception ex2) {
+            } catch (Exception ex) {
+                report.logIssue(new Issue(NbBundle.getMessage(ImportContainerImpl.class, "ImportContainerException_TimeInterval_ParseError", timeIntervalMin), Level.SEVERE));
             }
-        }
-        if (this.timeIntervalMin == null) {
-            report.logIssue(new Issue(NbBundle.getMessage(ImportContainerImpl.class, "ImportContainerException_TimeInterval_ParseError", timeIntervalMin), Level.SEVERE));
         }
     }
 
-    public boolean verify() {
+    public void setTimeFormat(TimeFormat timeFormat) {
+        this.timeFormat = timeFormat;
+    }
 
+    public boolean verify() {
         //Edge weight 0
         for (EdgeDraftImpl edge : edgeMap.values().toArray(new EdgeDraftImpl[0])) {
             if (edge.getWeight() <= 0f) {
-                String id = edge.getId();
-                String sourceTargetId = edge.getSource().getId() + "-" + edge.getTarget().getId();
                 if (parameters.isRemoveEdgeWithWeightZero()) {
+                    String id = edge.getId();
+                    String sourceTargetId = edge.getSource().getId() + "-" + edge.getTarget().getId();
                     edgeMap.remove(id);
                     edgeSourceTargetMap.remove(sourceTargetId);
                     report.logIssue(new Issue(NbBundle.getMessage(ImportContainerImpl.class, "ImportContainerException_Weight_Zero_Ignored", id), Level.SEVERE));
@@ -424,8 +438,51 @@ public class ImportContainerImpl implements Container, ContainerLoader, Containe
             }
         }
 
+        //Print time interval values to report
         if (timeIntervalMin != null || timeIntervalMax != null) {
-            //Print values to report
+            if (timeFormat.equals(TimeFormat.DATE)) {
+                try {
+                    String message = "[" + (timeIntervalMin != null ? DynamicUtilities.getXMLDateStringFromDouble(timeIntervalMin) : "-inf") + ",";
+                    message += (timeIntervalMax != null ? DynamicUtilities.getXMLDateStringFromDouble(timeIntervalMax) : "+inf") + "]";
+                    report.log(NbBundle.getMessage(ImportContainerImpl.class, "ImportContainerLog.TimeInterval", message));
+                } catch (Exception e) {
+                }
+            } else {
+                String message = "[" + (timeIntervalMin != null ? timeIntervalMin.toString() : "-inf") + ",";
+                message += (timeIntervalMax != null ? timeIntervalMax.toString() : "+inf") + "]";
+                report.log(NbBundle.getMessage(ImportContainerImpl.class, "ImportContainerLog.TimeInterval", message));
+            }
+        }
+
+        //Print TimeFormat
+        if (dynamicGraph) {
+            report.log(NbBundle.getMessage(ImportContainerImpl.class, "ImportContainerLog.TimeFormat", timeFormat.toString()));
+        }
+
+        //Remove overlapping
+        if (dynamicGraph && parameters.isRemoveIntervalsOverlapping()) {
+            for (NodeDraftImpl node : nodeMap.values()) {
+                AttributeValue[] values = node.getAttributeRow().getValues();
+                for (int i = 0; i < values.length; i++) {
+                    AttributeValue val = values[i];
+                    if (val.getValue() != null && val.getValue() instanceof DynamicType) {   //is Dynamic type
+                        DynamicType type = (DynamicType) val.getValue();
+                        type = DynamicUtilities.removeOverlapping(type);
+                        node.getAttributeRow().setValue(val.getColumn(), type);
+                    }
+                }
+            }
+            for (EdgeDraftImpl edge : edgeMap.values()) {
+                AttributeValue[] values = edge.getAttributeRow().getValues();
+                for (int i = 0; i < values.length; i++) {
+                    AttributeValue val = values[i];
+                    if (val.getValue() != null && val.getValue() instanceof DynamicType) {   //is Dynamic type
+                        DynamicType type = (DynamicType) val.getValue();
+                        type = DynamicUtilities.removeOverlapping(type);
+                        edge.getAttributeRow().setValue(val.getColumn(), type);
+                    }
+                }
+            }
         }
 
         //Dynamic attributes bounds
@@ -449,7 +506,7 @@ public class ImportContainerImpl implements Container, ContainerLoader, Containe
                 AttributeValue[] values = node.getAttributeRow().getValues();
                 for (int i = 0; i < values.length; i++) {
                     AttributeValue val = values[i];
-                    if (val.getValue() != null && DynamicType.class.isAssignableFrom(val.getColumn().getType().getType())) {   //is Dynamic type
+                    if (val.getValue() != null && val.getValue() instanceof DynamicType) {   //is Dynamic type
                         DynamicType type = (DynamicType) val.getValue();
                         if (timeIntervalMin != null && type.getLow() < timeIntervalMin) {
                             if (!Double.isInfinite(type.getLow())) {
@@ -488,7 +545,7 @@ public class ImportContainerImpl implements Container, ContainerLoader, Containe
                 AttributeValue[] values = edge.getAttributeRow().getValues();
                 for (int i = 0; i < values.length; i++) {
                     AttributeValue val = values[i];
-                    if (val.getValue() != null && DynamicType.class.isAssignableFrom(val.getColumn().getType().getType())) {   //is Dynamic type
+                    if (val.getValue() != null && val.getValue() instanceof DynamicType) {   //is Dynamic type
                         DynamicType type = (DynamicType) val.getValue();
                         if (timeIntervalMin != null && type.getLow() < timeIntervalMin) {
                             if (!Double.isInfinite(type.getLow())) {
@@ -621,15 +678,13 @@ public class ImportContainerImpl implements Container, ContainerLoader, Containe
         private int edgeIDgen = 0;
 
         public NodeDraftImpl newNodeDraft() {
-            NodeDraftImpl node = new NodeDraftImpl(ImportContainerImpl.this, source);
-            node.setId("n" + nodeIDgen);
+            NodeDraftImpl node = new NodeDraftImpl(ImportContainerImpl.this, "n" + nodeIDgen);
             nodeIDgen++;
             return node;
         }
 
         public EdgeDraftImpl newEdgeDraft() {
-            EdgeDraftImpl edge = new EdgeDraftImpl(ImportContainerImpl.this, source);
-            edge.setId("e" + edgeIDgen);
+            EdgeDraftImpl edge = new EdgeDraftImpl(ImportContainerImpl.this, "e" + edgeIDgen);
             edgeIDgen++;
             return edge;
         }

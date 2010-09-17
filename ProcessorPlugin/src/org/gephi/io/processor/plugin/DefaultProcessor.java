@@ -17,10 +17,11 @@ GNU Affero General Public License for more details.
 
 You should have received a copy of the GNU Affero General Public License
 along with Gephi.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.gephi.io.processor.plugin;
 
 import org.gephi.data.attributes.api.AttributeController;
+import org.gephi.dynamic.api.DynamicController;
 import org.gephi.graph.api.Edge;
 import org.gephi.graph.api.GraphController;
 import org.gephi.graph.api.GraphFactory;
@@ -57,7 +58,6 @@ public class DefaultProcessor extends AbstractProcessor implements Processor {
         if (container.getSource() != null) {
             pc.setSource(workspace, container.getSource());
         }
-        this.workspace = workspace;
 
         //Architecture
         GraphModel graphModel = Lookup.getDefault().lookup(GraphController.class).getModel();
@@ -84,15 +84,15 @@ public class DefaultProcessor extends AbstractProcessor implements Processor {
         attributeModel.mergeModel(container.getAttributeModel());
 
         //Dynamic
-//        if (timelineController != null) {
-//            timelineController.setMin(workspace, container.getTimeIntervalMin());
-//            timelineController.setMax(workspace, container.getTimeIntervalMax());
-//        }
+        if (container.getTimeFormat() != null) {
+            DynamicController dynamicController = Lookup.getDefault().lookup(DynamicController.class);
+            dynamicController.setTimeFormat(container.getTimeFormat());
+        }
 
         int nodeCount = 0;
         //Create all nodes
         for (NodeDraftGetter draftNode : container.getNodes()) {
-            Node n = factory.newNode(draftNode.getId());
+            Node n = factory.newNode(draftNode.isAutoId() ? null : draftNode.getId());
             flushToNode(draftNode, n);
             draftNode.setNode(n);
             nodeCount++;
@@ -120,13 +120,13 @@ public class DefaultProcessor extends AbstractProcessor implements Processor {
             Edge e = null;
             switch (container.getEdgeDefault()) {
                 case DIRECTED:
-                    e = factory.newEdge(edge.getId(), source, target, edge.getWeight(), true);
+                    e = factory.newEdge(edge.isAutoId() ? null : edge.getId(), source, target, edge.getWeight(), true);
                     break;
                 case UNDIRECTED:
-                    e = factory.newEdge(edge.getId(), source, target, edge.getWeight(), false);
+                    e = factory.newEdge(edge.isAutoId() ? null : edge.getId(), source, target, edge.getWeight(), false);
                     break;
                 case MIXED:
-                    e = factory.newEdge(edge.getId(), source, target, edge.getWeight(), edge.getType().equals(EdgeType.UNDIRECTED) ? false : true);
+                    e = factory.newEdge(edge.isAutoId() ? null : edge.getId(), source, target, edge.getWeight(), edge.getType().equals(EdgeType.UNDIRECTED) ? false : true);
                     break;
             }
 

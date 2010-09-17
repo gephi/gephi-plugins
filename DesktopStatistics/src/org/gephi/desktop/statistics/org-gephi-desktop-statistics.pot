@@ -39,12 +39,6 @@ msgstr "Run"
 msgid "StatisticsDisplayPanel.name.text"
 msgstr "name"
 
-msgid "StatisticsFrontEnd.runButton.text"
-msgstr "Run"
-
-msgid "StatisticsFrontEnd.reportButton.text"
-msgstr "View"
-
 msgid "StatisticsFrontEnd.displayLabel.text"
 msgstr "Display Name"
 
@@ -60,17 +54,8 @@ msgstr "Result"
 msgid "StatisticsFrontEnd.settingsPanel.title"
 msgstr "{0} settings"
 
-msgid "StatisticsReportPanel.copyButton.text"
-msgstr "Copy"
+msgid "StatisticsFrontEnd.reportButton.toolTipText"
+msgstr "View report"
 
-msgid "StatisticsReportPanel.closeButton.text"
-msgstr "Close"
-
-msgid "StatisticsReportPanel.printButton.text"
-msgstr "Print"
-
-msgid "StatisticsReportPanel.saveButton.text"
-msgstr "Save"
-
-msgid "StatisticsReportPanel.status.saveSuccess"
-msgstr "Report saved to {0} directory"
+msgid "StatisticsFrontEnd.runButton.text"
+msgstr "Run"

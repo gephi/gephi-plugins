@@ -43,4 +43,4 @@ msgid "ExporterGraphML_name"
 msgstr "GraphML"
 
 msgid "ExporterCSV_name"
-msgstr "Adjacency Matrix"
+msgstr "CSV"
