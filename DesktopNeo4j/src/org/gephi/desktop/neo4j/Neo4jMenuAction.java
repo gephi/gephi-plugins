@@ -60,6 +60,7 @@ import org.openide.NotifyDescriptor;
 import org.openide.util.HelpCtx;
 import org.openide.util.Lookup;
 import org.openide.util.NbBundle;
+import org.openide.util.NbPreferences;
 import org.openide.util.actions.CallableSystemAction;
 
 /**
@@ -68,6 +69,8 @@ import org.openide.util.actions.CallableSystemAction;
  */
 public class Neo4jMenuAction extends CallableSystemAction {
 
+    private final String IMPORT_LAST_PATH = "Neo4jMenuAction_Import_Last_Path";
+    private final String EXPORT_LAST_PATH = "Neo4jMenuAction_Export_Last_Path";
     private JMenuItem localExport;
     private JMenuItem remoteExport;
     private JMenuItem debug;
@@ -134,7 +137,8 @@ public class Neo4jMenuAction extends CallableSystemAction {
         JMenuItem localWholeImport = new JMenuItem(new AbstractAction(localWholeImportMenuLabel) {
 
             public void actionPerformed(ActionEvent e) {
-                JFileChooser fileChooser = new JFileChooser();
+                String lastDirectory = NbPreferences.forModule(Neo4jMenuAction.class).get(IMPORT_LAST_PATH, "");
+                JFileChooser fileChooser = new JFileChooser(lastDirectory);
                 String localImportDialogTitle = NbBundle.getMessage(Neo4jMenuAction.class, "CTL_Neo4j_LocalImportDialogTitle");
                 fileChooser.setDialogTitle(localImportDialogTitle);
 
@@ -150,6 +154,9 @@ public class Neo4jMenuAction extends CallableSystemAction {
                 }
 
                 final File neo4jDirectory = fileChooser.getSelectedFile();
+                if (neo4jDirectory != null && neo4jDirectory.exists()) {
+                    NbPreferences.forModule(Neo4jMenuAction.class).put(IMPORT_LAST_PATH, neo4jDirectory.getParentFile().getAbsolutePath());
+                }
                 final GraphDatabaseService graphDB = Neo4jUtils.localDatabase(neo4jDirectory);
 
                 String traversalDialogTitle = NbBundle.getMessage(Neo4jMenuAction.class, "CTL_Neo4j_TraversalDialogTitle");
@@ -180,7 +187,8 @@ public class Neo4jMenuAction extends CallableSystemAction {
         JMenuItem localTraversalImport = new JMenuItem(new AbstractAction(localTraversalImportMenuLabel) {
 
             public void actionPerformed(ActionEvent e) {
-                JFileChooser fileChooser = new JFileChooser();
+                String lastDirectory = NbPreferences.forModule(Neo4jMenuAction.class).get(IMPORT_LAST_PATH, "");
+                JFileChooser fileChooser = new JFileChooser(lastDirectory);
                 String localImportDialogTitle = NbBundle.getMessage(Neo4jMenuAction.class, "CTL_Neo4j_LocalImportDialogTitle");
                 fileChooser.setDialogTitle(localImportDialogTitle);
 
@@ -196,6 +204,9 @@ public class Neo4jMenuAction extends CallableSystemAction {
                 }
 
                 final File neo4jDirectory = fileChooser.getSelectedFile();
+                if (neo4jDirectory != null && neo4jDirectory.exists()) {
+                    NbPreferences.forModule(Neo4jMenuAction.class).put(IMPORT_LAST_PATH, neo4jDirectory.getParentFile().getAbsolutePath());
+                }
                 final GraphDatabaseService graphDB = Neo4jUtils.localDatabase(neo4jDirectory);
 
                 String traversalDialogTitle = NbBundle.getMessage(Neo4jMenuAction.class, "CTL_Neo4j_TraversalDialogTitle");
@@ -236,7 +247,8 @@ public class Neo4jMenuAction extends CallableSystemAction {
                 validationPanel.showOkCancelDialog(exportOptionsDialogTitle);
 
 
-                JFileChooser fileChooser = new JFileChooser();
+                String lastDirectory = NbPreferences.forModule(Neo4jMenuAction.class).get(EXPORT_LAST_PATH, "");
+                JFileChooser fileChooser = new JFileChooser(lastDirectory);
                 String localExportDialogTitle = NbBundle.getMessage(Neo4jMenuAction.class, "CTL_Neo4j_LocalExportDialogTitle");
                 fileChooser.setDialogTitle(localExportDialogTitle);
 
@@ -246,6 +258,9 @@ public class Neo4jMenuAction extends CallableSystemAction {
 
                 if (dialogResult == JFileChooser.APPROVE_OPTION) {
                     final File neo4jDirectory = fileChooser.getSelectedFile();
+                    if (neo4jDirectory != null && neo4jDirectory.exists()) {
+                        NbPreferences.forModule(Neo4jMenuAction.class).put(EXPORT_LAST_PATH, neo4jDirectory.getParentFile().getAbsolutePath());
+                    }
                     final Neo4jExporter neo4jExporter = Lookup.getDefault().lookup(Neo4jExporter.class);
 
                     LongTaskExecutor executor = new LongTaskExecutor(true);
