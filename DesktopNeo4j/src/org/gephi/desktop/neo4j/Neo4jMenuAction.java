@@ -61,6 +61,7 @@ import org.openide.DialogDescriptor;
 import org.openide.DialogDisplayer;
 import org.openide.NotifyDescriptor;
 import org.openide.util.HelpCtx;
+import org.openide.util.ImageUtilities;
 import org.openide.util.Lookup;
 import org.openide.util.NbBundle;
 import org.openide.util.NbPreferences;
@@ -193,6 +194,7 @@ public class Neo4jMenuAction extends CallableSystemAction {
                 }
             }
         });
+        localWholeImport.setIcon(ImageUtilities.loadImageIcon("org/gephi/desktop/neo4j/resources/import.png", false));
 
         String localTraversalImportMenuLabel = NbBundle.getMessage(Neo4jMenuAction.class, "CTL_Neo4j_LocalTraversalImportMenuLabel");
         JMenuItem localTraversalImport = new JMenuItem(new AbstractAction(localTraversalImportMenuLabel) {
@@ -301,6 +303,7 @@ public class Neo4jMenuAction extends CallableSystemAction {
                 }
             }
         });
+        localExport.setIcon(ImageUtilities.loadImageIcon("org/gephi/desktop/neo4j/resources/export.png", false));
 
         String remoteImportMenuLabel = NbBundle.getMessage(Neo4jMenuAction.class, "CTL_Neo4j_RemoteImportMenuLabel");
         JMenuItem remoteImport = new JMenuItem(new AbstractAction(remoteImportMenuLabel) {
