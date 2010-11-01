@@ -39,6 +39,8 @@ import javax.swing.JFileChooser;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import org.gephi.desktop.neo4j.ui.DebugFileChooserComponent;
 import org.gephi.desktop.neo4j.ui.DebugPanel;
 import org.gephi.desktop.neo4j.ui.ExportOptionsPanel;
@@ -163,24 +165,31 @@ public class Neo4jMenuAction extends CallableSystemAction {
                 String traversalDialogTitle = NbBundle.getMessage(Neo4jMenuAction.class, "CTL_Neo4j_TraversalDialogTitle");
                 final TraversalFilterPanel filterPanel = new TraversalFilterPanel();
                 ValidationPanel validationPanel = filterPanel.createValidationPanel();
+                final DialogDescriptor dd = new DialogDescriptor(validationPanel, traversalDialogTitle);
+                validationPanel.addChangeListener(new ChangeListener() {
 
-                if (validationPanel.showOkCancelDialog(traversalDialogTitle)) {
-                    if (dialogResult == JFileChooser.APPROVE_OPTION) {
-                        final Neo4jImporter neo4jImporter = Lookup.getDefault().lookup(Neo4jImporter.class);
-
-                        LongTaskExecutor executor = new LongTaskExecutor(true);
-                        executor.execute((LongTask) neo4jImporter, new Runnable() {
-
-                            @Override
-                            public void run() {
-                                initProject();
-                                neo4jImporter.importDatabase(graphDB,
-                                        filterPanel.getFilterDescriptions(),
-                                        filterPanel.isRestrictModeEnabled(),
-                                        filterPanel.isMatchCaseEnabled());
-                            }
-                        });
+                    @Override
+                    public void stateChanged(ChangeEvent e) {
+                        dd.setValid(!((ValidationPanel) e.getSource()).isProblem());
                     }
+                });
+
+                Object result = DialogDisplayer.getDefault().notify(dd);
+                if (result == NotifyDescriptor.OK_OPTION) {
+                    final Neo4jImporter neo4jImporter = Lookup.getDefault().lookup(Neo4jImporter.class);
+
+                    LongTaskExecutor executor = new LongTaskExecutor(true);
+                    executor.execute((LongTask) neo4jImporter, new Runnable() {
+
+                        @Override
+                        public void run() {
+                            initProject();
+                            neo4jImporter.importDatabase(graphDB,
+                                    filterPanel.getFilterDescriptions(),
+                                    filterPanel.isRestrictModeEnabled(),
+                                    filterPanel.isMatchCaseEnabled());
+                        }
+                    });
                 }
             }
         });
@@ -214,28 +223,35 @@ public class Neo4jMenuAction extends CallableSystemAction {
                 String traversalDialogTitle = NbBundle.getMessage(Neo4jMenuAction.class, "CTL_Neo4j_TraversalDialogTitle");
                 final TraversalImportPanel traversalPanel = new TraversalImportPanel(graphDB);
                 ValidationPanel validationPanel = traversalPanel.createValidationPanel();
+                final DialogDescriptor dd = new DialogDescriptor(validationPanel, traversalDialogTitle);
+                validationPanel.addChangeListener(new ChangeListener() {
 
-                if (validationPanel.showOkCancelDialog(traversalDialogTitle)) {
-                    if (dialogResult == JFileChooser.APPROVE_OPTION) {
-                        final Neo4jImporter neo4jImporter = Lookup.getDefault().lookup(Neo4jImporter.class);
-
-                        LongTaskExecutor executor = new LongTaskExecutor(true);
-                        executor.execute((LongTask) neo4jImporter, new Runnable() {
-
-                            @Override
-                            public void run() {
-                                initProject();
-                                neo4jImporter.importDatabase(graphDB,
-                                        traversalPanel.getStartNodeId(),
-                                        traversalPanel.getOrder(),
-                                        traversalPanel.getMaxDepth(),
-                                        traversalPanel.getRelationshipDescriptions(),
-                                        traversalPanel.getFilterDescriptions(),
-                                        traversalPanel.isRestrictModeEnabled(),
-                                        traversalPanel.isMatchCaseEnabled());
-                            }
-                        });
+                    @Override
+                    public void stateChanged(ChangeEvent e) {
+                        dd.setValid(!((ValidationPanel) e.getSource()).isProblem());
                     }
+                });
+
+                Object result = DialogDisplayer.getDefault().notify(dd);
+                if (result == NotifyDescriptor.OK_OPTION) {
+                    final Neo4jImporter neo4jImporter = Lookup.getDefault().lookup(Neo4jImporter.class);
+
+                    LongTaskExecutor executor = new LongTaskExecutor(true);
+                    executor.execute((LongTask) neo4jImporter, new Runnable() {
+
+                        @Override
+                        public void run() {
+                            initProject();
+                            neo4jImporter.importDatabase(graphDB,
+                                    traversalPanel.getStartNodeId(),
+                                    traversalPanel.getOrder(),
+                                    traversalPanel.getMaxDepth(),
+                                    traversalPanel.getRelationshipDescriptions(),
+                                    traversalPanel.getFilterDescriptions(),
+                                    traversalPanel.isRestrictModeEnabled(),
+                                    traversalPanel.isMatchCaseEnabled());
+                        }
+                    });
                 }
             }
         });
@@ -293,8 +309,17 @@ public class Neo4jMenuAction extends CallableSystemAction {
                 final RemoteDatabasePanel databasePanel = new RemoteDatabasePanel();
                 ValidationPanel validationPanel = databasePanel.createValidationPanel();
                 String remoteImportDialogTitle = NbBundle.getMessage(Neo4jMenuAction.class, "CTL_Neo4j_RemoteImportDialogTitle");
+                final DialogDescriptor dd = new DialogDescriptor(validationPanel, remoteImportDialogTitle);
+                validationPanel.addChangeListener(new ChangeListener() {
 
-                if (validationPanel.showOkCancelDialog(remoteImportDialogTitle)) {
+                    @Override
+                    public void stateChanged(ChangeEvent e) {
+                        dd.setValid(!((ValidationPanel) e.getSource()).isProblem());
+                    }
+                });
+
+                Object result = DialogDisplayer.getDefault().notify(dd);
+                if (result == NotifyDescriptor.OK_OPTION) {
                     final Neo4jImporter neo4jImporter = Lookup.getDefault().lookup(Neo4jImporter.class);
 
                     LongTaskExecutor executor = new LongTaskExecutor(true);
@@ -324,8 +349,17 @@ public class Neo4jMenuAction extends CallableSystemAction {
                 final RemoteDatabasePanel databasePanel = new RemoteDatabasePanel();
                 ValidationPanel validationPanel = databasePanel.createValidationPanel();
                 String remoteExportDialogTitle = NbBundle.getMessage(Neo4jMenuAction.class, "CTL_Neo4j_RemoteExportDialogTitle");
+                final DialogDescriptor dd = new DialogDescriptor(validationPanel, remoteExportDialogTitle);
+                validationPanel.addChangeListener(new ChangeListener() {
 
-                if (validationPanel.showOkCancelDialog(remoteExportDialogTitle)) {
+                    @Override
+                    public void stateChanged(ChangeEvent e) {
+                        dd.setValid(!((ValidationPanel) e.getSource()).isProblem());
+                    }
+                });
+
+                Object result = DialogDisplayer.getDefault().notify(dd);
+                if (result == NotifyDescriptor.OK_OPTION) {
                     final Neo4jExporter neo4jExporter = Lookup.getDefault().lookup(Neo4jExporter.class);
 
                     LongTaskExecutor executor = new LongTaskExecutor(true);
