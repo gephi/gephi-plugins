@@ -265,41 +265,51 @@ public class Neo4jMenuAction extends CallableSystemAction {
                 String exportOptionsDialogTitle = NbBundle.getMessage(Neo4jMenuAction.class, "CTL_Neo4j_ExportOptionsDialogTitle");
                 final ExportOptionsPanel exportOptionsPanel = new ExportOptionsPanel();
                 ValidationPanel validationPanel = exportOptionsPanel.createValidationPanel();
-                validationPanel.showOkCancelDialog(exportOptionsDialogTitle);
+                final DialogDescriptor dd = new DialogDescriptor(validationPanel, exportOptionsDialogTitle);
+                validationPanel.addChangeListener(new ChangeListener() {
 
-
-                String lastDirectory = NbPreferences.forModule(Neo4jMenuAction.class).get(EXPORT_LAST_PATH, "");
-                JFileChooser fileChooser = new JFileChooser(lastDirectory);
-                String localExportDialogTitle = NbBundle.getMessage(Neo4jMenuAction.class, "CTL_Neo4j_LocalExportDialogTitle");
-                fileChooser.setDialogTitle(localExportDialogTitle);
-
-                fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-
-                int dialogResult = fileChooser.showOpenDialog(null);
-
-                if (dialogResult == JFileChooser.APPROVE_OPTION) {
-                    final File neo4jDirectory = fileChooser.getSelectedFile();
-                    if (neo4jDirectory != null && neo4jDirectory.exists()) {
-                        NbPreferences.forModule(Neo4jMenuAction.class).put(EXPORT_LAST_PATH, neo4jDirectory.getParentFile().getAbsolutePath());
+                    @Override
+                    public void stateChanged(ChangeEvent e) {
+                        dd.setValid(!((ValidationPanel) e.getSource()).isProblem());
                     }
-                    final Neo4jExporter neo4jExporter = Lookup.getDefault().lookup(Neo4jExporter.class);
+                });
 
-                    LongTaskExecutor executor = new LongTaskExecutor(true);
-                    executor.execute((LongTask) neo4jExporter, new Runnable() {
+                Object result = DialogDisplayer.getDefault().notify(dd);
+                if (result == NotifyDescriptor.OK_OPTION) {
 
-                        @Override
-                        public void run() {
-                            GraphDatabaseService graphDB = Neo4jUtils.localDatabase(neo4jDirectory);
+                    String lastDirectory = NbPreferences.forModule(Neo4jMenuAction.class).get(EXPORT_LAST_PATH, "");
+                    JFileChooser fileChooser = new JFileChooser(lastDirectory);
+                    String localExportDialogTitle = NbBundle.getMessage(Neo4jMenuAction.class, "CTL_Neo4j_LocalExportDialogTitle");
+                    fileChooser.setDialogTitle(localExportDialogTitle);
 
-                            neo4jExporter.exportDatabase(graphDB,
-                                    exportOptionsPanel.getFromColumn(),
-                                    exportOptionsPanel.getDefaultValue(),
-                                    exportOptionsPanel.getExportEdgeColumnNames(),
-                                    exportOptionsPanel.getExportNodeColumnNames());
+                    fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 
-                            graphDB.shutdown();
+                    int dialogResult = fileChooser.showOpenDialog(null);
+
+                    if (dialogResult == JFileChooser.APPROVE_OPTION) {
+                        final File neo4jDirectory = fileChooser.getSelectedFile();
+                        if (neo4jDirectory != null && neo4jDirectory.exists()) {
+                            NbPreferences.forModule(Neo4jMenuAction.class).put(EXPORT_LAST_PATH, neo4jDirectory.getParentFile().getAbsolutePath());
                         }
-                    });
+                        final Neo4jExporter neo4jExporter = Lookup.getDefault().lookup(Neo4jExporter.class);
+
+                        LongTaskExecutor executor = new LongTaskExecutor(true);
+                        executor.execute((LongTask) neo4jExporter, new Runnable() {
+
+                            @Override
+                            public void run() {
+                                GraphDatabaseService graphDB = Neo4jUtils.localDatabase(neo4jDirectory);
+
+                                neo4jExporter.exportDatabase(graphDB,
+                                        exportOptionsPanel.getFromColumn(),
+                                        exportOptionsPanel.getDefaultValue(),
+                                        exportOptionsPanel.getExportEdgeColumnNames(),
+                                        exportOptionsPanel.getExportNodeColumnNames());
+
+                                graphDB.shutdown();
+                            }
+                        });
+                    }
                 }
             }
         });
