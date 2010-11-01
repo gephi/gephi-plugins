@@ -147,7 +147,7 @@ public final class Neo4jImporterImpl implements Neo4jImporter, LongTask {
     }
 
     private void importGraph() {
-        createNewWorkspace();
+        initProject();
 
         graphModelImportConverter = GraphModelImportConverter.getInstance(graphDB);
         graphModelImportConverter.createNeo4jRelationshipTypeGephiColumn();
@@ -198,14 +198,11 @@ public final class Neo4jImporterImpl implements Neo4jImporter, LongTask {
         graphModelImportConverter.createGephiEdge(neoRelationship);
     }
 
-    private void createNewWorkspace() {
+    private void initProject() {
         ProjectController pc = Lookup.getDefault().lookup(ProjectController.class);
 
         if (pc.getCurrentProject() == null) {
             pc.newProject();
         }
-
-        Workspace w = pc.newWorkspace(pc.getCurrentProject());
-        pc.openWorkspace(w);
     }
 }

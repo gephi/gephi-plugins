@@ -46,6 +46,7 @@ import org.gephi.desktop.neo4j.ui.TraversalFilterPanel;
 import org.gephi.desktop.neo4j.ui.RemoteDatabasePanel;
 import org.gephi.desktop.neo4j.ui.TraversalImportPanel;
 import org.gephi.desktop.neo4j.ui.util.Neo4jUtils;
+import org.gephi.desktop.project.api.ProjectControllerUI;
 import org.gephi.project.api.ProjectController;
 import org.gephi.project.api.Workspace;
 import org.gephi.project.api.WorkspaceListener;
@@ -172,6 +173,7 @@ public class Neo4jMenuAction extends CallableSystemAction {
 
                             @Override
                             public void run() {
+                                initProject();
                                 neo4jImporter.importDatabase(graphDB,
                                         filterPanel.getFilterDescriptions(),
                                         filterPanel.isRestrictModeEnabled(),
@@ -222,6 +224,7 @@ public class Neo4jMenuAction extends CallableSystemAction {
 
                             @Override
                             public void run() {
+                                initProject();
                                 neo4jImporter.importDatabase(graphDB,
                                         traversalPanel.getStartNodeId(),
                                         traversalPanel.getOrder(),
@@ -440,6 +443,14 @@ public class Neo4jMenuAction extends CallableSystemAction {
                 JOptionPane.WARNING_MESSAGE);
 
         DialogDisplayer.getDefault().notify(notifyDescriptor);
+    }
+
+    private void initProject() {
+        ProjectController projectController = Lookup.getDefault().lookup(ProjectController.class);
+        if (projectController.getCurrentProject() == null) {
+            ProjectControllerUI projectControllerUI = Lookup.getDefault().lookup(ProjectControllerUI.class);
+            projectControllerUI.newProject();
+        }
     }
 
     /*
