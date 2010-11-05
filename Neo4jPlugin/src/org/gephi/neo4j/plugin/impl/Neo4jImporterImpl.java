@@ -53,32 +53,6 @@ public final class Neo4jImporterImpl implements Neo4jImporter, LongTask {
     private ProgressTicket progressTicket;
     private boolean cancelImport;
 
-    public Neo4jImporterImpl() {
-        ProjectController pc = Lookup.getDefault().lookup(ProjectController.class);
-        pc.addWorkspaceListener(new WorkspaceListener() {
-
-            @Override
-            public void initialize(Workspace workspace) {
-            }
-
-            @Override
-            public void select(Workspace workspace) {
-            }
-
-            @Override
-            public void unselect(Workspace workspace) {
-            }
-
-            @Override
-            public void close(Workspace workspace) {
-            }
-
-            @Override
-            public void disable() {
-            }
-        });
-    }
-
     @Override
     public boolean cancel() {
         cancelImport = true;

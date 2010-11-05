@@ -24,16 +24,16 @@ import java.awt.Color;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
-import org.gephi.graph.api.DirectedGraph;
 import org.gephi.graph.api.Edge;
 import org.gephi.graph.api.EdgeData;
+import org.gephi.graph.api.Graph;
 import org.gephi.graph.api.GraphController;
 import org.gephi.graph.api.NodeData;
 import org.gephi.graph.api.Renderable;
 import org.gephi.neo4j.plugin.api.Neo4jDelegateNodeDebugger;
 import org.gephi.neo4j.plugin.api.Neo4jVisualDebugger;
 import org.gephi.neo4j.plugin.api.NoMoreElementsException;
+import org.gephi.neo4j.plugin.impl.GraphModelImportConverter.Neo4jGraphModel;
 import org.neo4j.graphdb.Path;
 import org.openide.util.Lookup;
 import org.openide.util.lookup.ServiceProvider;
@@ -50,16 +50,16 @@ public class Neo4jVisualDebuggerImpl implements Neo4jVisualDebugger {
     private final List<Edge> previousEdges = new LinkedList<Edge>();
     private final List<Color> previousNodeColors = new LinkedList<Color>();
     private final List<Color> previousEdgeColors = new LinkedList<Color>();
-    private Map<Long, org.gephi.graph.api.Node> mapper;
-    private DirectedGraph directedGraph;
+    private Graph graph;
     private Iterator<Path> paths;
+    private Neo4jGraphModel neo4jModel;
     private Path currentPath;
     private boolean finishedTraversal = false;
 
     @Override
     public void initialize() {
-        this.mapper = GraphModelImportConverter.getMapperForCurrentWorkspace();
-        this.directedGraph = Lookup.getDefault().lookup(GraphController.class).getModel().getDirectedGraphVisible();
+        this.neo4jModel = GraphModelImportConverter.getNeo4jModelForCurrentWorkspace();
+        this.graph = Lookup.getDefault().lookup(GraphController.class).getModel().getGraphVisible();
     }
 
     @Override
@@ -146,7 +146,8 @@ public class Neo4jVisualDebuggerImpl implements Neo4jVisualDebugger {
         if (neo4jDebugger.isShowNodes()) {
             if (currentPath != null) {
                 for (org.neo4j.graphdb.Node neoNode : currentPath.nodes()) {
-                    org.gephi.graph.api.Node currentGephiNode = mapper.get(neoNode.getId());
+                    int nodeId = neo4jModel.getNodeMap().get(neoNode.getId());;
+                    org.gephi.graph.api.Node currentGephiNode = graph.getNode(nodeId);
 
                     if (currentGephiNode == null) {
                         try {
@@ -178,8 +179,8 @@ public class Neo4jVisualDebuggerImpl implements Neo4jVisualDebugger {
                     org.gephi.graph.api.Node startNode = previousNodes.get(index);
                     org.gephi.graph.api.Node endNode = previousNodes.get(index + 1);
 
-                    Edge edge1 = directedGraph.getEdge(startNode, endNode);
-                    Edge edge2 = directedGraph.getEdge(endNode, startNode);
+                    Edge edge1 = graph.getEdge(startNode, endNode);
+                    Edge edge2 = graph.getEdge(endNode, startNode);
 
                     Edge currentEdge = (edge1 != null) ? edge1
                             : edge2;
