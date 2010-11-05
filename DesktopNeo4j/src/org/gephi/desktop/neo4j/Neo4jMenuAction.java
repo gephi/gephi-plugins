@@ -340,15 +340,11 @@ public class Neo4jMenuAction extends CallableSystemAction {
 
                         @Override
                         public void run() {
-//TODO remoteImport dorobit...
-//                            if (graphDB != null)
-//                                graphDB.shutdown();
-//
-//                            graphDB = Neo4jUtils.remoteDatabase(databasePanel.getRemoteUrl(),
-//                                                                databasePanel.getLogin(),
-//                                                                databasePanel.getPassword());
-//
-//                            neo4jImporter.importDatabase(graphDB);
+                            GraphDatabaseService graphDB = Neo4jUtils.remoteDatabase(databasePanel.getRemoteUrl(),
+                                                                databasePanel.getLogin(),
+                                                                databasePanel.getPassword());
+
+                            neo4jImporter.importDatabase(graphDB);
                         }
                     });
                 }
