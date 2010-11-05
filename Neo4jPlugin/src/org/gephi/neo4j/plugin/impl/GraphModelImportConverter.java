@@ -100,7 +100,7 @@ public class GraphModelImportConverter {
                 if (model != null) {
                     model.graphDb.shutdown();
                 }
-                if (graphModel.getWorkspace() == workspace) {
+                if (graphModel != null && graphModel.getWorkspace() == workspace) {
                     graphModel = null;
                     graph = null;
                     attributeModel = null;
@@ -126,7 +126,7 @@ public class GraphModelImportConverter {
      */
     public void createGephiNodeFromNeoNode(org.neo4j.graphdb.Node neoNode) {
         org.gephi.graph.api.Node gephiNode = graphModel.factory().newNode();
-        graphModel.getGraph().addNode(gephiNode);
+        graph.addNode(gephiNode);
 
         fillGephiNodeDataWithNeoNodeData(gephiNode, neoNode);
         currentNeo4jModel.nodeMap.put(neoNode.getId(), gephiNode.getId());
@@ -174,8 +174,11 @@ public class GraphModelImportConverter {
         org.gephi.graph.api.Node endGephiNode = graph.getNode(end);
 
         if (startGephiNode != null && endGephiNode != null) {
+            System.out.println("new edge start");
             Edge gephiEdge = graphModel.factory().newEdge(startGephiNode, endGephiNode);
-            graphModel.getGraph().addEdge(gephiEdge);
+            System.out.println("new edge end");
+            graph.addEdge(gephiEdge);
+            System.out.println("add edge end");
 
             fillGephiEdgeDataWithNeoRelationshipData(gephiEdge, neoRelationship);
         }
@@ -188,7 +191,6 @@ public class GraphModelImportConverter {
         Object neoRelationshipId = neoRelationship.getId();
         for (String neoPropertyKey : neoRelationship.getPropertyKeys()) {
             Object neoPropertyValue = neoRelationship.getProperty(neoPropertyKey);
-
             if (!edgeTable.hasColumn(neoPropertyKey)) {
                 if (!neoPropertyValue.getClass().isArray()) {
                     edgeTable.addColumn(neoPropertyKey, neoPropertyKey, AttributeType.parse(neoPropertyValue), Neo4jDelegateProviderImpl.getInstance(), null);

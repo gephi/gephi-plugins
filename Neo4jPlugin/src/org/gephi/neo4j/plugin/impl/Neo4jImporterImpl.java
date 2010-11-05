@@ -187,7 +187,6 @@ public final class Neo4jImporterImpl implements Neo4jImporter, LongTask {
             if (cancelImport) {
                 return;
             }
-
             processRelationship(graphModelImportConverter, relationship);
         }
     }
