@@ -73,10 +73,10 @@ public class GraphModelImportConverter {
         attributeModel = attributeController.getModel();
 
         Workspace currentWorkspace = Lookup.getDefault().lookup(ProjectController.class).getCurrentWorkspace();
-        Neo4jGraphModel neo4jmodel = currentWorkspace.getLookup().lookup(Neo4jGraphModel.class);
-        if (neo4jmodel == null) {
-            neo4jmodel = new Neo4jGraphModel(graphDB);
-            currentWorkspace.add(neo4jmodel);
+        currentNeo4jModel = currentWorkspace.getLookup().lookup(Neo4jGraphModel.class);
+        if (currentNeo4jModel == null) {
+            currentNeo4jModel = new Neo4jGraphModel(graphDB);
+            currentWorkspace.add(currentNeo4jModel);
         }
 
         ProjectController projectController = Lookup.getDefault().lookup(ProjectController.class);
