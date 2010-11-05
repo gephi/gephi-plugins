@@ -28,6 +28,7 @@ import org.gephi.neo4j.plugin.api.RelationshipDescription;
 import org.gephi.neo4j.plugin.api.TraversalOrder;
 import org.gephi.project.api.ProjectController;
 import org.gephi.project.api.Workspace;
+import org.gephi.project.api.WorkspaceListener;
 import org.gephi.utils.longtask.spi.LongTask;
 import org.gephi.utils.progress.Progress;
 import org.gephi.utils.progress.ProgressTicket;
@@ -49,12 +50,34 @@ public final class Neo4jImporterImpl implements Neo4jImporter, LongTask {
     // when we want to iterate through whole graph
 
     private static final int NO_START_NODE = -1;
-    private GraphDatabaseService graphDB;
-    private GraphModelImportConverter graphModelImportConverter;
-    private Traverser traverser;
-    private NodeReturnFilter nodeReturnFilter;
     private ProgressTicket progressTicket;
     private boolean cancelImport;
+
+    public Neo4jImporterImpl() {
+        ProjectController pc = Lookup.getDefault().lookup(ProjectController.class);
+        pc.addWorkspaceListener(new WorkspaceListener() {
+
+            @Override
+            public void initialize(Workspace workspace) {
+            }
+
+            @Override
+            public void select(Workspace workspace) {
+            }
+
+            @Override
+            public void unselect(Workspace workspace) {
+            }
+
+            @Override
+            public void close(Workspace workspace) {
+            }
+
+            @Override
+            public void disable() {
+            }
+        });
+    }
 
     @Override
     public boolean cancel() {
@@ -97,7 +120,6 @@ public final class Neo4jImporterImpl implements Neo4jImporter, LongTask {
     public void importDatabase(GraphDatabaseService graphDB, long startNodeId, TraversalOrder order, int maxDepth,
             Collection<RelationshipDescription> relationshipDescriptions, Collection<FilterDescription> filterDescriptions,
             boolean restrictMode, boolean matchCase) {
-        this.graphDB = graphDB;
 
         String longTaskMessage = (graphDB instanceof RemoteGraphDatabase)
                 ? NbBundle.getMessage(Neo4jImporterImpl.class, "CTL_Neo4j_RemoteImportMessage")
@@ -105,6 +127,8 @@ public final class Neo4jImporterImpl implements Neo4jImporter, LongTask {
 
         Progress.setDisplayName(progressTicket, longTaskMessage);
         Progress.start(progressTicket);
+        Traverser traverser;
+        NodeReturnFilter nodeReturnFilter = null;
 
         if (startNodeId != NO_START_NODE) {
             TraversalDescription traversalDescription = Traversal.description();
@@ -131,13 +155,13 @@ public final class Neo4jImporterImpl implements Neo4jImporter, LongTask {
             traverser = null;
         }
 
-        doImport();
+        doImport(graphDB, traverser, nodeReturnFilter);
     }
 
-    private void doImport() {
+    private void doImport(GraphDatabaseService graphDB, Traverser traverser, NodeReturnFilter nodeReturnFilter) {
         Transaction transaction = graphDB.beginTx();
         try {
-            importGraph();
+            importGraph(graphDB, traverser, nodeReturnFilter);
             transaction.success();
         } finally {
             transaction.finish();
@@ -146,25 +170,25 @@ public final class Neo4jImporterImpl implements Neo4jImporter, LongTask {
         Progress.finish(progressTicket);
     }
 
-    private void importGraph() {
+    private void importGraph(GraphDatabaseService graphDB, Traverser traverser, NodeReturnFilter nodeReturnFilter) {
         initProject();
 
-        graphModelImportConverter = GraphModelImportConverter.getInstance(graphDB);
+        GraphModelImportConverter graphModelImportConverter = GraphModelImportConverter.getInstance(graphDB);
         graphModelImportConverter.createNeo4jRelationshipTypeGephiColumn();
 
         if (traverser == null) {
-            importNodes(graphDB.getAllNodes());
+            importNodes(graphModelImportConverter, graphDB.getAllNodes(), nodeReturnFilter);
 
             for (org.neo4j.graphdb.Node node : graphDB.getAllNodes()) {
-                importRelationships(node.getRelationships(Direction.INCOMING));
+                importRelationships(graphModelImportConverter, node.getRelationships(Direction.INCOMING));
             }
         } else {
-            importNodes(traverser.nodes());
-            importRelationships(traverser.relationships());
+            importNodes(graphModelImportConverter, traverser.nodes(), nodeReturnFilter);
+            importRelationships(graphModelImportConverter, traverser.relationships());
         }
     }
 
-    private void importNodes(Iterable<org.neo4j.graphdb.Node> nodes) {
+    private void importNodes(GraphModelImportConverter graphModelImportConverter, Iterable<org.neo4j.graphdb.Node> nodes, NodeReturnFilter nodeReturnFilter) {
         for (org.neo4j.graphdb.Node node : nodes) {
             if (cancelImport) {
                 return;
@@ -172,29 +196,29 @@ public final class Neo4jImporterImpl implements Neo4jImporter, LongTask {
 
             if (nodeReturnFilter != null) {
                 if (nodeReturnFilter.accept(node)) {
-                    processNode(node);
+                    processNode(graphModelImportConverter, node);
                 }
             } else {
-                processNode(node);
+                processNode(graphModelImportConverter, node);
             }
         }
     }
 
-    private void processNode(org.neo4j.graphdb.Node node) {
+    private void processNode(GraphModelImportConverter graphModelImportConverter, org.neo4j.graphdb.Node node) {
         graphModelImportConverter.createGephiNodeFromNeoNode(node);
     }
 
-    private void importRelationships(Iterable<Relationship> relationships) {
+    private void importRelationships(GraphModelImportConverter graphModelImportConverter, Iterable<Relationship> relationships) {
         for (Relationship relationship : relationships) {
             if (cancelImport) {
                 return;
             }
 
-            processRelationship(relationship);
+            processRelationship(graphModelImportConverter, relationship);
         }
     }
 
-    private void processRelationship(Relationship neoRelationship) {
+    private void processRelationship(GraphModelImportConverter graphModelImportConverter, Relationship neoRelationship) {
         graphModelImportConverter.createGephiEdge(neoRelationship);
     }
 
