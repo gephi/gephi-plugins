@@ -20,6 +20,7 @@ along with Gephi.  If not, see <http://www.gnu.org/licenses/>.
  */
 package org.gephi.neo4j.plugin.impl;
 
+import gnu.trove.TIntLongHashMap;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
@@ -32,6 +33,10 @@ import org.gephi.graph.api.Attributes;
 import org.gephi.graph.api.Edge;
 import org.gephi.graph.api.GraphController;
 import org.gephi.graph.api.GraphModel;
+import org.gephi.neo4j.plugin.impl.GraphModelImportConverter.Neo4jGraphModel;
+import org.gephi.project.api.ProjectController;
+import org.gephi.project.api.Workspace;
+import org.gephi.project.api.WorkspaceListener;
 import org.neo4j.graphdb.DynamicRelationshipType;
 import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.graphdb.Relationship;
@@ -43,13 +48,20 @@ import org.openide.util.Lookup;
  */
 public class GraphModelExportConverter {
 
-    private static Map<Integer, Long> gephiNodeIdToNeoNodeIdMapper;
+    private static TIntLongHashMap gephiNodeIdToNeoNodeIdMapper;
     private static GraphModelExportConverter singleton;
     private static GraphModel graphModel;
     private static AttributeModel attributeModel;
     private static GraphDatabaseService graphDB;
 
     private GraphModelExportConverter() {
+    }
+
+    public void reset() {
+        graphDB = null;
+        graphModel = null;
+        attributeModel = null;
+        gephiNodeIdToNeoNodeIdMapper = null;
     }
 
     public static GraphModelExportConverter getInstance(GraphDatabaseService graphDB) {
@@ -66,7 +78,36 @@ public class GraphModelExportConverter {
         GraphModelExportConverter.graphDB = graphDB;
 
         int numberOfGephiNodes = graphModel.getGraph().getNodeCount();
-        gephiNodeIdToNeoNodeIdMapper = new HashMap<Integer, Long>(numberOfGephiNodes);
+        gephiNodeIdToNeoNodeIdMapper = new TIntLongHashMap(numberOfGephiNodes);
+
+        ProjectController projectController = Lookup.getDefault().lookup(ProjectController.class);
+        projectController.addWorkspaceListener(new WorkspaceListener() {
+
+            @Override
+            public void initialize(Workspace workspace) {
+            }
+
+            @Override
+            public void select(Workspace workspace) {
+            }
+
+            @Override
+            public void unselect(Workspace workspace) {
+            }
+
+            @Override
+            public void close(Workspace workspace) {
+                if (graphModel != null && graphModel.getWorkspace() == workspace) {
+                    graphModel = null;
+                    attributeModel = null;
+                    gephiNodeIdToNeoNodeIdMapper = null;
+                }
+            }
+
+            @Override
+            public void disable() {
+            }
+        });
 
         return singleton;
     }

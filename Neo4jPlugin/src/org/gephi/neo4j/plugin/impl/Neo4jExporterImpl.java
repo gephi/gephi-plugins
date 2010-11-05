@@ -22,8 +22,10 @@ package org.gephi.neo4j.plugin.impl;
 
 import java.util.Collection;
 import org.gephi.graph.api.Edge;
+import org.gephi.graph.api.Graph;
 import org.gephi.graph.api.GraphController;
 import org.gephi.graph.api.GraphModel;
+import org.gephi.graph.api.HierarchicalGraph;
 import org.gephi.neo4j.plugin.api.Neo4jExporter;
 import org.gephi.utils.longtask.spi.LongTask;
 import org.gephi.utils.progress.Progress;
@@ -100,9 +102,11 @@ public class Neo4jExporterImpl implements Neo4jExporter, LongTask {
     private void exportGraph() {
         graphModelExportConverter = GraphModelExportConverter.getInstance(graphDB);
         GraphModel graphModel = Lookup.getDefault().lookup(GraphController.class).getModel();
+        HierarchicalGraph graph = graphModel.getHierarchicalGraphVisible();
 
-        exportNodes(graphModel.getGraph().getNodes());
-        exportEdges(graphModel.getGraph().getEdges());
+        exportNodes(graph.getNodes());
+        exportEdges(graph.getEdgesAndMetaEdges());
+        graphModelExportConverter.reset();
     }
 
     private void exportNodes(Iterable<org.gephi.graph.api.Node> nodes) {

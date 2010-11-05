@@ -174,11 +174,8 @@ public class GraphModelImportConverter {
         org.gephi.graph.api.Node endGephiNode = graph.getNode(end);
 
         if (startGephiNode != null && endGephiNode != null) {
-            System.out.println("new edge start");
             Edge gephiEdge = graphModel.factory().newEdge(startGephiNode, endGephiNode);
-            System.out.println("new edge end");
             graph.addEdge(gephiEdge);
-            System.out.println("add edge end");
 
             fillGephiEdgeDataWithNeoRelationshipData(gephiEdge, neoRelationship);
         }
