@@ -23,6 +23,7 @@ package org.gephi.desktop.neo4j.ui;
 import org.netbeans.validation.api.builtin.Validators;
 import org.netbeans.validation.api.ui.ValidationGroup;
 import org.netbeans.validation.api.ui.ValidationPanel;
+import org.openide.util.NbPreferences;
 
 /**
  *
@@ -30,8 +31,19 @@ import org.netbeans.validation.api.ui.ValidationPanel;
  */
 public class RemoteDatabasePanel extends javax.swing.JPanel {
 
+    private static String URL = "Neo4jRemoteDatabasePanel_Url";
+    private static String LOGIN = "Neo4jRemoteDatabasePanel_Login";
+    private static String PASSWD = "Neo4jRemoteDatabasePanel_Passwd";
+
     public RemoteDatabasePanel() {
         initComponents();
+
+        String url = NbPreferences.forModule(RemoteDatabasePanel.class).get(URL, "");
+        String login = NbPreferences.forModule(RemoteDatabasePanel.class).get(LOGIN, "");
+        String passwd = NbPreferences.forModule(RemoteDatabasePanel.class).get(PASSWD, "");
+        remoteDatabaseUrlTextField.setText(url);
+        loginTextField.setText(login);
+        passwordTextField.setText(passwd);
     }
 
     @SuppressWarnings("unchecked")
@@ -44,7 +56,7 @@ public class RemoteDatabasePanel extends javax.swing.JPanel {
         loginLabel = new javax.swing.JLabel();
         loginTextField = new javax.swing.JTextField();
         passwordLabel = new javax.swing.JLabel();
-        passwordTextField = new javax.swing.JTextField();
+        passwordTextField = new javax.swing.JPasswordField();
 
         contentPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(org.openide.util.NbBundle.getMessage(RemoteDatabasePanel.class, "RemoteDatabasePanel.contentPanel.border.title"))); // NOI18N
 
@@ -62,9 +74,8 @@ public class RemoteDatabasePanel extends javax.swing.JPanel {
 
         passwordLabel.setText(org.openide.util.NbBundle.getMessage(RemoteDatabasePanel.class, "RemoteDatabasePanel.passwordLabel.text")); // NOI18N
 
-        passwordTextField.setText(org.openide.util.NbBundle.getMessage(RemoteDatabasePanel.class, "RemoteDatabasePanel.password.text")); // NOI18N
-        passwordTextField.setToolTipText(org.openide.util.NbBundle.getMessage(RemoteDatabasePanel.class, "RemoteDatabasePanel.password.toolTipText")); // NOI18N
-        passwordTextField.setName("password"); // NOI18N
+        passwordTextField.setText(org.openide.util.NbBundle.getMessage(RemoteDatabasePanel.class, "RemoteDatabasePanel.passwordTextField.text")); // NOI18N
+        passwordTextField.setToolTipText(org.openide.util.NbBundle.getMessage(RemoteDatabasePanel.class, "RemoteDatabasePanel.passwordTextField.toolTipText")); // NOI18N
 
         javax.swing.GroupLayout contentPanelLayout = new javax.swing.GroupLayout(contentPanel);
         contentPanel.setLayout(contentPanelLayout);
@@ -117,7 +128,7 @@ public class RemoteDatabasePanel extends javax.swing.JPanel {
     private javax.swing.JLabel loginLabel;
     private javax.swing.JTextField loginTextField;
     private javax.swing.JLabel passwordLabel;
-    private javax.swing.JTextField passwordTextField;
+    private javax.swing.JPasswordField passwordTextField;
     private javax.swing.JLabel remoteDatabaseUrlLabel;
     private javax.swing.JTextField remoteDatabaseUrlTextField;
     // End of variables declaration//GEN-END:variables
@@ -136,14 +147,17 @@ public class RemoteDatabasePanel extends javax.swing.JPanel {
     }
 
     public String getRemoteUrl() {
+        NbPreferences.forModule(RemoteDatabasePanel.class).put(URL, remoteDatabaseUrlTextField.getText().trim());
         return remoteDatabaseUrlTextField.getText().trim();
     }
 
     public String getLogin() {
+        NbPreferences.forModule(RemoteDatabasePanel.class).put(LOGIN, loginTextField.getText().trim());
         return loginTextField.getText().trim();
     }
 
     public String getPassword() {
+        NbPreferences.forModule(RemoteDatabasePanel.class).put(PASSWD, passwordTextField.getText().trim());
         return passwordTextField.getText().trim();
     }
 }
