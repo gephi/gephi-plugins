@@ -60,6 +60,7 @@ import org.netbeans.validation.api.ui.ValidationPanel;
 import org.openide.DialogDescriptor;
 import org.openide.DialogDisplayer;
 import org.openide.NotifyDescriptor;
+import org.openide.awt.StatusDisplayer;
 import org.openide.util.HelpCtx;
 import org.openide.util.ImageUtilities;
 import org.openide.util.Lookup;
@@ -189,6 +190,7 @@ public class Neo4jMenuAction extends CallableSystemAction {
                                     filterPanel.getFilterDescriptions(),
                                     filterPanel.isRestrictModeEnabled(),
                                     filterPanel.isMatchCaseEnabled());
+                            StatusDisplayer.getDefault().setStatusText(NbBundle.getMessage(Neo4jMenuAction.class, "CTL_Neo4j_ImportTaskFinished", neo4jDirectory));
                         }
                     });
                 }
@@ -252,6 +254,7 @@ public class Neo4jMenuAction extends CallableSystemAction {
                                     traversalPanel.getFilterDescriptions(),
                                     traversalPanel.isRestrictModeEnabled(),
                                     traversalPanel.isMatchCaseEnabled());
+                            StatusDisplayer.getDefault().setStatusText(NbBundle.getMessage(Neo4jMenuAction.class, "CTL_Neo4j_ImportTaskFinished", neo4jDirectory));
                         }
                     });
                 }
@@ -307,6 +310,7 @@ public class Neo4jMenuAction extends CallableSystemAction {
                                         exportOptionsPanel.getExportNodeColumnNames());
 
                                 graphDB.shutdown();
+                                StatusDisplayer.getDefault().setStatusText(NbBundle.getMessage(Neo4jMenuAction.class, "CTL_Neo4j_ExportTaskFinished", neo4jDirectory));
                             }
                         });
                     }
@@ -341,10 +345,11 @@ public class Neo4jMenuAction extends CallableSystemAction {
                         @Override
                         public void run() {
                             GraphDatabaseService graphDB = Neo4jUtils.remoteDatabase(databasePanel.getRemoteUrl(),
-                                                                databasePanel.getLogin(),
-                                                                databasePanel.getPassword());
+                                    databasePanel.getLogin(),
+                                    databasePanel.getPassword());
 
                             neo4jImporter.importDatabase(graphDB);
+                            StatusDisplayer.getDefault().setStatusText(NbBundle.getMessage(Neo4jMenuAction.class, "CTL_Neo4j_ImportTaskFinished", databasePanel.getRemoteUrl()));
                         }
                     });
                 }
@@ -387,6 +392,7 @@ public class Neo4jMenuAction extends CallableSystemAction {
                                     null);
 
                             graphDB.shutdown();
+                            StatusDisplayer.getDefault().setStatusText(NbBundle.getMessage(Neo4jMenuAction.class, "CTL_Neo4j_ExportTaskFinished", databasePanel.getRemoteUrl()));
                         }
                     });
                 }
