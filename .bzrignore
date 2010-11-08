@@ -4,7 +4,9 @@
 nbproject/project.properties
 **/dist
 nbproject/private/platform-private.properties
+nbproject/private/profiler/
 .DS_Store
 .classpath
 .project
 .settings
+toolkit
