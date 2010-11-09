@@ -30,6 +30,10 @@ import org.neo4j.graphdb.DynamicRelationshipType;
 import org.neo4j.graphdb.GraphDatabaseService;
 
 
+/**
+ *
+ * @author Martin Škurla
+ */
 class Neo4jDelegateProviderImpl extends AttributeValueDelegateProvider<Long> {
     private static final Neo4jDelegateProviderImpl instance;
 

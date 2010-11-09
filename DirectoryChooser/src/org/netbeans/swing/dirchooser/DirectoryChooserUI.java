@@ -480,10 +480,8 @@ public class DirectoryChooserUI extends BasicFileChooserUI {
         cancelButton.addActionListener(getCancelSelectionAction());
         buttonPanel.add(cancelButton);
 
-        //TODO initial approve button disabled code started
         if (customDirectoryProvider != null)
             approveButton.setEnabled(false);
-        //TODO initial approve button disabled code ended
     }
     
     private void createCenterPanel(final JFileChooser fc) {
@@ -1323,10 +1321,8 @@ public class DirectoryChooserUI extends BasicFileChooserUI {
             setFileName(getStringOfFileName(f));
         }
 
-        //TODO button visibility code started
         if (customDirectoryProvider != null)
             approveButton.setEnabled(customDirectoryProvider.isValidCustomDirectory(f));
-        //TODO button visibility code ended
     }
     
     private void fireSelectedFilesChanged(PropertyChangeEvent e) {
@@ -2428,11 +2424,9 @@ public class DirectoryChooserUI extends BasicFileChooserUI {
         private Icon getNodeIcon(DirectoryNode node) {
             File file = node.getFile();
             if(file.exists()) {
-                //TODO icon changer code started
                 if (customDirectoryProvider != null && customDirectoryProvider.isValidCustomDirectory(file)) {
                     return customDirectoryProvider.getCustomDirectoryIcon();
                 }
-                //TODO icon changer code ended
 
                 return fileChooser.getIcon(file);
             } else {

@@ -220,28 +220,22 @@ public class GraphModelImportConverter {
     }
 
     static GraphDatabaseService getGraphDBForCurrentWorkspace() {
-        Workspace currentWorkspace = Lookup.getDefault().lookup(ProjectController.class).getCurrentWorkspace();
-        Neo4jGraphModel neo4jmodel = currentWorkspace.getLookup().lookup(Neo4jGraphModel.class);
-        if (neo4jmodel != null) {
-            return neo4jmodel.graphDb;
-        }
+        Neo4jGraphModel neo4jmodel = getNeo4jModelForCurrentWorkspace();
 
-        return null;
+        return neo4jmodel != null ? neo4jmodel.graphDb
+                                  : null;
     }
 
     static Neo4jGraphModel getNeo4jModelForCurrentWorkspace() {
         Workspace currentWorkspace = Lookup.getDefault().lookup(ProjectController.class).getCurrentWorkspace();
-        Neo4jGraphModel neo4jmodel = currentWorkspace.getLookup().lookup(Neo4jGraphModel.class);
-        if (neo4jmodel != null) {
-            return neo4jmodel;
-        }
-        return null;
+        return currentWorkspace.getLookup().lookup(Neo4jGraphModel.class);
     }
 
     static Collection<GraphDatabaseService> getAllGraphDBs() {
         List<GraphDatabaseService> dbs = new ArrayList<GraphDatabaseService>();
         ProjectController pc = Lookup.getDefault().lookup(ProjectController.class);
         for (Workspace w : pc.getCurrentProject().getLookup().lookup(WorkspaceProvider.class).getWorkspaces()) {
+            //TODO vypis + debug
             Neo4jGraphModel neo4jmodel = w.getLookup().lookup(Neo4jGraphModel.class);
             if (neo4jmodel != null) {
                 dbs.add(neo4jmodel.graphDb);

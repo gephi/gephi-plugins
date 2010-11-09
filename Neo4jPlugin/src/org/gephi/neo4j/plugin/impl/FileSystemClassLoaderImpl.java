@@ -37,6 +37,11 @@ import org.openide.util.lookup.ServiceProvider;
 
 import static org.gephi.neo4j.plugin.impl.FileSystemClassLoaderImpl.ReflectionUtils.*;
 
+
+/**
+ *
+ * @author Martin Škurla
+ */
 @ServiceProvider(service = FileSystemClassLoader.class)
 public class FileSystemClassLoaderImpl extends ClassLoader implements FileSystemClassLoader {
 

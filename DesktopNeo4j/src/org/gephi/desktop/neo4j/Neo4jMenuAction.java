@@ -138,8 +138,8 @@ public class Neo4jMenuAction extends CallableSystemAction {
     private void initializeMenu() {
         menu = new JMenu(NbBundle.getMessage(Neo4jMenuAction.class, "CTL_Neo4j_MenuLabel"));
 
-        String localWholeImportMenuLabel = NbBundle.getMessage(Neo4jMenuAction.class, "CTL_Neo4j_LocalWholeImportMenuLabel");
-        JMenuItem localWholeImport = new JMenuItem(new AbstractAction(localWholeImportMenuLabel) {
+        String localFullImportMenuLabel = NbBundle.getMessage(Neo4jMenuAction.class, "CTL_Neo4j_LocalWholeImportMenuLabel");
+        JMenuItem localFullImport = new JMenuItem(new AbstractAction(localFullImportMenuLabel) {
 
             public void actionPerformed(ActionEvent e) {
                 String lastDirectory = NbPreferences.forModule(Neo4jMenuAction.class).get(IMPORT_LAST_PATH, "");
@@ -196,7 +196,7 @@ public class Neo4jMenuAction extends CallableSystemAction {
                 }
             }
         });
-        localWholeImport.setIcon(ImageUtilities.loadImageIcon("org/gephi/desktop/neo4j/resources/import.png", false));
+        localFullImport.setIcon(ImageUtilities.loadImageIcon("org/gephi/desktop/neo4j/resources/import.png", false));
 
         String localTraversalImportMenuLabel = NbBundle.getMessage(Neo4jMenuAction.class, "CTL_Neo4j_LocalTraversalImportMenuLabel");
         JMenuItem localTraversalImport = new JMenuItem(new AbstractAction(localTraversalImportMenuLabel) {
@@ -471,7 +471,7 @@ public class Neo4jMenuAction extends CallableSystemAction {
         });
 
 
-        menu.add(localWholeImport);
+        menu.add(localFullImport);
         menu.add(localTraversalImport);
         menu.add(remoteImport);
         menu.addSeparator();

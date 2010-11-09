@@ -27,8 +27,6 @@ import org.gephi.neo4j.plugin.api.Neo4jImporter;
 import org.gephi.neo4j.plugin.api.RelationshipDescription;
 import org.gephi.neo4j.plugin.api.TraversalOrder;
 import org.gephi.project.api.ProjectController;
-import org.gephi.project.api.Workspace;
-import org.gephi.project.api.WorkspaceListener;
 import org.gephi.utils.longtask.spi.LongTask;
 import org.gephi.utils.progress.Progress;
 import org.gephi.utils.progress.ProgressTicket;
@@ -45,6 +43,10 @@ import org.openide.util.Lookup;
 import org.openide.util.NbBundle;
 import org.openide.util.lookup.ServiceProvider;
 
+/**
+ *
+ * @author Martin Škurla
+ */
 @ServiceProvider(service = Neo4jImporter.class)
 public final class Neo4jImporterImpl implements Neo4jImporter, LongTask {
     // when we want to iterate through whole graph

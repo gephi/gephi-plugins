@@ -22,7 +22,6 @@ package org.gephi.neo4j.plugin.impl;
 
 import java.util.Collection;
 import org.gephi.graph.api.Edge;
-import org.gephi.graph.api.Graph;
 import org.gephi.graph.api.GraphController;
 import org.gephi.graph.api.GraphModel;
 import org.gephi.graph.api.HierarchicalGraph;

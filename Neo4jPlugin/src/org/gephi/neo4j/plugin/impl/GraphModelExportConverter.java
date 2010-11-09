@@ -22,8 +22,6 @@ package org.gephi.neo4j.plugin.impl;
 
 import gnu.trove.TIntLongHashMap;
 import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
 import org.gephi.data.attributes.api.AttributeColumn;
 import org.gephi.data.attributes.api.AttributeController;
 import org.gephi.data.attributes.api.AttributeModel;
@@ -33,7 +31,6 @@ import org.gephi.graph.api.Attributes;
 import org.gephi.graph.api.Edge;
 import org.gephi.graph.api.GraphController;
 import org.gephi.graph.api.GraphModel;
-import org.gephi.neo4j.plugin.impl.GraphModelImportConverter.Neo4jGraphModel;
 import org.gephi.project.api.ProjectController;
 import org.gephi.project.api.Workspace;
 import org.gephi.project.api.WorkspaceListener;
@@ -64,7 +61,7 @@ public class GraphModelExportConverter {
         gephiNodeIdToNeoNodeIdMapper = null;
     }
 
-    public static GraphModelExportConverter getInstance(GraphDatabaseService graphDB) {
+    public synchronized static GraphModelExportConverter getInstance(GraphDatabaseService graphDB) {
         if (singleton == null) {
             singleton = new GraphModelExportConverter();
         }
