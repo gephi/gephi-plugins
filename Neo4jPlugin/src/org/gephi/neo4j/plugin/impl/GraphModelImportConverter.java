@@ -65,6 +65,17 @@ public class GraphModelImportConverter {
             singleton = new GraphModelImportConverter();
         }
 
+        ProjectController projectController = Lookup.getDefault().lookup(ProjectController.class);
+
+        Workspace currentWorkspace = projectController.newWorkspace(projectController.getCurrentProject());
+        projectController.openWorkspace(currentWorkspace);
+
+        currentNeo4jModel = currentWorkspace.getLookup().lookup(Neo4jGraphModel.class);
+        if (currentNeo4jModel == null) {
+            currentNeo4jModel = new Neo4jGraphModel(graphDB);
+            currentWorkspace.add(currentNeo4jModel);
+        }
+
         GraphController graphController = Lookup.getDefault().lookup(GraphController.class);
         graphModel = graphController.getModel();
         graph = graphModel.getGraph();
@@ -72,14 +83,6 @@ public class GraphModelImportConverter {
         AttributeController attributeController = Lookup.getDefault().lookup(AttributeController.class);
         attributeModel = attributeController.getModel();
 
-        Workspace currentWorkspace = Lookup.getDefault().lookup(ProjectController.class).getCurrentWorkspace();
-        currentNeo4jModel = currentWorkspace.getLookup().lookup(Neo4jGraphModel.class);
-        if (currentNeo4jModel == null) {
-            currentNeo4jModel = new Neo4jGraphModel(graphDB);
-            currentWorkspace.add(currentNeo4jModel);
-        }
-
-        ProjectController projectController = Lookup.getDefault().lookup(ProjectController.class);
         projectController.addWorkspaceListener(new WorkspaceListener() {
 
             @Override
