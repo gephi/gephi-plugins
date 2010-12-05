@@ -20,6 +20,7 @@ along with Gephi.  If not, see <http://www.gnu.org/licenses/>.
  */
 package org.gephi.neo4j.plugin.impl;
 
+import gnu.trove.TIntLongHashMap;
 import gnu.trove.TLongIntHashMap;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -132,7 +133,8 @@ public class GraphModelImportConverter {
         graph.addNode(gephiNode);
 
         fillGephiNodeDataWithNeoNodeData(gephiNode, neoNode);
-        currentNeo4jModel.nodeMap.put(neoNode.getId(), gephiNode.getId());
+        currentNeo4jModel.neo4jToGephiNodeMap.put(neoNode  .getId(), gephiNode.getId());
+        currentNeo4jModel.gephiToNeo4jNodeMap.put(gephiNode.getId(), neoNode  .getId());
     }
 
     private void fillGephiNodeDataWithNeoNodeData(org.gephi.graph.api.Node gephiNode, org.neo4j.graphdb.Node neoNode) {
@@ -171,8 +173,8 @@ public class GraphModelImportConverter {
      * @param neoRelationship Neo4j relationship
      */
     public void createGephiEdge(Relationship neoRelationship) {
-        int start = currentNeo4jModel.nodeMap.get(neoRelationship.getStartNode().getId());
-        int end = currentNeo4jModel.nodeMap.get(neoRelationship.getEndNode().getId());
+        int start = currentNeo4jModel.neo4jToGephiNodeMap.get(neoRelationship.getStartNode().getId());
+        int end = currentNeo4jModel.neo4jToGephiNodeMap.get(neoRelationship.getEndNode().getId());
         org.gephi.graph.api.Node startGephiNode = graph.getNode(start);
         org.gephi.graph.api.Node endGephiNode = graph.getNode(end);
 
@@ -222,14 +224,14 @@ public class GraphModelImportConverter {
                 null);
     }
 
-    static GraphDatabaseService getGraphDBForCurrentWorkspace() {
+    public static GraphDatabaseService getGraphDBForCurrentWorkspace() {
         Neo4jGraphModel neo4jmodel = getNeo4jModelForCurrentWorkspace();
 
         return neo4jmodel != null ? neo4jmodel.graphDb
                                   : null;
     }
 
-    static Neo4jGraphModel getNeo4jModelForCurrentWorkspace() {
+    public static Neo4jGraphModel getNeo4jModelForCurrentWorkspace() {
         Workspace currentWorkspace = Lookup.getDefault().lookup(ProjectController.class).getCurrentWorkspace();
         return currentWorkspace.getLookup().lookup(Neo4jGraphModel.class);
     }
@@ -250,16 +252,26 @@ public class GraphModelImportConverter {
     public static class Neo4jGraphModel {
 
         private final GraphDatabaseService graphDb;
-        private final TLongIntHashMap nodeMap;
+        private final TLongIntHashMap neo4jToGephiNodeMap;
+        private final TIntLongHashMap gephiToNeo4jNodeMap;
 
         public Neo4jGraphModel(GraphDatabaseService graphDb) {
             this.graphDb = graphDb;
             int numberOfNeo4jNodeIds = (int) ((EmbeddedGraphDatabase) graphDb).getManagementBean(Primitives.class).getNumberOfNodeIdsInUse();
-            this.nodeMap = new TLongIntHashMap(numberOfNeo4jNodeIds, 1f);
+            this.neo4jToGephiNodeMap = new TLongIntHashMap(numberOfNeo4jNodeIds, 1f);
+            this.gephiToNeo4jNodeMap = new TIntLongHashMap(numberOfNeo4jNodeIds, 1f);
         }
 
-        public TLongIntHashMap getNodeMap() {
-            return nodeMap;
+        public TLongIntHashMap getNeo4jToGephiNodeMap() {
+            return neo4jToGephiNodeMap;
+        }
+
+        public TIntLongHashMap getGephiToNeo4jNodeMap() {
+            return gephiToNeo4jNodeMap;
+        }
+
+        public GraphDatabaseService getGraphDB() {
+            return graphDb;
         }
     }
 }

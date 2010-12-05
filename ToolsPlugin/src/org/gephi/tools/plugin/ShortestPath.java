@@ -149,7 +149,7 @@ public class ShortestPath implements Tool {
     public ToolUI getUI() {
         return new ToolUI() {
 
-            public JPanel getPropertiesBar(Tool tool) {
+            public JPanel getPropertiesBar() {
                 shortestPathPanel = new ShortestPathPanel();
                 shortestPathPanel.setColor(color);
                 shortestPathPanel.setStatus(NbBundle.getMessage(ShortestPath.class, "ShortestPath.status1"));

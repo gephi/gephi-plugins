@@ -33,10 +33,9 @@ public interface ToolUI {
     /**
      * Returns the tool's properties bar. The properties bar is used for tool's
      * settings.
-     * @param tool the tool instance
      * @return a <code>JPanel</code> for the the tool's properties bar
      */
-    public JPanel getPropertiesBar(Tool tool);
+    public JPanel getPropertiesBar();
 
     /**
      * Returns the tool icon, for the toobar.

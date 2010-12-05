@@ -176,7 +176,7 @@ public class DesktopToolController implements ToolController {
                         unselect();
                     } else {
                         select(tool);
-                        propertiesBar.select(toolUI.getPropertiesBar(tool));
+                        propertiesBar.select(toolUI.getPropertiesBar());
                     }
                 }
             });

@@ -146,7 +146,7 @@ public class Neo4jVisualDebuggerImpl implements Neo4jVisualDebugger {
         if (neo4jDebugger.isShowNodes()) {
             if (currentPath != null) {
                 for (org.neo4j.graphdb.Node neoNode : currentPath.nodes()) {
-                    int nodeId = neo4jModel.getNodeMap().get(neoNode.getId());;
+                    int nodeId = neo4jModel.getNeo4jToGephiNodeMap().get(neoNode.getId());
                     org.gephi.graph.api.Node currentGephiNode = graph.getNode(nodeId);
 
                     if (currentGephiNode == null) {
