@@ -18,7 +18,7 @@ GNU Affero General Public License for more details.
 You should have received a copy of the GNU Affero General Public License
 along with Gephi.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.gephi.neo4j.plugin.impl;
+package org.gephi.desktop.neo4j.ui;
 
 
 import javax.swing.Icon;
@@ -26,10 +26,9 @@ import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 import org.gephi.graph.api.GraphController;
 import org.gephi.graph.api.Node;
+import org.gephi.neo4j.plugin.api.GephiToNeo4jMapper;
 import org.gephi.neo4j.plugin.api.Neo4jImporter;
 import org.gephi.neo4j.plugin.api.TraversalOrder;
-import org.gephi.neo4j.plugin.impl.GraphModelImportConverter;
-import org.gephi.neo4j.plugin.impl.GraphModelImportConverter.Neo4jGraphModel;
 import org.gephi.tools.spi.NodeClickEventListener;
 import org.gephi.tools.spi.Tool;
 import org.gephi.tools.spi.ToolEventListener;
@@ -51,9 +50,19 @@ public class LazyNeo4jGraphExplorationTool implements Tool {
     private ToolEventListener[] toolListeners;
     private LazyNeo4jGraphExplorationToolPanel toolPanel;
 
+    private GephiToNeo4jMapper gephiToNeo4jMapper;
+
 
     @Override
     public void select() {
+        gephiToNeo4jMapper = Lookup.getDefault().lookup(GephiToNeo4jMapper.class);
+
+        if (!gephiToNeo4jMapper.isNeo4jDatabaseInCurrentWorkspace()) {
+//TODO finish dialog descriptor
+//            DialogDesc
+            unselect();
+        }
+
         toolListeners = null;
         toolPanel = null;
     }
@@ -66,11 +75,9 @@ public class LazyNeo4jGraphExplorationTool implements Tool {
         toolListeners = new ToolEventListener[] { new NodeClickEventListener() {
             @Override
             public void clickNodes(Node[] nodes) {
-                final Neo4jGraphModel neo4jGraphModel = GraphModelImportConverter.getNeo4jModelForCurrentWorkspace();
+                final long startNeo4jNodeId = gephiToNeo4jMapper.getNeo4jNodeIdFromGephiNodeId(nodes[0].getId());
 
-                final long startNeo4jNodeId = neo4jGraphModel.getGephiToNeo4jNodeMap().get(nodes[0].getId());
-
-                clearGraphAndNeo4jGraphModel(neo4jGraphModel);
+                clearGraphAndNeo4jGraphModel();
 
                 final Neo4jImporter neo4jImporter = Lookup.getDefault().lookup(Neo4jImporter.class);
 
@@ -79,7 +86,7 @@ public class LazyNeo4jGraphExplorationTool implements Tool {
 
                     @Override
                     public void run() {
-                        neo4jImporter.importDatabase(neo4jGraphModel.getGraphDB(),
+                        neo4jImporter.importDatabase(gephiToNeo4jMapper.getGraphDBFromCurrentWorkspace()/*neo4jGraphModel.getGraphDB()*/,
                                                      startNeo4jNodeId,
                                                      TraversalOrder.DEPTH_FIRST,
                                                      toolPanel.getDepth());
@@ -87,11 +94,10 @@ public class LazyNeo4jGraphExplorationTool implements Tool {
                 });               
             }
 
-            private void clearGraphAndNeo4jGraphModel(Neo4jGraphModel neo4jGraphModel) {
+            private void clearGraphAndNeo4jGraphModel() {
                 Lookup.getDefault().lookup(GraphController.class).getModel().getGraph().clear();
 
-                neo4jGraphModel.getGephiToNeo4jNodeMap().clear();
-                neo4jGraphModel.getNeo4jToGephiNodeMap().clear();
+                gephiToNeo4jMapper.clearMappers();
             }
         }};
 
@@ -111,7 +117,7 @@ public class LazyNeo4jGraphExplorationTool implements Tool {
 
             @Override
             public Icon getIcon() {
-                return new ImageIcon(getClass().getResource("/org/gephi/neo4j/plugin/impl/resources/Neo4j-logo.png"));
+                return new ImageIcon(getClass().getResource("/org/gephi/desktop/neo4j/resources/Neo4j-logo.png"));
             }
 
             @Override

@@ -18,7 +18,7 @@ GNU Affero General Public License for more details.
 You should have received a copy of the GNU Affero General Public License
 along with Gephi.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.gephi.neo4j.plugin.impl;
+package org.gephi.desktop.neo4j.ui;
 
 
 /**
@@ -38,10 +38,10 @@ public class LazyNeo4jGraphExplorationToolPanel extends javax.swing.JPanel {
         depthLabel = new javax.swing.JLabel();
         depthSpinner = new javax.swing.JSpinner();
 
-        depthLabel.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
+        depthLabel.setFont(new java.awt.Font("Tahoma", 0, 10));
         depthLabel.setText(org.openide.util.NbBundle.getMessage(LazyNeo4jGraphExplorationToolPanel.class, "LazyNeo4jGraphExplorationToolPanel.depthLabel.text")); // NOI18N
 
-        depthSpinner.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
+        depthSpinner.setFont(new java.awt.Font("Tahoma", 0, 10));
         depthSpinner.setModel(new javax.swing.SpinnerNumberModel(0, 0, 100, 1));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
