@@ -37,12 +37,15 @@ public class LazyNeo4jGraphExplorationToolPanel extends javax.swing.JPanel {
 
         depthLabel = new javax.swing.JLabel();
         depthSpinner = new javax.swing.JSpinner();
+        automaticLayoutCheckBox = new javax.swing.JCheckBox();
 
         depthLabel.setFont(new java.awt.Font("Tahoma", 0, 10));
         depthLabel.setText(org.openide.util.NbBundle.getMessage(LazyNeo4jGraphExplorationToolPanel.class, "LazyNeo4jGraphExplorationToolPanel.depthLabel.text")); // NOI18N
 
         depthSpinner.setFont(new java.awt.Font("Tahoma", 0, 10));
         depthSpinner.setModel(new javax.swing.SpinnerNumberModel(0, 0, 100, 1));
+
+        automaticLayoutCheckBox.setText(org.openide.util.NbBundle.getMessage(LazyNeo4jGraphExplorationToolPanel.class, "LazyNeo4jGraphExplorationToolPanel.automaticLayoutCheckBox.text")); // NOI18N
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -53,21 +56,29 @@ public class LazyNeo4jGraphExplorationToolPanel extends javax.swing.JPanel {
                 .addComponent(depthLabel)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(depthSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(automaticLayoutCheckBox)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                 .addComponent(depthLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addComponent(depthSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(depthSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(automaticLayoutCheckBox))
         );
     }// </editor-fold>//GEN-END:initComponents
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JCheckBox automaticLayoutCheckBox;
     private javax.swing.JLabel depthLabel;
     private javax.swing.JSpinner depthSpinner;
     // End of variables declaration//GEN-END:variables
 
     public int getDepth() {
         return (Integer) depthSpinner.getValue();
+    }
+
+    public boolean isAutomaticLayoutOn() {
+        return automaticLayoutCheckBox.isSelected();
     }
 }

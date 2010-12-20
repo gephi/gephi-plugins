@@ -31,6 +31,22 @@
                     </run-dependency>
                 </dependency>
                 <dependency>
+                    <code-name-base>org.gephi.layout.api</code-name-base>
+                    <build-prerequisite/>
+                    <compile-dependency/>
+                    <run-dependency>
+                        <specification-version>0.7.1.3</specification-version>
+                    </run-dependency>
+                </dependency>
+                <dependency>
+                    <code-name-base>org.gephi.layout.plugin</code-name-base>
+                    <build-prerequisite/>
+                    <compile-dependency/>
+                    <run-dependency>
+                        <specification-version>0.7.1.1</specification-version>
+                    </run-dependency>
+                </dependency>
+                <dependency>
                     <code-name-base>org.gephi.lib.neo4j</code-name-base>
                     <build-prerequisite/>
                     <compile-dependency/>

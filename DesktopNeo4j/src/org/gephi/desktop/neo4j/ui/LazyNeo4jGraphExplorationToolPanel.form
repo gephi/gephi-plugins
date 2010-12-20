@@ -21,6 +21,8 @@
               <Component id="depthLabel" min="-2" max="-2" attributes="0"/>
               <EmptySpace type="unrelated" max="-2" attributes="0"/>
               <Component id="depthSpinner" min="-2" pref="54" max="-2" attributes="0"/>
+              <EmptySpace type="unrelated" max="-2" attributes="0"/>
+              <Component id="automaticLayoutCheckBox" min="-2" max="-2" attributes="0"/>
               <EmptySpace max="32767" attributes="0"/>
           </Group>
       </Group>
@@ -30,6 +32,7 @@
           <Group type="103" alignment="0" groupAlignment="3" attributes="0">
               <Component id="depthLabel" alignment="3" min="-2" pref="28" max="-2" attributes="0"/>
               <Component id="depthSpinner" alignment="3" min="-2" max="-2" attributes="0"/>
+              <Component id="automaticLayoutCheckBox" alignment="3" min="-2" max="-2" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -52,6 +55,13 @@
         </Property>
         <Property name="model" type="javax.swing.SpinnerModel" editor="org.netbeans.modules.form.editors2.SpinnerModelEditor">
           <SpinnerModel initial="0" maximum="100" minimum="0" numberType="java.lang.Integer" stepSize="1" type="number"/>
+        </Property>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JCheckBox" name="automaticLayoutCheckBox">
+      <Properties>
+        <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
+          <ResourceString bundle="org/gephi/desktop/neo4j/ui/Bundle.properties" key="LazyNeo4jGraphExplorationToolPanel.automaticLayoutCheckBox.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
         </Property>
       </Properties>
     </Component>
