@@ -48,7 +48,8 @@ public class Sizer implements Tool {
     private Node[] nodes;
     private float[] sizes;
 
-    public void select() {
+    public boolean select() {
+        return false;
     }
 
     public void unselect() {

@@ -57,7 +57,8 @@ public class NodePencil implements Tool {
         size = 10f;
     }
 
-    public void select() {
+    public boolean select() {
+        return false;
     }
 
     public void unselect() {

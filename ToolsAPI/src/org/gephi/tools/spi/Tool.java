@@ -41,7 +41,7 @@ public interface Tool {
     /**
      * Notify when this tool is selected.
      */
-    public void select();
+    public boolean select();
 
     /**
      * Notify when this tool is unselected.

@@ -56,6 +56,8 @@ import org.openide.util.lookup.ServiceProvider;
  */
 @ServiceProvider(service = ToolController.class)
 public class DesktopToolController implements ToolController {
+    private Toolbar toolbar;
+    private boolean unselectTool;
 
     //Architecture
     private Tool[] tools;
@@ -114,7 +116,12 @@ public class DesktopToolController implements ToolController {
                 break;
         }
         currentTool = tool;
-        currentTool.select();
+        unselectTool = currentTool.select();
+
+        if (unselectTool) {
+            toolbar.clearSelection();
+            unselect();
+        }
     }
 
     public void unselect() {
@@ -176,7 +183,9 @@ public class DesktopToolController implements ToolController {
                         unselect();
                     } else {
                         select(tool);
-                        propertiesBar.select(toolUI.getPropertiesBar());
+
+                        if (!unselectTool)
+                            propertiesBar.select(toolUI.getPropertiesBar());
                     }
                 }
             });
@@ -202,6 +211,8 @@ public class DesktopToolController implements ToolController {
             }
         });
 
+        this.toolbar = toolbar;
+        
         return toolbar;
     }
 

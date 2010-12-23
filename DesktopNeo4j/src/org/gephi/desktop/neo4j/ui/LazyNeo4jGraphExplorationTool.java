@@ -68,18 +68,11 @@ public class LazyNeo4jGraphExplorationTool implements Tool {
 
 
     public LazyNeo4jGraphExplorationTool() {
-//        VizController.getInstance().getSelectionManager().addChangeListener(new ChangeListener() {
-//
-//            @Override
-//            public void stateChanged(ChangeEvent e) {
-//                Lookup.getDefault().lookup(ToolController.class).select(null);
-//            }
-//        });
     }
 
 
     @Override
-    public void select() {
+    public boolean select() {
         gephiToNeo4jMapper = Lookup.getDefault().lookup(GephiToNeo4jMapper.class);
 
         if (!gephiToNeo4jMapper.isNeo4jDatabaseInCurrentWorkspace()) {
@@ -90,25 +83,17 @@ public class LazyNeo4jGraphExplorationTool implements Tool {
 
             DialogDisplayer.getDefault().notify(notifyDescriptor);
 
-//            try {
-//                Lookup.getDefault().lookup(ToolController.class).select(null);
-//                JComponent toolbar = Lookup.getDefault().lookup(ToolController.class).getToolbar();
-//                toolbar.getClass().getMethod("clearSelection").invoke(toolbar);
-//
-//                JComponent propertiesBar = Lookup.getDefault().lookup(ToolController.class).getPropertiesBar();
-//                propertiesBar.getClass().getMethod("unselect").invoke(propertiesBar);
-//            }
-//            catch (Exception e) {
-//                e.printStackTrace();
-//            }
+            return true;
         }
 
-        toolListeners = null;
-        toolPanel = null;
+        return false;
     }
 
     @Override
-    public void unselect() {}
+    public void unselect() {
+        toolListeners = null;
+        toolPanel = null;
+    }
 
     @Override
     public ToolEventListener[] getListeners() {
