@@ -43,7 +43,7 @@ import org.gephi.project.api.WorkspaceProvider;
 import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.kernel.EmbeddedGraphDatabase;
-import org.neo4j.kernel.management.Primitives;
+import org.neo4j.management.Primitives;
 import org.openide.util.Lookup;
 
 /**

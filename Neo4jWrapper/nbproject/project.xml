@@ -25,55 +25,42 @@
                 <package>org.apache.lucene.util</package>
                 <package>org.apache.lucene.util.cache</package>
                 <package>org.neo4j.graphdb</package>
-                <package>org.neo4j.graphdb.event</package>
                 <package>org.neo4j.graphdb.traversal</package>
                 <package>org.neo4j.helpers</package>
-                <package>org.neo4j.helpers.collection</package>
                 <package>org.neo4j.index</package>
                 <package>org.neo4j.index.impl</package>
-                <package>org.neo4j.index.impl.btree</package>
-                <package>org.neo4j.index.impl.map</package>
-                <package>org.neo4j.index.impl.sortedtree</package>
                 <package>org.neo4j.index.lucene</package>
-                <package>org.neo4j.index.timeline</package>
                 <package>org.neo4j.kernel</package>
-                <package>org.neo4j.kernel.impl.batchinsert</package>
-                <package>org.neo4j.kernel.impl.cache</package>
-                <package>org.neo4j.kernel.impl.core</package>
-                <package>org.neo4j.kernel.impl.management</package>
-                <package>org.neo4j.kernel.impl.nioneo.store</package>
-                <package>org.neo4j.kernel.impl.nioneo.xa</package>
-                <package>org.neo4j.kernel.impl.persistence</package>
-                <package>org.neo4j.kernel.impl.transaction</package>
-                <package>org.neo4j.kernel.impl.transaction.xaframework</package>
-                <package>org.neo4j.kernel.impl.traversal</package>
-                <package>org.neo4j.kernel.impl.util</package>
-                <package>org.neo4j.kernel.management</package>
+                <package>org.neo4j.management</package>
                 <package>org.neo4j.remote</package>
-                <package>org.neo4j.remote.impl.corba.remote_neo4j</package>
-                <package>org.neo4j.remote.impl.protobuf</package>
-                <package>org.neo4j.remote.inspect</package>
-                <package>org.neo4j.remote.transports</package>
             </public-packages>
             <class-path-extension>
-                <runtime-relative-path>ext/neo4j-kernel-1.1.jar</runtime-relative-path>
-                <binary-origin>release/modules/ext/neo4j-kernel-1.1.jar</binary-origin>
+                <runtime-relative-path>ext/neo4j-management-1.2-1.2.M06.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/neo4j-management-1.2-1.2.M06.jar</binary-origin>
             </class-path-extension>
             <class-path-extension>
-                <runtime-relative-path>ext/neo4j-index-1.1.jar</runtime-relative-path>
-                <binary-origin>release/modules/ext/neo4j-index-1.1.jar</binary-origin>
+                <runtime-relative-path>ext/neo4j-index-1.2-1.2.M06.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/neo4j-index-1.2-1.2.M06.jar</binary-origin>
             </class-path-extension>
             <class-path-extension>
                 <runtime-relative-path>ext/geronimo-jta_1.1_spec-1.1.1.jar</runtime-relative-path>
                 <binary-origin>release/modules/ext/geronimo-jta_1.1_spec-1.1.1.jar</binary-origin>
             </class-path-extension>
             <class-path-extension>
+                <runtime-relative-path>ext/neo4j-lucene-index-0.2-1.2.M06.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/neo4j-lucene-index-0.2-1.2.M06.jar</binary-origin>
+            </class-path-extension>
+            <class-path-extension>
                 <runtime-relative-path>ext/lucene-core-2.9.2.jar</runtime-relative-path>
                 <binary-origin>release/modules/ext/lucene-core-2.9.2.jar</binary-origin>
             </class-path-extension>
             <class-path-extension>
-                <runtime-relative-path>ext/neo4j-remote-graphdb-0.7.jar</runtime-relative-path>
-                <binary-origin>release/modules/ext/neo4j-remote-graphdb-0.7.jar</binary-origin>
+                <runtime-relative-path>ext/neo4j-remote-graphdb-0.8-1.2.M06.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/neo4j-remote-graphdb-0.8-1.2.M06.jar</binary-origin>
+            </class-path-extension>
+            <class-path-extension>
+                <runtime-relative-path>ext/neo4j-kernel-1.2-1.2.M06.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/neo4j-kernel-1.2-1.2.M06.jar</binary-origin>
             </class-path-extension>
         </data>
     </configuration>
