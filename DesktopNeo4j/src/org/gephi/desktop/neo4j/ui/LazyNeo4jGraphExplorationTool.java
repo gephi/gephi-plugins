@@ -23,22 +23,18 @@ package org.gephi.desktop.neo4j.ui;
 
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
-import javax.swing.JComponent;
 import javax.swing.JPanel;
-import javax.swing.JToolBar;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 import org.gephi.graph.api.GraphController;
 import org.gephi.graph.api.Node;
 import org.gephi.layout.api.LayoutController;
+import org.gephi.layout.plugin.force.yifanHu.YifanHu;
+import org.gephi.layout.plugin.force.yifanHu.YifanHuLayout;
 import org.gephi.layout.plugin.forceAtlas.ForceAtlas;
-import org.gephi.layout.plugin.forceAtlas.ForceAtlasLayout;
 import org.gephi.layout.spi.Layout;
 import org.gephi.layout.spi.LayoutBuilder;
 import org.gephi.neo4j.plugin.api.GephiToNeo4jMapper;
 import org.gephi.neo4j.plugin.api.Neo4jImporter;
 import org.gephi.neo4j.plugin.api.TraversalOrder;
-import org.gephi.tools.api.ToolController;
 import org.gephi.tools.spi.NodeClickEventListener;
 import org.gephi.tools.spi.Tool;
 import org.gephi.tools.spi.ToolEventListener;
@@ -46,8 +42,6 @@ import org.gephi.tools.spi.ToolSelectionType;
 import org.gephi.tools.spi.ToolUI;
 import org.gephi.utils.longtask.api.LongTaskExecutor;
 import org.gephi.utils.longtask.spi.LongTask;
-import org.gephi.visualization.VizController;
-import org.openide.DialogDescriptor;
 import org.openide.DialogDisplayer;
 import org.openide.NotifyDescriptor;
 import org.openide.util.Lookup;
@@ -125,8 +119,8 @@ public class LazyNeo4jGraphExplorationTool implements Tool {
                     }
 
                     private void applyLayout() {
-                        LayoutBuilder forceAtlas = Lookup.getDefault().lookup(ForceAtlas.class);
-                        Layout layout = forceAtlas.buildLayout();
+                        YifanHu yifanHuLayoutBuilder = Lookup.getDefault().lookup(YifanHu.class);
+                        YifanHuLayout layout = yifanHuLayoutBuilder.buildLayout();
                         layout.resetPropertiesValues();
 
                         LayoutController layoutController = Lookup.getDefault().lookup(LayoutController.class);
