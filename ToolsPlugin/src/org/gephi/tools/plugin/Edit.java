@@ -70,7 +70,7 @@ public class Edit implements Tool {
     public ToolUI getUI() {
         return new ToolUI() {
 
-            public JPanel getPropertiesBar() {
+            public JPanel getPropertiesBar(Tool tool) {
                 return new JPanel();
             }
 

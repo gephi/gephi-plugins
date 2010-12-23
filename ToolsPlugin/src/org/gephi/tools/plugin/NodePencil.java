@@ -91,7 +91,7 @@ public class NodePencil implements Tool {
     public ToolUI getUI() {
         return new ToolUI() {
 
-            public JPanel getPropertiesBar() {
+            public JPanel getPropertiesBar(Tool tool) {
                 nodePencilPanel = new NodePencilPanel();
                 nodePencilPanel.setColor(color);
                 nodePencilPanel.setNodeSize(size);

@@ -101,7 +101,7 @@ public class Sizer implements Tool {
     public ToolUI getUI() {
         return new ToolUI() {
 
-            public JPanel getPropertiesBar() {
+            public JPanel getPropertiesBar(Tool tool) {
                 sizerPanel = new SizerPanel();
                 return sizerPanel;
             }

@@ -131,7 +131,7 @@ public class Brush implements Tool {
     public ToolUI getUI() {
         return new ToolUI() {
 
-            public JPanel getPropertiesBar() {
+            public JPanel getPropertiesBar(Tool tool) {
                 brushPanel = new BrushPanel();
                 brushPanel.setDiffusionMethod(diffusionMethod);
                 brushPanel.setColor(new Color(color[0], color[1], color[2]));

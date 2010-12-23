@@ -84,7 +84,7 @@ public class Painter implements Tool {
     public ToolUI getUI() {
         return new ToolUI() {
 
-            public JPanel getPropertiesBar() {
+            public JPanel getPropertiesBar(Tool tool) {
                 painterPanel = new PainterPanel();
                 painterPanel.setColor(new Color(color[0], color[1], color[2]));
                 return painterPanel;

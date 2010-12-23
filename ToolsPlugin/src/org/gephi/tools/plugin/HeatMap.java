@@ -143,7 +143,7 @@ public class HeatMap implements Tool {
     public ToolUI getUI() {
         return new ToolUI() {
 
-            public JPanel getPropertiesBar() {
+            public JPanel getPropertiesBar(Tool tool) {
                 heatMapPanel = new HeatMapPanel(gradientColors, gradientPositions, dontPaintUnreachable);
                 return heatMapPanel;
             }

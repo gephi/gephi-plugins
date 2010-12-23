@@ -145,7 +145,7 @@ public class LazyNeo4jGraphExplorationTool implements Tool {
         return new ToolUI() {
 
             @Override
-            public JPanel getPropertiesBar() {
+            public JPanel getPropertiesBar(Tool tool) {
                 toolPanel = new LazyNeo4jGraphExplorationToolPanel();
 
                 return toolPanel;

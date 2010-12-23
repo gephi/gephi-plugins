@@ -113,7 +113,7 @@ public class EdgePencil implements Tool {
     public ToolUI getUI() {
         return new ToolUI() {
 
-            public JPanel getPropertiesBar() {
+            public JPanel getPropertiesBar(Tool tool) {
                 edgePencilPanel = new EdgePencilPanel();
                 edgePencilPanel.setColor(color);
                 edgePencilPanel.setWeight(weight);
