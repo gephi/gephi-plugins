@@ -17,7 +17,7 @@ GNU Affero General Public License for more details.
 
 You should have received a copy of the GNU Affero General Public License
 along with Gephi.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.gephi.desktop.importer;
 
 import java.awt.Color;
@@ -64,6 +64,7 @@ public class ReportPanel extends javax.swing.JPanel {
     //Preferences
     private final static String SHOW_ISSUES = "ReportPanel_Show_Issues";
     private final static String SHOW_REPORT = "ReportPanel_Show_Report";
+    private final static int ISSUES_LIMIT = 5000;
     private ThreadGroup fillingThreads;
     //Icons
     private ImageIcon infoIcon;
@@ -140,6 +141,7 @@ public class ReportPanel extends javax.swing.JPanel {
     public void setData(Report report, Container container) {
         this.container = container;
         initProcessorsUI();
+        report.pruneReport(ISSUES_LIMIT);
         fillIssues(report);
         fillReport(report);
         fillStats(container);
@@ -205,7 +207,13 @@ public class ReportPanel extends javax.swing.JPanel {
 
             public void run() {
                 //Source
-                sourceLabel.setText(container.getSource());
+                String source = container.getSource();
+                String[] label = source.split("\\.");
+                if (label.length > 2 && label[label.length-2].matches("\\d+")) { //case of temp file
+                    source = source.replaceFirst("."+label[label.length-2], "");
+                }
+                
+                sourceLabel.setText(source);
 
                 //Autoscale
                 autoscaleCheckbox.setSelected(container.isAutoScale());
