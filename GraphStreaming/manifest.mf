@@ -1,0 +1,5 @@
+Manifest-Version: 1.0
+OpenIDE-Module: org.gephi.graphstreaming
+OpenIDE-Module-Localizing-Bundle: org/gephi/graphstreaming/Bundle.properties
+OpenIDE-Module-Specification-Version: 0.7
+
