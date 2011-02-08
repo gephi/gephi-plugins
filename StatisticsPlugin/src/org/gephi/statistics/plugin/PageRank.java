@@ -1,6 +1,6 @@
 /*
 Copyright 2008-2010 Gephi
-Authors : Patick J. McSweeney <pjmcswee@syr.edu>
+Authors : Patick J. McSweeney <pjmcswee@syr.edu>, Sebastien Heymann <seb@gephi.org>
 Website : http://www.gephi.org
 
 This file is part of Gephi.
@@ -23,20 +23,22 @@ package org.gephi.statistics.plugin;
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 import org.gephi.data.attributes.api.AttributeTable;
 import org.gephi.data.attributes.api.AttributeColumn;
 import org.gephi.data.attributes.api.AttributeModel;
 import org.gephi.data.attributes.api.AttributeOrigin;
 import org.gephi.data.attributes.api.AttributeRow;
 import org.gephi.data.attributes.api.AttributeType;
-import org.gephi.graph.api.DirectedGraph;
 import org.gephi.graph.api.Edge;
 import org.gephi.graph.api.EdgeIterable;
-import org.gephi.graph.api.Graph;
 import org.gephi.graph.api.GraphController;
 import org.gephi.graph.api.GraphModel;
+import org.gephi.graph.api.HierarchicalDirectedGraph;
+import org.gephi.graph.api.HierarchicalGraph;
+import org.gephi.graph.api.HierarchicalUndirectedGraph;
 import org.gephi.graph.api.Node;
-import org.gephi.graph.api.UndirectedGraph;
 import org.gephi.statistics.spi.Statistics;
 import org.gephi.utils.TempDirUtils;
 import org.gephi.utils.TempDirUtils.TempDir;
@@ -47,6 +49,8 @@ import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartRenderingInfo;
 import org.jfree.chart.ChartUtilities;
 import org.jfree.chart.JFreeChart;
+import org.jfree.chart.axis.NumberAxis;
+import org.jfree.chart.axis.ValueAxis;
 import org.jfree.chart.entity.StandardEntityCollection;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.chart.plot.XYPlot;
@@ -63,125 +67,125 @@ public class PageRank implements Statistics, LongTask {
 
     public static final String PAGERANK = "pageranks";
     /** */
-    private ProgressTicket mProgress;
+    private ProgressTicket progress;
     /** */
-    private boolean mIsCanceled;
+    private boolean isCanceled;
     /** */
-    private double mEpsilon = 0.001;
+    private double epsilon = 0.001;
     /** */
-    private double mProbability = 0.85;
+    private double probability = 0.85;
     /** */
-    private double[] mPageranks;
+    private double[] pageranks;
     /** */
-    private boolean mDirected;
+    private boolean isDirected;
 
     public PageRank() {
         GraphController graphController = Lookup.getDefault().lookup(GraphController.class);
         if (graphController != null && graphController.getModel() != null) {
-            mDirected = graphController.getModel().isDirected();
+            isDirected = graphController.getModel().isDirected();
         }
     }
     
-    public void setUndirected(boolean pUndirected) {
-        mDirected = pUndirected;
+    public void setDirected(boolean isDirected) {
+        this.isDirected = isDirected;
     }
 
     /**
      * 
      * @return
      */
-    public boolean getUndirected() {
-        return mDirected;
+    public boolean getDirected() {
+        return isDirected;
     }
 
     public void execute(GraphModel graphModel, AttributeModel attributeModel) {
-        Graph graph;
-        if (mDirected) {
-            graph = graphModel.getUndirectedGraphVisible();
+        HierarchicalGraph graph;
+        if (isDirected) {
+            graph = graphModel.getHierarchicalDirectedGraphVisible();
         } else {
-            graph = graphModel.getDirectedGraphVisible();
+            graph = graphModel.getHierarchicalUndirectedGraphVisible();
         }
         execute(graph, attributeModel);
     }
 
-    public void execute(Graph graph, AttributeModel attributeModel) {
-        mIsCanceled = false;
+    public void execute(HierarchicalGraph hgraph, AttributeModel attributeModel) {
+        isCanceled = false;
 
-        graph.readLock();
+        hgraph.readLock();
 
-        int N = graph.getNodeCount();
-        mPageranks = new double[N];
+        int N = hgraph.getNodeCount();
+        pageranks = new double[N];
         double[] temp = new double[N];
         HashMap<Node, Integer> indicies = new HashMap<Node, Integer>();
         int index = 0;
 
-        Progress.start(mProgress);
-        for (Node s : graph.getNodes()) {
+        Progress.start(progress);
+        for (Node s : hgraph.getNodes()) {
             indicies.put(s, index);
-            mPageranks[index] = 1.0f / N;
+            pageranks[index] = 1.0f / N;
             index++;
         }
 
         while (true) {
             double r = 0;
-            for (Node s : graph.getNodes()) {
+            for (Node s : hgraph.getNodes()) {
                 int s_index = indicies.get(s);
                 boolean out;
-                if (mDirected) {
-                    out = graph.getDegree(s) > 0;
+                if (isDirected) {
+                    out = ((HierarchicalDirectedGraph) hgraph).getTotalOutDegree(s) > 0;
                 } else {
-                    out = ((DirectedGraph) graph).getOutDegree(s) > 0;
+                    out = hgraph.getTotalDegree(s) > 0;
                 }
 
                 if (out) {
-                    r += (1.0 - mProbability) * (mPageranks[s_index] / N);
+                    r += (1.0 - probability) * (pageranks[s_index] / N);
                 } else {
-                    r += (mPageranks[s_index] / N);
+                    r += (pageranks[s_index] / N);
                 }
-                if (mIsCanceled) {
-                    graph.readUnlockAll();
+                if (isCanceled) {
+                    hgraph.readUnlockAll();
                     return;
                 }
             }
 
             boolean done = true;
-            for (Node s : graph.getNodes()) {
+            for (Node s : hgraph.getNodes()) {
                 int s_index = indicies.get(s);
                 temp[s_index] = r;
 
                 EdgeIterable eIter;
-                if (mDirected) {
-                    eIter = ((UndirectedGraph) graph).getEdges(s);
+                if (isDirected) {
+                    eIter = ((HierarchicalDirectedGraph) hgraph).getInEdgesAndMetaInEdges(s);
                 } else {
-                    eIter = ((DirectedGraph) graph).getInEdges(s);
+                    eIter = ((HierarchicalUndirectedGraph) hgraph).getEdgesAndMetaEdges(s);
                 }
 
                 for (Edge edge : eIter) {
-                    Node neighbor = graph.getOpposite(s, edge);
+                    Node neighbor = hgraph.getOpposite(s, edge);
                     int neigh_index = indicies.get(neighbor);
                     int normalize;
-                    if (mDirected) {
-                        normalize = ((UndirectedGraph) graph).getDegree(neighbor);
+                    if (isDirected) {
+                        normalize = ((HierarchicalDirectedGraph) hgraph).getTotalOutDegree(neighbor);
                     } else {
-                        normalize = ((DirectedGraph) graph).getOutDegree(neighbor);
+                        normalize = ((HierarchicalUndirectedGraph) hgraph).getTotalDegree(neighbor);
                     }
 
-                    temp[s_index] += mProbability * (mPageranks[neigh_index] / normalize);
+                    temp[s_index] += probability * (pageranks[neigh_index] / normalize);
                 }
 
-                if ((temp[s_index] - mPageranks[s_index]) / mPageranks[s_index] >= mEpsilon) {
+                if ((temp[s_index] - pageranks[s_index]) / pageranks[s_index] >= epsilon) {
                     done = false;
                 }
 
-                if (mIsCanceled) {
-                    graph.readUnlockAll();
+                if (isCanceled) {
+                    hgraph.readUnlockAll();
                     return;
                 }
 
             }
-            mPageranks = temp;
+            pageranks = temp;
             temp = new double[N];
-            if ((done) || (mIsCanceled)) {
+            if ((done) || (isCanceled)) {
                 break;
             }
 
@@ -193,13 +197,13 @@ public class PageRank implements Statistics, LongTask {
             pangeRanksCol = nodeTable.addColumn(PAGERANK, "PageRank", AttributeType.DOUBLE, AttributeOrigin.COMPUTED, new Double(0));
         }
 
-        for (Node s : graph.getNodes()) {
+        for (Node s : hgraph.getNodes()) {
             int s_index = indicies.get(s);
             AttributeRow row = (AttributeRow) s.getNodeData().getAttributes();
-            row.setValue(pangeRanksCol, mPageranks[s_index]);
+            row.setValue(pangeRanksCol, pageranks[s_index]);
         }
 
-        graph.readUnlockAll();
+        hgraph.readUnlockAll();
     }
 
     /**
@@ -207,22 +211,34 @@ public class PageRank implements Statistics, LongTask {
      * @return
      */
     public String getReport() {
-
-        double max = 0;
-        XYSeries series = new XYSeries("Series 2");
-        for (int i = 0; i < mPageranks.length; i++) {
-            series.add(i, mPageranks[i]);
-
+        //distribution of values
+        Map<Double, Integer> dist = new HashMap<Double, Integer>();
+        for (int i = 0; i < pageranks.length; i++) {
+            Double d = pageranks[i];
+            if (dist.containsKey(d)) {
+                Integer v = dist.get(d);
+                dist.put(d, v + 1);
+            } else {
+                dist.put(d, 1);
+            }
         }
 
+        //Distribution series
+        XYSeries dSeries = new XYSeries("PageRanks");
+        for (Iterator it = dist.entrySet().iterator(); it.hasNext();) {
+            Map.Entry d = (Map.Entry) it.next();
+            Double x = (Double) d.getKey();
+            Integer y = (Integer) d.getValue();
+            dSeries.add(x, y);
+        }
 
         XYSeriesCollection dataset = new XYSeriesCollection();
-        dataset.addSeries(series);
+        dataset.addSeries(dSeries);
 
         JFreeChart chart = ChartFactory.createXYLineChart(
-                "PageRanks",
-                "Nodes",
-                "PageRank",
+                "PageRank Distribution",
+                "Scores",
+                "Count",
                 dataset,
                 PlotOrientation.VERTICAL,
                 true,
@@ -230,17 +246,21 @@ public class PageRank implements Statistics, LongTask {
                 false);
         XYPlot plot = (XYPlot) chart.getPlot();
         XYLineAndShapeRenderer renderer = new XYLineAndShapeRenderer();
-        renderer.setSeriesLinesVisible(0, true);
-        renderer.setSeriesShapesVisible(0, false);
-        renderer.setSeriesLinesVisible(1, false);
-        renderer.setSeriesShapesVisible(1, true);
-        renderer.setSeriesShape(1, new java.awt.geom.Ellipse2D.Double(0, 0, 1, 1));
+        renderer.setSeriesLinesVisible(0, false);
+        renderer.setSeriesShapesVisible(0, true);
+        renderer.setSeriesShape(0, new java.awt.geom.Ellipse2D.Double(0, 0, 2, 2));
         plot.setBackgroundPaint(java.awt.Color.WHITE);
         plot.setDomainGridlinePaint(java.awt.Color.GRAY);
         plot.setRangeGridlinePaint(java.awt.Color.GRAY);
-
         plot.setRenderer(renderer);
 
+        ValueAxis domainAxis = plot.getDomainAxis();
+        domainAxis.setLowerMargin(1.0);
+        domainAxis.setUpperMargin(1.0);
+        domainAxis.setRange(dSeries.getMinX()-1, dSeries.getMaxX()+1);
+        domainAxis.setStandardTickUnits(NumberAxis.createIntegerTickUnits());
+        NumberAxis rangeAxis = (NumberAxis) plot.getRangeAxis();
+        rangeAxis.setRange(-1, dSeries.getMaxY()+0.1*dSeries.getMaxY());
 
         String imageFile = "";
         try {
@@ -256,8 +276,8 @@ public class PageRank implements Statistics, LongTask {
         String report = "<HTML> <BODY> <h1>PageRank Report </h1> "
                 + "<hr> <br>"
                 + "<h2> Parameters: </h2>"
-                + "Epsilon = " + this.mEpsilon + "<br>"
-                + "Probability = " + this.mProbability
+                + "Epsilon = " + epsilon + "<br>"
+                + "Probability = " + probability
                 + "<br> <h2> Results: </h2>"
                 + imageFile
                 + "</BODY></HTML>";
@@ -271,7 +291,7 @@ public class PageRank implements Statistics, LongTask {
      * @return
      */
     public boolean cancel() {
-        mIsCanceled = true;
+        isCanceled = true;
         return true;
     }
 
@@ -280,7 +300,7 @@ public class PageRank implements Statistics, LongTask {
      * @param progressTicket
      */
     public void setProgressTicket(ProgressTicket progressTicket) {
-        mProgress = progressTicket;
+        progress = progressTicket;
     }
 
     /**
@@ -288,7 +308,7 @@ public class PageRank implements Statistics, LongTask {
      * @param prob
      */
     public void setProbability(double prob) {
-        mProbability = prob;
+        probability = prob;
     }
 
     /**
@@ -296,7 +316,7 @@ public class PageRank implements Statistics, LongTask {
      * @param eps
      */
     public void setEpsilon(double eps) {
-        mEpsilon = eps;
+        epsilon = eps;
     }
 
     /**
@@ -304,7 +324,7 @@ public class PageRank implements Statistics, LongTask {
      * @return
      */
     public double getProbability() {
-        return mProbability;
+        return probability;
     }
 
     /**
@@ -312,6 +332,6 @@ public class PageRank implements Statistics, LongTask {
      * @return
      */
     public double getEpsilon() {
-        return mEpsilon;
+        return epsilon;
     }
 }

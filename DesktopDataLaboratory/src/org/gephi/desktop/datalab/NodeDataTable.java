@@ -25,7 +25,6 @@ import java.awt.Rectangle;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
@@ -59,6 +58,7 @@ import org.gephi.data.attributes.type.DynamicType;
 import org.gephi.data.attributes.type.NumberList;
 import org.gephi.data.attributes.type.TimeInterval;
 import org.gephi.datalab.api.AttributeColumnsController;
+import org.gephi.datalab.api.DataLaboratoryHelper;
 import org.gephi.dynamic.api.DynamicModel.TimeFormat;
 import org.gephi.graph.api.HierarchicalGraph;
 import org.gephi.graph.api.ImmutableTreeNode;
@@ -70,10 +70,8 @@ import org.netbeans.swing.outline.OutlineModel;
 import org.netbeans.swing.outline.RenderDataProvider;
 import org.netbeans.swing.outline.RowModel;
 import org.openide.awt.MouseUtils;
-import org.openide.util.Exceptions;
 import org.openide.util.Lookup;
 import org.gephi.datalab.spi.nodes.NodesManipulator;
-import org.gephi.desktop.datalab.utils.DataLaboratoryHelper;
 import org.gephi.graph.api.Attributes;
 import org.gephi.tools.api.EditWindowController;
 import org.gephi.desktop.datalab.utils.PopupMenuUtils;
@@ -150,10 +148,10 @@ public class NodeDataTable {
             @Override
             public void keyReleased(KeyEvent e) {
                 if (e.getKeyCode() == KeyEvent.VK_DELETE) {
+                    DataLaboratoryHelper dlh = DataLaboratoryHelper.getDefault();
                     Node[] selectedNodes = getNodesFromSelectedRows();
                     if (selectedNodes.length > 0) {
-                        DataLaboratoryHelper dlh = new DataLaboratoryHelper();
-                        NodesManipulator del = dlh.getDeleteNodesManipulator();
+                        NodesManipulator del = dlh.getNodesManipulatorByName("DeleteNodes");
                         if (del != null) {
                             del.setup(selectedNodes, null);
                             if (del.canExecute()) {
@@ -247,22 +245,10 @@ public class NodeDataTable {
         final OutlineModel mdl = DefaultOutlineModel.createOutlineModel(nodeTreeModel, new NodeRowModel(cols), true);
         outlineTable.setRootVisible(false);
         outlineTable.setRenderDataProvider(new NodeRenderer());
-
-        try {
-            SwingUtilities.invokeAndWait(new Runnable() {
-
-                public void run() {
-                    outlineTable.setModel(mdl);
-                    NodeDataTable.this.dataTablesModel = dataTablesModel;
-                    setNodesSelection(selectedNodes);//Keep row selection before refreshing.
-                    selectedNodes = null;
-                }
-            });
-        } catch (InterruptedException ex) {
-            Exceptions.printStackTrace(ex);
-        } catch (InvocationTargetException ex) {
-            Exceptions.printStackTrace(ex);
-        }
+        outlineTable.setModel(mdl);
+        NodeDataTable.this.dataTablesModel = dataTablesModel;
+        setNodesSelection(selectedNodes);//Keep row selection before refreshing.
+        selectedNodes = null;
         refreshingTable = false;
     }
 
@@ -491,7 +477,11 @@ public class NodeDataTable {
         @Override
         public String getDisplayName(Object o) {
             if (o instanceof ImmutableTreeNode) {
-                return ((ImmutableTreeNode) o).getNode().getNodeData().getLabel();
+                if (((ImmutableTreeNode) o).getNode().getNodeData().isFixed()) {
+                    return "¤ " + ((ImmutableTreeNode) o).getNode().getNodeData().getLabel();//UI feedback when node is settled
+                } else {
+                    return ((ImmutableTreeNode) o).getNode().getNodeData().getLabel();
+                }
             } else {
                 return o.toString();
             }
@@ -577,7 +567,7 @@ public class NodeDataTable {
             JPopupMenu contextMenu = new JPopupMenu();
 
             //First add nodes manipulators items:
-            DataLaboratoryHelper dlh = new DataLaboratoryHelper();
+            DataLaboratoryHelper dlh = DataLaboratoryHelper.getDefault();
             Integer lastManipulatorType = null;
             for (NodesManipulator nm : dlh.getNodesManipulators()) {
                 nm.setup(selectedNodes, clickedNode);

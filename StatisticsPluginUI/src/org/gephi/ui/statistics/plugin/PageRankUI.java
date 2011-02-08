@@ -24,6 +24,7 @@ import javax.swing.JPanel;
 import org.gephi.statistics.plugin.PageRank;
 import org.gephi.statistics.spi.Statistics;
 import org.gephi.statistics.spi.StatisticsUI;
+import org.openide.util.NbBundle;
 import org.openide.util.lookup.ServiceProvider;
 
 @ServiceProvider(service = StatisticsUI.class)
@@ -44,7 +45,7 @@ public class PageRankUI implements StatisticsUI {
             settings.load(pageRank);
             panel.setEpsilon(pageRank.getEpsilon());
             panel.setProbability(pageRank.getProbability());
-            panel.setDirected(!pageRank.getUndirected());
+            panel.setDirected(pageRank.getDirected());
         }
     }
 
@@ -52,7 +53,7 @@ public class PageRankUI implements StatisticsUI {
         if (panel != null) {
             pageRank.setEpsilon(panel.getEpsilon());
             pageRank.setProbability(panel.getProbability());
-            pageRank.setUndirected(!panel.isDirected());
+            pageRank.setDirected(panel.isDirected());
             settings.save(pageRank);
         }
         panel = null;
@@ -68,7 +69,7 @@ public class PageRankUI implements StatisticsUI {
     }
 
     public String getDisplayName() {
-        return "PageRank";
+        return NbBundle.getMessage(getClass(), "PageRankUI.name");
     }
 
     public String getCategory() {

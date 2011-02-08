@@ -1,6 +1,6 @@
 /*
 Copyright 2008-2010 Gephi
-Authors : Patick J. McSweeney <pjmcswee@syr.edu>
+Authors : Patick J. McSweeney <pjmcswee@syr.edu>, Sebastien Heymann <seb@gephi.org>
 Website : http://www.gephi.org
 
 This file is part of Gephi.
@@ -23,10 +23,12 @@ package org.gephi.statistics.plugin;
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.Iterator;
 import org.gephi.statistics.spi.Statistics;
 import org.gephi.graph.api.*;
 import java.util.LinkedList;
 import java.util.ListIterator;
+import java.util.Map;
 import java.util.Stack;
 import org.gephi.data.attributes.api.AttributeTable;
 import org.gephi.data.attributes.api.AttributeColumn;
@@ -43,6 +45,8 @@ import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartRenderingInfo;
 import org.jfree.chart.ChartUtilities;
 import org.jfree.chart.JFreeChart;
+import org.jfree.chart.axis.NumberAxis;
+import org.jfree.chart.axis.ValueAxis;
 import org.jfree.chart.entity.StandardEntityCollection;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.chart.plot.XYPlot;
@@ -62,36 +66,36 @@ public class GraphDistance implements Statistics, LongTask {
     public static final String CLOSENESS = "closnesscentrality";
     public static final String ECCENTRICITY = "eccentricity";
     /** */
-    private double[] mBetweenness;
+    private double[] betweenness;
     /** */
-    private double[] mCloseness;
+    private double[] closeness;
     /** */
-    private double[] mEccentricity;
+    private double[] eccentricity;
     /** */
-    private int mDiameter;
-    private int mRadius;
+    private int diameter;
+    private int radius;
     /** */
-    private double mAvgDist;
+    private double avgDist;
     /** */
-    private int mN;
+    private int N;
     /** */
-    private boolean mDirected;
+    private boolean isDirected;
     /** */
-    private ProgressTicket mProgress;
+    private ProgressTicket progress;
     /** */
-    private boolean mIsCanceled;
-    private int mShortestPaths;
-    private boolean mRelativeValues;
+    private boolean isCanceled;
+    private int shortestPaths;
+    private boolean isRelativeValues;
 
     public GraphDistance() {
         GraphController graphController = Lookup.getDefault().lookup(GraphController.class);
         if (graphController != null && graphController.getModel() != null) {
-            mDirected = graphController.getModel().isDirected();
+            isDirected = graphController.getModel().isDirected();
         }
     }
 
     public double getPathLength() {
-        return mAvgDist;
+        return avgDist;
     }
 
     /**
@@ -99,15 +103,25 @@ public class GraphDistance implements Statistics, LongTask {
      * @return
      */
     public double getDiameter() {
-        return mDiameter;
+        return diameter;
     }
 
     /**
-     * 
+     *
      * @param graphModel
      */
-    public void execute(Graph graph, AttributeModel attributeModel) {
-        mIsCanceled = false;
+    public void execute(GraphModel graphModel, AttributeModel attributeModel) {
+        HierarchicalGraph graph = null;
+        if (isDirected) {
+            graph = graphModel.getHierarchicalDirectedGraphVisible();
+        } else {
+            graph = graphModel.getHierarchicalUndirectedGraphVisible();
+        }
+        execute(graph, attributeModel);
+    }
+
+    public void execute(HierarchicalGraph hgraph, AttributeModel attributeModel) {
+        isCanceled = false;
         AttributeTable nodeTable = attributeModel.getNodeTable();
         AttributeColumn eccentricityCol = nodeTable.getColumn(ECCENTRICITY);
         AttributeColumn closenessCol = nodeTable.getColumn(CLOSENESS);
@@ -122,33 +136,33 @@ public class GraphDistance implements Statistics, LongTask {
             betweenessCol = nodeTable.addColumn(BETWEENNESS, "Betweenness Centrality", AttributeType.DOUBLE, AttributeOrigin.COMPUTED, new Double(0));
         }
 
-        graph.readLock();
+        hgraph.readLock();
 
-        mN = graph.getNodeCount();
+        N = hgraph.getNodeCount();
 
-        mBetweenness = new double[mN];
-        mEccentricity = new double[mN];
-        mCloseness = new double[mN];
-        mDiameter = 0;
-        mAvgDist = 0;
-        mShortestPaths = 0;
-        mRadius = Integer.MAX_VALUE;
+        betweenness = new double[N];
+        eccentricity = new double[N];
+        closeness = new double[N];
+        diameter = 0;
+        avgDist = 0;
+        shortestPaths = 0;
+        radius = Integer.MAX_VALUE;
         HashMap<Node, Integer> indicies = new HashMap<Node, Integer>();
         int index = 0;
-        for (Node s : graph.getNodes()) {
+        for (Node s : hgraph.getNodes()) {
             indicies.put(s, index);
             index++;
         }
 
-        Progress.start(mProgress, graph.getNodeCount());
+        Progress.start(progress, hgraph.getNodeCount());
         int count = 0;
-        for (Node s : graph.getNodes()) {
+        for (Node s : hgraph.getNodes()) {
             Stack<Node> S = new Stack<Node>();
 
-            LinkedList<Node>[] P = new LinkedList[mN];
-            double[] theta = new double[mN];
-            int[] d = new int[mN];
-            for (int j = 0; j < mN; j++) {
+            LinkedList<Node>[] P = new LinkedList[N];
+            double[] theta = new double[N];
+            int[] d = new int[N];
+            for (int j = 0; j < N; j++) {
                 P[j] = new LinkedList<Node>();
                 theta[j] = 0;
                 d[j] = -1;
@@ -167,14 +181,14 @@ public class GraphDistance implements Statistics, LongTask {
                 int v_index = indicies.get(v);
 
                 EdgeIterable edgeIter = null;
-                if (mDirected) {
-                    edgeIter = ((DirectedGraph) graph).getOutEdges(v);
+                if (isDirected) {
+                    edgeIter = ((HierarchicalDirectedGraph) hgraph).getOutEdgesAndMetaOutEdges(v);
                 } else {
-                    edgeIter = graph.getEdges(v);
+                    edgeIter = hgraph.getEdgesAndMetaEdges(v);
                 }
 
                 for (Edge edge : edgeIter) {
-                    Node reachable = graph.getOpposite(v, edge);
+                    Node reachable = hgraph.getOpposite(v, edge);
 
                     int r_index = indicies.get(reachable);
                     if (d[r_index] < 0) {
@@ -188,25 +202,25 @@ public class GraphDistance implements Statistics, LongTask {
                 }
             }
             double reachable = 0;
-            for (int i = 0; i < mN; i++) {
+            for (int i = 0; i < N; i++) {
                 if (d[i] > 0) {
-                    mAvgDist += d[i];
-                    mEccentricity[s_index] = (int) Math.max(mEccentricity[s_index], d[i]);
-                    mCloseness[s_index] += d[i];
-                    mDiameter = Math.max(mDiameter, d[i]);
+                    avgDist += d[i];
+                    eccentricity[s_index] = (int) Math.max(eccentricity[s_index], d[i]);
+                    closeness[s_index] += d[i];
+                    diameter = Math.max(diameter, d[i]);
                     reachable++;
                 }
             }
 
-            mRadius = (int) Math.min(mEccentricity[s_index], mRadius);
+            radius = (int) Math.min(eccentricity[s_index], radius);
 
             if (reachable != 0) {
-                mCloseness[s_index] /= reachable;
+                closeness[s_index] /= reachable;
             }
 
-            mShortestPaths += reachable;
+            shortestPaths += reachable;
 
-            double[] delta = new double[mN];
+            double[] delta = new double[N];
             while (!S.empty()) {
                 Node w = S.pop();
                 int w_index = indicies.get(w);
@@ -217,57 +231,43 @@ public class GraphDistance implements Statistics, LongTask {
                     delta[u_index] += (theta[u_index] / theta[w_index]) * (1 + delta[w_index]);
                 }
                 if (w != s) {
-                    mBetweenness[w_index] += delta[w_index];
+                    betweenness[w_index] += delta[w_index];
                 }
             }
             count++;
-            if (mIsCanceled) {
-                graph.readUnlockAll();
+            if (isCanceled) {
+                hgraph.readUnlockAll();
                 return;
             }
-            Progress.progress(mProgress, count);
+            Progress.progress(progress, count);
         }
 
-        mAvgDist /= this.mShortestPaths;//mN * (mN - 1.0f);
+        avgDist /= shortestPaths;//mN * (mN - 1.0f);
 
-        for (Node s : graph.getNodes()) {
+        for (Node s : hgraph.getNodes()) {
             AttributeRow row = (AttributeRow) s.getNodeData().getAttributes();
             int s_index = indicies.get(s);
 
-            if (!mDirected) {
-                mBetweenness[s_index] /= 2;
+            if (!isDirected) {
+                betweenness[s_index] /= 2;
             }
-            if (this.mRelativeValues) {
-                mCloseness[s_index] = (mCloseness[s_index] == 0) ? 0 : 1.0 / mCloseness[s_index];
-                mBetweenness[s_index] /= mDirected ? (mN - 1) * (mN - 2) : (mN - 1) * (mN - 2) / 2;
+            if (isRelativeValues) {
+                closeness[s_index] = (closeness[s_index] == 0) ? 0 : 1.0 / closeness[s_index];
+                betweenness[s_index] /= isDirected ? (N - 1) * (N - 2) : (N - 1) * (N - 2) / 2;
             }
-            row.setValue(eccentricityCol, mEccentricity[s_index]);
-            row.setValue(closenessCol, mCloseness[s_index]);
-            row.setValue(betweenessCol, mBetweenness[s_index]);
+            row.setValue(eccentricityCol, eccentricity[s_index]);
+            row.setValue(closenessCol, closeness[s_index]);
+            row.setValue(betweenessCol, betweenness[s_index]);
         }
-        graph.readUnlock();
-    }
-
-    /**
-     *
-     * @param graphModel
-     */
-    public void execute(GraphModel graphModel, AttributeModel attributeModel) {
-        Graph graph = null;
-        if (mDirected) {
-            graph = graphModel.getDirectedGraphVisible();
-        } else {
-            graph = graphModel.getUndirectedGraphVisible();
-        }
-        execute(graph, attributeModel);
+        hgraph.readUnlock();
     }
 
     /**
      * 
      * @param pRelative
      */
-    public void setRelative(boolean pRelative) {
-        this.mRelativeValues = pRelative;
+    public void setRelative(boolean isRelative) {
+        this.isRelativeValues = isRelative;
     }
 
     /**
@@ -275,42 +275,51 @@ public class GraphDistance implements Statistics, LongTask {
      * @param pRelative
      */
     public boolean useRelative() {
-        return this.mRelativeValues;
+        return this.isRelativeValues;
     }
 
     /**
      * 
      * @param pDirected
      */
-    public void setDirected(boolean pDirected) {
-        this.mDirected = pDirected;
+    public void setDirected(boolean isDirected) {
+        this.isDirected = isDirected;
     }
 
     public boolean isDirected() {
-        return mDirected;
+        return isDirected;
     }
 
-    /**
-     * 
-     * @param pVals
-     * @param pName
-     * @param pX
-     * @param pY
-     * @return
-     */
     private String createImageFile(TempDir tempDir, double[] pVals, String pName, String pX, String pY) throws IOException {
-        XYSeries series = new XYSeries(pName);
-        for (int i = 0; i < mN; i++) {
-            series.add(i, pVals[i]);
+        //distribution of values
+        Map<Double, Integer> dist = new HashMap<Double, Integer>();
+        for (int i = 0; i < N; i++) {
+            Double d = pVals[i];
+            if (dist.containsKey(d)) {
+                Integer v = dist.get(d);
+                dist.put(d, v + 1);
+            } else {
+                dist.put(d, 1);
+            }
         }
-        XYSeriesCollection dataSet = new XYSeriesCollection();
-        dataSet.addSeries(series);
+
+        //Distribution series
+        XYSeries dSeries = new XYSeries(pName);
+        for (Iterator it = dist.entrySet().iterator(); it.hasNext();) {
+            Map.Entry d = (Map.Entry) it.next();
+            Double x = (Double) d.getKey();
+            Integer y = (Integer) d.getValue();
+            dSeries.add(x, y);
+        }
+
+        XYSeriesCollection dataset = new XYSeriesCollection();
+        dataset.addSeries(dSeries);
 
         JFreeChart chart = ChartFactory.createXYLineChart(
                 pName,
                 pX,
                 pY,
-                dataSet,
+                dataset,
                 PlotOrientation.VERTICAL,
                 true,
                 false,
@@ -319,16 +328,24 @@ public class GraphDistance implements Statistics, LongTask {
         XYLineAndShapeRenderer renderer = new XYLineAndShapeRenderer();
         renderer.setSeriesLinesVisible(0, false);
         renderer.setSeriesShapesVisible(0, true);
-        renderer.setSeriesShape(0, new java.awt.geom.Ellipse2D.Double(0, 0, 1, 1));
+        renderer.setSeriesShape(0, new java.awt.geom.Ellipse2D.Double(0, 0, 2, 2));
         plot.setBackgroundPaint(java.awt.Color.WHITE);
         plot.setDomainGridlinePaint(java.awt.Color.GRAY);
         plot.setRangeGridlinePaint(java.awt.Color.GRAY);
         plot.setRenderer(renderer);
 
+        ValueAxis domainAxis = plot.getDomainAxis();
+        domainAxis.setLowerMargin(1.0);
+        domainAxis.setUpperMargin(1.0);
+        domainAxis.setRange(dSeries.getMinX()-1, dSeries.getMaxX()+1);
+        domainAxis.setStandardTickUnits(NumberAxis.createIntegerTickUnits());
+        NumberAxis rangeAxis = (NumberAxis) plot.getRangeAxis();
+        rangeAxis.setRange(-1, dSeries.getMaxY()+0.1*dSeries.getMaxY());
+
         String imageFile = "";
 
         ChartRenderingInfo info = new ChartRenderingInfo(new StandardEntityCollection());
-        String fileName = pY + ".png";
+        String fileName = pName + ".png";
         File file1 = tempDir.createFile(fileName);
         imageFile = "<IMG SRC=\"file:" + file1.getAbsolutePath() + "\" " + "WIDTH=\"600\" HEIGHT=\"400\" BORDER=\"0\" USEMAP=\"#chart\"></IMG>";
 
@@ -347,9 +364,9 @@ public class GraphDistance implements Statistics, LongTask {
         String htmlIMG3 = "";
         try {
             TempDir tempDir = TempDirUtils.createTempDir();
-            htmlIMG1 = createImageFile(tempDir, mBetweenness, "Betweenness Centrality", "Nodes", "Betweenness");
-            htmlIMG2 = createImageFile(tempDir, mCloseness, "Closeness Centrality", "Nodes", "Closeness");
-            htmlIMG3 = createImageFile(tempDir, mEccentricity, "Eccentricity", "Nodes", "Eccentricity");
+            htmlIMG1 = createImageFile(tempDir, betweenness, "Betweenness Centrality Distribution", "Values", "Count");
+            htmlIMG2 = createImageFile(tempDir, closeness, "Closeness Centrality Distribution", "Values", "Count");
+            htmlIMG3 = createImageFile(tempDir, eccentricity, "Eccentricity Distribution", "Values", "Count");
         } catch (IOException ex) {
             Exceptions.printStackTrace(ex);
         }
@@ -358,12 +375,12 @@ public class GraphDistance implements Statistics, LongTask {
                 + "<hr>"
                 + "<br>"
                 + "<h2> Parameters: </h2>"
-                + "Network Interpretation:  " + (this.mDirected ? "directed" : "undirected") + "<br>"
+                + "Network Interpretation:  " + (isDirected ? "directed" : "undirected") + "<br>"
                 + "<br> <h2> Results: </h2>"
-                + "Diameter: " + this.mDiameter + "<br>"
-                + "Radius: " + this.mRadius + "<br>"
-                + "Average Path length: " + this.mAvgDist + "<br>"
-                + "Number of shortest paths: " + this.mShortestPaths + "<br>"
+                + "Diameter: " + diameter + "<br>"
+                + "Radius: " + radius + "<br>"
+                + "Average Path length: " + avgDist + "<br>"
+                + "Number of shortest paths: " + shortestPaths + "<br>"
                 + htmlIMG1 + "<br>"
                 + htmlIMG2 + "<br>"
                 + htmlIMG3
@@ -377,7 +394,7 @@ public class GraphDistance implements Statistics, LongTask {
      * @return
      */
     public boolean cancel() {
-        mIsCanceled = true;
+        this.isCanceled = true;
         return true;
     }
 
@@ -386,6 +403,6 @@ public class GraphDistance implements Statistics, LongTask {
      * @param progressTicket
      */
     public void setProgressTicket(ProgressTicket progressTicket) {
-        mProgress = progressTicket;
+        this.progress = progressTicket;
     }
 }
