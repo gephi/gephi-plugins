@@ -28,6 +28,7 @@ import java.net.HttpURLConnection;
 import java.net.PasswordAuthentication;
 import java.net.URL;
 import java.net.URLConnection;
+import java.net.UnknownServiceException;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashSet;
@@ -199,7 +200,14 @@ public class StreamingControllerImpl implements StreamingController {
 
             StreamWriterFactory writerFactory =
                     Lookup.getDefault().lookup(StreamWriterFactory.class);
-            OutputStream out = connection.getOutputStream();
+
+            OutputStream out = null;
+            try {
+                out = connection.getOutputStream();
+            } catch (UnknownServiceException e) {
+                // protocol doesn't support output
+                return;
+            }
             StreamWriter writer = writerFactory.createStreamWriter(endpoint.getStreamType(), out);
             writer.handleGraphEvent(event);
             out.flush();
@@ -207,7 +215,7 @@ public class StreamingControllerImpl implements StreamingController {
             connection.getInputStream().close();
 
         } catch (IOException ex) {
-            logger.log(Level.WARNING, null, ex);
+            logger.log(Level.FINE, null, ex);
         }
     }
 
