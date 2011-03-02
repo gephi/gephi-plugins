@@ -18,21 +18,26 @@ GNU Affero General Public License for more details.
 You should have received a copy of the GNU Affero General Public License
 along with Gephi.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.gephi.datalab.plugin.manipulators.nodes;
+package org.gephi.datalab.plugin.manipulators.edges;
 
-import org.gephi.datalab.spi.nodes.NodesManipulator;
-import org.gephi.datalab.spi.nodes.NodesManipulatorBuilder;
-import org.openide.util.lookup.ServiceProvider;
+import org.gephi.datalab.spi.ContextMenuItemManipulator;
+import org.gephi.datalab.spi.edges.EdgesManipulator;
 
 /**
- * Builder for TagNodes nodes manipulator.
- * @author Eduardo Ramos <eduramiba@gmail.com>
+ *
+ * @author Eduardo
  */
-@ServiceProvider(service=NodesManipulatorBuilder.class)
-public class TagNodesBuilder implements NodesManipulatorBuilder{
+public abstract class BasicEdgesManipulator implements EdgesManipulator{
 
-    public NodesManipulator getNodesManipulator() {
-        return new TagNodes();
+    public boolean isAvailable() {
+        return true;
     }
 
+    public ContextMenuItemManipulator[] getSubItems() {
+        return null;
+    }
+
+    public Integer getMnemonicKey() {
+        return null;
+    }
 }

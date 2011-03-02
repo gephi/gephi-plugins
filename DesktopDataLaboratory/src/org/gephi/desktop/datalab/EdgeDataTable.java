@@ -271,10 +271,10 @@ public class EdgeDataTable {
         }
 
         if (model == null) {
-            model = new EdgeDataTableModel(graph.getEdges().toArray(), columns.toArray(new EdgeDataColumn[0]));
+            model = new EdgeDataTableModel(graph.getEdgesAndMetaEdges().toArray(), columns.toArray(new EdgeDataColumn[0]));
             table.setModel(model);
         } else {
-            model.setEdges(graph.getEdges().toArray());
+            model.setEdges(graph.getEdgesAndMetaEdges().toArray());
             model.setColumns(columns.toArray(new EdgeDataColumn[0]));
         }
 
@@ -453,6 +453,8 @@ public class EdgeDataTable {
                 return TimeInterval.class;
             } else if (attributeUtils.isNumberColumn(column)) {
                 return column.getType().getType();//Number columns should not be treated as Strings because the sorting would be alphabetic instead of numeric
+            } else if (column.getType() == AttributeType.BOOLEAN) {
+                return Boolean.class;
             } else {
                 return String.class;//Treat all columns as Strings. Also fix the fact that the table implementation does not allow to edit Character cells.
             }
@@ -469,6 +471,8 @@ public class EdgeDataTable {
             } else if (column.getType() == AttributeType.TIME_INTERVAL) {
                 return value;
             } else if (attributeUtils.isNumberColumn(column)) {
+                return value;
+            } else if (column.getType() == AttributeType.BOOLEAN) {
                 return value;
             } else {
                 //Show values as Strings like in Edit window and other parts of the program to be consistent
@@ -587,7 +591,9 @@ public class EdgeDataTable {
                     contextMenu.addSeparator();
                 }
                 lastManipulatorType = em.getType();
-                contextMenu.add(PopupMenuUtils.createMenuItemFromManipulator(em));
+                if (em.isAvailable()) {
+                    contextMenu.add(PopupMenuUtils.createMenuItemFromEdgesManipulator(em, clickedEdge, selectedEdges));
+                }
             }
 
             //Add AttributeValues manipulators submenu:

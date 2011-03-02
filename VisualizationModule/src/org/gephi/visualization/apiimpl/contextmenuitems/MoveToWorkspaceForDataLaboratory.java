@@ -20,14 +20,31 @@ along with Gephi.  If not, see <http://www.gnu.org/licenses/>.
  */
 package org.gephi.visualization.apiimpl.contextmenuitems;
 
+import org.gephi.datalab.spi.nodes.NodesManipulator;
+import org.gephi.datalab.spi.nodes.NodesManipulatorBuilder;
+import org.openide.util.lookup.ServiceProvider;
+
+@ServiceProvider(service=NodesManipulatorBuilder.class)
+public class MoveToWorkspaceForDataLaboratory implements NodesManipulatorBuilder{
+
+    public NodesManipulator getNodesManipulator() {
+        return new MoveToWorkspaceForDataLaboratoryManipulator();
+    }
+}
+
 /**
- *
+ * Same action as MoveToWorkspace, with different position for data laboratory.
  * @author Eduardo
  */
-public class LastColumnOpenedURL {
-    String column;
+class MoveToWorkspaceForDataLaboratoryManipulator extends MoveToWorkspace{
 
-    public LastColumnOpenedURL(String column) {
-        this.column = column;
+    @Override
+    public int getType() {
+        return 100;
+    }
+
+    @Override
+    public int getPosition() {
+        return 400;
     }
 }

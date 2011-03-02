@@ -18,20 +18,14 @@ GNU Affero General Public License for more details.
 You should have received a copy of the GNU Affero General Public License
 along with Gephi.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.gephi.datalab.plugin.manipulators.edges;
-
-import org.gephi.datalab.spi.edges.EdgesManipulator;
-import org.gephi.datalab.spi.edges.EdgesManipulatorBuilder;
-import org.openide.util.lookup.ServiceProvider;
+package org.gephi.datalab.api.datatables;
 
 /**
- * Builder for TagEdges edges manipulator.
+ * <p>This is the interface for a listener of <code>DataTablesController</code> requests.</p>
+ * <p><b>Only data table UI should be an implementation of this listener</b></p>
+ * @see DataTablesController
  * @author Eduardo Ramos <eduramiba@gmail.com>
  */
-@ServiceProvider(service=EdgesManipulatorBuilder.class)
-public class TagEdgesBuilder implements EdgesManipulatorBuilder{
-
-    public EdgesManipulator getEdgesManipulator() {
-        return new TagEdges();
-    }
+public interface DataTablesEventListener extends DataTablesCommonInterface {
+    
 }
