@@ -34,33 +34,85 @@
                 <package>org.neo4j.management</package>
                 <package>org.neo4j.remote</package>
             </public-packages>
+
             <class-path-extension>
-                <runtime-relative-path>ext/neo4j-management-1.2-1.2.M06.jar</runtime-relative-path>
-                <binary-origin>release/modules/ext/neo4j-management-1.2-1.2.M06.jar</binary-origin>
+                <runtime-relative-path>ext/neo4j-index-1.3-1.3.M01.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/neo4j-index-1.3-1.3.M01.jar</binary-origin>
             </class-path-extension>
+
             <class-path-extension>
-                <runtime-relative-path>ext/neo4j-index-1.2-1.2.M06.jar</runtime-relative-path>
-                <binary-origin>release/modules/ext/neo4j-index-1.2-1.2.M06.jar</binary-origin>
+                <runtime-relative-path>ext/neo4j-remote-graphdb-0.8-1.2.M06.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/neo4j-remote-graphdb-0.8-1.2.M06.jar</binary-origin>
+            </class-path-extension>
+
+
+            <class-path-extension>
+                <runtime-relative-path>ext/neo4j-management-1.3.M03.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/neo4j-management-1.3.M03.jar</binary-origin>
             </class-path-extension>
             <class-path-extension>
                 <runtime-relative-path>ext/geronimo-jta_1.1_spec-1.1.1.jar</runtime-relative-path>
                 <binary-origin>release/modules/ext/geronimo-jta_1.1_spec-1.1.1.jar</binary-origin>
             </class-path-extension>
             <class-path-extension>
-                <runtime-relative-path>ext/neo4j-lucene-index-0.2-1.2.M06.jar</runtime-relative-path>
-                <binary-origin>release/modules/ext/neo4j-lucene-index-0.2-1.2.M06.jar</binary-origin>
+                <runtime-relative-path>ext/neo4j-lucene-index-1.3.M03.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/neo4j-lucene-index-1.3.M03.jar</binary-origin>
             </class-path-extension>
             <class-path-extension>
-                <runtime-relative-path>ext/lucene-core-2.9.2.jar</runtime-relative-path>
-                <binary-origin>release/modules/ext/lucene-core-2.9.2.jar</binary-origin>
+                <runtime-relative-path>ext/neo4j-shell-1.3.M03.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/neo4j-shell-1.3.M03.jar</binary-origin>
             </class-path-extension>
             <class-path-extension>
-                <runtime-relative-path>ext/neo4j-remote-graphdb-0.8-1.2.M06.jar</runtime-relative-path>
-                <binary-origin>release/modules/ext/neo4j-remote-graphdb-0.8-1.2.M06.jar</binary-origin>
+                <runtime-relative-path>ext/neo4j-udc-1.3.M03.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/neo4j-udc-1.3.M03.jar</binary-origin>
             </class-path-extension>
             <class-path-extension>
-                <runtime-relative-path>ext/neo4j-kernel-1.2-1.2.M06.jar</runtime-relative-path>
-                <binary-origin>release/modules/ext/neo4j-kernel-1.2-1.2.M06.jar</binary-origin>
+                <runtime-relative-path>ext/neo4j-backup-1.3.M03.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/neo4j-backup-1.3.M03.jar</binary-origin>
+            </class-path-extension>
+            <class-path-extension>
+                <runtime-relative-path>ext/neo4j-com-1.3.M03.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/neo4j-com-1.3.M03.jar</binary-origin>
+            </class-path-extension>
+            <class-path-extension>
+                <runtime-relative-path>ext/neo4j-graph-algo-1.3.M03.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/neo4j-graph-algo-1.3.M03.jar</binary-origin>
+            </class-path-extension>
+            <class-path-extension>
+                <runtime-relative-path>ext/neo4j-ha-1.3.M03.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/neo4j-ha-1.3.M03.jar</binary-origin>
+            </class-path-extension>
+            <class-path-extension>
+                <runtime-relative-path>ext/neo4j-kernel-1.3.M03.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/neo4j-kernel-1.3.M03.jar</binary-origin>
+            </class-path-extension>
+            <class-path-extension>
+                <runtime-relative-path>ext/org.apache.servicemix.bundles.lucene-3.0.1_2.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/org.apache.servicemix.bundles.lucene-3.0.1_2.jar</binary-origin>
+            </class-path-extension>
+            <class-path-extension>
+                <runtime-relative-path>ext/server-api-1.3.M03.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/server-api-1.3.M03.jar</binary-origin>
+            </class-path-extension>
+            <class-path-extension>
+                <runtime-relative-path>ext/org.apache.servicemix.bundles.jline-0.9.94_1.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/org.apache.servicemix.bundles.jline-0.9.94_1.jar</binary-origin>
+            </class-path-extension>
+            <class-path-extension>
+                <runtime-relative-path>ext/zookeeper-3.3.2.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/zookeeper-3.3.2.jar</binary-origin>
+            </class-path-extension>
+            <class-path-extension>
+                <runtime-relative-path>ext/netty-3.2.1.Final.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/netty-3.2.1.Final.jar</binary-origin>
+            </class-path-extension>
+            <class-path-extension>
+                <runtime-relative-path>ext/neo4j-kernel-1.3.M03-tests.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/neo4j-kernel-1.3.M03-tests.jar</binary-origin>
+            </class-path-extension>
+            <class-path-extension>
+                <runtime-relative-path>ext/log4j-1.2.16.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/log4j-1.2.16.jar</binary-origin>
             </class-path-extension>
         </data>
     </configuration>
