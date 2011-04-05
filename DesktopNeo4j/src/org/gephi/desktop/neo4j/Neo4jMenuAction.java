@@ -45,7 +45,6 @@ import org.gephi.desktop.neo4j.ui.DebugFileChooserComponent;
 import org.gephi.desktop.neo4j.ui.DebugPanel;
 import org.gephi.desktop.neo4j.ui.ExportOptionsPanel;
 import org.gephi.desktop.neo4j.ui.TraversalFilterPanel;
-import org.gephi.desktop.neo4j.ui.RemoteDatabasePanel;
 import org.gephi.desktop.neo4j.ui.TraversalImportPanel;
 import org.gephi.desktop.neo4j.ui.util.Neo4jUtils;
 import org.gephi.desktop.project.api.ProjectControllerUI;
@@ -77,7 +76,6 @@ public class Neo4jMenuAction extends CallableSystemAction {
     private final String IMPORT_LAST_PATH = "Neo4jMenuAction_Import_Last_Path";
     private final String EXPORT_LAST_PATH = "Neo4jMenuAction_Export_Last_Path";
     private JMenuItem localExport;
-    private JMenuItem remoteExport;
     private JMenuItem debug;
     private JMenu menu;
     private boolean previousEdgeHasUniColor;
@@ -90,14 +88,12 @@ public class Neo4jMenuAction extends CallableSystemAction {
             @Override
             public void initialize(Workspace workspace) {
                 localExport.setEnabled(true);
-                remoteExport.setEnabled(true);
                 debug.setEnabled(true);
             }
 
             @Override
             public void disable() {
                 localExport.setEnabled(false);
-                remoteExport.setEnabled(false);
                 debug.setEnabled(false);
             }
 
@@ -319,86 +315,6 @@ public class Neo4jMenuAction extends CallableSystemAction {
         });
         localExport.setIcon(ImageUtilities.loadImageIcon("org/gephi/desktop/neo4j/resources/export.png", false));
 
-        String remoteImportMenuLabel = NbBundle.getMessage(Neo4jMenuAction.class, "CTL_Neo4j_RemoteImportMenuLabel");
-        JMenuItem remoteImport = new JMenuItem(new AbstractAction(remoteImportMenuLabel) {
-
-            public void actionPerformed(ActionEvent e) {
-                final RemoteDatabasePanel databasePanel = new RemoteDatabasePanel();
-                ValidationPanel validationPanel = databasePanel.createValidationPanel();
-                String remoteImportDialogTitle = NbBundle.getMessage(Neo4jMenuAction.class, "CTL_Neo4j_RemoteImportDialogTitle");
-                final DialogDescriptor dd = new DialogDescriptor(validationPanel, remoteImportDialogTitle);
-                validationPanel.addChangeListener(new ChangeListener() {
-
-                    @Override
-                    public void stateChanged(ChangeEvent e) {
-                        dd.setValid(!((ValidationPanel) e.getSource()).isProblem());
-                    }
-                });
-
-                Object result = DialogDisplayer.getDefault().notify(dd);
-                if (result == NotifyDescriptor.OK_OPTION) {
-                    final Neo4jImporter neo4jImporter = Lookup.getDefault().lookup(Neo4jImporter.class);
-
-                    LongTaskExecutor executor = new LongTaskExecutor(true);
-                    executor.execute((LongTask) neo4jImporter, new Runnable() {
-
-                        @Override
-                        public void run() {
-                            GraphDatabaseService graphDB = Neo4jUtils.remoteDatabase(databasePanel.getRemoteUrl(),
-                                    databasePanel.getLogin(),
-                                    databasePanel.getPassword());
-
-                            neo4jImporter.importDatabase(graphDB);
-                            StatusDisplayer.getDefault().setStatusText(NbBundle.getMessage(Neo4jMenuAction.class, "CTL_Neo4j_ImportTaskFinished", databasePanel.getRemoteUrl()));
-                        }
-                    });
-                }
-            }
-        });
-
-        String remoteExportMenuLabel = NbBundle.getMessage(Neo4jMenuAction.class, "CTL_Neo4j_RemoteExportMenuLabel");
-        remoteExport = new JMenuItem(new AbstractAction(remoteExportMenuLabel) {
-
-            public void actionPerformed(ActionEvent e) {
-                final RemoteDatabasePanel databasePanel = new RemoteDatabasePanel();
-                ValidationPanel validationPanel = databasePanel.createValidationPanel();
-                String remoteExportDialogTitle = NbBundle.getMessage(Neo4jMenuAction.class, "CTL_Neo4j_RemoteExportDialogTitle");
-                final DialogDescriptor dd = new DialogDescriptor(validationPanel, remoteExportDialogTitle);
-                validationPanel.addChangeListener(new ChangeListener() {
-
-                    @Override
-                    public void stateChanged(ChangeEvent e) {
-                        dd.setValid(!((ValidationPanel) e.getSource()).isProblem());
-                    }
-                });
-
-                Object result = DialogDisplayer.getDefault().notify(dd);
-                if (result == NotifyDescriptor.OK_OPTION) {
-                    final Neo4jExporter neo4jExporter = Lookup.getDefault().lookup(Neo4jExporter.class);
-
-                    LongTaskExecutor executor = new LongTaskExecutor(true);
-                    executor.execute((LongTask) neo4jExporter, new Runnable() {
-
-                        @Override
-                        public void run() {
-                            GraphDatabaseService graphDB = Neo4jUtils.remoteDatabase(databasePanel.getRemoteUrl(),
-                                    databasePanel.getLogin(),
-                                    databasePanel.getPassword());
-
-                            neo4jExporter.exportDatabase(graphDB,//TODO >>> refactor like for local export with export dialog
-                                    null,
-                                    null,
-                                    null,
-                                    null);
-
-                            graphDB.shutdown();
-                            StatusDisplayer.getDefault().setStatusText(NbBundle.getMessage(Neo4jMenuAction.class, "CTL_Neo4j_ExportTaskFinished", databasePanel.getRemoteUrl()));
-                        }
-                    });
-                }
-            }
-        });
-
         String debugMenuLabel = NbBundle.getMessage(Neo4jMenuAction.class, "CTL_Neo4j_DebugMenuLabel");
         debug = new JMenuItem(new AbstractAction(debugMenuLabel) {
 
@@ -473,13 +389,10 @@ public class Neo4jMenuAction extends CallableSystemAction {
 
         menu.add(localFullImport);
         menu.add(localTraversalImport);
-        menu.add(remoteImport);
         menu.addSeparator();
 
         localExport.setEnabled(false);
         menu.add(localExport);
-        remoteExport.setEnabled(false);
-        menu.add(remoteExport);
         menu.addSeparator();
 
         debug.setEnabled(false);

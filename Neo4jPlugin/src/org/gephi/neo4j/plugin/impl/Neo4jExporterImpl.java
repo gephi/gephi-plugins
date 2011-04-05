@@ -31,7 +31,6 @@ import org.gephi.utils.progress.Progress;
 import org.gephi.utils.progress.ProgressTicket;
 import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.graphdb.Transaction;
-import org.neo4j.remote.RemoteGraphDatabase;
 import org.openide.util.Lookup;
 import org.openide.util.NbBundle;
 import org.openide.util.lookup.ServiceProvider;
@@ -72,9 +71,7 @@ public class Neo4jExporterImpl implements Neo4jExporter, LongTask {
         this.exportedEdgeColumnNames = exportedEdgeColumnNames;
         this.exportedNodeColumnNames = exportedNodeColumnNames;
 
-        String longTaskMessage = (graphDB instanceof RemoteGraphDatabase)
-                ? NbBundle.getMessage(Neo4jExporterImpl.class, "CTL_Neo4j_RemoteExportMessage")
-                : NbBundle.getMessage(Neo4jExporterImpl.class, "CTL_Neo4j_LocalExportMessage");
+        String longTaskMessage = NbBundle.getMessage(Neo4jExporterImpl.class, "CTL_Neo4j_LocalExportMessage");
 
         Progress.setDisplayName(progressTicket, longTaskMessage);
         Progress.start(progressTicket);

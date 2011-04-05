@@ -199,131 +199,46 @@ public class GraphModelImportConverter {
                 }
             }
 
-        }
-        if (!edgeTable.hasColumn(neoPropertyKey)) {
-            if (!neoPropertyValue.getClass().isArray()) {
-                edgeTable.addColumn(neoPropertyKey, neoPropertyKey, AttributeType.parse(neoPropertyValue), Neo4jDelegateProviderImpl.getInstance(), null);
-            } else {
-                AttributeType attributeType =
-                        Neo4jArrayToGephiAttributeTypeMapper.map(neoPropertyValue);
+            if (!edgeTable.hasColumn(neoPropertyKey)) {
+                if (!neoPropertyValue.getClass().isArray()) {
+                    edgeTable.addColumn(neoPropertyKey, neoPropertyKey, AttributeType.parse(neoPropertyValue), Neo4jDelegateProviderImpl.getInstance(), null);
+                } else {
+                    AttributeType attributeType =
+                            Neo4jArrayToGephiAttributeTypeMapper.map(neoPropertyValue);
 
-                edgeTable.addColumn(neoPropertyKey, neoPropertyKey, attributeType, Neo4jDelegateProviderImpl.getInstance(), null);
+                    edgeTable.addColumn(neoPropertyKey, neoPropertyKey, attributeType, Neo4jDelegateProviderImpl.getInstance(), null);
+                }
+            }
+            if (edgeTable.getColumn(neoPropertyKey).getOrigin() == AttributeOrigin.DELEGATE) {
+                attributes.setValue(neoPropertyKey, neoRelationshipId);
+            } else {
+                attributes.setValue(neoPropertyKey, neoPropertyValue);
             }
         }
-        if (edgeTable.getColumn(neoPropertyKey).getOrigin() == AttributeOrigin.DELEGATE) {
-            attributes.setValue(neoPropertyKey, neoRelationshipId);
-        } else {
-            attributes.setValue(neoPropertyKey, neoPropertyValue);
-        }
+
+        attributes.setValue(PropertiesColumn.NEO4J_RELATIONSHIP_TYPE.getId(), neoRelationshipId);
     }
 
-    attributes.setValue (PropertiesColumn.NEO4J_RELATIONSHIP_TYPE.getId
-
-
-
-
-
-(), neoRelationshipId);
-
-
-}
-
-    public void
-
-createNeo4jRelationshipTypeGephiColumn() {
+    public void createNeo4jRelationshipTypeGephiColumn() {
         PropertiesColumn propertiesColumn = PropertiesColumn.NEO4J_RELATIONSHIP_TYPE;
 
-        attributeModel.
-
-getEdgeTable().addColumn(propertiesColumn.getId(),
+        attributeModel.getEdgeTable().addColumn(propertiesColumn.getId(),
                 propertiesColumn.getTitle(),
                 AttributeType.STRING,
                 Neo4jDelegateProviderImpl.getInstance(),
                 null);
+    }
 
-
-
-
-
-
-}
-
-    public static GraphDatabaseService
-
-
-
-
-
-getGraphDBForCurrentWorkspace() {
+    public static GraphDatabaseService getGraphDBForCurrentWorkspace() {
         Neo4jGraphModel neo4jmodel = getNeo4jModelForCurrentWorkspace();
 
+        return neo4jmodel != null ? neo4jmodel.graphDb : null;
+    }
 
-
-
-
-
-
-return neo4jmodel != null ? neo4jmodel.graphDb
-                                  : null;
-
-
-
-
-
-
-}
-
-    public static Neo4jGraphModel
-
-
-
-
-
-
-
-
-
-
-
-    getNeo4jModelForCurrentWorkspace() {
+    public static Neo4jGraphModel getNeo4jModelForCurrentWorkspace() {
         Workspace currentWorkspace = Lookup.getDefault().lookup(ProjectController.class).getCurrentWorkspace();
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-               return currentWorkspace.getLookup().lookup(Neo4jGraphModel.class);
+        return currentWorkspace.getLookup().lookup(Neo4jGraphModel.class);
     }
 
     static Collection<GraphDatabaseService> getAllGraphDBs() {

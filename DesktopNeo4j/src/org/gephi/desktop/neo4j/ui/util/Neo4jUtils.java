@@ -27,7 +27,6 @@ import java.util.List;
 import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.graphdb.RelationshipType;
 import org.neo4j.kernel.EmbeddedGraphDatabase;
-import org.neo4j.remote.RemoteGraphDatabase;
 
 /**
  *
@@ -40,19 +39,6 @@ public class Neo4jUtils {
 
     public static GraphDatabaseService localDatabase(File neo4jDirectory) {
         return new EmbeddedGraphDatabase(neo4jDirectory.getAbsolutePath());
-    }
-
-    public static GraphDatabaseService remoteDatabase(String resourceURI, String login, String password) {
-        try {
-            if (login == null && password == null) {
-                return new RemoteGraphDatabase(resourceURI);
-            } else {
-                return new RemoteGraphDatabase(resourceURI, login, password);
-            }
-        } catch (URISyntaxException e) {
-            e.printStackTrace();
-            return null;
-        }
     }
 
     public static String[] relationshipTypeNames(GraphDatabaseService graphDB) {

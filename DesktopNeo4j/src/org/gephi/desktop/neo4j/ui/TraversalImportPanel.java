@@ -36,8 +36,6 @@ import org.neo4j.graphdb.Direction;
 import org.neo4j.graphdb.DynamicRelationshipType;
 import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.graphdb.Node;
-import org.neo4j.index.IndexService;
-import org.neo4j.index.lucene.LuceneIndexService;
 import org.netbeans.validation.api.ui.ValidationPanel;
 
 /**
@@ -313,13 +311,15 @@ public class TraversalImportPanel extends javax.swing.JPanel {
                     .addGroup(startNodePanelLayout.createSequentialGroup()
                         .addGap(3, 3, 3)
                         .addComponent(idStartNodeTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(idStartNodeRadioButton))
+                    .addGroup(startNodePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(idStartNodeRadioButton)))
                 .addGap(3, 3, 3)
                 .addGroup(startNodePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(startNodePanelLayout.createSequentialGroup()
                         .addGap(3, 3, 3)
                         .addComponent(indexKeyStartNodeTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(indexStartNodeRadioButton))
+                    .addGroup(startNodePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(indexStartNodeRadioButton)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(startNodePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE, false)
                     .addComponent(indexValueStartNodeLabel)
@@ -459,12 +459,17 @@ public class TraversalImportPanel extends javax.swing.JPanel {
         if (idStartNodeRadioButton.isSelected()) {
             return Integer.parseInt(idStartNodeTextField.getText().trim());
         } else {
-            IndexService indexService = new LuceneIndexService(graphDB);
+            String key = indexKeyStartNodeTextField.getText().trim();
+            String value = indexValueStartNodeTextField.getText().trim();
 
-            Node node = indexService.getSingleNode(indexKeyStartNodeTextField.getText().trim(),
-                    indexValueStartNodeTextField.getText().trim());
+            for(String index : graphDB.index().nodeIndexNames()) {
+                Node n =graphDB.index().forNodes(index).get(key, value).getSingle();
+                if(n!=null) {
+                    return n.getId();
+                }
+            }
 
-            return node.getId();
+           return -1;
         }
     }
 

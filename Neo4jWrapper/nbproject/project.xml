@@ -7,112 +7,116 @@
             <suite-component/>
             <module-dependencies/>
             <public-packages>
-                <package>javax.transaction</package>
-                <package>javax.transaction.xa</package>
-                <package>org.apache.lucene</package>
-                <package>org.apache.lucene.analysis</package>
-                <package>org.apache.lucene.analysis.standard</package>
-                <package>org.apache.lucene.analysis.tokenattributes</package>
-                <package>org.apache.lucene.document</package>
-                <package>org.apache.lucene.index</package>
-                <package>org.apache.lucene.messages</package>
-                <package>org.apache.lucene.queryParser</package>
-                <package>org.apache.lucene.search</package>
-                <package>org.apache.lucene.search.function</package>
-                <package>org.apache.lucene.search.payloads</package>
-                <package>org.apache.lucene.search.spans</package>
-                <package>org.apache.lucene.store</package>
-                <package>org.apache.lucene.util</package>
-                <package>org.apache.lucene.util.cache</package>
+                <package>org.neo4j.backup</package>
+                <package>org.neo4j.com</package>
+                <package>org.neo4j.com.backup</package>
+                <package>org.neo4j.ext.udc</package>
+                <package>org.neo4j.ext.udc.impl</package>
+                <package>org.neo4j.ext.udc.impl.osgi</package>
+                <package>org.neo4j.graphalgo</package>
+                <package>org.neo4j.graphalgo.impl.centrality</package>
+                <package>org.neo4j.graphalgo.impl.path</package>
+                <package>org.neo4j.graphalgo.impl.shortestpath</package>
+                <package>org.neo4j.graphalgo.impl.util</package>
                 <package>org.neo4j.graphdb</package>
+                <package>org.neo4j.graphdb.event</package>
+                <package>org.neo4j.graphdb.index</package>
                 <package>org.neo4j.graphdb.traversal</package>
                 <package>org.neo4j.helpers</package>
-                <package>org.neo4j.index</package>
-                <package>org.neo4j.index.impl</package>
+                <package>org.neo4j.helpers.collection</package>
+                <package>org.neo4j.index.impl.lucene</package>
                 <package>org.neo4j.index.lucene</package>
                 <package>org.neo4j.kernel</package>
+                <package>org.neo4j.kernel.ha</package>
+                <package>org.neo4j.kernel.ha.zookeeper</package>
+                <package>org.neo4j.kernel.impl</package>
+                <package>org.neo4j.kernel.impl.batchinsert</package>
+                <package>org.neo4j.kernel.impl.cache</package>
+                <package>org.neo4j.kernel.impl.core</package>
+                <package>org.neo4j.kernel.impl.index</package>
+                <package>org.neo4j.kernel.impl.nioneo.store</package>
+                <package>org.neo4j.kernel.impl.nioneo.xa</package>
+                <package>org.neo4j.kernel.impl.osgi</package>
+                <package>org.neo4j.kernel.impl.persistence</package>
+                <package>org.neo4j.kernel.impl.transaction</package>
+                <package>org.neo4j.kernel.impl.transaction.xaframework</package>
+                <package>org.neo4j.kernel.impl.traversal</package>
+                <package>org.neo4j.kernel.impl.util</package>
                 <package>org.neo4j.management</package>
-                <package>org.neo4j.remote</package>
+                <package>org.neo4j.management.impl</package>
+                <package>org.neo4j.management.impl.jconsole</package>
+                <package>org.neo4j.server.helpers</package>
+                <package>org.neo4j.server.plugins</package>
+                <package>org.neo4j.server.rest.repr</package>
+                <package>org.neo4j.server.rest.web</package>
+                <package>org.neo4j.shell</package>
+                <package>org.neo4j.shell.apps</package>
+                <package>org.neo4j.shell.apps.extra</package>
+                <package>org.neo4j.shell.apps.ha</package>
+                <package>org.neo4j.shell.impl</package>
+                <package>org.neo4j.shell.kernel</package>
+                <package>org.neo4j.shell.kernel.apps</package>
+                <package>org.neo4j.shell.util.json</package>
             </public-packages>
-
             <class-path-extension>
-                <runtime-relative-path>ext/neo4j-index-1.3-1.3.M01.jar</runtime-relative-path>
-                <binary-origin>release/modules/ext/neo4j-index-1.3-1.3.M01.jar</binary-origin>
-            </class-path-extension>
-
-            <class-path-extension>
-                <runtime-relative-path>ext/neo4j-remote-graphdb-0.8-1.2.M06.jar</runtime-relative-path>
-                <binary-origin>release/modules/ext/neo4j-remote-graphdb-0.8-1.2.M06.jar</binary-origin>
-            </class-path-extension>
-
-
-            <class-path-extension>
-                <runtime-relative-path>ext/neo4j-management-1.3.M03.jar</runtime-relative-path>
-                <binary-origin>release/modules/ext/neo4j-management-1.3.M03.jar</binary-origin>
+                <runtime-relative-path>ext/zookeeper-3.3.2.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/zookeeper-3.3.2.jar</binary-origin>
             </class-path-extension>
             <class-path-extension>
-                <runtime-relative-path>ext/geronimo-jta_1.1_spec-1.1.1.jar</runtime-relative-path>
-                <binary-origin>release/modules/ext/geronimo-jta_1.1_spec-1.1.1.jar</binary-origin>
-            </class-path-extension>
-            <class-path-extension>
-                <runtime-relative-path>ext/neo4j-lucene-index-1.3.M03.jar</runtime-relative-path>
-                <binary-origin>release/modules/ext/neo4j-lucene-index-1.3.M03.jar</binary-origin>
-            </class-path-extension>
-            <class-path-extension>
-                <runtime-relative-path>ext/neo4j-shell-1.3.M03.jar</runtime-relative-path>
-                <binary-origin>release/modules/ext/neo4j-shell-1.3.M03.jar</binary-origin>
-            </class-path-extension>
-            <class-path-extension>
-                <runtime-relative-path>ext/neo4j-udc-1.3.M03.jar</runtime-relative-path>
-                <binary-origin>release/modules/ext/neo4j-udc-1.3.M03.jar</binary-origin>
-            </class-path-extension>
-            <class-path-extension>
-                <runtime-relative-path>ext/neo4j-backup-1.3.M03.jar</runtime-relative-path>
-                <binary-origin>release/modules/ext/neo4j-backup-1.3.M03.jar</binary-origin>
-            </class-path-extension>
-            <class-path-extension>
-                <runtime-relative-path>ext/neo4j-com-1.3.M03.jar</runtime-relative-path>
-                <binary-origin>release/modules/ext/neo4j-com-1.3.M03.jar</binary-origin>
-            </class-path-extension>
-            <class-path-extension>
-                <runtime-relative-path>ext/neo4j-graph-algo-1.3.M03.jar</runtime-relative-path>
-                <binary-origin>release/modules/ext/neo4j-graph-algo-1.3.M03.jar</binary-origin>
-            </class-path-extension>
-            <class-path-extension>
-                <runtime-relative-path>ext/neo4j-ha-1.3.M03.jar</runtime-relative-path>
-                <binary-origin>release/modules/ext/neo4j-ha-1.3.M03.jar</binary-origin>
-            </class-path-extension>
-            <class-path-extension>
-                <runtime-relative-path>ext/neo4j-kernel-1.3.M03.jar</runtime-relative-path>
-                <binary-origin>release/modules/ext/neo4j-kernel-1.3.M03.jar</binary-origin>
+                <runtime-relative-path>ext/neo4j-ha-1.3.M05.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/neo4j-ha-1.3.M05.jar</binary-origin>
             </class-path-extension>
             <class-path-extension>
                 <runtime-relative-path>ext/org.apache.servicemix.bundles.lucene-3.0.1_2.jar</runtime-relative-path>
                 <binary-origin>release/modules/ext/org.apache.servicemix.bundles.lucene-3.0.1_2.jar</binary-origin>
             </class-path-extension>
             <class-path-extension>
-                <runtime-relative-path>ext/server-api-1.3.M03.jar</runtime-relative-path>
-                <binary-origin>release/modules/ext/server-api-1.3.M03.jar</binary-origin>
+                <runtime-relative-path>ext/neo4j-lucene-index-1.3.M05.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/neo4j-lucene-index-1.3.M05.jar</binary-origin>
             </class-path-extension>
             <class-path-extension>
-                <runtime-relative-path>ext/org.apache.servicemix.bundles.jline-0.9.94_1.jar</runtime-relative-path>
-                <binary-origin>release/modules/ext/org.apache.servicemix.bundles.jline-0.9.94_1.jar</binary-origin>
+                <runtime-relative-path>ext/neo4j-management-1.3.M05.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/neo4j-management-1.3.M05.jar</binary-origin>
             </class-path-extension>
             <class-path-extension>
-                <runtime-relative-path>ext/zookeeper-3.3.2.jar</runtime-relative-path>
-                <binary-origin>release/modules/ext/zookeeper-3.3.2.jar</binary-origin>
+                <runtime-relative-path>ext/geronimo-jta_1.1_spec-1.1.1.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/geronimo-jta_1.1_spec-1.1.1.jar</binary-origin>
             </class-path-extension>
             <class-path-extension>
-                <runtime-relative-path>ext/netty-3.2.1.Final.jar</runtime-relative-path>
-                <binary-origin>release/modules/ext/netty-3.2.1.Final.jar</binary-origin>
+                <runtime-relative-path>ext/neo4j-backup-1.3.M05.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/neo4j-backup-1.3.M05.jar</binary-origin>
             </class-path-extension>
             <class-path-extension>
-                <runtime-relative-path>ext/neo4j-kernel-1.3.M03-tests.jar</runtime-relative-path>
-                <binary-origin>release/modules/ext/neo4j-kernel-1.3.M03-tests.jar</binary-origin>
+                <runtime-relative-path>ext/neo4j-udc-1.3.M05.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/neo4j-udc-1.3.M05.jar</binary-origin>
+            </class-path-extension>
+            <class-path-extension>
+                <runtime-relative-path>ext/server-api-1.3.M05.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/server-api-1.3.M05.jar</binary-origin>
+            </class-path-extension>
+            <class-path-extension>
+                <runtime-relative-path>ext/neo4j-graph-algo-1.3.M05.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/neo4j-graph-algo-1.3.M05.jar</binary-origin>
+            </class-path-extension>
+            <class-path-extension>
+                <runtime-relative-path>ext/neo4j-kernel-1.3.M05.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/neo4j-kernel-1.3.M05.jar</binary-origin>
             </class-path-extension>
             <class-path-extension>
                 <runtime-relative-path>ext/log4j-1.2.16.jar</runtime-relative-path>
                 <binary-origin>release/modules/ext/log4j-1.2.16.jar</binary-origin>
+            </class-path-extension>
+            <class-path-extension>
+                <runtime-relative-path>ext/neo4j-shell-1.3.M05.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/neo4j-shell-1.3.M05.jar</binary-origin>
+            </class-path-extension>
+            <class-path-extension>
+                <runtime-relative-path>ext/neo4j-com-1.3.M05.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/neo4j-com-1.3.M05.jar</binary-origin>
+            </class-path-extension>
+            <class-path-extension>
+                <runtime-relative-path>ext/org.apache.servicemix.bundles.jline-0.9.94_1.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/org.apache.servicemix.bundles.jline-0.9.94_1.jar</binary-origin>
             </class-path-extension>
         </data>
     </configuration>

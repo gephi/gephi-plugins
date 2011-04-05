@@ -38,7 +38,6 @@ import org.neo4j.graphdb.traversal.PruneEvaluator;
 import org.neo4j.graphdb.traversal.TraversalDescription;
 import org.neo4j.graphdb.traversal.Traverser;
 import org.neo4j.kernel.Traversal;
-import org.neo4j.remote.RemoteGraphDatabase;
 import org.openide.util.Lookup;
 import org.openide.util.NbBundle;
 import org.openide.util.lookup.ServiceProvider;
@@ -97,9 +96,7 @@ public final class Neo4jImporterImpl implements Neo4jImporter, LongTask {
             Collection<RelationshipDescription> relationshipDescriptions, Collection<FilterDescription> filterDescriptions,
             boolean restrictMode, boolean matchCase) {
 
-        String longTaskMessage = (graphDB instanceof RemoteGraphDatabase)
-                ? NbBundle.getMessage(Neo4jImporterImpl.class, "CTL_Neo4j_RemoteImportMessage")
-                : NbBundle.getMessage(Neo4jImporterImpl.class, "CTL_Neo4j_LocalImportMessage");
+        String longTaskMessage = NbBundle.getMessage(Neo4jImporterImpl.class, "CTL_Neo4j_LocalImportMessage");
 
         Progress.setDisplayName(progressTicket, longTaskMessage);
         Progress.start(progressTicket);
