@@ -1,6 +1,6 @@
 /*
-Copyright 2008-2010 Gephi
-Authors : Mathieu Bastian <mathieu.bastian@gephi.org>
+Copyright 2008-2011 Gephi
+Authors : Mathieu Bastian <mathieu.bastian@gephi.org>, Sébastien Heymann <sebastien.heymann@gephi.org>
 Website : http://www.gephi.org
 
 This file is part of Gephi.
@@ -20,31 +20,21 @@ along with Gephi.  If not, see <http://www.gnu.org/licenses/>.
  */
 package org.gephi.filters;
 
-import java.beans.PropertyEditor;
-import java.beans.PropertyEditorManager;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
-import org.gephi.filters.api.FilterController;
 import org.gephi.filters.api.FilterLibrary;
 import org.gephi.filters.api.FilterModel;
 import org.gephi.filters.api.Query;
 import org.gephi.filters.spi.Filter;
 import org.gephi.filters.spi.FilterBuilder;
-import org.gephi.filters.spi.FilterProperty;
 import org.gephi.graph.api.GraphController;
 import org.gephi.graph.api.GraphModel;
 import org.gephi.graph.api.GraphView;
 import org.gephi.project.api.Workspace;
 import org.openide.util.Lookup;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
 
 /**
  *
@@ -55,8 +45,10 @@ public class FilterModelImpl implements FilterModel {
     private FilterLibraryImpl filterLibraryImpl;
     private LinkedList<Query> queries;
     private FilterThread filterThread;
+    private GraphModel graphModel;
     private Query currentQuery;
     private boolean filtering;
+    private boolean selecting;
     private GraphView currentResult;
     private boolean autoRefresh;
     private FilterAutoRefreshor autoRefreshor;
@@ -69,7 +61,7 @@ public class FilterModelImpl implements FilterModel {
         listeners = new ArrayList<ChangeListener>();
         autoRefresh = true;
 
-        GraphModel graphModel = Lookup.getDefault().lookup(GraphController.class).getModel(workspace);
+        graphModel = Lookup.getDefault().lookup(GraphController.class).getModel(workspace);
         autoRefreshor = new FilterAutoRefreshor(this, graphModel);
     }
 
@@ -92,6 +84,7 @@ public class FilterModelImpl implements FilterModel {
 
     public void addFirst(Query function) {
         queries.addFirst(function);
+        currentQuery = function;
         fireChangeEvent();
     }
 
@@ -105,6 +98,9 @@ public class FilterModelImpl implements FilterModel {
     }
 
     public void remove(Query query) {
+        if (query == currentQuery) {
+            currentQuery = query.getParent();
+        }
         queries.remove(query);
         destroyQuery(query);
         fireChangeEvent();
@@ -123,6 +119,9 @@ public class FilterModelImpl implements FilterModel {
         if (subQuery.getParent() != null) {
             ((AbstractQueryImpl) subQuery.getParent()).removeSubQuery(subQuery);
         }
+        if (subQuery == currentQuery) {
+            currentQuery = ((AbstractQueryImpl) query).getRoot();
+        }
 
         //Set
         AbstractQueryImpl impl = (AbstractQueryImpl) query;
@@ -135,6 +134,9 @@ public class FilterModelImpl implements FilterModel {
         AbstractQueryImpl impl = (AbstractQueryImpl) parent;
         impl.removeSubQuery(query);
         ((AbstractQueryImpl) query).setParent(null);
+        if (query == currentQuery) {
+            currentQuery = parent;
+        }
         fireChangeEvent();
         autoRefreshor.manualRefresh();
     }
@@ -155,15 +157,21 @@ public class FilterModelImpl implements FilterModel {
     }
 
     public boolean isSelecting() {
-        return currentQuery != null && !filtering;
+        return currentQuery != null && selecting;
     }
 
     public void setFiltering(boolean filtering) {
         this.filtering = filtering;
+        if (filtering) {
+            this.selecting = false;
+        }
     }
 
     public void setSelecting(boolean selecting) {
-        this.filtering = !selecting;
+        this.selecting = selecting;
+        if (selecting) {
+            this.filtering = false;
+        }
     }
 
     public boolean isAutoRefresh() {
@@ -185,8 +193,13 @@ public class FilterModelImpl implements FilterModel {
     }
 
     public void setCurrentQuery(Query currentQuery) {
-        this.currentQuery = currentQuery;
-        fireChangeEvent();
+        if (currentQuery != null) {
+            currentQuery = ((AbstractQueryImpl) currentQuery).getRoot();
+        }
+        if (this.currentQuery != currentQuery) {
+            this.currentQuery = currentQuery;
+            fireChangeEvent();
+        }
     }
 
     public void updateParameters(Query query) {
@@ -242,6 +255,10 @@ public class FilterModelImpl implements FilterModel {
 
     public GraphView getCurrentResult() {
         return currentResult;
+    }
+
+    public GraphModel getGraphModel() {
+        return graphModel;
     }
 
     public void destroy() {

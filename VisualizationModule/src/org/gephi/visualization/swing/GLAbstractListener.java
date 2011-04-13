@@ -1,3 +1,24 @@
+/*
+Copyright 2008-2010 Gephi
+Authors : Mathieu Bastian <mathieu.bastian@gephi.org>
+Website : http://www.gephi.org
+
+This file is part of Gephi.
+
+Gephi is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+Gephi is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with Gephi.  If not, see <http://www.gnu.org/licenses/>.
+*/
+
 package org.gephi.visualization.swing;
 
 import com.sun.opengl.util.BufferUtil;
@@ -13,6 +34,7 @@ import org.gephi.visualization.VizController;
 import org.gephi.visualization.config.GraphicalConfiguration;
 import org.gephi.visualization.opengl.Lighting;
 import org.gephi.visualization.screenshot.ScreenshotMaker;
+import org.openide.util.Exceptions;
 
 /**
  *
@@ -55,26 +77,30 @@ public abstract class GLAbstractListener implements GLEventListener {
 
     protected GLCapabilities getCaps() {
         GLCapabilities caps = new GLCapabilities();
-        caps.setAlphaBits(8);		//if NOT opaque
-        caps.setDoubleBuffered(true);
-        caps.setHardwareAccelerated(true);
+        try {
+            caps.setAlphaBits(8);		//if NOT opaque
+            caps.setDoubleBuffered(true);
+            caps.setHardwareAccelerated(true);
 
-        //FSAA
-        int antialisaing = vizController.getVizConfig().getAntialiasing();
-        if (antialisaing == 0) {
-            caps.setSampleBuffers(false);
-        } else if (antialisaing == 2) {
-            caps.setSampleBuffers(true);
-            caps.setNumSamples(2);
-        } else if (antialisaing == 4) {
-            caps.setSampleBuffers(true);
-            caps.setNumSamples(4);
-        } else if (antialisaing == 8) {
-            caps.setSampleBuffers(true);
-            caps.setNumSamples(8);
-        } else if (antialisaing == 16) {
-            caps.setSampleBuffers(true);
-            caps.setNumSamples(16);
+            //FSAA
+            int antialisaing = vizController.getVizConfig().getAntialiasing();
+            if (antialisaing == 0) {
+                caps.setSampleBuffers(false);
+            } else if (antialisaing == 2) {
+                caps.setSampleBuffers(true);
+                caps.setNumSamples(2);
+            } else if (antialisaing == 4) {
+                caps.setSampleBuffers(true);
+                caps.setNumSamples(4);
+            } else if (antialisaing == 8) {
+                caps.setSampleBuffers(true);
+                caps.setNumSamples(8);
+            } else if (antialisaing == 16) {
+                caps.setSampleBuffers(true);
+                caps.setNumSamples(16);
+            }
+        } catch (javax.media.opengl.GLException ex) {
+            Exceptions.printStackTrace(ex);
         }
 
         return caps;

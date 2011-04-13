@@ -1,5 +1,5 @@
 /*
-Copyright 2008-2010 Gephi
+Copyright 2008-2011 Gephi
 Authors : Patick J. McSweeney <pjmcswee@syr.edu>, Sebastien Heymann <seb@gephi.org>
 Website : http://www.gephi.org
 
@@ -20,12 +20,11 @@ along with Gephi.  If not, see <http://www.gnu.org/licenses/>.
  */
 package org.gephi.statistics.plugin;
 
-import java.io.File;
-import java.io.IOException;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 import org.gephi.statistics.spi.Statistics;
 import org.gephi.graph.api.Node;
@@ -40,26 +39,19 @@ import org.gephi.graph.api.GraphController;
 import org.gephi.graph.api.GraphModel;
 import org.gephi.graph.api.HierarchicalDirectedGraph;
 import org.gephi.graph.api.HierarchicalGraph;
-import org.gephi.utils.TempDirUtils;
-import org.gephi.utils.TempDirUtils.TempDir;
 import org.gephi.utils.longtask.spi.LongTask;
 import org.gephi.utils.progress.Progress;
 import org.gephi.utils.progress.ProgressTicket;
 import org.jfree.chart.ChartFactory;
-import org.jfree.chart.ChartRenderingInfo;
-import org.jfree.chart.ChartUtilities;
 import org.jfree.chart.JFreeChart;
-import org.jfree.chart.axis.NumberAxis;
-import org.jfree.chart.axis.ValueAxis;
-import org.jfree.chart.entity.StandardEntityCollection;
 import org.jfree.chart.plot.PlotOrientation;
-import org.jfree.chart.plot.XYPlot;
-import org.jfree.chart.renderer.xy.XYLineAndShapeRenderer;
 import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
 import org.openide.util.Lookup;
 
 /**
+ * Ref: Matthieu Latapy, Main-memory Triangle Computations for Very Large (Sparse (Power-Law)) Graphs,
+ * in Theoretical Computer Science (TCS) 407 (1-3), pages 458-473, 2008
  *
  * @author pjmcswee
  */
@@ -77,7 +69,7 @@ class Renumbering implements Comparator<EdgeWrapper> {
 }
 
 /**
- * 
+ *
  * @author pjmcswee
  */
 class EdgeWrapper {
@@ -92,7 +84,7 @@ class EdgeWrapper {
 }
 
 /**
- * 
+ *
  * @author pjmcswee
  */
 class ArrayWrapper implements Comparable {
@@ -158,7 +150,7 @@ class ArrayWrapper implements Comparable {
     }
 
     /**
-     * 
+     *
      * @return
      */
     public int length() {
@@ -166,7 +158,7 @@ class ArrayWrapper implements Comparable {
     }
 
     /**
-     * 
+     *
      * @param o
      * @return
      */
@@ -230,6 +222,7 @@ public class ClusteringCoefficient implements Statistics, LongTask {
         isCanceled = false;
 
         triangles(hgraph, attributeModel);
+        //bruteForce(hgraph, attributeModel);
     }
 
     private int closest_in_array(int v) {
@@ -420,8 +413,12 @@ public class ClusteringCoefficient implements Statistics, LongTask {
             clusteringCol = nodeTable.addColumn(CLUSTERING_COEFF, "Clustering Coefficient", AttributeType.DOUBLE, AttributeOrigin.COMPUTED, new Double(0));
         }
 
-        for (Node s : hgraph.getNodes()) {
-            int v = indicies.get(s);
+        AttributeColumn triCount = nodeTable.getColumn("Triangles");
+        if (triCount == null) {
+            triCount = nodeTable.addColumn("Triangles", "Number of triangles", AttributeType.INT, AttributeOrigin.COMPUTED, new Integer(0));
+        }
+
+        for (int v = 0; v < N; v++) {
             if (network[v].length() > 1) {
                 double cc = triangles[v];
                 totalTriangles += triangles[v];
@@ -430,8 +427,9 @@ public class ClusteringCoefficient implements Statistics, LongTask {
                     cc *= 2.0f;
                 }
                 nodeClustering[v] = cc;
-                AttributeRow row = (AttributeRow) s.getNodeData().getAttributes();
+                AttributeRow row = (AttributeRow) network[v].node.getNodeData().getAttributes();
                 row.setValue(clusteringCol, cc);
+                row.setValue(triCount, triangles[v]);
                 avgClusteringCoeff += cc;
             }
             Progress.progress(progress, ++ProgressCount);
@@ -447,81 +445,75 @@ public class ClusteringCoefficient implements Statistics, LongTask {
         hgraph.readUnlock();
     }
 
+    /*private void bruteForce(HierarchicalGraph hgraph, AttributeModel attributeModel) {
+        //The atrributes computed by the statistics
+        AttributeTable nodeTable = attributeModel.getNodeTable();
+        AttributeColumn clusteringCol = nodeTable.getColumn("clustering");
+        if (clusteringCol == null) {
+            clusteringCol = nodeTable.addColumn("clustering", "Clustering Coefficient", AttributeType.DOUBLE, AttributeOrigin.COMPUTED, new Double(0));
+        }
 
-    /*private void bruteForce(GraphModel graphModel, AttributeModel attributeModel) {
-    //The atrributes computed by the statistics
-    AttributeTable nodeTable = attributeModel.getNodeTable();
-    AttributeColumn clusteringCol = nodeTable.getColumn("clustering");
-    if (clusteringCol == null) {
-    clusteringCol = nodeTable.addColumn("clustering", "Clustering Coefficient", AttributeType.DOUBLE, AttributeOrigin.COMPUTED, new Double(0));
-    }
+        float totalCC = 0;
 
-    float totalCC = 0;
-    Graph graph = null;
-    if (!directed) {
-    graph = graphModel.getUndirectedGraphVisible();
-    } else {
-    graph = graphModel.getDirectedGraphVisible();
-    }
+        hgraph.readLock();
 
-    graph.readLock();
+        Progress.start(progress, hgraph.getNodeCount());
+        int node_count = 0;
+        for (Node node : hgraph.getNodes()) {
+            float nodeCC = 0;
+            int neighborhood = 0;
+            NodeIterable neighbors1 = hgraph.getNeighbors(node);
+            for (Node neighbor1 : neighbors1) {
+                neighborhood++;
+                NodeIterable neighbors2 = hgraph.getNeighbors(node);
+                for (Node neighbor2 : neighbors2) {
 
-    Progress.start(progress, graph.getNodeCount());
-    int node_count = 0;
-    for (Node node : graph.getNodes()) {
-    float nodeCC = 0;
-    int neighborhood = 0;
-    NodeIterable neighbors1 = graph.getNeighbors(node);
-    for (Node neighbor1 : neighbors1) {
-    neighborhood++;
-    NodeIterable neighbors2 = graph.getNeighbors(node);
-    for (Node neighbor2 : neighbors2) {
-
-    if (neighbor1 == neighbor2) {
-    continue;
-    }
-    if (directed) {
-    if (((DirectedGraph) graph).getEdge(neighbor1, neighbor2) != null) {
-    nodeCC++;
-    }
-    if (((DirectedGraph) graph).getEdge(neighbor2, neighbor1) != null) {
-    nodeCC++;
-    }
-    } else {
-    if (graph.isAdjacent(neighbor1, neighbor2)) {
-    nodeCC++;
-    }
-    }
-    }
-    }
-    nodeCC /= 2.0;
+                    if (neighbor1 == neighbor2) {
+                        continue;
+                    }
+                    if (isDirected) {
+                        if (((HierarchicalDirectedGraph) hgraph).getEdge(neighbor1, neighbor2) != null) {
+                            nodeCC++;
+                        }
+                        if (((HierarchicalDirectedGraph) hgraph).getEdge(neighbor2, neighbor1) != null) {
+                            nodeCC++;
+                        }
+                    } else {
+                        if (hgraph.isAdjacent(neighbor1, neighbor2)) {
+                            nodeCC++;
+                        }
+                    }
+                }
+            }
+            nodeCC /= 2.0;
 
 
 
-    if (neighborhood > 1) {
-    float cc = nodeCC / (.5f * neighborhood * (neighborhood - 1));
-    if (directed) {
-    cc = nodeCC / (neighborhood * (neighborhood - 1));
-    }
+            if (neighborhood > 1) {
+                float cc = nodeCC / (.5f * neighborhood * (neighborhood - 1));
+                if (isDirected) {
+                    cc = nodeCC / (neighborhood * (neighborhood - 1));
+                }
 
-    AttributeRow row = (AttributeRow) node.getNodeData().getAttributes();
-    row.setValue(clusteringCol, cc);
+                AttributeRow row = (AttributeRow) node.getNodeData().getAttributes();
+                row.setValue(clusteringCol, cc);
 
-    totalCC += cc;
-    }
+                totalCC += cc;
+            }
 
-    if (isCanceled) {
-    break;
-    }
+            if (isCanceled) {
+                break;
+            }
 
-    node_count++;
-    Progress.progress(progress, node_count);
+            node_count++;
+            Progress.progress(progress, node_count);
 
-    }
-    avgClusteringCoeff = totalCC / graph.getNodeCount();
+        }
+        avgClusteringCoeff = totalCC / hgraph.getNodeCount();
 
-    graph.readUnlockAll();
+        hgraph.readUnlockAll();
     }*/
+
     public String getReport() {
         //distribution of values
         Map<Double, Integer> dist = new HashMap<Double, Integer>();
@@ -536,66 +528,37 @@ public class ClusteringCoefficient implements Statistics, LongTask {
         }
 
         //Distribution series
-        XYSeries dSeries = new XYSeries("Clustering Coefficient");
-        for (Iterator it = dist.entrySet().iterator(); it.hasNext();) {
-            Map.Entry d = (Map.Entry) it.next();
-            Double x = (Double) d.getKey();
-            Integer y = (Integer) d.getValue();
-            dSeries.add(x, y);
-        }
-
+        XYSeries dSeries = ChartUtils.createXYSeries(dist, "Clustering Coefficient");
         XYSeriesCollection dataset = new XYSeriesCollection();
         dataset.addSeries(dSeries);
 
         JFreeChart chart = ChartFactory.createScatterPlot(
                 "Clustering Coefficient Distribution",
-                "Values",
+                "Value",
                 "Count",
                 dataset,
                 PlotOrientation.VERTICAL,
                 true,
                 false,
                 false);
-        XYPlot plot = (XYPlot) chart.getPlot();
-        XYLineAndShapeRenderer renderer = new XYLineAndShapeRenderer();
-        renderer.setSeriesLinesVisible(0, false);
-        renderer.setSeriesShapesVisible(0, true);
-        renderer.setSeriesShape(0, new java.awt.geom.Ellipse2D.Double(0, 0, 2, 2));
-        plot.setBackgroundPaint(java.awt.Color.WHITE);
-        plot.setDomainGridlinePaint(java.awt.Color.GRAY);
-        plot.setRangeGridlinePaint(java.awt.Color.GRAY);
-        plot.setRenderer(renderer);
+        ChartUtils.decorateChart(chart);
+        ChartUtils.scaleChart(chart, dSeries, false);
+        String imageFile = ChartUtils.renderChart(chart, "clustering-coefficient.png");
 
-        ValueAxis domainAxis = plot.getDomainAxis();
-        domainAxis.setLowerMargin(1.0);
-        domainAxis.setUpperMargin(1.0);
-        domainAxis.setRange(dSeries.getMinX()-1, dSeries.getMaxX()+1);
-        domainAxis.setStandardTickUnits(NumberAxis.createIntegerTickUnits());
-        NumberAxis rangeAxis = (NumberAxis) plot.getRangeAxis();
-        rangeAxis.setRange(-1, dSeries.getMaxY()+0.1*dSeries.getMaxY());
-
-        String imageFile = "";
-        try {
-            final ChartRenderingInfo info = new ChartRenderingInfo(new StandardEntityCollection());
-            TempDir tempDir = TempDirUtils.createTempDir();
-            final String fileName = "coefficients.png";
-            final File file1 = tempDir.createFile(fileName);
-            imageFile = "<IMG SRC=\"file:" + file1.getAbsolutePath() + "\" " + "WIDTH=\"600\" HEIGHT=\"400\" BORDER=\"0\" USEMAP=\"#chart\"></IMG>";
-            ChartUtilities.saveChartAsPNG(file1, chart, 600, 400, info);
-
-        } catch (IOException e) {
-            System.out.println(e.toString());
-        }
-
-
+        NumberFormat f = new DecimalFormat("#0.000");
 
         return "<HTML> <BODY> <h1> Clustering Coefficient Metric Report </h1> "
                 + "<hr>"
-                + "<br>" + "<h2> Parameters: </h2>"
-                + "Network Interpretation:  " + (isDirected ? "directed" : "undirected") + "<br>"
-                + "Average Clustering Coefficient: " + avgClusteringCoeff + "<br>"
-                + "Total triangles: " + totalTriangles + "<br>"
-                + imageFile + "<br>" + "</BODY> </HTML>";
+                + "<br />" + "<h2> Parameters: </h2>"
+                + "Network Interpretation:  " + (isDirected ? "directed" : "undirected") + "<br />"
+                + "<br>" + "<h2> Results: </h2>"
+                + "Average Clustering Coefficient: " + f.format(avgClusteringCoeff) + "<br />"
+                + "Total triangles: " + totalTriangles + "<br />"
+                + "The Average Clustering Coefficient is the mean value of individual coefficients.<br /><br />"
+                + imageFile
+                + "<br /><br />" + "<h2> Algorithm: </h2>"
+                + "Matthieu Latapy, <i>Main-memory Triangle Computations for Very Large (Sparse (Power-Law)) Graphs</i>, in Theoretical Computer Science (TCS) 407 (1-3), pages 458-473, 2008<br />"
+                + "</BODY> </HTML>";
     }
 
     public void setDirected(boolean isDirected) {

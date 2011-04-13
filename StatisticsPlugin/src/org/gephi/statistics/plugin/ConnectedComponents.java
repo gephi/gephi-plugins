@@ -1,5 +1,5 @@
 /*
-Copyright 2008-2010 Gephi
+Copyright 2008-2011 Gephi
 Authors : Patick J. McSweeney <pjmcswee@syr.edu>, Sebastien Heymann <seb@gephi.org>
 Website : http://www.gephi.org
 
@@ -276,7 +276,9 @@ public class ConnectedComponents implements Statistics, LongTask {
                 + "<br> <h2> Results: </h2>"
                 + "Weakly Connected Components: " + componentCount + "<br>"
                 + (isDirected ? "Stronlgy Connected Components: " + stronglyCount + "<br>" : "")
-                + "</BODY></HTML>";
+                + "<br />" + "<h2> Algorithm: </h2>"
+                + "Robert Tarjan, <i>Depth-First Search and Linear Graph Algorithms</i>, in SIAM Journal on Computing 1 (2): 146–160 (1972)<br />"
+                + "</BODY> </HTML>";
 
         return report;
     }

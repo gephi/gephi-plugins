@@ -23,8 +23,9 @@ package org.gephi.desktop.filters.query;
 import java.awt.event.ActionEvent;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
-import org.gephi.desktop.filters.FiltersTopComponent;
 import org.gephi.filters.api.FilterController;
+import org.gephi.filters.api.FilterLibrary;
+import org.gephi.filters.api.FilterModel;
 import org.gephi.filters.api.Query;
 import org.openide.DialogDisplayer;
 import org.openide.NotifyDescriptor;
@@ -54,7 +55,8 @@ public class QueryNode extends AbstractNode {
 
     private boolean isSelected() {
         FilterController fc = Lookup.getDefault().lookup(FilterController.class);
-        return fc.getModel().getCurrentQuery() == query;
+        FilterModel fm = fc.getModel();
+        return (fm.isFiltering() || fm.isSelecting()) && fc.getModel().getCurrentQuery() == query;
         //return FiltersTopComponent.findInstance().getUiModel().getSelectedRoot() == query;
     }
 
@@ -92,7 +94,7 @@ public class QueryNode extends AbstractNode {
     @Override
     public Action[] getActions(boolean context) {
         //System.out.println("getActions " + context);
-        return new Action[]{new RemoveAction(), new RenameAction()};
+        return new Action[]{new RemoveAction(), new RenameAction(), new SaveAction(), new DuplicateAction()};
     }
 
     public Query getQuery() {
@@ -132,6 +134,43 @@ public class QueryNode extends AbstractNode {
                 if (input != null && !input.isEmpty()) {
                     filterController.rename(query, input);
                 }
+            }
+        }
+    }
+
+    private class SaveAction extends AbstractAction {
+
+        public SaveAction() {
+            super(NbBundle.getMessage(QueryNode.class, "QueryNode.actions.save"));
+        }
+
+        public void actionPerformed(ActionEvent e) {
+            FilterController filterController = Lookup.getDefault().lookup(FilterController.class);
+            FilterLibrary filterLibrary = filterController.getModel().getLibrary();
+            if (query.getParent() == null) {
+                filterLibrary.saveQuery(query);
+            } else {
+                filterLibrary.saveQuery(query.getParent());
+            }
+        }
+    }
+
+    private class DuplicateAction extends AbstractAction {
+
+        public DuplicateAction() {
+            super(NbBundle.getMessage(QueryNode.class, "QueryNode.actions.duplicate"));
+        }
+
+        public void actionPerformed(ActionEvent e) {
+            FilterController filterController = Lookup.getDefault().lookup(FilterController.class);
+            if (query.getParent() == null) {
+                //filterController.add(query);
+                Query q = filterController.createQuery(query.getFilter());
+                filterController.add(q);
+            } else {
+                //filterController.add(query.getParent());
+                Query q = filterController.createQuery(query.getParent().getFilter());
+                filterController.add(q);
             }
         }
     }
