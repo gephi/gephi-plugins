@@ -267,10 +267,16 @@ public class JSONStreamReader extends StreamReader {
                         attributes.put(key, value);
                     }
                 }
+
+                boolean directed = true;
+                if (gObj.has(Fields.DIRECTED.value())) {
+                    directed = Boolean.valueOf(gObj.getString(Fields.DIRECTED.value()));
+                }
+
                 event = eventBuilder.edgeAddedEvent(id,
                         gObj.getString(Fields.SOURCE.value()),
                         gObj.getString(Fields.TARGET.value()),
-                        Boolean.valueOf(gObj.getString(Fields.DIRECTED.value())), attributes);
+                        directed, attributes);
 
             } else if (eventType.equals(Types.CE)) {
                 JSONObject gObj = (JSONObject)gObjs.get(id);
