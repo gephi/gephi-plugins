@@ -50,7 +50,7 @@ public class StreamingConnectionImpl implements StreamingConnection {
     private static final Logger logger = Logger.getLogger(StreamingConnectionImpl.class.getName());
     
     private final StreamingEndpoint endpoint;
-    private final StreamReader streamProcessor;
+    private final StreamReader streamReader;
     private URLConnection connection;
     private ReadableByteChannel channel;
     private final List<StatusListener> listeners =
@@ -59,9 +59,9 @@ public class StreamingConnectionImpl implements StreamingConnection {
     private final Report report;
     
     public StreamingConnectionImpl(final StreamingEndpoint endpoint, 
-            final StreamReader streamProcessor, Report report) throws IOException {
+            final StreamReader streamReader, Report report) throws IOException {
         this.endpoint = endpoint;
-        this.streamProcessor = streamProcessor;
+        this.streamReader = streamReader;
         this.report = report;
 
         // Workaround to avoid invalid certificate problem
@@ -157,7 +157,7 @@ public class StreamingConnectionImpl implements StreamingConnection {
         try {
 
             InputStream inputStream = connection.getInputStream();
-            streamProcessor.setStatusListener(new StreamReader.StreamReaderStatusListener() {
+            streamReader.setStatusListener(new StreamReader.StreamReaderStatusListener() {
 
                 @Override
                 public void onStreamClosed() {
@@ -190,7 +190,7 @@ public class StreamingConnectionImpl implements StreamingConnection {
                 }
             });
 
-            streamProcessor.processStream(inputStream);
+            streamReader.processStream(inputStream);
 
         } catch (IOException e) {
             logger.log(Level.INFO, null, e);
