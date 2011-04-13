@@ -81,6 +81,9 @@ public class GraphUpdaterEventHandler implements GraphEventHandler {
         properties.addEdgePropertyAssociation(EdgeProperties.TARGET, "target");
         properties.addEdgePropertyAssociation(EdgeProperties.LABEL, "label");
         properties.addEdgePropertyAssociation(EdgeProperties.WEIGHT, "weight");
+        properties.addEdgePropertyAssociation(EdgeProperties.R, "r");
+        properties.addEdgePropertyAssociation(EdgeProperties.G, "g");
+        properties.addEdgePropertyAssociation(EdgeProperties.B, "b");
     }
 
     /**
