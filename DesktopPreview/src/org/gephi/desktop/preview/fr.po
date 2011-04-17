@@ -8,14 +8,14 @@ msgstr ""
 "Project-Id-Version: gephi\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2010-04-07 13:16+0200\n"
-"PO-Revision-Date: 2010-04-30 08:01+0000\n"
+"PO-Revision-Date: 2011-03-12 18:32+0000\n"
 "Last-Translator: Sébastien Heymann <Unknown>\n"
 "Language-Team: French <fr@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2010-10-03 04:58+0000\n"
-"X-Generator: Launchpad (build Unknown)\n"
+"X-Launchpad-Export-Date: 2011-03-21 04:43+0000\n"
+"X-Generator: Launchpad (build 12559)\n"
 
 msgid "CTL_PreviewAction"
 msgstr "Aperçu"
@@ -35,11 +35,32 @@ msgstr "Paramètres d'aperçu"
 msgid "HINT_PreviewTopComponent"
 msgstr "Aperçu"
 
+msgid "OpenIDE-Module-Short-Description"
+msgstr "Aperçu et paramétrages"
+
 msgid "GenericColorizerPanel.CustomColorRadioButton.text"
 msgstr "Couleur personnalisée"
 
-msgid "OpenIDE-Module-Short-Description"
-msgstr "Aperçu et paramétrages"
+msgid "PreviewNode.displayName"
+msgstr "Paramètres d'aperçu"
+
+msgid "PreviewNode.Node.displayName"
+msgstr "Noeud"
+
+msgid "PreviewNode.Edge.displayName"
+msgstr "Lien"
+
+msgid "PreviewNode.SelfLoop.displayName"
+msgstr "Boucle"
+
+msgid "PreviewNode.Directed.displayName"
+msgstr "Dirigé"
+
+msgid "PreviewNode.Undirected.displayName"
+msgstr "Non dirigé"
+
+msgid "PreviewNode.Mutual.displayName"
+msgstr "Mutuel"
 
 msgid "PreviewSettingsTopComponent.savePreset.input"
 msgstr "Nom"
@@ -59,8 +80,14 @@ msgstr "Rafraîchir"
 msgid "PreviewTopComponent.busyLabel.text"
 msgstr "Rafraîchissement en cours..."
 
+msgid "PreviewSettingsTopComponent.box.text"
+msgstr ""
+
 msgid "PreviewSettingsTopComponent.saveButton.toolTipText"
 msgstr "Enregistrer les réglages"
+
+msgid "PreviewSettingsTopComponent.saveButton.text"
+msgstr ""
 
 msgid "PreviewSettingsTopComponent.ratioLabel.text"
 msgstr "0"
@@ -77,6 +104,9 @@ msgstr "Réglages"
 msgid "PreviewSettingsTopComponent.ratio.minimum"
 msgstr "Minimum"
 
+msgid "PreviewTopComponent.southBusyLabel.text"
+msgstr ""
+
 msgid "PreviewTopComponent.backgroundButton.text"
 msgstr "Arrière-plan"
 
@@ -91,9 +121,3 @@ msgstr "Export :"
 
 msgid "PreviewSettingsTopComponent.svgExportButton.toolTipText"
 msgstr "Exporter au format SVG ou PDF"
-
-#~ msgid "OpenIDE-Module-Name"
-#~ msgstr "Desktop Preview"
-
-#~ msgid "OpenIDE-Module-Display-Category"
-#~ msgstr "Gephi UI"
