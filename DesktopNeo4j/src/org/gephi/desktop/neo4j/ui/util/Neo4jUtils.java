@@ -21,7 +21,6 @@ along with Gephi.  If not, see <http://www.gnu.org/licenses/>.
 package org.gephi.desktop.neo4j.ui.util;
 
 import java.io.File;
-import java.net.URISyntaxException;
 import java.util.LinkedList;
 import java.util.List;
 import org.neo4j.graphdb.GraphDatabaseService;

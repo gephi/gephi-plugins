@@ -34,7 +34,8 @@ import org.neo4j.graphdb.Direction;
 import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.Transaction;
-import org.neo4j.graphdb.traversal.PruneEvaluator;
+import org.neo4j.graphdb.traversal.Evaluator;
+import org.neo4j.graphdb.traversal.Evaluators;
 import org.neo4j.graphdb.traversal.TraversalDescription;
 import org.neo4j.graphdb.traversal.Traverser;
 import org.neo4j.kernel.Traversal;
@@ -105,7 +106,6 @@ public final class Neo4jImporterImpl implements Neo4jImporter, LongTask {
 
         if (startNodeId != NO_START_NODE) {
             TraversalDescription traversalDescription = Traversal.description();
-            PruneEvaluator pruneEvaluator = Traversal.pruneAfterDepth(maxDepth);
 
             traversalDescription = order.update(traversalDescription);
 
@@ -114,13 +114,13 @@ public final class Neo4jImporterImpl implements Neo4jImporter, LongTask {
                         relationshipDescription.getDirection());
             }
 
-            if (!filterDescriptions.isEmpty()) {
-                traversalDescription = traversalDescription.filter(new NodeReturnFilter(filterDescriptions,
-                        restrictMode,
-                        matchCase));
-            }
+            Evaluator evaluator;
+            if (filterDescriptions.isEmpty())
+                evaluator = Evaluators.toDepth(maxDepth);
+            else
+                evaluator = new DepthAndNodeFilterEvaluator(filterDescriptions, restrictMode, matchCase, maxDepth);
 
-            traverser = traversalDescription.prune(pruneEvaluator).traverse(graphDB.getNodeById(startNodeId));
+            traverser = traversalDescription.evaluator(evaluator).traverse(graphDB.getNodeById(startNodeId));
         } else if (startNodeId == NO_START_NODE && filterDescriptions.size() > 0) {
             nodeReturnFilter = new NodeReturnFilter(filterDescriptions, restrictMode, matchCase);
             traverser = null;

@@ -42,8 +42,8 @@ import org.gephi.project.api.WorkspaceListener;
 import org.gephi.project.api.WorkspaceProvider;
 import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.graphdb.Relationship;
-import org.neo4j.kernel.EmbeddedGraphDatabase;
-import org.neo4j.management.Primitives;
+import org.neo4j.jmx.Primitives;
+import org.neo4j.management.Neo4jManager;
 import org.openide.util.Lookup;
 
 /**
@@ -262,7 +262,9 @@ public class GraphModelImportConverter {
 
         public Neo4jGraphModel(GraphDatabaseService graphDb) {
             this.graphDb = graphDb;
-            int numberOfNeo4jNodeIds = (int) ((EmbeddedGraphDatabase) graphDb).getManagementBean(Primitives.class).getNumberOfNodeIdsInUse();
+
+            int numberOfNeo4jNodeIds = (int) Neo4jManager.get().getPrimitivesBean().getNumberOfNodeIdsInUse();
+
             this.neo4jToGephiNodeMap = new TLongIntHashMap(numberOfNeo4jNodeIds, 1f);
             this.gephiToNeo4jNodeMap = new TIntLongHashMap(numberOfNeo4jNodeIds, 1f);
         }
