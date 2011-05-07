@@ -75,8 +75,8 @@ public class Neo4jMenuAction extends CallableSystemAction {
 
     private final String IMPORT_LAST_PATH = "Neo4jMenuAction_Import_Last_Path";
     private final String EXPORT_LAST_PATH = "Neo4jMenuAction_Export_Last_Path";
-    private JMenuItem localExport;
-    private JMenuItem debug;
+    private JMenuItem exportMenuItem;
+    private JMenuItem debugMenuItem;
     private JMenu menu;
     private boolean previousEdgeHasUniColor;
 
@@ -87,14 +87,14 @@ public class Neo4jMenuAction extends CallableSystemAction {
 
             @Override
             public void initialize(Workspace workspace) {
-                localExport.setEnabled(true);
-                debug.setEnabled(true);
+                exportMenuItem.setEnabled(true);
+                debugMenuItem.setEnabled(true);
             }
 
             @Override
             public void disable() {
-                localExport.setEnabled(false);
-                debug.setEnabled(false);
+                exportMenuItem.setEnabled(false);
+                debugMenuItem.setEnabled(false);
             }
 
             @Override
@@ -134,13 +134,13 @@ public class Neo4jMenuAction extends CallableSystemAction {
     private void initializeMenu() {
         menu = new JMenu(NbBundle.getMessage(Neo4jMenuAction.class, "CTL_Neo4j_MenuLabel"));
 
-        String localFullImportMenuLabel = NbBundle.getMessage(Neo4jMenuAction.class, "CTL_Neo4j_LocalWholeImportMenuLabel");
-        JMenuItem localFullImport = new JMenuItem(new AbstractAction(localFullImportMenuLabel) {
+        String fullImportMenuLabel = NbBundle.getMessage(Neo4jMenuAction.class, "CTL_Neo4j_FullImportMenuLabel");
+        JMenuItem fullImport = new JMenuItem(new AbstractAction(fullImportMenuLabel) {
 
             public void actionPerformed(ActionEvent e) {
                 String lastDirectory = NbPreferences.forModule(Neo4jMenuAction.class).get(IMPORT_LAST_PATH, "");
                 JFileChooser fileChooser = new JFileChooser(lastDirectory);
-                String localImportDialogTitle = NbBundle.getMessage(Neo4jMenuAction.class, "CTL_Neo4j_LocalImportDialogTitle");
+                String localImportDialogTitle = NbBundle.getMessage(Neo4jMenuAction.class, "CTL_Neo4j_ImportDialogTitle");
                 fileChooser.setDialogTitle(localImportDialogTitle);
 
                 Neo4jCustomDirectoryProvider.setEnabled(true);
@@ -192,15 +192,15 @@ public class Neo4jMenuAction extends CallableSystemAction {
                 }
             }
         });
-        localFullImport.setIcon(ImageUtilities.loadImageIcon("org/gephi/desktop/neo4j/resources/import.png", false));
+        fullImport.setIcon(ImageUtilities.loadImageIcon("org/gephi/desktop/neo4j/resources/import.png", false));
 
-        String localTraversalImportMenuLabel = NbBundle.getMessage(Neo4jMenuAction.class, "CTL_Neo4j_LocalTraversalImportMenuLabel");
-        JMenuItem localTraversalImport = new JMenuItem(new AbstractAction(localTraversalImportMenuLabel) {
+        String traversalImportMenuLabel = NbBundle.getMessage(Neo4jMenuAction.class, "CTL_Neo4j_TraversalImportMenuLabel");
+        JMenuItem traversalImport = new JMenuItem(new AbstractAction(traversalImportMenuLabel) {
 
             public void actionPerformed(ActionEvent e) {
                 String lastDirectory = NbPreferences.forModule(Neo4jMenuAction.class).get(IMPORT_LAST_PATH, "");
                 JFileChooser fileChooser = new JFileChooser(lastDirectory);
-                String localImportDialogTitle = NbBundle.getMessage(Neo4jMenuAction.class, "CTL_Neo4j_LocalImportDialogTitle");
+                String localImportDialogTitle = NbBundle.getMessage(Neo4jMenuAction.class, "CTL_Neo4j_ImportDialogTitle");
                 fileChooser.setDialogTitle(localImportDialogTitle);
 
                 Neo4jCustomDirectoryProvider.setEnabled(true);
@@ -257,8 +257,8 @@ public class Neo4jMenuAction extends CallableSystemAction {
             }
         });
 
-        String localExportMenuLabel = NbBundle.getMessage(Neo4jMenuAction.class, "CTL_Neo4j_LocalExportMenuLabel");
-        localExport = new JMenuItem(new AbstractAction(localExportMenuLabel) {
+        String exportMenuLabel = NbBundle.getMessage(Neo4jMenuAction.class, "CTL_Neo4j_ExportMenuLabel");
+        exportMenuItem = new JMenuItem(new AbstractAction(exportMenuLabel) {
 
             public void actionPerformed(ActionEvent e) {
                 String exportOptionsDialogTitle = NbBundle.getMessage(Neo4jMenuAction.class, "CTL_Neo4j_ExportOptionsDialogTitle");
@@ -278,7 +278,7 @@ public class Neo4jMenuAction extends CallableSystemAction {
 
                     String lastDirectory = NbPreferences.forModule(Neo4jMenuAction.class).get(EXPORT_LAST_PATH, "");
                     JFileChooser fileChooser = new JFileChooser(lastDirectory);
-                    String localExportDialogTitle = NbBundle.getMessage(Neo4jMenuAction.class, "CTL_Neo4j_LocalExportDialogTitle");
+                    String localExportDialogTitle = NbBundle.getMessage(Neo4jMenuAction.class, "CTL_Neo4j_ExportDialogTitle");
                     fileChooser.setDialogTitle(localExportDialogTitle);
 
                     fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
@@ -313,10 +313,10 @@ public class Neo4jMenuAction extends CallableSystemAction {
                 }
             }
         });
-        localExport.setIcon(ImageUtilities.loadImageIcon("org/gephi/desktop/neo4j/resources/export.png", false));
+        exportMenuItem.setIcon(ImageUtilities.loadImageIcon("org/gephi/desktop/neo4j/resources/export.png", false));
 
         String debugMenuLabel = NbBundle.getMessage(Neo4jMenuAction.class, "CTL_Neo4j_DebugMenuLabel");
-        debug = new JMenuItem(new AbstractAction(debugMenuLabel) {
+        debugMenuItem = new JMenuItem(new AbstractAction(debugMenuLabel) {
 
             public void actionPerformed(ActionEvent e) {
                 JFileChooser fileChooser = new JFileChooser();
@@ -387,16 +387,16 @@ public class Neo4jMenuAction extends CallableSystemAction {
         });
 
 
-        menu.add(localFullImport);
-        menu.add(localTraversalImport);
+        menu.add(fullImport);
+        menu.add(traversalImport);
         menu.addSeparator();
 
-        localExport.setEnabled(false);
-        menu.add(localExport);
+        exportMenuItem.setEnabled(false);
+        menu.add(exportMenuItem);
         menu.addSeparator();
 
-        debug.setEnabled(false);
-        menu.add(debug);
+        debugMenuItem.setEnabled(false);
+        menu.add(debugMenuItem);
     }
 
     private void showWarningMessage() {
