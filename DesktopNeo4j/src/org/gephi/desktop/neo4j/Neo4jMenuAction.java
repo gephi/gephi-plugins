@@ -73,12 +73,14 @@ import org.openide.util.actions.CallableSystemAction;
  */
 public class Neo4jMenuAction extends CallableSystemAction {
 
-    private final String IMPORT_LAST_PATH = "Neo4jMenuAction_Import_Last_Path";
-    private final String EXPORT_LAST_PATH = "Neo4jMenuAction_Export_Last_Path";
+    private static final String IMPORT_LAST_PATH = "Neo4jMenuAction_Import_Last_Path";
+    private static final String EXPORT_LAST_PATH = "Neo4jMenuAction_Export_Last_Path";
+
+    private static boolean previousEdgeHasUniColor;
+
     private JMenuItem exportMenuItem;
     private JMenuItem debugMenuItem;
     private JMenu menu;
-    private boolean previousEdgeHasUniColor;
 
     public Neo4jMenuAction() {
         initializeMenu();
@@ -135,256 +137,18 @@ public class Neo4jMenuAction extends CallableSystemAction {
         menu = new JMenu(NbBundle.getMessage(Neo4jMenuAction.class, "CTL_Neo4j_MenuLabel"));
 
         String fullImportMenuLabel = NbBundle.getMessage(Neo4jMenuAction.class, "CTL_Neo4j_FullImportMenuLabel");
-        JMenuItem fullImport = new JMenuItem(new AbstractAction(fullImportMenuLabel) {
-
-            public void actionPerformed(ActionEvent e) {
-                String lastDirectory = NbPreferences.forModule(Neo4jMenuAction.class).get(IMPORT_LAST_PATH, "");
-                JFileChooser fileChooser = new JFileChooser(lastDirectory);
-                String localImportDialogTitle = NbBundle.getMessage(Neo4jMenuAction.class, "CTL_Neo4j_ImportDialogTitle");
-                fileChooser.setDialogTitle(localImportDialogTitle);
-
-                Neo4jCustomDirectoryProvider.setEnabled(true);
-                fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-
-                int dialogResult = fileChooser.showOpenDialog(null);
-
-                Neo4jCustomDirectoryProvider.setEnabled(false);
-
-                if (dialogResult == JFileChooser.CANCEL_OPTION) {
-                    return;
-                }
-
-                final File neo4jDirectory = fileChooser.getSelectedFile();
-                if (neo4jDirectory != null && neo4jDirectory.exists()) {
-                    NbPreferences.forModule(Neo4jMenuAction.class).put(IMPORT_LAST_PATH, neo4jDirectory.getParentFile().getAbsolutePath());
-                }
-                final GraphDatabaseService graphDB = Neo4jUtils.localDatabase(neo4jDirectory);
-
-                String traversalDialogTitle = NbBundle.getMessage(Neo4jMenuAction.class, "CTL_Neo4j_TraversalDialogTitle");
-                final TraversalFilterPanel filterPanel = new TraversalFilterPanel();
-                ValidationPanel validationPanel = filterPanel.createValidationPanel();
-                final DialogDescriptor dd = new DialogDescriptor(validationPanel, traversalDialogTitle);
-                validationPanel.addChangeListener(new ChangeListener() {
-
-                    @Override
-                    public void stateChanged(ChangeEvent e) {
-                        dd.setValid(!((ValidationPanel) e.getSource()).isProblem());
-                    }
-                });
-
-                Object result = DialogDisplayer.getDefault().notify(dd);
-                if (result == NotifyDescriptor.OK_OPTION) {
-                    final Neo4jImporter neo4jImporter = Lookup.getDefault().lookup(Neo4jImporter.class);
-
-                    LongTaskExecutor executor = new LongTaskExecutor(true);
-                    executor.execute((LongTask) neo4jImporter, new Runnable() {
-
-                        @Override
-                        public void run() {
-                            initProject();
-                            neo4jImporter.importDatabase(graphDB,
-                                    filterPanel.getFilterDescriptions(),
-                                    filterPanel.isRestrictModeEnabled(),
-                                    filterPanel.isMatchCaseEnabled());
-                            StatusDisplayer.getDefault().setStatusText(NbBundle.getMessage(Neo4jMenuAction.class, "CTL_Neo4j_ImportTaskFinished", neo4jDirectory));
-                        }
-                    });
-                }
-            }
-        });
+        JMenuItem fullImport = new JMenuItem(new FullImportMenuAction(fullImportMenuLabel));
         fullImport.setIcon(ImageUtilities.loadImageIcon("org/gephi/desktop/neo4j/resources/import.png", false));
 
         String traversalImportMenuLabel = NbBundle.getMessage(Neo4jMenuAction.class, "CTL_Neo4j_TraversalImportMenuLabel");
-        JMenuItem traversalImport = new JMenuItem(new AbstractAction(traversalImportMenuLabel) {
-
-            public void actionPerformed(ActionEvent e) {
-                String lastDirectory = NbPreferences.forModule(Neo4jMenuAction.class).get(IMPORT_LAST_PATH, "");
-                JFileChooser fileChooser = new JFileChooser(lastDirectory);
-                String localImportDialogTitle = NbBundle.getMessage(Neo4jMenuAction.class, "CTL_Neo4j_ImportDialogTitle");
-                fileChooser.setDialogTitle(localImportDialogTitle);
-
-                Neo4jCustomDirectoryProvider.setEnabled(true);
-                fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-
-                int dialogResult = fileChooser.showOpenDialog(null);
-
-                Neo4jCustomDirectoryProvider.setEnabled(false);
-
-                if (dialogResult == JFileChooser.CANCEL_OPTION) {
-                    return;
-                }
-
-                final File neo4jDirectory = fileChooser.getSelectedFile();
-                if (neo4jDirectory != null && neo4jDirectory.exists()) {
-                    NbPreferences.forModule(Neo4jMenuAction.class).put(IMPORT_LAST_PATH, neo4jDirectory.getParentFile().getAbsolutePath());
-                }
-                final GraphDatabaseService graphDB = Neo4jUtils.localDatabase(neo4jDirectory);
-
-                String traversalDialogTitle = NbBundle.getMessage(Neo4jMenuAction.class, "CTL_Neo4j_TraversalDialogTitle");
-                final TraversalImportPanel traversalPanel = new TraversalImportPanel(graphDB);
-                ValidationPanel validationPanel = traversalPanel.createValidationPanel();
-                final DialogDescriptor dd = new DialogDescriptor(validationPanel, traversalDialogTitle);
-                validationPanel.addChangeListener(new ChangeListener() {
-
-                    @Override
-                    public void stateChanged(ChangeEvent e) {
-                        dd.setValid(!((ValidationPanel) e.getSource()).isProblem());
-                    }
-                });
-
-                Object result = DialogDisplayer.getDefault().notify(dd);
-                if (result == NotifyDescriptor.OK_OPTION) {
-                    final Neo4jImporter neo4jImporter = Lookup.getDefault().lookup(Neo4jImporter.class);
-
-                    LongTaskExecutor executor = new LongTaskExecutor(true);
-                    executor.execute((LongTask) neo4jImporter, new Runnable() {
-
-                        @Override
-                        public void run() {
-                            initProject();
-                            neo4jImporter.importDatabase(graphDB,
-                                    traversalPanel.getStartNodeId(),
-                                    traversalPanel.getOrder(),
-                                    traversalPanel.getMaxDepth(),
-                                    traversalPanel.getRelationshipDescriptions(),
-                                    traversalPanel.getFilterDescriptions(),
-                                    traversalPanel.isRestrictModeEnabled(),
-                                    traversalPanel.isMatchCaseEnabled());
-                            StatusDisplayer.getDefault().setStatusText(NbBundle.getMessage(Neo4jMenuAction.class, "CTL_Neo4j_ImportTaskFinished", neo4jDirectory));
-                        }
-                    });
-                }
-            }
-        });
+        JMenuItem traversalImport = new JMenuItem(new TraversalImportMenuAction(traversalImportMenuLabel));
 
         String exportMenuLabel = NbBundle.getMessage(Neo4jMenuAction.class, "CTL_Neo4j_ExportMenuLabel");
-        exportMenuItem = new JMenuItem(new AbstractAction(exportMenuLabel) {
-
-            public void actionPerformed(ActionEvent e) {
-                String exportOptionsDialogTitle = NbBundle.getMessage(Neo4jMenuAction.class, "CTL_Neo4j_ExportOptionsDialogTitle");
-                final ExportOptionsPanel exportOptionsPanel = new ExportOptionsPanel();
-                ValidationPanel validationPanel = exportOptionsPanel.createValidationPanel();
-                final DialogDescriptor dd = new DialogDescriptor(validationPanel, exportOptionsDialogTitle);
-                validationPanel.addChangeListener(new ChangeListener() {
-
-                    @Override
-                    public void stateChanged(ChangeEvent e) {
-                        dd.setValid(!((ValidationPanel) e.getSource()).isProblem());
-                    }
-                });
-
-                Object result = DialogDisplayer.getDefault().notify(dd);
-                if (result == NotifyDescriptor.OK_OPTION) {
-
-                    String lastDirectory = NbPreferences.forModule(Neo4jMenuAction.class).get(EXPORT_LAST_PATH, "");
-                    JFileChooser fileChooser = new JFileChooser(lastDirectory);
-                    String localExportDialogTitle = NbBundle.getMessage(Neo4jMenuAction.class, "CTL_Neo4j_ExportDialogTitle");
-                    fileChooser.setDialogTitle(localExportDialogTitle);
-
-                    fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-
-                    int dialogResult = fileChooser.showOpenDialog(null);
-
-                    if (dialogResult == JFileChooser.APPROVE_OPTION) {
-                        final File neo4jDirectory = fileChooser.getSelectedFile();
-                        if (neo4jDirectory != null && neo4jDirectory.exists()) {
-                            NbPreferences.forModule(Neo4jMenuAction.class).put(EXPORT_LAST_PATH, neo4jDirectory.getParentFile().getAbsolutePath());
-                        }
-                        final Neo4jExporter neo4jExporter = Lookup.getDefault().lookup(Neo4jExporter.class);
-
-                        LongTaskExecutor executor = new LongTaskExecutor(true);
-                        executor.execute((LongTask) neo4jExporter, new Runnable() {
-
-                            @Override
-                            public void run() {
-                                GraphDatabaseService graphDB = Neo4jUtils.localDatabase(neo4jDirectory);
-
-                                neo4jExporter.exportDatabase(graphDB,
-                                        exportOptionsPanel.getFromColumn(),
-                                        exportOptionsPanel.getDefaultValue(),
-                                        exportOptionsPanel.getExportEdgeColumnNames(),
-                                        exportOptionsPanel.getExportNodeColumnNames());
-
-                                graphDB.shutdown();
-                                StatusDisplayer.getDefault().setStatusText(NbBundle.getMessage(Neo4jMenuAction.class, "CTL_Neo4j_ExportTaskFinished", neo4jDirectory));
-                            }
-                        });
-                    }
-                }
-            }
-        });
+        exportMenuItem = new JMenuItem(new ExportMenuAction(exportMenuLabel));
         exportMenuItem.setIcon(ImageUtilities.loadImageIcon("org/gephi/desktop/neo4j/resources/export.png", false));
 
         String debugMenuLabel = NbBundle.getMessage(Neo4jMenuAction.class, "CTL_Neo4j_DebugMenuLabel");
-        debugMenuItem = new JMenuItem(new AbstractAction(debugMenuLabel) {
-
-            public void actionPerformed(ActionEvent e) {
-                JFileChooser fileChooser = new JFileChooser();
-                String chooseDebugFileDialogTitle =
-                        NbBundle.getMessage(Neo4jMenuAction.class, "CTL_Neo4j_ChooseDebugFileDialogTitle");
-                fileChooser.setDialogTitle(chooseDebugFileDialogTitle);
-
-                fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
-                fileChooser.setFileFilter(new Neo4jDebugFileFilter());
-                fileChooser.setFileView(new Neo4jDebugFileView());
-                fileChooser.setAccessory(new DebugFileChooserComponent(fileChooser));
-
-                int dialogResult = fileChooser.showOpenDialog(null);
-
-                if (dialogResult == JFileChooser.CANCEL_OPTION) {
-                    return;
-                }
-
-                File neo4jDebugFile = fileChooser.getSelectedFile();
-                FileSystemClassLoader classLoader =
-                        Lookup.getDefault().lookup(FileSystemClassLoader.class);
-
-                Class<?> loadedClass = null;
-
-                try {
-                    loadedClass = classLoader.loadClass(neo4jDebugFile,
-                            enabled,
-                            Neo4jDelegateNodeDebugger.class);
-                } catch (ClassNotFoundException cnfe) {
-                    showWarningMessage();
-                    return;
-                } catch (NoClassDefFoundError ncdfe) {
-                    showWarningMessage();
-                    return;
-                } catch (ClassNotFulfillRequirementsException cnfre) {
-                    showWarningMessage();
-                    return;
-                } catch (IllegalArgumentException iae) {
-                    showWarningMessage();
-                    return;
-                }
-
-                Neo4jDelegateNodeDebugger neo4jDebugger = null;
-                try {
-                    neo4jDebugger = (Neo4jDelegateNodeDebugger) loadedClass.newInstance();
-                } catch (IllegalAccessException iae) {
-                    throw new AssertionError();
-                } catch (InstantiationException ie) {
-                    throw new AssertionError();
-                }
-
-                // see GraphRestoration JavaDoc
-                GraphRestoration graphRestoration = new GraphRestoration();
-
-                previousEdgeHasUniColor =
-                        VizController.getInstance().getVizModel().isEdgeHasUniColor();
-                VizController.getInstance().getVizModel().setEdgeHasUniColor(true);
-
-                String debugDialogTitle = NbBundle.getMessage(Neo4jMenuAction.class, "CTL_Neo4j_DebugOptionsDialogTitle");
-                DialogDescriptor dialog = new DialogDescriptor(new DebugPanel(new MutableNeo4jDelegateNodeDebugger(neo4jDebugger)),
-                        debugDialogTitle,
-                        false,
-                        graphRestoration);
-                dialog.addPropertyChangeListener(graphRestoration);
-
-                DialogDisplayer.getDefault().notify(dialog);
-            }
-        });
+        debugMenuItem = new JMenuItem(new DebugMenuAction(debugMenuLabel));
 
 
         menu.add(fullImport);
@@ -399,7 +163,7 @@ public class Neo4jMenuAction extends CallableSystemAction {
         menu.add(debugMenuItem);
     }
 
-    private void showWarningMessage() {
+    private static void showWarningMessage() {
         NotifyDescriptor notifyDescriptor =
                 new NotifyDescriptor.Message("Selected file is not valid Neo4j debug file.",
                 JOptionPane.WARNING_MESSAGE);
@@ -407,11 +171,330 @@ public class Neo4jMenuAction extends CallableSystemAction {
         DialogDisplayer.getDefault().notify(notifyDescriptor);
     }
 
-    private void initProject() {
+    private static void initProject() {
         ProjectController projectController = Lookup.getDefault().lookup(ProjectController.class);
         if (projectController.getCurrentProject() == null) {
             ProjectControllerUI projectControllerUI = Lookup.getDefault().lookup(ProjectControllerUI.class);
             projectControllerUI.newProject();
+        }
+    }
+
+    private static class FullImportMenuAction extends AbstractAction {
+        private TraversalFilterPanel filterPanel;
+
+
+        FullImportMenuAction(String menuLabel) {
+            super(menuLabel);
+        }
+
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            JFileChooser fileChooser = new JFileChooser();
+            int dialogResult = chooseDirectory(fileChooser);
+
+            if (dialogResult == JFileChooser.CANCEL_OPTION) {
+                return;
+            }
+
+            final File neo4jDirectory = fileChooser.getSelectedFile();
+            if (neo4jDirectory != null && neo4jDirectory.exists()) {
+                NbPreferences.forModule(Neo4jMenuAction.class).put(IMPORT_LAST_PATH, neo4jDirectory.getParentFile().getAbsolutePath());
+            }
+            final GraphDatabaseService graphDB = Neo4jUtils.localDatabase(neo4jDirectory);
+
+            Object result = showFilterDialog();
+
+            if (result == NotifyDescriptor.OK_OPTION) {
+                final Neo4jImporter neo4jImporter = Lookup.getDefault().lookup(Neo4jImporter.class);
+
+                LongTaskExecutor executor = new LongTaskExecutor(true);
+                executor.execute((LongTask) neo4jImporter, new Runnable() {
+
+                    @Override
+                    public void run() {
+                        initProject();
+                        neo4jImporter.importDatabase(graphDB,
+                                filterPanel.getFilterDescriptions(),
+                                filterPanel.isRestrictModeEnabled(),
+                                filterPanel.isMatchCaseEnabled());
+                        StatusDisplayer.getDefault().setStatusText(NbBundle.getMessage(Neo4jMenuAction.class, "CTL_Neo4j_ImportTaskFinished", neo4jDirectory));
+                    }
+                });
+            }
+        }
+
+        private int chooseDirectory(JFileChooser fileChooser) {
+            String lastDirectory = NbPreferences.forModule(Neo4jMenuAction.class).get(IMPORT_LAST_PATH, "");
+            fileChooser.setCurrentDirectory(new File(lastDirectory));
+
+            String localImportDialogTitle = NbBundle.getMessage(Neo4jMenuAction.class, "CTL_Neo4j_ImportDialogTitle");
+            fileChooser.setDialogTitle(localImportDialogTitle);
+
+            Neo4jCustomDirectoryProvider.setEnabled(true);
+            fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+
+            int dialogResult = fileChooser.showOpenDialog(null);
+
+            Neo4jCustomDirectoryProvider.setEnabled(false);
+
+            return dialogResult;
+        }
+
+        private Object showFilterDialog() {
+            String traversalDialogTitle = NbBundle.getMessage(Neo4jMenuAction.class, "CTL_Neo4j_TraversalDialogTitle");
+            filterPanel = new TraversalFilterPanel();
+
+            ValidationPanel validationPanel = filterPanel.createValidationPanel();
+            final DialogDescriptor dd = new DialogDescriptor(validationPanel, traversalDialogTitle);
+
+            validationPanel.addChangeListener(new ChangeListener() {
+
+                @Override
+                public void stateChanged(ChangeEvent e) {
+                    dd.setValid(!((ValidationPanel) e.getSource()).isProblem());
+                }
+            });
+
+            return DialogDisplayer.getDefault().notify(dd);
+        }
+    }
+
+    private static class TraversalImportMenuAction extends AbstractAction {
+        private TraversalImportPanel traversalPanel;
+
+
+        TraversalImportMenuAction(String menuLabel) {
+            super(menuLabel);
+        }
+
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            JFileChooser fileChooser = new JFileChooser();
+            int dialogResult = chooseDirectory(fileChooser);
+
+            if (dialogResult == JFileChooser.CANCEL_OPTION) {
+                return;
+            }
+
+            final File neo4jDirectory = fileChooser.getSelectedFile();
+            if (neo4jDirectory != null && neo4jDirectory.exists()) {
+                NbPreferences.forModule(Neo4jMenuAction.class).put(IMPORT_LAST_PATH, neo4jDirectory.getParentFile().getAbsolutePath());
+            }
+            final GraphDatabaseService graphDB = Neo4jUtils.localDatabase(neo4jDirectory);
+
+            Object result = showTraversalDialog(graphDB);
+            if (result == NotifyDescriptor.OK_OPTION) {
+                final Neo4jImporter neo4jImporter = Lookup.getDefault().lookup(Neo4jImporter.class);
+
+                LongTaskExecutor executor = new LongTaskExecutor(true);
+                executor.execute((LongTask) neo4jImporter, new Runnable() {
+
+                    @Override
+                    public void run() {
+                        initProject();
+                        neo4jImporter.importDatabase(graphDB,
+                                traversalPanel.getStartNodeId(),
+                                traversalPanel.getOrder(),
+                                traversalPanel.getMaxDepth(),
+                                traversalPanel.getRelationshipDescriptions(),
+                                traversalPanel.getFilterDescriptions(),
+                                traversalPanel.isRestrictModeEnabled(),
+                                traversalPanel.isMatchCaseEnabled());
+                        StatusDisplayer.getDefault().setStatusText(NbBundle.getMessage(Neo4jMenuAction.class, "CTL_Neo4j_ImportTaskFinished", neo4jDirectory));
+                    }
+                });
+            }
+        }
+
+        private int chooseDirectory(JFileChooser fileChooser) {
+            String lastDirectory = NbPreferences.forModule(Neo4jMenuAction.class).get(IMPORT_LAST_PATH, "");
+            fileChooser.setCurrentDirectory(new File(lastDirectory));
+
+            String importDialogTitle = NbBundle.getMessage(Neo4jMenuAction.class, "CTL_Neo4j_ImportDialogTitle");
+            fileChooser.setDialogTitle(importDialogTitle);
+
+            Neo4jCustomDirectoryProvider.setEnabled(true);
+            fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+
+            int dialogResult = fileChooser.showOpenDialog(null);
+
+            Neo4jCustomDirectoryProvider.setEnabled(false);
+
+            return dialogResult;
+        }
+
+        private Object showTraversalDialog(GraphDatabaseService graphDB) {
+            String traversalDialogTitle = NbBundle.getMessage(Neo4jMenuAction.class, "CTL_Neo4j_TraversalDialogTitle");
+            traversalPanel = new TraversalImportPanel(graphDB);
+
+            ValidationPanel validationPanel = traversalPanel.createValidationPanel();
+            final DialogDescriptor dd = new DialogDescriptor(validationPanel, traversalDialogTitle);
+
+            validationPanel.addChangeListener(new ChangeListener() {
+
+                @Override
+                public void stateChanged(ChangeEvent e) {
+                    dd.setValid(!((ValidationPanel) e.getSource()).isProblem());
+                }
+            });
+
+            return DialogDisplayer.getDefault().notify(dd);
+        }
+    }
+
+    private static class ExportMenuAction extends AbstractAction {
+        private ExportOptionsPanel exportOptionsPanel;
+
+
+        ExportMenuAction(String menuLabel) {
+            super(menuLabel);
+        }
+
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            Object result = showExportOptionsDialog();
+            if (result == NotifyDescriptor.OK_OPTION) {
+                JFileChooser fileChooser = new JFileChooser();
+                int dialogResult = chooseDirectory(fileChooser);
+
+                if (dialogResult == JFileChooser.APPROVE_OPTION) {
+                    final File neo4jDirectory = fileChooser.getSelectedFile();
+                    if (neo4jDirectory != null && neo4jDirectory.exists()) {
+                        NbPreferences.forModule(Neo4jMenuAction.class).put(EXPORT_LAST_PATH, neo4jDirectory.getParentFile().getAbsolutePath());
+                    }
+                    final Neo4jExporter neo4jExporter = Lookup.getDefault().lookup(Neo4jExporter.class);
+
+                    LongTaskExecutor executor = new LongTaskExecutor(true);
+                    executor.execute((LongTask) neo4jExporter, new Runnable() {
+
+                        @Override
+                        public void run() {
+                            GraphDatabaseService graphDB = Neo4jUtils.localDatabase(neo4jDirectory);
+
+                            neo4jExporter.exportDatabase(graphDB,
+                                    exportOptionsPanel.getFromColumn(),
+                                    exportOptionsPanel.getDefaultValue(),
+                                    exportOptionsPanel.getExportEdgeColumnNames(),
+                                    exportOptionsPanel.getExportNodeColumnNames());
+
+                            graphDB.shutdown();
+                            StatusDisplayer.getDefault().setStatusText(NbBundle.getMessage(Neo4jMenuAction.class, "CTL_Neo4j_ExportTaskFinished", neo4jDirectory));
+                        }
+                    });
+                }
+            }
+        }
+
+        private Object showExportOptionsDialog() {
+            String exportOptionsDialogTitle = NbBundle.getMessage(Neo4jMenuAction.class, "CTL_Neo4j_ExportOptionsDialogTitle");
+            exportOptionsPanel = new ExportOptionsPanel();
+
+            ValidationPanel validationPanel = exportOptionsPanel.createValidationPanel();
+            final DialogDescriptor dd = new DialogDescriptor(validationPanel, exportOptionsDialogTitle);
+
+            validationPanel.addChangeListener(new ChangeListener() {
+
+                @Override
+                public void stateChanged(ChangeEvent e) {
+                    dd.setValid(!((ValidationPanel) e.getSource()).isProblem());
+                }
+            });
+
+            return DialogDisplayer.getDefault().notify(dd);
+        }
+
+        private int chooseDirectory(JFileChooser fileChooser) {
+            String lastDirectory = NbPreferences.forModule(Neo4jMenuAction.class).get(EXPORT_LAST_PATH, "");
+            fileChooser.setCurrentDirectory(new File(lastDirectory));
+
+            String localExportDialogTitle = NbBundle.getMessage(Neo4jMenuAction.class, "CTL_Neo4j_ExportDialogTitle");
+            fileChooser.setDialogTitle(localExportDialogTitle);
+
+            fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+
+            return fileChooser.showOpenDialog(null);
+        }
+    }
+
+    private static class DebugMenuAction extends AbstractAction {
+
+        DebugMenuAction(String menuLabel) {
+            super(menuLabel);
+        }
+
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            JFileChooser fileChooser = new JFileChooser();
+            int dialogResult = chooseDebugFile(fileChooser);
+
+            if (dialogResult == JFileChooser.CANCEL_OPTION) {
+                return;
+            }
+
+            File neo4jDebugFile = fileChooser.getSelectedFile();
+            FileSystemClassLoader classLoader = Lookup.getDefault().lookup(FileSystemClassLoader.class);
+
+            Class<?> loadedClass = null;
+
+            try {
+                loadedClass = classLoader.loadClass(neo4jDebugFile,
+                        enabled,
+                        Neo4jDelegateNodeDebugger.class);
+            } catch (ClassNotFoundException cnfe) {
+                showWarningMessage();
+                return;
+            } catch (NoClassDefFoundError ncdfe) {
+                showWarningMessage();
+                return;
+            } catch (ClassNotFulfillRequirementsException cnfre) {
+                showWarningMessage();
+                return;
+            } catch (IllegalArgumentException iae) {
+                showWarningMessage();
+                return;
+            }
+
+            Neo4jDelegateNodeDebugger neo4jDebugger = null;
+            try {
+                neo4jDebugger = (Neo4jDelegateNodeDebugger) loadedClass.newInstance();
+            } catch (IllegalAccessException iae) {
+                throw new AssertionError();
+            } catch (InstantiationException ie) {
+                throw new AssertionError();
+            }
+
+            // see GraphRestoration JavaDoc
+            GraphRestoration graphRestoration = new GraphRestoration();
+
+            previousEdgeHasUniColor =
+                    VizController.getInstance().getVizModel().isEdgeHasUniColor();
+            VizController.getInstance().getVizModel().setEdgeHasUniColor(true);
+
+            String debugDialogTitle = NbBundle.getMessage(Neo4jMenuAction.class, "CTL_Neo4j_DebugOptionsDialogTitle");
+            DialogDescriptor dialog = new DialogDescriptor(new DebugPanel(new MutableNeo4jDelegateNodeDebugger(neo4jDebugger)),
+                    debugDialogTitle,
+                    false,
+                    graphRestoration);
+            dialog.addPropertyChangeListener(graphRestoration);
+
+            DialogDisplayer.getDefault().notify(dialog);
+        }
+
+        private int chooseDebugFile(JFileChooser fileChooser) {
+            String chooseDebugFileDialogTitle =
+                    NbBundle.getMessage(Neo4jMenuAction.class, "CTL_Neo4j_ChooseDebugFileDialogTitle");
+            fileChooser.setDialogTitle(chooseDebugFileDialogTitle);
+
+            fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+            fileChooser.setFileFilter(new Neo4jDebugFileFilter());
+            fileChooser.setFileView(new Neo4jDebugFileView());
+            fileChooser.setAccessory(new DebugFileChooserComponent(fileChooser));
+
+            return fileChooser.showOpenDialog(null);
         }
     }
 
@@ -423,7 +506,7 @@ public class Neo4jMenuAction extends CallableSystemAction {
      * We want to restore graph in all 3 cases, so we need to implement and register both
      * interfaces.
      */
-    private class GraphRestoration implements PropertyChangeListener, ActionListener {
+    private static class GraphRestoration implements PropertyChangeListener, ActionListener {
 
         private final Neo4jVisualDebugger neo4jVisualDebugger =
                 Lookup.getDefault().lookup(Neo4jVisualDebugger.class);

@@ -29,9 +29,6 @@ import org.gephi.graph.api.Node;
 import org.gephi.layout.api.LayoutController;
 import org.gephi.layout.plugin.force.yifanHu.YifanHu;
 import org.gephi.layout.plugin.force.yifanHu.YifanHuLayout;
-import org.gephi.layout.plugin.forceAtlas.ForceAtlas;
-import org.gephi.layout.spi.Layout;
-import org.gephi.layout.spi.LayoutBuilder;
 import org.gephi.neo4j.plugin.api.GephiToNeo4jMapper;
 import org.gephi.neo4j.plugin.api.Neo4jImporter;
 import org.gephi.neo4j.plugin.api.TraversalOrder;
@@ -127,7 +124,7 @@ public class LazyNeo4jGraphExplorationTool implements Tool {
                         layoutController.setLayout(layout);
                         layoutController.executeLayout();
                     }
-                });               
+                });
             }
 
             private void clearGraphAndNeo4jGraphModel() {
