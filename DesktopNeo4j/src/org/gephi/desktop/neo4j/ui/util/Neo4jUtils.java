@@ -25,7 +25,9 @@ import java.util.LinkedList;
 import java.util.List;
 import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.graphdb.RelationshipType;
+import org.neo4j.graphdb.TransactionFailureException;
 import org.neo4j.kernel.EmbeddedGraphDatabase;
+import org.neo4j.kernel.impl.nioneo.store.IllegalStoreVersionException;
 
 /**
  *
@@ -37,7 +39,15 @@ public class Neo4jUtils {
     }
 
     public static GraphDatabaseService localDatabase(File neo4jDirectory) {
-        return new EmbeddedGraphDatabase(neo4jDirectory.getAbsolutePath());
+        try {
+            return new EmbeddedGraphDatabase(neo4jDirectory.getAbsolutePath());
+        }
+        catch (TransactionFailureException e) {
+            if (e.getCause() instanceof IllegalStoreVersionException)
+                return null;
+
+            throw e;
+        }
     }
 
     public static String[] relationshipTypeNames(GraphDatabaseService graphDB) {
