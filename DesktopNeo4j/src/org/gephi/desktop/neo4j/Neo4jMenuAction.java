@@ -203,6 +203,17 @@ public class Neo4jMenuAction extends CallableSystemAction {
             }
             final GraphDatabaseService graphDB = Neo4jUtils.localDatabase(neo4jDirectory);
 
+            // older incompatible version of Neo4j was used during creating database
+            if (graphDB == null) {
+                String errorMessage = NbBundle.getMessage(Neo4jMenuAction.class, "CTL_Neo4j_InvalidStorageDatabaseVersion");
+
+                NotifyDescriptor notifyDescriptor = new NotifyDescriptor.Message(errorMessage, JOptionPane.WARNING_MESSAGE);
+
+                DialogDisplayer.getDefault().notify(notifyDescriptor);
+
+                return;
+            }
+
             Object result = showFilterDialog();
 
             if (result == NotifyDescriptor.OK_OPTION) {
@@ -283,6 +294,17 @@ public class Neo4jMenuAction extends CallableSystemAction {
                 NbPreferences.forModule(Neo4jMenuAction.class).put(IMPORT_LAST_PATH, neo4jDirectory.getParentFile().getAbsolutePath());
             }
             final GraphDatabaseService graphDB = Neo4jUtils.localDatabase(neo4jDirectory);
+
+            // older incompatible version of Neo4j was used during creating database
+            if (graphDB == null) {
+                String errorMessage = NbBundle.getMessage(Neo4jMenuAction.class, "CTL_Neo4j_InvalidStorageDatabaseVersion");
+
+                NotifyDescriptor notifyDescriptor = new NotifyDescriptor.Message(errorMessage, JOptionPane.WARNING_MESSAGE);
+
+                DialogDisplayer.getDefault().notify(notifyDescriptor);
+
+                return;
+            }
 
             Object result = showTraversalDialog(graphDB);
             if (result == NotifyDescriptor.OK_OPTION) {
@@ -373,6 +395,17 @@ public class Neo4jMenuAction extends CallableSystemAction {
                         @Override
                         public void run() {
                             GraphDatabaseService graphDB = Neo4jUtils.localDatabase(neo4jDirectory);
+
+                            // older incompatible version of Neo4j was used during creating database
+                            if (graphDB == null) {
+                                String errorMessage = NbBundle.getMessage(Neo4jMenuAction.class, "CTL_Neo4j_InvalidStorageDatabaseVersion");
+
+                                NotifyDescriptor notifyDescriptor = new NotifyDescriptor.Message(errorMessage, JOptionPane.WARNING_MESSAGE);
+
+                                DialogDisplayer.getDefault().notify(notifyDescriptor);
+
+                                return;
+                            }
 
                             neo4jExporter.exportDatabase(graphDB,
                                     exportOptionsPanel.getFromColumn(),
