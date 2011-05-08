@@ -39,6 +39,7 @@ public class Neo4jUtils {
     }
 
     public static GraphDatabaseService localDatabase(File neo4jDirectory) throws ObsoleneVersionOfNeo4jStoreException {
+
         try {
             return new EmbeddedGraphDatabase(neo4jDirectory.getAbsolutePath());
         }

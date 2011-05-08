@@ -180,6 +180,14 @@ public class Neo4jMenuAction extends CallableSystemAction {
         }
     }
 
+    private static void handleLocalDatabaseError(Exception e) {
+        String errorMessage = NbBundle.getMessage(Neo4jMenuAction.class, "CTL_Neo4j_InvalidStorageDatabaseVersion");
+
+        NotifyDescriptor notifyDescriptor = new NotifyDescriptor.Message(errorMessage, JOptionPane.WARNING_MESSAGE);
+
+        DialogDisplayer.getDefault().notify(notifyDescriptor);
+    }
+
     private static class FullImportMenuAction extends AbstractAction {
         private TraversalFilterPanel filterPanel;
 
@@ -209,12 +217,7 @@ public class Neo4jMenuAction extends CallableSystemAction {
             }
             // older incompatible version of Neo4j was used during creating database
             catch (ObsoleneVersionOfNeo4jStoreException obsoleneVersionException) {
-                String errorMessage = NbBundle.getMessage(Neo4jMenuAction.class, "CTL_Neo4j_InvalidStorageDatabaseVersion");
-
-                NotifyDescriptor notifyDescriptor = new NotifyDescriptor.Message(errorMessage, JOptionPane.WARNING_MESSAGE);
-
-                DialogDisplayer.getDefault().notify(notifyDescriptor);
-
+                handleLocalDatabaseError(obsoleneVersionException);
                 return;
             }
 
@@ -306,12 +309,7 @@ public class Neo4jMenuAction extends CallableSystemAction {
             }
             // older incompatible version of Neo4j was used during creating database
             catch (ObsoleneVersionOfNeo4jStoreException obsoleneVersionException) {
-                String errorMessage = NbBundle.getMessage(Neo4jMenuAction.class, "CTL_Neo4j_InvalidStorageDatabaseVersion");
-
-                NotifyDescriptor notifyDescriptor = new NotifyDescriptor.Message(errorMessage, JOptionPane.WARNING_MESSAGE);
-
-                DialogDisplayer.getDefault().notify(notifyDescriptor);
-
+                handleLocalDatabaseError(obsoleneVersionException);
                 return;
             }
 
@@ -411,12 +409,7 @@ public class Neo4jMenuAction extends CallableSystemAction {
                             }
                             // older incompatible version of Neo4j was used during creating database
                             catch (ObsoleneVersionOfNeo4jStoreException obsoleneVersionException) {
-                                String errorMessage = NbBundle.getMessage(Neo4jMenuAction.class, "CTL_Neo4j_InvalidStorageDatabaseVersion");
-
-                                NotifyDescriptor notifyDescriptor = new NotifyDescriptor.Message(errorMessage, JOptionPane.WARNING_MESSAGE);
-
-                                DialogDisplayer.getDefault().notify(notifyDescriptor);
-
+                                handleLocalDatabaseError(obsoleneVersionException);
                                 return;
                             }
 
