@@ -47,6 +47,7 @@ import org.gephi.desktop.neo4j.ui.ExportOptionsPanel;
 import org.gephi.desktop.neo4j.ui.TraversalFilterPanel;
 import org.gephi.desktop.neo4j.ui.TraversalImportPanel;
 import org.gephi.desktop.neo4j.ui.util.Neo4jUtils;
+import org.gephi.desktop.neo4j.ui.util.ObsoleneVersionOfNeo4jStoreException;
 import org.gephi.desktop.project.api.ProjectControllerUI;
 import org.gephi.project.api.ProjectController;
 import org.gephi.project.api.Workspace;
@@ -201,10 +202,13 @@ public class Neo4jMenuAction extends CallableSystemAction {
             if (neo4jDirectory != null && neo4jDirectory.exists()) {
                 NbPreferences.forModule(Neo4jMenuAction.class).put(IMPORT_LAST_PATH, neo4jDirectory.getParentFile().getAbsolutePath());
             }
-            final GraphDatabaseService graphDB = Neo4jUtils.localDatabase(neo4jDirectory);
 
+            GraphDatabaseService tempGraphDB;
+            try {
+                tempGraphDB = Neo4jUtils.localDatabase(neo4jDirectory);
+            }
             // older incompatible version of Neo4j was used during creating database
-            if (graphDB == null) {
+            catch (ObsoleneVersionOfNeo4jStoreException obsoleneVersionException) {
                 String errorMessage = NbBundle.getMessage(Neo4jMenuAction.class, "CTL_Neo4j_InvalidStorageDatabaseVersion");
 
                 NotifyDescriptor notifyDescriptor = new NotifyDescriptor.Message(errorMessage, JOptionPane.WARNING_MESSAGE);
@@ -213,6 +217,8 @@ public class Neo4jMenuAction extends CallableSystemAction {
 
                 return;
             }
+
+            final GraphDatabaseService graphDB = tempGraphDB;
 
             Object result = showFilterDialog();
 
@@ -293,10 +299,13 @@ public class Neo4jMenuAction extends CallableSystemAction {
             if (neo4jDirectory != null && neo4jDirectory.exists()) {
                 NbPreferences.forModule(Neo4jMenuAction.class).put(IMPORT_LAST_PATH, neo4jDirectory.getParentFile().getAbsolutePath());
             }
-            final GraphDatabaseService graphDB = Neo4jUtils.localDatabase(neo4jDirectory);
 
+            GraphDatabaseService tempGraphDB;
+            try {
+                tempGraphDB = Neo4jUtils.localDatabase(neo4jDirectory);
+            }
             // older incompatible version of Neo4j was used during creating database
-            if (graphDB == null) {
+            catch (ObsoleneVersionOfNeo4jStoreException obsoleneVersionException) {
                 String errorMessage = NbBundle.getMessage(Neo4jMenuAction.class, "CTL_Neo4j_InvalidStorageDatabaseVersion");
 
                 NotifyDescriptor notifyDescriptor = new NotifyDescriptor.Message(errorMessage, JOptionPane.WARNING_MESSAGE);
@@ -305,6 +314,8 @@ public class Neo4jMenuAction extends CallableSystemAction {
 
                 return;
             }
+
+            final GraphDatabaseService graphDB = tempGraphDB;
 
             Object result = showTraversalDialog(graphDB);
             if (result == NotifyDescriptor.OK_OPTION) {
@@ -394,10 +405,12 @@ public class Neo4jMenuAction extends CallableSystemAction {
 
                         @Override
                         public void run() {
-                            GraphDatabaseService graphDB = Neo4jUtils.localDatabase(neo4jDirectory);
-
+                            GraphDatabaseService tempGraphDB;
+                            try {
+                                tempGraphDB = Neo4jUtils.localDatabase(neo4jDirectory);
+                            }
                             // older incompatible version of Neo4j was used during creating database
-                            if (graphDB == null) {
+                            catch (ObsoleneVersionOfNeo4jStoreException obsoleneVersionException) {
                                 String errorMessage = NbBundle.getMessage(Neo4jMenuAction.class, "CTL_Neo4j_InvalidStorageDatabaseVersion");
 
                                 NotifyDescriptor notifyDescriptor = new NotifyDescriptor.Message(errorMessage, JOptionPane.WARNING_MESSAGE);
@@ -406,6 +419,8 @@ public class Neo4jMenuAction extends CallableSystemAction {
 
                                 return;
                             }
+
+                            final GraphDatabaseService graphDB = tempGraphDB;
 
                             neo4jExporter.exportDatabase(graphDB,
                                     exportOptionsPanel.getFromColumn(),

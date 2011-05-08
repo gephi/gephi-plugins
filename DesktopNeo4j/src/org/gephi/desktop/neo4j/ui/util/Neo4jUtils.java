@@ -38,13 +38,13 @@ public class Neo4jUtils {
     private Neo4jUtils() {
     }
 
-    public static GraphDatabaseService localDatabase(File neo4jDirectory) {
+    public static GraphDatabaseService localDatabase(File neo4jDirectory) throws ObsoleneVersionOfNeo4jStoreException {
         try {
             return new EmbeddedGraphDatabase(neo4jDirectory.getAbsolutePath());
         }
         catch (TransactionFailureException e) {
             if (e.getCause() instanceof IllegalStoreVersionException)
-                return null;
+                throw new ObsoleneVersionOfNeo4jStoreException(e);
 
             throw e;
         }
