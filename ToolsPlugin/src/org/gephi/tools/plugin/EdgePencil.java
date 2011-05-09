@@ -62,8 +62,7 @@ public class EdgePencil implements Tool {
         weight = 1f;
     }
 
-    public boolean select() {
-        return false;
+    public void select() {
     }
 
     public void unselect() {

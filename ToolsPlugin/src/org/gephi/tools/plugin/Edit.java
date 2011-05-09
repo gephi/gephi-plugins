@@ -42,11 +42,9 @@ import org.openide.util.lookup.ServiceProvider;
 public class Edit implements Tool {
     private EditWindowController edc;
 
-    public boolean select() {
+    public void select() {
         edc=Lookup.getDefault().lookup(EditWindowController.class);
         edc.openEditWindow();
-
-        return false;
     }
 
     public void unselect() {

@@ -63,7 +63,7 @@ public class LazyNeo4jGraphExplorationTool implements Tool {
 
 
     @Override
-    public boolean select() {
+    public void select() {
         gephiToNeo4jMapper = Lookup.getDefault().lookup(GephiToNeo4jMapper.class);
 
         if (!gephiToNeo4jMapper.isNeo4jDatabaseInCurrentWorkspace()) {
@@ -74,10 +74,11 @@ public class LazyNeo4jGraphExplorationTool implements Tool {
 
             DialogDisplayer.getDefault().notify(notifyDescriptor);
 
-            return true;
+            System.out.println("neni neo4j databaza");
+//            return true;
         }
-
-        return false;
+        System.out.println("vypissss");
+//        return false;
     }
 
     @Override

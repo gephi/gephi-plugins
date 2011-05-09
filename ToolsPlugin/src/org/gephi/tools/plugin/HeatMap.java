@@ -66,8 +66,7 @@ public class HeatMap implements Tool {
         gradientPositions = new float[]{0f, 0.5f, 1f};
     }
 
-    public boolean select() {
-        return false;
+    public void select() {
     }
 
     public void unselect() {

@@ -52,8 +52,7 @@ public class Brush implements Tool {
     private float intensity = 0.3f;
     private DiffusionMethods.DiffusionMethod diffusionMethod = DiffusionMethods.DiffusionMethod.NEIGHBORS;
 
-    public boolean select() {
-        return false;
+    public void select() {
     }
 
     public void unselect() {

@@ -64,12 +64,10 @@ public class ShortestPath implements Tool {
         color = Color.RED;
     }
 
-    public boolean select() {
+    public void select() {
         settingEdgeSourceColor = !VizController.getInstance().getVizModel().isEdgeHasUniColor();
         VizController.getInstance().getVizModel().setEdgeHasUniColor(true);
         VizController.getInstance().getVizConfig().setEnableAutoSelect(false);
-
-        return false;
     }
 
     public void unselect() {
