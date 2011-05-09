@@ -74,6 +74,8 @@ public class GraphUpdaterEventHandler implements GraphEventHandler {
         properties.addNodePropertyAssociation(NodeProperties.R, "r");
         properties.addNodePropertyAssociation(NodeProperties.G, "g");
         properties.addNodePropertyAssociation(NodeProperties.B, "b");
+        properties.addNodePropertyAssociation(NodeProperties.COLOR, "color");
+        properties.addNodePropertyAssociation(NodeProperties.FIXED, "fixed");
 
         //Default edge associations
         properties.addEdgePropertyAssociation(EdgeProperties.ID, "id");
@@ -84,6 +86,7 @@ public class GraphUpdaterEventHandler implements GraphEventHandler {
         properties.addEdgePropertyAssociation(EdgeProperties.R, "r");
         properties.addEdgePropertyAssociation(EdgeProperties.G, "g");
         properties.addEdgePropertyAssociation(EdgeProperties.B, "b");
+        properties.addEdgePropertyAssociation(EdgeProperties.COLOR, "color");
     }
 
     /**
@@ -105,7 +108,7 @@ public class GraphUpdaterEventHandler implements GraphEventHandler {
         try {
             doHandleGraphEvent(event);
         } catch (RuntimeException e) {
-            logger.log(Level.WARNING, e.getMessage(), e);
+            logger.log(Level.INFO, e.getMessage(), e);
             if (report!=null) {
                 Issue issue = new Issue(e, Issue.Level.WARNING);
                 report.logIssue(issue);
@@ -316,6 +319,10 @@ public class GraphUpdaterEventHandler implements GraphEventHandler {
                 String label = (value!=null)?value.toString():null;
                 node.getNodeData().setLabel(label);
                 break;
+            case FIXED:
+                boolean fixed = (value!=null)?Boolean.valueOf(value.toString()):false;
+                node.getNodeData().setFixed(fixed);
+                break;
             case X:
                 float x = Float.valueOf(value.toString());
                 if (x != 0) {
@@ -336,15 +343,31 @@ public class GraphUpdaterEventHandler implements GraphEventHandler {
                 break;
             case R:
                 float r = Float.valueOf(value.toString());
+                if (r < 0.0 || r > 1.0) {
+                    throw new IllegalArgumentException("Color parameter outside of expected range: " + r);
+                }
                 node.getNodeData().setR(r);
                 break;
             case G:
                 float g = Float.valueOf(value.toString());
+                if (g < 0.0 || g > 1.0) {
+                    throw new IllegalArgumentException("Color parameter outside of expected range: " + g);
+                }
                 node.getNodeData().setG(g);
                 break;
             case B:
                 float b = Float.valueOf(value.toString());
+                if (b < 0.0 || b > 1.0) {
+                    throw new IllegalArgumentException("Color parameter outside of expected range: " + b);
+                }
                 node.getNodeData().setB(b);
+                break;
+            case COLOR:
+                Integer color = (value!=null)?Integer.decode(value.toString()):0;
+                int i = color.intValue();
+                node.getNodeData().setR((i >> 16) & 0xFF);
+                node.getNodeData().setG((i >> 8) & 0xFF);
+                node.getNodeData().setB(i & 0xFF);
                 break;
             case SIZE:
                 float size = Float.valueOf(value.toString());
@@ -394,15 +417,31 @@ public class GraphUpdaterEventHandler implements GraphEventHandler {
                 break;
             case R:
                 float r = Float.valueOf(value.toString());
+                if (r < 0.0 || r > 1.0) {
+                    throw new IllegalArgumentException("Color parameter outside of expected range: " + r);
+                }
                 edge.getEdgeData().setR(r);
                 break;
             case G:
                 float g = Float.valueOf(value.toString());
+                if (g < 0.0 || g > 1.0) {
+                    throw new IllegalArgumentException("Color parameter outside of expected range: " + g);
+                }
                 edge.getEdgeData().setG(g);
                 break;
             case B:
                 float b = Float.valueOf(value.toString());
+                if (b < 0.0 || b > 1.0) {
+                    throw new IllegalArgumentException("Color parameter outside of expected range: " + b);
+                }
                 edge.getEdgeData().setB(b);
+                break;
+            case COLOR:
+                Integer color = (value!=null)?Integer.decode(value.toString()):0;
+                int i = color.intValue();
+                edge.getEdgeData().setR((i >> 16) & 0xFF);
+                edge.getEdgeData().setG((i >> 8) & 0xFF);
+                edge.getEdgeData().setB(i & 0xFF);
                 break;
         }
     }
