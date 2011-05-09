@@ -37,6 +37,7 @@ import org.gephi.tools.spi.Tool;
 import org.gephi.tools.spi.ToolEventListener;
 import org.gephi.tools.spi.ToolSelectionType;
 import org.gephi.tools.spi.ToolUI;
+import org.gephi.tools.spi.UnselectToolException;
 import org.gephi.utils.longtask.api.LongTaskExecutor;
 import org.gephi.utils.longtask.spi.LongTask;
 import org.openide.DialogDisplayer;
@@ -74,11 +75,8 @@ public class LazyNeo4jGraphExplorationTool implements Tool {
 
             DialogDisplayer.getDefault().notify(notifyDescriptor);
 
-            System.out.println("neni neo4j databaza");
-//            return true;
+            throw new UnselectToolException();
         }
-        System.out.println("vypissss");
-//        return false;
     }
 
     @Override
