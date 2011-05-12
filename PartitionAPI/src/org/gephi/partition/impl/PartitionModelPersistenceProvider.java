@@ -17,14 +17,15 @@ GNU Affero General Public License for more details.
 
 You should have received a copy of the GNU Affero General Public License
 along with Gephi.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.gephi.partition.impl;
 
+import javax.xml.stream.XMLStreamException;
+import javax.xml.stream.XMLStreamReader;
+import javax.xml.stream.XMLStreamWriter;
 import org.gephi.project.api.Workspace;
 import org.gephi.project.spi.WorkspacePersistenceProvider;
 import org.openide.util.lookup.ServiceProvider;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
 
 /**
  *
@@ -33,12 +34,20 @@ import org.w3c.dom.Element;
 @ServiceProvider(service = WorkspacePersistenceProvider.class)
 public class PartitionModelPersistenceProvider implements WorkspacePersistenceProvider {
 
-    public Element writeXML(Document document, Workspace workspace) {
-        return document.createElement("partitionmodel");
+    public void writeXML(XMLStreamWriter writer, Workspace workspace) {
+        try {
+            writer.writeEmptyElement("partitionmodel");
+        } catch (XMLStreamException ex) {
+            throw new RuntimeException(ex);
+        }
     }
 
-    public void readXML(Element element, Workspace workspace) {
-        workspace.add(new PartitionModelImpl());
+    public void readXML(XMLStreamReader reader, Workspace workspace) {
+        PartitionModelImpl partitionModel = workspace.getLookup().lookup(PartitionModelImpl.class);
+        if (partitionModel == null) {
+            partitionModel = new PartitionModelImpl();
+            workspace.add(partitionModel);
+        }
     }
 
     public String getIdentifier() {

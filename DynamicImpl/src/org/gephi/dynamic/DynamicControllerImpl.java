@@ -6,18 +6,18 @@
  * 
  * This file is part of Gephi.
  *
- * Gephi is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * Gephi is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with Gephi.  If not, see <http://www.gnu.org/licenses/>.
+Gephi is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+Gephi is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with Gephi.  If not, see <http://www.gnu.org/licenses/>.
  */
 package org.gephi.dynamic;
 
@@ -47,6 +47,7 @@ import org.openide.util.lookup.ServiceProvider;
  */
 @ServiceProvider(service = DynamicController.class)
 public final class DynamicControllerImpl implements DynamicController {
+
     private DynamicModelImpl model;
     private List<DynamicModelListener> listeners;
     private DynamicModelEventDispatchThread eventThread;
@@ -55,14 +56,16 @@ public final class DynamicControllerImpl implements DynamicController {
      * The default constructor.
      */
     public DynamicControllerImpl() {
-        listeners   = Collections.synchronizedList(new ArrayList<DynamicModelListener>());
+        listeners = Collections.synchronizedList(new ArrayList<DynamicModelListener>());
         eventThread = new DynamicModelEventDispatchThread();
         eventThread.start();
 
         ProjectController projectController = Lookup.getDefault().lookup(ProjectController.class);
         projectController.addWorkspaceListener(new WorkspaceListener() {
+
             @Override
             public void initialize(Workspace workspace) {
+                workspace.add(new DynamicModelImpl(DynamicControllerImpl.this, workspace));
             }
 
             @Override
@@ -105,6 +108,13 @@ public final class DynamicControllerImpl implements DynamicController {
 
     @Override
     public DynamicModel getModel() {
+        if (model == null) {
+            ProjectController projectController = Lookup.getDefault().lookup(ProjectController.class);
+            if (projectController.getCurrentWorkspace() != null) {
+                Workspace workspace = projectController.getCurrentWorkspace();
+                return workspace.getLookup().lookup(DynamicModel.class);
+            }
+        }
         return model;
     }
 

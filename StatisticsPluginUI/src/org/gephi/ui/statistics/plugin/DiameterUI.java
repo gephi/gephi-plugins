@@ -25,6 +25,7 @@ import javax.swing.JPanel;
 import org.gephi.statistics.plugin.GraphDistance;
 import org.gephi.statistics.spi.Statistics;
 import org.gephi.statistics.spi.StatisticsUI;
+import org.openide.util.NbBundle;
 import org.openide.util.lookup.ServiceProvider;
 
 @ServiceProvider(service = StatisticsUI.class)
@@ -42,14 +43,14 @@ public class DiameterUI implements StatisticsUI {
         this.graphDistance = (GraphDistance) statistics;
         if (panel != null) {
             panel.setDirected(graphDistance.isDirected());
-            panel.doNormalize(graphDistance.useRelative());
+            panel.doNormalize(graphDistance.isNormalized());
         }
     }
 
     public void unsetup() {
         if (panel != null) {
             graphDistance.setDirected(panel.isDirected());
-            graphDistance.setRelative(panel.normalize());
+            graphDistance.setNormalized(panel.normalize());
         }
         panel = null;
         graphDistance = null;
@@ -65,7 +66,7 @@ public class DiameterUI implements StatisticsUI {
     }
 
     public String getDisplayName() {
-        return "Network Diameter";
+        return NbBundle.getMessage(getClass(), "DiameterUI.name");
     }
 
     public String getCategory() {

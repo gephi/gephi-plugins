@@ -1,5 +1,5 @@
 /*
-Copyright 2008-2010 Gephi
+Copyright 2008-2011 Gephi
 Authors : Patick J. McSweeney <pjmcswee@syr.edu>, Sebastien Heymann <seb@gephi.org>
 Website : http://www.gephi.org
 
@@ -20,6 +20,8 @@ along with Gephi.  If not, see <http://www.gnu.org/licenses/>.
 */
 package org.gephi.statistics.plugin;
 
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Random;
@@ -51,54 +53,29 @@ public class Modularity implements Statistics, LongTask {
     private double modularity;
     private boolean isRandomized = false;
 
-    /**
-     *
-     * @param isRandomized
-     */
     public void setRandom(boolean isRandomized) {
         this.isRandomized = isRandomized;
     }
 
-    /**
-     * 
-     * @return
-     */
     public boolean getRandom() {
         return isRandomized;
     }
 
-    /**
-     * 
-     * @return
-     */
     public boolean cancel() {
         this.isCanceled = true;
         return true;
     }
 
-    /**
-     *
-     * @param progressTicket
-     */
     public void setProgressTicket(ProgressTicket progressTicket) {
         this.progress = progressTicket;
     }
 
-    /**
-     *
-     */
     class ModEdge {
 
         int source;
         int target;
         int weight;
 
-        /**
-         * 
-         * @param s
-         * @param t
-         * @param w
-         */
         public ModEdge(int s, int t, int w) {
             source = s;
             target = t;
@@ -108,15 +85,10 @@ public class Modularity implements Statistics, LongTask {
 
     class CommunityStructure {
 
-        /**   */
         HashMap<Community, Integer>[] nodeConnections;
-        /** */
         HashMap<Node, Integer> map;
-        /**   */
         Community[] nodeCommunities;
-        /** */
         HierarchicalUndirectedGraph graph;
-        /** */
         double[] weights;
         double graphWeightSum;
         LinkedList<ModEdge>[] topology;
@@ -124,13 +96,9 @@ public class Modularity implements Statistics, LongTask {
         int N;
         HashMap<Integer, Community> invMap;
 
-        /**
-         * 
-         * @param graph
-         */
-        CommunityStructure(HierarchicalUndirectedGraph graph) {
-            this.graph = graph;
-            N = graph.getNodeCount();
+        CommunityStructure(HierarchicalUndirectedGraph hgraph) {
+            this.graph = hgraph;
+            N = hgraph.getNodeCount();
             invMap = new HashMap<Integer, Community>();
             nodeConnections = new HashMap[N];
             nodeCommunities = new Community[N];
@@ -139,11 +107,11 @@ public class Modularity implements Statistics, LongTask {
             communities = new LinkedList<Community>();
             int index = 0;
             weights = new double[N];
-            for (Node node : graph.getNodes()) {
+            for (Node node : hgraph.getNodes()) {
                 map.put(node, index);
                 nodeCommunities[index] = new Community(this);
                 nodeConnections[index] = new HashMap<Community, Integer>();
-                weights[index] = graph.getTotalDegree(node);
+                weights[index] = hgraph.getTotalDegree(node);
                 nodeCommunities[index].seed(index);
                 Community hidden = new Community(structure);
                 hidden.nodes.add(index);
@@ -156,11 +124,11 @@ public class Modularity implements Statistics, LongTask {
                 }
             }
 
-            for (Node node : graph.getNodes()) {
+            for (Node node : hgraph.getNodes()) {
                 int node_index = map.get(node);
                 topology[node_index] = new LinkedList<ModEdge>();
 
-                for (Node neighbor : graph.getNeighbors(node)) {
+                for (Node neighbor : hgraph.getNeighbors(node)) {
                     if (node == neighbor) {
                         continue;
                     }
@@ -182,11 +150,6 @@ public class Modularity implements Statistics, LongTask {
             graphWeightSum /= 2.0;
         }
 
-        /**
-         *
-         * @param node
-         * @param to
-         */
         private void addNodeTo(int node, Community to) {
             to.add(new Integer(node));
             nodeCommunities[node] = to;
@@ -233,11 +196,6 @@ public class Modularity implements Statistics, LongTask {
             }
         }
 
-        /**
-         * 
-         * @param node
-         * @param from
-         */
         private void removeNodeFrom(int node, Community from) {
             Community community = nodeCommunities[node];
             for (ModEdge e : topology[node]) {
@@ -287,22 +245,13 @@ public class Modularity implements Statistics, LongTask {
             from.remove(new Integer(node));
         }
 
-        /**
-         *
-         * @param node
-         * @param to
-         */
-        public void moveNodeTo(int node, Community to) {
+        private void moveNodeTo(int node, Community to) {
             Community from = nodeCommunities[node];
             removeNodeFrom(node, from);
             addNodeTo(node, to);
         }
 
-        /**
-         *
-         * @return
-         */
-        public void zoomOut() {
+        private void zoomOut() {
             int M = communities.size();
             LinkedList<ModEdge>[] newTopology = new LinkedList[M];
             int index = 0;
@@ -354,9 +303,6 @@ public class Modularity implements Statistics, LongTask {
         }
     }
 
-    /**
-     *
-     */
     class Community {
 
         double weightSum;
@@ -365,18 +311,10 @@ public class Modularity implements Statistics, LongTask {
         HashMap<Community, Integer> connections;
         Integer min;
 
-        /**
-         * 
-         * @return
-         */
         public int size() {
             return nodes.size();
         }
 
-        /**
-         * 
-         * @param com
-         */
         public Community(Community com) {
             structure = com.structure;
             connections = new HashMap<Community, Integer>();
@@ -385,31 +323,18 @@ public class Modularity implements Statistics, LongTask {
             //mHidden = pCom.mHidden;
         }
 
-        /**
-         * 
-         * @param structure
-         */
         public Community(CommunityStructure structure) {
             this.structure = structure;
             connections = new HashMap<Community, Integer>();
             nodes = new LinkedList<Integer>();
         }
 
-        /**
-         * 
-         * @param node
-         */
         public void seed(int node) {
             nodes.add(node);
             weightSum += structure.weights[node];
             min = node;
         }
 
-        /**
-         *
-         * @param node
-         * @return
-         */
         public boolean add(int node) {
             nodes.addLast(new Integer(node));
             weightSum += structure.weights[node];
@@ -419,11 +344,6 @@ public class Modularity implements Statistics, LongTask {
             return true;
         }
 
-        /**
-         * 
-         * @param node
-         * @return
-         */
         public boolean remove(int node) {
             boolean result = nodes.remove(new Integer(node));
             weightSum -= structure.weights[node];
@@ -446,25 +366,21 @@ public class Modularity implements Statistics, LongTask {
         }
     }
 
-    /**
-     *
-     * @param graphModel
-     */
     public void execute(GraphModel graphModel, AttributeModel attributeModel) {
-        HierarchicalUndirectedGraph graph = graphModel.getHierarchicalUndirectedGraphVisible();
-        execute(graph, attributeModel);
+        HierarchicalUndirectedGraph hgraph = graphModel.getHierarchicalUndirectedGraphVisible();
+        execute(hgraph, attributeModel);
     }
 
-    public void execute(HierarchicalUndirectedGraph graph, AttributeModel attributeModel) {
+    public void execute(HierarchicalUndirectedGraph hgraph, AttributeModel attributeModel) {
         isCanceled = false;
         Progress.start(progress);
         Random rand = new Random();
 
-        graph.readLock();
+        hgraph.readLock();
 
-        structure = new CommunityStructure(graph);
+        structure = new CommunityStructure(hgraph);
         if (isCanceled) {
-            graph.readUnlockAll();
+            hgraph.readUnlockAll();
             return;
         }
         boolean someChange = true;
@@ -504,13 +420,13 @@ public class Modularity implements Statistics, LongTask {
                         localChange = true;
                     }
                     if (isCanceled) {
-                        graph.readUnlockAll();
+                        hgraph.readUnlockAll();
                         return;
                     }
                 }
                 someChange = localChange || someChange;
                 if (isCanceled) {
-                    graph.readUnlockAll();
+                    hgraph.readUnlockAll();
                     return;
                 }
             }
@@ -520,7 +436,7 @@ public class Modularity implements Statistics, LongTask {
             }
         }
 
-        int[] comStructure = new int[graph.getNodeCount()];
+        int[] comStructure = new int[hgraph.getNodeCount()];
         int count = 0;
         double[] degreeCount = new double[structure.communities.size()];
         for (Community com : structure.communities) {
@@ -532,24 +448,17 @@ public class Modularity implements Statistics, LongTask {
             }
             count++;
         }
-        for (Node node : graph.getNodes()) {
+        for (Node node : hgraph.getNodes()) {
             int index = structure.map.get(node);
-            degreeCount[comStructure[index]] += graph.getTotalDegree(node);
+            degreeCount[comStructure[index]] += hgraph.getTotalDegree(node);
         }
 
-        modularity = finalQ(comStructure, degreeCount, graph, attributeModel);
+        modularity = finalQ(comStructure, degreeCount, hgraph, attributeModel);
 
-        graph.readUnlock();
+        hgraph.readUnlock();
     }
 
-    /**
-     * 
-     * @param struct
-     * @param degrees
-     * @param hgraph
-     * @return
-     */
-    public double finalQ(int[] struct, double[] degrees, HierarchicalUndirectedGraph hgraph, AttributeModel attributeModel) {
+    private double finalQ(int[] struct, double[] degrees, HierarchicalUndirectedGraph hgraph, AttributeModel attributeModel) {
         AttributeTable nodeTable = attributeModel.getNodeTable();
         AttributeColumn modCol = nodeTable.getColumn(MODULARITY_CLASS);
         if (modCol == null) {
@@ -579,38 +488,27 @@ public class Modularity implements Statistics, LongTask {
         return res;
     }
 
-    /**
-     * 
-     * @return
-     */
     public double getModularity() {
         return modularity;
     }
 
-    /**
-     *
-     * @return
-     */
     public String getReport() {
+        NumberFormat f = new DecimalFormat("#0.000");
 
         String report = "<HTML> <BODY> <h1>Modularity Report </h1> "
                 + "<hr>"
                 + "<h2> Parameters: </h2>"
                 + "Randomize:  " + (isRandomized ? "On" : "Off") + "<br>"
                 + "<br> <h2> Results: </h2>"
-                + "Modularity: " + modularity + "<br>"
+                + "Modularity: " + f.format(modularity) + "<br>"
                 + "Number of Communities: " + structure.communities.size()
-                + "</BODY></HTML>";
+                + "<br /><br />" + "<h2> Algorithm: </h2>"
+                + "Vincent D Blondel, Jean-Loup Guillaume, Renaud Lambiotte, Etienne Lefebvre, <i>Fast unfolding of communities in large networks</i>, in Journal of Statistical Mechanics: Theory and Experiment 2008 (10), P1000<br />"
+                + "</BODY> </HTML>";
 
         return report;
     }
 
-    /**
-     * 
-     * @param node
-     * @param pCom
-     * @return
-     */
     private double q(int node, Community community) {
 
         Integer edgesToInt = structure.nodeConnections[node].get(community);

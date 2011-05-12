@@ -1,3 +1,23 @@
+/*
+Copyright 2008-2010 Gephi
+Website : http://www.gephi.org
+
+This file is part of Gephi.
+
+Gephi is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+Gephi is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with Gephi.  If not, see <http://www.gnu.org/licenses/>.
+*/
+
 package org.gephi.desktop.preview;
 
 import java.awt.BorderLayout;
@@ -50,27 +70,10 @@ public final class PreviewTopComponent extends TopComponent {
 
         // inits the preview applet
         sketch = new ProcessingPreview();
+        sketch.init();
+        sketch.registerPost(processingListener);
+        sketch.registerPre(processingListener);
         sketchPanel.add(sketch, BorderLayout.CENTER);
-
-        Thread initProcessing = new Thread(new Runnable() {
-
-            public void run() {
-                try {
-                    Thread.sleep(200);
-                } catch (InterruptedException ex) {
-                    Exceptions.printStackTrace(ex);
-                }
-                SwingUtilities.invokeLater(new Runnable() {
-
-                    public void run() {
-                        sketch.init();
-                        sketch.registerPost(processingListener);
-                        sketch.registerPre(processingListener);
-                    }
-                });
-            }
-        });
-        initProcessing.start();
 
         // forces the controller instanciation
         PreviewUIController.findInstance();

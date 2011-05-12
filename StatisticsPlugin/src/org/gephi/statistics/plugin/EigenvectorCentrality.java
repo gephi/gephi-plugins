@@ -1,5 +1,5 @@
 /*
-Copyright 2008-2010 Gephi
+Copyright 2008-2011 Gephi
 Authors : Patick J. McSweeney <pjmcswee@syr.edu>, Sebastien Heymann <seb@gephi.org>
 Website : http://www.gephi.org
 
@@ -20,9 +20,8 @@ along with Gephi.  If not, see <http://www.gnu.org/licenses/>.
  */
 package org.gephi.statistics.plugin;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.HashMap;
+import java.util.Map;
 import org.gephi.data.attributes.api.AttributeColumn;
 import org.gephi.data.attributes.api.AttributeModel;
 import org.gephi.data.attributes.api.AttributeOrigin;
@@ -35,21 +34,15 @@ import org.gephi.graph.api.GraphController;
 import org.gephi.graph.api.GraphModel;
 import org.gephi.graph.api.HierarchicalDirectedGraph;
 import org.gephi.graph.api.HierarchicalGraph;
+import org.gephi.graph.api.HierarchicalUndirectedGraph;
 import org.gephi.graph.api.Node;
 import org.gephi.statistics.spi.Statistics;
-import org.gephi.utils.TempDirUtils;
-import org.gephi.utils.TempDirUtils.TempDir;
 import org.gephi.utils.longtask.spi.LongTask;
 import org.gephi.utils.progress.Progress;
 import org.gephi.utils.progress.ProgressTicket;
 import org.jfree.chart.ChartFactory;
-import org.jfree.chart.ChartRenderingInfo;
-import org.jfree.chart.ChartUtilities;
 import org.jfree.chart.JFreeChart;
-import org.jfree.chart.entity.StandardEntityCollection;
 import org.jfree.chart.plot.PlotOrientation;
-import org.jfree.chart.plot.XYPlot;
-import org.jfree.chart.renderer.xy.XYLineAndShapeRenderer;
 import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
 import org.openide.util.Lookup;
@@ -119,7 +112,7 @@ public class EigenvectorCentrality implements Statistics, LongTask {
         execute(graph, attributeModel);
     }
 
-    public void execute(HierarchicalGraph graph, AttributeModel attributeModel) {
+    public void execute(HierarchicalGraph hgraph, AttributeModel attributeModel) {
 
         AttributeTable nodeTable = attributeModel.getNodeTable();
         AttributeColumn eigenCol = nodeTable.getColumn(EIGENVECTOR);
@@ -127,8 +120,8 @@ public class EigenvectorCentrality implements Statistics, LongTask {
             eigenCol = nodeTable.addColumn(EIGENVECTOR, "Eigenvector Centrality", AttributeType.DOUBLE, AttributeOrigin.COMPUTED, new Double(0));
         }
 
-        int N = graph.getNodeCount();
-        graph.readLock();
+        int N = hgraph.getNodeCount();
+        hgraph.readLock();
 
         double[] tmp = new double[N];
         centralities = new double[N];
@@ -138,7 +131,7 @@ public class EigenvectorCentrality implements Statistics, LongTask {
         HashMap<Integer, Node> indicies = new HashMap<Integer, Node>();
         HashMap<Node, Integer> invIndicies = new HashMap<Node, Integer>();
         int count = 0;
-        for (Node u : graph.getNodes()) {
+        for (Node u : hgraph.getNodes()) {
             indicies.put(count, u);
             invIndicies.put(u, count);
             centralities[count] = 1;
@@ -150,13 +143,13 @@ public class EigenvectorCentrality implements Statistics, LongTask {
                 Node u = indicies.get(i);
                 EdgeIterable iter = null;
                 if (isDirected) {
-                    iter = ((HierarchicalDirectedGraph) graph).getInEdges(u);
+                    iter = ((HierarchicalDirectedGraph) hgraph).getInEdgesAndMetaInEdges(u);
                 } else {
-                    iter = graph.getEdges(u);
+                    iter = ((HierarchicalUndirectedGraph) hgraph).getEdgesAndMetaEdges(u);
                 }
 
                 for (Edge e : iter) {
-                    Node v = graph.getOpposite(u, e);
+                    Node v = hgraph.getOpposite(u, e);
                     Integer id = invIndicies.get(v);
                     tmp[i] += centralities[id];
                 }
@@ -191,7 +184,7 @@ public class EigenvectorCentrality implements Statistics, LongTask {
                 return;
             }
         }
-        graph.readUnlock();
+        hgraph.readUnlock();
 
         Progress.finish(progress);
     }
@@ -201,48 +194,37 @@ public class EigenvectorCentrality implements Statistics, LongTask {
      * @return
      */
     public String getReport() {
-        XYSeries series = new XYSeries("Series 2");
+        //distribution of values
+        Map<Double, Integer> dist = new HashMap<Double, Integer>();
         for (int i = 0; i < centralities.length; i++) {
-            series.add(i, centralities[i]);
+            Double d = centralities[i];
+            if (dist.containsKey(d)) {
+                Integer v = dist.get(d);
+                dist.put(d, v + 1);
+            } else {
+                dist.put(d, 1);
+            }
         }
 
-        XYSeriesCollection dataset = new XYSeriesCollection();
-        dataset.addSeries(series);
+        //Distribution series
+        XYSeries dSeries = ChartUtils.createXYSeries(dist, "Eigenvector Centralities");
 
-        JFreeChart chart = ChartFactory.createXYLineChart(
-                "Eigenvector Centralities",
-                "Nodes",
-                "Eigenvector Centrality",
+        XYSeriesCollection dataset = new XYSeriesCollection();
+        dataset.addSeries(dSeries);
+
+        JFreeChart chart = ChartFactory.createScatterPlot(
+                "Eigenvector Centrality Distribution",
+                "Score",
+                "Count",
                 dataset,
                 PlotOrientation.VERTICAL,
                 true,
                 false,
                 false);
-        XYPlot plot = (XYPlot) chart.getPlot();
-        XYLineAndShapeRenderer renderer = new XYLineAndShapeRenderer();
-        renderer.setSeriesLinesVisible(0, true);
-        renderer.setSeriesShapesVisible(0, false);
-        renderer.setSeriesLinesVisible(1, false);
-        renderer.setSeriesShapesVisible(1, true);
-        renderer.setSeriesShape(1, new java.awt.geom.Ellipse2D.Double(0, 0, 1, 1));
-        plot.setBackgroundPaint(java.awt.Color.WHITE);
-        plot.setDomainGridlinePaint(java.awt.Color.GRAY);
-        plot.setRangeGridlinePaint(java.awt.Color.GRAY);
-
-        plot.setRenderer(renderer);
-
-
-        String imageFile = "";
-        try {
-            final ChartRenderingInfo info = new ChartRenderingInfo(new StandardEntityCollection());
-            TempDir tempDir = TempDirUtils.createTempDir();
-            String fileName = "eigen.png";
-            File file1 = tempDir.createFile(fileName);
-            imageFile = "<IMG SRC=\"file:" + file1.getAbsolutePath() + "\" " + "WIDTH=\"600\" HEIGHT=\"400\" BORDER=\"0\" USEMAP=\"#chart\"></IMG>";
-            ChartUtilities.saveChartAsPNG(file1, chart, 600, 400, info);
-        } catch (IOException e) {
-            System.out.println(e.toString());
-        }
+        ChartUtils.decorateChart(chart);
+        ChartUtils.scaleChart(chart, dSeries, true);
+        String imageFile = ChartUtils.renderChart(chart, "eigenvector-centralities.png");
+        
         String report = "<HTML> <BODY> <h1>Eigenvector Centrality Report</h1> "
                 + "<hr>"
                 + "<h2> Parameters: </h2>"

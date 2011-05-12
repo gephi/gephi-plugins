@@ -8,14 +8,14 @@ msgstr ""
 "Project-Id-Version: gephi\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2010-04-07 13:16+0200\n"
-"PO-Revision-Date: 2010-04-26 04:48+0000\n"
-"Last-Translator: Mathieu Bastian <mathieu.bastian@gmail.com>\n"
+"PO-Revision-Date: 2011-03-12 21:00+0000\n"
+"Last-Translator: Sébastien Heymann <Unknown>\n"
 "Language-Team: French <fr@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2010-04-27 03:43+0000\n"
-"X-Generator: Launchpad (build Unknown)\n"
+"X-Launchpad-Export-Date: 2011-03-21 04:44+0000\n"
+"X-Generator: Launchpad (build 12559)\n"
 
 msgid "YifanHu.name"
 msgstr "Yifan Hu"
@@ -33,3 +33,64 @@ msgid "YifanHuProportional.description"
 msgstr ""
 "Version modifiée de Yifan Hu utilisant un schéma de déplacement "
 "proportionnel."
+
+msgid "YifanHu.optimalDistance.name"
+msgstr "Distance optimale"
+
+msgid "YifanHu.optimalDistance.desc"
+msgstr ""
+"Longueur naturelle des ressorts. Une plus grande valeur signifie que les "
+"noeuds se repousseront plus loin."
+
+msgid "YifanHu.relativeStrength.name"
+msgstr "Force relative"
+
+msgid "YifanHu.relativeStrength.desc"
+msgstr "Force relative entre la répulsion et l'attraction."
+
+msgid "YifanHu.initialStepSize.name"
+msgstr "Taille du pas initial"
+
+msgid "YifanHu.initialStepSize.desc"
+msgstr ""
+"Utilisé dans la phase d'intégration. Mettez cette valeur à une taille "
+"signifiante comparée à la distance optimale (10% est un bon point de départ)."
+
+msgid "YifanHu.stepRatio.name"
+msgstr "Ratio du pas"
+
+msgid "YifanHu.stepRatio.desc"
+msgstr ""
+"Le ratio utilisé pour mettre à jour la taille du pas entre itérations."
+
+msgid "YifanHu.adaptativeCooling.name"
+msgstr "Refroidissement adaptatif"
+
+msgid "YifanHu.adaptativeCooling.desc"
+msgstr ""
+"Contrôle l'usage du refroidissement adaptatif. Aide l'algorithme de "
+"spatialisation à éviter les minima locaux d'énergie."
+
+msgid "YifanHu.convergenceThreshold.name"
+msgstr "Seuille de Convergence"
+
+msgid "YifanHu.convergenceThreshold.desc"
+msgstr ""
+"Seuil de convergence de l'énergie relative. Une petite valeur augmente la "
+"précision."
+
+msgid "YifanHu.quadTreeMaxLevel.name"
+msgstr "Niveau Max du Quadtree"
+
+msgid "YifanHu.quadTreeMaxLevel.desc"
+msgstr ""
+"Niveau maximal utilisé dans la représentation quadtree. Une grande valeur "
+"augmente la précision."
+
+msgid "YifanHu.theta.name"
+msgstr "Theta"
+
+msgid "YifanHu.theta.desc"
+msgstr ""
+"Paramètre theta de l'algorithme Barnes-Hut. Une petite valeur augmente la "
+"précision."

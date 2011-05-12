@@ -1,5 +1,5 @@
 /*
-Copyright 2008-2010 Gephi
+Copyright 2008-2011 Gephi
 Authors : Patick J. McSweeney <pjmcswee@syr.edu>, Sebastien Heymann <seb@gephi.org>
 Website : http://www.gephi.org
 
@@ -17,13 +17,12 @@ GNU Affero General Public License for more details.
 
 You should have received a copy of the GNU Affero General Public License
 along with Gephi.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.gephi.statistics.plugin;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.Map;
 import org.gephi.data.attributes.api.AttributeTable;
 import org.gephi.data.attributes.api.AttributeColumn;
 import org.gephi.data.attributes.api.AttributeModel;
@@ -39,25 +38,19 @@ import org.gephi.graph.api.HierarchicalGraph;
 import org.gephi.graph.api.HierarchicalUndirectedGraph;
 import org.gephi.graph.api.Node;
 import org.gephi.statistics.spi.Statistics;
-import org.gephi.utils.TempDirUtils;
-import org.gephi.utils.TempDirUtils.TempDir;
 import org.gephi.utils.longtask.spi.LongTask;
 import org.gephi.utils.progress.Progress;
 import org.gephi.utils.progress.ProgressTicket;
 import org.jfree.chart.ChartFactory;
-import org.jfree.chart.ChartRenderingInfo;
-import org.jfree.chart.ChartUtilities;
 import org.jfree.chart.JFreeChart;
-import org.jfree.chart.entity.StandardEntityCollection;
 import org.jfree.chart.plot.PlotOrientation;
-import org.jfree.chart.plot.XYPlot;
-import org.jfree.chart.renderer.xy.XYLineAndShapeRenderer;
 import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
-import org.openide.util.Exceptions;
 import org.openide.util.Lookup;
 
 /**
+ * Ref: Jon M. Kleinberg, Authoritative Sources in a Hyperlinked Environment,
+ * in Journal of the ACM 46 (5): 604–632 (1999)
  *
  * @author pjmcswee
  */
@@ -104,10 +97,10 @@ public class Hits implements Statistics, LongTask {
         execute(graph, attributeModel);
     }
 
-    public void execute(HierarchicalGraph graph, AttributeModel attributeModel) {
-        graph.readLock();
+    public void execute(HierarchicalGraph hgraph, AttributeModel attributeModel) {
+        hgraph.readLock();
 
-        int N = graph.getNodeCount();
+        int N = hgraph.getNodeCount();
         authority = new double[N];
         hubs = new double[N];
         double[] temp_authority = new double[N];
@@ -120,19 +113,19 @@ public class Hits implements Statistics, LongTask {
 
         indicies = new HashMap<Node, Integer>();
         int index = 0;
-        for (Node node : graph.getNodes()) {
+        for (Node node : hgraph.getNodes()) {
             indicies.put(node, new Integer(index));
             index++;
 
             if (!useUndirected) {
-                if (((HierarchicalDirectedGraph) graph).getTotalOutDegree(node) > 0) {
+                if (((HierarchicalDirectedGraph) hgraph).getTotalOutDegree(node) > 0) {
                     hub_list.add(node);
                 }
-                if (((HierarchicalDirectedGraph) graph).getTotalInDegree(node) > 0) {
+                if (((HierarchicalDirectedGraph) hgraph).getTotalInDegree(node) > 0) {
                     auth_list.add(node);
                 }
             } else {
-                if (((HierarchicalUndirectedGraph) graph).getTotalDegree(node) > 0) {
+                if (((HierarchicalUndirectedGraph) hgraph).getTotalDegree(node) > 0) {
                     hub_list.add(node);
                     auth_list.add(node);
                 }
@@ -159,12 +152,12 @@ public class Hits implements Statistics, LongTask {
                 temp_authority[n_index] = authority[n_index];
                 EdgeIterable edge_iter;
                 if (!useUndirected) {
-                    edge_iter = ((HierarchicalDirectedGraph) graph).getInEdges(node);
+                    edge_iter = ((HierarchicalDirectedGraph) hgraph).getInEdgesAndMetaInEdges(node);
                 } else {
-                    edge_iter = ((HierarchicalUndirectedGraph) graph).getEdges(node);
+                    edge_iter = ((HierarchicalUndirectedGraph) hgraph).getEdgesAndMetaEdges(node);
                 }
                 for (Edge edge : edge_iter) {
-                    Node target = graph.getOpposite(node, edge);
+                    Node target = hgraph.getOpposite(node, edge);
                     int target_index = indicies.get(target);
                     temp_authority[n_index] += hubs[target_index];
                 }
@@ -183,12 +176,12 @@ public class Hits implements Statistics, LongTask {
                 temp_hubs[n_index] = hubs[n_index];
                 EdgeIterable edge_iter;
                 if (!useUndirected) {
-                    edge_iter = ((HierarchicalDirectedGraph) graph).getInEdges(node);
+                    edge_iter = ((HierarchicalDirectedGraph) hgraph).getInEdgesAndMetaInEdges(node);
                 } else {
-                    edge_iter = ((HierarchicalUndirectedGraph) graph).getEdges(node);
+                    edge_iter = ((HierarchicalUndirectedGraph) hgraph).getEdgesAndMetaEdges(node);
                 }
                 for (Edge edge : edge_iter) {
-                    Node target = graph.getOpposite(node, edge);
+                    Node target = hgraph.getOpposite(node, edge);
                     int target_index = indicies.get(target);
                     temp_hubs[n_index] += authority[target_index];
                 }
@@ -234,14 +227,14 @@ public class Hits implements Statistics, LongTask {
             hubsCol = nodeTable.addColumn(HUB, "Hub", AttributeType.FLOAT, AttributeOrigin.COMPUTED, new Float(0));
         }
 
-        for (Node s : graph.getNodes()) {
+        for (Node s : hgraph.getNodes()) {
             int s_index = indicies.get(s);
             AttributeRow row = (AttributeRow) s.getNodeData().getAttributes();
             row.setValue(authorityCol, (float) authority[s_index]);
             row.setValue(hubsCol, (float) hubs[s_index]);
         }
 
-        graph.readUnlockAll();
+        hgraph.readUnlockAll();
     }
 
     /**
@@ -249,95 +242,80 @@ public class Hits implements Statistics, LongTask {
      * @return
      */
     public String getReport() {
-        String imageFile1 = "";
-        String imageFile2 = "";
-        try {
-            XYSeries series1 = new XYSeries("Hubs");
-            for (Node node : hub_list) {
-                int n_index = indicies.get(node);
-                series1.add(n_index, hubs[n_index]);
+        //distribution of hub values
+        Map<Double, Integer> distHubs = new HashMap<Double, Integer>();
+        for (Node node : hub_list) {
+            int n_index = indicies.get(node);
+            Double d = hubs[n_index];
+            if (distHubs.containsKey(d)) {
+                Integer v = distHubs.get(d);
+                distHubs.put(d, v + 1);
+            } else {
+                distHubs.put(d, 1);
             }
-            XYSeries series2 = new XYSeries("Authority");
-            for (Node node : auth_list) {
-                int n_index = indicies.get(node);
-                series2.add(n_index, authority[n_index]);
-            }
-
-            XYSeriesCollection dataset = new XYSeriesCollection();
-            dataset.addSeries(series1);
-
-            JFreeChart chart = ChartFactory.createXYLineChart(
-                    "Hubs",
-                    "Nodes",
-                    "hubs",
-                    dataset,
-                    PlotOrientation.VERTICAL,
-                    true,
-                    false,
-                    false);
-            XYPlot plot = (XYPlot) chart.getPlot();
-            XYLineAndShapeRenderer renderer = new XYLineAndShapeRenderer();
-            renderer.setSeriesLinesVisible(0, true);
-            renderer.setSeriesShapesVisible(0, false);
-            renderer.setSeriesLinesVisible(1, false);
-            renderer.setSeriesShapesVisible(1, true);
-            renderer.setSeriesShape(1, new java.awt.geom.Ellipse2D.Double(0, 0, 1, 1));
-            plot.setBackgroundPaint(java.awt.Color.WHITE);
-            plot.setDomainGridlinePaint(java.awt.Color.GRAY);
-            plot.setRangeGridlinePaint(java.awt.Color.GRAY);
-
-            plot.setRenderer(renderer);
-
-            //Create temporary directory
-            TempDir tempDir = TempDirUtils.createTempDir();
-
-            final ChartRenderingInfo info = new ChartRenderingInfo(new StandardEntityCollection());
-            final String fileName = "hubs.png";
-            final File file1 = tempDir.createFile(fileName);
-            imageFile1 = "<IMG SRC=\"file:" + file1.getAbsolutePath() + "\" " + "WIDTH=\"600\" HEIGHT=\"400\" BORDER=\"0\" USEMAP=\"#chart\"></IMG>";
-            ChartUtilities.saveChartAsPNG(file1, chart, 600, 400, info);
-
-            XYSeriesCollection dataset2 = new XYSeriesCollection();
-            dataset2.addSeries(series2);
-
-            JFreeChart chart2 = ChartFactory.createXYLineChart(
-                    "Authority",
-                    "Nodes",
-                    "Authority",
-                    dataset2,
-                    PlotOrientation.VERTICAL,
-                    true,
-                    false,
-                    false);
-            XYPlot plot2 = (XYPlot) chart2.getPlot();
-            XYLineAndShapeRenderer renderer2 = new XYLineAndShapeRenderer();
-            renderer2.setSeriesLinesVisible(0, true);
-            renderer2.setSeriesShapesVisible(0, false);
-            renderer2.setSeriesLinesVisible(1, false);
-            renderer2.setSeriesShapesVisible(1, true);
-            renderer2.setSeriesShape(1, new java.awt.geom.Ellipse2D.Double(0, 0, 1, 1));
-            plot2.setBackgroundPaint(java.awt.Color.WHITE);
-            plot2.setDomainGridlinePaint(java.awt.Color.GRAY);
-            plot2.setRangeGridlinePaint(java.awt.Color.GRAY);
-
-            plot2.setRenderer(renderer);
-
-            final ChartRenderingInfo info2 = new ChartRenderingInfo(new StandardEntityCollection());
-            final String fileName2 = "authority.png";
-            final File file2 = tempDir.createFile(fileName2);
-            imageFile2 = "<IMG SRC=\"file:" + file2.getAbsolutePath() + "\" " + "WIDTH=\"600\" HEIGHT=\"400\" BORDER=\"0\" USEMAP=\"#chart\"></IMG>";
-
-            ChartUtilities.saveChartAsPNG(file2, chart2, 600, 400, info2);
-        } catch (IOException ex) {
-            Exceptions.printStackTrace(ex);
         }
 
-        String report = "<HTML> <BODY> <h1> HITS Metric Report </h1> <br> "
+        //distribution of authority values
+        Map<Double, Integer> distAuthorities = new HashMap<Double, Integer>();
+        for (Node node : auth_list) {
+            int n_index = indicies.get(node);
+            Double d = authority[n_index];
+            if (distAuthorities.containsKey(d)) {
+                Integer v = distAuthorities.get(d);
+                distAuthorities.put(d, v + 1);
+            } else {
+                distAuthorities.put(d, 1);
+            }
+        }
+
+        //Distribution of hub series
+        XYSeries dHubsSeries = ChartUtils.createXYSeries(distHubs, "Hubs");
+
+        //Distribution of authority series
+        XYSeries dAuthsSeries = ChartUtils.createXYSeries(distAuthorities, "Authority");
+
+        XYSeriesCollection datasetHubs = new XYSeriesCollection();
+        datasetHubs.addSeries(dHubsSeries);
+
+        XYSeriesCollection datasetAuths = new XYSeriesCollection();
+        datasetAuths.addSeries(dAuthsSeries);
+
+        JFreeChart chart = ChartFactory.createXYLineChart(
+                "Hubs Distribution",
+                "Score",
+                "Count",
+                datasetHubs,
+                PlotOrientation.VERTICAL,
+                true,
+                false,
+                false);
+        ChartUtils.decorateChart(chart);
+        ChartUtils.scaleChart(chart, dHubsSeries, true);
+        String imageFile1 = ChartUtils.renderChart(chart, "hubs.png");
+
+        JFreeChart chart2 = ChartFactory.createXYLineChart(
+                "Authority Distribution",
+                "Score",
+                "Count",
+                datasetAuths,
+                PlotOrientation.VERTICAL,
+                true,
+                false,
+                false);
+        ChartUtils.decorateChart(chart2);
+        ChartUtils.scaleChart(chart, dAuthsSeries, true);
+        String imageFile2 = ChartUtils.renderChart(chart, "authorities.png");
+
+
+        String report = "<HTML> <BODY> <h1> HITS Metric Report </h1>"
                 + "<hr>"
-                + "<br>"
-                + "<h2> Parameters: </h2>  <br> &#917; = " + this.epsilon
-                + "<br> <h2> Results: </h2><br>"
-                + imageFile1 + "<br>" + imageFile2 + "</BODY> </HTML>";
+                + "<br />"
+                + "<h2> Parameters: </h2>  &#917; = " + this.epsilon
+                + "<br /> <h2> Results: </h2><br />"
+                + imageFile1 + "<br />" + imageFile2
+                + "<br /><br />" + "<h2> Algorithm: </h2>"
+                + "Jon M. Kleinberg, <i>Authoritative Sources in a Hyperlinked Environment</i>, in Journal of the ACM 46 (5): 604–632 (1999)<br />"
+                + "</BODY> </HTML>";
 
         return report;
     }

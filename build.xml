@@ -2,8 +2,8 @@
 <!-- You may freely edit this file. See harness/README in the NetBeans platform -->
 <!-- for some information on what you could do (e.g. targets to override). -->
 <!-- If you delete this file and reopen the project it will be recreated. -->
-<project name="0.7" basedir=".">
-    <description>Builds the module suite 0.7.</description>
+<project name="0.8" basedir=".">
+    <description>Builds the module suite 0.8.</description>
     <import file="nbproject/build-impl.xml"/>
 
     <condition property="isWindows">
@@ -49,7 +49,7 @@
     </target>
 
     <target name="javadoc">
-        <javadoc destdir="dist/apiindex" windowtitle="Gephi API Index" encoding="UTF-8" charset="UTF-8" stylesheetfile="stylesheet.css"  packagenames="org.gephi.**.api,org.gephi.**.spi,org.gephi.data.*,org.gephi.utils.progress" overview="overview.html">
+        <javadoc destdir="dist/apiindex" windowtitle="Gephi API Index" encoding="UTF-8" charset="UTF-8" stylesheetfile="stylesheet.css"  packagenames="org.gephi.**.api,org.gephi.**.spi,org.gephi.data.*,org.gephi.utils.progress" overview="overview.html"  classpath="build/public-package-jars/org-openide-util-lookup.jar">
             <sourcepath>
                 <pathelement path="AttributesAPI/src"/>
                 <pathelement path="ClusteringAPI/src"/>
@@ -69,14 +69,14 @@
                 <pathelement path="StatisticsAPI/src"/>
                 <pathelement path="ToolsAPI/src"/>
             </sourcepath>
-            <doctitle>Gephi 0.7beta API Index</doctitle>
-            <header>Gephi 0.7beta Javadoc</header>
+            <doctitle>Gephi 0.8alpha API Index</doctitle>
+            <header>Gephi 0.8alpha Javadoc</header>
         </javadoc>
     </target>
 
     <target name="download-l10n-jars" description="Download Netbeans Platform Localization JARs on the website">
-        <property name="l10n.url" value="http://netbeans.org/project_downloads/nblocalization/6.9/"/>
-        <property name="l10n.file" value="nb69_platform_l10n.zip"/>
+        <property name="l10n.url" value="http://netbeans.org/project_downloads/nblocalization/7.0/"/>
+        <property name="l10n.file" value="nb70_platform_l10n.zip"/>
         <property name="l10n.dir" value="l10n"/>
         <get src="${l10n.url}${l10n.file}" dest="${dist.dir}" verbose="true" skipexisting="true" ignoreerrors="true"/>      
     </target>

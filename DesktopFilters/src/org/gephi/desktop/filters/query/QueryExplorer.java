@@ -1,6 +1,6 @@
 /*
-Copyright 2008-2010 Gephi
-Authors : Mathieu Bastian <mathieu.bastian@gephi.org>
+Copyright 2008-2011 Gephi
+Authors : Mathieu Bastian <mathieu.bastian@gephi.org>, Sébastien Heymann <sebastien.heymann@gephi.org>
 Website : http://www.gephi.org
 
 This file is part of Gephi.
@@ -17,7 +17,7 @@ GNU Affero General Public License for more details.
 
 You should have received a copy of the GNU Affero General Public License
 along with Gephi.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.gephi.desktop.filters.query;
 
 import java.beans.PropertyChangeEvent;
@@ -28,6 +28,7 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.tree.TreeSelectionModel;
 import org.gephi.desktop.filters.FilterUIModel;
+import org.gephi.filters.api.FilterController;
 import org.gephi.filters.api.FilterModel;
 import org.gephi.filters.api.Query;
 import org.openide.explorer.ExplorerManager;
@@ -35,6 +36,7 @@ import org.openide.explorer.view.BeanTreeView;
 import org.openide.nodes.AbstractNode;
 import org.openide.nodes.Children;
 import org.openide.nodes.Node;
+import org.openide.util.Lookup;
 
 /**
  *
@@ -45,6 +47,7 @@ public class QueryExplorer extends BeanTreeView implements PropertyChangeListene
     private ExplorerManager manager;
     private FilterModel model;
     private FilterUIModel uiModel;
+    private FilterController filterController;
     //state
     private boolean listenSelectedNodes = false;
 
@@ -63,6 +66,7 @@ public class QueryExplorer extends BeanTreeView implements PropertyChangeListene
         this.manager = manager;
         this.model = model;
         this.uiModel = uiModel;
+        this.filterController = Lookup.getDefault().lookup(FilterController.class);
 
         if (model != null) {
             model.addChangeListener(this);
@@ -104,12 +108,14 @@ public class QueryExplorer extends BeanTreeView implements PropertyChangeListene
                 Node node = ((Node[]) evt.getNewValue())[0];
                 if (node instanceof RootNode) {
                     uiModel.setSelectedQuery(null);
+                    filterController.setCurrentQuery(null);
                     return;
                 }
                 while (!(node instanceof QueryNode)) {
                     node = node.getParentNode();
                     if (node.getParentNode() == null) {
                         uiModel.setSelectedQuery(null);
+                        filterController.setCurrentQuery(null);
                         return;
                     }
                 }
@@ -119,6 +125,9 @@ public class QueryExplorer extends BeanTreeView implements PropertyChangeListene
 
                     public void run() {
                         uiModel.setSelectedQuery(query);
+                        model.removeChangeListener(QueryExplorer.this);
+                        filterController.setCurrentQuery(uiModel.getSelectedRoot());
+                        model.addChangeListener(QueryExplorer.this);
                     }
                 }).start();
             }
@@ -130,6 +139,7 @@ public class QueryExplorer extends BeanTreeView implements PropertyChangeListene
         SwingUtilities.invokeLater(new Runnable() {
 
             public void run() {
+                //uiModel.setSelectedQuery(model.getCurrentQuery());
                 saveExpandStatus(QueryExplorer.this.manager.getRootContext());
                 QueryExplorer.this.manager.setRootContext(new RootNode(new QueryChildren(QueryExplorer.this.model.getQueries())));
                 loadExpandStatus(QueryExplorer.this.manager.getRootContext());

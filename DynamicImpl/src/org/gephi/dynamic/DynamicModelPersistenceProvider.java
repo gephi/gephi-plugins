@@ -20,16 +20,15 @@ along with Gephi.  If not, see <http://www.gnu.org/licenses/>.
  */
 package org.gephi.dynamic;
 
+import javax.xml.stream.XMLStreamException;
+import javax.xml.stream.XMLStreamReader;
+import javax.xml.stream.XMLStreamWriter;
 import org.gephi.dynamic.api.DynamicController;
 import org.gephi.dynamic.api.DynamicModel;
 import org.gephi.project.api.Workspace;
 import org.gephi.project.spi.WorkspacePersistenceProvider;
 import org.openide.util.Lookup;
 import org.openide.util.lookup.ServiceProvider;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
 
 /**
  *
@@ -39,20 +38,31 @@ import org.w3c.dom.NodeList;
 public class DynamicModelPersistenceProvider implements WorkspacePersistenceProvider {
 
     @Override
-    public Element writeXML(Document document, Workspace workspace) {
+    public void writeXML(XMLStreamWriter writer, Workspace workspace) {
         DynamicModelImpl model = (DynamicModelImpl) workspace.getLookup().lookup(DynamicModel.class);
         if (model != null) {
-            return writeModel(document, model);
+            try {
+                writeModel(writer, model);
+            } catch (XMLStreamException ex) {
+                throw new RuntimeException(ex);
+            }
         }
-        return null;
     }
 
     @Override
-    public void readXML(Element element, Workspace workspace) {
+    public void readXML(XMLStreamReader reader, Workspace workspace) {
         DynamicControllerImpl dynamicController = (DynamicControllerImpl) Lookup.getDefault().lookup(DynamicController.class);
-        DynamicModelImpl dynamicModelImpl = new DynamicModelImpl(dynamicController, workspace);
-        readModel(element, dynamicModelImpl);
-        workspace.add(dynamicModelImpl);
+        DynamicModelImpl dynamicModelImpl = (DynamicModelImpl) workspace.getLookup().lookup(DynamicModel.class);
+        if (dynamicModelImpl == null) {
+            dynamicModelImpl = new DynamicModelImpl(dynamicController, workspace);
+            workspace.add(dynamicModelImpl);
+        }
+        try {
+            readModel(reader, dynamicModelImpl);
+        } catch (XMLStreamException ex) {
+            throw new RuntimeException(ex);
+        }
+
     }
 
     @Override
@@ -60,33 +70,55 @@ public class DynamicModelPersistenceProvider implements WorkspacePersistenceProv
         return "dynamicmodel";
     }
 
-    public Element writeModel(Document document, DynamicModelImpl model) {
-        Element modelE = document.createElement("dynamicmodel");
+    public void writeModel(XMLStreamWriter writer, DynamicModelImpl model) throws XMLStreamException {
+        writer.writeStartElement("dynamicmodel");
 
-        Element timeFormatE = document.createElement("timeformat");
-        if (model.getTimeFormat().equals(DynamicModel.TimeFormat.DATE)) {
-            timeFormatE.setAttribute("value", "date");
+        writer.writeStartElement("timeformat");
+        if (model.getTimeFormat().equals(DynamicModel.TimeFormat.DATETIME)) {
+            writer.writeAttribute("value", "datetime");
+        } else if (model.getTimeFormat().equals(DynamicModel.TimeFormat.DATE)) {
+            writer.writeAttribute("value", "date");
         } else {
-            timeFormatE.setAttribute("value", "double");
+            // default: if equals(DynamicModel.TimeFormat.DOUBLE)
+            writer.writeAttribute("value", "double");
         }
-        modelE.appendChild(timeFormatE);
-        return modelE;
+        writer.writeEndElement();
+
+        writer.writeEndElement();
     }
 
-    public void readModel(Element modelE, DynamicModelImpl model) {
-        NodeList modelListE = modelE.getChildNodes();
-        for (int i = 0; i < modelListE.getLength(); i++) {
-            if (modelListE.item(i).getNodeType() == Node.ELEMENT_NODE) {
-                Element itemE = (Element) modelListE.item(i);
-                if (itemE.getTagName().equals("timeformat")) {
-                    String val = itemE.getAttribute("value");
-                    if (val.equals("date")) {
-                        model.setTimeFormat(DynamicModel.TimeFormat.DATE);
-                    } else {
-                        model.setTimeFormat(DynamicModel.TimeFormat.DOUBLE);
+    public void readModel(XMLStreamReader reader, DynamicModelImpl model) throws XMLStreamException {
+        boolean end = false;
+        while (reader.hasNext() && !end) {
+            int type = reader.next();
+            switch (type) {
+                case XMLStreamReader.START_ELEMENT:
+                    if ("timeformat".equalsIgnoreCase(reader.getLocalName())) {
+                        String val = reader.getAttributeValue(null, "value");
+                        if (val.equalsIgnoreCase("date")) {
+                            model.setTimeFormat(DynamicModel.TimeFormat.DATE);
+                        } else if (val.equalsIgnoreCase("datetime")) {
+                            model.setTimeFormat(DynamicModel.TimeFormat.DATETIME);
+                        } else {
+                            model.setTimeFormat(DynamicModel.TimeFormat.DOUBLE);
+                        }
                     }
-                }
+                    break;
+                case XMLStreamReader.END_ELEMENT:
+                    if ("dynamicmodel".equalsIgnoreCase(reader.getLocalName())) {
+                        end = true;
+                    }
+                    break;
             }
         }
+        // Start & End
+        /*
+        if (!start.isEmpty()) {
+        container.setTimeIntervalMin(start);
+        }
+        if (!end.isEmpty()) {
+        container.setTimeIntervalMax(end);
+        }
+         */
     }
 }
