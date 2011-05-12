@@ -78,13 +78,13 @@
         <property name="l10n.url" value="http://netbeans.org/project_downloads/nblocalization/7.0/"/>
         <property name="l10n.file" value="nb70_platform_l10n.zip"/>
         <property name="l10n.dir" value="l10n"/>
-        <get src="${l10n.url}${l10n.file}" dest="${dist.dir}" verbose="true" skipexisting="true" ignoreerrors="true"/>      
+        <get src="${l10n.url}${l10n.file}" dest="${dist.dir}" verbose="true" skipexisting="true" ignoreerrors="true"/>
     </target>
 
     <target name="unzip-l10n" depends="download-l10n-jars" description="Unzip Netbeans Platform Localization JARs">
         <unzip src="${dist.dir}/${l10n.file}" dest="${dist.dir}/${l10n.dir}/${app.name}"/>
     </target>
-    
+
     <target name="merge-l10n-zip" depends="unzip-l10n" description="Merge Localization JARs on ZIP distribution" >
         <zip destfile="${dist.dir}/${app.name}.zip" basedir="${dist.dir}/${l10n.dir}" update="true"/>
         <antcall target="clean-l10n"/>
@@ -182,7 +182,6 @@
         <copy todir="${toolkit.tempdir}">
             <fileset dir="${libs.dir}">
                 <include name="batik*.jar"/>
-                <include name="bzip2*.jar"/>
                 <include name="core.jar"/><!-- Processing -->
                 <include name="iText*.jar"/>
                 <include name="jcommon*.jar"/>
@@ -204,7 +203,7 @@
             <zipgroupfileset dir="${toolkit.tempdir}" includes="*.jar"/>
 
             <manifest>
-                
+
             </manifest>
         </jar>
 
