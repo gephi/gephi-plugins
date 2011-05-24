@@ -66,7 +66,7 @@ public final class IntervalTree<T> {
 	 *
 	 * @param intervalTree a copied {@code IntervalTree}
 	 */
-	public IntervalTree(IntervalTree intervalTree) {
+	public IntervalTree(IntervalTree<T> intervalTree) {
 		this();
 		copy(intervalTree.root.left, intervalTree.nil);
 	}
