@@ -20,12 +20,14 @@ along with Gephi.  If not, see <http://www.gnu.org/licenses/>.
  */
 package org.gephi.desktop.scripting;
 
+import org.gephi.scripting.api.ScriptingController;
 import org.openide.util.NbBundle;
 import org.openide.windows.TopComponent;
 import org.openide.windows.WindowManager;
 import org.netbeans.api.settings.ConvertAsProperties;
 import org.openide.awt.ActionID;
 import org.openide.awt.ActionReference;
+import org.openide.util.Lookup;
 
 /**
  * Top component which displays something.
@@ -46,6 +48,8 @@ public final class ConsoleTopComponent extends TopComponent {
         initComponents();
         setName(NbBundle.getMessage(ConsoleTopComponent.class, "CTL_ConsoleTopComponent"));
         setToolTipText(NbBundle.getMessage(ConsoleTopComponent.class, "HINT_ConsoleTopComponent"));
+
+        ScriptingController scriptingController = Lookup.getDefault().lookup(ScriptingController.class);
 
     }
 
