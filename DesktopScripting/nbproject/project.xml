@@ -5,7 +5,49 @@
         <data xmlns="http://www.netbeans.org/ns/nb-module-project/3">
             <code-name-base>org.gephi.desktop.scripting</code-name-base>
             <suite-component/>
-            <module-dependencies/>
+            <module-dependencies>
+                <dependency>
+                    <code-name-base>org.netbeans.modules.settings</code-name-base>
+                    <build-prerequisite/>
+                    <compile-dependency/>
+                    <run-dependency>
+                        <release-version>1</release-version>
+                        <specification-version>1.30.1</specification-version>
+                    </run-dependency>
+                </dependency>
+                <dependency>
+                    <code-name-base>org.openide.awt</code-name-base>
+                    <build-prerequisite/>
+                    <compile-dependency/>
+                    <run-dependency>
+                        <specification-version>7.30.1</specification-version>
+                    </run-dependency>
+                </dependency>
+                <dependency>
+                    <code-name-base>org.openide.util</code-name-base>
+                    <build-prerequisite/>
+                    <compile-dependency/>
+                    <run-dependency>
+                        <specification-version>8.14.1</specification-version>
+                    </run-dependency>
+                </dependency>
+                <dependency>
+                    <code-name-base>org.openide.util.lookup</code-name-base>
+                    <build-prerequisite/>
+                    <compile-dependency/>
+                    <run-dependency>
+                        <specification-version>8.6.1</specification-version>
+                    </run-dependency>
+                </dependency>
+                <dependency>
+                    <code-name-base>org.openide.windows</code-name-base>
+                    <build-prerequisite/>
+                    <compile-dependency/>
+                    <run-dependency>
+                        <specification-version>6.39.1</specification-version>
+                    </run-dependency>
+                </dependency>
+            </module-dependencies>
             <public-packages/>
         </data>
     </configuration>
