@@ -20,10 +20,14 @@ along with Gephi.  If not, see <http://www.gnu.org/licenses/>.
  */
 package org.gephi.scripting.impl;
 
+import org.gephi.project.api.ProjectController;
 import org.gephi.project.api.Workspace;
+import org.gephi.project.api.WorkspaceListener;
 import org.gephi.scripting.api.ScriptingController;
 import org.gephi.scripting.api.ScriptingModel;
+import org.openide.util.Lookup;
 import org.openide.util.lookup.ServiceProvider;
+import org.python.core.PySystemState;
 import org.python.util.PythonInterpreter;
 
 /**
@@ -32,25 +36,80 @@ import org.python.util.PythonInterpreter;
  */
 @ServiceProvider(service = ScriptingController.class)
 public class ScriptingControllerImpl implements ScriptingController {
-    
+
     private ScriptingModelImpl currentModel;
-    
+    private PythonInterpreter pythonInterpreter;
+
     public ScriptingControllerImpl() {
-        // TODO
+        // Setup a WorkspaceListener
+        ProjectController projectController = Lookup.getDefault().lookup(ProjectController.class);
+        projectController.addWorkspaceListener(new WorkspaceListener() {
+
+            @Override
+            public void initialize(Workspace workspace) {
+                workspace.add(new ScriptingModelImpl());
+            }
+
+            @Override
+            public void select(Workspace workspace) {
+                currentModel = (ScriptingModelImpl) getModel(workspace);
+
+                // create a new namespace, if necessary
+                if (currentModel == null) {
+                    currentModel = new ScriptingModelImpl();
+                    workspace.add(currentModel);
+                }
+
+                // Update the local namespace of the interpreter
+                pythonInterpreter.setLocals(currentModel.getLocalNamespace());
+            }
+
+            @Override
+            public void unselect(Workspace workspace) {
+            }
+
+            @Override
+            public void close(Workspace workspace) {
+            }
+
+            @Override
+            public void disable() {
+                currentModel = null;
+            }
+        });
+
+        // Setup a model for the current workspace if needed
+        Workspace currentWorkspace = projectController.getCurrentWorkspace();
+        if (currentWorkspace != null) {
+            currentModel = (ScriptingModelImpl) getModel(currentWorkspace);
+            if (currentModel == null) {
+                currentModel = new ScriptingModelImpl();
+                currentWorkspace.add(currentModel);
+            }
+        }
+
+        // Setup the Controller's Python Interpreter
+        PySystemState.initialize();
+        pythonInterpreter = new PythonInterpreter();
+
+        // Set the local namespace of the interpreter to current workspace's
+        if (currentModel != null) {
+            pythonInterpreter.setLocals(currentModel.getLocalNamespace());
+        }
     }
 
     @Override
-    public ScriptingModel getModel() {
-        throw new UnsupportedOperationException("Not supported yet.");
+    public final ScriptingModel getModel() {
+        return currentModel;
     }
 
     @Override
-    public ScriptingModel getModel(Workspace workspace) {
-        throw new UnsupportedOperationException("Not supported yet.");
+    public final ScriptingModel getModel(Workspace workspace) {
+        return (ScriptingModel) workspace.getLookup().lookup(ScriptingModel.class);
     }
 
     @Override
-    public PythonInterpreter getPythonInterpreter() {
-        throw new UnsupportedOperationException("Not supported yet.");
+    public final PythonInterpreter getPythonInterpreter() {
+        return pythonInterpreter;
     }
 }

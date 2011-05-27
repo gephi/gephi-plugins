@@ -21,6 +21,7 @@ along with Gephi.  If not, see <http://www.gnu.org/licenses/>.
 package org.gephi.scripting.impl;
 
 import org.gephi.scripting.api.ScriptingModel;
+import org.python.core.Py;
 import org.python.core.PyObject;
 
 /**
@@ -29,8 +30,14 @@ import org.python.core.PyObject;
  */
 public class ScriptingModelImpl implements ScriptingModel {
 
+    private PyObject localNamespace;
+
+    public ScriptingModelImpl() {
+        localNamespace = Py.newStringMap();
+    }
+
     @Override
-    public PyObject getLocalNamespace() {
-        throw new UnsupportedOperationException("Not supported yet.");
+    public final PyObject getLocalNamespace() {
+        return localNamespace;
     }
 }
