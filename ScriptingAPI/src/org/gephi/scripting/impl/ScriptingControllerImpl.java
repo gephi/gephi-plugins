@@ -54,12 +54,6 @@ public class ScriptingControllerImpl implements ScriptingController {
             public void select(Workspace workspace) {
                 currentModel = (ScriptingModelImpl) getModel(workspace);
 
-                // create a new namespace, if necessary
-                if (currentModel == null) {
-                    currentModel = new ScriptingModelImpl();
-                    workspace.add(currentModel);
-                }
-
                 // Update the local namespace of the interpreter
                 pythonInterpreter.setLocals(currentModel.getLocalNamespace());
             }
@@ -78,14 +72,10 @@ public class ScriptingControllerImpl implements ScriptingController {
             }
         });
 
-        // Setup a model for the current workspace if needed
+        // Load the model for the current workspace
         Workspace currentWorkspace = projectController.getCurrentWorkspace();
         if (currentWorkspace != null) {
             currentModel = (ScriptingModelImpl) getModel(currentWorkspace);
-            if (currentModel == null) {
-                currentModel = new ScriptingModelImpl();
-                currentWorkspace.add(currentModel);
-            }
         }
 
         // Setup the Controller's Python Interpreter
@@ -104,8 +94,16 @@ public class ScriptingControllerImpl implements ScriptingController {
     }
 
     @Override
-    public final ScriptingModel getModel(Workspace workspace) {
-        return (ScriptingModel) workspace.getLookup().lookup(ScriptingModel.class);
+    public final synchronized ScriptingModel getModel(Workspace workspace) {
+        ScriptingModel scriptingModel = (ScriptingModel) workspace.getLookup().lookup(ScriptingModel.class);
+        
+        // create a model for the workspace, if needed
+        if (scriptingModel == null) {
+            scriptingModel = new ScriptingModelImpl();
+            workspace.add(scriptingModel);
+        }
+        
+        return scriptingModel;
     }
 
     @Override
