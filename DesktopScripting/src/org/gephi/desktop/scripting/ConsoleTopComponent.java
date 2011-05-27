@@ -20,6 +20,7 @@ along with Gephi.  If not, see <http://www.gnu.org/licenses/>.
  */
 package org.gephi.desktop.scripting;
 
+import java.awt.Component;
 import org.gephi.scripting.api.ScriptingController;
 import org.openide.util.NbBundle;
 import org.openide.windows.TopComponent;
@@ -28,6 +29,8 @@ import org.netbeans.api.settings.ConvertAsProperties;
 import org.openide.awt.ActionID;
 import org.openide.awt.ActionReference;
 import org.openide.util.Lookup;
+import org.python.core.PyObject;
+import org.python.util.PythonInterpreter;
 
 /**
  * Top component which displays something.
@@ -50,7 +53,13 @@ public final class ConsoleTopComponent extends TopComponent {
         setToolTipText(NbBundle.getMessage(ConsoleTopComponent.class, "HINT_ConsoleTopComponent"));
 
         ScriptingController scriptingController = Lookup.getDefault().lookup(ScriptingController.class);
-
+        
+        // This stuff is temporary, it's here for testing jythonconsole integration only
+        PythonInterpreter pyi = scriptingController.getPythonInterpreter();
+        pyi.exec("from jythonconsole.console import Console");
+        PyObject jythonConsoleClass = pyi.get("Console");
+        PyObject console = jythonConsoleClass.__call__(pyi.getLocals());
+        jScrollPane1.setViewportView((Component) console.__getattr__("text_pane").__tojava__(Component.class));
     }
 
     /** This method is called from within the constructor to
@@ -61,19 +70,24 @@ public final class ConsoleTopComponent extends TopComponent {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jScrollPane1 = new javax.swing.JScrollPane();
+
+        jScrollPane1.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 400, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 300, Short.MAX_VALUE)
         );
     }// </editor-fold>//GEN-END:initComponents
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JScrollPane jScrollPane1;
     // End of variables declaration//GEN-END:variables
     @Override
     public void componentOpened() {
