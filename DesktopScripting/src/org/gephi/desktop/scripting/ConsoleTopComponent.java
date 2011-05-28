@@ -92,6 +92,7 @@ public final class ConsoleTopComponent extends TopComponent {
             
             @Override
             public void disable() {
+                jScrollPane1.setViewportView(new JPanel());
             }
         });
 
