@@ -31,18 +31,16 @@ import org.gephi.scripting.api.ScriptingController;
 import org.gephi.scripting.api.ScriptingModel;
 import org.openide.util.NbBundle;
 import org.openide.windows.TopComponent;
-import org.openide.windows.WindowManager;
 import org.netbeans.api.settings.ConvertAsProperties;
 import org.openide.awt.ActionID;
 import org.openide.awt.ActionReference;
 import org.openide.util.Lookup;
-import org.python.core.Py;
 import org.python.core.PyObject;
-import org.python.core.PySystemState;
 import org.python.util.PythonInterpreter;
 
 /**
- * Top component which displays something.
+ *
+ * @author Luiz Ribeiro
  */
 @ConvertAsProperties(dtd = "-//org.gephi.desktop.scripting//Console//EN",
 autostore = false)
@@ -55,9 +53,9 @@ persistenceType = TopComponent.PERSISTENCE_ALWAYS)
 @TopComponent.OpenActionRegistration(displayName = "#CTL_ConsoleAction",
 preferredID = "ConsoleTopComponent")
 public final class ConsoleTopComponent extends TopComponent {
-    
+
     private ConcurrentMap<Workspace, PyObject> mapWorkspaceConsole;
-    
+
     public ConsoleTopComponent() {
         initComponents();
         setName(NbBundle.getMessage(ConsoleTopComponent.class, "CTL_ConsoleTopComponent"));
@@ -71,25 +69,25 @@ public final class ConsoleTopComponent extends TopComponent {
         // the corresponding jythonconsole.
         ProjectController projectController = Lookup.getDefault().lookup(ProjectController.class);
         projectController.addWorkspaceListener(new WorkspaceListener() {
-            
+
             @Override
             public void initialize(Workspace workspace) {
             }
-            
+
             @Override
             public void select(Workspace workspace) {
                 updateCurrentConsole(workspace);
             }
-            
+
             @Override
             public void unselect(Workspace workspace) {
             }
-            
+
             @Override
             public void close(Workspace workspace) {
                 mapWorkspaceConsole.remove(workspace);
             }
-            
+
             @Override
             public void disable() {
                 jScrollPane1.setViewportView(new JPanel());
@@ -102,28 +100,28 @@ public final class ConsoleTopComponent extends TopComponent {
             updateCurrentConsole(currentWorkspace);
         }
     }
-    
+
     private void updateCurrentConsole(Workspace workspace) {
         PyObject jythonConsole;
-        
+
         if (!mapWorkspaceConsole.containsKey(workspace)) {
             // This workspace doesn't have an associated jythonconsole yet, create it
             jythonConsole = newJythonConsole(workspace);
             mapWorkspaceConsole.put(workspace, jythonConsole);
         }
-        
+
         jythonConsole = mapWorkspaceConsole.get(workspace);
 
         // Show the right jythonconsole on the scroll pane
         Component jythonConsoleComponent = (Component) jythonConsole.__getattr__("text_pane").__tojava__(Component.class);
         jScrollPane1.setViewportView(jythonConsoleComponent);
-        
+
         // Hack to redirect sys.stdout to the current workspace's jythonconsole
         ScriptingController scriptingController = Lookup.getDefault().lookup(ScriptingController.class);
         PythonInterpreter pythonInterpreter = scriptingController.getPythonInterpreter();
         pythonInterpreter.getSystemState().__setattr__("stdout", jythonConsole.__getattr__("stdout"));
     }
-    
+
     private PyObject newJythonConsole(Workspace workspace) {
         ScriptingController scriptingController = Lookup.getDefault().lookup(ScriptingController.class);
         PythonInterpreter pyi = scriptingController.getPythonInterpreter();
@@ -131,11 +129,11 @@ public final class ConsoleTopComponent extends TopComponent {
         pyi.exec("from jythonconsole.console import Console");
         PyObject jythonConsoleClass = pyi.get("Console");
         PyObject console = jythonConsoleClass.__call__(scriptingModel.getLocalNamespace());
-        
+
         // Stores a reference to the console's stdout redirector into an attribute
         // (used later for redirecting stdout to the correct jythonconsole)
         console.__setattr__("stdout", pyi.getSystemState().__getattr__("stdout"));
-        
+
         return console;
     }
 
@@ -170,19 +168,19 @@ public final class ConsoleTopComponent extends TopComponent {
     public void componentOpened() {
         // TODO add custom code on component opening
     }
-    
+
     @Override
     public void componentClosed() {
         // TODO add custom code on component closing
     }
-    
+
     void writeProperties(java.util.Properties p) {
         // better to version settings since initial version as advocated at
         // http://wiki.apidesign.org/wiki/PropertyFiles
         p.setProperty("version", "1.0");
         // TODO store your settings
     }
-    
+
     void readProperties(java.util.Properties p) {
         String version = p.getProperty("version");
         // TODO read your settings according to their version
