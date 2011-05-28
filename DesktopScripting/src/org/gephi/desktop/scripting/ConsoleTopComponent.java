@@ -21,7 +21,14 @@ along with Gephi.  If not, see <http://www.gnu.org/licenses/>.
 package org.gephi.desktop.scripting;
 
 import java.awt.Component;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
+import javax.swing.JPanel;
+import org.gephi.project.api.ProjectController;
+import org.gephi.project.api.Workspace;
+import org.gephi.project.api.WorkspaceListener;
 import org.gephi.scripting.api.ScriptingController;
+import org.gephi.scripting.api.ScriptingModel;
 import org.openide.util.NbBundle;
 import org.openide.windows.TopComponent;
 import org.openide.windows.WindowManager;
@@ -29,7 +36,9 @@ import org.netbeans.api.settings.ConvertAsProperties;
 import org.openide.awt.ActionID;
 import org.openide.awt.ActionReference;
 import org.openide.util.Lookup;
+import org.python.core.Py;
 import org.python.core.PyObject;
+import org.python.core.PySystemState;
 import org.python.util.PythonInterpreter;
 
 /**
@@ -46,20 +55,87 @@ persistenceType = TopComponent.PERSISTENCE_ALWAYS)
 @TopComponent.OpenActionRegistration(displayName = "#CTL_ConsoleAction",
 preferredID = "ConsoleTopComponent")
 public final class ConsoleTopComponent extends TopComponent {
-
+    
+    private ConcurrentMap<Workspace, PyObject> mapWorkspaceConsole;
+    
     public ConsoleTopComponent() {
         initComponents();
         setName(NbBundle.getMessage(ConsoleTopComponent.class, "CTL_ConsoleTopComponent"));
         setToolTipText(NbBundle.getMessage(ConsoleTopComponent.class, "HINT_ConsoleTopComponent"));
 
-        ScriptingController scriptingController = Lookup.getDefault().lookup(ScriptingController.class);
+        // Setup a map for assigning each jythonconsole's PyObject to a Workspace
+        mapWorkspaceConsole = new ConcurrentHashMap<Workspace, PyObject>();
+
+        // Setup a WorkspaceListener for listening to Workspace selection events.
+        // Whenever a Workspace is selected, the JScrollPane is updated with
+        // the corresponding jythonconsole.
+        ProjectController projectController = Lookup.getDefault().lookup(ProjectController.class);
+        projectController.addWorkspaceListener(new WorkspaceListener() {
+            
+            @Override
+            public void initialize(Workspace workspace) {
+            }
+            
+            @Override
+            public void select(Workspace workspace) {
+                updateCurrentConsole(workspace);
+            }
+            
+            @Override
+            public void unselect(Workspace workspace) {
+            }
+            
+            @Override
+            public void close(Workspace workspace) {
+                mapWorkspaceConsole.remove(workspace);
+            }
+            
+            @Override
+            public void disable() {
+            }
+        });
+
+        // Setup a jythonconsole for the current workspace, if there is one
+        Workspace currentWorkspace = projectController.getCurrentWorkspace();
+        if (currentWorkspace != null) {
+            updateCurrentConsole(currentWorkspace);
+        }
+    }
+    
+    private void updateCurrentConsole(Workspace workspace) {
+        PyObject jythonConsole;
         
-        // This stuff is temporary, it's here for testing jythonconsole integration only
+        if (!mapWorkspaceConsole.containsKey(workspace)) {
+            // This workspace doesn't have an associated jythonconsole yet, create it
+            jythonConsole = newJythonConsole(workspace);
+            mapWorkspaceConsole.put(workspace, jythonConsole);
+        }
+        
+        jythonConsole = mapWorkspaceConsole.get(workspace);
+
+        // Show the right jythonconsole on the scroll pane
+        Component jythonConsoleComponent = (Component) jythonConsole.__getattr__("text_pane").__tojava__(Component.class);
+        jScrollPane1.setViewportView(jythonConsoleComponent);
+        
+        // Hack to redirect sys.stdout to the current workspace's jythonconsole
+        ScriptingController scriptingController = Lookup.getDefault().lookup(ScriptingController.class);
+        PythonInterpreter pythonInterpreter = scriptingController.getPythonInterpreter();
+        pythonInterpreter.getSystemState().__setattr__("stdout", jythonConsole.__getattr__("stdout"));
+    }
+    
+    private PyObject newJythonConsole(Workspace workspace) {
+        ScriptingController scriptingController = Lookup.getDefault().lookup(ScriptingController.class);
         PythonInterpreter pyi = scriptingController.getPythonInterpreter();
+        ScriptingModel scriptingModel = scriptingController.getModel(workspace);
         pyi.exec("from jythonconsole.console import Console");
         PyObject jythonConsoleClass = pyi.get("Console");
-        PyObject console = jythonConsoleClass.__call__(pyi.getLocals());
-        jScrollPane1.setViewportView((Component) console.__getattr__("text_pane").__tojava__(Component.class));
+        PyObject console = jythonConsoleClass.__call__(scriptingModel.getLocalNamespace());
+        
+        // Stores a reference to the console's stdout redirector into an attribute
+        // (used later for redirecting stdout to the correct jythonconsole)
+        console.__setattr__("stdout", pyi.getSystemState().__getattr__("stdout"));
+        
+        return console;
     }
 
     /** This method is called from within the constructor to
@@ -85,27 +161,27 @@ public final class ConsoleTopComponent extends TopComponent {
             .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 300, Short.MAX_VALUE)
         );
     }// </editor-fold>//GEN-END:initComponents
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JScrollPane jScrollPane1;
     // End of variables declaration//GEN-END:variables
+
     @Override
     public void componentOpened() {
         // TODO add custom code on component opening
     }
-
+    
     @Override
     public void componentClosed() {
         // TODO add custom code on component closing
     }
-
+    
     void writeProperties(java.util.Properties p) {
         // better to version settings since initial version as advocated at
         // http://wiki.apidesign.org/wiki/PropertyFiles
         p.setProperty("version", "1.0");
         // TODO store your settings
     }
-
+    
     void readProperties(java.util.Properties p) {
         String version = p.getProperty("version");
         // TODO read your settings according to their version
