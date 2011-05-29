@@ -57,7 +57,7 @@ public final class ConsoleTopComponent extends TopComponent {
     public ConsoleTopComponent() {
         initComponents();
         setName(NbBundle.getMessage(ConsoleTopComponent.class, "CTL_ConsoleTopComponent"));
-        setToolTipText(NbBundle.getMessage(ConsoleTopComponent.class, "HINT_ConsoleTopComponent"));
+        //setToolTipText(NbBundle.getMessage(ConsoleTopComponent.class, "HINT_ConsoleTopComponent"));
 
         // Setup a WorkspaceListener for listening to Workspace selection events.
         // Whenever a Workspace is selected, the JScrollPane is updated with
