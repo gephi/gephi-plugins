@@ -54,15 +54,10 @@ persistenceType = TopComponent.PERSISTENCE_ALWAYS)
 preferredID = "ConsoleTopComponent")
 public final class ConsoleTopComponent extends TopComponent {
 
-    private ConcurrentMap<Workspace, PyObject> mapWorkspaceConsole;
-
     public ConsoleTopComponent() {
         initComponents();
         setName(NbBundle.getMessage(ConsoleTopComponent.class, "CTL_ConsoleTopComponent"));
         setToolTipText(NbBundle.getMessage(ConsoleTopComponent.class, "HINT_ConsoleTopComponent"));
-
-        // Setup a map for assigning each jythonconsole's PyObject to a Workspace
-        mapWorkspaceConsole = new ConcurrentHashMap<Workspace, PyObject>();
 
         // Setup a WorkspaceListener for listening to Workspace selection events.
         // Whenever a Workspace is selected, the JScrollPane is updated with
@@ -85,7 +80,6 @@ public final class ConsoleTopComponent extends TopComponent {
 
             @Override
             public void close(Workspace workspace) {
-                mapWorkspaceConsole.remove(workspace);
             }
 
             @Override
@@ -102,15 +96,13 @@ public final class ConsoleTopComponent extends TopComponent {
     }
 
     private void updateCurrentConsole(Workspace workspace) {
-        PyObject jythonConsole;
+        PyObject jythonConsole = workspace.getLookup().lookup(PyObject.class);
 
-        if (!mapWorkspaceConsole.containsKey(workspace)) {
+        if (jythonConsole == null) {
             // This workspace doesn't have an associated jythonconsole yet, create it
             jythonConsole = newJythonConsole(workspace);
-            mapWorkspaceConsole.put(workspace, jythonConsole);
+            workspace.add(jythonConsole);
         }
-
-        jythonConsole = mapWorkspaceConsole.get(workspace);
 
         // Show the right jythonconsole on the scroll pane
         Component jythonConsoleComponent = (Component) jythonConsole.__getattr__("text_pane").__tojava__(Component.class);
