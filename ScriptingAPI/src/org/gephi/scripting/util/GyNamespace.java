@@ -21,7 +21,10 @@ along with Gephi.  If not, see <http://www.gnu.org/licenses/>.
 package org.gephi.scripting.util;
 
 import org.gephi.graph.api.GraphModel;
+import org.gephi.graph.api.Node;
+import org.python.core.PyObject;
 import org.python.core.PyStringMap;
+import org.gephi.scripting.wrappers.GyNode;
 
 /**
  *
@@ -29,9 +32,38 @@ import org.python.core.PyStringMap;
  */
 public class GyNamespace extends PyStringMap {
 
+    public static final String NODE_PREFIX = "v";
     private GraphModel graphModel;
 
     public GyNamespace(GraphModel graphModel) {
         this.graphModel = graphModel;
+    }
+
+    @Override
+    public PyObject __finditem__(String key) {
+        PyObject ret = super.__finditem__(key);
+
+        if (ret != null) {
+            // Object is already on the namespace
+            return ret;
+        }
+        
+        // Got a namespace lookup failure
+
+        if (key.startsWith(NODE_PREFIX)) {
+            // Check if it is a node
+            String id = key.substring(NODE_PREFIX.length());
+            Node node = graphModel.getGraph().getNode(id);
+            if (node != null) {
+                ret = new GyNode(node);
+            }
+        }
+
+        if (ret != null) {
+            // Update the namespace binding, in case something was found
+            super.__setitem__(key, ret);
+        }
+
+        return ret;
     }
 }
