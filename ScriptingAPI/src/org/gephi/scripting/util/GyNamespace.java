@@ -20,9 +20,11 @@ along with Gephi.  If not, see <http://www.gnu.org/licenses/>.
  */
 package org.gephi.scripting.util;
 
+import org.gephi.graph.api.Edge;
 import org.gephi.graph.api.Graph;
 import org.gephi.graph.api.GraphModel;
 import org.gephi.graph.api.Node;
+import org.gephi.scripting.wrappers.GyEdge;
 import org.python.core.PyObject;
 import org.python.core.PyStringMap;
 import org.gephi.scripting.wrappers.GyNode;
@@ -34,6 +36,7 @@ import org.gephi.scripting.wrappers.GyNode;
 public class GyNamespace extends PyStringMap {
 
     public static final String NODE_PREFIX = "v";
+    public static final String EDGE_PREFIX = "e";
     private GraphModel graphModel;
 
     public GyNamespace(GraphModel graphModel) {
@@ -48,7 +51,7 @@ public class GyNamespace extends PyStringMap {
             // Object is already on the namespace
             return ret;
         }
-        
+
         // Got a namespace lookup failure
 
         if (key.startsWith(NODE_PREFIX)) {
@@ -58,6 +61,14 @@ public class GyNamespace extends PyStringMap {
             Node node = graph.getNode(id);
             if (node != null) {
                 ret = new GyNode(graph, node);
+            }
+        } else if (key.startsWith(EDGE_PREFIX)) {
+            // Check if it is an edge
+            String id = key.substring(EDGE_PREFIX.length());
+            Graph graph = graphModel.getGraph();
+            Edge edge = graph.getEdge(id);
+            if (edge != null) {
+                ret = new GyEdge(graph, edge);
             }
         }
 
