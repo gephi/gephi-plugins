@@ -47,7 +47,6 @@ public class ScriptingControllerImpl implements ScriptingController {
 
             @Override
             public void initialize(Workspace workspace) {
-                workspace.add(new ScriptingModelImpl());
             }
 
             @Override
@@ -96,13 +95,13 @@ public class ScriptingControllerImpl implements ScriptingController {
     @Override
     public final synchronized ScriptingModel getModel(Workspace workspace) {
         ScriptingModel scriptingModel = (ScriptingModel) workspace.getLookup().lookup(ScriptingModel.class);
-        
+
         // create a model for the workspace, if needed
         if (scriptingModel == null) {
-            scriptingModel = new ScriptingModelImpl();
+            scriptingModel = new ScriptingModelImpl(workspace);
             workspace.add(scriptingModel);
         }
-        
+
         return scriptingModel;
     }
 

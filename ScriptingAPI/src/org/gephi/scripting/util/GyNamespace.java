@@ -18,30 +18,20 @@ GNU Affero General Public License for more details.
 You should have received a copy of the GNU Affero General Public License
 along with Gephi.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.gephi.scripting.impl;
+package org.gephi.scripting.util;
 
 import org.gephi.graph.api.GraphModel;
-import org.gephi.project.api.Workspace;
-import org.gephi.scripting.api.ScriptingModel;
-import org.gephi.scripting.util.GyNamespace;
-import org.python.core.PyObject;
+import org.python.core.PyStringMap;
 
 /**
  *
  * @author Luiz Ribeiro
  */
-public class ScriptingModelImpl implements ScriptingModel {
+public class GyNamespace extends PyStringMap {
 
-    private PyObject localNamespace;
-    private Workspace workspace;
+    private GraphModel graphModel;
 
-    public ScriptingModelImpl(Workspace workspace) {
-        this.localNamespace = new GyNamespace(workspace.getLookup().lookup(GraphModel.class));
-        this.workspace = workspace;
-    }
-
-    @Override
-    public final PyObject getLocalNamespace() {
-        return localNamespace;
+    public GyNamespace(GraphModel graphModel) {
+        this.graphModel = graphModel;
     }
 }
