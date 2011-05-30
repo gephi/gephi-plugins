@@ -21,8 +21,6 @@ along with Gephi.  If not, see <http://www.gnu.org/licenses/>.
 package org.gephi.desktop.scripting;
 
 import java.awt.Component;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentMap;
 import javax.swing.JPanel;
 import org.gephi.project.api.ProjectController;
 import org.gephi.project.api.Workspace;
