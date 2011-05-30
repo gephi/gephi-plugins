@@ -20,6 +20,7 @@ along with Gephi.  If not, see <http://www.gnu.org/licenses/>.
  */
 package org.gephi.scripting.util;
 
+import org.gephi.graph.api.Graph;
 import org.gephi.graph.api.GraphModel;
 import org.gephi.graph.api.Node;
 import org.python.core.PyObject;
@@ -53,9 +54,10 @@ public class GyNamespace extends PyStringMap {
         if (key.startsWith(NODE_PREFIX)) {
             // Check if it is a node
             String id = key.substring(NODE_PREFIX.length());
-            Node node = graphModel.getGraph().getNode(id);
+            Graph graph = graphModel.getGraph();
+            Node node = graph.getNode(id);
             if (node != null) {
-                ret = new GyNode(node);
+                ret = new GyNode(graph, node);
             }
         }
 

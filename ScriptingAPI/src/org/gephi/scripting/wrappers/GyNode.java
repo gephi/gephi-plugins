@@ -20,6 +20,7 @@ along with Gephi.  If not, see <http://www.gnu.org/licenses/>.
  */
 package org.gephi.scripting.wrappers;
 
+import org.gephi.graph.api.Graph;
 import org.gephi.graph.api.Node;
 import org.gephi.scripting.util.GyNamespace;
 import org.python.core.PyObject;
@@ -29,10 +30,12 @@ import org.python.core.PyObject;
  * @author Luiz Ribeiro
  */
 public class GyNode extends PyObject {
-
+    
+    private Graph graph;
     private Node node;
 
-    public GyNode(Node node) {
+    public GyNode(Graph graph, Node node) {
+        this.graph = graph;
         this.node = node;
     }
 
