@@ -44,12 +44,12 @@ public class GyNamespace extends PyStringMap {
     public GyNamespace(GraphModel graphModel) {
         this.graphModel = graphModel;
     }
-    
+
     @Override
     public void __setitem__(String key, PyObject value) {
         // The user shouldn't be able to set any of the variables that match
         // the regular expressions NODE_PREFIX[0-9]+ or EDGE_PREFIX[0-9]+
-        
+
         if (key.startsWith(NODE_PREFIX)) {
             // Checks if key matches a node reserved variable name
             String id = key.substring(NODE_PREFIX.length());
@@ -63,16 +63,16 @@ public class GyNamespace extends PyStringMap {
                 throw Py.NameError(key + " is a reserved variable name.");
             }
         }
-        
+
         // If everything ok, set the binding on the namespace
         super.__setitem__(key, value);
     }
-    
+
     @Override
     public void __delitem__(String key) {
         // If the user tries to delete a node's binding from the namespace, it
         // will delete the node from the graph accordingly
-        
+
         if (key.startsWith(NODE_PREFIX)) {
             // Check if it is a node
             try {
@@ -81,6 +81,9 @@ public class GyNamespace extends PyStringMap {
                 Node node = graph.getNode(id);
                 if (node != null) {
                     graph.removeNode(node);
+                    if (super.__finditem__(key) != null) {
+                        super.__delitem__(key);
+                    }
                     return;
                 }
             } catch (NumberFormatException ex) {
@@ -93,11 +96,15 @@ public class GyNamespace extends PyStringMap {
                 Edge edge = graph.getEdge(id);
                 if (edge != null) {
                     graph.removeEdge(edge);
+                    if (super.__finditem__(key) != null) {
+                        super.__delitem__(key);
+                    }
+                    return;
                 }
             } catch (NumberFormatException ex) {
             }
         }
-        
+
         super.__delitem__(key);
     }
 
