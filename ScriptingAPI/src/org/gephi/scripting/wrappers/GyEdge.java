@@ -22,6 +22,7 @@ package org.gephi.scripting.wrappers;
 
 import org.gephi.graph.api.Edge;
 import org.gephi.graph.api.Graph;
+import org.gephi.graph.api.Node;
 import org.gephi.scripting.util.GyNamespace;
 import org.python.core.PyObject;
 
@@ -42,5 +43,9 @@ public class GyEdge extends PyObject {
     @Override
     public String toString() {
         return GyNamespace.EDGE_PREFIX + Integer.toString(edge.getId());
+    }
+
+    public Edge getEdge() {
+        return edge;
     }
 }

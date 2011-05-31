@@ -43,4 +43,8 @@ public class GyNode extends PyObject {
     public String toString() {
         return GyNamespace.NODE_PREFIX + Integer.toString(node.getId());
     }
+
+    public Node getNode() {
+        return node;
+    }
 }
