@@ -99,25 +99,25 @@ public class GyNamespace extends PyStringMap {
 
         if (key.startsWith(NODE_PREFIX)) {
             // Check if it is a node
-            try {
-                int id = Integer.parseInt(key.substring(NODE_PREFIX.length()));
+            String strId = key.substring(EDGE_PREFIX.length());
+            if (Pattern.compile("[1-9][0-9]*").matcher(strId).matches()) {
+                int id = Integer.parseInt(strId);
                 Graph graph = graphModel.getGraph();
                 Node node = graph.getNode(id);
                 if (node != null) {
                     ret = new GyNode(graph, node);
                 }
-            } catch (NumberFormatException ex) {
             }
         } else if (key.startsWith(EDGE_PREFIX)) {
             // Check if it is an edge
-            try {
-                int id = Integer.parseInt(key.substring(EDGE_PREFIX.length()));
+            String strId = key.substring(EDGE_PREFIX.length());
+            if (Pattern.compile("[1-9][0-9]*").matcher(strId).matches()) {
+                int id = Integer.parseInt(strId);
                 Graph graph = graphModel.getGraph();
                 Edge edge = graph.getEdge(id);
                 if (edge != null) {
                     ret = new GyEdge(graph, edge);
                 }
-            } catch (NumberFormatException ex) {
             }
         }
 
