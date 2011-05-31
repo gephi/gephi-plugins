@@ -30,7 +30,7 @@ import org.python.core.PyObject;
  * @author Luiz Ribeiro
  */
 public class GyEdge extends PyObject {
-    
+
     private Graph graph;
     private Edge edge;
 
@@ -41,6 +41,6 @@ public class GyEdge extends PyObject {
 
     @Override
     public String toString() {
-        return GyNamespace.EDGE_PREFIX + edge.getId();
+        return GyNamespace.EDGE_PREFIX + Integer.toString(edge.getId());
     }
 }

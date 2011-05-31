@@ -56,19 +56,25 @@ public class GyNamespace extends PyStringMap {
 
         if (key.startsWith(NODE_PREFIX)) {
             // Check if it is a node
-            String id = key.substring(NODE_PREFIX.length());
-            Graph graph = graphModel.getGraph();
-            Node node = graph.getNode(id);
-            if (node != null) {
-                ret = new GyNode(graph, node);
+            try {
+                int id = Integer.parseInt(key.substring(NODE_PREFIX.length()));
+                Graph graph = graphModel.getGraph();
+                Node node = graph.getNode(id);
+                if (node != null) {
+                    ret = new GyNode(graph, node);
+                }
+            } catch (NumberFormatException ex) {
             }
         } else if (key.startsWith(EDGE_PREFIX)) {
             // Check if it is an edge
-            String id = key.substring(EDGE_PREFIX.length());
-            Graph graph = graphModel.getGraph();
-            Edge edge = graph.getEdge(id);
-            if (edge != null) {
-                ret = new GyEdge(graph, edge);
+            try {
+                int id = Integer.parseInt(key.substring(EDGE_PREFIX.length()));
+                Graph graph = graphModel.getGraph();
+                Edge edge = graph.getEdge(id);
+                if (edge != null) {
+                    ret = new GyEdge(graph, edge);
+                }
+            } catch (NumberFormatException ex) {
             }
         }
 
