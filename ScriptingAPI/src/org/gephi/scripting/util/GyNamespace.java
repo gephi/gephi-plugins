@@ -67,6 +67,39 @@ public class GyNamespace extends PyStringMap {
         // If everything ok, set the binding on the namespace
         super.__setitem__(key, value);
     }
+    
+    @Override
+    public void __delitem__(String key) {
+        // If the user tries to delete a node's binding from the namespace, it
+        // will delete the node from the graph accordingly
+        
+        if (key.startsWith(NODE_PREFIX)) {
+            // Check if it is a node
+            try {
+                int id = Integer.parseInt(key.substring(NODE_PREFIX.length()));
+                Graph graph = graphModel.getGraph();
+                Node node = graph.getNode(id);
+                if (node != null) {
+                    graph.removeNode(node);
+                    return;
+                }
+            } catch (NumberFormatException ex) {
+            }
+        } else if (key.startsWith(EDGE_PREFIX)) {
+            // Check if it is an edge
+            try {
+                int id = Integer.parseInt(key.substring(EDGE_PREFIX.length()));
+                Graph graph = graphModel.getGraph();
+                Edge edge = graph.getEdge(id);
+                if (edge != null) {
+                    graph.removeEdge(edge);
+                }
+            } catch (NumberFormatException ex) {
+            }
+        }
+        
+        super.__delitem__(key);
+    }
 
     @Override
     public PyObject __finditem__(String key) {
