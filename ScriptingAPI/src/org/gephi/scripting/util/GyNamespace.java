@@ -20,6 +20,7 @@ along with Gephi.  If not, see <http://www.gnu.org/licenses/>.
  */
 package org.gephi.scripting.util;
 
+import java.util.regex.Pattern;
 import org.gephi.graph.api.Edge;
 import org.gephi.graph.api.Graph;
 import org.gephi.graph.api.GraphModel;
@@ -28,6 +29,7 @@ import org.gephi.scripting.wrappers.GyEdge;
 import org.python.core.PyObject;
 import org.python.core.PyStringMap;
 import org.gephi.scripting.wrappers.GyNode;
+import org.python.core.Py;
 
 /**
  *
@@ -41,6 +43,29 @@ public class GyNamespace extends PyStringMap {
 
     public GyNamespace(GraphModel graphModel) {
         this.graphModel = graphModel;
+    }
+    
+    @Override
+    public void __setitem__(String key, PyObject value) {
+        // The user shouldn't be able to set any of the variables that match
+        // the regular expressions NODE_PREFIX[0-9]+ or EDGE_PREFIX[0-9]+
+        
+        if (key.startsWith(NODE_PREFIX)) {
+            // Checks if key matches a node reserved variable name
+            String id = key.substring(NODE_PREFIX.length());
+            if (Pattern.compile("[0-9]+").matcher(id).matches()) {
+                throw Py.NameError(key + " is a reserved variable name.");
+            }
+        } else if (key.startsWith(EDGE_PREFIX)) {
+            // Checks if key matches an edge reserved variable name
+            String id = key.substring(EDGE_PREFIX.length());
+            if (Pattern.compile("[0-9]+").matcher(id).matches()) {
+                throw Py.NameError(key + " is a reserved variable name.");
+            }
+        }
+        
+        // If everything ok, set the binding on the namespace
+        super.__setitem__(key, value);
     }
 
     @Override
