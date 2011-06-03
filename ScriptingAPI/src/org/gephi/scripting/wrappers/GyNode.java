@@ -38,6 +38,7 @@ public class GyNode extends PyObject {
     // TODO: get rid of this ugly hack (:
     public int color;
     public float size;
+    public String label;
 
     public GyNode(Graph graph, Node node) {
         this.graph = graph;
@@ -64,6 +65,9 @@ public class GyNode extends PyObject {
         } else if (name.equals("size")) {
             float size = (Float) value.__tojava__(Float.class);
             node.getNodeData().setSize(size);
+        } else if (name.equals("label")) {
+            String label = (String) value.__tojava__(String.class);
+            node.getNodeData().setLabel(label);
         } else {
             super.__setattr__(name, value);
         }
@@ -78,6 +82,8 @@ public class GyNode extends PyObject {
             return Py.java2py(new Integer((red << 16) + (green << 8) + blue));
         } else if (name.equals("size")) {
             return Py.java2py(new Float(node.getNodeData().getSize()));
+        } else if (name.equals("label")) {
+            return Py.java2py(node.getNodeData().getLabel());
         } else {
             return super.__findattr_ex__(name);
         }
