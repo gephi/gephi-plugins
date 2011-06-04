@@ -22,9 +22,12 @@ package org.gephi.scripting.wrappers;
 
 import org.gephi.graph.api.Edge;
 import org.gephi.graph.api.Graph;
-import org.gephi.graph.api.Node;
 import org.gephi.scripting.util.GyNamespace;
+import org.python.core.Py;
+import org.python.core.PyFloat;
+import org.python.core.PyInteger;
 import org.python.core.PyObject;
+import org.python.core.PyString;
 
 /**
  *
@@ -34,6 +37,10 @@ public class GyEdge extends PyObject {
 
     private Graph graph;
     private Edge edge;
+    // Hack to get color and size attributes into jythonconsole's auto-completion
+    // TODO: get rid of this ugly hack (:
+    public float weight;
+    public String label;
 
     public GyEdge(Graph graph, Edge edge) {
         this.graph = graph;
@@ -47,5 +54,53 @@ public class GyEdge extends PyObject {
 
     public Edge getEdge() {
         return edge;
+    }
+
+    @Override
+    public void __setattr__(String name, PyObject value) {
+        if (name.equals("weight")) {
+            float size = (Float) value.__tojava__(Float.class);
+            edge.getEdgeData().getAttributes().setValue("Weight", size);
+        } else if (name.equals("label")) {
+            String label = (String) value.__tojava__(String.class);
+            edge.getEdgeData().setLabel(label);
+        } else if (!name.startsWith("__")) {
+            Object obj = null;
+
+            // TODO: support conversions for other object types
+            if (value instanceof PyString) {
+                obj = (String) value.__tojava__(String.class);
+            } else if (value instanceof PyInteger) {
+                obj = (Integer) value.__tojava__(Integer.class);
+            } else if (value instanceof PyFloat) {
+                obj = (Float) value.__tojava__(Float.class);
+            }
+
+            if (obj == null) {
+                throw Py.AttributeError("Unsupported edge attribute type '" + value.getType().getName() + "'");
+            }
+
+            edge.getEdgeData().getAttributes().setValue(name, obj);
+        } else {
+            super.__setattr__(name, value);
+        }
+    }
+
+    @Override
+    public PyObject __findattr_ex__(String name) {
+        if (name.equals("weight")) {
+            float weight = (Float) edge.getEdgeData().getAttributes().getValue("Weight");
+            return Py.java2py(weight);
+        } else if (name.equals("label")) {
+            return Py.java2py(edge.getEdgeData().getLabel());
+        } else if (!name.startsWith("__")) {
+            Object obj = edge.getEdgeData().getAttributes().getValue(name);
+            if (obj == null) {
+                return null;
+            }
+            return Py.java2py(obj);
+        } else {
+            return super.__findattr_ex__(name);
+        }
     }
 }
