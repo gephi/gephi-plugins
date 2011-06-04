@@ -20,7 +20,6 @@ along with Gephi.  If not, see <http://www.gnu.org/licenses/>.
  */
 package org.gephi.scripting.wrappers;
 
-import org.gephi.graph.api.Graph;
 import org.gephi.graph.api.Node;
 import org.gephi.scripting.util.GyNamespace;
 import org.python.core.Py;
@@ -35,7 +34,7 @@ import org.python.core.PyString;
  */
 public class GyNode extends PyObject {
 
-    private Graph graph;
+    private GyNamespace namespace;
     private Node node;
     // Hack to get color and size attributes into jythonconsole's auto-completion
     // TODO: get rid of this ugly hack (:
@@ -43,8 +42,8 @@ public class GyNode extends PyObject {
     public float size;
     public String label;
 
-    public GyNode(Graph graph, Node node) {
-        this.graph = graph;
+    public GyNode(GyNamespace namespace, Node node) {
+        this.namespace = namespace;
         this.node = node;
     }
 
@@ -73,7 +72,7 @@ public class GyNode extends PyObject {
             node.getNodeData().setLabel(label);
         } else if (!name.startsWith("__")) {
             Object obj = null;
-            
+
             // TODO: support conversions for other object types
             if (value instanceof PyString) {
                 obj = (String) value.__tojava__(String.class);
@@ -82,11 +81,11 @@ public class GyNode extends PyObject {
             } else if (value instanceof PyFloat) {
                 obj = (Float) value.__tojava__(Float.class);
             }
-            
+
             if (obj == null) {
                 throw Py.AttributeError("Unsupported node attribute type '" + value.getType().getName() + "'");
             }
-            
+
             node.getNodeData().getAttributes().setValue(name, obj);
         } else {
             super.__setattr__(name, value);
