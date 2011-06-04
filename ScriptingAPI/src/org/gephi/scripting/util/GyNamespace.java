@@ -55,8 +55,8 @@ public class GyNamespace extends PyStringMap {
         return (GyNode) __finditem__(NODE_PREFIX + id);
     }
     
-    public GyNode getGyEdge(int id) {
-        return (GyNode) __finditem__(NODE_PREFIX + id);
+    public GyEdge getGyEdge(int id) {
+        return (GyEdge) __finditem__(EDGE_PREFIX + id);
     }
 
     @Override

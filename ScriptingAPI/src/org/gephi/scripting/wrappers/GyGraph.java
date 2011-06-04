@@ -20,6 +20,7 @@ along with Gephi.  If not, see <http://www.gnu.org/licenses/>.
  */
 package org.gephi.scripting.wrappers;
 
+import org.gephi.graph.api.Edge;
 import org.gephi.graph.api.Node;
 import org.gephi.scripting.util.GyNamespace;
 import org.python.core.PyObject;
@@ -39,7 +40,7 @@ public class GyGraph extends PyObject {
     public GyNode addNode(PyObject args[], String keywords[]) {
         GyNode ret;
         Node node;
-        
+
         // Instantiates the new node and adds it to the graph
         node = namespace.getGraphModel().factory().newNode();
         namespace.getGraphModel().getGraph().addNode(node);
@@ -49,6 +50,18 @@ public class GyGraph extends PyObject {
         for (int i = 0; i < args.length; i++) {
             ret.__setattr__(keywords[i], args[i]);
         }
+
+        return ret;
+    }
+
+    public GyEdge addDirectedEdge(GyNode source, GyNode target) {
+        GyEdge ret = null;
+        Edge edge;
+
+        // Instantiates the new edge and adds it to the graph
+        edge = namespace.getGraphModel().factory().newEdge(source.getNode(), target.getNode(), 1.0f, true);
+        namespace.getGraphModel().getGraph().addEdge(edge);
+        ret = namespace.getGyEdge(edge.getId());
 
         return ret;
     }
