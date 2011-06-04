@@ -24,7 +24,10 @@ import org.gephi.graph.api.Graph;
 import org.gephi.graph.api.Node;
 import org.gephi.scripting.util.GyNamespace;
 import org.python.core.Py;
+import org.python.core.PyFloat;
+import org.python.core.PyInteger;
 import org.python.core.PyObject;
+import org.python.core.PyString;
 
 /**
  *
@@ -68,6 +71,23 @@ public class GyNode extends PyObject {
         } else if (name.equals("label")) {
             String label = (String) value.__tojava__(String.class);
             node.getNodeData().setLabel(label);
+        } else if (!name.startsWith("__")) {
+            Object obj = null;
+            
+            // TODO: support conversions for other object types
+            if (value instanceof PyString) {
+                obj = (String) value.__tojava__(String.class);
+            } else if (value instanceof PyInteger) {
+                obj = (Integer) value.__tojava__(Integer.class);
+            } else if (value instanceof PyFloat) {
+                obj = (Float) value.__tojava__(Float.class);
+            }
+            
+            if (obj == null) {
+                throw Py.AttributeError("Unsupported node attribute type '" + value.getType().getName() + "'");
+            }
+            
+            node.getNodeData().getAttributes().setValue(name, obj);
         } else {
             super.__setattr__(name, value);
         }
@@ -84,6 +104,12 @@ public class GyNode extends PyObject {
             return Py.java2py(new Float(node.getNodeData().getSize()));
         } else if (name.equals("label")) {
             return Py.java2py(node.getNodeData().getLabel());
+        } else if (!name.startsWith("__")) {
+            Object obj = node.getNodeData().getAttributes().getValue(name);
+            if (obj == null) {
+                return null;
+            }
+            return Py.java2py(obj);
         } else {
             return super.__findattr_ex__(name);
         }
