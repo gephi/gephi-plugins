@@ -26,6 +26,7 @@ import org.gephi.graph.api.Graph;
 import org.gephi.graph.api.GraphModel;
 import org.gephi.graph.api.Node;
 import org.gephi.scripting.wrappers.GyEdge;
+import org.gephi.scripting.wrappers.GyGraph;
 import org.python.core.PyObject;
 import org.python.core.PyStringMap;
 import org.gephi.scripting.wrappers.GyNode;
@@ -39,6 +40,7 @@ public class GyNamespace extends PyStringMap {
 
     public static final String NODE_PREFIX = "v";
     public static final String EDGE_PREFIX = "e";
+    public static final String GRAPH_NAME = "g";
     private GraphModel graphModel;
 
     public GyNamespace(GraphModel graphModel) {
@@ -62,6 +64,8 @@ public class GyNamespace extends PyStringMap {
             if (Pattern.compile("[0-9]+").matcher(id).matches()) {
                 throw Py.NameError(key + " is a reserved variable name.");
             }
+        } else if (key.equals(GRAPH_NAME)) {
+            throw Py.NameError(key + " is a reserved variable name.");
         }
 
         // If everything ok, set the binding on the namespace
@@ -80,6 +84,8 @@ public class GyNamespace extends PyStringMap {
         } else if (object instanceof GyEdge) {
             GyEdge node = (GyEdge) object;
             graphModel.getGraph().removeEdge(node.getEdge());
+        } else if (object instanceof GyGraph) {
+            throw Py.NameError(key + " is a readonly variable.");
         }
 
         // Effectively delete the binding from the namespace
@@ -119,6 +125,8 @@ public class GyNamespace extends PyStringMap {
                     ret = new GyEdge(graph, edge);
                 }
             }
+        } else if (key.matches(GRAPH_NAME)) {
+            ret = new GyGraph(graphModel);
         }
 
         if (ret != null) {
