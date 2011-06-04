@@ -50,6 +50,14 @@ public class GyNamespace extends PyStringMap {
     public GraphModel getGraphModel() {
         return graphModel;
     }
+    
+    public GyNode getGyNode(int id) {
+        return (GyNode) __finditem__(NODE_PREFIX + id);
+    }
+    
+    public GyNode getGyEdge(int id) {
+        return (GyNode) __finditem__(NODE_PREFIX + id);
+    }
 
     @Override
     public void __setitem__(String key, PyObject value) {
@@ -90,7 +98,7 @@ public class GyNamespace extends PyStringMap {
             graphModel.getGraph().removeEdge(node.getEdge());
         } else if (object instanceof GyGraph) {
             throw Py.NameError(key + " is a readonly variable.");
-        }
+        } 
 
         // Effectively delete the binding from the namespace
         super.__delitem__(key);

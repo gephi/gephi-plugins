@@ -36,8 +36,20 @@ public class GyGraph extends PyObject {
         this.namespace = namespace;
     }
 
-    public void addNode() {
-        Node node = namespace.getGraphModel().factory().newNode();
+    public GyNode addNode(PyObject args[], String keywords[]) {
+        GyNode ret;
+        Node node;
+        
+        // Instantiates the new node and adds it to the graph
+        node = namespace.getGraphModel().factory().newNode();
         namespace.getGraphModel().getGraph().addNode(node);
+        ret = namespace.getGyNode(node.getId());
+
+        // Sets the node attributes according to args, kwargs
+        for (int i = 0; i < args.length; i++) {
+            ret.__setattr__(keywords[i], args[i]);
+        }
+
+        return ret;
     }
 }
