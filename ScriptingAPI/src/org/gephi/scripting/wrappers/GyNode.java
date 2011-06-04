@@ -27,6 +27,7 @@ import org.python.core.PyFloat;
 import org.python.core.PyInteger;
 import org.python.core.PyObject;
 import org.python.core.PyString;
+import org.python.core.PyTuple;
 
 /**
  *
@@ -36,11 +37,12 @@ public class GyNode extends PyObject {
 
     private GyNamespace namespace;
     private Node node;
-    // Hack to get color and size attributes into jythonconsole's auto-completion
+    // Hack to get a few attributes into jythonconsole's auto-completion
     // TODO: get rid of this ugly hack (:
     public int color;
     public float size;
     public String label;
+    public int position;
 
     public GyNode(GyNamespace namespace, Node node) {
         this.namespace = namespace;
@@ -70,6 +72,12 @@ public class GyNode extends PyObject {
         } else if (name.equals("label")) {
             String label = (String) value.__tojava__(String.class);
             node.getNodeData().setLabel(label);
+        } else if (name.equals("position")) {
+            PyTuple tuple = (PyTuple) value;
+            float x = (Float) tuple.__finditem__(0).__tojava__(Float.class);
+            float y = (Float) tuple.__finditem__(1).__tojava__(Float.class);
+            node.getNodeData().setX(x);
+            node.getNodeData().setY(y);
         } else if (!name.startsWith("__")) {
             Object obj = null;
 
@@ -103,6 +111,10 @@ public class GyNode extends PyObject {
             return Py.java2py(new Float(node.getNodeData().getSize()));
         } else if (name.equals("label")) {
             return Py.java2py(node.getNodeData().getLabel());
+        } else if (name.equals("position")) {
+            float x = node.getNodeData().x();
+            float y = node.getNodeData().y();
+            return new PyTuple(new PyFloat(x), new PyFloat(y));
         } else if (!name.startsWith("__")) {
             Object obj = node.getNodeData().getAttributes().getValue(name);
             if (obj == null) {
