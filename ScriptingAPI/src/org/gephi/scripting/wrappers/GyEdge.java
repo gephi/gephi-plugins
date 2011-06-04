@@ -21,7 +21,6 @@ along with Gephi.  If not, see <http://www.gnu.org/licenses/>.
 package org.gephi.scripting.wrappers;
 
 import org.gephi.graph.api.Edge;
-import org.gephi.graph.api.Graph;
 import org.gephi.scripting.util.GyNamespace;
 import org.python.core.Py;
 import org.python.core.PyFloat;
@@ -35,15 +34,15 @@ import org.python.core.PyString;
  */
 public class GyEdge extends PyObject {
 
-    private Graph graph;
+    private GyNamespace namespace;
     private Edge edge;
     // Hack to get color and size attributes into jythonconsole's auto-completion
     // TODO: get rid of this ugly hack (:
     public float weight;
     public String label;
 
-    public GyEdge(Graph graph, Edge edge) {
-        this.graph = graph;
+    public GyEdge(GyNamespace namespace, Edge edge) {
+        this.namespace = namespace;
         this.edge = edge;
     }
 

@@ -47,6 +47,10 @@ public class GyNamespace extends PyStringMap {
         this.graphModel = graphModel;
     }
 
+    public GraphModel getGraphModel() {
+        return graphModel;
+    }
+
     @Override
     public void __setitem__(String key, PyObject value) {
         // The user shouldn't be able to set any of the variables that match
@@ -111,7 +115,7 @@ public class GyNamespace extends PyStringMap {
                 Graph graph = graphModel.getGraph();
                 Node node = graph.getNode(id);
                 if (node != null) {
-                    ret = new GyNode(graph, node);
+                    ret = new GyNode(this, node);
                 }
             }
         } else if (key.startsWith(EDGE_PREFIX)) {
@@ -122,7 +126,7 @@ public class GyNamespace extends PyStringMap {
                 Graph graph = graphModel.getGraph();
                 Edge edge = graph.getEdge(id);
                 if (edge != null) {
-                    ret = new GyEdge(graph, edge);
+                    ret = new GyEdge(this, edge);
                 }
             }
         } else if (key.matches(GRAPH_NAME)) {

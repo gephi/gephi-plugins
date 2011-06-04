@@ -20,8 +20,8 @@ along with Gephi.  If not, see <http://www.gnu.org/licenses/>.
  */
 package org.gephi.scripting.wrappers;
 
-import org.gephi.graph.api.GraphModel;
 import org.gephi.graph.api.Node;
+import org.gephi.scripting.util.GyNamespace;
 import org.python.core.PyObject;
 
 /**
@@ -29,15 +29,15 @@ import org.python.core.PyObject;
  * @author Luiz Ribeiro
  */
 public class GyGraph extends PyObject {
-    
-    private GraphModel graphModel;
-    
-    public GyGraph(GraphModel graphModel) {
-        this.graphModel = graphModel;
+
+    private GyNamespace namespace;
+
+    public GyGraph(GyNamespace namespace) {
+        this.namespace = namespace;
     }
-    
+
     public void addNode() {
-        Node node = graphModel.factory().newNode();
-        graphModel.getGraph().addNode(node);
+        Node node = namespace.getGraphModel().factory().newNode();
+        namespace.getGraphModel().getGraph().addNode(node);
     }
 }
