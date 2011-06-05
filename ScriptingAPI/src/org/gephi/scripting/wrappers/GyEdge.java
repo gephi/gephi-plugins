@@ -36,10 +36,11 @@ public class GyEdge extends PyObject {
 
     private GyNamespace namespace;
     private Edge edge;
-    // Hack to get color and size attributes into jythonconsole's auto-completion
+    // Hack to get a few attributes into jythonconsole's auto-completion
     // TODO: get rid of this ugly hack (:
     public float weight;
     public String label;
+    public int color;
 
     public GyEdge(GyNamespace namespace, Edge edge) {
         this.namespace = namespace;
@@ -57,7 +58,13 @@ public class GyEdge extends PyObject {
 
     @Override
     public void __setattr__(String name, PyObject value) {
-        if (name.equals("weight")) {
+        if (name.equals("color")) {
+            int color = (Integer) value.__tojava__(Integer.class);
+            float red = ((color >> 16) & 0xFF) / 255.0f;
+            float green = ((color >> 8) & 0xFF) / 255.0f;
+            float blue = (color & 0xFF) / 255.0f;
+            edge.getEdgeData().setColor(red, green, blue);
+        } else if (name.equals("weight")) {
             float size = (Float) value.__tojava__(Float.class);
             edge.getEdgeData().getAttributes().setValue("Weight", size);
         } else if (name.equals("label")) {
@@ -87,7 +94,12 @@ public class GyEdge extends PyObject {
 
     @Override
     public PyObject __findattr_ex__(String name) {
-        if (name.equals("weight")) {
+        if (name.equals("color")) {
+            int red = (int) Math.round(edge.getEdgeData().r() * 255.0f);
+            int green = (int) Math.round(edge.getEdgeData().g() * 255.0f);
+            int blue = (int) Math.round(edge.getEdgeData().b() * 255.0f);
+            return Py.java2py(new Integer((red << 16) + (green << 8) + blue));
+        } else if (name.equals("weight")) {
             float weight = (Float) edge.getEdgeData().getAttributes().getValue("Weight");
             return Py.java2py(weight);
         } else if (name.equals("label")) {

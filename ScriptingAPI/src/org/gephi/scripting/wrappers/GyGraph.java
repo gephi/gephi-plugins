@@ -60,7 +60,23 @@ public class GyGraph extends PyObject {
 
         // Instantiates the new edge and adds it to the graph
         edge = namespace.getGraphModel().factory().newEdge(source.getNode(), target.getNode(), 1.0f, true);
-        namespace.getGraphModel().getGraph().addEdge(edge);
+        namespace.getGraphModel().getDirectedGraph().addEdge(edge);
+        ret = namespace.getGyEdge(edge.getId());
+
+        return ret;
+    }
+
+    public GyEdge addEdge(GyNode source, GyNode target) {
+        return addUndirectedEdge(source, target);
+    }
+
+    public GyEdge addUndirectedEdge(GyNode source, GyNode target) {
+        GyEdge ret = null;
+        Edge edge;
+
+        // Instantiates the new edge and adds it to the graph
+        edge = namespace.getGraphModel().factory().newEdge(source.getNode(), target.getNode(), 1.0f, false);
+        namespace.getGraphModel().getUndirectedGraph().addEdge(edge);
         ret = namespace.getGyEdge(edge.getId());
 
         return ret;
