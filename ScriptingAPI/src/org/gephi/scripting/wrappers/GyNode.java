@@ -70,8 +70,7 @@ public class GyNode extends PyObject {
             float size = (Float) value.__tojava__(Float.class);
             node.getNodeData().setSize(size);
         } else if (name.equals("label")) {
-            String label = (String) value.__tojava__(String.class);
-            node.getNodeData().setLabel(label);
+            node.getNodeData().setLabel(value.toString());
         } else if (name.equals("position")) {
             PyTuple tuple = (PyTuple) value;
             float x = (Float) tuple.__finditem__(0).__tojava__(Float.class);

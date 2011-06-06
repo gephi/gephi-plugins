@@ -68,8 +68,7 @@ public class GyEdge extends PyObject {
             float size = (Float) value.__tojava__(Float.class);
             edge.getEdgeData().getAttributes().setValue("Weight", size);
         } else if (name.equals("label")) {
-            String label = (String) value.__tojava__(String.class);
-            edge.getEdgeData().setLabel(label);
+            edge.getEdgeData().setLabel(value.toString());
         } else if (!name.startsWith("__")) {
             Object obj = null;
 
