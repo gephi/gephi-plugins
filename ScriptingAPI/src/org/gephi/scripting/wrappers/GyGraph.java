@@ -21,8 +21,13 @@ along with Gephi.  If not, see <http://www.gnu.org/licenses/>.
 package org.gephi.scripting.wrappers;
 
 import org.gephi.graph.api.Edge;
+import org.gephi.graph.api.EdgeIterable;
+import org.gephi.graph.api.EdgeIterator;
 import org.gephi.graph.api.Node;
+import org.gephi.graph.api.NodeIterable;
+import org.gephi.graph.api.NodeIterator;
 import org.gephi.scripting.util.GyNamespace;
+import org.python.core.PyList;
 import org.python.core.PyObject;
 
 /**
@@ -32,6 +37,10 @@ import org.python.core.PyObject;
 public class GyGraph extends PyObject {
 
     private GyNamespace namespace;
+    // Hack to get a few attributes into jythonconsole's auto-completion
+    // TODO: get rid of this ugly hack (:
+    public PyList nodes;
+    public PyList edges;
 
     public GyGraph(GyNamespace namespace) {
         this.namespace = namespace;
@@ -80,5 +89,43 @@ public class GyGraph extends PyObject {
         ret = namespace.getGyEdge(edge.getId());
 
         return ret;
+    }
+
+    @Override
+    public PyObject __findattr_ex__(String name) {
+        if (name.equals("nodes")) {
+            NodeIterable nodeIterable = namespace.getGraphModel().getGraph().getNodes();
+            PyList nodesList = new PyList();
+
+            for (NodeIterator nodeItr = nodeIterable.iterator(); nodeItr.hasNext();) {
+                GyNode node = namespace.getGyNode(nodeItr.next().getId());
+                nodesList.add(node);
+            }
+
+            return nodesList;
+        } else if (name.equals("edges")) {
+            EdgeIterable edgeIterable = namespace.getGraphModel().getGraph().getEdges();
+            PyList edgesList = new PyList();
+
+            for (EdgeIterator edgeItr = edgeIterable.iterator(); edgeItr.hasNext();) {
+                GyEdge edge = namespace.getGyEdge(edgeItr.next().getId());
+                edgesList.add(edge);
+            }
+
+            return edgesList;
+        } else {
+            return super.__findattr_ex__(name);
+        }
+    }
+
+    @Override
+    public void __setattr__(String name, PyObject value) {
+        if (name.equals("nodes")) {
+            readonlyAttributeError(name);
+        } else if (name.equals("edges")) {
+            readonlyAttributeError(name);
+        } else {
+            super.__setattr__(name, value);
+        }
     }
 }
