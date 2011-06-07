@@ -20,11 +20,10 @@ along with Gephi.  If not, see <http://www.gnu.org/licenses/>.
  */
 package org.gephi.scripting.impl;
 
-import org.gephi.graph.api.GraphModel;
 import org.gephi.project.api.Workspace;
 import org.gephi.scripting.api.ScriptingModel;
 import org.gephi.scripting.util.GyNamespace;
-import org.python.core.PyObject;
+import org.python.core.PyStringMap;
 
 /**
  *
@@ -32,7 +31,7 @@ import org.python.core.PyObject;
  */
 public class ScriptingModelImpl implements ScriptingModel {
 
-    private PyObject localNamespace;
+    private PyStringMap localNamespace;
     private Workspace workspace;
 
     public ScriptingModelImpl(Workspace workspace) {
@@ -41,7 +40,7 @@ public class ScriptingModelImpl implements ScriptingModel {
     }
 
     @Override
-    public final PyObject getLocalNamespace() {
+    public final PyStringMap getLocalNamespace() {
         return localNamespace;
     }
 }

@@ -24,14 +24,40 @@ import org.gephi.project.api.Workspace;
 import org.python.util.PythonInterpreter;
 
 /**
+ * Controller that manages the scripting models, one per workspace.
+ * 
+ * The <code>ScriptingController</code> is also responsible for instantiating
+ * and managing the <code>PythonInterpreter</code> object. The
+ * <code>PythonInterpreter</code> should be instantiated upon Controller's
+ * construction.
+ * 
+ * The <code>ScriptingController</code> should also update the
+ * <code>PythonInterpreter</code>'s current namespace accordingly whenever
+ * the current workspace is changed, by implementing a
+ * {@link org.gephi.project.api.WorkspaceListener}.
  *
  * @author Luiz Ribeiro
+ * @see ScriptingModel
  */
 public interface ScriptingController {
 
+    /**
+     * Returns the scripting model for the current workspace or
+     * <code>null</code>, in case the project is empty.
+     * @return          the current scripting model
+     */
     public ScriptingModel getModel();
 
+    /**
+     * Returns the scripting model for a given <code>workspace</code>.
+     * @param workspace the workspace whose model will be returned
+     * @return          the <code>workspace</code>'s scripting model
+     */
     public ScriptingModel getModel(Workspace workspace);
 
+    /**
+     * Returns the Python interpreter instance associated with the controller.
+     * @return          the <code>PythonInterpreter</code> instance
+     */
     public PythonInterpreter getPythonInterpreter();
 }

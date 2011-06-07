@@ -20,13 +20,28 @@ along with Gephi.  If not, see <http://www.gnu.org/licenses/>.
  */
 package org.gephi.scripting.api;
 
-import org.python.core.PyObject;
+import org.python.core.PyStringMap;
 
 /**
+ * Interface for storing Scripting API data.
+ * 
+ * Scripting models are responsible for instantiating and keeping a local
+ * namespace for each workspace. Note that <code>ScriptingModel</code> are
+ * instantiated by the <code>ScriptingController</code>, one per workspace.
+ * 
+ * Namespaces in Jython are essentially <code>String</code> to
+ * <code>PyObject</code> maps, which represent bindings from variable bindings
+ * to the actual objects. Namespaces implementations are always extended from
+ * Jython's <code>PyStringMap</code> type.
  *
  * @author Luiz Ribeiro
+ * @see ScriptingController
  */
 public interface ScriptingModel {
 
-    public PyObject getLocalNamespace();
+    /**
+     * Returns the local namespace associated to this scripting model.
+     * @return          the local namespace
+     */
+    public PyStringMap getLocalNamespace();
 }
