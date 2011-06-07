@@ -116,8 +116,9 @@ public class GyNode extends PyObject {
             return new PyTuple(new PyFloat(x), new PyFloat(y));
         } else if (!name.startsWith("__")) {
             Object obj = node.getNodeData().getAttributes().getValue(name);
+            // TODO: return null if there is no column with name
             if (obj == null) {
-                return null;
+                return Py.None;
             }
             return Py.java2py(obj);
         } else {

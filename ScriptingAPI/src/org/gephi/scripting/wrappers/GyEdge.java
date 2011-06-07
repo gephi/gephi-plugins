@@ -105,8 +105,9 @@ public class GyEdge extends PyObject {
             return Py.java2py(edge.getEdgeData().getLabel());
         } else if (!name.startsWith("__")) {
             Object obj = edge.getEdgeData().getAttributes().getValue(name);
+            // TODO: return null if there is no column with name
             if (obj == null) {
-                return null;
+                return Py.None;
             }
             return Py.java2py(obj);
         } else {

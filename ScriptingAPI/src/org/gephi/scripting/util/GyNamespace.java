@@ -25,6 +25,7 @@ import org.gephi.graph.api.Edge;
 import org.gephi.graph.api.Graph;
 import org.gephi.graph.api.GraphModel;
 import org.gephi.graph.api.Node;
+import org.gephi.project.api.Workspace;
 import org.gephi.scripting.wrappers.GyEdge;
 import org.gephi.scripting.wrappers.GyGraph;
 import org.python.core.PyObject;
@@ -41,14 +42,20 @@ public class GyNamespace extends PyStringMap {
     public static final String NODE_PREFIX = "v";
     public static final String EDGE_PREFIX = "e";
     public static final String GRAPH_NAME = "g";
+    private Workspace workspace;
     private GraphModel graphModel;
 
-    public GyNamespace(GraphModel graphModel) {
-        this.graphModel = graphModel;
+    public GyNamespace(Workspace workspace) {
+        this.workspace = workspace;
+        this.graphModel = workspace.getLookup().lookup(GraphModel.class);
     }
 
     public GraphModel getGraphModel() {
         return graphModel;
+    }
+    
+    public Workspace getWorkspace() {
+        return workspace;
     }
     
     public GyNode getGyNode(int id) {

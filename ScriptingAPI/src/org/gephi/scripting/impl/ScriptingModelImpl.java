@@ -36,7 +36,7 @@ public class ScriptingModelImpl implements ScriptingModel {
     private Workspace workspace;
 
     public ScriptingModelImpl(Workspace workspace) {
-        this.localNamespace = new GyNamespace(workspace.getLookup().lookup(GraphModel.class));
+        this.localNamespace = new GyNamespace(workspace);
         this.workspace = workspace;
     }
 
