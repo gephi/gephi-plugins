@@ -21,10 +21,13 @@ along with Gephi.  If not, see <http://www.gnu.org/licenses/>.
 package org.gephi.scripting.wrappers;
 
 import org.gephi.graph.api.Node;
+import org.gephi.graph.api.NodeIterable;
+import org.gephi.graph.api.NodeIterator;
 import org.gephi.scripting.util.GyNamespace;
 import org.python.core.Py;
 import org.python.core.PyFloat;
 import org.python.core.PyInteger;
+import org.python.core.PyList;
 import org.python.core.PyObject;
 import org.python.core.PyString;
 import org.python.core.PyTuple;
@@ -77,6 +80,8 @@ public class GyNode extends PyObject {
             float y = (Float) tuple.__finditem__(1).__tojava__(Float.class);
             node.getNodeData().setX(x);
             node.getNodeData().setY(y);
+        } else if (name.equals("neighbors")) {
+            readonlyAttributeError(name);
         } else if (!name.startsWith("__")) {
             Object obj = null;
 
@@ -114,6 +119,16 @@ public class GyNode extends PyObject {
             float x = node.getNodeData().x();
             float y = node.getNodeData().y();
             return new PyTuple(new PyFloat(x), new PyFloat(y));
+        } else if (name.equals("neighbors")) {
+            NodeIterable nodeIterable = namespace.getGraphModel().getGraph().getNeighbors(node);
+            PyList nodesList = new PyList();
+
+            for (NodeIterator nodeItr = nodeIterable.iterator(); nodeItr.hasNext();) {
+                GyNode node = namespace.getGyNode(nodeItr.next().getId());
+                nodesList.add(node);
+            }
+
+            return nodesList;
         } else if (!name.startsWith("__")) {
             Object obj = node.getNodeData().getAttributes().getValue(name);
             // TODO: return null if there is no column with name
