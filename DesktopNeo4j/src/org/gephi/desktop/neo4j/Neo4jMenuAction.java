@@ -251,6 +251,8 @@ public class Neo4jMenuAction extends CallableSystemAction {
                     }
                 });
             }
+            else
+                graphDB.shutdown();
         }
 
         private int chooseDirectory(JFileChooser fileChooser) {
@@ -350,6 +352,8 @@ public class Neo4jMenuAction extends CallableSystemAction {
                     }
                 });
             }
+            else
+                graphDB.shutdown();
         }
 
         private int chooseDirectory(JFileChooser fileChooser) {
