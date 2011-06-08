@@ -244,11 +244,13 @@ public class GraphModelImportConverter {
     static Collection<GraphDatabaseService> getAllGraphDBs() {
         List<GraphDatabaseService> dbs = new ArrayList<GraphDatabaseService>();
         ProjectController pc = Lookup.getDefault().lookup(ProjectController.class);
-        for (Workspace w : pc.getCurrentProject().getLookup().lookup(WorkspaceProvider.class).getWorkspaces()) {
-            //TODO vypis + debug
-            Neo4jGraphModel neo4jmodel = w.getLookup().lookup(Neo4jGraphModel.class);
-            if (neo4jmodel != null) {
-                dbs.add(neo4jmodel.graphDb);
+
+        if (pc.getCurrentProject() != null) {
+            for (Workspace w : pc.getCurrentProject().getLookup().lookup(WorkspaceProvider.class).getWorkspaces()) {
+                Neo4jGraphModel neo4jmodel = w.getLookup().lookup(Neo4jGraphModel.class);
+                if (neo4jmodel != null) {
+                    dbs.add(neo4jmodel.graphDb);
+                }
             }
         }
         return dbs;
