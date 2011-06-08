@@ -73,7 +73,7 @@ public class Neo4jVisualDebuggerImpl implements Neo4jVisualDebugger {
     @Override
     public void nextStep(Neo4jDelegateNodeDebugger neo4jDelegateNodeDebugger) throws NoMoreElementsException {
         if (paths == null || finishedTraversal == true) {
-            this.paths = neo4jDelegateNodeDebugger.paths(GraphModelImportConverter.getGraphDBForCurrentWorkspace()).iterator();
+            this.paths = neo4jDelegateNodeDebugger.paths(GraphModelImportConverter.getGraphDBForCurrentWorkspace());
             this.finishedTraversal = false;
             this.currentPath = null;
         }
@@ -98,7 +98,7 @@ public class Neo4jVisualDebuggerImpl implements Neo4jVisualDebugger {
     @Override
     public void update(Neo4jDelegateNodeDebugger neo4jDelegateNodeDebugger) {
         if (paths == null || finishedTraversal == true) {
-            this.paths = neo4jDelegateNodeDebugger.paths(GraphModelImportConverter.getGraphDBForCurrentWorkspace()).iterator();
+            this.paths = neo4jDelegateNodeDebugger.paths(GraphModelImportConverter.getGraphDBForCurrentWorkspace());
             this.finishedTraversal = false;
             this.currentPath = null;
         }

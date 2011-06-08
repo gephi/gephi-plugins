@@ -21,6 +21,7 @@ along with Gephi.  If not, see <http://www.gnu.org/licenses/>.
 package org.gephi.neo4j.plugin.api;
 
 import java.awt.Color;
+import java.util.Iterator;
 import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.graphdb.Path;
 
@@ -50,7 +51,7 @@ public final class MutableNeo4jDelegateNodeDebugger implements Neo4jDelegateNode
     }
 
     @Override
-    public Iterable<Path> paths(GraphDatabaseService graphDB) {
+    public Iterator<Path> paths(GraphDatabaseService graphDB) {
         return neo4jDebugger.paths(graphDB);
     }
 
