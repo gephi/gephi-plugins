@@ -38,9 +38,10 @@ public class GyEdge extends PyObject {
     private Edge edge;
     // Hack to get a few attributes into jythonconsole's auto-completion
     // TODO: get rid of this ugly hack (:
+    public int color;
     public float weight;
     public String label;
-    public int color;
+    public boolean directed;
 
     public GyEdge(GyNamespace namespace, Edge edge) {
         this.namespace = namespace;
@@ -69,6 +70,8 @@ public class GyEdge extends PyObject {
             edge.getEdgeData().getAttributes().setValue("Weight", size);
         } else if (name.equals("label")) {
             edge.getEdgeData().setLabel(value.toString());
+        } else if (name.equals("directed")) {
+            readonlyAttributeError(name);
         } else if (!name.startsWith("__")) {
             Object obj = null;
 
@@ -103,6 +106,8 @@ public class GyEdge extends PyObject {
             return Py.java2py(weight);
         } else if (name.equals("label")) {
             return Py.java2py(edge.getEdgeData().getLabel());
+        } else if (name.equals("directed")) {
+            return Py.java2py(edge.isDirected());
         } else if (!name.startsWith("__")) {
             Object obj = edge.getEdgeData().getAttributes().getValue(name);
             // TODO: return null if there is no column with name
