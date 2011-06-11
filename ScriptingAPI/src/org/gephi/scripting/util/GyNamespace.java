@@ -37,7 +37,7 @@ import org.python.core.Py;
  *
  * @author Luiz Ribeiro
  */
-public class GyNamespace extends PyStringMap {
+public final class GyNamespace extends PyStringMap {
 
     public static final String NODE_PREFIX = "v";
     public static final String EDGE_PREFIX = "e";
@@ -48,6 +48,8 @@ public class GyNamespace extends PyStringMap {
     public GyNamespace(Workspace workspace) {
         this.workspace = workspace;
         this.graphModel = workspace.getLookup().lookup(GraphModel.class);
+        
+        __setitem__("GySet", GySet._TYPE);
     }
 
     public GraphModel getGraphModel() {

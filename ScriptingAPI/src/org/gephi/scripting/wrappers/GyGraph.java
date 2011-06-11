@@ -27,6 +27,7 @@ import org.gephi.graph.api.Node;
 import org.gephi.graph.api.NodeIterable;
 import org.gephi.graph.api.NodeIterator;
 import org.gephi.scripting.util.GyNamespace;
+import org.gephi.scripting.util.GySet;
 import org.python.core.PyList;
 import org.python.core.PyObject;
 
@@ -95,24 +96,24 @@ public class GyGraph extends PyObject {
     public PyObject __findattr_ex__(String name) {
         if (name.equals("nodes")) {
             NodeIterable nodeIterable = namespace.getGraphModel().getGraph().getNodes();
-            PyList nodesList = new PyList();
+            GySet nodesSet = new GySet();
 
             for (NodeIterator nodeItr = nodeIterable.iterator(); nodeItr.hasNext();) {
                 GyNode node = namespace.getGyNode(nodeItr.next().getId());
-                nodesList.add(node);
+                nodesSet.add(node);
             }
 
-            return nodesList;
+            return nodesSet;
         } else if (name.equals("edges")) {
             EdgeIterable edgeIterable = namespace.getGraphModel().getGraph().getEdges();
-            PyList edgesList = new PyList();
+            GySet edgesSet = new GySet();
 
             for (EdgeIterator edgeItr = edgeIterable.iterator(); edgeItr.hasNext();) {
                 GyEdge edge = namespace.getGyEdge(edgeItr.next().getId());
-                edgesList.add(edge);
+                edgesSet.add(edge);
             }
 
-            return edgesList;
+            return edgesSet;
         } else {
             return super.__findattr_ex__(name);
         }

@@ -24,6 +24,7 @@ import org.gephi.graph.api.Node;
 import org.gephi.graph.api.NodeIterable;
 import org.gephi.graph.api.NodeIterator;
 import org.gephi.scripting.util.GyNamespace;
+import org.gephi.scripting.util.GySet;
 import org.python.core.Py;
 import org.python.core.PyBoolean;
 import org.python.core.PyFloat;
@@ -159,14 +160,14 @@ public class GyNode extends PyObject {
             return new PyInteger(totaldegree);
         } else if (name.equals("neighbors")) {
             NodeIterable nodeIterable = namespace.getGraphModel().getGraph().getNeighbors(node);
-            PyList nodesList = new PyList();
+            GySet nodesSet = new GySet();
 
             for (NodeIterator nodeItr = nodeIterable.iterator(); nodeItr.hasNext();) {
                 GyNode node = namespace.getGyNode(nodeItr.next().getId());
-                nodesList.add(node);
+                nodesSet.add(node);
             }
 
-            return nodesList;
+            return nodesSet;
         } else if (!name.startsWith("__")) {
             Object obj = node.getNodeData().getAttributes().getValue(name);
             // TODO: return null if there is no column with name
