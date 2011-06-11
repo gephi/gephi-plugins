@@ -25,6 +25,7 @@ import org.gephi.graph.api.NodeIterable;
 import org.gephi.graph.api.NodeIterator;
 import org.gephi.scripting.util.GyNamespace;
 import org.python.core.Py;
+import org.python.core.PyBoolean;
 import org.python.core.PyFloat;
 import org.python.core.PyInteger;
 import org.python.core.PyList;
@@ -46,6 +47,11 @@ public class GyNode extends PyObject {
     public float size;
     public String label;
     public int position;
+    public boolean fixed;
+    public int indegree;
+    public int outdegree;
+    public int totaldegree;
+    public PyList neighbors;
 
     public GyNode(GyNamespace namespace, Node node) {
         this.namespace = namespace;
@@ -80,6 +86,15 @@ public class GyNode extends PyObject {
             float y = (Float) tuple.__finditem__(1).__tojava__(Float.class);
             node.getNodeData().setX(x);
             node.getNodeData().setY(y);
+        } else if (name.equals("fixed")) {
+            boolean fixed = (Boolean) value.__tojava__(Boolean.class);
+            node.getNodeData().setFixed(fixed);
+        } else if (name.equals("indegree")) {
+            readonlyAttributeError(name);
+        } else if (name.equals("outdegree")) {
+            readonlyAttributeError(name);
+        } else if (name.equals("totaldegree")) {
+            readonlyAttributeError(name);
         } else if (name.equals("neighbors")) {
             readonlyAttributeError(name);
         } else if (!name.startsWith("__")) {
@@ -119,6 +134,17 @@ public class GyNode extends PyObject {
             float x = node.getNodeData().x();
             float y = node.getNodeData().y();
             return new PyTuple(new PyFloat(x), new PyFloat(y));
+        } else if (name.equals("fixed")) {
+            return new PyBoolean(node.getNodeData().isFixed());
+        } else if (name.equals("indegree")) {
+            int indegree = namespace.getGraphModel().getDirectedGraph().getInDegree(node);
+            return new PyInteger(indegree);
+        } else if (name.equals("outdegree")) {
+            int outdegree = namespace.getGraphModel().getDirectedGraph().getOutDegree(node);
+            return new PyInteger(outdegree);
+        } else if (name.equals("totaldegree")) {
+            int totaldegree = namespace.getGraphModel().getDirectedGraph().getDegree(node);
+            return new PyInteger(totaldegree);
         } else if (name.equals("neighbors")) {
             NodeIterable nodeIterable = namespace.getGraphModel().getGraph().getNeighbors(node);
             PyList nodesList = new PyList();
