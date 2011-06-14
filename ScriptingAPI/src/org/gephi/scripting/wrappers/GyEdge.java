@@ -42,6 +42,8 @@ public class GyEdge extends PyObject {
     public float weight;
     public String label;
     public boolean directed;
+    public GyNode source;
+    public GyNode target;
 
     public GyEdge(GyNamespace namespace, Edge edge) {
         this.namespace = namespace;
@@ -71,6 +73,10 @@ public class GyEdge extends PyObject {
         } else if (name.equals("label")) {
             edge.getEdgeData().setLabel(value.toString());
         } else if (name.equals("directed")) {
+            readonlyAttributeError(name);
+        } else if (name.equals("source")) {
+            readonlyAttributeError(name);
+        } else if (name.equals("target")) {
             readonlyAttributeError(name);
         } else if (!name.startsWith("__")) {
             Object obj = null;
@@ -108,6 +114,10 @@ public class GyEdge extends PyObject {
             return Py.java2py(edge.getEdgeData().getLabel());
         } else if (name.equals("directed")) {
             return Py.java2py(edge.isDirected());
+        } else if (name.equals("source")) {
+            return namespace.getGyNode(edge.getSource().getId());
+        } else if (name.equals("target")) {
+            return namespace.getGyNode(edge.getTarget().getId());
         } else if (!name.startsWith("__")) {
             Object obj = edge.getEdgeData().getAttributes().getValue(name);
             // TODO: return null if there is no column with name
