@@ -21,6 +21,7 @@ along with Gephi.  If not, see <http://www.gnu.org/licenses/>.
 package org.gephi.scripting.util;
 
 import java.util.Arrays;
+import org.gephi.scripting.wrappers.GyEdge;
 import org.python.core.PyObject;
 import org.python.core.PyType;
 
@@ -44,5 +45,20 @@ public class GyEdgeSet extends GySet {
     public GyEdgeSet(PyObject args[]) {
         this();
         addAll(Arrays.asList(args));
+    }
+
+    @Override
+    public boolean add(Object obj) {
+        boolean added = false;
+
+        if (obj instanceof GyEdge) {
+            added |= super.add(obj);
+        } else if (obj instanceof GyEdgeSet || (obj instanceof PyObject && ((PyObject) obj).isSequenceType())) {
+            for (PyObject iter : ((PyObject) obj).asIterable()) {
+                added |= add(iter);
+            }
+        }
+
+        return added;
     }
 }

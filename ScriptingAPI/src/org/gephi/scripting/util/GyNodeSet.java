@@ -47,6 +47,21 @@ public class GyNodeSet extends GySet {
         this();
         addAll(Arrays.asList(args));
     }
+    
+    @Override
+    public boolean add(Object obj) {
+        boolean added = false;
+
+        if (obj instanceof GyNode) {
+            added |= super.add(obj);
+        } else if (obj instanceof GyNodeSet || (obj instanceof PyObject && ((PyObject) obj).isSequenceType())) {
+            for (PyObject iter : ((PyObject) obj).asIterable()) {
+                added |= add(iter);
+            }
+        }
+
+        return added;
+    }
 
     @Override
     public PyObject __rde__(PyObject obj) {
