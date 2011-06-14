@@ -20,9 +20,12 @@ along with Gephi.  If not, see <http://www.gnu.org/licenses/>.
  */
 package org.gephi.scripting.wrappers;
 
+import java.util.Iterator;
+import org.gephi.graph.api.Edge;
 import org.gephi.graph.api.Node;
 import org.gephi.graph.api.NodeIterable;
 import org.gephi.graph.api.NodeIterator;
+import org.gephi.scripting.util.GyEdgeSet;
 import org.gephi.scripting.util.GyNamespace;
 import org.gephi.scripting.util.GyNodeSet;
 import org.python.core.Py;
@@ -178,5 +181,41 @@ public class GyNode extends PyObject {
         } else {
             return super.__findattr_ex__(name);
         }
+    }
+
+    @Override
+    public PyObject __rde__(PyObject obj) {
+        if (obj instanceof GyNode) {
+            GyEdgeSet edgeSet = new GyEdgeSet();
+            Node target = ((GyNode) obj).getNode();
+            Edge edge = namespace.getGraphModel().getMixedGraph().getEdge(node, target);
+
+            if (edge != null && edge.isDirected() && edge.getTarget().equals(target)) {
+                edgeSet.add(namespace.getGyEdge(edge.getId()));
+            }
+
+            return edgeSet;
+        } else if (obj instanceof GyNodeSet) {
+            GyEdgeSet edgeSet = new GyEdgeSet();
+            GyNodeSet nodeSet = (GyNodeSet) obj;
+
+            for (Iterator iter = nodeSet.iterator(); iter.hasNext();) {
+                GyEdgeSet ret = (GyEdgeSet) this.__rde__((PyObject) iter.next());
+                edgeSet.__ior__(ret);
+            }
+
+            return edgeSet;
+        }
+
+        return null;
+    }
+
+    @Override
+    public PyObject __lde__(PyObject obj) {
+        if (obj instanceof GyNode || obj instanceof GyNodeSet) {
+            return obj.__rde__(this);
+        }
+
+        return null;
     }
 }

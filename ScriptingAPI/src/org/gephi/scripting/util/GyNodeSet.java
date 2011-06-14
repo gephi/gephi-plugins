@@ -21,6 +21,8 @@ along with Gephi.  If not, see <http://www.gnu.org/licenses/>.
 package org.gephi.scripting.util;
 
 import java.util.Arrays;
+import java.util.Iterator;
+import org.gephi.scripting.wrappers.GyNode;
 import org.python.core.PyObject;
 import org.python.core.PyType;
 
@@ -43,5 +45,31 @@ public class GyNodeSet extends GySet {
     public GyNodeSet(PyObject args[]) {
         this();
         addAll(Arrays.asList(args));
+    }
+
+    @Override
+    public PyObject __rde__(PyObject obj) {
+        if (obj instanceof GyNode || obj instanceof GyNodeSet) {
+            GyEdgeSet edgeSet = new GyEdgeSet();
+
+            for (Iterator iter = _set.iterator(); iter.hasNext();) {
+                PyObject iterObj = (PyObject) iter.next();
+                GyEdgeSet ret = (GyEdgeSet) iterObj.__rde__(obj);
+                edgeSet.__ior__(ret);
+            }
+
+            return edgeSet;
+        }
+
+        return null;
+    }
+
+    @Override
+    public PyObject __lde__(PyObject obj) {
+        if (obj instanceof GyNode || obj instanceof GyNodeSet) {
+            return obj.__rde__(this);
+        }
+        
+        return null;
     }
 }
