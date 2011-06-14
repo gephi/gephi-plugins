@@ -34,6 +34,7 @@ public class GyEdgeSet extends GySet {
 
     public GyEdgeSet() {
         this(_TYPE);
+        _TYPE.setName("edgeset");
     }
 
     public GyEdgeSet(PyType type) {

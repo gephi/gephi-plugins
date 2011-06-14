@@ -36,6 +36,7 @@ public class GyNodeSet extends GySet {
 
     public GyNodeSet() {
         this(_TYPE);
+        _TYPE.setName("nodeset");
     }
 
     public GyNodeSet(PyType type) {
@@ -69,10 +70,10 @@ public class GyNodeSet extends GySet {
         if (obj instanceof GyNode || obj instanceof GyNodeSet) {
             return obj.__rde__(this);
         }
-        
+
         return null;
     }
-    
+
     @Override
     public PyObject __bde__(PyObject obj) {
         if (obj instanceof GyNode || obj instanceof GyNodeSet) {

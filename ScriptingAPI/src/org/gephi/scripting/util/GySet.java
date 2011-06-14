@@ -22,9 +22,11 @@ package org.gephi.scripting.util;
 
 import java.util.Arrays;
 import java.util.Iterator;
+import org.python.core.Py;
 import org.python.core.PyObject;
 import org.python.core.PySet;
 import org.python.core.PyType;
+import org.python.core.ThreadState;
 
 /**
  *
@@ -58,5 +60,24 @@ public abstract class GySet extends PySet {
             PyObject object = iter.next();
             object.__setattr__(name, value);
         }
+    }
+
+    @Override
+    public String toString() {
+        String name = getType().fastGetName();
+        ThreadState ts = Py.getThreadState();
+        if (!ts.enterRepr(this)) {
+            return name + "(...)";
+        }
+        StringBuilder buf = new StringBuilder(name).append("(");
+        for (Iterator<PyObject> i = _set.iterator(); i.hasNext();) {
+            buf.append((i.next()).__repr__().toString());
+            if (i.hasNext()) {
+                buf.append(", ");
+            }
+        }
+        buf.append(")");
+        ts.exitRepr(this);
+        return buf.toString();
     }
 }
