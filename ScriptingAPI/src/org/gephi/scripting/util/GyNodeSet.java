@@ -72,4 +72,21 @@ public class GyNodeSet extends GySet {
         
         return null;
     }
+    
+    @Override
+    public PyObject __bde__(PyObject obj) {
+        if (obj instanceof GyNode || obj instanceof GyNodeSet) {
+            GyEdgeSet edgeSet = new GyEdgeSet();
+
+            for (Iterator iter = _set.iterator(); iter.hasNext();) {
+                PyObject iterObj = (PyObject) iter.next();
+                GyEdgeSet ret = (GyEdgeSet) iterObj.__bde__(obj);
+                edgeSet.__ior__(ret);
+            }
+
+            return edgeSet;
+        }
+
+        return null;
+    }
 }

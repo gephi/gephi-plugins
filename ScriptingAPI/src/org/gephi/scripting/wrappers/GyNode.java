@@ -218,4 +218,37 @@ public class GyNode extends PyObject {
 
         return null;
     }
+
+    @Override
+    public PyObject __bde__(PyObject obj) {
+        if (obj instanceof GyNode) {
+            GyEdgeSet edgeSet = new GyEdgeSet();
+            Node target = ((GyNode) obj).getNode();
+            Edge edge = namespace.getGraphModel().getMixedGraph().getEdge(node, target);
+
+            if (edge != null && !edge.isDirected()) {
+                edgeSet.add(namespace.getGyEdge(edge.getId()));
+            } else {
+                edge = namespace.getGraphModel().getMixedGraph().getEdge(target, node);
+
+                if (edge != null && !edge.isDirected()) {
+                    edgeSet.add(namespace.getGyEdge(edge.getId()));
+                }
+            }
+
+            return edgeSet;
+        } else if (obj instanceof GyNodeSet) {
+            GyEdgeSet edgeSet = new GyEdgeSet();
+            GyNodeSet nodeSet = (GyNodeSet) obj;
+
+            for (Iterator iter = nodeSet.iterator(); iter.hasNext();) {
+                GyEdgeSet ret = (GyEdgeSet) this.__bde__((PyObject) iter.next());
+                edgeSet.__ior__(ret);
+            }
+
+            return edgeSet;
+        }
+
+        return null;
+    }
 }
