@@ -21,42 +21,27 @@ along with Gephi.  If not, see <http://www.gnu.org/licenses/>.
 package org.gephi.scripting.util;
 
 import java.util.Arrays;
-import java.util.Iterator;
 import org.python.core.PyObject;
-import org.python.core.PySet;
 import org.python.core.PyType;
 
 /**
  *
  * @author Luiz Ribeiro
  */
-public abstract class GySet extends PySet {
+public class GyEdgeSet extends GySet {
 
-    public static final PyType _TYPE = PyType.fromClass(GySet.class);
+    public static final PyType _TYPE = PyType.fromClass(GyEdgeSet.class);
 
-    public GySet() {
+    public GyEdgeSet() {
         this(_TYPE);
     }
 
-    public GySet(PyType type) {
+    public GyEdgeSet(PyType type) {
         super(type);
     }
 
-    public GySet(PyObject args[]) {
+    public GyEdgeSet(PyObject args[]) {
         this();
         addAll(Arrays.asList(args));
-    }
-
-    @Override
-    public PyObject __findattr_ex__(String name) {
-        return super.__findattr_ex__(name);
-    }
-
-    @Override
-    public void __setattr__(String name, PyObject value) {
-        for (Iterator<PyObject> iter = _set.iterator(); iter.hasNext();) {
-            PyObject object = iter.next();
-            object.__setattr__(name, value);
-        }
     }
 }

@@ -49,7 +49,9 @@ public final class GyNamespace extends PyStringMap {
         this.workspace = workspace;
         this.graphModel = workspace.getLookup().lookup(GraphModel.class);
         
-        __setitem__("GySet", GySet._TYPE);
+        // Import some types into the namespace
+        __setitem__("nodeset", GyNodeSet._TYPE);
+        __setitem__("edgeset", GyEdgeSet._TYPE);
     }
 
     public GraphModel getGraphModel() {
