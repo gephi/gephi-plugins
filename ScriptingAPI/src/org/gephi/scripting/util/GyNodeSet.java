@@ -47,7 +47,7 @@ public class GyNodeSet extends GySet {
         this();
         addAll(Arrays.asList(args));
     }
-    
+
     @Override
     public boolean add(Object obj) {
         boolean added = false;
@@ -99,6 +99,21 @@ public class GyNodeSet extends GySet {
                 GyEdgeSet ret = (GyEdgeSet) iterObj.__bde__(obj);
                 edgeSet.__ior__(ret);
             }
+
+            return edgeSet;
+        }
+
+        return null;
+    }
+
+    @Override
+    public PyObject __anye__(PyObject obj) {
+        if (obj instanceof GyNode || obj instanceof GyNodeSet) {
+            GyEdgeSet edgeSet = new GyEdgeSet();
+
+            edgeSet.__ior__(this.__lde__(obj));
+            edgeSet.__ior__(this.__rde__(obj));
+            edgeSet.__ior__(this.__bde__(obj));
 
             return edgeSet;
         }

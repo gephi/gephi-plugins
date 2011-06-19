@@ -251,4 +251,19 @@ public class GyNode extends PyObject {
 
         return null;
     }
+
+    @Override
+    public PyObject __anye__(PyObject obj) {
+        if (obj instanceof GyNode || obj instanceof GyNodeSet) {
+            GyEdgeSet edgeSet = new GyEdgeSet();
+
+            edgeSet.__ior__(this.__lde__(obj));
+            edgeSet.__ior__(this.__rde__(obj));
+            edgeSet.__ior__(this.__bde__(obj));
+
+            return edgeSet;
+        }
+
+        return null;
+    }
 }
