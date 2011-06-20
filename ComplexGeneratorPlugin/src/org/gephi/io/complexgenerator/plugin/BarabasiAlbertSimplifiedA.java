@@ -67,6 +67,7 @@ public class BarabasiAlbertSimplifiedA implements Generator {
 		for (int i = 0; i < m0 && !cancel; ++i) {
 			NodeDraft node = container.factory().newNodeDraft();
 			node.setLabel("Node " + i);
+			node.addTimeInterval(i + "", N + "");
 			nodes[i] = node;
 			container.addNode(node);
 			Progress.progress(progressTicket);
@@ -87,6 +88,7 @@ public class BarabasiAlbertSimplifiedA implements Generator {
 			// Adding new node
 			NodeDraft node = container.factory().newNodeDraft();
 			node.setLabel("Node " + i);
+			node.addTimeInterval(i + "", N + "");
 			nodes[i] = node;
 			container.addNode(node);
 

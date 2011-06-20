@@ -72,6 +72,7 @@ public class BarabasiAlbertGeneralized implements Generator {
 		for (int i = 0; i < m0 && !cancel; ++i) {
 			NodeDraft node = container.factory().newNodeDraft();
 			node.setLabel("Node " + i);
+			node.addTimeInterval(i + "", N + "");
 			nodes[i] = node;
 			degrees[i] = 0;
 			container.addNode(node);
@@ -161,6 +162,7 @@ public class BarabasiAlbertGeneralized implements Generator {
 			else { // adding a new node with M edges
 				NodeDraft node = container.factory().newNodeDraft();
 				node.setLabel("Node " + n);
+				node.addTimeInterval(n + "", N + "");
 				nodes[n] = node;
 				degrees[n] = 0;
 				container.addNode(node);

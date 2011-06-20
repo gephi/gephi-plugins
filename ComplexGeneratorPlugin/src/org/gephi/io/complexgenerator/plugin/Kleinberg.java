@@ -72,6 +72,7 @@ public class Kleinberg implements Generator {
 			for (int j = 0; j < n && !cancel; ++j) {
 				NodeDraft node = container.factory().newNodeDraft();
 				node.setLabel("Node " + i + " " + j);
+				node.addTimeInterval((i * 10 + j) + "", n * n + "");
 				nodes[i][j] = node;
 				container.addNode(node);
 				Progress.progress(progressTicket);

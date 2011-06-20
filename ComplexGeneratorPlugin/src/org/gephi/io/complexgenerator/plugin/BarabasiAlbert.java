@@ -55,6 +55,8 @@ public class BarabasiAlbert implements Generator {
 	private int N  = 50;
 	private int m0 = 1;
 	private int M  = 1;
+	
+	private boolean considerExistingNodes;
 
 	public void generate(ContainerLoader container) {
 		Progress.start(progressTicket, N + M);
@@ -68,6 +70,7 @@ public class BarabasiAlbert implements Generator {
 		for (int i = 0; i < m0 && !cancel; ++i) {
 			NodeDraft node = container.factory().newNodeDraft();
 			node.setLabel("Node " + i);
+			node.addTimeInterval(i + "", N + "");
 			nodes[i] = node;
 			degrees[i] = 0;
 			container.addNode(node);
@@ -91,6 +94,7 @@ public class BarabasiAlbert implements Generator {
 			// Adding new node
 			NodeDraft node = container.factory().newNodeDraft();
 			node.setLabel("Node " + i);
+			node.addTimeInterval(i + "", N + "");
 			nodes[i] = node;
 			degrees[i] = 0;
 			container.addNode(node);
@@ -156,6 +160,14 @@ public class BarabasiAlbert implements Generator {
 
 	public void setM(int M) {
 		this.M = M;
+	}
+
+	public boolean isConsiderExistingNodes() {
+		return considerExistingNodes;
+	}
+
+	public void setConsiderExistingNodes(boolean considerExistingNodes) {
+		this.considerExistingNodes = considerExistingNodes;
 	}
 
 	public String getName() {

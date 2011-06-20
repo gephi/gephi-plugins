@@ -64,6 +64,7 @@ public class ErdosRenyiGnp implements Generator {
 		for (int i = 0; i < n && !cancel; ++i) {
 			NodeDraft node = container.factory().newNodeDraft();
 			node.setLabel("Node " + i);
+			node.addTimeInterval(i + "", n + "");
 			nodes[i] = node;
 			container.addNode(node);
 			Progress.progress(progressTicket);

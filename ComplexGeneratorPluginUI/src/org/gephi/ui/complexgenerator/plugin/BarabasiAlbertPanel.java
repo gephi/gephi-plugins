@@ -39,6 +39,14 @@ public class BarabasiAlbertPanel extends javax.swing.JPanel {
         initComponents();
     }
 
+	public boolean isConsiderExistingNodes() {
+		return existingCheckBox.isSelected();
+	}
+
+	public void setConsiderExistingNodes(boolean considerExistingNodes) {
+		existingCheckBox.setSelected(considerExistingNodes);
+	}
+
 	public static ValidationPanel createValidationPanel(BarabasiAlbertPanel innerPanel) {
 		ValidationPanel validationPanel = new ValidationPanel();
 		if (innerPanel == null)
@@ -129,8 +137,9 @@ public class BarabasiAlbertPanel extends javax.swing.JPanel {
         NLabel = new javax.swing.JLabel();
         m0Label = new javax.swing.JLabel();
         constraintsLabel = new javax.swing.JLabel();
+        existingCheckBox = new javax.swing.JCheckBox();
 
-        setPreferredSize(new java.awt.Dimension(451, 170));
+        setPreferredSize(new java.awt.Dimension(451, 152));
 
         MLabel.setText(org.openide.util.NbBundle.getMessage(BarabasiAlbertPanel.class, "BarabasiAlbertPanel.MLabel.text")); // NOI18N
 
@@ -146,23 +155,29 @@ public class BarabasiAlbertPanel extends javax.swing.JPanel {
 
         constraintsLabel.setText(org.openide.util.NbBundle.getMessage(BarabasiAlbertPanel.class, "BarabasiAlbertPanel.constraintsLabel.text")); // NOI18N
 
+        existingCheckBox.setText(org.openide.util.NbBundle.getMessage(BarabasiAlbertPanel.class, "BarabasiAlbertPanel.existingCheckBox.text")); // NOI18N
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(constraintsLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(NLabel)
-                        .addComponent(m0Label)
-                        .addComponent(MLabel)))
-                .addGap(25, 25, 25)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(m0Field, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 161, Short.MAX_VALUE)
-                    .addComponent(MField, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 161, Short.MAX_VALUE)
-                    .addComponent(NField, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 161, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(49, 49, 49)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(NLabel)
+                            .addComponent(m0Label)
+                            .addComponent(MLabel)
+                            .addComponent(existingCheckBox))
+                        .addGap(25, 25, 25)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(m0Field, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 188, Short.MAX_VALUE)
+                            .addComponent(MField, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 188, Short.MAX_VALUE)
+                            .addComponent(NField, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 188, Short.MAX_VALUE)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(constraintsLabel)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -181,8 +196,10 @@ public class BarabasiAlbertPanel extends javax.swing.JPanel {
                     .addComponent(MField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(MLabel))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(constraintsLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(existingCheckBox)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 19, Short.MAX_VALUE)
+                .addComponent(constraintsLabel)
+                .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -193,6 +210,7 @@ public class BarabasiAlbertPanel extends javax.swing.JPanel {
     protected javax.swing.JTextField NField;
     private javax.swing.JLabel NLabel;
     private javax.swing.JLabel constraintsLabel;
+    private javax.swing.JCheckBox existingCheckBox;
     protected javax.swing.JTextField m0Field;
     private javax.swing.JLabel m0Label;
     // End of variables declaration//GEN-END:variables

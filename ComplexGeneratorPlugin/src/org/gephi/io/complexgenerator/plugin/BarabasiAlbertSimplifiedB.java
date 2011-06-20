@@ -67,6 +67,7 @@ public class BarabasiAlbertSimplifiedB implements Generator {
 		for (int i = 0; i < N && !cancel; ++i) {
 			NodeDraft node = container.factory().newNodeDraft();
 			node.setLabel("Node " + i);
+			node.addTimeInterval(i + "", N + "");
 			nodes[i] = node;
 			degrees[i] = 0;
 			container.addNode(node);

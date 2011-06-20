@@ -60,12 +60,14 @@ public class BalancedTree implements Generator {
 		// Creating a root of degree r
 		NodeDraft root = container.factory().newNodeDraft();
 		root.setLabel("Node 0");
+		root.addTimeInterval("0", n + "");
 		container.addNode(root);
 		List<NodeDraft> newLeaves = new ArrayList<NodeDraft>();
 		int v = 1;
 		for (int i = 0; i < r && !cancel; ++i) {
 			NodeDraft node = container.factory().newNodeDraft();
 			node.setLabel("Node " + v++);
+			node.addTimeInterval((v - 1) + "", n + "");
 			newLeaves.add(node);
 			container.addNode(node);
 
@@ -85,6 +87,7 @@ public class BalancedTree implements Generator {
 				for (int i = 0; i < r; ++i) {
 					NodeDraft node = container.factory().newNodeDraft();
 					node.setLabel("Node " + v++);
+					node.addTimeInterval((v - 1) + "", n + "");
 					newLeaves.add(node);
 					container.addNode(node);
 
