@@ -56,10 +56,15 @@ public class ErdosRenyiGnm implements Generator {
 	private int n = 50;
 	private int m = 50;
 
+	@Override
 	public void generate(ContainerLoader container) {
 		Progress.start(progressTicket, n + n * n + m);
 		Random random = new Random();
 		container.setEdgeDefault(EdgeDefault.UNDIRECTED);
+
+		// Timestamps
+		int vt = 0;
+		int et = 1;
 
 		NodeDraft[] nodes = new NodeDraft[n];
 
@@ -67,7 +72,7 @@ public class ErdosRenyiGnm implements Generator {
 		for (int i = 0; i < n && !cancel; ++i) {
 			NodeDraft node = container.factory().newNodeDraft();
 			node.setLabel("Node " + i);
-			node.addTimeInterval(i + "", n + "");
+			node.addTimeInterval(vt + "", m + "");
 			nodes[i] = node;
 			container.addNode(node);
 			Progress.progress(progressTicket);
@@ -85,8 +90,9 @@ public class ErdosRenyiGnm implements Generator {
 			}
 
 		// Drawing m edges
-		for (int i = 0; i < m; ++i) {
+		for (int i = 0; i < m; ++i, ++et) {
 			EdgeDraft e = edges.get(random.nextInt(edges.size()));
+			// TODO: timestamps!
 			edges.remove(e);
 			container.addEdge(e);
 		}
@@ -111,19 +117,23 @@ public class ErdosRenyiGnm implements Generator {
 		this.m = m;
 	}
 
+	@Override
 	public String getName() {
 		return "Erdos-Renyi G(n, m) model";
 	}
 
+	@Override
 	public GeneratorUI getUI() {
 		return Lookup.getDefault().lookup(ErdosRenyiGnmUI.class);
 	}
 
+	@Override
 	public boolean cancel() {
 		cancel = true;
 		return true;
 	}
 
+	@Override
 	public void setProgressTicket(ProgressTicket progressTicket) {
 		this.progressTicket = progressTicket;
 	}

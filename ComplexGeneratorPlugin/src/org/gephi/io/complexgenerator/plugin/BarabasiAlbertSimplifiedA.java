@@ -56,10 +56,15 @@ public class BarabasiAlbertSimplifiedA implements Generator {
 	private int m0 = 1;
 	private int M  = 1;
 
+	@Override
 	public void generate(ContainerLoader container) {
 		Progress.start(progressTicket, N + M);
 		Random random = new Random();
 		container.setEdgeDefault(EdgeDefault.UNDIRECTED);
+
+		// Timestamps
+		int vt = 1;
+		int et = 1;
 
 		NodeDraft[] nodes = new NodeDraft[N];
 
@@ -67,7 +72,7 @@ public class BarabasiAlbertSimplifiedA implements Generator {
 		for (int i = 0; i < m0 && !cancel; ++i) {
 			NodeDraft node = container.factory().newNodeDraft();
 			node.setLabel("Node " + i);
-			node.addTimeInterval(i + "", N + "");
+			node.addTimeInterval("0", (N - m0) + "");
 			nodes[i] = node;
 			container.addNode(node);
 			Progress.progress(progressTicket);
@@ -79,16 +84,17 @@ public class BarabasiAlbertSimplifiedA implements Generator {
 				EdgeDraft edge = container.factory().newEdgeDraft();
 				edge.setSource(nodes[i]);
 				edge.setTarget(nodes[j]);
+				edge.addTimeInterval("0", (N - m0) + "");
 				container.addEdge(edge);
 				Progress.progress(progressTicket);
 			}
 
 		// Adding N - m0 nodes, each with M edges
-		for (int i = m0; i < N && !cancel; ++i) {
+		for (int i = m0; i < N && !cancel; ++i, ++vt, ++et) {
 			// Adding new node
 			NodeDraft node = container.factory().newNodeDraft();
 			node.setLabel("Node " + i);
-			node.addTimeInterval(i + "", N + "");
+			node.addTimeInterval(vt + "", (N - m0) + "");
 			nodes[i] = node;
 			container.addNode(node);
 
@@ -100,6 +106,7 @@ public class BarabasiAlbertSimplifiedA implements Generator {
 				EdgeDraft edge = container.factory().newEdgeDraft();
 				edge.setSource(nodes[i]);
 				edge.setTarget(nodes[j]);
+				edge.addTimeInterval(et + "", (N - m0) + "");
 				container.addEdge(edge);
 				Progress.progress(progressTicket);
 			}
@@ -135,19 +142,23 @@ public class BarabasiAlbertSimplifiedA implements Generator {
 		this.M = M;
 	}
 
+	@Override
 	public String getName() {
 		return "Barabasi-Albert Scale Free model A (uniform attachment)";
 	}
 
+	@Override
 	public GeneratorUI getUI() {
 		return Lookup.getDefault().lookup(BarabasiAlbertSimplifiedAUI.class);
 	}
 
+	@Override
 	public boolean cancel() {
 		cancel = true;
 		return true;
 	}
 
+	@Override
 	public void setProgressTicket(ProgressTicket progressTicket) {
 		this.progressTicket = progressTicket;
 	}

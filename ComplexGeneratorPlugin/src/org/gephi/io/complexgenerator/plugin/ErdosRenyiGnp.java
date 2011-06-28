@@ -53,10 +53,15 @@ public class ErdosRenyiGnp implements Generator {
 	private int    n = 50;
 	private double p = 0.05;
 
+	@Override
 	public void generate(ContainerLoader container) {
 		Progress.start(progressTicket, n + n * n);
 		Random random = new Random();
 		container.setEdgeDefault(EdgeDefault.UNDIRECTED);
+
+		// Timestamps
+		int vt = 0;
+		int et = 1;
 
 		NodeDraft[] nodes = new NodeDraft[n];
 
@@ -64,7 +69,7 @@ public class ErdosRenyiGnp implements Generator {
 		for (int i = 0; i < n && !cancel; ++i) {
 			NodeDraft node = container.factory().newNodeDraft();
 			node.setLabel("Node " + i);
-			node.addTimeInterval(i + "", n + "");
+			node.addTimeInterval(vt + "", n * n + "");
 			nodes[i] = node;
 			container.addNode(node);
 			Progress.progress(progressTicket);
@@ -72,11 +77,12 @@ public class ErdosRenyiGnp implements Generator {
 
 		// Linking every node with each other with probability p (no self-loops)
 		for (int i = 0; i < n && !cancel; ++i)
-			for (int j = 0; j < n && !cancel; ++j)
+			for (int j = 0; j < n && !cancel; ++j, ++et)
 				if (i != j && !edgeExists(container, nodes[i], nodes[j]) && random.nextDouble() <= p) {
 					EdgeDraft edge = container.factory().newEdgeDraft();
 					edge.setSource(nodes[i]);
 					edge.setTarget(nodes[j]);
+					edge.addTimeInterval(et + "", n * n + "");
 					container.addEdge(edge);
 					Progress.progress(progressTicket);
 				}
@@ -105,19 +111,23 @@ public class ErdosRenyiGnp implements Generator {
 		this.p = p;
 	}
 
+	@Override
 	public String getName() {
 		return "Erdos-Renyi G(n, p) model";
 	}
 
+	@Override
 	public GeneratorUI getUI() {
 		return Lookup.getDefault().lookup(ErdosRenyiGnpUI.class);
 	}
 
+	@Override
 	public boolean cancel() {
 		cancel = true;
 		return true;
 	}
 
+	@Override
 	public void setProgressTicket(ProgressTicket progressTicket) {
 		this.progressTicket = progressTicket;
 	}

@@ -61,10 +61,15 @@ public class Kleinberg implements Generator {
 
 	private boolean torusBased = false;
 
+	@Override
 	public void generate(ContainerLoader container) {
 		Progress.start(progressTicket, n * n + n * n * (2 * p + 1) * (2 * p + 1) +
 				(int)Math.pow(n, 4) + n * n * q);
 		Random random = new Random();
+
+		// Timestamps
+		int vt = 0;
+		int et = 1;
 
 		// Creating lattice n x n
 		NodeDraft[][] nodes = new NodeDraft[n][n];
@@ -72,7 +77,7 @@ public class Kleinberg implements Generator {
 			for (int j = 0; j < n && !cancel; ++j) {
 				NodeDraft node = container.factory().newNodeDraft();
 				node.setLabel("Node " + i + " " + j);
-				node.addTimeInterval((i * 10 + j) + "", n * n + "");
+				node.addTimeInterval(vt + "", 2 * n * n + "");
 				nodes[i][j] = node;
 				container.addNode(node);
 				Progress.progress(progressTicket);
@@ -80,7 +85,7 @@ public class Kleinberg implements Generator {
 
 		// Creating edges from each node to p local contacts
 		for (int i = 0; i < n && !cancel; ++i)
-			for (int j = 0; j < n && !cancel; ++j)
+			for (int j = 0; j < n && !cancel; ++j, ++et)
 				for (int k = i - p; k <= i + p && !cancel; ++k)
 					for (int l = j - p; l <= j + p && !cancel; ++l) {
 						if ((torusBased || !torusBased && k >= 0 && k < n && l >= 0 && l < n) &&
@@ -88,6 +93,7 @@ public class Kleinberg implements Generator {
 							EdgeDraft edge = container.factory().newEdgeDraft();
 							edge.setSource(nodes[i][j]);
 							edge.setTarget(nodes[(k + n) % n][(l + n) % n]);
+							edge.addTimeInterval(et + "", 2 * n * n + "");
 							container.addEdge(edge);
 						}
 						Progress.progress(progressTicket);
@@ -95,7 +101,7 @@ public class Kleinberg implements Generator {
 
 		// Creating edges from each node to q long-range contacts
 		for (int i = 0; i < n && !cancel; ++i)
-			for (int j = 0; j < n && !cancel; ++j) {
+			for (int j = 0; j < n && !cancel; ++j, ++et) {
 				double sum = 0.0;
 				for (int k = 0; k < n && !cancel; ++k)
 					for (int l = 0; l < n && !cancel; ++l) {
@@ -119,6 +125,7 @@ public class Kleinberg implements Generator {
 										EdgeDraft edge = container.factory().newEdgeDraft();
 										edge.setSource(nodes[i][j]);
 										edge.setTarget(nodes[k][l]);
+										edge.addTimeInterval(et + "", 2 * n * n + "");
 										container.addEdge(edge);
 
 										e = true;
@@ -182,19 +189,23 @@ public class Kleinberg implements Generator {
 		this.torusBased = torusBased;
 	}
 
+	@Override
 	public String getName() {
 		return "Kleinberg Small World model";
 	}
 
+	@Override
 	public GeneratorUI getUI() {
 		return Lookup.getDefault().lookup(KleinbergUI.class);
 	}
 
+	@Override
 	public boolean cancel() {
 		cancel = true;
 		return true;
 	}
 
+	@Override
 	public void setProgressTicket(ProgressTicket progressTicket) {
 		this.progressTicket = progressTicket;
 	}
