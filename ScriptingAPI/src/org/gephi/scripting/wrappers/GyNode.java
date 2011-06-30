@@ -74,7 +74,6 @@ public class GyNode extends PyObject {
 
     @Override
     public void __setattr__(String name, PyObject value) {
-        System.out.println("Called GyNode.__setattr__");
         if (name.equals("color")) {
             int color = (Integer) value.__tojava__(Integer.class);
             float red = ((color >> 16) & 0xFF) / 255.0f;
