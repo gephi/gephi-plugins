@@ -25,15 +25,14 @@ import org.gephi.graph.api.Edge;
 import org.gephi.graph.api.Node;
 import org.gephi.graph.api.NodeIterable;
 import org.gephi.graph.api.NodeIterator;
-import org.gephi.scripting.util.GyEdgeSet;
 import org.gephi.scripting.util.GyNamespace;
-import org.gephi.scripting.util.GyNodeSet;
 import org.python.core.Py;
 import org.python.core.PyBoolean;
 import org.python.core.PyFloat;
 import org.python.core.PyInteger;
 import org.python.core.PyList;
 import org.python.core.PyObject;
+import org.python.core.PySet;
 import org.python.core.PyString;
 import org.python.core.PyTuple;
 
@@ -75,6 +74,7 @@ public class GyNode extends PyObject {
 
     @Override
     public void __setattr__(String name, PyObject value) {
+        System.out.println("Called GyNode.__setattr__");
         if (name.equals("color")) {
             int color = (Integer) value.__tojava__(Integer.class);
             float red = ((color >> 16) & 0xFF) / 255.0f;
@@ -163,7 +163,7 @@ public class GyNode extends PyObject {
             return new PyInteger(totaldegree);
         } else if (name.equals("neighbors")) {
             NodeIterable nodeIterable = namespace.getGraphModel().getGraph().getNeighbors(node);
-            GyNodeSet nodesSet = new GyNodeSet();
+            PySet nodesSet = new PySet();
 
             for (NodeIterator nodeItr = nodeIterable.iterator(); nodeItr.hasNext();) {
                 GyNode node = namespace.getGyNode(nodeItr.next().getId());
@@ -186,7 +186,7 @@ public class GyNode extends PyObject {
     @Override
     public PyObject __rde__(PyObject obj) {
         if (obj instanceof GyNode) {
-            GyEdgeSet edgeSet = new GyEdgeSet();
+            PySet edgeSet = new PySet();
             Node target = ((GyNode) obj).getNode();
             Edge edge = namespace.getGraphModel().getMixedGraph().getEdge(node, target);
 
@@ -195,12 +195,12 @@ public class GyNode extends PyObject {
             }
 
             return edgeSet;
-        } else if (obj instanceof GyNodeSet) {
-            GyEdgeSet edgeSet = new GyEdgeSet();
-            GyNodeSet nodeSet = (GyNodeSet) obj;
+        } else if (obj instanceof PySet) {
+            PySet edgeSet = new PySet();
+            PySet nodeSet = (PySet) obj;
 
             for (Iterator iter = nodeSet.iterator(); iter.hasNext();) {
-                GyEdgeSet ret = (GyEdgeSet) this.__rde__((PyObject) iter.next());
+                PySet ret = (PySet) this.__rde__((PyObject) iter.next());
                 edgeSet.__ior__(ret);
             }
 
@@ -212,7 +212,7 @@ public class GyNode extends PyObject {
 
     @Override
     public PyObject __lde__(PyObject obj) {
-        if (obj instanceof GyNode || obj instanceof GyNodeSet) {
+        if (obj instanceof GyNode || obj instanceof PySet) {
             return obj.__rde__(this);
         }
 
@@ -222,7 +222,7 @@ public class GyNode extends PyObject {
     @Override
     public PyObject __bde__(PyObject obj) {
         if (obj instanceof GyNode) {
-            GyEdgeSet edgeSet = new GyEdgeSet();
+            PySet edgeSet = new PySet();
             Node target = ((GyNode) obj).getNode();
             Edge edge = namespace.getGraphModel().getMixedGraph().getEdge(node, target);
 
@@ -237,12 +237,12 @@ public class GyNode extends PyObject {
             }
 
             return edgeSet;
-        } else if (obj instanceof GyNodeSet) {
-            GyEdgeSet edgeSet = new GyEdgeSet();
-            GyNodeSet nodeSet = (GyNodeSet) obj;
+        } else if (obj instanceof PySet) {
+            PySet edgeSet = new PySet();
+            PySet nodeSet = (PySet) obj;
 
             for (Iterator iter = nodeSet.iterator(); iter.hasNext();) {
-                GyEdgeSet ret = (GyEdgeSet) this.__bde__((PyObject) iter.next());
+                PySet ret = (PySet) this.__bde__((PyObject) iter.next());
                 edgeSet.__ior__(ret);
             }
 
@@ -254,8 +254,8 @@ public class GyNode extends PyObject {
 
     @Override
     public PyObject __anye__(PyObject obj) {
-        if (obj instanceof GyNode || obj instanceof GyNodeSet) {
-            GyEdgeSet edgeSet = new GyEdgeSet();
+        if (obj instanceof GyNode || obj instanceof PySet) {
+            PySet edgeSet = new PySet();
 
             edgeSet.__ior__(this.__lde__(obj));
             edgeSet.__ior__(this.__rde__(obj));

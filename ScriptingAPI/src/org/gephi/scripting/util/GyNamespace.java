@@ -29,9 +29,9 @@ import org.gephi.project.api.Workspace;
 import org.gephi.scripting.wrappers.GyEdge;
 import org.gephi.scripting.wrappers.GyGraph;
 import org.python.core.PyObject;
-import org.python.core.PyStringMap;
 import org.gephi.scripting.wrappers.GyNode;
 import org.python.core.Py;
+import org.python.core.PyStringMap;
 
 /**
  *
@@ -48,10 +48,6 @@ public final class GyNamespace extends PyStringMap {
     public GyNamespace(Workspace workspace) {
         this.workspace = workspace;
         this.graphModel = workspace.getLookup().lookup(GraphModel.class);
-        
-        // Import some types into the namespace
-        __setitem__("nodeset", GyNodeSet._TYPE);
-        __setitem__("edgeset", GyEdgeSet._TYPE);
     }
 
     public GraphModel getGraphModel() {
