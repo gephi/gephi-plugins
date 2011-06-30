@@ -21,6 +21,8 @@ along with Gephi.  If not, see <http://www.gnu.org/licenses/>.
 package org.gephi.scripting.util;
 
 import java.util.regex.Pattern;
+import org.gephi.data.attributes.api.AttributeColumn;
+import org.gephi.data.attributes.api.AttributeModel;
 import org.gephi.graph.api.Edge;
 import org.gephi.graph.api.Graph;
 import org.gephi.graph.api.GraphModel;
@@ -44,24 +46,26 @@ public final class GyNamespace extends PyStringMap {
     public static final String GRAPH_NAME = "g";
     private Workspace workspace;
     private GraphModel graphModel;
+    private AttributeModel attributeModel;
 
     public GyNamespace(Workspace workspace) {
         this.workspace = workspace;
         this.graphModel = workspace.getLookup().lookup(GraphModel.class);
+        this.attributeModel = workspace.getLookup().lookup(AttributeModel.class);
     }
 
     public GraphModel getGraphModel() {
         return graphModel;
     }
-    
+
     public Workspace getWorkspace() {
         return workspace;
     }
-    
+
     public GyNode getGyNode(int id) {
         return (GyNode) __finditem__(NODE_PREFIX + id);
     }
-    
+
     public GyEdge getGyEdge(int id) {
         return (GyEdge) __finditem__(EDGE_PREFIX + id);
     }
@@ -105,7 +109,7 @@ public final class GyNamespace extends PyStringMap {
             graphModel.getGraph().removeEdge(node.getEdge());
         } else if (object instanceof GyGraph) {
             throw Py.NameError(key + " is a readonly variable.");
-        } 
+        }
 
         // Effectively delete the binding from the namespace
         super.__delitem__(key);
@@ -151,6 +155,22 @@ public final class GyNamespace extends PyStringMap {
         if (ret != null) {
             // Update the namespace binding, in case something was found
             super.__setitem__(key, ret);
+        } else {
+            // Check if it is an attribute column
+            // Note that attribute columns are not stored in the namespace binding
+            // and are always looked up by the namespace
+            AttributeColumn nodeColumn = attributeModel.getNodeTable().getColumn(key);
+            AttributeColumn edgeColumn = attributeModel.getEdgeTable().getColumn(key);
+
+            if (nodeColumn != null && edgeColumn != null) {
+                throw Py.NameError("name '" + key + "' is an ambiguous column name");
+            } else if (nodeColumn != null) {
+                // TODO: ret = GyAttribute
+                ret = new PyObject(); // FIXME: stub
+            } else if (edgeColumn != null) {
+                // TODO: ret = GyAttribute
+                ret = new PyObject(); // FIXME: stub
+            }
         }
 
         return ret;
