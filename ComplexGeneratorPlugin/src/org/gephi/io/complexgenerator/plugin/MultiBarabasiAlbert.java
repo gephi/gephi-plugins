@@ -20,6 +20,8 @@
  */
 package org.gephi.io.complexgenerator.plugin;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Random;
 import org.gephi.io.generator.spi.Generator;
 import org.gephi.io.generator.spi.GeneratorUI;
@@ -41,26 +43,29 @@ import org.openide.util.lookup.ServiceProvider;
  *
  * N  > 0
  * m0 > 0 && m0 <  N
- * M  > 0 && M  <= m0
+ * Mi > 0 && Mi <= m0
  *
- * O(N^2 * M)
+ * O(N^2 * avgM)
  *
  * @author Cezary Bartosiak
  */
 @ServiceProvider(service = Generator.class)
-public class BarabasiAlbert implements Generator {
+public class MultiBarabasiAlbert implements Generator {
 	private boolean cancel = false;
 	private ProgressTicket progressTicket;
 
 	private int N  = 50;
 	private int m0 = 1;
-	private int M  = 1;
-	
-	private boolean considerExistingNodes;
+
+	private Map<Integer, Integer> Mmap = new HashMap<Integer, Integer>();
+
+	public MultiBarabasiAlbert() {
+		Mmap.put(1, 1);
+	}
 
 	@Override
 	public void generate(ContainerLoader container) {
-		Progress.start(progressTicket, m0 + (N - m0) * M);
+		Progress.start(progressTicket, N);
 		Random random = new Random();
 		container.setEdgeDefault(EdgeDefault.UNDIRECTED);
 
@@ -94,8 +99,12 @@ public class BarabasiAlbert implements Generator {
 				container.addEdge(edge);
 			}
 
-		// Adding N - m0 nodes, each with M edges
+		// Adding N - m0 nodes, each with Mi edges
+		int Mi = 0;
 		for (int i = m0; i < N && !cancel; ++i, ++vt, ++et) {
+			if (Mmap.containsKey(i))
+				Mi = Mmap.get(i);
+
 			// Adding new node
 			NodeDraft node = container.factory().newNodeDraft();
 			node.setLabel("Node " + i);
@@ -104,12 +113,12 @@ public class BarabasiAlbert implements Generator {
 			degrees[i] = 0;
 			container.addNode(node);
 
-			// Adding M edges out of the new node
+			// Adding Mi edges out of the new node
 			double sum = 0.0; // sum of all nodes degrees
 			for (int j = 0; j < i && !cancel; ++j)
 				sum += degrees[j];
 			double s = 0.0;
-			for (int m = 0; m < M && !cancel; ++m) {
+			for (int m = 0; m < Mi && !cancel; ++m) {
 				double r = random.nextDouble();
 				double p = 0.0;
 				for (int j = 0; j < i && !cancel; ++j) {
@@ -152,8 +161,8 @@ public class BarabasiAlbert implements Generator {
 		return m0;
 	}
 
-	public int getM() {
-		return M;
+	public Map<Integer, Integer> getMmap() {
+		return Mmap;
 	}
 
 	public void setN(int N) {
@@ -164,26 +173,18 @@ public class BarabasiAlbert implements Generator {
 		this.m0 = m0;
 	}
 
-	public void setM(int M) {
-		this.M = M;
-	}
-
-	public boolean isConsiderExistingNodes() {
-		return considerExistingNodes;
-	}
-
-	public void setConsiderExistingNodes(boolean considerExistingNodes) {
-		this.considerExistingNodes = considerExistingNodes;
+	public void setMmap(Map<Integer, Integer> Mmap) {
+		this.Mmap = Mmap;
 	}
 
 	@Override
 	public String getName() {
-		return "Barabasi-Albert Scale Free model";
+		return "Multi Barabasi-Albert Scale Free model";
 	}
 
 	@Override
 	public GeneratorUI getUI() {
-		return Lookup.getDefault().lookup(BarabasiAlbertUI.class);
+		return Lookup.getDefault().lookup(MultiBarabasiAlbertUI.class);
 	}
 
 	@Override

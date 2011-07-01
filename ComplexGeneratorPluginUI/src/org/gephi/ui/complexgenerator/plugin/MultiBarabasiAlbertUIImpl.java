@@ -21,8 +21,8 @@
 package org.gephi.ui.complexgenerator.plugin;
 
 import javax.swing.JPanel;
-import org.gephi.io.complexgenerator.plugin.BarabasiAlbert;
-import org.gephi.io.complexgenerator.plugin.BarabasiAlbertUI;
+import org.gephi.io.complexgenerator.plugin.MultiBarabasiAlbert;
+import org.gephi.io.complexgenerator.plugin.MultiBarabasiAlbertUI;
 import org.gephi.io.generator.spi.Generator;
 import org.openide.util.lookup.ServiceProvider;
 
@@ -31,34 +31,35 @@ import org.openide.util.lookup.ServiceProvider;
  *
  * @author Cezary Bartosiak
  */
-@ServiceProvider(service = BarabasiAlbertUI.class)
-public class BarabasiAlbertUIImpl implements BarabasiAlbertUI {
-	private BarabasiAlbertPanel panel;
-	private BarabasiAlbert barabasiAlbert;
+@ServiceProvider(service = MultiBarabasiAlbertUI.class)
+public class MultiBarabasiAlbertUIImpl implements MultiBarabasiAlbertUI {
+	private MultiBarabasiAlbertPanel panel;
+	private MultiBarabasiAlbert multiBarabasiAlbert;
 
+	@Override
 	public JPanel getPanel() {
 		if (panel == null)
-			panel = new BarabasiAlbertPanel();
-		return BarabasiAlbertPanel.createValidationPanel(panel);
+			panel = new MultiBarabasiAlbertPanel();
+		return MultiBarabasiAlbertPanel.createValidationPanel(panel);
 	}
 
+	@Override
 	public void setup(Generator generator) {
-		this.barabasiAlbert = (BarabasiAlbert)generator;
+		this.multiBarabasiAlbert = (MultiBarabasiAlbert)generator;
 
 		if (panel == null)
-			panel = new BarabasiAlbertPanel();
+			panel = new MultiBarabasiAlbertPanel();
 
-		panel.NField.setText(String.valueOf(barabasiAlbert.getN()));
-		panel.m0Field.setText(String.valueOf(barabasiAlbert.getm0()));
-		panel.MField.setText(String.valueOf(barabasiAlbert.getM()));
-		panel.setConsiderExistingNodes(barabasiAlbert.isConsiderExistingNodes());
+		panel.NField.setText(String.valueOf(multiBarabasiAlbert.getN()));
+		panel.m0Field.setText(String.valueOf(multiBarabasiAlbert.getm0()));
+		panel.setMmap(multiBarabasiAlbert.getMmap());
 	}
 
+	@Override
 	public void unsetup() {
-		barabasiAlbert.setN(Integer.parseInt(panel.NField.getText()));
-		barabasiAlbert.setm0(Integer.parseInt(panel.m0Field.getText()));
-		barabasiAlbert.setM(Integer.parseInt(panel.MField.getText()));
-		barabasiAlbert.setConsiderExistingNodes(panel.isConsiderExistingNodes());
+		multiBarabasiAlbert.setN(Integer.parseInt(panel.NField.getText()));
+		multiBarabasiAlbert.setm0(Integer.parseInt(panel.m0Field.getText()));
+		multiBarabasiAlbert.setMmap(panel.getMmap());
 		panel = null;
 	}
 }

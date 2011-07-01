@@ -20,6 +20,9 @@
  */
 package org.gephi.ui.complexgenerator.plugin;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Map.Entry;
 import org.gephi.lib.validation.PositiveNumberValidator;
 import org.netbeans.validation.api.Problems;
 import org.netbeans.validation.api.Validator;
@@ -32,25 +35,38 @@ import org.netbeans.validation.api.ui.ValidationPanel;
  *
  * @author Cezary Bartosiak
  */
-public class BarabasiAlbertPanel extends javax.swing.JPanel {
+public class MultiBarabasiAlbertPanel extends javax.swing.JPanel {
+	private Map<Integer, Integer> Mmap = new HashMap<Integer, Integer>();
 
-    /** Creates new form BarabasiAlbertPanel */
-    public BarabasiAlbertPanel() {
+    /** Creates new form MultiBarabasiAlbertPanel */
+    public MultiBarabasiAlbertPanel() {
         initComponents();
     }
 
-	public boolean isConsiderExistingNodes() {
-		return existingCheckBox.isSelected();
+	public Map<Integer, Integer> getMmap() {
+		String[] pairs = MField.getText().split(",");
+		for (int i = 0; i < pairs.length; ++i) {
+			String[] pair = pairs[i].split(":");
+			Integer key = Integer.parseInt(pair[0]);
+			Integer value = Integer.parseInt(pair[1]);
+			Mmap.put(key, value);
+		}
+		return Mmap;
 	}
 
-	public void setConsiderExistingNodes(boolean considerExistingNodes) {
-		existingCheckBox.setSelected(considerExistingNodes);
+	public void setMmap(Map<Integer, Integer> Mmap) {
+		this.Mmap = Mmap;
+		StringBuilder sb = new StringBuilder();
+		for (Entry<Integer, Integer> entry : Mmap.entrySet())
+			sb.append(entry.getKey() + ":" + entry.getValue() + ",");
+		if (sb.length() > 0)
+			MField.setText(sb.substring(0, sb.length() - 1));
 	}
 
-	public static ValidationPanel createValidationPanel(BarabasiAlbertPanel innerPanel) {
+	public static ValidationPanel createValidationPanel(MultiBarabasiAlbertPanel innerPanel) {
 		ValidationPanel validationPanel = new ValidationPanel();
 		if (innerPanel == null)
-			innerPanel = new BarabasiAlbertPanel();
+			innerPanel = new MultiBarabasiAlbertPanel();
 		validationPanel.setInnerComponent(innerPanel);
 
 		ValidationGroup group = validationPanel.getValidationGroup();
@@ -61,18 +77,14 @@ public class BarabasiAlbertPanel extends javax.swing.JPanel {
 				new PositiveNumberValidator());
 		group.add(innerPanel.m0Field, Validators.REQUIRE_NON_EMPTY_STRING,
 				new m0Validator(innerPanel));
-		group.add(innerPanel.MField, Validators.REQUIRE_NON_EMPTY_STRING,
-				new PositiveNumberValidator());
-		group.add(innerPanel.MField, Validators.REQUIRE_NON_EMPTY_STRING,
-				new MValidator(innerPanel));
 
 		return validationPanel;
 	}
 
 	private static class m0Validator implements Validator<String> {
-		private BarabasiAlbertPanel innerPanel;
+		private MultiBarabasiAlbertPanel innerPanel;
 
-		public m0Validator(BarabasiAlbertPanel innerPanel) {
+		public m0Validator(MultiBarabasiAlbertPanel innerPanel) {
 			this.innerPanel = innerPanel;
 		}
 
@@ -95,32 +107,6 @@ public class BarabasiAlbertPanel extends javax.swing.JPanel {
 		}
     }
 
-	private static class MValidator implements Validator<String> {
-		private BarabasiAlbertPanel innerPanel;
-
-		public MValidator(BarabasiAlbertPanel innerPanel) {
-			this.innerPanel = innerPanel;
-		}
-
-		@Override
-		public boolean validate(Problems problems, String compName, String model) {
-			boolean result = false;
-
-			try {
-				Integer m0 = Integer.parseInt(innerPanel.m0Field.getText());
-				Integer M  = Integer.parseInt(innerPanel.MField.getText());
-				result = M <= m0;
-			}
-			catch (Exception e) { }
-			if (!result) {
-				String message = "<html>M &lt;= m0</html>";
-				problems.add(message);
-			}
-
-			return result;
-		}
-    }
-
     /** This method is called from within the constructor to
      * initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is
@@ -130,37 +116,28 @@ public class BarabasiAlbertPanel extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        MLabel = new javax.swing.JLabel();
-        MField = new javax.swing.JTextField();
-        NField = new javax.swing.JTextField();
-        m0Field = new javax.swing.JTextField();
         NLabel = new javax.swing.JLabel();
+        m0Field = new javax.swing.JTextField();
+        NField = new javax.swing.JTextField();
         m0Label = new javax.swing.JLabel();
         constraintsLabel = new javax.swing.JLabel();
-        existingCheckBox = new javax.swing.JCheckBox();
+        MLabel = new javax.swing.JLabel();
+        MField = new javax.swing.JTextField();
 
-        setPreferredSize(new java.awt.Dimension(451, 152));
+        NLabel.setText(org.openide.util.NbBundle.getMessage(MultiBarabasiAlbertPanel.class, "MultiBarabasiAlbertPanel.NLabel.text")); // NOI18N
 
-        MLabel.setText(org.openide.util.NbBundle.getMessage(BarabasiAlbertPanel.class, "BarabasiAlbertPanel.MLabel.text")); // NOI18N
+        m0Field.setText(org.openide.util.NbBundle.getMessage(MultiBarabasiAlbertPanel.class, "MultiBarabasiAlbertPanel.m0Field.text")); // NOI18N
 
-        MField.setText(org.openide.util.NbBundle.getMessage(BarabasiAlbertPanel.class, "BarabasiAlbertPanel.MField.text")); // NOI18N
+        NField.setText(org.openide.util.NbBundle.getMessage(MultiBarabasiAlbertPanel.class, "MultiBarabasiAlbertPanel.NField.text")); // NOI18N
 
-        NField.setText(org.openide.util.NbBundle.getMessage(BarabasiAlbertPanel.class, "BarabasiAlbertPanel.NField.text")); // NOI18N
+        m0Label.setText(org.openide.util.NbBundle.getMessage(MultiBarabasiAlbertPanel.class, "MultiBarabasiAlbertPanel.m0Label.text")); // NOI18N
 
-        m0Field.setText(org.openide.util.NbBundle.getMessage(BarabasiAlbertPanel.class, "BarabasiAlbertPanel.m0Field.text")); // NOI18N
+        constraintsLabel.setText(org.openide.util.NbBundle.getMessage(MultiBarabasiAlbertPanel.class, "MultiBarabasiAlbertPanel.constraintsLabel.text")); // NOI18N
 
-        NLabel.setText(org.openide.util.NbBundle.getMessage(BarabasiAlbertPanel.class, "BarabasiAlbertPanel.NLabel.text")); // NOI18N
+        MLabel.setText(org.openide.util.NbBundle.getMessage(MultiBarabasiAlbertPanel.class, "MultiBarabasiAlbertPanel.MLabel.text")); // NOI18N
 
-        m0Label.setText(org.openide.util.NbBundle.getMessage(BarabasiAlbertPanel.class, "BarabasiAlbertPanel.m0Label.text")); // NOI18N
-
-        constraintsLabel.setText(org.openide.util.NbBundle.getMessage(BarabasiAlbertPanel.class, "BarabasiAlbertPanel.constraintsLabel.text")); // NOI18N
-
-        existingCheckBox.setText(org.openide.util.NbBundle.getMessage(BarabasiAlbertPanel.class, "BarabasiAlbertPanel.existingCheckBox.text")); // NOI18N
-        existingCheckBox.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                existingCheckBoxActionPerformed(evt);
-            }
-        });
+        MField.setText(org.openide.util.NbBundle.getMessage(MultiBarabasiAlbertPanel.class, "MultiBarabasiAlbertPanel.MField.text")); // NOI18N
+        MField.setAutoscrolls(false);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -171,15 +148,16 @@ public class BarabasiAlbertPanel extends javax.swing.JPanel {
                     .addGroup(layout.createSequentialGroup()
                         .addGap(49, 49, 49)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(NLabel)
-                            .addComponent(m0Label)
-                            .addComponent(MLabel)
-                            .addComponent(existingCheckBox))
-                        .addGap(25, 25, 25)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(m0Field, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 122, Short.MAX_VALUE)
-                            .addComponent(MField, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 122, Short.MAX_VALUE)
-                            .addComponent(NField, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 122, Short.MAX_VALUE)))
+                            .addComponent(MLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 258, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(NLabel)
+                                    .addComponent(m0Label))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(m0Field, javax.swing.GroupLayout.DEFAULT_SIZE, 172, Short.MAX_VALUE)
+                                    .addComponent(NField, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 172, Short.MAX_VALUE)))
+                            .addComponent(MField, javax.swing.GroupLayout.DEFAULT_SIZE, 392, Short.MAX_VALUE)))
                     .addGroup(layout.createSequentialGroup()
                         .addContainerGap()
                         .addComponent(constraintsLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
@@ -197,20 +175,14 @@ public class BarabasiAlbertPanel extends javax.swing.JPanel {
                     .addComponent(m0Field, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(m0Label))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(MField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(MLabel))
+                .addComponent(MLabel)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(existingCheckBox)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(MField, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(constraintsLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
-
-	private void existingCheckBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_existingCheckBoxActionPerformed
-		m0Field.setEnabled(!existingCheckBox.isSelected());
-	}//GEN-LAST:event_existingCheckBoxActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -219,7 +191,6 @@ public class BarabasiAlbertPanel extends javax.swing.JPanel {
     protected javax.swing.JTextField NField;
     private javax.swing.JLabel NLabel;
     private javax.swing.JLabel constraintsLabel;
-    private javax.swing.JCheckBox existingCheckBox;
     protected javax.swing.JTextField m0Field;
     private javax.swing.JLabel m0Label;
     // End of variables declaration//GEN-END:variables
