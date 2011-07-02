@@ -21,6 +21,7 @@ along with Gephi.  If not, see <http://www.gnu.org/licenses/>.
 package org.gephi.scripting.wrappers;
 
 import org.gephi.data.attributes.api.AttributeColumn;
+import org.gephi.data.attributes.api.AttributeUtils;
 import org.gephi.scripting.util.GyNamespace;
 import org.python.core.PyObject;
 
@@ -29,14 +30,24 @@ import org.python.core.PyObject;
  * @author Luiz Ribeiro
  */
 public class GyAttribute extends PyObject {
+
     private GyNamespace namespace;
     private AttributeColumn attributeColumn;
-    
+
     public GyAttribute(GyNamespace namespace, AttributeColumn attributeColumn) {
         this.namespace = namespace;
         this.attributeColumn = attributeColumn;
     }
-    
+
+    @Override
+    public String toString() {
+        if (AttributeUtils.getDefault().isNodeColumn(attributeColumn)) {
+            return "Node Attribute '" + attributeColumn.getId() + "'";
+        } else {
+            return "Edge Attribute '" + attributeColumn.getId() + "'";
+        }
+    }
+
     // TODO: implement comparison operators that execute queries in the graph
     // or build graph filters somehow
 }
