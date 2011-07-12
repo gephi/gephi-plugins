@@ -77,8 +77,8 @@ public class ErdosRenyiGnp implements Generator {
 
 		// Linking every node with each other with probability p (no self-loops)
 		for (int i = 0; i < n && !cancel; ++i)
-			for (int j = 0; j < n && !cancel; ++j, ++et)
-				if (i != j && !edgeExists(container, nodes[i], nodes[j]) && random.nextDouble() <= p) {
+			for (int j =  i + 1; j < n && !cancel; ++j, ++et)
+				if (random.nextDouble() <= p) {
 					EdgeDraft edge = container.factory().newEdgeDraft();
 					edge.setSource(nodes[i]);
 					edge.setTarget(nodes[j]);
@@ -89,10 +89,6 @@ public class ErdosRenyiGnp implements Generator {
 
 		Progress.finish(progressTicket);
 		progressTicket = null;
-	}
-
-	private boolean edgeExists(ContainerLoader container, NodeDraft node1, NodeDraft node2) {
-		return container.edgeExists(node1, node2) || container.edgeExists(node2, node1);
 	}
 
 	public int getn() {

@@ -177,28 +177,21 @@ public class BarabasiAlbertGeneralized implements Generator {
 				// Adding M edges out of the new node
 				double sum = 0.0;
 				for (int j = 0; j < n && !cancel; ++j)
-					sum += degrees[j];
-				double s = 0.0;
+					sum += degrees[j] + 1;
 				for (int m = 0; m < M && !cancel; ++m) {
 					r = random.nextDouble();
 					double p = 0.0;
 					for (int j = 0; j < n && !cancel; ++j) {
-						if (edgeExists(container, nodes[n], nodes[j]))
-							continue;
-
-						if (n == 1)
-							p = 1.0;
-						else p += degrees[j] / sum + s / (n - m);
+						p += (degrees[j] + 1) / sum;
 
 						if (r <= p) {
-							s += degrees[j] / sum;
-
 							EdgeDraft edge = container.factory().newEdgeDraft();
 							edge.setSource(nodes[n]);
 							edge.setTarget(nodes[j]);
 							edge.addTimeInterval(et + "", N + "");
 							degrees[n]++;
 							degrees[j]++;
+							sum += 2.0;
 							container.addEdge(edge);
 							ec++;
 
