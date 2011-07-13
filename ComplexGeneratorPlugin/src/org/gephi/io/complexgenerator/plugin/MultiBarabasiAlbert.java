@@ -43,7 +43,6 @@ import org.openide.util.lookup.ServiceProvider;
  *
  * N  > 0
  * m0 > 0 && m0 <  N
- * Mi > 0 && Mi <= m0
  *
  * O(N^2 * avgM)
  *
@@ -105,6 +104,13 @@ public class MultiBarabasiAlbert implements Generator {
 			if (Mmap.containsKey(i))
 				Mi = Mmap.get(i);
 
+			int mi = 0;
+			for (int j = 0; j < i; ++j)
+				if (degrees[j] < i)
+					mi++;
+			if (Mi < mi)
+				mi = Mi;
+
 			// Adding new node
 			NodeDraft node = container.factory().newNodeDraft();
 			node.setLabel("Node " + i);
@@ -113,12 +119,12 @@ public class MultiBarabasiAlbert implements Generator {
 			degrees[i] = 0;
 			container.addNode(node);
 
-			// Adding Mi edges out of the new node
+			// Adding mi edges out of the new node
 			double sum = 0.0; // sum of all nodes degrees
 			for (int j = 0; j < i && !cancel; ++j)
 				sum += degrees[j];
 			double s = 0.0;
-			for (int m = 0; m < Mi && !cancel; ++m) {
+			for (int m = 0; m < mi && !cancel; ++m) {
 				double r = random.nextDouble();
 				double p = 0.0;
 				for (int j = 0; j < i && !cancel; ++j) {
