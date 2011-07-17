@@ -42,9 +42,9 @@ public class GyAttribute extends PyObject {
     @Override
     public String toString() {
         if (AttributeUtils.getDefault().isNodeColumn(attributeColumn)) {
-            return "Node Attribute '" + attributeColumn.getId() + "'";
+            return "Node Attribute '" + attributeColumn.getId() + "' (" + attributeColumn.getType() + ")";
         } else {
-            return "Edge Attribute '" + attributeColumn.getId() + "'";
+            return "Edge Attribute '" + attributeColumn.getId() + "' (" + attributeColumn.getType() + ")";
         }
     }
 
