@@ -32,19 +32,19 @@ import org.python.core.PyObject;
 public class GyAttribute extends PyObject {
 
     private GyNamespace namespace;
-    private AttributeColumn attributeColumn;
+    private AttributeColumn underlyingAttributeColumn;
 
     public GyAttribute(GyNamespace namespace, AttributeColumn attributeColumn) {
         this.namespace = namespace;
-        this.attributeColumn = attributeColumn;
+        this.underlyingAttributeColumn = attributeColumn;
     }
 
     @Override
     public String toString() {
-        if (AttributeUtils.getDefault().isNodeColumn(attributeColumn)) {
-            return "Node Attribute '" + attributeColumn.getId() + "' (" + attributeColumn.getType() + ")";
+        if (AttributeUtils.getDefault().isNodeColumn(underlyingAttributeColumn)) {
+            return "Node Attribute '" + underlyingAttributeColumn.getId() + "' (" + underlyingAttributeColumn.getType() + ")";
         } else {
-            return "Edge Attribute '" + attributeColumn.getId() + "' (" + attributeColumn.getType() + ")";
+            return "Edge Attribute '" + underlyingAttributeColumn.getId() + "' (" + underlyingAttributeColumn.getType() + ")";
         }
     }
 

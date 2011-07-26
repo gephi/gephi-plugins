@@ -43,7 +43,7 @@ import org.python.core.PyTuple;
 public class GyNode extends PyObject {
 
     private GyNamespace namespace;
-    private Node node;
+    private Node underlyingNode;
     // Hack to get a few attributes into jythonconsole's auto-completion
     // TODO: get rid of this ugly hack (:
     public int color;
@@ -60,16 +60,16 @@ public class GyNode extends PyObject {
 
     public GyNode(GyNamespace namespace, Node node) {
         this.namespace = namespace;
-        this.node = node;
+        this.underlyingNode = node;
     }
 
     @Override
     public String toString() {
-        return GyNamespace.NODE_PREFIX + Integer.toString(node.getId());
+        return GyNamespace.NODE_PREFIX + Integer.toString(underlyingNode.getId());
     }
 
     public Node getNode() {
-        return node;
+        return underlyingNode;
     }
 
     @Override
@@ -79,27 +79,27 @@ public class GyNode extends PyObject {
             float red = ((color >> 16) & 0xFF) / 255.0f;
             float green = ((color >> 8) & 0xFF) / 255.0f;
             float blue = (color & 0xFF) / 255.0f;
-            node.getNodeData().setColor(red, green, blue);
+            underlyingNode.getNodeData().setColor(red, green, blue);
         } else if (name.equals("size")) {
             float size = (Float) value.__tojava__(Float.class);
-            node.getNodeData().setSize(size);
+            underlyingNode.getNodeData().setSize(size);
         } else if (name.equals("label")) {
-            node.getNodeData().setLabel(value.toString());
+            underlyingNode.getNodeData().setLabel(value.toString());
         } else if (name.equals("position")) {
             PyTuple tuple = (PyTuple) value;
             float x = (Float) tuple.__finditem__(0).__tojava__(Float.class);
             float y = (Float) tuple.__finditem__(1).__tojava__(Float.class);
-            node.getNodeData().setX(x);
-            node.getNodeData().setY(y);
+            underlyingNode.getNodeData().setX(x);
+            underlyingNode.getNodeData().setY(y);
         } else if (name.equals("x")) {
             float x = (Float) value.__tojava__(Float.class);
-            node.getNodeData().setX(x);
+            underlyingNode.getNodeData().setX(x);
         } else if (name.equals("y")) {
             float y = (Float) value.__tojava__(Float.class);
-            node.getNodeData().setY(y);
+            underlyingNode.getNodeData().setY(y);
         } else if (name.equals("fixed")) {
             boolean fixed = (Boolean) value.__tojava__(Boolean.class);
-            node.getNodeData().setFixed(fixed);
+            underlyingNode.getNodeData().setFixed(fixed);
         } else if (name.equals("indegree")) {
             readonlyAttributeError(name);
         } else if (name.equals("outdegree")) {
@@ -124,7 +124,7 @@ public class GyNode extends PyObject {
                 throw Py.AttributeError("Unsupported node attribute type '" + value.getType().getName() + "'");
             }
 
-            node.getNodeData().getAttributes().setValue(name, obj);
+            underlyingNode.getNodeData().getAttributes().setValue(name, obj);
         } else {
             super.__setattr__(name, value);
         }
@@ -133,35 +133,35 @@ public class GyNode extends PyObject {
     @Override
     public PyObject __findattr_ex__(String name) {
         if (name.equals("color")) {
-            int red = (int) Math.round(node.getNodeData().r() * 255.0f);
-            int green = (int) Math.round(node.getNodeData().g() * 255.0f);
-            int blue = (int) Math.round(node.getNodeData().b() * 255.0f);
+            int red = (int) Math.round(underlyingNode.getNodeData().r() * 255.0f);
+            int green = (int) Math.round(underlyingNode.getNodeData().g() * 255.0f);
+            int blue = (int) Math.round(underlyingNode.getNodeData().b() * 255.0f);
             return Py.java2py(new Integer((red << 16) + (green << 8) + blue));
         } else if (name.equals("size")) {
-            return Py.java2py(new Float(node.getNodeData().getSize()));
+            return Py.java2py(new Float(underlyingNode.getNodeData().getSize()));
         } else if (name.equals("label")) {
-            return Py.java2py(node.getNodeData().getLabel());
+            return Py.java2py(underlyingNode.getNodeData().getLabel());
         } else if (name.equals("position")) {
-            float x = node.getNodeData().x();
-            float y = node.getNodeData().y();
+            float x = underlyingNode.getNodeData().x();
+            float y = underlyingNode.getNodeData().y();
             return new PyTuple(new PyFloat(x), new PyFloat(y));
         } else if (name.equals("x")) {
-            return new PyFloat(node.getNodeData().x());
+            return new PyFloat(underlyingNode.getNodeData().x());
         } else if (name.equals("y")) {
-            return new PyFloat(node.getNodeData().y());
+            return new PyFloat(underlyingNode.getNodeData().y());
         } else if (name.equals("fixed")) {
-            return new PyBoolean(node.getNodeData().isFixed());
+            return new PyBoolean(underlyingNode.getNodeData().isFixed());
         } else if (name.equals("indegree")) {
-            int indegree = namespace.getGraphModel().getDirectedGraph().getInDegree(node);
+            int indegree = namespace.getGraphModel().getDirectedGraph().getInDegree(underlyingNode);
             return new PyInteger(indegree);
         } else if (name.equals("outdegree")) {
-            int outdegree = namespace.getGraphModel().getDirectedGraph().getOutDegree(node);
+            int outdegree = namespace.getGraphModel().getDirectedGraph().getOutDegree(underlyingNode);
             return new PyInteger(outdegree);
         } else if (name.equals("totaldegree")) {
-            int totaldegree = namespace.getGraphModel().getDirectedGraph().getDegree(node);
+            int totaldegree = namespace.getGraphModel().getDirectedGraph().getDegree(underlyingNode);
             return new PyInteger(totaldegree);
         } else if (name.equals("neighbors")) {
-            NodeIterable nodeIterable = namespace.getGraphModel().getGraph().getNeighbors(node);
+            NodeIterable nodeIterable = namespace.getGraphModel().getGraph().getNeighbors(underlyingNode);
             PySet nodesSet = new PySet();
 
             for (NodeIterator nodeItr = nodeIterable.iterator(); nodeItr.hasNext();) {
@@ -171,7 +171,7 @@ public class GyNode extends PyObject {
 
             return nodesSet;
         } else if (!name.startsWith("__")) {
-            Object obj = node.getNodeData().getAttributes().getValue(name);
+            Object obj = underlyingNode.getNodeData().getAttributes().getValue(name);
             // TODO: return null if there is no column with name
             if (obj == null) {
                 return Py.None;
@@ -187,7 +187,7 @@ public class GyNode extends PyObject {
         if (obj instanceof GyNode) {
             PySet edgeSet = new PySet();
             Node target = ((GyNode) obj).getNode();
-            Edge edge = namespace.getGraphModel().getMixedGraph().getEdge(node, target);
+            Edge edge = namespace.getGraphModel().getMixedGraph().getEdge(underlyingNode, target);
 
             if (edge != null && edge.isDirected() && edge.getTarget().equals(target)) {
                 edgeSet.add(namespace.getGyEdge(edge.getId()));
@@ -223,12 +223,12 @@ public class GyNode extends PyObject {
         if (obj instanceof GyNode) {
             PySet edgeSet = new PySet();
             Node target = ((GyNode) obj).getNode();
-            Edge edge = namespace.getGraphModel().getMixedGraph().getEdge(node, target);
+            Edge edge = namespace.getGraphModel().getMixedGraph().getEdge(underlyingNode, target);
 
             if (edge != null && !edge.isDirected()) {
                 edgeSet.add(namespace.getGyEdge(edge.getId()));
             } else {
-                edge = namespace.getGraphModel().getMixedGraph().getEdge(target, node);
+                edge = namespace.getGraphModel().getMixedGraph().getEdge(target, underlyingNode);
 
                 if (edge != null && !edge.isDirected()) {
                     edgeSet.add(namespace.getGyEdge(edge.getId()));

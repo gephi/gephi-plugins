@@ -35,7 +35,7 @@ import org.python.core.PyString;
 public class GyEdge extends PyObject {
 
     private GyNamespace namespace;
-    private Edge edge;
+    private Edge underlyingEdge;
     // Hack to get a few attributes into jythonconsole's auto-completion
     // TODO: get rid of this ugly hack (:
     public int color;
@@ -47,16 +47,16 @@ public class GyEdge extends PyObject {
 
     public GyEdge(GyNamespace namespace, Edge edge) {
         this.namespace = namespace;
-        this.edge = edge;
+        this.underlyingEdge = edge;
     }
 
     @Override
     public String toString() {
-        return GyNamespace.EDGE_PREFIX + Integer.toString(edge.getId());
+        return GyNamespace.EDGE_PREFIX + Integer.toString(underlyingEdge.getId());
     }
 
     public Edge getEdge() {
-        return edge;
+        return underlyingEdge;
     }
 
     @Override
@@ -66,12 +66,12 @@ public class GyEdge extends PyObject {
             float red = ((color >> 16) & 0xFF) / 255.0f;
             float green = ((color >> 8) & 0xFF) / 255.0f;
             float blue = (color & 0xFF) / 255.0f;
-            edge.getEdgeData().setColor(red, green, blue);
+            underlyingEdge.getEdgeData().setColor(red, green, blue);
         } else if (name.equals("weight")) {
             float size = (Float) value.__tojava__(Float.class);
-            edge.getEdgeData().getAttributes().setValue("Weight", size);
+            underlyingEdge.getEdgeData().getAttributes().setValue("Weight", size);
         } else if (name.equals("label")) {
-            edge.getEdgeData().setLabel(value.toString());
+            underlyingEdge.getEdgeData().setLabel(value.toString());
         } else if (name.equals("directed")) {
             readonlyAttributeError(name);
         } else if (name.equals("source")) {
@@ -94,7 +94,7 @@ public class GyEdge extends PyObject {
                 throw Py.AttributeError("Unsupported edge attribute type '" + value.getType().getName() + "'");
             }
 
-            edge.getEdgeData().getAttributes().setValue(name, obj);
+            underlyingEdge.getEdgeData().getAttributes().setValue(name, obj);
         } else {
             super.__setattr__(name, value);
         }
@@ -103,23 +103,23 @@ public class GyEdge extends PyObject {
     @Override
     public PyObject __findattr_ex__(String name) {
         if (name.equals("color")) {
-            int red = (int) Math.round(edge.getEdgeData().r() * 255.0f);
-            int green = (int) Math.round(edge.getEdgeData().g() * 255.0f);
-            int blue = (int) Math.round(edge.getEdgeData().b() * 255.0f);
+            int red = (int) Math.round(underlyingEdge.getEdgeData().r() * 255.0f);
+            int green = (int) Math.round(underlyingEdge.getEdgeData().g() * 255.0f);
+            int blue = (int) Math.round(underlyingEdge.getEdgeData().b() * 255.0f);
             return Py.java2py(new Integer((red << 16) + (green << 8) + blue));
         } else if (name.equals("weight")) {
-            float weight = (Float) edge.getEdgeData().getAttributes().getValue("Weight");
+            float weight = (Float) underlyingEdge.getEdgeData().getAttributes().getValue("Weight");
             return Py.java2py(weight);
         } else if (name.equals("label")) {
-            return Py.java2py(edge.getEdgeData().getLabel());
+            return Py.java2py(underlyingEdge.getEdgeData().getLabel());
         } else if (name.equals("directed")) {
-            return Py.java2py(edge.isDirected());
+            return Py.java2py(underlyingEdge.isDirected());
         } else if (name.equals("source")) {
-            return namespace.getGyNode(edge.getSource().getId());
+            return namespace.getGyNode(underlyingEdge.getSource().getId());
         } else if (name.equals("target")) {
-            return namespace.getGyNode(edge.getTarget().getId());
+            return namespace.getGyNode(underlyingEdge.getTarget().getId());
         } else if (!name.startsWith("__")) {
-            Object obj = edge.getEdgeData().getAttributes().getValue(name);
+            Object obj = underlyingEdge.getEdgeData().getAttributes().getValue(name);
             // TODO: return null if there is no column with name
             if (obj == null) {
                 return Py.None;
