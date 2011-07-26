@@ -17,13 +17,15 @@ GNU Affero General Public License for more details.
 
 You should have received a copy of the GNU Affero General Public License
 along with Gephi.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.gephi.ui.ranking.plugin;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.ObjectInputStream;
@@ -34,14 +36,19 @@ import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
-import org.gephi.ranking.api.ColorTransformer;
 import org.gephi.ranking.api.Ranking;
+import org.gephi.ranking.api.RankingController;
+import org.gephi.ranking.api.RankingEvent;
+import org.gephi.ranking.api.RankingListener;
+import org.gephi.ranking.api.RankingModel;
+import org.gephi.ranking.plugin.transformer.AbstractColorTransformer;
 import org.gephi.ranking.api.Transformer;
 import org.gephi.ui.components.JRangeSlider;
 import org.gephi.ui.components.PaletteIcon;
 import org.gephi.ui.components.gradientslider.GradientSlider;
 import org.gephi.utils.PaletteUtils;
 import org.gephi.utils.PaletteUtils.Palette;
+import org.openide.util.Lookup;
 import org.openide.util.NbBundle;
 import org.openide.util.NbPreferences;
 
@@ -51,18 +58,20 @@ import org.openide.util.NbPreferences;
 public class ColorTransformerPanel extends javax.swing.JPanel {
 
     private static final int SLIDER_MAXIMUM = 100;
-    private ColorTransformer colorTransformer;
+    private AbstractColorTransformer colorTransformer;
     private GradientSlider gradientSlider;
-    private Ranking ranking;
+    private final RecentPalettes recentPalettes;
+    private final Ranking ranking;
 
-    public ColorTransformerPanel(Transformer transformer, Ranking ranking) {
+    public ColorTransformerPanel(final Transformer transformer, Ranking ranking) {
         initComponents();
 
         final String POSITIONS = "ColorTransformerPanel_" + transformer.getClass().getSimpleName() + "_positions";
         final String COLORS = "ColorTransformerPanel_" + transformer.getClass().getSimpleName() + "_colors";
 
-        colorTransformer = (ColorTransformer) transformer;
+        colorTransformer = (AbstractColorTransformer) transformer;
         this.ranking = ranking;
+        this.recentPalettes = new RecentPalettes();
 
         float[] positionsStart = colorTransformer.getColorPositions();
         Color[] colorsStart = colorTransformer.getColors();
@@ -116,20 +125,59 @@ public class ColorTransformerPanel extends javax.swing.JPanel {
         prepareGradientTooltip();
 
         //Context
-        setComponentPopupMenu(getPalettePopupMenu());
+//        setComponentPopupMenu(getPalettePopupMenu());
+        addMouseListener(new MouseAdapter() {
+
+            public void mousePressed(MouseEvent evt) {
+                if (evt.isPopupTrigger()) {
+                    JPopupMenu popupMenu = getPalettePopupMenu();       
+                    popupMenu.show(evt.getComponent(), evt.getX(), evt.getY());
+                }
+            }
+
+            public void mouseReleased(MouseEvent evt) {
+                if (evt.isPopupTrigger()) {
+                    JPopupMenu popupMenu = getPalettePopupMenu();
+                    popupMenu.show(evt.getComponent(), evt.getX(), evt.getY());
+                }
+            }
+        });
+        
+        //Color Swatch
+        colorSwatchButton.addActionListener(new ActionListener() {
+
+            public void actionPerformed(ActionEvent ae) {
+                JPopupMenu popupMenu = getPalettePopupMenu();
+                popupMenu.show(colorSwatchToolbar, -popupMenu.getPreferredSize().width, 0);
+            }
+        });
+
+        //Listen to apply button to add recent palettes
+        RankingController rankingController = Lookup.getDefault().lookup(RankingController.class);
+        RankingModel rankingModel = rankingController.getModel();
+        rankingModel.addRankingListener(new RankingListener() {
+
+            public void rankingChanged(RankingEvent event) {
+                if (event.is(RankingEvent.EventType.APPLY_TRANSFORMER)) {
+                    if (transformer == event.getTransformer()) {
+                        addRecentPalette();
+                    }
+                }
+            }
+        });
     }
 
-    private void prepareGradientTooltip(){
-        StringBuilder sb=new StringBuilder();
-        final double min=((Number)ranking.unNormalize(colorTransformer.getLowerBound())).doubleValue();
-        final double max=((Number)ranking.unNormalize(colorTransformer.getUpperBound())).doubleValue();
-        final double range=max-min;
+    private void prepareGradientTooltip() {
+        StringBuilder sb = new StringBuilder();
+        final double min = ((Number) ranking.unNormalize(colorTransformer.getLowerBound())).doubleValue();
+        final double max = ((Number) ranking.unNormalize(colorTransformer.getUpperBound())).doubleValue();
+        final double range = max - min;
         float[] positions = gradientSlider.getThumbPositions();
-        for (int i = 0; i < positions.length-1; i++) {
-            sb.append(min+range*positions[i]);
+        for (int i = 0; i < positions.length - 1; i++) {
+            sb.append(min + range * positions[i]);
             sb.append(", ");
         }
-        sb.append(min+range*positions[positions.length-1]);
+        sb.append(min + range * positions[positions.length - 1]);
         gradientSlider.setToolTipText(sb.toString());
     }
 
@@ -189,7 +237,27 @@ public class ColorTransformerPanel extends javax.swing.JPanel {
             }
         });
         popupMenu.add(invertItem);
+
+        //Recent
+        JMenu recentMenu = new JMenu(NbBundle.getMessage(ColorTransformerPanel.class, "PalettePopup.recent"));
+        for (final AbstractColorTransformer.LinearGradient gradient : recentPalettes.getPalettes()) {
+            JMenuItem item = new JMenuItem(new PaletteIcon(gradient.getColors()));
+            item.addActionListener(new ActionListener() {
+
+                public void actionPerformed(ActionEvent e) {
+                    gradientSlider.setValues(gradient.getPositions(), gradient.getColors());
+                }
+            });
+            recentMenu.add(item);
+        }
+        popupMenu.add(recentMenu);
+
         return popupMenu;
+    }
+
+    private void addRecentPalette() {
+        AbstractColorTransformer.LinearGradient gradient = colorTransformer.getLinearGradient();
+        recentPalettes.add(gradient);
     }
 
     private Color[] invert(Color[] source) {
@@ -258,6 +326,8 @@ public class ColorTransformerPanel extends javax.swing.JPanel {
         labelRange = new javax.swing.JLabel();
         upperBoundLabel = new javax.swing.JLabel();
         lowerBoundLabel = new javax.swing.JLabel();
+        colorSwatchToolbar = new javax.swing.JToolBar();
+        colorSwatchButton = new javax.swing.JButton();
 
         setPreferredSize(new java.awt.Dimension(225, 114));
 
@@ -276,15 +346,27 @@ public class ColorTransformerPanel extends javax.swing.JPanel {
         upperBoundLabel.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         upperBoundLabel.setText(org.openide.util.NbBundle.getMessage(ColorTransformerPanel.class, "ColorTransformerPanel.upperBoundLabel.text")); // NOI18N
 
-        lowerBoundLabel.setFont(new java.awt.Font("Tahoma", 0, 10));
+        lowerBoundLabel.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
         lowerBoundLabel.setForeground(new java.awt.Color(102, 102, 102));
         lowerBoundLabel.setText(org.openide.util.NbBundle.getMessage(ColorTransformerPanel.class, "ColorTransformerPanel.lowerBoundLabel.text")); // NOI18N
+
+        colorSwatchToolbar.setFloatable(false);
+        colorSwatchToolbar.setRollover(true);
+        colorSwatchToolbar.setOpaque(false);
+
+        colorSwatchButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/org/gephi/ui/ranking/plugin/resources/color-swatch.png"))); // NOI18N
+        colorSwatchButton.setFocusable(false);
+        colorSwatchButton.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        colorSwatchButton.setIconTextGap(0);
+        colorSwatchButton.setMargin(new java.awt.Insets(0, 0, 0, 0));
+        colorSwatchButton.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        colorSwatchToolbar.add(colorSwatchButton);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
@@ -301,27 +383,33 @@ public class ColorTransformerPanel extends javax.swing.JPanel {
                                 .addGap(18, 18, 18)
                                 .addComponent(upperBoundLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addComponent(rangeSlider, javax.swing.GroupLayout.PREFERRED_SIZE, 162, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 8, Short.MAX_VALUE)
+                .addComponent(colorSwatchToolbar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(labelColor, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(gradientPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 17, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(rangeSlider, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(labelRange, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lowerBoundLabel)
-                    .addComponent(upperBoundLabel))
-                .addContainerGap(23, Short.MAX_VALUE))
+                    .addComponent(colorSwatchToolbar, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(labelColor, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(gradientPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 17, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(rangeSlider, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(labelRange, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(lowerBoundLabel)
+                            .addComponent(upperBoundLabel))))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton colorSwatchButton;
+    private javax.swing.JToolBar colorSwatchToolbar;
     private javax.swing.JPanel gradientPanel;
     private javax.swing.JLabel labelColor;
     private javax.swing.JLabel labelRange;

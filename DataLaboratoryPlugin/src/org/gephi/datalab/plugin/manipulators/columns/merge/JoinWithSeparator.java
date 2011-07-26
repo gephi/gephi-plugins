@@ -52,6 +52,7 @@ public class JoinWithSeparator implements AttributeColumnsMergeStrategy {
     }
 
     public void execute() {
+        NbPreferences.forModule(JoinWithSeparator.class).put(SEPARATOR_SAVED_PREFERENCES, separator);
         Lookup.getDefault().lookup(AttributeColumnsMergeStrategiesController.class).joinWithSeparatorMerge(table, columns, null, newColumnTitle, separator);
     }
 
