@@ -127,7 +127,7 @@ public class GyAttribute extends PyObject {
             filterRange = new Range(Float.MIN_VALUE, upperBound, Float.MIN_VALUE, Float.MAX_VALUE);
         } else if (underlyingAttributeColumn.getType() == AttributeType.INT) {
             int upperBound = (Integer) obj.__tojava__(Integer.class);
-            filterRange = new Range(Integer.MIN_VALUE, upperBound - 1, Integer.MIN_VALUE, Integer.MAX_VALUE);
+            filterRange = new Range(Integer.MIN_VALUE, upperBound, Integer.MIN_VALUE, Integer.MAX_VALUE);
         } else {
             throw Py.TypeError("unsupported operator for attribute type '" + underlyingAttributeColumn.getType() + "'");
         }
@@ -147,7 +147,7 @@ public class GyAttribute extends PyObject {
             filterRange = new Range(Float.MIN_VALUE, upperBound, Float.MIN_VALUE, Float.MAX_VALUE);
         } else if (underlyingAttributeColumn.getType() == AttributeType.INT) {
             int upperBound = (Integer) obj.__tojava__(Integer.class);
-            filterRange = new Range(Integer.MIN_VALUE, upperBound, Integer.MIN_VALUE, Integer.MAX_VALUE);
+            filterRange = new Range(Integer.MIN_VALUE, upperBound + 1, Integer.MIN_VALUE, Integer.MAX_VALUE);
         } else {
             throw Py.TypeError("unsupported operator for attribute type '" + underlyingAttributeColumn.getType() + "'");
         }
