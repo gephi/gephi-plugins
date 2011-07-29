@@ -23,6 +23,7 @@ package org.gephi.scripting.wrappers;
 import org.gephi.filters.api.FilterController;
 import org.gephi.filters.api.Query;
 import org.gephi.filters.plugin.operator.INTERSECTIONBuilder.IntersectionOperator;
+import org.gephi.filters.plugin.operator.UNIONBuilder.UnionOperator;
 import org.gephi.scripting.util.GyNamespace;
 import org.openide.util.Lookup;
 import org.python.core.PyObject;
@@ -71,6 +72,23 @@ public class GyFilter extends PyObject {
             filterController.setSubQuery(andQuery, otherFilter.underlyingQuery);
 
             return new GyFilter(namespace, andQuery);
+        }
+
+        return null;
+    }
+
+    @Override
+    public PyObject __or__(PyObject obj) {
+        if (obj instanceof GyFilter) {
+            FilterController filterController = Lookup.getDefault().lookup(FilterController.class);
+            UnionOperator unionOperator = new UnionOperator();
+            Query orQuery = filterController.createQuery(unionOperator);
+            GyFilter otherFilter = (GyFilter) obj;
+
+            filterController.setSubQuery(orQuery, underlyingQuery);
+            filterController.setSubQuery(orQuery, otherFilter.underlyingQuery);
+
+            return new GyFilter(namespace, orQuery);
         }
 
         return null;
