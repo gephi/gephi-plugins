@@ -20,8 +20,11 @@ along with Gephi.  If not, see <http://www.gnu.org/licenses/>.
  */
 package org.gephi.scripting.wrappers;
 
+import org.gephi.filters.api.FilterController;
 import org.gephi.filters.api.Query;
+import org.gephi.filters.plugin.operator.INTERSECTIONBuilder.IntersectionOperator;
 import org.gephi.scripting.util.GyNamespace;
+import org.openide.util.Lookup;
 import org.python.core.PyObject;
 import org.python.core.PySet;
 
@@ -54,5 +57,22 @@ public class GyFilter extends PyObject {
 
     public void setUnderlyingSet(PySet underlyingSet) {
         this.underlyingSet = underlyingSet;
+    }
+
+    @Override
+    public PyObject __and__(PyObject obj) {
+        if (obj instanceof GyFilter) {
+            FilterController filterController = Lookup.getDefault().lookup(FilterController.class);
+            IntersectionOperator intersectionOperator = new IntersectionOperator();
+            Query andQuery = filterController.createQuery(intersectionOperator);
+            GyFilter otherFilter = (GyFilter) obj;
+
+            filterController.setSubQuery(andQuery, underlyingQuery);
+            filterController.setSubQuery(andQuery, otherFilter.underlyingQuery);
+
+            return new GyFilter(namespace, andQuery);
+        }
+
+        return null;
     }
 }
