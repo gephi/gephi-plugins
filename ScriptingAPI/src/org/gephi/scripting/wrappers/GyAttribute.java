@@ -26,8 +26,10 @@ import org.gephi.data.attributes.api.AttributeUtils;
 import org.gephi.filters.api.FilterController;
 import org.gephi.filters.api.Query;
 import org.gephi.filters.api.Range;
+import org.gephi.filters.plugin.attribute.AttributeEqualBuilder;
 import org.gephi.filters.plugin.attribute.AttributeRangeBuilder;
 import org.gephi.filters.plugin.attribute.AttributeRangeBuilder.AttributeRangeFilter;
+import org.gephi.filters.spi.Filter;
 import org.gephi.scripting.util.GyNamespace;
 import org.openide.util.Lookup;
 import org.python.core.Py;
@@ -157,8 +159,53 @@ public class GyAttribute extends PyObject {
         return new GyFilter(namespace, query);
     }
 
+    private Query buildAttributeEqualsQuery(PyObject match) {
+        FilterController filterController = Lookup.getDefault().lookup(FilterController.class);
+        Filter attributeEqualFilter;
+        Query query;
+
+        if (AttributeUtils.getDefault().isNumberColumn(underlyingAttributeColumn)) {
+            AttributeEqualBuilder.EqualNumberFilter filter;
+
+            // FIXME: this is not working correctly yet
+
+            if (AttributeUtils.getDefault().isNodeColumn(underlyingAttributeColumn)) {
+                filter = new AttributeEqualBuilder.NodeEqualNumberFilter(underlyingAttributeColumn);
+            } else {
+                filter = new AttributeEqualBuilder.EdgeEqualNumberFilter(underlyingAttributeColumn);
+            }
+
+            attributeEqualFilter = filter;
+            query = filterController.createQuery(attributeEqualFilter);
+
+            filter.setMatch((Number) match.__tojava__(underlyingAttributeColumn.getType().getType()));
+        } else if (AttributeUtils.getDefault().isStringColumn(underlyingAttributeColumn)) {
+            AttributeEqualBuilder.EqualStringFilter filter;
+
+            if (AttributeUtils.getDefault().isNodeColumn(underlyingAttributeColumn)) {
+                filter = new AttributeEqualBuilder.NodeEqualStringFilter();
+            } else {
+                filter = new AttributeEqualBuilder.EdgeEqualStringFilter();
+            }
+
+            attributeEqualFilter = filter;
+            query = filterController.createQuery(attributeEqualFilter);
+
+            filter.setColumn(underlyingAttributeColumn);
+            filter.setPattern(match.toString());
+        } else {
+            throw Py.TypeError("unsupported operator for attribute type '" + underlyingAttributeColumn.getType() + "'");
+        }
+
+        return query;
+    }
+
     @Override
     public PyObject __eq__(PyObject obj) {
-        throw Py.TypeError("unsupported operator for attribute type '" + underlyingAttributeColumn.getType() + "'");
+        Query query;
+
+        query = buildAttributeEqualsQuery(obj);
+
+        return new GyFilter(namespace, query);
     }
 }
