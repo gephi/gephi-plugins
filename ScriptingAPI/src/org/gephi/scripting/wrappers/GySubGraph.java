@@ -59,6 +59,10 @@ public class GySubGraph extends PyObject {
         }
     }
 
+    public GraphView getUnderlyingGraphView() {
+        return this.underlyingGraphView;
+    }
+
     @Override
     public PyObject __findattr_ex__(String name) {
         if (name.equals("nodes")) {

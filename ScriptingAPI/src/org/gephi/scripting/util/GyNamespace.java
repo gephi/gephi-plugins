@@ -33,6 +33,7 @@ import org.gephi.scripting.wrappers.GyEdge;
 import org.gephi.scripting.wrappers.GyGraph;
 import org.python.core.PyObject;
 import org.gephi.scripting.wrappers.GyNode;
+import org.gephi.scripting.wrappers.GySubGraph;
 import org.python.core.Py;
 import org.python.core.PyStringMap;
 
@@ -45,6 +46,7 @@ public final class GyNamespace extends PyStringMap {
     public static final String NODE_PREFIX = "v";
     public static final String EDGE_PREFIX = "e";
     public static final String GRAPH_NAME = "g";
+    public static final String VISIBLE_NAME = "visible";
     private Workspace workspace;
     private GraphModel graphModel;
     private AttributeModel attributeModel;
@@ -76,7 +78,19 @@ public final class GyNamespace extends PyStringMap {
         // The user shouldn't be able to set any of the variables that match
         // the regular expressions NODE_PREFIX[0-9]+ or EDGE_PREFIX[0-9]+
 
-        if (key.startsWith(NODE_PREFIX)) {
+        if (key.equals(VISIBLE_NAME)) {
+            // Checks if the key is the variable name of the visible subgraph
+            if (value instanceof GySubGraph) {
+                GySubGraph subGraph = (GySubGraph) value;
+                getGraphModel().setVisibleView(subGraph.getUnderlyingGraphView());
+                return;
+            } else {
+                // TODO: throw an exception
+            }
+        } else if (key.equals(GRAPH_NAME)) {
+            // Checks if the key is the variable name of the main graph
+            throw Py.NameError(key + " is a reserved variable name.");
+        } else if (key.startsWith(NODE_PREFIX)) {
             // Checks if key matches a node reserved variable name
             String id = key.substring(NODE_PREFIX.length());
             if (Pattern.compile("[0-9]+").matcher(id).matches()) {
@@ -88,8 +102,6 @@ public final class GyNamespace extends PyStringMap {
             if (Pattern.compile("[0-9]+").matcher(id).matches()) {
                 throw Py.NameError(key + " is a reserved variable name.");
             }
-        } else if (key.equals(GRAPH_NAME)) {
-            throw Py.NameError(key + " is a reserved variable name.");
         }
 
         // If everything ok, set the binding on the namespace
@@ -110,6 +122,8 @@ public final class GyNamespace extends PyStringMap {
             graphModel.getGraph().removeEdge(node.getEdge());
         } else if (object instanceof GyGraph) {
             throw Py.NameError(key + " is a readonly variable.");
+        } else if (key.equals(VISIBLE_NAME)) {
+            throw Py.NameError(key + " cannot be deleted.");
         }
 
         // Effectively delete the binding from the namespace
@@ -127,7 +141,13 @@ public final class GyNamespace extends PyStringMap {
 
         // Got a namespace lookup failure
 
-        if (key.startsWith(NODE_PREFIX)) {
+        if (key.matches(VISIBLE_NAME)) {
+            // Check if it is the visible subgraph
+            return new GySubGraph(this, getGraphModel().getVisibleView());
+        } else if (key.matches(GRAPH_NAME)) {
+            // Check if it is the main graph
+            ret = new GyGraph(this);
+        } else if (key.startsWith(NODE_PREFIX)) {
             // Check if it is a node
             String strId = key.substring(EDGE_PREFIX.length());
             if (Pattern.compile("[1-9][0-9]*").matcher(strId).matches()) {
@@ -149,8 +169,6 @@ public final class GyNamespace extends PyStringMap {
                     ret = new GyEdge(this, edge);
                 }
             }
-        } else if (key.matches(GRAPH_NAME)) {
-            ret = new GyGraph(this);
         }
 
         if (ret != null) {
