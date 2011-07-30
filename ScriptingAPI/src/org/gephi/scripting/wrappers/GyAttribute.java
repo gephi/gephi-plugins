@@ -28,6 +28,8 @@ import org.gephi.filters.api.Range;
 import org.gephi.filters.plugin.attribute.AttributeEqualBuilder;
 import org.gephi.filters.plugin.attribute.AttributeRangeBuilder;
 import org.gephi.filters.plugin.attribute.AttributeRangeBuilder.AttributeRangeFilter;
+import org.gephi.filters.plugin.operator.NOTBuilderEdge.NotOperatorEdge;
+import org.gephi.filters.plugin.operator.NOTBuilderNode.NOTOperatorNode;
 import org.gephi.filters.spi.Filter;
 import org.gephi.scripting.util.GyNamespace;
 import org.openide.util.Lookup;
@@ -226,5 +228,24 @@ public class GyAttribute extends PyObject {
         query = buildAttributeEqualsQuery(obj);
 
         return new GyFilter(namespace, query);
+    }
+
+    @Override
+    public PyObject __ne__(PyObject obj) {
+        FilterController filterController = Lookup.getDefault().lookup(FilterController.class);
+        Query equalsQuery = buildAttributeEqualsQuery(obj);
+        Query notEqualsQuery;
+        Filter notFilter;
+
+        if (AttributeUtils.getDefault().isNodeColumn(underlyingAttributeColumn)) {
+            notFilter = new NOTOperatorNode();
+        } else {
+            notFilter = new NotOperatorEdge();
+        }
+
+        notEqualsQuery = filterController.createQuery(notFilter);
+        filterController.setSubQuery(notEqualsQuery, equalsQuery);
+
+        return new GyFilter(namespace, notEqualsQuery);
     }
 }
