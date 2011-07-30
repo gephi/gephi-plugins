@@ -20,6 +20,8 @@ along with Gephi.  If not, see <http://www.gnu.org/licenses/>.
  */
 package org.gephi.scripting.wrappers;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.gephi.data.attributes.api.AttributeColumn;
 import org.gephi.data.attributes.api.AttributeType;
 import org.gephi.data.attributes.api.AttributeUtils;
@@ -82,13 +84,18 @@ public class GyAttribute extends PyObject {
         Range filterRange;
         Query query;
 
-        if (underlyingAttributeColumn.getType() == AttributeType.FLOAT) {
+        if (AttributeUtils.getDefault().isNumberColumn(underlyingAttributeColumn)) {
             // FIXME: lower bound should be an open interval
-            float lowerBound = (Float) obj.__tojava__(Float.class);
-            filterRange = new Range(lowerBound, Float.MAX_VALUE, Float.MIN_VALUE, Float.MAX_VALUE);
-        } else if (underlyingAttributeColumn.getType() == AttributeType.INT) {
-            int lowerBound = (Integer) obj.__tojava__(Integer.class);
-            filterRange = new Range(lowerBound + 1, Integer.MAX_VALUE, Integer.MIN_VALUE, Integer.MAX_VALUE);
+            Class columnType = underlyingAttributeColumn.getType().getType();
+            try {
+                Number minValue = (Number) columnType.getDeclaredField("MIN_VALUE").get(null);
+                Number maxValue = (Number) columnType.getDeclaredField("MAX_VALUE").get(null);
+                Number lowerBound = (Number) obj.__tojava__(columnType);
+                Number upperBound = maxValue;
+                filterRange = new Range(lowerBound, upperBound, minValue, maxValue);
+            } catch (Exception ex) {
+                throw Py.TypeError("unsupported operator for attribute type '" + underlyingAttributeColumn.getType() + "'");
+            }
         } else {
             throw Py.TypeError("unsupported operator for attribute type '" + underlyingAttributeColumn.getType() + "'");
         }
@@ -103,12 +110,17 @@ public class GyAttribute extends PyObject {
         Range filterRange;
         Query query;
 
-        if (underlyingAttributeColumn.getType() == AttributeType.FLOAT) {
-            float lowerBound = (Float) obj.__tojava__(Float.class);
-            filterRange = new Range(lowerBound, Float.MAX_VALUE, Float.MIN_VALUE, Float.MAX_VALUE);
-        } else if (underlyingAttributeColumn.getType() == AttributeType.INT) {
-            int lowerBound = (Integer) obj.__tojava__(Integer.class);
-            filterRange = new Range(lowerBound, Integer.MAX_VALUE, Integer.MIN_VALUE, Integer.MAX_VALUE);
+        if (AttributeUtils.getDefault().isNumberColumn(underlyingAttributeColumn)) {
+            Class columnType = underlyingAttributeColumn.getType().getType();
+            try {
+                Number minValue = (Number) columnType.getDeclaredField("MIN_VALUE").get(null);
+                Number maxValue = (Number) columnType.getDeclaredField("MAX_VALUE").get(null);
+                Number lowerBound = (Number) obj.__tojava__(columnType);
+                Number upperBound = maxValue;
+                filterRange = new Range(lowerBound, upperBound, minValue, maxValue);
+            } catch (Exception ex) {
+                throw Py.TypeError("unsupported operator for attribute type '" + underlyingAttributeColumn.getType() + "'");
+            }
         } else {
             throw Py.TypeError("unsupported operator for attribute type '" + underlyingAttributeColumn.getType() + "'");
         }
@@ -123,13 +135,18 @@ public class GyAttribute extends PyObject {
         Range filterRange;
         Query query;
 
-        if (underlyingAttributeColumn.getType() == AttributeType.FLOAT) {
+        if (AttributeUtils.getDefault().isNumberColumn(underlyingAttributeColumn)) {
             // FIXME: upper bound should be an open interval
-            float upperBound = (Float) obj.__tojava__(Float.class);
-            filterRange = new Range(Float.MIN_VALUE, upperBound, Float.MIN_VALUE, Float.MAX_VALUE);
-        } else if (underlyingAttributeColumn.getType() == AttributeType.INT) {
-            int upperBound = (Integer) obj.__tojava__(Integer.class);
-            filterRange = new Range(Integer.MIN_VALUE, upperBound, Integer.MIN_VALUE, Integer.MAX_VALUE);
+            Class columnType = underlyingAttributeColumn.getType().getType();
+            try {
+                Number minValue = (Number) columnType.getDeclaredField("MIN_VALUE").get(null);
+                Number maxValue = (Number) columnType.getDeclaredField("MAX_VALUE").get(null);
+                Number lowerBound = minValue;
+                Number upperBound = (Number) obj.__tojava__(columnType);
+                filterRange = new Range(lowerBound, upperBound, minValue, maxValue);
+            } catch (Exception ex) {
+                throw Py.TypeError("unsupported operator for attribute type '" + underlyingAttributeColumn.getType() + "'");
+            }
         } else {
             throw Py.TypeError("unsupported operator for attribute type '" + underlyingAttributeColumn.getType() + "'");
         }
@@ -144,12 +161,17 @@ public class GyAttribute extends PyObject {
         Range filterRange;
         Query query;
 
-        if (underlyingAttributeColumn.getType() == AttributeType.FLOAT) {
-            float upperBound = (Float) obj.__tojava__(Float.class);
-            filterRange = new Range(Float.MIN_VALUE, upperBound, Float.MIN_VALUE, Float.MAX_VALUE);
-        } else if (underlyingAttributeColumn.getType() == AttributeType.INT) {
-            int upperBound = (Integer) obj.__tojava__(Integer.class);
-            filterRange = new Range(Integer.MIN_VALUE, upperBound + 1, Integer.MIN_VALUE, Integer.MAX_VALUE);
+        if (AttributeUtils.getDefault().isNumberColumn(underlyingAttributeColumn)) {
+            Class columnType = underlyingAttributeColumn.getType().getType();
+            try {
+                Number minValue = (Number) columnType.getDeclaredField("MIN_VALUE").get(null);
+                Number maxValue = (Number) columnType.getDeclaredField("MAX_VALUE").get(null);
+                Number lowerBound = minValue;
+                Number upperBound = (Number) obj.__tojava__(columnType);
+                filterRange = new Range(lowerBound, upperBound, minValue, maxValue);
+            } catch (Exception ex) {
+                throw Py.TypeError("unsupported operator for attribute type '" + underlyingAttributeColumn.getType() + "'");
+            }
         } else {
             throw Py.TypeError("unsupported operator for attribute type '" + underlyingAttributeColumn.getType() + "'");
         }
