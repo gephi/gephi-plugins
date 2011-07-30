@@ -55,7 +55,7 @@ public class GyNode extends PyObject {
     public boolean fixed;
     public int indegree;
     public int outdegree;
-    public int totaldegree;
+    public int degree;
     public PyList neighbors;
 
     public GyNode(GyNamespace namespace, Node node) {
@@ -104,7 +104,7 @@ public class GyNode extends PyObject {
             readonlyAttributeError(name);
         } else if (name.equals("outdegree")) {
             readonlyAttributeError(name);
-        } else if (name.equals("totaldegree")) {
+        } else if (name.equals("degree")) {
             readonlyAttributeError(name);
         } else if (name.equals("neighbors")) {
             readonlyAttributeError(name);
@@ -157,9 +157,9 @@ public class GyNode extends PyObject {
         } else if (name.equals("outdegree")) {
             int outdegree = namespace.getGraphModel().getDirectedGraph().getOutDegree(underlyingNode);
             return new PyInteger(outdegree);
-        } else if (name.equals("totaldegree")) {
-            int totaldegree = namespace.getGraphModel().getDirectedGraph().getDegree(underlyingNode);
-            return new PyInteger(totaldegree);
+        } else if (name.equals("degree")) {
+            int degree = namespace.getGraphModel().getDirectedGraph().getDegree(underlyingNode);
+            return new PyInteger(degree);
         } else if (name.equals("neighbors")) {
             NodeIterable nodeIterable = namespace.getGraphModel().getGraph().getNeighbors(underlyingNode);
             PySet nodesSet = new PySet();
