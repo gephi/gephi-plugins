@@ -29,6 +29,7 @@ import org.gephi.graph.api.GraphModel;
 import org.gephi.graph.api.Node;
 import org.gephi.project.api.Workspace;
 import org.gephi.scripting.wrappers.GyAttributeColumn;
+import org.gephi.scripting.wrappers.GyAttributeTopology;
 import org.gephi.scripting.wrappers.GyEdge;
 import org.gephi.scripting.wrappers.GyGraph;
 import org.python.core.PyObject;
@@ -90,6 +91,15 @@ public final class GyNamespace extends PyStringMap {
         } else if (key.equals(GRAPH_NAME)) {
             // Checks if the key is the variable name of the main graph
             throw Py.NameError(key + " is a reserved variable name.");
+        } else if (key.equals("degree")) {
+            // Checks if the key is the degree topology attribute
+            throw Py.NameError(key + " is a reserved variable name.");
+        } else if (key.equals("indegree")) {
+            // Checks if the key is the in degree topology attribute
+            throw Py.NameError(key + " is a reserved variable name.");
+        } else if (key.equals("outdegree")) {
+            // Checks if the key is the out degree topology attribute
+            throw Py.NameError(key + " is a reserved variable name.");
         } else if (key.startsWith(NODE_PREFIX)) {
             // Checks if key matches a node reserved variable name
             String id = key.substring(NODE_PREFIX.length());
@@ -124,6 +134,15 @@ public final class GyNamespace extends PyStringMap {
             throw Py.NameError(key + " is a readonly variable.");
         } else if (key.equals(VISIBLE_NAME)) {
             throw Py.NameError(key + " cannot be deleted.");
+        } else if (key.equals("degree")) {
+            // Checks if the key is the degree topology attribute
+            throw Py.NameError(key + " is a reserved variable name.");
+        } else if (key.equals("indegree")) {
+            // Checks if the key is the in degree topology attribute
+            throw Py.NameError(key + " is a reserved variable name.");
+        } else if (key.equals("outdegree")) {
+            // Checks if the key is the out degree topology attribute
+            throw Py.NameError(key + " is a reserved variable name.");
         }
 
         // Effectively delete the binding from the namespace
@@ -147,6 +166,15 @@ public final class GyNamespace extends PyStringMap {
         } else if (key.matches(GRAPH_NAME)) {
             // Check if it is the main graph
             ret = new GyGraph(this);
+        } else if (key.equals("degree")) {
+            // Checks if the key is the degree topology attribute
+            ret = new GyAttributeTopology(this, GyAttributeTopology.Type.DEGREE);
+        } else if (key.equals("indegree")) {
+            // Checks if the key is the in degree topology attribute
+            ret = new GyAttributeTopology(this, GyAttributeTopology.Type.IN_DEGREE);
+        } else if (key.equals("outdegree")) {
+            // Checks if the key is the out degree topology attribute
+            ret = new GyAttributeTopology(this, GyAttributeTopology.Type.OUT_DEGREE);
         } else if (key.startsWith(NODE_PREFIX)) {
             // Check if it is a node
             String strId = key.substring(EDGE_PREFIX.length());
