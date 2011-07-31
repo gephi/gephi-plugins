@@ -43,7 +43,7 @@ import org.python.util.PythonInterpreter;
 @ConvertAsProperties(dtd = "-//org.gephi.desktop.scripting//Console//EN",
 autostore = false)
 @TopComponent.Description(preferredID = "ConsoleTopComponent",
-//iconBase="SET/PATH/TO/ICON/HERE", 
+iconBase="org/gephi/desktop/scripting/resources/icon.png", 
 persistenceType = TopComponent.PERSISTENCE_ALWAYS)
 @TopComponent.Registration(mode = "consolemode", openAtStartup = false)
 @ActionID(category = "Window", id = "org.gephi.desktop.scripting.ConsoleTopComponent")
