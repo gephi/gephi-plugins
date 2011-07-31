@@ -23,6 +23,7 @@ package org.gephi.scripting.util;
 import java.util.regex.Pattern;
 import org.gephi.data.attributes.api.AttributeColumn;
 import org.gephi.data.attributes.api.AttributeModel;
+import org.gephi.filters.api.FilterController;
 import org.gephi.graph.api.Edge;
 import org.gephi.graph.api.Graph;
 import org.gephi.graph.api.GraphModel;
@@ -35,6 +36,7 @@ import org.gephi.scripting.wrappers.GyGraph;
 import org.python.core.PyObject;
 import org.gephi.scripting.wrappers.GyNode;
 import org.gephi.scripting.wrappers.GySubGraph;
+import org.openide.util.Lookup;
 import org.python.core.Py;
 import org.python.core.PyStringMap;
 
@@ -83,6 +85,8 @@ public final class GyNamespace extends PyStringMap {
             // Checks if the key is the variable name of the visible subgraph
             if (value instanceof GySubGraph) {
                 GySubGraph subGraph = (GySubGraph) value;
+                FilterController filterController = Lookup.getDefault().lookup(FilterController.class);
+                filterController.setCurrentQuery(subGraph.getFilter().getUnderlyingQuery());
                 getGraphModel().setVisibleView(subGraph.getUnderlyingGraphView());
                 return;
             } else {
@@ -162,7 +166,8 @@ public final class GyNamespace extends PyStringMap {
 
         if (key.matches(VISIBLE_NAME)) {
             // Check if it is the visible subgraph
-            return new GySubGraph(this, getGraphModel().getVisibleView());
+            FilterController filterController = Lookup.getDefault().lookup(FilterController.class);
+            return new GySubGraph(this, filterController.getModel().getCurrentQuery());
         } else if (key.matches(GRAPH_NAME)) {
             // Check if it is the main graph
             ret = new GyGraph(this);

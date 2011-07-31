@@ -21,6 +21,7 @@ along with Gephi.  If not, see <http://www.gnu.org/licenses/>.
 package org.gephi.scripting.wrappers;
 
 import org.gephi.filters.api.FilterController;
+import org.gephi.filters.api.Query;
 import org.gephi.graph.api.EdgeIterable;
 import org.gephi.graph.api.EdgeIterator;
 import org.gephi.graph.api.Graph;
@@ -41,14 +42,22 @@ public class GySubGraph extends PyObject {
 
     protected GyNamespace namespace;
     protected GraphView underlyingGraphView;
+    protected Query constructionQuery;
     // Hack to get a few attributes into jythonconsole's auto-completion
     // TODO: get rid of this ugly hack (:
     public PyList nodes;
     public PyList edges;
 
-    public GySubGraph(GyNamespace namespace, GraphView graphView) {
+    public GySubGraph(GyNamespace namespace, Query constructionQuery) {
         this.namespace = namespace;
-        this.underlyingGraphView = graphView;
+        this.constructionQuery = constructionQuery;
+
+        FilterController filterController = Lookup.getDefault().lookup(FilterController.class);
+        if (this.constructionQuery != null) {
+            this.underlyingGraphView = filterController.filter(this.constructionQuery);
+        } else {
+            this.underlyingGraphView = null;
+        }
     }
 
     public Graph getUnderlyingGraph() {
@@ -61,6 +70,10 @@ public class GySubGraph extends PyObject {
 
     public GraphView getUnderlyingGraphView() {
         return this.underlyingGraphView;
+    }
+
+    public GyFilter getFilter() {
+        return new GyFilter(namespace, constructionQuery);
     }
 
     @Override
@@ -103,7 +116,12 @@ public class GySubGraph extends PyObject {
 
     public GySubGraph filter(GyFilter filter) {
         FilterController filterController = Lookup.getDefault().lookup(FilterController.class);
-        GraphView graphView = filterController.filter(filter.getUnderlyingQuery());
-        return new GySubGraph(namespace, graphView);
+        Query newQuery = filterController.createQuery(filter.getUnderlyingQuery().getFilter());
+
+        if (constructionQuery != null) {
+            filterController.setSubQuery(newQuery, constructionQuery);
+        }
+
+        return new GySubGraph(namespace, newQuery);
     }
 }
