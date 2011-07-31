@@ -20,14 +20,9 @@ along with Gephi.  If not, see <http://www.gnu.org/licenses/>.
  */
 package org.gephi.scripting.wrappers;
 
-import org.gephi.data.attributes.api.AttributeColumn;
-import org.gephi.data.attributes.api.AttributeUtils;
 import org.gephi.filters.api.FilterController;
 import org.gephi.filters.api.Query;
 import org.gephi.filters.api.Range;
-import org.gephi.filters.plugin.attribute.AttributeEqualBuilder;
-import org.gephi.filters.plugin.attribute.AttributeRangeBuilder;
-import org.gephi.filters.plugin.attribute.AttributeRangeBuilder.AttributeRangeFilter;
 import org.gephi.filters.plugin.operator.NOTBuilderEdge.NotOperatorEdge;
 import org.gephi.filters.plugin.operator.NOTBuilderNode.NOTOperatorNode;
 import org.gephi.filters.spi.Filter;
@@ -40,52 +35,33 @@ import org.python.core.PyObject;
  *
  * @author Luiz Ribeiro
  */
-public class GyAttribute extends PyObject {
+abstract class GyAttribute extends PyObject {
 
-    private GyNamespace namespace;
-    private AttributeColumn underlyingAttributeColumn;
+    protected GyNamespace namespace;
 
-    public GyAttribute(GyNamespace namespace, AttributeColumn underlyingAttributeColumn) {
+    GyAttribute(GyNamespace namespace) {
         this.namespace = namespace;
-        this.underlyingAttributeColumn = underlyingAttributeColumn;
     }
 
     @Override
-    public String toString() {
-        if (AttributeUtils.getDefault().isNodeColumn(underlyingAttributeColumn)) {
-            return "Node Attribute '" + underlyingAttributeColumn.getId() + "' (" + underlyingAttributeColumn.getType() + ")";
-        } else {
-            return "Edge Attribute '" + underlyingAttributeColumn.getId() + "' (" + underlyingAttributeColumn.getType() + ")";
-        }
-    }
+    public abstract String toString();
 
-    // TODO: implement comparison operators that execute queries in the graph
-    // or build graph filters somehow
-    private Query buildAttributeRangeQuery(Range range) {
-        FilterController filterController = Lookup.getDefault().lookup(FilterController.class);
-        AttributeRangeFilter attributeRangeFilter;
-        Query query;
+    public abstract Class getAttributeType();
 
-        if (AttributeUtils.getDefault().isNodeColumn(underlyingAttributeColumn)) {
-            attributeRangeFilter = new AttributeRangeBuilder.NodeAttributeRangeFilter(underlyingAttributeColumn);
-        } else {
-            attributeRangeFilter = new AttributeRangeBuilder.EdgeAttributeRangeFilter(underlyingAttributeColumn);
-        }
+    public abstract boolean isNodeAttribute();
 
-        query = filterController.createQuery(attributeRangeFilter);
-        attributeRangeFilter.setRange(range);
+    protected abstract Query buildRangeQuery(Range range);
 
-        return query;
-    }
+    protected abstract Query buildEqualsQuery(PyObject match);
 
     @Override
     public PyObject __gt__(PyObject obj) {
         Range filterRange;
         Query query;
 
-        if (AttributeUtils.getDefault().isNumberColumn(underlyingAttributeColumn)) {
+        if (Number.class.isAssignableFrom(getAttributeType())) {
             // FIXME: lower bound should be an open interval
-            Class columnType = underlyingAttributeColumn.getType().getType();
+            Class columnType = getAttributeType();
             try {
                 Number minValue = (Number) columnType.getDeclaredField("MIN_VALUE").get(null);
                 Number maxValue = (Number) columnType.getDeclaredField("MAX_VALUE").get(null);
@@ -93,13 +69,13 @@ public class GyAttribute extends PyObject {
                 Number upperBound = maxValue;
                 filterRange = new Range(lowerBound, upperBound, minValue, maxValue);
             } catch (Exception ex) {
-                throw Py.TypeError("unsupported operator for attribute type '" + underlyingAttributeColumn.getType() + "'");
+                throw Py.TypeError("unsupported operator for attribute type '" + getAttributeType() + "'");
             }
         } else {
-            throw Py.TypeError("unsupported operator for attribute type '" + underlyingAttributeColumn.getType() + "'");
+            throw Py.TypeError("unsupported operator for attribute type '" + getAttributeType() + "'");
         }
 
-        query = buildAttributeRangeQuery(filterRange);
+        query = buildRangeQuery(filterRange);
 
         return new GyFilter(namespace, query);
     }
@@ -109,8 +85,8 @@ public class GyAttribute extends PyObject {
         Range filterRange;
         Query query;
 
-        if (AttributeUtils.getDefault().isNumberColumn(underlyingAttributeColumn)) {
-            Class columnType = underlyingAttributeColumn.getType().getType();
+        if (Number.class.isAssignableFrom(getAttributeType())) {
+            Class columnType = getAttributeType();
             try {
                 Number minValue = (Number) columnType.getDeclaredField("MIN_VALUE").get(null);
                 Number maxValue = (Number) columnType.getDeclaredField("MAX_VALUE").get(null);
@@ -118,13 +94,13 @@ public class GyAttribute extends PyObject {
                 Number upperBound = maxValue;
                 filterRange = new Range(lowerBound, upperBound, minValue, maxValue);
             } catch (Exception ex) {
-                throw Py.TypeError("unsupported operator for attribute type '" + underlyingAttributeColumn.getType() + "'");
+                throw Py.TypeError("unsupported operator for attribute type '" + getAttributeType() + "'");
             }
         } else {
-            throw Py.TypeError("unsupported operator for attribute type '" + underlyingAttributeColumn.getType() + "'");
+            throw Py.TypeError("unsupported operator for attribute type '" + getAttributeType() + "'");
         }
 
-        query = buildAttributeRangeQuery(filterRange);
+        query = buildRangeQuery(filterRange);
 
         return new GyFilter(namespace, query);
     }
@@ -134,9 +110,9 @@ public class GyAttribute extends PyObject {
         Range filterRange;
         Query query;
 
-        if (AttributeUtils.getDefault().isNumberColumn(underlyingAttributeColumn)) {
+        if (Number.class.isAssignableFrom(getAttributeType())) {
             // FIXME: upper bound should be an open interval
-            Class columnType = underlyingAttributeColumn.getType().getType();
+            Class columnType = getAttributeType();
             try {
                 Number minValue = (Number) columnType.getDeclaredField("MIN_VALUE").get(null);
                 Number maxValue = (Number) columnType.getDeclaredField("MAX_VALUE").get(null);
@@ -144,13 +120,13 @@ public class GyAttribute extends PyObject {
                 Number upperBound = (Number) obj.__tojava__(columnType);
                 filterRange = new Range(lowerBound, upperBound, minValue, maxValue);
             } catch (Exception ex) {
-                throw Py.TypeError("unsupported operator for attribute type '" + underlyingAttributeColumn.getType() + "'");
+                throw Py.TypeError("unsupported operator for attribute type '" + getAttributeType() + "'");
             }
         } else {
-            throw Py.TypeError("unsupported operator for attribute type '" + underlyingAttributeColumn.getType() + "'");
+            throw Py.TypeError("unsupported operator for attribute type '" + getAttributeType() + "'");
         }
 
-        query = buildAttributeRangeQuery(filterRange);
+        query = buildRangeQuery(filterRange);
 
         return new GyFilter(namespace, query);
     }
@@ -160,8 +136,8 @@ public class GyAttribute extends PyObject {
         Range filterRange;
         Query query;
 
-        if (AttributeUtils.getDefault().isNumberColumn(underlyingAttributeColumn)) {
-            Class columnType = underlyingAttributeColumn.getType().getType();
+        if (Number.class.isAssignableFrom(getAttributeType())) {
+            Class columnType = getAttributeType();
             try {
                 Number minValue = (Number) columnType.getDeclaredField("MIN_VALUE").get(null);
                 Number maxValue = (Number) columnType.getDeclaredField("MAX_VALUE").get(null);
@@ -169,63 +145,22 @@ public class GyAttribute extends PyObject {
                 Number upperBound = (Number) obj.__tojava__(columnType);
                 filterRange = new Range(lowerBound, upperBound, minValue, maxValue);
             } catch (Exception ex) {
-                throw Py.TypeError("unsupported operator for attribute type '" + underlyingAttributeColumn.getType() + "'");
+                throw Py.TypeError("unsupported operator for attribute type '" + getAttributeType() + "'");
             }
         } else {
-            throw Py.TypeError("unsupported operator for attribute type '" + underlyingAttributeColumn.getType() + "'");
+            throw Py.TypeError("unsupported operator for attribute type '" + getAttributeType() + "'");
         }
 
-        query = buildAttributeRangeQuery(filterRange);
+        query = buildRangeQuery(filterRange);
 
         return new GyFilter(namespace, query);
-    }
-
-    private Query buildAttributeEqualsQuery(PyObject match) {
-        FilterController filterController = Lookup.getDefault().lookup(FilterController.class);
-        Filter attributeEqualFilter;
-        Query query;
-
-        if (AttributeUtils.getDefault().isNumberColumn(underlyingAttributeColumn)) {
-            AttributeEqualBuilder.EqualNumberFilter filter;
-
-            // FIXME: this is not working correctly yet
-
-            if (AttributeUtils.getDefault().isNodeColumn(underlyingAttributeColumn)) {
-                filter = new AttributeEqualBuilder.NodeEqualNumberFilter(underlyingAttributeColumn);
-            } else {
-                filter = new AttributeEqualBuilder.EdgeEqualNumberFilter(underlyingAttributeColumn);
-            }
-
-            attributeEqualFilter = filter;
-            query = filterController.createQuery(attributeEqualFilter);
-
-            filter.setMatch((Number) match.__tojava__(underlyingAttributeColumn.getType().getType()));
-        } else if (AttributeUtils.getDefault().isStringColumn(underlyingAttributeColumn)) {
-            AttributeEqualBuilder.EqualStringFilter filter;
-
-            if (AttributeUtils.getDefault().isNodeColumn(underlyingAttributeColumn)) {
-                filter = new AttributeEqualBuilder.NodeEqualStringFilter();
-            } else {
-                filter = new AttributeEqualBuilder.EdgeEqualStringFilter();
-            }
-
-            attributeEqualFilter = filter;
-            query = filterController.createQuery(attributeEqualFilter);
-
-            filter.setColumn(underlyingAttributeColumn);
-            filter.setPattern(match.toString());
-        } else {
-            throw Py.TypeError("unsupported operator for attribute type '" + underlyingAttributeColumn.getType() + "'");
-        }
-
-        return query;
     }
 
     @Override
     public PyObject __eq__(PyObject obj) {
         Query query;
 
-        query = buildAttributeEqualsQuery(obj);
+        query = buildEqualsQuery(obj);
 
         return new GyFilter(namespace, query);
     }
@@ -233,11 +168,11 @@ public class GyAttribute extends PyObject {
     @Override
     public PyObject __ne__(PyObject obj) {
         FilterController filterController = Lookup.getDefault().lookup(FilterController.class);
-        Query equalsQuery = buildAttributeEqualsQuery(obj);
+        Query equalsQuery = buildEqualsQuery(obj);
         Query notEqualsQuery;
         Filter notFilter;
 
-        if (AttributeUtils.getDefault().isNodeColumn(underlyingAttributeColumn)) {
+        if (isNodeAttribute()) {
             notFilter = new NOTOperatorNode();
         } else {
             notFilter = new NotOperatorEdge();

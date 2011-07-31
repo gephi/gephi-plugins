@@ -28,7 +28,7 @@ import org.gephi.graph.api.Graph;
 import org.gephi.graph.api.GraphModel;
 import org.gephi.graph.api.Node;
 import org.gephi.project.api.Workspace;
-import org.gephi.scripting.wrappers.GyAttribute;
+import org.gephi.scripting.wrappers.GyAttributeColumn;
 import org.gephi.scripting.wrappers.GyEdge;
 import org.gephi.scripting.wrappers.GyGraph;
 import org.python.core.PyObject;
@@ -187,10 +187,10 @@ public final class GyNamespace extends PyStringMap {
                 throw Py.NameError("name '" + key + "' is an ambiguous column name");
             } else if (nodeColumn != null) {
                 // Found a node attribute column
-                ret = new GyAttribute(this, nodeColumn);
+                ret = new GyAttributeColumn(this, nodeColumn);
             } else if (edgeColumn != null) {
                 // Found an edge attribute column
-                ret = new GyAttribute(this, edgeColumn);
+                ret = new GyAttributeColumn(this, edgeColumn);
             }
         }
 
