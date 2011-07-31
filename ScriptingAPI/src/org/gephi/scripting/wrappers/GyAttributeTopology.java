@@ -20,9 +20,18 @@ along with Gephi.  If not, see <http://www.gnu.org/licenses/>.
  */
 package org.gephi.scripting.wrappers;
 
+import org.gephi.filters.api.FilterController;
 import org.gephi.filters.api.Query;
 import org.gephi.filters.api.Range;
+import org.gephi.filters.plugin.graph.DegreeRangeBuilder;
+import org.gephi.filters.plugin.graph.DegreeRangeBuilder.DegreeRangeFilter;
+import org.gephi.filters.plugin.graph.InDegreeRangeBuilder;
+import org.gephi.filters.plugin.graph.InDegreeRangeBuilder.InDegreeRangeFilter;
+import org.gephi.filters.plugin.graph.OutDegreeRangeBuilder;
+import org.gephi.filters.plugin.graph.OutDegreeRangeBuilder.OutDegreeRangeFilter;
 import org.gephi.scripting.util.GyNamespace;
+import org.openide.util.Lookup;
+import org.python.core.Py;
 import org.python.core.PyObject;
 
 /**
@@ -74,11 +83,33 @@ public class GyAttributeTopology extends GyAttribute {
 
     @Override
     protected Query buildRangeQuery(Range range) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        FilterController filterController = Lookup.getDefault().lookup(FilterController.class);
+        Query query;
+
+        if (topologyType == Type.DEGREE) {
+            DegreeRangeFilter degreeRangeFilter = new DegreeRangeBuilder.DegreeRangeFilter();
+            query = filterController.createQuery(degreeRangeFilter);
+            degreeRangeFilter.setRange(range);
+        } else if (topologyType == Type.IN_DEGREE) {
+            InDegreeRangeFilter inDegreeRangeFilter = new InDegreeRangeBuilder.InDegreeRangeFilter();
+            query = filterController.createQuery(inDegreeRangeFilter);
+            inDegreeRangeFilter.setRange(range);
+        } else if (topologyType == Type.OUT_DEGREE) {
+            OutDegreeRangeFilter outDegreeRangeFilter = new OutDegreeRangeBuilder.OutDegreeRangeFilter();
+            query = filterController.createQuery(outDegreeRangeFilter);
+            outDegreeRangeFilter.setRange(range);
+        } else {
+            // Shouldn't happen ever
+            throw Py.TypeError("Unexpected error");
+        }
+
+        return query;
     }
 
     @Override
     protected Query buildEqualsQuery(PyObject match) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        Integer intMatch = (Integer) match.__tojava__(Integer.class);
+        // FIXME: this is not working correctly
+        return buildRangeQuery(new Range(intMatch, intMatch, Integer.MIN_VALUE, Integer.MAX_VALUE));
     }
 }
