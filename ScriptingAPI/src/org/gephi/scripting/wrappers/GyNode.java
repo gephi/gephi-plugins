@@ -114,6 +114,8 @@ public class GyNode extends PyObject {
             // TODO: support conversions for other object types
             if (value instanceof PyString) {
                 obj = (String) value.__tojava__(String.class);
+            } else if (value instanceof PyBoolean) {
+                obj = (Boolean) value.__tojava__(Boolean.class);
             } else if (value instanceof PyInteger) {
                 obj = (Integer) value.__tojava__(Integer.class);
             } else if (value instanceof PyFloat) {

@@ -21,6 +21,7 @@ along with Gephi.  If not, see <http://www.gnu.org/licenses/>.
 package org.gephi.scripting.wrappers;
 
 import org.gephi.data.attributes.api.AttributeColumn;
+import org.gephi.data.attributes.api.AttributeType;
 import org.gephi.data.attributes.api.AttributeUtils;
 import org.gephi.filters.api.FilterController;
 import org.gephi.filters.api.Query;
@@ -73,6 +74,10 @@ public class GyAttributeColumn extends GyAttribute {
         AttributeRangeFilter attributeRangeFilter;
         Query query;
 
+        if (underlyingAttributeColumn.getType() == AttributeType.BOOLEAN) {
+            throw Py.TypeError("unsupported operator for attribute type '" + underlyingAttributeColumn.getType() + "'");
+        }
+
         if (AttributeUtils.getDefault().isNodeColumn(underlyingAttributeColumn)) {
             attributeRangeFilter = new AttributeRangeBuilder.NodeAttributeRangeFilter(underlyingAttributeColumn);
         } else {
@@ -120,6 +125,19 @@ public class GyAttributeColumn extends GyAttribute {
 
             filter.setColumn(underlyingAttributeColumn);
             filter.setPattern(match.toString());
+        } else if (underlyingAttributeColumn.getType() == AttributeType.BOOLEAN) {
+            AttributeEqualBuilder.EqualBooleanFilter filter;
+
+            if (AttributeUtils.getDefault().isNodeColumn(underlyingAttributeColumn)) {
+                filter = new AttributeEqualBuilder.NodeEqualBooleanFilter();
+            } else {
+                filter = new AttributeEqualBuilder.EdgeEqualBooleanFilter();
+            }
+
+            query = filterController.createQuery(filter);
+
+            filter.setColumn(underlyingAttributeColumn);
+            filter.setMatch((Boolean) match.__tojava__(Boolean.class));
         } else {
             throw Py.TypeError("unsupported operator for attribute type '" + underlyingAttributeColumn.getType() + "'");
         }
