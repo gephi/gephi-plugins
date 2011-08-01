@@ -116,12 +116,15 @@ public class GySubGraph extends PyObject {
 
     public GySubGraph filter(GyFilter filter) {
         FilterController filterController = Lookup.getDefault().lookup(FilterController.class);
-        Query newQuery = filterController.createQuery(filter.getUnderlyingQuery().getFilter());
+        Query query;
 
         if (constructionQuery != null) {
-            filterController.setSubQuery(newQuery, constructionQuery);
+            query = filterController.createQuery(filter.getUnderlyingQuery().getFilter());
+            filterController.setSubQuery(query, constructionQuery);
+        } else {
+            query = filter.getUnderlyingQuery();
         }
 
-        return new GySubGraph(namespace, newQuery);
+        return new GySubGraph(namespace, query);
     }
 }
