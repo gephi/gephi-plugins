@@ -55,6 +55,7 @@ public class ScriptingControllerImpl implements ScriptingController {
 
                 // Update the local namespace of the interpreter
                 pythonInterpreter.setLocals(currentModel.getLocalNamespace());
+                ScriptingControllerImpl.this.preloadGlobals();
             }
 
             @Override
@@ -84,6 +85,7 @@ public class ScriptingControllerImpl implements ScriptingController {
         // Set the local namespace of the interpreter to current workspace's
         if (currentModel != null) {
             pythonInterpreter.setLocals(currentModel.getLocalNamespace());
+            preloadGlobals();
         }
     }
 
@@ -108,5 +110,11 @@ public class ScriptingControllerImpl implements ScriptingController {
     @Override
     public final PythonInterpreter getPythonInterpreter() {
         return pythonInterpreter;
+    }
+
+    private void preloadGlobals() {
+        // FIXME: this should be called only once, just after loading up a newly
+        // created ScriptingModel's namespace on the interpreter.
+        pythonInterpreter.execfile(getClass().getResourceAsStream("/org/gephi/scripting/util/preload.py"));
     }
 }
