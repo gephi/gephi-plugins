@@ -17,7 +17,7 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with Gephi.  If not, see <http://www.gnu.org/licenses/>.
 
-# This file defines wrapper methods that can be used as shortucts in the
+# This file defines wrapper methods that can be used as shortcuts in the
 # interpreter from the scripting console.
 
 def addFilter(filter, name = None):
