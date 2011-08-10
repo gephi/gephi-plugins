@@ -20,16 +20,17 @@
 # This file defines wrapper methods that can be used as shortucts in the
 # interpreter from the scripting console.
 
-import org.gephi.filters.api.FilterController as FilterController
-import org.openide.util.Lookup as Lookup
+def addFilter(filter, name = None):
+    import org.gephi.filters.api.FilterController as FilterController
+    import org.openide.util.Lookup as Lookup
 
-def addFilter(filter):
     filterController = Lookup.getDefault().lookup(FilterController)
+
+    if name != None:
+        filterController.rename(filter.getUnderlyingQuery(), name)
+
     filterController.add(filter.getUnderlyingQuery())
 
 def setVisible(subgraph):
     global visible
     visible = subgraph
-
-del Lookup
-del FilterController
