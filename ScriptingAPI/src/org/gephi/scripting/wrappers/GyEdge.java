@@ -20,6 +20,7 @@ along with Gephi.  If not, see <http://www.gnu.org/licenses/>.
  */
 package org.gephi.scripting.wrappers;
 
+import java.awt.Color;
 import org.gephi.graph.api.Edge;
 import org.gephi.scripting.util.GyNamespace;
 import org.python.core.Py;
@@ -62,10 +63,10 @@ public class GyEdge extends PyObject {
     @Override
     public void __setattr__(String name, PyObject value) {
         if (name.equals("color")) {
-            int color = (Integer) value.__tojava__(Integer.class);
-            float red = ((color >> 16) & 0xFF) / 255.0f;
-            float green = ((color >> 8) & 0xFF) / 255.0f;
-            float blue = (color & 0xFF) / 255.0f;
+            Color color = (Color) value.__tojava__(Color.class);
+            float red = color.getRed() / 255.0f;
+            float green = color.getGreen() / 255.0f;
+            float blue = color.getBlue() / 255.0f;
             underlyingEdge.getEdgeData().setColor(red, green, blue);
         } else if (name.equals("weight")) {
             float size = (Float) value.__tojava__(Float.class);
@@ -106,7 +107,7 @@ public class GyEdge extends PyObject {
             int red = (int) Math.round(underlyingEdge.getEdgeData().r() * 255.0f);
             int green = (int) Math.round(underlyingEdge.getEdgeData().g() * 255.0f);
             int blue = (int) Math.round(underlyingEdge.getEdgeData().b() * 255.0f);
-            return Py.java2py(new Integer((red << 16) + (green << 8) + blue));
+            return Py.java2py(new Color(red, green, blue));
         } else if (name.equals("weight")) {
             float weight = (Float) underlyingEdge.getEdgeData().getAttributes().getValue("Weight");
             return Py.java2py(weight);

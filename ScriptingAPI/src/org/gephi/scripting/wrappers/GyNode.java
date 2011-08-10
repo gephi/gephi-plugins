@@ -20,6 +20,7 @@ along with Gephi.  If not, see <http://www.gnu.org/licenses/>.
  */
 package org.gephi.scripting.wrappers;
 
+import java.awt.Color;
 import java.util.Iterator;
 import org.gephi.graph.api.Edge;
 import org.gephi.graph.api.Node;
@@ -75,10 +76,10 @@ public class GyNode extends PyObject {
     @Override
     public void __setattr__(String name, PyObject value) {
         if (name.equals("color")) {
-            int color = (Integer) value.__tojava__(Integer.class);
-            float red = ((color >> 16) & 0xFF) / 255.0f;
-            float green = ((color >> 8) & 0xFF) / 255.0f;
-            float blue = (color & 0xFF) / 255.0f;
+            Color color = (Color) value.__tojava__(Color.class);
+            float red = color.getRed() / 255.0f;
+            float green = color.getGreen() / 255.0f;
+            float blue = color.getBlue() / 255.0f;
             underlyingNode.getNodeData().setColor(red, green, blue);
         } else if (name.equals("size")) {
             float size = (Float) value.__tojava__(Float.class);
@@ -138,7 +139,7 @@ public class GyNode extends PyObject {
             int red = (int) Math.round(underlyingNode.getNodeData().r() * 255.0f);
             int green = (int) Math.round(underlyingNode.getNodeData().g() * 255.0f);
             int blue = (int) Math.round(underlyingNode.getNodeData().b() * 255.0f);
-            return Py.java2py(new Integer((red << 16) + (green << 8) + blue));
+            return Py.java2py(new Color(red, green, blue));
         } else if (name.equals("size")) {
             return Py.java2py(new Float(underlyingNode.getNodeData().getSize()));
         } else if (name.equals("label")) {

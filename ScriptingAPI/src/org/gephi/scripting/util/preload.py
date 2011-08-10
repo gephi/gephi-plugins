@@ -20,6 +20,9 @@
 # This file defines wrapper methods that can be used as shortcuts in the
 # interpreter from the scripting console.
 
+import java.awt.Color as color
+from pawt.colors import *
+
 def addFilter(filter, name = None):
     import org.gephi.filters.api.FilterController as FilterController
     import org.openide.util.Lookup as Lookup
