@@ -34,6 +34,14 @@ def addFilter(filter, name = None):
 
     filterController.add(filter.getUnderlyingQuery())
 
+def export(filename):
+    import org.gephi.io.exporter.api.ExportController as ExportController
+    import org.openide.util.Lookup as Lookup
+    import java.io.File
+
+    exportController = Lookup.getDefault().lookup(ExportController)
+    exportController.exportFile(java.io.File(filename))
+
 def setVisible(subgraph):
     global visible
     visible = subgraph
