@@ -131,6 +131,20 @@ public class AttributeRankingBuilder implements RankingBuilder {
         return rankingArray;
     }
 
+    @Override
+    public Ranking refreshRanking(Ranking ranking) {
+        if (ranking == null) {
+            throw new NullPointerException();
+        }
+        if (ranking instanceof AttributeRanking) {
+            return ((AttributeRanking) ranking).clone();
+        } else if (ranking instanceof DynamicAttributeRanking) {
+            return ((DynamicAttributeRanking) ranking).clone();
+        } else {
+            throw new IllegalArgumentException("Ranking must be an AttributeRanking or DynamicAttributeRanking");
+        }
+    }
+
     private static class AttributeRanking extends AbstractRanking<Attributable> {
 
         private final AttributeColumn column;
@@ -195,6 +209,14 @@ public class AttributeRankingBuilder implements RankingBuilder {
             }
             return minimum;
         }
+
+        @Override
+        protected AttributeRanking clone() {
+            GraphModel graphModel = graph.getGraphModel();
+            Graph currentGraph = graphModel.getGraphVisible();
+            AttributeRanking newRanking = new AttributeRanking(elementType, column, currentGraph);
+            return newRanking;
+        }
     }
 
     private static class DynamicAttributeRanking extends AbstractRanking<Attributable> {
@@ -224,7 +246,7 @@ public class AttributeRankingBuilder implements RankingBuilder {
 
         @Override
         public float normalize(Number value) {
-            return (value.floatValue() - minimum.floatValue()) / (float) (getMaximumValue().floatValue() - getMinimumValue().floatValue());
+            return (value.floatValue() - getMinimumValue().floatValue()) / (float) (getMaximumValue().floatValue() - getMinimumValue().floatValue());
         }
 
         @Override
@@ -269,6 +291,24 @@ public class AttributeRankingBuilder implements RankingBuilder {
                 AbstractRanking.refreshMinMax(this, graph);
             }
             return minimum;
+        }
+
+        @Override
+        protected DynamicAttributeRanking clone() {
+            TimeInterval visibleInterval = timeInterval;
+            Estimator currentEstimator = estimator;
+            DynamicController dynamicController = Lookup.getDefault().lookup(DynamicController.class);
+            if (dynamicController != null) {
+                DynamicModel dynamicModel = dynamicController.getModel();
+                if (dynamicModel != null) {
+                    visibleInterval = dynamicModel.getVisibleInterval();
+                    currentEstimator = dynamicModel.getNumberEstimator();
+                }
+            }
+            GraphModel graphModel = graph.getGraphModel();
+            Graph currentGraph = graphModel.getGraphVisible();
+            DynamicAttributeRanking newRanking = new DynamicAttributeRanking(elementType, column, currentGraph, visibleInterval, currentEstimator);
+            return newRanking;
         }
     }
 }

@@ -57,6 +57,18 @@ public class DegreeRankingBuilder implements RankingBuilder {
         return new Ranking[]{new DegreeRanking(Ranking.NODE_ELEMENT, graphModel.getGraphVisible())};
     }
 
+    @Override
+    public Ranking refreshRanking(Ranking ranking) {
+        if (ranking == null) {
+            throw new NullPointerException();
+        }
+        if (ranking instanceof DegreeRanking) {
+            return ((DegreeRanking) ranking).clone();
+        } else {
+            throw new IllegalArgumentException("Ranking must be an DegreeRanking");
+        }
+    }
+
     private static class DegreeRanking extends AbstractRanking<Node> {
 
         private final Graph graph;
@@ -100,6 +112,13 @@ public class DegreeRankingBuilder implements RankingBuilder {
                 AbstractRanking.refreshMinMax(this, graph);
             }
             return minimum;
+        }
+
+        @Override
+        protected DegreeRanking clone() {
+            GraphModel graphModel = graph.getGraphModel();
+            Graph currentGraph = graphModel.getGraphVisible();
+            return new DegreeRanking(elementType, currentGraph);
         }
     }
 }
