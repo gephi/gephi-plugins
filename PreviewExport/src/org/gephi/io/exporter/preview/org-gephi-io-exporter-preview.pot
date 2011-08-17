@@ -35,3 +35,6 @@ msgstr "SVG"
 
 msgid "fileType_PNG_Name"
 msgstr "PNG Files"
+
+msgid "ExporterPDF.font.registration"
+msgstr "Registering system fonts"
