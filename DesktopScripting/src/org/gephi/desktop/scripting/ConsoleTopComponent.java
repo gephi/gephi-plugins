@@ -37,13 +37,18 @@ import org.python.core.PyObject;
 import org.python.util.PythonInterpreter;
 
 /**
- *
+ * Top component which displays the scripting console.
+ * 
+ * Note that this class is responsible for instantiating jythonconsole from the
+ * PythonInterpreter that is referenced from the ScriptingController. Each
+ * workspace has it's own jythonconsole instance.
+ * 
  * @author Luiz Ribeiro
  */
 @ConvertAsProperties(dtd = "-//org.gephi.desktop.scripting//Console//EN",
 autostore = false)
 @TopComponent.Description(preferredID = "ConsoleTopComponent",
-iconBase="org/gephi/desktop/scripting/resources/icon.png", 
+iconBase = "org/gephi/desktop/scripting/resources/icon.png",
 persistenceType = TopComponent.PERSISTENCE_ALWAYS)
 @TopComponent.Registration(mode = "consolemode", openAtStartup = false)
 @ActionID(category = "Window", id = "org.gephi.desktop.scripting.ConsoleTopComponent")
@@ -93,6 +98,11 @@ public final class ConsoleTopComponent extends TopComponent {
         }
     }
 
+    /**
+     * This method is called from within the component to change the
+     * jythonconsole instance that is being currently used.
+     * @param workspace the workspace that owns the new jythonconsole
+     */
     private void updateCurrentConsole(Workspace workspace) {
         PyObject jythonConsole = workspace.getLookup().lookup(PyObject.class);
 
@@ -112,6 +122,11 @@ public final class ConsoleTopComponent extends TopComponent {
         pythonInterpreter.getSystemState().__setattr__("stdout", jythonConsole.__getattr__("stdout"));
     }
 
+    /**
+     * Instantiates a new jythonconsole for the given workspace.
+     * @param workspace the workspace that owns the new jythonconsole
+     * @return a jythonconsole instance
+     */
     private PyObject newJythonConsole(Workspace workspace) {
         ScriptingController scriptingController = Lookup.getDefault().lookup(ScriptingController.class);
         PythonInterpreter pyi = scriptingController.getPythonInterpreter();
