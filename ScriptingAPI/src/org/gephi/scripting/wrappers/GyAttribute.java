@@ -32,13 +32,30 @@ import org.python.core.Py;
 import org.python.core.PyObject;
 
 /**
+ * Abstract class for other classes that wrap graph attributes.
+ * 
+ * Classes that inherit from this should implement the following methods:
+ * <code>toString</code>, <code>getAttributeType</code>,
+ * <code>isNodeAttribute</code>, <code>buildRangeQuery</code> and
+ * <code>buildEqualsQuery</code>.
+ * 
+ * Note that this class already implements the comparison operators (e.g.
+ * <code>__gt__</code>, <code>__lt__</code>, etc). The implemented comparison
+ * operators build <code>Range</code> objects according to the parameter
+ * passed to them and it is <code>buildRangeQuery</code>'s job to build
+ * a query with the newly created <code>Range</code> object.
  *
  * @author Luiz Ribeiro
  */
 abstract class GyAttribute extends PyObject {
 
+    /** The namespace in which this attribute is inserted */
     protected GyNamespace namespace;
 
+    /**
+     * Default constructor.
+     * @param namespace     the namespace in which this attribute is inserted
+     */
     GyAttribute(GyNamespace namespace) {
         this.namespace = namespace;
     }
@@ -46,12 +63,33 @@ abstract class GyAttribute extends PyObject {
     @Override
     public abstract String toString();
 
+    /**
+     * Should return the class of the data that is contained in this attribute
+     * column.
+     * @return              class of the attribute column's data
+     */
     public abstract Class getAttributeType();
 
+    /**
+     * Should indicate if this attribute is related to nodes. If this is an edge
+     * attribute, the function returns false.
+     * @return              true if it's related to nodes, false if not
+     */
     public abstract boolean isNodeAttribute();
 
+    /**
+     * Should build a range query for this attribute, with the given range.
+     * @param range         range for building the query
+     * @return              a <code>Query</code> containing the range query
+     */
     protected abstract Query buildRangeQuery(Range range);
 
+    /**
+     * Should build an equals query for this attribute, looking for matches
+     * with the given object.
+     * @param match         value to match for
+     * @return              a <code>Query</code> containing the equals query
+     */
     protected abstract Query buildEqualsQuery(PyObject match);
 
     @Override
