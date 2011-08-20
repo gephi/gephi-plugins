@@ -49,7 +49,8 @@ import org.python.core.PyStringMap;
  * 
  * Since namespaces are just dictionaries, this class extends PyStringMap, which
  * is used as the default namespace on Jython. This class is extended on Gython
- * to perform extra functionality related to Gephi and Gython itself.
+ * to perform extra functionality related to Gephi and Gython itself (e.g.
+ * lookups for nodes, edges, etc).
  *
  * @author Luiz Ribeiro
  */
