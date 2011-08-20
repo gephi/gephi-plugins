@@ -26,14 +26,25 @@ import org.gephi.scripting.util.GyNamespace;
 import org.python.core.PyStringMap;
 
 /**
+ * Default implementation of the scripting model.
+ * 
+ * This implementation only encapsulates the Python's local namespace for the
+ * given workspace. It is responsible for instantiating the namespace upon
+ * constructor's execution.
  *
  * @author Luiz Ribeiro
  */
 public class ScriptingModelImpl implements ScriptingModel {
 
+    /** Python's local namespace for the model's workspace */
     private PyStringMap localNamespace;
+    /** The workspace to which this model is related to */
     private Workspace workspace;
 
+    /**
+     * Default constructor for the scripting model.
+     * @param workspace the workspace to which this model is related to
+     */
     public ScriptingModelImpl(Workspace workspace) {
         this.localNamespace = new GyNamespace(workspace);
         this.workspace = workspace;
