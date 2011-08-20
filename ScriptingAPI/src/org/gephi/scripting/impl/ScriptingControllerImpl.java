@@ -31,13 +31,22 @@ import org.python.core.PySystemState;
 import org.python.util.PythonInterpreter;
 
 /**
+ * Default implementation of the scripting controller.
+ * 
+ * This implementation manages the ScriptingModel instances, one for each
+ * workspace, and also the PythonInterpreter instance. New models are created
+ * as needed, as soon as a new workspace is selected. The interpreter, on the
+ * other hand, is instantiated upon constructor's execution and, therefore,
+ * there is only one PythonInterpreter instance for the entire application.
  *
  * @author Luiz Ribeiro
  */
 @ServiceProvider(service = ScriptingController.class)
 public class ScriptingControllerImpl implements ScriptingController {
 
+    /** Model for the current workspace */
     private ScriptingModelImpl currentModel;
+    /** The application's python interpreter */
     private PythonInterpreter pythonInterpreter;
 
     public ScriptingControllerImpl() {
@@ -112,6 +121,13 @@ public class ScriptingControllerImpl implements ScriptingController {
         return pythonInterpreter;
     }
 
+    /**
+     * This function loads global functions into a newly created scripting
+     * model.
+     * 
+     * This is called just after the instantiation of a new ScriptingModel, so
+     * that the globals are loaded on the corresponding namespace.
+     */
     private void preloadGlobals() {
         // FIXME: this should be called only once, just after loading up a newly
         // created ScriptingModel's namespace on the interpreter.
