@@ -36,16 +36,23 @@ import org.python.core.Py;
 import org.python.core.PyObject;
 
 /**
- *
+ * Wraps an attribute column, so that it is exposed to the scripting language.
+ * 
  * @author Luiz Ribeiro
  */
 public class GyAttributeColumn extends GyAttribute {
 
+    /** The underlying attribute column */
     private AttributeColumn underlyingAttributeColumn;
 
-    public GyAttributeColumn(GyNamespace namespace, AttributeColumn underlyingAttributeColumn) {
+    /**
+     * Constructor for the attribute column wrapper.
+     * @param namespace         the namespace in which this wrapper is inserted
+     * @param attributeColumn   the underlying attribute column
+     */
+    public GyAttributeColumn(GyNamespace namespace, AttributeColumn attributeColumn) {
         super(namespace);
-        this.underlyingAttributeColumn = underlyingAttributeColumn;
+        this.underlyingAttributeColumn = attributeColumn;
     }
 
     @Override
