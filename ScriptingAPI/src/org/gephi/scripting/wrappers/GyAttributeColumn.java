@@ -110,8 +110,6 @@ public class GyAttributeColumn extends GyAttribute {
         if (AttributeUtils.getDefault().isNumberColumn(underlyingAttributeColumn)) {
             AttributeEqualBuilder.EqualNumberFilter filter;
 
-            // FIXME: this is not working correctly yet
-
             if (AttributeUtils.getDefault().isNodeColumn(underlyingAttributeColumn)) {
                 filter = new AttributeEqualBuilder.NodeEqualNumberFilter(underlyingAttributeColumn);
             } else {
