@@ -30,26 +30,47 @@ import org.python.core.PyObject;
 import org.python.core.PySet;
 
 /**
+ * Wraps a <code>Query</code> object from the Filters API so that it can be
+ * easily handled from the scripting language.
+ * 
+ * This class overrides the <code>__and__</code> and <code>__or__</code> methods
+ * from the <code>PyObject</code> class for implementing the INTERSECTION and
+ * UNION operators from the Filters API, respectively.
  *
  * @author Luiz Ribeiro
  */
 public class GyFilter extends PyObject {
 
+    /** The namespace in which this object is inserted */
     private GyNamespace namespace;
+    /** The underlying query object */
     private Query underlyingQuery;
     private PySet underlyingSet;
 
+    /**
+     * Constructor for the filter wrapper.
+     * @param namespace     the namespace in which this object is inserted
+     * @param query         the query object that will be wrapped
+     */
     public GyFilter(GyNamespace namespace, Query query) {
         this.namespace = namespace;
         this.underlyingQuery = query;
     }
 
+    /**
+     * Retrieves the underlying query object.
+     * @return              the underlying query object
+     */
     public Query getUnderlyingQuery() {
         return underlyingQuery;
     }
 
-    public void setUnderlyingQuery(Query underlyingQuery) {
-        this.underlyingQuery = underlyingQuery;
+    /**
+     * Sets a new query to be wrapped by this wrapper object.
+     * @param query         the new underlying query object
+     */
+    public void setUnderlyingQuery(Query query) {
+        this.underlyingQuery = query;
     }
 
     public PySet getUnderlyingSet() {
