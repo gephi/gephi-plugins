@@ -35,20 +35,43 @@ import org.python.core.Py;
 import org.python.core.PyObject;
 
 /**
+ * Wraps a topology attribute (i.e. degree, in degree or out degree), so that
+ * it is exposed to the scripting language.
+ * 
+ * Objects of the type <code>GyAttributeTopology</code> are exposed to the
+ * scripting language by <code>GyNamespace</code>. Once the user tries to access
+ * a variable whose name matches an attribute column name, a new
+ * <code>GyAttributeTopology</code> is instantiated and returned.
  *
  * @author Luiz Ribeiro
  */
 public class GyAttributeTopology extends GyAttribute {
 
+    /** The attribute type this object represents */
     protected Type topologyType;
 
+    /**
+     * An enumeration type that is used for representing one of the topology
+     * attribute types that can <code>GyAttributeTopology</code> objects can
+     * represent.
+     */
     public static enum Type {
 
+        /** Degree type */
         DEGREE,
+        /** In degree type */
         IN_DEGREE,
+        /** Out degree type */
         OUT_DEGREE
     }
 
+    /**
+     * Constructs a new <code>GyAttributeTopology</code> for representing
+     * the given topologyy type.
+     * 
+     * @param namespace     namespace in which this attribute is inserted
+     * @param topologyType  the topology type that the new object will represent
+     */
     public GyAttributeTopology(GyNamespace namespace, Type topologyType) {
         super(namespace);
         this.topologyType = topologyType;

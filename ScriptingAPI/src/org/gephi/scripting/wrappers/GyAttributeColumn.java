@@ -38,6 +38,11 @@ import org.python.core.PyObject;
 /**
  * Wraps an attribute column, so that it is exposed to the scripting language.
  * 
+ * Objects of the type <code>GyAttributeColumn</code> are exposed to the
+ * scripting language by <code>GyNamespace</code>. Once the user tries to access
+ * a variable whose name matches an attribute column name, a new
+ * <code>GyAttributeColumn</code> is instantiated and returned.
+ * 
  * @author Luiz Ribeiro
  */
 public class GyAttributeColumn extends GyAttribute {
