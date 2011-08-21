@@ -38,12 +38,26 @@ import org.python.core.PyString;
 import org.python.core.PyTuple;
 
 /**
- *
+ * This class wraps a node from the graph in a way that it is easier to be
+ * handled from the scripting language.
+ * 
+ * <code>GyNode</code> objects are only instantiated by the
+ * <code>GyNamespace.getGyEdge</code> method, which is called every time the
+ * user tries to access a variable whose name is reserved for nodes on the
+ * Gython's namespace.
+ * 
+ * This class overrides the default implementation of the
+ * <code>__findattr_ex__</code> and <code>__setattr__</code> methods from
+ * <code>PyObject</code> so that the user can access (read and write) the nodes'
+ * attributes in a seamless way.
+ * 
  * @author Luiz Ribeiro
  */
 public class GyNode extends PyObject {
 
+    /** The namespace in which this object is inserted */
     private GyNamespace namespace;
+    /** The edge underlying on this wrapper */
     private Node underlyingNode;
     // Hack to get a few attributes into jythonconsole's auto-completion
     // TODO: get rid of this ugly hack (:
@@ -59,6 +73,11 @@ public class GyNode extends PyObject {
     public int degree;
     public PyList neighbors;
 
+    /**
+     * Constructor for the node wrapper.
+     * @param namespace     the namespace in which this object is inserted
+     * @param node          the node object that will be wrapped
+     */
     public GyNode(GyNamespace namespace, Node node) {
         this.namespace = namespace;
         this.underlyingNode = node;
@@ -69,6 +88,10 @@ public class GyNode extends PyObject {
         return GyNamespace.NODE_PREFIX + Integer.toString(underlyingNode.getId());
     }
 
+    /**
+     * Retrieves the underlying node object.
+     * @return              the underlying node object
+     */
     public Node getNode() {
         return underlyingNode;
     }

@@ -30,12 +30,26 @@ import org.python.core.PyObject;
 import org.python.core.PyString;
 
 /**
- *
+ * This class wraps an edge from the graph in a way that it is easier to be
+ * handled from the scripting language.
+ * 
+ * <code>GyEdge</code> objects are only instantiated by the
+ * <code>GyNamespace.getGyEdge</code> method, which is called every time the
+ * user tries to access a variable whose name is reserved for edges on the
+ * Gython's namespace.
+ * 
+ * This class overrides the default implementation of the
+ * <code>__findattr_ex__</code> and <code>__setattr__</code> methods from
+ * <code>PyObject</code> so that the user can access (read and write) the edges'
+ * attributes in a seamless way.
+ * 
  * @author Luiz Ribeiro
  */
 public class GyEdge extends PyObject {
 
+    /** The namespace in which this object is inserted */
     private GyNamespace namespace;
+    /** The edge underlying on this wrapper */
     private Edge underlyingEdge;
     // Hack to get a few attributes into jythonconsole's auto-completion
     // TODO: get rid of this ugly hack (:
@@ -46,6 +60,11 @@ public class GyEdge extends PyObject {
     public GyNode source;
     public GyNode target;
 
+    /**
+     * Constructor for the edge wrapper.
+     * @param namespace     the namespace in which this object is inserted
+     * @param edge          the edge object that will be wrapped
+     */
     public GyEdge(GyNamespace namespace, Edge edge) {
         this.namespace = namespace;
         this.underlyingEdge = edge;
@@ -56,6 +75,10 @@ public class GyEdge extends PyObject {
         return GyNamespace.EDGE_PREFIX + Integer.toString(underlyingEdge.getId());
     }
 
+    /**
+     * Retrieves the underlying edge object.
+     * @return              the underlying edge object
+     */
     public Edge getEdge() {
         return underlyingEdge;
     }
