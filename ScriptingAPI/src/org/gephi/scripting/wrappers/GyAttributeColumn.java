@@ -41,7 +41,6 @@ import org.python.core.PyObject;
  */
 public class GyAttributeColumn extends GyAttribute {
 
-    private GyNamespace namespace;
     private AttributeColumn underlyingAttributeColumn;
 
     public GyAttributeColumn(GyNamespace namespace, AttributeColumn underlyingAttributeColumn) {
