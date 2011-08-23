@@ -35,22 +35,44 @@ import org.python.core.PyObject;
 import org.python.core.PySet;
 
 /**
+ * This class represents a subgraph of the main graph or, more specifically,
+ * wraps a <code>GraphView</code>.
+ * 
+ * Besides of wrapping a <code>GraphView</code> object, objects of this class
+ * also store a <code>Query</code> object, which was the query used to build the
+ * respective <code>GraphView</code>.
+ * 
+ * Note that the underlying <code>GraphView</code> object is instantiated by
+ * this class' constructor. In other words, <code>GySubGraph</code> objects
+ * are instantiated from the <code>Query</code> object.
+ * 
+ * If this <code>GySubGraph</code> represents the main graph (so it's a
+ * <code>GyGraph</code> instance, actually), the underlying
+ * <code>GraphView</code> and <code>Query</code> objects are <code>null</code>.
  *
  * @author Luiz Ribeiro
  */
 public class GySubGraph extends PyObject {
 
+    /** The namespace in which this object is inserted */
     protected GyNamespace namespace;
+    /** The underlying <code>GraphView</code> object */
     protected GraphView underlyingGraphView;
+    /** The query that was used to construct this subgraph */
     protected Query constructionQuery;
     // Hack to get a few attributes into jythonconsole's auto-completion
     // TODO: get rid of this ugly hack (:
     public PyList nodes;
     public PyList edges;
 
-    public GySubGraph(GyNamespace namespace, Query constructionQuery) {
+    /**
+     * Constructor for the subgraph wrapper.
+     * @param namespace     the namespace in which this object is inserted
+     * @param query         the query that will be used to construct the subgraph
+     */
+    public GySubGraph(GyNamespace namespace, Query query) {
         this.namespace = namespace;
-        this.constructionQuery = constructionQuery;
+        this.constructionQuery = query;
 
         FilterController filterController = Lookup.getDefault().lookup(FilterController.class);
         if (this.constructionQuery != null) {
@@ -60,6 +82,11 @@ public class GySubGraph extends PyObject {
         }
     }
 
+    /**
+     * Returns the corresponding <code>Graph</code> object of the underlying
+     * <code>GraphView</code>.
+     * @return an object for accessing the graph of the underlying subgraph
+     */
     public Graph getUnderlyingGraph() {
         if (underlyingGraphView == null) {
             return namespace.getGraphModel().getGraph();
@@ -68,10 +95,20 @@ public class GySubGraph extends PyObject {
         }
     }
 
+    /**
+     * Returns the underlying <code>GraphView</code> object.
+     * @return the underlying <code>GraphView</code> object.
+     */
     public GraphView getUnderlyingGraphView() {
         return this.underlyingGraphView;
     }
 
+    /**
+     * Returns the <code>GyFilter</code> that was used as a construction query
+     * for this subgraph.
+     * @return the <code>GyFilter</code> that was used as a construction query
+     * for this subgraph.
+     */
     public GyFilter getFilter() {
         return new GyFilter(namespace, constructionQuery);
     }
@@ -114,14 +151,21 @@ public class GySubGraph extends PyObject {
         }
     }
 
+    /**
+     * Filters this subgraph with the given filter.
+     * @param filter    the filter that will be applied to this subgraph
+     * @return          a new subgraph, that is this subgraph filtered with the given filter
+     */
     public GySubGraph filter(GyFilter filter) {
         FilterController filterController = Lookup.getDefault().lookup(FilterController.class);
         Query query;
 
         if (constructionQuery != null) {
+            // If we have a construction query for this subgraph, use it as a sub query
             query = filterController.createQuery(filter.getUnderlyingQuery().getFilter());
             filterController.setSubQuery(query, constructionQuery);
         } else {
+            // If this is the main graph, just use the filter passed as argument
             query = filter.getUnderlyingQuery();
         }
 
