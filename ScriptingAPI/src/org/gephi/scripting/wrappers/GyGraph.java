@@ -26,8 +26,14 @@ import org.gephi.scripting.util.GyNamespace;
 import org.python.core.PyObject;
 
 /**
- *
+ * A specialization of <code>GySubGraph</code> that allows creating nodes and
+ * edges.
+ * 
+ * This class is only used for representing the main graph on the scripting
+ * language.
+ * 
  * @author Luiz Ribeiro
+ * @see GySubGraph
  */
 public class GyGraph extends GySubGraph {
 
@@ -35,6 +41,21 @@ public class GyGraph extends GySubGraph {
         super(namespace, null);
     }
 
+    /**
+     * Creates a new node and add it to the graph.
+     * 
+     * This method supports *args and **kwargs. Because of that, the user can
+     * make calls like <code>g.addNode(color = red, size = 100)</code>, which
+     * allows the user to set many attributes as soon as the node is created.
+     * 
+     * For more information on how *args and **kwargs work on Jython, refer to
+     * the Jython FAQ.
+     * 
+     * @param args      values for setting nodes' attributes
+     * @param keywords  keywords for setting nodes' attributes
+     * @return          the newly created node
+     * @see <a href="http://www.jython.org/archive/22/userfaq.html#supporting-args-and-kw-in-java-methods">Jython FAQ</a>
+     */
     public GyNode addNode(PyObject args[], String keywords[]) {
         GyNode ret;
         Node node;
@@ -52,6 +73,12 @@ public class GyGraph extends GySubGraph {
         return ret;
     }
 
+    /**
+     * Creates a new directed edge and adds it to the graph.
+     * @param source    the source node of the edge
+     * @param target    the target node of the edge
+     * @return          the newly created edge
+     */
     public GyEdge addDirectedEdge(GyNode source, GyNode target) {
         GyEdge ret = null;
         Edge edge;
@@ -64,10 +91,24 @@ public class GyGraph extends GySubGraph {
         return ret;
     }
 
+    /**
+     * An alias to the <code>addUndirectedEdge</code>, for compatibility with
+     * GUESS.
+     * @param source    the source node of the edge
+     * @param target    the target node of the edge
+     * @return          the newly created edge
+     * @see #addUndirectedEdge(org.gephi.scripting.wrappers.GyNode, org.gephi.scripting.wrappers.GyNode) 
+     */
     public GyEdge addEdge(GyNode source, GyNode target) {
         return addUndirectedEdge(source, target);
     }
 
+    /**
+     * Creates a new undirected edge and adds it to the graph.
+     * @param source    the source node of the edge
+     * @param target    the target node of the edge
+     * @return          the newly created edge
+     */
     public GyEdge addUndirectedEdge(GyNode source, GyNode target) {
         GyEdge ret = null;
         Edge edge;
