@@ -17,15 +17,19 @@ GNU Affero General Public License for more details.
 
 You should have received a copy of the GNU Affero General Public License
 along with Gephi.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.gephi.branding.desktop;
 
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 import org.gephi.branding.desktop.reporter.ReporterHandler;
+import org.gephi.desktop.project.api.ProjectControllerUI;
 import org.gephi.project.api.ProjectController;
 import org.openide.modules.ModuleInstall;
 import org.openide.util.Lookup;
+import org.openide.util.NbBundle;
+import org.openide.util.NbPreferences;
 import org.openide.windows.WindowManager;
 
 /**
@@ -45,7 +49,15 @@ public class Installer extends ModuleInstall {
         UIManager.put("Slider.paintValue", Boolean.FALSE);
 
         //Handler
-        Logger.getLogger("").addHandler(new ReporterHandler());
+        if (NbPreferences.forModule(Installer.class).getBoolean("CrashReporter.enabled", true)) {
+            Logger.getLogger("").addHandler(new ReporterHandler());
+        }
+
+        //Memory Starvation Manager
+        if (NbPreferences.forModule(Installer.class).getBoolean("MemoryStarvationManager.enabled", true)) {
+            MemoryStarvationManager memoryStarvationManager = new MemoryStarvationManager();
+            memoryStarvationManager.startup();
+        }
     }
 
     private void initGephi() {
@@ -57,5 +69,22 @@ public class Installer extends ModuleInstall {
                 DragNDropFrameAdapter.register();
             }
         });
+    }
+
+    @Override
+    public boolean closing() {
+        if (Lookup.getDefault().lookup(ProjectController.class).getCurrentProject() == null) {
+            //Close directly if no project open
+            return true;
+        }
+
+        int option = JOptionPane.showConfirmDialog(WindowManager.getDefault().getMainWindow(), NbBundle.getMessage(Installer.class, "CloseConfirmation.message"), NbBundle.getMessage(Installer.class, "CloseConfirmation.message"), JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
+        if (option == JOptionPane.YES_OPTION) {
+            Lookup.getDefault().lookup(ProjectControllerUI.class).saveProject();
+        } else if (option == JOptionPane.CANCEL_OPTION) {
+            return false;//Exit canceled
+        }
+        Lookup.getDefault().lookup(ProjectController.class).closeCurrentProject();
+        return true;
     }
 }

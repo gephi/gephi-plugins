@@ -22,9 +22,12 @@ package org.gephi.dynamic;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 import javax.xml.datatype.DatatypeConfigurationException;
@@ -46,6 +49,10 @@ import org.gephi.data.attributes.type.DynamicType;
 import org.gephi.data.attributes.type.Interval;
 import org.gephi.data.attributes.type.TimeInterval;
 import org.gephi.dynamic.api.DynamicModel;
+import org.gephi.graph.api.Edge;
+import org.gephi.graph.api.Graph;
+import org.gephi.graph.api.HierarchicalGraph;
+import org.gephi.graph.api.Node;
 import org.openide.util.Exceptions;
 
 /**
@@ -69,8 +76,20 @@ public final class DynamicUtilities {
     public static double getDoubleFromXMLDateString(String str) {
         try {
             DatatypeFactory dateFactory = DatatypeFactory.newInstance();
-            return dateFactory.newXMLGregorianCalendar(str.length() > 23 ? str.substring(0, 23) : str).
-                    toGregorianCalendar().getTimeInMillis();
+            try {
+                return dateFactory.newXMLGregorianCalendar(str.length() > 23 ? str.substring(0, 23) : str).
+                        toGregorianCalendar().getTimeInMillis();
+            } catch (IllegalArgumentException ex) {
+                //Try simple format
+                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                try {
+                    Date date = dateFormat.parse(str);
+                    return date.getTime();
+                } catch (ParseException ex1) {
+                    Exceptions.printStackTrace(ex1);
+                    return 0.0;
+                }
+            }
         } catch (DatatypeConfigurationException ex) {
             Exceptions.printStackTrace(ex);
             return 0.0;
@@ -660,5 +679,34 @@ public final class DynamicUtilities {
             return new Interval<String>(low, high, lopen, ropen, (String) value);
         }
         return null;
+    }
+
+    public static int getNodeCount(Graph graph, Interval timeInterval) {
+        int nodeCount = 0;
+        for (Node n : graph.getNodes()) {
+            TimeInterval tnode = (TimeInterval) n.getAttributes().getValue(DynamicModel.TIMEINTERVAL_COLUMN);
+            if (tnode.isInRange(timeInterval.getLow(), timeInterval.getHigh())) {
+                nodeCount++;
+            }
+        }
+        return nodeCount;
+    }
+
+    public static int getEdgeCount(Graph graph, Interval timeInterval) {
+        int edgeCount = 0;
+        for (Edge e : ((HierarchicalGraph) graph).getEdgesAndMetaEdges()) {
+            TimeInterval tedge = (TimeInterval) e.getAttributes().getValue(DynamicModel.TIMEINTERVAL_COLUMN);
+            if (tedge.isInRange(timeInterval.getLow(), timeInterval.getHigh())) {
+
+                TimeInterval tsource = (TimeInterval) e.getSource().getAttributes().getValue(DynamicModel.TIMEINTERVAL_COLUMN);
+                TimeInterval tdest = (TimeInterval) e.getTarget().getAttributes().getValue(DynamicModel.TIMEINTERVAL_COLUMN);
+                if (tsource.isInRange(timeInterval.getLow(), timeInterval.getHigh())
+                        && tdest.isInRange(timeInterval.getLow(), timeInterval.getHigh())) {
+                    edgeCount++;
+                }
+
+            }
+        }
+        return edgeCount;
     }
 }

@@ -20,6 +20,9 @@ along with Gephi.  If not, see <http://www.gnu.org/licenses/>.
 */
 package org.gephi.ui.statistics.plugin;
 
+import org.gephi.graph.api.GraphController;
+import org.openide.util.Lookup;
+
 /**
  *
  * @author pjmcswee
@@ -28,6 +31,12 @@ public class DegreeDistributionPanel extends javax.swing.JPanel {
 
     public DegreeDistributionPanel() {
         initComponents();
+        
+        //Disable directed if the graph is undirecteds
+        GraphController graphController = Lookup.getDefault().lookup(GraphController.class);
+        if(graphController.getModel().isUndirected()){
+            directedRadioButton.setEnabled(false);
+        }
     }
 
     public boolean isDirected() {
@@ -36,6 +45,9 @@ public class DegreeDistributionPanel extends javax.swing.JPanel {
 
     public void setDirected(boolean directed) {
         directedButtonGroup.setSelected(directed ? directedRadioButton.getModel() : undirectedRadioButton.getModel(), true);
+        if (!directed) {
+            directedRadioButton.setEnabled(false);
+        }
     }
 
     /** This method is called from within the constructor to

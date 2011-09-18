@@ -1,14 +1,14 @@
-# English (en) translation for Gephi.
-# Copyright (C) 2010 Gephi contributors.
+# Translation file for Gephi.
+# Copyright (C) 2011 Gephi contributors.
 # This file is distributed under the same license as the Gephi package.
-# Gephi Team <gephi.team@lists.launchpad.net>, 2010.
+# Gephi Team <gephi.team@lists.launchpad.net>, 2011.
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: Gephi 0.7\n"
+"Project-Id-Version: Gephi 0.8\n"
 "Report-Msgid-Bugs-To: gephi.team@lists.launchpad.net\n"
-"POT-Creation-Date: 2010-04-07 13:16+0200\n"
-"PO-Revision-Date: 2010-04-07 13:16+0200\n"
+"POT-Creation-Date: 2011-08-05 14:52+0200\n"
+"PO-Revision-Date: 2011-08-05 14:52+0200\n"
 "Last-Translator: Mathieu Bastian <gephi.team@lists.launchpad.net>\n"
 "Language-Team: English <https://launchpad.net/~gephi.team>\n"
 "MIME-Version: 1.0\n"
@@ -31,6 +31,9 @@ msgstr "Gephi Update Center"
 msgid ""
 "Services/AutoupdateType/org_gephi_branding_desktop_update_center_1.instance"
 msgstr "Gephi Thirdparties Plugins"
+
+msgid "CloseConfirmation.message"
+msgstr "Save changes before closing?"
 
 msgid "CommandLineProcessor.OutOfMemoryError.message"
 msgstr ""
@@ -92,3 +95,32 @@ msgstr "The file ''{0}'' has not been found, please check if the file exists"
 
 msgid "CommandLineProcessor.fileNotSupported"
 msgstr "The file format is not supported"
+
+msgid "OutOfMemoryError.canIncreaseMemory.message"
+msgstr ""
+"Gephi reached the maximum amount of memory ({0}). This happens when the "
+"volume of data is too large. The limit can be increased up to {1} on your "
+"computer.\n"
+"\n"
+"Gephi will try to save your project before exiting. If cancel, it's likely "
+"Gephi will stop respond."
+
+msgid "OutOfMemoryError.alreadyMax.message"
+msgstr ""
+"Gephi reached the maximum amount of memory ({0}). This happens when the "
+"volume of data is too large. The limit is already set at it's maximum.\n"
+"\n"
+"Gephi will try to save your project before exiting. If cancel, it's likely "
+"Gephi will stop respond."
+
+msgid "OutOfMemoryError.title"
+msgstr "Gephi is running out of memory"
+
+msgid "OutOfMemoryError.canIncreaseMemory.button"
+msgstr "Increase memory and restart Gephi"
+
+msgid "OutOfMemoryError.alreadyMax.button"
+msgstr "Save project and restart Gephi"
+
+msgid "OutOfMemoryError.cancel"
+msgstr "Cancel"

@@ -28,10 +28,10 @@ import java.util.regex.Pattern;
 import org.gephi.data.attributes.api.AttributeColumn;
 import org.gephi.data.attributes.api.AttributeTable;
 import org.gephi.data.attributes.api.AttributeType;
+import org.gephi.datalab.spi.rows.merge.AttributeRowsMergeStrategy;
 import org.gephi.graph.api.Attributes;
 import org.gephi.graph.api.Edge;
 import org.gephi.graph.api.Node;
-import org.openide.util.Lookup;
 
 /**
  * <p>This interface defines part of the Data Laboratory API basic actions.</p>
@@ -328,6 +328,16 @@ public interface AttributeColumnsController {
      * @return Array with all numbers.
      */
     Number[] getColumnNumbers(AttributeTable table, AttributeColumn column);
+    
+    /**
+     * <p>Prepares an array <b>only</b> with all not null numbers the indicated rows of a given column.</p>
+     * <p>The column can only be a number/number list column.</p>
+     * <p>Otherwise, a IllegalArgumentException will be thrown.</p>
+     * @param rows Rows to get numbers
+     * @param column Column to get numbers
+     * @return Array with all numbers.
+     */
+    Number[] getRowsColumnNumbers(Attributes[] rows, AttributeColumn column);
 
     /**
      * <p>Prepares an array with all not null numbers of a row using only the given columns.</p>
@@ -359,7 +369,7 @@ public interface AttributeColumnsController {
      * <p>Method for importing csv data to edges table.</p>
      * <p>Column named 'Source' and 'Target' (case insensitive) should be provided. Any row that does not provide a source and target nodes ids will be ignored.</p>
      * <p>If no 'Type' (case insensitive) column is provided, all edges will be directed.</p>
-     * <p>If an edge already exists or cannot be created, it will be ignored, and no data will be updated.</p>
+     * <p>If an edge already exists and cannot be created, it will be ignored but the weight of the existing edge will be increased with each repetition.</p>
      *
      * <p>Special cases are id, source, target and type columns:
      * <ul>
@@ -377,4 +387,17 @@ public interface AttributeColumnsController {
      * @param createNewNodes Indicates if missing nodes should be created when an edge declares a source or target id not already existing
      */
     void importCSVToEdgesTable(File file, Character separator, Charset charset, String[] columnNames, AttributeType[] columnTypes, boolean createNewNodes);
+    
+    /**
+     * <p>Merges the given rows values to the given result row using one merge strategy for each column of the table.</p>
+     * <p>The number of columns must be equal to the number of merge strategies provided</p>
+     * <p>No parameters can be null except selectedRow (first row will be used in case selectedRow is null)</p>
+     * <p>If any strategy is null, the value of the selectedRow will be used</p>
+     * @param table Table of the rows
+     * @param mergeStrategies Strategies for each column of the table
+     * @param rows Rows to merge (at least 1)
+     * @param selectedRow Main selected row or null (first row will be used in case selectedRow is null)
+     * @param resultRow Already existing row to put the values on
+     */
+    void mergeRowsValues(AttributeTable table, AttributeRowsMergeStrategy[] mergeStrategies, Attributes[] rows, Attributes selectedRow, Attributes resultRow);
 }

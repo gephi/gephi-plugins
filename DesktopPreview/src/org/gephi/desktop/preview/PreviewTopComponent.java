@@ -1,5 +1,6 @@
 /*
 Copyright 2008-2010 Gephi
+Authors : Jérémy Subtil <jeremy.subtil@gephi.org>, Mathieu Bastian
 Website : http://www.gephi.org
 
 This file is part of Gephi.
@@ -16,8 +17,7 @@ GNU Affero General Public License for more details.
 
 You should have received a copy of the GNU Affero General Public License
 along with Gephi.  If not, see <http://www.gnu.org/licenses/>.
-*/
-
+ */
 package org.gephi.desktop.preview;
 
 import java.awt.BorderLayout;
@@ -33,26 +33,35 @@ import java.util.logging.Logger;
 import javax.swing.BorderFactory;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
-import org.gephi.preview.api.GraphSheet;
+import org.gephi.desktop.preview.api.PreviewUIController;
+import org.gephi.desktop.preview.api.PreviewUIModel;
 import org.gephi.preview.api.PreviewController;
-import org.gephi.preview.api.PreviewModel;
+import org.gephi.preview.api.PreviewProperty;
+import org.gephi.preview.api.ProcessingTarget;
+import org.gephi.preview.api.RenderTarget;
 import org.gephi.ui.components.JColorButton;
 import org.gephi.ui.utils.UIUtils;
 import org.jdesktop.swingx.JXBusyLabel;
-import org.openide.util.Exceptions;
 import org.openide.util.ImageUtilities;
 import org.openide.util.Lookup;
 import org.openide.util.NbBundle;
 import org.openide.windows.TopComponent;
 import org.openide.windows.WindowManager;
+import processing.core.PApplet;
 
+/**
+ * 
+ * @author Jérémy Subtil, Mathieu Bastian
+ */
 public final class PreviewTopComponent extends TopComponent {
 
     private static PreviewTopComponent instance;
     static final String ICON_PATH = "org/gephi/desktop/preview/resources/preview.png";
     private static final String PREFERRED_ID = "PreviewTopComponent";
-    private final ProcessingPreview sketch;
-    private final ProcessingListener processingListener = new ProcessingListener();
+    private final transient ProcessingListener processingListener = new ProcessingListener();
+    //Data
+    private transient ProcessingTarget target;
+    private transient PApplet sketch;
 
     private PreviewTopComponent() {
         initComponents();
@@ -68,31 +77,47 @@ public final class PreviewTopComponent extends TopComponent {
 
         bannerPanel.setVisible(false);
 
-        // inits the preview applet
-        sketch = new ProcessingPreview();
-        sketch.init();
-        sketch.registerPost(processingListener);
-        sketch.registerPre(processingListener);
-        sketchPanel.add(sketch, BorderLayout.CENTER);
-
-        // forces the controller instanciation
-        PreviewUIController.findInstance();
-
         //background color
         ((JColorButton) backgroundButton).addPropertyChangeListener(JColorButton.EVENT_COLOR, new PropertyChangeListener() {
 
             public void propertyChange(PropertyChangeEvent evt) {
-                PreviewController controller = Lookup.getDefault().lookup(PreviewController.class);
-                controller.setBackgroundColor((Color) evt.getNewValue());
+                PreviewController previewController = Lookup.getDefault().lookup(PreviewController.class);
+                previewController.getModel().getProperties().putValue(PreviewProperty.BACKGROUND_COLOR, (Color) evt.getNewValue());
+                PreviewUIController previewUIController = Lookup.getDefault().lookup(PreviewUIController.class);
+                previewUIController.refreshPreview();
             }
         });
         southBusyLabel.setVisible(false);
         resetZoomButton.addActionListener(new ActionListener() {
 
             public void actionPerformed(ActionEvent e) {
-                sketch.resetZoom();
+                target.resetZoom();
             }
         });
+        plusButton.addActionListener(new ActionListener() {
+
+            public void actionPerformed(ActionEvent e) {
+                target.zoomPlus();
+            }
+        });
+        minusButton.addActionListener(new ActionListener() {
+
+            public void actionPerformed(ActionEvent e) {
+                target.zoomMinus();
+            }
+        });
+    }
+
+    public void refreshModel() {
+        PreviewUIController puic = Lookup.getDefault().lookup(PreviewUIController.class);
+        PreviewUIModel previewUIModel = puic.getModel();
+        if (previewUIModel == null) {
+            //Disable
+            initTarget(null);
+        } else {
+            initTarget(previewUIModel);
+            refreshPreview();
+        }
     }
 
     public void setRefresh(final boolean refresh) {
@@ -106,10 +131,28 @@ public final class PreviewTopComponent extends TopComponent {
         });
     }
 
+    public void initTarget(PreviewUIModel previewUIModel) {
+        // inits the preview applet
+        if (previewUIModel != null && target == null) {
+            PreviewController previewController = Lookup.getDefault().lookup(PreviewController.class);
+
+            target = (ProcessingTarget) previewController.getRenderTarget(RenderTarget.PROCESSING_TARGET);
+            if (target != null) {
+                sketch = target.getApplet();
+                sketch.init();
+                sketch.registerPost(processingListener);
+                sketch.registerPre(processingListener);
+                sketchPanel.add(sketch, BorderLayout.CENTER);
+            }
+        } else if (previewUIModel == null && target != null) {
+            sketchPanel.remove(sketch);
+        }
+    }
+
     public class ProcessingListener {
 
         public void post() {
-            final boolean isRedraw = sketch.isRedraw();
+            final boolean isRedraw = target.isRedrawn();
             SwingUtilities.invokeLater(new Runnable() {
 
                 public void run() {
@@ -120,7 +163,7 @@ public final class PreviewTopComponent extends TopComponent {
         }
 
         public void pre() {
-            final boolean isRedraw = sketch.isRedraw();
+            final boolean isRedraw = target.isRedrawn();
             SwingUtilities.invokeLater(new Runnable() {
 
                 public void run() {
@@ -174,6 +217,8 @@ public final class PreviewTopComponent extends TopComponent {
         southToolbar = new javax.swing.JToolBar();
         backgroundButton = new JColorButton(Color.WHITE);
         resetZoomButton = new javax.swing.JButton();
+        minusButton = new javax.swing.JButton();
+        plusButton = new javax.swing.JButton();
 
         setLayout(new java.awt.GridBagLayout());
 
@@ -261,6 +306,20 @@ public final class PreviewTopComponent extends TopComponent {
         resetZoomButton.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         southToolbar.add(resetZoomButton);
 
+        org.openide.awt.Mnemonics.setLocalizedText(minusButton, "-"); // NOI18N
+        minusButton.setToolTipText(org.openide.util.NbBundle.getMessage(PreviewTopComponent.class, "PreviewTopComponent.minusButton.toolTipText")); // NOI18N
+        minusButton.setFocusable(false);
+        minusButton.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        minusButton.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        southToolbar.add(minusButton);
+
+        org.openide.awt.Mnemonics.setLocalizedText(plusButton, "+"); // NOI18N
+        plusButton.setToolTipText(org.openide.util.NbBundle.getMessage(PreviewTopComponent.class, "PreviewTopComponent.plusButton.toolTipText")); // NOI18N
+        plusButton.setFocusable(false);
+        plusButton.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        plusButton.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        southToolbar.add(plusButton);
+
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
@@ -270,13 +329,15 @@ public final class PreviewTopComponent extends TopComponent {
     }// </editor-fold>//GEN-END:initComponents
 
     private void refreshButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_refreshButtonActionPerformed
-        PreviewUIController.findInstance().refreshPreview();
+        Lookup.getDefault().lookup(PreviewUIController.class).refreshPreview();
     }//GEN-LAST:event_refreshButtonActionPerformed
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton backgroundButton;
     private javax.swing.JLabel bannerLabel;
     private javax.swing.JPanel bannerPanel;
     private javax.swing.JLabel busyLabel;
+    private javax.swing.JButton minusButton;
+    private javax.swing.JButton plusButton;
     private javax.swing.JPanel previewPanel;
     private javax.swing.JButton refreshButton;
     private javax.swing.JPanel refreshPanel;
@@ -355,16 +416,12 @@ public final class PreviewTopComponent extends TopComponent {
     /**
      * Refresh the preview applet.
      */
-    public void refreshPreview() {
-        sketch.refresh();
-    }
+    private void refreshPreview() {
+        SwingUtilities.invokeLater(new Runnable() {
 
-    /**
-     * Defines the preview graph to draw in the applet.
-     *
-     * @param graph  the preview graph to draw in the applet
-     */
-    public void setGraph(GraphSheet graphSheet) {
-        sketch.setGraphSheet(graphSheet);
+            public void run() {
+                target.refresh();
+            }
+        });
     }
 }

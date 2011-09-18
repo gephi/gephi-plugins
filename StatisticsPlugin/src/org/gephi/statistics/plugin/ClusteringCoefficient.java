@@ -221,8 +221,28 @@ public class ClusteringCoefficient implements Statistics, LongTask {
     public void execute(HierarchicalGraph hgraph, AttributeModel attributeModel) {
         isCanceled = false;
 
-        triangles(hgraph, attributeModel);
+        triangles(hgraph);
         //bruteForce(hgraph, attributeModel);
+
+        //Set results in columns
+        AttributeTable nodeTable = attributeModel.getNodeTable();
+        AttributeColumn clusteringCol = nodeTable.getColumn(CLUSTERING_COEFF);
+        if (clusteringCol == null) {
+            clusteringCol = nodeTable.addColumn(CLUSTERING_COEFF, "Clustering Coefficient", AttributeType.DOUBLE, AttributeOrigin.COMPUTED, new Double(0));
+        }
+
+        AttributeColumn triCount = nodeTable.getColumn("Triangles");
+        if (triCount == null) {
+            triCount = nodeTable.addColumn("Triangles", "Number of triangles", AttributeType.INT, AttributeOrigin.COMPUTED, new Integer(0));
+        }
+
+        for (int v = 0; v < N; v++) {
+            if (network[v].length() > 1) {
+                AttributeRow row = (AttributeRow) network[v].node.getNodeData().getAttributes();
+                row.setValue(clusteringCol, nodeClustering[v]);
+                row.setValue(triCount, triangles[v]);
+            }
+        }
     }
 
     private int closest_in_array(int v) {
@@ -305,7 +325,7 @@ public class ClusteringCoefficient implements Statistics, LongTask {
         }
     }
 
-    private void triangles(HierarchicalGraph hgraph, AttributeModel attributeModel) {
+    public void triangles(HierarchicalGraph hgraph) {
 
         int ProgressCount = 0;
         Progress.start(progress, 7 * hgraph.getNodeCount());
@@ -322,7 +342,7 @@ public class ClusteringCoefficient implements Statistics, LongTask {
         HashMap<Node, Integer> indicies = new HashMap<Node, Integer>();
         int index = 0;
         for (Node s : hgraph.getNodes()) {
-            indicies.put(s, index);
+            indicies.put(s.getNodeData().getRootNode(), index);
             network[index] = new ArrayWrapper();
             index++;
             Progress.progress(progress, ++ProgressCount);
@@ -406,18 +426,9 @@ public class ClusteringCoefficient implements Statistics, LongTask {
             }
         }
 
+        //Results and average
         avgClusteringCoeff = 0;
-        AttributeTable nodeTable = attributeModel.getNodeTable();
-        AttributeColumn clusteringCol = nodeTable.getColumn(CLUSTERING_COEFF);
-        if (clusteringCol == null) {
-            clusteringCol = nodeTable.addColumn(CLUSTERING_COEFF, "Clustering Coefficient", AttributeType.DOUBLE, AttributeOrigin.COMPUTED, new Double(0));
-        }
-
-        AttributeColumn triCount = nodeTable.getColumn("Triangles");
-        if (triCount == null) {
-            triCount = nodeTable.addColumn("Triangles", "Number of triangles", AttributeType.INT, AttributeOrigin.COMPUTED, new Integer(0));
-        }
-
+        totalTriangles = 0;
         for (int v = 0; v < N; v++) {
             if (network[v].length() > 1) {
                 double cc = triangles[v];
@@ -427,9 +438,6 @@ public class ClusteringCoefficient implements Statistics, LongTask {
                     cc *= 2.0f;
                 }
                 nodeClustering[v] = cc;
-                AttributeRow row = (AttributeRow) network[v].node.getNodeData().getAttributes();
-                row.setValue(clusteringCol, cc);
-                row.setValue(triCount, triangles[v]);
                 avgClusteringCoeff += cc;
             }
             Progress.progress(progress, ++ProgressCount);
@@ -446,74 +454,73 @@ public class ClusteringCoefficient implements Statistics, LongTask {
     }
 
     /*private void bruteForce(HierarchicalGraph hgraph, AttributeModel attributeModel) {
-        //The atrributes computed by the statistics
-        AttributeTable nodeTable = attributeModel.getNodeTable();
-        AttributeColumn clusteringCol = nodeTable.getColumn("clustering");
-        if (clusteringCol == null) {
-            clusteringCol = nodeTable.addColumn("clustering", "Clustering Coefficient", AttributeType.DOUBLE, AttributeOrigin.COMPUTED, new Double(0));
-        }
-
-        float totalCC = 0;
-
-        hgraph.readLock();
-
-        Progress.start(progress, hgraph.getNodeCount());
-        int node_count = 0;
-        for (Node node : hgraph.getNodes()) {
-            float nodeCC = 0;
-            int neighborhood = 0;
-            NodeIterable neighbors1 = hgraph.getNeighbors(node);
-            for (Node neighbor1 : neighbors1) {
-                neighborhood++;
-                NodeIterable neighbors2 = hgraph.getNeighbors(node);
-                for (Node neighbor2 : neighbors2) {
-
-                    if (neighbor1 == neighbor2) {
-                        continue;
-                    }
-                    if (isDirected) {
-                        if (((HierarchicalDirectedGraph) hgraph).getEdge(neighbor1, neighbor2) != null) {
-                            nodeCC++;
-                        }
-                        if (((HierarchicalDirectedGraph) hgraph).getEdge(neighbor2, neighbor1) != null) {
-                            nodeCC++;
-                        }
-                    } else {
-                        if (hgraph.isAdjacent(neighbor1, neighbor2)) {
-                            nodeCC++;
-                        }
-                    }
-                }
-            }
-            nodeCC /= 2.0;
-
-
-
-            if (neighborhood > 1) {
-                float cc = nodeCC / (.5f * neighborhood * (neighborhood - 1));
-                if (isDirected) {
-                    cc = nodeCC / (neighborhood * (neighborhood - 1));
-                }
-
-                AttributeRow row = (AttributeRow) node.getNodeData().getAttributes();
-                row.setValue(clusteringCol, cc);
-
-                totalCC += cc;
-            }
-
-            if (isCanceled) {
-                break;
-            }
-
-            node_count++;
-            Progress.progress(progress, node_count);
-
-        }
-        avgClusteringCoeff = totalCC / hgraph.getNodeCount();
-
-        hgraph.readUnlockAll();
+    //The atrributes computed by the statistics
+    AttributeTable nodeTable = attributeModel.getNodeTable();
+    AttributeColumn clusteringCol = nodeTable.getColumn("clustering");
+    if (clusteringCol == null) {
+    clusteringCol = nodeTable.addColumn("clustering", "Clustering Coefficient", AttributeType.DOUBLE, AttributeOrigin.COMPUTED, new Double(0));
+    }
+    
+    float totalCC = 0;
+    
+    hgraph.readLock();
+    
+    Progress.start(progress, hgraph.getNodeCount());
+    int node_count = 0;
+    for (Node node : hgraph.getNodes()) {
+    float nodeCC = 0;
+    int neighborhood = 0;
+    NodeIterable neighbors1 = hgraph.getNeighbors(node);
+    for (Node neighbor1 : neighbors1) {
+    neighborhood++;
+    NodeIterable neighbors2 = hgraph.getNeighbors(node);
+    for (Node neighbor2 : neighbors2) {
+    
+    if (neighbor1 == neighbor2) {
+    continue;
+    }
+    if (isDirected) {
+    if (((HierarchicalDirectedGraph) hgraph).getEdge(neighbor1, neighbor2) != null) {
+    nodeCC++;
+    }
+    if (((HierarchicalDirectedGraph) hgraph).getEdge(neighbor2, neighbor1) != null) {
+    nodeCC++;
+    }
+    } else {
+    if (hgraph.isAdjacent(neighbor1, neighbor2)) {
+    nodeCC++;
+    }
+    }
+    }
+    }
+    nodeCC /= 2.0;
+    
+    
+    
+    if (neighborhood > 1) {
+    float cc = nodeCC / (.5f * neighborhood * (neighborhood - 1));
+    if (isDirected) {
+    cc = nodeCC / (neighborhood * (neighborhood - 1));
+    }
+    
+    AttributeRow row = (AttributeRow) node.getNodeData().getAttributes();
+    row.setValue(clusteringCol, cc);
+    
+    totalCC += cc;
+    }
+    
+    if (isCanceled) {
+    break;
+    }
+    
+    node_count++;
+    Progress.progress(progress, node_count);
+    
+    }
+    avgClusteringCoeff = totalCC / hgraph.getNodeCount();
+    
+    hgraph.readUnlockAll();
     }*/
-
     public String getReport() {
         //distribution of values
         Map<Double, Integer> dist = new HashMap<Double, Integer>();
@@ -541,6 +548,7 @@ public class ClusteringCoefficient implements Statistics, LongTask {
                 true,
                 false,
                 false);
+        chart.removeLegend();
         ChartUtils.decorateChart(chart);
         ChartUtils.scaleChart(chart, dSeries, false);
         String imageFile = ChartUtils.renderChart(chart, "clustering-coefficient.png");
@@ -576,5 +584,25 @@ public class ClusteringCoefficient implements Statistics, LongTask {
 
     public void setProgressTicket(ProgressTicket ProgressTicket) {
         this.progress = ProgressTicket;
+    }
+
+    public double[] getCoefficientReuslts() {
+        double[] res = new double[N];
+        for (int v = 0; v < N; v++) {
+            if (network[v].length() > 1) {
+                res[v] = nodeClustering[v];
+            }
+        }
+        return res;
+    }
+
+    public double[] getTriangesReuslts() {
+        double[] res = new double[N];
+        for (int v = 0; v < N; v++) {
+            if (network[v].length() > 1) {
+                res[v] = triangles[v];
+            }
+        }
+        return res;
     }
 }

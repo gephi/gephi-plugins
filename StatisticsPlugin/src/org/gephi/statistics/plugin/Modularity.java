@@ -24,6 +24,7 @@ import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.Map;
 import java.util.Random;
 import java.util.Set;
 import org.gephi.data.attributes.api.AttributeTable;
@@ -39,6 +40,11 @@ import org.gephi.statistics.spi.Statistics;
 import org.gephi.utils.longtask.spi.LongTask;
 import org.gephi.utils.progress.Progress;
 import org.gephi.utils.progress.ProgressTicket;
+import org.jfree.chart.ChartFactory;
+import org.jfree.chart.JFreeChart;
+import org.jfree.chart.plot.PlotOrientation;
+import org.jfree.data.xy.XYSeries;
+import org.jfree.data.xy.XYSeriesCollection;
 
 /**
  *
@@ -96,6 +102,7 @@ public class Modularity implements Statistics, LongTask {
         int N;
         HashMap<Integer, Community> invMap;
 
+        
         CommunityStructure(HierarchicalUndirectedGraph hgraph) {
             this.graph = hgraph;
             N = hgraph.getNodeCount();
@@ -116,9 +123,8 @@ public class Modularity implements Statistics, LongTask {
                 Community hidden = new Community(structure);
                 hidden.nodes.add(index);
                 invMap.put(index, hidden);
-                communities.add(nodeCommunities[index]);
+                communities.add(nodeCommunities[index]);               
                 index++;
-
                 if (isCanceled) {
                     return;
                 }
@@ -140,7 +146,7 @@ public class Modularity implements Statistics, LongTask {
                     nodeCommunities[node_index].connections.put(adjCom, 1);
                     nodeConnections[neighbor_index].put(nodeCommunities[node_index], 1);
                     nodeCommunities[neighbor_index].connections.put(nodeCommunities[node_index], 1);
-                    graphWeightSum++;
+                    graphWeightSum++;//WARNING : may be an issue with self_loop
                 }
 
                 if (isCanceled) {
@@ -275,8 +281,10 @@ public class Modularity implements Statistics, LongTask {
                 for(Community adjCom : iter) {
                     int target = communities.indexOf(adjCom);
                     int weight = com.connections.get(adjCom);
-
-                    weightSum += weight;
+                    if(target == index)
+                        weightSum += 2*weight;
+                    else
+                        weightSum += weight;
                     ModEdge e = new ModEdge(index, target, weight);
                     newTopology[index].add(e);
                 }
@@ -304,12 +312,10 @@ public class Modularity implements Statistics, LongTask {
     }
 
     class Community {
-
         double weightSum;
         CommunityStructure structure;
         LinkedList<Integer> nodes;
         HashMap<Community, Integer> connections;
-        Integer min;
 
         public int size() {
             return nodes.size();
@@ -319,7 +325,6 @@ public class Modularity implements Statistics, LongTask {
             structure = com.structure;
             connections = new HashMap<Community, Integer>();
             nodes = new LinkedList<Integer>();
-            min = Integer.MAX_VALUE;
             //mHidden = pCom.mHidden;
         }
 
@@ -332,15 +337,11 @@ public class Modularity implements Statistics, LongTask {
         public void seed(int node) {
             nodes.add(node);
             weightSum += structure.weights[node];
-            min = node;
         }
 
         public boolean add(int node) {
             nodes.addLast(new Integer(node));
             weightSum += structure.weights[node];
-            if (!isRandomized) {
-                min = Math.min(node, min);
-            }
             return true;
         }
 
@@ -350,19 +351,7 @@ public class Modularity implements Statistics, LongTask {
             if (nodes.size() == 0) {
                 structure.communities.remove(this);
             }
-            if (!isRandomized) {
-                if (node == min.intValue()) {
-                    min = Integer.MAX_VALUE;
-                    for (Integer other : nodes) {
-                        min = Math.min(other, min);
-                    }
-                }
-            }
             return result;
-        }
-
-        public int getMin() {
-            return min;
         }
     }
 
@@ -375,9 +364,7 @@ public class Modularity implements Statistics, LongTask {
         isCanceled = false;
         Progress.start(progress);
         Random rand = new Random();
-
         hgraph.readLock();
-
         structure = new CommunityStructure(hgraph);
         if (isCanceled) {
             hgraph.readUnlockAll();
@@ -387,8 +374,6 @@ public class Modularity implements Statistics, LongTask {
         while (someChange) {
             someChange = false;
             boolean localChange = true;
-
-
             while (localChange) {
                 localChange = false;
                 int start = 0;
@@ -398,22 +383,16 @@ public class Modularity implements Statistics, LongTask {
                 int step = 0;
                 for (int i = start; step < structure.N; i = (i + 1) % structure.N) {
                     step++;
-                    double best = 0;
-                    double current = q(i, structure.nodeCommunities[i]);
+                    double best = 0.;
                     Community bestCommunity = null;
-                    int smallest = Integer.MAX_VALUE;
+                    Community nodecom = structure.nodeCommunities[i];
                     Set<Community> iter = structure.nodeConnections[i].keySet();
                     for(Community com : iter) {
-                        double qValue = q(i, com) - current;
+                        double qValue = q(i, com);
                         if (qValue > best) {
                             best = qValue;
                             bestCommunity = com;
-                            smallest = com.getMin();
-                        } else if ((qValue == best) && (com.getMin() < smallest)) {
-                            best = qValue;
-                            bestCommunity = com;
-                            smallest = com.getMin();
-                        }
+                        } 
                     }
                     if ((structure.nodeCommunities[i] != bestCommunity) && (bestCommunity != null)) {
                         structure.moveNodeTo(i, bestCommunity);
@@ -493,6 +472,36 @@ public class Modularity implements Statistics, LongTask {
     }
 
     public String getReport() {
+        //Distribution series
+        Map<Integer, Integer> sizeDist = new HashMap<Integer, Integer>();
+        for(Node n : structure.graph.getNodes()) {
+            Integer v = (Integer) n.getNodeData().getAttributes().getValue(MODULARITY_CLASS);
+            if(!sizeDist.containsKey(v)) {
+                sizeDist.put(v, 0);
+            }
+            sizeDist.put(v, sizeDist.get(v) + 1);
+        }
+        
+        XYSeries dSeries = ChartUtils.createXYSeries(sizeDist, "Size Distribution");
+
+        XYSeriesCollection dataset1 = new XYSeriesCollection();
+        dataset1.addSeries(dSeries);
+
+        JFreeChart chart = ChartFactory.createXYLineChart(
+                "Size Distribution",
+                "Modularity Class",
+                "Size (number of nodes)",
+                dataset1,
+                PlotOrientation.VERTICAL,
+                true,
+                false,
+                false);
+        chart.removeLegend();
+        ChartUtils.decorateChart(chart);
+        ChartUtils.scaleChart(chart, dSeries, false);
+        String imageFile = ChartUtils.renderChart(chart, "communities-size-distribution.png");
+
+        
         NumberFormat f = new DecimalFormat("#0.000");
 
         String report = "<HTML> <BODY> <h1>Modularity Report </h1> "
@@ -502,6 +511,7 @@ public class Modularity implements Statistics, LongTask {
                 + "<br> <h2> Results: </h2>"
                 + "Modularity: " + f.format(modularity) + "<br>"
                 + "Number of Communities: " + structure.communities.size()
+                + "<br /><br />"+imageFile
                 + "<br /><br />" + "<h2> Algorithm: </h2>"
                 + "Vincent D Blondel, Jean-Loup Guillaume, Renaud Lambiotte, Etienne Lefebvre, <i>Fast unfolding of communities in large networks</i>, in Journal of Statistical Mechanics: Theory and Experiment 2008 (10), P1000<br />"
                 + "</BODY> </HTML>";
@@ -518,10 +528,12 @@ public class Modularity implements Statistics, LongTask {
         }
         double weightSum = community.weightSum;
         double nodeWeight = structure.weights[node];
-        //double penalty = (nodeWeight * weightSum) / (2.0 * mStructure.graphWeightSum);
         double qValue = edgesTo - (nodeWeight * weightSum) / (2.0 * structure.graphWeightSum);
         if ((structure.nodeCommunities[node] == community) && (structure.nodeCommunities[node].size() > 1)) {
             qValue = edgesTo - (nodeWeight * (weightSum - nodeWeight)) / (2.0 * structure.graphWeightSum);
+        }
+        if ((structure.nodeCommunities[node] == community) && (structure.nodeCommunities[node].size() == 1)) {
+            qValue = 0.;
         }
         return qValue;
     }

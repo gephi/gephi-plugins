@@ -17,7 +17,7 @@ GNU Affero General Public License for more details.
 
 You should have received a copy of the GNU Affero General Public License
 along with Gephi.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.gephi.layout.plugin.forceAtlas;
 
 import javax.swing.Icon;
@@ -32,7 +32,7 @@ import org.openide.util.lookup.ServiceProvider;
  *
  * @author Helder Suzuki <heldersuzuki@gephi.org>
  */
-@ServiceProvider(service=LayoutBuilder.class)
+@ServiceProvider(service = LayoutBuilder.class)
 public class ForceAtlas implements LayoutBuilder {
 
     private ForceAtlasLayoutUI ui = new ForceAtlasLayoutUI();

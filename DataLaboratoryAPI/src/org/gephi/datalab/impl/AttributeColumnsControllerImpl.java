@@ -47,6 +47,7 @@ import org.gephi.data.attributes.type.StringList;
 import org.gephi.data.properties.PropertiesColumn;
 import org.gephi.datalab.api.AttributeColumnsController;
 import org.gephi.datalab.api.GraphElementsController;
+import org.gephi.datalab.spi.rows.merge.AttributeRowsMergeStrategy;
 import org.gephi.dynamic.api.DynamicModel;
 import org.gephi.graph.api.Attributes;
 import org.gephi.graph.api.Edge;
@@ -142,17 +143,17 @@ public class AttributeColumnsControllerImpl implements AttributeColumnsControlle
         }
     }
 
-    public void fillNodesColumnWithValue(Node[] nodes, AttributeColumn column, String value){
+    public void fillNodesColumnWithValue(Node[] nodes, AttributeColumn column, String value) {
         if (canChangeColumnData(column)) {
-            for (Node node: nodes) {
+            for (Node node : nodes) {
                 setAttributeValue(value, node.getNodeData().getAttributes(), column);
             }
         }
     }
 
-    public void fillEdgesColumnWithValue(Edge[] edges, AttributeColumn column, String value){
+    public void fillEdgesColumnWithValue(Edge[] edges, AttributeColumn column, String value) {
         if (canChangeColumnData(column)) {
-            for (Edge edge: edges) {
+            for (Edge edge : edges) {
                 setAttributeValue(value, edge.getEdgeData().getAttributes(), column);
             }
         }
@@ -401,6 +402,10 @@ public class AttributeColumnsControllerImpl implements AttributeColumnsControlle
     }
 
     public Number[] getColumnNumbers(AttributeTable table, AttributeColumn column) {
+        return getRowsColumnNumbers(getTableAttributeRows(table), column);
+    }
+
+    public Number[] getRowsColumnNumbers(Attributes[] rows, AttributeColumn column) {
         AttributeUtils attributeUtils = AttributeUtils.getDefault();
         if (!attributeUtils.isNumberOrNumberListColumn(column)) {
             throw new IllegalArgumentException("The column has to be a number or number list column");
@@ -410,14 +415,14 @@ public class AttributeColumnsControllerImpl implements AttributeColumnsControlle
         final int columnIndex = column.getIndex();
         Number number;
         if (attributeUtils.isNumberColumn(column)) {//Number column
-            for (Attributes row : getTableAttributeRows(table)) {
+            for (Attributes row : rows) {
                 number = (Number) row.getValue(columnIndex);
                 if (number != null) {
                     numbers.add(number);
                 }
             }
         } else {//Number list column
-            for (Attributes row : getTableAttributeRows(table)) {
+            for (Attributes row : rows) {
                 numbers.addAll(getNumberListColumnNumbers(row, column));
             }
         }
@@ -482,6 +487,7 @@ public class AttributeColumnsControllerImpl implements AttributeColumnsControlle
             Node node;
             Attributes nodeAttributes;
             reader = new CsvReader(new FileInputStream(file), separator, charset);
+            reader.setTrimWhitespace(false);
             reader.readHeaders();
             while (reader.readRecord()) {
                 //Prepare the correct node to assign the attributes:
@@ -567,6 +573,7 @@ public class AttributeColumnsControllerImpl implements AttributeColumnsControlle
             boolean directed;
             Attributes edgeAttributes;
             reader = new CsvReader(new FileInputStream(file), separator, charset);
+            reader.setTrimWhitespace(false);
             reader.readHeaders();
             while (reader.readRecord()) {
                 sourceId = reader.get(sourceColumn);
@@ -637,6 +644,25 @@ public class AttributeColumnsControllerImpl implements AttributeColumnsControlle
                     for (AttributeColumn column : columnsList) {
                         setAttributeValue(reader.get(column.getTitle()), edgeAttributes, column);
                     }
+                } else {
+                    //Do not ignore repeated edge, instead increase edge weight
+                    edge = graph.getEdge(source, target);
+                    if (edge != null) {
+                        //Increase edge weight with specified weight (if specified), else increase by 1:
+                        String weight = reader.get(edges.getColumn(PropertiesColumn.EDGE_WEIGHT.getIndex()).getTitle());
+                        if (weight != null) {
+                            try {
+                                Float weightFloat = Float.parseFloat(weight);
+                                edge.getEdgeData().getAttributes().setValue(PropertiesColumn.EDGE_WEIGHT.getIndex(), edge.getWeight() + weightFloat);
+                            } catch (NumberFormatException numberFormatException) {
+                                //Not valid weight, add 1
+                                edge.getEdgeData().getAttributes().setValue(PropertiesColumn.EDGE_WEIGHT.getIndex(), edge.getWeight() + 1);
+                            }
+                        } else {
+                            //Add 1 (weight not specified)
+                            edge.getEdgeData().getAttributes().setValue(PropertiesColumn.EDGE_WEIGHT.getIndex(), edge.getWeight() + 1);
+                        }
+                    }
                 }
             }
         } catch (FileNotFoundException ex) {
@@ -645,6 +671,30 @@ public class AttributeColumnsControllerImpl implements AttributeColumnsControlle
             Exceptions.printStackTrace(ex);
         } finally {
             reader.close();
+        }
+    }
+
+    public void mergeRowsValues(AttributeTable table, AttributeRowsMergeStrategy[] mergeStrategies, Attributes[] rows, Attributes selectedRow, Attributes resultRow) {
+        AttributeColumn[] columns = table.getColumns();
+        if (columns.length != mergeStrategies.length) {
+            throw new IllegalArgumentException("The number of columns must be equal to the number of merge strategies provided");
+        }
+        if (selectedRow == null) {
+            selectedRow = rows[0];
+        }
+
+        AttributeRowsMergeStrategy mergeStrategy;
+        Object value;
+        for (int i = 0; i < columns.length; i++) {
+            mergeStrategy = mergeStrategies[i];
+            if (mergeStrategy != null) {
+                mergeStrategy.setup(rows, selectedRow, columns[i]);
+                mergeStrategy.execute();
+                value = mergeStrategy.getReducedValue();
+            } else {
+                value = selectedRow.getValue(columns[i].getIndex());
+            }
+            setAttributeValue(value, resultRow, columns[i]);
         }
     }
 

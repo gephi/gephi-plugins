@@ -23,20 +23,25 @@ package org.gephi.statistics;
 
 import org.gephi.statistics.spi.StatisticsBuilder;
 import org.gephi.statistics.spi.Statistics;
-import java.util.ArrayList;
 import org.gephi.statistics.api.*;
-import java.util.List;
 import org.gephi.data.attributes.api.AttributeController;
 import org.gephi.data.attributes.api.AttributeModel;
+import org.gephi.data.attributes.type.Interval;
+import org.gephi.data.attributes.type.TimeInterval;
+import org.gephi.dynamic.api.DynamicController;
+import org.gephi.dynamic.api.DynamicGraph;
+import org.gephi.dynamic.api.DynamicModel;
+import org.gephi.graph.api.Graph;
 import org.gephi.graph.api.GraphController;
 import org.gephi.graph.api.GraphModel;
+import org.gephi.graph.api.HierarchicalGraph;
 import org.gephi.project.api.ProjectController;
-import org.gephi.statistics.spi.StatisticsUI;
 import org.gephi.utils.longtask.spi.LongTask;
 import org.gephi.utils.longtask.api.LongTaskExecutor;
 import org.gephi.utils.longtask.api.LongTaskListener;
 import org.gephi.project.api.Workspace;
 import org.gephi.project.api.WorkspaceListener;
+import org.gephi.statistics.spi.DynamicStatistics;
 import org.openide.util.Lookup;
 import org.openide.util.lookup.ServiceProvider;
 
@@ -48,7 +53,7 @@ import org.openide.util.lookup.ServiceProvider;
 @ServiceProvider(service = StatisticsController.class)
 public class StatisticsControllerImpl implements StatisticsController {
 
-    private StatisticsBuilder[] statisticsBuilders;
+    private final StatisticsBuilder[] statisticsBuilders;
     private StatisticsModelImpl model;
 
     public StatisticsControllerImpl() {
@@ -90,62 +95,81 @@ public class StatisticsControllerImpl implements StatisticsController {
         }
     }
 
-    /**
-     *
-     * @param statistics
-     */
-    public void execute(final Statistics pStatistics, LongTaskListener listener) {
-        final GraphController graphController = Lookup.getDefault().lookup(GraphController.class);
-        final GraphModel graphModel = graphController.getModel();
-        final AttributeModel attributeModel = Lookup.getDefault().lookup(AttributeController.class).getModel();
-        StatisticsBuilder builder = getBuilder(pStatistics.getClass());
-        final StatisticsUI[] uis = getUI(pStatistics);
-
-        for (StatisticsUI s : uis) {
-            s.setup(pStatistics);
+    public void execute(final Statistics statistics, LongTaskListener listener) {
+        StatisticsBuilder builder = getBuilder(statistics.getClass());
+        LongTaskExecutor executor = new LongTaskExecutor(true, "Statistics " + builder.getName(), 10);
+        if (listener != null) {
+            executor.setLongTaskListener(listener);
         }
-        model.setRunning(pStatistics, true);
+        LongTask task = statistics instanceof LongTask ? (LongTask) statistics : null;
 
-        if (pStatistics instanceof LongTask) {
-            LongTaskExecutor executor = new LongTaskExecutor(true, builder.getName(), 10);
-//            executor.addLongTaskListener(this);
-            if (listener != null) {
-                executor.setLongTaskListener(listener);
+        executor.execute(task, new Runnable() {
+
+            public void run() {
+                execute(statistics);
             }
-            executor.execute((LongTask) pStatistics, new Runnable() {
+        }, builder.getName(), null);
+    }
 
-                public void run() {
-                    pStatistics.execute(graphModel, attributeModel);
-                    model.setRunning(pStatistics, false);
-                    for (StatisticsUI s : uis) {
-                        model.addResult(s);
-                        s.unsetup();
-                    }
-                    model.addReport(pStatistics);
-                }
-            }, builder.getName(), null);
+    public void execute(Statistics statistics) {
+        if (statistics instanceof DynamicStatistics) {
+            execute((DynamicStatistics) statistics);
         } else {
-            pStatistics.execute(graphModel, attributeModel);
-            model.setRunning(pStatistics, false);
-            for (StatisticsUI s : uis) {              
-                model.addResult(s);
-                s.unsetup();
-            }
-            model.addReport(pStatistics);
-            if (listener != null) {
-                listener.taskFinished(null);
-            }
+            GraphController graphController = Lookup.getDefault().lookup(GraphController.class);
+            GraphModel graphModel = graphController.getModel();
+            AttributeModel attributeModel = Lookup.getDefault().lookup(AttributeController.class).getModel();
+            statistics.execute(graphModel, attributeModel);
+            model.addReport(statistics);
         }
     }
 
-    public StatisticsUI[] getUI(Statistics statistics) {
-        ArrayList<StatisticsUI> list = new ArrayList<StatisticsUI>();
-        for (StatisticsUI sui : Lookup.getDefault().lookupAll(StatisticsUI.class)) {
-            if (sui.getStatisticsClass().equals(statistics.getClass())) {
-                list.add(sui);
-            }
+    public void execute(DynamicStatistics statistics) {
+        GraphController graphController = Lookup.getDefault().lookup(GraphController.class);
+        GraphModel graphModel = graphController.getModel();
+        AttributeController attributeController = Lookup.getDefault().lookup(AttributeController.class);
+        DynamicController dynamicController = Lookup.getDefault().lookup(DynamicController.class);
+        DynamicModel dynamicModel = dynamicController.getModel();
+        AttributeModel attributeModel = attributeController.getModel();
+        if (!dynamicModel.isDynamicGraph()) {
+            throw new IllegalArgumentException("The current graph must be a dynamic graph");
         }
-        return list.toArray(new StatisticsUI[0]);
+
+        double window = statistics.getWindow();
+        double tick = statistics.getTick();
+        Interval bounds = statistics.getBounds();
+        if (bounds == null) {
+            TimeInterval visibleInterval = dynamicModel.getVisibleInterval();
+            double low = visibleInterval.getLow();
+            if (Double.isInfinite(low)) {
+                low = dynamicModel.getMin();
+            }
+            double high = visibleInterval.getHigh();
+            if (Double.isInfinite(high)) {
+                high = dynamicModel.getMax();
+            }
+            bounds = new Interval(low, high);
+            statistics.setBounds(bounds);
+        }
+
+
+        HierarchicalGraph graph = graphModel.getHierarchicalGraphVisible();
+        DynamicGraph dynamicGraph = dynamicModel.createDynamicGraph(graph, bounds);
+
+        //Init
+        statistics.execute(graphModel, attributeModel);
+
+        //Loop
+        for (double low = bounds.getLow(); low <= bounds.getHigh() - window;
+                low += tick) {
+            double high = low + window;
+
+            Graph g = dynamicGraph.getSnapshotGraph(low, high);
+
+
+            statistics.loop(g.getView(), new Interval(low, high));
+        }
+        statistics.end();
+        model.addReport(statistics);
     }
 
     public StatisticsBuilder getBuilder(Class<? extends Statistics> statisticsClass) {
@@ -157,11 +181,16 @@ public class StatisticsControllerImpl implements StatisticsController {
         return null;
     }
 
-    public void setStatisticsUIVisible(StatisticsUI ui, boolean visible) {
-        model.setVisible(ui, visible);
-    }
-
     public StatisticsModelImpl getModel() {
         return model;
+    }
+
+    public StatisticsModel getModel(Workspace workspace) {
+        StatisticsModel statModel = workspace.getLookup().lookup(StatisticsModelImpl.class);
+        if (statModel == null) {
+            statModel = new StatisticsModelImpl();
+            workspace.add(statModel);
+        }
+        return statModel;
     }
 }

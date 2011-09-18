@@ -50,6 +50,7 @@ public class Degree implements Statistics, LongTask {
     public static final String INDEGREE = "indegree";
     public static final String OUTDEGREE = "outdegree";
     public static final String DEGREE = "degree";
+    private boolean isDirected; // only set inside this class
     /** Remembers if the Cancel function has been called. */
     private boolean isCanceled;
     /** Keep track of the work done. */
@@ -78,6 +79,7 @@ public class Degree implements Statistics, LongTask {
     }
 
     public void execute(HierarchicalGraph graph, AttributeModel attributeModel) {
+        isDirected = graph instanceof DirectedGraph;
         isCanceled = false;
         inDegreeDist = new HashMap<Integer, Integer>();
         outDegreeDist = new HashMap<Integer, Integer>();
@@ -88,32 +90,34 @@ public class Degree implements Statistics, LongTask {
         AttributeColumn inCol = nodeTable.getColumn(INDEGREE);
         AttributeColumn outCol = nodeTable.getColumn(OUTDEGREE);
         AttributeColumn degCol = nodeTable.getColumn(DEGREE);
-        if (graph instanceof DirectedGraph) {
-
+        if (isDirected) {
             if (inCol == null) {
-                inCol = nodeTable.addColumn(INDEGREE, "In Degree", AttributeType.INT, AttributeOrigin.COMPUTED, 0);
+                inCol = nodeTable.addColumn(INDEGREE, "In-Degree", AttributeType.INT, AttributeOrigin.COMPUTED, 0);
             }
             if (outCol == null) {
-                outCol = nodeTable.addColumn(OUTDEGREE, "Out Degree", AttributeType.INT, AttributeOrigin.COMPUTED, 0);
+                outCol = nodeTable.addColumn(OUTDEGREE, "Out-Degree", AttributeType.INT, AttributeOrigin.COMPUTED, 0);
             }
         }
         if (degCol == null) {
             degCol = nodeTable.addColumn(DEGREE, "Degree", AttributeType.INT, AttributeOrigin.COMPUTED, 0);
         }
 
-
         int i = 0;
 
         graph.readLock();
 
         Progress.start(progress, graph.getNodeCount());
+        
+        HierarchicalDirectedGraph directedGraph = null;
+        if(isDirected) {
+            directedGraph = graph.getGraphModel().getHierarchicalDirectedGraphVisible();
+        }
 
         for (Node n : graph.getNodes()) {
             AttributeRow row = (AttributeRow) n.getNodeData().getAttributes();
-            if (graph instanceof DirectedGraph) {
-                HierarchicalDirectedGraph hdg = graph.getGraphModel().getHierarchicalDirectedGraph();
-                int inDegree = hdg.getTotalInDegree(n);
-                int outDegree = hdg.getTotalOutDegree(n);
+            if (isDirected) {
+                int inDegree = directedGraph.getTotalInDegree(n);
+                int outDegree = directedGraph.getTotalOutDegree(n);
                 row.setValue(inCol, inDegree);
                 row.setValue(outCol, outDegree);
                 if (!inDegreeDist.containsKey(inDegree)) {
@@ -140,7 +144,7 @@ public class Degree implements Statistics, LongTask {
             Progress.progress(progress, i);
         }
 
-        avgDegree /= graph.getNodeCount();
+        avgDegree /= (isDirected) ? 2 * graph.getNodeCount() : graph.getNodeCount();
 
         graph.readUnlockAll();
     }
@@ -150,6 +154,43 @@ public class Degree implements Statistics, LongTask {
      * @return
      */
     public String getReport() {
+        String report = "";
+        if (isDirected) {
+            report = getDirectedReport();
+        } else {
+            //Distribution series
+            XYSeries dSeries = ChartUtils.createXYSeries(degreeDist, "Degree Distribution");
+
+            XYSeriesCollection dataset1 = new XYSeriesCollection();
+            dataset1.addSeries(dSeries);
+
+            JFreeChart chart1 = ChartFactory.createXYLineChart(
+                    "Degree Distribution",
+                    "Value",
+                    "Count",
+                    dataset1,
+                    PlotOrientation.VERTICAL,
+                    true,
+                    false,
+                    false);
+            chart1.removeLegend();
+            ChartUtils.decorateChart(chart1);
+            ChartUtils.scaleChart(chart1, dSeries, false);
+            String degreeImageFile = ChartUtils.renderChart(chart1, "degree-distribution.png");
+
+            NumberFormat f = new DecimalFormat("#0.000");
+
+            report = "<HTML> <BODY> <h1>Degree Report </h1> "
+                    + "<hr>"
+                    + "<br> <h2> Results: </h2>"
+                    + "Average Degree: " + f.format(avgDegree)
+                    + "<br /><br />"+degreeImageFile
+                    + "</BODY></HTML>";
+        }
+        return report;
+    }
+
+    public String getDirectedReport() {
         //Distribution series
         XYSeries dSeries = ChartUtils.createXYSeries(degreeDist, "Degree Distribution");
         XYSeries idSeries = ChartUtils.createXYSeries(inDegreeDist, "In-Degree Distribution");
@@ -173,6 +214,7 @@ public class Degree implements Statistics, LongTask {
                 true,
                 false,
                 false);
+        chart1.removeLegend();
         ChartUtils.decorateChart(chart1);
         ChartUtils.scaleChart(chart1, dSeries, false);
         String degreeImageFile = ChartUtils.renderChart(chart1, "degree-distribution.png");
@@ -186,6 +228,7 @@ public class Degree implements Statistics, LongTask {
                 true,
                 false,
                 false);
+        chart2.removeLegend();
         ChartUtils.decorateChart(chart2);
         ChartUtils.scaleChart(chart2, dSeries, false);
         String indegreeImageFile = ChartUtils.renderChart(chart2, "indegree-distribution.png");
@@ -199,6 +242,7 @@ public class Degree implements Statistics, LongTask {
                 true,
                 false,
                 false);
+        chart3.removeLegend();
         ChartUtils.decorateChart(chart3);
         ChartUtils.scaleChart(chart3, dSeries, false);
         String outdegreeImageFile = ChartUtils.renderChart(chart3, "outdegree-distribution.png");
@@ -213,7 +257,7 @@ public class Degree implements Statistics, LongTask {
                 + "<br /><br />"+indegreeImageFile
                 + "<br /><br />"+outdegreeImageFile
                 + "</BODY></HTML>";
-
+        
         return report;
     }
 

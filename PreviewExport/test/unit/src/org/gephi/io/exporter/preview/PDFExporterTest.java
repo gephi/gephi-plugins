@@ -21,19 +21,22 @@ along with Gephi.  If not, see <http://www.gnu.org/licenses/>.
 package org.gephi.io.exporter.preview;
 
 import java.awt.Color;
-import java.awt.Font;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import org.gephi.desktop.welcome.WelcomeTopComponent;
+import org.gephi.graph.api.Edge;
 import org.gephi.graph.api.GraphController;
-import org.gephi.graph.api.GraphModel;
-import org.gephi.graph.api.Node;
-import org.gephi.io.generator.plugin.RandomGraph;
 import org.gephi.io.importer.api.Container;
-import org.gephi.io.importer.api.ContainerFactory;
 import org.gephi.io.importer.api.ImportController;
+import org.gephi.io.importer.spi.FileImporter;
 import org.gephi.io.processor.plugin.DefaultProcessor;
+import org.gephi.preview.api.PDFTarget;
 import org.gephi.preview.api.PreviewController;
 import org.gephi.preview.api.PreviewModel;
+import org.gephi.preview.api.PreviewProperties;
+import org.gephi.preview.api.PreviewProperty;
 import org.gephi.project.api.ProjectController;
 import org.gephi.project.api.Workspace;
 import org.junit.After;
@@ -75,32 +78,37 @@ public class PDFExporterTest {
         pc.newProject();
         Workspace workspace = pc.getCurrentWorkspace();
 
-        Container container = Lookup.getDefault().lookup(ContainerFactory.class).newContainer();
-        RandomGraph randomGraph = new RandomGraph();
-        randomGraph.generate(container.getLoader());
-
-        //Append container to graph structure
+        String sample = "/org/gephi/desktop/welcome/samples/Java.gexf";
+        final InputStream stream = WelcomeTopComponent.class.getResourceAsStream(sample);
+        try {
+            stream.reset();
+        } catch (IOException ex) {
+            //Exceptions.printStackTrace(ex);
+        }
         ImportController importController = Lookup.getDefault().lookup(ImportController.class);
+        FileImporter fileImporter = importController.getFileImporter(".gexf");
+        Container container = importController.importFile(stream, fileImporter);
+
         importController.process(container, new DefaultProcessor(), workspace);
 
-        //Set labels
-        GraphController gc = Lookup.getDefault().lookup(GraphController.class);
-        GraphModel graphModel = gc.getModel(workspace);
-        for (Node n : graphModel.getGraph().getNodes()) {
-            n.getNodeData().setLabel("Node " + n.getNodeData().getId());
-        }
+        //Set label edges
+//        GraphController graphController = Lookup.getDefault().lookup(GraphController.class);
+//        for (Edge edge : graphController.getModel().getGraph().getEdges()) {
+//            edge.getEdgeData().setLabel("Label test");
+//        }
 
         PreviewModel model = Lookup.getDefault().lookup(PreviewController.class).getModel();
-        Font font = new Font("Broadway", Font.PLAIN, 15);
-        model.getNodeSupervisor().setBaseNodeLabelFont(font);
-        model.getNodeSupervisor().setShowNodeLabels(Boolean.TRUE);
-        Lookup.getDefault().lookup(PreviewController.class).setBackgroundColor(Color.GRAY);
+
+        PreviewProperties props = model.getProperties();
+        props.putValue(PreviewProperty.SHOW_NODE_LABELS, false);
+        props.putValue(PreviewProperty.EDGE_OPACITY, 20f);
 
         PDFExporter pDFExporter = new PDFExporter();
+        pDFExporter.setLandscape(true);
 
         pDFExporter.setWorkspace(workspace);
         try {
-            File file = new File("test.pdf");
+            File file = new File("/Users/mbastian/test.pdf");
             System.out.println(file.getAbsolutePath());
             FileOutputStream fos = new FileOutputStream(file);
             pDFExporter.setOutputStream(fos);
@@ -116,7 +124,7 @@ public class PDFExporterTest {
     /* @Test
     public void testExportData() throws Exception {
     File file = new File("test.pdf");
-
+    
     DOMImplementation impl = SVGDOMImplementation.getDOMImplementation();
     DocumentType doctype = impl.createDocumentType(
     "-//W3C//DTD SVG 1.1//EN",
@@ -126,7 +134,7 @@ public class PDFExporterTest {
     float MARGIN = 25f;
     Document doc = impl.createDocument(namespaceURI, "svg", doctype);
     SupportSize supportSize = new SupportSize(210, 297, LengthUnit.MILLIMETER);
-
+    
     // initializes CSS and SVG specific DOM interfaces
     UserAgent userAgent = new UserAgentAdapter();
     DocumentLoader loader = new DocumentLoader(userAgent);
@@ -135,18 +143,18 @@ public class PDFExporterTest {
     GVTBuilder builder = new GVTBuilder();
     builder.build(ctx, doc);
     Element svgRoot;
-
+    
     // root element
     svgRoot = doc.getDocumentElement();
     svgRoot.setAttributeNS(null, "width", supportSize.getWidth());
     svgRoot.setAttributeNS(null, "height", supportSize.getHeight());
     svgRoot.setAttributeNS(null, "version", "1.1");
     svgRoot.setAttributeNS(null, "viewBox", String.format(Locale.ENGLISH, "%d %d %d %d", -3323, -3057, 7379, 5977));
-
+    
     Element labelGroupElem = doc.createElementNS(namespaceURI, "g");
     labelGroupElem.setAttribute("id", "labels");
     svgRoot.appendChild(labelGroupElem);
-
+    
     for (int i = 0; i < 500; i++) {
     Random rd = new Random();
     char[] ch = new char[10];
@@ -154,9 +162,9 @@ public class PDFExporterTest {
     ch[j] = (char) rd.nextInt(255);
     }
     String str = new String(ch);
-
+    
     Text labelText = doc.createTextNode(str);
-
+    
     Element labelElem = doc.createElementNS(namespaceURI, "text");
     labelElem.setAttribute("x", "" + (Math.random() * 1000));
     labelElem.setAttribute("y", "" + (Math.random() * 1000));
@@ -167,24 +175,24 @@ public class PDFExporterTest {
     labelElem.appendChild(labelText);
     labelGroupElem.appendChild(labelElem);
     }
-
-
+    
+    
     try {
     OutputStream ostream = null;
     PDFTranscoder t = new PDFTranscoder();
     TranscoderInput input = new TranscoderInput(doc);
-
+    
     // performs transcoding
     try {
     ostream = new BufferedOutputStream(new FileOutputStream(file));
     TranscoderOutput output = new TranscoderOutput(ostream);
-
+    
     t.transcode(input, output);
-
+    
     } finally {
     ostream.close();
     }
-
+    
     } catch (Exception e) {
     e.printStackTrace();
     }

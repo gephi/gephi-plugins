@@ -76,6 +76,7 @@ import org.gephi.graph.api.Attributes;
 import org.gephi.tools.api.EditWindowController;
 import org.gephi.desktop.datalab.utils.PopupMenuUtils;
 import org.gephi.desktop.datalab.utils.SparkLinesRenderer;
+import org.gephi.desktop.datalab.utils.TimeIntervalCellEditor;
 import org.gephi.desktop.datalab.utils.TimeIntervalsRenderer;
 import org.gephi.dynamic.api.DynamicController;
 import org.gephi.dynamic.api.DynamicModel;
@@ -85,7 +86,6 @@ import org.gephi.dynamic.api.DynamicModel;
  * @author Mathieu Bastian
  */
 public class NodeDataTable {
-
     private boolean useSparklines = false;
     private boolean timeIntervalGraphics = false;
     private Outline outlineTable;
@@ -100,6 +100,7 @@ public class NodeDataTable {
     private static final int FAKE_COLUMNS_COUNT = 1;
     private SparkLinesRenderer sparkLinesRenderer;
     private TimeIntervalsRenderer timeIntervalsRenderer;
+    private TimeIntervalCellEditor timeIntervalCellEditor;
     private TimeFormat currentTimeFormat;
 
     public NodeDataTable() {
@@ -195,7 +196,7 @@ public class NodeDataTable {
         outlineTable.setDefaultEditor(DynamicInteger.class, new DefaultCellEditor(new JTextField()));
         outlineTable.setDefaultEditor(DynamicLong.class, new DefaultCellEditor(new JTextField()));
         outlineTable.setDefaultEditor(DynamicShort.class, new DefaultCellEditor(new JTextField()));
-        outlineTable.setDefaultEditor(TimeInterval.class, new DefaultCellEditor(new JTextField()));
+        outlineTable.setDefaultEditor(TimeInterval.class, timeIntervalCellEditor=new TimeIntervalCellEditor(new JTextField()));
     }
 
     public Outline getOutlineTable() {
@@ -234,6 +235,7 @@ public class NodeDataTable {
             timeIntervalsRenderer.setMinMax(dm.getMin(), dm.getMax());
             currentTimeFormat = dm.getTimeFormat();
             timeIntervalsRenderer.setTimeFormat(currentTimeFormat);
+            timeIntervalCellEditor.setTimeFormat(currentTimeFormat);
             sparkLinesRenderer.setTimeFormat(currentTimeFormat);
         }
         timeIntervalsRenderer.setDrawGraphics(timeIntervalGraphics);
@@ -251,6 +253,14 @@ public class NodeDataTable {
         selectedNodes = null;
         refreshingTable = false;
     }
+    
+    /**
+     * Temporal trick to avoid visual problems of netbeans Outline such as bad highlighting of rows.
+     */
+    private void avoidOutlineVisualIssues(){
+        outlineTable.requestFocusInWindow();
+        outlineTable.repaint();
+    }
 
     public void setNodesSelection(Node[] nodes) {
         this.selectedNodes = nodes;//Keep this selection request to be able to apply nodes selection if the table is first refreshed later.
@@ -264,6 +274,7 @@ public class NodeDataTable {
                 }
             }
         }
+        avoidOutlineVisualIssues();
     }
 
     public void scrollToFirstNodeSelected() {
@@ -272,6 +283,7 @@ public class NodeDataTable {
             Rectangle rect = outlineTable.getCellRect(row, 0, true);
             outlineTable.scrollRectToVisible(rect);
         }
+        avoidOutlineVisualIssues();
     }
 
     public boolean hasData() {
@@ -572,7 +584,7 @@ public class NodeDataTable {
 
                     public void popupMenuWillBecomeInvisible(PopupMenuEvent e) {
                         popup.removePopupMenuListener(this);
-                        outlineTable.requestFocus();
+                        avoidOutlineVisualIssues();
                     }
 
                     public void popupMenuCanceled(PopupMenuEvent e) {

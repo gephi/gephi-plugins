@@ -1,6 +1,6 @@
 /*
-Copyright 2008-2010 Gephi
-Authors : Mathieu Bastian <mathieu.bastian@gephi.org>
+Copyright 2008-2011 Gephi
+Authors : Yudi Xue <yudi.xue@usask.ca>, Mathieu Bastian
 Website : http://www.gephi.org
 
 This file is part of Gephi.
@@ -17,66 +17,87 @@ GNU Affero General Public License for more details.
 
 You should have received a copy of the GNU Affero General Public License
 along with Gephi.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 package org.gephi.preview.api;
 
-import org.gephi.preview.api.supervisors.DirectedEdgeSupervisor;
-import org.gephi.preview.api.supervisors.GlobalEdgeSupervisor;
-import org.gephi.preview.api.supervisors.NodeSupervisor;
-import org.gephi.preview.api.supervisors.SelfLoopSupervisor;
-import org.gephi.preview.api.supervisors.UndirectedEdgeSupervisor;
+import java.awt.Dimension;
+import java.awt.Point;
+import org.gephi.graph.api.Edge;
+import org.gephi.graph.api.Graph;
+import org.gephi.graph.api.Node;
+import org.gephi.preview.spi.ItemBuilder;
+import org.gephi.preview.spi.Renderer;
 
 /**
- *
- * @author Mathieu Bastian
+ * The Preview Model contains all items and all preview properties.
+ * <p>
+ * Items are the visual elements built from the {@link Graph} by {@link ItemBuilder} 
+ * implementations and can be retrieved from this class. Each item has a type and
+ * default types are {@link Item#NODE}, {@link Item#EDGE}, {@link Item#NODE_LABEL}
+ * and {@link Item#EDGE_LABEL}.
+ * <p>
+ * A preview model is attached to it's workspace and can be retrieved from the
+ * {@link PreviewController}.
+ * 
+ * @author Yudi Xue, Mathieu Bastian
+ * @see Item
+ * @see Renderer
  */
 public interface PreviewModel {
 
     /**
-     * Returns the node supervisor.
-     *
-     * @return the controller's node supervisor
+     * Returns the preview properties attached to this model.
+     * @return the preview properties
      */
-    public NodeSupervisor getNodeSupervisor();
+    public PreviewProperties getProperties();
 
     /**
-     * Returns the global edge supervisor.
-     *
-     * @return the controller's global edge supervisor
+     * Returns all items with <code>type</code> as type.
+     * <p>
+     * Default types are {@link Item#NODE}, {@link Item#EDGE}, {@link Item#NODE_LABEL}
+     * and {@link Item#EDGE_LABEL}.
+     * @param type the item's type
+     * @return all items from this type
      */
-    public GlobalEdgeSupervisor getGlobalEdgeSupervisor();
+    public Item[] getItems(String type);
 
     /**
-     * Returns the self-loop supervisor.
-     *
-     * @return the controller's self-loop supervisor
+     * Returns all items attached to <code>source</code>.
+     * <p>
+     * The source is the graph object behind the item (e.g.
+     * {@link Node} or {@link Edge}). Multiple items can be created from the same
+     * source object. For instance both <code>Item.NODE</code> and
+     * <code>Item.NODE_LABEL</code> have the node object as source.
+     * @param source the item's source
+     * @return all items with <code>source</code> as source
      */
-    public SelfLoopSupervisor getSelfLoopSupervisor();
+    public Item[] getItems(Object source);
 
     /**
-     * Returns the unidirectional edge supervisor.
-     *
-     * @return the controller's unidirectional edge supervisor
+     * Returns the item attached to <code>source</code> and with the type
+     * <code>type</code>. 
+     * <p>
+     * The source is the graph object behind the item (e.g.
+     * {@link Node} or {@link Edge}) and the type a default or a custom type.
+     * <p>
+     * Default types are {@link Item#NODE}, {@link Item#EDGE}, {@link Item#NODE_LABEL}
+     * and {@link Item#EDGE_LABEL}.
+     * @param type the item's type
+     * @param source the item's source object
+     * @return the item or <code>null</code> if not found
      */
-    public DirectedEdgeSupervisor getUniEdgeSupervisor();
+    public Item getItem(String type, Object source);
 
     /**
-     * Returns the bidirectional edge supervisor.
-     *
-     * @return the controller's bidirectional edge supervisor
+     * Returns the width and height of the graph in the graph coordinates.
+     * @return the graph dimensions
      */
-    public DirectedEdgeSupervisor getBiEdgeSupervisor();
+    public Dimension getDimensions();
 
     /**
-     * Returns the undirected edge supervisor.
-     *
-     * @return the controller's undirected edge supervisor
+     * Returns the top left position in the graph coordinate (i.e. not the preview
+     * coordinates).
+     * @return the top left position point
      */
-    public UndirectedEdgeSupervisor getUndirectedEdgeSupervisor();
-
-    public float getVisibilityRatio();
-
-    public PreviewPreset getCurrentPreset();
-
-    public java.awt.Color getBackgroundColor();
+    public Point getTopLeftPosition();
 }

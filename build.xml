@@ -130,14 +130,22 @@
         <property name="toolkit.tempdir" value="${toolkit.dir}/${toolkit.jar.name}"/>
         <mkdir dir="${toolkit.tempdir}"/>
         <property name="toolkit.platformdir" value="${platform.dir}"/>
-        <copy file="${toolkit.platformdir}/core/org-openide-filesystems.jar" todir="${toolkit.tempdir}"/>
+        <copy file="${toolkit.platformdir}/core/core.jar" tofile="${toolkit.tempdir}/core-netbeans.jar"/>
+		<copy file="${toolkit.platformdir}/core/org-openide-filesystems.jar" todir="${toolkit.tempdir}"/>
         <copy file="${toolkit.platformdir}/lib/org-openide-util.jar" todir="${toolkit.tempdir}"/>
         <copy file="${toolkit.platformdir}/lib/org-openide-util-lookup.jar" todir="${toolkit.tempdir}"/>
+        <copy file="${toolkit.platformdir}/lib/org-openide-modules.jar" todir="${toolkit.tempdir}"/>
         <copy todir="${toolkit.tempdir}">
             <fileset dir="${toolkit.platformdir}/modules">
                 <include name="org-openide-nodes.jar"/>
                 <include name="org-netbeans-modules-masterfs.jar"/>
                 <include name="org-openide-dialogs.jar"/>
+                <include name="org-netbeans-modules-queries.jar"/>
+            </fileset>
+        </copy>
+        <copy todir="${toolkit.tempdir}">
+            <fileset dir="${toolkit.platformdir}/modules/ext/">
+                <include name="jna-*.jar"/>
             </fileset>
         </copy>
         <copy todir="${toolkit.tempdir}">
@@ -161,7 +169,7 @@
                 <include name="org-gephi-layout-api.jar"/>
                 <include name="org-gephi-layout-plugin.jar"/>
                 <include name="org-gephi-preview-api.jar"/>
-                <include name="org-gephi-preview.jar"/>
+                <include name="org-gephi-preview-plugin.jar"/>
                 <include name="org-gephi-project-api.jar"/>
                 <include name="org-gephi-statistics-api.jar"/>
                 <include name="org-gephi-statistics-plugin.jar"/>
@@ -182,6 +190,7 @@
         <copy todir="${toolkit.tempdir}">
             <fileset dir="${libs.dir}">
                 <include name="batik*.jar"/>
+				<include name="bzip2*.jar"/>
                 <include name="core.jar"/><!-- Processing -->
                 <include name="iText*.jar"/>
                 <include name="jcommon*.jar"/>
@@ -191,6 +200,7 @@
                 <include name="mysql-connector*.jar"/>
                 <include name="postgresql*.jar"/>
                 <include name="sqljdbc*.jar"/>
+                <include name="sqlite*.jar"/>
                 <include name="google-collect*.jar"/>
                 <include name="stax-utils.jar"/>
                 <include name="trove*.jar"/>
@@ -201,9 +211,53 @@
 
         <jar destfile="${toolkit.dir}/temp_final.jar" filesetmanifest="merge" duplicate="preserve">
             <zipgroupfileset dir="${toolkit.tempdir}" includes="*.jar"/>
-
+            
+            <!-- Next service declarations fix problem of having service providers in different modules (duplicated files) -->
+            <service type="org.openide.filesystems.URLMapper">
+                <provider classname="org.netbeans.modules.masterfs.MasterURLMapper"/>
+                <provider classname="org.netbeans.modules.openide.filesystems.DefaultURLMapperProxy"/>
+                <provider classname="org.openide.filesystems.MemoryFileSystem$Mapper"/>
+                <provider classname="org.netbeans.core.startup.layers.ArchiveURLMapper"/>
+            </service>
+            
+            <service type="javax.annotation.processing.Processor">
+                <provider classname="org.netbeans.modules.openide.filesystems.CleaningAnnotationProcessor"/>
+                <provider classname="org.netbeans.modules.openide.util.NbBundleProcessor"/>
+                <provider classname="org.netbeans.modules.openide.util.URLStreamHandlerRegistrationProcessor"/>
+                <provider classname="org.netbeans.modules.openide.util.ServiceProviderProcessor"/>
+            </service>
+            
+            <service type="java.sql.Driver">
+                <provider classname="com.mysql.jdbc.Driver"/>
+                <provider classname="org.postgresql.Driver"/>
+                <provider classname="com.microsoft.sqlserver.jdbc.SQLServerDriver"/>
+                <provider classname="org.sqlite.JDBC"/>
+            </service>
+            
+            <service type="org.gephi.project.spi.WorkspacePersistenceProvider">
+                <provider classname="org.gephi.data.attributes.serialization.AttributeModelPersistenceProvider"/>
+                <provider classname="org.gephi.graph.dhns.DhnsPersistenceProvider"/>
+                <provider classname="org.gephi.graph.dhns.DataPersistenceProvider"/>
+                <provider classname="org.gephi.data.attributes.serialization.AttributeRowPersistenceProvider"/>
+                <provider classname="org.gephi.dynamic.DynamicModelPersistenceProvider"/>
+                <provider classname="org.gephi.filters.FilterModelPersistenceProvider"/>
+                <provider classname="org.gephi.layout.LayoutModelPersistenceProvider"/>
+                <provider classname="org.gephi.partition.impl.PartitionModelPersistenceProvider"/>
+                <provider classname="org.gephi.statistics.StatisticsPersistenceProvider"/>
+                <provider classname="org.gephi.preview.PreviewModelPersistenceProvider"/>
+            </service>
+            
+            <service type="org.gephi.project.spi.WorkspaceDuplicateProvider">
+                <provider classname="org.gephi.data.attributes.AttributeModelDuplicateProvider"/>
+                <provider classname="org.gephi.graph.dhns.DhnsDuplicateProvider"/>
+            </service>
+                
+            <!-- These are services from core.startup modules. We disable them because they deal with the startup only -->
+            <service type="org.openide.util.Lookup" provider="" />
+            <service type="org.openide.filesystems.Repository" provider="" />
+            <service type="org.openide.util.NbPreferences$Provider" provider="" />
+            
             <manifest>
-
             </manifest>
         </jar>
 
@@ -235,6 +289,7 @@
                 <pathelement path="LayoutAPI/src"/>
                 <pathelement path="LayoutPlugin/src"/>
                 <pathelement path="PreviewAPI/src"/>
+                <pathelement path="PreviewPlugin/src"/>
                 <pathelement path="ProjectAPI/src"/>
                 <pathelement path="StatisticsAPI/src"/>
                 <pathelement path="StatisticsPlugin/src"/>

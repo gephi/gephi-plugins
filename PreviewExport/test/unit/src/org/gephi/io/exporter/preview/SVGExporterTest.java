@@ -21,7 +21,6 @@ along with Gephi.  If not, see <http://www.gnu.org/licenses/>.
 package org.gephi.io.exporter.preview;
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
@@ -32,6 +31,8 @@ import org.gephi.io.importer.spi.FileImporter;
 import org.gephi.io.processor.plugin.DefaultProcessor;
 import org.gephi.preview.api.PreviewController;
 import org.gephi.preview.api.PreviewModel;
+import org.gephi.preview.api.PreviewProperties;
+import org.gephi.preview.api.PreviewProperty;
 import org.gephi.project.api.ProjectController;
 import org.gephi.project.api.Workspace;
 import org.junit.After;
@@ -84,10 +85,16 @@ public class SVGExporterTest {
         importController.process(container, new DefaultProcessor(), workspace);
 
         PreviewModel model = Lookup.getDefault().lookup(PreviewController.class).getModel();
-        model.getNodeSupervisor().setShowNodeLabels(Boolean.TRUE);
 
+        PreviewProperties props = model.getProperties();
+        props.putValue(PreviewProperty.SHOW_NODE_LABELS, true);
+        props.putValue(PreviewProperty.EDGE_CURVED, false);
+        
+        
         SVGExporter sVGExporter = new SVGExporter();
-
+        sVGExporter.setScaleStrokes(true);
+        
+        
         sVGExporter.setWorkspace(workspace);
         try {
             File file = new File("test.svg");

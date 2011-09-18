@@ -186,8 +186,8 @@ public final class DynamicModelImpl implements DynamicModel {
             public void graphChanged(GraphEvent event) {
                 if (event.getSource().isMainView()) {
                     switch (event.getEventType()) {
-                        case REMOVE_EDGES:
-                            if (!edgeDynamicColumns.isEmpty()) {
+                        case REMOVE_NODES_AND_EDGES:
+                            if (!edgeDynamicColumns.isEmpty() && event.getData().removedEdges() != null) {
                                 AttributeColumn[] dynamicCols = edgeDynamicColumns.toArray(new AttributeColumn[0]);
                                 for (Edge e : event.getData().removedEdges()) {
                                     Attributes attributeRow = e.getEdgeData().getAttributes();
@@ -201,9 +201,7 @@ public final class DynamicModelImpl implements DynamicModel {
                                     }
                                 }
                             }
-                            break;
-                        case REMOVE_NODES:
-                            if (!nodeDynamicColumns.isEmpty()) {
+                            if (!nodeDynamicColumns.isEmpty() && event.getData().removedNodes() != null) {
                                 AttributeColumn[] dynamicCols = edgeDynamicColumns.toArray(new AttributeColumn[0]);
                                 for (Node n : event.getData().removedNodes()) {
                                     Attributes attributeRow = n.getNodeData().getAttributes();
@@ -277,7 +275,7 @@ public final class DynamicModelImpl implements DynamicModel {
     }
 
     @Override
-    public DynamicGraph createDynamicGraph(Graph graph, TimeInterval interval) {
+    public DynamicGraph createDynamicGraph(Graph graph, Interval interval) {
         return new DynamicGraphImpl(graph, interval.getLow(), interval.getHigh());
     }
 
@@ -382,5 +380,15 @@ public final class DynamicModelImpl implements DynamicModel {
 
     public void setNumberEstimator(Estimator numberEstimator) {
         this.numberEstimator = numberEstimator;
+    }
+
+    @Override
+    public boolean hasDynamicEdges() {
+        return attributeModel.getEdgeTable().hasColumn(TIMEINTERVAL_COLUMN);
+    }
+
+    @Override
+    public boolean hasDynamicNodes() {
+        return attributeModel.getNodeTable().hasColumn(TIMEINTERVAL_COLUMN);
     }
 }
