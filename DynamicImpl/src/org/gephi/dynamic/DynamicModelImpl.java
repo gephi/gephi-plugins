@@ -6,18 +6,39 @@
  * 
  * This file is part of Gephi.
  *
-Gephi is free software: you can redistribute it and/or modify
-it under the terms of the GNU Affero General Public License as
-published by the Free Software Foundation, either version 3 of the
-License, or (at your option) any later version.
+DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
 
-Gephi is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU Affero General Public License for more details.
+Copyright 2011 Gephi Consortium. All rights reserved.
 
-You should have received a copy of the GNU Affero General Public License
-along with Gephi.  If not, see <http://www.gnu.org/licenses/>.
+The contents of this file are subject to the terms of either the GNU
+General Public License Version 3 only ("GPL") or the Common
+Development and Distribution License("CDDL") (collectively, the
+"License"). You may not use this file except in compliance with the
+License. You can obtain a copy of the License at
+http://gephi.org/about/legal/license-notice/
+or /cddl-1.0.txt and /gpl-3.0.txt. See the License for the
+specific language governing permissions and limitations under the
+License.  When distributing the software, include this License Header
+Notice in each file and include the License files at
+/cddl-1.0.txt and /gpl-3.0.txt. If applicable, add the following below the
+License Header, with the fields enclosed by brackets [] replaced by
+your own identifying information:
+"Portions Copyrighted [year] [name of copyright owner]"
+
+If you wish your version of this file to be governed by only the CDDL
+or only the GPL Version 3, indicate your decision by adding
+"[Contributor] elects to include this software in this distribution
+under the [CDDL or GPL Version 3] license." If you do not indicate a
+single choice of license, a recipient has the option to distribute
+your version of this file under either the CDDL, the GPL Version 3 or
+to extend the choice of license to its licensees as provided above.
+However, if you add GPL Version 3 code and therefore, elected the GPL
+Version 3 license, then the option applies only if the new code is
+made subject to such option by the copyright holder.
+
+Contributor(s):
+
+Portions Copyrighted 2011 Gephi Consortium.
  */
 package org.gephi.dynamic;
 
@@ -186,8 +207,8 @@ public final class DynamicModelImpl implements DynamicModel {
             public void graphChanged(GraphEvent event) {
                 if (event.getSource().isMainView()) {
                     switch (event.getEventType()) {
-                        case REMOVE_EDGES:
-                            if (!edgeDynamicColumns.isEmpty()) {
+                        case REMOVE_NODES_AND_EDGES:
+                            if (!edgeDynamicColumns.isEmpty() && event.getData().removedEdges() != null) {
                                 AttributeColumn[] dynamicCols = edgeDynamicColumns.toArray(new AttributeColumn[0]);
                                 for (Edge e : event.getData().removedEdges()) {
                                     Attributes attributeRow = e.getEdgeData().getAttributes();
@@ -201,9 +222,7 @@ public final class DynamicModelImpl implements DynamicModel {
                                     }
                                 }
                             }
-                            break;
-                        case REMOVE_NODES:
-                            if (!nodeDynamicColumns.isEmpty()) {
+                            if (!nodeDynamicColumns.isEmpty() && event.getData().removedNodes() != null) {
                                 AttributeColumn[] dynamicCols = edgeDynamicColumns.toArray(new AttributeColumn[0]);
                                 for (Node n : event.getData().removedNodes()) {
                                     Attributes attributeRow = n.getNodeData().getAttributes();
@@ -277,7 +296,7 @@ public final class DynamicModelImpl implements DynamicModel {
     }
 
     @Override
-    public DynamicGraph createDynamicGraph(Graph graph, TimeInterval interval) {
+    public DynamicGraph createDynamicGraph(Graph graph, Interval interval) {
         return new DynamicGraphImpl(graph, interval.getLow(), interval.getHigh());
     }
 
@@ -344,7 +363,8 @@ public final class DynamicModelImpl implements DynamicModel {
 
     @Override
     public boolean isDynamicGraph() {
-        return !Double.isInfinite(timeIntervalIndex.getMax()) || !Double.isInfinite(timeIntervalIndex.getMin());
+        boolean res = !Double.isInfinite(timeIntervalIndex.getMax()) || !Double.isInfinite(timeIntervalIndex.getMin());
+        return res || !nodeDynamicColumns.isEmpty() || !edgeDynamicColumns.isEmpty();
     }
 
     @Override
@@ -382,5 +402,15 @@ public final class DynamicModelImpl implements DynamicModel {
 
     public void setNumberEstimator(Estimator numberEstimator) {
         this.numberEstimator = numberEstimator;
+    }
+
+    @Override
+    public boolean hasDynamicEdges() {
+        return attributeModel.getEdgeTable().hasColumn(TIMEINTERVAL_COLUMN);
+    }
+
+    @Override
+    public boolean hasDynamicNodes() {
+        return attributeModel.getNodeTable().hasColumn(TIMEINTERVAL_COLUMN);
     }
 }

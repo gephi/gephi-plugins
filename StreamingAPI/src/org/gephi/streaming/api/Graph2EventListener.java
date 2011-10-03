@@ -65,14 +65,15 @@ public class Graph2EventListener implements GraphListener, AttributeListener {
     public void graphChanged(GraphEvent event) {
 
         switch (event.getEventType()) {
-            case ADD_EDGES:
+            case ADD_NODES_AND_EDGES:
+//            case ADD_EDGES:
                 for (Edge edge: event.getData().addedEdges()) {
                     String edgeId = edge.getEdgeData().getId();
                     eventHandler.handleGraphEvent(eventBuilder.edgeAddedEvent(edgeId, edge.getSource().getNodeData().getId(),
                             edge.getTarget().getNodeData().getId(), edge.isDirected(), getEdgeAttributes(edge)));
                 }
-            break;
-            case ADD_NODES:
+//            break;
+//            case ADD_NODES:
                 for (Node node: event.getData().addedNodes()) {
                     String nodeId = node.getNodeData().getId();
                     eventHandler.handleGraphEvent(eventBuilder.graphEvent(ElementType.NODE, EventType.ADD, nodeId, getNodeAttributes(node)));
@@ -84,13 +85,14 @@ public class Graph2EventListener implements GraphListener, AttributeListener {
                     eventHandler.handleGraphEvent(eventBuilder.graphEvent(ElementType.NODE, EventType.CHANGE, nodeId, getNodeAttributes(node)));
                 }
                 break;
-            case REMOVE_EDGES:
+            case REMOVE_NODES_AND_EDGES:
+//            case REMOVE_EDGES:
                 for (Edge edge: event.getData().removedEdges()) {
                     String edgeId = edge.getEdgeData().getId();
                     eventHandler.handleGraphEvent(eventBuilder.graphEvent(ElementType.EDGE, EventType.REMOVE, edgeId, null));
                 }
-                break;
-            case REMOVE_NODES:
+//                break;
+//            case REMOVE_NODES:
                 for (Node node: event.getData().removedNodes()) {
                     String nodeId = node.getNodeData().getId();
                     eventHandler.handleGraphEvent(eventBuilder.graphEvent(ElementType.NODE, EventType.REMOVE, nodeId, null));

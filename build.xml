@@ -49,7 +49,7 @@
     </target>
 
     <target name="javadoc">
-        <javadoc destdir="dist/apiindex" windowtitle="Gephi API Index" encoding="UTF-8" charset="UTF-8" stylesheetfile="stylesheet.css"  packagenames="org.gephi.**.api,org.gephi.**.spi,org.gephi.data.*,org.gephi.utils.progress" overview="overview.html"  classpath="build/public-package-jars/org-openide-util-lookup.jar">
+        <javadoc destdir="dist/apiindex" windowtitle="Gephi API Index" encoding="UTF-8" charset="UTF-8" stylesheetfile="stylesheet.css"  packagenames="org.gephi.**.api,org.gephi.**.spi.*,org.gephi.data.*,org.gephi.utils.progress" overview="overview.html"  classpath="build/public-package-jars/org-openide-util-lookup.jar">
             <sourcepath>
                 <pathelement path="AttributesAPI/src"/>
                 <pathelement path="ClusteringAPI/src"/>
@@ -66,11 +66,12 @@
                 <pathelement path="PreviewAPI/src"/>
                 <pathelement path="ProjectAPI/src"/>
                 <pathelement path="RankingAPI/src"/>
+                <pathelement path="RankingPlugin/src"/>
                 <pathelement path="StatisticsAPI/src"/>
                 <pathelement path="ToolsAPI/src"/>
             </sourcepath>
-            <doctitle>Gephi 0.8alpha API Index</doctitle>
-            <header>Gephi 0.8alpha Javadoc</header>
+            <doctitle>Gephi 0.8 beta API Index</doctitle>
+            <header>Gephi 0.8 beta Javadoc</header>
         </javadoc>
     </target>
 
@@ -130,14 +131,22 @@
         <property name="toolkit.tempdir" value="${toolkit.dir}/${toolkit.jar.name}"/>
         <mkdir dir="${toolkit.tempdir}"/>
         <property name="toolkit.platformdir" value="${platform.dir}"/>
+        <copy file="${toolkit.platformdir}/core/core.jar" tofile="${toolkit.tempdir}/core-netbeans.jar"/>
         <copy file="${toolkit.platformdir}/core/org-openide-filesystems.jar" todir="${toolkit.tempdir}"/>
         <copy file="${toolkit.platformdir}/lib/org-openide-util.jar" todir="${toolkit.tempdir}"/>
         <copy file="${toolkit.platformdir}/lib/org-openide-util-lookup.jar" todir="${toolkit.tempdir}"/>
+        <copy file="${toolkit.platformdir}/lib/org-openide-modules.jar" todir="${toolkit.tempdir}"/>
         <copy todir="${toolkit.tempdir}">
             <fileset dir="${toolkit.platformdir}/modules">
                 <include name="org-openide-nodes.jar"/>
                 <include name="org-netbeans-modules-masterfs.jar"/>
                 <include name="org-openide-dialogs.jar"/>
+                <include name="org-netbeans-modules-queries.jar"/>
+            </fileset>
+        </copy>
+        <copy todir="${toolkit.tempdir}">
+            <fileset dir="${toolkit.platformdir}/modules/ext/">
+                <include name="jna-*.jar"/>
             </fileset>
         </copy>
         <copy todir="${toolkit.tempdir}">
@@ -161,7 +170,7 @@
                 <include name="org-gephi-layout-api.jar"/>
                 <include name="org-gephi-layout-plugin.jar"/>
                 <include name="org-gephi-preview-api.jar"/>
-                <include name="org-gephi-preview.jar"/>
+                <include name="org-gephi-preview-plugin.jar"/>
                 <include name="org-gephi-project-api.jar"/>
                 <include name="org-gephi-statistics-api.jar"/>
                 <include name="org-gephi-statistics-plugin.jar"/>
@@ -171,6 +180,7 @@
                 <include name="org-gephi-utils.jar"/>
                 <include name="org-gephi-utils-longtask.jar" />
                 <include name="org-gephi-ranking-api.jar"/>
+                <include name="org-gephi-ranking-plugin.jar"/>
                 <include name="org-gephi-partition-api.jar"/>
                 <include name="org-gephi-partition-plugin.jar"/>
                 <include name="org-gephi-io-generator-api.jar"/>
@@ -192,6 +202,7 @@
                 <include name="mysql-connector*.jar"/>
                 <include name="postgresql*.jar"/>
                 <include name="sqljdbc*.jar"/>
+                <include name="sqlite*.jar"/>
                 <include name="google-collect*.jar"/>
                 <include name="stax-utils.jar"/>
                 <include name="trove*.jar"/>
@@ -208,6 +219,7 @@
                 <provider classname="org.netbeans.modules.masterfs.MasterURLMapper"/>
                 <provider classname="org.netbeans.modules.openide.filesystems.DefaultURLMapperProxy"/>
                 <provider classname="org.openide.filesystems.MemoryFileSystem$Mapper"/>
+                <provider classname="org.netbeans.core.startup.layers.ArchiveURLMapper"/>
             </service>
             
             <service type="javax.annotation.processing.Processor">
@@ -221,6 +233,7 @@
                 <provider classname="com.mysql.jdbc.Driver"/>
                 <provider classname="org.postgresql.Driver"/>
                 <provider classname="com.microsoft.sqlserver.jdbc.SQLServerDriver"/>
+                <provider classname="org.sqlite.JDBC"/>
             </service>
             
             <service type="org.gephi.project.spi.WorkspacePersistenceProvider">
@@ -232,6 +245,8 @@
                 <provider classname="org.gephi.filters.FilterModelPersistenceProvider"/>
                 <provider classname="org.gephi.layout.LayoutModelPersistenceProvider"/>
                 <provider classname="org.gephi.partition.impl.PartitionModelPersistenceProvider"/>
+                <provider classname="org.gephi.statistics.StatisticsPersistenceProvider"/>
+                <provider classname="org.gephi.preview.PreviewPersistenceProvider"/>
             </service>
             
             <service type="org.gephi.project.spi.WorkspaceDuplicateProvider">
@@ -239,6 +254,11 @@
                 <provider classname="org.gephi.graph.dhns.DhnsDuplicateProvider"/>
             </service>
                 
+            <!-- These are services from core.startup modules. We disable them because they deal with the startup only -->
+            <service type="org.openide.util.Lookup" provider="" />
+            <service type="org.openide.filesystems.Repository" provider="" />
+            <service type="org.openide.util.NbPreferences$Provider" provider="" />
+            
             <manifest>
             </manifest>
         </jar>
@@ -271,6 +291,7 @@
                 <pathelement path="LayoutAPI/src"/>
                 <pathelement path="LayoutPlugin/src"/>
                 <pathelement path="PreviewAPI/src"/>
+                <pathelement path="PreviewPlugin/src"/>
                 <pathelement path="ProjectAPI/src"/>
                 <pathelement path="StatisticsAPI/src"/>
                 <pathelement path="StatisticsPlugin/src"/>

@@ -6,18 +6,39 @@ Website : http://www.gephi.org
 
 This file is part of Gephi.
 
-Gephi is free software: you can redistribute it and/or modify
-it under the terms of the GNU Affero General Public License as
-published by the Free Software Foundation, either version 3 of the
-License, or (at your option) any later version.
+DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
 
-Gephi is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU Affero General Public License for more details.
+Copyright 2011 Gephi Consortium. All rights reserved.
 
-You should have received a copy of the GNU Affero General Public License
-along with Gephi.  If not, see <http://www.gnu.org/licenses/>.
+The contents of this file are subject to the terms of either the GNU
+General Public License Version 3 only ("GPL") or the Common
+Development and Distribution License("CDDL") (collectively, the
+"License"). You may not use this file except in compliance with the
+License. You can obtain a copy of the License at
+http://gephi.org/about/legal/license-notice/
+or /cddl-1.0.txt and /gpl-3.0.txt. See the License for the
+specific language governing permissions and limitations under the
+License.  When distributing the software, include this License Header
+Notice in each file and include the License files at
+/cddl-1.0.txt and /gpl-3.0.txt. If applicable, add the following below the
+License Header, with the fields enclosed by brackets [] replaced by
+your own identifying information:
+"Portions Copyrighted [year] [name of copyright owner]"
+
+If you wish your version of this file to be governed by only the CDDL
+or only the GPL Version 3, indicate your decision by adding
+"[Contributor] elects to include this software in this distribution
+under the [CDDL or GPL Version 3] license." If you do not indicate a
+single choice of license, a recipient has the option to distribute
+your version of this file under either the CDDL, the GPL Version 3 or
+to extend the choice of license to its licensees as provided above.
+However, if you add GPL Version 3 code and therefore, elected the GPL
+Version 3 license, then the option applies only if the new code is
+made subject to such option by the copyright holder.
+
+Contributor(s):
+
+Portions Copyrighted 2011 Gephi Consortium.
  */
 package org.gephi.statistics;
 
@@ -27,15 +48,10 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import javax.imageio.ImageIO;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
 import javax.xml.stream.XMLStreamWriter;
@@ -55,118 +71,23 @@ import org.openide.util.Lookup;
  */
 public class StatisticsModelImpl implements StatisticsModel {
 
-    //Model
-    private final List<StatisticsUI> invisibleList;
-    private final List<Statistics> runningList;
-    private final Map<StatisticsUI, String> resultMap;
+    //Model  
     private final Map<Class, String> reportMap;
-    //Listeners
-    private final List<ChangeListener> listeners;
 
     public StatisticsModelImpl() {
-        invisibleList = new ArrayList<StatisticsUI>();
-        runningList = Collections.synchronizedList(new ArrayList<Statistics>());
-        listeners = new ArrayList<ChangeListener>();
-        resultMap = new HashMap<StatisticsUI, String>();
         reportMap = new HashMap<Class, String>();
     }
 
     public void addReport(Statistics statistics) {
         reportMap.put(statistics.getClass(), statistics.getReport());
-        fireChangeEvent();
-    }
-
-    public void addResult(StatisticsUI ui) {
-        if (resultMap.containsKey(ui) && ui.getValue() == null) {
-            resultMap.remove(ui);
-        } else {
-            resultMap.put(ui, ui.getValue());
-        }
-        fireChangeEvent();
     }
 
     public String getReport(Class<? extends Statistics> statisticsClass) {
         return reportMap.get(statisticsClass);
     }
 
-    public String getResult(StatisticsUI statisticsUI) {
-        return resultMap.get(statisticsUI);
-    }
-
-    public boolean isStatisticsUIVisible(StatisticsUI statisticsUI) {
-        return !invisibleList.contains(statisticsUI);
-    }
-
-    public boolean isRunning(StatisticsUI statisticsUI) {
-        for (Statistics s : runningList.toArray(new Statistics[0])) {
-            if (statisticsUI.getStatisticsClass().equals(s.getClass())) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    public void setRunning(Statistics statistics, boolean running) {
-        if (!running) {
-            if (runningList.remove(statistics)) {
-                fireChangeEvent();
-            }
-        } else if (!runningList.contains(statistics)) {
-            runningList.add(statistics);
-            fireChangeEvent();
-        }
-    }
-
-    public Statistics getRunning(StatisticsUI statisticsUI) {
-        for (Statistics s : runningList.toArray(new Statistics[0])) {
-            if (statisticsUI.getStatisticsClass().equals(s)) {
-                return s;
-            }
-        }
-        return null;
-    }
-
-    public void setVisible(StatisticsUI statisticsUI, boolean visible) {
-        if (visible) {
-            if (invisibleList.remove(statisticsUI)) {
-                fireChangeEvent();
-            }
-        } else if (!invisibleList.contains(statisticsUI)) {
-            invisibleList.add(statisticsUI);
-            fireChangeEvent();
-        }
-    }
-
-    public void addChangeListener(ChangeListener changeListener) {
-        if (!listeners.contains(changeListener)) {
-            listeners.add(changeListener);
-        }
-    }
-
-    public void removeChangeListener(ChangeListener changeListener) {
-        listeners.remove(changeListener);
-    }
-
-    public void fireChangeEvent() {
-        ChangeEvent evt = new ChangeEvent(this);
-        for (ChangeListener listener : listeners) {
-            listener.stateChanged(evt);
-        }
-    }
-
     public void writeXML(XMLStreamWriter writer) throws XMLStreamException {
         writer.writeStartElement("statisticsmodel");
-
-        writer.writeStartElement("results");
-        for (Map.Entry<StatisticsUI, String> entry : resultMap.entrySet()) {
-            if (entry.getValue() != null && !entry.getValue().isEmpty()) {
-                writer.writeStartElement("result");
-                writer.writeAttribute("class", entry.getKey().getClass().getName());
-                writer.writeAttribute("value", entry.getValue());
-                writer.writeEndElement();
-            }
-        }
-        writer.writeEndElement();
 
         writer.writeStartElement("reports");
         for (Map.Entry<Class, String> entry : reportMap.entrySet()) {
@@ -195,19 +116,7 @@ public class StatisticsModelImpl implements StatisticsModel {
             switch (type) {
                 case XMLStreamReader.START_ELEMENT:
                     String name = reader.getLocalName();
-                    if ("result".equalsIgnoreCase(name)) {
-                        String classStr = reader.getAttributeValue(null, "class");
-                        StatisticsUI resultUI = null;
-                        for (StatisticsUI ui : uis) {
-                            if (ui.getClass().getName().equals(classStr)) {
-                                resultUI = ui;
-                            }
-                        }
-                        if (resultUI != null) {
-                            String value = reader.getAttributeValue(null, "value");
-                            resultMap.put(resultUI, value);
-                        }
-                    } else if ("report".equalsIgnoreCase(name)) {
+                    if ("report".equalsIgnoreCase(name)) {
                         String classStr = reader.getAttributeValue(null, "class");
                         Class reportClass = null;
                         for (StatisticsBuilder builder : builders) {

@@ -5,18 +5,39 @@ Website : http://www.gephi.org
 
 This file is part of Gephi.
 
-Gephi is free software: you can redistribute it and/or modify
-it under the terms of the GNU Affero General Public License as
-published by the Free Software Foundation, either version 3 of the
-License, or (at your option) any later version.
+DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
 
-Gephi is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU Affero General Public License for more details.
+Copyright 2011 Gephi Consortium. All rights reserved.
 
-You should have received a copy of the GNU Affero General Public License
-along with Gephi.  If not, see <http://www.gnu.org/licenses/>.
+The contents of this file are subject to the terms of either the GNU
+General Public License Version 3 only ("GPL") or the Common
+Development and Distribution License("CDDL") (collectively, the
+"License"). You may not use this file except in compliance with the
+License. You can obtain a copy of the License at
+http://gephi.org/about/legal/license-notice/
+or /cddl-1.0.txt and /gpl-3.0.txt. See the License for the
+specific language governing permissions and limitations under the
+License.  When distributing the software, include this License Header
+Notice in each file and include the License files at
+/cddl-1.0.txt and /gpl-3.0.txt. If applicable, add the following below the
+License Header, with the fields enclosed by brackets [] replaced by
+your own identifying information:
+"Portions Copyrighted [year] [name of copyright owner]"
+
+If you wish your version of this file to be governed by only the CDDL
+or only the GPL Version 3, indicate your decision by adding
+"[Contributor] elects to include this software in this distribution
+under the [CDDL or GPL Version 3] license." If you do not indicate a
+single choice of license, a recipient has the option to distribute
+your version of this file under either the CDDL, the GPL Version 3 or
+to extend the choice of license to its licensees as provided above.
+However, if you add GPL Version 3 code and therefore, elected the GPL
+Version 3 license, then the option applies only if the new code is
+made subject to such option by the copyright holder.
+
+Contributor(s):
+
+Portions Copyrighted 2011 Gephi Consortium.
  */
 package org.gephi.graph.dhns.core;
 
@@ -67,27 +88,27 @@ public class StructureModifier {
     }
 
     public void expand(AbstractNode node) {
-        dhns.writeLock();
+        boolean locked = dhns.conditionalWriteLock();
         if (node.level < treeStructure.getTreeHeight()) {
             business.expand(node);
         }
         graphVersion.incNodeAndEdgeVersion();
-        dhns.writeUnlock();
+        dhns.conditionalWriteUnlock(locked);
         dhns.getEventManager().fireEvent(new NodeEvent(EventType.EXPAND, node, view));
     }
 
     public void retract(AbstractNode node) {
-        dhns.writeLock();
+        boolean locked = dhns.conditionalWriteLock();
         if (node.level < treeStructure.getTreeHeight()) {
             business.retract(node);
         }
         graphVersion.incNodeAndEdgeVersion();
-        dhns.writeUnlock();
+        dhns.conditionalWriteUnlock(locked);
         dhns.getEventManager().fireEvent(new NodeEvent(EventType.RETRACT, node, view));
     }
 
     public void addNode(AbstractNode node, AbstractNode parent) {
-        dhns.writeLock();
+        boolean locked = dhns.conditionalWriteLock();
         AbstractNode parentNode;
         if (parent == null) {
             parentNode = treeStructure.getRoot();
@@ -98,13 +119,13 @@ public class StructureModifier {
         business.addNode(node);
         dhns.getGraphStructure().addToDictionnary(node);
         graphVersion.incNodeVersion();
-        dhns.writeUnlock();
-        dhns.getEventManager().fireEvent(new NodeEvent(EventType.ADD_NODES, node, view));
+        dhns.conditionalWriteUnlock(locked);
+        dhns.getEventManager().fireEvent(new NodeEvent(EventType.ADD_NODES_AND_EDGES, node, view));
     }
 
     public void deleteNode(AbstractNode node) {
         if (view.isMainView() && node.getNodeData().getNodes().getCount() > 1) {
-            dhns.writeLock();
+            boolean locked = dhns.conditionalWriteLock();
             for (AbstractNodeIterator itr = node.getNodeData().getNodes().iterator(); itr.hasNext();) {
                 AbstractNode nodeInOtherView = itr.next();
                 if (nodeInOtherView.getViewId() != view.getViewId()) {
@@ -114,110 +135,110 @@ public class StructureModifier {
             }
             AbstractNode[] deletesNodes = business.deleteNode(node, view);
             graphVersion.incNodeAndEdgeVersion();
-            dhns.writeUnlock();
+            dhns.conditionalWriteUnlock(locked);
             for (int i = 0; i < deletesNodes.length; i++) {
-                dhns.getEventManager().fireEvent(new NodeEvent(EventType.REMOVE_NODES, deletesNodes[i], view));
+                dhns.getEventManager().fireEvent(new NodeEvent(EventType.REMOVE_NODES_AND_EDGES, deletesNodes[i], view));
             }
 
         } else {
-            dhns.writeLock();
+            boolean locked = dhns.conditionalWriteLock();
             AbstractNode[] deletesNodes = business.deleteNode(node, view);
             graphVersion.incNodeAndEdgeVersion();
-            dhns.writeUnlock();
+            dhns.conditionalWriteUnlock(locked);
             for (int i = 0; i < deletesNodes.length; i++) {
-                dhns.getEventManager().fireEvent(new NodeEvent(EventType.REMOVE_NODES, deletesNodes[i], view));
+                dhns.getEventManager().fireEvent(new NodeEvent(EventType.REMOVE_NODES_AND_EDGES, deletesNodes[i], view));
             }
         }
     }
 
     public void addEdge(AbstractEdge edge) {
-        dhns.writeLock();
+        boolean locked = dhns.conditionalWriteLock();
         business.addEdge(edge);
         graphVersion.incEdgeVersion();
-        dhns.writeUnlock();
-        dhns.getEventManager().fireEvent(new EdgeEvent(EventType.ADD_EDGES, edge, view));
+        dhns.conditionalWriteUnlock(locked);
+        dhns.getEventManager().fireEvent(new EdgeEvent(EventType.ADD_NODES_AND_EDGES, edge, view));
     }
 
     public boolean deleteEdge(AbstractEdge edge) {
-        dhns.writeLock();
+        boolean locked = dhns.conditionalWriteLock();
         boolean res = business.delEdge(edge);
         graphVersion.incEdgeVersion();
-        dhns.writeUnlock();
+        dhns.conditionalWriteUnlock(locked);
         if (res) {
-            dhns.getEventManager().fireEvent(new EdgeEvent(EventType.REMOVE_EDGES, edge, view));
+            dhns.getEventManager().fireEvent(new EdgeEvent(EventType.REMOVE_NODES_AND_EDGES, edge, view));
         }
         return res;
     }
 
     public boolean deleteMetaEdge(AbstractEdge edge) {
-        dhns.writeLock();
+        boolean locked = dhns.conditionalWriteLock();
         boolean res = business.delMetaEdge((MetaEdgeImpl) edge);
         graphVersion.incEdgeVersion();
-        dhns.writeUnlock();
+        dhns.conditionalWriteUnlock(locked);
         return res;
     }
 
     public void clear() {
-        dhns.writeLock();
+        boolean locked = dhns.conditionalWriteLock();
         AbstractEdge[] clearedEdges = business.clearAllEdges();
         AbstractNode[] clearedNodes = business.clearAllNodes();
         graphVersion.incNodeAndEdgeVersion();
-        dhns.writeUnlock();
+        dhns.conditionalWriteUnlock(locked);
         if (clearedEdges != null) {
             for (int i = 0; i < clearedEdges.length; i++) {
                 if (clearedEdges[i] != null) {
-                    dhns.getEventManager().fireEvent(new EdgeEvent(EventType.REMOVE_EDGES, clearedEdges[i], view));
+                    dhns.getEventManager().fireEvent(new EdgeEvent(EventType.REMOVE_NODES_AND_EDGES, clearedEdges[i], view));
                 }
             }
         }
         if (clearedNodes != null) {
             for (int i = 0; i < clearedNodes.length; i++) {
                 if (clearedNodes[i] != null) {
-                    dhns.getEventManager().fireEvent(new NodeEvent(EventType.REMOVE_NODES, clearedNodes[i], view));
+                    dhns.getEventManager().fireEvent(new NodeEvent(EventType.REMOVE_NODES_AND_EDGES, clearedNodes[i], view));
                 }
             }
         }
     }
 
     public void clearEdges() {
-        dhns.writeLock();
+        boolean locked = dhns.conditionalWriteLock();
         AbstractEdge[] clearedEdges = business.clearAllEdges();
         graphVersion.incEdgeVersion();
-        dhns.writeUnlock();
+        dhns.conditionalWriteUnlock(locked);
         if (clearedEdges != null) {
             for (int i = 0; i < clearedEdges.length; i++) {
                 if (clearedEdges[i] != null) {
-                    dhns.getEventManager().fireEvent(new EdgeEvent(EventType.REMOVE_EDGES, clearedEdges[i], view));
+                    dhns.getEventManager().fireEvent(new EdgeEvent(EventType.REMOVE_NODES_AND_EDGES, clearedEdges[i], view));
                 }
             }
         }
     }
 
     public void clearEdges(AbstractNode node) {
-        dhns.writeLock();
+        boolean locked = dhns.conditionalWriteLock();
         AbstractEdge[] clearedEdges = business.clearEdges(node);
         graphVersion.incEdgeVersion();
-        dhns.writeUnlock();
+        dhns.conditionalWriteUnlock(locked);
         if (clearedEdges != null) {
             for (int i = 0; i < clearedEdges.length; i++) {
                 if (clearedEdges[i] != null) {
                     dhns.getGraphStructure().removeFromDictionnary(clearedEdges[i]);
-                    dhns.getEventManager().fireEvent(new EdgeEvent(EventType.REMOVE_EDGES, clearedEdges[i], view));
+                    dhns.getEventManager().fireEvent(new EdgeEvent(EventType.REMOVE_NODES_AND_EDGES, clearedEdges[i], view));
                 }
             }
         }
     }
 
     public void clearMetaEdges(AbstractNode node) {
-        dhns.writeLock();
+        boolean locked = dhns.conditionalWriteLock();
         business.clearMetaEdges(node);
         graphVersion.incEdgeVersion();
-        dhns.writeUnlock();
+        dhns.conditionalWriteUnlock(locked);
         dhns.getEventManager().fireEvent(new GeneralEvent(EventType.META_EDGES_UPDATE, view));
     }
 
     public void resetViewToLeaves() {
-        dhns.writeLock();
+        boolean locked = dhns.conditionalWriteLock();
         edgeProcessor.clearAllMetaEdges();
         view.setNodesEnabled(0);
         for (TreeListIterator itr = new TreeListIterator(treeStructure.getTree(), 1); itr.hasNext();) {
@@ -236,12 +257,12 @@ public class StructureModifier {
             edgeProcessor.computeEdgesCounting(node);
         }
         graphVersion.incNodeAndEdgeVersion();
-        dhns.writeUnlock();
+        dhns.conditionalWriteUnlock(locked);
         dhns.getEventManager().fireEvent(new GeneralEvent(EventType.META_EDGES_UPDATE, view));
     }
 
     public void resetViewToTopNodes() {
-        dhns.writeLock();
+        boolean locked = dhns.conditionalWriteLock();
         edgeProcessor.clearAllMetaEdges();
         view.setNodesEnabled(0);
         for (TreeListIterator itr = new TreeListIterator(treeStructure.getTree(), 1); itr.hasNext();) {
@@ -260,12 +281,12 @@ public class StructureModifier {
             edgeProcessor.computeEdgesCounting(node);
         }
         graphVersion.incNodeAndEdgeVersion();
-        dhns.writeUnlock();
+        dhns.conditionalWriteUnlock(locked);
         dhns.getEventManager().fireEvent(new GeneralEvent(EventType.META_EDGES_UPDATE, view));
     }
 
     public void resetViewToLevel(int level) {
-        dhns.writeLock();
+        boolean locked = dhns.conditionalWriteLock();
         edgeProcessor.clearAllMetaEdges();
         view.setNodesEnabled(0);
         for (TreeListIterator itr = new TreeListIterator(treeStructure.getTree(), 1); itr.hasNext();) {
@@ -284,26 +305,26 @@ public class StructureModifier {
             edgeProcessor.computeEdgesCounting(node);
         }
         graphVersion.incNodeAndEdgeVersion();
-        dhns.writeUnlock();
+        dhns.conditionalWriteUnlock(locked);
         dhns.getEventManager().fireEvent(new GeneralEvent(EventType.META_EDGES_UPDATE, view));
     }
 
     public void moveToGroup(AbstractNode node, AbstractNode nodeGroup) {
-        dhns.writeLock();
+        boolean locked = dhns.conditionalWriteLock();
         business.moveToGroup(node, nodeGroup);
         graphVersion.incNodeAndEdgeVersion();
-        dhns.writeUnlock();
+        dhns.conditionalWriteUnlock(locked);
         dhns.getEventManager().fireEvent(new NodeEvent(EventType.MOVE_NODES, node, view));
     }
 
     public Node group(AbstractNode[] nodes) {
-        dhns.writeLock();
+        boolean locked = dhns.conditionalWriteLock();
         AbstractNode group = dhns.factory().newNode(view.getViewId());
         business.group(group, nodes);
         graphVersion.incNodeAndEdgeVersion();
         dhns.getGraphStructure().addToDictionnary(group);
-        dhns.writeUnlock();
-        dhns.getEventManager().fireEvent(new NodeEvent(EventType.ADD_NODES, group, view));
+        dhns.conditionalWriteUnlock(locked);
+        dhns.getEventManager().fireEvent(new NodeEvent(EventType.ADD_NODES_AND_EDGES, group, view));
         for (int i = 0; i < nodes.length; i++) {
             dhns.getEventManager().fireEvent(new NodeEvent(EventType.MOVE_NODES, nodes[i], view));
         }
@@ -311,11 +332,11 @@ public class StructureModifier {
     }
 
     public void ungroup(AbstractNode nodeGroup) {
-        dhns.writeLock();
+        boolean locked = dhns.conditionalWriteLock();
         AbstractNode[] ungroupedNodes = business.ungroup(nodeGroup);
         graphVersion.incNodeAndEdgeVersion();
-        dhns.writeUnlock();
-        dhns.getEventManager().fireEvent(new NodeEvent(EventType.REMOVE_NODES, nodeGroup, view));
+        dhns.conditionalWriteUnlock(locked);
+        dhns.getEventManager().fireEvent(new NodeEvent(EventType.REMOVE_NODES_AND_EDGES, nodeGroup, view));
         for (int i = 0; i < ungroupedNodes.length; i++) {
             dhns.getEventManager().fireEvent(new NodeEvent(EventType.MOVE_NODES, ungroupedNodes[i], view));
         }
@@ -333,7 +354,7 @@ public class StructureModifier {
                         AbstractEdge e = newEdges[i];
                         if (e != null) {
                             dhns.getGraphStructure().addToDictionnary(e);
-                            dhns.getEventManager().fireEvent(new EdgeEvent(EventType.ADD_EDGES, e, view));
+                            dhns.getEventManager().fireEvent(new EdgeEvent(EventType.ADD_NODES_AND_EDGES, e, view));
                         }
                     }
                 }
@@ -358,7 +379,7 @@ public class StructureModifier {
                     for (int j = 0; j < deletedEdges.length; j++) {
                         if (deletedEdges[j] != null) {
                             dhns.getGraphStructure().removeFromDictionnary(deletedEdges[j]);
-                            dhns.getEventManager().fireEvent(new EdgeEvent(EventType.REMOVE_EDGES, deletedEdges[j], view));
+                            dhns.getEventManager().fireEvent(new EdgeEvent(EventType.REMOVE_NODES_AND_EDGES, deletedEdges[j], view));
                         }
                     }
                 }
@@ -367,7 +388,7 @@ public class StructureModifier {
 
 
                 treeStructure.deleteOnlySelf(node);
-                dhns.getEventManager().fireEvent(new NodeEvent(EventType.REMOVE_NODES, node, view));
+                dhns.getEventManager().fireEvent(new NodeEvent(EventType.REMOVE_NODES_AND_EDGES, node, view));
             }
 
             for (AbstractNode node : nodesToKeep) {
@@ -496,7 +517,7 @@ public class StructureModifier {
                     for (int j = 0; j < deletedEdges.length; j++) {
                         if (deletedEdges[j] != null) {
                             dhns.getGraphStructure().removeFromDictionnary(deletedEdges[j]);
-                            dhns.getEventManager().fireEvent(new EdgeEvent(EventType.REMOVE_EDGES, deletedEdges[j], graphView));
+                            dhns.getEventManager().fireEvent(new EdgeEvent(EventType.REMOVE_NODES_AND_EDGES, deletedEdges[j], graphView));
                         }
                     }
                 }

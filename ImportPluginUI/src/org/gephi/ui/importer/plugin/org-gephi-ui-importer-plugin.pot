@@ -1,14 +1,14 @@
-# English (en) translation for Gephi.
-# Copyright (C) 2010 Gephi contributors.
+# Translation file for Gephi.
+# Copyright (C) 2011 Gephi contributors.
 # This file is distributed under the same license as the Gephi package.
-# Gephi Team <gephi.team@lists.launchpad.net>, 2010.
+# Gephi Team <gephi.team@lists.launchpad.net>, 2011.
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: Gephi 0.7\n"
+"Project-Id-Version: Gephi 0.8\n"
 "Report-Msgid-Bugs-To: gephi.team@lists.launchpad.net\n"
-"POT-Creation-Date: 2010-04-07 13:16+0200\n"
-"PO-Revision-Date: 2010-04-07 13:16+0200\n"
+"POT-Creation-Date: 2011-08-05 14:52+0200\n"
+"PO-Revision-Date: 2011-08-05 14:52+0200\n"
 "Last-Translator: Mathieu Bastian <gephi.team@lists.launchpad.net>\n"
 "Language-Team: English <https://launchpad.net/~gephi.team>\n"
 "MIME-Version: 1.0\n"
@@ -26,6 +26,9 @@ msgstr "Configuration:"
 
 msgid "EdgeListPanel.hostLabel.text"
 msgstr "Host:"
+
+msgid "EdgeListPanel.fileLabel.text"
+msgstr "File:"
 
 msgid "EdgeListPanel.portLabel.text"
 msgstr "Port:"
@@ -48,20 +51,8 @@ msgstr "Node Query:"
 msgid "EdgeListPanel.edgeQueryLabel.text"
 msgstr "Edge Query:"
 
-msgid "EdgeListPanel.nodeAttQueyLabel.text"
-msgstr "Node Attributes Query:"
-
-msgid "EdgeListPanel.edgeAttQueryLabel.text"
-msgstr "Edge Attributes Query:"
-
 msgid "EdgeListPanel.nodeQueryTextField.text"
 msgstr "SELECT * FROM nodes"
-
-msgid "EdgeListPanel.nodeAttQueryTextField.text"
-msgstr "SELECT * FROM nodesAttributes"
-
-msgid "EdgeListPanel.edgeAttQueryTextField.text"
-msgstr "SELECT * FROM edgesAttributes"
 
 msgid "EdgeListPanel.testConnection.text"
 msgstr "Test Connection"
@@ -95,4 +86,26 @@ msgstr ""
 "Nodes and edges database with an edge table with two columns: source and "
 "target. Name node primary key column \"id\" and edge columns \"source\" and "
 "\"target\". Columns \"label\", \"x\", \"y\" and \"size\" for nodes and "
-"\"label\" and \"weight\" for edges are optionnal."
+"\"label\" and \"weight\" for edges are optional. For dynamic networks, use "
+"'start' and 'end' columns with type date, datetime or double."
+
+msgid "EdgeListPanel.sqliteFileChooser.title"
+msgstr "Database file"
+
+msgid "EdgeListPanel.sqliteFileChooser.filefilter"
+msgstr "SQLite database"
+
+msgid "ImporterVnaUI.displayName"
+msgstr "VNA import"
+
+msgid "ImporterVnaUI.message.linear"
+msgstr "Line width increases linearly with its value."
+
+msgid "ImporterVnaUI.message.square_root"
+msgstr "Line width increases with a square root of its value."
+
+msgid "ImporterVnaUI.message.logarithmic"
+msgstr "Line width increases logarithmically with its value."
+
+msgid "EdgeListPanel.browseButton.text"
+msgstr "Browse"

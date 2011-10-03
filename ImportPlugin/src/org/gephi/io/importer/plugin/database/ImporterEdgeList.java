@@ -5,30 +5,55 @@ Website : http://www.gephi.org
 
 This file is part of Gephi.
 
-Gephi is free software: you can redistribute it and/or modify
-it under the terms of the GNU Affero General Public License as
-published by the Free Software Foundation, either version 3 of the
-License, or (at your option) any later version.
+DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
 
-Gephi is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU Affero General Public License for more details.
+Copyright 2011 Gephi Consortium. All rights reserved.
 
-You should have received a copy of the GNU Affero General Public License
-along with Gephi.  If not, see <http://www.gnu.org/licenses/>.
-*/
+The contents of this file are subject to the terms of either the GNU
+General Public License Version 3 only ("GPL") or the Common
+Development and Distribution License("CDDL") (collectively, the
+"License"). You may not use this file except in compliance with the
+License. You can obtain a copy of the License at
+http://gephi.org/about/legal/license-notice/
+or /cddl-1.0.txt and /gpl-3.0.txt. See the License for the
+specific language governing permissions and limitations under the
+License.  When distributing the software, include this License Header
+Notice in each file and include the License files at
+/cddl-1.0.txt and /gpl-3.0.txt. If applicable, add the following below the
+License Header, with the fields enclosed by brackets [] replaced by
+your own identifying information:
+"Portions Copyrighted [year] [name of copyright owner]"
+
+If you wish your version of this file to be governed by only the CDDL
+or only the GPL Version 3, indicate your decision by adding
+"[Contributor] elects to include this software in this distribution
+under the [CDDL or GPL Version 3] license." If you do not indicate a
+single choice of license, a recipient has the option to distribute
+your version of this file under either the CDDL, the GPL Version 3 or
+to extend the choice of license to its licensees as provided above.
+However, if you add GPL Version 3 code and therefore, elected the GPL
+Version 3 license, then the option applies only if the new code is
+made subject to such option by the copyright holder.
+
+Contributor(s):
+
+Portions Copyrighted 2011 Gephi Consortium.
+ */
 package org.gephi.io.importer.plugin.database;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.Time;
+import java.sql.Timestamp;
 import java.sql.Types;
 import org.gephi.data.attributes.api.AttributeTable;
 import org.gephi.data.attributes.api.AttributeColumn;
 import org.gephi.data.attributes.api.AttributeType;
+import org.gephi.dynamic.api.DynamicModel.TimeFormat;
 import org.gephi.io.database.drivers.SQLUtils;
 import org.gephi.io.importer.api.ContainerLoader;
 import org.gephi.io.importer.api.Database;
@@ -51,6 +76,11 @@ public class ImporterEdgeList implements DatabaseImporter {
     private EdgeListDatabaseImpl database;
     private ContainerLoader container;
     private Connection connection;
+    //TempData
+    private String timeIntervalStart;
+    private String timeIntervalStartOpen;
+    private String timeIntervalEnd;
+    private String timeIntervalEndOpen;
 
     public boolean execute(ContainerLoader container) {
         this.container = container;
@@ -111,14 +141,14 @@ public class ImporterEdgeList implements DatabaseImporter {
         PropertiesAssociations properties = database.getPropertiesAssociations();
 
         Statement s = connection.createStatement();
+        ResultSet rs = null;
         try {
-            s.executeQuery(database.getNodeQuery());
+            rs = s.executeQuery(database.getNodeQuery());
         } catch (SQLException ex) {
             report.logIssue(new Issue("Failed to execute Node query", Issue.Level.SEVERE, ex));
             return;
         }
 
-        ResultSet rs = s.getResultSet();
         findNodeAttributesColumns(rs);
         AttributeTable nodeClass = container.getAttributeModel().getNodeTable();
         ResultSetMetaData metaData = rs.getMetaData();
@@ -137,6 +167,7 @@ public class ImporterEdgeList implements DatabaseImporter {
                     injectNodeAttribute(rs, i + 1, col, node);
                 }
             }
+            injectTimeIntervalProperty(node);
             container.addNode(node);
             ++count;
         }
@@ -154,13 +185,13 @@ public class ImporterEdgeList implements DatabaseImporter {
         PropertiesAssociations properties = database.getPropertiesAssociations();
 
         Statement s = connection.createStatement();
+        ResultSet rs = null;
         try {
-            s.executeQuery(database.getEdgeQuery());
+            rs = s.executeQuery(database.getEdgeQuery());
         } catch (SQLException ex) {
             report.logIssue(new Issue("Failed to execute Edge query", Issue.Level.SEVERE, ex));
             return;
         }
-        ResultSet rs = s.getResultSet();
         findEdgeAttributesColumns(rs);
         AttributeTable edgeClass = container.getAttributeModel().getEdgeTable();
         ResultSetMetaData metaData = rs.getMetaData();
@@ -179,7 +210,7 @@ public class ImporterEdgeList implements DatabaseImporter {
                     injectEdgeAttribute(rs, i + 1, col, edge);
                 }
             }
-
+            injectTimeIntervalProperty(edge);
             container.addEdge(edge);
             ++count;
         }
@@ -225,13 +256,116 @@ public class ImporterEdgeList implements DatabaseImporter {
                     nodeDraft.setZ(z);
                 }
                 break;
-            case R:
+            case COLOR:
+                String color = rs.getString(column);
+                if (color != null) {
+                    String[] rgb = color.split(",");
+                    if (rgb.length == 3) {
+                        nodeDraft.setColor(rgb[0], rgb[1], rgb[2]);
+                    }
+                }
                 break;
-            case G:
+            case SIZE:
+                float size = rs.getFloat(column);
+                if (size != 0) {
+                    nodeDraft.setSize(size);
+                }
                 break;
-            case B:
+            case START:
+                container.setTimeFormat(getTimeFormat(rs, column));
+                String start = getDateData(rs, column);
+                if (start != null) {
+                    timeIntervalStart = start;
+                }
                 break;
+            case START_OPEN:
+                container.setTimeFormat(getTimeFormat(rs, column));
+                String startOpen = rs.getString(column);
+                if (startOpen != null) {
+                    timeIntervalStartOpen = startOpen;
+                }
+                break;
+            case END:
+                container.setTimeFormat(getTimeFormat(rs, column));
+                String end = rs.getString(column);
+                if (end != null) {
+                    timeIntervalEnd = end;
+                }
+                break;
+            case END_OPEN:
+                container.setTimeFormat(getTimeFormat(rs, column));
+                String endOpen = rs.getString(column);
+                if (endOpen != null) {
+                    timeIntervalEndOpen = endOpen;
+                }
+                break;
+
         }
+    }
+    
+    private TimeFormat getTimeFormat(ResultSet rs, int column) throws SQLException {
+        ResultSetMetaData metaData = rs.getMetaData();
+        int type = metaData.getColumnType(column);
+        if (type == Types.DATE) {
+            return TimeFormat.DATE;
+        } else if (type == Types.TIME) {
+            return TimeFormat.DATETIME;
+        } else if (type == Types.TIMESTAMP) {
+            return TimeFormat.DATETIME;
+        } else if (type == Types.VARCHAR) {
+            return TimeFormat.DATETIME;
+        } else if (type == Types.DOUBLE || type == Types.FLOAT) {
+            return TimeFormat.DOUBLE;
+        }
+        return TimeFormat.DOUBLE;
+    }
+
+    private String getDateData(ResultSet rs, int column) throws SQLException {
+        String res = null;
+        ResultSetMetaData metaData = rs.getMetaData();
+        int type = metaData.getColumnType(column);
+        if (type == Types.DATE) {
+            Date date = rs.getDate(column);
+            res = date.toString();
+        } else if (type == Types.TIME) {
+            Time time = rs.getTime(column);
+            res = time.toString();
+        } else if (type == Types.TIMESTAMP) {
+            Timestamp timeStamp = rs.getTimestamp(column);
+            res = timeStamp.toString();
+        } else if (type == Types.VARCHAR) {
+            res = rs.getString(column);
+        } else if (type == Types.DOUBLE || type == Types.FLOAT) {
+            Double dbl = rs.getDouble(column);
+            res = dbl.toString();
+        }
+        return res;
+    }
+
+    private void injectTimeIntervalProperty(NodeDraft nodeDraft) {
+        if (timeIntervalStart != null && timeIntervalEnd != null) {
+            nodeDraft.addTimeInterval(timeIntervalStart, timeIntervalEnd, false, false);
+        } else if (timeIntervalStart != null && timeIntervalEndOpen != null) {
+            nodeDraft.addTimeInterval(timeIntervalStart, timeIntervalEndOpen, false, true);
+        } else if (timeIntervalStartOpen != null && timeIntervalEnd != null) {
+            nodeDraft.addTimeInterval(timeIntervalStartOpen, timeIntervalEnd, true, false);
+        } else if (timeIntervalStartOpen != null && timeIntervalEndOpen != null) {
+            nodeDraft.addTimeInterval(timeIntervalStartOpen, timeIntervalEndOpen, true, true);
+        } else if (timeIntervalStart != null) {
+            nodeDraft.addTimeInterval(timeIntervalStart, null);
+        } else if (timeIntervalStartOpen != null) {
+            nodeDraft.addTimeInterval(timeIntervalStartOpen, null, true, false);
+        } else if (timeIntervalEnd != null) {
+            nodeDraft.addTimeInterval(null, timeIntervalEnd);
+        } else if (timeIntervalEndOpen != null) {
+            nodeDraft.addTimeInterval(null, timeIntervalEndOpen, false, true);
+        }
+
+        //Reset temp data
+        timeIntervalStart = null;
+        timeIntervalStartOpen = null;
+        timeIntervalEnd = null;
+        timeIntervalEndOpen = null;
     }
 
     private void injectEdgeProperty(EdgeProperties p, ResultSet rs, int column, EdgeDraft edgeDraft) throws SQLException {
@@ -268,13 +402,70 @@ public class ImporterEdgeList implements DatabaseImporter {
                     edgeDraft.setWeight(weight);
                 }
                 break;
-            case R:
+            case COLOR:
+                String color = rs.getString(column);
+                if (color != null) {
+                    String[] rgb = color.split(",");
+                    if (rgb.length == 3) {
+                        edgeDraft.setColor(rgb[0], rgb[1], rgb[2]);
+                    }
+                }
                 break;
-            case G:
+            case START:
+                container.setTimeFormat(getTimeFormat(rs, column));
+                String start = getDateData(rs, column);
+                if (start != null) {
+                    timeIntervalStart = start;
+                }
                 break;
-            case B:
+            case START_OPEN:
+                container.setTimeFormat(getTimeFormat(rs, column));
+                String startOpen = rs.getString(column);
+                if (startOpen != null) {
+                    timeIntervalStartOpen = startOpen;
+                }
+                break;
+            case END:
+                container.setTimeFormat(getTimeFormat(rs, column));
+                String end = rs.getString(column);
+                if (end != null) {
+                    timeIntervalEnd = end;
+                }
+                break;
+            case END_OPEN:
+                container.setTimeFormat(getTimeFormat(rs, column));
+                String endOpen = rs.getString(column);
+                if (endOpen != null) {
+                    timeIntervalEndOpen = endOpen;
+                }
                 break;
         }
+    }
+    
+    private void injectTimeIntervalProperty(EdgeDraft edgeDraft) {
+        if (timeIntervalStart != null && timeIntervalEnd != null) {
+            edgeDraft.addTimeInterval(timeIntervalStart, timeIntervalEnd, false, false);
+        } else if (timeIntervalStart != null && timeIntervalEndOpen != null) {
+            edgeDraft.addTimeInterval(timeIntervalStart, timeIntervalEndOpen, false, true);
+        } else if (timeIntervalStartOpen != null && timeIntervalEnd != null) {
+            edgeDraft.addTimeInterval(timeIntervalStartOpen, timeIntervalEnd, true, false);
+        } else if (timeIntervalStartOpen != null && timeIntervalEndOpen != null) {
+            edgeDraft.addTimeInterval(timeIntervalStartOpen, timeIntervalEndOpen, true, true);
+        } else if (timeIntervalStart != null) {
+            edgeDraft.addTimeInterval(timeIntervalStart, null);
+        } else if (timeIntervalStartOpen != null) {
+            edgeDraft.addTimeInterval(timeIntervalStartOpen, null, true, false);
+        } else if (timeIntervalEnd != null) {
+            edgeDraft.addTimeInterval(null, timeIntervalEnd);
+        } else if (timeIntervalEndOpen != null) {
+            edgeDraft.addTimeInterval(null, timeIntervalEndOpen, false, true);
+        }
+
+        //Reset temp data
+        timeIntervalStart = null;
+        timeIntervalStartOpen = null;
+        timeIntervalEnd = null;
+        timeIntervalEndOpen = null;
     }
 
     private void injectNodeAttribute(ResultSet rs, int columnIndex, AttributeColumn column, NodeDraft draft) {
@@ -497,5 +688,5 @@ public class ImporterEdgeList implements DatabaseImporter {
 
     public Report getReport() {
         return report;
-    }  
+    }
 }

@@ -5,23 +5,48 @@ Website : http://www.gephi.org
 
 This file is part of Gephi.
 
-Gephi is free software: you can redistribute it and/or modify
-it under the terms of the GNU Affero General Public License as
-published by the Free Software Foundation, either version 3 of the
-License, or (at your option) any later version.
+DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
 
-Gephi is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU Affero General Public License for more details.
+Copyright 2011 Gephi Consortium. All rights reserved.
 
-You should have received a copy of the GNU Affero General Public License
-along with Gephi.  If not, see <http://www.gnu.org/licenses/>.
+The contents of this file are subject to the terms of either the GNU
+General Public License Version 3 only ("GPL") or the Common
+Development and Distribution License("CDDL") (collectively, the
+"License"). You may not use this file except in compliance with the
+License. You can obtain a copy of the License at
+http://gephi.org/about/legal/license-notice/
+or /cddl-1.0.txt and /gpl-3.0.txt. See the License for the
+specific language governing permissions and limitations under the
+License.  When distributing the software, include this License Header
+Notice in each file and include the License files at
+/cddl-1.0.txt and /gpl-3.0.txt. If applicable, add the following below the
+License Header, with the fields enclosed by brackets [] replaced by
+your own identifying information:
+"Portions Copyrighted [year] [name of copyright owner]"
+
+If you wish your version of this file to be governed by only the CDDL
+or only the GPL Version 3, indicate your decision by adding
+"[Contributor] elects to include this software in this distribution
+under the [CDDL or GPL Version 3] license." If you do not indicate a
+single choice of license, a recipient has the option to distribute
+your version of this file under either the CDDL, the GPL Version 3 or
+to extend the choice of license to its licensees as provided above.
+However, if you add GPL Version 3 code and therefore, elected the GPL
+Version 3 license, then the option applies only if the new code is
+made subject to such option by the copyright holder.
+
+Contributor(s):
+
+Portions Copyrighted 2011 Gephi Consortium.
  */
 package org.gephi.layout.plugin.forceAtlas2;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 import org.gephi.data.attributes.type.TimeInterval;
 import org.gephi.dynamic.DynamicUtilities;
 import org.gephi.dynamic.api.DynamicController;
@@ -37,6 +62,7 @@ import org.gephi.layout.spi.Layout;
 import org.gephi.layout.spi.LayoutBuilder;
 import org.gephi.layout.spi.LayoutProperty;
 import org.gephi.project.api.Workspace;
+import org.openide.util.Exceptions;
 import org.openide.util.Lookup;
 import org.openide.util.NbBundle;
 
@@ -60,13 +86,18 @@ public class ForceAtlas2 implements Layout {
     private boolean barnesHutOptimize;
     private double barnesHutTheta;
     private boolean linLogMode;
+    private boolean strongGravityMode;
+    private int threadCount;
+    private int currentThreadCount;
     private Region rootRegion;
     double outboundAttCompensation = 1;
     //Dynamic Weight
     private TimeInterval timeInterval;
+    private ExecutorService pool;
 
     public ForceAtlas2(ForceAtlas2Builder layoutBuilder) {
         this.layoutBuilder = layoutBuilder;
+        this.threadCount = Math.min(4, Math.max(1, Runtime.getRuntime().availableProcessors() - 1));
     }
 
     @Override
@@ -93,6 +124,9 @@ public class ForceAtlas2 implements Layout {
             nLayout.dx = 0;
             nLayout.dy = 0;
         }
+
+        pool = Executors.newFixedThreadPool(threadCount);
+        currentThreadCount = threadCount;
     }
 
     @Override
@@ -140,31 +174,43 @@ public class ForceAtlas2 implements Layout {
             outboundAttCompensation /= nodes.length;
         }
 
-        // Repulsion
+        // Repulsion (and gravity)
+        // NB: Muti-threaded
         RepulsionForce Repulsion = ForceFactory.builder.buildRepulsion(isAdjustSizes(), getScalingRatio());
-        if (isBarnesHutOptimize()) {
-            for (Node n : nodes) {
-                rootRegion.applyForce(n, Repulsion, getBarnesHutTheta());
-            }
-        } else {
-            for (int n1Index = 0; n1Index < nodes.length; n1Index++) {
-                Node n1 = nodes[n1Index];
-                for (int n2Index = 0; n2Index < n1Index; n2Index++) {
-                    Node n2 = nodes[n2Index];
-                    Repulsion.apply(n1, n2);
-                }
+
+        int taskCount = 8 * currentThreadCount;  // The threadPool Executor Service will manage the fetching of tasks and threads.
+        // We make more tasks than threads because some tasks may need more time to compute.
+        ArrayList<Future> threads = new ArrayList();
+        for (int t = taskCount; t > 0; t--) {
+            int from = (int) Math.floor(nodes.length * (t - 1) / taskCount);
+            int to = (int) Math.floor(nodes.length * t / taskCount);
+            Future future = pool.submit(new NodesThread(nodes, from, to, isBarnesHutOptimize(), getBarnesHutTheta(), getGravity(), (isStrongGravityMode()) ? (ForceFactory.builder.getStrongGravity(getScalingRatio())) : (Repulsion), getScalingRatio(), rootRegion, Repulsion));
+            threads.add(future);
+        }
+        for (Future future : threads) {
+            try {
+                future.get();
+            } catch (InterruptedException ex) {
+                Exceptions.printStackTrace(ex);
+            } catch (ExecutionException ex) {
+                Exceptions.printStackTrace(ex);
             }
         }
 
         // Attraction
         AttractionForce Attraction = ForceFactory.builder.buildAttraction(isLinLogMode(), isOutboundAttractionDistribution(), isAdjustSizes(), 1 * ((isOutboundAttractionDistribution()) ? (outboundAttCompensation) : (1)));
-        for (Edge e : edges) {
-            Attraction.apply(e.getSource(), e.getTarget(), Math.pow(getWeight(e), getEdgeWeightInfluence()));
-        }
-
-        // Gravity
-        for (Node n : nodes) {
-            Repulsion.apply(n, getGravity() / getScalingRatio());
+        if (getEdgeWeightInfluence() == 0) {
+            for (Edge e : edges) {
+                Attraction.apply(e.getSource(), e.getTarget(), 1);
+            }
+        } else if (getEdgeWeightInfluence() == 1) {
+            for (Edge e : edges) {
+                Attraction.apply(e.getSource(), e.getTarget(), getWeight(e));
+            }
+        } else {
+            for (Edge e : edges) {
+                Attraction.apply(e.getSource(), e.getTarget(), Math.pow(getWeight(e), getEdgeWeightInfluence()));
+            }
         }
 
         // Auto adjust speed
@@ -242,6 +288,7 @@ public class ForceAtlas2 implements Layout {
         for (Node n : graph.getNodes()) {
             n.getNodeData().setLayoutData(null);
         }
+        pool.shutdown();
         graph.readUnlockAll();
     }
 
@@ -251,19 +298,30 @@ public class ForceAtlas2 implements Layout {
         final String FORCEATLAS2_TUNING = NbBundle.getMessage(getClass(), "ForceAtlas2.tuning");
         final String FORCEATLAS2_BEHAVIOR = NbBundle.getMessage(getClass(), "ForceAtlas2.behavior");
         final String FORCEATLAS2_PERFORMANCE = NbBundle.getMessage(getClass(), "ForceAtlas2.performance");
+        final String FORCEATLAS2_THREADS = NbBundle.getMessage(getClass(), "ForceAtlas2.threads");
 
         try {
             properties.add(LayoutProperty.createProperty(
                     this, Double.class,
                     NbBundle.getMessage(getClass(), "ForceAtlas2.scalingRatio.name"),
                     FORCEATLAS2_TUNING,
+                    "ForceAtlas2.scalingRatio.name",
                     NbBundle.getMessage(getClass(), "ForceAtlas2.scalingRatio.desc"),
                     "getScalingRatio", "setScalingRatio"));
+
+            properties.add(LayoutProperty.createProperty(
+                    this, Boolean.class,
+                    NbBundle.getMessage(getClass(), "ForceAtlas2.strongGravityMode.name"),
+                    FORCEATLAS2_TUNING,
+                    "ForceAtlas2.strongGravityMode.name",
+                    NbBundle.getMessage(getClass(), "ForceAtlas2.strongGravityMode.desc"),
+                    "isStrongGravityMode", "setStrongGravityMode"));
 
             properties.add(LayoutProperty.createProperty(
                     this, Double.class,
                     NbBundle.getMessage(getClass(), "ForceAtlas2.gravity.name"),
                     FORCEATLAS2_TUNING,
+                    "ForceAtlas2.gravity.name",
                     NbBundle.getMessage(getClass(), "ForceAtlas2.gravity.desc"),
                     "getGravity", "setGravity"));
 
@@ -271,6 +329,7 @@ public class ForceAtlas2 implements Layout {
                     this, Boolean.class,
                     NbBundle.getMessage(getClass(), "ForceAtlas2.distributedAttraction.name"),
                     FORCEATLAS2_BEHAVIOR,
+                    "ForceAtlas2.distributedAttraction.name",
                     NbBundle.getMessage(getClass(), "ForceAtlas2.distributedAttraction.desc"),
                     "isOutboundAttractionDistribution", "setOutboundAttractionDistribution"));
 
@@ -278,6 +337,7 @@ public class ForceAtlas2 implements Layout {
                     this, Boolean.class,
                     NbBundle.getMessage(getClass(), "ForceAtlas2.linLogMode.name"),
                     FORCEATLAS2_BEHAVIOR,
+                    "ForceAtlas2.linLogMode.name",
                     NbBundle.getMessage(getClass(), "ForceAtlas2.linLogMode.desc"),
                     "isLinLogMode", "setLinLogMode"));
 
@@ -285,6 +345,7 @@ public class ForceAtlas2 implements Layout {
                     this, Boolean.class,
                     NbBundle.getMessage(getClass(), "ForceAtlas2.adjustSizes.name"),
                     FORCEATLAS2_BEHAVIOR,
+                    "ForceAtlas2.adjustSizes.name",
                     NbBundle.getMessage(getClass(), "ForceAtlas2.adjustSizes.desc"),
                     "isAdjustSizes", "setAdjustSizes"));
 
@@ -292,6 +353,7 @@ public class ForceAtlas2 implements Layout {
                     this, Double.class,
                     NbBundle.getMessage(getClass(), "ForceAtlas2.edgeWeightInfluence.name"),
                     FORCEATLAS2_BEHAVIOR,
+                    "ForceAtlas2.edgeWeightInfluence.name",
                     NbBundle.getMessage(getClass(), "ForceAtlas2.edgeWeightInfluence.desc"),
                     "getEdgeWeightInfluence", "setEdgeWeightInfluence"));
 
@@ -299,6 +361,7 @@ public class ForceAtlas2 implements Layout {
                     this, Double.class,
                     NbBundle.getMessage(getClass(), "ForceAtlas2.jitterTolerance.name"),
                     FORCEATLAS2_PERFORMANCE,
+                    "ForceAtlas2.jitterTolerance.name",
                     NbBundle.getMessage(getClass(), "ForceAtlas2.jitterTolerance.desc"),
                     "getJitterTolerance", "setJitterTolerance"));
 
@@ -306,6 +369,7 @@ public class ForceAtlas2 implements Layout {
                     this, Boolean.class,
                     NbBundle.getMessage(getClass(), "ForceAtlas2.barnesHutOptimization.name"),
                     FORCEATLAS2_PERFORMANCE,
+                    "ForceAtlas2.barnesHutOptimization.name",
                     NbBundle.getMessage(getClass(), "ForceAtlas2.barnesHutOptimization.desc"),
                     "isBarnesHutOptimize", "setBarnesHutOptimize"));
 
@@ -313,8 +377,17 @@ public class ForceAtlas2 implements Layout {
                     this, Double.class,
                     NbBundle.getMessage(getClass(), "ForceAtlas2.barnesHutTheta.name"),
                     FORCEATLAS2_PERFORMANCE,
+                    "ForceAtlas2.barnesHutTheta.name",
                     NbBundle.getMessage(getClass(), "ForceAtlas2.barnesHutTheta.desc"),
                     "getBarnesHutTheta", "setBarnesHutTheta"));
+
+            properties.add(LayoutProperty.createProperty(
+                    this, Integer.class,
+                    NbBundle.getMessage(getClass(), "ForceAtlas2.threads.name"),
+                    FORCEATLAS2_THREADS,
+                    "ForceAtlas2.threads.name",
+                    NbBundle.getMessage(getClass(), "ForceAtlas2.threads.desc"),
+                    "getThreadsCount", "setThreadsCount"));
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -337,6 +410,7 @@ public class ForceAtlas2 implements Layout {
         } else {
             setScalingRatio(10.0);
         }
+        setStrongGravityMode(false);
         setGravity(1.);
 
         // Behavior
@@ -359,6 +433,7 @@ public class ForceAtlas2 implements Layout {
             setBarnesHutOptimize(false);
         }
         setBarnesHutTheta(1.2);
+        setThreadsCount(2);
     }
 
     @Override
@@ -418,12 +493,32 @@ public class ForceAtlas2 implements Layout {
         this.scalingRatio = scalingRatio;
     }
 
+    public Boolean isStrongGravityMode() {
+        return strongGravityMode;
+    }
+
+    public void setStrongGravityMode(Boolean strongGravityMode) {
+        this.strongGravityMode = strongGravityMode;
+    }
+
     public Double getGravity() {
         return gravity;
     }
 
     public void setGravity(Double gravity) {
         this.gravity = gravity;
+    }
+
+    public Integer getThreadsCount() {
+        return threadCount;
+    }
+
+    public void setThreadsCount(Integer threadCount) {
+        if (threadCount < 1) {
+            setThreadsCount(1);
+        } else {
+            this.threadCount = threadCount;
+        }
     }
 
     public Boolean isOutboundAttractionDistribution() {

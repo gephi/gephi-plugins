@@ -5,18 +5,39 @@ Website : http://www.gephi.org
 
 This file is part of Gephi.
 
-Gephi is free software: you can redistribute it and/or modify
-it under the terms of the GNU Affero General Public License as
-published by the Free Software Foundation, either version 3 of the
-License, or (at your option) any later version.
+DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
 
-Gephi is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU Affero General Public License for more details.
+Copyright 2011 Gephi Consortium. All rights reserved.
 
-You should have received a copy of the GNU Affero General Public License
-along with Gephi.  If not, see <http://www.gnu.org/licenses/>.
+The contents of this file are subject to the terms of either the GNU
+General Public License Version 3 only ("GPL") or the Common
+Development and Distribution License("CDDL") (collectively, the
+"License"). You may not use this file except in compliance with the
+License. You can obtain a copy of the License at
+http://gephi.org/about/legal/license-notice/
+or /cddl-1.0.txt and /gpl-3.0.txt. See the License for the
+specific language governing permissions and limitations under the
+License.  When distributing the software, include this License Header
+Notice in each file and include the License files at
+/cddl-1.0.txt and /gpl-3.0.txt. If applicable, add the following below the
+License Header, with the fields enclosed by brackets [] replaced by
+your own identifying information:
+"Portions Copyrighted [year] [name of copyright owner]"
+
+If you wish your version of this file to be governed by only the CDDL
+or only the GPL Version 3, indicate your decision by adding
+"[Contributor] elects to include this software in this distribution
+under the [CDDL or GPL Version 3] license." If you do not indicate a
+single choice of license, a recipient has the option to distribute
+your version of this file under either the CDDL, the GPL Version 3 or
+to extend the choice of license to its licensees as provided above.
+However, if you add GPL Version 3 code and therefore, elected the GPL
+Version 3 license, then the option applies only if the new code is
+made subject to such option by the copyright holder.
+
+Contributor(s):
+
+Portions Copyrighted 2011 Gephi Consortium.
  */
 package org.gephi.datalab.api;
 
@@ -49,6 +70,8 @@ import org.gephi.datalab.spi.general.GeneralActionsManipulator;
 import org.gephi.datalab.spi.general.PluginGeneralActionsManipulator;
 import org.gephi.datalab.spi.nodes.NodesManipulator;
 import org.gephi.datalab.spi.nodes.NodesManipulatorBuilder;
+import org.gephi.datalab.spi.rows.merge.AttributeRowsMergeStrategy;
+import org.gephi.datalab.spi.rows.merge.AttributeRowsMergeStrategyBuilder;
 import org.openide.DialogDescriptor;
 import org.openide.DialogDisplayer;
 import org.openide.util.Lookup;
@@ -58,8 +81,8 @@ import org.openide.util.lookup.ServiceProvider;
 /**
  * Helper class for simplifying the use of Data Laboratory API and SPI.
  */
-@ServiceProvider(service=DataLaboratoryHelper.class)
-public class DataLaboratoryHelper{
+@ServiceProvider(service = DataLaboratoryHelper.class)
+public class DataLaboratoryHelper {
 
     /**
      * <p>Prepares an array with one new instance of every NodesManipulator
@@ -157,6 +180,20 @@ public class DataLaboratoryHelper{
         return strategies.toArray(new AttributeColumnsMergeStrategy[0]);
     }
 
+    /**
+     * <p>Prepares an array that has one new instance of every AttributeRowsMergeStrategy implementation that is registered.</p>
+     * <p>It also returns the manipulators ordered first by type and then by position.</p>
+     * @return Array of all AttributeRowsMergeStrategy implementations
+     */
+    public AttributeRowsMergeStrategy[] getAttributeRowsMergeStrategies() {
+        ArrayList<AttributeRowsMergeStrategy> strategies = new ArrayList<AttributeRowsMergeStrategy>();
+        for (AttributeRowsMergeStrategyBuilder cs : Lookup.getDefault().lookupAll(AttributeRowsMergeStrategyBuilder.class)) {
+            strategies.add(cs.getAttributeRowsMergeStrategy());
+        }
+        sortManipulators(strategies);
+        return strategies.toArray(new AttributeRowsMergeStrategy[0]);
+    }
+
     private void sortManipulators(ArrayList<? extends Manipulator> m) {
         Collections.sort(m, new Comparator<Manipulator>() {
 
@@ -233,6 +270,38 @@ public class DataLaboratoryHelper{
         }
     }
 
+    /**
+     * This method shows the UI of an AttributeRowsMergeStrategy if it is provided and the AttributeRowsMergeStrategy can be executed.
+     * These UI only configures (calls unSetup) the AttributeRowsMergeStrategy if the dialog is accepted,
+     * and it does not execute the AttributeRowsMergeStrategy.
+     * @param m AttributeRowsMergeStrategy
+     * @return True if the AttributeRowsMergeStrategy UI is provided
+     */
+    public boolean showAttributeRowsMergeStrategyUIDialog(final AttributeRowsMergeStrategy m) {
+        final ManipulatorUI ui = m.getUI();
+        //Show a dialog for the manipulator UI if it provides one. If not, execute the manipulator directly:
+        if (ui != null && m.canExecute()) {
+            final JButton okButton = new JButton(NbBundle.getMessage(DataLaboratoryHelper.class, "DataLaboratoryHelper.ui.okButton.text"));
+            DialogControls dialogControls = new DialogControlsImpl(okButton);
+            ui.setup(m, dialogControls);
+            JPanel settingsPanel = ui.getSettingsPanel();
+            DialogDescriptor dd = new DialogDescriptor(settingsPanel, NbBundle.getMessage(DataLaboratoryHelper.class, "SettingsPanel.title", ui.getDisplayName()), ui.isModal(), new ActionListener() {
+
+                public void actionPerformed(ActionEvent e) {
+                    if (e.getSource().equals(okButton)) {
+                        ui.unSetup();
+                    }
+                }
+            });
+            dd.setOptions(new Object[]{okButton, DialogDescriptor.CANCEL_OPTION});
+            dd.setClosingOptions(null);//All options close
+            Dialog dialog = DialogDisplayer.getDefault().createDialog(dd);
+            dialog.setVisible(true);
+            return true;
+        }
+        return false;
+    }
+
     private void executeManipulatorInOtherThread(final Manipulator m) {
         new Thread() {
 
@@ -305,9 +374,9 @@ public class DataLaboratoryHelper{
     /**
      * Returns the AttributeColumnsMergeStrategy with that class name or null if it does not exist
      */
-    public NodesManipulator getNodesManipulatorByName(String name){
+    public NodesManipulator getNodesManipulatorByName(String name) {
         for (NodesManipulatorBuilder nm : Lookup.getDefault().lookupAll(NodesManipulatorBuilder.class)) {
-            if(nm.getNodesManipulator().getClass().getSimpleName().equals(name)){
+            if (nm.getNodesManipulator().getClass().getSimpleName().equals(name)) {
                 return nm.getNodesManipulator();
             }
         }
@@ -317,9 +386,9 @@ public class DataLaboratoryHelper{
     /**
      * Returns the AttributeColumnsMergeStrategy with that class name or null if it does not exist
      */
-    public EdgesManipulator getEdgesManipulatorByName(String name){
+    public EdgesManipulator getEdgesManipulatorByName(String name) {
         for (EdgesManipulatorBuilder nm : Lookup.getDefault().lookupAll(EdgesManipulatorBuilder.class)) {
-            if(nm.getEdgesManipulator().getClass().getSimpleName().equals(name)){
+            if (nm.getEdgesManipulator().getClass().getSimpleName().equals(name)) {
                 return nm.getEdgesManipulator();
             }
         }
@@ -331,7 +400,7 @@ public class DataLaboratoryHelper{
      */
     public GeneralActionsManipulator getGeneralActionsManipulatorByName(String name) {
         for (GeneralActionsManipulator m : Lookup.getDefault().lookupAll(GeneralActionsManipulator.class)) {
-            if(m.getClass().getSimpleName().equals(name)){
+            if (m.getClass().getSimpleName().equals(name)) {
                 return m;
             }
         }
@@ -343,7 +412,7 @@ public class DataLaboratoryHelper{
      */
     public PluginGeneralActionsManipulator getPluginGeneralActionsManipulatorByName(String name) {
         for (PluginGeneralActionsManipulator m : Lookup.getDefault().lookupAll(PluginGeneralActionsManipulator.class)) {
-            if(m.getClass().getSimpleName().equals(name)){
+            if (m.getClass().getSimpleName().equals(name)) {
                 return m;
             }
         }
@@ -355,7 +424,7 @@ public class DataLaboratoryHelper{
      */
     public AttributeColumnsManipulator getAttributeColumnsManipulatorByName(String name) {
         for (AttributeColumnsManipulator m : Lookup.getDefault().lookupAll(AttributeColumnsManipulator.class)) {
-            if(m.getClass().getSimpleName().equals(name)){
+            if (m.getClass().getSimpleName().equals(name)) {
                 return m;
             }
         }
@@ -367,7 +436,7 @@ public class DataLaboratoryHelper{
      */
     public AttributeValueManipulator getAttributeValueManipulatorByName(String name) {
         for (AttributeValueManipulatorBuilder am : Lookup.getDefault().lookupAll(AttributeValueManipulatorBuilder.class)) {
-            if(am.getAttributeValueManipulator().getClass().getSimpleName().equals(name)){
+            if (am.getAttributeValueManipulator().getClass().getSimpleName().equals(name)) {
                 return am.getAttributeValueManipulator();
             }
         }
@@ -377,10 +446,22 @@ public class DataLaboratoryHelper{
     /**
      * Returns the AttributeColumnsMergeStrategy with that class name or null if it does not exist
      */
-    public AttributeColumnsMergeStrategy getAttributeColumnsMergeStrategieByName(String name) {
+    public AttributeColumnsMergeStrategy getAttributeColumnsMergeStrategyByName(String name) {
         for (AttributeColumnsMergeStrategyBuilder cs : Lookup.getDefault().lookupAll(AttributeColumnsMergeStrategyBuilder.class)) {
-            if(cs.getAttributeColumnsMergeStrategy().getClass().getSimpleName().equals(name)){
+            if (cs.getAttributeColumnsMergeStrategy().getClass().getSimpleName().equals(name)) {
                 return cs.getAttributeColumnsMergeStrategy();
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Returns the AttributeRowsMergeStrategy with that class name or null if it does not exist
+     */
+    public AttributeRowsMergeStrategy getAttributeRowsMergeStrategyByName(String name) {
+        for (AttributeRowsMergeStrategyBuilder cs : Lookup.getDefault().lookupAll(AttributeRowsMergeStrategyBuilder.class)) {
+            if (cs.getAttributeRowsMergeStrategy().getClass().getSimpleName().equals(name)) {
+                return cs.getAttributeRowsMergeStrategy();
             }
         }
         return null;
@@ -398,12 +479,12 @@ public class DataLaboratoryHelper{
             okButton.setEnabled(enabled);
         }
 
-        public boolean isOkButtonEnabled(){
+        public boolean isOkButtonEnabled() {
             return okButton.isEnabled();
         }
     }
 
-    public static DataLaboratoryHelper getDefault(){
+    public static DataLaboratoryHelper getDefault() {
         return Lookup.getDefault().lookup(DataLaboratoryHelper.class);
     }
 }

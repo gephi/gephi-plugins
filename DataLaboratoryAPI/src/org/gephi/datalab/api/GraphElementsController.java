@@ -5,21 +5,43 @@ Website : http://www.gephi.org
 
 This file is part of Gephi.
 
-Gephi is free software: you can redistribute it and/or modify
-it under the terms of the GNU Affero General Public License as
-published by the Free Software Foundation, either version 3 of the
-License, or (at your option) any later version.
+DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
 
-Gephi is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU Affero General Public License for more details.
+Copyright 2011 Gephi Consortium. All rights reserved.
 
-You should have received a copy of the GNU Affero General Public License
-along with Gephi.  If not, see <http://www.gnu.org/licenses/>.
+The contents of this file are subject to the terms of either the GNU
+General Public License Version 3 only ("GPL") or the Common
+Development and Distribution License("CDDL") (collectively, the
+"License"). You may not use this file except in compliance with the
+License. You can obtain a copy of the License at
+http://gephi.org/about/legal/license-notice/
+or /cddl-1.0.txt and /gpl-3.0.txt. See the License for the
+specific language governing permissions and limitations under the
+License.  When distributing the software, include this License Header
+Notice in each file and include the License files at
+/cddl-1.0.txt and /gpl-3.0.txt. If applicable, add the following below the
+License Header, with the fields enclosed by brackets [] replaced by
+your own identifying information:
+"Portions Copyrighted [year] [name of copyright owner]"
+
+If you wish your version of this file to be governed by only the CDDL
+or only the GPL Version 3, indicate your decision by adding
+"[Contributor] elects to include this software in this distribution
+under the [CDDL or GPL Version 3] license." If you do not indicate a
+single choice of license, a recipient has the option to distribute
+your version of this file under either the CDDL, the GPL Version 3 or
+to extend the choice of license to its licensees as provided above.
+However, if you add GPL Version 3 code and therefore, elected the GPL
+Version 3 license, then the option applies only if the new code is
+made subject to such option by the copyright holder.
+
+Contributor(s):
+
+Portions Copyrighted 2011 Gephi Consortium.
  */
 package org.gephi.datalab.api;
 
+import org.gephi.datalab.spi.rows.merge.AttributeRowsMergeStrategy;
 import org.gephi.graph.api.Edge;
 import org.gephi.graph.api.Node;
 
@@ -80,7 +102,7 @@ public interface GraphElementsController {
      * @param directed Indicates if the edge has to be directed
      * @return New edge if the edge was created succesfully, null otherwise
      */
-    Edge createEdge(String id,Node source, Node target, boolean directed);
+    Edge createEdge(String id, Node source, Node target, boolean directed);
 
     /**
      * <p>Tries to create edges between the source node and all other edges, directed or undirected.</p>
@@ -179,6 +201,17 @@ public interface GraphElementsController {
      * @return True if the node can be ungrouped, false otherwise
      */
     boolean canUngroupNode(Node node);
+
+    /**
+     * Merges 2 or more nodes into a new one node that has all the edges of the merged nodes.
+     * An AttributeRowsMergeStrategy must be provided for each column of the nodes.
+     * @param nodes Nodes to merge
+     * @param selectedNode Main selected node of the nodes to merge
+     * @param mergeStrategies Strategies to merge rows of each column of the nodes
+     * @param deleteMergedNodes Indicates if merged nodes should be deleted
+     * @return New resulting node
+     */
+    Node mergeNodes(Node[] nodes, Node selectedNode, AttributeRowsMergeStrategy[] mergeStrategies, boolean deleteMergedNodes);
 
     /**
      * Moves a node to a group of nodes if it is possible.
@@ -280,7 +313,7 @@ public interface GraphElementsController {
      * @return Edges count
      */
     int getEdgesCount();
-	
+
     /**
      * Checks if a node is contained in the main view graph.
      * @param node Node to check
