@@ -89,7 +89,7 @@ public class Graph2EventListenerTest {
         graph.removeNode(node1);
         graph.removeNode(node2);
         try {
-            Thread.sleep(100);
+            Thread.sleep(1000);
         } catch (InterruptedException ex) { }
 
         assertEquals(6, handler.getEventCount());

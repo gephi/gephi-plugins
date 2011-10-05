@@ -44,10 +44,8 @@ package org.gephi.streaming.api;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import org.gephi.data.attributes.api.AttributeEvent;
 import org.gephi.data.attributes.api.AttributeListener;
 import org.gephi.data.attributes.api.AttributeRow;
@@ -60,7 +58,6 @@ import org.gephi.graph.api.GraphEvent;
 import org.gephi.graph.api.GraphListener;
 import org.gephi.graph.api.Node;
 import org.gephi.graph.api.NodeData;
-import org.gephi.streaming.api.GraphEventHandler;
 import org.gephi.streaming.api.event.ElementType;
 import org.gephi.streaming.api.event.EventType;
 import org.gephi.streaming.api.event.GraphEventBuilder;
@@ -87,37 +84,55 @@ public class Graph2EventListener implements GraphListener, AttributeListener {
 
         switch (event.getEventType()) {
             case ADD_NODES_AND_EDGES:
-//            case ADD_EDGES:
+                
+                if (event.getData().addedEdges() != null)
                 for (Edge edge: event.getData().addedEdges()) {
                     String edgeId = edge.getEdgeData().getId();
-                    eventHandler.handleGraphEvent(eventBuilder.edgeAddedEvent(edgeId, edge.getSource().getNodeData().getId(),
-                            edge.getTarget().getNodeData().getId(), edge.isDirected(), getEdgeAttributes(edge)));
+                    org.gephi.streaming.api.event.GraphEvent e = 
+                            eventBuilder.edgeAddedEvent(edgeId, edge.getSource().getNodeData().getId(),
+                            edge.getTarget().getNodeData().getId(), edge.isDirected(), 
+                            getEdgeAttributes(edge));
+                    eventHandler.handleGraphEvent(e);
                 }
-//            break;
-//            case ADD_NODES:
+                
+                if (event.getData().addedNodes() != null)
                 for (Node node: event.getData().addedNodes()) {
                     String nodeId = node.getNodeData().getId();
-                    eventHandler.handleGraphEvent(eventBuilder.graphEvent(ElementType.NODE, EventType.ADD, nodeId, getNodeAttributes(node)));
+                    org.gephi.streaming.api.event.GraphEvent e = 
+                            eventBuilder.graphEvent(ElementType.NODE, EventType.ADD, nodeId, 
+                            getNodeAttributes(node));
+                    eventHandler.handleGraphEvent(e);
                 }
             break;
             case MOVE_NODES:
+                
                 for (Node node: event.getData().movedNodes()) {
                     String nodeId = node.getNodeData().getId();
-                    eventHandler.handleGraphEvent(eventBuilder.graphEvent(ElementType.NODE, EventType.CHANGE, nodeId, getNodeAttributes(node)));
+                    org.gephi.streaming.api.event.GraphEvent e = 
+                            eventBuilder.graphEvent(ElementType.NODE, EventType.CHANGE, nodeId, 
+                            getNodeAttributes(node));
+                    eventHandler.handleGraphEvent(e);
                 }
                 break;
+                
             case REMOVE_NODES_AND_EDGES:
-//            case REMOVE_EDGES:
+                
+                if (event.getData().removedEdges() != null)
                 for (Edge edge: event.getData().removedEdges()) {
                     String edgeId = edge.getEdgeData().getId();
-                    eventHandler.handleGraphEvent(eventBuilder.graphEvent(ElementType.EDGE, EventType.REMOVE, edgeId, null));
+                    org.gephi.streaming.api.event.GraphEvent e = 
+                            eventBuilder.graphEvent(ElementType.EDGE, EventType.REMOVE, edgeId, null);
+                    eventHandler.handleGraphEvent(e);
                 }
-//                break;
-//            case REMOVE_NODES:
+                
+                if (event.getData().removedNodes() != null)
                 for (Node node: event.getData().removedNodes()) {
                     String nodeId = node.getNodeData().getId();
-                    eventHandler.handleGraphEvent(eventBuilder.graphEvent(ElementType.NODE, EventType.REMOVE, nodeId, null));
+                    org.gephi.streaming.api.event.GraphEvent e = 
+                            eventBuilder.graphEvent(ElementType.NODE, EventType.REMOVE, nodeId, null);
+                    eventHandler.handleGraphEvent(e);
                 }
+                break;
         }
 
     }
