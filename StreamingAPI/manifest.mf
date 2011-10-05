@@ -3,5 +3,5 @@ AutoUpdate-Show-In-Client: false
 OpenIDE-Module: org.gephi.streaming.api
 OpenIDE-Module-Layer: org/gephi/streaming/api/layer.xml
 OpenIDE-Module-Localizing-Bundle: org/gephi/streaming/api/Bundle.properties
-OpenIDE-Module-Specification-Version: 0.7.0.12
+OpenIDE-Module-Specification-Version: 0.8
 
