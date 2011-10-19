@@ -20,6 +20,8 @@ along with Gephi.  If not, see <http://www.gnu.org/licenses/>.
  */
 package org.gephi.preview.plugin.renderers;
 
+import com.itextpdf.text.pdf.PdfContentByte;
+import com.itextpdf.text.pdf.PdfGState;
 import java.awt.Color;
 import java.util.Locale;
 import org.gephi.graph.api.Edge;
@@ -30,6 +32,7 @@ import org.gephi.preview.api.PreviewProperty;
 import org.gephi.preview.api.ProcessingTarget;
 import org.gephi.preview.api.RenderTarget;
 import org.gephi.preview.api.SVGTarget;
+import org.gephi.preview.api.PDFTarget;
 import org.gephi.preview.plugin.items.EdgeItem;
 import org.gephi.preview.plugin.items.NodeItem;
 import org.gephi.preview.spi.Renderer;
@@ -48,41 +51,49 @@ import processing.core.PVector;
 public class ArrowRenderer implements Renderer {
 
     //Const
-    private final float BASE_RATIO = 0.5f;
+    protected final float BASE_RATIO = 0.5f;
     //Default values
-    private float defaultArrowSize = 3f;
-    private float defaultArrowRadius = 0f;
+    protected float defaultArrowSize = 3f;
 
     public void preProcess(PreviewModel previewModel) {
     }
 
     public void render(Item item, RenderTarget target, PreviewProperties properties) {
-        //Get nodes
-        Item sourceItem = item.getData(EdgeRenderer.SOURCE);
-        Item targetItem = item.getData(EdgeRenderer.TARGET);
-
-        //Weight and color
-        Float weight = item.getData(EdgeItem.WEIGHT);
-        EdgeColor edgeColor = (EdgeColor) properties.getValue(PreviewProperty.EDGE_COLOR);
-        Color color = edgeColor.getColor((Color) item.getData(EdgeItem.COLOR),
-                (Color) sourceItem.getData(NodeItem.COLOR),
-                (Color) targetItem.getData(NodeItem.COLOR));
-
-        //Size and radius
-        float radius = properties.getFloatValue(PreviewProperty.ARROW_RADIUS);
-        float size = properties.getFloatValue(PreviewProperty.ARROW_SIZE) * weight;
-        radius = -(radius + (Float) targetItem.getData(NodeItem.SIZE) / 2f);
-
-        //3 points
-        Float x1 = sourceItem.getData(NodeItem.X);
-        Float x2 = targetItem.getData(NodeItem.X);
-        Float y1 = sourceItem.getData(NodeItem.Y);
-        Float y2 = targetItem.getData(NodeItem.Y);
-
+        float size = properties.getFloatValue(PreviewProperty.ARROW_SIZE);
         if (size > 0) {
+            //Get nodes
+            Item sourceItem = item.getData(EdgeRenderer.SOURCE);
+            Item targetItem = item.getData(EdgeRenderer.TARGET);
+
+            //Weight and color
+            Float weight = item.getData(EdgeItem.WEIGHT);
+            EdgeColor edgeColor = (EdgeColor) properties.getValue(PreviewProperty.EDGE_COLOR);
+            Color color = edgeColor.getColor((Color) item.getData(EdgeItem.COLOR),
+                    (Color) sourceItem.getData(NodeItem.COLOR),
+                    (Color) targetItem.getData(NodeItem.COLOR));
+            int alpha = (int) ((properties.getFloatValue(PreviewProperty.EDGE_OPACITY) / 100f) * 255f);
+            color = new Color(color.getRed(), color.getGreen(), color.getBlue(), alpha);
+
+            //Size and radius
+            float radius = properties.getFloatValue(PreviewProperty.EDGE_RADIUS);
+
+            size *= weight;
+            radius = -(radius + (Float) targetItem.getData(NodeItem.SIZE) / 2f + properties.getFloatValue(PreviewProperty.NODE_BORDER_WIDTH));
+
+            //Avoid arrow from passing the node's center:
+            if (radius > 0) {
+                radius = 0;
+            }
+            
+            //3 points
+            Float x1 = sourceItem.getData(NodeItem.X);
+            Float x2 = targetItem.getData(NodeItem.X);
+            Float y1 = sourceItem.getData(NodeItem.Y);
+            Float y2 = targetItem.getData(NodeItem.Y);
+
             if (properties.getBooleanValue(PreviewProperty.EDGE_CURVED)) {
             } else {
-                renderStraight((ProcessingTarget) target, item, x1, y1, x2, y2, radius, size, color);
+                renderStraight(target, item, x1, y1, x2, y2, radius, size, color);
             }
         }
     }
@@ -121,7 +132,28 @@ public class ArrowRenderer implements Renderer {
                     p1.x, p1.y, p2.x, p2.y, p3.x, p3.y));
             arrowElem.setAttribute("class", edge.getSource().getNodeData().getId() + " " + edge.getTarget().getNodeData().getId());
             arrowElem.setAttribute("fill", svgTarget.toHexString(color));
+            arrowElem.setAttribute("fill-opacity", (color.getAlpha() / 255f) + "");
             arrowElem.setAttribute("stroke", "none");
+            svgTarget.getTopElement(SVGTarget.TOP_ARROWS).appendChild(arrowElem);
+        } else if (target instanceof PDFTarget) {
+            PDFTarget pdfTarget = (PDFTarget) target;
+            PdfContentByte cb = pdfTarget.getContentByte();
+            cb.moveTo(p1.x, -p1.y);
+            cb.lineTo(p2.x, -p2.y);
+            cb.lineTo(p3.x, -p3.y);
+            cb.closePath();
+            cb.setRGBColorFill(color.getRed(), color.getGreen(), color.getBlue());
+            if (color.getAlpha() < 255) {
+                cb.saveState();
+                float alpha = color.getAlpha() / 255f;
+                PdfGState gState = new PdfGState();
+                gState.setFillOpacity(alpha);
+                cb.setGState(gState);
+            }
+            cb.fill();
+            if (color.getAlpha() < 255) {
+                cb.restoreState();
+            }
         }
     }
 
@@ -130,11 +162,7 @@ public class ArrowRenderer implements Renderer {
                     PreviewProperty.createProperty(this, PreviewProperty.ARROW_SIZE, Float.class,
                     NbBundle.getMessage(EdgeRenderer.class, "ArrowRenderer.property.size.displayName"),
                     NbBundle.getMessage(EdgeRenderer.class, "ArrowRenderer.property.size.description"),
-                    NbBundle.getMessage(EdgeRenderer.class, "ArrowRenderer.category"), PreviewProperty.SHOW_EDGES).setValue(defaultArrowSize),
-                    PreviewProperty.createProperty(this, PreviewProperty.ARROW_RADIUS, Float.class,
-                    NbBundle.getMessage(EdgeRenderer.class, "ArrowRenderer.property.radius.displayName"),
-                    NbBundle.getMessage(EdgeRenderer.class, "ArrowRenderer.property.radius.description"),
-                    NbBundle.getMessage(EdgeRenderer.class, "ArrowRenderer.category"), PreviewProperty.SHOW_EDGES).setValue(defaultArrowRadius),};
+                    PreviewProperty.CATEGORY_EDGE_ARROWS, PreviewProperty.SHOW_EDGES).setValue(defaultArrowSize)};
     }
 
     public boolean isRendererForitem(Item item, PreviewProperties properties) {

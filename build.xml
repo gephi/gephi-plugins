@@ -49,7 +49,7 @@
     </target>
 
     <target name="javadoc">
-        <javadoc destdir="dist/apiindex" windowtitle="Gephi API Index" encoding="UTF-8" charset="UTF-8" stylesheetfile="stylesheet.css"  packagenames="org.gephi.**.api,org.gephi.**.spi,org.gephi.data.*,org.gephi.utils.progress" overview="overview.html"  classpath="build/public-package-jars/org-openide-util-lookup.jar">
+        <javadoc destdir="dist/apiindex" windowtitle="Gephi API Index" encoding="UTF-8" charset="UTF-8" stylesheetfile="stylesheet.css"  packagenames="org.gephi.**.api,org.gephi.**.spi.*,org.gephi.data.*,org.gephi.utils.progress" overview="overview.html"  classpath="build/public-package-jars/org-openide-util-lookup.jar">
             <sourcepath>
                 <pathelement path="AttributesAPI/src"/>
                 <pathelement path="ClusteringAPI/src"/>
@@ -66,6 +66,7 @@
                 <pathelement path="PreviewAPI/src"/>
                 <pathelement path="ProjectAPI/src"/>
                 <pathelement path="RankingAPI/src"/>
+                <pathelement path="RankingPlugin/src"/>
                 <pathelement path="StatisticsAPI/src"/>
                 <pathelement path="ToolsAPI/src"/>
             </sourcepath>
@@ -169,7 +170,7 @@
                 <include name="org-gephi-layout-api.jar"/>
                 <include name="org-gephi-layout-plugin.jar"/>
                 <include name="org-gephi-preview-api.jar"/>
-                <include name="org-gephi-preview.jar"/>
+                <include name="org-gephi-preview-plugin.jar"/>
                 <include name="org-gephi-project-api.jar"/>
                 <include name="org-gephi-statistics-api.jar"/>
                 <include name="org-gephi-statistics-plugin.jar"/>
@@ -179,6 +180,7 @@
                 <include name="org-gephi-utils.jar"/>
                 <include name="org-gephi-utils-longtask.jar" />
                 <include name="org-gephi-ranking-api.jar"/>
+                <include name="org-gephi-ranking-plugin.jar"/>
                 <include name="org-gephi-partition-api.jar"/>
                 <include name="org-gephi-partition-plugin.jar"/>
                 <include name="org-gephi-io-generator-api.jar"/>
@@ -200,6 +202,7 @@
                 <include name="mysql-connector*.jar"/>
                 <include name="postgresql*.jar"/>
                 <include name="sqljdbc*.jar"/>
+                <include name="sqlite*.jar"/>
                 <include name="google-collect*.jar"/>
                 <include name="stax-utils.jar"/>
                 <include name="trove*.jar"/>
@@ -230,7 +233,7 @@
                 <provider classname="com.mysql.jdbc.Driver"/>
                 <provider classname="org.postgresql.Driver"/>
                 <provider classname="com.microsoft.sqlserver.jdbc.SQLServerDriver"/>
-                <provider classname="org.gephi.io.database.drivers.SQLiteDriver"/>
+                <provider classname="org.sqlite.JDBC"/>
             </service>
             
             <service type="org.gephi.project.spi.WorkspacePersistenceProvider">
@@ -243,6 +246,7 @@
                 <provider classname="org.gephi.layout.LayoutModelPersistenceProvider"/>
                 <provider classname="org.gephi.partition.impl.PartitionModelPersistenceProvider"/>
                 <provider classname="org.gephi.statistics.StatisticsPersistenceProvider"/>
+                <provider classname="org.gephi.preview.PreviewPersistenceProvider"/>
             </service>
             
             <service type="org.gephi.project.spi.WorkspaceDuplicateProvider">
@@ -287,6 +291,7 @@
                 <pathelement path="LayoutAPI/src"/>
                 <pathelement path="LayoutPlugin/src"/>
                 <pathelement path="PreviewAPI/src"/>
+                <pathelement path="PreviewPlugin/src"/>
                 <pathelement path="ProjectAPI/src"/>
                 <pathelement path="StatisticsAPI/src"/>
                 <pathelement path="StatisticsPlugin/src"/>

@@ -42,6 +42,8 @@ import org.gephi.utils.longtask.api.LongTaskListener;
 import org.gephi.project.api.Workspace;
 import org.gephi.project.api.WorkspaceListener;
 import org.gephi.statistics.spi.DynamicStatistics;
+import org.gephi.utils.progress.Progress;
+import org.gephi.utils.progress.ProgressTicket;
 import org.openide.util.Lookup;
 import org.openide.util.lookup.ServiceProvider;
 
@@ -101,19 +103,29 @@ public class StatisticsControllerImpl implements StatisticsController {
         if (listener != null) {
             executor.setLongTaskListener(listener);
         }
-        LongTask task = statistics instanceof LongTask ? (LongTask) statistics : null;
 
-        executor.execute(task, new Runnable() {
+        if (statistics instanceof DynamicStatistics) {
+            final DynamicLongTask dynamicLongTask = new DynamicLongTask((DynamicStatistics) statistics);
+            executor.execute(dynamicLongTask, new Runnable() {
 
-            public void run() {
-                execute(statistics);
-            }
-        }, builder.getName(), null);
+                public void run() {
+                    executeDynamic((DynamicStatistics) statistics, dynamicLongTask);
+                }
+            }, builder.getName(), null);
+        } else {
+            LongTask task = statistics instanceof LongTask ? (LongTask) statistics : null;
+            executor.execute(task, new Runnable() {
+
+                public void run() {
+                    execute(statistics);
+                }
+            }, builder.getName(), null);
+        }
     }
 
     public void execute(Statistics statistics) {
         if (statistics instanceof DynamicStatistics) {
-            execute((DynamicStatistics) statistics);
+            executeDynamic((DynamicStatistics) statistics, null);
         } else {
             GraphController graphController = Lookup.getDefault().lookup(GraphController.class);
             GraphModel graphModel = graphController.getModel();
@@ -123,17 +135,40 @@ public class StatisticsControllerImpl implements StatisticsController {
         }
     }
 
-    public void execute(DynamicStatistics statistics) {
+    private void executeDynamic(DynamicStatistics statistics, DynamicLongTask dynamicLongTask) {
         GraphController graphController = Lookup.getDefault().lookup(GraphController.class);
         GraphModel graphModel = graphController.getModel();
         AttributeController attributeController = Lookup.getDefault().lookup(AttributeController.class);
         DynamicController dynamicController = Lookup.getDefault().lookup(DynamicController.class);
         DynamicModel dynamicModel = dynamicController.getModel();
         AttributeModel attributeModel = attributeController.getModel();
+        if (!dynamicModel.isDynamicGraph()) {
+            throw new IllegalArgumentException("The current graph must be a dynamic graph");
+        }
 
         double window = statistics.getWindow();
         double tick = statistics.getTick();
         Interval bounds = statistics.getBounds();
+        if (bounds == null) {
+            TimeInterval visibleInterval = dynamicModel.getVisibleInterval();
+            double low = visibleInterval.getLow();
+            if (Double.isInfinite(low)) {
+                low = dynamicModel.getMin();
+            }
+            double high = visibleInterval.getHigh();
+            if (Double.isInfinite(high)) {
+                high = dynamicModel.getMax();
+            }
+            bounds = new Interval(low, high);
+            statistics.setBounds(bounds);
+        }
+
+
+        if (dynamicLongTask != null) {
+            //Count
+            int c = (int) ((bounds.getHigh() - window - bounds.getLow()) / tick);
+            dynamicLongTask.start(c);
+        }
 
         HierarchicalGraph graph = graphModel.getHierarchicalGraphVisible();
         DynamicGraph dynamicGraph = dynamicModel.createDynamicGraph(graph, bounds);
@@ -142,14 +177,19 @@ public class StatisticsControllerImpl implements StatisticsController {
         statistics.execute(graphModel, attributeModel);
 
         //Loop
-        for (double low = bounds.getLow(); low <= bounds.getHigh() - window;
-                low += tick) {
+        for (double low = bounds.getLow(); low <= bounds.getHigh() - window; low += tick) {
             double high = low + window;
 
             Graph g = dynamicGraph.getSnapshotGraph(low, high);
 
-
             statistics.loop(g.getView(), new Interval(low, high));
+
+            //Cancelled?
+            if (dynamicLongTask != null && dynamicLongTask.isCancelled()) {
+                return;
+            } else if (dynamicLongTask != null) {
+                dynamicLongTask.progress();
+            }
         }
         statistics.end();
         model.addReport(statistics);
@@ -175,5 +215,44 @@ public class StatisticsControllerImpl implements StatisticsController {
             workspace.add(statModel);
         }
         return statModel;
+    }
+
+    private static class DynamicLongTask implements LongTask {
+
+        private ProgressTicket progressTicket;
+        private boolean cancel = false;
+        private final LongTask longTask;
+
+        public DynamicLongTask(DynamicStatistics statistics) {
+            if (statistics instanceof LongTask) {
+                this.longTask = (LongTask) statistics;
+            } else {
+                this.longTask = null;
+            }
+        }
+
+        public boolean cancel() {
+            cancel = true;
+            if (longTask != null) {
+                this.longTask.cancel();
+            }
+            return true;
+        }
+
+        public void setProgressTicket(ProgressTicket progressTicket) {
+            this.progressTicket = progressTicket;
+        }
+
+        public void start(int iterations) {
+            Progress.start(progressTicket, iterations);
+        }
+
+        public void progress() {
+            Progress.progress(progressTicket);
+        }
+
+        public boolean isCancelled() {
+            return cancel;
+        }
     }
 }

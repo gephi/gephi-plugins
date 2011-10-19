@@ -20,7 +20,6 @@ along with Gephi.  If not, see <http://www.gnu.org/licenses/>.
  */
 package org.gephi.ui.statistics.plugin.dynamic;
 
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 import org.gephi.statistics.plugin.dynamic.DynamicDegree;
 import org.gephi.statistics.spi.Statistics;
@@ -35,20 +34,32 @@ import org.openide.util.lookup.ServiceProvider;
 @ServiceProvider(service = StatisticsUI.class)
 public class DynamicDegreeUI implements StatisticsUI {
 
+    private final StatSettings settings = new StatSettings();
     private DynamicDegree degree;
+    private DynamicDegreePanel panel;
 
     public JPanel getSettingsPanel() {
-        JPanel panel = new JPanel();
-        panel.add(new JLabel("Test"));
+        panel = new DynamicDegreePanel();
         return panel;
     }
 
     public void setup(Statistics statistics) {
         this.degree = (DynamicDegree) statistics;
+        if (panel != null) {
+            settings.load(degree);
+            panel.setDirected(degree.isDirected());
+            panel.setAverageOnly(degree.isAverageOnly());
+        }
     }
 
     public void unsetup() {
+        if (panel != null) {
+            degree.setDirected(panel.isDirected());
+            degree.setAverageOnly(panel.isAverageOnly());
+            settings.save(degree);
+        }
         degree = null;
+        panel = null;
     }
 
     public Class<? extends Statistics> getStatisticsClass() {
@@ -68,6 +79,25 @@ public class DynamicDegreeUI implements StatisticsUI {
     }
 
     public int getPosition() {
-        return 1;
+        return 300;
+    }
+
+    private static class StatSettings {
+
+        private boolean averageOnly = false;
+        private double window = 0.0;
+        private double tick = 0.0;
+
+        private void save(DynamicDegree stat) {
+            this.averageOnly = stat.isAverageOnly();
+            this.window = stat.getWindow();
+            this.tick = stat.getTick();
+        }
+
+        private void load(DynamicDegree stat) {
+            stat.setAverageOnly(averageOnly);
+            stat.setWindow(window);
+            stat.setTick(tick);
+        }
     }
 }

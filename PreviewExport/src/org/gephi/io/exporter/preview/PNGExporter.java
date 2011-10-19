@@ -1,6 +1,6 @@
 /*
 Copyright 2008-2011 Gephi
-Authors : Taras Klaskovsky <megaterik@gmail.com>
+Authors : Mathieu Bastian
 Website : http://www.gephi.org
 
 This file is part of Gephi.
@@ -20,139 +20,135 @@ along with Gephi.  If not, see <http://www.gnu.org/licenses/>.
  */
 package org.gephi.io.exporter.preview;
 
-import com.sun.pdfview.PDFFile;
-import com.sun.pdfview.PDFPage;
-import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 import java.io.OutputStream;
-import java.nio.ByteBuffer;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import org.gephi.io.exporter.spi.ByteExporter;
 import org.gephi.io.exporter.spi.VectorExporter;
+import org.gephi.preview.api.PreviewController;
+import org.gephi.preview.api.PreviewProperties;
+import org.gephi.preview.api.PreviewProperty;
+import org.gephi.preview.api.ProcessingTarget;
+import org.gephi.preview.api.RenderTarget;
 import org.gephi.project.api.Workspace;
+import org.gephi.utils.longtask.spi.LongTask;
+import org.gephi.utils.progress.Progress;
+import org.gephi.utils.progress.ProgressTicket;
+import org.openide.util.Lookup;
+import processing.core.PGraphicsJava2D;
 
-public class PNGExporter implements VectorExporter, ByteExporter {
-
-    private boolean exportVisible = false;
+/**
+ * 
+ * @author Mathieu Bastian
+ */
+public class PNGExporter implements VectorExporter, ByteExporter, LongTask {
+    
+    private ProgressTicket progress;
+    private boolean cancel = false;
     private Workspace workspace;
-    private PDFExporter pdfExporter = new PDFExporter();
     private OutputStream stream;
     private int width = 1024;
     private int height = 1024;
-    private int bottomMargin = 20;
-    private int topMargin = 20;
-    private int leftMargin = 20;
-    private int rightMargin = 20;
-
-    public int getBottomMargin() {
-        return bottomMargin;
+    private boolean transparentBackground = false;
+    private int margin = 4;
+    private ProcessingTarget target;
+    
+    @Override
+    public boolean execute() {
+        Progress.start(progress);
+        
+        PreviewController controller = Lookup.getDefault().lookup(PreviewController.class);
+        controller.getModel(workspace).getProperties().putValue(PreviewProperty.VISIBILITY_RATIO, 1.0);
+        controller.refreshPreview(workspace);
+        
+        PreviewProperties props = controller.getModel(workspace).getProperties();
+        props.putValue("width", width);
+        props.putValue("height", height);
+        if (transparentBackground) {
+            props.putValue(PreviewProperty.BACKGROUND_COLOR, null);
+        }
+        props.putValue(PreviewProperty.MARGIN, new Float((float) margin));
+        target = (ProcessingTarget) controller.getRenderTarget(RenderTarget.PROCESSING_TARGET, workspace);
+        if (target instanceof LongTask) {
+            ((LongTask) target).setProgressTicket(progress);
+        }
+        
+        try {
+            target.refresh();
+            
+            Progress.switchToIndeterminate(progress);
+            
+            PGraphicsJava2D pg2 = (PGraphicsJava2D) target.getGraphics();
+            BufferedImage img = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+            img.setRGB(0, 0, width, height, pg2.pixels, 0, width);
+            ImageIO.write(img, "png", stream);
+            stream.close();
+            
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+        
+        Progress.finish(progress);
+        
+        return !cancel;
     }
-
-    public void setBottomMargin(int bottomMargin) {
-        this.bottomMargin = bottomMargin;
-    }
-
-    public int getLeftMargin() {
-        return leftMargin;
-    }
-
-    public void setLeftMargin(int leftMargin) {
-        this.leftMargin = leftMargin;
-    }
-
-    public int getRightMargin() {
-        return rightMargin;
-    }
-
-    public void setRightMargin(int rightMargin) {
-        this.rightMargin = rightMargin;
-    }
-
-    public int getTopMargin() {
-        return topMargin;
-    }
-
-    public void setTopMargin(int topMargin) {
-        this.topMargin = topMargin;
-    }
-
+    
     public int getHeight() {
         return height;
     }
-
+    
     public void setHeight(int height) {
         this.height = height;
     }
-
+    
     public int getWidth() {
         return width;
     }
-
+    
     public void setWidth(int width) {
         this.width = width;
     }
 
-    public boolean isExportVisible() {
-        return exportVisible;
+    public int getMargin() {
+        return margin;
     }
 
-    public void setExportVisible(boolean exportVisible) {
-        this.exportVisible = exportVisible;
+    public void setMargin(int margin) {
+        this.margin = margin;
     }
 
-    @Override
-    public boolean execute() {
-        ByteArrayOutputStream byteStream = new ByteArrayOutputStream();
-
-        pdfExporter.setWorkspace(workspace);
-        pdfExporter.setOutputStream(byteStream);
-
-        pdfExporter.setMarginBottom(bottomMargin);
-        pdfExporter.setMarginTop(topMargin);
-        pdfExporter.setMarginLeft(leftMargin);
-        pdfExporter.setMarginRight(rightMargin);
-        pdfExporter.setPageSize(new com.itextpdf.text.Rectangle(width, height));
-
-        pdfExporter.execute();
-
-        try {
-            export(byteStream.toByteArray());
-        } catch (IOException ex) {
-            Logger.getLogger(PNGExporter.class.getName()).log(Level.SEVERE, null, ex);
-            return false;
-        }
-
-        return true;
+    public boolean isTransparentBackground() {
+        return transparentBackground;
     }
 
+    public void setTransparentBackground(boolean transparentBackground) {
+        this.transparentBackground = transparentBackground;
+    }
+    
     @Override
     public void setWorkspace(Workspace workspace) {
         this.workspace = workspace;
     }
-
+    
     @Override
     public Workspace getWorkspace() {
         return workspace;
     }
-
-    public void export(byte[] pdf) throws IOException {
-        ByteBuffer buf = ByteBuffer.wrap(pdf);
-        PDFFile file = new PDFFile(buf);
-        PDFPage page = file.getPage(1);
-
-        Rectangle rect = new Rectangle(0, 0, width, height);
-
-        BufferedImage img = (BufferedImage) page.getImage(width, height, rect, null, true, true);
-
-        ImageIO.write(img, "png", stream);
-    }
-
+    
     @Override
     public void setOutputStream(OutputStream stream) {
         this.stream = stream;
+    }
+    
+    public boolean cancel() {
+        cancel = true;
+        if (target instanceof LongTask) {
+            ((LongTask) target).cancel();
+        }
+        return true;
+    }
+    
+    public void setProgressTicket(ProgressTicket progressTicket) {
+        this.progress = progressTicket;
     }
 }

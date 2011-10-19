@@ -31,22 +31,16 @@ public class UIExporterPNGPanel extends javax.swing.JPanel implements Validation
     void setup(PNGExporter exporter) {
         heightTextField.setText(Integer.toString(exporter.getHeight()));
         widthTextField.setText(Integer.toString(exporter.getWidth()));
-
-        leftTextField.setText(Integer.toString(exporter.getLeftMargin()));
-        rightTextField.setText(Integer.toString(exporter.getRightMargin()));
-        topTextField.setText(Integer.toString(exporter.getTopMargin()));
-        bottomTextField.setText(Integer.toString(exporter.getBottomMargin()));
+        marginTextField.setText(Integer.toString(exporter.getMargin()));
+        transparentBackgroundCheckbox.setSelected(exporter.isTransparentBackground());
     }
 
     void unsetup(PNGExporter exporter) {
         try {
             exporter.setWidth(Integer.parseInt(widthTextField.getText()));
             exporter.setHeight(Integer.parseInt(heightTextField.getText()));
-
-            exporter.setLeftMargin(Integer.parseInt(leftTextField.getText()));
-            exporter.setRightMargin(Integer.parseInt(rightTextField.getText()));
-            exporter.setBottomMargin(Integer.parseInt(bottomTextField.getText()));
-            exporter.setTopMargin(Integer.parseInt(topTextField.getText()));
+            exporter.setMargin(Integer.parseInt(marginTextField.getText()));
+            exporter.setTransparentBackground(transparentBackgroundCheckbox.isSelected());
         } catch (Exception ex) {
         }
     }
@@ -65,137 +59,99 @@ public class UIExporterPNGPanel extends javax.swing.JPanel implements Validation
 
         widthTextField = new javax.swing.JTextField();
         heightTextField = new javax.swing.JTextField();
-        marginsLabel = new javax.swing.JLabel();
-        topTextField = new javax.swing.JTextField();
-        bottomTextField = new javax.swing.JTextField();
-        leftTextField = new javax.swing.JTextField();
-        rightTextField = new javax.swing.JTextField();
-        topLabel = new javax.swing.JLabel();
-        leftLabel = new javax.swing.JLabel();
-        rightLabel = new javax.swing.JLabel();
-        bottomLabel = new javax.swing.JLabel();
         widthLabel = new javax.swing.JLabel();
         heightLabel = new javax.swing.JLabel();
+        labelWpx = new javax.swing.JLabel();
+        labelHpx = new javax.swing.JLabel();
+        labelMargin = new javax.swing.JLabel();
+        marginTextField = new javax.swing.JTextField();
+        labelMperc = new javax.swing.JLabel();
+        transparentBackgroundCheckbox = new javax.swing.JCheckBox();
 
-        marginsLabel.setText(org.openide.util.NbBundle.getMessage(UIExporterPNGPanel.class, "UIExporterPNGPanel.marginsLabel.text")); // NOI18N
+        widthTextField.setName("width"); // NOI18N
 
-        topTextField.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                topTextFieldActionPerformed(evt);
-            }
-        });
-
-        leftTextField.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                leftTextFieldActionPerformed(evt);
-            }
-        });
-
-        topLabel.setText(org.openide.util.NbBundle.getMessage(UIExporterPNGPanel.class, "UIExporterPNGPanel.topLabel.text")); // NOI18N
-
-        leftLabel.setText(org.openide.util.NbBundle.getMessage(UIExporterPNGPanel.class, "UIExporterPNGPanel.leftLabel.text")); // NOI18N
-
-        rightLabel.setText(org.openide.util.NbBundle.getMessage(UIExporterPNGPanel.class, "UIExporterPNGPanel.rightLabel.text")); // NOI18N
-
-        bottomLabel.setText(org.openide.util.NbBundle.getMessage(UIExporterPNGPanel.class, "UIExporterPNGPanel.bottomLabel.text")); // NOI18N
+        heightTextField.setName("height"); // NOI18N
 
         widthLabel.setText(org.openide.util.NbBundle.getMessage(UIExporterPNGPanel.class, "UIExporterPNGPanel.widthLabel.text")); // NOI18N
 
         heightLabel.setText(org.openide.util.NbBundle.getMessage(UIExporterPNGPanel.class, "UIExporterPNGPanel.heightLabel.text")); // NOI18N
 
-        org.jdesktop.layout.GroupLayout layout = new org.jdesktop.layout.GroupLayout(this);
+        labelWpx.setText("px");
+
+        labelHpx.setText("px");
+
+        labelMargin.setText("Margin:");
+
+        marginTextField.setName("margin"); // NOI18N
+
+        labelMperc.setText("% of width");
+
+        transparentBackgroundCheckbox.setText("Transparent background");
+
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
-            layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(layout.createSequentialGroup()
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                    .add(marginsLabel)
-                    .add(widthLabel)
-                    .add(heightLabel))
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING, false)
-                    .add(layout.createSequentialGroup()
-                        .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                            .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING, false)
-                                .add(org.jdesktop.layout.GroupLayout.LEADING, heightTextField)
-                                .add(org.jdesktop.layout.GroupLayout.LEADING, widthTextField, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 78, Short.MAX_VALUE))
-                            .add(topLabel))
-                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                        .add(topTextField, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 50, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
-                    .add(layout.createSequentialGroup()
-                        .add(bottomLabel, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 60, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .add(bottomTextField, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 50, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)))
-                .add(39, 39, 39)
-                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                    .add(layout.createSequentialGroup()
-                        .add(leftLabel)
-                        .add(18, 18, 18)
-                        .add(leftTextField, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 50, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
-                    .add(layout.createSequentialGroup()
-                        .add(rightLabel)
-                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                        .add(rightTextField, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 50, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap())
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                            .addComponent(widthLabel)
+                            .addGap(16, 16, 16)
+                            .addComponent(widthTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(labelWpx)
+                            .addGap(49, 49, 49))
+                        .addGroup(layout.createSequentialGroup()
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                                    .addComponent(labelMargin)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                    .addComponent(marginTextField))
+                                .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                                    .addComponent(heightLabel)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                    .addComponent(heightTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(labelMperc)
+                                .addComponent(labelHpx))))
+                    .addComponent(transparentBackgroundCheckbox))
+                .addContainerGap(123, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
-            layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(layout.createSequentialGroup()
-                .add(22, 22, 22)
-                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING)
-                    .add(widthTextField, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                    .add(widthLabel))
-                .add(22, 22, 22)
-                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING)
-                    .add(heightTextField, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                    .add(heightLabel))
-                .add(40, 40, 40)
-                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING)
-                    .add(layout.createSequentialGroup()
-                        .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING)
-                            .add(layout.createSequentialGroup()
-                                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING)
-                                    .add(marginsLabel)
-                                    .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
-                                        .add(leftLabel)
-                                        .add(leftTextField, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)))
-                                .add(16, 16, 16))
-                            .add(layout.createSequentialGroup()
-                                .add(topTextField, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                                .add(18, 18, 18))
-                            .add(layout.createSequentialGroup()
-                                .add(topLabel)
-                                .add(18, 18, 18)))
-                        .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING)
-                            .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
-                                .add(bottomLabel, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 20, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                                .add(bottomTextField, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
-                            .add(rightLabel)))
-                    .add(rightTextField, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(widthLabel)
+                    .addComponent(widthTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(labelWpx))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(heightLabel)
+                    .addComponent(heightTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(labelHpx))
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(labelMargin)
+                    .addComponent(marginTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(labelMperc))
+                .addGap(18, 18, 18)
+                .addComponent(transparentBackgroundCheckbox)
+                .addContainerGap(49, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
-
-    private void leftTextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_leftTextFieldActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_leftTextFieldActionPerformed
-
-    private void topTextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_topTextFieldActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_topTextFieldActionPerformed
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel bottomLabel;
-    private javax.swing.JTextField bottomTextField;
     private javax.swing.JLabel heightLabel;
     private javax.swing.JTextField heightTextField;
-    private javax.swing.JLabel leftLabel;
-    private javax.swing.JTextField leftTextField;
-    private javax.swing.JLabel marginsLabel;
-    private javax.swing.JLabel rightLabel;
-    private javax.swing.JTextField rightTextField;
-    private javax.swing.JLabel topLabel;
-    private javax.swing.JTextField topTextField;
+    private javax.swing.JLabel labelHpx;
+    private javax.swing.JLabel labelMargin;
+    private javax.swing.JLabel labelMperc;
+    private javax.swing.JLabel labelWpx;
+    private javax.swing.JTextField marginTextField;
+    private javax.swing.JCheckBox transparentBackgroundCheckbox;
     private javax.swing.JLabel widthLabel;
     private javax.swing.JTextField widthTextField;
     // End of variables declaration//GEN-END:variables
@@ -214,10 +170,6 @@ public class UIExporterPNGPanel extends javax.swing.JPanel implements Validation
     public void validate(ValidationGroup group) {
         group.add(widthTextField, Validators.REQUIRE_NON_EMPTY_STRING, Validators.REQUIRE_VALID_INTEGER, Validators.numberRange(1, Integer.MAX_VALUE));
         group.add(heightTextField, Validators.REQUIRE_NON_EMPTY_STRING, Validators.REQUIRE_VALID_INTEGER, Validators.numberRange(1, Integer.MAX_VALUE));
-
-        group.add(leftTextField, Validators.REQUIRE_NON_EMPTY_STRING, Validators.REQUIRE_NON_NEGATIVE_NUMBER, Validators.REQUIRE_VALID_INTEGER);
-        group.add(rightTextField, Validators.REQUIRE_NON_EMPTY_STRING, Validators.REQUIRE_NON_NEGATIVE_NUMBER, Validators.REQUIRE_VALID_INTEGER);
-        group.add(topTextField, Validators.REQUIRE_NON_EMPTY_STRING, Validators.REQUIRE_NON_NEGATIVE_NUMBER, Validators.REQUIRE_VALID_INTEGER);
-        group.add(bottomTextField, Validators.REQUIRE_NON_EMPTY_STRING, Validators.REQUIRE_NON_NEGATIVE_NUMBER, Validators.REQUIRE_VALID_INTEGER);
+        group.add(marginTextField, Validators.REQUIRE_NON_EMPTY_STRING, Validators.REQUIRE_VALID_INTEGER, Validators.numberRange(0, 100));
     }
 }

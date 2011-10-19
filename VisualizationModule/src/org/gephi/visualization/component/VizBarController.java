@@ -21,6 +21,7 @@ along with Gephi.  If not, see <http://www.gnu.org/licenses/>.
 package org.gephi.visualization.component;
 
 import com.connectina.swing.fontchooser.JFontChooser;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
@@ -81,9 +82,9 @@ public class VizBarController {
                 if (evt.getPropertyName().equals("init")) {
                     VizModel model = VizController.getInstance().getVizModel();
                     toolbar.setEnable(!model.isDefaultModel());
-                    ((NodeGroupBar)groups[1]).setModelValues(model);
-                    ((EdgeGroupBar)groups[2]).setModelValues(model);
-                    ((LabelGroupBar)groups[3]).setModelValues(model);
+                    ((NodeGroupBar) groups[1]).setModelValues(model);
+                    ((EdgeGroupBar) groups[2]).setModelValues(model);
+                    ((LabelGroupBar) groups[3]).setModelValues(model);
                 }
             }
         });
@@ -118,7 +119,12 @@ public class VizBarController {
 
                 public void propertyChange(PropertyChangeEvent evt) {
                     VizModel vizModel = VizController.getInstance().getVizModel();
-                    vizModel.setBackgroundColor(((JColorBlackWhiteSwitcher) backgroundColorButton).getColor());
+                    Color backgroundColor=((JColorBlackWhiteSwitcher) backgroundColorButton).getColor();
+                    vizModel.setBackgroundColor(backgroundColor);
+
+                    TextModel textModel = VizController.getInstance().getVizModel().getTextModel();
+                    boolean isDarkBackground = (backgroundColor.getRed() + backgroundColor.getGreen() + backgroundColor.getBlue()) / 3 < 128;
+                    textModel.setNodeColor(isDarkBackground ? Color.WHITE : Color.BLACK);
                 }
             });
             vizModel.addPropertyChangeListener(new PropertyChangeListener() {
@@ -404,7 +410,7 @@ public class VizBarController {
             ((JSlider) components[3]).setValue((int) (model.getNodeSizeFactor() * 100f));
         }
 
-        public JComponent[] getToolbarComponents() {          
+        public JComponent[] getToolbarComponents() {
             TextModel model = VizController.getInstance().getVizModel().getTextModel();
 
             //Mode

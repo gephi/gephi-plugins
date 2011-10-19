@@ -23,7 +23,8 @@ package org.gephi.preview.types;
 import java.awt.Color;
 
 /**
- *
+ * A color that can be custom or depend from a parent color.
+ * 
  * @author Mathieu Bastian
  */
 public final class DependantColor {
@@ -59,9 +60,9 @@ public final class DependantColor {
     }
     
     public Color getColor(Color parentColor) {
-        if (customColor == null) {
-            return parentColor;
+        if (mode.equals(Mode.CUSTOM) && customColor != null) {
+            return customColor;
         }
-        return customColor;
+        return parentColor;
     }
 }

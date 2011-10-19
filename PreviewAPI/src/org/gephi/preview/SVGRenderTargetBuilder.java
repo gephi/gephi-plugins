@@ -45,7 +45,7 @@ import org.w3c.dom.Text;
  *
  * @author Mathieu Bastian
  */
-@ServiceProvider(service=RenderTargetBuilder.class)
+@ServiceProvider(service = RenderTargetBuilder.class)
 public class SVGRenderTargetBuilder implements RenderTargetBuilder {
 
     @Override
@@ -67,7 +67,7 @@ public class SVGRenderTargetBuilder implements RenderTargetBuilder {
         return RenderTarget.SVG_TARGET;
     }
 
-    public static class SVGRenderTargetImpl implements SVGTarget {
+    public static class SVGRenderTargetImpl extends AbstractRenderTarget implements SVGTarget {
 
         private Document document;
         private float scaleRatio = 1f;
@@ -120,6 +120,7 @@ public class SVGRenderTargetBuilder implements RenderTargetBuilder {
             if (topElement == null) {
                 topElement = createElement("g");
                 topElement.setAttribute("id", name);
+                topElements.put(name, topElement);
                 document.getDocumentElement().appendChild(topElement);
             }
             return topElement;

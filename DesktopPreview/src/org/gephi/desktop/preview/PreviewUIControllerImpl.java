@@ -20,9 +20,13 @@ along with Gephi.  If not, see <http://www.gnu.org/licenses/>.
  */
 package org.gephi.desktop.preview;
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.beans.PropertyEditorManager;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import javax.swing.SwingUtilities;
 import org.gephi.data.attributes.api.AttributeController;
@@ -39,7 +43,13 @@ import org.gephi.preview.api.PreviewController;
 import org.gephi.preview.api.PreviewModel;
 import org.gephi.preview.api.PreviewPreset;
 import org.gephi.preview.api.PreviewProperty;
+import org.gephi.preview.presets.BlackBackground;
+import org.gephi.preview.presets.DefaultCurved;
 import org.gephi.preview.presets.DefaultPreset;
+import org.gephi.preview.presets.DefaultStraight;
+import org.gephi.preview.presets.EdgesCustomColor;
+import org.gephi.preview.presets.TagCloud;
+import org.gephi.preview.presets.TextOutline;
 import org.gephi.preview.types.DependantColor;
 import org.gephi.preview.types.DependantOriginalColor;
 import org.gephi.preview.types.EdgeColor;
@@ -57,6 +67,7 @@ import org.openide.util.lookup.ServiceProvider;
 @ServiceProvider(service = PreviewUIController.class)
 public class PreviewUIControllerImpl implements PreviewUIController, GraphListener {
 
+    private final List<PropertyChangeListener> listeners;
     private final PreviewController previewController;
     private final GraphController graphController;
     private final PresetUtils presetUtils = new PresetUtils();
@@ -64,19 +75,14 @@ public class PreviewUIControllerImpl implements PreviewUIController, GraphListen
     private GraphModel graphModel = null;
 
     public PreviewUIControllerImpl() {
-        previewController = Lookup.getDefault().lookup(PreviewController.class);
-        graphController = Lookup.getDefault().lookup(GraphController.class);
-        PreviewModel previewModel = previewController.getModel();
-        if (previewModel != null) {
-            graphModel = graphController.getModel();
-            graphModel.addGraphListener(this);
-        }
-
+        listeners = new ArrayList<PropertyChangeListener>();
         ProjectController pc = Lookup.getDefault().lookup(ProjectController.class);
+        graphController = Lookup.getDefault().lookup(GraphController.class);
         pc.addWorkspaceListener(new WorkspaceListener() {
 
             public void initialize(Workspace workspace) {
                 workspace.add(new PreviewUIModelImpl());
+                enableRefresh();
             }
 
             public void select(Workspace workspace) {
@@ -85,20 +91,13 @@ public class PreviewUIControllerImpl implements PreviewUIController, GraphListen
 
                 graphModel = graphController.getModel();
                 graphModel.addGraphListener(PreviewUIControllerImpl.this);
-                showRefreshNotification();
 
                 model = workspace.getLookup().lookup(PreviewUIModelImpl.class);
                 if (model == null) {
                     model = new PreviewUIModelImpl();
                     workspace.add(model);
                 }
-                SwingUtilities.invokeLater(new Runnable() {
-
-                    public void run() {
-                        PreviewSettingsTopComponent.findInstance().refreshModel();
-                        PreviewTopComponent.findInstance().refreshModel();
-                    }
-                });
+                fireEvent(SELECT, model);
             }
 
             public void unselect(Workspace workspace) {
@@ -106,6 +105,7 @@ public class PreviewUIControllerImpl implements PreviewUIController, GraphListen
                     graphModel.removeGraphListener(PreviewUIControllerImpl.this);
                     graphModel = null;
                 }
+                fireEvent(UNSELECT, model);
             }
 
             public void close(Workspace workspace) {
@@ -116,16 +116,8 @@ public class PreviewUIControllerImpl implements PreviewUIController, GraphListen
                     graphModel.removeGraphListener(PreviewUIControllerImpl.this);
                     graphModel = null;
                 }
-                disableRefresh();
-
-                //When project is closed, clear graph preview instead of keeping it:
-                SwingUtilities.invokeLater(new Runnable() {
-
-                    public void run() {
-                        PreviewSettingsTopComponent.findInstance().refreshModel();
-                        PreviewTopComponent.findInstance().refreshModel();
-                    }
-                });
+                fireEvent(SELECT, null);
+                model = null;
             }
         });
         if (pc.getCurrentWorkspace() != null) {
@@ -134,7 +126,11 @@ public class PreviewUIControllerImpl implements PreviewUIController, GraphListen
                 model = new PreviewUIModelImpl();
                 pc.getCurrentWorkspace().add(model);
             }
+            graphModel = graphController.getModel();
+            graphModel.addGraphListener(this);
         }
+
+        previewController = Lookup.getDefault().lookup(PreviewController.class);
 
         //Register editors
         PropertyEditorManager.registerEditor(EdgeColor.class, EdgeColorPropertyEditor.class);
@@ -150,29 +146,31 @@ public class PreviewUIControllerImpl implements PreviewUIController, GraphListen
      * @see GraphListener#graphChanged(org.gephi.graph.api.GraphEvent)
      */
     public void graphChanged(GraphEvent event) {
-        showRefreshNotification();
+        boolean previous = model.isWorkspaceBarVisible();
+        model.setWorkspaceBarVisible(true);
+        if (!previous) {
+            fireEvent(GRAPH_CHANGED, true);
+        }
     }
 
     /**
      * Refreshes the preview applet.
      */
     public void refreshPreview() {
-        final PreviewTopComponent previewTopComponent = PreviewTopComponent.findInstance();
-        final float visibilityRatio = PreviewSettingsTopComponent.findInstance().getVisibilityRatio();
-        setVisibilityRatio(visibilityRatio);
-
         Thread refreshThread = new Thread(new Runnable() {
 
             public void run() {
-                previewTopComponent.setRefresh(true);
-                disableRefresh();
-                hideRefreshNotification();
+                model.setRefreshing(true);
+                fireEvent(REFRESHING, true);
+
+                previewController.getModel().getProperties().putValue(PreviewProperty.VISIBILITY_RATIO, model.getVisibilityRatio());
                 previewController.refreshPreview();
 
-                previewTopComponent.refreshPreview();
+                fireEvent(REFRESHED, model);
 
-                previewTopComponent.setRefresh(false);
-                enableRefresh();
+                model.setRefreshing(false);
+                fireEvent(REFRESHING, false);
+                fireEvent(GRAPH_CHANGED, false);
             }
         }, "Refresh Preview");
         refreshThread.start();
@@ -191,54 +189,6 @@ public class PreviewUIControllerImpl implements PreviewUIController, GraphListen
         });
     }
 
-    /**
-     * Disables the preview refresh action.
-     *
-     * The preview refresh notification is also hidden.
-     */
-    private void disableRefresh() {
-        hideRefreshNotification();
-
-        SwingUtilities.invokeLater(new Runnable() {
-
-            public void run() {
-                PreviewSettingsTopComponent previewSettingsTopComponent = PreviewSettingsTopComponent.findInstance();
-                previewSettingsTopComponent.disableRefreshButton();
-            }
-        });
-    }
-
-    /**
-     * Shows a notification to invite the user to refresh the preview.
-     *
-     * The refresh action is enabled.
-     */
-    private void showRefreshNotification() {
-        enableRefresh();
-
-        SwingUtilities.invokeLater(new Runnable() {
-
-            public void run() {
-                PreviewTopComponent previewTopComponent = PreviewTopComponent.findInstance();
-                previewTopComponent.showBannerPanel();
-                PreviewSettingsTopComponent.findInstance().refreshModel();
-            }
-        });
-    }
-
-    /**
-     * Hides the preview refresh notification.
-     */
-    private void hideRefreshNotification() {
-        SwingUtilities.invokeLater(new Runnable() {
-
-            public void run() {
-                PreviewTopComponent previewTopComponent = PreviewTopComponent.findInstance();
-                previewTopComponent.hideBannerPanel();
-            }
-        });
-    }
-
     public void setVisibilityRatio(float visibilityRatio) {
         if (model != null) {
             model.setVisibilityRatio(visibilityRatio);
@@ -250,7 +200,7 @@ public class PreviewUIControllerImpl implements PreviewUIController, GraphListen
     }
 
     public PreviewPreset[] getDefaultPresets() {
-        return new PreviewPreset[]{new DefaultPreset()};
+        return new PreviewPreset[]{new DefaultPreset(), new DefaultCurved(), new DefaultStraight(), new TextOutline(), new BlackBackground(), new EdgesCustomColor(), new TagCloud()};
     }
 
     public PreviewPreset[] getUserPresets() {
@@ -281,6 +231,23 @@ public class PreviewUIControllerImpl implements PreviewUIController, GraphListen
             PreviewPreset preset = new PreviewPreset(name, map);
             presetUtils.savePreset(preset);
             model.setCurrentPreset(preset);
+        }
+    }
+
+    public void addPropertyChangeListener(PropertyChangeListener listener) {
+        if (!listeners.contains(listener)) {
+            listeners.add(listener);
+        }
+    }
+
+    public void removePropertyChangeListener(PropertyChangeListener listener) {
+        listeners.remove(listener);
+    }
+
+    private void fireEvent(String eventName, Object data) {
+        PropertyChangeEvent event = new PropertyChangeEvent(this, eventName, null, data);
+        for (PropertyChangeListener l : listeners) {
+            l.propertyChange(event);
         }
     }
 }

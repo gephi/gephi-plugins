@@ -23,7 +23,8 @@ package org.gephi.preview.types;
 import java.awt.Color;
 
 /**
- *
+ * A color that depends from another object, but can also have it's own color.
+ * 
  * @author Mathieu Bastian
  */
 public final class DependantOriginalColor {
@@ -54,7 +55,7 @@ public final class DependantOriginalColor {
     }
 
     public Color getColor(Color parentColor, Color originalColor) {
-        if (customColor == null) {
+        if (!mode.equals(Mode.CUSTOM)) {
             if (mode.equals(Mode.ORIGINAL) && originalColor != null) {
                 return originalColor;
             }

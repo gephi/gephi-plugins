@@ -1,8 +1,8 @@
 /*
 Copyright 2008-2011 Gephi
 Authors : Jérémy Subtil <jeremy.subtil@gephi.org>,
-          Yudi Xue <yudi.xue@usask.ca>,
-          Mathieu Bastian
+Yudi Xue <yudi.xue@usask.ca>,
+Mathieu Bastian
 Website : http://www.gephi.org
 
 This file is part of Gephi.
@@ -27,10 +27,12 @@ import java.beans.PropertyChangeListener;
 import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.Map;
+import javax.swing.SwingUtilities;
 import org.gephi.preview.api.PreviewController;
 import org.gephi.preview.api.PreviewModel;
 import org.gephi.preview.api.PreviewProperties;
 import org.gephi.preview.api.PreviewProperty;
+import org.openide.explorer.propertysheet.PropertySheet;
 import org.openide.nodes.AbstractNode;
 import org.openide.nodes.Children;
 import org.openide.nodes.Node;
@@ -46,8 +48,11 @@ import org.openide.util.NbBundle;
  */
 public class PreviewNode extends AbstractNode implements PropertyChangeListener {
 
-    public PreviewNode() {
+    private PropertySheet propertySheet;
+    
+    public PreviewNode(PropertySheet propertySheet) {
         super(Children.LEAF);
+        this.propertySheet = propertySheet;
         setDisplayName(NbBundle.getMessage(PreviewNode.class, "PreviewNode.displayName"));
     }
 
@@ -81,6 +86,28 @@ public class PreviewNode extends AbstractNode implements PropertyChangeListener 
 
                 sheetSet.put(nodeProperty);
                 sheetSets.put(category, sheetSet);
+            }
+
+            //Ordered
+            Sheet.Set nodeSet = sheetSets.remove(PreviewProperty.CATEGORY_NODES);
+            Sheet.Set nodeLabelSet = sheetSets.remove(PreviewProperty.CATEGORY_NODE_LABELS);
+            Sheet.Set edgeSet = sheetSets.remove(PreviewProperty.CATEGORY_EDGES);
+            Sheet.Set arrowsSet = sheetSets.remove(PreviewProperty.CATEGORY_EDGE_ARROWS);
+            Sheet.Set edgeLabelSet = sheetSets.remove(PreviewProperty.CATEGORY_EDGE_LABELS);
+            if (nodeSet != null) {
+                sheet.put(nodeSet);
+            }
+            if (nodeLabelSet != null) {
+                sheet.put(nodeLabelSet);
+            }
+            if (edgeSet != null) {
+                sheet.put(edgeSet);
+            }
+            if (arrowsSet != null) {
+                sheet.put(arrowsSet);
+            }
+            if (edgeLabelSet != null) {
+                sheet.put(edgeLabelSet);
             }
             for (Sheet.Set sheetSet : sheetSets.values()) {
                 sheet.put(sheetSet);
@@ -176,5 +203,11 @@ public class PreviewNode extends AbstractNode implements PropertyChangeListener 
     @Override
     public void propertyChange(PropertyChangeEvent pce) {
         firePropertyChange(pce.getPropertyName(), pce.getOldValue(), pce.getNewValue());
+        SwingUtilities.invokeLater(new Runnable() {
+
+            public void run() {
+                propertySheet.updateUI();
+            }
+        });
     }
 }

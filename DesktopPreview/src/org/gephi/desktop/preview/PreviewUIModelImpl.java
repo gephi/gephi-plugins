@@ -20,11 +20,12 @@ along with Gephi.  If not, see <http://www.gnu.org/licenses/>.
  */
 package org.gephi.desktop.preview;
 
-import java.util.ArrayList;
-import java.util.List;
 import org.gephi.desktop.preview.api.PreviewUIModel;
+import org.gephi.preview.api.PreviewController;
 import org.gephi.preview.api.PreviewPreset;
+import org.gephi.preview.api.PreviewProperty;
 import org.gephi.preview.presets.DefaultPreset;
+import org.openide.util.Lookup;
 
 /**
  *
@@ -32,8 +33,11 @@ import org.gephi.preview.presets.DefaultPreset;
  */
 public class PreviewUIModelImpl implements PreviewUIModel {
 
+    //Data
     private float visibilityRatio = 1f;
     private PreviewPreset currentPreset;
+    private boolean refreshing;
+    private boolean workspaceBarVisible;
 
     public PreviewUIModelImpl() {
         currentPreset = new DefaultPreset();
@@ -49,10 +53,25 @@ public class PreviewUIModelImpl implements PreviewUIModel {
 
     public void setVisibilityRatio(float visibilityRatio) {
         this.visibilityRatio = visibilityRatio;
-
     }
 
     public void setCurrentPreset(PreviewPreset preset) {
         currentPreset = preset;
+    }
+
+    public boolean isRefreshing() {
+        return refreshing;
+    }
+
+    public boolean isWorkspaceBarVisible() {
+        return workspaceBarVisible;
+    }
+
+    public void setRefreshing(boolean refreshing) {
+        this.refreshing = refreshing;
+    }
+
+    public void setWorkspaceBarVisible(boolean workspaceBarVisible) {
+        this.workspaceBarVisible = workspaceBarVisible;
     }
 }
