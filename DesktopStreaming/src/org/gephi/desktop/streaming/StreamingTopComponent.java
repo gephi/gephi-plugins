@@ -46,6 +46,9 @@ import java.beans.PropertyChangeListener;
 import java.util.logging.Logger;
 import javax.swing.Action;
 import javax.swing.SwingUtilities;
+import org.gephi.desktop.perspective.plugin.OverviewPerspective;
+import org.gephi.desktop.perspective.spi.Perspective;
+import org.gephi.desktop.perspective.spi.PerspectiveMember;
 import org.openide.nodes.Node;
 import org.openide.util.NbBundle;
 import org.openide.windows.TopComponent;
@@ -58,6 +61,7 @@ import org.openide.explorer.view.BeanTreeView;
 import org.openide.nodes.AbstractNode;
 import org.openide.nodes.Children;
 import org.openide.util.Lookup;
+import org.openide.util.lookup.ServiceProvider;
 
 /**
  * Top component which displays the Streaming component.
@@ -70,7 +74,6 @@ public final class StreamingTopComponent extends TopComponent implements Explore
     /** path to the icon used by the component and its open action */
     static final String ICON_PATH = "org/gephi/desktop/streaming/resources/media-stream.png";
     private static final String PREFERRED_ID = "StreamingTopComponent";
-
     private StreamingUIController controller;
     private Children clientMasterChildren;
     private StreamingTreeView tree;
@@ -90,8 +93,9 @@ public final class StreamingTopComponent extends TopComponent implements Explore
 
         clientMasterChildren = new Children.Array();
 
-        associateLookup (ExplorerUtils.createLookup(mgr, getActionMap()));
+        associateLookup(ExplorerUtils.createLookup(mgr, getActionMap()));
         AbstractNode topnode = new AbstractNode(clientMasterChildren) {
+
             @Override
             public Action[] getActions(boolean context) {
                 return new Action[0];
@@ -121,10 +125,10 @@ public final class StreamingTopComponent extends TopComponent implements Explore
 
             public void propertyChange(PropertyChangeEvent evt) {
                 if (evt.getPropertyName().equals(ExplorerManager.PROP_SELECTED_NODES)) {
-                    Node[] selected = (Node[])evt.getNewValue();
-                    if (selected!=null && selected.length==1 && selected[0] instanceof StreamingConnectionNode) {
+                    Node[] selected = (Node[]) evt.getNewValue();
+                    if (selected != null && selected.length == 1 && selected[0] instanceof StreamingConnectionNode) {
                         removeButton.setEnabled(true);
-                        selectedNode = (StreamingConnectionNode)selected[0];
+                        selectedNode = (StreamingConnectionNode) selected[0];
                     } else {
                         removeButton.setEnabled(false);
                         selectedNode = null;
@@ -224,6 +228,7 @@ public final class StreamingTopComponent extends TopComponent implements Explore
 
     private void settingsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_settingsActionPerformed
         SwingUtilities.invokeLater(new Runnable() {
+
             public void run() {
                 controller.setSettings();
             }
@@ -233,6 +238,7 @@ public final class StreamingTopComponent extends TopComponent implements Explore
 
     private void addActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addActionPerformed
         SwingUtilities.invokeLater(new Runnable() {
+
             public void run() {
                 controller.connectToStream();
             }
@@ -241,15 +247,15 @@ public final class StreamingTopComponent extends TopComponent implements Explore
 
     private void removeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_removeButtonActionPerformed
         SwingUtilities.invokeLater(new Runnable() {
+
             public void run() {
-                if (selectedNode!=null) {
+                if (selectedNode != null) {
                     selectedNode.closeConnection();
                     selectedNode.getParentNode().getChildren().remove(new Node[]{selectedNode});
                 }
             }
         });
     }//GEN-LAST:event_removeButtonActionPerformed
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton addButton;
     private javax.swing.JButton removeButton;
@@ -257,6 +263,7 @@ public final class StreamingTopComponent extends TopComponent implements Explore
     private javax.swing.JButton settingsButton;
     private javax.swing.JPanel topPanel;
     // End of variables declaration//GEN-END:variables
+
     /**
      * Gets default instance. Do not use directly: reserved for *.settings files only,
      * i.e. deserialization routines; otherwise you could get a non-deserialized instance.
@@ -327,10 +334,21 @@ public final class StreamingTopComponent extends TopComponent implements Explore
     protected String preferredID() {
         return PREFERRED_ID;
     }
-
     private final ExplorerManager mgr = new ExplorerManager();
+
     public ExplorerManager getExplorerManager() {
         return mgr;
     }
 
+    @ServiceProvider(service = PerspectiveMember.class)
+    public static class StreamingTopComponentPerspectiveMember implements PerspectiveMember {
+
+        public boolean isMemberOf(Perspective perspective) {
+            return perspective instanceof OverviewPerspective;
+        }
+
+        public String getTopComponentId() {
+            return StreamingTopComponent.PREFERRED_ID;
+        }
+    }
 }

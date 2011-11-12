@@ -52,6 +52,7 @@ public final class Range {
     private Number upperNumber;
     private Number min;
     private Number max;
+    private boolean autoUpdateBounds;
 
     public Range(Double lowerBound, Double upperBound) {
         lowerNumber = lowerBound;
