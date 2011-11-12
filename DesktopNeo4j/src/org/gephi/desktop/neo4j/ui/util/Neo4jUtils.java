@@ -27,7 +27,6 @@ import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.graphdb.RelationshipType;
 import org.neo4j.graphdb.TransactionFailureException;
 import org.neo4j.kernel.EmbeddedGraphDatabase;
-import org.neo4j.kernel.impl.nioneo.store.IllegalStoreVersionException;
 
 /**
  *
@@ -38,16 +37,13 @@ public class Neo4jUtils {
     private Neo4jUtils() {
     }
 
-    public static GraphDatabaseService localDatabase(File neo4jDirectory) throws ObsoleneVersionOfNeo4jStoreException,
-            Neo4jStoreAlreadyInUseException {
+    public static GraphDatabaseService localDatabase(File neo4jDirectory) throws Neo4jStoreAlreadyInUseException {
 
         try {
             return new EmbeddedGraphDatabase(neo4jDirectory.getAbsolutePath());
         }
         catch (TransactionFailureException e) {
-            if (e.getCause() instanceof IllegalStoreVersionException)
-                throw new ObsoleneVersionOfNeo4jStoreException(e);
-            else if (e.getCause() instanceof IllegalStateException)
+            if (e.getCause() instanceof IllegalStateException)
                 throw new Neo4jStoreAlreadyInUseException(e);
 
             throw e;

@@ -48,7 +48,6 @@ import org.gephi.desktop.neo4j.ui.TraversalFilterPanel;
 import org.gephi.desktop.neo4j.ui.TraversalImportPanel;
 import org.gephi.desktop.neo4j.ui.util.Neo4jStoreAlreadyInUseException;
 import org.gephi.desktop.neo4j.ui.util.Neo4jUtils;
-import org.gephi.desktop.neo4j.ui.util.ObsoleneVersionOfNeo4jStoreException;
 import org.gephi.desktop.project.api.ProjectControllerUI;
 import org.gephi.project.api.ProjectController;
 import org.gephi.project.api.Workspace;
@@ -184,9 +183,7 @@ public class Neo4jMenuAction extends CallableSystemAction {
     private static void handleLocalDatabaseError(Exception e) {
         String errorMessage = null;
 
-        if (e.getClass() == ObsoleneVersionOfNeo4jStoreException.class)
-            errorMessage = NbBundle.getMessage(Neo4jMenuAction.class, "CTL_Neo4j_InvalidStorageDatabaseVersion");
-        else if (e.getClass() == Neo4jStoreAlreadyInUseException.class)
+        if (e.getClass() == Neo4jStoreAlreadyInUseException.class)
             errorMessage = NbBundle.getMessage(Neo4jMenuAction.class, "CTL_Neo4j_DatabaseStorageAlreadyInUse");
 
         NotifyDescriptor notifyDescriptor = new NotifyDescriptor.Message(errorMessage, JOptionPane.WARNING_MESSAGE);
@@ -219,11 +216,6 @@ public class Neo4jMenuAction extends CallableSystemAction {
             GraphDatabaseService tempGraphDB;
             try {
                 tempGraphDB = Neo4jUtils.localDatabase(neo4jDirectory);
-            }
-            // older incompatible version of Neo4j was used during creating database
-            catch (ObsoleneVersionOfNeo4jStoreException obsoleneVersionException) {
-                handleLocalDatabaseError(obsoleneVersionException);
-                return;
             }
             catch (Neo4jStoreAlreadyInUseException storeInUseException) {
                 handleLocalDatabaseError(storeInUseException);
@@ -317,11 +309,6 @@ public class Neo4jMenuAction extends CallableSystemAction {
             GraphDatabaseService tempGraphDB;
             try {
                 tempGraphDB = Neo4jUtils.localDatabase(neo4jDirectory);
-            }
-            // older incompatible version of Neo4j was used during creating database
-            catch (ObsoleneVersionOfNeo4jStoreException obsoleneVersionException) {
-                handleLocalDatabaseError(obsoleneVersionException);
-                return;
             }
             catch (Neo4jStoreAlreadyInUseException storeInUseException) {
                 handleLocalDatabaseError(storeInUseException);
@@ -423,11 +410,6 @@ public class Neo4jMenuAction extends CallableSystemAction {
                             GraphDatabaseService tempGraphDB;
                             try {
                                 tempGraphDB = Neo4jUtils.localDatabase(neo4jDirectory);
-                            }
-                            // older incompatible version of Neo4j was used during creating database
-                            catch (ObsoleneVersionOfNeo4jStoreException obsoleneVersionException) {
-                                handleLocalDatabaseError(obsoleneVersionException);
-                                return;
                             }
                             catch (Neo4jStoreAlreadyInUseException storeInUseException) {
                                 handleLocalDatabaseError(storeInUseException);
