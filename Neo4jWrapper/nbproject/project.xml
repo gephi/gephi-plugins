@@ -29,6 +29,9 @@
                 <package>org.neo4j.kernel.impl.nioneo.xa</package>
                 <package>org.neo4j.kernel.impl.osgi</package>
                 <package>org.neo4j.kernel.impl.persistence</package>
+                <package>org.neo4j.kernel.impl.storemigration</package>
+                <package>org.neo4j.kernel.impl.storemigration.legacystore</package>
+                <package>org.neo4j.kernel.impl.storemigration.monitoring</package>
                 <package>org.neo4j.kernel.impl.transaction</package>
                 <package>org.neo4j.kernel.impl.transaction.xaframework</package>
                 <package>org.neo4j.kernel.impl.traversal</package>
@@ -38,24 +41,24 @@
                 <package>org.neo4j.management.impl.jconsole</package>
             </public-packages>
             <class-path-extension>
-                <runtime-relative-path>ext/neo4j-kernel-1.4.1.jar</runtime-relative-path>
-                <binary-origin>release/modules/ext/neo4j-kernel-1.4.1.jar</binary-origin>
+                <runtime-relative-path>ext/neo4j-management-1.5.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/neo4j-management-1.5.jar</binary-origin>
+            </class-path-extension>
+            <class-path-extension>
+                <runtime-relative-path>ext/neo4j-jmx-1.5.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/neo4j-jmx-1.5.jar</binary-origin>
+            </class-path-extension>
+            <class-path-extension>
+                <runtime-relative-path>ext/neo4j-kernel-1.5.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/neo4j-kernel-1.5.jar</binary-origin>
+            </class-path-extension>
+            <class-path-extension>
+                <runtime-relative-path>ext/neo4j-udc-1.5.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/neo4j-udc-1.5.jar</binary-origin>
             </class-path-extension>
             <class-path-extension>
                 <runtime-relative-path>ext/geronimo-jta_1.1_spec-1.1.1.jar</runtime-relative-path>
                 <binary-origin>release/modules/ext/geronimo-jta_1.1_spec-1.1.1.jar</binary-origin>
-            </class-path-extension>
-            <class-path-extension>
-                <runtime-relative-path>ext/neo4j-management-1.4.1.jar</runtime-relative-path>
-                <binary-origin>release/modules/ext/neo4j-management-1.4.1.jar</binary-origin>
-            </class-path-extension>
-            <class-path-extension>
-                <runtime-relative-path>ext/neo4j-jmx-1.4.1.jar</runtime-relative-path>
-                <binary-origin>release/modules/ext/neo4j-jmx-1.4.1.jar</binary-origin>
-            </class-path-extension>
-            <class-path-extension>
-                <runtime-relative-path>ext/neo4j-udc-1.4.1.jar</runtime-relative-path>
-                <binary-origin>release/modules/ext/neo4j-udc-1.4.1.jar</binary-origin>
             </class-path-extension>
         </data>
     </configuration>
