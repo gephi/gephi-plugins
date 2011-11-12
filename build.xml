@@ -49,7 +49,7 @@
     </target>
 
     <target name="javadoc">
-        <javadoc destdir="dist/apiindex" windowtitle="Gephi API Index" encoding="UTF-8" charset="UTF-8" stylesheetfile="stylesheet.css"  packagenames="org.gephi.**.api,org.gephi.**.spi,org.gephi.data.*,org.gephi.utils.progress" overview="overview.html"  classpath="build/public-package-jars/org-openide-util-lookup.jar">
+        <javadoc destdir="dist/apiindex" windowtitle="Gephi API Index" encoding="UTF-8" charset="UTF-8" stylesheetfile="stylesheet.css"  packagenames="org.gephi.**.api,org.gephi.**.spi.*,org.gephi.data.*,org.gephi.utils.progress" overview="overview.html"  classpath="build/public-package-jars/org-openide-util-lookup.jar">
             <sourcepath>
                 <pathelement path="AttributesAPI/src"/>
                 <pathelement path="ClusteringAPI/src"/>
@@ -66,11 +66,12 @@
                 <pathelement path="PreviewAPI/src"/>
                 <pathelement path="ProjectAPI/src"/>
                 <pathelement path="RankingAPI/src"/>
+                <pathelement path="RankingPlugin/src"/>
                 <pathelement path="StatisticsAPI/src"/>
                 <pathelement path="ToolsAPI/src"/>
             </sourcepath>
-            <doctitle>Gephi 0.8alpha API Index</doctitle>
-            <header>Gephi 0.8alpha Javadoc</header>
+            <doctitle>Gephi 0.8 beta API Index</doctitle>
+            <header>Gephi 0.8 beta Javadoc</header>
         </javadoc>
     </target>
 
@@ -179,6 +180,7 @@
                 <include name="org-gephi-utils.jar"/>
                 <include name="org-gephi-utils-longtask.jar" />
                 <include name="org-gephi-ranking-api.jar"/>
+                <include name="org-gephi-ranking-plugin.jar"/>
                 <include name="org-gephi-partition-api.jar"/>
                 <include name="org-gephi-partition-plugin.jar"/>
                 <include name="org-gephi-io-generator-api.jar"/>
@@ -244,7 +246,7 @@
                 <provider classname="org.gephi.layout.LayoutModelPersistenceProvider"/>
                 <provider classname="org.gephi.partition.impl.PartitionModelPersistenceProvider"/>
                 <provider classname="org.gephi.statistics.StatisticsPersistenceProvider"/>
-                <provider classname="org.gephi.preview.PreviewModelPersistenceProvider"/>
+                <provider classname="org.gephi.preview.PreviewPersistenceProvider"/>
             </service>
             
             <service type="org.gephi.project.spi.WorkspaceDuplicateProvider">

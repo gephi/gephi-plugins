@@ -5,22 +5,44 @@ Website : http://www.gephi.org
 
 This file is part of Gephi.
 
-Gephi is free software: you can redistribute it and/or modify
-it under the terms of the GNU Affero General Public License as
-published by the Free Software Foundation, either version 3 of the
-License, or (at your option) any later version.
+DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
 
-Gephi is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU Affero General Public License for more details.
+Copyright 2011 Gephi Consortium. All rights reserved.
 
-You should have received a copy of the GNU Affero General Public License
-along with Gephi.  If not, see <http://www.gnu.org/licenses/>.
+The contents of this file are subject to the terms of either the GNU
+General Public License Version 3 only ("GPL") or the Common
+Development and Distribution License("CDDL") (collectively, the
+"License"). You may not use this file except in compliance with the
+License. You can obtain a copy of the License at
+http://gephi.org/about/legal/license-notice/
+or /cddl-1.0.txt and /gpl-3.0.txt. See the License for the
+specific language governing permissions and limitations under the
+License.  When distributing the software, include this License Header
+Notice in each file and include the License files at
+/cddl-1.0.txt and /gpl-3.0.txt. If applicable, add the following below the
+License Header, with the fields enclosed by brackets [] replaced by
+your own identifying information:
+"Portions Copyrighted [year] [name of copyright owner]"
+
+If you wish your version of this file to be governed by only the CDDL
+or only the GPL Version 3, indicate your decision by adding
+"[Contributor] elects to include this software in this distribution
+under the [CDDL or GPL Version 3] license." If you do not indicate a
+single choice of license, a recipient has the option to distribute
+your version of this file under either the CDDL, the GPL Version 3 or
+to extend the choice of license to its licensees as provided above.
+However, if you add GPL Version 3 code and therefore, elected the GPL
+Version 3 license, then the option applies only if the new code is
+made subject to such option by the copyright holder.
+
+Contributor(s):
+
+Portions Copyrighted 2011 Gephi Consortium.
  */
 package org.gephi.desktop.layout;
 
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
@@ -38,6 +60,7 @@ import java.util.Comparator;
 import java.util.List;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JMenuItem;
+import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.JSeparator;
 import org.gephi.layout.api.LayoutController;
@@ -227,8 +250,30 @@ public class LayoutPanel extends javax.swing.JPanel implements PropertyChangeLis
     private void refreshProperties() {
         if (model == null || model.getSelectedLayout() == null) {
             ((PropertySheet) propertySheet).setNodes(new Node[0]);
+            layoutProvidedPanel.setVisible(false);
+            propertySheet.setVisible(true);
+            layoutProvidedPanel.removeAll();
         } else {
             LayoutNode layoutNode = new LayoutNode(model.getSelectedLayout());
+            
+            JPanel simplePanel = null;
+            try {
+                simplePanel = layoutNode.getLayout().getBuilder().getUI().getSimplePanel(layoutNode.getLayout());
+            } catch (Exception ex) {
+                // Tried and failed to getSimplePanel
+            }
+            
+            if(null != simplePanel) {
+                propertySheet.setVisible(false);
+                layoutProvidedPanel.setVisible(true);
+                layoutProvidedPanel.removeAll();
+                layoutProvidedPanel.add(simplePanel);
+            } else {
+                layoutProvidedPanel.setVisible(false);
+                propertySheet.setVisible(true);
+                layoutProvidedPanel.removeAll();
+            }
+            
             ((PropertySheet) propertySheet).setNodes(new Node[]{layoutNode});
         }
     }
@@ -277,6 +322,7 @@ public class LayoutPanel extends javax.swing.JPanel implements PropertyChangeLis
         layoutToolbar = new javax.swing.JToolBar();
         presetsButton = new javax.swing.JButton();
         resetButton = new javax.swing.JButton();
+        layoutProvidedPanel = new javax.swing.JPanel();
         propertySheet = new PropertySheet();
 
         setLayout(new java.awt.GridBagLayout());
@@ -344,6 +390,17 @@ public class LayoutPanel extends javax.swing.JPanel implements PropertyChangeLis
         gridBagConstraints.weightx = 1.0;
         add(layoutToolbar, gridBagConstraints);
 
+        layoutProvidedPanel.setOpaque(false);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        add(layoutProvidedPanel, gridBagConstraints);
+
         propertySheet.setOpaque(false);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -370,6 +427,7 @@ public class LayoutPanel extends javax.swing.JPanel implements PropertyChangeLis
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel infoLabel;
     private javax.swing.JComboBox layoutCombobox;
+    private javax.swing.JPanel layoutProvidedPanel;
     private javax.swing.JToolBar layoutToolbar;
     private javax.swing.JButton presetsButton;
     private javax.swing.JPanel propertySheet;

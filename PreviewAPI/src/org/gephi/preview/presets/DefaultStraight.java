@@ -5,22 +5,44 @@ Website : http://www.gephi.org
 
 This file is part of Gephi.
 
-Gephi is free software: you can redistribute it and/or modify
-it under the terms of the GNU Affero General Public License as
-published by the Free Software Foundation, either version 3 of the
-License, or (at your option) any later version.
+DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
 
-Gephi is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU Affero General Public License for more details.
+Copyright 2011 Gephi Consortium. All rights reserved.
 
-You should have received a copy of the GNU Affero General Public License
-along with Gephi.  If not, see <http://www.gnu.org/licenses/>.
+The contents of this file are subject to the terms of either the GNU
+General Public License Version 3 only ("GPL") or the Common
+Development and Distribution License("CDDL") (collectively, the
+"License"). You may not use this file except in compliance with the
+License. You can obtain a copy of the License at
+http://gephi.org/about/legal/license-notice/
+or /cddl-1.0.txt and /gpl-3.0.txt. See the License for the
+specific language governing permissions and limitations under the
+License.  When distributing the software, include this License Header
+Notice in each file and include the License files at
+/cddl-1.0.txt and /gpl-3.0.txt. If applicable, add the following below the
+License Header, with the fields enclosed by brackets [] replaced by
+your own identifying information:
+"Portions Copyrighted [year] [name of copyright owner]"
+
+If you wish your version of this file to be governed by only the CDDL
+or only the GPL Version 3, indicate your decision by adding
+"[Contributor] elects to include this software in this distribution
+under the [CDDL or GPL Version 3] license." If you do not indicate a
+single choice of license, a recipient has the option to distribute
+your version of this file under either the CDDL, the GPL Version 3 or
+to extend the choice of license to its licensees as provided above.
+However, if you add GPL Version 3 code and therefore, elected the GPL
+Version 3 license, then the option applies only if the new code is
+made subject to such option by the copyright holder.
+
+Contributor(s):
+
+Portions Copyrighted 2011 Gephi Consortium.
  */
 package org.gephi.preview.presets;
 
 import org.gephi.preview.api.PreviewPreset;
+import org.gephi.preview.api.PreviewProperty;
 import org.openide.util.NbBundle;
 
 /**
@@ -32,69 +54,13 @@ public class DefaultStraight extends PreviewPreset {
     public DefaultStraight() {
         super(NbBundle.getMessage(DefaultStraight.class, "DefaultStraight.name"));
 
-        properties.put("showNodes", "true");
-        properties.put("Directed_arrowAddedRadius", "30.0");
-        properties.put("Directed_miniLabelColorizer", "parent");
-        properties.put("Bidirectional_shortenLabelsFlag", "true");
-        properties.put("Bidirectional_showArrowsFlag", "true");
-        properties.put("Bidirectional_labelColorizer", "parent");
-        properties.put("Bidirectional_arrowSize", "10.0");
-        properties.put("Bidirectional_miniLabelFont", "Arial 6 Plain");
-        properties.put("Bidirectional_arrowAddedRadius", "30.0");
-        properties.put("Bidirectional_baseLabelFont", "Arial 10 Plain");
-        properties.put("nodeLabelColorizer", "custom [0,0,0]");
-        properties.put("nodeLabelBorderColorizer", "custom [255,255,255]");
-        properties.put("Bidirectional_colorizer", "mixed");
-        properties.put("Directed_labelColorizer", "parent");
-        properties.put("showNodeLabelBorders", "false");
-        properties.put("SelfLoop_showFlag", "true");
-        properties.put("Directed_miniLabelAddedRadius", "15.0");
-        properties.put("GlobalEdge_showFlag", "true");
-        properties.put("showNodeLabels", "true");
-        properties.put("Directed_colorizer", "source");
-        properties.put("Undirected_rescaleWeight", "true");
-        properties.put("Directed_miniLabelMaxChar", "10");
-        properties.put("Undirected_shortenLabelsFlag", "false");
-        properties.put("Directed_shortenLabelsFlag", "false");
-        properties.put("Bidirectional_curvedFlag", "false");
-        properties.put("baseNodeLabelFont", "Arial 12 Plain");
-        properties.put("Directed_showMiniLabelsFlag", "false");
-        properties.put("Directed_arrowSize", "10.0");
-        properties.put("SelfLoop_edgeScale", "1.0");
-        properties.put("SelfLoop_rescaleWeight", "false");
-        properties.put("SelfLoop_colorizer", "custom [0,0,0]");
-        properties.put("Directed_showArrowsFlag", "true");
-        properties.put("Undirected_baseLabelFont", "Arial 10 Plain");
-        properties.put("Directed_rescaleWeight", "true");
-        properties.put("Undirected_showLabelsFlag", "true");
-        properties.put("Directed_edgeScale", "1.0");
-        properties.put("Undirected_labelMaxChar", "10");
-        properties.put("shortenLabelsFlag", "false");
-        properties.put("nodeLabelMaxChar", "10");
-        properties.put("Undirected_colorizer", "mixed");
-        properties.put("proportionalLabelSize", "true");
-        properties.put("Bidirectional_miniLabelMaxChar", "10");
-        properties.put("Directed_labelMaxChar", "10");
-        properties.put("nodeBorderWidth", "1.0");
-        properties.put("Undirected_labelColorizer", "parent");
-        properties.put("Directed_arrowColorizer", "parent");
-        properties.put("Bidirectional_labelMaxChar", "10");
-        properties.put("Bidirectional_arrowColorizer", "parent");
-        properties.put("nodeBorderColorizer", "custom [0,0,0]");
-        properties.put("Bidirectional_edgeScale", "1.0");
-        properties.put("Directed_showLabelsFlag", "true");
-        properties.put("Bidirectional_miniLabelColorizer", "parent");
-        properties.put("Directed_shortenMiniLabelsFlag", "false");
-        properties.put("Bidirectional_shortenMiniLabelsFlag", "false");
-        properties.put("Directed_curvedFlag", "false");
-        properties.put("Undirected_curvedFlag", "false");
-        properties.put("Bidirectional_rescaleWeight", "true");
-        properties.put("Bidirectional_miniLabelAddedRadius", "15.0");
-        properties.put("nodeColorizer", "original");
-        properties.put("Undirected_edgeScale", "1.0");
-        properties.put("Directed_baseLabelFont", "Arial 8 Plain");
-        properties.put("Bidirectional_showMiniLabelsFlag", "false");
-        properties.put("Bidirectional_showLabelsFlag", "false");
-        properties.put("Directed_miniLabelFont", "Arial 6 Plain");
+        //Default
+        DefaultPreset defaultPreset = new DefaultPreset();
+        properties.putAll(defaultPreset.getProperties());
+        
+        //Custom values
+        properties.put(PreviewProperty.SHOW_EDGE_LABELS, Boolean.TRUE);
+        properties.put(PreviewProperty.SHOW_NODE_LABELS, Boolean.TRUE);
+        properties.put(PreviewProperty.EDGE_CURVED, false);
     }
 }

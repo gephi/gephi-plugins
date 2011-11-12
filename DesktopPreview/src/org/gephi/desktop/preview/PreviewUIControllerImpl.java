@@ -5,24 +5,49 @@ Website : http://www.gephi.org
 
 This file is part of Gephi.
 
-Gephi is free software: you can redistribute it and/or modify
-it under the terms of the GNU Affero General Public License as
-published by the Free Software Foundation, either version 3 of the
-License, or (at your option) any later version.
+DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
 
-Gephi is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU Affero General Public License for more details.
+Copyright 2011 Gephi Consortium. All rights reserved.
 
-You should have received a copy of the GNU Affero General Public License
-along with Gephi.  If not, see <http://www.gnu.org/licenses/>.
+The contents of this file are subject to the terms of either the GNU
+General Public License Version 3 only ("GPL") or the Common
+Development and Distribution License("CDDL") (collectively, the
+"License"). You may not use this file except in compliance with the
+License. You can obtain a copy of the License at
+http://gephi.org/about/legal/license-notice/
+or /cddl-1.0.txt and /gpl-3.0.txt. See the License for the
+specific language governing permissions and limitations under the
+License.  When distributing the software, include this License Header
+Notice in each file and include the License files at
+/cddl-1.0.txt and /gpl-3.0.txt. If applicable, add the following below the
+License Header, with the fields enclosed by brackets [] replaced by
+your own identifying information:
+"Portions Copyrighted [year] [name of copyright owner]"
+
+If you wish your version of this file to be governed by only the CDDL
+or only the GPL Version 3, indicate your decision by adding
+"[Contributor] elects to include this software in this distribution
+under the [CDDL or GPL Version 3] license." If you do not indicate a
+single choice of license, a recipient has the option to distribute
+your version of this file under either the CDDL, the GPL Version 3 or
+to extend the choice of license to its licensees as provided above.
+However, if you add GPL Version 3 code and therefore, elected the GPL
+Version 3 license, then the option applies only if the new code is
+made subject to such option by the copyright holder.
+
+Contributor(s):
+
+Portions Copyrighted 2011 Gephi Consortium.
  */
 package org.gephi.desktop.preview;
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.beans.PropertyEditorManager;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import javax.swing.SwingUtilities;
 import org.gephi.data.attributes.api.AttributeController;
@@ -39,8 +64,13 @@ import org.gephi.preview.api.PreviewController;
 import org.gephi.preview.api.PreviewModel;
 import org.gephi.preview.api.PreviewPreset;
 import org.gephi.preview.api.PreviewProperty;
+import org.gephi.preview.presets.BlackBackground;
 import org.gephi.preview.presets.DefaultCurved;
 import org.gephi.preview.presets.DefaultPreset;
+import org.gephi.preview.presets.DefaultStraight;
+import org.gephi.preview.presets.EdgesCustomColor;
+import org.gephi.preview.presets.TagCloud;
+import org.gephi.preview.presets.TextOutline;
 import org.gephi.preview.types.DependantColor;
 import org.gephi.preview.types.DependantOriginalColor;
 import org.gephi.preview.types.EdgeColor;
@@ -58,6 +88,7 @@ import org.openide.util.lookup.ServiceProvider;
 @ServiceProvider(service = PreviewUIController.class)
 public class PreviewUIControllerImpl implements PreviewUIController, GraphListener {
 
+    private final List<PropertyChangeListener> listeners;
     private final PreviewController previewController;
     private final GraphController graphController;
     private final PresetUtils presetUtils = new PresetUtils();
@@ -65,15 +96,9 @@ public class PreviewUIControllerImpl implements PreviewUIController, GraphListen
     private GraphModel graphModel = null;
 
     public PreviewUIControllerImpl() {
-        previewController = Lookup.getDefault().lookup(PreviewController.class);
-        graphController = Lookup.getDefault().lookup(GraphController.class);
-        PreviewModel previewModel = previewController.getModel();
-        if (previewModel != null) {
-            graphModel = graphController.getModel();
-            graphModel.addGraphListener(this);
-        }
-
+        listeners = new ArrayList<PropertyChangeListener>();
         ProjectController pc = Lookup.getDefault().lookup(ProjectController.class);
+        graphController = Lookup.getDefault().lookup(GraphController.class);
         pc.addWorkspaceListener(new WorkspaceListener() {
 
             public void initialize(Workspace workspace) {
@@ -93,16 +118,7 @@ public class PreviewUIControllerImpl implements PreviewUIController, GraphListen
                     model = new PreviewUIModelImpl();
                     workspace.add(model);
                 }
-                SwingUtilities.invokeLater(new Runnable() {
-
-                    public void run() {
-                        PreviewSettingsTopComponent settingsTopComponent = PreviewSettingsTopComponent.findInstance();
-                        if(settingsTopComponent.isVisible()) {
-                            settingsTopComponent.refreshModel();
-                            PreviewTopComponent.findInstance().refreshModel();
-                        }
-                    }
-                });
+                fireEvent(SELECT, model);
             }
 
             public void unselect(Workspace workspace) {
@@ -110,6 +126,7 @@ public class PreviewUIControllerImpl implements PreviewUIController, GraphListen
                     graphModel.removeGraphListener(PreviewUIControllerImpl.this);
                     graphModel = null;
                 }
+                fireEvent(UNSELECT, model);
             }
 
             public void close(Workspace workspace) {
@@ -120,16 +137,8 @@ public class PreviewUIControllerImpl implements PreviewUIController, GraphListen
                     graphModel.removeGraphListener(PreviewUIControllerImpl.this);
                     graphModel = null;
                 }
-                disableRefresh();
-
-                //When project is closed, clear graph preview instead of keeping it:
-                SwingUtilities.invokeLater(new Runnable() {
-
-                    public void run() {
-                        PreviewSettingsTopComponent.findInstance().refreshModel();
-                        PreviewTopComponent.findInstance().refreshModel();
-                    }
-                });
+                fireEvent(SELECT, null);
+                model = null;
             }
         });
         if (pc.getCurrentWorkspace() != null) {
@@ -138,7 +147,11 @@ public class PreviewUIControllerImpl implements PreviewUIController, GraphListen
                 model = new PreviewUIModelImpl();
                 pc.getCurrentWorkspace().add(model);
             }
+            graphModel = graphController.getModel();
+            graphModel.addGraphListener(this);
         }
+
+        previewController = Lookup.getDefault().lookup(PreviewController.class);
 
         //Register editors
         PropertyEditorManager.registerEditor(EdgeColor.class, EdgeColorPropertyEditor.class);
@@ -154,29 +167,31 @@ public class PreviewUIControllerImpl implements PreviewUIController, GraphListen
      * @see GraphListener#graphChanged(org.gephi.graph.api.GraphEvent)
      */
     public void graphChanged(GraphEvent event) {
-        showRefreshNotification();
+        boolean previous = model.isWorkspaceBarVisible();
+        model.setWorkspaceBarVisible(true);
+        if (!previous) {
+            fireEvent(GRAPH_CHANGED, true);
+        }
     }
 
     /**
      * Refreshes the preview applet.
      */
     public void refreshPreview() {
-        final PreviewTopComponent previewTopComponent = PreviewTopComponent.findInstance();
-        final float visibilityRatio = PreviewSettingsTopComponent.findInstance().getVisibilityRatio();
-        setVisibilityRatio(visibilityRatio);
-
         Thread refreshThread = new Thread(new Runnable() {
 
             public void run() {
-                previewTopComponent.setRefresh(true);
-                disableRefresh();
-                hideRefreshNotification();
+                model.setRefreshing(true);
+                fireEvent(REFRESHING, true);
+
+                previewController.getModel().getProperties().putValue(PreviewProperty.VISIBILITY_RATIO, model.getVisibilityRatio());
                 previewController.refreshPreview();
 
-                previewTopComponent.refreshModel();
+                fireEvent(REFRESHED, model);
 
-                previewTopComponent.setRefresh(false);
-                enableRefresh();
+                model.setRefreshing(false);
+                fireEvent(REFRESHING, false);
+                fireEvent(GRAPH_CHANGED, false);
             }
         }, "Refresh Preview");
         refreshThread.start();
@@ -195,59 +210,6 @@ public class PreviewUIControllerImpl implements PreviewUIController, GraphListen
         });
     }
 
-    /**
-     * Disables the preview refresh action.
-     *
-     * The preview refresh notification is also hidden.
-     */
-    private void disableRefresh() {
-        hideRefreshNotification();
-
-        SwingUtilities.invokeLater(new Runnable() {
-
-            public void run() {
-                PreviewSettingsTopComponent previewSettingsTopComponent = PreviewSettingsTopComponent.findInstance();
-                previewSettingsTopComponent.disableRefreshButton();
-            }
-        });
-    }
-    private boolean showingRefresh = false;
-
-    /**
-     * Shows a notification to invite the user to refresh the preview.
-     *
-     * The refresh action is enabled.
-     */
-    private void showRefreshNotification() {
-        if (showingRefresh) {
-            return;
-        }
-        showingRefresh = true;
-        enableRefresh();
-
-        SwingUtilities.invokeLater(new Runnable() {
-
-            public void run() {
-                PreviewTopComponent previewTopComponent = PreviewTopComponent.findInstance();
-                previewTopComponent.showBannerPanel();
-            }
-        });
-    }
-
-    /**
-     * Hides the preview refresh notification.
-     */
-    private void hideRefreshNotification() {
-        showingRefresh = false;
-        SwingUtilities.invokeLater(new Runnable() {
-
-            public void run() {
-                PreviewTopComponent previewTopComponent = PreviewTopComponent.findInstance();
-                previewTopComponent.hideBannerPanel();
-            }
-        });
-    }
-
     public void setVisibilityRatio(float visibilityRatio) {
         if (model != null) {
             model.setVisibilityRatio(visibilityRatio);
@@ -259,7 +221,7 @@ public class PreviewUIControllerImpl implements PreviewUIController, GraphListen
     }
 
     public PreviewPreset[] getDefaultPresets() {
-        return new PreviewPreset[]{new DefaultPreset(), new DefaultCurved()};
+        return new PreviewPreset[]{new DefaultPreset(), new DefaultCurved(), new DefaultStraight(), new TextOutline(), new BlackBackground(), new EdgesCustomColor(), new TagCloud()};
     }
 
     public PreviewPreset[] getUserPresets() {
@@ -290,6 +252,23 @@ public class PreviewUIControllerImpl implements PreviewUIController, GraphListen
             PreviewPreset preset = new PreviewPreset(name, map);
             presetUtils.savePreset(preset);
             model.setCurrentPreset(preset);
+        }
+    }
+
+    public void addPropertyChangeListener(PropertyChangeListener listener) {
+        if (!listeners.contains(listener)) {
+            listeners.add(listener);
+        }
+    }
+
+    public void removePropertyChangeListener(PropertyChangeListener listener) {
+        listeners.remove(listener);
+    }
+
+    private void fireEvent(String eventName, Object data) {
+        PropertyChangeEvent event = new PropertyChangeEvent(this, eventName, null, data);
+        for (PropertyChangeListener l : listeners) {
+            l.propertyChange(event);
         }
     }
 }

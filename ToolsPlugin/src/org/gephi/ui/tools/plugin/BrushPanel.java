@@ -5,18 +5,39 @@ Website : http://www.gephi.org
 
 This file is part of Gephi.
 
-Gephi is free software: you can redistribute it and/or modify
-it under the terms of the GNU Affero General Public License as
-published by the Free Software Foundation, either version 3 of the
-License, or (at your option) any later version.
+DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
 
-Gephi is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU Affero General Public License for more details.
+Copyright 2011 Gephi Consortium. All rights reserved.
 
-You should have received a copy of the GNU Affero General Public License
-along with Gephi.  If not, see <http://www.gnu.org/licenses/>.
+The contents of this file are subject to the terms of either the GNU
+General Public License Version 3 only ("GPL") or the Common
+Development and Distribution License("CDDL") (collectively, the
+"License"). You may not use this file except in compliance with the
+License. You can obtain a copy of the License at
+http://gephi.org/about/legal/license-notice/
+or /cddl-1.0.txt and /gpl-3.0.txt. See the License for the
+specific language governing permissions and limitations under the
+License.  When distributing the software, include this License Header
+Notice in each file and include the License files at
+/cddl-1.0.txt and /gpl-3.0.txt. If applicable, add the following below the
+License Header, with the fields enclosed by brackets [] replaced by
+your own identifying information:
+"Portions Copyrighted [year] [name of copyright owner]"
+
+If you wish your version of this file to be governed by only the CDDL
+or only the GPL Version 3, indicate your decision by adding
+"[Contributor] elects to include this software in this distribution
+under the [CDDL or GPL Version 3] license." If you do not indicate a
+single choice of license, a recipient has the option to distribute
+your version of this file under either the CDDL, the GPL Version 3 or
+to extend the choice of license to its licensees as provided above.
+However, if you add GPL Version 3 code and therefore, elected the GPL
+Version 3 license, then the option applies only if the new code is
+made subject to such option by the copyright holder.
+
+Contributor(s):
+
+Portions Copyrighted 2011 Gephi Consortium.
 */
 package org.gephi.ui.tools.plugin;
 
@@ -80,26 +101,26 @@ public class BrushPanel extends javax.swing.JPanel {
         intensitySpinner = new javax.swing.JSpinner();
         jLabel1 = new javax.swing.JLabel();
 
-        labelDiffusion.setFont(new java.awt.Font("Tahoma", 0, 10));
+        labelDiffusion.setFont(labelDiffusion.getFont().deriveFont((float)10));
         labelDiffusion.setText(org.openide.util.NbBundle.getMessage(BrushPanel.class, "BrushPanel.labelDiffusion.text")); // NOI18N
 
-        labelColor.setFont(new java.awt.Font("Tahoma", 0, 10));
+        labelColor.setFont(labelColor.getFont().deriveFont((float)10));
         labelColor.setText(org.openide.util.NbBundle.getMessage(BrushPanel.class, "BrushPanel.labelColor.text")); // NOI18N
 
-        diffusionCombobox.setFont(new java.awt.Font("Tahoma", 0, 10));
+        diffusionCombobox.setFont(diffusionCombobox.getFont().deriveFont((float)10));
         diffusionCombobox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
         colorButton.setText(org.openide.util.NbBundle.getMessage(BrushPanel.class, "BrushPanel.colorButton.text")); // NOI18N
         colorButton.setContentAreaFilled(false);
         colorButton.setFocusPainted(false);
 
-        labelIntensity.setFont(new java.awt.Font("Tahoma", 0, 10));
+        labelIntensity.setFont(labelIntensity.getFont().deriveFont((float)10));
         labelIntensity.setText(org.openide.util.NbBundle.getMessage(BrushPanel.class, "BrushPanel.labelIntensity.text")); // NOI18N
 
-        intensitySpinner.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
+        intensitySpinner.setFont(intensitySpinner.getFont().deriveFont((float)10));
         intensitySpinner.setModel(new javax.swing.SpinnerNumberModel(0, 0, 100, 1));
 
-        jLabel1.setFont(new java.awt.Font("Tahoma", 0, 10));
+        jLabel1.setFont(jLabel1.getFont().deriveFont((float)10));
         jLabel1.setText(org.openide.util.NbBundle.getMessage(BrushPanel.class, "BrushPanel.jLabel1.text")); // NOI18N
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
@@ -117,7 +138,7 @@ public class BrushPanel extends javax.swing.JPanel {
                 .addComponent(intensitySpinner, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 247, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 239, Short.MAX_VALUE)
                 .addComponent(labelDiffusion)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(diffusionCombobox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)

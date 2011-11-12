@@ -21,8 +21,5 @@ msgstr "SPI for perspectives and TopComponent management"
 msgid "OpenIDE-Module-Short-Description"
 msgstr "SPI for perspectives and TopComponent management"
 
-msgid "BannerTopComponent.logoButton.toolTipText"
+msgid "BannerComponent.logoButton.toolTipText"
 msgstr "Go on Gephi website www.gephi.org"
-
-msgid "CTL_BannerTopComponent"
-msgstr "Banner"

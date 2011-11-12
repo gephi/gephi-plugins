@@ -5,18 +5,39 @@ Website : http://www.gephi.org
 
 This file is part of Gephi.
 
-Gephi is free software: you can redistribute it and/or modify
-it under the terms of the GNU Affero General Public License as
-published by the Free Software Foundation, either version 3 of the
-License, or (at your option) any later version.
+DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
 
-Gephi is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU Affero General Public License for more details.
+Copyright 2011 Gephi Consortium. All rights reserved.
 
-You should have received a copy of the GNU Affero General Public License
-along with Gephi.  If not, see <http://www.gnu.org/licenses/>.
+The contents of this file are subject to the terms of either the GNU
+General Public License Version 3 only ("GPL") or the Common
+Development and Distribution License("CDDL") (collectively, the
+"License"). You may not use this file except in compliance with the
+License. You can obtain a copy of the License at
+http://gephi.org/about/legal/license-notice/
+or /cddl-1.0.txt and /gpl-3.0.txt. See the License for the
+specific language governing permissions and limitations under the
+License.  When distributing the software, include this License Header
+Notice in each file and include the License files at
+/cddl-1.0.txt and /gpl-3.0.txt. If applicable, add the following below the
+License Header, with the fields enclosed by brackets [] replaced by
+your own identifying information:
+"Portions Copyrighted [year] [name of copyright owner]"
+
+If you wish your version of this file to be governed by only the CDDL
+or only the GPL Version 3, indicate your decision by adding
+"[Contributor] elects to include this software in this distribution
+under the [CDDL or GPL Version 3] license." If you do not indicate a
+single choice of license, a recipient has the option to distribute
+your version of this file under either the CDDL, the GPL Version 3 or
+to extend the choice of license to its licensees as provided above.
+However, if you add GPL Version 3 code and therefore, elected the GPL
+Version 3 license, then the option applies only if the new code is
+made subject to such option by the copyright holder.
+
+Contributor(s):
+
+Portions Copyrighted 2011 Gephi Consortium.
  */
 package org.gephi.desktop.preview;
 
@@ -25,6 +46,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.io.Serializable;
 import java.text.NumberFormat;
 import java.util.logging.Logger;
@@ -58,7 +81,7 @@ import org.openide.windows.WindowManager;
  * 
  * @author Jérémy Subtil, Mathieu Bastian
  */
-public final class PreviewSettingsTopComponent extends TopComponent {
+public final class PreviewSettingsTopComponent extends TopComponent implements PropertyChangeListener {
     
     private static PreviewSettingsTopComponent instance;
     static final String ICON_PATH = "org/gephi/desktop/preview/resources/settings.png";
@@ -94,16 +117,6 @@ public final class PreviewSettingsTopComponent extends TopComponent {
             propertiesPanel.add(propertySheet, BorderLayout.CENTER);
         }
 
-
-        // checks the state of the workspace
-        ProjectController pc = Lookup.getDefault().lookup(ProjectController.class);
-        if (pc.getCurrentWorkspace() != null) {
-            enableRefreshButton();
-        }
-
-        // forces the controller instanciation
-        PreviewUIController puic = Lookup.getDefault().lookup(PreviewUIController.class);
-
         //Ratio
         ratioSlider.addChangeListener(new ChangeListener() {
             
@@ -116,6 +129,8 @@ public final class PreviewSettingsTopComponent extends TopComponent {
                 } else {
                     ratioLabel.setText(formatter.format(val));
                 }
+                PreviewUIController puic = Lookup.getDefault().lookup(PreviewUIController.class);
+                puic.setVisibilityRatio(getVisibilityRatio());
             }
         });
 
@@ -142,13 +157,41 @@ public final class PreviewSettingsTopComponent extends TopComponent {
                 ui.action();
             }
         });
-        refreshModel();
+        setup(null);
+        
+        PreviewUIController controller = Lookup.getDefault().lookup(PreviewUIController.class);
+        controller.addPropertyChangeListener(this);
+        
+        PreviewUIModel m = controller.getModel();
+        if (m != null) {
+            setup(m);
+            enableRefreshButton();
+        }
     }
     
-    public void refreshModel() {
+    public void propertyChange(PropertyChangeEvent evt) {
+        if (evt.getPropertyName().equals(PreviewUIController.SELECT)) {
+            PreviewUIModel model = (PreviewUIModel) evt.getNewValue();
+            setup(model);
+            if (model != null) {
+                enableRefreshButton();
+            } else {
+                disableRefreshButton();
+            }
+        } else if (evt.getPropertyName().equals(PreviewUIController.REFRESHED)) {
+        } else if (evt.getPropertyName().equals(PreviewUIController.REFRESHING)) {
+            boolean refrehsing = (Boolean) evt.getNewValue();
+            if (refrehsing) {
+                disableRefreshButton();
+            } else {
+                enableRefreshButton();
+            }
+        }
+    }
+    
+    public void setup(PreviewUIModel previewModel) {
         propertySheet.setNodes(new Node[]{new PreviewNode(propertySheet)});
         PreviewUIController previewUIController = Lookup.getDefault().lookup(PreviewUIController.class);
-        PreviewUIModel previewModel = previewUIController.getModel();
         if (previewModel != null) {
             ratioSlider.setValue((int) (previewModel.getVisibilityRatio() * 100));
         }
@@ -207,6 +250,9 @@ public final class PreviewSettingsTopComponent extends TopComponent {
                 }
             }
         }
+    }
+    
+    public void unsetup() {
     }
 
     /**

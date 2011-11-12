@@ -5,27 +5,47 @@ Website : http://www.gephi.org
 
 This file is part of Gephi.
 
-Gephi is free software: you can redistribute it and/or modify
-it under the terms of the GNU Affero General Public License as
-published by the Free Software Foundation, either version 3 of the
-License, or (at your option) any later version.
+DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
 
-Gephi is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU Affero General Public License for more details.
+Copyright 2011 Gephi Consortium. All rights reserved.
 
-You should have received a copy of the GNU Affero General Public License
-along with Gephi.  If not, see <http://www.gnu.org/licenses/>.
+The contents of this file are subject to the terms of either the GNU
+General Public License Version 3 only ("GPL") or the Common
+Development and Distribution License("CDDL") (collectively, the
+"License"). You may not use this file except in compliance with the
+License. You can obtain a copy of the License at
+http://gephi.org/about/legal/license-notice/
+or /cddl-1.0.txt and /gpl-3.0.txt. See the License for the
+specific language governing permissions and limitations under the
+License.  When distributing the software, include this License Header
+Notice in each file and include the License files at
+/cddl-1.0.txt and /gpl-3.0.txt. If applicable, add the following below the
+License Header, with the fields enclosed by brackets [] replaced by
+your own identifying information:
+"Portions Copyrighted [year] [name of copyright owner]"
+
+If you wish your version of this file to be governed by only the CDDL
+or only the GPL Version 3, indicate your decision by adding
+"[Contributor] elects to include this software in this distribution
+under the [CDDL or GPL Version 3] license." If you do not indicate a
+single choice of license, a recipient has the option to distribute
+your version of this file under either the CDDL, the GPL Version 3 or
+to extend the choice of license to its licensees as provided above.
+However, if you add GPL Version 3 code and therefore, elected the GPL
+Version 3 license, then the option applies only if the new code is
+made subject to such option by the copyright holder.
+
+Contributor(s):
+
+Portions Copyrighted 2011 Gephi Consortium.
  */
 package org.gephi.desktop.statistics;
 
 import java.util.ArrayList;
 import org.gephi.desktop.statistics.api.StatisticsControllerUI;
 import org.gephi.dynamic.api.DynamicController;
-import org.gephi.project.api.ProjectController;
-import org.gephi.project.api.Workspace;
-import org.gephi.project.api.WorkspaceListener;
+import org.gephi.dynamic.api.DynamicModelEvent;
+import org.gephi.dynamic.api.DynamicModelListener;
 import org.gephi.statistics.api.StatisticsController;
 import org.gephi.statistics.spi.Statistics;
 import org.gephi.statistics.spi.StatisticsUI;
@@ -42,6 +62,7 @@ import org.openide.util.lookup.ServiceProvider;
 public class StatisticsControllerUIImpl implements StatisticsControllerUI {
 
     private StatisticsModelUIImpl model;
+    private DynamicModelListener dynamicModelListener;
 
     public void setup(StatisticsModelUIImpl model) {
         this.model = model;
@@ -57,12 +78,28 @@ public class StatisticsControllerUIImpl implements StatisticsControllerUI {
                     }
                 }
             }
+            //Add listener
+            dynamicModelListener = new DynamicModelListener() {
+
+                public void dynamicModelChanged(DynamicModelEvent event) {
+                    if (event.getEventType().equals(DynamicModelEvent.EventType.IS_DYNAMIC_GRAPH)) {
+                        boolean isDynamic = (Boolean) event.getData();
+                        for (StatisticsUI ui : Lookup.getDefault().lookupAll(StatisticsUI.class)) {
+                            if (ui.getCategory().equals(StatisticsUI.CATEGORY_DYNAMIC)) {
+                                setStatisticsUIVisible(ui, isDynamic);
+                            }
+                        }
+                    }
+                }
+            };
+            dynamicController.addModelListener(dynamicModelListener);
         }
     }
 
     public void unsetup() {
         if (model != null) {
             DynamicController dynamicController = Lookup.getDefault().lookup(DynamicController.class);
+            dynamicController.removeModelListener(dynamicModelListener);
         }
     }
 

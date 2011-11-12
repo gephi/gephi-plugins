@@ -5,18 +5,39 @@ Website : http://www.gephi.org
 
 This file is part of Gephi.
 
-Gephi is free software: you can redistribute it and/or modify
-it under the terms of the GNU Affero General Public License as
-published by the Free Software Foundation, either version 3 of the
-License, or (at your option) any later version.
+DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
 
-Gephi is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU Affero General Public License for more details.
+Copyright 2011 Gephi Consortium. All rights reserved.
 
-You should have received a copy of the GNU Affero General Public License
-along with Gephi.  If not, see <http://www.gnu.org/licenses/>.
+The contents of this file are subject to the terms of either the GNU
+General Public License Version 3 only ("GPL") or the Common
+Development and Distribution License("CDDL") (collectively, the
+"License"). You may not use this file except in compliance with the
+License. You can obtain a copy of the License at
+http://gephi.org/about/legal/license-notice/
+or /cddl-1.0.txt and /gpl-3.0.txt. See the License for the
+specific language governing permissions and limitations under the
+License.  When distributing the software, include this License Header
+Notice in each file and include the License files at
+/cddl-1.0.txt and /gpl-3.0.txt. If applicable, add the following below the
+License Header, with the fields enclosed by brackets [] replaced by
+your own identifying information:
+"Portions Copyrighted [year] [name of copyright owner]"
+
+If you wish your version of this file to be governed by only the CDDL
+or only the GPL Version 3, indicate your decision by adding
+"[Contributor] elects to include this software in this distribution
+under the [CDDL or GPL Version 3] license." If you do not indicate a
+single choice of license, a recipient has the option to distribute
+your version of this file under either the CDDL, the GPL Version 3 or
+to extend the choice of license to its licensees as provided above.
+However, if you add GPL Version 3 code and therefore, elected the GPL
+Version 3 license, then the option applies only if the new code is
+made subject to such option by the copyright holder.
+
+Contributor(s):
+
+Portions Copyrighted 2011 Gephi Consortium.
  */
 package org.gephi.desktop.perspective;
 
@@ -27,14 +48,8 @@ import java.awt.event.ActionListener;
 import javax.swing.Icon;
 import javax.swing.JToggleButton;
 import org.gephi.desktop.perspective.spi.Perspective;
-import org.gephi.desktop.perspective.spi.PerspectiveMember;
 import org.gephi.ui.utils.UIUtils;
 import org.openide.util.ImageUtilities;
-import org.openide.util.Lookup;
-import org.openide.util.NbPreferences;
-import org.openide.windows.TopComponent;
-import org.openide.windows.TopComponentGroup;
-import org.openide.windows.WindowManager;
 
 /**
  *
@@ -42,14 +57,15 @@ import org.openide.windows.WindowManager;
  */
 public class BannerComponent extends javax.swing.JPanel {
 
-    private String selectedPerspective;
-    private static final String SELECTED_PERSPECTIVE_PREFERENCE = "BannerComponent_selectedPerspective";
+    
     private transient JToggleButton[] buttons;
+    private transient PerspectiveController perspectiveController;
 
     public BannerComponent() {
         initComponents();
 
-        selectedPerspective = NbPreferences.forModule(BannerComponent.class).get(SELECTED_PERSPECTIVE_PREFERENCE, null);
+        //Init perspective controller
+        perspectiveController = new PerspectiveController();
 
         addGroupTabs();
 
@@ -76,55 +92,17 @@ public class BannerComponent extends javax.swing.JPanel {
     }
 
     private void addGroupTabs() {
-        final Perspective[] perspectives = Lookup.getDefault().lookupAll(Perspective.class).toArray(new Perspective[0]);
-
-        buttons = new JPerspectiveButton[perspectives.length];
+        buttons = new JPerspectiveButton[perspectiveController.getPerspectives().length];
         int i = 0;
 
         //Add tabs
-        for (final Perspective perspective : perspectives) {
+        for (final Perspective perspective : perspectiveController.getPerspectives()) {
             JPerspectiveButton toggleButton = new JPerspectiveButton(perspective.getDisplayName(), perspective.getIcon());
             toggleButton.addActionListener(new ActionListener() {
 
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    //Close other perspective
-                    for (Perspective g : perspectives) {
-                        if (g != perspective) {
-                            TopComponentGroup tpg = WindowManager.getDefault().findTopComponentGroup(g.getName());
-                            tpg.close();
-                        }
-                    }
-
-                    //Open perspective
-                    TopComponentGroup tpg = WindowManager.getDefault().findTopComponentGroup(perspective.getName());
-                    tpg.open();
-
-                    PerspectiveMember[] members = Lookup.getDefault().lookupAll(PerspectiveMember.class).toArray(new PerspectiveMember[0]);
-
-                    //Close members
-                    Perspective closingPerspective = getPerspective(selectedPerspective);
-                    for (PerspectiveMember member : members) {
-                        if (member.close(closingPerspective)) {
-                            if (member instanceof TopComponent) {
-                                boolean closed = ((TopComponent) member).close();
-                                //System.out.println("Close "+member+" : "+closed);
-                            }
-                        }
-                    }
-
-                    //Open members
-                    for (PerspectiveMember member : members) {
-                        if (member.open(perspective)) {
-                            if (member instanceof TopComponent && !((TopComponent) member).isOpened()) {
-                                ((TopComponent) member).open();
-                                //System.out.println("Open "+member);
-                            }
-                        }
-                    }
-
-                    selectedPerspective = perspective.getName();
-                    NbPreferences.forModule(BannerComponent.class).put(SELECTED_PERSPECTIVE_PREFERENCE, selectedPerspective);
+                    perspectiveController.select(perspective);
                 }
             });
             perspectivesButtonGroup.add(toggleButton);
@@ -132,7 +110,8 @@ public class BannerComponent extends javax.swing.JPanel {
             buttons[i++] = toggleButton;
         }
 
-        refreshSelectedPerspective();
+        //Set currently selected button
+        perspectivesButtonGroup.setSelected(buttons[perspectiveController.getSelectedPerspectiveIndex()].getModel(), true);
     }
 
     //Not working
@@ -147,29 +126,6 @@ public class BannerComponent extends javax.swing.JPanel {
     }
     }
     }*/
-    private void refreshSelectedPerspective() {
-        Perspective[] perspectives = Lookup.getDefault().lookupAll(Perspective.class).toArray(new Perspective[0]);
-        if (selectedPerspective == null) {
-            perspectivesButtonGroup.setSelected(buttons[0].getModel(), true);
-            selectedPerspective = perspectives[0].getName();
-        } else {
-            for (int j = 0; j < perspectives.length; j++) {
-                String groupName = perspectives[j].getName();
-                if (selectedPerspective.equals(groupName)) {
-                    perspectivesButtonGroup.setSelected(buttons[j].getModel(), true);
-                }
-            }
-        }
-    }
-
-    private Perspective getPerspective(String name) {
-        for (Perspective p : Lookup.getDefault().lookupAll(Perspective.class)) {
-            if (p.getName().equals(name)) {
-                return p;
-            }
-        }
-        return null;
-    }
 
     /** This method is called from within the constructor to
      * initialize the form.
