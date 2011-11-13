@@ -1,0 +1,14 @@
+**/build
+**/nbproject/private
+**/nbproject/platform.properties
+nbproject/project.properties
+**/dist
+.DS_Store
+.classpath
+.project
+.settings
+toolkit
+keystore.ks
+dist/**
+build/**
+nbproject/private/**
