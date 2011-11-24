@@ -101,6 +101,7 @@ import org.gephi.desktop.datalab.utils.TimeIntervalCellEditor;
 import org.gephi.desktop.datalab.utils.TimeIntervalsRenderer;
 import org.gephi.dynamic.api.DynamicController;
 import org.gephi.dynamic.api.DynamicModel;
+import org.netbeans.swing.etable.ETableColumnModel;
 
 /**
  *
@@ -266,6 +267,7 @@ public class NodeDataTable {
         }
         NodeTreeModel nodeTreeModel = new NodeTreeModel(graph.wrapToTreeNode());
         final OutlineModel mdl = DefaultOutlineModel.createOutlineModel(nodeTreeModel, new NodeRowModel(cols), true);
+        ((ETableColumnModel)outlineTable.getColumnModel()).clearSortedColumns();//Outline has problems when a sorted column in the previous model is not in the new model
         outlineTable.setRootVisible(false);
         outlineTable.setRenderDataProvider(new NodeRenderer());
         outlineTable.setModel(mdl);
@@ -273,14 +275,6 @@ public class NodeDataTable {
         setNodesSelection(selectedNodes);//Keep row selection before refreshing.
         selectedNodes = null;
         refreshingTable = false;
-    }
-    
-    /**
-     * Temporal trick to avoid visual problems of netbeans Outline such as bad highlighting of rows.
-     */
-    private void avoidOutlineVisualIssues(){
-        outlineTable.requestFocusInWindow();
-        outlineTable.repaint();
     }
 
     public void setNodesSelection(Node[] nodes) {
@@ -295,7 +289,6 @@ public class NodeDataTable {
                 }
             }
         }
-        avoidOutlineVisualIssues();
     }
 
     public void scrollToFirstNodeSelected() {
@@ -304,7 +297,6 @@ public class NodeDataTable {
             Rectangle rect = outlineTable.getCellRect(row, 0, true);
             outlineTable.scrollRectToVisible(rect);
         }
-        avoidOutlineVisualIssues();
     }
 
     public boolean hasData() {
@@ -605,7 +597,6 @@ public class NodeDataTable {
 
                     public void popupMenuWillBecomeInvisible(PopupMenuEvent e) {
                         popup.removePopupMenuListener(this);
-                        avoidOutlineVisualIssues();
                     }
 
                     public void popupMenuCanceled(PopupMenuEvent e) {
