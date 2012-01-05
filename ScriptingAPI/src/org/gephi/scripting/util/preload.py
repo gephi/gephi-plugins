@@ -45,3 +45,44 @@ def export(filename):
 def setVisible(subgraph):
     global visible
     visible = subgraph
+
+import org.gephi.layout.plugin.force.yifanHu.YifanHu as YifanHu
+import org.gephi.layout.plugin.force.yifanHu.YifanHuProportional as YifanHuProportional
+import org.gephi.layout.plugin.forceAtlas.ForceAtlas as ForceAtlas
+import org.gephi.layout.plugin.forceAtlas2.ForceAtlas2Builder as ForceAtlas2
+import org.gephi.layout.plugin.fruchterman.FruchtermanReingoldBuilder as FruchtermanReingold
+import org.gephi.layout.plugin.labelAdjust.LabelAdjustBuilder as LabelAdjust
+import org.gephi.layout.plugin.multilevel.YifanHuMultiLevel as YifanHuMultiLevel
+import org.gephi.layout.plugin.random.Random as RandomLayout
+import org.gephi.layout.plugin.rotate.ClockwiseRotate as ClockwiseRotate
+import org.gephi.layout.plugin.rotate.CounterClockwiseRotate as CounterClockwiseRotate
+import org.gephi.layout.plugin.scale.Contract as Contract
+import org.gephi.layout.plugin.scale.Expand as Expand
+
+def getLayoutBuilders():
+    import org.gephi.layout.spi.LayoutBuilder as LayoutBuilder
+    import org.openide.util.Lookup as Lookup
+
+    return Lookup.getDefault().lookupAll(LayoutBuilder)
+
+def runLayout(layoutBuilder, iters = None):
+    import org.gephi.layout.api.LayoutController as LayoutController
+    import org.openide.util.Lookup as Lookup
+
+    layoutController = Lookup.getDefault().lookup(LayoutController)
+
+    layout = layoutBuilder().buildLayout()
+    layout.resetPropertiesValues()
+    layoutController.setLayout(layout)
+
+    if iters == None:
+        layoutController.executeLayout()
+    else:
+        layoutController.executeLayout(iters)
+
+def stopLayout():
+    import org.gephi.layout.api.LayoutController as LayoutController
+    import org.openide.util.Lookup as Lookup
+
+    layoutController = Lookup.getDefault().lookup(LayoutController)
+    layoutController.stopLayout()
