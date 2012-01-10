@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module codename="org.gephi.io.database.drivers">
+    <module_version install_time="1317726309990" last="true" origin="installer" specification_version="0.8.0.1">
+        <file crc="1679678997" name="config/Modules/org-gephi-io-database-drivers.xml"/>
+        <file crc="3960311945" name="modules/ext/mysql-connector-java-5.1.7-bin.jar"/>
+        <file crc="2161641350" name="modules/ext/postgresql-8.4-701.jdbc4.jar"/>
+        <file crc="2765916770" name="modules/ext/sqlite-jdbc-3.7.2.jar"/>
+        <file crc="3248830856" name="modules/ext/sqljdbc4.jar"/>
+        <file crc="2348294485" name="modules/org-gephi-io-database-drivers.jar"/>
+    </module_version>
+</module>
