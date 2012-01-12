@@ -1,6 +1,7 @@
 This repository is an out of the box development environment for [Gephi](http://gephi.org) plugins. It contains the latest stable version of Gephi modules so you can run a development version of Gephi in seconds. Checkout the [Bootcamp](https://github.com/gephi/gephi-plugins-bootcamp) for examples of the different type of plugins you can create.
 
 Branches contains Gephi Plugins supported by the core team:
+
 - [Neo4j Graph Database Support](https://gephi.org/plugins/neo4j-graph-database-support)
 - [Graph streaming](https://gephi.org/plugins/graph-streaming)
 - Python Scripting (In Development)
