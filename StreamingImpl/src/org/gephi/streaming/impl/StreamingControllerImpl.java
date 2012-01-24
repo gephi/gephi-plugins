@@ -56,6 +56,7 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.apache.commons.codec.binary.Base64;
 import org.gephi.data.attributes.api.AttributeController;
 import org.gephi.graph.api.Graph;
 import org.gephi.streaming.api.Graph2EventListener;
@@ -214,7 +215,7 @@ public class StreamingControllerImpl implements StreamingController {
             URLConnection connection = url.openConnection();
 
             connection.setRequestProperty("Authorization", "Basic " +
-                    (new sun.misc.BASE64Encoder().encode((endpoint.getUser()+":"+endpoint.getPassword()).getBytes())));
+                    Base64.encodeBase64((endpoint.getUser()+":"+endpoint.getPassword()).getBytes()));
             
             connection.setDoOutput(true);
             connection.connect();

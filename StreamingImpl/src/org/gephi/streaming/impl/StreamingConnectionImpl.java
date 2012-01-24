@@ -55,6 +55,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.apache.commons.codec.binary.Base64;
 import org.gephi.streaming.api.Report;
 import org.gephi.streaming.api.StreamReader;
 import org.gephi.streaming.api.StreamingConnection;
@@ -104,7 +105,7 @@ public class StreamingConnectionImpl implements StreamingConnection {
         if (endpoint.getUser()!=null && endpoint.getUser().length()>0) {
 
             connection.setRequestProperty("Authorization", "Basic " +
-                    (new sun.misc.BASE64Encoder().encode((endpoint.getUser()+":"+endpoint.getPassword()).getBytes())));
+                    Base64.encodeBase64((endpoint.getUser()+":"+endpoint.getPassword()).getBytes()));
 
             // this option is not optimal, as it sets the same authenticator for all connections
 //            Authenticator.setDefault(new Authenticator() {
