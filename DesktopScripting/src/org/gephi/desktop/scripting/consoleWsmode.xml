@@ -5,8 +5,8 @@
     <kind type="editor" />
     <state type="joined" />
     <constraints>
-        <path orientation="horizontal" number="1" weight="0.7831858407079646"/>
-        <path orientation="vertical" number="1" weight="0.25"/>
+        <path orientation="horizontal" number="1" weight="0.6568483063328424"/>
+        <path orientation="vertical" number="1" weight="0.2895927601809955"/>
     </constraints>
     <bounds x="0" y="0" width="0" height="0" />
     <frame state="0"/>
