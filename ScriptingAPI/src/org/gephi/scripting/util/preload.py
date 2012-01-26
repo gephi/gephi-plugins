@@ -23,6 +23,11 @@
 import java.awt.Color as color
 from pawt.colors import *
 
+
+#
+# Filters API support
+#
+
 def addFilter(filter, name = None):
     import org.gephi.filters.api.FilterController as FilterController
     import org.openide.util.Lookup as Lookup
@@ -34,6 +39,11 @@ def addFilter(filter, name = None):
 
     filterController.add(filter.getUnderlyingQuery())
 
+
+#
+# Export API support
+#
+
 def export(filename):
     import org.gephi.io.exporter.api.ExportController as ExportController
     import org.openide.util.Lookup as Lookup
@@ -42,9 +52,10 @@ def export(filename):
     exportController = Lookup.getDefault().lookup(ExportController)
     exportController.exportFile(java.io.File(filename))
 
-def setVisible(subgraph):
-    global visible
-    visible = subgraph
+
+#
+# Layouts API support
+#
 
 import org.gephi.layout.plugin.force.yifanHu.YifanHu as YifanHu
 import org.gephi.layout.plugin.force.yifanHu.YifanHuProportional as YifanHuProportional
@@ -86,3 +97,22 @@ def stopLayout():
 
     layoutController = Lookup.getDefault().lookup(LayoutController)
     layoutController.stopLayout()
+
+
+#
+# Miscelaneous functions
+#
+
+def setVisible(subgraph):
+    global visible
+    visible = subgraph
+
+
+#
+# Handy aliases
+#
+
+add_filter = addFilter
+get_layout_builders = getLayoutBuilders
+run_layout = runLayout
+stop_layout = stopLayout
