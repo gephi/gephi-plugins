@@ -43,6 +43,7 @@ package org.gephi.streaming.server.impl;
 
 import org.gephi.graph.api.Graph;
 import org.gephi.graph.api.Node;
+import org.gephi.graph.api.NodeIterable;
 import org.gephi.graph.api.NodeIterator;
 import org.gephi.streaming.api.CompositeGraphEventHandler;
 import org.gephi.streaming.api.GraphUpdaterEventHandler;
@@ -61,7 +62,8 @@ public class GraphBufferedEventHandler extends CompositeGraphEventHandler {
         this.updater = new GraphUpdaterEventHandler(graph);
 
         Node firstNode = null;
-        NodeIterator iterator = graph.getNodes().iterator();
+        NodeIterable iterable = graph.getNodes();
+        NodeIterator iterator = iterable.iterator();
         if (iterator.hasNext())
             firstNode = iterator.next();
         if (firstNode!=null && firstNode.getNodeData().getAttributes().getValue("dynamicrange")!=null) {
@@ -69,6 +71,7 @@ public class GraphBufferedEventHandler extends CompositeGraphEventHandler {
         } else {
             this.graphWriter = new GraphWriter(graph, true);
         }
+        iterable.doBreak();
     }
     
     @Override
