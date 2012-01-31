@@ -207,19 +207,28 @@ You must shut it down before trying to run it again.
         </fail>
     </target>
 
+    <target name="nb-check">
+        <condition property="nb-check">
+            <isset property="netbeans.home"/>
+        </condition>
+    </target>
+    
+    <target name="nb-debugger" if="nb-check">
+       <fail unless="netbeans.home">This target only works when run from inside the NetBeans IDE.</fail>
+       <nbjpdastart name="NetBeans" addressproperty="debug.port" transport="dt_socket">
+           <classpath>
+               <pathfileset include="**/*.jar">
+                   <path refid="cluster.path.id"/>
+               </pathfileset>
+               <fileset dir="${cluster}">
+                   <include name="**/*.jar"/>
+               </fileset>
+           </classpath>
+       </nbjpdastart>
+    </target>
 
-    <target name="debug">
-        <fail unless="netbeans.home">This target only works when run from inside the NetBeans IDE.</fail>
-        <nbjpdastart name="NetBeans" addressproperty="debug.port" transport="dt_socket">
-            <classpath>
-                <pathfileset include="**/*.jar">
-                    <path refid="cluster.path.id"/>
-                </pathfileset>
-                <fileset dir="${cluster}">
-                    <include name="**/*.jar"/>
-                </fileset>
-            </classpath>
-        </nbjpdastart>
+    <target name="debug" depends="nb-check,nb-debugger">
+        <fail unless="debug.port">You must set the debug.port property.</fail>
         <property name="debug.pause" value="y"/>
         <property name="debug.args" value="-J-Xdebug -J-Xrunjdwp:transport=dt_socket,suspend=${debug.pause},server=n,address=${debug.port}"/>
         <antcall target="run">
