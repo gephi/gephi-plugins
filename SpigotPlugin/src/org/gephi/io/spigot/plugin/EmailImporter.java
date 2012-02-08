@@ -5,18 +5,39 @@ Website : http://www.gephi.org
 
 This file is part of Gephi.
 
-Gephi is free software: you can redistribute it and/or modify
-it under the terms of the GNU Affero General Public License as
-published by the Free Software Foundation, either version 3 of the
-License, or (at your option) any later version.
+DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
 
-Gephi is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU Affero General Public License for more details.
+Copyright 2011 Gephi Consortium. All rights reserved.
 
-You should have received a copy of the GNU Affero General Public License
-along with Gephi.  If not, see <http://www.gnu.org/licenses/>.
+The contents of this file are subject to the terms of either the GNU
+General Public License Version 3 only ("GPL") or the Common
+Development and Distribution License("CDDL") (collectively, the
+"License"). You may not use this file except in compliance with the
+License. You can obtain a copy of the License at
+http://gephi.org/about/legal/license-notice/
+or /cddl-1.0.txt and /gpl-3.0.txt. See the License for the
+specific language governing permissions and limitations under the
+License.  When distributing the software, include this License Header
+Notice in each file and include the License files at
+/cddl-1.0.txt and /gpl-3.0.txt. If applicable, add the following below the
+License Header, with the fields enclosed by brackets [] replaced by
+your own identifying information:
+"Portions Copyrighted [year] [name of copyright owner]"
+
+If you wish your version of this file to be governed by only the CDDL
+or only the GPL Version 3, indicate your decision by adding
+"[Contributor] elects to include this software in this distribution
+under the [CDDL or GPL Version 3] license." If you do not indicate a
+single choice of license, a recipient has the option to distribute
+your version of this file under either the CDDL, the GPL Version 3 or
+to extend the choice of license to its licensees as provided above.
+However, if you add GPL Version 3 code and therefore, elected the GPL
+Version 3 license, then the option applies only if the new code is
+made subject to such option by the copyright holder.
+
+Contributor(s):
+
+Portions Copyrighted 2011 Gephi Consortium.
  */
 package org.gephi.io.spigot.plugin;
 
@@ -73,7 +94,7 @@ public class EmailImporter extends EmailDataType implements SpigotImporter, Long
         this.container = loader;
         this.report = new Report();
         //datatype = this;
-        
+
         //if(datatype == null){
 //            cancel();
 //            return false;
@@ -105,17 +126,18 @@ public class EmailImporter extends EmailDataType implements SpigotImporter, Long
         this.progress = progressTicket;
     }
 
-    private void doImport(){
-        if(isFromLocalFile()){
+    private void doImport() {
+        if (isFromLocalFile()) {
             importFromLocalFile(getFiles());
-        }
-        else{
+        } else {
             Progress.setDisplayName(progress, "Connect to email server");
             Store store = connectToMailService();
-            if(store != null)
+            if (store != null) {
                 importEmail(store);
+            }
         }
     }
+
     /**
      * connect to the email server
      * @return
@@ -126,37 +148,34 @@ public class EmailImporter extends EmailDataType implements SpigotImporter, Long
         Store store = null;
 
         try {
-            if(getServerType().equals(EmailDataType.SERVER_TYPE_POP3) && isUseSSL()){
+            if (getServerType().equals(EmailDataType.SERVER_TYPE_POP3) && isUseSSL()) {
                 store = session.getStore("pop3s");
-            }
-            else if(getServerType().equals(EmailDataType.SERVER_TYPE_POP3) && !isUseSSL()){
+            } else if (getServerType().equals(EmailDataType.SERVER_TYPE_POP3) && !isUseSSL()) {
                 store = session.getStore("pop3");
-            }
-            else if(getServerType().equals(EmailDataType.SERVER_TYPE_IMAP) && !isUseSSL()){
+            } else if (getServerType().equals(EmailDataType.SERVER_TYPE_IMAP) && !isUseSSL()) {
                 store = session.getStore("imap");
-            }
-            else if(getServerType().equals(EmailDataType.SERVER_TYPE_IMAP) && isUseSSL()){
+            } else if (getServerType().equals(EmailDataType.SERVER_TYPE_IMAP) && isUseSSL()) {
                 store = session.getStore("imaps");
-            }
-            else
+            } else {
                 return null;
+            }
             store.connect(getServerURL(), getPort(), getUserName(), getUserPsw());
 
             return store;
-        }catch (NoSuchProviderException ex) {
+        } catch (NoSuchProviderException ex) {
             Exceptions.printStackTrace(ex);
             return null;
         } catch (Exception ex) {
-            JOptionPane.showMessageDialog(null, "Impossible to connect to the mail server, please" +
-                    " check your configuration", "Connection error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Impossible to connect to the mail server, please"
+                    + " check your configuration", "Connection error", JOptionPane.ERROR_MESSAGE);
             ex.printStackTrace();
             cancel = true;
             return null;
         }
     }
 
-    private boolean importEmail(Store store){
-        try{
+    private boolean importEmail(Store store) {
+        try {
             Folder folder = null;
             //get the folder of inbox
             folder = store.getDefaultFolder();
@@ -172,15 +191,18 @@ public class EmailImporter extends EmailDataType implements SpigotImporter, Long
             //get mail list
             Message[] msgs = folder.getMessages();
             Progress.switchToDeterminate(progress, msgs.length);
-            Progress.setDisplayName(progress, "Download "+msgs.length+" emails");
+            Progress.setDisplayName(progress, "Download " + msgs.length + " emails");
             //show progress bar
 //            showProgressBar(msgs.length);
             int index = 0;
             for (Message msg : msgs) {
-                index ++;
+                index++;
 //                setProgressBar(index);
                 filterOneEmail(msg);
                 Progress.progress(progress);
+                if (cancel) {
+                    break;
+                }
             }
             folder.close(false);
             store.close();
@@ -198,10 +220,10 @@ public class EmailImporter extends EmailDataType implements SpigotImporter, Long
      * deal with one email
      * @param msg
      */
-    private void filterOneEmail(Message msg){
+    private void filterOneEmail(Message msg) {
         HashMap<String, String> filters = getFilter();
         EmailFilterFactory factory = Lookup.getDefault().lookup(EmailFilterFactory.class);
-        
+
         //do the filter operation, if the message isn't filtered; go on to parse it
         for (String filter : filters.keySet()) {
             EmailFilter emailFilter = factory.createEmailFilter(filter);
@@ -220,75 +242,76 @@ public class EmailImporter extends EmailDataType implements SpigotImporter, Long
         NodeDraft sourceNode = null, targetNode = null;
         //construct the source node
         InternetAddress fromAddress = null;
-        try{
+        try {
             Address[] froms = msg.getFrom();
-            if(froms == null || froms.length == 0){
-                report.log("message "+msg+"don't have from address");
+            if (froms == null || froms.length == 0) {
+                report.log("message " + msg + "don't have from address");
                 return;
             }
             fromAddress = (InternetAddress) froms[0];
-        }
-        catch(MessagingException e){
+        } catch (MessagingException e) {
             try {
                 fromAddress = constructFromAddress(msg);
             } catch (MessagingException ex) {
-                report.log("Can't parse message :"+msg.toString());
-                return ;
+                report.log("Can't parse message :" + msg.toString());
+                return;
             }
         }
 
         //address string
-        if(fromAddress == null)
-        {
-            report.log("From address of message " + msg +" is null.");
+        if (fromAddress == null) {
+            report.log("From address of message " + msg + " is null.");
             return;
         }
-        if(fromAddress.getAddress() == null || fromAddress.getAddress().isEmpty()){
-            report.log("Can't parse from message " + msg +".");
+        if (fromAddress.getAddress() == null || fromAddress.getAddress().isEmpty()) {
+            report.log("Can't parse from message " + msg + ".");
             return;
         }
-        if(fromAddress.getPersonal() == null || fromAddress.getPersonal().isEmpty()){
+        if (fromAddress.getPersonal() == null || fromAddress.getPersonal().isEmpty()) {
             try {
                 fromAddress.setPersonal(fromAddress.getAddress());
             } catch (UnsupportedEncodingException ex) {
-                report.log("message " + msg +" cann't be parsed.");
+                report.log("message " + msg + " cann't be parsed.");
                 return;
             }
         }
-        
+
         //get the codec type
         String codecType = null;
         String contentType = null;
         try {
             contentType = msg.getContentType();
         } catch (MessagingException ex) {
-            report.log("message:"+msg+",can't get the content type of the email");
+            report.log("message:" + msg + ",can't get the content type of the email");
             return;
             //log
         }
-	StringTokenizer s = new StringTokenizer(contentType,";");
-        while(s.hasMoreTokens()){
+        StringTokenizer s = new StringTokenizer(contentType, ";");
+        while (s.hasMoreTokens()) {
             String temp = s.nextToken();
-            if(temp.contains("charset")){
+            if (temp.contains("charset")) {
                 codecType = temp.substring(9, temp.length());
             }
-	}
-        if(contentType == null || contentType.isEmpty())
+        }
+        if (contentType == null || contentType.isEmpty()) {
             contentType = "UTF-8";
-        if(codecType == null || codecType.isEmpty())
+        }
+        if (codecType == null || codecType.isEmpty()) {
             codecType = "UTF-8";
-        
+        }
+
         if (!container.nodeExists(fromAddress.getAddress())) {
             //whether use one node to display the same display name
             boolean exist = false;
-            if(isUseOneNodeIfSameDisplayName()){
-                if(container instanceof ContainerUnloader){
-                    ContainerUnloader con = (ContainerUnloader)container;
+            if (isUseOneNodeIfSameDisplayName()) {
+                if (container instanceof ContainerUnloader) {
+                    ContainerUnloader con = (ContainerUnloader) container;
                     Collection<? extends NodeDraftGetter> allNodes = con.getNodes();
-                    for(NodeDraftGetter node : allNodes){
-                        if(node.getLabel() == null || node.getLabel().isEmpty())
+                    for (NodeDraftGetter node : allNodes) {
+                        if (node.getLabel() == null || node.getLabel().isEmpty()) {
                             continue;
-                        if(node.getLabel().equals(fromAddress.getPersonal())){
+                        }
+                        if (node.getLabel().equals(fromAddress.getPersonal())) {
                             sourceNode = container.getNode(node.getId());
                             exist = true;
                             break;
@@ -296,7 +319,7 @@ public class EmailImporter extends EmailDataType implements SpigotImporter, Long
                     }
                 }
             }
-            if(!exist || !isUseOneNodeIfSameDisplayName()){
+            if (!exist || !isUseOneNodeIfSameDisplayName()) {
                 sourceNode = container.factory().newNodeDraft();
                 sourceNode.setId(Utilities.codecTranslate(codecType, fromAddress.getAddress()));
                 sourceNode.setLabel(Utilities.codecTranslate(codecType, fromAddress.getPersonal()));
@@ -310,23 +333,24 @@ public class EmailImporter extends EmailDataType implements SpigotImporter, Long
         try {
             recipietsTo = msg.getRecipients(RecipientType.TO);
         } catch (MessagingException ex) {
-            report.log("message:"+msg+",can't get the To adress of the email");
+            report.log("message:" + msg + ",can't get the To adress of the email");
             return;//log
         }
-        if(recipietsTo != null){
+        if (recipietsTo != null) {
             for (Address addr : recipietsTo) {
                 InternetAddress addrTo = (InternetAddress) addr;
                 if (!container.nodeExists(addrTo.getAddress())) {
                     //whether use one node to display the same display name
                     boolean exist = false;
                     if (isUseOneNodeIfSameDisplayName()) {
-                        if(container instanceof ContainerUnloader){
-                            ContainerUnloader con = (ContainerUnloader)container;
+                        if (container instanceof ContainerUnloader) {
+                            ContainerUnloader con = (ContainerUnloader) container;
                             Collection<? extends NodeDraftGetter> allNodes = con.getNodes();
-                            for(NodeDraftGetter node : allNodes){
-                                if(node.getLabel() == null || node.getLabel().isEmpty())
+                            for (NodeDraftGetter node : allNodes) {
+                                if (node.getLabel() == null || node.getLabel().isEmpty()) {
                                     continue;
-                                if(node.getLabel().equals(fromAddress.getPersonal())){
+                                }
+                                if (node.getLabel().equals(fromAddress.getPersonal())) {
                                     targetNode = container.getNode(node.getId());
                                     exist = true;
                                     break;
@@ -363,24 +387,25 @@ public class EmailImporter extends EmailDataType implements SpigotImporter, Long
             try {
                 recipietsCc = msg.getRecipients(RecipientType.CC);
             } catch (MessagingException ex) {
-                report.log("message:"+msg+",can't get the Cc of the email");
-                return ;
+                report.log("message:" + msg + ",can't get the Cc of the email");
+                return;
                 //log
             }
-            if(recipietsCc != null){
+            if (recipietsCc != null) {
                 for (Address addr : recipietsCc) {
                     InternetAddress addrCc = (InternetAddress) addr;
                     if (!container.nodeExists(addrCc.getAddress())) {
                         //whether use one node to display the same display name
                         boolean exist = false;
                         if (isUseOneNodeIfSameDisplayName()) {
-                            if(container instanceof ContainerUnloader){
-                                ContainerUnloader con = (ContainerUnloader)container;
+                            if (container instanceof ContainerUnloader) {
+                                ContainerUnloader con = (ContainerUnloader) container;
                                 Collection<? extends NodeDraftGetter> allNodes = con.getNodes();
-                                for(NodeDraftGetter node : allNodes){
-                                    if(node.getLabel() == null || node.getLabel().isEmpty())
+                                for (NodeDraftGetter node : allNodes) {
+                                    if (node.getLabel() == null || node.getLabel().isEmpty()) {
                                         continue;
-                                    if(node.getLabel().equalsIgnoreCase(fromAddress.getPersonal())){
+                                    }
+                                    if (node.getLabel().equalsIgnoreCase(fromAddress.getPersonal())) {
                                         targetNode = container.getNode(node.getId());
                                         exist = true;
                                         break;
@@ -418,24 +443,25 @@ public class EmailImporter extends EmailDataType implements SpigotImporter, Long
             try {
                 recipietsBcc = msg.getRecipients(RecipientType.BCC);
             } catch (MessagingException ex) {
-                report.log("message:"+msg+",can't get the Bcc of the email");
+                report.log("message:" + msg + ",can't get the Bcc of the email");
                 return;
                 //TODO log
             }
-            if(recipietsBcc != null){
+            if (recipietsBcc != null) {
                 for (Address addr : recipietsBcc) {
                     InternetAddress addrBcc = (InternetAddress) addr;
                     if (!container.nodeExists(addrBcc.getAddress())) {
                         //whether use one node to display the same display name
                         boolean exist = false;
                         if (isUseOneNodeIfSameDisplayName()) {
-                            if(container instanceof ContainerUnloader){
-                                ContainerUnloader con = (ContainerUnloader)container;
+                            if (container instanceof ContainerUnloader) {
+                                ContainerUnloader con = (ContainerUnloader) container;
                                 Collection<? extends NodeDraftGetter> allNodes = con.getNodes();
-                                for(NodeDraftGetter node : allNodes){
-                                    if(node.getLabel() == null || node.getLabel().isEmpty())
+                                for (NodeDraftGetter node : allNodes) {
+                                    if (node.getLabel() == null || node.getLabel().isEmpty()) {
                                         continue;
-                                    if(node.getLabel().equals(fromAddress.getPersonal())){
+                                    }
+                                    if (node.getLabel().equals(fromAddress.getPersonal())) {
                                         targetNode = container.getNode(node.getId());
                                         exist = true;
                                         break;
@@ -472,39 +498,43 @@ public class EmailImporter extends EmailDataType implements SpigotImporter, Long
      * construct a address by message
      * @param msg
      */
-    private InternetAddress constructFromAddress(Message msg) throws MessagingException{
+    private InternetAddress constructFromAddress(Message msg) throws MessagingException {
         InternetAddress address = new InternetAddress();
         if (msg instanceof MimeMessage) {
             String fromHeader = msg.getHeader("From")[0];
             if (fromHeader.contains("<") && fromHeader.contains(">")) {
                 address.setAddress(fromHeader.substring(fromHeader.lastIndexOf('<') + 1, fromHeader.lastIndexOf('>')));
             } else {
-                report.log("Can't parse mime message :"+ msg.toString());
+                report.log("Can't parse mime message :" + msg.toString());
                 return null;
             }
         } else {
-                report.log("Can't parse message :"+ msg.toString());
-                return null;
+            report.log("Can't parse message :" + msg.toString());
+            return null;
         }
         return address;
     }
 
-     /**
+    /**
      * import from local files
      * @param files
      */
     private void importFromLocalFile(File[] files) {
-        if(files == null)
+        if (files == null) {
             return;
+        }
         EmailFilesFilter[] filters =
                 Lookup.getDefault().lookupAll(EmailFilesFilter.class).toArray(new EmailFilesFilter[0]);
         int totalNumOfEmails = getNumOfLocalEmailFile(files);
         progress.switchToDeterminate(totalNumOfEmails * filters.length);
         for (EmailFilesFilter f : filters) {
-            if(!getFileFilterType().equals(f.getDisplayName()))
+            if (!getFileFilterType().equals(f.getDisplayName())) {
                 progress.progress(totalNumOfEmails);
-            else{
+            } else {
                 for (File file : files) {
+                    if (cancel) {
+                        return;
+                    }
                     if (!file.isDirectory()) {
                         progress.progress();
                         MimeMessage message = f.parseFile(file, report);
@@ -524,16 +554,17 @@ public class EmailImporter extends EmailDataType implements SpigotImporter, Long
         }
     }
 
-    
     private int getNumOfLocalEmailFile(File[] files) {
         int totalNum = 0;
-        if(files == null)
+        if (files == null) {
             return 0;
+        }
         for (File f : files) {
             totalNum += getNumOfOneFile(f);
         }
         return totalNum;
     }
+
     private int getNumOfOneFile(File f) {
         int temp = 0;
         if (!f.isDirectory()) {
@@ -543,5 +574,4 @@ public class EmailImporter extends EmailDataType implements SpigotImporter, Long
         }
         return temp;
     }
-
 }

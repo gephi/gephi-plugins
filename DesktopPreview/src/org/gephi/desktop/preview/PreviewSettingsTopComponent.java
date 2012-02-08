@@ -1,23 +1,44 @@
 /*
 Copyright 2008-2010 Gephi
+Authors : Jérémy Subtil <jeremy.subtil@gephi.org>, Mathieu Bastian
 Website : http://www.gephi.org
 
 This file is part of Gephi.
 
-Gephi is free software: you can redistribute it and/or modify
-it under the terms of the GNU Affero General Public License as
-published by the Free Software Foundation, either version 3 of the
-License, or (at your option) any later version.
+DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
 
-Gephi is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU Affero General Public License for more details.
+Copyright 2011 Gephi Consortium. All rights reserved.
 
-You should have received a copy of the GNU Affero General Public License
-along with Gephi.  If not, see <http://www.gnu.org/licenses/>.
-*/
+The contents of this file are subject to the terms of either the GNU
+General Public License Version 3 only ("GPL") or the Common
+Development and Distribution License("CDDL") (collectively, the
+"License"). You may not use this file except in compliance with the
+License. You can obtain a copy of the License at
+http://gephi.org/about/legal/license-notice/
+or /cddl-1.0.txt and /gpl-3.0.txt. See the License for the
+specific language governing permissions and limitations under the
+License.  When distributing the software, include this License Header
+Notice in each file and include the License files at
+/cddl-1.0.txt and /gpl-3.0.txt. If applicable, add the following below the
+License Header, with the fields enclosed by brackets [] replaced by
+your own identifying information:
+"Portions Copyrighted [year] [name of copyright owner]"
 
+If you wish your version of this file to be governed by only the CDDL
+or only the GPL Version 3, indicate your decision by adding
+"[Contributor] elects to include this software in this distribution
+under the [CDDL or GPL Version 3] license." If you do not indicate a
+single choice of license, a recipient has the option to distribute
+your version of this file under either the CDDL, the GPL Version 3 or
+to extend the choice of license to its licensees as provided above.
+However, if you add GPL Version 3 code and therefore, elected the GPL
+Version 3 license, then the option applies only if the new code is
+made subject to such option by the copyright holder.
+
+Contributor(s):
+
+Portions Copyrighted 2011 Gephi Consortium.
+ */
 package org.gephi.desktop.preview;
 
 import java.awt.BorderLayout;
@@ -25,18 +46,24 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.io.Serializable;
 import java.text.NumberFormat;
 import java.util.logging.Logger;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.JPanel;
+import javax.swing.JTabbedPane;
 import javax.swing.UIManager;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import org.gephi.desktop.io.export.api.VectorialFileExporterUI;
+import org.gephi.desktop.preview.api.PreviewUIController;
+import org.gephi.desktop.preview.api.PreviewUIModel;
 import org.gephi.preview.api.PreviewController;
 import org.gephi.preview.api.PreviewModel;
 import org.gephi.preview.api.PreviewPreset;
-import org.gephi.project.api.ProjectController;
+import org.gephi.preview.spi.PreviewUI;
 import org.gephi.ui.utils.UIUtils;
 import org.openide.DialogDisplayer;
 import org.openide.NotifyDescriptor;
@@ -49,17 +76,22 @@ import org.openide.util.NbBundle;
 import org.openide.windows.TopComponent;
 import org.openide.windows.WindowManager;
 
-public final class PreviewSettingsTopComponent extends TopComponent {
-
+/**
+ * 
+ * @author Jérémy Subtil, Mathieu Bastian
+ */
+public final class PreviewSettingsTopComponent extends TopComponent implements PropertyChangeListener {
+    
     private static PreviewSettingsTopComponent instance;
     static final String ICON_PATH = "org/gephi/desktop/preview/resources/settings.png";
     private static final String PREFERRED_ID = "PreviewSettingsTopComponent";
     private final String NO_SELECTION = "---";
     //Component
-    private PropertySheet propertySheet;
+    private transient PropertySheet propertySheet;
+    private transient JTabbedPane tabbedPane;
     //State
     private int defaultPresetLimit;
-
+    
     private PreviewSettingsTopComponent() {
         initComponents();
         setName(NbBundle.getMessage(PreviewSettingsTopComponent.class, "CTL_PreviewSettingsTopComponent"));
@@ -71,24 +103,24 @@ public final class PreviewSettingsTopComponent extends TopComponent {
 
         // property sheet
         propertySheet = new PropertySheet();
-        propertySheet.setNodes(new Node[]{new PreviewNode()});
+        propertySheet.setNodes(new Node[]{new PreviewNode(propertySheet)});
         propertySheet.setDescriptionAreaVisible(false);
-        propertiesPanel.add(propertySheet, BorderLayout.CENTER);
 
-        // checks the state of the workspace
-        ProjectController pc = Lookup.getDefault().lookup(ProjectController.class);
-        if (pc.getCurrentWorkspace() != null) {
-            enableRefreshButton();
+        //Tabs and PreviewUI
+        PreviewUI[] previewUIs = Lookup.getDefault().lookupAll(PreviewUI.class).toArray(new PreviewUI[0]);
+        if (previewUIs.length > 0) {
+            tabbedPane = new JTabbedPane();
+            tabbedPane.addTab(NbBundle.getMessage(PreviewSettingsTopComponent.class, "PreviewSettingsTopComponent.propertySheetTab"), propertySheet);
+            propertiesPanel.add(tabbedPane, BorderLayout.CENTER);
+        } else {
+            propertiesPanel.add(propertySheet, BorderLayout.CENTER);
         }
-
-        // forces the controller instanciation
-        PreviewUIController.findInstance();
 
         //Ratio
         ratioSlider.addChangeListener(new ChangeListener() {
-
+            
             NumberFormat formatter = NumberFormat.getPercentInstance();
-
+            
             public void stateChanged(ChangeEvent e) {
                 float val = ratioSlider.getValue() / 100f;
                 if (val == 0f) {
@@ -96,19 +128,21 @@ public final class PreviewSettingsTopComponent extends TopComponent {
                 } else {
                     ratioLabel.setText(formatter.format(val));
                 }
+                PreviewUIController puic = Lookup.getDefault().lookup(PreviewUIController.class);
+                puic.setVisibilityRatio(getVisibilityRatio());
             }
         });
 
         //Presets
         presetComboBox.addItemListener(new ItemListener() {
-
+            
             public void itemStateChanged(ItemEvent e) {
-                PreviewController pc = Lookup.getDefault().lookup(PreviewController.class);
-                PreviewModel previewModel = pc.getModel();
+                PreviewUIController pc = Lookup.getDefault().lookup(PreviewUIController.class);
+                PreviewUIModel previewModel = pc.getModel();
                 if (previewModel != null && presetComboBox.getSelectedItem() instanceof PreviewPreset) {
                     if (previewModel.getCurrentPreset() != presetComboBox.getSelectedItem()) {
                         pc.setCurrentPreset((PreviewPreset) presetComboBox.getSelectedItem());
-                        propertySheet.setNodes(new Node[]{new PreviewNode()});
+                        propertySheet.setNodes(new Node[]{new PreviewNode(propertySheet)});
                     }
                 }
             }
@@ -116,18 +150,47 @@ public final class PreviewSettingsTopComponent extends TopComponent {
 
         //Export
         svgExportButton.addActionListener(new ActionListener() {
-
+            
             public void actionPerformed(ActionEvent e) {
                 VectorialFileExporterUI ui = Lookup.getDefault().lookup(VectorialFileExporterUI.class);
                 ui.action();
             }
         });
-        refreshModel();
+        setup(null);
+        
+        PreviewUIController controller = Lookup.getDefault().lookup(PreviewUIController.class);
+        controller.addPropertyChangeListener(this);
+        
+        PreviewUIModel m = controller.getModel();
+        if (m != null) {
+            setup(m);
+            enableRefreshButton();
+        }
     }
-
-    public void refreshModel() {
-        propertySheet.setNodes(new Node[]{new PreviewNode()});
-        PreviewModel previewModel = Lookup.getDefault().lookup(PreviewController.class).getModel();
+    
+    public void propertyChange(PropertyChangeEvent evt) {
+        if (evt.getPropertyName().equals(PreviewUIController.SELECT)) {
+            PreviewUIModel model = (PreviewUIModel) evt.getNewValue();
+            setup(model);
+            if (model != null) {
+                enableRefreshButton();
+            } else {
+                disableRefreshButton();
+            }
+        } else if (evt.getPropertyName().equals(PreviewUIController.REFRESHED)) {
+        } else if (evt.getPropertyName().equals(PreviewUIController.REFRESHING)) {
+            boolean refrehsing = (Boolean) evt.getNewValue();
+            if (refrehsing) {
+                disableRefreshButton();
+            } else {
+                enableRefreshButton();
+            }
+        }
+    }
+    
+    public void setup(PreviewUIModel previewModel) {
+        propertySheet.setNodes(new Node[]{new PreviewNode(propertySheet)});
+        PreviewUIController previewUIController = Lookup.getDefault().lookup(PreviewUIController.class);
         if (previewModel != null) {
             ratioSlider.setValue((int) (previewModel.getVisibilityRatio() * 100));
         }
@@ -142,14 +205,13 @@ public final class PreviewSettingsTopComponent extends TopComponent {
             saveButton.setEnabled(true);
             labelPreset.setEnabled(true);
             presetComboBox.setEnabled(true);
-            PreviewController controller = Lookup.getDefault().lookup(PreviewController.class);
             DefaultComboBoxModel comboBoxModel = new DefaultComboBoxModel();
             defaultPresetLimit = 0;
-            for (PreviewPreset preset : controller.getDefaultPresets()) {
+            for (PreviewPreset preset : previewUIController.getDefaultPresets()) {
                 comboBoxModel.addElement(preset);
                 defaultPresetLimit++;
             }
-            PreviewPreset[] userPresets = controller.getUserPresets();
+            PreviewPreset[] userPresets = previewUIController.getUserPresets();
             if (userPresets.length > 0) {
                 comboBoxModel.addElement(NO_SELECTION);
                 for (PreviewPreset preset : userPresets) {
@@ -159,6 +221,37 @@ public final class PreviewSettingsTopComponent extends TopComponent {
             presetComboBox.setSelectedItem(previewModel.getCurrentPreset());
             presetComboBox.setModel(comboBoxModel);
         }
+
+        //Refresh tabs
+        if (tabbedPane != null) {
+            int tabCount = tabbedPane.getTabCount();
+            for (int i = 1; i < tabCount; i++) {
+                tabbedPane.removeTabAt(i);
+            }
+            for (PreviewUI pui : Lookup.getDefault().lookupAll(PreviewUI.class)) {
+                pui.unsetup();
+            }
+            if (previewModel != null) {
+                PreviewController previewController = Lookup.getDefault().lookup(PreviewController.class);
+                PreviewModel pModel = previewController.getModel();
+                //Add new tabs
+                for (PreviewUI pui : Lookup.getDefault().lookupAll(PreviewUI.class)) {
+                    pui.setup(pModel);
+                    JPanel pluginPanel = pui.getPanel();
+                    if (UIUtils.isAquaLookAndFeel()) {
+                        pluginPanel.setBackground(UIManager.getColor("NbExplorerView.background"));
+                    }
+                    if (pui.getIcon() != null) {
+                        tabbedPane.addTab(pui.getPanelTitle(), pui.getIcon(), pluginPanel);
+                    } else {
+                        tabbedPane.addTab(pui.getPanelTitle(), pluginPanel);
+                    }
+                }
+            }
+        }
+    }
+    
+    public void unsetup() {
     }
 
     /**
@@ -169,13 +262,13 @@ public final class PreviewSettingsTopComponent extends TopComponent {
      */
     public float getVisibilityRatio() {
         float value = (Integer) ratioSlider.getValue();
-
+        
         if (value < 0) {
             value = 0;
         } else if (value > 100) {
             value = 100;
         }
-
+        
         return value / 100;
     }
 
@@ -206,7 +299,7 @@ public final class PreviewSettingsTopComponent extends TopComponent {
         labelExport.setEnabled(false);
         svgExportButton.setEnabled(false);
     }
-
+    
     private boolean isDefaultPreset(PreviewPreset preset) {
         int i = 0;
         for (i = 0; i < presetComboBox.getItemCount(); i++) {
@@ -370,12 +463,11 @@ public final class PreviewSettingsTopComponent extends TopComponent {
         southToolbar.setRollover(true);
         southToolbar.setOpaque(false);
 
-        labelExport.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
+        labelExport.setFont(new java.awt.Font("Tahoma", 0, 10));
         org.openide.awt.Mnemonics.setLocalizedText(labelExport, org.openide.util.NbBundle.getMessage(PreviewSettingsTopComponent.class, "PreviewSettingsTopComponent.labelExport.text")); // NOI18N
         labelExport.setEnabled(false);
         southToolbar.add(labelExport);
 
-        svgExportButton.setFont(svgExportButton.getFont().deriveFont(svgExportButton.getFont().getSize()-1f));
         org.openide.awt.Mnemonics.setLocalizedText(svgExportButton, org.openide.util.NbBundle.getMessage(PreviewSettingsTopComponent.class, "PreviewSettingsTopComponent.svgExportButton.text")); // NOI18N
         svgExportButton.setToolTipText(org.openide.util.NbBundle.getMessage(PreviewSettingsTopComponent.class, "PreviewSettingsTopComponent.svgExportButton.toolTipText")); // NOI18N
         svgExportButton.setEnabled(false);
@@ -398,11 +490,11 @@ public final class PreviewSettingsTopComponent extends TopComponent {
     }// </editor-fold>//GEN-END:initComponents
 
     private void refreshButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_refreshButtonActionPerformed
-        PreviewUIController.findInstance().refreshPreview();
+        Lookup.getDefault().lookup(PreviewUIController.class).refreshPreview();
 }//GEN-LAST:event_refreshButtonActionPerformed
-
+    
     private void saveButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveButtonActionPerformed
-        PreviewController previewController = Lookup.getDefault().lookup(PreviewController.class);
+        PreviewUIController previewController = Lookup.getDefault().lookup(PreviewUIController.class);
         PreviewPreset preset = previewController.getModel().getCurrentPreset();
         boolean saved = false;
         if (isDefaultPreset(preset)) {
@@ -422,17 +514,16 @@ public final class PreviewSettingsTopComponent extends TopComponent {
             saved = true;
             StatusDisplayer.getDefault().setStatusText(NbBundle.getMessage(PreviewSettingsTopComponent.class, "PreviewSettingsTopComponent.savePreset.status", preset.getName()));
         }
-
+        
         if (saved) {
             //refresh combo
-            PreviewController controller = Lookup.getDefault().lookup(PreviewController.class);
             DefaultComboBoxModel comboBoxModel = new DefaultComboBoxModel();
             defaultPresetLimit = 0;
-            for (PreviewPreset p : controller.getDefaultPresets()) {
+            for (PreviewPreset p : previewController.getDefaultPresets()) {
                 comboBoxModel.addElement(p);
                 defaultPresetLimit++;
             }
-            PreviewPreset[] userPresets = controller.getUserPresets();
+            PreviewPreset[] userPresets = previewController.getUserPresets();
             if (userPresets.length > 0) {
                 comboBoxModel.addElement(NO_SELECTION);
                 for (PreviewPreset p : userPresets) {
@@ -491,17 +582,17 @@ public final class PreviewSettingsTopComponent extends TopComponent {
                 + "' ID. That is a potential source of errors and unexpected behavior.");
         return getDefault();
     }
-
+    
     @Override
     public int getPersistenceType() {
         return TopComponent.PERSISTENCE_ALWAYS;
     }
-
+    
     @Override
     public void componentOpened() {
         // TODO add custom code on component opening
     }
-
+    
     @Override
     public void componentClosed() {
         // TODO add custom code on component closing
@@ -512,16 +603,16 @@ public final class PreviewSettingsTopComponent extends TopComponent {
     public Object writeReplace() {
         return new ResolvableHelper();
     }
-
+    
     @Override
     protected String preferredID() {
         return PREFERRED_ID;
     }
-
+    
     final static class ResolvableHelper implements Serializable {
-
+        
         private static final long serialVersionUID = 1L;
-
+        
         public Object readResolve() {
             return PreviewSettingsTopComponent.getDefault();
         }

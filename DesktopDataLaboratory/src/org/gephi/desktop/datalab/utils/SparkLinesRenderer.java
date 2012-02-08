@@ -5,34 +5,55 @@ Website : http://www.gephi.org
 
 This file is part of Gephi.
 
-Gephi is free software: you can redistribute it and/or modify
-it under the terms of the GNU Affero General Public License as
-published by the Free Software Foundation, either version 3 of the
-License, or (at your option) any later version.
+DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
 
-Gephi is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU Affero General Public License for more details.
+Copyright 2011 Gephi Consortium. All rights reserved.
 
-You should have received a copy of the GNU Affero General Public License
-along with Gephi.  If not, see <http://www.gnu.org/licenses/>.
+The contents of this file are subject to the terms of either the GNU
+General Public License Version 3 only ("GPL") or the Common
+Development and Distribution License("CDDL") (collectively, the
+"License"). You may not use this file except in compliance with the
+License. You can obtain a copy of the License at
+http://gephi.org/about/legal/license-notice/
+or /cddl-1.0.txt and /gpl-3.0.txt. See the License for the
+specific language governing permissions and limitations under the
+License.  When distributing the software, include this License Header
+Notice in each file and include the License files at
+/cddl-1.0.txt and /gpl-3.0.txt. If applicable, add the following below the
+License Header, with the fields enclosed by brackets [] replaced by
+your own identifying information:
+"Portions Copyrighted [year] [name of copyright owner]"
+
+If you wish your version of this file to be governed by only the CDDL
+or only the GPL Version 3, indicate your decision by adding
+"[Contributor] elects to include this software in this distribution
+under the [CDDL or GPL Version 3] license." If you do not indicate a
+single choice of license, a recipient has the option to distribute
+your version of this file under either the CDDL, the GPL Version 3 or
+to extend the choice of license to its licensees as provided above.
+However, if you add GPL Version 3 code and therefore, elected the GPL
+Version 3 license, then the option applies only if the new code is
+made subject to such option by the copyright holder.
+
+Contributor(s):
+
+Portions Copyrighted 2011 Gephi Consortium.
  */
 package org.gephi.desktop.datalab.utils;
 
-import com.representqueens.spark.LineGraph;
-import com.representqueens.spark.SizeParams;
 import java.awt.Component;
 import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import javax.swing.ImageIcon;
-import javax.swing.JTable;
 import javax.swing.JLabel;
+import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
 import org.gephi.data.attributes.type.DynamicType;
 import org.gephi.data.attributes.type.NumberList;
 import org.gephi.dynamic.api.DynamicModel.TimeFormat;
+import org.gephi.utils.sparklines.SparklineGraph;
+import org.gephi.utils.sparklines.SparklineParameters;
 
 /**
  * TableCellRenderer for drawing sparklines from cells that have a NumberList or DynamicNumber as their value.
@@ -58,18 +79,17 @@ public class SparkLinesRenderer extends DefaultTableCellRenderer {
             stringRepresentation = value.toString();
         } else if (value instanceof DynamicType) {
             numbers = getDynamicNumberNumbers((DynamicType) value);
-            stringRepresentation=((DynamicType) value).toString(timeFormat==TimeFormat.DOUBLE);
+            stringRepresentation = ((DynamicType) value).toString(timeFormat == TimeFormat.DOUBLE);
         } else {
             throw new IllegalArgumentException("Only number lists and dynamic numbers are supported for sparklines rendering");
         }
 
-        //If there is less than 2 elements, show as a String.
-        if (numbers.length < 2) {
+        //If there is less than 3 elements, show as a String.
+        if (numbers.length < 3) {
             return super.getTableCellRendererComponent(table, stringRepresentation, isSelected, hasFocus, row, column);
         }
 
         JLabel label = new JLabel();
-
         Color background;
         if (isSelected) {
             background = SELECTED_BACKGROUND;
@@ -77,8 +97,10 @@ public class SparkLinesRenderer extends DefaultTableCellRenderer {
             background = UNSELECTED_BACKGROUND;
         }
 
-        final SizeParams size = new SizeParams(table.getColumnModel().getColumn(column).getWidth(), table.getRowHeight(row) - 1, 1);
-        final BufferedImage i = LineGraph.createGraph(numbers, size, Color.BLUE, background);
+        //Note: Can't use interactive SparklineComponent because TableCellEditors don't receive mouse events.
+
+        final SparklineParameters sparklineParameters = new SparklineParameters(table.getColumnModel().getColumn(column).getWidth() - 1, table.getRowHeight(row) - 1, Color.BLUE, background, Color.RED, Color.GREEN, null);
+        final BufferedImage i = SparklineGraph.draw(numbers, sparklineParameters);
         label.setIcon(new ImageIcon(i));
         label.setToolTipText(stringRepresentation);//String representation as tooltip
 

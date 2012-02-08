@@ -5,18 +5,39 @@ Website : http://www.gephi.org
 
 This file is part of Gephi.
 
-Gephi is free software: you can redistribute it and/or modify
-it under the terms of the GNU Affero General Public License as
-published by the Free Software Foundation, either version 3 of the
-License, or (at your option) any later version.
+DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
 
-Gephi is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU Affero General Public License for more details.
+Copyright 2011 Gephi Consortium. All rights reserved.
 
-You should have received a copy of the GNU Affero General Public License
-along with Gephi.  If not, see <http://www.gnu.org/licenses/>.
+The contents of this file are subject to the terms of either the GNU
+General Public License Version 3 only ("GPL") or the Common
+Development and Distribution License("CDDL") (collectively, the
+"License"). You may not use this file except in compliance with the
+License. You can obtain a copy of the License at
+http://gephi.org/about/legal/license-notice/
+or /cddl-1.0.txt and /gpl-3.0.txt. See the License for the
+specific language governing permissions and limitations under the
+License.  When distributing the software, include this License Header
+Notice in each file and include the License files at
+/cddl-1.0.txt and /gpl-3.0.txt. If applicable, add the following below the
+License Header, with the fields enclosed by brackets [] replaced by
+your own identifying information:
+"Portions Copyrighted [year] [name of copyright owner]"
+
+If you wish your version of this file to be governed by only the CDDL
+or only the GPL Version 3, indicate your decision by adding
+"[Contributor] elects to include this software in this distribution
+under the [CDDL or GPL Version 3] license." If you do not indicate a
+single choice of license, a recipient has the option to distribute
+your version of this file under either the CDDL, the GPL Version 3 or
+to extend the choice of license to its licensees as provided above.
+However, if you add GPL Version 3 code and therefore, elected the GPL
+Version 3 license, then the option applies only if the new code is
+made subject to such option by the copyright holder.
+
+Contributor(s):
+
+Portions Copyrighted 2011 Gephi Consortium.
  */
 package org.gephi.ui.workspace;
 
@@ -174,26 +195,18 @@ public class WorkspaceUISelectorPanel extends javax.swing.JPanel implements Chan
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
+        java.awt.GridBagConstraints gridBagConstraints;
 
-        jToolBar1 = new javax.swing.JToolBar();
-        jSeparator1 = new javax.swing.JToolBar.Separator();
-        workspaceLabel = new javax.swing.JLabel();
+        workspaceButtonsBar = new javax.swing.JToolBar();
         leftArrowButton = new javax.swing.JButton();
         rightArrowButton = new javax.swing.JButton();
+        workspaceLabel = new javax.swing.JLabel();
         jSeparator2 = new javax.swing.JToolBar.Separator();
 
         setLayout(new java.awt.GridBagLayout());
 
-        jToolBar1.setFloatable(false);
-        jToolBar1.setRollover(true);
-        jToolBar1.add(jSeparator1);
-
-        workspaceLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/org/gephi/ui/workspace/resources/workspace.png"))); // NOI18N
-        workspaceLabel.setText(org.openide.util.NbBundle.getMessage(WorkspaceUISelectorPanel.class, "WorkspaceUISelectorPanel.workspaceLabel.text")); // NOI18N
-        workspaceLabel.setIconTextGap(7);
-        workspaceLabel.setMaximumSize(new java.awt.Dimension(120, 16));
-        workspaceLabel.setPreferredSize(new java.awt.Dimension(100, 16));
-        jToolBar1.add(workspaceLabel);
+        workspaceButtonsBar.setFloatable(false);
+        workspaceButtonsBar.setRollover(true);
 
         leftArrowButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/org/gephi/ui/workspace/resources/leftArrow.png"))); // NOI18N
         leftArrowButton.setText(org.openide.util.NbBundle.getMessage(WorkspaceUISelectorPanel.class, "WorkspaceUISelectorPanel.leftArrowButton.text")); // NOI18N
@@ -202,7 +215,7 @@ public class WorkspaceUISelectorPanel extends javax.swing.JPanel implements Chan
         leftArrowButton.setFocusable(false);
         leftArrowButton.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         leftArrowButton.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        jToolBar1.add(leftArrowButton);
+        workspaceButtonsBar.add(leftArrowButton);
 
         rightArrowButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/org/gephi/ui/workspace/resources/rightArrow.png"))); // NOI18N
         rightArrowButton.setText(org.openide.util.NbBundle.getMessage(WorkspaceUISelectorPanel.class, "WorkspaceUISelectorPanel.rightArrowButton.text")); // NOI18N
@@ -211,17 +224,36 @@ public class WorkspaceUISelectorPanel extends javax.swing.JPanel implements Chan
         rightArrowButton.setFocusable(false);
         rightArrowButton.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         rightArrowButton.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        jToolBar1.add(rightArrowButton);
-        jToolBar1.add(jSeparator2);
+        workspaceButtonsBar.add(rightArrowButton);
 
-        add(jToolBar1, new java.awt.GridBagConstraints());
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 0;
+        add(workspaceButtonsBar, gridBagConstraints);
+
+        workspaceLabel.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        workspaceLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/org/gephi/ui/workspace/resources/workspace.png"))); // NOI18N
+        workspaceLabel.setText(org.openide.util.NbBundle.getMessage(WorkspaceUISelectorPanel.class, "WorkspaceUISelectorPanel.workspaceLabel.text")); // NOI18N
+        workspaceLabel.setIconTextGap(7);
+        workspaceLabel.setMaximumSize(new java.awt.Dimension(300, 16));
+        workspaceLabel.setPreferredSize(new java.awt.Dimension(300, 16));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 2);
+        add(workspaceLabel, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 0;
+        add(jSeparator2, gridBagConstraints);
     }// </editor-fold>//GEN-END:initComponents
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JToolBar.Separator jSeparator1;
     private javax.swing.JToolBar.Separator jSeparator2;
-    private javax.swing.JToolBar jToolBar1;
     private javax.swing.JButton leftArrowButton;
     private javax.swing.JButton rightArrowButton;
+    private javax.swing.JToolBar workspaceButtonsBar;
     private javax.swing.JLabel workspaceLabel;
     // End of variables declaration//GEN-END:variables
 }

@@ -5,18 +5,39 @@ Website : http://www.gephi.org
 
 This file is part of Gephi.
 
-Gephi is free software: you can redistribute it and/or modify
-it under the terms of the GNU Affero General Public License as
-published by the Free Software Foundation, either version 3 of the
-License, or (at your option) any later version.
+DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
 
-Gephi is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU Affero General Public License for more details.
+Copyright 2011 Gephi Consortium. All rights reserved.
 
-You should have received a copy of the GNU Affero General Public License
-along with Gephi.  If not, see <http://www.gnu.org/licenses/>.
+The contents of this file are subject to the terms of either the GNU
+General Public License Version 3 only ("GPL") or the Common
+Development and Distribution License("CDDL") (collectively, the
+"License"). You may not use this file except in compliance with the
+License. You can obtain a copy of the License at
+http://gephi.org/about/legal/license-notice/
+or /cddl-1.0.txt and /gpl-3.0.txt. See the License for the
+specific language governing permissions and limitations under the
+License.  When distributing the software, include this License Header
+Notice in each file and include the License files at
+/cddl-1.0.txt and /gpl-3.0.txt. If applicable, add the following below the
+License Header, with the fields enclosed by brackets [] replaced by
+your own identifying information:
+"Portions Copyrighted [year] [name of copyright owner]"
+
+If you wish your version of this file to be governed by only the CDDL
+or only the GPL Version 3, indicate your decision by adding
+"[Contributor] elects to include this software in this distribution
+under the [CDDL or GPL Version 3] license." If you do not indicate a
+single choice of license, a recipient has the option to distribute
+your version of this file under either the CDDL, the GPL Version 3 or
+to extend the choice of license to its licensees as provided above.
+However, if you add GPL Version 3 code and therefore, elected the GPL
+Version 3 license, then the option applies only if the new code is
+made subject to such option by the copyright holder.
+
+Contributor(s):
+
+Portions Copyrighted 2011 Gephi Consortium.
  */
 package org.gephi.statistics.plugin;
 
@@ -44,12 +65,14 @@ import org.jfree.chart.JFreeChart;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
+import org.openide.util.NbBundle;
 
 public class Degree implements Statistics, LongTask {
 
     public static final String INDEGREE = "indegree";
     public static final String OUTDEGREE = "outdegree";
     public static final String DEGREE = "degree";
+    public static final String AVERAGE_DEGREE = "avgdegree";
     private boolean isDirected; // only set inside this class
     /** Remembers if the Cancel function has been called. */
     private boolean isCanceled;
@@ -87,19 +110,24 @@ public class Degree implements Statistics, LongTask {
 
         //Attributes cols
         AttributeTable nodeTable = attributeModel.getNodeTable();
+        AttributeTable graphTable = attributeModel.getGraphTable();
         AttributeColumn inCol = nodeTable.getColumn(INDEGREE);
         AttributeColumn outCol = nodeTable.getColumn(OUTDEGREE);
         AttributeColumn degCol = nodeTable.getColumn(DEGREE);
+        AttributeColumn avgDegreeCol = graphTable.getColumn(AVERAGE_DEGREE);
         if (isDirected) {
             if (inCol == null) {
-                inCol = nodeTable.addColumn(INDEGREE, "In-Degree", AttributeType.INT, AttributeOrigin.COMPUTED, 0);
+                inCol = nodeTable.addColumn(INDEGREE, NbBundle.getMessage(Degree.class, "Degree.nodecolumn.InDegree"), AttributeType.INT, AttributeOrigin.COMPUTED, 0);
             }
             if (outCol == null) {
-                outCol = nodeTable.addColumn(OUTDEGREE, "Out-Degree", AttributeType.INT, AttributeOrigin.COMPUTED, 0);
+                outCol = nodeTable.addColumn(OUTDEGREE, NbBundle.getMessage(Degree.class, "Degree.nodecolumn.OutDegree"), AttributeType.INT, AttributeOrigin.COMPUTED, 0);
             }
         }
         if (degCol == null) {
-            degCol = nodeTable.addColumn(DEGREE, "Degree", AttributeType.INT, AttributeOrigin.COMPUTED, 0);
+            degCol = nodeTable.addColumn(DEGREE, NbBundle.getMessage(Degree.class, "Degree.nodecolumn.Degree"), AttributeType.INT, AttributeOrigin.COMPUTED, 0);
+        }
+        if(avgDegreeCol == null) {
+            avgDegreeCol = graphTable.addColumn(AVERAGE_DEGREE, NbBundle.getMessage(Degree.class, "Degree.graphcolumn.AverageDegree"), AttributeType.DOUBLE, AttributeOrigin.COMPUTED, 0.0);
         }
 
         int i = 0;
@@ -107,13 +135,17 @@ public class Degree implements Statistics, LongTask {
         graph.readLock();
 
         Progress.start(progress, graph.getNodeCount());
+        
+        HierarchicalDirectedGraph directedGraph = null;
+        if(isDirected) {
+            directedGraph = graph.getGraphModel().getHierarchicalDirectedGraphVisible();
+        }
 
         for (Node n : graph.getNodes()) {
             AttributeRow row = (AttributeRow) n.getNodeData().getAttributes();
             if (isDirected) {
-                HierarchicalDirectedGraph hdg = graph.getGraphModel().getHierarchicalDirectedGraph();
-                int inDegree = hdg.getTotalInDegree(n);
-                int outDegree = hdg.getTotalOutDegree(n);
+                int inDegree = directedGraph.getTotalInDegree(n);
+                int outDegree = directedGraph.getTotalOutDegree(n);
                 row.setValue(inCol, inDegree);
                 row.setValue(outCol, outDegree);
                 if (!inDegreeDist.containsKey(inDegree)) {
@@ -140,7 +172,8 @@ public class Degree implements Statistics, LongTask {
             Progress.progress(progress, i);
         }
 
-        avgDegree /= graph.getNodeCount();
+        avgDegree /= (isDirected) ? 2 * graph.getNodeCount() : graph.getNodeCount();
+        graph.getAttributes().setValue(avgDegreeCol.getIndex(), avgDegree);
 
         graph.readUnlockAll();
     }
@@ -169,6 +202,7 @@ public class Degree implements Statistics, LongTask {
                     true,
                     false,
                     false);
+            chart1.removeLegend();
             ChartUtils.decorateChart(chart1);
             ChartUtils.scaleChart(chart1, dSeries, false);
             String degreeImageFile = ChartUtils.renderChart(chart1, "degree-distribution.png");
@@ -209,6 +243,7 @@ public class Degree implements Statistics, LongTask {
                 true,
                 false,
                 false);
+        chart1.removeLegend();
         ChartUtils.decorateChart(chart1);
         ChartUtils.scaleChart(chart1, dSeries, false);
         String degreeImageFile = ChartUtils.renderChart(chart1, "degree-distribution.png");
@@ -222,6 +257,7 @@ public class Degree implements Statistics, LongTask {
                 true,
                 false,
                 false);
+        chart2.removeLegend();
         ChartUtils.decorateChart(chart2);
         ChartUtils.scaleChart(chart2, dSeries, false);
         String indegreeImageFile = ChartUtils.renderChart(chart2, "indegree-distribution.png");
@@ -235,6 +271,7 @@ public class Degree implements Statistics, LongTask {
                 true,
                 false,
                 false);
+        chart3.removeLegend();
         ChartUtils.decorateChart(chart3);
         ChartUtils.scaleChart(chart3, dSeries, false);
         String outdegreeImageFile = ChartUtils.renderChart(chart3, "outdegree-distribution.png");

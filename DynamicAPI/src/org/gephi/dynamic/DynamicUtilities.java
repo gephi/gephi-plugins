@@ -5,26 +5,50 @@
  * 
  * This file is part of Gephi.
  *
-Gephi is free software: you can redistribute it and/or modify
-it under the terms of the GNU Affero General Public License as
-published by the Free Software Foundation, either version 3 of the
-License, or (at your option) any later version.
+DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
 
-Gephi is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU Affero General Public License for more details.
+Copyright 2011 Gephi Consortium. All rights reserved.
 
-You should have received a copy of the GNU Affero General Public License
-along with Gephi.  If not, see <http://www.gnu.org/licenses/>.
+The contents of this file are subject to the terms of either the GNU
+General Public License Version 3 only ("GPL") or the Common
+Development and Distribution License("CDDL") (collectively, the
+"License"). You may not use this file except in compliance with the
+License. You can obtain a copy of the License at
+http://gephi.org/about/legal/license-notice/
+or /cddl-1.0.txt and /gpl-3.0.txt. See the License for the
+specific language governing permissions and limitations under the
+License.  When distributing the software, include this License Header
+Notice in each file and include the License files at
+/cddl-1.0.txt and /gpl-3.0.txt. If applicable, add the following below the
+License Header, with the fields enclosed by brackets [] replaced by
+your own identifying information:
+"Portions Copyrighted [year] [name of copyright owner]"
+
+If you wish your version of this file to be governed by only the CDDL
+or only the GPL Version 3, indicate your decision by adding
+"[Contributor] elects to include this software in this distribution
+under the [CDDL or GPL Version 3] license." If you do not indicate a
+single choice of license, a recipient has the option to distribute
+your version of this file under either the CDDL, the GPL Version 3 or
+to extend the choice of license to its licensees as provided above.
+However, if you add GPL Version 3 code and therefore, elected the GPL
+Version 3 license, then the option applies only if the new code is
+made subject to such option by the copyright holder.
+
+Contributor(s):
+
+Portions Copyrighted 2011 Gephi Consortium.
  */
 package org.gephi.dynamic;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 import javax.xml.datatype.DatatypeConfigurationException;
@@ -46,6 +70,10 @@ import org.gephi.data.attributes.type.DynamicType;
 import org.gephi.data.attributes.type.Interval;
 import org.gephi.data.attributes.type.TimeInterval;
 import org.gephi.dynamic.api.DynamicModel;
+import org.gephi.graph.api.Edge;
+import org.gephi.graph.api.Graph;
+import org.gephi.graph.api.HierarchicalGraph;
+import org.gephi.graph.api.Node;
 import org.openide.util.Exceptions;
 
 /**
@@ -55,6 +83,15 @@ import org.openide.util.Exceptions;
  * @author Cezary Bartosiak
  */
 public final class DynamicUtilities {
+
+    private static DatatypeFactory dateFactory;
+
+    static {
+        try {
+            dateFactory = DatatypeFactory.newInstance();
+        } catch (DatatypeConfigurationException ex) {
+        }
+    }
 
     /**
      * Used for import (parses XML date strings).
@@ -68,13 +105,51 @@ public final class DynamicUtilities {
      */
     public static double getDoubleFromXMLDateString(String str) {
         try {
-            DatatypeFactory dateFactory = DatatypeFactory.newInstance();
             return dateFactory.newXMLGregorianCalendar(str.length() > 23 ? str.substring(0, 23) : str).
                     toGregorianCalendar().getTimeInMillis();
-        } catch (DatatypeConfigurationException ex) {
-            Exceptions.printStackTrace(ex);
-            return 0.0;
+        } catch (IllegalArgumentException ex) {
+            //Try simple format
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            try {
+                Date date = dateFormat.parse(str);
+                return date.getTime();
+            } catch (ParseException ex1) {
+                Exceptions.printStackTrace(ex1);
+                return 0.0;
+            }
         }
+    }
+
+    /**
+     * Used for import (parses XML date strings).
+     *
+     * @param str a string to parse from
+     *
+     * @return date as a double.
+     *
+     * @throws IllegalArgumentException if {@code str} is not a valid {@code XMLGregorianCalendar}.
+     * @throws NullPointerException     if {@code str} is null.
+     */
+    public static double getDoubleFromDate(Date date) {
+        return date.getTime();
+    }
+
+    /**
+     * Used for get a date from the low-level double
+     *
+     * @param d a double to convert from
+     *
+     * @return an date instance
+     *
+     * @throws IllegalArgumentException if {@code d} is infinite.
+     */
+    public static Date getDateFromDouble(double d) {
+        if (d == Double.NEGATIVE_INFINITY || d == Double.POSITIVE_INFINITY) {
+            throw new IllegalArgumentException("date can' be infinite");
+        }
+        GregorianCalendar gc = new GregorianCalendar();
+        gc.setTimeInMillis((long) d);
+        return dateFactory.newXMLGregorianCalendar(gc).toGregorianCalendar().getTime();
     }
 
     /**
@@ -87,18 +162,14 @@ public final class DynamicUtilities {
      * @throws IllegalArgumentException if {@code d} is infinite.
      */
     public static String getXMLDateStringFromDouble(double d) {
-        try {
-            DatatypeFactory dateFactory = DatatypeFactory.newInstance();
-            if (Double.isInfinite(d)) {
-                throw new IllegalArgumentException("The passed double cannot be infinite.");
-            }
-            GregorianCalendar gc = new GregorianCalendar();
-            gc.setTimeInMillis((long) d);
-            return dateFactory.newXMLGregorianCalendar(gc).toXMLFormat().substring(0, 23);
-        } catch (DatatypeConfigurationException ex) {
-            Exceptions.printStackTrace(ex);
-            return "";
+        if (d == Double.NEGATIVE_INFINITY) {
+            return "-Infinity";
+        } else if (d == Double.POSITIVE_INFINITY) {
+            return "Infinity";
         }
+        GregorianCalendar gc = new GregorianCalendar();
+        gc.setTimeInMillis((long) d);
+        return dateFactory.newXMLGregorianCalendar(gc).toXMLFormat().substring(0, 23);
     }
 
     /**
@@ -660,5 +731,34 @@ public final class DynamicUtilities {
             return new Interval<String>(low, high, lopen, ropen, (String) value);
         }
         return null;
+    }
+
+    public static int getNodeCount(Graph graph, Interval timeInterval) {
+        int nodeCount = 0;
+        for (Node n : graph.getNodes()) {
+            TimeInterval tnode = (TimeInterval) n.getAttributes().getValue(DynamicModel.TIMEINTERVAL_COLUMN);
+            if (tnode.isInRange(timeInterval.getLow(), timeInterval.getHigh())) {
+                nodeCount++;
+            }
+        }
+        return nodeCount;
+    }
+
+    public static int getEdgeCount(Graph graph, Interval timeInterval) {
+        int edgeCount = 0;
+        for (Edge e : ((HierarchicalGraph) graph).getEdgesAndMetaEdges()) {
+            TimeInterval tedge = (TimeInterval) e.getAttributes().getValue(DynamicModel.TIMEINTERVAL_COLUMN);
+            if (tedge.isInRange(timeInterval.getLow(), timeInterval.getHigh())) {
+
+                TimeInterval tsource = (TimeInterval) e.getSource().getAttributes().getValue(DynamicModel.TIMEINTERVAL_COLUMN);
+                TimeInterval tdest = (TimeInterval) e.getTarget().getAttributes().getValue(DynamicModel.TIMEINTERVAL_COLUMN);
+                if (tsource.isInRange(timeInterval.getLow(), timeInterval.getHigh())
+                        && tdest.isInRange(timeInterval.getLow(), timeInterval.getHigh())) {
+                    edgeCount++;
+                }
+
+            }
+        }
+        return edgeCount;
     }
 }

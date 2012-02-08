@@ -1,14 +1,14 @@
-# English (en) translation for Gephi.
-# Copyright (C) 2010 Gephi contributors.
+# Translation file for Gephi.
+# Copyright (C) 2011 Gephi contributors.
 # This file is distributed under the same license as the Gephi package.
-# Gephi Team <gephi.team@lists.launchpad.net>, 2010.
+# Gephi Team <gephi.team@lists.launchpad.net>, 2011.
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: Gephi 0.7\n"
+"Project-Id-Version: Gephi 0.8\n"
 "Report-Msgid-Bugs-To: gephi.team@lists.launchpad.net\n"
-"POT-Creation-Date: 2010-04-07 13:16+0200\n"
-"PO-Revision-Date: 2010-04-07 13:16+0200\n"
+"POT-Creation-Date: 2011-08-05 14:52+0200\n"
+"PO-Revision-Date: 2011-08-05 14:52+0200\n"
 "Last-Translator: Mathieu Bastian <gephi.team@lists.launchpad.net>\n"
 "Language-Team: English <https://launchpad.net/~gephi.team>\n"
 "MIME-Version: 1.0\n"
@@ -34,6 +34,12 @@ msgstr ""
 
 msgid "ClearEdges.name"
 msgstr "Clear edges"
+
+msgid "MergeNodeDuplicates.name"
+msgstr "Detect and merge node duplicates"
+
+msgid "MergeNodeDuplicates.description"
+msgstr "Automatically detects and merges node duplicates based on a column"
 
 msgid "SearchReplace.name"
 msgstr "Search/Replace"

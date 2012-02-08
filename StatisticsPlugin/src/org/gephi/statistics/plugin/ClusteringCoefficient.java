@@ -5,18 +5,39 @@ Website : http://www.gephi.org
 
 This file is part of Gephi.
 
-Gephi is free software: you can redistribute it and/or modify
-it under the terms of the GNU Affero General Public License as
-published by the Free Software Foundation, either version 3 of the
-License, or (at your option) any later version.
+DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
 
-Gephi is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU Affero General Public License for more details.
+Copyright 2011 Gephi Consortium. All rights reserved.
 
-You should have received a copy of the GNU Affero General Public License
-along with Gephi.  If not, see <http://www.gnu.org/licenses/>.
+The contents of this file are subject to the terms of either the GNU
+General Public License Version 3 only ("GPL") or the Common
+Development and Distribution License("CDDL") (collectively, the
+"License"). You may not use this file except in compliance with the
+License. You can obtain a copy of the License at
+http://gephi.org/about/legal/license-notice/
+or /cddl-1.0.txt and /gpl-3.0.txt. See the License for the
+specific language governing permissions and limitations under the
+License.  When distributing the software, include this License Header
+Notice in each file and include the License files at
+/cddl-1.0.txt and /gpl-3.0.txt. If applicable, add the following below the
+License Header, with the fields enclosed by brackets [] replaced by
+your own identifying information:
+"Portions Copyrighted [year] [name of copyright owner]"
+
+If you wish your version of this file to be governed by only the CDDL
+or only the GPL Version 3, indicate your decision by adding
+"[Contributor] elects to include this software in this distribution
+under the [CDDL or GPL Version 3] license." If you do not indicate a
+single choice of license, a recipient has the option to distribute
+your version of this file under either the CDDL, the GPL Version 3 or
+to extend the choice of license to its licensees as provided above.
+However, if you add GPL Version 3 code and therefore, elected the GPL
+Version 3 license, then the option applies only if the new code is
+made subject to such option by the copyright holder.
+
+Contributor(s):
+
+Portions Copyrighted 2011 Gephi Consortium.
  */
 package org.gephi.statistics.plugin;
 
@@ -221,8 +242,28 @@ public class ClusteringCoefficient implements Statistics, LongTask {
     public void execute(HierarchicalGraph hgraph, AttributeModel attributeModel) {
         isCanceled = false;
 
-        triangles(hgraph, attributeModel);
+        triangles(hgraph);
         //bruteForce(hgraph, attributeModel);
+
+        //Set results in columns
+        AttributeTable nodeTable = attributeModel.getNodeTable();
+        AttributeColumn clusteringCol = nodeTable.getColumn(CLUSTERING_COEFF);
+        if (clusteringCol == null) {
+            clusteringCol = nodeTable.addColumn(CLUSTERING_COEFF, "Clustering Coefficient", AttributeType.DOUBLE, AttributeOrigin.COMPUTED, new Double(0));
+        }
+
+        AttributeColumn triCount = nodeTable.getColumn("Triangles");
+        if (triCount == null) {
+            triCount = nodeTable.addColumn("Triangles", "Number of triangles", AttributeType.INT, AttributeOrigin.COMPUTED, new Integer(0));
+        }
+
+        for (int v = 0; v < N; v++) {
+            if (network[v].length() > 1) {
+                AttributeRow row = (AttributeRow) network[v].node.getNodeData().getAttributes();
+                row.setValue(clusteringCol, nodeClustering[v]);
+                row.setValue(triCount, triangles[v]);
+            }
+        }
     }
 
     private int closest_in_array(int v) {
@@ -305,7 +346,7 @@ public class ClusteringCoefficient implements Statistics, LongTask {
         }
     }
 
-    private void triangles(HierarchicalGraph hgraph, AttributeModel attributeModel) {
+    public void triangles(HierarchicalGraph hgraph) {
 
         int ProgressCount = 0;
         Progress.start(progress, 7 * hgraph.getNodeCount());
@@ -333,17 +374,18 @@ public class ClusteringCoefficient implements Statistics, LongTask {
             HashMap<Node, EdgeWrapper> neighborTable = new HashMap<Node, EdgeWrapper>();
 
             if (!isDirected) {
-                for (Node neighbor : hgraph.getNeighbors(node)) {
+                for (Edge edge : hgraph.getEdgesAndMetaEdges(node)) {
+                    Node neighbor = hgraph.getOpposite(node, edge);
                     neighborTable.put(neighbor, new EdgeWrapper(1, network[indicies.get(neighbor)]));
                 }
             } else {
                 for (Edge in : ((HierarchicalDirectedGraph) hgraph).getInEdgesAndMetaInEdges(node)) {
-                    Node neighbor = in.getSource();
+                    Node neighbor = in.getSource().getNodeData().getNode(hgraph.getView().getViewId());
                     neighborTable.put(neighbor, new EdgeWrapper(1, network[indicies.get(neighbor)]));
                 }
 
                 for (Edge out : ((HierarchicalDirectedGraph) hgraph).getOutEdgesAndMetaOutEdges(node)) {
-                    Node neighbor = out.getTarget();
+                    Node neighbor = out.getTarget().getNodeData().getNode(hgraph.getView().getViewId());
                     EdgeWrapper ew = neighborTable.get(neighbor);
                     if (ew == null) {
                         neighborTable.put(neighbor, new EdgeWrapper(1, network[indicies.get(neighbor)]));
@@ -406,18 +448,9 @@ public class ClusteringCoefficient implements Statistics, LongTask {
             }
         }
 
+        //Results and average
         avgClusteringCoeff = 0;
-        AttributeTable nodeTable = attributeModel.getNodeTable();
-        AttributeColumn clusteringCol = nodeTable.getColumn(CLUSTERING_COEFF);
-        if (clusteringCol == null) {
-            clusteringCol = nodeTable.addColumn(CLUSTERING_COEFF, "Clustering Coefficient", AttributeType.DOUBLE, AttributeOrigin.COMPUTED, new Double(0));
-        }
-
-        AttributeColumn triCount = nodeTable.getColumn("Triangles");
-        if (triCount == null) {
-            triCount = nodeTable.addColumn("Triangles", "Number of triangles", AttributeType.INT, AttributeOrigin.COMPUTED, new Integer(0));
-        }
-
+        totalTriangles = 0;
         for (int v = 0; v < N; v++) {
             if (network[v].length() > 1) {
                 double cc = triangles[v];
@@ -427,9 +460,6 @@ public class ClusteringCoefficient implements Statistics, LongTask {
                     cc *= 2.0f;
                 }
                 nodeClustering[v] = cc;
-                AttributeRow row = (AttributeRow) network[v].node.getNodeData().getAttributes();
-                row.setValue(clusteringCol, cc);
-                row.setValue(triCount, triangles[v]);
                 avgClusteringCoeff += cc;
             }
             Progress.progress(progress, ++ProgressCount);
@@ -446,74 +476,73 @@ public class ClusteringCoefficient implements Statistics, LongTask {
     }
 
     /*private void bruteForce(HierarchicalGraph hgraph, AttributeModel attributeModel) {
-        //The atrributes computed by the statistics
-        AttributeTable nodeTable = attributeModel.getNodeTable();
-        AttributeColumn clusteringCol = nodeTable.getColumn("clustering");
-        if (clusteringCol == null) {
-            clusteringCol = nodeTable.addColumn("clustering", "Clustering Coefficient", AttributeType.DOUBLE, AttributeOrigin.COMPUTED, new Double(0));
-        }
-
-        float totalCC = 0;
-
-        hgraph.readLock();
-
-        Progress.start(progress, hgraph.getNodeCount());
-        int node_count = 0;
-        for (Node node : hgraph.getNodes()) {
-            float nodeCC = 0;
-            int neighborhood = 0;
-            NodeIterable neighbors1 = hgraph.getNeighbors(node);
-            for (Node neighbor1 : neighbors1) {
-                neighborhood++;
-                NodeIterable neighbors2 = hgraph.getNeighbors(node);
-                for (Node neighbor2 : neighbors2) {
-
-                    if (neighbor1 == neighbor2) {
-                        continue;
-                    }
-                    if (isDirected) {
-                        if (((HierarchicalDirectedGraph) hgraph).getEdge(neighbor1, neighbor2) != null) {
-                            nodeCC++;
-                        }
-                        if (((HierarchicalDirectedGraph) hgraph).getEdge(neighbor2, neighbor1) != null) {
-                            nodeCC++;
-                        }
-                    } else {
-                        if (hgraph.isAdjacent(neighbor1, neighbor2)) {
-                            nodeCC++;
-                        }
-                    }
-                }
-            }
-            nodeCC /= 2.0;
-
-
-
-            if (neighborhood > 1) {
-                float cc = nodeCC / (.5f * neighborhood * (neighborhood - 1));
-                if (isDirected) {
-                    cc = nodeCC / (neighborhood * (neighborhood - 1));
-                }
-
-                AttributeRow row = (AttributeRow) node.getNodeData().getAttributes();
-                row.setValue(clusteringCol, cc);
-
-                totalCC += cc;
-            }
-
-            if (isCanceled) {
-                break;
-            }
-
-            node_count++;
-            Progress.progress(progress, node_count);
-
-        }
-        avgClusteringCoeff = totalCC / hgraph.getNodeCount();
-
-        hgraph.readUnlockAll();
+    //The atrributes computed by the statistics
+    AttributeTable nodeTable = attributeModel.getNodeTable();
+    AttributeColumn clusteringCol = nodeTable.getColumn("clustering");
+    if (clusteringCol == null) {
+    clusteringCol = nodeTable.addColumn("clustering", "Clustering Coefficient", AttributeType.DOUBLE, AttributeOrigin.COMPUTED, new Double(0));
+    }
+    
+    float totalCC = 0;
+    
+    hgraph.readLock();
+    
+    Progress.start(progress, hgraph.getNodeCount());
+    int node_count = 0;
+    for (Node node : hgraph.getNodes()) {
+    float nodeCC = 0;
+    int neighborhood = 0;
+    NodeIterable neighbors1 = hgraph.getNeighbors(node);
+    for (Node neighbor1 : neighbors1) {
+    neighborhood++;
+    NodeIterable neighbors2 = hgraph.getNeighbors(node);
+    for (Node neighbor2 : neighbors2) {
+    
+    if (neighbor1 == neighbor2) {
+    continue;
+    }
+    if (isDirected) {
+    if (((HierarchicalDirectedGraph) hgraph).getEdge(neighbor1, neighbor2) != null) {
+    nodeCC++;
+    }
+    if (((HierarchicalDirectedGraph) hgraph).getEdge(neighbor2, neighbor1) != null) {
+    nodeCC++;
+    }
+    } else {
+    if (hgraph.isAdjacent(neighbor1, neighbor2)) {
+    nodeCC++;
+    }
+    }
+    }
+    }
+    nodeCC /= 2.0;
+    
+    
+    
+    if (neighborhood > 1) {
+    float cc = nodeCC / (.5f * neighborhood * (neighborhood - 1));
+    if (isDirected) {
+    cc = nodeCC / (neighborhood * (neighborhood - 1));
+    }
+    
+    AttributeRow row = (AttributeRow) node.getNodeData().getAttributes();
+    row.setValue(clusteringCol, cc);
+    
+    totalCC += cc;
+    }
+    
+    if (isCanceled) {
+    break;
+    }
+    
+    node_count++;
+    Progress.progress(progress, node_count);
+    
+    }
+    avgClusteringCoeff = totalCC / hgraph.getNodeCount();
+    
+    hgraph.readUnlockAll();
     }*/
-
     public String getReport() {
         //distribution of values
         Map<Double, Integer> dist = new HashMap<Double, Integer>();
@@ -541,6 +570,7 @@ public class ClusteringCoefficient implements Statistics, LongTask {
                 true,
                 false,
                 false);
+        chart.removeLegend();
         ChartUtils.decorateChart(chart);
         ChartUtils.scaleChart(chart, dSeries, false);
         String imageFile = ChartUtils.renderChart(chart, "clustering-coefficient.png");
@@ -576,5 +606,25 @@ public class ClusteringCoefficient implements Statistics, LongTask {
 
     public void setProgressTicket(ProgressTicket ProgressTicket) {
         this.progress = ProgressTicket;
+    }
+
+    public double[] getCoefficientReuslts() {
+        double[] res = new double[N];
+        for (int v = 0; v < N; v++) {
+            if (network[v].length() > 1) {
+                res[v] = nodeClustering[v];
+            }
+        }
+        return res;
+    }
+
+    public double[] getTriangesReuslts() {
+        double[] res = new double[N];
+        for (int v = 0; v < N; v++) {
+            if (network[v].length() > 1) {
+                res[v] = triangles[v];
+            }
+        }
+        return res;
     }
 }

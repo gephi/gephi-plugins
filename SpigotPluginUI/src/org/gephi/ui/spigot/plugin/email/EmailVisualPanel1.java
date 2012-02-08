@@ -5,18 +5,39 @@ Website : http://www.gephi.org
 
 This file is part of Gephi.
 
-Gephi is free software: you can redistribute it and/or modify
-it under the terms of the GNU Affero General Public License as
-published by the Free Software Foundation, either version 3 of the
-License, or (at your option) any later version.
+DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
 
-Gephi is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU Affero General Public License for more details.
+Copyright 2011 Gephi Consortium. All rights reserved.
 
-You should have received a copy of the GNU Affero General Public License
-along with Gephi.  If not, see <http://www.gnu.org/licenses/>.
+The contents of this file are subject to the terms of either the GNU
+General Public License Version 3 only ("GPL") or the Common
+Development and Distribution License("CDDL") (collectively, the
+"License"). You may not use this file except in compliance with the
+License. You can obtain a copy of the License at
+http://gephi.org/about/legal/license-notice/
+or /cddl-1.0.txt and /gpl-3.0.txt. See the License for the
+specific language governing permissions and limitations under the
+License.  When distributing the software, include this License Header
+Notice in each file and include the License files at
+/cddl-1.0.txt and /gpl-3.0.txt. If applicable, add the following below the
+License Header, with the fields enclosed by brackets [] replaced by
+your own identifying information:
+"Portions Copyrighted [year] [name of copyright owner]"
+
+If you wish your version of this file to be governed by only the CDDL
+or only the GPL Version 3, indicate your decision by adding
+"[Contributor] elects to include this software in this distribution
+under the [CDDL or GPL Version 3] license." If you do not indicate a
+single choice of license, a recipient has the option to distribute
+your version of this file under either the CDDL, the GPL Version 3 or
+to extend the choice of license to its licensees as provided above.
+However, if you add GPL Version 3 code and therefore, elected the GPL
+Version 3 license, then the option applies only if the new code is
+made subject to such option by the copyright holder.
+
+Contributor(s):
+
+Portions Copyrighted 2011 Gephi Consortium.
  */
 package org.gephi.ui.spigot.plugin.email;
 
@@ -35,6 +56,7 @@ import org.openide.DialogDescriptor;
 import org.openide.DialogDisplayer;
 import org.openide.NotifyDescriptor;
 import org.openide.util.Lookup;
+import org.openide.util.NbBundle;
 import org.openide.util.NbPreferences;
 
 public final class EmailVisualPanel1 extends JPanel implements ChangeListener {
@@ -56,7 +78,7 @@ public final class EmailVisualPanel1 extends JPanel implements ChangeListener {
 
     @Override
     public String getName() {
-        return "Select Datasource";
+        return NbBundle.getMessage(EmailVisualPanel1.class, "EmailVisualPanel1.name");
     }
 
     /** This method is called from within the constructor to
@@ -101,10 +123,10 @@ public final class EmailVisualPanel1 extends JPanel implements ChangeListener {
         jPanelReceiveFromServer.setMaximumSize(new java.awt.Dimension(600, 32767));
         jPanelReceiveFromServer.setPreferredSize(new java.awt.Dimension(400, 87));
 
-        jLabelEmailAddr.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabelEmailAddr.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         org.openide.awt.Mnemonics.setLocalizedText(jLabelEmailAddr, org.openide.util.NbBundle.getMessage(EmailVisualPanel1.class, "EmailVisualPanel1.jLabelEmailAddr.text")); // NOI18N
 
-        jLabelServerType.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabelServerType.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         org.openide.awt.Mnemonics.setLocalizedText(jLabelServerType, org.openide.util.NbBundle.getMessage(EmailVisualPanel1.class, "EmailVisualPanel1.jLabelServerType.text")); // NOI18N
 
         jTextFieldServerAddr.setText(org.openide.util.NbBundle.getMessage(EmailVisualPanel1.class, "EmailVisualPanel1.jTextFieldServerAddr.text")); // NOI18N
@@ -114,10 +136,10 @@ public final class EmailVisualPanel1 extends JPanel implements ChangeListener {
             }
         });
 
-        jLabelServerAddr.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabelServerAddr.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         org.openide.awt.Mnemonics.setLocalizedText(jLabelServerAddr, org.openide.util.NbBundle.getMessage(EmailVisualPanel1.class, "EmailVisualPanel1.jLabelServerAddr.text")); // NOI18N
 
-        jLabelPsw.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabelPsw.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         org.openide.awt.Mnemonics.setLocalizedText(jLabelPsw, org.openide.util.NbBundle.getMessage(EmailVisualPanel1.class, "EmailVisualPanel1.jLabelPsw.text")); // NOI18N
 
         org.openide.awt.Mnemonics.setLocalizedText(jButton3, org.openide.util.NbBundle.getMessage(EmailVisualPanel1.class, "EmailVisualPanel1.jButton3.text")); // NOI18N
@@ -175,34 +197,31 @@ public final class EmailVisualPanel1 extends JPanel implements ChangeListener {
         jPanelReceiveFromServerLayout.setHorizontalGroup(
             jPanelReceiveFromServerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanelReceiveFromServerLayout.createSequentialGroup()
+                .addGap(2, 2, 2)
                 .addGroup(jPanelReceiveFromServerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanelReceiveFromServerLayout.createSequentialGroup()
-                        .addGap(2, 2, 2)
-                        .addGroup(jPanelReceiveFromServerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addComponent(jLabelPsw, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jLabelServerType, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jLabelServerAddr, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanelReceiveFromServerLayout.createSequentialGroup()
-                        .addGap(2, 2, 2)
-                        .addComponent(jLabelEmailAddr, javax.swing.GroupLayout.PREFERRED_SIZE, 138, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(jPanelReceiveFromServerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                        .addComponent(jLabelPsw, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jLabelServerType, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jLabelServerAddr, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jLabelEmailAddr, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 138, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanelReceiveFromServerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(jPanelReceiveFromServerLayout.createSequentialGroup()
-                        .addComponent(jTextFieldEmailAddr, javax.swing.GroupLayout.DEFAULT_SIZE, 285, Short.MAX_VALUE)
+                        .addComponent(jTextFieldEmailAddr, javax.swing.GroupLayout.DEFAULT_SIZE, 358, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jLabel1))
                     .addGroup(jPanelReceiveFromServerLayout.createSequentialGroup()
-                        .addComponent(jComboBoxServerType, 0, 175, Short.MAX_VALUE)
+                        .addComponent(jComboBoxServerType, 0, 227, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jButton3)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jLabel7))
                     .addGroup(jPanelReceiveFromServerLayout.createSequentialGroup()
-                        .addComponent(jTextFieldServerAddr, javax.swing.GroupLayout.DEFAULT_SIZE, 285, Short.MAX_VALUE)
+                        .addComponent(jTextFieldServerAddr, javax.swing.GroupLayout.DEFAULT_SIZE, 358, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jLabel3))
                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanelReceiveFromServerLayout.createSequentialGroup()
-                        .addComponent(jPasswordField1, javax.swing.GroupLayout.DEFAULT_SIZE, 285, Short.MAX_VALUE)
+                        .addComponent(jPasswordField1, javax.swing.GroupLayout.DEFAULT_SIZE, 358, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jLabel2))))
         );
@@ -230,7 +249,7 @@ public final class EmailVisualPanel1 extends JPanel implements ChangeListener {
                     .addComponent(jLabelServerAddr)
                     .addComponent(jTextFieldServerAddr, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel3))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(41, Short.MAX_VALUE))
         );
 
         buttonGroup1.add(jRadioButtonFromLocalFile);
@@ -254,7 +273,7 @@ public final class EmailVisualPanel1 extends JPanel implements ChangeListener {
         Lookup.getDefault().lookupAll(EmailFilesFilter.class).toArray(new EmailFilesFilter[0]);
         String[] fileFilterString = new String[filters.length+1];
         int index = 0;
-        fileFilterString[0] = "--Select file type";
+        fileFilterString[0] = NbBundle.getMessage(EmailVisualPanel1.class, "EmailVisualPanel1.fileType.default");
         for(EmailFilesFilter f: filters){
             index ++;
             fileFilterString[index] = f.getDisplayName();
@@ -299,13 +318,13 @@ public final class EmailVisualPanel1 extends JPanel implements ChangeListener {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jPanelReceiveFromServer, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 471, Short.MAX_VALUE)
+                    .addComponent(jPanelReceiveFromServer, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 480, Short.MAX_VALUE)
                     .addComponent(jCheckBoxDisplayNameSameLabel, javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jCheckBoxUseBccLine, javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jCheckBoxUseCcLine, javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jRadioButtonFromLocalFile, javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jRadioButtonFromServer, javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel4, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 471, Short.MAX_VALUE)
+                    .addComponent(jLabel4, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 544, Short.MAX_VALUE)
                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
                         .addComponent(jLabel5)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -337,7 +356,7 @@ public final class EmailVisualPanel1 extends JPanel implements ChangeListener {
                 .addComponent(jCheckBoxUseBccLine)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jCheckBoxDisplayNameSameLabel)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 22, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jLabel4))
         );
     }// </editor-fold>//GEN-END:initComponents
@@ -345,7 +364,7 @@ public final class EmailVisualPanel1 extends JPanel implements ChangeListener {
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         EmailImportAdvancedOptPanel panel = new EmailImportAdvancedOptPanel(jComboBoxServerType.getSelectedItem().toString(), this);
         //TODO internalize
-        DialogDescriptor dd = new DialogDescriptor(panel, "Advanced Options");
+        DialogDescriptor dd = new DialogDescriptor(panel, NbBundle.getMessage(EmailVisualPanel1.class, "EmailImportAdvancedOptPanel.name"));
         if (!DialogDisplayer.getDefault().notify(dd).equals(NotifyDescriptor.OK_OPTION)) {
             panel = null;
             return;
@@ -376,7 +395,7 @@ public final class EmailVisualPanel1 extends JPanel implements ChangeListener {
             setDisable(jPanelReceiveFromServer);
             jComboBoxFileFilters.setEnabled(false);
         }
-        if (jComboBoxFileFilters.getSelectedItem().toString().equals("select file type")) {
+        if (jComboBoxFileFilters.getSelectedItem().toString().equals(NbBundle.getMessage(EmailVisualPanel1.class, "EmailImportAdvancedOptPanel.name"))) {
             jButtonFromLocalFile.setEnabled(false);
         } else {
             jButtonFromLocalFile.setEnabled(true);
@@ -393,7 +412,7 @@ public final class EmailVisualPanel1 extends JPanel implements ChangeListener {
 
     private void jComboBoxFileFiltersActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBoxFileFiltersActionPerformed
         wizardPanel.fireChangeEvent();
-        if (!jComboBoxFileFilters.getSelectedItem().equals("select file type")) {
+        if (!jComboBoxFileFilters.getSelectedItem().equals(NbBundle.getMessage(EmailVisualPanel1.class, "EmailVisualPanel1.fileType.default"))) {
             jButtonFromLocalFile.setEnabled(true);
         } else {
             jButtonFromLocalFile.setEnabled(false);

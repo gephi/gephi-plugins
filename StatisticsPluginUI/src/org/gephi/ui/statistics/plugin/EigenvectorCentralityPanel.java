@@ -5,20 +5,44 @@ Website : http://www.gephi.org
 
 This file is part of Gephi.
 
-Gephi is free software: you can redistribute it and/or modify
-it under the terms of the GNU Affero General Public License as
-published by the Free Software Foundation, either version 3 of the
-License, or (at your option) any later version.
+DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
 
-Gephi is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU Affero General Public License for more details.
+Copyright 2011 Gephi Consortium. All rights reserved.
 
-You should have received a copy of the GNU Affero General Public License
-along with Gephi.  If not, see <http://www.gnu.org/licenses/>.
+The contents of this file are subject to the terms of either the GNU
+General Public License Version 3 only ("GPL") or the Common
+Development and Distribution License("CDDL") (collectively, the
+"License"). You may not use this file except in compliance with the
+License. You can obtain a copy of the License at
+http://gephi.org/about/legal/license-notice/
+or /cddl-1.0.txt and /gpl-3.0.txt. See the License for the
+specific language governing permissions and limitations under the
+License.  When distributing the software, include this License Header
+Notice in each file and include the License files at
+/cddl-1.0.txt and /gpl-3.0.txt. If applicable, add the following below the
+License Header, with the fields enclosed by brackets [] replaced by
+your own identifying information:
+"Portions Copyrighted [year] [name of copyright owner]"
+
+If you wish your version of this file to be governed by only the CDDL
+or only the GPL Version 3, indicate your decision by adding
+"[Contributor] elects to include this software in this distribution
+under the [CDDL or GPL Version 3] license." If you do not indicate a
+single choice of license, a recipient has the option to distribute
+your version of this file under either the CDDL, the GPL Version 3 or
+to extend the choice of license to its licensees as provided above.
+However, if you add GPL Version 3 code and therefore, elected the GPL
+Version 3 license, then the option applies only if the new code is
+made subject to such option by the copyright holder.
+
+Contributor(s):
+
+Portions Copyrighted 2011 Gephi Consortium.
 */
 package org.gephi.ui.statistics.plugin;
+
+import org.gephi.graph.api.GraphController;
+import org.openide.util.Lookup;
 
 /**
  *
@@ -29,27 +53,33 @@ public class EigenvectorCentralityPanel extends javax.swing.JPanel {
     /** Creates new form EigenvectorCentralityPanel */
     public EigenvectorCentralityPanel() {
         initComponents();
+        
+        //Disable directed if the graph is undirecteds
+        GraphController graphController = Lookup.getDefault().lookup(GraphController.class);
+        if(graphController.getModel().isUndirected()){
+            directedRadioButton.setEnabled(false);
+        }
     }
 
     public boolean isDirected(){
-        return this.jRadioButton1.isSelected();
+        return this.directedRadioButton.isSelected();
     }
 
     public void setDirected(boolean pDirected){
-        this.jRadioButton1.setSelected(pDirected);
-        this.jRadioButton2.setSelected(!pDirected);
+        this.directedRadioButton.setSelected(pDirected);
+        this.undirectedRadioButton.setSelected(!pDirected);
         if (!pDirected) {
-            jRadioButton1.setEnabled(false);
+            directedRadioButton.setEnabled(false);
         }
     }
 
     public void setNumRuns(int mRuns){
-        jTextField1.setText(mRuns+"");
+        iterationTextField.setText(mRuns+"");
     }
 
     public int getNumRuns(){
         try{
-            int runs = Integer.parseInt(jTextField1.getText());
+            int runs = Integer.parseInt(iterationTextField.getText());
             return runs;
         }catch(Exception e){e.printStackTrace();}
         return 0;
@@ -67,26 +97,26 @@ public class EigenvectorCentralityPanel extends javax.swing.JPanel {
 
         buttonGroup1 = new javax.swing.ButtonGroup();
         header = new org.jdesktop.swingx.JXHeader();
-        jTextField1 = new javax.swing.JTextField();
+        iterationTextField = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
-        jRadioButton1 = new javax.swing.JRadioButton();
-        jRadioButton2 = new javax.swing.JRadioButton();
+        directedRadioButton = new javax.swing.JRadioButton();
+        undirectedRadioButton = new javax.swing.JRadioButton();
 
         header.setDescription(org.openide.util.NbBundle.getMessage(EigenvectorCentralityPanel.class, "EigenvectorCentralityPanel.header.description")); // NOI18N
         header.setTitle(org.openide.util.NbBundle.getMessage(EigenvectorCentralityPanel.class, "EigenvectorCentralityPanel.header.title")); // NOI18N
 
-        jTextField1.setMinimumSize(new java.awt.Dimension(30, 27));
+        iterationTextField.setMinimumSize(new java.awt.Dimension(30, 27));
 
         jLabel1.setText(org.openide.util.NbBundle.getMessage(EigenvectorCentralityPanel.class, "EigenvectorCentralityPanel.labeliterations.text")); // NOI18N
 
-        buttonGroup1.add(jRadioButton1);
-        jRadioButton1.setText(org.openide.util.NbBundle.getMessage(EigenvectorCentralityPanel.class, "EigenvectorCentralityPanel.directedButton.text")); // NOI18N
+        buttonGroup1.add(directedRadioButton);
+        directedRadioButton.setText(org.openide.util.NbBundle.getMessage(EigenvectorCentralityPanel.class, "EigenvectorCentralityPanel.directedButton.text")); // NOI18N
 
-        buttonGroup1.add(jRadioButton2);
-        jRadioButton2.setText(org.openide.util.NbBundle.getMessage(EigenvectorCentralityPanel.class, "EigenvectorCentralityPanel.undirectedButton.text")); // NOI18N
-        jRadioButton2.addActionListener(new java.awt.event.ActionListener() {
+        buttonGroup1.add(undirectedRadioButton);
+        undirectedRadioButton.setText(org.openide.util.NbBundle.getMessage(EigenvectorCentralityPanel.class, "EigenvectorCentralityPanel.undirectedButton.text")); // NOI18N
+        undirectedRadioButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jRadioButton2ActionPerformed(evt);
+                undirectedRadioButtonActionPerformed(evt);
             }
         });
 
@@ -94,50 +124,50 @@ public class EigenvectorCentralityPanel extends javax.swing.JPanel {
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(header, javax.swing.GroupLayout.DEFAULT_SIZE, 626, Short.MAX_VALUE)
+            .addComponent(header, javax.swing.GroupLayout.DEFAULT_SIZE, 541, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(directedRadioButton)
+                .addContainerGap(439, Short.MAX_VALUE))
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(undirectedRadioButton)
+                .addContainerGap(422, Short.MAX_VALUE))
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabel1)
                 .addGap(8, 8, 8)
-                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 174, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(332, Short.MAX_VALUE))
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jRadioButton1)
-                .addContainerGap(555, Short.MAX_VALUE))
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jRadioButton2)
-                .addContainerGap(541, Short.MAX_VALUE))
+                .addComponent(iterationTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 174, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(204, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(header, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(50, 50, 50)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel1))
+                .addGap(18, 18, 18)
+                .addComponent(directedRadioButton)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jRadioButton1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jRadioButton2)
-                .addContainerGap(81, Short.MAX_VALUE))
+                .addComponent(undirectedRadioButton)
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(iterationTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel1))
+                .addContainerGap(66, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jRadioButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton2ActionPerformed
+    private void undirectedRadioButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_undirectedRadioButtonActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jRadioButton2ActionPerformed
+    }//GEN-LAST:event_undirectedRadioButtonActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.ButtonGroup buttonGroup1;
+    private javax.swing.JRadioButton directedRadioButton;
     private org.jdesktop.swingx.JXHeader header;
+    private javax.swing.JTextField iterationTextField;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JRadioButton jRadioButton1;
-    private javax.swing.JRadioButton jRadioButton2;
-    private javax.swing.JTextField jTextField1;
+    private javax.swing.JRadioButton undirectedRadioButton;
     // End of variables declaration//GEN-END:variables
 
 }

@@ -1,22 +1,43 @@
 /*
-Copyright 2008-2010 Gephi
-Authors : Mathieu Bastian <mathieu.bastian@gephi.org>
-Website : http://www.gephi.org
+ Copyright 2008-2010 Gephi
+ Authors : Mathieu Bastian <mathieu.bastian@gephi.org>
+ Website : http://www.gephi.org
 
-This file is part of Gephi.
+ This file is part of Gephi.
 
-Gephi is free software: you can redistribute it and/or modify
-it under the terms of the GNU Affero General Public License as
-published by the Free Software Foundation, either version 3 of the
-License, or (at your option) any later version.
+ DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
 
-Gephi is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU Affero General Public License for more details.
+ Copyright 2011 Gephi Consortium. All rights reserved.
 
-You should have received a copy of the GNU Affero General Public License
-along with Gephi.  If not, see <http://www.gnu.org/licenses/>.
+ The contents of this file are subject to the terms of either the GNU
+ General Public License Version 3 only ("GPL") or the Common
+ Development and Distribution License("CDDL") (collectively, the
+ "License"). You may not use this file except in compliance with the
+ License. You can obtain a copy of the License at
+ http://gephi.org/about/legal/license-notice/
+ or /cddl-1.0.txt and /gpl-3.0.txt. See the License for the
+ specific language governing permissions and limitations under the
+ License.  When distributing the software, include this License Header
+ Notice in each file and include the License files at
+ /cddl-1.0.txt and /gpl-3.0.txt. If applicable, add the following below the
+ License Header, with the fields enclosed by brackets [] replaced by
+ your own identifying information:
+ "Portions Copyrighted [year] [name of copyright owner]"
+
+ If you wish your version of this file to be governed by only the CDDL
+ or only the GPL Version 3, indicate your decision by adding
+ "[Contributor] elects to include this software in this distribution
+ under the [CDDL or GPL Version 3] license." If you do not indicate a
+ single choice of license, a recipient has the option to distribute
+ your version of this file under either the CDDL, the GPL Version 3 or
+ to extend the choice of license to its licensees as provided above.
+ However, if you add GPL Version 3 code and therefore, elected the GPL
+ Version 3 license, then the option applies only if the new code is
+ made subject to such option by the copyright holder.
+
+ Contributor(s):
+
+ Portions Copyrighted 2011 Gephi Consortium.
  */
 package org.gephi.branding.desktop.multilingual;
 
@@ -46,22 +67,37 @@ public final class LanguageAction extends CallableSystemAction {
     public enum Language {
 
         EN_US("en", "English"),
+        ES_ES("es", "Español"),
         FR_FR("fr", "Français"),
-        ES_ES("es", "Español");
-        private String locale;
+        PT_BR("pt", "BR", "Português do Brasil"),
+        RU_RU("ru", "Русский"),
+        ZH_CN("zh", "CN", "中文"),
+        JA_JA("ja", "日本語");
+        private String language;
+        private String country = null;
         private String name;
 
         private Language(String locale, String name) {
-            this.locale = locale;
+            this.language = locale;
             this.name = name;
+        }
+
+        private Language(String language, String country, String name) {
+            this.language = language;
+            this.name = name;
+            this.country = country;
         }
 
         public String getName() {
             return name;
         }
 
-        public String getLocale() {
-            return locale;
+        public String getLanguage() {
+            return language;
+        }
+
+        public String getCountry() {
+            return country;
         }
     }
 
@@ -100,7 +136,12 @@ public final class LanguageAction extends CallableSystemAction {
                 }
             });
             //Flag icons from http://www.famfamfam.com
-            Icon icon = ImageUtilities.loadImageIcon("org/gephi/branding/desktop/multilingual/resources/" + lang.getLocale() + ".png", false);
+            String iconFile = "org/gephi/branding/desktop/multilingual/resources/" + lang.getLanguage();
+            if (lang.getCountry() != null) {
+                iconFile += "_" + lang.getCountry();
+            }
+            iconFile += ".png";
+            Icon icon = ImageUtilities.loadImageIcon(iconFile, false);
             if (icon != null) {
                 menuItem.setIcon(icon);
             }
@@ -110,7 +151,7 @@ public final class LanguageAction extends CallableSystemAction {
         return menu;
     }
 
-    private void setLanguage(Language language) throws Exception{
+    private void setLanguage(Language language) throws Exception {
         String homePath;
         if (Utilities.isMac() || Utilities.isUnix()) {
             homePath = System.getProperty("netbeans.home");
@@ -126,25 +167,31 @@ public final class LanguageAction extends CallableSystemAction {
 
         File confFile = new File(etc, APPNAME + ".conf");
         StringBuilder outputBuilder = new StringBuilder();
-        String match = "-J-Duser.language=";
-        int langLength = 2;
+
+        String matchOptionsLine = "default_options=";
 
         //In
         BufferedReader reader = new BufferedReader(new FileReader(confFile));
         String strLine;
         while ((strLine = reader.readLine()) != null) {
-            int i = 0;
-            if ((i = strLine.indexOf(match)) != -1) {
-                String locale = strLine.substring(i + match.length());
-                locale = locale.substring(0, langLength);
-                String before = strLine.substring(0, i + match.length());
-                String after = strLine.substring(i + match.length() + langLength);
-                outputBuilder.append(before);
-                outputBuilder.append(language.getLocale());
-                outputBuilder.append(after);
-            } else {
-                outputBuilder.append(strLine);
+            if (strLine.indexOf(matchOptionsLine) != -1) {
+                //Remove old language and country:
+                strLine = strLine.replaceAll(" -J-Duser\\.language=..", "");
+                strLine = strLine.replaceAll(" -J-Duser\\.country=..", "");
+
+                //Get string up to closing '"':
+                strLine = strLine.substring(0, strLine.lastIndexOf("\""));
+                //Set new language
+                strLine += " -J-Duser.language=" + language.getLanguage();
+                //Set new country if necessary
+                if (language.getCountry() != null) {
+                    strLine += " -J-Duser.country=" + language.getCountry();
+                }
+                //Close options with '"'
+                strLine += "\"";
             }
+
+            outputBuilder.append(strLine);
             outputBuilder.append("\n");
         }
         reader.close();
@@ -160,6 +207,5 @@ public final class LanguageAction extends CallableSystemAction {
             LifecycleManager.getDefault().markForRestart();
         }
         LifecycleManager.getDefault().exit();
-
     }
 }

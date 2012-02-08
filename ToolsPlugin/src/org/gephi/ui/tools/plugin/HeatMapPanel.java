@@ -5,18 +5,39 @@ Website : http://www.gephi.org
 
 This file is part of Gephi.
 
-Gephi is free software: you can redistribute it and/or modify
-it under the terms of the GNU Affero General Public License as
-published by the Free Software Foundation, either version 3 of the
-License, or (at your option) any later version.
+DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
 
-Gephi is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU Affero General Public License for more details.
+Copyright 2011 Gephi Consortium. All rights reserved.
 
-You should have received a copy of the GNU Affero General Public License
-along with Gephi.  If not, see <http://www.gnu.org/licenses/>.
+The contents of this file are subject to the terms of either the GNU
+General Public License Version 3 only ("GPL") or the Common
+Development and Distribution License("CDDL") (collectively, the
+"License"). You may not use this file except in compliance with the
+License. You can obtain a copy of the License at
+http://gephi.org/about/legal/license-notice/
+or /cddl-1.0.txt and /gpl-3.0.txt. See the License for the
+specific language governing permissions and limitations under the
+License.  When distributing the software, include this License Header
+Notice in each file and include the License files at
+/cddl-1.0.txt and /gpl-3.0.txt. If applicable, add the following below the
+License Header, with the fields enclosed by brackets [] replaced by
+your own identifying information:
+"Portions Copyrighted [year] [name of copyright owner]"
+
+If you wish your version of this file to be governed by only the CDDL
+or only the GPL Version 3, indicate your decision by adding
+"[Contributor] elects to include this software in this distribution
+under the [CDDL or GPL Version 3] license." If you do not indicate a
+single choice of license, a recipient has the option to distribute
+your version of this file under either the CDDL, the GPL Version 3 or
+to extend the choice of license to its licensees as provided above.
+However, if you add GPL Version 3 code and therefore, elected the GPL
+Version 3 license, then the option applies only if the new code is
+made subject to such option by the copyright holder.
+
+Contributor(s):
+
+Portions Copyrighted 2011 Gephi Consortium.
 */
 package org.gephi.ui.tools.plugin;
 
@@ -157,25 +178,25 @@ public class HeatMapPanel extends javax.swing.JPanel {
 
         setPreferredSize(new java.awt.Dimension(654, 28));
 
-        statusLabel.setFont(new java.awt.Font("Tahoma", 0, 10));
+        statusLabel.setFont(statusLabel.getFont().deriveFont((float)10));
         statusLabel.setText(org.openide.util.NbBundle.getMessage(HeatMapPanel.class, "HeatMapPanel.statusLabel.text")); // NOI18N
 
-        labelMode.setFont(new java.awt.Font("Tahoma", 0, 10));
+        labelMode.setFont(labelMode.getFont().deriveFont((float)10));
         labelMode.setText(org.openide.util.NbBundle.getMessage(HeatMapPanel.class, "HeatMapPanel.labelMode.text")); // NOI18N
 
-        modeComboBox.setFont(new java.awt.Font("Tahoma", 0, 10));
+        modeComboBox.setFont(modeComboBox.getFont().deriveFont((float)10));
         modeComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Gradient", "Palette" }));
 
         gradientPanel.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT, 5, 0));
 
-        labelGradient.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
+        labelGradient.setFont(labelGradient.getFont().deriveFont((float)10));
         labelGradient.setText(org.openide.util.NbBundle.getMessage(HeatMapPanel.class, "HeatMapPanel.labelGradient.text")); // NOI18N
         labelGradient.setPreferredSize(new java.awt.Dimension(45, 28));
         gradientPanel.add(labelGradient);
 
         palettePanel.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT, 5, 0));
 
-        labelPalette.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
+        labelPalette.setFont(labelPalette.getFont().deriveFont((float)10));
         labelPalette.setText(org.openide.util.NbBundle.getMessage(HeatMapPanel.class, "HeatMapPanel.labelPalette.text")); // NOI18N
         labelPalette.setPreferredSize(new java.awt.Dimension(45, 28));
         palettePanel.add(labelPalette);
@@ -195,7 +216,7 @@ public class HeatMapPanel extends javax.swing.JPanel {
                 .addComponent(gradientPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 399, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(palettePanel, javax.swing.GroupLayout.PREFERRED_SIZE, 363, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(23, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)

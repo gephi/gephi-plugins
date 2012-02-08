@@ -5,25 +5,49 @@ Website : http://www.gephi.org
 
 This file is part of Gephi.
 
-Gephi is free software: you can redistribute it and/or modify
-it under the terms of the GNU Affero General Public License as
-published by the Free Software Foundation, either version 3 of the
-License, or (at your option) any later version.
+DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
 
-Gephi is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU Affero General Public License for more details.
+Copyright 2011 Gephi Consortium. All rights reserved.
 
-You should have received a copy of the GNU Affero General Public License
-along with Gephi.  If not, see <http://www.gnu.org/licenses/>.
+The contents of this file are subject to the terms of either the GNU
+General Public License Version 3 only ("GPL") or the Common
+Development and Distribution License("CDDL") (collectively, the
+"License"). You may not use this file except in compliance with the
+License. You can obtain a copy of the License at
+http://gephi.org/about/legal/license-notice/
+or /cddl-1.0.txt and /gpl-3.0.txt. See the License for the
+specific language governing permissions and limitations under the
+License.  When distributing the software, include this License Header
+Notice in each file and include the License files at
+/cddl-1.0.txt and /gpl-3.0.txt. If applicable, add the following below the
+License Header, with the fields enclosed by brackets [] replaced by
+your own identifying information:
+"Portions Copyrighted [year] [name of copyright owner]"
+
+If you wish your version of this file to be governed by only the CDDL
+or only the GPL Version 3, indicate your decision by adding
+"[Contributor] elects to include this software in this distribution
+under the [CDDL or GPL Version 3] license." If you do not indicate a
+single choice of license, a recipient has the option to distribute
+your version of this file under either the CDDL, the GPL Version 3 or
+to extend the choice of license to its licensees as provided above.
+However, if you add GPL Version 3 code and therefore, elected the GPL
+Version 3 license, then the option applies only if the new code is
+made subject to such option by the copyright holder.
+
+Contributor(s):
+
+Portions Copyrighted 2011 Gephi Consortium.
  */
 package org.gephi.statistics.plugin;
 
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import org.gephi.data.attributes.api.AttributeColumn;
 import org.gephi.data.attributes.api.AttributeModel;
 import org.gephi.data.attributes.api.AttributeOrigin;
@@ -42,6 +66,11 @@ import org.gephi.statistics.spi.Statistics;
 import org.gephi.utils.longtask.spi.LongTask;
 import org.gephi.utils.progress.Progress;
 import org.gephi.utils.progress.ProgressTicket;
+import org.jfree.chart.ChartFactory;
+import org.jfree.chart.JFreeChart;
+import org.jfree.chart.plot.PlotOrientation;
+import org.jfree.data.xy.XYSeries;
+import org.jfree.data.xy.XYSeriesCollection;
 import org.openide.util.Lookup;
 
 /**
@@ -268,14 +297,46 @@ public class ConnectedComponents implements Statistics, LongTask {
     }
 
     public String getReport() {
+        Map<Integer, Integer> sizeDist = new HashMap<Integer, Integer>();
+        for(int v : componentsSize) {
+            if(!sizeDist.containsKey(v)) {
+                sizeDist.put(v, 0);
+            }
+            sizeDist.put(v, sizeDist.get(v) + 1);
+        }
+        
+        //Distribution series
+        XYSeries dSeries = ChartUtils.createXYSeries(sizeDist, "Size Distribution");
+
+        XYSeriesCollection dataset1 = new XYSeriesCollection();
+        dataset1.addSeries(dSeries);
+
+        JFreeChart chart = ChartFactory.createXYLineChart(
+                "Size Distribution",
+                "Size (number of nodes)",
+                "Count",
+                dataset1,
+                PlotOrientation.VERTICAL,
+                true,
+                false,
+                false);
+        chart.removeLegend();
+        ChartUtils.decorateChart(chart);
+        ChartUtils.scaleChart(chart, dSeries, false);
+        String imageFile = ChartUtils.renderChart(chart, "cc-size-distribution.png");
+
+        NumberFormat f = new DecimalFormat("#0.000");
+
+
         String report = "<HTML> <BODY> <h1>Connected Components Report </h1> "
                 + "<hr>"
                 + "<br>"
                 + "<h2> Parameters: </h2>"
                 + "Network Interpretation:  " + (isDirected ? "directed" : "undirected") + "<br>"
                 + "<br> <h2> Results: </h2>"
-                + "Weakly Connected Components: " + componentCount + "<br>"
-                + (isDirected ? "Stronlgy Connected Components: " + stronglyCount + "<br>" : "")
+                + "Number of Weakly Connected Components: " + componentCount + "<br>"
+                + (isDirected ? "Number of Stronlgy Connected Components: " + stronglyCount + "<br>" : "")
+                + "<br /><br />"+imageFile
                 + "<br />" + "<h2> Algorithm: </h2>"
                 + "Robert Tarjan, <i>Depth-First Search and Linear Graph Algorithms</i>, in SIAM Journal on Computing 1 (2): 146–160 (1972)<br />"
                 + "</BODY> </HTML>";

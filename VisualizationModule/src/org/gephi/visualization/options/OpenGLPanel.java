@@ -5,18 +5,39 @@ Website : http://www.gephi.org
 
 This file is part of Gephi.
 
-Gephi is free software: you can redistribute it and/or modify
-it under the terms of the GNU Affero General Public License as
-published by the Free Software Foundation, either version 3 of the
-License, or (at your option) any later version.
+DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
 
-Gephi is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU Affero General Public License for more details.
+Copyright 2011 Gephi Consortium. All rights reserved.
 
-You should have received a copy of the GNU Affero General Public License
-along with Gephi.  If not, see <http://www.gnu.org/licenses/>.
+The contents of this file are subject to the terms of either the GNU
+General Public License Version 3 only ("GPL") or the Common
+Development and Distribution License("CDDL") (collectively, the
+"License"). You may not use this file except in compliance with the
+License. You can obtain a copy of the License at
+http://gephi.org/about/legal/license-notice/
+or /cddl-1.0.txt and /gpl-3.0.txt. See the License for the
+specific language governing permissions and limitations under the
+License.  When distributing the software, include this License Header
+Notice in each file and include the License files at
+/cddl-1.0.txt and /gpl-3.0.txt. If applicable, add the following below the
+License Header, with the fields enclosed by brackets [] replaced by
+your own identifying information:
+"Portions Copyrighted [year] [name of copyright owner]"
+
+If you wish your version of this file to be governed by only the CDDL
+or only the GPL Version 3, indicate your decision by adding
+"[Contributor] elects to include this software in this distribution
+under the [CDDL or GPL Version 3] license." If you do not indicate a
+single choice of license, a recipient has the option to distribute
+your version of this file under either the CDDL, the GPL Version 3 or
+to extend the choice of license to its licensees as provided above.
+However, if you add GPL Version 3 code and therefore, elected the GPL
+Version 3 license, then the option applies only if the new code is
+made subject to such option by the copyright holder.
+
+Contributor(s):
+
+Portions Copyrighted 2011 Gephi Consortium.
  */
 package org.gephi.visualization.options;
 
@@ -139,17 +160,17 @@ final class OpenGLPanel extends javax.swing.JPanel {
 
         jXTitledSeparator3.setTitle(org.openide.util.NbBundle.getMessage(OpenGLPanel.class, "OpenGLPanel.jXTitledSeparator3.title")); // NOI18N
 
-        org.openide.awt.Mnemonics.setLocalizedText(labelAmbiant, org.openide.util.NbBundle.getMessage(OpenGLPanel.class, "OpenGLPanel.labelAmbiant.text")); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(labelAmbiant, org.openide.util.NbBundle.getMessage(OpenGLPanel.class, "OpenGLPanel.labelAmbient.text")); // NOI18N
 
         org.openide.awt.Mnemonics.setLocalizedText(ambientDiffuseColorButton, org.openide.util.NbBundle.getMessage(OpenGLPanel.class, "OpenGLPanel.ambientDiffuseColorButton.text")); // NOI18N
 
         org.openide.awt.Mnemonics.setLocalizedText(ambientSpecularColorButton, org.openide.util.NbBundle.getMessage(OpenGLPanel.class, "OpenGLPanel.ambientSpecularColorButton.text")); // NOI18N
 
-        org.openide.awt.Mnemonics.setLocalizedText(ambientAmbiantColorButton, org.openide.util.NbBundle.getMessage(OpenGLPanel.class, "OpenGLPanel.ambientAmbiantColorButton.text")); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(ambientAmbiantColorButton, org.openide.util.NbBundle.getMessage(OpenGLPanel.class, "OpenGLPanel.ambientAmbientColorButton.text")); // NOI18N
 
         org.openide.awt.Mnemonics.setLocalizedText(labelDirectional, org.openide.util.NbBundle.getMessage(OpenGLPanel.class, "OpenGLPanel.labelDirectional.text")); // NOI18N
 
-        org.openide.awt.Mnemonics.setLocalizedText(light1AmbiantColorButton, org.openide.util.NbBundle.getMessage(OpenGLPanel.class, "OpenGLPanel.light1AmbiantColorButton.text")); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(light1AmbiantColorButton, org.openide.util.NbBundle.getMessage(OpenGLPanel.class, "OpenGLPanel.light1AmbientColorButton.text")); // NOI18N
 
         org.openide.awt.Mnemonics.setLocalizedText(light1DiffuseColorButton, org.openide.util.NbBundle.getMessage(OpenGLPanel.class, "OpenGLPanel.light1DiffuseColorButton.text")); // NOI18N
 
@@ -159,7 +180,7 @@ final class OpenGLPanel extends javax.swing.JPanel {
 
         org.openide.awt.Mnemonics.setLocalizedText(light2Checkbox, org.openide.util.NbBundle.getMessage(OpenGLPanel.class, "OpenGLPanel.light2Checkbox.text")); // NOI18N
 
-        org.openide.awt.Mnemonics.setLocalizedText(light2AmbiantColorButton, org.openide.util.NbBundle.getMessage(OpenGLPanel.class, "OpenGLPanel.light2AmbiantColorButton.text")); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(light2AmbiantColorButton, org.openide.util.NbBundle.getMessage(OpenGLPanel.class, "OpenGLPanel.light2AmbientColorButton.text")); // NOI18N
 
         org.openide.awt.Mnemonics.setLocalizedText(light2DiffuseColorButton, org.openide.util.NbBundle.getMessage(OpenGLPanel.class, "OpenGLPanel.light2DiffuseColorButton.text")); // NOI18N
 
@@ -167,7 +188,7 @@ final class OpenGLPanel extends javax.swing.JPanel {
 
         org.openide.awt.Mnemonics.setLocalizedText(light3Checkbox, org.openide.util.NbBundle.getMessage(OpenGLPanel.class, "OpenGLPanel.light3Checkbox.text")); // NOI18N
 
-        org.openide.awt.Mnemonics.setLocalizedText(light3AmbiantColorButton, org.openide.util.NbBundle.getMessage(OpenGLPanel.class, "OpenGLPanel.light3AmbiantColorButton.text")); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(light3AmbiantColorButton, org.openide.util.NbBundle.getMessage(OpenGLPanel.class, "OpenGLPanel.light3AmbientColorButton.text")); // NOI18N
 
         org.openide.awt.Mnemonics.setLocalizedText(light3DiffuseColorButton, org.openide.util.NbBundle.getMessage(OpenGLPanel.class, "OpenGLPanel.light3DiffuseColorButton.text")); // NOI18N
 
@@ -216,7 +237,7 @@ final class OpenGLPanel extends javax.swing.JPanel {
             }
         });
 
-        jLabel10.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
+        jLabel10.setFont(new java.awt.Font("Tahoma", 0, 10));
         org.openide.awt.Mnemonics.setLocalizedText(jLabel10, org.openide.util.NbBundle.getMessage(OpenGLPanel.class, "OpenGLPanel.jLabel10.text")); // NOI18N
         jLabel10.setForeground(new java.awt.Color(102, 102, 102));
 
@@ -224,7 +245,7 @@ final class OpenGLPanel extends javax.swing.JPanel {
 
         openInfoText.setColumns(5);
         openInfoText.setEditable(false);
-        openInfoText.setFont(new java.awt.Font("Monospaced", 0, 11)); // NOI18N
+        openInfoText.setFont(new java.awt.Font("Monospaced", 0, 11));
         openInfoText.setRows(3);
         openInfoText.setText("Vendor\nModel\nVersion"); // NOI18N
         openInfoText.setOpaque(false);
@@ -243,7 +264,7 @@ final class OpenGLPanel extends javax.swing.JPanel {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jXTitledSeparator1, javax.swing.GroupLayout.DEFAULT_SIZE, 630, Short.MAX_VALUE)
+                    .addComponent(jXTitledSeparator1, javax.swing.GroupLayout.DEFAULT_SIZE, 679, Short.MAX_VALUE)
                     .addComponent(resetButton)
                     .addGroup(layout.createSequentialGroup()
                         .addGap(10, 10, 10)
@@ -322,7 +343,7 @@ final class OpenGLPanel extends javax.swing.JPanel {
                                 .addComponent(light1ZPosition, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE))))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jXTitledSeparator3, javax.swing.GroupLayout.DEFAULT_SIZE, 424, Short.MAX_VALUE)
+                            .addComponent(jXTitledSeparator3, javax.swing.GroupLayout.DEFAULT_SIZE, 473, Short.MAX_VALUE)
                             .addGroup(layout.createSequentialGroup()
                                 .addGap(10, 10, 10)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)

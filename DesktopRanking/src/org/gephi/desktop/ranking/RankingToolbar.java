@@ -5,23 +5,44 @@ Website : http://www.gephi.org
 
 This file is part of Gephi.
 
-Gephi is free software: you can redistribute it and/or modify
-it under the terms of the GNU Affero General Public License as
-published by the Free Software Foundation, either version 3 of the
-License, or (at your option) any later version.
+DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
 
-Gephi is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU Affero General Public License for more details.
+Copyright 2011 Gephi Consortium. All rights reserved.
 
-You should have received a copy of the GNU Affero General Public License
-along with Gephi.  If not, see <http://www.gnu.org/licenses/>.
-*/
+The contents of this file are subject to the terms of either the GNU
+General Public License Version 3 only ("GPL") or the Common
+Development and Distribution License("CDDL") (collectively, the
+"License"). You may not use this file except in compliance with the
+License. You can obtain a copy of the License at
+http://gephi.org/about/legal/license-notice/
+or /cddl-1.0.txt and /gpl-3.0.txt. See the License for the
+specific language governing permissions and limitations under the
+License.  When distributing the software, include this License Header
+Notice in each file and include the License files at
+/cddl-1.0.txt and /gpl-3.0.txt. If applicable, add the following below the
+License Header, with the fields enclosed by brackets [] replaced by
+your own identifying information:
+"Portions Copyrighted [year] [name of copyright owner]"
+
+If you wish your version of this file to be governed by only the CDDL
+or only the GPL Version 3, indicate your decision by adding
+"[Contributor] elects to include this software in this distribution
+under the [CDDL or GPL Version 3] license." If you do not indicate a
+single choice of license, a recipient has the option to distribute
+your version of this file under either the CDDL, the GPL Version 3 or
+to extend the choice of license to its licensees as provided above.
+However, if you add GPL Version 3 code and therefore, elected the GPL
+Version 3 license, then the option applies only if the new code is
+made subject to such option by the copyright holder.
+
+Contributor(s):
+
+Portions Copyrighted 2011 Gephi Consortium.
+ */
 package org.gephi.desktop.ranking;
 
 import java.awt.Component;
-import org.gephi.ranking.api.TransformerUI;
+import org.gephi.ranking.spi.TransformerUI;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
@@ -29,139 +50,187 @@ import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
+import java.util.MissingResourceException;
 import javax.swing.AbstractButton;
 import javax.swing.ButtonGroup;
+import javax.swing.ButtonModel;
+import javax.swing.Icon;
 import javax.swing.JToggleButton;
 import javax.swing.JToolBar;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.border.Border;
-import org.gephi.ranking.api.RankingUIModel;
-import org.openide.util.Lookup;
+import org.gephi.ranking.api.Transformer;
+import org.gephi.ui.components.DecoratedIcon;
+import org.openide.util.ImageUtilities;
 import org.openide.util.NbBundle;
 
 /**
  *
  * @author Mathieu Bastian
  */
-public class RankingToolbar extends JToolBar {
+public class RankingToolbar extends JToolBar implements PropertyChangeListener {
 
+    private final RankingUIController controller;
     private RankingUIModel model;
+    private final List<ButtonGroup> buttonGroups = new ArrayList<ButtonGroup>();
 
-    public RankingToolbar(RankingUIModel model) {
-        this.model = model;
+    public RankingToolbar(RankingUIController controller) {
+        this.controller = controller;
         initComponents();
-        initTransformersUI();
-        model.addPropertyChangeListener(new PropertyChangeListener() {
+    }
 
-            public void propertyChange(PropertyChangeEvent evt) {
-                if (evt.getPropertyName().equals("nodeTransformer")
-                        || evt.getPropertyName().equals("edgeTransformer")
-                        || evt.getPropertyName().equals("ranking")) {
-                    refreshModel();
+    public void refreshModel(RankingUIModel model) {
+        if (this.model != null) {
+            this.model.removePropertyChangeListener(this);
+        }
+        this.model = model;
+        if (model != null) {
+            model.addPropertyChangeListener(this);
+        }
+
+        SwingUtilities.invokeLater(new Runnable() {
+
+            public void run() {
+                initTransformersUI();
+
+                if (RankingToolbar.this.model != null) {
+                    refreshTransformers();
+
+                    //Select the right element group
+                    refreshSelectedElmntGroup(RankingToolbar.this.model.getCurrentElementType());
+                } else {
+                    elementGroup.clearSelection();
                 }
             }
         });
-        refreshModel();
     }
 
-    private void refreshModel() {
-        boolean nodeSelected = model.getRanking() == RankingUIModel.NODE_RANKING;
-        boolean edgeSelected = !nodeSelected;
-        elementGroup.setSelected(nodeSelected ? nodeButton.getModel() : edgeButton.getModel(), true);
+    public void propertyChange(PropertyChangeEvent pce) {
+        if (pce.getPropertyName().equals(RankingUIModel.CURRENT_ELEMENT_TYPE)) {
+            refreshSelectedElmntGroup((String) pce.getNewValue());
+        }
+        if (pce.getPropertyName().equals(RankingUIModel.CURRENT_TRANSFORMER)
+                || pce.getPropertyName().equals(RankingUIModel.CURRENT_ELEMENT_TYPE)) {
+            refreshTransformers();
+        }
+        if (pce.getPropertyName().equalsIgnoreCase(RankingUIModel.START_AUTO_TRANSFORMER)
+                || pce.getPropertyName().equalsIgnoreCase(RankingUIModel.STOP_AUTO_TRANSFORMER)) {
+            refreshDecoratedIcons();
+        }
+    }
 
-        nodeTransformerGroup.clearSelection();
-        edgeTransformerGroup.clearSelection();
-        
-        if (model.getNodeTransformer() == null) {
-            TransformerUI[] allTrans = Lookup.getDefault().lookupAll(TransformerUI.class).toArray(new TransformerUI[0]);
-            for(int i=0;i<allTrans.length;i++) {
-                TransformerUI t = allTrans[i];
-                if (t.isNodeTransformer()) {
-                    model.setNodeTransformer(t.getTransformerClass());
-                    break;
+    private void refreshTransformers() {
+        //Select the right transformer
+        int index = 0;
+        for (String elmtType : controller.getElementTypes()) {
+            ButtonGroup g = buttonGroups.get(index);
+            boolean active = model == null ? false : model.getCurrentElementType().equals(elmtType);
+            g.clearSelection();
+            Transformer t = model.getCurrentTransformer(elmtType);
+            String selected = model == null ? "" : controller.getUI(t).getDisplayName();
+            for (Enumeration<AbstractButton> btns = g.getElements(); btns.hasMoreElements();) {
+                AbstractButton btn = btns.nextElement();
+                btn.setVisible(active);
+                if (btn.getName().equals(selected)) {
+                    g.setSelected(btn.getModel(), true);
                 }
             }
+            index++;
         }
-        if (model.getEdgeTransformer() == null) {
-            TransformerUI[] allTrans = Lookup.getDefault().lookupAll(TransformerUI.class).toArray(new TransformerUI[0]);
-            for(int i=0;i<allTrans.length;i++) {
-                TransformerUI t = allTrans[i];
-                if (t.isEdgeTransformer()) {
-                    model.setEdgeTransformer(t.getTransformerClass());
-                    break;
+    }
+
+    private void refreshDecoratedIcons() {
+        SwingUtilities.invokeLater(new Runnable() {
+
+            public void run() {
+                int index = 0;
+                for (String elmtType : controller.getElementTypes()) {
+                    ButtonGroup g = buttonGroups.get(index++);
+                    boolean active = model == null ? false : model.getCurrentElementType().equals(elmtType);
+                    if (active) {
+                        for (Enumeration<AbstractButton> btns = g.getElements(); btns.hasMoreElements();) {
+                            btns.nextElement().repaint();
+                        }
+                    }
                 }
             }
-        }
+        });
+    }
 
-        for (Enumeration<AbstractButton> btns = nodeTransformerGroup.getElements(); btns.hasMoreElements();) {
-            AbstractButton btn = btns.nextElement();
-            btn.setVisible(nodeSelected);
-            if (model.getNodeTransformer() != null && btn.getName().equals(model.getNodeTransformer().getSimpleName())) {
-                nodeTransformerGroup.setSelected(btn.getModel(), true);
+    private void refreshSelectedElmntGroup(String selected) {
+        ButtonModel buttonModel = null;
+        Enumeration<AbstractButton> en = elementGroup.getElements();
+        for (String elmtType : controller.getElementTypes()) {
+            if (elmtType.equals(selected)) {
+                buttonModel = en.nextElement().getModel();
+                break;
             }
+            en.nextElement();
         }
-        for (Enumeration<AbstractButton> btns = edgeTransformerGroup.getElements(); btns.hasMoreElements();) {
-            AbstractButton btn = btns.nextElement();
-            btn.setVisible(edgeSelected);
-            if (model.getEdgeTransformer() != null && btn.getName().equals(model.getEdgeTransformer().getSimpleName())) {
-                edgeTransformerGroup.setSelected(btn.getModel(), true);
-            }
-        }
+        elementGroup.setSelected(buttonModel, true);
     }
 
     private void initTransformersUI() {
-        nodeTransformerGroup = new ButtonGroup();
-        edgeTransformerGroup = new ButtonGroup();
-        List<TransformerUI> nodeTrans = new ArrayList<TransformerUI>();
-        List<TransformerUI> edgeTrans = new ArrayList<TransformerUI>();
-        TransformerUI[] allTrans = Lookup.getDefault().lookupAll(TransformerUI.class).toArray(new TransformerUI[0]);
-        for (TransformerUI t : allTrans) {
-            if (t.isNodeTransformer()) {
-                nodeTrans.add(t);
-            }
-            if (t.isEdgeTransformer()) {
-                edgeTrans.add(t);
+        //Clear precent buttons
+        for (ButtonGroup bg : buttonGroups) {
+            for (Enumeration<AbstractButton> btns = bg.getElements(); btns.hasMoreElements();) {
+                AbstractButton btn = btns.nextElement();
+                remove(btn);
             }
         }
+        buttonGroups.clear();
+        if (model != null) {
+            //Add transformers buttons, separate them by element group
+            for (String elmtType : controller.getElementTypes()) {
+                ButtonGroup buttonGroup = new ButtonGroup();
+                for (final Transformer t : model.getTransformers(elmtType)) {
+                    TransformerUI u = controller.getUI(t);
+                    if (u != null) {
+                        //Build button
+                        Icon icon = u.getIcon();
+                        DecoratedIcon decoratedIcon = getDecoratedIcon(icon, t);
+                        JToggleButton btn = new JToggleButton(decoratedIcon);
+                        btn.setToolTipText(u.getDisplayName());
+                        btn.addActionListener(new ActionListener() {
 
-        for (final TransformerUI t : nodeTrans) {
-            JToggleButton btn = new JToggleButton(t.getIcon());
-            btn.setToolTipText(t.getName());
-            btn.addActionListener(new ActionListener() {
-
-                public void actionPerformed(ActionEvent e) {
-                    model.setNodeTransformer(t.getTransformerClass());
+                            public void actionPerformed(ActionEvent e) {
+                                model.setCurrentTransformer(t);
+                            }
+                        });
+                        btn.setName(u.getDisplayName());
+                        btn.setFocusPainted(false);
+                        buttonGroup.add(btn);
+                        add(btn);
+                    }
                 }
-            });
-            btn.setName(t.getTransformerClass().getSimpleName());
-            btn.setFocusPainted(false);
-            nodeTransformerGroup.add(btn);
-            add(btn);
-        }
-
-        for (final TransformerUI t : edgeTrans) {
-            JToggleButton btn = new JToggleButton(t.getIcon());
-            btn.setToolTipText(t.getName());
-            btn.addActionListener(new ActionListener() {
-
-                public void actionPerformed(ActionEvent e) {
-                    model.setEdgeTransformer(t.getTransformerClass());
-                }
-            });
-            btn.setName(t.getTransformerClass().getSimpleName());
-            btn.setFocusPainted(false);
-            edgeTransformerGroup.add(btn);
-            add(btn);
+                buttonGroups.add(buttonGroup);
+            }
         }
     }
 
     private void initComponents() {
         elementGroup = new javax.swing.ButtonGroup();
-        nodeButton = new javax.swing.JToggleButton();
-        edgeButton = new javax.swing.JToggleButton();
-        nodeButton.setFocusPainted(false);
-        edgeButton.setFocusPainted(false);
+        for (final String elmtType : controller.getElementTypes()) {
+
+            JToggleButton btn = new JToggleButton();
+            btn.setFocusPainted(false);
+            String btnLabel = elmtType;
+            try {
+                btnLabel = NbBundle.getMessage(RankingToolbar.class, "RankingToolbar." + elmtType + ".label");
+            } catch (MissingResourceException e) {
+            }
+            btn.setText(btnLabel);
+            btn.setEnabled(false);
+            btn.addActionListener(new ActionListener() {
+
+                public void actionPerformed(ActionEvent e) {
+                    model.setCurrentElementType(elmtType);
+                }
+            });
+            elementGroup.add(btn);
+            add(btn);
+        }
         box = new javax.swing.JLabel();
 
         setFloatable(false);
@@ -169,32 +238,10 @@ public class RankingToolbar extends JToolBar {
         Border b = (Border) UIManager.get("Nb.Editor.Toolbar.border"); //NOI18N
         setBorder(b);
 
-        elementGroup.add(nodeButton);
-        nodeButton.setText(NbBundle.getMessage(RankingToolbar.class, "RankingToolbar.nodes.label"));
-        nodeButton.setEnabled(false);
-        add(nodeButton);
-
-        elementGroup.add(edgeButton);
-        edgeButton.setText(NbBundle.getMessage(RankingToolbar.class, "RankingToolbar.edges.label"));
-        edgeButton.setEnabled(false);
-        add(edgeButton);
         addSeparator();
 
         box.setMaximumSize(new java.awt.Dimension(32767, 32767));
         add(box);
-
-        nodeButton.addActionListener(new ActionListener() {
-
-            public void actionPerformed(ActionEvent e) {
-                model.setRanking(RankingUIModel.NODE_RANKING);
-            }
-        });
-        edgeButton.addActionListener(new ActionListener() {
-
-            public void actionPerformed(ActionEvent e) {
-                model.setRanking(RankingUIModel.EDGE_RANKING);
-            }
-        });
     }
 
     @Override
@@ -209,9 +256,15 @@ public class RankingToolbar extends JToolBar {
         });
     }
     private javax.swing.JLabel box;
-    private javax.swing.JToggleButton edgeButton;
     private javax.swing.ButtonGroup elementGroup;
-    private javax.swing.ButtonGroup nodeTransformerGroup;
-    private javax.swing.ButtonGroup edgeTransformerGroup;
-    private javax.swing.JToggleButton nodeButton;
+
+    private DecoratedIcon getDecoratedIcon(Icon icon, final Transformer transformer) {
+        Icon decoration = ImageUtilities.image2Icon(ImageUtilities.loadImage("org/gephi/desktop/ranking/resources/chain.png", false));
+        return new DecoratedIcon(icon, decoration, new DecoratedIcon.DecorationController() {
+
+            public boolean isDecorated() {
+                return model != null && model.isAutoTransformer(transformer);
+            }
+        });
+    }
 }

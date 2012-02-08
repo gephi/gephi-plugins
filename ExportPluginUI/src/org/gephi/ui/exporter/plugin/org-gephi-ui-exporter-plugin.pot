@@ -1,14 +1,14 @@
-# English (en) translation for Gephi.
-# Copyright (C) 2010 Gephi contributors.
+# Translation file for Gephi.
+# Copyright (C) 2011 Gephi contributors.
 # This file is distributed under the same license as the Gephi package.
-# Gephi Team <gephi.team@lists.launchpad.net>, 2010.
+# Gephi Team <gephi.team@lists.launchpad.net>, 2011.
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: Gephi 0.7\n"
+"Project-Id-Version: Gephi 0.8\n"
 "Report-Msgid-Bugs-To: gephi.team@lists.launchpad.net\n"
-"POT-Creation-Date: 2010-04-07 13:16+0200\n"
-"PO-Revision-Date: 2010-04-07 13:16+0200\n"
+"POT-Creation-Date: 2011-08-05 14:52+0200\n"
+"PO-Revision-Date: 2011-08-05 14:52+0200\n"
 "Last-Translator: Mathieu Bastian <gephi.team@lists.launchpad.net>\n"
 "Language-Team: English <https://launchpad.net/~gephi.team>\n"
 "MIME-Version: 1.0\n"
@@ -24,11 +24,20 @@ msgstr "GDF"
 msgid "UIExporterGEXF.name"
 msgstr "GEXF"
 
+msgid "UIExporterGML.name"
+msgstr "GML"
+
 msgid "UIExporterGraphML.name"
 msgstr "GraphML"
 
 msgid "UIExporterCSV.name"
 msgstr "CSV"
+
+msgid "UIExporterPajek.name"
+msgstr "Pajek"
+
+msgid "UIExporterDL.name"
+msgstr "DL"
 
 msgid "UIExporterGDFPanel.jRadioButton1.text"
 msgstr "Simple quotes"
@@ -143,3 +152,42 @@ msgstr "Complete node tree without meta edges"
 
 msgid "UIExporterGEXFPanel.hierarchyCheckbox.text"
 msgstr "Export hierarchy"
+
+msgid "UIExporterPajekPanel.labelExport.text"
+msgstr "Export:"
+
+msgid "UIExporterPajekPanel.positionExportCheckbox.text"
+msgstr "Position (x,y)"
+
+msgid "UIExporterPajekPanel.edgeWeightCheckbox.text"
+msgstr "Edge weights"
+
+msgid "UIExporterGML.attributes.text"
+msgstr "Attributes"
+
+msgid "UIExporterGML.exportLabel.text"
+msgstr "Export:"
+
+msgid "UIExporterGML.positionLabel.text"
+msgstr "Position (x, y)"
+
+msgid "UIExporterGML.colorsLabel.text"
+msgstr "Colors"
+
+msgid "UIExporterGML.sizeLabel.text"
+msgstr "Size"
+
+msgid "UIExporterGML.edgeWeightLabel.text"
+msgstr "Edge weight"
+
+msgid "UIExporterGML.labelLabel.text"
+msgstr "Label"
+
+msgid "UIExporterGML.normalize.text"
+msgstr "Normalize"
+
+msgid "UIExporterGML.normalizeHintLabel.text"
+msgstr "Scale position and size between 0 and 1"
+
+msgid "UIExporterGML.indentationLabel.text"
+msgstr "Indentation:"

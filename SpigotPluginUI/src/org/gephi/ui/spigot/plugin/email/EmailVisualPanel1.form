@@ -1,4 +1,4 @@
-<?xml version="1.1" encoding="UTF-8" ?>
+<?xml version="1.0" encoding="UTF-8" ?>
 
 <Form version="1.4" maxVersion="1.7" type="org.netbeans.modules.form.forminfo.JPanelFormInfo">
   <NonVisualComponents>
@@ -34,13 +34,13 @@
           <Group type="102" alignment="1" attributes="0">
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="1" attributes="0">
-                  <Component id="jPanelReceiveFromServer" alignment="0" pref="488" max="32767" attributes="1"/>
+                  <Component id="jPanelReceiveFromServer" alignment="0" pref="480" max="32767" attributes="1"/>
                   <Component id="jCheckBoxDisplayNameSameLabel" alignment="0" min="-2" max="-2" attributes="0"/>
                   <Component id="jCheckBoxUseBccLine" alignment="0" min="-2" max="-2" attributes="0"/>
                   <Component id="jCheckBoxUseCcLine" alignment="0" min="-2" max="-2" attributes="0"/>
                   <Component id="jRadioButtonFromLocalFile" alignment="0" min="-2" max="-2" attributes="0"/>
                   <Component id="jRadioButtonFromServer" alignment="0" min="-2" max="-2" attributes="0"/>
-                  <Component id="jLabel4" alignment="0" pref="488" max="32767" attributes="0"/>
+                  <Component id="jLabel4" alignment="0" pref="544" max="32767" attributes="0"/>
                   <Group type="102" alignment="0" attributes="0">
                       <Component id="jLabel5" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
@@ -103,41 +103,36 @@
         <DimensionLayout dim="0">
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" alignment="1" attributes="0">
+                  <EmptySpace min="2" pref="2" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <Group type="102" attributes="0">
-                          <EmptySpace min="-2" pref="2" max="-2" attributes="0"/>
-                          <Group type="103" groupAlignment="1" max="-2" attributes="0">
-                              <Component id="jLabelPsw" alignment="0" max="32767" attributes="1"/>
-                              <Component id="jLabelServerType" alignment="0" max="32767" attributes="1"/>
-                              <Component id="jLabelServerAddr" alignment="0" max="32767" attributes="1"/>
-                          </Group>
+                      <Group type="103" groupAlignment="1" max="-2" attributes="0">
+                          <Component id="jLabelPsw" alignment="0" max="32767" attributes="1"/>
+                          <Component id="jLabelServerType" alignment="0" max="32767" attributes="1"/>
+                          <Component id="jLabelServerAddr" alignment="0" max="32767" attributes="1"/>
                       </Group>
-                      <Group type="102" alignment="1" attributes="0">
-                          <EmptySpace min="-2" pref="2" max="-2" attributes="0"/>
-                          <Component id="jLabelEmailAddr" min="-2" pref="138" max="-2" attributes="1"/>
-                      </Group>
+                      <Component id="jLabelEmailAddr" alignment="1" min="-2" pref="138" max="-2" attributes="1"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="1" attributes="0">
                       <Group type="102" attributes="0">
-                          <Component id="jTextFieldEmailAddr" pref="290" max="32767" attributes="1"/>
+                          <Component id="jTextFieldEmailAddr" pref="358" max="32767" attributes="1"/>
                           <EmptySpace max="-2" attributes="0"/>
                           <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <Group type="102" attributes="0">
-                          <Component id="jComboBoxServerType" pref="195" max="32767" attributes="1"/>
+                          <Component id="jComboBoxServerType" pref="227" max="32767" attributes="1"/>
                           <EmptySpace max="-2" attributes="0"/>
                           <Component id="jButton3" min="-2" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
                           <Component id="jLabel7" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <Group type="102" attributes="0">
-                          <Component id="jTextFieldServerAddr" pref="290" max="32767" attributes="1"/>
+                          <Component id="jTextFieldServerAddr" pref="358" max="32767" attributes="1"/>
                           <EmptySpace max="-2" attributes="0"/>
                           <Component id="jLabel3" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <Group type="102" alignment="0" attributes="0">
-                          <Component id="jPasswordField1" pref="290" max="32767" attributes="1"/>
+                          <Component id="jPasswordField1" pref="358" max="32767" attributes="1"/>
                           <EmptySpace max="-2" attributes="0"/>
                           <Component id="jLabel2" min="-2" max="-2" attributes="0"/>
                       </Group>
@@ -173,7 +168,7 @@
                       <Component id="jTextFieldServerAddr" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="jLabel3" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
-                  <EmptySpace pref="13" max="32767" attributes="0"/>
+                  <EmptySpace pref="41" max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -181,7 +176,7 @@
       <SubComponents>
         <Component class="javax.swing.JLabel" name="jLabelEmailAddr">
           <Properties>
-            <Property name="horizontalAlignment" type="int" value="0"/>
+            <Property name="horizontalAlignment" type="int" value="4"/>
             <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
               <ResourceString bundle="org/gephi/ui/spigot/plugin/email/Bundle.properties" key="EmailVisualPanel1.jLabelEmailAddr.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
             </Property>
@@ -189,7 +184,7 @@
         </Component>
         <Component class="javax.swing.JLabel" name="jLabelServerType">
           <Properties>
-            <Property name="horizontalAlignment" type="int" value="0"/>
+            <Property name="horizontalAlignment" type="int" value="4"/>
             <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
               <ResourceString bundle="org/gephi/ui/spigot/plugin/email/Bundle.properties" key="EmailVisualPanel1.jLabelServerType.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
             </Property>
@@ -207,7 +202,7 @@
         </Component>
         <Component class="javax.swing.JLabel" name="jLabelServerAddr">
           <Properties>
-            <Property name="horizontalAlignment" type="int" value="0"/>
+            <Property name="horizontalAlignment" type="int" value="4"/>
             <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
               <ResourceString bundle="org/gephi/ui/spigot/plugin/email/Bundle.properties" key="EmailVisualPanel1.jLabelServerAddr.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
             </Property>
@@ -215,7 +210,7 @@
         </Component>
         <Component class="javax.swing.JLabel" name="jLabelPsw">
           <Properties>
-            <Property name="horizontalAlignment" type="int" value="0"/>
+            <Property name="horizontalAlignment" type="int" value="4"/>
             <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
               <ResourceString bundle="org/gephi/ui/spigot/plugin/email/Bundle.properties" key="EmailVisualPanel1.jLabelPsw.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
             </Property>
@@ -331,7 +326,7 @@
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jComboBoxFileFiltersActionPerformed"/>
       </Events>
       <AuxValues>
-        <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="EmailFilesFilter[] filters = &#xa;                Lookup.getDefault().lookupAll(EmailFilesFilter.class).toArray(new EmailFilesFilter[0]);&#xa;String[] fileFilterString = new String[filters.length+1];&#xa;int index = 0;&#xa;fileFilterString[0] = &quot;--Select file type&quot;;&#xa;for(EmailFilesFilter f: filters){&#xa;    index ++;&#xa;    fileFilterString[index] = f.getDisplayName();&#xa;}"/>
+        <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="EmailFilesFilter[] filters = &#xa;                Lookup.getDefault().lookupAll(EmailFilesFilter.class).toArray(new EmailFilesFilter[0]);&#xa;String[] fileFilterString = new String[filters.length+1];&#xa;int index = 0;&#xa;fileFilterString[0] = NbBundle.getMessage(EmailVisualPanel1.class, &quot;EmailVisualPanel1.fileType.default&quot;);&#xa;for(EmailFilesFilter f: filters){&#xa;    index ++;&#xa;    fileFilterString[index] = f.getDisplayName();&#xa;}"/>
       </AuxValues>
     </Component>
     <Component class="javax.swing.JButton" name="jButtonFromLocalFile">

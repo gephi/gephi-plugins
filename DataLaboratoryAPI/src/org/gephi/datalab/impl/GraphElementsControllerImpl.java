@@ -5,18 +5,39 @@ Website : http://www.gephi.org
 
 This file is part of Gephi.
 
-Gephi is free software: you can redistribute it and/or modify
-it under the terms of the GNU Affero General Public License as
-published by the Free Software Foundation, either version 3 of the
-License, or (at your option) any later version.
+DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
 
-Gephi is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU Affero General Public License for more details.
+Copyright 2011 Gephi Consortium. All rights reserved.
 
-You should have received a copy of the GNU Affero General Public License
-along with Gephi.  If not, see <http://www.gnu.org/licenses/>.
+The contents of this file are subject to the terms of either the GNU
+General Public License Version 3 only ("GPL") or the Common
+Development and Distribution License("CDDL") (collectively, the
+"License"). You may not use this file except in compliance with the
+License. You can obtain a copy of the License at
+http://gephi.org/about/legal/license-notice/
+or /cddl-1.0.txt and /gpl-3.0.txt. See the License for the
+specific language governing permissions and limitations under the
+License.  When distributing the software, include this License Header
+Notice in each file and include the License files at
+/cddl-1.0.txt and /gpl-3.0.txt. If applicable, add the following below the
+License Header, with the fields enclosed by brackets [] replaced by
+your own identifying information:
+"Portions Copyrighted [year] [name of copyright owner]"
+
+If you wish your version of this file to be governed by only the CDDL
+or only the GPL Version 3, indicate your decision by adding
+"[Contributor] elects to include this software in this distribution
+under the [CDDL or GPL Version 3] license." If you do not indicate a
+single choice of license, a recipient has the option to distribute
+your version of this file under either the CDDL, the GPL Version 3 or
+to extend the choice of license to its licensees as provided above.
+However, if you add GPL Version 3 code and therefore, elected the GPL
+Version 3 license, then the option applies only if the new code is
+made subject to such option by the copyright holder.
+
+Contributor(s):
+
+Portions Copyrighted 2011 Gephi Consortium.
  */
 package org.gephi.datalab.impl;
 
@@ -24,10 +45,14 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
-import org.gephi.data.attributes.api.AttributeOrigin;
+import org.gephi.data.attributes.api.AttributeController;
 import org.gephi.data.attributes.api.AttributeRow;
+import org.gephi.data.attributes.api.AttributeTable;
 import org.gephi.data.properties.PropertiesColumn;
+import org.gephi.datalab.api.AttributeColumnsController;
 import org.gephi.datalab.api.GraphElementsController;
+import org.gephi.datalab.spi.rows.merge.AttributeRowsMergeStrategy;
+import org.gephi.graph.api.Attributes;
 import org.gephi.graph.api.DirectedGraph;
 import org.gephi.graph.api.Edge;
 import org.gephi.graph.api.Graph;
@@ -265,6 +290,69 @@ public class GraphElementsControllerImpl implements GraphElementsController {
         return canUngroup;
     }
 
+    public Node mergeNodes(Node[] nodes, Node selectedNode, AttributeRowsMergeStrategy[] mergeStrategies, boolean deleteMergedNodes) {
+        AttributeTable nodesTable = Lookup.getDefault().lookup(AttributeController.class).getModel().getNodeTable();
+        if (selectedNode == null) {
+            selectedNode = nodes[0];//Use first node as selected node if null
+        }
+        
+        //Create empty new node:
+        Node newNode = createNode("");
+
+        //Set properties (position, size and color) using the selected node properties:
+        NodeData newNodeData = newNode.getNodeData();
+        NodeData selectedNodeData = selectedNode.getNodeData();
+        newNodeData.setX(selectedNodeData.x());
+        newNodeData.setY(selectedNodeData.y());
+        newNodeData.setZ(selectedNodeData.z());
+        newNodeData.setSize(selectedNodeData.getSize());
+        newNodeData.setColor(selectedNodeData.r(), selectedNodeData.g(), selectedNodeData.b());
+        newNodeData.setAlpha(selectedNodeData.alpha());
+
+        //Prepare node rows:
+        Attributes[] rows = new Attributes[nodes.length];
+        for (int i = 0; i < nodes.length; i++) {
+            rows[i] = nodes[i].getAttributes();
+        }
+
+        //Merge attributes:        
+        AttributeColumnsController ac = Lookup.getDefault().lookup(AttributeColumnsController.class);
+        ac.mergeRowsValues(nodesTable, mergeStrategies, rows, selectedNode.getAttributes(), newNode.getAttributes());
+
+        //Assign edges to the new node:
+        Edge newEdge;
+        for (Node node : nodes) {
+            for (Edge edge : getNodeEdges(node)) {
+                if (edge.getSource() == node) {
+                    if (edge.getTarget() == node) {
+                        newEdge = createEdge(newNode, newNode, edge.isDirected());//Self loop because of edge between merged nodes
+                    } else {
+                        newEdge = createEdge(newNode, edge.getTarget(), edge.isDirected());
+                    }
+                } else {
+                    newEdge = createEdge(edge.getSource(), newNode, edge.isDirected());
+                }
+
+                if (newEdge != null) {//Edge may not be created if repeated
+                    //Copy edge attributes:
+                    AttributeRow row = (AttributeRow) edge.getAttributes();
+                    for (int i = 0; i < row.countValues(); i++) {
+                        if (row.getAttributeValueAt(i).getColumn().getIndex() != PropertiesColumn.EDGE_ID.getIndex()) {
+                            newEdge.getAttributes().setValue(i, row.getValue(i));
+                        }
+                    }
+                }
+            }
+        }
+
+        //Finally delete merged nodes:
+        if (deleteMergedNodes) {
+            deleteNodes(nodes);
+        }
+
+        return newNode;
+    }
+
     public boolean moveNodeToGroup(Node node, Node group) {
         if (canMoveNodeToGroup(node, group)) {
             getHierarchicalGraph().moveToGroup(node, group);
@@ -434,8 +522,9 @@ public class GraphElementsControllerImpl implements GraphElementsController {
     }
 
     private Node buildNode(String label, String id) {
-        Node newNode = buildNode(label);
-        getGraph().setId(newNode, id);
+        Node newNode = Lookup.getDefault().lookup(GraphController.class).getModel().factory().newNode(id);
+        newNode.getNodeData().setSize(DEFAULT_NODE_SIZE);
+        newNode.getNodeData().setLabel(label);
         return newNode;
     }
 
@@ -465,7 +554,7 @@ public class GraphElementsControllerImpl implements GraphElementsController {
         //Copy attributes:
         AttributeRow row = (AttributeRow) nodeData.getAttributes();
         for (int i = 0; i < row.countValues(); i++) {
-            if (row.getValues()[i].getColumn().getIndex()!=PropertiesColumn.NODE_ID.getIndex()) {
+            if (row.getAttributeValueAt(i).getColumn().getIndex() != PropertiesColumn.NODE_ID.getIndex()) {
                 copyData.getAttributes().setValue(i, row.getValue(i));
             }
         }

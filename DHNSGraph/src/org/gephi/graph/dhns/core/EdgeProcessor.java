@@ -5,18 +5,39 @@ Website : http://www.gephi.org
 
 This file is part of Gephi.
 
-Gephi is free software: you can redistribute it and/or modify
-it under the terms of the GNU Affero General Public License as
-published by the Free Software Foundation, either version 3 of the
-License, or (at your option) any later version.
+DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
 
-Gephi is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU Affero General Public License for more details.
+Copyright 2011 Gephi Consortium. All rights reserved.
 
-You should have received a copy of the GNU Affero General Public License
-along with Gephi.  If not, see <http://www.gnu.org/licenses/>.
+The contents of this file are subject to the terms of either the GNU
+General Public License Version 3 only ("GPL") or the Common
+Development and Distribution License("CDDL") (collectively, the
+"License"). You may not use this file except in compliance with the
+License. You can obtain a copy of the License at
+http://gephi.org/about/legal/license-notice/
+or /cddl-1.0.txt and /gpl-3.0.txt. See the License for the
+specific language governing permissions and limitations under the
+License.  When distributing the software, include this License Header
+Notice in each file and include the License files at
+/cddl-1.0.txt and /gpl-3.0.txt. If applicable, add the following below the
+License Header, with the fields enclosed by brackets [] replaced by
+your own identifying information:
+"Portions Copyrighted [year] [name of copyright owner]"
+
+If you wish your version of this file to be governed by only the CDDL
+or only the GPL Version 3, indicate your decision by adding
+"[Contributor] elects to include this software in this distribution
+under the [CDDL or GPL Version 3] license." If you do not indicate a
+single choice of license, a recipient has the option to distribute
+your version of this file under either the CDDL, the GPL Version 3 or
+to extend the choice of license to its licensees as provided above.
+However, if you add GPL Version 3 code and therefore, elected the GPL
+Version 3 license, then the option applies only if the new code is
+made subject to such option by the copyright holder.
+
+Contributor(s):
+
+Portions Copyrighted 2011 Gephi Consortium.
  */
 package org.gephi.graph.dhns.core;
 
@@ -137,7 +158,7 @@ public class EdgeProcessor {
             while (edgeIterator.hasNext()) {
                 AbstractEdge edge = edgeIterator.next();
                 AbstractNode source = edge.getSource(viewId);
-                if (!edge.isSelfLoop() && node.getEdgesOutTree().hasNeighbour(source)) {
+                if (!edge.isSelfLoop() && node.getMetaEdgesOutTree().hasNeighbour(source)) {
                     node.decMutualMetaEdgeDegree();
                     source.decMutualMetaEdgeDegree();
                     view.decMutualMetaEdgesTotal(1);
@@ -171,7 +192,7 @@ public class EdgeProcessor {
                 int targetPre = target.getPre();
                 if (targetPre >= rangeStart && targetPre <= rangeLimit) {
                     //The meta edge has to be removed because it's in the range
-                    if (!metaEdge.isSelfLoop() && target.getEdgesInTree().hasNeighbour(enabledNode)) {
+                    if (!metaEdge.isSelfLoop() && target.getMetaEdgesOutTree().hasNeighbour(enabledNode)) {
                         enabledNode.decMutualMetaEdgeDegree();
                         target.decMutualMetaEdgeDegree();
                         view.decMutualMetaEdgesTotal(1);
@@ -322,7 +343,7 @@ public class EdgeProcessor {
         MetaEdgeImpl newEdge = dhns.factory().newMetaEdge(source, target);
         source.getMetaEdgesOutTree().add(newEdge);
         target.getMetaEdgesInTree().add(newEdge);
-        if (!newEdge.isSelfLoop() && target.getEdgesInTree().hasNeighbour(source)) {
+        if (!newEdge.isSelfLoop() && target.getMetaEdgesOutTree().hasNeighbour(source)) {
             source.incMutualMetaEdgeDegree();
             target.incMutualMetaEdgeDegree();
             view.incMutualMetaEdgesTotal(1);
@@ -426,6 +447,10 @@ public class EdgeProcessor {
                 edgeIterator.remove();
                 source.getMetaEdgesOutTree().remove((MetaEdgeImpl) edge);
                 view.decMetaEdgesCount(1);
+                
+                if(node.getMetaEdgesOutTree().hasNeighbour(source)) {
+                    source.decMutualMetaEdgeDegree();
+                }
 
                 if (!node.getEdgesInTree().hasNeighbour(source)) {
                     AbstractEdge realEdge = dhns.factory().newEdge(source, node, edge.getWeight(), edge.isDirected());
@@ -522,11 +547,11 @@ public class EdgeProcessor {
         for (edgeIterator.setNode(disabledNode.getEdgesOutTree()); edgeIterator.hasNext();) {
             AbstractEdge edge = edgeIterator.next();
             AbstractNode target = edge.getTarget(view.getViewId());
-            if (target.isEnabled() || (parent != null && target.parent == parent)) {
+            if (target.isEnabled() || (parent != null && target.parent == parent) || edge.isSelfLoop()) {
                 target.decEnabledInDegree();
                 disabledNode.decEnabledOutDegree();
                 view.decEdgesCountEnabled(1);
-                if (target.getEdgesOutTree().hasNeighbour(disabledNode) && (parent == null || (parent != null && target.parent == parent && target.getId() < disabledNode.getId()))) {
+                if (target.getEdgesOutTree().hasNeighbour(disabledNode) && (parent == null || (parent != null && target.parent == parent && target.getId() < disabledNode.getId())) && !edge.isSelfLoop()) {
                     target.decEnabledMutualDegree();
                     disabledNode.decEnabledMutualDegree();
                     view.decMutualEdgesEnabled(1);

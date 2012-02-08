@@ -2,13 +2,36 @@
 <!-- You may freely edit this file. See harness/README in the NetBeans platform -->
 <!-- for some information on what you could do (e.g. targets to override). -->
 <!-- If you delete this file and reopen the project it will be recreated. -->
-<project name="0.8" basedir=".">
+<project name="0.8" basedir="." default="build-all">
+
     <description>Builds the module suite 0.8.</description>
     <import file="nbproject/build-impl.xml"/>
 
+    <echo message="Using harness folder ${harness.dir}"/>
+	
     <condition property="isWindows">
         <os family="windows" />
     </condition>
+
+    <condition property="isMac">
+        <os family="mac" />
+    </condition>
+
+	<!-- Build both windows and mac on a mac and only windows on a windows -->
+    <target name="build-all" depends="clean, build-zip, build-mac">
+        <echo message="Build completed. The files are available in the 'dist' folder."/>
+    </target>
+
+	<!-- Download the latest stable relese of the platform, including the JUnit plugin -->
+    <target name="download-platform">
+        <property name="platform.netbeans.version" value="7.0.1"/>
+        <taskdef name="autoupdate" classname="org.netbeans.nbbuild.AutoUpdate" classpath="${nbplatform.active.dir}/harness/tasks.jar"/>
+        <autoupdate installdir="${nbplatform.active.dir}" updatecenter="http://updates.netbeans.org/netbeans/updates/${platform.netbeans.version}/uc/final/certified/catalog.xml.gz" force="false">
+            <modules includes=".*junit.*" clusters="platform[0-9]*"/>
+            <modules includes=".*" clusters="harness[0-9]*"/>
+            <modules includes=".*" clusters="platform[0-9]*"/>
+        </autoupdate>
+    </target>
 
     <target name="build-launchers" depends="suite.build-launchers">
         <!-- Replace the icon for the Windows launcher exe. -->
@@ -27,7 +50,7 @@
     </target>
 
     <!-- Override to change Mac application icon. -->
-    <target name="build-mac" depends="suite.build-mac" description="Build Mac OS X Application">
+    <target name="build-mac" depends="suite.build-mac" if="isMac" description="Build Mac OS X Application">
         <property name="nbdist-contents.dir" value="${dist.dir}/${app.name}.app/Contents"/>
         <property name="nbdist-resources.dir" value="${nbdist-contents.dir}/Resources"/>
 
@@ -49,7 +72,7 @@
     </target>
 
     <target name="javadoc">
-        <javadoc destdir="dist/apiindex" windowtitle="Gephi API Index" encoding="UTF-8" charset="UTF-8" stylesheetfile="stylesheet.css"  packagenames="org.gephi.**.api,org.gephi.**.spi,org.gephi.data.*,org.gephi.utils.progress" overview="overview.html"  classpath="build/public-package-jars/org-openide-util-lookup.jar">
+        <javadoc destdir="dist/apiindex" windowtitle="Gephi API Index" encoding="UTF-8" charset="UTF-8" stylesheetfile="stylesheet.css"  packagenames="org.gephi.**.api,org.gephi.**.spi.*,org.gephi.data.*,org.gephi.utils.progress,org.gephi.preview.types" overview="overview.html"  classpath="build/public-package-jars/org-openide-util-lookup.jar">
             <sourcepath>
                 <pathelement path="AttributesAPI/src"/>
                 <pathelement path="ClusteringAPI/src"/>
@@ -63,34 +86,42 @@
                 <pathelement path="LayoutAPI/src"/>
                 <pathelement path="LongTaskAPI/src"/>
                 <pathelement path="PartitionAPI/src"/>
+                <pathelement path="PerspectiveAPI/src"/>
                 <pathelement path="PreviewAPI/src"/>
                 <pathelement path="ProjectAPI/src"/>
                 <pathelement path="RankingAPI/src"/>
+                <pathelement path="RankingPlugin/src"/>
                 <pathelement path="StatisticsAPI/src"/>
                 <pathelement path="ToolsAPI/src"/>
+                <pathelement path="TimelineAPI/src"/>
             </sourcepath>
-            <doctitle>Gephi 0.8alpha API Index</doctitle>
-            <header>Gephi 0.8alpha Javadoc</header>
+            <doctitle>Gephi 0.8 beta API Index</doctitle>
+            <header>Gephi 0.8 beta Javadoc</header>
         </javadoc>
+    </target>
+    
+    <target name="javadoc-zip" description="Javadoc zip" depends="javadoc">
+        <zip destfile="dist/apiindex/gephi-javadoc.zip" basedir="dist/" update="true"/>
     </target>
 
     <target name="download-l10n-jars" description="Download Netbeans Platform Localization JARs on the website">
         <property name="l10n.url" value="http://netbeans.org/project_downloads/nblocalization/7.0/"/>
         <property name="l10n.file" value="nb70_platform_l10n.zip"/>
         <property name="l10n.dir" value="l10n"/>
-        <get src="${l10n.url}${l10n.file}" dest="${dist.dir}" verbose="true" skipexisting="true" ignoreerrors="true"/>      
+        <get src="${l10n.url}${l10n.file}" dest="${dist.dir}" verbose="true" skipexisting="true" ignoreerrors="true"/>   
+        <available file="${dist.dir}/${l10n.file}" property="l10n.exists"/>
     </target>
 
-    <target name="unzip-l10n" depends="download-l10n-jars" description="Unzip Netbeans Platform Localization JARs">
+    <target name="unzip-l10n" depends="download-l10n-jars" description="Unzip Netbeans Platform Localization JARs" if="l10n.exists">
         <unzip src="${dist.dir}/${l10n.file}" dest="${dist.dir}/${l10n.dir}/${app.name}"/>
     </target>
     
-    <target name="merge-l10n-zip" depends="unzip-l10n" description="Merge Localization JARs on ZIP distribution" >
+    <target name="merge-l10n-zip" depends="unzip-l10n" description="Merge Localization JARs on ZIP distribution" if="l10n.exists">
         <zip destfile="${dist.dir}/${app.name}.zip" basedir="${dist.dir}/${l10n.dir}" update="true"/>
         <antcall target="clean-l10n"/>
     </target>
 
-    <target name="merge-l10n-mac" depends="unzip-l10n" description="Merge Localization JARs on MAC distribution" >
+    <target name="merge-l10n-mac" depends="unzip-l10n" description="Merge Localization JARs on MAC distribution" if="l10n.exists">
         <copy todir="${dist.dir}/${app.name}.app/Contents/Resources">
             <fileset dir="${dist.dir}/${l10n.dir}"/>
         </copy>
@@ -106,6 +137,29 @@
         <delete failonerror="false" includeemptydirs="true">
             <fileset dir="toolkit"/>
         </delete>
+    </target>
+
+	<target name="release-toolkit"  depends="toolkit, toolkit-javadoc" description="Release Toolkit">
+		<property name="toolkit.dir" value="toolkit"/>
+ 		<property name="demos.url" value="https://github.com/gephi/gephi-toolkit-demos/zipball/master"/>
+        <property name="demos.file" value="toolkit-demos"/>
+        <get src="${demos.url}" dest="${toolkit.dir}" verbose="true" skipexisting="true" ignoreerrors="true"/>
+		<delete dir="${toolkit.dir}/${demos.file}"/>
+		<unzip src="${toolkit.dir}/master" dest="${toolkit.dir}/${demos.file}"/>
+		<path id="demos_folder_name">
+			<dirset dir="${toolkit.dir}/${demos.file}/">
+		    	<include name="gephi-*"/>
+			</dirset>
+		</path>
+		<property name="demos-folder-name" refid="demos_folder_name" />
+		<move file="${demos-folder-name}" tofile="${toolkit.dir}/${demos.file}" />
+		<delete dir="${demos-folder-name}"/>
+		<copy tofile="${toolkit.dir}/${demos.file}/lib/gephi-toolkit.jar" file="${toolkit.dir}/gephi-toolkit.jar" />
+		<copy tofile="${toolkit.dir}/${demos.file}/lib/toolkit-javadoc.zip" file="${toolkit.dir}/toolkit-javadoc.zip" />
+		<delete file="${toolkit.dir}/master"/>
+		<zip destfile="${toolkit.dir}/gephi-toolkit.zip" basedir="${toolkit.dir}"
+		       includes="gephi-toolkit.jar,toolkit-demos/**,toolkit-javadoc.zip"
+		  />
     </target>
 
     <target name="toolkit" depends="clean-toolkit,build,build-launchers" description="Build Gephi Toolkit JAR">
@@ -143,7 +197,11 @@
                 <include name="org-netbeans-modules-queries.jar"/>
             </fileset>
         </copy>
-        <copy file="${toolkit.platformdir}/modules/ext/jna-3.2.7.jar" todir="${toolkit.tempdir}"/>
+        <copy todir="${toolkit.tempdir}">
+            <fileset dir="${toolkit.platformdir}/modules/ext/">
+                <include name="jna-*.jar"/>
+            </fileset>
+        </copy>
         <copy todir="${toolkit.tempdir}">
             <fileset dir="${build.dir}">
                 <include name="org-gephi-algorithms.jar"/>
@@ -165,7 +223,7 @@
                 <include name="org-gephi-layout-api.jar"/>
                 <include name="org-gephi-layout-plugin.jar"/>
                 <include name="org-gephi-preview-api.jar"/>
-                <include name="org-gephi-preview.jar"/>
+                <include name="org-gephi-preview-plugin.jar"/>
                 <include name="org-gephi-project-api.jar"/>
                 <include name="org-gephi-statistics-api.jar"/>
                 <include name="org-gephi-statistics-plugin.jar"/>
@@ -175,6 +233,7 @@
                 <include name="org-gephi-utils.jar"/>
                 <include name="org-gephi-utils-longtask.jar" />
                 <include name="org-gephi-ranking-api.jar"/>
+                <include name="org-gephi-ranking-plugin.jar"/>
                 <include name="org-gephi-partition-api.jar"/>
                 <include name="org-gephi-partition-plugin.jar"/>
                 <include name="org-gephi-io-generator-api.jar"/>
@@ -196,6 +255,8 @@
                 <include name="mysql-connector*.jar"/>
                 <include name="postgresql*.jar"/>
                 <include name="sqljdbc*.jar"/>
+                <include name="sqlite*.jar"/>
+                <include name="teradata*.jar"/>
                 <include name="google-collect*.jar"/>
                 <include name="stax-utils.jar"/>
                 <include name="trove*.jar"/>
@@ -226,6 +287,8 @@
                 <provider classname="com.mysql.jdbc.Driver"/>
                 <provider classname="org.postgresql.Driver"/>
                 <provider classname="com.microsoft.sqlserver.jdbc.SQLServerDriver"/>
+                <provider classname="org.sqlite.JDBC"/>
+                <provider classname="com.teradata.jdbc.TeraDriver"/>
             </service>
             
             <service type="org.gephi.project.spi.WorkspacePersistenceProvider">
@@ -237,6 +300,8 @@
                 <provider classname="org.gephi.filters.FilterModelPersistenceProvider"/>
                 <provider classname="org.gephi.layout.LayoutModelPersistenceProvider"/>
                 <provider classname="org.gephi.partition.impl.PartitionModelPersistenceProvider"/>
+                <provider classname="org.gephi.statistics.StatisticsPersistenceProvider"/>
+                <provider classname="org.gephi.preview.PreviewPersistenceProvider"/>
             </service>
             
             <service type="org.gephi.project.spi.WorkspaceDuplicateProvider">
@@ -248,6 +313,8 @@
             <service type="org.openide.util.Lookup" provider="" />
             <service type="org.openide.filesystems.Repository" provider="" />
             <service type="org.openide.util.NbPreferences$Provider" provider="" />
+            <service type="org.netbeans.modules.masterfs.watcher.Watcher" provider="" />
+            <service type="org.netbeans.modules.masterfs.providers.AnnotationProvider" provider="" />
             
             <manifest>
             </manifest>
@@ -255,7 +322,9 @@
 
         <zip destfile="${toolkit.jar}">
             <zipfileset src="${toolkit.dir}/temp_final.jar"
-            excludes="META-INF/*.SF, META-INF/*.DSA, META-INF/*.RSA"/>
+            excludes="META-INF/*.SF, META-INF/*.DSA, META-INF/*.RSA,
+            org/netbeans/modules/masterfs/watcher/Watcher*,
+            META-INF/services/org.netbeans.modules.masterfs.watcher.Watcher"/>
         </zip>
 
         <delete file="${toolkit.dir}/temp_final.jar"/>
@@ -281,6 +350,7 @@
                 <pathelement path="LayoutAPI/src"/>
                 <pathelement path="LayoutPlugin/src"/>
                 <pathelement path="PreviewAPI/src"/>
+                <pathelement path="PreviewPlugin/src"/>
                 <pathelement path="ProjectAPI/src"/>
                 <pathelement path="StatisticsAPI/src"/>
                 <pathelement path="StatisticsPlugin/src"/>
@@ -293,6 +363,7 @@
                 <pathelement path="GeneratorAPI/src"/>
                 <pathelement path="GeneratorPlugin/src"/>
                 <pathelement path="DataLaboratoryAPI/src"/>
+                <pathelement path="TimelineAPI/src"/>
             </sourcepath>
             <doctitle>Gephi Toolkit Javadoc</doctitle>
             <header>Gephi Toolkit Javadoc</header>
