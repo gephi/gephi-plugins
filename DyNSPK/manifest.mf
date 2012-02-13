@@ -1,0 +1,5 @@
+Manifest-Version: 1.0
+OpenIDE-Module: edu.uic.cs.compbio.DyNSPK
+OpenIDE-Module-Localizing-Bundle: edu/uic/cs/compbio/DyNSPK/Bundle.properties
+OpenIDE-Module-Specification-Version: 1.0
+
