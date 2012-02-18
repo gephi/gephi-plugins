@@ -114,4 +114,16 @@ public class GyFilter extends PyObject {
 
         return null;
     }
+
+    @Override
+    public void __setattr__(String name, PyObject value) {
+        GyGraph graph = (GyGraph) this.namespace.__finditem__(GyNamespace.GRAPH_NAME);
+        GySubGraph subGraph = graph.filter(this);
+
+        PySet nodes = (PySet) subGraph.__findattr_ex__("nodes");
+        PySet edges = (PySet) subGraph.__findattr_ex__("edges");
+
+        nodes.__setattr__(name, value);
+        edges.__setattr__(name, value);
+    }
 }
