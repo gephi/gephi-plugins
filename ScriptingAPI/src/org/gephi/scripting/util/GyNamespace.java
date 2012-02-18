@@ -141,7 +141,7 @@ public final class GyNamespace extends PyStringMap {
                 getGraphModel().setVisibleView(subGraph.getUnderlyingGraphView());
                 return;
             } else {
-                // TODO: throw an exception
+                throw Py.TypeError("Passed object is not a valid subgraph.");
             }
         } else if (key.equals(GRAPH_NAME)) {
             // Checks if the key is the variable name of the main graph
