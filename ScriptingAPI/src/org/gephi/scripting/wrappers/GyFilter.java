@@ -45,7 +45,6 @@ public class GyFilter extends PyObject {
     private GyNamespace namespace;
     /** The underlying query object */
     private Query underlyingQuery;
-    private PySet underlyingSet;
 
     /**
      * Constructor for the filter wrapper.
@@ -71,14 +70,6 @@ public class GyFilter extends PyObject {
      */
     public void setUnderlyingQuery(Query query) {
         this.underlyingQuery = query;
-    }
-
-    public PySet getUnderlyingSet() {
-        return underlyingSet;
-    }
-
-    public void setUnderlyingSet(PySet underlyingSet) {
-        this.underlyingSet = underlyingSet;
     }
 
     @Override
