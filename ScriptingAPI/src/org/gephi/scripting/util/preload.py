@@ -116,3 +116,4 @@ add_filter = addFilter
 get_layout_builders = getLayoutBuilders
 run_layout = runLayout
 stop_layout = stopLayout
+graph = g
