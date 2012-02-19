@@ -165,7 +165,7 @@ public class DynamicGraphDensity implements DynamicStatistics {
             interval += DynamicUtilities.getXMLDateStringFromDouble(densities.get(i).getHigh()).replace('T', ' ').substring(0, 19);
             interval += "]";
             
-            report += Double.toString(densities.get(i).getValue());
+            //report += Double.toString(densities.get(i).getValue());
             inDataset.addValue(densities.get(i).getValue(), "in degrees", interval);
 
 
