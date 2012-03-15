@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<module codename="org.gephi.datalab.api">
-    <module_version install_time="1326173665493" last="true" origin="Ant" specification_version="0.8.0.8">
-        <file crc="3946728914" name="config/Modules/org-gephi-datalab-api.xml"/>
-        <file crc="4206416166" name="modules/org-gephi-datalab-api.jar"/>
-    </module_version>
-</module>

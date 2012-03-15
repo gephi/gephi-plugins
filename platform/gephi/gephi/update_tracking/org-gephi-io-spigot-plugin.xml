@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<module codename="org.gephi.io.spigot.plugin">
-    <module_version install_time="1326173680699" last="true" origin="Ant" specification_version="0.8.0.1">
-        <file crc="3789482422" name="config/Modules/org-gephi-io-spigot-plugin.xml"/>
-        <file crc="3183686417" name="modules/org-gephi-io-spigot-plugin.jar"/>
-    </module_version>
-</module>

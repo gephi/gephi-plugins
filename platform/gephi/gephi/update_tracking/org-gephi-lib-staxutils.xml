@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<module codename="org.gephi.lib.staxutils">
-    <module_version install_time="1317726324991" last="true" origin="installer" specification_version="1.0">
-        <file crc="2232046053" name="config/Modules/org-gephi-lib-staxutils.xml"/>
-        <file crc="1645750284" name="modules/ext/stax-utils.jar"/>
-        <file crc="2892587253" name="modules/org-gephi-lib-staxutils.jar"/>
-    </module_version>
-</module>

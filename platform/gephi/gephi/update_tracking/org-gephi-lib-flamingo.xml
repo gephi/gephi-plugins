@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<module codename="org.gephi.lib.flamingo">
-    <module_version install_time="1317726315245" last="true" origin="installer" specification_version="5.0.1">
-        <file crc="774117821" name="config/Modules/org-gephi-lib-flamingo.xml"/>
-        <file crc="51273591" name="modules/ext/flamingo.jar"/>
-        <file crc="1976092896" name="modules/org-gephi-lib-flamingo.jar"/>
-    </module_version>
-</module>
