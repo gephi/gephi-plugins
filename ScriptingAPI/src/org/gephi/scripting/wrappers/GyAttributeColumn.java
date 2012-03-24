@@ -89,11 +89,7 @@ public class GyAttributeColumn extends GyAttribute {
             throw Py.TypeError("unsupported operator for attribute type '" + underlyingAttributeColumn.getType() + "'");
         }
 
-        if (AttributeUtils.getDefault().isNodeColumn(underlyingAttributeColumn)) {
-            attributeRangeFilter = new AttributeRangeBuilder.NodeAttributeRangeFilter(underlyingAttributeColumn);
-        } else {
-            attributeRangeFilter = new AttributeRangeBuilder.EdgeAttributeRangeFilter(underlyingAttributeColumn);
-        }
+        attributeRangeFilter = new AttributeRangeBuilder.AttributeRangeFilter(underlyingAttributeColumn);
 
         query = filterController.createQuery(attributeRangeFilter);
         attributeRangeFilter.setRange(range);
@@ -110,11 +106,7 @@ public class GyAttributeColumn extends GyAttribute {
         if (AttributeUtils.getDefault().isNumberColumn(underlyingAttributeColumn)) {
             AttributeEqualBuilder.EqualNumberFilter filter;
 
-            if (AttributeUtils.getDefault().isNodeColumn(underlyingAttributeColumn)) {
-                filter = new AttributeEqualBuilder.NodeEqualNumberFilter(underlyingAttributeColumn);
-            } else {
-                filter = new AttributeEqualBuilder.EdgeEqualNumberFilter(underlyingAttributeColumn);
-            }
+            filter = new AttributeEqualBuilder.EqualNumberFilter(underlyingAttributeColumn);
 
             attributeEqualFilter = filter;
             query = filterController.createQuery(attributeEqualFilter);
@@ -123,11 +115,7 @@ public class GyAttributeColumn extends GyAttribute {
         } else if (AttributeUtils.getDefault().isStringColumn(underlyingAttributeColumn)) {
             AttributeEqualBuilder.EqualStringFilter filter;
 
-            if (AttributeUtils.getDefault().isNodeColumn(underlyingAttributeColumn)) {
-                filter = new AttributeEqualBuilder.NodeEqualStringFilter();
-            } else {
-                filter = new AttributeEqualBuilder.EdgeEqualStringFilter();
-            }
+            filter = new AttributeEqualBuilder.EqualStringFilter(underlyingAttributeColumn);
 
             attributeEqualFilter = filter;
             query = filterController.createQuery(attributeEqualFilter);
@@ -137,11 +125,7 @@ public class GyAttributeColumn extends GyAttribute {
         } else if (underlyingAttributeColumn.getType() == AttributeType.BOOLEAN) {
             AttributeEqualBuilder.EqualBooleanFilter filter;
 
-            if (AttributeUtils.getDefault().isNodeColumn(underlyingAttributeColumn)) {
-                filter = new AttributeEqualBuilder.NodeEqualBooleanFilter();
-            } else {
-                filter = new AttributeEqualBuilder.EdgeEqualBooleanFilter();
-            }
+            filter = new AttributeEqualBuilder.EqualBooleanFilter(underlyingAttributeColumn);
 
             query = filterController.createQuery(filter);
 
