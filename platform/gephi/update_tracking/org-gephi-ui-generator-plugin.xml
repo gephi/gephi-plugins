@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module codename="org.gephi.ui.generator.plugin">
+    <module_version install_time="1332622382352" last="true" origin="Ant" specification_version="0.8">
+        <file crc="3182978886" name="config/Modules/org-gephi-ui-generator-plugin.xml"/>
+        <file crc="3289917937" name="modules/org-gephi-ui-generator-plugin.jar"/>
+    </module_version>
+</module>

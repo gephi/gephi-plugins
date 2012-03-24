@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<module codename="org.gephi.utils.collection">
-    <module_version install_time="1317726328617" last="true" origin="installer" specification_version="0.8.0.1">
-        <file crc="4231463630" name="config/Modules/org-gephi-utils-collection.xml"/>
-        <file crc="2878195793" name="modules/ext/google-collect-1.0.jar"/>
-        <file crc="3288490373" name="modules/ext/trove-2.1.0.jar"/>
-        <file crc="161093560" name="modules/org-gephi-utils-collection.jar"/>
-    </module_version>
-</module>

@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<module codename="org.gephi.lib.javacsv">
-    <module_version install_time="1317726318747" last="true" origin="installer" specification_version="2.0">
-        <file crc="355630174" name="config/Modules/org-gephi-lib-javacsv.xml"/>
-        <file crc="157780274" name="modules/ext/javacsv.jar"/>
-        <file crc="2106684199" name="modules/org-gephi-lib-javacsv.jar"/>
-    </module_version>
-</module>

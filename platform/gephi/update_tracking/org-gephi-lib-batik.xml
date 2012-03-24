@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module codename="org.gephi.lib.batik">
+    <module_version install_time="1332622373909" last="true" origin="Ant" specification_version="1.7">
+        <file crc="2262186251" name="config/Modules/org-gephi-lib-batik.xml"/>
+        <file crc="3554543657" name="modules/ext/batik-anim.jar"/>
+        <file crc="3611392181" name="modules/ext/batik-awt-util.jar"/>
+        <file crc="3109020801" name="modules/ext/batik-bridge.jar"/>
+        <file crc="2636257451" name="modules/ext/batik-css.jar"/>
+        <file crc="3204984344" name="modules/ext/batik-dom.jar"/>
+        <file crc="953793239" name="modules/ext/batik-ext.jar"/>
+        <file crc="2179353059" name="modules/ext/batik-gvt.jar"/>
+        <file crc="2626389382" name="modules/ext/batik-parser.jar"/>
+        <file crc="1163528020" name="modules/ext/batik-script.jar"/>
+        <file crc="1071338746" name="modules/ext/batik-svg-dom.jar"/>
+        <file crc="3984149222" name="modules/ext/batik-transcoder.jar"/>
+        <file crc="3921999510" name="modules/ext/batik-util.jar"/>
+        <file crc="1528363556" name="modules/ext/batik-xml.jar"/>
+        <file crc="2272801337" name="modules/ext/pdf-transcoder.jar"/>
+        <file crc="2627674371" name="modules/ext/xml-apis-ext.jar"/>
+        <file crc="585792146" name="modules/org-gephi-lib-batik.jar"/>
+    </module_version>
+</module>

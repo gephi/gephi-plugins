@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module codename="org.gephi.lib.gleem">
+    <module_version install_time="1332622421824" last="true" origin="Ant" specification_version="1.0">
+        <file crc="794636180" name="config/Modules/org-gephi-lib-gleem.xml"/>
+        <file crc="2976780031" name="modules/org-gephi-lib-gleem.jar"/>
+    </module_version>
+</module>

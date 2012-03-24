@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module codename="org.gephi.ui.upgrader">
+    <module_version install_time="1332622422547" last="true" origin="Ant" specification_version="0.8">
+        <file crc="2780943924" name="config/Modules/org-gephi-ui-upgrader.xml"/>
+        <file crc="3804132104" name="modules/org-gephi-ui-upgrader.jar"/>
+    </module_version>
+</module>

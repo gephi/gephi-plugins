@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<module codename="org.gephi.lib.timing">
-    <module_version install_time="1317726325838" last="true" origin="installer" specification_version="1.1">
-        <file crc="604845913" name="config/Modules/org-gephi-lib-timing.xml"/>
-        <file crc="331990583" name="modules/ext/timingframework-classic-1.1.jar"/>
-        <file crc="1132250772" name="modules/org-gephi-lib-timing.jar"/>
-    </module_version>
-</module>

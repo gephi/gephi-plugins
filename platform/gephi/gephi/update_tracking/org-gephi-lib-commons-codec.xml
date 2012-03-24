@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<module codename="org.gephi.lib.commons.codec">
-    <module_version install_time="1317726313167" last="true" origin="installer" specification_version="1.4">
-        <file crc="2718973395" name="config/Modules/org-gephi-lib-commons-codec.xml"/>
-        <file crc="3905088850" name="modules/ext/commons-codec-1.4.jar"/>
-        <file crc="2201745825" name="modules/org-gephi-lib-commons-codec.jar"/>
-    </module_version>
-</module>

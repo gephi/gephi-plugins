@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module codename="org.gephi.algorithms">
+    <module_version install_time="1332622430782" last="true" origin="Ant" specification_version="0.8.0.1">
+        <file crc="3892608538" name="config/Modules/org-gephi-algorithms.xml"/>
+        <file crc="3962707007" name="modules/org-gephi-algorithms.jar"/>
+    </module_version>
+</module>

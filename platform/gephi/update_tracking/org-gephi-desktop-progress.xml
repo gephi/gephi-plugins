@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module codename="org.gephi.desktop.progress">
+    <module_version install_time="1332622388810" last="true" origin="Ant" specification_version="0.8.0.4">
+        <file crc="2259707326" name="config/Modules/org-gephi-desktop-progress.xml"/>
+        <file crc="3902561124" name="modules/org-gephi-desktop-progress.jar"/>
+    </module_version>
+</module>

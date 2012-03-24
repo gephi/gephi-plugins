@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module codename="org.jdesktop.swingx">
+    <module_version install_time="1332622369242" last="true" origin="Ant" specification_version="1.6.1">
+        <file crc="3305547730" name="config/Modules/org-jdesktop-swingx.xml"/>
+        <file crc="1668775733" name="modules/ext/swingx-1.6.1.jar"/>
+        <file crc="2978096038" name="modules/ext/swingx-beaninfo-1.6.1.jar"/>
+        <file crc="2138055911" name="modules/org-jdesktop-swingx.jar"/>
+    </module_version>
+</module>

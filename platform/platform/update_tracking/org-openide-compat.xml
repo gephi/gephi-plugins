@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module codename="org.openide.compat">
+    <module_version install_time="1332622337062" last="true" origin="Ant" specification_version="6.19.1">
+        <file crc="2448415079" name="modules/locale/org-openide-compat_ja.jar"/>
+        <file crc="78667790" name="modules/locale/org-openide-compat_pt_BR.jar"/>
+        <file crc="2327112847" name="modules/locale/org-openide-compat_ru.jar"/>
+        <file crc="4208820339" name="modules/locale/org-openide-compat_zh_CN.jar"/>
+        <file crc="1028000658" name="config/Modules/org-openide-compat.xml"/>
+        <file crc="3996873339" name="modules/org-openide-compat.jar"/>
+    </module_version>
+</module>

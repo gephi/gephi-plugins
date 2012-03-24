@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module codename="org.gephi.lib.processing">
+    <module_version install_time="1332622354600" last="true" origin="Ant" specification_version="1.5.1">
+        <file crc="1609696445" name="config/Modules/org-gephi-lib-processing.xml"/>
+        <file crc="1906956389" name="modules/ext/core.jar"/>
+        <file crc="1233620413" name="modules/org-gephi-lib-processing.jar"/>
+    </module_version>
+</module>

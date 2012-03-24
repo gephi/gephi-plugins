@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module codename="org.gephi.lib.javamail">
+    <module_version install_time="1332622416873" last="true" origin="Ant" specification_version="1.0">
+        <file crc="1523317817" name="config/Modules/org-gephi-lib-javamail.xml"/>
+        <file crc="2085511553" name="modules/ext/dsn.jar"/>
+        <file crc="1534254416" name="modules/ext/imap.jar"/>
+        <file crc="3994771362" name="modules/ext/mail.jar"/>
+        <file crc="2493830962" name="modules/ext/mailapi.jar"/>
+        <file crc="615255452" name="modules/ext/pop3.jar"/>
+        <file crc="2370330402" name="modules/ext/smtp.jar"/>
+        <file crc="653680127" name="modules/org-gephi-lib-javamail.jar"/>
+    </module_version>
+</module>

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module codename="org.gephi.ui.components.SplineEditor">
+    <module_version install_time="1332622353540" last="true" origin="Ant" specification_version="0.8.0.1">
+        <file crc="2181378415" name="config/Modules/org-gephi-ui-components-SplineEditor.xml"/>
+        <file crc="1156182063" name="modules/org-gephi-ui-components-SplineEditor.jar"/>
+    </module_version>
+</module>

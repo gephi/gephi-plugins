@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module codename="org.gephi.desktop.tools">
+    <module_version install_time="1332622348704" last="true" origin="Ant" specification_version="0.8.0.3">
+        <file crc="1423726154" name="config/Modules/org-gephi-desktop-tools.xml"/>
+        <file crc="3289446389" name="modules/org-gephi-desktop-tools.jar"/>
+    </module_version>
+</module>

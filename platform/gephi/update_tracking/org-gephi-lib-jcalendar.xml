@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module codename="org.gephi.lib.jcalendar">
+    <module_version install_time="1332622418863" last="true" origin="Ant" specification_version="1.0">
+        <file crc="2568105360" name="config/Modules/org-gephi-lib-jcalendar.xml"/>
+        <file crc="1052385138" name="modules/ext/jcalendar-1.3.3.jar"/>
+        <file crc="3251530755" name="modules/ext/looks-2.0.1.jar"/>
+        <file crc="3994507473" name="modules/org-gephi-lib-jcalendar.jar"/>
+    </module_version>
+</module>

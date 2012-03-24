@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<module codename="org.gephi.ui.components.SplineEditor">
-    <module_version install_time="1317726375794" last="true" origin="installer" specification_version="0.8.0.1">
-        <file crc="2181378415" name="config/Modules/org-gephi-ui-components-SplineEditor.xml"/>
-        <file crc="2016593088" name="modules/ext/TimingFramework-1.0.jar"/>
-        <file crc="2848808423" name="modules/org-gephi-ui-components-SplineEditor.jar"/>
-    </module_version>
-</module>
