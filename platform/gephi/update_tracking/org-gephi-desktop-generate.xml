@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <module codename="org.gephi.desktop.generate">
-    <module_version install_time="1330232189517" last="true" origin="Ant" specification_version="0.8">
-        <file crc="54718609" name="config/Modules/org-gephi-desktop-generate.xml"/>
-        <file crc="1353842365" name="modules/org-gephi-desktop-generate.jar"/>
+    <module_version install_time="1332622351683" last="true" origin="Ant" specification_version="0.8">
+        <file crc="3070562525" name="config/Modules/org-gephi-desktop-generate.xml"/>
+        <file crc="3465298811" name="modules/org-gephi-desktop-generate.jar"/>
     </module_version>
 </module>

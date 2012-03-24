@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <module codename="org.gephi.dynamic">
-    <module_version install_time="1330232239050" last="true" origin="Ant" specification_version="0.8.0.3">
-        <file crc="2255637323" name="config/Modules/org-gephi-dynamic.xml"/>
-        <file crc="3256186431" name="modules/org-gephi-dynamic.jar"/>
+    <module_version install_time="1332622419257" last="true" origin="Ant" specification_version="0.8.0.5">
+        <file crc="3620388957" name="config/Modules/org-gephi-dynamic.xml"/>
+        <file crc="2675320827" name="modules/org-gephi-dynamic.jar"/>
     </module_version>
 </module>

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <module codename="org.gephi.lib.commons.codec">
-    <module_version install_time="1330232187958" last="true" origin="Ant" specification_version="1.4">
-        <file crc="2957653263" name="config/Modules/org-gephi-lib-commons-codec.xml"/>
+    <module_version install_time="1332622349432" last="true" origin="Ant" specification_version="1.4">
+        <file crc="2718973395" name="config/Modules/org-gephi-lib-commons-codec.xml"/>
         <file crc="126352050" name="modules/ext/commons-codec-1.4.jar"/>
-        <file crc="240081822" name="modules/org-gephi-lib-commons-codec.jar"/>
+        <file crc="3690257707" name="modules/org-gephi-lib-commons-codec.jar"/>
     </module_version>
 </module>

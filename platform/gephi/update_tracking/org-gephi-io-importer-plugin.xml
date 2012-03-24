@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <module codename="org.gephi.io.importer.plugin">
-    <module_version install_time="1330232232231" last="true" origin="Ant" specification_version="0.8.0.5">
-        <file crc="3694370859" name="config/Modules/org-gephi-io-importer-plugin.xml"/>
-        <file crc="299014679" name="modules/org-gephi-io-importer-plugin.jar"/>
+    <module_version install_time="1332622410928" last="true" origin="Ant" specification_version="0.8.0.6">
+        <file crc="968561685" name="config/Modules/org-gephi-io-importer-plugin.xml"/>
+        <file crc="4041085872" name="modules/org-gephi-io-importer-plugin.jar"/>
     </module_version>
 </module>

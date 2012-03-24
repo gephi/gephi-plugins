@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <module codename="org.gephi.utils.collection">
-    <module_version install_time="1330232231314" last="true" origin="Ant" specification_version="0.8.0.1">
-        <file crc="3014556075" name="config/Modules/org-gephi-utils-collection.xml"/>
+    <module_version install_time="1332622409645" last="true" origin="Ant" specification_version="0.8.0.1">
+        <file crc="4231463630" name="config/Modules/org-gephi-utils-collection.xml"/>
         <file crc="2263279560" name="modules/ext/google-collect-1.0.jar"/>
         <file crc="800473109" name="modules/ext/trove-2.1.0.jar"/>
-        <file crc="1811511103" name="modules/org-gephi-utils-collection.jar"/>
+        <file crc="1228885906" name="modules/org-gephi-utils-collection.jar"/>
     </module_version>
 </module>

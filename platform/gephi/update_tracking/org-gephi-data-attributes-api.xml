@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <module codename="org.gephi.data.attributes.api">
-    <module_version install_time="1330232190327" last="true" origin="Ant" specification_version="0.8.0.4">
-        <file crc="1308345016" name="config/Modules/org-gephi-data-attributes-api.xml"/>
-        <file crc="4039548804" name="modules/org-gephi-data-attributes-api.jar"/>
+    <module_version install_time="1332622352265" last="true" origin="Ant" specification_version="0.8.0.6">
+        <file crc="2552114538" name="config/Modules/org-gephi-data-attributes-api.xml"/>
+        <file crc="2964671396" name="modules/org-gephi-data-attributes-api.jar"/>
     </module_version>
 </module>

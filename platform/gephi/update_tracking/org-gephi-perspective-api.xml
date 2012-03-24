@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <module codename="org.gephi.perspective.api">
-    <module_version install_time="1330232247292" last="true" origin="Ant" specification_version="0.8">
-        <file crc="4229696985" name="config/Modules/org-gephi-perspective-api.xml"/>
-        <file crc="1277154382" name="modules/org-gephi-perspective-api.jar"/>
+    <module_version install_time="1332622413845" last="true" origin="Ant" specification_version="0.8.1">
+        <file crc="2277141879" name="config/Modules/org-gephi-perspective-api.xml"/>
+        <file crc="1377780311" name="modules/org-gephi-perspective-api.jar"/>
     </module_version>
 </module>

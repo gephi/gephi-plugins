@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <module codename="org.joda.time">
-    <module_version install_time="1330232240977" last="true" origin="Ant" specification_version="1.0">
-        <file crc="1370848409" name="config/Modules/org-joda-time.xml"/>
+    <module_version install_time="1332622423590" last="true" origin="Ant" specification_version="1.0">
+        <file crc="2238865622" name="config/Modules/org-joda-time.xml"/>
         <file crc="744227393" name="modules/ext/joda-time-1.6.jar"/>
-        <file crc="2545201216" name="modules/org-joda-time.jar"/>
+        <file crc="3614674897" name="modules/org-joda-time.jar"/>
     </module_version>
 </module>

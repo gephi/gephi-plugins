@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <module codename="org.gephi.ui.components">
-    <module_version install_time="1330232198797" last="true" origin="Ant" specification_version="0.8.0.4">
-        <file crc="27255901" name="config/Modules/org-gephi-ui-components.xml"/>
+    <module_version install_time="1332622356578" last="true" origin="Ant" specification_version="0.8.0.6">
+        <file crc="1396020538" name="config/Modules/org-gephi-ui-components.xml"/>
         <file crc="4147050779" name="modules/ext/FontChooser.jar"/>
         <file crc="1695224237" name="modules/ext/MigLayout-3.7.1.jar"/>
         <file crc="1263379670" name="modules/ext/colorchooser.jar"/>
-        <file crc="1642818558" name="modules/org-gephi-ui-components.jar"/>
+        <file crc="2041263674" name="modules/org-gephi-ui-components.jar"/>
     </module_version>
 </module>

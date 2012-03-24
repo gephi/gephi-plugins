@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <module codename="org.gephi.io.processor.plugin">
-    <module_version install_time="1330232202676" last="true" origin="Ant" specification_version="0.8">
-        <file crc="2630480340" name="config/Modules/org-gephi-io-processor-plugin.xml"/>
-        <file crc="1146155919" name="modules/org-gephi-io-processor-plugin.jar"/>
+    <module_version install_time="1332622366261" last="true" origin="Ant" specification_version="0.8">
+        <file crc="4217858483" name="config/Modules/org-gephi-io-processor-plugin.xml"/>
+        <file crc="3776948232" name="modules/org-gephi-io-processor-plugin.jar"/>
     </module_version>
 </module>

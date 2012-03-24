@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <module codename="org.openide.windows">
-    <module_version install_time="1330232150774" last="true" origin="Ant" specification_version="6.40.1">
-        <file crc="3501802074" name="modules/locale/org-openide-windows_ja.jar"/>
-        <file crc="1675007166" name="modules/locale/org-openide-windows_pt_BR.jar"/>
-        <file crc="2700299681" name="modules/locale/org-openide-windows_ru.jar"/>
-        <file crc="4229475394" name="modules/locale/org-openide-windows_zh_CN.jar"/>
+    <module_version install_time="1332622312867" last="true" origin="Ant" specification_version="6.48.2">
+        <file crc="1760819278" name="modules/locale/org-openide-windows_ja.jar"/>
+        <file crc="4043686124" name="modules/locale/org-openide-windows_pt_BR.jar"/>
+        <file crc="1909074487" name="modules/locale/org-openide-windows_ru.jar"/>
+        <file crc="404832955" name="modules/locale/org-openide-windows_zh_CN.jar"/>
         <file crc="3877728110" name="config/Modules/org-openide-windows.xml"/>
-        <file crc="3949341827" name="modules/org-openide-windows.jar"/>
+        <file crc="3129891330" name="modules/org-openide-windows.jar"/>
     </module_version>
 </module>

@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <module codename="org.gephi.io.database.drivers">
-    <module_version install_time="1330232226809" last="true" origin="Ant" specification_version="0.8.0.2">
-        <file crc="1182262971" name="config/Modules/org-gephi-io-database-drivers.xml"/>
+    <module_version install_time="1332622402763" last="true" origin="Ant" specification_version="0.8.0.3">
+        <file crc="1679678997" name="config/Modules/org-gephi-io-database-drivers.xml"/>
         <file crc="949853006" name="modules/ext/mysql-connector-java-5.1.18-bin.jar"/>
         <file crc="1159503198" name="modules/ext/postgresql-9.1-901.jdbc4.jar"/>
         <file crc="2362385863" name="modules/ext/sqlite-jdbc-3.7.2.jar"/>
         <file crc="2695503397" name="modules/ext/sqljdbc4-3.0.1301.101.jar"/>
         <file crc="3772102626" name="modules/ext/teradata-config-14.00.00.04.jar"/>
         <file crc="732703450" name="modules/ext/teradata-jdbc4-14.00.00.04.jar"/>
-        <file crc="93266202" name="modules/org-gephi-io-database-drivers.jar"/>
+        <file crc="461548272" name="modules/org-gephi-io-database-drivers.jar"/>
     </module_version>
 </module>

@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <module codename="org.netbeans.core">
-    <module_version install_time="1330232164515" last="true" origin="Ant" specification_version="3.25.2">
-        <file crc="2365888058" name="modules/locale/org-netbeans-core_ja.jar"/>
-        <file crc="4243840740" name="modules/locale/org-netbeans-core_pt_BR.jar"/>
-        <file crc="3540219553" name="modules/locale/org-netbeans-core_ru.jar"/>
-        <file crc="130193005" name="modules/locale/org-netbeans-core_zh_CN.jar"/>
+    <module_version install_time="1332622313974" last="true" origin="Ant" specification_version="3.28.1">
+        <file crc="695839117" name="modules/locale/org-netbeans-core_ja.jar"/>
+        <file crc="1634014545" name="modules/locale/org-netbeans-core_pt_BR.jar"/>
+        <file crc="3689904407" name="modules/locale/org-netbeans-core_ru.jar"/>
+        <file crc="3893911670" name="modules/locale/org-netbeans-core_zh_CN.jar"/>
         <file crc="1234898518" name="config/ModuleAutoDeps/org-netbeans-core.xml"/>
         <file crc="2943625018" name="config/Modules/org-netbeans-core.xml"/>
         <file crc="2601114686" name="modules/ext/nsProxyAutoConfig.js"/>
-        <file crc="3339172794" name="modules/org-netbeans-core.jar"/>
+        <file crc="1378715999" name="modules/org-netbeans-core.jar"/>
     </module_version>
 </module>

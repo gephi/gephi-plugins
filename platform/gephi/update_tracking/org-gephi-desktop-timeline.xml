@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <module codename="org.gephi.desktop.timeline">
-    <module_version install_time="1330232243147" last="true" origin="Ant" specification_version="0.8">
-        <file crc="1755426135" name="config/Modules/org-gephi-desktop-timeline.xml"/>
-        <file crc="2004138267" name="modules/org-gephi-desktop-timeline.jar"/>
+    <module_version install_time="1332622412726" last="true" origin="Ant" specification_version="0.8.1.2">
+        <file crc="3581235922" name="config/Modules/org-gephi-desktop-timeline.xml"/>
+        <file crc="995035223" name="modules/org-gephi-desktop-timeline.jar"/>
     </module_version>
 </module>

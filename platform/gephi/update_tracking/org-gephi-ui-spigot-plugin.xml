@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <module codename="org.gephi.ui.spigot.plugin">
-    <module_version install_time="1330232238198" last="true" origin="Ant" specification_version="0.8">
-        <file crc="1359289628" name="config/Modules/org-gephi-ui-spigot-plugin.xml"/>
-        <file crc="2826885889" name="modules/org-gephi-ui-spigot-plugin.jar"/>
+    <module_version install_time="1332622418333" last="true" origin="Ant" specification_version="0.8">
+        <file crc="1179703867" name="config/Modules/org-gephi-ui-spigot-plugin.xml"/>
+        <file crc="3644432428" name="modules/org-gephi-ui-spigot-plugin.jar"/>
     </module_version>
 </module>

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <module codename="org.gephi.ui.exporter.plugin">
-    <module_version install_time="1330232246927" last="true" origin="Ant" specification_version="0.8.0.3">
-        <file crc="363411979" name="config/Modules/org-gephi-ui-exporter-plugin.xml"/>
-        <file crc="1357091404" name="modules/org-gephi-ui-exporter-plugin.jar"/>
+    <module_version install_time="1332622431028" last="true" origin="Ant" specification_version="0.8.0.5">
+        <file crc="1203052455" name="config/Modules/org-gephi-ui-exporter-plugin.xml"/>
+        <file crc="3481440879" name="modules/org-gephi-ui-exporter-plugin.jar"/>
     </module_version>
 </module>

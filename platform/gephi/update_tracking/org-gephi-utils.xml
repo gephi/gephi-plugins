@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <module codename="org.gephi.utils">
-    <module_version install_time="1330232191710" last="true" origin="Ant" specification_version="0.8">
-        <file crc="3462785050" name="config/Modules/org-gephi-utils.xml"/>
-        <file crc="1913537047" name="modules/org-gephi-utils.jar"/>
+    <module_version install_time="1332622418072" last="true" origin="Ant" specification_version="0.8.0.3">
+        <file crc="3391084597" name="config/Modules/org-gephi-utils.xml"/>
+        <file crc="18871833" name="modules/org-gephi-utils.jar"/>
     </module_version>
 </module>
