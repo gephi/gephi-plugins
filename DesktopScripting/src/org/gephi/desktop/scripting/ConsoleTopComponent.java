@@ -50,7 +50,7 @@ autostore = false)
 @TopComponent.Description(preferredID = "ConsoleTopComponent",
 iconBase = "org/gephi/desktop/scripting/resources/icon.png",
 persistenceType = TopComponent.PERSISTENCE_ALWAYS)
-@TopComponent.Registration(mode = "consolemode", openAtStartup = false)
+@TopComponent.Registration(mode = "leftSlidingSide", openAtStartup = true, roles = {"overview", "datalab"})
 @ActionID(category = "Window", id = "org.gephi.desktop.scripting.ConsoleTopComponent")
 @ActionReference(path = "Menu/Window", position = 333)
 @TopComponent.OpenActionRegistration(displayName = "#CTL_ConsoleAction",
