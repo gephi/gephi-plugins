@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module codename="org.gephi.lib.itext">
+    <module_version install_time="1332622360275" last="true" origin="Ant" specification_version="5.0.1">
+        <file crc="3184727634" name="config/Modules/org-gephi-lib-itext.xml"/>
+        <file crc="1558698582" name="modules/ext/iText-5.0.1.jar"/>
+        <file crc="3228215122" name="modules/org-gephi-lib-itext.jar"/>
+    </module_version>
+</module>

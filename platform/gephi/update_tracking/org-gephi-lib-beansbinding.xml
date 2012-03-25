@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module codename="org.gephi.lib.beansbinding">
+    <module_version install_time="1332622349111" last="true" origin="Ant" specification_version="1.2.1">
+        <file crc="4126669953" name="config/Modules/org-gephi-lib-beansbinding.xml"/>
+        <file crc="826192464" name="modules/ext/beansbinding-1.2.1.jar"/>
+        <file crc="3345834729" name="modules/org-gephi-lib-beansbinding.jar"/>
+    </module_version>
+</module>

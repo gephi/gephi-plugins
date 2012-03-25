@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module codename="org.gephi.ui.statistics.plugin">
+    <module_version install_time="1332622351446" last="true" origin="Ant" specification_version="0.8.0.4">
+        <file crc="1475313982" name="config/Modules/org-gephi-ui-statistics-plugin.xml"/>
+        <file crc="3453188706" name="modules/org-gephi-ui-statistics-plugin.jar"/>
+    </module_version>
+</module>

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module codename="org.gephi.lib.jogl">
+    <module_version install_time="1332622387451" last="true" origin="Ant" specification_version="1.1.0.3">
+        <file crc="3952647386" name="config/Modules/org-gephi-lib-jogl.xml"/>
+        <file crc="502047212" name="modules/ext/gluegen-rt.jar"/>
+        <file crc="861344670" name="modules/ext/jogl.jar"/>
+        <file crc="2784716445" name="modules/ext/version.txt"/>
+        <file crc="3490466348" name="modules/lib/linux-amd64/libgluegen-rt.so"/>
+        <file crc="3601329531" name="modules/lib/linux-amd64/libjogl.so"/>
+        <file crc="699388215" name="modules/lib/linux-amd64/libjogl_awt.so"/>
+        <file crc="4053132620" name="modules/lib/linux-amd64/libjogl_cg.so"/>
+        <file crc="889771569" name="modules/lib/linux-i586/libgluegen-rt.so"/>
+        <file crc="3099196022" name="modules/lib/linux-i586/libjogl.so"/>
+        <file crc="2832964668" name="modules/lib/linux-i586/libjogl_awt.so"/>
+        <file crc="990924422" name="modules/lib/linux-i586/libjogl_cg.so"/>
+        <file crc="2788215462" name="modules/lib/macosx-universal/libgluegen-rt.jnilib"/>
+        <file crc="3272036687" name="modules/lib/macosx-universal/libjogl.jnilib"/>
+        <file crc="1232734016" name="modules/lib/macosx-universal/libjogl_awt.jnilib"/>
+        <file crc="988407254" name="modules/lib/macosx-universal/libjogl_cg.jnilib"/>
+        <file crc="2239020519" name="modules/lib/windows-amd64/gluegen-rt.dll"/>
+        <file crc="314817466" name="modules/lib/windows-amd64/jogl.dll"/>
+        <file crc="2022187039" name="modules/lib/windows-amd64/jogl_awt.dll"/>
+        <file crc="2130736779" name="modules/lib/windows-amd64/jogl_cg.dll"/>
+        <file crc="876437193" name="modules/lib/windows-i586/gluegen-rt.dll"/>
+        <file crc="1494902120" name="modules/lib/windows-i586/jogl.dll"/>
+        <file crc="2233592965" name="modules/lib/windows-i586/jogl_awt.dll"/>
+        <file crc="3276286261" name="modules/lib/windows-i586/jogl_cg.dll"/>
+        <file crc="2999411198" name="modules/org-gephi-lib-jogl.jar"/>
+    </module_version>
+</module>

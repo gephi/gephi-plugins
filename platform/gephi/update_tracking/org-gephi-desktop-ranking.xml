@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module codename="org.gephi.desktop.ranking">
+    <module_version install_time="1332622426844" last="true" origin="Ant" specification_version="0.8.1.4">
+        <file crc="3150690848" name="config/Modules/org-gephi-desktop-ranking.xml"/>
+        <file crc="3750142614" name="modules/org-gephi-desktop-ranking.jar"/>
+    </module_version>
+</module>

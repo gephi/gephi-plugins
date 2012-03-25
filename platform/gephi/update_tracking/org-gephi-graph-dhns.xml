@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module codename="org.gephi.graph.dhns">
+    <module_version install_time="1332622352652" last="true" origin="Ant" specification_version="0.8.0.5">
+        <file crc="717028660" name="config/Modules/org-gephi-graph-dhns.xml"/>
+        <file crc="3929725854" name="modules/org-gephi-graph-dhns.jar"/>
+    </module_version>
+</module>

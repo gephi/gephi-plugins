@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module codename="org.gephi.desktop.recentfiles">
+    <module_version install_time="1332622413186" last="true" origin="Ant" specification_version="1.0.1">
+        <file crc="2774258544" name="config/Modules/org-gephi-desktop-recentfiles.xml"/>
+        <file crc="1912387208" name="modules/org-gephi-desktop-recentfiles.jar"/>
+    </module_version>
+</module>

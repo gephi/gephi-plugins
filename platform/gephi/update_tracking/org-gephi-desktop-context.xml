@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module codename="org.gephi.desktop.context">
+    <module_version install_time="1332622353851" last="true" origin="Ant" specification_version="0.8.0.1">
+        <file crc="3990385091" name="config/Modules/org-gephi-desktop-context.xml"/>
+        <file crc="334195421" name="modules/org-gephi-desktop-context.jar"/>
+    </module_version>
+</module>

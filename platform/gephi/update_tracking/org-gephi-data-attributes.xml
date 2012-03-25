@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module codename="org.gephi.data.attributes">
+    <module_version install_time="1332622348082" last="true" origin="Ant" specification_version="0.8.0.3">
+        <file crc="1252686148" name="config/Modules/org-gephi-data-attributes.xml"/>
+        <file crc="1235937338" name="modules/org-gephi-data-attributes.jar"/>
+    </module_version>
+</module>

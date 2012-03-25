@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<module codename="org.gephi.desktop.perspective">
-    <module_version install_time="1326173681376" last="true" origin="Ant" specification_version="0.8.2">
-        <file crc="2489213622" name="config/Modules/org-gephi-desktop-perspective.xml"/>
-        <file crc="2432286573" name="modules/org-gephi-desktop-perspective.jar"/>
-    </module_version>
-</module>

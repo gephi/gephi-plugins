@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module codename="org.gephi.lib.commonscompress">
+    <module_version install_time="1332622417784" last="true" origin="Ant" specification_version="1.1">
+        <file crc="425994036" name="config/Modules/org-gephi-lib-commonscompress.xml"/>
+        <file crc="1740911783" name="modules/ext/commons-compress-1.1.jar"/>
+        <file crc="912477736" name="modules/org-gephi-lib-commonscompress.jar"/>
+    </module_version>
+</module>

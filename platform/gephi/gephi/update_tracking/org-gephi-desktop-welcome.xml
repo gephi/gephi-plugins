@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<module codename="org.gephi.desktop.welcome">
-    <module_version install_time="1317726404603" last="true" origin="installer" specification_version="0.8.0.1">
-        <file crc="3737723780" name="config/Modules/org-gephi-desktop-welcome.xml"/>
-        <file crc="3467080201" name="modules/org-gephi-desktop-welcome.jar"/>
-    </module_version>
-</module>

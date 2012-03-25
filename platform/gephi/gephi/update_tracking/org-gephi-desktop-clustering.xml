@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<module codename="org.gephi.desktop.clustering">
-    <module_version install_time="1317726402525" last="true" origin="installer" specification_version="0.8">
-        <file crc="2275565231" name="config/Modules/org-gephi-desktop-clustering.xml"/>
-        <file crc="1103708514" name="modules/org-gephi-desktop-clustering.jar"/>
-    </module_version>
-</module>
