@@ -98,14 +98,11 @@ abstract class GyAttribute extends PyObject {
         Query query;
 
         if (Number.class.isAssignableFrom(getAttributeType())) {
-            // FIXME: lower bound should be an open interval
             Class columnType = getAttributeType();
             try {
-                Number minValue = (Number) columnType.getDeclaredField("MIN_VALUE").get(null);
-                Number maxValue = (Number) columnType.getDeclaredField("MAX_VALUE").get(null);
                 Number lowerBound = (Number) obj.__tojava__(columnType);
-                Number upperBound = maxValue;
-                filterRange = new Range(lowerBound, upperBound, minValue, maxValue);
+                Number upperBound = (Number) columnType.getDeclaredField("MAX_VALUE").get(null);
+                filterRange = new Range(lowerBound, upperBound, false, true);
             } catch (Exception ex) {
                 throw Py.TypeError("unsupported operator for attribute type '" + getAttributeType() + "'");
             }
@@ -149,14 +146,11 @@ abstract class GyAttribute extends PyObject {
         Query query;
 
         if (Number.class.isAssignableFrom(getAttributeType())) {
-            // FIXME: upper bound should be an open interval
             Class columnType = getAttributeType();
             try {
-                Number minValue = (Number) columnType.getDeclaredField("MIN_VALUE").get(null);
-                Number maxValue = (Number) columnType.getDeclaredField("MAX_VALUE").get(null);
-                Number lowerBound = minValue;
+                Number lowerBound = (Number) columnType.getDeclaredField("MIN_VALUE").get(null);
                 Number upperBound = (Number) obj.__tojava__(columnType);
-                filterRange = new Range(lowerBound, upperBound, minValue, maxValue);
+                filterRange = new Range(lowerBound, upperBound, true, false);
             } catch (Exception ex) {
                 throw Py.TypeError("unsupported operator for attribute type '" + getAttributeType() + "'");
             }
