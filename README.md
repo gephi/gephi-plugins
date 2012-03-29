@@ -4,6 +4,7 @@ Branches contains Gephi Plugins supported by the core team:
 
 - [Neo4j Graph Database Support](https://gephi.org/plugins/neo4j-graph-database-support)
 - [Graph streaming](https://gephi.org/plugins/graph-streaming)
+- [GeoLayout](https://gephi.org/plugins/geolayout/)
 - Python Scripting (In Development)
 
 ## Get started
@@ -39,8 +40,15 @@ You can also run Gephi from the command-line using the 'ant run' command.
 
 ### Distribute your plugin ###
 
-When you successfully tested your plugin, it's time to create a release.
+When you successfully tested your plugin, it's time to create a release. Verify that you have latest updates of Gephi JARs:
 
+- Pull latest changes:
+
+        git checkout master
+        git pull
+        git checkout mybranch
+
+- Test your plugin again in case of an update. If it's okay:
 - Right-click on the project and select '''Package As''' and then '''NMBs'''.
 - Go to the '''build''' folder and find the created '''plugin-release.zip''' file. Individual NBM files (one per each module) are packaged in this zip.
 
