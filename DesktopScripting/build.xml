@@ -5,9 +5,4 @@
 <project name="org.gephi.desktop.scripting" default="netbeans" basedir=".">
     <description>Builds, tests, and runs the project org.gephi.desktop.scripting.</description>
     <import file="nbproject/build-impl.xml"/>
-    <target name="netbeans-extra">
-        <copy todir="${cluster}/modules/ext/Lib">
-            <fileset dir="${src.dir}/py"/>
-        </copy>
-    </target>
 </project>

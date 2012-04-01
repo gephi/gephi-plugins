@@ -21,6 +21,7 @@ along with Gephi.  If not, see <http://www.gnu.org/licenses/>.
 package org.gephi.desktop.scripting;
 
 import java.awt.Component;
+import java.io.File;
 import javax.swing.JPanel;
 import org.gephi.project.api.ProjectController;
 import org.gephi.project.api.Workspace;
@@ -32,7 +33,9 @@ import org.openide.windows.TopComponent;
 import org.netbeans.api.settings.ConvertAsProperties;
 import org.openide.awt.ActionID;
 import org.openide.awt.ActionReference;
+import org.openide.modules.InstalledFileLocator;
 import org.openide.util.Lookup;
+import org.python.core.Py;
 import org.python.core.PyObject;
 import org.python.util.PythonInterpreter;
 
@@ -131,6 +134,15 @@ public final class ConsoleTopComponent extends TopComponent {
         ScriptingController scriptingController = Lookup.getDefault().lookup(ScriptingController.class);
         PythonInterpreter pyi = scriptingController.getPythonInterpreter();
         ScriptingModel scriptingModel = scriptingController.getModel(workspace);
+
+        // put internal path for jythonconsole into the Jython's PATH variable
+        File pyDir = InstalledFileLocator.getDefault().locate("py", "org.gephi.desktop.scripting", false);
+        pyi.getSystemState().path.append(Py.newString(pyDir.getAbsolutePath()));
+
+        // put path for custom user libraries into Jython's PATH
+        pyi.getSystemState().path.append(Py.newString(System.getProperty("netbeans.user") + File.separatorChar + "scripts"));
+
+        // instantiate a new jythonconsole
         pyi.exec("from jythonconsole.console import Console");
         PyObject jythonConsoleClass = pyi.get("Console");
         PyObject console = jythonConsoleClass.__call__(scriptingModel.getLocalNamespace());
