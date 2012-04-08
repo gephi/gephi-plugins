@@ -21,6 +21,7 @@ along with Gephi.  If not, see <http://www.gnu.org/licenses/>.
 package org.gephi.scripting.wrappers;
 
 import java.awt.Color;
+import org.gephi.data.attributes.api.AttributeModel;
 import org.gephi.graph.api.Edge;
 import org.gephi.scripting.util.GyNamespace;
 import org.python.core.Py;
@@ -142,14 +143,16 @@ public class GyEdge extends PyObject {
             return namespace.getGyNode(underlyingEdge.getSource().getId());
         } else if (name.equals("target")) {
             return namespace.getGyNode(underlyingEdge.getTarget().getId());
-        } else if (!name.startsWith("__")) {
-            Object obj = underlyingEdge.getEdgeData().getAttributes().getValue(name);
-            // TODO: return null if there is no column with name
-            if (obj == null) {
-                return Py.None;
-            }
-            return Py.java2py(obj);
         } else {
+            AttributeModel attributeModel = namespace.getWorkspace().getLookup().lookup(AttributeModel.class);
+            if (attributeModel.getEdgeTable().hasColumn(name)) {
+                Object obj = underlyingEdge.getEdgeData().getAttributes().getValue(name);
+                if (obj == null) {
+                    return Py.None;
+                }
+                return Py.java2py(obj);
+            }
+
             return super.__findattr_ex__(name);
         }
     }

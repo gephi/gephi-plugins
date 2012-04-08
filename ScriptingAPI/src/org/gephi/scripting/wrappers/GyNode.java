@@ -22,6 +22,7 @@ package org.gephi.scripting.wrappers;
 
 import java.awt.Color;
 import java.util.Iterator;
+import org.gephi.data.attributes.api.AttributeModel;
 import org.gephi.graph.api.Edge;
 import org.gephi.graph.api.Node;
 import org.gephi.graph.api.NodeIterable;
@@ -196,14 +197,16 @@ public class GyNode extends PyObject {
             }
 
             return nodesSet;
-        } else if (!name.startsWith("__")) {
-            Object obj = underlyingNode.getNodeData().getAttributes().getValue(name);
-            // TODO: return null if there is no column with name
-            if (obj == null) {
-                return Py.None;
-            }
-            return Py.java2py(obj);
         } else {
+            AttributeModel attributeModel = namespace.getWorkspace().getLookup().lookup(AttributeModel.class);
+            if (attributeModel.getNodeTable().hasColumn(name)) {
+                Object obj = underlyingNode.getNodeData().getAttributes().getValue(name);
+                if (obj == null) {
+                    return Py.None;
+                }
+                return Py.java2py(obj);
+            }
+
             return super.__findattr_ex__(name);
         }
     }
