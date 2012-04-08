@@ -69,6 +69,10 @@ public class GyAttributeColumn extends GyAttribute {
         }
     }
 
+    public AttributeColumn getUnderlyingAttributeColumn() {
+        return this.underlyingAttributeColumn;
+    }
+
     @Override
     public Class getAttributeType() {
         return underlyingAttributeColumn.getType().getType();

@@ -20,9 +20,13 @@ along with Gephi.  If not, see <http://www.gnu.org/licenses/>.
  */
 package org.gephi.scripting.wrappers;
 
+import org.gephi.data.attributes.api.AttributeColumn;
+import org.gephi.data.attributes.api.AttributeModel;
 import org.gephi.graph.api.Edge;
 import org.gephi.graph.api.Node;
 import org.gephi.scripting.util.GyNamespace;
+import org.python.core.Py;
+import org.python.core.PyDictionary;
 import org.python.core.PyObject;
 
 /**
@@ -151,5 +155,27 @@ public class GyGraph extends GySubGraph {
      */
     public boolean isMixed() {
         return namespace.getGraphModel().isMixed();
+    }
+
+    public PyDictionary getNodeAttributes() {
+        AttributeModel attributeModel = namespace.getWorkspace().getLookup().lookup(AttributeModel.class);
+        PyDictionary dict = new PyDictionary();
+
+        for (AttributeColumn column : attributeModel.getNodeTable().getColumns()) {
+            dict.put(Py.java2py(column.getTitle()), new GyAttributeColumn(namespace, column));
+        }
+
+        return dict;
+    }
+
+    public PyDictionary getEdgeAttributes() {
+        AttributeModel attributeModel = namespace.getWorkspace().getLookup().lookup(AttributeModel.class);
+        PyDictionary dict = new PyDictionary();
+
+        for (AttributeColumn column : attributeModel.getEdgeTable().getColumns()) {
+            dict.put(Py.java2py(column.getTitle()), new GyAttributeColumn(namespace, column));
+        }
+
+        return dict;
     }
 }

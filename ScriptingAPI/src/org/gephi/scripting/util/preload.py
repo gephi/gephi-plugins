@@ -41,6 +41,17 @@ def addFilter(filter, name = None):
 
 
 #
+# Attributes API support
+#
+
+def getNodeAttributes():
+    return g.getNodeAttributes()
+
+def getEdgeAttributes():
+    return g.getEdgeAttributes()
+
+
+#
 # Export API support
 #
 
@@ -113,6 +124,8 @@ def setVisible(subgraph):
 #
 
 add_filter = addFilter
+get_node_attributes = getNodeAttributes
+get_edge_attributes = getEdgeAttributes
 get_layout_builders = getLayoutBuilders
 run_layout = runLayout
 stop_layout = stopLayout
