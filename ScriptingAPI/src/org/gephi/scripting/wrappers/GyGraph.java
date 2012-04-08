@@ -120,4 +120,36 @@ public class GyGraph extends GySubGraph {
 
         return ret;
     }
+
+    /**
+     * Returns true if the graph is directed by default.
+     * This value is an indicator of the current state and it means that so far
+     * all edges are directed in the graph.
+     * @return          true if the graph is only directed or false otherwise
+     */
+    public boolean isDirected() {
+        return namespace.getGraphModel().isDirected();
+    }
+
+    /**
+     * Returns true if the graph is undirected by default.
+     * This value is an indicator of the current state and it means that so far
+     * all edges are undirected in the graph.
+     * @return          true if the graph is only undirected or false otherwise
+     */
+    public boolean isUndirected() {
+        return namespace.getGraphModel().isUndirected();
+    }
+
+    /**
+     * Returns true if the graph is mixed by default.
+     * This value is an indicator of the current state and it means that
+     * directed and undirected edges has been added to the graph. When it
+     * returns true, isDirected() and isUndirected() methods always returns
+     * false.
+     * @return          true if the graph is mixed or false otherwise
+     */
+    public boolean isMixed() {
+        return namespace.getGraphModel().isMixed();
+    }
 }
