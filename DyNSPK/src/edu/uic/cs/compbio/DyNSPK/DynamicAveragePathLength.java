@@ -309,11 +309,11 @@ public class DynamicAveragePathLength implements DynamicStatistics, LongTask  {
 //            report += "Nodecount:" + this.nodecount + "\n";
 //            report += "Length of degreelist" + Integer.toString(degreelist.toArray().length) + "\n";
 //            report += nodecount;
-
+            
             JFreeChart inChart = ChartFactory.createLineChart(
                     "Dynamic Average Path Length",
                     "Edges",
-                    "Dynamic Average Path Length",
+                    "Count",
                     inDataset,
                     PlotOrientation.VERTICAL,
                     true,

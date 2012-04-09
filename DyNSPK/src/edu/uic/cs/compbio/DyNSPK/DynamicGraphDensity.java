@@ -186,8 +186,8 @@ public class DynamicGraphDensity implements DynamicStatistics {
 
             JFreeChart inChart = ChartFactory.createLineChart(
                     "Dynamic Graph Density",
-                    "Degrees",
-                    "Dynamic Graph Density",
+                    "Count",
+                    "Count",
                     inDataset,
                     PlotOrientation.VERTICAL,
                     true,

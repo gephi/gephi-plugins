@@ -88,7 +88,7 @@ public class DynamicBetweennessPanel extends javax.swing.JPanel {
         undirectedRadioButton = new javax.swing.JRadioButton();
  
         header.setDescription("Degree of each node and the average of the network over time. It is the number of links that have a node, and is an indicator of centrality."); // NOI18N
-        header.setTitle("Dynamic Graph Density"); // NOI18N
+        header.setTitle("Dynamic Betweeness"); // NOI18N
 
         directedButtonGroup.add(directedRadioButton);
         directedRadioButton.setText("Directed"); // NOI18N

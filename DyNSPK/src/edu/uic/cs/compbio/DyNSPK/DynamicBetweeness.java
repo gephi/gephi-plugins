@@ -144,8 +144,8 @@ public class DynamicBetweeness implements DynamicStatistics{
 
         JFreeChart chart = ChartFactory.createXYLineChart(
                 "Degree Time Series",
-                "Time",
-                "Average Degree",
+                "Count",
+                "Count",
                 dataset,
                 PlotOrientation.VERTICAL,
                 true,
