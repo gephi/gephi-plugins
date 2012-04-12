@@ -1,5 +1,5 @@
 Manifest-Version: 1.0
 OpenIDE-Module: org.gephi.scripting
 OpenIDE-Module-Localizing-Bundle: org/gephi/scripting/Bundle.properties
-OpenIDE-Module-Specification-Version: 1.0
+OpenIDE-Module-Specification-Version: 0.1.0
 
