@@ -132,7 +132,6 @@ public class GyAttributeTopology extends GyAttribute {
     @Override
     protected Query buildEqualsQuery(PyObject match) {
         Integer intMatch = (Integer) match.__tojava__(Integer.class);
-        // FIXME: this is not working correctly
         return buildRangeQuery(new Range(intMatch, intMatch, Integer.MIN_VALUE, Integer.MAX_VALUE));
     }
 }
