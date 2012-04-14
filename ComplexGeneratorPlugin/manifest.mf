@@ -2,5 +2,5 @@ Manifest-Version: 1.0
 OpenIDE-Module: org.gephi.io.complexgenerator.plugin
 OpenIDE-Module-Layer: org/gephi/io/complexgenerator/plugin/layer.xml
 OpenIDE-Module-Localizing-Bundle: org/gephi/io/complexgenerator/plugin/Bundle.properties
-OpenIDE-Module-Specification-Version: 1.0
+OpenIDE-Module-Specification-Version: 1.1
 AutoUpdate-Show-In-Client: false

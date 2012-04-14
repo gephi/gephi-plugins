@@ -48,7 +48,7 @@ import org.openide.util.lookup.ServiceProvider;
  *
  * @author Cezary Bartosiak
  */
-@ServiceProvider(service = Generator.class)
+// @ServiceProvider(service = Generator.class)
 public class MultiBarabasiAlbert implements Generator {
 	private boolean cancel = false;
 	private ProgressTicket progressTicket;
