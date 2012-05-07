@@ -213,7 +213,7 @@ public class GyNode extends PyObject {
             PySet nodesSet = new PySet();
 
             for (NodeIterator nodeItr = nodeIterable.iterator(); nodeItr.hasNext();) {
-                GyNode node = namespace.getGyNode(nodeItr.next().getId());
+                GyNode node = namespace.getGyNode(nodeItr.next().getNodeData().getId());
                 nodesSet.add(node);
             }
 
@@ -240,7 +240,7 @@ public class GyNode extends PyObject {
             Edge edge = namespace.getGraphModel().getMixedGraph().getEdge(underlyingNode, target);
 
             if (edge != null && edge.isDirected() && edge.getTarget().equals(target)) {
-                edgeSet.add(namespace.getGyEdge(edge.getId()));
+                edgeSet.add(namespace.getGyEdge(edge.getEdgeData().getId()));
             }
 
             return edgeSet;
@@ -276,12 +276,12 @@ public class GyNode extends PyObject {
             Edge edge = namespace.getGraphModel().getMixedGraph().getEdge(underlyingNode, target);
 
             if (edge != null && !edge.isDirected()) {
-                edgeSet.add(namespace.getGyEdge(edge.getId()));
+                edgeSet.add(namespace.getGyEdge(edge.getEdgeData().getId()));
             } else {
                 edge = namespace.getGraphModel().getMixedGraph().getEdge(target, underlyingNode);
 
                 if (edge != null && !edge.isDirected()) {
-                    edgeSet.add(namespace.getGyEdge(edge.getId()));
+                    edgeSet.add(namespace.getGyEdge(edge.getEdgeData().getId()));
                 }
             }
 

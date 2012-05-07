@@ -141,7 +141,7 @@ public class GySubGraph extends PyObject {
             PySet nodesSet = new PySet();
 
             for (NodeIterator nodeItr = nodeIterable.iterator(); nodeItr.hasNext();) {
-                GyNode node = namespace.getGyNode(nodeItr.next().getId());
+                GyNode node = namespace.getGyNode(nodeItr.next().getNodeData().getId());
                 nodesSet.add(node);
             }
 
@@ -151,7 +151,7 @@ public class GySubGraph extends PyObject {
             PySet edgesSet = new PySet();
 
             for (EdgeIterator edgeItr = edgeIterable.iterator(); edgeItr.hasNext();) {
-                GyEdge edge = namespace.getGyEdge(edgeItr.next().getId());
+                GyEdge edge = namespace.getGyEdge(edgeItr.next().getEdgeData().getId());
                 edgesSet.add(edge);
             }
 

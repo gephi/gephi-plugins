@@ -161,9 +161,9 @@ public class GyEdge extends PyObject {
         } else if (name.equals("directed")) {
             return Py.java2py(underlyingEdge.isDirected());
         } else if (name.equals("source")) {
-            return namespace.getGyNode(underlyingEdge.getSource().getId());
+            return namespace.getGyNode(underlyingEdge.getSource().getNodeData().getId());
         } else if (name.equals("target")) {
-            return namespace.getGyNode(underlyingEdge.getTarget().getId());
+            return namespace.getGyNode(underlyingEdge.getTarget().getNodeData().getId());
         } else {
             AttributeModel attributeModel = namespace.getWorkspace().getLookup().lookup(AttributeModel.class);
             if (attributeModel.getEdgeTable().hasColumn(name)) {

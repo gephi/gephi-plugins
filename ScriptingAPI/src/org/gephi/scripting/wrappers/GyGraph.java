@@ -88,7 +88,7 @@ public class GyGraph extends GySubGraph {
         // Instantiates the new node and adds it to the graph
         node = namespace.getGraphModel().factory().newNode();
         namespace.getGraphModel().getGraph().addNode(node);
-        ret = namespace.getGyNode(node.getId());
+        ret = namespace.getGyNode(node.getNodeData().getId());
 
         // Sets the node attributes according to args, kwargs
         for (int i = 0; i < args.length; i++) {
@@ -111,7 +111,7 @@ public class GyGraph extends GySubGraph {
         // Instantiates the new edge and adds it to the graph
         edge = namespace.getGraphModel().factory().newEdge(source.getNode(), target.getNode(), 1.0f, true);
         namespace.getGraphModel().getDirectedGraph().addEdge(edge);
-        ret = namespace.getGyEdge(edge.getId());
+        ret = namespace.getGyEdge(edge.getEdgeData().getId());
 
         return ret;
     }
@@ -141,7 +141,7 @@ public class GyGraph extends GySubGraph {
         // Instantiates the new edge and adds it to the graph
         edge = namespace.getGraphModel().factory().newEdge(source.getNode(), target.getNode(), 1.0f, false);
         namespace.getGraphModel().getUndirectedGraph().addEdge(edge);
-        ret = namespace.getGyEdge(edge.getId());
+        ret = namespace.getGyEdge(edge.getEdgeData().getId());
 
         return ret;
     }

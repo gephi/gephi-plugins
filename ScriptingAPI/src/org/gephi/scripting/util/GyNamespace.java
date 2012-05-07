@@ -119,7 +119,7 @@ public final class GyNamespace extends PyStringMap {
      * @param id    the node's internal id
      * @return      GyNode wrapper for the given node
      */
-    public GyNode getGyNode(int id) {
+    public GyNode getGyNode(String id) {
         return (GyNode) __finditem__(NODE_PREFIX + id);
     }
 
@@ -128,7 +128,7 @@ public final class GyNamespace extends PyStringMap {
      * @param id    the edge's internal id
      * @return      GyEdge wrapper for the given edge
      */
-    public GyEdge getGyEdge(int id) {
+    public GyEdge getGyEdge(String id) {
         return (GyEdge) __finditem__(EDGE_PREFIX + id);
     }
 
