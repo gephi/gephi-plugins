@@ -73,7 +73,7 @@ public class GyEdge extends PyObject {
 
     @Override
     public String toString() {
-        return GyNamespace.EDGE_PREFIX + Integer.toString(underlyingEdge.getId());
+        return GyNamespace.EDGE_PREFIX + underlyingEdge.getEdgeData().getId();
     }
 
     /**

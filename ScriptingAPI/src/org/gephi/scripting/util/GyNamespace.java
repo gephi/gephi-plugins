@@ -268,9 +268,8 @@ public final class GyNamespace extends PyStringMap {
             // Check if it is a node
             String strId = key.substring(EDGE_PREFIX.length());
             if (Pattern.compile("[1-9][0-9]*").matcher(strId).matches()) {
-                int id = Integer.parseInt(strId);
                 Graph graph = graphModel.getGraph();
-                Node node = graph.getNode(id);
+                Node node = graph.getNode(strId);
                 if (node != null) {
                     ret = new GyNode(this, node);
                 }
@@ -279,9 +278,8 @@ public final class GyNamespace extends PyStringMap {
             // Check if it is an edge
             String strId = key.substring(EDGE_PREFIX.length());
             if (Pattern.compile("[1-9][0-9]*").matcher(strId).matches()) {
-                int id = Integer.parseInt(strId);
                 Graph graph = graphModel.getGraph();
-                Edge edge = graph.getEdge(id);
+                Edge edge = graph.getEdge(strId);
                 if (edge != null) {
                     ret = new GyEdge(this, edge);
                 }

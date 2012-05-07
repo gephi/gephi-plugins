@@ -86,7 +86,7 @@ public class GyNode extends PyObject {
 
     @Override
     public String toString() {
-        return GyNamespace.NODE_PREFIX + Integer.toString(underlyingNode.getId());
+        return GyNamespace.NODE_PREFIX + underlyingNode.getNodeData().getId();
     }
 
     /**
