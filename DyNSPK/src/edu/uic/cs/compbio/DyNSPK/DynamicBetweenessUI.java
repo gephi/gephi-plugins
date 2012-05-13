@@ -54,7 +54,7 @@ import org.openide.util.lookup.ServiceProvider;
 public class DynamicBetweenessUI implements StatisticsUI {
 
     private final StatSettings settings = new StatSettings();
-    private DynamicBetweeness degree;
+    private DynamicEntropy degree;
     private DynamicBetweennessPanel panel;
 
     public JPanel getSettingsPanel() {
@@ -63,7 +63,7 @@ public class DynamicBetweenessUI implements StatisticsUI {
     }
 
     public void setup(Statistics statistics) {
-        this.degree = (DynamicBetweeness) statistics;
+        this.degree = (DynamicEntropy) statistics;
         if (panel != null) {
             
             settings.load(degree);
@@ -83,7 +83,7 @@ public class DynamicBetweenessUI implements StatisticsUI {
     }
 
     public Class<? extends Statistics> getStatisticsClass() {
-        return DynamicBetweeness.class;
+        return DynamicEntropy.class;
     }
 
     public String getValue() {
@@ -91,7 +91,7 @@ public class DynamicBetweenessUI implements StatisticsUI {
     }
 
     public String getDisplayName() {
-        return "Dynamic Betweeness";
+        return "Dynamic Entropy";
     }
 
     public String getCategory() {
@@ -106,13 +106,13 @@ public class DynamicBetweenessUI implements StatisticsUI {
         private double window = 0.0;
         private double tick = 0.0;
 
-        private void save(DynamicBetweeness stat) {
+        private void save(DynamicEntropy stat) {
             
             this.window = stat.getWindow();
             this.tick = stat.getTick();
         }
 
-        private void load(DynamicBetweeness stat) {
+        private void load(DynamicEntropy stat) {
             
             stat.setWindow(window);
             stat.setTick(tick);

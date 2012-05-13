@@ -23,12 +23,12 @@ public class DynamicBetweenessBuilder implements StatisticsBuilder {
 
     @Override
     public Statistics getStatistics() {
-        return new DynamicBetweeness();
+        return new DynamicEntropy();
     }
 
     @Override
     public Class<? extends Statistics> getStatisticsClass() {
-        return DynamicBetweeness.class;
+        return DynamicEntropy.class;
     }
     
 }
