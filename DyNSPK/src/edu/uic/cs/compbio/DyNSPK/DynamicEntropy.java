@@ -43,15 +43,9 @@ package edu.uic.cs.compbio.DyNSPK;
 
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
-import org.gephi.data.attributes.api.AttributeColumn;
 import org.gephi.data.attributes.api.AttributeModel;
-import org.gephi.data.attributes.api.AttributeOrigin;
-import org.gephi.data.attributes.api.AttributeTable;
-import org.gephi.data.attributes.api.AttributeType;
-import org.gephi.data.attributes.type.DynamicInteger;
 import org.gephi.data.attributes.type.Interval;
 import org.gephi.dynamic.api.DynamicController;
 import org.gephi.dynamic.api.DynamicModel;

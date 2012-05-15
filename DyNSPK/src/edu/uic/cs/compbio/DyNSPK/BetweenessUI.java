@@ -51,14 +51,14 @@ import org.openide.util.lookup.ServiceProvider;
  * @author Mathieu Bastian
  */
 @ServiceProvider(service = StatisticsUI.class)
-public class DynamicBetweenessUI implements StatisticsUI {
+public class BetweenessUI implements StatisticsUI {
 
     private final StatSettings settings = new StatSettings();
     private DynamicEntropy degree;
-    private DynamicBetweennessPanel panel;
+    private BetweenessPanel panel;
 
     public JPanel getSettingsPanel() {
-        panel = new DynamicBetweennessPanel();
+        panel = new BetweenessPanel();
         return panel;
     }
 

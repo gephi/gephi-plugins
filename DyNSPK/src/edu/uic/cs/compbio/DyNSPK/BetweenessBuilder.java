@@ -14,7 +14,7 @@ import org.openide.util.lookup.ServiceProvider;
  * @author zitterbewegung
  */
 @ServiceProvider(service = StatisticsBuilder.class)
-public class DynamicBetweenessBuilder implements StatisticsBuilder {
+public class BetweenessBuilder implements StatisticsBuilder {
 
     @Override
     public String getName() {

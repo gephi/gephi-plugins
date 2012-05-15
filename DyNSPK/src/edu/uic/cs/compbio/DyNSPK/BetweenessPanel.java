@@ -48,10 +48,10 @@ import org.openide.util.Lookup;
  *
  * @author Mathieu Bastian
  */
-public class DynamicBetweennessPanel extends javax.swing.JPanel {
+public class BetweenessPanel extends javax.swing.JPanel {
 
     /** Creates new form DynamicDegreePanel */
-    public DynamicBetweennessPanel() {
+    public BetweenessPanel() {
         initComponents();
 
         //Disable directed if the graph is undirecteds
