@@ -172,4 +172,5 @@ select_sub_graph = selectSubGraph
 select_subgraph = selectSubGraph
 select_nodes = selectNodes
 select_edges = selectEdges
+set_visible = setVisible
 graph = g
