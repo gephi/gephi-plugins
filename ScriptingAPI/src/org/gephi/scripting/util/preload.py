@@ -51,14 +51,20 @@ from pawt.colors import *
 
 import org.openide.util.Lookup as Lookup
 
-import org.gephi.filters.api.FilterController
-FilterController = Lookup.getDefault().lookup(org.gephi.filters.api.FilterController)
-
 import org.gephi.io.exporter.api.ExportController
 ExportController = Lookup.getDefault().lookup(org.gephi.io.exporter.api.ExportController)
 
+import org.gephi.filters.api.FilterController
+FilterController = Lookup.getDefault().lookup(org.gephi.filters.api.FilterController)
+
+import org.gephi.io.importer.api.ImportController
+ImportController = Lookup.getDefault().lookup(org.gephi.io.importer.api.ImportController)
+
 import org.gephi.layout.api.LayoutController
 LayoutController = Lookup.getDefault().lookup(org.gephi.layout.api.LayoutController)
+
+import org.gephi.project.api.ProjectController
+ProjectController = Lookup.getDefault().lookup(org.gephi.project.api.ProjectController)
 
 import org.gephi.visualization.VizController
 VizController = Lookup.getDefault().lookup(org.gephi.visualization.VizController)
@@ -90,9 +96,22 @@ def getEdgeAttributes():
 # Export API support
 #
 
-def export(filename):
+def exportGraph(filename):
     import java.io.File
     ExportController.exportFile(java.io.File(filename))
+
+
+#
+# Import API support
+#
+
+def importGraph(filename):
+    import org.gephi.io.processor.plugin.DefaultProcessor as DefaultProcessor
+    import java.io.File
+
+    workspace = ProjectController.getCurrentWorkspace()
+    container = ImportController.importFile(java.io.File(filename))
+    ImportController.process(container, DefaultProcessor(), workspace)
 
 
 #
