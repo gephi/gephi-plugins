@@ -147,6 +147,8 @@ def selectNodes(nodes):
 def selectEdges(edges):
     VizController.selectionManager.selectEdges([v.getEdge() for v in edges])
 
+def resetSelection():
+    VizController.resetSelection()
 
 #
 # Miscelaneous functions
