@@ -46,19 +46,33 @@ from pawt.colors import *
 
 
 #
+# Setup Lookup and Controllers
+#
+
+import org.openide.util.Lookup as Lookup
+
+import org.gephi.filters.api.FilterController
+FilterController = Lookup.getDefault().lookup(org.gephi.filters.api.FilterController)
+
+import org.gephi.io.exporter.api.ExportController
+ExportController = Lookup.getDefault().lookup(org.gephi.io.exporter.api.ExportController)
+
+import org.gephi.layout.api.LayoutController
+LayoutController = Lookup.getDefault().lookup(org.gephi.layout.api.LayoutController)
+
+import org.gephi.visualization.VizController
+VizController = Lookup.getDefault().lookup(org.gephi.visualization.VizController)
+
+
+#
 # Filters API support
 #
 
 def addFilter(filter, name = None):
-    import org.gephi.filters.api.FilterController as FilterController
-    import org.openide.util.Lookup as Lookup
-
-    filterController = Lookup.getDefault().lookup(FilterController)
-
     if name != None:
-        filterController.rename(filter.getUnderlyingQuery(), name)
+        FilterController.rename(filter.getUnderlyingQuery(), name)
 
-    filterController.add(filter.getUnderlyingQuery())
+    FilterController.add(filter.getUnderlyingQuery())
 
 
 #
@@ -77,12 +91,8 @@ def getEdgeAttributes():
 #
 
 def export(filename):
-    import org.gephi.io.exporter.api.ExportController as ExportController
-    import org.openide.util.Lookup as Lookup
     import java.io.File
-
-    exportController = Lookup.getDefault().lookup(ExportController)
-    exportController.exportFile(java.io.File(filename))
+    ExportController.exportFile(java.io.File(filename))
 
 
 #
@@ -104,31 +114,20 @@ import org.gephi.layout.plugin.scale.Expand as Expand
 
 def getLayoutBuilders():
     import org.gephi.layout.spi.LayoutBuilder as LayoutBuilder
-    import org.openide.util.Lookup as Lookup
-
     return Lookup.getDefault().lookupAll(LayoutBuilder)
 
 def runLayout(layoutBuilder, iters = None):
-    import org.gephi.layout.api.LayoutController as LayoutController
-    import org.openide.util.Lookup as Lookup
-
-    layoutController = Lookup.getDefault().lookup(LayoutController)
-
     layout = layoutBuilder().buildLayout()
     layout.resetPropertiesValues()
-    layoutController.setLayout(layout)
+    LayoutController.setLayout(layout)
 
     if iters == None:
-        layoutController.executeLayout()
+        LayoutController.executeLayout()
     else:
-        layoutController.executeLayout(iters)
+        LayoutController.executeLayout(iters)
 
 def stopLayout():
-    import org.gephi.layout.api.LayoutController as LayoutController
-    import org.openide.util.Lookup as Lookup
-
-    layoutController = Lookup.getDefault().lookup(LayoutController)
-    layoutController.stopLayout()
+    LayoutController.stopLayout()
 
 
 #
@@ -136,29 +135,17 @@ def stopLayout():
 #
 
 def center(node):
-    import org.gephi.visualization.VizController as VizController
-    import org.openide.util.Lookup as Lookup
-
-    vizController = Lookup.getDefault().lookup(VizController)
-    vizController.selectionManager.centerOnNode(node.getNode())
+    VizController.selectionManager.centerOnNode(node.getNode())
 
 def selectSubGraph(subgraph):
     selectNodes(subgraph.nodes)
     selectEdges(subgraph.edges)
 
 def selectNodes(nodes):
-    import org.gephi.visualization.VizController as VizController
-    import org.openide.util.Lookup as Lookup
-
-    vizController = Lookup.getDefault().lookup(VizController)
-    vizController.selectionManager.selectNodes([v.getNode() for v in nodes])
+    VizController.selectionManager.selectNodes([v.getNode() for v in nodes])
 
 def selectEdges(edges):
-    import org.gephi.visualization.VizController as VizController
-    import org.openide.util.Lookup as Lookup
-
-    vizController = Lookup.getDefault().lookup(VizController)
-    vizController.selectionManager.selectEdges([v.getEdge() for v in edges])
+    VizController.selectionManager.selectEdges([v.getEdge() for v in edges])
 
 
 #
