@@ -132,6 +132,36 @@ def stopLayout():
 
 
 #
+# Visualization API support
+#
+
+def center(node):
+    import org.gephi.visualization.VizController as VizController
+    import org.openide.util.Lookup as Lookup
+
+    vizController = Lookup.getDefault().lookup(VizController)
+    vizController.selectionManager.centerOnNode(node.getNode())
+
+def selectSubGraph(subgraph):
+    selectNodes(subgraph.nodes)
+    selectEdges(subgraph.edges)
+
+def selectNodes(nodes):
+    import org.gephi.visualization.VizController as VizController
+    import org.openide.util.Lookup as Lookup
+
+    vizController = Lookup.getDefault().lookup(VizController)
+    vizController.selectionManager.selectNodes([v.getNode() for v in nodes])
+
+def selectEdges(edges):
+    import org.gephi.visualization.VizController as VizController
+    import org.openide.util.Lookup as Lookup
+
+    vizController = Lookup.getDefault().lookup(VizController)
+    vizController.selectionManager.selectEdges([v.getEdge() for v in edges])
+
+
+#
 # Miscelaneous functions
 #
 
@@ -150,4 +180,9 @@ get_edge_attributes = getEdgeAttributes
 get_layout_builders = getLayoutBuilders
 run_layout = runLayout
 stop_layout = stopLayout
+selectSubgraph = selectSubGraph
+select_sub_graph = selectSubGraph
+select_subgraph = selectSubGraph
+select_nodes = selectNodes
+select_edges = selectEdges
 graph = g
