@@ -87,8 +87,8 @@ public class DynamicGraphDensityPanel extends javax.swing.JPanel {
         directedRadioButton = new javax.swing.JRadioButton();
         undirectedRadioButton = new javax.swing.JRadioButton();
  
-        header.setDescription("Degree of each node and the average of the network over time. It is the number of links that have a node, and is an indicator of centrality."); // NOI18N
-        header.setTitle("Dynamic Graph Density"); // NOI18N
+        header.setDescription("Density of each graph window and the average of the network over time.  "); // NOI18N
+        header.setTitle("Graph Density"); // NOI18N
 
         directedButtonGroup.add(directedRadioButton);
         directedRadioButton.setText("Directed"); // NOI18N

@@ -90,7 +90,7 @@ public class DynamicGraphDensityUI implements StatisticsUI {
     }
 
     public String getDisplayName() {
-        return "Dynamic Graph Density";
+        return "Graph Density";
     }
 
     public String getCategory() {

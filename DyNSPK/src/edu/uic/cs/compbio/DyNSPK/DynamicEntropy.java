@@ -63,7 +63,7 @@ import org.openide.util.Lookup;
 
 /**
  *
- * @author Mathieu Bastian
+ * @author Mathieu Bastian, Joshua Herman
  */
 public class DynamicEntropy implements DynamicStatistics, LongTask {
 
@@ -108,7 +108,7 @@ public class DynamicEntropy implements DynamicStatistics, LongTask {
 
     public String makeChart(Map<Double, Double> data, String filename, String Title, String XAxis, String YAxis) {
         //Time series
-        
+
 
         XYSeries dSeries = ChartUtils.createXYSeries(data, Title);
 
@@ -142,9 +142,9 @@ public class DynamicEntropy implements DynamicStatistics, LongTask {
                 + "<br> Window: " + window
                 + "<br> Tick: " + tick
                 + "<br><br><h2> Average degrees over time: </h2>"
-                + "<br /><br />" + makeChart(this.nodedata, "nodets.png", "Node Entropy Time Series", " Time", "Node Changes" ) + 
-                    makeChart(this.edgedata, "edgets.png",  "Edge Entropy Time Series", " Time" ,"Edge Changes" ) + 
-                    makeChart(this.sumdata, "sumts.png",  "Entropy Time Series"," Time" , "Total Changes" );
+                + "<br /><br />" + makeChart(this.nodedata, "nodets.png", "Node Entropy Time Series", " Time", "Node Changes")
+                + makeChart(this.edgedata, "edgets.png", "Edge Entropy Time Series", " Time", "Edge Changes")
+                + makeChart(this.sumdata, "sumts.png", "Entropy Time Series", " Time", "Total Changes");
         /*
          * private Map<Double, Double> nodedata; private Map<Double, Double>
          * edgedata; private Map<Double, Double> sumdata;
@@ -152,15 +152,14 @@ public class DynamicEntropy implements DynamicStatistics, LongTask {
         /*
          * for (Interval<Double> average : averages) { report +=
          * average.toString(dynamicModel.getTimeFormat().equals(DynamicModel.TimeFormat.DOUBLE))
-         * + "<br />";
-        }
+         * + "<br />"; }
          */
         report += "<br /><br /></BODY></HTML>";
         return report;
     }
 
     public void loop(GraphView window, Interval interval) {
-        
+
         //Time complexity of this algorithm is the cost of visiting each window twice and seeing if there is a change of edges or nodes.
         HierarchicalGraph graph = graphModel.getHierarchicalGraph(window);
         HierarchicalDirectedGraph directedGraph = null;
@@ -182,33 +181,41 @@ public class DynamicEntropy implements DynamicStatistics, LongTask {
 
                 for (Edge prevedge : previousedges) {
                     if (!directedGraph.contains(prevedge)) {
-                        
+
                         edgedelta++;
                     }
-                    for(Edge nextedge : directedGraph.getEdges())
-                        if(!prevedge.equals(nextedge)){
+                    for (Edge nextedge : directedGraph.getEdges()) {
+                        if (!prevedge.equals(nextedge)) {
                             edgedelta++;
+                            if (cancel) {
+                                break;
+                            }
                         }
-                    
+                    }
+
                 }
-                
-                    
-               // edgedelta = edgedelta / Collections.max(edgedata.values());
-              
+
+
+                // edgedelta = edgedelta / Collections.max(edgedata.values());
+
                 edgedata.put(interval.getHigh(), edgedelta);
                 double nodedelta = 0;
                 for (Node prevnode : previousnodes) {
                     if (!directedGraph.contains(prevnode)) {
                         nodedelta++;
                     }
-                     for(Node nextnode : directedGraph.getNodes())
-                        if(!prevnode.equals(nextnode)){
+                    for (Node nextnode : directedGraph.getNodes()) {
+                        if (!prevnode.equals(nextnode)) {
                             edgedelta++;
+                            if (cancel) {
+                                break;
+                            }
                         }
-                    
+                    }
+
 
                 }
-                
+
                 //nodedelta = nodedelta / Collections.max(edgedata.values());
                 nodedata.put(interval.getHigh(), nodedelta);
                 Double sumdelta = (nodedelta + edgedelta);
@@ -235,10 +242,15 @@ public class DynamicEntropy implements DynamicStatistics, LongTask {
                     if (!graph.contains(prevedge)) {
                         edgedelta++;
                     }
-                     for(Edge nextedge : graph.getEdges())
-                        if(!prevedge.equals(nextedge)){
+                    for (Edge nextedge : graph.getEdges()) {
+                        if (!prevedge.equals(nextedge)) {
                             edgedelta++;
+                            if (cancel) {
+                                break;
+                            }
                         }
+                    }
+
 
                 }
                 edgedata.put(interval.getHigh(), edgedelta);
@@ -247,11 +259,15 @@ public class DynamicEntropy implements DynamicStatistics, LongTask {
                     if (!graph.contains(prevnode)) {
                         nodedelta++;
                     }
-                      for(Node nextnode : graph.getNodes())
-                        if(!prevnode.equals(nextnode)){
+                    for (Node nextnode : graph.getNodes()) {
+                        if (!prevnode.equals(nextnode)) {
                             edgedelta++;
+                            if (cancel) {
+                                break;
+                            }
                         }
-                    
+                    }
+
 
 
                 }
@@ -264,7 +280,7 @@ public class DynamicEntropy implements DynamicStatistics, LongTask {
                 previousnodes = graph.getNodes().toArray();
             }
         }
-    graph.readUnlockAll();  
+        graph.readUnlockAll();
 
 
     }

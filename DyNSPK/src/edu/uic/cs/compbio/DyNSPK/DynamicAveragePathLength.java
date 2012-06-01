@@ -312,8 +312,8 @@ public class DynamicAveragePathLength implements DynamicStatistics, LongTask  {
             
             JFreeChart inChart = ChartFactory.createLineChart(
                     "Dynamic Average Path Length",
-                    "Edges",
-                    "Count",
+                    "Time",
+                    "Verticies",
                     inDataset,
                     PlotOrientation.VERTICAL,
                     true,

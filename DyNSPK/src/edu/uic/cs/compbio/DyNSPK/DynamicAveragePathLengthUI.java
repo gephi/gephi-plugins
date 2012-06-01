@@ -91,7 +91,7 @@ public class DynamicAveragePathLengthUI implements StatisticsUI {
     }
 
     public String getDisplayName() {
-        return "Dynamic Average Path Length";
+        return "Average Path Length";
     }
 
     public String getCategory() {
