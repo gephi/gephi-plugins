@@ -48,7 +48,7 @@ made subject to such option by the copyright holder.
     <import file="common.xml"/>
     <import file="jdk.xml"/>
     
-    <target name="taskdefs" unless="harness.taskdefs.done">
+    <target name="taskdefs" unless="${harness.taskdefs.done}">
         <dirname property="harness.dir" file="${harness.file}"/>
         <taskdef classpath="${harness.dir}/tasks.jar" resource="org/netbeans/nbbuild/taskdefs.properties"/>
         <typedef name="pathfileset" classname="org.netbeans.nbbuild.PathFileSet"
@@ -205,15 +205,48 @@ made subject to such option by the copyright holder.
         <property name="nbm.release.date" value=""/>
         <property name="nbm.needs.restart" value="false"/>
         <property name="nbm.is.global" value=""/>
+        <property name="nbm.is.preferredupdate" value=""/>
         <!-- Override if you want to use these: -->
         <property name="nbm.distribution" value=""/>
         <property name="nbm.homepage" value=""/>
         <property name="build.javahelp.dir" location="${build.dir}/javahelp"/>
         <property name="javahelp.base" value="${code.name.base.slashes}/docs"/>
         <property name="javahelp.search" value="JavaHelpSearch"/>
+        <pathconvert property="retouche.javac.api.patterns" pathsep=",">
+            <path path="${cluster.path.final}"/>
+            <regexpmapper from="(.*)" to="\1/modules/ext/*javac*api*.jar"/>
+        </pathconvert>
+        <pathconvert property="retouche.javac.api">
+            <files includes="${retouche.javac.api.patterns}"/>
+        </pathconvert>
+        <pathconvert property="retouche.javac.impl.patterns" pathsep=",">
+            <path path="${cluster.path.final}"/>
+            <regexpmapper from="(.*)" to="\1/modules/ext/*javac*impl*.jar"/>
+        </pathconvert>
+        <pathconvert property="retouche.javac.impl">
+            <files includes="${retouche.javac.impl.patterns}"/>
+            <fileset dir="${nbjdk.home}/../Classes" erroronmissingdir="false">
+                <include name="*.jar"/>
+            </fileset>
+        </pathconvert>
+        <!-- When requires.nb.javac property is true, prepend javac-api on bootclasspath to allow override the default annotation
+             processing API located in rt.jar. On Mac, prepend also javac-impl, so that tests are built against correct version of javac. -->
+        <condition property="bootclasspath.prepend" value="${retouche.javac.api}:${retouche.javac.impl}">
+            <and>
+                <os family="mac"/>
+                <istrue value="${requires.nb.javac}"/>
+            </and>
+        </condition>
+        <condition property="bootclasspath.prepend" value="${retouche.javac.api}">
+            <istrue value="${requires.nb.javac}"/>
+        </condition>
     </target>
 
-    <target name="test-lib-init" depends="init">
+    <target name="-test-branding" if="branding.token"><!-- #197066 -->
+        <property name="test-unit-sys-prop.branding.token" value="${branding.token}"/>
+        <property name="test-qa-functional-sys-prop.branding.token" value="${branding.token}"/>
+    </target>
+    <target name="test-lib-init" depends="init,-test-branding">
         <!-- NbModuleSuite must be made to ignore disabled.modules during a test; see discussion in #136621: -->
         <delete failonerror="false">
             <fileset dir="${suite.build.dir}">
@@ -260,7 +293,7 @@ made subject to such option by the copyright holder.
 
     <target name="javadoc" depends="build-init,-javadoc-init">
         <mkdir dir="${netbeans.javadoc.dir}/${code.name.base.dashes}"/>
-        <javadoc destdir="${netbeans.javadoc.dir}/${code.name.base.dashes}" packagenames="${module.javadoc.packages}" source="${javac.source}" windowtitle="${javadoc.title}" encoding="UTF-8">
+        <javadoc destdir="${netbeans.javadoc.dir}/${code.name.base.dashes}" packagenames="${module.javadoc.packages}" source="${javac.source}" windowtitle="${javadoc.title}" encoding="UTF-8" charset="UTF-8">
             <classpath refid="processor.cp"/> <!-- #157320 -->
             <sourcepath location="${src.dir}"/>
             <doctitle>${javadoc.title}</doctitle>
@@ -282,10 +315,27 @@ made subject to such option by the copyright holder.
         </ant>
     </target>
 
-    <target name="profile" depends="netbeans,-hide-excluded-modules,-jdk-presetdef-nbprofiledirect">
+    <target name="-profile-check" if="netbeans.home">
+        <condition property="profiler.configured">
+            <or>
+                <contains string="${run.args.ide}" substring="-agentpath:" casesensitive="true"/>
+                <contains string="${run.args.ide}" substring="-javaagent:" casesensitive="true"/>
+            </or>
+        </condition>
+    </target>
+
+    <target name="-do-profile" depends="netbeans,-hide-excluded-modules,-jdk-presetdef-nbprofiledirect">
         <ant antfile="${harness.dir}/run.xml" target="profile">
             <reference refid="cluster.path.id"/>
         </ant>
+    </target>
+    <target name="-try-profile" depends="-profile-check" if="profiler.configured">
+        <antcall target="-do-profile"/>
+    </target>
+
+    <target name="profile">
+        <ant antfile="${harness.dir}/run.xml" target="-profile-check"/>
+        <antcall target="-try-profile"/>
     </target>
 
     <target name="debug" depends="netbeans,-hide-excluded-modules,-jdk-presetdef-nbjpdastart">
@@ -296,7 +346,7 @@ made subject to such option by the copyright holder.
 
     <target name="reload" depends="netbeans">
         <ant antfile="${harness.dir}/run.xml" target="run">
-            <property name="run.args" value='--reload "${cluster}/${module.jar}"'/>
+            <property name="run.args" value='--reload "${cluster}/${module.jar}" --nosplash'/>
             <property name="run.args.extra" value=""/>
             <reference refid="cluster.path.id"/>
         </ant>

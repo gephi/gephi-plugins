@@ -77,8 +77,13 @@ made subject to such option by the copyright holder.
             </pathfileset>
         </delete>
         
+        <!-- architecture of jvm on which app will run -->
+        <condition property="jvm.arch.string" value="64" else="">
+            <available file="${run.jdkhome}\jre\lib\amd64" />
+        </condition>  
+        
         <!-- use nb.exe if exists (old platform), netbeans.exe otherwise -->
-        <condition property="run.app.exe" value="bin\nb.exe" else="bin\netbeans.exe">
+        <condition property="run.app.exe" value="bin\nb.exe" else="bin\netbeans${jvm.arch.string}.exe">
             <available file="${install}\bin\nb.exe"/>
         </condition>
         <property name="run.app.sh" value="bin/netbeans"/>
@@ -101,10 +106,10 @@ made subject to such option by the copyright holder.
                 </and>
                 <!-- #66793: also treat as a platform-based app if using platform and have no branding -->
                 <not>
-                    <available file="${run.exe.candidate}"/>
-                </not>
-                <not>
-                    <available file="${run.sh.candidate}"/>
+                    <or>
+                        <available file="${run.exe.candidate}"/>
+                        <available file="${run.sh.candidate}"/>
+                    </or>
                 </not>
             </or>
         </condition>
@@ -149,7 +154,7 @@ made subject to such option by the copyright holder.
         </pathconvert>
         <pathconvert property="run.exe">
             <path>
-                <fileset dir="${install}" includes="platform*/lib/nbexec.exe"/>
+                <fileset dir="${install}" includes="platform*/lib/nbexec${jvm.arch.string}.exe"/>
             </path>
         </pathconvert>
         <pathconvert property="run.sh">
@@ -169,7 +174,7 @@ made subject to such option by the copyright holder.
         <condition property="run.args.mac" value="-J-Xdock:name=${app.name}" else="">
             <os family="mac"/>
         </condition>
-        <exec osfamily="windows" executable="${run.exe}" failonerror="no" resultproperty="result.prop">
+        <exec osfamily="windows" executable="${run.exe}" failonerror="no">
             <arg value="--jdkhome"/>
             <arg file="${run.jdkhome}"/>
             <arg line="${run.args.common}"/>
@@ -178,8 +183,7 @@ made subject to such option by the copyright holder.
             <arg line="${run.args.extra}"/>
             <arg line="${run.args.ide}"/>
         </exec>
-        <exec osfamily="unix" dir="." executable="sh"
-        failonerror="no" resultproperty="result.prop">
+        <exec osfamily="unix" dir="." executable="sh" failonerror="no">
             <arg value="${run.sh}"/>
             <arg value="--jdkhome"/>
             <arg file="${run.jdkhome}"/>
@@ -190,21 +194,6 @@ made subject to such option by the copyright holder.
             <arg line="${run.args.mac}"/>
             <arg line="${run.args.ide}"/>
         </exec>
-        <fail>
-The application is already running within the test user directory.
-You must shut it down before trying to run it again.
-            <condition>
-                <and>
-                    <isset property="result.prop" />
-                    <or>
-                        <!-- unknown option exit code as returned from IDE by org.netbeans.api.sendopts.CommandLine -->
-                        <equals arg1="${result.prop}" arg2="50346" />
-                        <!-- unknown option exit code as returned from platform app by org.netbeans.CLIHandler -->
-                        <equals arg1="${result.prop}" arg2="2" />
-                    </or>
-                </and>
-            </condition>
-        </fail>
     </target>
 
 
@@ -228,7 +217,23 @@ You must shut it down before trying to run it again.
         </antcall>
     </target>
     
-    <target name="profile" description="Profile a project in the IDE.">
+    <target name="-profile-check" if="netbeans.home">
+        <condition property="profiler.configured">
+            <or>
+                <contains string="${run.args.ide}" substring="-agentpath:" casesensitive="true"/>
+                <contains string="${run.args.ide}" substring="-javaagent:" casesensitive="true"/>
+            </or>
+        </condition>
+    </target>
+    
+    <target name="profile" depends="-profile-check,-profile-pre72" if="profiler.configured" unless="profiler.info.jvmargs.agent" description="Profile a project in the IDE.">
+        <startprofiler/>
+        <antcall target="run">
+            <reference refid="cluster.path.id"/>
+        </antcall>
+    </target>
+    
+    <target name="-profile-pre72" description="Profile a project in the IDE." if="profiler.info.jvmargs.agent">
         <fail unless="netbeans.home">This target only works when run from inside the NetBeans IDE.</fail>
         <nbprofiledirect 
             jvmargsprefix="-J" 
@@ -255,5 +260,4 @@ You must shut it down before trying to run it again.
             <reference refid="cluster.path.id"/>
         </antcall>
     </target>
-    
 </project>

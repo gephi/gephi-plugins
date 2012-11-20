@@ -2,7 +2,7 @@
 <!--
 DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
 
-Copyright 1997-2010 Oracle and/or its affiliates. All rights reserved.
+Copyright 1997-2012 Oracle and/or its affiliates. All rights reserved.
 
 Oracle and Java are registered trademarks of Oracle and/or its affiliates.
 Other names may be trademarks of their respective owners.
@@ -75,9 +75,9 @@ made subject to such option by the copyright holder.
         <!-- Do not try to set module.classpath here, in particular: -->
         <!-- during a clean, the ${foo/bar.dir} properties may not be set. -->
         <parseprojectxml project="." 
-            codenamebaseproperty="code.name.base"
-            codenamebasedashesproperty="code.name.base.dashes" 
-            codenamebaseslashesproperty="code.name.base.slashes"
+                         codenamebaseproperty="code.name.base"
+                         codenamebasedashesproperty="code.name.base.dashes"
+                         codenamebaseslashesproperty="code.name.base.slashes"
         />
         <property name="module.jar.dir" value="modules"/>
         <property name="module.jar.basename" value="${code.name.base.dashes}.jar"/>
@@ -134,6 +134,18 @@ made subject to such option by the copyright holder.
         </patternset>
     </target>
 
+    <target name="-javac-init-nbjdk" depends="-jdk-preinit" if="nbjdk.valid">
+        <macrodef name="custom-javac-presetdef">
+            <attribute name="javacval"/>
+            <sequential>
+                <presetdef name="custom-javac">
+                    <custom-javac executable="@{javacval}"/>
+                </presetdef>
+            </sequential>
+        </macrodef>
+        <custom-javac-presetdef javacval="${nbjdk.javac}"/>
+    </target>
+
     <target name="-javac-init-bootclasspath-prepend" depends="build-init" if="bootclasspath.prepend">
         <presetdef name="nb-javac">
             <custom-javac>
@@ -155,7 +167,7 @@ made subject to such option by the copyright holder.
         </presetdef>
     </target>
 
-    <target name="-javac-init" depends="build-init,-javac-init-bootclasspath-prepend,-javac-init-no-bootclasspath-prepend">
+    <target name="-javac-init" depends="build-init,-javac-init-nbjdk,-javac-init-bootclasspath-prepend,-javac-init-no-bootclasspath-prepend">
         <path id="cp">
             <pathelement path="${module.classpath}"/>
             <pathelement path="${cp.extra}"/>
@@ -203,7 +215,7 @@ made subject to such option by the copyright holder.
             <classpath refid="cp"/>
         </depend>
         <nb-javac srcdir="${src.dir}" destdir="${build.classes.dir}" debug="${build.compiler.debug}" debuglevel="${build.compiler.debuglevel}" encoding="UTF-8"
-                deprecation="${build.compiler.deprecation}" optimize="${build.compiler.optimize}" source="${javac.source}" target="${javac.target}" includeantruntime="false">
+                  deprecation="${build.compiler.deprecation}" optimize="${build.compiler.optimize}" source="${javac.source}" target="${javac.target}" includeantruntime="false">
             <classpath refid="cp"/>
             <compilerarg line="${javac.compilerargs}"/>
             <processorpath refid="processor.cp"/>
@@ -222,8 +234,8 @@ made subject to such option by the copyright holder.
             <classpath refid="cp"/>
         </depend>
         <nb-javac srcdir="${src.dir}" destdir="${build.classes.dir}"
-               debug="${build.compiler.debug}" deprecation="${build.compiler.deprecation}" encoding="UTF-8"
-               source="${javac.source}" target="${javac.target}" includes="${javac.includes}" optimize="${build.compiler.optimize}" includeantruntime="false">
+                  debug="${build.compiler.debug}" deprecation="${build.compiler.deprecation}" encoding="UTF-8"
+                  source="${javac.source}" target="${javac.target}" includes="${javac.includes}" optimize="${build.compiler.optimize}" includeantruntime="false">
             <classpath refid="cp"/>
             <compilerarg line="${javac.compilerargs}"/>
             <processorpath refid="processor.cp"/>
@@ -313,7 +325,7 @@ made subject to such option by the copyright holder.
         <parsemanifest manifest="${manifest.mf}" attribute="OpenIDE-Module-Layer" property="layer.file"/>
         <!-- DTD from sources -->
         <available file="${nb_all}/openide.filesystems/src/org/openide/filesystems/filesystem.dtd" type="file"
-            property="dtd.cp" value="${nb_all}/openide.filesystems/src"/>
+                   property="dtd.cp" value="${nb_all}/openide.filesystems/src"/>
         <!-- DTD from platform -->
         <pathconvert property="dtd.cp">
             <pathfileset>
@@ -326,18 +338,20 @@ made subject to such option by the copyright holder.
             <fileset file="${src.dir}/${layer.file}" erroronmissingdir="false"/>
             <xmlcatalog classpath="${dtd.cp}">
                 <dtd publicId="-//NetBeans//DTD Filesystem 1.0//EN"
-                location="org/openide/filesystems/filesystem.dtd"/>
+                     location="org/openide/filesystems/filesystem.dtd"/>
                 <dtd publicId="-//NetBeans//DTD Filesystem 1.1//EN"
-                location="org/openide/filesystems/filesystem1_1.dtd"/>
+                     location="org/openide/filesystems/filesystem1_1.dtd"/>
                 <dtd publicId="-//NetBeans//DTD Filesystem 1.2//EN"
-                location="org/openide/filesystems/filesystem1_2.dtd"/>
+                     location="org/openide/filesystems/filesystem1_2.dtd"/>
             </xmlcatalog>
         </xmlvalidate>
     </target>
 
-    <target name="netbeans" depends="init,jar,netbeans-extra,javahelp,module-auto-deps,release,module-xml-regular,
+    <target name="-netbeans" depends="init,jar,netbeans-extra,javahelp,module-auto-deps,release,module-xml-regular,
             module-xml-autoload,module-xml-eager,chmod-executables,verify-class-linkage,
-            -validate-layers,-verify-apichanges">            
+            -validate-layers,-verify-apichanges"/> 
+    
+    <target name="netbeans" depends="-netbeans">
         <property name="module.files.toString" refid="module.files"/>
         <echo level="verbose">Basic matching module files: ${module.files.toString}</echo>
         <genlist outputfiledir="${cluster}" module="${module.jar}">
@@ -426,6 +440,7 @@ made subject to such option by the copyright holder.
                  distribution="${nbm.distribution}"
                  needsrestart="${nbm.needs.restart}"
                  global="${nbm.is.global}"
+                 preferredupdate="${nbm.is.preferredupdate}"
                  usepack200="${use.pack200}"
                  pack200excludes="${pack200.excludes}"
                  targetcluster="${nbm.target.cluster}"
@@ -500,15 +515,15 @@ made subject to such option by the copyright holder.
                         <propertyref name="test.timeout"/>
                         <mapper type="glob" from="test.timeout" to="nbjunit.hard.timeout"/>
                     </propertyset>
-                </propertyset>
-                <condition property="exists.test.@{test.type}.src.dir">
-                    <and>
-                        <available file="${test.@{test.type}.src.dir}" type="dir"/>
-                        <not>
-                            <istrue value="${disable.@{test.type}.tests}"/>
-                        </not>
-                    </and>
-                </condition>
+                    </propertyset>
+                    <condition property="exists.test.@{test.type}.src.dir">
+                        <and>
+                            <available file="${test.@{test.type}.src.dir}" type="dir"/>
+                            <not>
+                                <istrue value="${disable.@{test.type}.tests}"/>
+                            </not>
+                        </and>
+                    </condition>
 
             </sequential>
         </macrodef>
@@ -537,9 +552,9 @@ made subject to such option by the copyright holder.
         <attribute name="test.type"/>
         <sequential>
             <fail >
-             Missing test dependency
-              Runtime classpath: ${test.@{test.type}.runtime.cp}
-              Compile classpath: ${test.@{test.type}.compile.cp}
+                Missing test dependency
+                Runtime classpath: ${test.@{test.type}.runtime.cp}
+                Compile classpath: ${test.@{test.type}.compile.cp}
                 <condition>
                     <or>
                         <contains string="${test.@{test.type}.runtime.cp}" substring="-missing-Module-Entries-:" />
@@ -553,8 +568,8 @@ made subject to such option by the copyright holder.
             </depend>
             <property name="test.excludes" value=""/> <!-- # 113770 -->
             <nb-javac srcdir="${test.@{test.type}.src.dir}" destdir="${build.test.@{test.type}.classes.dir}" excludes="${test.excludes}"
-                   debug="true" deprecation="${build.compiler.deprecation}" encoding="UTF-8"
-                   source="${javac.source}" target="${javac.target}" optimize="${build.compiler.optimize}" includeantruntime="false">
+                      debug="true" deprecation="${build.compiler.deprecation}" encoding="UTF-8"
+                      source="${javac.source}" target="${javac.target}" optimize="${build.compiler.optimize}" includeantruntime="false">
                 <classpath refid="test.@{test.type}.cp"/>
                 <compilerarg line="${javac.compilerargs}"/>
                 <processorpath refid="test.@{test.type}.cp"/>
@@ -592,8 +607,8 @@ made subject to such option by the copyright holder.
                     <classpath refid="test.@{test.type}.cp"/>
                 </depend>
                 <nb-javac srcdir="${test.@{test.type}.src.dir}" destdir="${build.test.@{test.type}.classes.dir}"
-                       debug="true" deprecation="${build.compiler.deprecation}" encoding="UTF-8"
-                       source="${javac.source}" target="${javac.target}" includeantruntime="false" optimize="${build.compiler.optimize}" includes="${javac.includes}">
+                          debug="true" deprecation="${build.compiler.deprecation}" encoding="UTF-8"
+                          source="${javac.source}" target="${javac.target}" includeantruntime="false" optimize="${build.compiler.optimize}" includes="${javac.includes}">
                     <classpath refid="test.@{test.type}.cp"/>
                     <compilerarg line="${javac.compilerargs}"/>
                     <processorpath refid="test.@{test.type}.cp"/>
@@ -632,27 +647,13 @@ made subject to such option by the copyright holder.
             <property name="test.config.${test.config}.excludes" value=""/>
             <metaproperty name="test.excludes" value="test.config.${test.config}.excludes"/>
             <mkdir dir="${build.test.@{test.type}.results.dir}"/>
-            <junit showoutput="true" fork="true" failureproperty="tests.failed" errorproperty="tests.failed" filtertrace="${test.filter.trace}" tempdir="${build.test.@{test.type}.results.dir}" timeout="${test.timeout}">
-                <batchtest todir="${build.test.@{test.type}.results.dir}">
-                    <fileset dir="${build.test.@{test.type}.classes.dir}" includes="${test.includes}" excludes="${test.excludes}"/>
-                </batchtest>
-                <classpath refid="test.@{test.type}.run.cp"/>
-                <syspropertyset refid="test.@{test.type}.properties"/>
-                <jvmarg line="${test.bootclasspath.prepend.args}"/>
-                <jvmarg line="${test.run.args}"/>
-                <!--needed to have tests NOT to steal focus when running, works in latest apple jdk update only.-->
-                <sysproperty key="apple.awt.UIElement" value="@{disable.apple.ui}"/>
-                <formatter type="brief" usefile="false"/>
-                <formatter type="xml"/>
-            </junit>
-            <fail message="Some tests failed; see details above.">
-                <condition>
-                    <and>
-                        <isset property="tests.failed"/>
-                        <isfalse value="${continue.after.failing.tests}"/>
-                    </and>
-                </condition>
-            </fail>
+            <condition property="test.runner" value ="testng" else="junit">
+                <available classname="org.testng.annotations.Test" classpath="${test.@{test.type}.runtime.cp}"/>
+            </condition>
+            <antcall target="-do-${test.runner}">
+                <param name="run.test.type" value="@{test.type}"/>
+                <param name="disable.apple.ui" value="@{disable.apple.ui}"/>
+            </antcall>
         </sequential>
     </macrodef>
     <target name="test-unit" depends="init,test-init,test-build" if="exists.test.unit.src.dir">
@@ -660,6 +661,56 @@ made subject to such option by the copyright holder.
     </target>
     <target name="test-qa-functional" depends="init,test-init,test-build" if="exists.test.qa-functional.src.dir">
         <test test.type="qa-functional"/>
+    </target>
+
+    <target name="-do-junit" depends="test-init">
+        <macrodef name="junit-impl">
+            <attribute name="test.type"/>
+            <attribute name="disable.apple.ui" default="false"/>
+            <sequential>
+                <junit showoutput="true" fork="true" failureproperty="tests.failed" errorproperty="tests.failed" filtertrace="${test.filter.trace}" tempdir="${build.test.@{test.type}.results.dir}" timeout="${test.timeout}">
+                    <batchtest todir="${build.test.@{test.type}.results.dir}">
+                        <fileset dir="${build.test.@{test.type}.classes.dir}" includes="${test.includes}" excludes="${test.excludes}"/>
+                    </batchtest>
+                    <classpath refid="test.@{test.type}.run.cp"/>
+                    <syspropertyset refid="test.@{test.type}.properties"/>
+                    <jvmarg line="${test.bootclasspath.prepend.args}"/>
+                    <jvmarg line="${test.run.args}"/>
+                    <!--needed to have tests NOT to steal focus when running, works in latest apple jdk update only.-->
+                    <sysproperty key="apple.awt.UIElement" value="@{disable.apple.ui}"/>
+                    <formatter type="brief" usefile="false"/>
+                    <formatter type="xml"/>
+                </junit>
+                <fail if="tests.failed" unless="continue.after.failing.tests">Some tests failed; see details above.</fail>
+            </sequential>
+        </macrodef>
+        <junit-impl test.type="${run.test.type}" disable.apple.ui="${disable.apple.ui}"/>
+    </target>
+
+    <target name="-do-testng" depends="test-init">
+        <macrodef name="testng-impl">
+            <attribute name="test.type"/>
+            <attribute name="disable.apple.ui" default="false"/>
+            <sequential>
+                <taskdef name="testng" classname="org.testng.TestNGAntTask" classpathref="test.@{test.type}.run.cp"/>
+                <testng mode="mixed"
+                        failureProperty="tests.failed"
+                        outputdir="${build.test.@{test.type}.results.dir}"
+                        workingDir="${build.test.@{test.type}.results.dir}"
+                        suitename="${code.name.base}"
+                >
+                    <classfileset dir="${build.test.@{test.type}.classes.dir}" excludes="${test.excludes}" includes="${test.includes}"/>
+                    <propertyset refid="test.@{test.type}.properties"/>
+                    <classpath refid="test.@{test.type}.run.cp"/>
+                    <jvmarg line="${test.bootclasspath.prepend.args}"/>
+                    <jvmarg line="${test.run.args}"/>
+                    <!-- needed to have tests NOT to steal focus when running, works in latest apple jdk update only.-->
+                    <sysproperty key="apple.awt.UIElement" value="@{disable.apple.ui}"/>
+                </testng>
+                <fail if="tests.failed" unless="continue.after.failing.tests">Some tests failed; see details above.</fail>
+            </sequential>
+        </macrodef>
+        <testng-impl test.type="${run.test.type}" disable.apple.ui="${disable.apple.ui}"/>
     </target>
 
     <target name="test-generate-html" depends="-build-dir-init">
@@ -678,7 +729,7 @@ made subject to such option by the copyright holder.
         <makeurl file="${basedir}/html/index.html" property="test.report.url"/>
         <echo>
 
-        Report URL: ${test.report.url}
+            Report URL: ${test.report.url}
         </echo>
     </target>
 
@@ -692,7 +743,26 @@ made subject to such option by the copyright holder.
             <attribute name="test.type"/>
             <sequential>
                 <fail unless="test.includes">Must set test.includes</fail>
+                <property name="run.jvmargs.ide" value=""/> 
                 <mkdir dir="${build.test.@{test.type}.results.dir}"/>
+                <condition property="test.runner" value ="testng" else="junit">
+                    <available classname="org.testng.annotations.Test" classpath="${test.@{test.type}.runtime.cp}"/>
+                </condition>
+                <antcall target="-do-${test.runner}-single">
+                    <param name="test.type" value="@{test.type}"/>
+                </antcall>
+            </sequential>
+        </macrodef>
+        <property name="test.type" value="unit"/>
+        <property name="run.args.ide" value=""/>
+        
+        <test-single test.type="${test.type}"/>
+    </target>
+
+    <target name="-do-junit-single" depends="test-init">
+        <macrodef name="junit-impl">
+            <attribute name="test.type"/>
+            <sequential>
                 <junit showoutput="true" fork="true" failureproperty="tests.failed" errorproperty="tests.failed" filtertrace="${test.filter.trace}" tempdir="${build.test.@{test.type}.results.dir}" timeout="${test.timeout}">
                     <batchtest todir="${build.test.@{test.type}.results.dir}">
                         <fileset dir="${test.@{test.type}.src.dir}" includes="${test.includes}"/>
@@ -701,14 +771,41 @@ made subject to such option by the copyright holder.
                     <syspropertyset refid="test.@{test.type}.properties"/>
                     <jvmarg line="${test.run.args}"/>
                     <jvmarg line="${test.bootclasspath.prepend.args}"/>
+                    <jvmarg line="${run.args.ide}"/>
+                    <jvmarg line="${run.jvmargs.ide}"/>
                     <formatter type="brief" usefile="false"/>
                     <formatter type="xml"/>
                 </junit>
                 <fail if="tests.failed" unless="continue.after.failing.tests">Some tests failed; see details above.</fail>
             </sequential>
         </macrodef>
-        <property name="test.type" value="unit"/>
-        <test-single test.type="${test.type}"/>
+        <junit-impl test.type="${test.type}" />
+    </target>
+
+    <target name="-do-testng-single" depends="test-init">
+        <macrodef name="testng-impl">
+            <attribute name="test.type"/>
+            <sequential>
+                <fileset id="testng.test" dir="${test.@{test.type}.src.dir}" includes="${test.includes}"/>
+                <taskdef name="testng" classname="org.testng.TestNGAntTask" classpathref="test.@{test.type}.run.cp"/>
+                <testng  mode="mixed"
+                         classfilesetref="testng.test"
+                         failureProperty="tests.failed"
+                         outputdir="${build.test.@{test.type}.results.dir}"
+                         workingDir="${build.test.@{test.type}.results.dir}"
+                         suitename="${code.name.base}"
+                >
+                    <propertyset refid="test.@{test.type}.properties"/>
+                    <classpath refid="test.@{test.type}.run.cp"/>
+                    <jvmarg line="${test.bootclasspath.prepend.args}"/>
+                    <jvmarg line="${test.run.args}"/>
+                    <!-- needed to have tests NOT to steal focus when running, works in latest apple jdk update only.-->
+                    <sysproperty key="apple.awt.UIElement" value="@{disable.apple.ui}"/>
+                </testng>
+                <fail if="tests.failed" unless="continue.after.failing.tests">Some tests failed; see details above.</fail>
+            </sequential>
+        </macrodef>
+        <testng-impl test.type="${test.type}"/>
     </target>
 
     <target name="do-debug-test-single" depends="test-init">
@@ -716,9 +813,25 @@ made subject to such option by the copyright holder.
             <attribute name="test.type"/>
             <sequential>
                 <fail unless="test.class">Must set test.class</fail>
+                <mkdir dir="${build.test.@{test.type}.results.dir}"/>
+                <condition property="test.runner" value ="testng" else="junit">
+                    <available classname="org.testng.annotations.Test" classpath="${test.@{test.type}.runtime.cp}"/>
+                </condition>
+                <antcall target="-do-${test.runner}-debug-single">
+                    <param name="test.type" value="@{test.type}"/>
+                </antcall>
+            </sequential>
+        </macrodef>
+        <property name="test.type" value="unit"/>
+        <do-debug-test-single test.type="${test.type}"/>
+    </target>
+
+    <target name="-do-junit-debug-single" depends="test-init">
+        <macrodef name="junit-impl">
+            <attribute name="test.type"/>
+            <sequential>
                 <property name="test.report.file" location="${build.test.@{test.type}.results.dir}/TEST-${test.class}.xml"/>
                 <delete file="${test.report.file}"/>
-                <mkdir dir="${build.test.@{test.type}.results.dir}"/>
                 <touch file="${test.report.file}" verbose="false"/>   <!-- must exist, otherwise the XML formatter would fail -->
                 <condition property="test.methods.line" value="methods=${test.methods}" else="">
                     <isset property="test.methods"/>
@@ -744,8 +857,50 @@ made subject to such option by the copyright holder.
                 </java>
             </sequential>
         </macrodef>
-        <property name="test.type" value="unit"/>
-        <do-debug-test-single test.type="${test.type}"/>
+        <junit-impl test.type="${test.type}" />
+    </target>
+
+    <target name="-do-testng-debug-single" depends="test-init">
+        <macrodef name="testng-impl">
+            <attribute name="test.type"/>
+            <sequential>
+                <condition property="testng.args.line" value="-methods ${test.class}.${test.methods}" else="-testclass ${test.class}">
+                    <isset property="test.methods"/>
+                </condition>
+                <!-- XXX: Consider debugging using testng task itself      -->
+                <!-- TestNG is running in forkMode="once"                  -->
+                <!-- therefore results while debugging single class/method -->
+                <!-- can be different from running all tests at once       -->
+                <java classname="org.testng.TestNG" fork="true">
+                    <jvmarg value="-Xdebug"/>
+                    <jvmarg value="-Xrunjdwp:transport=dt_socket,address=${jpda.address}"/>
+                    <jvmarg line="${test.run.args}"/>
+                    <jvmarg line="${test.bootclasspath.prepend.args}"/>
+                    <classpath refid="test.@{test.type}.run.cp"/>
+                    <syspropertyset refid="test.@{test.type}.properties"/>
+                    <jvmarg value="-ea"/>
+                    <arg line="-mixed"/>
+                    <arg line="-d ${build.test.@{test.type}.results.dir}"/>
+                    <arg line="-listener org.testng.reporters.VerboseReporter"/>
+                    <arg line="-suitename ${code.name.base}"/>
+                    <arg line="-testname ${test.class}"/>
+                    <arg line="${testng.args.line}"/>
+                </java>
+                <!--
+                <taskdef name="testng" classname="org.testng.TestNGAntTask" classpathref="test.@{test.type}.run.cp"/>
+                <testng mode="mixed" methods="${testng.methods}" failureProperty="tests.failed" outputdir="${build.test.@{test.type}.results.dir}" workingDir="${build.test.@{test.type}.results.dir}">
+                    <classfileset dir="${build.test.@{test.type}.classes.dir}" excludes="${test.excludes}" includes="**/*Test.class"/>
+                    <propertyset refid="test.@{test.type}.properties"/>
+                    <classpath refid="test.@{test.type}.run.cp"/>
+                    <jvmarg line="${test.bootclasspath.prepend.args}"/>
+                    <jvmarg line="${test.run.args}"/>
+                    <jvmarg value="-Xdebug"/>
+                    <jvmarg value="-Xrunjdwp:transport=dt_socket,address=${jpda.address}"/>
+                </testng>
+                -->
+            </sequential>
+        </macrodef>
+        <testng-impl test.type="${test.type}"/>
     </target>
 
     <target name="debug-test-single" depends="init,test-init,test-build,do-debug-test-single"/>
@@ -776,39 +931,85 @@ made subject to such option by the copyright holder.
             <sequential>
                 <fail unless="test.class">Must set test.class</fail>
                 <fail unless="test.methods">Must set test.methods</fail>
+                <property name="run.jvmargs.ide" value=""/>
                 <mkdir dir="${build.test.@{test.type}.results.dir}"/>
-                <junit showoutput="true" fork="true" failureproperty="tests.failed" errorproperty="tests.failed" filtertrace="${test.filter.trace}" tempdir="${build.test.@{test.type}.results.dir}" timeout="${test.timeout}">
-                    <test name="${test.class}" methods="${test.methods}" todir="${build.test.@{test.type}.results.dir}"/>
-                    <classpath refid="test.@{test.type}.run.cp"/>
-                    <syspropertyset refid="test.@{test.type}.properties"/>
-                    <jvmarg line="${test.run.args}"/>
-                    <jvmarg line="${test.bootclasspath.prepend.args}"/>
-                    <formatter type="brief" usefile="false"/>
-                    <formatter type="xml"/>
-                </junit>
-                <fail if="tests.failed" unless="continue.after.failing.tests">Some tests failed; see details above.</fail>
+                <condition property="test.runner" value ="testng" else="junit">
+                    <available classname="org.testng.annotations.Test" classpath="${test.@{test.type}.runtime.cp}"/>
+                </condition>
+                <antcall target="-do-${test.runner}-testmethod">
+                    <param name="test.type" value="@{test.type}"/>
+                </antcall>
             </sequential>
         </macrodef>
         <property name="test.type" value="unit"/>
         <test-method test.type="${test.type}"/>
     </target>
     
+    <target name="-do-junit-testmethod" depends="test-init">
+        <macrodef name="junit-impl">
+            <attribute name="test.type"/>
+            <sequential>
+                <junit showoutput="true" fork="true" failureproperty="tests.failed" errorproperty="tests.failed" filtertrace="${test.filter.trace}" tempdir="${build.test.@{test.type}.results.dir}" timeout="${test.timeout}">
+                    <test name="${test.class}" methods="${test.methods}" todir="${build.test.@{test.type}.results.dir}"/>
+                    <classpath refid="test.@{test.type}.run.cp"/>
+                    <syspropertyset refid="test.@{test.type}.properties"/>
+                    <jvmarg line="${test.run.args}"/>
+                    <jvmarg line="${test.bootclasspath.prepend.args}"/>
+                    <jvmarg line="${run.jvmargs.ide}"/>
+                    <formatter type="brief" usefile="false"/>
+                    <formatter type="xml"/>
+                </junit>
+                <fail if="tests.failed" unless="continue.after.failing.tests">Some tests failed; see details above.</fail>
+            </sequential>
+        </macrodef>
+        <junit-impl test.type="${test.type}" />
+    </target>
+
+    <target name="-do-testng-testmethod" depends="test-init">
+        <macrodef name="testng-impl">
+            <attribute name="test.type"/>
+            <sequential>
+                <taskdef name="testng" classname="org.testng.TestNGAntTask" classpathref="test.@{test.type}.run.cp"/>
+                <testng mode="mixed"
+                        methods="${test.class}.${test.methods}"
+                        failureProperty="tests.failed"
+                        outputdir="${build.test.@{test.type}.results.dir}"
+                        workingDir="${build.test.@{test.type}.results.dir}"
+                        suitename="${code.name.base}"
+                >
+                    <propertyset refid="test.@{test.type}.properties"/>
+                    <classpath refid="test.@{test.type}.run.cp"/>
+                    <jvmarg line="${test.bootclasspath.prepend.args}"/>
+                    <jvmarg line="${test.run.args}"/>
+                    <!-- needed to have tests NOT to steal focus when running, works in latest apple jdk update only.-->
+                    <sysproperty key="apple.awt.UIElement" value="@{disable.apple.ui}"/>
+                </testng>
+                <fail if="tests.failed" unless="continue.after.failing.tests">Some tests failed; see details above.</fail>
+            </sequential>
+        </macrodef>
+        <testng-impl test.type="${test.type}"/>
+    </target>
+
     <target name="run-test-main"  depends="init,test-init,test-build">
         <macrodef name="tjava">
             <attribute name="test.type"/>
             <element name="customize" optional="true"/>
             <sequential>
                 <fail unless="main.class">Must set main.class.</fail>
+                <property name="run.jvmargs.ide" value=""/>
                 <mkdir dir="${build.test.@{test.type}.results.dir}"/>
                 <java classname="${main.class}" dir="${build.test.@{test.type}.results.dir}" fork="true">
                     <classpath refid="test.@{test.type}.run.cp"/>
                     <syspropertyset refid="test.@{test.type}.properties"/>
                     <jvmarg line="${test.run.args}"/>
+                    <jvmarg line="${run.args.ide}"/>
+                    <jvmarg line="${run.jvmargs.ide}"/>
                     <customize/>
                 </java>
             </sequential>
         </macrodef>
         <property name="test.type" value="unit"/> <!-- compatibility -->
+        <property name="run.args.ide" value=""/> <!-- default -->
         <tjava test.type="${test.type}"/>
     </target>
 
@@ -875,7 +1076,16 @@ made subject to such option by the copyright holder.
         <debug-fix-test-nb test.type="${test.type}"/>
     </target>
 
-    <target name="profile-test-single-nb" depends="init,test-init,test-build,-jdk-presetdef-nbprofiledirect">
+    <target name="-profile-check" if="netbeans.home">
+        <condition property="profiler.configured">
+            <or>
+                <contains string="${run.args.ide}" substring="-agentpath:" casesensitive="true"/>
+                <contains string="${run.args.ide}" substring="-javaagent:" casesensitive="true"/>
+            </or>
+        </condition>
+    </target>
+
+    <target name="-profile-test-single-nb-pre72" depends="init,test-init,test-build,-jdk-presetdef-nbprofiledirect" if="profiler.info.jvmargs.agent">
         <macrodef name="profile-test-single-nb">
             <attribute name="test.type"/>
             <sequential>
@@ -883,7 +1093,7 @@ made subject to such option by the copyright holder.
                 <mkdir dir="${build.test.@{test.type}.results.dir}"/>
                 <nbprofiledirect
                     jvmargsproperty="profiler.jvmargs"
-                    >
+                >
                     <classpath refid="test.@{test.type}.run.cp"/>
                 </nbprofiledirect>
                 <junit showoutput="true" fork="true" failureproperty="tests.failed" errorproperty="tests.failed" filtertrace="${test.filter.trace}" tempdir="${build.test.@{test.type}.results.dir}">
@@ -903,6 +1113,16 @@ made subject to such option by the copyright holder.
         </macrodef>
         <property name="test.type" value="unit"/>
         <profile-test-single-nb test.type="${test.type}"/>
+    </target>
+
+    <target name="profile-test-single-nb" depends="-profile-check,init,test-init,test-build,-profile-test-single-nb-pre72" if="profiler.configured" unless="profiler.info.jvmargs.agent">        
+        <startprofiler/>
+        <antcall target="test-single"/>
+    </target>
+    
+    <target name="profile-test-main-nb" depends="-profile-check,init,test-init,test-build" if="profiler.configured" unless="profiler.info.jvmargs.agent">
+        <startprofiler/>
+        <antcall target="run-test-main"/>
     </target>
 
     <target name="-javadoc-init" depends="init">
@@ -927,7 +1147,7 @@ made subject to such option by the copyright holder.
         <property name="arch.output.html" location="${build.dir}/arch.html"/>
         <property name="arch.generate" value="true"/>
         <arch answers="${javadoc.arch}" output="${arch.output.html}"
-            project="nbproject/project.xml"
+              project="nbproject/project.xml"
         />
     </target>
 
@@ -975,7 +1195,7 @@ made subject to such option by the copyright holder.
             </fileset>
         </delete>
         <delete file="${cluster}/update_tracking/${code.name.base.dashes}.xml"/>
-	<delete file="${netbeans.dest.dir}/${module.cluster.name}.built" failonerror="false"/>
+        <delete file="${netbeans.dest.dir}/${module.cluster.name}.built" failonerror="false"/>
     </target>
 
     <target name="fix-dependencies" depends="basic-init" description="Removes unused compilation dependencies on other modules.">
@@ -1010,13 +1230,13 @@ made subject to such option by the copyright holder.
 
     <target name="fix-test-dependencies" depends="basic-init" description="Moves classpath for tests from project.properties to project.xml.">
         <fixtestdeps projectXml="nbproject/project.xml"
-                  propertiesFile="nbproject/project.properties"/>
+                     propertiesFile="nbproject/project.properties"/>
     </target>
 
     <target name="display-coverage-report" depends="coverage-report"
-        description="Creates and displays unit test coverage report for this module">
+            description="Creates and displays unit test coverage report for this module">
         <fail unless="testcoverage.unit.report.dir">
-Property testcoverage.unit.report.dir not set. Test coverage script may be missing in ${harness.dir}.
+            Property testcoverage.unit.report.dir not set. Test coverage script may be missing in ${harness.dir}.
         </fail>
         <nbbrowse file="${testcoverage.unit.report.dir}/index.html"/>
     </target>

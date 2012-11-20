@@ -1,7 +1,7 @@
 #!/bin/sh
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
 #
-# Copyright 1997-2011 Oracle and/or its affiliates. All rights reserved.
+# Copyright 1997-2012 Oracle and/or its affiliates. All rights reserved.
 #
 # Oracle and Java are registered trademarks of Oracle and/or its affiliates.
 # Other names may be trademarks of their respective owners.
@@ -151,7 +151,16 @@ if [ -z "$jdkhome" ] ; then
 
     case "`uname`" in
         Darwin*)
-        if [ -f "/System/Library/Java/JavaVirtualMachines/1.6.0.jdk/Contents/Home/bin/java" ] ; then
+        # read Java Preferences
+        if [ -x "/usr/libexec/java_home" ]; then
+            jdkhome=`/usr/libexec/java_home`
+
+        # JDK1.7
+        elif [ -f "/Library/Java/JavaVirtualMachines/1.7.0.jdk/Contents/Home/bin/java" ] ; then
+            jdkhome="/Library/Java/JavaVirtualMachines/1.7.0.jdk/Contents/Home"
+
+        # JDK1.6
+        elif [ -f "/System/Library/Java/JavaVirtualMachines/1.6.0.jdk/Contents/Home/bin/java" ] ; then
             jdkhome="/System/Library/Java/JavaVirtualMachines/1.6.0.jdk/Contents/Home"
         elif [ -f "/System/Library/Frameworks/JavaVM.framework/Versions/1.6/Home/bin/java" ] ; then
             jdkhome="/System/Library/Frameworks/JavaVM.framework/Versions/1.6/Home"
@@ -179,6 +188,10 @@ if [ ! -x "${jdkhome}/bin/java" ] ; then
     exit 2
 fi
 
+# Make sure native code libraries of jdk7 are found
+LD_LIBRARY_PATH=${jdkhome}/jre/lib/amd64:${jdkhome}/jre/lib/i386:${LD_LIBRARY_PATH}
+export LD_LIBRARY_PATH
+	 
 # if the Java option for heap dump on OOME is supported enable it
 if "${jdkhome}/bin/java" -XX:+HeapDumpOnOutOfMemoryError -cp "${progdir}/boot.jar" org.netbeans.NbExecJavaStartTry > /dev/null 2>&1 ; then
    jargs="$jargs -XX:+HeapDumpOnOutOfMemoryError"
@@ -478,6 +491,11 @@ fi
 
 if [ ! -z "$socks_proxy_tmp" ] ; then
 	jargs="-Dnetbeans.system_socks_proxy=\"$socks_proxy_tmp\" $jargs"
+fi
+
+if [ ! -z "${DEFAULT_USERDIR_ROOT}" ] ; then
+	jargs="-Dnetbeans.default_userdir_root=\"${DEFAULT_USERDIR_ROOT}\" $jargs"
+        unset DEFAULT_USERDIR_ROOT
 fi
 
 # http://java.sun.com/j2se/1.5.0/docs/guide/2d/flags.html#pixmaps
