@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module codename="org.gephi.project.ui">
+    <module_version install_time="1357231593307" last="true" origin="Ant" specification_version="0.8.2">
+        <file crc="1536508534" name="config/Modules/org-gephi-project-ui.xml"/>
+        <file crc="360977390" name="modules/org-gephi-project-ui.jar"/>
+    </module_version>
+</module>

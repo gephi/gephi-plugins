@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module codename="org.gephi.spigot.plugin">
+    <module_version install_time="1357231512782" last="true" origin="Ant" specification_version="0.8.2">
+        <file crc="3332027302" name="config/Modules/org-gephi-spigot-plugin.xml"/>
+        <file crc="3142374707" name="modules/ext/com.sun.mail/javax.mail-1.4.5.jar"/>
+        <file crc="984909869" name="modules/ext/javax.activation/activation-1.1.jar"/>
+        <file crc="3658500684" name="modules/org-gephi-spigot-plugin.jar"/>
+    </module_version>
+</module>

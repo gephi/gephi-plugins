@@ -1,13 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <module codename="org.netbeans.bootstrap">
-    <module_version install_time="1332622318425" last="true" origin="Ant" specification_version="2.44.3">
-        <file crc="50535038" name="lib/locale/boot_ja.jar"/>
-        <file crc="2382483033" name="lib/locale/boot_pt_BR.jar"/>
-        <file crc="2459378035" name="lib/locale/boot_ru.jar"/>
-        <file crc="2863403174" name="lib/locale/boot_zh_CN.jar"/>
-        <file crc="1888166190" name="lib/boot.jar"/>
-        <file crc="3884695144" name="lib/nbexec"/>
-        <file crc="919094233" name="lib/nbexec.dll"/>
-        <file crc="513039229" name="lib/nbexec.exe"/>
+    <module_version install_time="1357231485162" last="true" origin="Ant" specification_version="2.52.3">
+        <file crc="46069828" name="lib/locale/boot_ja.jar"/>
+        <file crc="2485104774" name="lib/locale/boot_pt_BR.jar"/>
+        <file crc="2030220867" name="lib/locale/boot_ru.jar"/>
+        <file crc="3259298199" name="lib/locale/boot_zh_CN.jar"/>
+        <file crc="2541057664" name="lib/boot.jar"/>
+        <file crc="3646150229" name="lib/nbexec"/>
+        <file crc="2456958452" name="lib/nbexec.dll"/>
+        <file crc="3581242558" name="lib/nbexec.exe"/>
+        <file crc="1697682851" name="lib/nbexec64.dll"/>
+        <file crc="3672063725" name="lib/nbexec64.exe"/>
     </module_version>
 </module>

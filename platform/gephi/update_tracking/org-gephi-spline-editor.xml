@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module codename="org.gephi.spline.editor">
+    <module_version install_time="1357231591884" last="true" origin="Ant" specification_version="0.8.2">
+        <file crc="2495326835" name="config/Modules/org-gephi-spline-editor.xml"/>
+        <file crc="4167862119" name="modules/org-gephi-spline-editor.jar"/>
+    </module_version>
+</module>

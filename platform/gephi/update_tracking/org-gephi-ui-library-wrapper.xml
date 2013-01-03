@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module codename="org.gephi.ui.library.wrapper">
+    <module_version install_time="1357231573191" last="true" origin="Ant" specification_version="0.8.2">
+        <file crc="2498837548" name="config/Modules/org-gephi-ui-library-wrapper.xml"/>
+        <file crc="648259997" name="modules/ext/com.connectina.swing/fontchooser-1.0.jar"/>
+        <file crc="52845380" name="modules/ext/com.jhlabs/filters-2.0.235.jar"/>
+        <file crc="3936443784" name="modules/ext/com.miglayout/miglayout-3.7.1.jar"/>
+        <file crc="3774104986" name="modules/ext/net.java.dev/colorchooser-1.0.jar"/>
+        <file crc="331990583" name="modules/ext/net.java.dev/timingframework-1.1.jar"/>
+        <file crc="826192464" name="modules/ext/org.jdesktop/beansbinding-1.2.1.jar"/>
+        <file crc="921328341" name="modules/ext/org.pushingpixels/flamingo-5.0-gephi.jar"/>
+        <file crc="72982457" name="modules/ext/org.pushingpixels/trident-1.3.jar"/>
+        <file crc="994891229" name="modules/ext/org.swinglabs/swing-worker-1.1.jar"/>
+        <file crc="366189765" name="modules/ext/org.swinglabs/swingx-1.6.1.jar"/>
+        <file crc="3123847893" name="modules/org-gephi-ui-library-wrapper.jar"/>
+    </module_version>
+</module>

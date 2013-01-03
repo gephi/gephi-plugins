@@ -52,7 +52,7 @@ made subject to such option by the copyright holder.
     </condition>
     <import file="${testcoverage.import}"/>
 
-    <target name="-taskdefs" unless="harness.taskdefs.done">
+    <target name="-taskdefs" unless="${harness.taskdefs.done}">
         <dirname property="harness.dir" file="${suite.file}"/>
         <echo level="verbose">Using build harness in ${harness.dir}</echo>
         <taskdef classpath="${harness.dir}/tasks.jar" resource="org/netbeans/nbbuild/taskdefs.properties"/>
@@ -183,6 +183,7 @@ made subject to such option by the copyright holder.
     <target name="build" depends="-init,branding,release,-hide-excluded-modules" description="Build all modules in the suite.">
         <subant target="netbeans" buildpath="${modules.sorted}" inheritrefs="false" inheritall="false">
             <property name="cluster.path.evaluated" value="${cluster.path.evaluated}"/> <!-- Just for speed of pre-7.0 projects -->
+            <property name="harness.taskdefs.done" value="${harness.taskdefs.done}"/> <!-- optimization -->
         </subant>
     </target>
 
@@ -232,6 +233,7 @@ made subject to such option by the copyright holder.
             <property name="nbm.target.dir" location="${build.updates.dir}"/>
             <property name="${nbm.target.cluster.name}" value="${help.target.cluster}" />
             <property name="cluster.path.evaluated" value="${cluster.path.evaluated}"/> <!-- Just for speed of pre-7.0 projects -->
+            <property name="harness.taskdefs.done" value="${harness.taskdefs.done}"/> <!-- optimization -->
         </subant>
 
         <condition property="use.license.url.in.catalog" value="true" else="false">
@@ -323,6 +325,7 @@ made subject to such option by the copyright holder.
             <isset property="nbexec.dll.found"/>
         </condition>
         <copy file="${harness.dir}/launchers/${app.exe.prefix}app.exe" tofile="${build.launcher.dir}/bin/${app.name}.exe" overwrite="true"/>
+        <copy file="${harness.dir}/launchers/${app.exe.prefix}app64.exe" tofile="${build.launcher.dir}/bin/${app.name}64.exe" failonerror="false" overwrite="true"/>
         <copy file="${harness.dir}/launchers/${app.exe.prefix}app_w.exe" tofile="${build.launcher.dir}/bin/${app.name}_w.exe" failonerror="false" overwrite="true"/>
 
         <copy file="${harness.dir}/launchers/app.sh" tofile="${build.launcher.dir}/bin/${app.name}"/>
@@ -485,6 +488,7 @@ Alternatively use "zip -yr ${app.name}.app" to create a simple zipped distributi
         </delete>
         <subant target="clean" buildpath="${modules.sorted}" inheritrefs="false" inheritall="false">
             <property name="cluster.path.evaluated" value="${cluster.path.evaluated}"/> <!-- Just for speed of pre-7.0 projects -->
+            <property name="harness.taskdefs.done" value="${harness.taskdefs.done}"/> <!-- optimization -->
         </subant>
         <delete dir="${dist.dir}"/>
     </target>
@@ -569,6 +573,7 @@ Alternatively use "zip -yr ${app.name}.app" to create a simple zipped distributi
         <property name="continue.after.failing.tests" value="true"/> <!-- fallback -->
         <subant target="test" buildpath="${modules.test.sorted}" inheritrefs="false" inheritall="false">
             <property name="cluster.path.evaluated" value="${cluster.path.evaluated}"/> <!-- Just for speed of pre-7.0 projects -->
+            <property name="harness.taskdefs.done" value="${harness.taskdefs.done}"/> <!-- optimization -->
             <property name="continue.after.failing.tests" value="${continue.after.failing.tests}"/>
         </subant>
     </target>
@@ -598,6 +603,7 @@ Alternatively use "zip -yr ${app.name}.app" to create a simple zipped distributi
         <sortsuitemodules unsortedmodules="${modules}" sortedmodulesproperty="modules.test.sorted"/>
         <subant target="update" buildpath="${modules.test.sorted}" inheritrefs="false" inheritall="false">
             <property name="cluster.path.evaluated" value="${cluster.path.evaluated}"/> <!-- Just for speed of pre-7.0 projects -->
+            <property name="harness.taskdefs.done" value="${harness.taskdefs.done}"/> <!-- optimization -->
             <property name="autoupdate.catalog.url" value="${autoupdate.catalog.url}"/>
         </subant>
     </target>

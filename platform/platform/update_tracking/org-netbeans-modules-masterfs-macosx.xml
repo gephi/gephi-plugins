@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module codename="org.netbeans.modules.masterfs.macosx">
+    <module_version install_time="1357231485564" last="true" origin="Ant" specification_version="1.1.1">
+        <file crc="1950409712" name="modules/locale/org-netbeans-modules-masterfs-macosx_ja.jar"/>
+        <file crc="946077279" name="modules/locale/org-netbeans-modules-masterfs-macosx_pt_BR.jar"/>
+        <file crc="683524124" name="modules/locale/org-netbeans-modules-masterfs-macosx_ru.jar"/>
+        <file crc="2959779968" name="modules/locale/org-netbeans-modules-masterfs-macosx_zh_CN.jar"/>
+        <file crc="4284776310" name="config/Modules/org-netbeans-modules-masterfs-macosx.xml"/>
+        <file crc="3054039283" name="modules/org-netbeans-modules-masterfs-macosx.jar"/>
+    </module_version>
+</module>

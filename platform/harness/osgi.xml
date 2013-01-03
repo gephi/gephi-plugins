@@ -159,8 +159,30 @@ made subject to such option by the copyright holder.
             <reference refid="cluster.path.id"/>
         </antcall>
     </target>
-
-    <target name="profile">
+    
+    <target name="-profile-check" if="netbeans.home">
+        <condition property="profiler.configured">
+            <or>
+                <contains string="${osgi.run.args}" substring="-agentpath:" casesensitive="true"/>
+                <contains string="${osgi.run.args}" substring="-javaagent:" casesensitive="true"/>
+                <contains string="${osgi.run.args.extra}" substring="-agentpath:" casesensitive="true"/>
+                <contains string="${osgi.run.args.extra}" substring="-javaagent:" casesensitive="true"/>
+                <contains string="${run.args.ide}" substring="-agentpath:" casesensitive="true"/>
+                <contains string="${run.args.ide}" substring="-javaagent:" casesensitive="true"/>
+            </or>
+        </condition>
+    </target>
+    
+    <target name="profile" depends="-profile-check,-profile-pre72" if="profiler.configured" unless="profiler.info.jvmargs.agent" description="Profile a project in the IDE.">        
+        <startprofiler/>
+        <antcall target="run">
+            <reference refid="cluster.path.id"/>
+            <param name="felix-sys-prop.org.osgi.framework.bootdelegation" value="org.netbeans.lib.profiler.*"/>
+            <param name="osgi.run.args.extra" value="${run.args.ide}"/>
+        </antcall>
+    </target>
+    
+    <target name="-profile-pre72" if="profiler.info.jvmargs.agent">
         <fail unless="netbeans.home">This target only works when run from inside the NetBeans IDE.</fail>
         <nbprofiledirect jvmargsprefix="" jvmargsproperty="profiler.jvmargs">
             <classpath>
@@ -179,10 +201,9 @@ made subject to such option by the copyright holder.
             </rootspath>
         </nbprofiledirect>
         <antcall target="run">
-            <param name="osgi.run.args.extra" value='"${profiler.jvmargs}"'/>
+            <param name="osgi.run.args.extra" value="${profiler.jvmargs}"/>
             <param name="felix-sys-prop.org.osgi.framework.bootdelegation" value="org.netbeans.lib.profiler.*"/>
             <reference refid="cluster.path.id"/>
         </antcall>
     </target>
-
 </project>

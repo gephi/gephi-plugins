@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module codename="org.gephi.processor.plugin.ui">
+    <module_version install_time="1357231553826" last="true" origin="Ant" specification_version="0.8.2">
+        <file crc="988383613" name="config/Modules/org-gephi-processor-plugin-ui.xml"/>
+        <file crc="277853262" name="modules/org-gephi-processor-plugin-ui.jar"/>
+    </module_version>
+</module>
