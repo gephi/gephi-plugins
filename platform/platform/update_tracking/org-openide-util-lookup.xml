@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <module codename="org.openide.util.lookup">
-    <module_version install_time="1353264866411" last="true" origin="Ant" specification_version="8.15.2">
+    <module_version install_time="1357231461549" last="true" origin="Ant" specification_version="8.15.2">
         <file crc="1100490639" name="lib/locale/org-openide-util-lookup_ja.jar"/>
         <file crc="2001089394" name="lib/locale/org-openide-util-lookup_pt_BR.jar"/>
         <file crc="2778085341" name="lib/locale/org-openide-util-lookup_ru.jar"/>

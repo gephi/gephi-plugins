@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <module codename="org.gephi.utils.longtask">
-    <module_version install_time="1353265455846" last="true" origin="Ant" specification_version="0.8.2">
+    <module_version install_time="1357231578118" last="true" origin="Ant" specification_version="0.8.2">
         <file crc="3453859323" name="config/Modules/org-gephi-utils-longtask.xml"/>
-        <file crc="3846379835" name="modules/org-gephi-utils-longtask.jar"/>
+        <file crc="2452451472" name="modules/org-gephi-utils-longtask.jar"/>
     </module_version>
 </module>

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <module codename="org.openide.modules">
-    <module_version install_time="1353264885449" last="true" origin="Ant" specification_version="7.32.1">
+    <module_version install_time="1357231465574" last="true" origin="Ant" specification_version="7.32.1">
         <file crc="2964128735" name="lib/locale/org-openide-modules_ja.jar"/>
         <file crc="850646194" name="lib/locale/org-openide-modules_pt_BR.jar"/>
         <file crc="2568364366" name="lib/locale/org-openide-modules_ru.jar"/>

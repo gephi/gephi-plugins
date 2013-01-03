@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <module codename="org.netbeans.core.osgi">
-    <module_version install_time="1353265049095" last="true" origin="Ant" specification_version="1.9.1">
+    <module_version install_time="1357231492572" last="true" origin="Ant" specification_version="1.9.1">
         <file crc="2954800147" name="modules/locale/org-netbeans-core-osgi_ja.jar"/>
         <file crc="2992809819" name="modules/locale/org-netbeans-core-osgi_pt_BR.jar"/>
         <file crc="1438543009" name="modules/locale/org-netbeans-core-osgi_ru.jar"/>

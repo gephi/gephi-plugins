@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <module codename="org.openide.dialogs">
-    <module_version install_time="1353264975511" last="true" origin="Ant" specification_version="7.25.1">
+    <module_version install_time="1357231481753" last="true" origin="Ant" specification_version="7.25.1">
         <file crc="4076710690" name="modules/locale/org-openide-dialogs_ja.jar"/>
         <file crc="1918393713" name="modules/locale/org-openide-dialogs_pt_BR.jar"/>
         <file crc="3474043713" name="modules/locale/org-openide-dialogs_ru.jar"/>

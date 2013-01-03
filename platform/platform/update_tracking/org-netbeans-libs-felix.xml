@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <module codename="org.netbeans.libs.felix">
-    <module_version install_time="1353264969587" last="true" origin="Ant" specification_version="2.3.1">
+    <module_version install_time="1357231480538" last="true" origin="Ant" specification_version="2.3.1">
         <file crc="2653403146" name="modules/locale/org-netbeans-libs-felix_ja.jar"/>
         <file crc="767740449" name="modules/locale/org-netbeans-libs-felix_pt_BR.jar"/>
         <file crc="3815772583" name="modules/locale/org-netbeans-libs-felix_ru.jar"/>

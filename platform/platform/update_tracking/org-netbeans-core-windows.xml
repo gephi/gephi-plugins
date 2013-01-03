@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <module codename="org.netbeans.core.windows">
-    <module_version install_time="1353265017349" last="true" origin="Ant" specification_version="2.49.3">
+    <module_version install_time="1357231488745" last="true" origin="Ant" specification_version="2.49.3">
         <file crc="873289479" name="modules/locale/org-netbeans-core-windows_ja.jar"/>
         <file crc="1327280921" name="modules/locale/org-netbeans-core-windows_pt_BR.jar"/>
         <file crc="3450764426" name="modules/locale/org-netbeans-core-windows_ru.jar"/>

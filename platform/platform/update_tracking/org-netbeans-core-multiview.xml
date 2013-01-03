@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <module codename="org.netbeans.core.multiview">
-    <module_version install_time="1353265058655" last="true" origin="Ant" specification_version="1.29.1">
+    <module_version install_time="1357231493594" last="true" origin="Ant" specification_version="1.29.1">
         <file crc="1689588025" name="modules/locale/org-netbeans-core-multiview_ja.jar"/>
         <file crc="297825843" name="modules/locale/org-netbeans-core-multiview_pt_BR.jar"/>
         <file crc="3327859950" name="modules/locale/org-netbeans-core-multiview_ru.jar"/>

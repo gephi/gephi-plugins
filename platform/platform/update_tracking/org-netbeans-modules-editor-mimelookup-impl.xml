@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <module codename="org.netbeans.modules.editor.mimelookup.impl">
-    <module_version install_time="1353265003411" last="true" origin="Ant" specification_version="1.18.1">
+    <module_version install_time="1357231486683" last="true" origin="Ant" specification_version="1.18.1">
         <file crc="1102954567" name="modules/locale/org-netbeans-modules-editor-mimelookup-impl_ja.jar"/>
         <file crc="3624242221" name="modules/locale/org-netbeans-modules-editor-mimelookup-impl_pt_BR.jar"/>
         <file crc="2665947255" name="modules/locale/org-netbeans-modules-editor-mimelookup-impl_ru.jar"/>

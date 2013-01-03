@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <module codename="org.gephi.io.generator.plugin">
-    <module_version install_time="1353265409365" last="true" origin="Ant" specification_version="0.8.2">
+    <module_version install_time="1357231557237" last="true" origin="Ant" specification_version="0.8.2">
         <file crc="3423453591" name="config/Modules/org-gephi-io-generator-plugin.xml"/>
-        <file crc="2696710447" name="modules/org-gephi-io-generator-plugin.jar"/>
+        <file crc="2389557979" name="modules/org-gephi-io-generator-plugin.jar"/>
     </module_version>
 </module>

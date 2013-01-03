@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <module codename="org.gephi.desktop.preview">
-    <module_version install_time="1353265481830" last="true" origin="Ant" specification_version="0.8.2">
+    <module_version install_time="1357231593676" last="true" origin="Ant" specification_version="0.8.2">
         <file crc="2416081230" name="config/Modules/org-gephi-desktop-preview.xml"/>
-        <file crc="2808286417" name="modules/org-gephi-desktop-preview.jar"/>
+        <file crc="3250360422" name="modules/org-gephi-desktop-preview.jar"/>
     </module_version>
 </module>

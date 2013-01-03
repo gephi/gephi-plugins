@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <module codename="org.netbeans.modules.apisupport.harness">
-    <module_version install_time="1353264879757" last="true" origin="Ant" specification_version="1.30.1">
+    <module_version install_time="1357231464068" last="true" origin="Ant" specification_version="1.30.1">
         <file crc="2427616749" name="modules/locale/org-netbeans-modules-apisupport-harness_ja.jar"/>
         <file crc="4018292733" name="modules/locale/org-netbeans-modules-apisupport-harness_pt_BR.jar"/>
         <file crc="274183052" name="modules/locale/org-netbeans-modules-apisupport-harness_ru.jar"/>

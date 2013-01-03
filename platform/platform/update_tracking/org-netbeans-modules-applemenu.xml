@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <module codename="org.netbeans.modules.applemenu">
-    <module_version install_time="1353264983876" last="true" origin="Ant" specification_version="1.24.1">
+    <module_version install_time="1357231483468" last="true" origin="Ant" specification_version="1.24.1">
         <file crc="2462276926" name="modules/locale/org-netbeans-modules-applemenu_ja.jar"/>
         <file crc="224417489" name="modules/locale/org-netbeans-modules-applemenu_pt_BR.jar"/>
         <file crc="34509408" name="modules/locale/org-netbeans-modules-applemenu_ru.jar"/>
