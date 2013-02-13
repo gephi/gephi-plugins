@@ -41,20 +41,20 @@
                 <package>org.neo4j.management.impl.jconsole</package>
             </public-packages>
             <class-path-extension>
-                <runtime-relative-path>ext/neo4j-management-1.5.jar</runtime-relative-path>
-                <binary-origin>release/modules/ext/neo4j-management-1.5.jar</binary-origin>
+                <runtime-relative-path>ext/neo4j-management-1.9.M04.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/neo4j-management-1.9.M04.jar</binary-origin>
             </class-path-extension>
             <class-path-extension>
-                <runtime-relative-path>ext/neo4j-jmx-1.5.jar</runtime-relative-path>
-                <binary-origin>release/modules/ext/neo4j-jmx-1.5.jar</binary-origin>
+                <runtime-relative-path>ext/neo4j-jmx-1.9.M04.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/neo4j-jmx-1.9.M04.jar</binary-origin>
             </class-path-extension>
             <class-path-extension>
-                <runtime-relative-path>ext/neo4j-kernel-1.5.jar</runtime-relative-path>
-                <binary-origin>release/modules/ext/neo4j-kernel-1.5.jar</binary-origin>
+                <runtime-relative-path>ext/neo4j-kernel-1.9.M04.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/neo4j-kernel-1.9.M04.jar</binary-origin>
             </class-path-extension>
             <class-path-extension>
-                <runtime-relative-path>ext/neo4j-udc-1.5.jar</runtime-relative-path>
-                <binary-origin>release/modules/ext/neo4j-udc-1.5.jar</binary-origin>
+                <runtime-relative-path>ext/neo4j-udc-1.9.M04.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/neo4j-udc-1.9.M04.jar</binary-origin>
             </class-path-extension>
             <class-path-extension>
                 <runtime-relative-path>ext/geronimo-jta_1.1_spec-1.1.1.jar</runtime-relative-path>
