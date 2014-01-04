@@ -52,7 +52,7 @@ When you successfully tested your plugin, it's time to create a release. Verify 
 - Right-click on the project and select '''Package As''' and then '''NMBs'''.
 - Go to the '''build''' folder and find the created '''plugin-release.zip''' file. Individual NBM files (one per each module) are packaged in this zip.
 
-Now you can publish you plugin on the [**Gephi Plugin portal**](http://gephi.org/plugins).
+Now you can publish you plugin on the [**Gephi Plugin portal**](https://marketplace.gephi.org/).
 
 ## Plugins Portal
 
