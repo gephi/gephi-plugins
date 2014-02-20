@@ -7,27 +7,21 @@
             <suite-component/>
             <module-dependencies/>
             <public-packages>
-                <package>org.neo4j.ext.udc</package>
-                <package>org.neo4j.ext.udc.impl</package>
-                <package>org.neo4j.ext.udc.impl.osgi</package>
                 <package>org.neo4j.graphdb</package>
                 <package>org.neo4j.graphdb.event</package>
+                <package>org.neo4j.graphdb.factory</package>
                 <package>org.neo4j.graphdb.index</package>
                 <package>org.neo4j.graphdb.traversal</package>
                 <package>org.neo4j.helpers</package>
                 <package>org.neo4j.helpers.collection</package>
-                <package>org.neo4j.jmx</package>
-                <package>org.neo4j.jmx.impl</package>
                 <package>org.neo4j.kernel</package>
                 <package>org.neo4j.kernel.impl</package>
                 <package>org.neo4j.kernel.impl.annotations</package>
-                <package>org.neo4j.kernel.impl.batchinsert</package>
                 <package>org.neo4j.kernel.impl.cache</package>
                 <package>org.neo4j.kernel.impl.core</package>
                 <package>org.neo4j.kernel.impl.index</package>
                 <package>org.neo4j.kernel.impl.nioneo.store</package>
                 <package>org.neo4j.kernel.impl.nioneo.xa</package>
-                <package>org.neo4j.kernel.impl.osgi</package>
                 <package>org.neo4j.kernel.impl.persistence</package>
                 <package>org.neo4j.kernel.impl.storemigration</package>
                 <package>org.neo4j.kernel.impl.storemigration.legacystore</package>
@@ -36,25 +30,10 @@
                 <package>org.neo4j.kernel.impl.transaction.xaframework</package>
                 <package>org.neo4j.kernel.impl.traversal</package>
                 <package>org.neo4j.kernel.impl.util</package>
-                <package>org.neo4j.management</package>
-                <package>org.neo4j.management.impl</package>
-                <package>org.neo4j.management.impl.jconsole</package>
             </public-packages>
             <class-path-extension>
-                <runtime-relative-path>ext/neo4j-management-1.9.M04.jar</runtime-relative-path>
-                <binary-origin>release/modules/ext/neo4j-management-1.9.M04.jar</binary-origin>
-            </class-path-extension>
-            <class-path-extension>
-                <runtime-relative-path>ext/neo4j-jmx-1.9.M04.jar</runtime-relative-path>
-                <binary-origin>release/modules/ext/neo4j-jmx-1.9.M04.jar</binary-origin>
-            </class-path-extension>
-            <class-path-extension>
-                <runtime-relative-path>ext/neo4j-kernel-1.9.M04.jar</runtime-relative-path>
-                <binary-origin>release/modules/ext/neo4j-kernel-1.9.M04.jar</binary-origin>
-            </class-path-extension>
-            <class-path-extension>
-                <runtime-relative-path>ext/neo4j-udc-1.9.M04.jar</runtime-relative-path>
-                <binary-origin>release/modules/ext/neo4j-udc-1.9.M04.jar</binary-origin>
+                <runtime-relative-path>ext/neo4j-kernel-2.0.1.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/neo4j-kernel-2.0.1.jar</binary-origin>
             </class-path-extension>
             <class-path-extension>
                 <runtime-relative-path>ext/geronimo-jta_1.1_spec-1.1.1.jar</runtime-relative-path>
