@@ -40,7 +40,10 @@ public class Neo4jUtils {
     public static GraphDatabaseService localDatabase(File neo4jDirectory) throws Neo4jStoreAlreadyInUseException {
 
         try {
-            return new GraphDatabaseFactory().newEmbeddedDatabase(neo4jDirectory.getAbsolutePath());
+            return new GraphDatabaseFactory()
+                    .newEmbeddedDatabaseBuilder(neo4jDirectory.getAbsolutePath())
+                    .setConfig("allow_store_upgrade","true")
+                    .newGraphDatabase();
         }
         catch (TransactionFailureException e) {
             if (e.getCause() instanceof IllegalStateException)

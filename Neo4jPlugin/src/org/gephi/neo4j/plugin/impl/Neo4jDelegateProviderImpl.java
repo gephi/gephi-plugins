@@ -28,6 +28,7 @@ import org.gephi.data.attributes.type.AbstractList;
 import org.gephi.data.properties.PropertiesColumn;
 import org.neo4j.graphdb.DynamicRelationshipType;
 import org.neo4j.graphdb.GraphDatabaseService;
+import org.neo4j.graphdb.Transaction;
 
 
 /**
@@ -57,8 +58,12 @@ class Neo4jDelegateProviderImpl extends AttributeValueDelegateProvider<Long> {
     @Override
     public Object getNodeAttributeValue(Long delegateId, AttributeColumn attributeColumn) {
         GraphDatabaseService graphDB = GraphModelImportConverter.getGraphDBForCurrentWorkspace();
-
-        return graphDB.getNodeById(delegateId).getProperty(attributeColumn.getId());
+        Transaction tx = graphDB.beginTx();
+        try {
+            return graphDB.getNodeById(delegateId).getProperty(attributeColumn.getId());
+        } finally {
+            tx.close();
+        }
     }
 
     @Override
@@ -69,14 +74,26 @@ class Neo4jDelegateProviderImpl extends AttributeValueDelegateProvider<Long> {
 
         GraphDatabaseService graphDB = GraphModelImportConverter.getGraphDBForCurrentWorkspace();
         
-        graphDB.getNodeById(delegateId).setProperty(attributeColumn.getId(), nodeValue);
+        Transaction tx = graphDB.beginTx();
+        try {
+            graphDB.getNodeById(delegateId).setProperty(attributeColumn.getId(), nodeValue);
+            tx.success();
+        } finally {
+            tx.close();
+        }
     }
 
     @Override
     public void deleteNodeAttributeValue(Long delegateId, AttributeColumn attributeColumn) {
         GraphDatabaseService graphDB = GraphModelImportConverter.getGraphDBForCurrentWorkspace();
 
-        graphDB.getNodeById(delegateId).removeProperty(attributeColumn.getId());
+        Transaction tx = graphDB.beginTx();
+        try {
+            graphDB.getNodeById(delegateId).removeProperty(attributeColumn.getId());
+            tx.success();
+        } finally {
+            tx.close();
+        }
     }
 
 
@@ -84,10 +101,15 @@ class Neo4jDelegateProviderImpl extends AttributeValueDelegateProvider<Long> {
     public Object getEdgeAttributeValue(Long delegateId, AttributeColumn attributeColumn) {
         GraphDatabaseService graphDB = GraphModelImportConverter.getGraphDBForCurrentWorkspace();
 
-        if (attributeColumn.getId().equals(PropertiesColumn.NEO4J_RELATIONSHIP_TYPE.getId()))
-            return graphDB.getRelationshipById(delegateId).getType().name();
-        else
-            return graphDB.getRelationshipById(delegateId).getProperty(attributeColumn.getId());
+        Transaction tx = graphDB.beginTx();
+        try {
+            if (attributeColumn.getId().equals(PropertiesColumn.NEO4J_RELATIONSHIP_TYPE.getId()))
+                return graphDB.getRelationshipById(delegateId).getType().name();
+            else
+                return graphDB.getRelationshipById(delegateId).getProperty(attributeColumn.getId());
+        } finally {
+            tx.close();
+        }
     }
 
     @Override
@@ -98,14 +120,26 @@ class Neo4jDelegateProviderImpl extends AttributeValueDelegateProvider<Long> {
 
         GraphDatabaseService graphDB = GraphModelImportConverter.getGraphDBForCurrentWorkspace();
 
-        graphDB.getRelationshipById(delegateId).setProperty(attributeColumn.getId(), edgeValue);
+        Transaction tx = graphDB.beginTx();
+        try {
+            graphDB.getRelationshipById(delegateId).setProperty(attributeColumn.getId(), edgeValue);
+            tx.success();
+        } finally {
+            tx.close();
+        }
     }
 
     @Override
     public void deleteEdgeAttributeValue(Long delegateId, AttributeColumn attributeColumn) {
         GraphDatabaseService graphDB = GraphModelImportConverter.getGraphDBForCurrentWorkspace();
 
-        graphDB.getRelationshipById(delegateId).removeProperty(attributeColumn.getId());
+        Transaction tx = graphDB.beginTx();
+        try {
+            graphDB.getRelationshipById(delegateId).removeProperty(attributeColumn.getId());
+            tx.success();
+        } finally {
+            tx.close();
+        }
     }
 
     public GraphItemDelegateFactoryProvider<Long> graphItemDelegateFactoryProvider() {
@@ -138,32 +172,58 @@ class Neo4jDelegateProviderImpl extends AttributeValueDelegateProvider<Long> {
         public Long createNode() {
             GraphDatabaseService graphDB = GraphModelImportConverter.getGraphDBForCurrentWorkspace();
 
-            return graphDB.createNode().getId();
+            Transaction tx = graphDB.beginTx();
+            try {
+                long id = graphDB.createNode().getId();
+                tx.success();
+                return id;
+            } finally {
+                tx.close();
+            }
         }
 
         @Override
         public void deleteNode(Long nodeId) {
             GraphDatabaseService graphDB = GraphModelImportConverter.getGraphDBForCurrentWorkspace();
 
-            graphDB.getNodeById(nodeId).delete();
+            Transaction tx = graphDB.beginTx();
+            try {
+                graphDB.getNodeById(nodeId).delete();
+                tx.success();
+            } finally {
+                tx.close();
+            }
         }
 
         @Override
         public Long createEdge(Long startNodeId, Long endNodeId) {
             GraphDatabaseService graphDB = GraphModelImportConverter.getGraphDBForCurrentWorkspace();
 
-            org.neo4j.graphdb.Node startNode = graphDB.getNodeById(startNodeId);
-            org.neo4j.graphdb.Node endNode   = graphDB.getNodeById(endNodeId);
+            Transaction tx = graphDB.beginTx();
+            try {
+                org.neo4j.graphdb.Node startNode = graphDB.getNodeById(startNodeId);
+                org.neo4j.graphdb.Node endNode   = graphDB.getNodeById(endNodeId);
 
-            return startNode.createRelationshipTo(endNode,
-                                                  DynamicRelationshipType.withName(DEFAULT_RELATIONSHIP_TYPE_NAME)).getId();
+                long id = startNode.createRelationshipTo(endNode,
+                                                      DynamicRelationshipType.withName(DEFAULT_RELATIONSHIP_TYPE_NAME)).getId();
+                tx.success();
+                return id;
+            } finally {
+                tx.close();
+            }
         }
 
         @Override
         public void deleteEdge(Long edgeId) {
             GraphDatabaseService graphDB = GraphModelImportConverter.getGraphDBForCurrentWorkspace();
 
-            graphDB.getRelationshipById(edgeId).delete();
+            Transaction tx = graphDB.beginTx();
+            try {
+                graphDB.getRelationshipById(edgeId).delete();
+                tx.success();
+            } finally {
+                tx.close();
+            }
         }
     }
 }

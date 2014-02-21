@@ -34,6 +34,8 @@ import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.File;
+import java.util.Arrays;
+import java.util.Collection;
 import javax.swing.AbstractAction;
 import javax.swing.JFileChooser;
 import javax.swing.JMenu;
@@ -56,6 +58,7 @@ import org.gephi.utils.longtask.api.LongTaskExecutor;
 import org.gephi.utils.longtask.spi.LongTask;
 import org.gephi.visualization.VizController;
 import org.neo4j.graphdb.GraphDatabaseService;
+import org.neo4j.kernel.StoreLockException;
 import org.netbeans.validation.api.ui.ValidationPanel;
 import org.openide.DialogDescriptor;
 import org.openide.DialogDisplayer;
@@ -180,14 +183,21 @@ public class Neo4jMenuAction extends CallableSystemAction {
         }
     }
 
-    private static void handleLocalDatabaseError(Exception e) {
+    private static void handleLocalDatabaseError(Exception e, GraphDatabaseService db) {
         String errorMessage = null;
 
-        if (e.getClass() == Neo4jStoreAlreadyInUseException.class)
+        Collection<Class> inUseExceptions = Arrays.<Class>asList(Neo4jStoreAlreadyInUseException.class,StoreLockException.class);
+        if (inUseExceptions.contains(e.getClass()) || inUseExceptions.contains(e.getCause().getClass()))
             errorMessage = NbBundle.getMessage(Neo4jMenuAction.class, "CTL_Neo4j_DatabaseStorageAlreadyInUse");
 
         NotifyDescriptor notifyDescriptor = new NotifyDescriptor.Message(errorMessage, JOptionPane.WARNING_MESSAGE);
         DialogDisplayer.getDefault().notify(notifyDescriptor);
+
+        try {
+            if (db!=null) db.shutdown();
+        } catch(Exception ex) {
+            // ignore
+        }
     }
 
     private static class FullImportMenuAction extends AbstractAction {
@@ -213,12 +223,16 @@ public class Neo4jMenuAction extends CallableSystemAction {
                 NbPreferences.forModule(Neo4jMenuAction.class).put(IMPORT_LAST_PATH, neo4jDirectory.getParentFile().getAbsolutePath());
             }
 
-            GraphDatabaseService tempGraphDB;
+            GraphDatabaseService tempGraphDB = null;
             try {
                 tempGraphDB = Neo4jUtils.localDatabase(neo4jDirectory);
             }
             catch (Neo4jStoreAlreadyInUseException storeInUseException) {
-                handleLocalDatabaseError(storeInUseException);
+                handleLocalDatabaseError(storeInUseException,tempGraphDB);
+                return;
+            }
+            catch (RuntimeException exception) {
+                handleLocalDatabaseError(exception,tempGraphDB);
                 return;
             }
 
@@ -306,12 +320,12 @@ public class Neo4jMenuAction extends CallableSystemAction {
                 NbPreferences.forModule(Neo4jMenuAction.class).put(IMPORT_LAST_PATH, neo4jDirectory.getParentFile().getAbsolutePath());
             }
 
-            GraphDatabaseService tempGraphDB;
+            GraphDatabaseService tempGraphDB = null;
             try {
                 tempGraphDB = Neo4jUtils.localDatabase(neo4jDirectory);
             }
             catch (Neo4jStoreAlreadyInUseException storeInUseException) {
-                handleLocalDatabaseError(storeInUseException);
+                handleLocalDatabaseError(storeInUseException,tempGraphDB);
                 return;
             }
 
@@ -407,12 +421,12 @@ public class Neo4jMenuAction extends CallableSystemAction {
 
                         @Override
                         public void run() {
-                            GraphDatabaseService tempGraphDB;
+                            GraphDatabaseService tempGraphDB = null;
                             try {
                                 tempGraphDB = Neo4jUtils.localDatabase(neo4jDirectory);
                             }
                             catch (Neo4jStoreAlreadyInUseException storeInUseException) {
-                                handleLocalDatabaseError(storeInUseException);
+                                handleLocalDatabaseError(storeInUseException,tempGraphDB);
                                 return;
                             }
 
