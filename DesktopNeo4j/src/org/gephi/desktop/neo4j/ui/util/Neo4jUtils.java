@@ -26,7 +26,7 @@ import java.util.List;
 import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.graphdb.RelationshipType;
 import org.neo4j.graphdb.TransactionFailureException;
-import org.neo4j.kernel.EmbeddedGraphDatabase;
+import org.neo4j.graphdb.factory.GraphDatabaseFactory;
 
 /**
  *
@@ -40,7 +40,10 @@ public class Neo4jUtils {
     public static GraphDatabaseService localDatabase(File neo4jDirectory) throws Neo4jStoreAlreadyInUseException {
 
         try {
-            return new EmbeddedGraphDatabase(neo4jDirectory.getAbsolutePath());
+            return new GraphDatabaseFactory()
+                    .newEmbeddedDatabaseBuilder(neo4jDirectory.getAbsolutePath())
+                    .setConfig("allow_store_upgrade","true")
+                    .newGraphDatabase();
         }
         catch (TransactionFailureException e) {
             if (e.getCause() instanceof IllegalStateException)

@@ -38,7 +38,6 @@ import org.neo4j.graphdb.traversal.Evaluator;
 import org.neo4j.graphdb.traversal.Evaluators;
 import org.neo4j.graphdb.traversal.TraversalDescription;
 import org.neo4j.graphdb.traversal.Traverser;
-import org.neo4j.kernel.Traversal;
 import org.openide.util.Lookup;
 import org.openide.util.NbBundle;
 import org.openide.util.lookup.ServiceProvider;
@@ -105,7 +104,7 @@ public final class Neo4jImporterImpl implements Neo4jImporter, LongTask {
         NodeReturnFilter nodeReturnFilter = null;
 
         if (startNodeId != NO_START_NODE) {
-            TraversalDescription traversalDescription = Traversal.description();
+            TraversalDescription traversalDescription = graphDB.traversalDescription();
 
             traversalDescription = order.update(traversalDescription);
 
@@ -137,7 +136,7 @@ public final class Neo4jImporterImpl implements Neo4jImporter, LongTask {
             importGraph(graphDB, traverser, nodeReturnFilter);
             transaction.success();
         } finally {
-            transaction.finish();
+            transaction.close();
         }
 
         Progress.finish(progressTicket);
