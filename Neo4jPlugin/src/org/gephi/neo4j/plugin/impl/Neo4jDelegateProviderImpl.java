@@ -60,7 +60,9 @@ class Neo4jDelegateProviderImpl extends AttributeValueDelegateProvider<Long> {
         GraphDatabaseService graphDB = GraphModelImportConverter.getGraphDBForCurrentWorkspace();
         Transaction tx = graphDB.beginTx();
         try {
-            return graphDB.getNodeById(delegateId).getProperty(attributeColumn.getId());
+            final Object value = graphDB.getNodeById(delegateId).getProperty(attributeColumn.getId());
+            tx.success();
+            return value;
         } finally {
             tx.close();
         }
@@ -103,10 +105,13 @@ class Neo4jDelegateProviderImpl extends AttributeValueDelegateProvider<Long> {
 
         Transaction tx = graphDB.beginTx();
         try {
+            Object value;
             if (attributeColumn.getId().equals(PropertiesColumn.NEO4J_RELATIONSHIP_TYPE.getId()))
-                return graphDB.getRelationshipById(delegateId).getType().name();
+                value = graphDB.getRelationshipById(delegateId).getType().name();
             else
-                return graphDB.getRelationshipById(delegateId).getProperty(attributeColumn.getId());
+                value = graphDB.getRelationshipById(delegateId).getProperty(attributeColumn.getId());
+            tx.success();
+            return value;
         } finally {
             tx.close();
         }
