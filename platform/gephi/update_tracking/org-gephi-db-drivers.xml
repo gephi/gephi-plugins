@@ -1,7 +1,18 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <module codename="org.gephi.db.drivers">
-    <module_version install_time="1357231558922" last="true" origin="Ant" specification_version="0.8.2">
+    <module_version install_time="1357231558922" last="false" origin="Ant" specification_version="0.8.2">
         <file crc="1254818683" name="config/Modules/org-gephi-db-drivers.xml"/>
         <file crc="3159460963" name="modules/org-gephi-db-drivers.jar"/>
+    </module_version>
+    <module_version install_time="1393018658666" last="true" origin="Gephi Update Center" specification_version="0.8.2.1">
+        <file crc="1283735835" name="config/Modules/org-gephi-db-drivers.xml"/>
+        <file crc="2695503397" name="modules/ext/com.microsoft.sqlserver/sqljdbc4-3.0.1301.101.jar"/>
+        <file crc="2671587918" name="modules/ext/com.teradata/teradata-config-14.00.00.21.jar"/>
+        <file crc="3043771556" name="modules/ext/com.teradata/teradata-jdbc-14.00.00.21.jar"/>
+        <file crc="1933678131" name="modules/ext/mysql/mysql-connector-java-5.1.18.jar"/>
+        <file crc="1041281680" name="modules/ext/org.xerial/sqlite-jdbc-3.7.2.jar"/>
+        <file crc="2136671707" name="modules/ext/postgresql/postgresql-9.1-901-1.jdbc4.jar"/>
+        <file crc="1541683834" name="modules/org-gephi-db-drivers.jar"/>
+        <file crc="2577119647" name="update_tracking/org-gephi-db-drivers.xml"/>
     </module_version>
 </module>

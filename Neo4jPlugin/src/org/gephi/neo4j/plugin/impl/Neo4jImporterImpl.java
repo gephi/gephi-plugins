@@ -103,43 +103,44 @@ public final class Neo4jImporterImpl implements Neo4jImporter, LongTask {
         Traverser traverser;
         NodeReturnFilter nodeReturnFilter = null;
 
-        if (startNodeId != NO_START_NODE) {
-            TraversalDescription traversalDescription = graphDB.traversalDescription();
-
-            traversalDescription = order.update(traversalDescription);
-
-            for (RelationshipDescription relationshipDescription : relationshipDescriptions) {
-                traversalDescription = traversalDescription.relationships(relationshipDescription.getRelationshipType(),
-                        relationshipDescription.getDirection());
-            }
-
-            Evaluator evaluator;
-            if (filterDescriptions.isEmpty())
-                evaluator = Evaluators.toDepth(maxDepth);
-            else
-                evaluator = new DepthAndNodeFilterEvaluator(filterDescriptions, restrictMode, matchCase, maxDepth);
-
-            traverser = traversalDescription.evaluator(evaluator).traverse(graphDB.getNodeById(startNodeId));
-        } else if (startNodeId == NO_START_NODE && filterDescriptions.size() > 0) {
-            nodeReturnFilter = new NodeReturnFilter(filterDescriptions, restrictMode, matchCase);
-            traverser = null;
-        } else {
-            traverser = null;
-        }
-
-        doImport(graphDB, traverser, nodeReturnFilter);
-    }
-
-    private void doImport(GraphDatabaseService graphDB, Traverser traverser, NodeReturnFilter nodeReturnFilter) {
         Transaction transaction = graphDB.beginTx();
         try {
-            importGraph(graphDB, traverser, nodeReturnFilter);
+            if (startNodeId != NO_START_NODE) {
+                TraversalDescription traversalDescription = graphDB.traversalDescription();
+
+                traversalDescription = order.update(traversalDescription);
+
+                for (RelationshipDescription relationshipDescription : relationshipDescriptions) {
+                    traversalDescription = traversalDescription.relationships(relationshipDescription.getRelationshipType(),
+                            relationshipDescription.getDirection());
+                }
+
+                Evaluator evaluator;
+                if (filterDescriptions.isEmpty())
+                    evaluator = Evaluators.toDepth(maxDepth);
+                else
+                    evaluator = new DepthAndNodeFilterEvaluator(filterDescriptions, restrictMode, matchCase, maxDepth);
+
+                traverser = traversalDescription.evaluator(evaluator).traverse(graphDB.getNodeById(startNodeId));
+            } else if (startNodeId == NO_START_NODE && filterDescriptions.size() > 0) {
+                nodeReturnFilter = new NodeReturnFilter(filterDescriptions, restrictMode, matchCase);
+                traverser = null;
+            } else {
+                traverser = null;
+            }
+
+            doImport(graphDB, traverser, nodeReturnFilter);
+            
             transaction.success();
         } finally {
             transaction.close();
         }
-
+        
         Progress.finish(progressTicket);
+    }
+
+    private void doImport(GraphDatabaseService graphDB, Traverser traverser, NodeReturnFilter nodeReturnFilter) {
+        importGraph(graphDB, traverser, nodeReturnFilter);
     }
 
     private void importGraph(GraphDatabaseService graphDB, Traverser traverser, NodeReturnFilter nodeReturnFilter) {
