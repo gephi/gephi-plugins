@@ -25,8 +25,10 @@ import java.util.LinkedList;
 import java.util.List;
 import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.graphdb.RelationshipType;
+import org.neo4j.graphdb.Transaction;
 import org.neo4j.graphdb.TransactionFailureException;
 import org.neo4j.graphdb.factory.GraphDatabaseFactory;
+import org.neo4j.tooling.GlobalGraphOperations;
 
 /**
  *
@@ -54,12 +56,15 @@ public class Neo4jUtils {
     }
 
     public static String[] relationshipTypeNames(GraphDatabaseService graphDB) {
-        List<String> relationshipTypeNames = new LinkedList<String>();
-
-        for (RelationshipType relationshipType : graphDB.getRelationshipTypes()) {
-            relationshipTypeNames.add(relationshipType.name());
+        List<String> relationshipTypeNames = new LinkedList<>();
+        
+        try(Transaction tx = graphDB.beginTx()) {
+            final GlobalGraphOperations graphOperations = GlobalGraphOperations.at(graphDB);
+            for (RelationshipType relationshipType : graphOperations.getAllRelationshipTypes()) {
+                relationshipTypeNames.add(relationshipType.name());
+            }
+            tx.success();
         }
-
         return relationshipTypeNames.toArray(new String[0]);
     }
 }
