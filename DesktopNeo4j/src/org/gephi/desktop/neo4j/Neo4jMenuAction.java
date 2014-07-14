@@ -36,6 +36,8 @@ import java.beans.PropertyChangeListener;
 import java.io.File;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.AbstractAction;
 import javax.swing.JFileChooser;
 import javax.swing.JMenu;
@@ -77,6 +79,7 @@ import org.openide.util.actions.CallableSystemAction;
  */
 public class Neo4jMenuAction extends CallableSystemAction {
 
+    private static final Logger LOG = Logger.getLogger(Neo4jMenuAction.class.getName());
     private static final String IMPORT_LAST_PATH = "Neo4jMenuAction_Import_Last_Path";
     private static final String EXPORT_LAST_PATH = "Neo4jMenuAction_Export_Last_Path";
 
@@ -167,11 +170,12 @@ public class Neo4jMenuAction extends CallableSystemAction {
         menu.add(debugMenuItem);
     }
 
-    private static void showWarningMessage() {
+    private static void showWarningMessage(String message, Throwable e) {
+        LOG.log(Level.INFO, "A local database error occurred", e);
         NotifyDescriptor notifyDescriptor =
-                new NotifyDescriptor.Message("Selected file is not valid Neo4j debug file.",
-                JOptionPane.WARNING_MESSAGE);
-
+                new NotifyDescriptor.Message(message,
+                        JOptionPane.WARNING_MESSAGE);
+        
         DialogDisplayer.getDefault().notify(notifyDescriptor);
     }
 
@@ -184,20 +188,34 @@ public class Neo4jMenuAction extends CallableSystemAction {
     }
 
     private static void handleLocalDatabaseError(Exception e, GraphDatabaseService db) {
-        String errorMessage = null;
+        shutdownDb(db);        
+        if (isCausedByAnyLockException(e)) {
+            String errorMessage = NbBundle.getMessage(Neo4jMenuAction.class, "CTL_Neo4j_DatabaseStorageAlreadyInUse");
+            showWarningMessage(errorMessage, e);
+        } else {
+            // Better than showing empty warning dialog is showing unexpected error dialog...
+            LOG.log(Level.WARNING, "A local database error occurred", e);
+        }
+    }
 
-        Collection<Class> inUseExceptions = Arrays.<Class>asList(Neo4jStoreAlreadyInUseException.class,StoreLockException.class);
-        if (inUseExceptions.contains(e.getClass()) || inUseExceptions.contains(e.getCause().getClass()))
-            errorMessage = NbBundle.getMessage(Neo4jMenuAction.class, "CTL_Neo4j_DatabaseStorageAlreadyInUse");
-
-        NotifyDescriptor notifyDescriptor = new NotifyDescriptor.Message(errorMessage, JOptionPane.WARNING_MESSAGE);
-        DialogDisplayer.getDefault().notify(notifyDescriptor);
-
+    private static void shutdownDb(GraphDatabaseService db) {
         try {
             if (db!=null) db.shutdown();
         } catch(Exception ex) {
             // ignore
         }
+    }
+    
+    private static boolean isCausedByAnyLockException(Exception e) {
+        Collection<Class> inUseExceptions = Arrays.<Class>asList(Neo4jStoreAlreadyInUseException.class,StoreLockException.class); 
+        Throwable t = e;
+        while (null != t) {
+            if (inUseExceptions.contains(t.getClass()))
+                return true;
+            else
+                t = t.getCause();
+        }
+        return false;
     }
 
     private static class FullImportMenuAction extends AbstractAction {
@@ -325,7 +343,7 @@ public class Neo4jMenuAction extends CallableSystemAction {
                 tempGraphDB = Neo4jUtils.localDatabase(neo4jDirectory);
             }
             catch (Neo4jStoreAlreadyInUseException storeInUseException) {
-                handleLocalDatabaseError(storeInUseException,tempGraphDB);
+                handleLocalDatabaseError(storeInUseException, tempGraphDB);
                 return;
             }
 
@@ -425,8 +443,12 @@ public class Neo4jMenuAction extends CallableSystemAction {
                             try {
                                 tempGraphDB = Neo4jUtils.localDatabase(neo4jDirectory);
                             }
-                            catch (Neo4jStoreAlreadyInUseException storeInUseException) {
-                                handleLocalDatabaseError(storeInUseException,tempGraphDB);
+                            catch (Neo4jStoreAlreadyInUseException exception) {
+                                handleLocalDatabaseError(exception, tempGraphDB);
+                                return;
+                            }
+                            catch (RuntimeException exception) {
+                                handleLocalDatabaseError(exception, tempGraphDB);
                                 return;
                             }
 
@@ -503,16 +525,16 @@ public class Neo4jMenuAction extends CallableSystemAction {
                         enabled,
                         Neo4jDelegateNodeDebugger.class);
             } catch (ClassNotFoundException cnfe) {
-                showWarningMessage();
+                showWarningMessage("Selected file is not valid Neo4j debug file.", cnfe);
                 return;
             } catch (NoClassDefFoundError ncdfe) {
-                showWarningMessage();
+                showWarningMessage("Selected file is not valid Neo4j debug file.", ncdfe);
                 return;
             } catch (ClassNotFulfillRequirementsException cnfre) {
-                showWarningMessage();
+                showWarningMessage("Selected file is not valid Neo4j debug file.", cnfre);
                 return;
             } catch (IllegalArgumentException iae) {
-                showWarningMessage();
+                showWarningMessage("Selected file is not valid Neo4j debug file.", iae);
                 return;
             }
 
