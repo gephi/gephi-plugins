@@ -38,6 +38,7 @@ import org.neo4j.graphdb.traversal.Evaluator;
 import org.neo4j.graphdb.traversal.Evaluators;
 import org.neo4j.graphdb.traversal.TraversalDescription;
 import org.neo4j.graphdb.traversal.Traverser;
+import org.neo4j.tooling.GlobalGraphOperations;
 import org.openide.util.Lookup;
 import org.openide.util.NbBundle;
 import org.openide.util.lookup.ServiceProvider;
@@ -147,12 +148,13 @@ public final class Neo4jImporterImpl implements Neo4jImporter, LongTask {
         initProject();
 
         GraphModelImportConverter graphModelImportConverter = GraphModelImportConverter.getInstance(graphDB);
+        graphModelImportConverter.createNeo4jNodeLabelGephiColumn();
         graphModelImportConverter.createNeo4jRelationshipTypeGephiColumn();
 
         if (traverser == null) {
-            importNodes(graphModelImportConverter, graphDB.getAllNodes(), nodeReturnFilter);
+            importNodes(graphModelImportConverter, GlobalGraphOperations.at(graphDB).getAllNodes(), nodeReturnFilter);
 
-            for (org.neo4j.graphdb.Node node : graphDB.getAllNodes()) {
+            for (org.neo4j.graphdb.Node node : GlobalGraphOperations.at(graphDB).getAllNodes()) {
                 importRelationships(graphModelImportConverter, node.getRelationships(Direction.INCOMING));
             }
         } else {

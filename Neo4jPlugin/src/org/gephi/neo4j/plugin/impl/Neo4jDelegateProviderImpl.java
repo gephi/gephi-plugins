@@ -21,13 +21,16 @@ along with Gephi.  If not, see <http://www.gnu.org/licenses/>.
 package org.gephi.neo4j.plugin.impl;
 
 
+import java.util.ArrayList;
 import org.gephi.data.attributes.api.AttributeColumn;
 import org.gephi.data.attributes.spi.AttributeValueDelegateProvider;
 import org.gephi.data.attributes.spi.GraphItemDelegateFactoryProvider;
 import org.gephi.data.attributes.type.AbstractList;
+import org.gephi.data.attributes.type.StringList;
 import org.gephi.data.properties.PropertiesColumn;
 import org.neo4j.graphdb.DynamicRelationshipType;
 import org.neo4j.graphdb.GraphDatabaseService;
+import org.neo4j.graphdb.Label;
 import org.neo4j.graphdb.Transaction;
 
 
@@ -60,7 +63,16 @@ class Neo4jDelegateProviderImpl extends AttributeValueDelegateProvider<Long> {
         GraphDatabaseService graphDB = GraphModelImportConverter.getGraphDBForCurrentWorkspace();
         Transaction tx = graphDB.beginTx();
         try {
-            final Object value = graphDB.getNodeById(delegateId).getProperty(attributeColumn.getId());
+            Object value;    
+            if (attributeColumn.getId().equals(Neo4JPropertiesColumn.NEO4J_NODE_LABEL.getId())) {
+                ArrayList<String> labels = new ArrayList<>();
+                for (Label label: graphDB.getNodeById(delegateId).getLabels()) {
+                    labels.add(label.name());
+                }
+                value = new StringList(labels.toArray(new String[]{}));
+            } else {
+                value = graphDB.getNodeById(delegateId).getProperty(attributeColumn.getId());
+            }
             tx.success();
             return value;
         } finally {

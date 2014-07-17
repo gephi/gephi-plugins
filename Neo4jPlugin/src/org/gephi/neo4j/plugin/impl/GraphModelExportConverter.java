@@ -26,7 +26,6 @@ import org.gephi.data.attributes.api.AttributeColumn;
 import org.gephi.data.attributes.api.AttributeController;
 import org.gephi.data.attributes.api.AttributeModel;
 import org.gephi.data.attributes.api.AttributeRow;
-import org.gephi.data.properties.PropertiesColumn;
 import org.gephi.graph.api.Attributes;
 import org.gephi.graph.api.Edge;
 import org.gephi.graph.api.GraphController;
@@ -126,7 +125,8 @@ public class GraphModelExportConverter {
             if (exportedNodeColumnNames.contains(attributeColumn.getTitle())) {
                 Object attributeValue = ((AttributeRow) attributes).getValue(attributeColumn);
 
-                if (attributeValue != null) {
+                if (attributeValue != null && 
+                    !attributeColumn.getId().equals(Neo4JPropertiesColumn.NEO4J_NODE_LABEL.getId())) {
                     neoNode.setProperty(attributeColumn.getId(), attributeValue);
                 }
             }
@@ -160,7 +160,7 @@ public class GraphModelExportConverter {
                 Object attributeValue = ((AttributeRow) attributes).getValue(attributeColumn);
 
                 if (attributeValue != null
-                        && !attributeColumn.getId().equals(PropertiesColumn.NEO4J_RELATIONSHIP_TYPE.getId())) {
+                        && !attributeColumn.getId().equals(Neo4JPropertiesColumn.NEO4J_RELATIONSHIP_TYPE.getId())) {
                     neoRelationship.setProperty(attributeColumn.getId(), attributeValue);
                 }
             }
