@@ -1,0 +1,6 @@
+Manifest-Version: 1.0
+AutoUpdate-Show-In-Client: false
+OpenIDE-Module: org.gephi.neo4j.plugin
+OpenIDE-Module-Localizing-Bundle: org/gephi/neo4j/plugin/Bundle.properties
+OpenIDE-Module-Specification-Version: 2.1.0
+

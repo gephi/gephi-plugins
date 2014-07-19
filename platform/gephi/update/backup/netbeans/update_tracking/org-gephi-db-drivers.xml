@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module codename="org.gephi.db.drivers">
+    <module_version install_time="1357231558922" last="true" origin="Ant" specification_version="0.8.2">
+        <file crc="1254818683" name="config/Modules/org-gephi-db-drivers.xml"/>
+        <file crc="3159460963" name="modules/org-gephi-db-drivers.jar"/>
+    </module_version>
+</module>
