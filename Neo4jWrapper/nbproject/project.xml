@@ -72,16 +72,20 @@
                 <package>org.neo4j.unsafe.batchinsert</package>
             </public-packages>
             <class-path-extension>
-                <runtime-relative-path>ext/neo4j-lucene-index-2.1.0-M01.jar</runtime-relative-path>
-                <binary-origin>release/modules/ext/neo4j-lucene-index-2.1.0-M01.jar</binary-origin>
+                <runtime-relative-path>ext/neo4j-lucene-index-2.1.2.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/neo4j-lucene-index-2.1.2.jar</binary-origin>
             </class-path-extension>
             <class-path-extension>
                 <runtime-relative-path>ext/geronimo-jta_1.1_spec-1.1.1.jar</runtime-relative-path>
                 <binary-origin>release/modules/ext/geronimo-jta_1.1_spec-1.1.1.jar</binary-origin>
             </class-path-extension>
             <class-path-extension>
-                <runtime-relative-path>ext/neo4j-kernel-2.1.0-M01.jar</runtime-relative-path>
-                <binary-origin>release/modules/ext/neo4j-kernel-2.1.0-M01.jar</binary-origin>
+                <runtime-relative-path>ext/neo4j-kernel-2.1.2.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/neo4j-kernel-2.1.2.jar</binary-origin>
+            </class-path-extension>
+            <class-path-extension>
+                <runtime-relative-path>ext/neo4j-primitive-collections-2.1.2.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/neo4j-primitive-collections-2.1.2.jar</binary-origin>
             </class-path-extension>
             <class-path-extension>
                 <runtime-relative-path>ext/lucene-core-3.6.2.jar</runtime-relative-path>
