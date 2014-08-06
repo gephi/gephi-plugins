@@ -27,6 +27,7 @@
                 <package>org.neo4j.kernel.api.exceptions</package>
                 <package>org.neo4j.kernel.api.exceptions.index</package>
                 <package>org.neo4j.kernel.api.exceptions.schema</package>
+                <package>org.neo4j.kernel.api.heuristics</package>
                 <package>org.neo4j.kernel.api.impl.index</package>
                 <package>org.neo4j.kernel.api.impl.index.bitmaps</package>
                 <package>org.neo4j.kernel.api.index</package>
@@ -43,45 +44,64 @@
                 <package>org.neo4j.kernel.impl.api.operations</package>
                 <package>org.neo4j.kernel.impl.api.scan</package>
                 <package>org.neo4j.kernel.impl.api.state</package>
+                <package>org.neo4j.kernel.impl.api.statistics</package>
                 <package>org.neo4j.kernel.impl.api.store</package>
                 <package>org.neo4j.kernel.impl.cache</package>
-                <package>org.neo4j.kernel.impl.cleanup</package>
                 <package>org.neo4j.kernel.impl.core</package>
                 <package>org.neo4j.kernel.impl.coreapi</package>
                 <package>org.neo4j.kernel.impl.coreapi.schema</package>
                 <package>org.neo4j.kernel.impl.index</package>
                 <package>org.neo4j.kernel.impl.locking</package>
+                <package>org.neo4j.kernel.impl.locking.community</package>
                 <package>org.neo4j.kernel.impl.nioneo.store</package>
                 <package>org.neo4j.kernel.impl.nioneo.store.labels</package>
                 <package>org.neo4j.kernel.impl.nioneo.store.windowpool</package>
                 <package>org.neo4j.kernel.impl.nioneo.xa</package>
+                <package>org.neo4j.kernel.impl.nioneo.xa.command</package>
                 <package>org.neo4j.kernel.impl.persistence</package>
                 <package>org.neo4j.kernel.impl.recovery</package>
                 <package>org.neo4j.kernel.impl.storemigration</package>
                 <package>org.neo4j.kernel.impl.storemigration.legacystore</package>
+                <package>org.neo4j.kernel.impl.storemigration.legacystore.v19</package>
+                <package>org.neo4j.kernel.impl.storemigration.legacystore.v20</package>
                 <package>org.neo4j.kernel.impl.storemigration.monitoring</package>
                 <package>org.neo4j.kernel.impl.transaction</package>
                 <package>org.neo4j.kernel.impl.transaction.xaframework</package>
                 <package>org.neo4j.kernel.impl.traversal</package>
                 <package>org.neo4j.kernel.impl.util</package>
+                <package>org.neo4j.kernel.impl.util.collection</package>
+                <package>org.neo4j.kernel.impl.util.concurrent</package>
+                <package>org.neo4j.kernel.impl.util.function</package>
+                <package>org.neo4j.kernel.impl.util.rawstorereader</package>
+                <package>org.neo4j.kernel.impl.util.statistics</package>
                 <package>org.neo4j.kernel.info</package>
                 <package>org.neo4j.kernel.lifecycle</package>
                 <package>org.neo4j.kernel.logging</package>
                 <package>org.neo4j.kernel.monitoring</package>
                 <package>org.neo4j.tooling</package>
                 <package>org.neo4j.unsafe.batchinsert</package>
+                <package>org.neo4j.unsafe.impl.batchimport</package>
+                <package>org.neo4j.unsafe.impl.batchimport.cache</package>
+                <package>org.neo4j.unsafe.impl.batchimport.input</package>
+                <package>org.neo4j.unsafe.impl.batchimport.staging</package>
+                <package>org.neo4j.unsafe.impl.batchimport.stats</package>
+                <package>org.neo4j.unsafe.impl.batchimport.store</package>
             </public-packages>
             <class-path-extension>
-                <runtime-relative-path>ext/neo4j-lucene-index-2.1.0-M01.jar</runtime-relative-path>
-                <binary-origin>release/modules/ext/neo4j-lucene-index-2.1.0-M01.jar</binary-origin>
+                <runtime-relative-path>ext/neo4j-kernel-2.1.3.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/neo4j-kernel-2.1.3.jar</binary-origin>
             </class-path-extension>
             <class-path-extension>
                 <runtime-relative-path>ext/geronimo-jta_1.1_spec-1.1.1.jar</runtime-relative-path>
                 <binary-origin>release/modules/ext/geronimo-jta_1.1_spec-1.1.1.jar</binary-origin>
             </class-path-extension>
             <class-path-extension>
-                <runtime-relative-path>ext/neo4j-kernel-2.1.0-M01.jar</runtime-relative-path>
-                <binary-origin>release/modules/ext/neo4j-kernel-2.1.0-M01.jar</binary-origin>
+                <runtime-relative-path>ext/neo4j-primitive-collections-2.1.3.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/neo4j-primitive-collections-2.1.3.jar</binary-origin>
+            </class-path-extension>
+            <class-path-extension>
+                <runtime-relative-path>ext/neo4j-lucene-index-2.1.3.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/neo4j-lucene-index-2.1.3.jar</binary-origin>
             </class-path-extension>
             <class-path-extension>
                 <runtime-relative-path>ext/lucene-core-3.6.2.jar</runtime-relative-path>
