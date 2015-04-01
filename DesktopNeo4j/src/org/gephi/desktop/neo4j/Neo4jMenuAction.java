@@ -36,6 +36,8 @@ import java.beans.PropertyChangeListener;
 import java.io.File;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.AbstractAction;
 import javax.swing.JFileChooser;
 import javax.swing.JMenu;
@@ -187,12 +189,20 @@ public class Neo4jMenuAction extends CallableSystemAction {
         String errorMessage = null;
 
         Collection<Class> inUseExceptions = Arrays.<Class>asList(Neo4jStoreAlreadyInUseException.class,StoreLockException.class);
-        if (inUseExceptions.contains(e.getClass()) || inUseExceptions.contains(e.getCause().getClass()))
-            errorMessage = NbBundle.getMessage(Neo4jMenuAction.class, "CTL_Neo4j_DatabaseStorageAlreadyInUse");
+        if (inUseExceptions.contains(e.getClass()) || inUseExceptions.contains(e.getCause().getClass())) {
+            errorMessage = NbBundle.getMessage(Neo4jMenuAction.class, "CTL_Neo4j_DatabaseStorageAlreadyInUse");          
+        } else {
+            StringBuilder sb = new StringBuilder();
+            for(Throwable t = e; t != null; t = t.getCause()) {
+                sb.append(t.getMessage()).append("\n");
+            }
+            errorMessage = sb.toString();
+        }
 
         NotifyDescriptor notifyDescriptor = new NotifyDescriptor.Message(errorMessage, JOptionPane.WARNING_MESSAGE);
-        DialogDisplayer.getDefault().notify(notifyDescriptor);
-
+        DialogDisplayer.getDefault().notifyLater(notifyDescriptor);
+        Logger.getLogger(Neo4jMenuAction.class.getName()).log(Level.INFO, 
+                null, e);
         try {
             if (db!=null) db.shutdown();
         } catch(Exception ex) {
