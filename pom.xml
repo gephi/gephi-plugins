@@ -181,7 +181,6 @@
                         <configuration>
                             <message>Creating site for gephi-plugins version=${project.version} and gephiVersion=$(gephi.version}</message>
                             <merge>false</merge>
-                            <dryRun>true</dryRun>
                         </configuration>
                         <executions>
                             <execution>
