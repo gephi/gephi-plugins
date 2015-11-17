@@ -19,8 +19,16 @@
         <!-- Version of Gephi building plugins against. Plugins with anterior versions will be ignored -->
         <gephi.version>0.9-SNAPSHOT</gephi.version>
         <clusters.path>${project.build.directory}/plugins_clusters</clusters.path>
+        <github.global.server>github</github.global.server>
     </properties>
     
+    <!-- SCM -->
+    <scm>
+        <connection>scm:git:git://github.com/gephi/gephi-plugins.git</connection>
+        <developerConnection>scm:git:git@github.com:gephi/gephi-plugins.git</developerConnection>
+        <url>https://github.com/gephi/gephi-plugins</url>
+    </scm>
+
     <!-- Repositories -->
     <repositories>
         <repository>
@@ -68,6 +76,11 @@
                             <cluster>${clusters.path}/plugins</cluster>
                         </clusters>
                     </configuration>
+                </plugin>
+                <plugin>
+                    <groupId>com.github.github</groupId>
+                    <artifactId>site-maven-plugin</artifactId>
+                    <version>0.12</version>
                 </plugin>
             </plugins>
         </pluginManagement>
@@ -159,6 +172,25 @@
                         <configuration>
                             <outputDirectory>${project.build.directory}/site/plugins/</outputDirectory>
                         </configuration>
+                    </plugin>
+
+                    <!-- Publish site folder to GitHub's gh-pages branch -->
+                    <plugin>
+                        <groupId>com.github.github</groupId>
+                        <artifactId>site-maven-plugin</artifactId>
+                        <configuration>
+                            <message>Creating site for gephi-plugins version=${project.version} and gephiVersion=$(gephi.version}</message>
+                            <merge>false</merge>
+                            <dryRun>true</dryRun>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <goals>
+                                    <goal>site</goal>
+                                </goals>
+                                <phase>package</phase>
+                            </execution>
+                        </executions>
                     </plugin>
                 </plugins>
             </build>
