@@ -179,6 +179,9 @@
                                     <goal>build-metadata</goal>
                                 </goals>
                                 <phase>package</phase>
+                                <configuration>
+                                    <metadataUrl>http://gephi.github.io/gephi-plugins/plugins/</metadataUrl>
+                                </configuration>
                             </execution>
                         </executions>
                         <configuration>
