@@ -1,0 +1,8 @@
+sudo: false
+language: java
+jdk:
+  - oraclejdk8
+install:
+  - echo "<settings><servers><server><id>ossrh</id><username>\${env.OSSRH_USER}</username><password>\${env.OSSRH_PASS}</password></server><servers><server><id>github</id><username>\${env.GITHUB_USER}</username><password>\${env.GITHUB_PASS}</password></server></servers></settings>" > ~/settings.xml
+script:
+  - mvn clean package --settings ~/settings.xml -Djava.awt.headless=true -P release
