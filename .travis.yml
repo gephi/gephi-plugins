@@ -1,5 +1,8 @@
 sudo: false
 language: java
+branches:
+  only:
+    - master-forge
 jdk:
   - oraclejdk8
 install:
