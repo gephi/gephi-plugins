@@ -14,6 +14,16 @@
       ],
       "category": "Layout",
       "last_update": "November 17, 2015",
+      "images": [
+        {
+          "image": "imgs/org.gephi.geolayout-plugin/geolayout_example.png",
+          "thumbnail": "imgs/org.gephi.geolayout-plugin/geolayout_example-thumbnail.png"
+        },
+        {
+          "image": "imgs/org.gephi.geolayout-plugin/geolayout_screenshot.png",
+          "thumbnail": "imgs/org.gephi.geolayout-plugin/geolayout_screenshot-thumbnail.png"
+        }
+      ],
       "versions": {
         "0.9-SNAPSHOT": {
           "url": "0.9-SNAPSHOT/geolayout-plugin-0.9-SNAPSHOT.nbm",
