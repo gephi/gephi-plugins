@@ -9,7 +9,8 @@
       "license": "GPL v3",
       "authors": [
         {
-          "name": "Alexis Jacomy"
+          "name": "Alexis Jacomy",
+          "link": null
         }
       ],
       "category": "Layout",
@@ -29,7 +30,41 @@
           "url": "0.9-SNAPSHOT/geolayout-plugin-0.9-SNAPSHOT.nbm",
           "last_update": "November 17, 2015"
         }
-      }
+      },
+      "sourcecode": null
+    },
+    {
+      "id": "org.gephi.geolayout-plugin",
+      "name": "GeoLayout",
+      "short_description": "A layout to display geocoded data",
+      "long_description": "OpenIDE-Module-Long-Description\u003d\\   This plugin contains only a layout (\"GeoLayout\") to display your graph according to geocoded attributes. \\   To use it:\\n- Select the two attributes which contain the geocoded coordinates of your nodes (latitude and longitude)\\n- Select the projection you want to use\\n- Set the other parameters according to the selected projection\\n- Launch the algorithm\\n\\nSelect the \u0027looping\u0027 parameter to run the algorithm continuously. \\   This is useful if your coordinates are dynamic.\\n\\n\\   One pore point: If, for any reason, some of your nodes do have null value on the attributes corresponding to \u0027latitude\u0027 or \u0027longitude\u0027, they will be displayed on a line, down to the graph (you can then delete them or do what you want).",
+      "readme": "## Introduction\n\nA Gephi plugin to display your geocoded graphs.\n\n## Plugin Owner’s Notes\n\nThis plugin contains only a layout (“GeoLayout”) to display your graph according to geocoded attributes. To use it:\n\n1. Select the two attributes which contain the geocoded coordinates of your nodes (latitude and longitude)\n2. Select the projection you want to use\n3. Set the other parameters according to the selected projection\n4. Launch the algorithm\n\nThe available projections are:\n\n* [Mercator](http://bit.ly/JQuvw)\n* [Tranverse Mercator](http://bit.ly/btWRTI)\n* [Miller cylindrical](http://bit.ly/agJOxd)\n* [Gall-Peters](http://bit.ly/Nj5cW)\n* [Sinusoidal](http://bit.ly/a8SsNg)\n* [Lambert cylindrical](http://bit.ly/cnuxqr)\n* [Winkel Tripel](http://en.wikipedia.org/wiki/Winkel_tripel_projection)\n* [Equirectangular](http://bit.ly/vxEmy)\n\nFor any questions or just more information, you can check the related [thread](http://bit.ly/a6itGZ) on the Gephi forum.\n\nAnd if, for any reason, some of your nodes do not have valid values on the selected attributes (for latitude and longitude), they will be displayed on a line on the bottom of your graph (then, you can delete them or do what you want). Also make sure your latitude and longitude columns are of type \u0027double\u0027, not \u0027string\u0027.\n",
+      "license": "GPL v3",
+      "authors": [
+        {
+          "name": "Alexis Jacomy",
+          "link": null
+        }
+      ],
+      "category": "Layout",
+      "last_update": "November 17, 2015",
+      "images": [
+        {
+          "image": "imgs/org.gephi.geolayout-plugin/geolayout_example.png",
+          "thumbnail": "imgs/org.gephi.geolayout-plugin/geolayout_example-thumbnail.png"
+        },
+        {
+          "image": "imgs/org.gephi.geolayout-plugin/geolayout_screenshot.png",
+          "thumbnail": "imgs/org.gephi.geolayout-plugin/geolayout_screenshot-thumbnail.png"
+        }
+      ],
+      "versions": {
+        "0.9-SNAPSHOT": {
+          "url": "0.9-SNAPSHOT/geolayout-plugin-0.9-SNAPSHOT.nbm",
+          "last_update": "November 17, 2015"
+        }
+      },
+      "sourcecode": null
     }
   ]
 }
