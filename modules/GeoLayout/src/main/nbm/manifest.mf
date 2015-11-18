@@ -1,9 +1,5 @@
 Manifest-Version: 1.0
 OpenIDE-Module-Name: GeoLayout
 OpenIDE-Module-Short-Description: A layout to display geocoded data
-OpenIDE-Module-Long-Description: OpenIDE-Module-Long-Description=\
-    This plugin contains only a layout ("GeoLayout") to display your graph according to geocoded attributes. \
-    To use it:\n- Select the two attributes which contain the geocoded coordinates of your nodes (latitude and longitude)\n- Select the projection you want to use\n- Set the other parameters according to the selected projection\n- Launch the algorithm\n\nSelect the 'looping' parameter to run the algorithm continuously. \
-    This is useful if your coordinates are dynamic.\n\n\
-    One pore point: If, for any reason, some of your nodes do have null value on the attributes corresponding to 'latitude' or 'longitude', they will be displayed on a line, down to the graph (you can then delete them or do what you want).
+OpenIDE-Module-Long-Description: This plugin contains the "GeoLayout", which displays your graph based on geocoded attributes (i.e. latitude and longitude) and standard projections.
 OpenIDE-Module-Display-Category: Layout
