@@ -46,7 +46,6 @@
                     <licenseName>GPL v3</licenseName>
                     <licenseFile>gpl-3.0.txt</licenseFile>
                     <author>Alexis Jacomy</author>
-                    <requiresRestart>true</requiresRestart>
                     <publicPackages>
                     </publicPackages>
                 </configuration>
