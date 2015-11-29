@@ -196,7 +196,7 @@
                         <artifactId>site-maven-plugin</artifactId>
                         <configuration>
                             <message>Creating site for gephi-plugins version=${project.version} and gephiVersion=$(gephi.version}</message>
-                            <merge>false</merge>
+                            <merge>true</merge>
                         </configuration>
                         <executions>
                             <execution>

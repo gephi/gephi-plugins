@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <actions>
-
-        <action>
-            <actionName>run</actionName>
-            <goals>
-                <goal>install</goal>
-                <goal>org.gephi:gephi-maven-plugin:run</goal>
-            </goals>
-        </action>
-    </actions>
+    <action>
+        <actionName>run</actionName>
+        <goals>
+            <goal>install</goal>
+            <goal>org.gephi:gephi-maven-plugin:run</goal>
+        </goals>
+    </action>
+</actions>
