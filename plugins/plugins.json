@@ -15,7 +15,7 @@
         }
       ],
       "category": "Layout",
-      "last_update": "November 18, 2015",
+      "last_update": "November 29, 2015",
       "images": [
         {
           "image": "imgs/geolayout-plugin/geolayout_example.png",
@@ -33,7 +33,7 @@
         },
         "0.9-SNAPSHOT": {
           "url": "0.9-SNAPSHOT/geolayout-plugin-0.9-SNAPSHOT.nbm",
-          "last_update": "November 18, 2015"
+          "last_update": "November 29, 2015"
         }
       },
       "sourcecode": null,
