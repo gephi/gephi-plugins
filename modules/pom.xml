@@ -483,10 +483,13 @@
                 <version>3.14</version>
                 <configuration>
                     <cluster>plugins</cluster>
+                    <!-- This can be overriden in child POMs but is needed in most cases -->
+                    <requiresRestart>true</requiresRestart>
                 </configuration>
             </plugin>
 
-            <plugin> <!-- required since nbm-plugin 3.0-->
+            <!-- required since nbm-plugin 3.0-->
+            <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
                 <version>2.5</version>
