@@ -24,19 +24,28 @@ import java.awt.Toolkit;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.StringSelection;
 import java.awt.event.KeyEvent;
+import java.util.ArrayList;
+import java.util.List;
 import javax.swing.Icon;
 import javax.swing.JOptionPane;
 import org.gephi.datalab.spi.ContextMenuItemManipulator;
 import org.gephi.datalab.spi.ManipulatorUI;
 import org.gephi.datalab.spi.nodes.NodesManipulator;
+import org.gephi.graph.api.AttributeUtils;
 import org.gephi.graph.api.Column;
 import org.gephi.graph.api.Graph;
 import org.gephi.graph.api.GraphController;
 import org.gephi.graph.api.GraphModel;
 import org.gephi.graph.api.Node;
 import org.gephi.graph.api.Table;
+import org.gephi.graph.api.TimeFormat;
+import org.gephi.graph.api.types.IntervalMap;
+import org.gephi.graph.api.types.IntervalSet;
+import org.gephi.graph.api.types.TimestampMap;
+import org.gephi.graph.api.types.TimestampSet;
 import org.gephi.project.api.ProjectController;
 import org.gephi.visualization.spi.GraphContextMenuItem;
+import org.joda.time.DateTimeZone;
 import org.openide.util.ImageUtilities;
 import org.openide.util.Lookup;
 import org.openide.util.NbBundle;
@@ -60,32 +69,70 @@ public class CopyDataToClipboard implements NodesManipulator, GraphContextMenuIt
     public void execute() {
         GraphModel graphModel = Lookup.getDefault().lookup(GraphController.class).getGraphModel();
         Table table = graphModel.getNodeTable();
-        final Column[] availableColumns = table.toArray();
-        Column initialSelection;
+        
+        List<String> availableColumns = new ArrayList<String>();
+        for (Column column : table) {
+            availableColumns.add(column.getTitle());
+        }
+        String initialSelection;
         LastColumnUsed lc = Lookup.getDefault().lookup(ProjectController.class).getCurrentWorkspace().getLookup().lookup(LastColumnUsed.class);
         if (lc != null) {
-            initialSelection = table.getColumn(lc.column);
+            initialSelection = lc.column;
         } else {
             initialSelection = null;
         }
 
-        Column selection = (Column) JOptionPane.showInputDialog(null, NbBundle.getMessage(CopyDataToClipboard.class, "CopyDataToClipboard.message"), getName(), JOptionPane.QUESTION_MESSAGE, null, availableColumns, initialSelection);
-        if (selection != null) {
-            final StringBuilder sb = new StringBuilder();
-            for (Node node : nodes) {
-                sb.append(node.getAttribute(selection));
-                sb.append('\n');
-            }
-            Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
-            StringSelection ss = new StringSelection(sb.toString());
-            clipboard.setContents(ss, ss);
+        String columnId = (String) JOptionPane.showInputDialog(null, NbBundle.getMessage(CopyDataToClipboard.class, "CopyDataToClipboard.message"), getName(), JOptionPane.QUESTION_MESSAGE, null, availableColumns.toArray(), initialSelection);
+        if (columnId != null) {
+            Column column = table.getColumn(columnId);
+            if(column != null ){
+                boolean isArray = column.isArray();
+                boolean isTimestampSet = TimestampSet.class.isAssignableFrom(column.getTypeClass());
+                boolean isIntervalSet = IntervalSet.class.isAssignableFrom(column.getTypeClass());
+                boolean isTimestampMap = TimestampMap.class.isAssignableFrom(column.getTypeClass());
+                boolean isIntervalMap = TimestampMap.class.isAssignableFrom(column.getTypeClass());
+                TimeFormat timeFormat = graphModel.getTimeFormat();
+                DateTimeZone timeZone = graphModel.getTimeZone();
 
-            if (lc == null) {
-                Lookup.getDefault().lookup(ProjectController.class).getCurrentWorkspace().add(new LastColumnUsed(selection.getTitle()));
-            } else {
-                lc.column = selection.getTitle();
+
+
+                final StringBuilder sb = new StringBuilder();
+                for (Node node : nodes) {
+                    Object value = node.getAttribute(column);
+                    sb.append(printValue(value, isArray, isTimestampSet, isIntervalSet, isTimestampMap, isIntervalMap, timeFormat, timeZone));
+                    sb.append('\n');
+                }
+                Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+                StringSelection ss = new StringSelection(sb.toString());
+                clipboard.setContents(ss, ss);
+
+                if (lc == null) {
+                    Lookup.getDefault().lookup(ProjectController.class).getCurrentWorkspace().add(new LastColumnUsed(column.getTitle()));
+                } else {
+                    lc.column = column.getTitle();
+                }
             }
         }
+    }
+    
+    private String printValue(Object value, boolean isArray, boolean isTimestampSet, boolean isIntervalSet, boolean isTimestampMap, boolean isIntervalMap, TimeFormat timeFormat, DateTimeZone timeZone){
+        if(value == null) {
+            return null;
+        }
+        
+        if(isArray){
+            return AttributeUtils.printArray(value);
+        } else if (isTimestampSet){
+            return ((TimestampSet) value).toString(timeFormat, timeZone);
+        } else if (isIntervalSet){
+            return ((IntervalSet) value).toString(timeFormat, timeZone);
+        } else if (isTimestampMap){
+            return ((TimestampMap) value).toString(timeFormat, timeZone);
+        } else if (isIntervalMap){
+            return ((IntervalMap) value).toString(timeFormat, timeZone);
+        }
+        
+        return value.toString();
     }
 
     public String getName() {
