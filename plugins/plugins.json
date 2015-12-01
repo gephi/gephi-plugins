@@ -15,7 +15,7 @@
         }
       ],
       "category": "Layout",
-      "last_update": "November 29, 2015",
+      "last_update": "December 1, 2015",
       "images": [
         {
           "image": "imgs/geolayout-plugin/geolayout_example.png",
@@ -33,7 +33,38 @@
         },
         "0.9-SNAPSHOT": {
           "url": "0.9-SNAPSHOT/geolayout-plugin-0.9-SNAPSHOT.nbm",
-          "last_update": "November 29, 2015"
+          "last_update": "December 1, 2015"
+        }
+      },
+      "sourcecode": null,
+      "homepage": null
+    },
+    {
+      "id": "linkfluence-plugin",
+      "name": "Linkfluence Plugin",
+      "short_description": "Public plugin for Linkfluence with some extra data manipulation features and tools",
+      "long_description": "This plugin provides some extra features for Overview and Data Laboratory such as nodes massive tagging, opening of urls from nodes and copying columns to clipboard.",
+      "readme": null,
+      "license": "GPL v3",
+      "authors": [
+        {
+          "name": "Eduardo Ramos",
+          "email": null,
+          "link": null
+        }
+      ],
+      "category": "Tool",
+      "last_update": "December 1, 2015",
+      "images": [
+        {
+          "image": "imgs/linkfluence-plugin/img.jpg",
+          "thumbnail": "imgs/linkfluence-plugin/img-thumbnail.png"
+        }
+      ],
+      "versions": {
+        "0.9-SNAPSHOT": {
+          "url": "0.9-SNAPSHOT/linkfluence-plugin-0.9-SNAPSHOT.nbm",
+          "last_update": "December 1, 2015"
         }
       },
       "sourcecode": null,
