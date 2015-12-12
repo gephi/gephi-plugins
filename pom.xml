@@ -182,7 +182,7 @@
                                 </goals>
                                 <phase>package</phase>
                                 <configuration>
-                                    <metadataUrl>http://gephi.github.io/gephi-plugins/plugins/</metadataUrl>
+                                    <metadataUrl>https://gephi.org/gephi-plugins/plugins/</metadataUrl>
                                 </configuration>
                             </execution>
                             <execution>
