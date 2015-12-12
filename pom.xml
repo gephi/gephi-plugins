@@ -181,8 +181,15 @@
                                 </goals>
                                 <phase>package</phase>
                                 <configuration>
-                                    <metadataUrl>http://gephi.github.io/gephi-plugins/plugins/</metadataUrl>
+                                    <metadataUrl>https://gephi.org/gephi-plugins/plugins/</metadataUrl>
                                 </configuration>
+                            </execution>
+                            <execution>
+                                <id>validate-plugin</id>
+                                <goals>
+                                    <goal>validate</goal>
+                                </goals>
+                                <phase>none</phase>
                             </execution>
                         </executions>
                         <configuration>
@@ -196,7 +203,7 @@
                         <artifactId>site-maven-plugin</artifactId>
                         <configuration>
                             <message>Creating site for gephi-plugins version=${project.version} and gephiVersion=$(gephi.version}</message>
-                            <merge>false</merge>
+                            <merge>true</merge>
                         </configuration>
                         <executions>
                             <execution>
