@@ -248,6 +248,16 @@
             </dependency>
             <dependency>
                 <groupId>${project.groupId}</groupId>
+                <artifactId>desktop-banner</artifactId>
+                <version>${gephi.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>${project.groupId}</groupId>
+                <artifactId>desktop-branding</artifactId>
+                <version>${gephi.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>${project.groupId}</groupId>
                 <artifactId>appearance-api</artifactId>
                 <version>${gephi.version}</version>
             </dependency>
@@ -339,6 +349,16 @@
             <dependency>
                 <groupId>${project.groupId}</groupId>
                 <artifactId>desktop-tools</artifactId>
+                <version>${gephi.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>${project.groupId}</groupId>
+                <artifactId>timeline-api</artifactId>
+                <version>${gephi.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>${project.groupId}</groupId>
+                <artifactId>desktop-timeline</artifactId>
                 <version>${gephi.version}</version>
             </dependency>
             <dependency>
