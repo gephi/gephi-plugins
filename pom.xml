@@ -201,7 +201,7 @@
                         <groupId>com.github.github</groupId>
                         <artifactId>site-maven-plugin</artifactId>
                         <configuration>
-                            <message>Creating site for gephi-plugins version=${project.version} and gephiVersion=$(gephi.version}</message>
+                            <message>Creating site for gephi-plugins version=${project.version} and gephiVersion=${gephi.version}</message>
                             <merge>true</merge>
                         </configuration>
                         <executions>
