@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
 <!DOCTYPE module_updates PUBLIC "-//NetBeans//DTD Autoupdate Catalog 2.4//EN" "http://www.netbeans.org/dtds/autoupdate-catalog-2_4.dtd">
-<module_updates timestamp="36/51/22/13/12/2015">
+<module_updates timestamp="32/38/23/13/12/2015">
 
 
 
-<module codenamebase="org.gephi.geolayout.plugin" distribution="geolayout-plugin-0.9-SNAPSHOT.nbm" downloadsize="25318" license="671322F0" moduleauthor="Alexis Jacomy" needsrestart="true" releasedate="2015/12/13" targetcluster="plugins">
+<module codenamebase="org.gephi.geolayout.plugin" distribution="geolayout-plugin-0.9-SNAPSHOT.nbm" downloadsize="25315" license="671322F0" moduleauthor="Alexis Jacomy" needsrestart="true" releasedate="2015/12/13" targetcluster="plugins">
     <manifest OpenIDE-Module="org.gephi.geolayout.plugin" OpenIDE-Module-Display-Category="Layout" OpenIDE-Module-Implementation-Version="0.9-20151213" OpenIDE-Module-Long-Description="This plugin contains the &quot;GeoLayout&quot;, which displays your graph based on geocoded attributes (i.e. latitude and longitude) and standard projections." OpenIDE-Module-Module-Dependencies="org.gephi.layout.api &gt; 0.9, org.gephi.graph.api &gt; 0.9, org.gephi.ui.propertyeditor &gt; 0.9, org.openide.util.lookup &gt; 8.32.1, org.openide.util &gt; 9.5.1" OpenIDE-Module-Name="GeoLayout" OpenIDE-Module-Requires="org.openide.modules.ModuleFormat1" OpenIDE-Module-Short-Description="A layout to display geocoded data" OpenIDE-Module-Specification-Version="0.9"/>
     
 </module>
 
-<module codenamebase="org.gephi.linkfluence" distribution="linkfluence-plugin-0.9-SNAPSHOT.nbm" downloadsize="39690" license="671322F0" moduleauthor="Eduardo Ramos" needsrestart="true" releasedate="2015/12/13" targetcluster="plugins">
+<module codenamebase="org.gephi.linkfluence" distribution="linkfluence-plugin-0.9-SNAPSHOT.nbm" downloadsize="39684" license="671322F0" moduleauthor="Eduardo Ramos" needsrestart="true" releasedate="2015/12/13" targetcluster="plugins">
     <manifest OpenIDE-Module="org.gephi.linkfluence" OpenIDE-Module-Display-Category="Plugin" OpenIDE-Module-Implementation-Version="0.9-20151213" OpenIDE-Module-Long-Description="This plugin provides some extra features for Overview and Data Laboratory such as nodes massive tagging, opening of urls from nodes and copying columns to clipboard." OpenIDE-Module-Module-Dependencies="org.gephi.graph.api &gt; 0.9, org.gephi.datalab.api &gt; 0.9, org.gephi.ui.library.wrapper &gt; 0.9, org.gephi.project.api &gt; 0.9, org.gephi.visualization.api &gt; 0.9, org.openide.util.lookup &gt; 8.32.1, org.openide.util &gt; 9.5.1, org.openide.util.ui &gt; 9.4.1, org.openide.awt &gt; 7.65.1" OpenIDE-Module-Name="Linkfluence Plugin" OpenIDE-Module-Requires="org.openide.modules.ModuleFormat1" OpenIDE-Module-Short-Description="Plugin for Linkfluence with some extra data manipulation features" OpenIDE-Module-Specification-Version="1.0.9"/>
     
 </module>
