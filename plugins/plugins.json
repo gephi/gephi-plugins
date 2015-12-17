@@ -857,6 +857,27 @@
   },
   "last_update": "October 19, 2014",
   "description": "<h2>Author</h2>\n<p>Clement Levallois, <a href=\"http://www.em-lyon.com/fr/faculte-recherche-enseignement-superieur/faculte-recherche-emlyon/corps-professoral/Professeurs-permanents/Clement-LEVALLOIS\" target=\"_blank\">Assistant Professor at EMLYON Business School</a>.</p>\n<p>The classic layout of Gephi extended to 3D.</p>\n<p>Versions:<br>\n1.0 — initial version (28 June 2013)<br>\n1.1 — conversion of nodes to spheres when layout in 3D (30 June 2013)</p>\n<p>&nbsp;</p>"
+},{
+  "id": "multipartite-layout",
+  "name": "Multipartite Layout",
+  "catchphrase": "",
+  "types": [
+    "layout"
+  ],
+  "images": [],
+  "authors": [
+    {
+      "name": "Kemal BESKARDESLER",
+      "link": "https://github.com/kemalceng/"
+    }
+  ],
+  "sourcecode": "https://github.com/kemalceng/gephi-plugins/",
+  "license": "GPL v3",
+  "versions": {
+    "0.8.2": "0.8.2/com-cna-multipartiteLayout.nbm"
+  },
+  "last_update": "June 1, 2013",
+  "description": "<p>To simplify analyzing connections between groups in multipartite graphs, minimizing edge crossings is a good way to do so. In this work, by using the algorithm suggested in the paper “An Edge Crossing Minimization Algorithm Based on Adjacency Matrix Transformation”, implementation for gephi platform is performed.</p>"
 }
   ]
 }
