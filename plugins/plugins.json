@@ -788,6 +788,29 @@
   },
   "last_update": "May 7, 2014",
   "description": "<p>This layout can be used to split a network layout into distinct Z-Layers (Network Splitter 3D Z-Layers are user-defined clusters).<br>\nE.g. after using layouts such as: Yifan Hu, Fruchterman Reingold, Force Atlas, Circular, Layered, OpenOrd, etc.</p>\n<p>Computed Z-Layers can be used in Gephi ranking and/or partition procedures. To use this plugin it is quite simple: network nodes should have an attribute containing “[z]” in its name. E.g. something like “Degree [z]” or “YourNodeColumn[z]“.</p>\n<p>The Network Splitter 3D will compute and segment z-Levels regarding your “[z]” column values (with any ranges). If your network don’t have a “[z]” column, no problem, all nodes will be placed in Z-Layer 0 (Zero).</p>\n<p>Another usefull feature:<br>\nYou can use this plugin to rotate your graph over the X-Axis.</p>"
+},{
+  "id": "isometriclayout",
+  "name": "IsometricLayout",
+  "catchphrase": "",
+  "types": [
+    "layout"
+  ],
+  "images": [
+    "imgs/isometriclayout/isometriclayout_logo.jpg"
+  ],
+  "authors": [
+    {
+      "name": "Alexandre Barão",
+      "link": "http://pt.linkedin.com/in/alexandrebarao"
+    }
+  ],
+  "sourcecode": "http://www.relationalcapitalvalue.com/gephi/plugins/isometric/IsometricLayout.zip",
+  "license": "GPL v3",
+  "versions": {
+    "0.8.2": "0.8.2/org-alexandrebarao-isometriclayout.nbm"
+  },
+  "last_update": "April 9, 2014",
+  "description": "<p>This layout uses an isometric perspective to visualize networks. I.e. it generates 3D coordinates for all network nodes (x,y,z).<br>\nThus, is a method for the visual representation of three-dimensional nodes in two dimensions.<br>\nIt can be used to split a network into distinct Z-Layers (e.g. to better visualize high-performers and/or low-performers, or communities after using modularity algorithms).<br>\nBesides, computed Z-layers can be used in Gephi ranking and/or partition procedures.<br>\nTo use it, is quite simple, network nodes should have an attribute containing “[z]” in its name. E.g., something like “Degree [z]” or “YourNodeColumn[z]“.<br>\nThe IsometricLayout will compute and segment z-Levels regarding your “[z]” column values (with any ranges).<br>\nIf your network don’t have a “[z]” column, no problem, all nodes will be placed in Z-Layer 0 (Zero).</p>"
 }
   ]
 }
