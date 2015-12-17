@@ -301,6 +301,31 @@
   },
   "last_update": "August 9, 2013",
   "description": "<p>Export your network from Gephi to a predefined Sigma.js template. Choose to include search, group selection, explanatory text, etc. without having to do any HTML/JavaScript coding. Upload the output to any webserver and enjoy a rich HTML5 interactive visualization of your network.</p>\n<p>Example output is available at: <a href=\"http://blogs.oii.ox.ac.uk/vis/?page_id=115\">http://blogs.oii.ox.ac.uk/vis/?page_id=115</a> More features are coming and better validation is needed, but I’m making this alpha version of the code available quickly because of the demand I’ve received for it. More <a href=\"http://blogs.oii.ox.ac.uk/vis/\">information on the project</a> is available on <a href=\"http://blogs.oii.ox.ac.uk/vis/\">our blog</a>. The underlying <a href=\"https://github.com/oxfordinternetinstitute/InteractiveVis/\">HTML5/CSS/JS framework used to render the graphs</a> is also available on <a href=\"https://github.com/oxfordinternetinstitute/InteractiveVis/\">GitHub as a separate project</a> and changes / pull requests are welcome.</p>\n<p>Once installed, restart Gephi and you will see a <strong>Export to sigma.js </strong>option on the <strong>File-&gt;Export</strong> menu. Choose a location to export to, set export customization options, and click OK. The resulting folder can be uploaded to any webserver to showcase your network. Please note, due to browser security restrictions in Chrome you will not be able to view the result without a webserver (Other browsers may work locally).</p>\n<p>Please report any issues or feature requests on the <a href=\"https://github.com/oxfordinternetinstitute/gephi-plugins/issues/\">GitHub page</a>.</p>\n<p>&nbsp;</p>\n<p>Release notes:</p>\n<p>1.0 (6 Nov 2012) Initial release</p>\n<p>1.1 (Jan 2013) Updated for 0.8.2 Gephi release</p>\n<p>1.1.1 (Feb 2013) Store edge weight to the ‘size’ attribute in the data so that this is displayed by Sigma.js. It is likely necessary to tweak the minEdgeSize and maxEdgeSize values in config.json for your particular configuration. The config.json files is now in pretty-print mode to make it easier to view and edit.</p>\n<p>1.2 (Aug 2013)</p>\n<ul>\n<li>Fix error in configuration causing ‘dim’ option not to work</li>\n<li>Force UTF-8 encoding on Mac/Windows for data/config files</li>\n<li>Fix error when graph had no edges</li>\n<li>Export edge color if given; if not use blend of source and target nodes’ colors</li>\n<li>Fix error when export path given was invalid</li>\n<li>Offer option to replace node ids with numbers (can be more compact for large graphs)</li>\n</ul>"
+},{
+  "id": "seadragon-web-export",
+  "name": "Seadragon Web Export",
+  "catchphrase": "",
+  "types": [
+    "exports"
+  ],
+  "images": [
+    "imgs/seadragon-web-export/seadragon-plugin-settings.png",
+    "imgs/seadragon-web-export/seadragon-plugin-export.png",
+    "imgs/seadragon-web-export/seadragon-a.png"
+  ],
+  "authors": [
+    {
+      "name": "Mathieu Bastian",
+      "link": "http://gephi.org"
+    }
+  ],
+  "sourcecode": "https://github.com/mbastian/gephi-plugins/tree/seadragon-plugin",
+  "license": "Apache v2",
+  "versions": {
+    "0.8.2": "0.8.2/seadragon-web-export.zip"
+  },
+  "last_update": "January 4, 2013",
+  "description": "<p>Export networks on the web with the <a href=\"http://www.seadragon.com\">Seadragon</a> dynamic exploration tool.</p>\n<p>* When a graph is loaded, go to <strong>File &gt; Export &gt; Seadragon Web</strong> and get the HTML file ready to use<br>\n* Zoom and pan into the graph<br>\n* Seadragon is pure Javascript and works on <strong>all modern browsers</strong><br>\n* As it uses image tiles (like Google Maps), there is <strong>no graph size limit</strong><br>\n* Export is similar as PDF and includes all settings from Preview</p>\n<p>Seadragon is a Microsoft Live Labs application and is released under Ms-PL license (Microsoft’s open source license) . Kudos to them for this great library.<br>\nExample Sample with <a href=\"http://diseasome.eu\">Diseasome</a> Network dataset directly exported from Gephi How to use the Plugin</p>\n<p style=\"margin-bottom: 25px; margin-top: 20px;\">Install the plugin from Gephi, “Tools &gt; Plugin” and find <strong>Seadragon Web Export</strong>. After restarting Gephi, the plugin is installed in the export menu. Load a sample network and try the plugin. Go to the Preview tab to configure the rendering settings like colors, labels and edges.</p>\n<div id=\"attachment_3895\" class=\"wp-caption alignnone\" style=\"width: 488px\"><a href=\"https://marketplace.gephi.org/wp-content/uploads/2013/01/seadragon-plugin-export.png?022bbc\"><img class=\"size-full wp-image-3895\" title=\"seadragon-plugin-export\" src=\"https://marketplace.gephi.org/wp-content/uploads/2013/01/seadragon-plugin-export.png?022bbc\" alt=\"\" width=\"478\" height=\"383\"></a><p class=\"wp-caption-text\">Export directly from Gephi Export menu</p></div>\n<p style=\"margin-bottom: 25px; margin-top: 20px;\">The settings asks for a valid directory where to export the files and the size of the canvas. Bigger is the canvas, more you can zoom in, but it takes longer time to generate and to load. If the process hangs and never finishes, reduce the dimensions as you’re hitting the memory limit.</p>\n<div id=\"attachment_3896\" class=\"wp-caption alignnone\" style=\"width: 489px\"><a href=\"https://marketplace.gephi.org/wp-content/uploads/2013/01/seadragon-plugin-settings.png?022bbc\"><img class=\"size-full wp-image-3896\" title=\"seadragon-plugin-settings\" src=\"https://marketplace.gephi.org/wp-content/uploads/2013/01/seadragon-plugin-settings.png?022bbc\" alt=\"\" width=\"479\" height=\"399\"></a><p class=\"wp-caption-text\">Export settings, configure the size of the image</p></div>\n<p>Note that result on the local hard-drive can’t be viewed with Chrome, due to <a href=\"http://code.google.com/p/chromium/issues/detail?id=40787&amp;q=ajax%20local&amp;colspec=ID%20Stars%20Pri%20Area%20Feature%20Type%20Status%20Summary%20Modified%20Owner%20Mstone%20OS\">a bug</a>. Run Chrome with “–allow-file-access-from-files” option to make it work.</p>"
 }
   ]
 }
