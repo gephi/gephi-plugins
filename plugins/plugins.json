@@ -1156,6 +1156,29 @@
   },
   "last_update": "February 14, 2015",
   "description": "<p>A simple clique detector of specific size in graphs.</p>"
+},{
+  "id": "edge-betweenness-metric",
+  "name": "Edge Betweenness Metric",
+  "catchphrase": "",
+  "types": [
+    "metrics"
+  ],
+  "images": [
+    "imgs/edge-betweenness-metric/eb2.png"
+  ],
+  "authors": [
+    {
+      "name": "Jaroslav Kuchar",
+      "link": "https://github.com/jaroslav-kuchar/"
+    }
+  ],
+  "sourcecode": "https://github.com/jaroslav-kuchar/EdgeBetweennessMetric",
+  "license": "GPL v3",
+  "versions": {
+    "0.8.2": "0.8.2/cz-cvut-fit-krizeji1-edge_betweenness.nbm"
+  },
+  "last_update": "May 6, 2014",
+  "description": "<p>Edge Betweenness plugin for Gephi. This plugin allows compute Edge Betweenness metric, which can be used in Social Network Analysis.<br>\nEdge betweenness of an edge as the number of shortest paths between pairs of nodes that run along it.</p>"
 }
   ]
 }
