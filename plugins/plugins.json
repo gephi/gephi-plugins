@@ -1179,6 +1179,29 @@
   },
   "last_update": "May 6, 2014",
   "description": "<p>Edge Betweenness plugin for Gephi. This plugin allows compute Edge Betweenness metric, which can be used in Social Network Analysis.<br>\nEdge betweenness of an edge as the number of shortest paths between pairs of nodes that run along it.</p>"
+},{
+  "id": "link-communities",
+  "name": "Link Communities",
+  "catchphrase": "",
+  "types": [
+    "metrics"
+  ],
+  "images": [
+    "imgs/link-communities/immaginePlugin.png"
+  ],
+  "authors": [
+    {
+      "name": "Danilo Domenino, Massimiliano Vella",
+      "link": "http://arcs.di.unito.it/"
+    }
+  ],
+  "sourcecode": "https://github.com/danimax/LinkCommunities/tree/master/src/org/gephi/LinkCommunities/plugin",
+  "license": "GPL v3",
+  "versions": {
+    "0.8.2": "0.8.2/org-gephi-LinkCommunities-plugin.nbm"
+  },
+  "last_update": "July 3, 2013",
+  "description": "<p align=\"JUSTIFY\">This Gephi plug-in implements the Link Communities algorithm proposed in the paper below.</p>\n<p align=\"JUSTIFY\">Yong-Yeol Ahn, James P. Bagrow &amp; Sune Lehmann, Link communities reveal multiscale complexity in networks, Nature 466, 761–764 (05 August 2010) <a id=\"nature\" href=\"http://www.nature.com/nature/journal/v466/n7307/full/nature09182.html\" target=\"_blank\">Paper</a></p>\n<p align=\"JUSTIFY\">The algorithm purpose is to reveal communities in undirected and unweigthed networks. It is an agglomerative method (like hierarchical clustering) that compares two links and, if similarity value is below a fixed threshold, puts those links into the same community. This method maintains communities overlap, because a node can belong to multiple links and so to different communities.</p>\n<p align=\"JUSTIFY\">Once the metric is computed, users should go to Partition → Edges → select Community. For a best visualization users can apply any visualization layout that Gephi provides, such as Force Atlas 2.</p>\n<p align=\"JUSTIFY\">This plugin has been developed by Danilo Domenino and Massimiliano Vella, under the supervision of Prof. Giancarlo Ruffo (for more information on related activities, see: <a id=\"yui_3_7_2_1_1372846362103_2110\" href=\"http://arcs.di.unito.it/\" target=\"_blank\">http://arcs.di.unito.it</a>).</p>"
 }
   ]
 }
