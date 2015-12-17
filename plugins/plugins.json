@@ -1223,6 +1223,29 @@
   },
   "last_update": "April 3, 2013",
   "description": "<p>This is a copy of Gephi internal Connected Components statistics module, only using much faster algorithm to obtain weakly connected components. It was redirected here from a pull request (https://github.com/gephi/gephi/pull/747) due to lack of time for proper testing that would be required to integrate it into the main program.</p>"
+},{
+  "id": "weighted-cluster-coefficient",
+  "name": "Weighted Cluster Coefficient",
+  "catchphrase": "",
+  "types": [
+    "metrics"
+  ],
+  "images": [
+    "imgs/weighted-cluster-coefficient/WCoeff.png"
+  ],
+  "authors": [
+    {
+      "name": "Umberto Griffo",
+      "link": "http://kumbolabs.altervista.org"
+    }
+  ],
+  "sourcecode": "https://github.com/umbertogriffo/WeightedClusterCoefficient",
+  "license": "GPL v3",
+  "versions": {
+    "0.8.2": "0.8.2/umberto-WeightedClusterCoefficient1.nbm"
+  },
+  "last_update": "April 14, 2013",
+  "description": "<p>This plugin allows to calculate the Weighted Cluster Coefficient for every node and the average value. The weighted clustering capture more precisely the effective level of cohesiveness and affinity due to the interaction strength.</p>\n<p>Reference: A. Barrat and M. Barthelemy and R. Pastor-Satorras and A. Vespignani (2004). The architecture of complex weighted networks. Proceedings of the National Academy of Sciences 101 (11): 3747–3752.</p>"
 }
   ]
 }
