@@ -1269,6 +1269,28 @@
   },
   "last_update": "July 3, 2013",
   "description": "<h3>Introduction</h3>\n<p>This plugin allows compute metrics, which can be used in Social Network Analysis. This version contains: Erdös number – idea of “The Small-World Phenomenon”. Can be visualized using Layered Layout Plugin Neighborhood Overlap and Embeddedness – identification of strong and weak ties, local bridges Clustering Coefficient</p>\n<h3>Plugin Owner’s Notes</h3>\n<p>This plugin allows compute metrics, which can be used in Social Network Analysis. This version contains: Erdös number – idea of “The Small-World Phenomenon”. Can be visualized using Layered Layout Plugin Neighborhood Overlap and Embeddedness – identification of strong and weak ties, local bridges Clustering Coefficient</p>"
+},{
+  "id": "multimode-networks-transformations-2",
+  "name": "Multimode Networks Transformations",
+  "catchphrase": "",
+  "types": [
+    "metrics",
+    "tools"
+  ],
+  "images": [],
+  "authors": [
+    {
+      "name": "Jaroslav Kuchar",
+      "link": "https://github.com/jaroslav-kuchar"
+    }
+  ],
+  "sourcecode": "https://github.com/jaroslav-kuchar/Multimode-Networks",
+  "license": "GPL v3",
+  "versions": {
+    "0.8.2": "0.8.2/cz-cvut-fit-gephi-multimode1.nbm"
+  },
+  "last_update": "January 31, 2013",
+  "description": "<h3>Introduction</h3>\n<p>This plugin allows multimode networks projection. For example: you can project your bipartite (2-mode) graph to monopartite (one-mode) graph. The projection/transformation is based on the matrix multiplication approach and allows different types of transformations. Not only bipartite graphs. The limitation is matrix multiplication – large matrix multiplication takes time and memory.</p>\n<h3>Plugin Owner’s Notes</h3>\n<p>This plugin allows multimode networks projection. For example: you can project your bipartite (2-mode) graph to monopartite (one-mode) graph. The projection/transformation is based on the matrix multiplication approach and allows different types of transformations. Not only bipartite graphs. The limitation is matrix multiplication – large matrix multiplication takes time and memory.</p>"
 }
   ]
 }
