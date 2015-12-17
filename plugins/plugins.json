@@ -878,6 +878,29 @@
   },
   "last_update": "June 1, 2013",
   "description": "<p>To simplify analyzing connections between groups in multipartite graphs, minimizing edge crossings is a good way to do so. In this work, by using the algorithm suggested in the paper “An Edge Crossing Minimization Algorithm Based on Adjacency Matrix Transformation”, implementation for gephi platform is performed.</p>"
+},{
+  "id": "hiveplot-layout",
+  "name": "Hiveplot Layout",
+  "catchphrase": "",
+  "types": [
+    "layout"
+  ],
+  "images": [
+    "imgs/hiveplot-layout/hiveplot_layout.jpg"
+  ],
+  "authors": [
+    {
+      "name": "Mehmet Aktas",
+      "link": "https://github.com/maktas"
+    }
+  ],
+  "sourcecode": "https://github.com/maktas/GephiTest/tree/master/HiveplotModule",
+  "license": "GPL v3",
+  "versions": {
+    "0.8.2": "0.8.2/org-maktas-hiveplot.nbm"
+  },
+  "last_update": "May 21, 2013",
+  "description": "<p>A Hiveplot Layout implementation for Gephi. For information about hiveplots visit www.hiveplot.com</p>"
 }
   ]
 }
