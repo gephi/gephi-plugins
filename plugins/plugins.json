@@ -972,6 +972,29 @@
   },
   "last_update": "April 25, 2015",
   "description": "<p>This plugin makes a call to graphviz to lay out your your graphs.</p>\n<p>To use it, you must have graphviz installed on your system. All layout algorithms provided by graphviz are supported, along with most of the options relevant to Gephi usage.</p>"
+},{
+  "id": "noverlap",
+  "name": "Noverlap",
+  "catchphrase": "",
+  "types": [
+    "layout"
+  ],
+  "images": [
+    "imgs/noverlap/noverlap100.jpg"
+  ],
+  "authors": [
+    {
+      "name": "Mathieu Jacomy",
+      "link": "http://me.com/"
+    }
+  ],
+  "sourcecode": "https://github.com/gephi/gephi-plugins/tree/noverlap",
+  "license": "GPL v3",
+  "versions": {
+    "0.8.2": "0.8.2/org-gephi-plugins-layout-noverlap1.nbm"
+  },
+  "last_update": "January 4, 2013",
+  "description": "<h3>Introduction</h3>\n<p>No overlap: prevents the round nodes from overlapping. Optimized for big graphs. Choose speed (vs. precision), ratio (more spacing around big nodes) and margin (constant space around nodes). Great to clean a graph after another layout. NB: doesn’t manage labels.</p>\n<h3>Plugin Owner’s Notes</h3>\n<p>Adds the “Noverlap” layout in the layouts list.</p>\n<h4>Parameters</h4>\n<ul>\n<li><strong>Speed</strong>: more efficient, so expected to be quicker, but implies a lack of precision.</li>\n<li><strong>Ratio</strong>: multiplies the effective radius. Ratio=1 and nodes will just “touch” each others. Ratio=2 and nodes will separate as if they were twice as big. Ratio=1.1 adds a 10% space around nodes, which is good looking. Ratio smaller than 1 allows overlapping. NB: these explanations take in account a null margin.</li>\n<li><strong>Margin</strong>: adds the margin to the radius. Margin=0 and there is no margin. Margin=10 and nodes will separate from at least 20 pixels (twice the margin, one time for each node). A negative margin allows overlapping.</li>\n</ul>\n<p>Of course the best solution is to use Margin and Ratio altogether. Which is the good setting? When we want to prevent overlap, we expect nodes to separate “well”. This means that nodes separate at least from a constant space. This is done with the “margin” parameter. But we also find that biggest nodes look better if they have a little bit more space around them that smaller nodes. This is done with the “ratio” parameter.</p>\n<p>UPDATE 1.2 Added the grid size setting. If you experience performance issues, raise grid size.</p>"
 }
   ]
 }
