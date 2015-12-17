@@ -995,6 +995,29 @@
   },
   "last_update": "January 4, 2013",
   "description": "<h3>Introduction</h3>\n<p>No overlap: prevents the round nodes from overlapping. Optimized for big graphs. Choose speed (vs. precision), ratio (more spacing around big nodes) and margin (constant space around nodes). Great to clean a graph after another layout. NB: doesn’t manage labels.</p>\n<h3>Plugin Owner’s Notes</h3>\n<p>Adds the “Noverlap” layout in the layouts list.</p>\n<h4>Parameters</h4>\n<ul>\n<li><strong>Speed</strong>: more efficient, so expected to be quicker, but implies a lack of precision.</li>\n<li><strong>Ratio</strong>: multiplies the effective radius. Ratio=1 and nodes will just “touch” each others. Ratio=2 and nodes will separate as if they were twice as big. Ratio=1.1 adds a 10% space around nodes, which is good looking. Ratio smaller than 1 allows overlapping. NB: these explanations take in account a null margin.</li>\n<li><strong>Margin</strong>: adds the margin to the radius. Margin=0 and there is no margin. Margin=10 and nodes will separate from at least 20 pixels (twice the margin, one time for each node). A negative margin allows overlapping.</li>\n</ul>\n<p>Of course the best solution is to use Margin and Ratio altogether. Which is the good setting? When we want to prevent overlap, we expect nodes to separate “well”. This means that nodes separate at least from a constant space. This is done with the “margin” parameter. But we also find that biggest nodes look better if they have a little bit more space around them that smaller nodes. This is done with the “ratio” parameter.</p>\n<p>UPDATE 1.2 Added the grid size setting. If you experience performance issues, raise grid size.</p>"
+},{
+  "id": "openord-layout",
+  "name": "OpenOrd Layout",
+  "catchphrase": "",
+  "types": [
+    "layout"
+  ],
+  "images": [
+    "imgs/openord-layout/openorb_medium.png?022bbc"
+  ],
+  "authors": [
+    {
+      "name": "Mathieu Bastian",
+      "link": "http://gephi.org/"
+    }
+  ],
+  "sourcecode": "https://github.com/gephi/gephi-plugins/tree/openord-layout",
+  "license": "GPL v3",
+  "versions": {
+    "0.8.2": "0.8.2/org-gephi-layout-plugin-openord1.nbm"
+  },
+  "last_update": "January 4, 2013",
+  "description": "<h3>Introduction</h3>\n<p>Force-Directed layout algorithm for real-world large-scale undirected graphs.</p>\n<h3>Plugin Owner’s Notes</h3>\n<p>It is one of the few force-directed layout algorithms that can scale to over 1 million nodes, making it ideal for large graphs. However, small graphs (hundreds or less) do not always end up looking so good. This algorithm expects undirected weighted graphs and aims to better distinguish clusters. It can be run in parallel to speed up computing.</p>\n<p>The algorithm is originally based on Frutcherman-Reingold and works with a fixed number of iterations. The algorithm is using simulated annealing and has five different phases: liquid, expansion, cool-down, crunch, and simmer. Each stage is a fraction of the total iterations and several parameters like temperature, attraction and damping are changing. The default schedule spends approximately 25% of its time in the liquid stage, 25% in the expansion stage, 25% in the cool-down stage, 10% in the crunch stage, and 15% in the simmer stage.</p>\n<p>The original OpenOrd C++ implementation is available at the following address : <a title=\"http://www.cs.sandia.gov/~smartin/software.html\" href=\"http://www.cs.sandia.gov/~smartin/software.html\">http://www.cs.sandia.gov/~smartin/software.html</a>. This plug-in version doesn’t include the multi-level version of the algorithm. The algorithm was formerly known as DrL, and before that VxOrd.<br>\nParallel</p>\n<p>OpenOrd can be run in parallel to speed up computation. Each thread will work on a subset of the nodes of the graph. It’s recommended to put the number of core minus 1 to keep a thread for display. For example on a quad-core computer, it’s good to use three threads.</p>\n<h4>Edge-Cutting</h4>\n<p>Edge-cutting in OpenOrd is specified using a fraction from 0 to 1. An edge-cutting value of 0 corresponds to the standard Frutcherman-Reingold layout algorithm (no cutting), while an edge-cutting value of 1 corresponds to aggressive cutting. Aggressive cutting promotes clustering but will not cut every edge. The default value for edge-cutting in OpenOrd is 0.8.</p>\n<h4>Layout on a grid</h4>\n<p><iframe src=\"http://player.vimeo.com/video/24731034?badge=0\" width=\"500\" height=\"281\" frameborder=\"0\" webkitallowfullscreen=\"\" mozallowfullscreen=\"\" allowfullscreen=\"\"></iframe>\n</p><p><a href=\"http://vimeo.com/24731034\">Gephi OpenOrd layout on a grid</a> from <a href=\"http://vimeo.com/gephi\">gephi</a> on <a href=\"http://vimeo.com\">Vimeo</a>.</p>\n<h4>Reference</h4>\n<p>S. Martin, W. M. Brown, R. Klavans, and K. Boyack (to appear, 2011), “OpenOrd: An Open-Source Toolbox for Large Graph Layout,” SPIE Conference on Visualization and Data Analysis (VDA).</p>\n<h4>Release history</h4>\n<ul>\n<li><strong>0.4</strong> (Feb 11): Configure time spent in each stage (liquid, expansion, cool-down, crunch and simmer)</li>\n<li><strong>0.3</strong> (Nov 10): First plugin release</li>\n</ul>"
 }
   ]
 }
