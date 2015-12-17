@@ -1361,6 +1361,29 @@
   },
   "last_update": "July 19, 2014",
   "description": "<p>This is a plugin for Gephi, a graph visualization and manipulation software package.</p>\n<p>With this plugin, nodes can be given a attribute (column) called ‘image’ that contained a image file name. those images are then loaded from a given path (provided by the Preview Settings). The images appear in the preview window, and can be exported with the SVG/PDF/PNG option. Please note that this is an early version of the plugin, and still contains many bugs. Please feel free to supply any feedback you may have. Please note that we have very limited resources and can not guarantee any future updates or changes. If you wish to help, let us know.</p>\n<p>This plugin was developed by the Yale Computer Graphics Group. We released it in the hopes it will be useful, but make no guarantees that it will work (see the GPL for a full disclaimer).</p>\n<p>Feel free to create an issue on GitHub if you need to contact us.</p>"
+},{
+  "id": "spatial-ranking",
+  "name": "Spatial Ranking",
+  "catchphrase": "",
+  "types": [
+    "ranking"
+  ],
+  "images": [
+    "imgs/spatial-ranking/spatialranking_screenshot.png"
+  ],
+  "authors": [
+    {
+      "name": "Mathieu Bastian",
+      "link": "http://gephi.org"
+    }
+  ],
+  "sourcecode": "https://github.com/gephi/gephi-plugins/tree/spatial-ranking",
+  "license": "AGPL v3",
+  "versions": {
+    "0.8.2": "0.8.2/org-gephi-plugins-spatialranking1.nbm"
+  },
+  "last_update": "January 4, 2013",
+  "description": "<h3>Introduction</h3>\n<p>SpatialRanking is a plugin to map an attribute into a spatial coordinate.</p>\n<h3>Plugin Owner’s Notes</h3>\n<p>SpatialRanking is a plugin to map an attribute into a spatial coordinate. As any other ranking, it is possible to choose the spline, the minimal and maximal values. The SpatialRanking interface will be found in the ranking interface.</p>"
 }
   ]
 }
