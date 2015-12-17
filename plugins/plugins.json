@@ -1246,6 +1246,29 @@
   },
   "last_update": "April 14, 2013",
   "description": "<p>This plugin allows to calculate the Weighted Cluster Coefficient for every node and the average value. The weighted clustering capture more precisely the effective level of cohesiveness and affinity due to the interaction strength.</p>\n<p>Reference: A. Barrat and M. Barthelemy and R. Pastor-Satorras and A. Vespignani (2004). The architecture of complex weighted networks. Proceedings of the National Academy of Sciences 101 (11): 3747–3752.</p>"
+},{
+  "id": "social-network-analysis",
+  "name": "Social Network Analysis",
+  "catchphrase": "",
+  "types": [
+    "metrics"
+  ],
+  "images": [
+    "imgs/social-network-analysis/snametrics.png"
+  ],
+  "authors": [
+    {
+      "name": "Jaroslav Kuchar",
+      "link": "http://github.com/jaroslav-kuchar"
+    }
+  ],
+  "sourcecode": "http://github.com/jaroslav-kuchar/Social-Network-Analysis",
+  "license": "GPL v3",
+  "versions": {
+    "0.8.2": "0.8.2/cz-cvut-fit-gephi-snametrics3.nbm"
+  },
+  "last_update": "July 3, 2013",
+  "description": "<h3>Introduction</h3>\n<p>This plugin allows compute metrics, which can be used in Social Network Analysis. This version contains: Erdös number – idea of “The Small-World Phenomenon”. Can be visualized using Layered Layout Plugin Neighborhood Overlap and Embeddedness – identification of strong and weak ties, local bridges Clustering Coefficient</p>\n<h3>Plugin Owner’s Notes</h3>\n<p>This plugin allows compute metrics, which can be used in Social Network Analysis. This version contains: Erdös number – idea of “The Small-World Phenomenon”. Can be visualized using Layered Layout Plugin Neighborhood Overlap and Embeddedness – identification of strong and weak ties, local bridges Clustering Coefficient</p>"
 }
   ]
 }
