@@ -924,6 +924,31 @@
   },
   "last_update": "March 18, 2013",
   "description": "<p>On choosing a root node, this plugin allows you to layout the graph such the nodes that are ‘n’ hops away from the root lies on the ‘n’th circle.</p>\n<p>For a sample tutorial on how to use the plugin, check out the video below.</p>\n<p><iframe width=\"853\" height=\"480\" src=\"http://www.youtube.com/embed/RCI0qFLjtV0\" frameborder=\"0\" allowfullscreen=\"\"></iframe></p>"
+},{
+  "id": "alphabetical-sorter",
+  "name": "Alphabetical Sorter",
+  "catchphrase": "",
+  "types": [
+    "layout"
+  ],
+  "images": [
+    "imgs/alphabetical-sorter/screenshot-plugin.png",
+    "imgs/alphabetical-sorter/img-e1360672733632.jpg",
+    "imgs/alphabetical-sorter/logo.jpg"
+  ],
+  "authors": [
+    {
+      "name": "Clement Levallois",
+      "link": "http://www.clementlevallois.net"
+    }
+  ],
+  "sourcecode": "https://github.com/seinecle/gephi-plugins",
+  "license": "GPL v3",
+  "versions": {
+    "0.8.2": "0.8.2/net-clementlevallois-alphabeticalsorter_1.1.nbm"
+  },
+  "last_update": "October 19, 2014",
+  "description": "<h2>Author</h2>\n<p>Clement Levallois, <a href=\"http://www.em-lyon.com/fr/faculte-recherche-enseignement-superieur/faculte-recherche-emlyon/corps-professoral/Professeurs-permanents/Clement-LEVALLOIS\" target=\"_blank\">Assistant Professor at EMLYON Business School</a>.</p>\n<h2>Function</h2>\n<p>Distributes the nodes according to the alphabetical order of their labels.<br>\nUseful to layout isolated nodes properly, for instance.</p>\n<p>Request for features, bug reports? Simply <a href=\"https://github.com/gephi/gephi-plugins/issues?state=open\" target=\"_blank\">open a ticket on Github</a>!</p>\n<p>&nbsp;</p>\n<p>version 1.0 (February 2013): initial release</p>\n<p>version 1.1 (May 2013): fixed issue when different nodes have identical labels.</p>"
 }
   ]
 }
