@@ -1384,6 +1384,52 @@
   },
   "last_update": "January 4, 2013",
   "description": "<h3>Introduction</h3>\n<p>SpatialRanking is a plugin to map an attribute into a spatial coordinate.</p>\n<h3>Plugin Owner’s Notes</h3>\n<p>SpatialRanking is a plugin to map an attribute into a spatial coordinate. As any other ranking, it is possible to choose the spline, the minimal and maximal values. The SpatialRanking interface will be found in the ranking interface.</p>"
+},{
+  "id": "give-color-to-edges",
+  "name": "Give Color To Edges",
+  "catchphrase": "",
+  "types": [
+    "tools"
+  ],
+  "images": [
+    "imgs/give-color-to-edges/colorwheel.png"
+  ],
+  "authors": [
+    {
+      "name": "Clement Levallois",
+      "link": "http://www.clementlevallois.net"
+    }
+  ],
+  "sourcecode": "https://github.com/seinecle/Plugins-for-Gephi/tree/master/GiveColorToEdges",
+  "license": "Apache v2",
+  "versions": {
+    "0.8.2": "0.8.2/net-clementlevallois-givecolortoedges-1.0.nbm"
+  },
+  "last_update": "May 11, 2015",
+  "description": "<p>Colorizes edges according to an RGB or HEX attribute</p>"
+},{
+  "id": "clique-percolation",
+  "name": "Clique Percolation",
+  "catchphrase": "",
+  "types": [
+    "tools"
+  ],
+  "images": [
+    "imgs/clique-percolation/Capture-d’écran-2015-03-23-à-09.59.291.png"
+  ],
+  "authors": [
+    {
+      "name": "Amine Kabab",
+      "link": "http://aminekabab.me/blog"
+    }
+  ],
+  "sourcecode": "https://github.com/kabab/gephi-plugin-clique-percolation",
+  "license": "LGPL v3",
+  "versions": {
+    "0.8.2": "0.8.2/org-ilis-cliquepercolation.nbm"
+  },
+  "last_update": "October 16, 2015",
+  "description": "<p>Gephi plugin able to calculate centrality of a social network with different methods and percolation of cliques.</p>\n<p>Contributors &nbsp;:</p>\n<p><strong>Khouloud MOUKRIM</strong>&nbsp;&lt;moukrim.khouloud@gmail.com&gt;</p>\n<p><strong>Mohammed MIDAOUI AYOUB</strong> &lt;lakhyos@outlook.com&gt;</p>"
 }
   ]
 }
