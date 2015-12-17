@@ -1065,6 +1065,29 @@
   },
   "last_update": "January 31, 2013",
   "description": "<h3>Introduction</h3>\n<p>This plugin provides layout, where nodes are in different layers (orbits). Assignment of node to layer depends on the value of numerical attribute of node. This layout can very nicely visualize the “Small-World Phenomenon”, where the layer assignement depends on the distance between key node and the others (Erdös number in the SNA Metrics Plugin).</p>\n<h3>Plugin Owner’s Notes</h3>\n<p>This plugin provides layout, where nodes are in different layers (orbits). Assignment of node to layer depends on the value of numerical attribute of node. This layout can very nicely visualize the “Small-World Phenomenon”, where the layer assignement depends on the distance between key node and the others (Erdös number in the SNA Metrics Plugin).</p>"
+},{
+  "id": "lineage",
+  "name": "Lineage",
+  "catchphrase": "",
+  "types": [
+    "metrics"
+  ],
+  "images": [
+    "imgs/lineage/Picture.png"
+  ],
+  "authors": [
+    {
+      "name": "Wouter Spekkink",
+      "link": "http://www.wouterspekkink.org/"
+    }
+  ],
+  "sourcecode": "https://github.com/WouterSpekkink/Lineage",
+  "license": "GPL v3",
+  "versions": {
+    "0.8.2": "0.8.2/org-wouterspekkink-lineage2.nbm"
+  },
+  "last_update": "December 15, 2015",
+  "description": "<p>This plugin identifies the ancestors and descendants of a node (identified by the user) in a directed graph (not suitable for undirected graphs).</p>\n<p>Usage: After installing the plugin, the Lineage option can be found in the statistics menu. The user is asked to submit a node (use the Id, not the Label!) and the plugin will find the ancestors and descendants for that node. In the nodes list, a variable “Lineage” is added that indicates for each node whether it is the origin node, an ancestor, a descendant, both ancestor and descendant (it will be marked as a hybrid), or unrelated. Two boolean variables are also added that indicate for each node whether they are ancestor or descendant (they can be both when there are cycles in the graph). Two integers are added to record the distance of ancestors and descendants from the origin. The distances of ancestors are recorded as negative values.</p>\n<p>The “Lineage” variable can be used for (for example) partition coloring and filtering.</p>"
 }
   ]
 }
