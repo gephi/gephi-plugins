@@ -93,6 +93,29 @@
   },
   "last_update": "June 23, 2014",
   "description": "<p>A plugin that provides an implementation of the label propagation graph clustering algorithm described in (1).<br>\nThis plugin offers an animated mode which allows the visualization of the labels propagation over the graph nodes. This feature is helpful when studying the behaviour of the algorithm on specific use cases. The current implementation does not take into consideration edges weights/direction, it also lacks defensive/offensive propagation support (2) which improves the performance. These missing features will be added later.</p>\n<p>1. Raghavan, U. N., Albert, R., &amp; Kumara, S. (2007). Near linear time algorithm to detect community structures in large-scale networks. Physical Review E, 76(3), 036106.<br>\n2. Šubelj, L., &amp; Bajec, M. (2011). Unfolding communities in large complex networks: Combining defensive and offensive label propagation for core extraction. Physical Review E, 83(3), 036103.</p>"
+},{
+  "id": "girvan-newman-clustering",
+  "name": "Girvan Newman Clustering",
+  "catchphrase": "",
+  "types": [
+    "clusters"
+  ],
+  "images": [
+    "imgs/girvan-newman-clustering/gn.png"
+  ],
+  "authors": [
+    {
+      "name": "Jaroslav Kuchar",
+      "link": "https://github.com/jaroslav-kuchar/"
+    }
+  ],
+  "sourcecode": "https://github.com/jaroslav-kuchar/GirmanNewmanClustering",
+  "license": "GPL v3",
+  "versions": {
+    "0.8.2": "0.8.2/cz-cvut-fit-krizeji1-girvan_newman.nbm"
+  },
+  "last_update": "May 30, 2014",
+  "description": "<p>The Girvan Newman Clustering plugin for Gephi. This plugin finds clusters in graph, which can be used in Social Network Analysis.</p>\n<p>The Girvan–Newman algorithm detects communities by progressively removing edges from the original network. The connected components of the remaining network are the comunnities. Instead of trying to construct a measure that tells us which edges are the most central to communities, the Girvan–Newman algorithm focuses on edges that are most likely “between” communities.</p>"
 }
   ]
 }
