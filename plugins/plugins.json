@@ -719,6 +719,29 @@
   },
   "last_update": "March 18, 2015",
   "description": "<p>The layout takes the coordinates of a Multidimensional Scaling (MDS) configuration as inputs and uses these coordinates to layout the nodes of a graph. MDS is sometimes used in Social Network Analysis to create layouts that reflect some type of distance between the nodes. This distance can be based on the length of paths between the nodes, but it can also be based on (dis)similarities in attributes of nodes.</p>\n<p>A separate plugin is available for MDS analysis (<a href=\"https://marketplace.gephi.org/plugin/mds-statistics/\">MDS Statistics) </a>from the Gephi Marketplace. It is also possible to perform the MDS analysis with external software (e.g. R or SPSS). In the latter case the coordinates of the MDS configuration have to be added to the nodes list manually.</p>\n<p>If you have the results of an MDS analysis, add the coordinates as variables to your nodes list. When importing the nodes list, make sure that you import the nodes as ‘doubles.’ Otherwise the layout plugin won’t be able to read the coordinates and use them for the layout.</p>"
+},{
+  "id": "event-graph-layout",
+  "name": "Event Graph Layout",
+  "catchphrase": "",
+  "types": [
+    "layout"
+  ],
+  "images": [
+    "imgs/event-graph-layout/Temp.png"
+  ],
+  "authors": [
+    {
+      "name": "Wouter Spekkink",
+      "link": "https://www.wouterspekkink.org"
+    }
+  ],
+  "sourcecode": "https://github.com/WouterSpekkink/EventGraphLayout",
+  "license": "GPL v3",
+  "versions": {
+    "0.8.2": "0.8.2/org-wouterspekkink-eventgraphlayout.nbm"
+  },
+  "last_update": "September 21, 2014",
+  "description": "<h2>Description</h2>\n<p>The event graph layout plugin was written to allow for the easy creation of event graphs. In an event graph the nodes represent events and the edges/arcs represent relationships between the events (e.g. causality). The layout plugin places the events in a user-specified order on the x-axis. If vertical force is activated, the plugin will push unconnected groups of events away from each other on the y-axis, and keep connected nodes together.</p>\n<h2>How to use</h2>\n<p>To use this plugin you need to add a numerical variable (integer, float or double) to your nodes that gives them a rank order. This rank order will be used to determine the position of the nodes on the x-axis. Typically, this order variable will indicate the order of events (represented by the nodes) in time. The order scale can be used to scale up or scale down the distances between the nodes on the x-axis.</p>\n<p>In its default setting the plugin will only lay out the nodes on the x-axis. If vertical force is activated the plugin will also lay out the nodes on the y-axis, based primarily on their degree of interconnectedness. Thus, groups of nodes that are highly interconnected tend to stay close to each other, and nodes that are not highly interconnected tend to drift away from each other. The vertical force can be used to increase or decrease the distance between the nodes on the y-axis.</p>\n<h2>Hints</h2>\n<ul>\n<li>For larger event graphs it may be helpful to increase the jitter tolerance somewhat if the vertical layout moves too slow.</li>\n<li>If you want to move the nodes on the y-axis with your mouse, but want to make sure that they keep their position on the x-axis, then run the plugin without vertical force activated</li>\n</ul>"
 }
   ]
 }
