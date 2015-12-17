@@ -1430,6 +1430,29 @@
   },
   "last_update": "October 16, 2015",
   "description": "<p>Gephi plugin able to calculate centrality of a social network with different methods and percolation of cliques.</p>\n<p>Contributors &nbsp;:</p>\n<p><strong>Khouloud MOUKRIM</strong>&nbsp;&lt;moukrim.khouloud@gmail.com&gt;</p>\n<p><strong>Mohammed MIDAOUI AYOUB</strong> &lt;lakhyos@outlook.com&gt;</p>"
+},{
+  "id": "clique-percolation-method",
+  "name": "Clique Percolation Method",
+  "catchphrase": "",
+  "types": [
+    "tools"
+  ],
+  "images": [
+    "imgs/clique-percolation-method/CPM_MST.png"
+  ],
+  "authors": [
+    {
+      "name": "Mir Saman Tajbakhsh",
+      "link": "https://github.com/mirsamantajbakhsh/"
+    }
+  ],
+  "sourcecode": "https://github.com/mirsamantajbakhsh/CliquePercolationMethod",
+  "license": "GPL v3",
+  "versions": {
+    "0.8.2": "0.8.2/org-urmiauniversity-it-mst-cpm3.nbm"
+  },
+  "last_update": "November 6, 2015",
+  "description": "<p>Clique Percolation Method is used to find overlapping communities by means of cliques of size k.</p>"
 }
   ]
 }
