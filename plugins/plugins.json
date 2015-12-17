@@ -834,6 +834,29 @@
   },
   "last_update": "August 5, 2015",
   "description": "<h2>Author</h2>\n<p>Clement Levallois, <a href=\"http://www.em-lyon.com/en/faculte-recherche-enseignement-superieur/faculte-recherche-emlyon/corps-professoral/Permanent-Professors/Clement-LEVALLOIS\" target=\"_blank\">Assistant Professor at EMLYON Business School</a>.</p>\n<h2>Function of the plugin</h2>\n<p>Use this plugin to insert maps of countries and world regions in Gephi. Now also includes country sub-regions: states and territories of Australia. You can also control the thickness of the line with the “Weight” parameter.</p>\n<p>&nbsp;</p>\n<h2>Quick instructions</h2>\n<p>- Install the plugin, open a new Project, go to the layout tab and select the layout “Map Of Countries”.</p>\n<p>- Click on “Run” to load the map of the world.</p>\n<p>&nbsp;</p>\n<h2>All features explained</h2>\n<p>Besides showing the map of the world, you can show single countries, subregions (parts of continents), and regions (continents).<br>\nPlease refer to the original data source for the definitions of borders:&nbsp;<a href=\"http://thematicmapping.org/downloads/world_borders.php\">http://thematicmapping.org/downloads/world_borders.php</a>.</p>\n<p>&nbsp;</p>\n<p>1) To load just the <strong><span style=\"text-decoration: underline\">map of a single country</span></strong> (example: Laos):<br>\n-&gt; “No subregion” must be selected in the subregion dropdown menu<br>\n-&gt; “No region” must be selected in the region dropdown menu<br>\n-&gt; Select “Lao People’s Democratic Republic” in the country menu, and click “run”.</p>\n<p>2) To load just the <span style=\"text-decoration: underline\"><strong>map of a subregion</strong></span> (example of a subregion: South-Eastern Asia):</p>\n<p>-&gt; “World” must be selected in the countries dropdown menu<br>\n-&gt; “No region” must be selected in the region dropdown menu<br>\n-&gt; Select “South-Eastern Asia” in the subregion menu, and click “run”.</p>\n<p>3) To load just the <strong><span style=\"text-decoration: underline\">map of a region</span></strong> (example of a region: Asia):<br>\n-&gt; “World” must be selected in the countries dropdown menu<br>\n-&gt; “No subregion” must be selected in the subregion dropdown menu<br>\n-&gt; Select “Asia” in the region menu, and click “run”.</p>\n<p>&nbsp;</p>\n<h2>These maps and your network: how do they interact?</h2>\n<p><em><strong>Note: if your map and your network are slightly off mark, run the “Geolayout” plugin once to get them properly aligned.</strong></em></p>\n<p>- You can have a map and your network shown in the same project – that’s what this plugin is for!</p>\n<p>- Loading a new map will erase the one previously displayed, but will leave your network intact.</p>\n<p>- If you want to delete / modify the map manually, go to the data laboratory and look for nodes that have a label “background_map_node”</p>\n<p>- What if you apply a layout (like Force Atlas 2) to your network? Your network will move, but the map is “fixed” so it will stay as it is.</p>\n<p>- What if you apply the Geolayout plugin to your network? To do that you need your latitude attribute to be called “lat” and the longitude called “lng” for the nodes of your network. If you have that, your network will be nicely placed over the maps.</p>\n<p>Other questions? Open an issue on Github:&nbsp;<a href=\"https://github.com/seinecle/My-Plugins-for-Gephi/issues\">https://github.com/seinecle/My-Plugins-for-Gephi/issues</a></p>\n<p>&nbsp;</p>\n<h2>Release History</h2>\n<p>Sept. 24, 2013: 1.0, first release</p>\n<p>Oct 19, 2014: 1.1, removed labels from background nodes because they were just an inconvenience.</p>\n<p>Jan 5, 2015: 1.2, solved a null pointer exception.</p>\n<p>May 13, 2015: added Australian states / territories and built support to easily add more regions from other countries.</p>\n<p>Aug 05, 2015: 1.4, added a new feature: “Weight” allows to control the thickness of the lines of the borders</p>"
+},{
+  "id": "force-atlas-3d",
+  "name": "Force Atlas 3D",
+  "catchphrase": "",
+  "types": [
+    "layout"
+  ],
+  "images": [
+    "imgs/force-atlas-3d/pic.jpg"
+  ],
+  "authors": [
+    {
+      "name": "Clement Levallois",
+      "link": "http://www.clementlevallois.net"
+    }
+  ],
+  "sourcecode": "https://github.com/seinecle/ForceAtlas3D",
+  "license": "Apache v2",
+  "versions": {
+    "0.8.2": "0.8.2/net-clementlevallois-ForceAtlas3D_1.11.nbm"
+  },
+  "last_update": "October 19, 2014",
+  "description": "<h2>Author</h2>\n<p>Clement Levallois, <a href=\"http://www.em-lyon.com/fr/faculte-recherche-enseignement-superieur/faculte-recherche-emlyon/corps-professoral/Professeurs-permanents/Clement-LEVALLOIS\" target=\"_blank\">Assistant Professor at EMLYON Business School</a>.</p>\n<p>The classic layout of Gephi extended to 3D.</p>\n<p>Versions:<br>\n1.0 — initial version (28 June 2013)<br>\n1.1 — conversion of nodes to spheres when layout in 3D (30 June 2013)</p>\n<p>&nbsp;</p>"
 }
   ]
 }
