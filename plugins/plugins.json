@@ -1338,6 +1338,29 @@
   },
   "last_update": "May 7, 2014",
   "description": "<p>Multi Colour Renderer is plugin for Gephi. This plugin allows rendering of nodes in “Preview” mode as a “multicolour pie”. Each node is rendered using multiple colours. The plugin uses an implementation proposed by the user Ferretti published on Gephi forum (http://forum.gephi.org/viewtopic.php?f=30&amp;t=1665)</p>\n<p>Code taken from forum and packaged as plugin. Supports only visualization in the Processing window, visualization export to PDF or SVG is not supported.</p>\n<p>Limitations:<br>\nOnly Processing window visualization is supported, export to PDF or SVG currently not supported.<br>\nInputs:<br>\n“colourList” attribute as String<br>\nthe comma delimited list of integers representing rgb of colours</p>\n<p>This plugin is used as visualization support for other plugins:<br>\nMCODE Clustering<br>\nGirvan Newman Clustering<br>\nMarkov Clustering</p>"
+},{
+  "id": "image-preview",
+  "name": "Image Preview",
+  "catchphrase": "",
+  "types": [
+    "preview"
+  ],
+  "images": [
+    "imgs/image-preview/screenshot.png"
+  ],
+  "authors": [
+    {
+      "name": "Chris Xue",
+      "link": "https://github.com/chrisxue815"
+    }
+  ],
+  "sourcecode": "https://github.com/chrisxue815/gephi-plugin-image-preview",
+  "license": "GPL v3",
+  "versions": {
+    "0.8.2": "0.8.2/org-yale-cs-graphics-gephi-imagepreview.nbm"
+  },
+  "last_update": "July 19, 2014",
+  "description": "<p>This is a plugin for Gephi, a graph visualization and manipulation software package.</p>\n<p>With this plugin, nodes can be given a attribute (column) called ‘image’ that contained a image file name. those images are then loaded from a given path (provided by the Preview Settings). The images appear in the preview window, and can be exported with the SVG/PDF/PNG option. Please note that this is an early version of the plugin, and still contains many bugs. Please feel free to supply any feedback you may have. Please note that we have very limited resources and can not guarantee any future updates or changes. If you wish to help, let us know.</p>\n<p>This plugin was developed by the Yale Computer Graphics Group. We released it in the hopes it will be useful, but make no guarantees that it will work (see the GPL for a full disclaimer).</p>\n<p>Feel free to create an issue on GitHub if you need to contact us.</p>"
 }
   ]
 }
