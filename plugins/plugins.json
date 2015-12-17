@@ -901,6 +901,29 @@
   },
   "last_update": "May 21, 2013",
   "description": "<p>A Hiveplot Layout implementation for Gephi. For information about hiveplots visit www.hiveplot.com</p>"
+},{
+  "id": "concentric-layout",
+  "name": "Concentric Layout",
+  "catchphrase": "",
+  "types": [
+    "layout"
+  ],
+  "images": [
+    "imgs/concentric-layout/Screenshot-1.png"
+  ],
+  "authors": [
+    {
+      "name": "Vijesh Mohan",
+      "link": "https://www.facebook.com/mv.vijesh"
+    }
+  ],
+  "sourcecode": "https://github.com/vijeshm/my-gephi-plugins/tree/master/ConcentricLayout",
+  "license": "GPL v3",
+  "versions": {
+    "0.8.2": "0.8.2/org-vijesh-concentric5.nbm"
+  },
+  "last_update": "March 18, 2013",
+  "description": "<p>On choosing a root node, this plugin allows you to layout the graph such the nodes that are ‘n’ hops away from the root lies on the ‘n’th circle.</p>\n<p>For a sample tutorial on how to use the plugin, check out the video below.</p>\n<p><iframe width=\"853\" height=\"480\" src=\"http://www.youtube.com/embed/RCI0qFLjtV0\" frameborder=\"0\" allowfullscreen=\"\"></iframe></p>"
 }
   ]
 }
