@@ -1453,6 +1453,31 @@
   },
   "last_update": "November 6, 2015",
   "description": "<p>Clique Percolation Method is used to find overlapping communities by means of cliques of size k.</p>"
+},{
+  "id": "give-color-to-nodes",
+  "name": "Give color to nodes",
+  "catchphrase": "",
+  "types": [
+    "tools"
+  ],
+  "images": [
+    "imgs/give-color-to-nodes/illustration2.jpg",
+    "imgs/give-color-to-nodes/illustration.jpg",
+    "imgs/give-color-to-nodes/colourwheel.png"
+  ],
+  "authors": [
+    {
+      "name": "Clement Levallois",
+      "link": "http://www.clementlevallois.net"
+    }
+  ],
+  "sourcecode": "https://github.com/seinecle/My-Plugins-for-Gephi",
+  "license": "Apache v2",
+  "versions": {
+    "0.8.2": "0.8.2/net-clementlevallois-givecolortonodes_1.1.nbm"
+  },
+  "last_update": "May 7, 2015",
+  "description": "<h2>Author</h2>\n<p>Clement Levallois, <a href=\"http://www.em-lyon.com/fr/faculte-recherche-enseignement-superieur/faculte-recherche-emlyon/corps-professoral/Professeurs-permanents/Clement-LEVALLOIS\" target=\"_blank\">Assistant Professor at EMLYON Business School</a>.</p>\n<h2>Function</h2>\n<p>Reads an attribute for nodes containing a RGB or #hex value. Colors nodes accordingly.</p>\n<h2>When is it useful?</h2>\n<p>This plugin gives you full control on the color of your nodes in Gephi. Define the color for each node as an attribute, that’s it!</p>\n<h2>Quick instructions</h2>\n<p>1. Your nodes should have an attribute containing “color” in its name. For example, something like “myColor” would work.<br>\n2. The value of this attribute for each node can be RGB (example: “255,0,0″ -&gt; for the red color) or hexadecimal (example: “#00FF00″ for bright green).<br>\n3. Click on this pic to enlarge the illustration:</p>\n<p><a href=\"https://marketplace.gephi.org/wp-content/uploads/2013/11/illustration.jpg?022bbc\"><img class=\"alignnone size-medium wp-image-5978\" alt=\"illustration\" src=\"https://marketplace.gephi.org/wp-content/uploads/2013/11/illustration-300x69.jpg?022bbc\" width=\"300\" height=\"69\"></a></p>\n<p>4. After installing the plugin, restart Gephi.<br>\n5. A new icon in the form of a color wheel appears on the left of the graph window (below existing icons). Click on the illustration below to see where the icon is exactly located:</p>\n<p><a href=\"https://marketplace.gephi.org/wp-content/uploads/2013/11/illustration2.jpg?022bbc\"><img class=\"alignnone size-medium wp-image-5984\" alt=\"illustration2\" src=\"https://marketplace.gephi.org/wp-content/uploads/2013/11/illustration2-300x191.jpg?022bbc\" width=\"300\" height=\"191\"></a></p>\n<p>6. Click on the icon, your nodes will be colored according to their color values!</p>\n<h2>Version history</h2>\n<p>1.0. initial release, 2013.</p>\n<p>1.1. The plugin now detects node attributes titled with the British spelling “colour”, in addition to “color”. April 2015.</p>\n<h2>Author of the plugin</h2>\n<p><a href=\"http://www.clementlevallois.net\" target=\"_blank\">Clement Levallois</a>. The original idea was suggested by <a href=\"http://www.frankvandermost.nl\" target=\"_blank\">Frank van der Most</a>.</p>\n<p>&nbsp;</p>\n<p>&nbsp;</p>"
 }
   ]
 }
