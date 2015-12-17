@@ -949,6 +949,29 @@
   },
   "last_update": "October 19, 2014",
   "description": "<h2>Author</h2>\n<p>Clement Levallois, <a href=\"http://www.em-lyon.com/fr/faculte-recherche-enseignement-superieur/faculte-recherche-emlyon/corps-professoral/Professeurs-permanents/Clement-LEVALLOIS\" target=\"_blank\">Assistant Professor at EMLYON Business School</a>.</p>\n<h2>Function</h2>\n<p>Distributes the nodes according to the alphabetical order of their labels.<br>\nUseful to layout isolated nodes properly, for instance.</p>\n<p>Request for features, bug reports? Simply <a href=\"https://github.com/gephi/gephi-plugins/issues?state=open\" target=\"_blank\">open a ticket on Github</a>!</p>\n<p>&nbsp;</p>\n<p>version 1.0 (February 2013): initial release</p>\n<p>version 1.1 (May 2013): fixed issue when different nodes have identical labels.</p>"
+},{
+  "id": "graphviz-layout",
+  "name": "Graphviz Layout",
+  "catchphrase": "",
+  "types": [
+    "layout"
+  ],
+  "images": [
+    "imgs/graphviz-layout/gephi_dot-1.png"
+  ],
+  "authors": [
+    {
+      "name": "Gary Briggs",
+      "link": "http://icculus.org/~chunky/"
+    }
+  ],
+  "sourcecode": "https://github.com/chunky/gephi_graphviz",
+  "license": "Zlib",
+  "versions": {
+    "0.8.2": "0.8.2/org-icculus-chunky-gephigraphviz3.nbm"
+  },
+  "last_update": "April 25, 2015",
+  "description": "<p>This plugin makes a call to graphviz to lay out your your graphs.</p>\n<p>To use it, you must have graphviz installed on your system. All layout algorithms provided by graphviz are supported, along with most of the options relevant to Gephi usage.</p>"
 }
   ]
 }
