@@ -326,6 +326,31 @@
   },
   "last_update": "January 4, 2013",
   "description": "<p>Export networks on the web with the <a href=\"http://www.seadragon.com\">Seadragon</a> dynamic exploration tool.</p>\n<p>* When a graph is loaded, go to <strong>File &gt; Export &gt; Seadragon Web</strong> and get the HTML file ready to use<br>\n* Zoom and pan into the graph<br>\n* Seadragon is pure Javascript and works on <strong>all modern browsers</strong><br>\n* As it uses image tiles (like Google Maps), there is <strong>no graph size limit</strong><br>\n* Export is similar as PDF and includes all settings from Preview</p>\n<p>Seadragon is a Microsoft Live Labs application and is released under Ms-PL license (Microsoft’s open source license) . Kudos to them for this great library.<br>\nExample Sample with <a href=\"http://diseasome.eu\">Diseasome</a> Network dataset directly exported from Gephi How to use the Plugin</p>\n<p style=\"margin-bottom: 25px; margin-top: 20px;\">Install the plugin from Gephi, “Tools &gt; Plugin” and find <strong>Seadragon Web Export</strong>. After restarting Gephi, the plugin is installed in the export menu. Load a sample network and try the plugin. Go to the Preview tab to configure the rendering settings like colors, labels and edges.</p>\n<div id=\"attachment_3895\" class=\"wp-caption alignnone\" style=\"width: 488px\"><a href=\"https://marketplace.gephi.org/wp-content/uploads/2013/01/seadragon-plugin-export.png?022bbc\"><img class=\"size-full wp-image-3895\" title=\"seadragon-plugin-export\" src=\"https://marketplace.gephi.org/wp-content/uploads/2013/01/seadragon-plugin-export.png?022bbc\" alt=\"\" width=\"478\" height=\"383\"></a><p class=\"wp-caption-text\">Export directly from Gephi Export menu</p></div>\n<p style=\"margin-bottom: 25px; margin-top: 20px;\">The settings asks for a valid directory where to export the files and the size of the canvas. Bigger is the canvas, more you can zoom in, but it takes longer time to generate and to load. If the process hangs and never finishes, reduce the dimensions as you’re hitting the memory limit.</p>\n<div id=\"attachment_3896\" class=\"wp-caption alignnone\" style=\"width: 489px\"><a href=\"https://marketplace.gephi.org/wp-content/uploads/2013/01/seadragon-plugin-settings.png?022bbc\"><img class=\"size-full wp-image-3896\" title=\"seadragon-plugin-settings\" src=\"https://marketplace.gephi.org/wp-content/uploads/2013/01/seadragon-plugin-settings.png?022bbc\" alt=\"\" width=\"479\" height=\"399\"></a><p class=\"wp-caption-text\">Export settings, configure the size of the image</p></div>\n<p>Note that result on the local hard-drive can’t be viewed with Chrome, due to <a href=\"http://code.google.com/p/chromium/issues/detail?id=40787&amp;q=ajax%20local&amp;colspec=ID%20Stars%20Pri%20Area%20Feature%20Type%20Status%20Summary%20Modified%20Owner%20Mstone%20OS\">a bug</a>. Run Chrome with “–allow-file-access-from-files” option to make it work.</p>"
+},{
+  "id": "loxa-web-site-export",
+  "name": "Loxa Web Site Export",
+  "catchphrase": "",
+  "types": [
+    "exports"
+  ],
+  "images": [
+    "imgs/loxa-web-site-export/lwseV031.png",
+    "imgs/loxa-web-site-export/loxa.png",
+    "imgs/loxa-web-site-export/example.png"
+  ],
+  "authors": [
+    {
+      "name": "Jorge Lopez-Vargas",
+      "link": "http://cafelojano.wordpress.com"
+    }
+  ],
+  "sourcecode": "https://github.com/jorgaf/LoxaWebSiteExport",
+  "license": "GPL v3",
+  "versions": {
+    "0.8.2": "0.8.2/ec-loxa-sna-gephi-031.nbm"
+  },
+  "last_update": "June 22, 2013",
+  "description": "<p>Loxa Web Site Export Plugin is a plugin developed for Gephi whose purpose is to allow easy publication of the analysis, descriptions and findings. The result of the implementation of the plugin is a fully functional website and easy customization, thereby allowing to publish the results of their work</p>\n<p>Features:</p>\n<p>Lets build a Web site for the project.<br>\nWorkspaces are the analysis performed, of which you can see a browse graph (using sigmajs), see statistics (number of nodes and arcs, weight and density of the graph), description of the analysis and lets you download files (from the graph and image – pdf format).<br>\nThe analysis information is stored in a JSON file for easy editing, which supports HTML tags to enhance your presentation.<br>\nThe most important and significant findings are displayed in the bottom of the image.<br>\nFull AJAX for asynchronous calls to the server to see statistics for each analysis.<br>\nIt works in most modern browsers (tested: Safari, Firefox, Chrome, Internet Explorer).</p>\n<p>Version 0.3:<br>\nVery quick generation<br>\nBrowse the graph using sigmajs. Now you can select nodes<br>\nNew interface<br>\nAnd now you can download the source code from GitHub</p>\n<p>Version 0.3.1:</p>\n<ul>\n<li>Support Gephi 0.8.2beta</li>\n<li><span style=\"line-height: 13px\">Redesign interface new style</span></li>\n<li>Search nodes via autocomplete, the node selected is placed in the center of the viewer of graph</li>\n<li>Get more information from project properties. In Gephi go to File-&gt;Properties and complete the form and this values will be used in the Website generated.</li>\n<li>Customization more easy!. The json file, now is in pretty format.</li>\n<li>Less clicks to view description and metrics.</li>\n<li>Now you can publish metrics and his values, with a description (it is shown when you click the metric name).</li>\n</ul>\n<p>To view all the new features, visit our web page.</p>"
 }
   ]
 }
