@@ -674,6 +674,30 @@
   },
   "last_update": "July 3, 2013",
   "description": "<p>This plugins allows to apply a SPARQL request on: 1. a set of RDF local files, i.e. on your computer. This is done by using the Corese SPARQL engine; 2. a SPARQL SOAP or REST end-point. It provides also the following functionalities: – statistics on the types present in the rdf obtained (if the rdf:type relations are provided in the construct request). – a filter on the type of the nodes. – filtering on the nodes, based on a SPARQL “Select” request.<br>\nPlugin Owner’s Notes</p>\n<p>Some examples are available: – the humans example use local files and the Corese engine. To make it run, choose “humans” in the bottom drop-list, the click on the “Load” button, then Start. – the DBPedia-Movies example access to dbpedia in order to depict the relationships between the actors, directors and movies. To make it run, choose “DBPedia-Movies” in the bottom drop-list, the click on the “Load” button, then Start.</p>"
+},{
+  "id": "neo4j-graph-database-support",
+  "name": "Neo4J Graph Database Support",
+  "catchphrase": "",
+  "types": [
+    "imports",
+    "other category"
+  ],
+  "images": [
+    "imgs/neo4j-graph-database-support/neo4j_logo.png"
+  ],
+  "authors": [
+    {
+      "name": "Eduardo Ramos",
+      "link": "https://github.com/gephi/gephi-plugins/tree/neo4j-plugin"
+    }
+  ],
+  "sourcecode": "https://github.com/gephi/gephi-plugins/tree/neo4j-plugin",
+  "license": "AGPL v3",
+  "versions": {
+    "0.8.2": "0.8.2/neo4j-plugin-2.1.3.zip"
+  },
+  "last_update": "August 7, 2014",
+  "description": "<h3>Introduction</h3>\n<p>Neo4j Graph Database support</p>\n<h3>Plugin Owner’s Notes</h3>\n<p>This plugin adds support for Neo4j graph database. You can open Neo4j 2.1.3 database directory and manipulate with graph as any other Gephi graph. You can also export any graph into Neo4j database, you can filter import or export and you can use debugging as well as lazy loading support.</p>\n<h4>Features</h4>\n<ul>\n<li>Import all data from Neo4j database</li>\n<li>Traversal and filtered import</li>\n<li>Export to Neo4J</li>\n<li>Lazy loading, use the mouse to expand nodes</li>\n</ul>\n<h4>Neo4j</h4>\n<p>Supports the 2.1.3 version of&nbsp;<a href=\"http://neo4j.org/download/\">Neo4j</a>. If you have trouble with other versions of Neo4j please let us know.</p>\n<h4>Known problems</h4>\n<p>Neo4j 2.0 refuses to work under any Java version previous to Java 7. If you are stuck with Java 6, you can download a Neo4j 1.9 version of this plugin for manual installation that may suffice you <a title=\"Neo4j 1.9M4 plugin\" href=\"https://marketplace.gephi.org/wp-content/uploads/2014/08/neo4j-plugin-1.9M4.zip?022bbc\">here</a>.</p>\n<h4>Preview</h4>\n<div id=\"attachment_2444\" class=\"wp-caption alignnone\" style=\"width: 519px\"><a href=\"https://marketplace.gephi.org/wp-content/uploads/2013/01/Open-database-dialog.png?022bbc\"><img class=\"size-full wp-image-2444\" title=\"Open-database-dialog\" alt=\"\" src=\"https://marketplace.gephi.org/wp-content/uploads/2013/01/Open-database-dialog.png?022bbc\" width=\"509\" height=\"403\"></a><p class=\"wp-caption-text\">Open Neo4J Database from Gephi</p></div>\n<p>&nbsp;</p>\n<div id=\"attachment_3868\" class=\"wp-caption alignnone\" style=\"width: 539px\"><a href=\"https://marketplace.gephi.org/wp-content/uploads/2013/01/gephi_neo4j-2.png?022bbc\"><img class=\"size-full wp-image-3868\" title=\"gephi_neo4j-2\" alt=\"\" src=\"https://marketplace.gephi.org/wp-content/uploads/2013/01/gephi_neo4j-2.png?022bbc\" width=\"529\" height=\"291\"></a><p class=\"wp-caption-text\">Full Import</p></div>\n<p>&nbsp;</p>\n<div id=\"attachment_3869\" class=\"wp-caption alignnone\" style=\"width: 551px\"><a href=\"https://marketplace.gephi.org/wp-content/uploads/2013/01/gephi_neo4j-3.png?022bbc\"><img class=\"size-full wp-image-3869\" title=\"gephi_neo4j-3\" alt=\"\" src=\"https://marketplace.gephi.org/wp-content/uploads/2013/01/gephi_neo4j-3.png?022bbc\" width=\"541\" height=\"629\"></a><p class=\"wp-caption-text\">Traversal Import</p></div>\n<h4>Code</h4>\n<p>The code is hosted on&nbsp;<a href=\"https://github.com/gephi/gephi-plugins/tree/neo4j-plugin\">GitHub</a>&nbsp;in a ‘neo4j-plugin’ branch of the ‘gephi-plugins’ repository.</p>\n<p>The plugin is composed of four modules:<br>\n* Neo4jWrapper: Wrapper around Neo4j JARs<br>\n* Neo4jPlugin: Business logic<br>\n* DesktopNeo4j: User interface<br>\n* Neo4jGraphDatabase: Empty module that depends on all other three</p>\n<p>To build, simply run:<br>\n<code>ant clean nbms</code></p>"
 }
   ]
 }
