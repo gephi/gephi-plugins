@@ -351,6 +351,27 @@
   },
   "last_update": "June 22, 2013",
   "description": "<p>Loxa Web Site Export Plugin is a plugin developed for Gephi whose purpose is to allow easy publication of the analysis, descriptions and findings. The result of the implementation of the plugin is a fully functional website and easy customization, thereby allowing to publish the results of their work</p>\n<p>Features:</p>\n<p>Lets build a Web site for the project.<br>\nWorkspaces are the analysis performed, of which you can see a browse graph (using sigmajs), see statistics (number of nodes and arcs, weight and density of the graph), description of the analysis and lets you download files (from the graph and image – pdf format).<br>\nThe analysis information is stored in a JSON file for easy editing, which supports HTML tags to enhance your presentation.<br>\nThe most important and significant findings are displayed in the bottom of the image.<br>\nFull AJAX for asynchronous calls to the server to see statistics for each analysis.<br>\nIt works in most modern browsers (tested: Safari, Firefox, Chrome, Internet Explorer).</p>\n<p>Version 0.3:<br>\nVery quick generation<br>\nBrowse the graph using sigmajs. Now you can select nodes<br>\nNew interface<br>\nAnd now you can download the source code from GitHub</p>\n<p>Version 0.3.1:</p>\n<ul>\n<li>Support Gephi 0.8.2beta</li>\n<li><span style=\"line-height: 13px\">Redesign interface new style</span></li>\n<li>Search nodes via autocomplete, the node selected is placed in the center of the viewer of graph</li>\n<li>Get more information from project properties. In Gephi go to File-&gt;Properties and complete the form and this values will be used in the Website generated.</li>\n<li>Customization more easy!. The json file, now is in pretty format.</li>\n<li>Less clicks to view description and metrics.</li>\n<li>Now you can publish metrics and his values, with a description (it is shown when you click the metric name).</li>\n</ul>\n<p>To view all the new features, visit our web page.</p>"
+},{
+  "id": "json-exporter",
+  "name": "JSON Exporter",
+  "catchphrase": "",
+  "types": [
+    "exports"
+  ],
+  "images": [],
+  "authors": [
+    {
+      "name": "Scott Hale",
+      "link": "http://www.scotthale.net/"
+    }
+  ],
+  "sourcecode": "https://github.com/oxfordinternetinstitute/gephi-plugins/tree/JSONExporter",
+  "license": "GPL v3",
+  "versions": {
+    "0.8.2": "0.8.2/uk-ac-ox-oii-jsonexporter9.nbm"
+  },
+  "last_update": "August 9, 2013",
+  "description": "<p>Exports the network to a JSON file with an array of nodes and an array of edges. This file is suitable to be used with the parseJSON plugin to Sigma.js. JSON allows Sigma.js to be faster and work</p>\n<p><strong> Why use JSON and not Gexf for Sigma?</strong><br>\nGexf is larger than JSON using extra bandwidth (important for mobile), does not parse correctly on Internet Explorer (yes there are still people using this browser), and is faster (everyone wants that!). More information <a href=\"http://blogs.oii.ox.ac.uk/vis/?p=149\" target=\"_blank\">here</a>.</p>\n<p>Sigma.js website: <a href=\"http://sigmajs.org/\" target=\"_blank\">http://sigmajs.org/</a></p>\n<p><strong>Sigma.js JSON parser</strong><br>\nUse the sigma.parseJson.js plugin to Sigma just as you use the parseGexf plugin and enjoy all the benefits of JSON.</p>\n<p>Release notes:<br>\nv1<br>\nInitial release</p>\n<p>v1.1 (Aug 2013)</p>\n<ul>\n<li>Switch to Google Gson for underlying JSON conversion fixing issues with improper escapes.</li>\n<li>Export edge attributes</li>\n<li>Export edge color</li>\n</ul>"
 }
   ]
 }
