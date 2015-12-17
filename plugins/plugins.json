@@ -579,6 +579,27 @@
   },
   "last_update": "February 13, 2013",
   "description": "<p>This plugin contains a collection of generators that enable users to generate graphs with different topologies. The current version contains following generators:</p>\n<p>* Balanced Tree<br>\n* Barabasi Albert<br>\n* Barabasi Albert Generalized<br>\n* Barabasi Albert Simplified A<br>\n* Barabasi Albert Simplified B<br>\n* Erdos Renyi Gnm<br>\n* Erdos Renyi Gnp<br>\n* Kleinberg<br>\n* Watts Strogatz Alpha<br>\n* Watts Strogatz Beta</p>\n<p>Version 1.1 changes:</p>\n<p>* added timestamps to nodes and edges so it is possible to look through the process of evolution<br>\n* fixed bugs in Erdos-Renyi Gnp and Generalized Barabasi Albert generators</p>"
+},{
+  "id": "http-graph",
+  "name": "HTTP Graph",
+  "catchphrase": "",
+  "types": [
+    "generator"
+  ],
+  "images": [],
+  "authors": [
+    {
+      "name": "phreakocious ",
+      "link": "http://phreakocious.net"
+    }
+  ],
+  "sourcecode": "https://github.com/phreakocious/gephi-plugins",
+  "license": "2-clause BSD",
+  "versions": {
+    "0.8.2": "0.8.2/net-phreakocious-httpgraph.nbm"
+  },
+  "last_update": "February 27, 2013",
+  "description": "<p>Runs a proxy server and collects data from your web browsing to generate a graph!</p>\n<p><iframe src=\"http://player.vimeo.com/video/18591468\" width=\"500\" height=\"281\" frameborder=\"0\" webkitallowfullscreen=\"\" mozallowfullscreen=\"\" allowfullscreen=\"\"></iframe>\n</p><p><a href=\"http://vimeo.com/18591468\">HTTP Graph — A Gephi plugin</a> from <a href=\"http://vimeo.com/user5689367\">phreakocious</a> on <a href=\"http://vimeo.com\">Vimeo</a>.</p>"
 }
   ]
 }
