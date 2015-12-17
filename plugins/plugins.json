@@ -765,6 +765,29 @@
   },
   "last_update": "May 14, 2014",
   "description": "<p>A simple layout plugin that places nodes randomly within a 3D space.</p>\n<p>Each node is given an x, y, and z. While normally this Z is not seen in the 2D Gephi view, it is used by other 3D algorithms (like Force Atlas 3D) and can be exported.</p>"
+},{
+  "id": "network-splitter-3d",
+  "name": "Network Splitter 3D",
+  "catchphrase": "",
+  "types": [
+    "layout"
+  ],
+  "images": [
+    "imgs/network-splitter-3d/networksplitter3d_logo.jpg"
+  ],
+  "authors": [
+    {
+      "name": "Alexandre Barão",
+      "link": "http://pt.linkedin.com/in/alexandrebarao"
+    }
+  ],
+  "sourcecode": "http://www.relationalcapitalvalue.com/gephi/plugins/networksplitter3d/NetworkSplitter3D.zip",
+  "license": "GPL v3",
+  "versions": {
+    "0.8.2": "0.8.2/org-alexandrebarao-networksplitter3d.nbm"
+  },
+  "last_update": "May 7, 2014",
+  "description": "<p>This layout can be used to split a network layout into distinct Z-Layers (Network Splitter 3D Z-Layers are user-defined clusters).<br>\nE.g. after using layouts such as: Yifan Hu, Fruchterman Reingold, Force Atlas, Circular, Layered, OpenOrd, etc.</p>\n<p>Computed Z-Layers can be used in Gephi ranking and/or partition procedures. To use this plugin it is quite simple: network nodes should have an attribute containing “[z]” in its name. E.g. something like “Degree [z]” or “YourNodeColumn[z]“.</p>\n<p>The Network Splitter 3D will compute and segment z-Levels regarding your “[z]” column values (with any ranges). If your network don’t have a “[z]” column, no problem, all nodes will be placed in Z-Layer 0 (Zero).</p>\n<p>Another usefull feature:<br>\nYou can use this plugin to rotate your graph over the X-Axis.</p>"
 }
   ]
 }
