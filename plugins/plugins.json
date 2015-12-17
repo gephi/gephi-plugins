@@ -624,6 +624,29 @@
   },
   "last_update": "September 12, 2015",
   "description": "<h2>Author</h2>\n<p>Clement Levallois, <a href=\"http://www.em-lyon.com/en/faculte-recherche-enseignement-superieur/faculte-recherche-emlyon/corps-professoral/Professeurs-permanents/Clement-LEVALLOIS\" target=\"_blank\">Assistant Professor at EMLYON Business School</a>.</p>\n<h2>What it does</h2>\n<h3>Creates a network of entities based on their similarities.</h3>\n<p>Once installed, you’ll find the plugin in Gephi in the menu: File -&gt; Import Spigot -&gt;&nbsp;Data importer (by computing similarities).</p>\n<p>Example of input files (need to be csv format):</p>\n<p>toto,green<br>\nnana,green<br>\ndede,blue<br>\ngege,blue<br>\nriri,blue<br>\nfifi,yellow<br>\nfifi,blue</p>\n<p>-&gt; First column corresponds to persons, and the second column correspond to their tastes in color.</p>\n<p>-&gt; This plugin will create a network of persons where the persons with similar color tastes will be connected:</p>\n<p><a href=\"https://marketplace.gephi.org/wp-content/uploads/2014/09/screenshot.png?022bbc\"><img class=\"alignnone size-medium wp-image-25212\" alt=\"screenshot\" src=\"https://marketplace.gephi.org/wp-content/uploads/2014/09/screenshot-300x244.png?022bbc\" width=\"300\" height=\"244\"></a></p>\n<p>&nbsp;</p>\n<p>&nbsp;</p>\n<p>Weighted features are also possible in the input file (select the corresponding option in the wizzard):</p>\n<p>John,ice-cream,8<br>\nKate,ice-cream,6<br>\nHarold,soda,7<br>\nSerge,soda,10<br>\nClifford,ice-cream,9<br>\nAlice,cake,5<br>\nAlice,soda,8</p>\n<p>This plugin will compute a network of persons, based on the nature of their tastes in cakes, soda, etc. and <strong>based on the intensity of these tastes&nbsp;</strong>(as represented by the value for each line).</p>\n<p>&nbsp;</p>\n<p>&nbsp;</p>\n<p>Comments, feedback: levallois[@]em-lyon.com</p>"
+},{
+  "id": "virtuoso-importer",
+  "name": "Virtuoso Importer",
+  "catchphrase": "",
+  "types": [
+    "imports"
+  ],
+  "images": [
+    "imgs/virtuoso-importer/virtuoso.png"
+  ],
+  "authors": [
+    {
+      "name": "Andrew Ovens",
+      "link": "http://andrewovens.com"
+    }
+  ],
+  "sourcecode": "https://github.com/avens19/virtuosoimporter",
+  "license": "GPL v3",
+  "versions": {
+    "0.8.2": "0.8.2/org-ualberta-virtuosoimporter.nbm"
+  },
+  "last_update": "May 30, 2013",
+  "description": "<p>Allows importing of RDF data from a Virtuoso server. Uses the import spigot functionality</p>"
 }
   ]
 }
