@@ -1314,6 +1314,30 @@
   },
   "last_update": "June 9, 2015",
   "description": "<p>Polygon shaped nodes<br>\nDescription:<br>\nExtends default node renderer to support polygon shaped nodes with arbitrary number of sides. Add a column of Integers in the data table named “Polygon”, the value corresponds to the number of sides. The renderer must be enabled in the “Manage Renderers” tab.</p>\n<p>How to use:<br>\n1. In the “Data Laboratory” tab, add a column with the title “Polygon” and type “Integer”.<br>\n- This number in the Polygon column corresponds to the desired number of sides the node will have in the preview.<br>\n- NOTE: A null/invalid value (i.e. leaving the column blank or a value less than 3) will result in the node being rendered as a circle.<br>\n2. In the “Preview” tab, make sure “Polygon shaped nodes” is checked in the “Manager renderers” tab.<br>\n3. Then in the “Settings” tab make sure “Enable polygon shaped nodes” is checked.<br>\n4. When the preview is refreshed the nodes should be displayed as polygons with sides corresponding to the number in the “Polygon” column.</p>"
+},{
+  "id": "multi-colour-renderer",
+  "name": "Multi Colour Renderer",
+  "catchphrase": "",
+  "types": [
+    "preview"
+  ],
+  "images": [
+    "imgs/multi-colour-renderer/renderer1.png",
+    "imgs/multi-colour-renderer/renderer.png"
+  ],
+  "authors": [
+    {
+      "name": "Jaroslav Kuchar",
+      "link": "https://github.com/jaroslav-kuchar/"
+    }
+  ],
+  "sourcecode": "https://github.com/jaroslav-kuchar/MultiColourRenderer",
+  "license": "GPL v3",
+  "versions": {
+    "0.8.2": "0.8.2/cz-cvut-fit-krizeji1-MultiColourRenderer.nbm"
+  },
+  "last_update": "May 7, 2014",
+  "description": "<p>Multi Colour Renderer is plugin for Gephi. This plugin allows rendering of nodes in “Preview” mode as a “multicolour pie”. Each node is rendered using multiple colours. The plugin uses an implementation proposed by the user Ferretti published on Gephi forum (http://forum.gephi.org/viewtopic.php?f=30&amp;t=1665)</p>\n<p>Code taken from forum and packaged as plugin. Supports only visualization in the Processing window, visualization export to PDF or SVG is not supported.</p>\n<p>Limitations:<br>\nOnly Processing window visualization is supported, export to PDF or SVG currently not supported.<br>\nInputs:<br>\n“colourList” attribute as String<br>\nthe comma delimited list of integers representing rgb of colours</p>\n<p>This plugin is used as visualization support for other plugins:<br>\nMCODE Clustering<br>\nGirvan Newman Clustering<br>\nMarkov Clustering</p>"
 }
   ]
 }
