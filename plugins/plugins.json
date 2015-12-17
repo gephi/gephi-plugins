@@ -253,10 +253,31 @@
   "sourcecode": "https://github.com/pegep/GoogleMapsExporter",
   "license": "GPL v3",
   "versions": {
-    "0.8.2": "0.8.2/" /* NBM NOT FOUND */
+    "0.8.2": "0.8.2/"
   },
   "last_update": "December 14, 2015",
   "description": "<p>Exports graphs from Gephi for use with Google Maps API. Similar to browsing maps in Google Maps you can browse graphs the same way. Pre-rendering the graph makes it possible to view even large graphs fluently in browser.</p>\n<p>Usage:<br>\n* File &gt; Export &gt; Google Maps Exporter<br>\n* Open index.html or index2.html in export directory</p>\n<p>The exporter will render the graph as PNG tiles and output a HTML and JavaScript files. There are two examples: index.html + ui.js and index2.html + ui2.js. Custom functionality (eg. hovering over a node, clicking a node) can be added with Google Maps API.</p>\n<p>Live example at<br>\n<a title=\"https://googlemapsexporter.firebaseapp.com/index.html\" href=\"https://googlemapsexporter.firebaseapp.com/index.html\">https://googlemapsexporter.firebaseapp.com/index.html</a> and<br>\n<a title=\"https://googlemapsexporter.firebaseapp.com/index2.html\" href=\"https://googlemapsexporter.firebaseapp.com/index2.html\">https://googlemapsexporter.firebaseapp.com/index2.html</a></p>\n<div id=\"attachment_30917\" class=\"wp-caption alignnone\" style=\"width: 310px\"><a href=\"https://marketplace.gephi.org/wp-content/uploads/2014/11/gme-01.png?022bbc\"><img class=\"size-medium wp-image-30917\" title=\"Browsing a graph\" alt=\"gme-01\" src=\"https://marketplace.gephi.org/wp-content/uploads/2014/11/gme-01-300x259.png?022bbc\" width=\"300\" height=\"259\"></a><p class=\"wp-caption-text\">Browsing graph is similar to browsing Google Maps</p></div>\n<div id=\"attachment_30918\" class=\"wp-caption alignnone\" style=\"width: 310px\"><a href=\"https://marketplace.gephi.org/wp-content/uploads/2014/11/gme-02.png?022bbc\"><img class=\"size-medium wp-image-30918\" title=\"Browsing with node data visible\" alt=\"\" src=\"https://marketplace.gephi.org/wp-content/uploads/2014/11/gme-02-300x247.png?022bbc\" width=\"300\" height=\"247\"></a><p class=\"wp-caption-text\">Visible nodes are updated on the data table below graph. Table is automatically updated while panning and zooming in on the graph. Columns can be ordered.</p></div>\n<p>&nbsp;</p>"
+},{
+  "id": "export-to-shp",
+  "name": "Export to SHP",
+  "catchphrase": "",
+  "types": [
+    "exports"
+  ],
+  "images": [],
+  "authors": [
+    {
+      "name": "Roman Seidl",
+      "link": "http://granul.at"
+    }
+  ],
+  "sourcecode": "https://github.com/romanseidl/SHPExporter",
+  "license": "GPL v3",
+  "versions": {
+    "0.8.2": "0.8.2/at-granul-gephi-shpexporter.nbm"
+  },
+  "last_update": "April 16, 2013",
+  "description": "<p>This Plugin exports two Shapefiles: one for the edges, and one for the nodes. The shapefiles (the respective DBF-Files) contain the columns of the edge and shape tables. It adds the current width/size and color in gephi to two additional columns.</p>\n<p>The geography is rather simple. The location info is either read from columns in the node table (I use parts of David Sheppard’s ExportToEarth Exporter to do that) or from a fake geography – that is the current position of the nodes in the gephi layout.</p>\n<p>One can then easily import the two datasets into QGIS or any other mapping tool and add a symbology. The only drawback of this simple solution is that in such tools you won’t be able to draw arrows or even more arrows that don’t intersect when they go into both directions.</p>\n<p>Copyright (c) 2013 by Roman Seidl – romanAeTgranul.at</p>\n<p>This Program uses code copyright (c) 2012 by David Shepard</p>"
 }
   ]
 }
