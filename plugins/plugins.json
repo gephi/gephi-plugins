@@ -1291,6 +1291,29 @@
   },
   "last_update": "January 31, 2013",
   "description": "<h3>Introduction</h3>\n<p>This plugin allows multimode networks projection. For example: you can project your bipartite (2-mode) graph to monopartite (one-mode) graph. The projection/transformation is based on the matrix multiplication approach and allows different types of transformations. Not only bipartite graphs. The limitation is matrix multiplication – large matrix multiplication takes time and memory.</p>\n<h3>Plugin Owner’s Notes</h3>\n<p>This plugin allows multimode networks projection. For example: you can project your bipartite (2-mode) graph to monopartite (one-mode) graph. The projection/transformation is based on the matrix multiplication approach and allows different types of transformations. Not only bipartite graphs. The limitation is matrix multiplication – large matrix multiplication takes time and memory.</p>"
+},{
+  "id": "polygon-nodes",
+  "name": "Polygon Nodes",
+  "catchphrase": "",
+  "types": [
+    "preview"
+  ],
+  "images": [
+    "imgs/polygon-nodes/polygonnodes1.png"
+  ],
+  "authors": [
+    {
+      "name": "Z D Eager",
+      "link": "https://github.com/zeager/"
+    }
+  ],
+  "sourcecode": "https://github.com/zeager/gephi-polygonnodes",
+  "license": "GPL v2",
+  "versions": {
+    "0.8.2": "0.8.2/org-zeager-polygonnodes.nbm"
+  },
+  "last_update": "June 9, 2015",
+  "description": "<p>Polygon shaped nodes<br>\nDescription:<br>\nExtends default node renderer to support polygon shaped nodes with arbitrary number of sides. Add a column of Integers in the data table named “Polygon”, the value corresponds to the number of sides. The renderer must be enabled in the “Manage Renderers” tab.</p>\n<p>How to use:<br>\n1. In the “Data Laboratory” tab, add a column with the title “Polygon” and type “Integer”.<br>\n- This number in the Polygon column corresponds to the desired number of sides the node will have in the preview.<br>\n- NOTE: A null/invalid value (i.e. leaving the column blank or a value less than 3) will result in the node being rendered as a circle.<br>\n2. In the “Preview” tab, make sure “Polygon shaped nodes” is checked in the “Manager renderers” tab.<br>\n3. Then in the “Settings” tab make sure “Enable polygon shaped nodes” is checked.<br>\n4. When the preview is refreshed the nodes should be displayed as polygons with sides corresponding to the number in the “Polygon” column.</p>"
 }
   ]
 }
