@@ -163,6 +163,28 @@
   },
   "last_update": "May 29, 2014",
   "description": "<p>The Molecular Complex Detection clustering plugin for Gephi. This plugin finds clusters in graph, which can be used in Social Network Analysis.</p>\n<p>Clustering on Graphs:</p>\n<p>details are available at http://www.biomedcentral.com/1471-2105/4/2</p>"
+},{
+  "id": "gc-viz",
+  "name": "GC-Viz",
+  "catchphrase": "",
+  "types": [
+    "clusters",
+    "layout"
+  ],
+  "images": [],
+  "authors": [
+    {
+      "name": "Brigitte Boden",
+      "link": "http://dme.rwth-aachen.de/de/gcviz"
+    }
+  ],
+  "sourcecode": "https://github.com/bboden/gephi-plugins/",
+  "license": "GPL v3",
+  "versions": {
+    "0.8.2": "0.8.2/org-i9-GCViz1.nbm"
+  },
+  "last_update": "November 7, 2013",
+  "description": "<p>The GC-Viz plugin contains the algorithms GAMer and DB-CSC for the clustering of graphs with node attributes. It also contains a layout for visualizing and comparing the clustering results.</p>\n<p>The plugin has been developed by Brigitte Boden, Roman Haag and Houran Ketabdar.</p>\n<p>The plugin is described in the following paper: Brigitte Boden, Roman Haag, and Thomas Seidl. Detecting and exploring clusters in attributed graphs. In 22st ACM International Conference on Information and Knowledge Management, CIKM13, 2013.</p>"
 }
   ]
 }
