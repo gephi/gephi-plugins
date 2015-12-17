@@ -396,6 +396,29 @@
   },
   "last_update": "April 18, 2013",
   "description": "<h3>Introduction</h3>\n<p>The purpose of the Graph Streaming API is to build a unified framework for streaming graph objects. Gephi’s data structure and visualization engine has been built with the idea that a graph is not static and might change continuously. By connecting Gephi with external data-sources, we leverage its power to visualize and monitor complex systems or enterprise data in real-time. Moreover, the idea of streaming graph data goes beyond Gephi, and a unified and standardized API could bring interoperability with other available tools for graph and network analysis, as they could start to interoperate with other tools in a distributed and cooperative fashion.</p>\n<h3>Plugin Owner’s Notes</h3>\n<p>With the increasing level of connectivity and cooperation between systems, for a system that aim to be interoperable, it is imperative to comply with the available standards. Graph objects are abstractions that can represent a wide range of real-world structures, from computer networks to human interactions, and there are a lot of standards to exchange graph data in different formats, from text-based formats to xml-based formats. But the real-world structures are constantly changing, and the current formats are not suitable to exchange such type of dynamic data.</p>\n<p>A lot of well-established systems already stream data to its users using a streaming API. Twitter for example defined a Streaming API to allow near-realtime access to its data. They are using two different formats: XML and JSON, but JSON is strongly encouraged over XML, as JSON is more compact and parsing is greatly simplified.</p>\n<p>We are not the first to implement a Graph Streaming API, and another very interesting experience is the GraphStream Java Library. It is composed of an API that gives a way to add edges and nodes in a graph and make them evolve. The graphs are composed of nodes and edges that can appear, disappear or be modified, and these operations are called events. The sequence of operations that occur in a graph is seen as a stream of events.</p>\n<p>So, as other people already had successful experiences with graph streaming, why not start our work based on these experiences? That’s what we are doing, and beyond finding these experiences very useful, we are also trying to be compatible with the available work. This Gephi Graph Streaming release is using two formats: JSON for flexibility, and a text-based format, based in the GraphStream implementation.</p>\n<p>To illustrate how simple it will be to connect to a master, <a href=\"http://www.youtube.com/watch?v=7SW_FDiY0sg\" target=\"_blank\">this video</a> shows Gephi connecting to a master and visualizing the received graph data in real time. The graph in this demo is a part of the Amazon.com library, where the nodes represent books and the edges represent their similarities. For each book, a node is added, the similar books are explored, adding the similar ones as nodes and the similarity as an edge.</p>\n<p>The Graph Streaming specification goes beyond the simple fact that a client can pull data from a master: in fact, clients can interact with the master pushing data to it, in a REST architecture. The same data format used by the master to send graph events to the clients is used by clients to interact with the master.</p>\n<p>But what about connecting two different Gephi instances together? One instance will be master, and the other client. Using the Graph Streaming API, a change in a graph at the master’s workspace should cause a change in the client’s workspace, and a change at the client’s workspace will cause it to send requests to the master to update its graph accordingly. Both instances working in a distributed mode. In fact, different people could work in a distributed mode to construct a graph: it’s the Collaborative Graph Construction.</p>"
+},{
+  "id": "exporttoearth",
+  "name": "ExportToEarth",
+  "catchphrase": "",
+  "types": [
+    "exports"
+  ],
+  "images": [
+    "imgs/exporttoearth/ExportToEarthForMarketplace-e1354074501870.png"
+  ],
+  "authors": [
+    {
+      "name": "David Shepard",
+      "link": "https://github.com/shepdl/"
+    }
+  ],
+  "sourcecode": "https://github.com/shepdl/Export-To-Earth",
+  "license": "3-clause BSD",
+  "versions": {
+    "0.8.2": "0.8.2/com-hypercities-exporttoearth1.nbm"
+  },
+  "last_update": "May 26, 2013",
+  "description": "<h3>Introduction</h3>\n<p>This plugin exports gephi graphs with geocoordinates to KMZ files for Google Earth or other GIS software.</p>\n<h3>Plugin Owner’s Notes</h3>\n<p>To use this plugin, first make sure your Nodes table has geocoordiante columns, such as x and y or longitude and latitude. Go to Preview, then choose File &gt; Export &gt; Graph file, and select “KMZ” from the dropdown menu. The tool will attempt to guess which columns contain the geodata; columns can also be specified by clicking the “Options” button in the file selection window.</p>\n<p>Aside from moving the nodes and edges to the appropriate geocoordinates, this plugin attempts to preserve the appearance of your graph preview as best as possible as it appears in the Preview mode (although curved edges are not supported).</p>\n<p>ExportToEarth was developed during the NEH Summer Institute for Advanced Topics in Digital Humanities on Digital Cultural Mapping (http://hypercities.com/NEH/) at UCLA. Thanks to <a href=\"http://ryan.cordell.us/\" target=\"_blank\">Ryan Cordell</a>,&nbsp;<a href=\"http://zoepster.blogspot.com/\" target=\"_blank\">Zoe Borovsky</a>, and <a href=\"http://unt.academia.edu/PaulaLupkin\" target=\"_blank\">Paula Lupkin</a> for being the impetus behind its development, not to mention the alpha testers.</p>"
 }
   ]
 }
