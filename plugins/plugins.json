@@ -77,7 +77,7 @@
   "types": [
     "clusters"
   ],
-  "screenshots": [
+  "images": [
     "imgs/label-propagation-clustering/snapshot.png"
   ],
   "authors": [
@@ -88,17 +88,11 @@
   ],
   "sourcecode": "https://github.com/BoutemineOualid/gephi-plugins-label_propagation",
   "license": "GPL v3",
-  "supported_platforms": [
-    "linux",
-    "macos",
-    "windows"
-  ],
   "versions": {
-    "0.8.2": "0.8.2"
+    "0.8.2": "0.8.2/labelpropagationclustering1.1.nbm"
   },
   "last_update": "June 23, 2014",
   "description": "<p>A plugin that provides an implementation of the label propagation graph clustering algorithm described in (1).<br>\nThis plugin offers an animated mode which allows the visualization of the labels propagation over the graph nodes. This feature is helpful when studying the behaviour of the algorithm on specific use cases. The current implementation does not take into consideration edges weights/direction, it also lacks defensive/offensive propagation support (2) which improves the performance. These missing features will be added later.</p>\n<p>1. Raghavan, U. N., Albert, R., &amp; Kumara, S. (2007). Near linear time algorithm to detect community structures in large-scale networks. Physical Review E, 76(3), 036106.<br>\n2. Šubelj, L., &amp; Bajec, M. (2011). Unfolding communities in large complex networks: Combining defensive and offensive label propagation for core extraction. Physical Review E, 83(3), 036103.</p>"
 }
-
   ]
 }
