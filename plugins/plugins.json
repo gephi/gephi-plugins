@@ -116,6 +116,30 @@
   },
   "last_update": "May 30, 2014",
   "description": "<p>The Girvan Newman Clustering plugin for Gephi. This plugin finds clusters in graph, which can be used in Social Network Analysis.</p>\n<p>The Girvan–Newman algorithm detects communities by progressively removing edges from the original network. The connected components of the remaining network are the comunnities. Instead of trying to construct a measure that tells us which edges are the most central to communities, the Girvan–Newman algorithm focuses on edges that are most likely “between” communities.</p>"
+},{
+  "id": "markov-cluster-algorithm-mcl",
+  "name": "Markov Cluster Algorithm (MCL)",
+  "catchphrase": "",
+  "types": [
+    "clusters"
+  ],
+  "images": [
+    "imgs/markov-cluster-algorithm-mcl/mcl1.png",
+    "imgs/markov-cluster-algorithm-mcl/mcl.png"
+  ],
+  "authors": [
+    {
+      "name": "Jaroslav Kuchar",
+      "link": "https://github.com/jaroslav-kuchar/"
+    }
+  ],
+  "sourcecode": "https://github.com/jaroslav-kuchar/MarkovClustering",
+  "license": "GPL v3",
+  "versions": {
+    "0.8.2": "0.8.2"
+  },
+  "last_update": "May 30, 2014",
+  "description": "<p>The Markov Clustering plugin for Gephi. This plugin finds clusters in graph, which can be used in Social Network Analysis.</p>\n<p>Clustering on Graphs: The Markov Cluster Algorithm (MCL)</p>\n<p>MCL details are freely available at http://www.micans.org/mcl/</p>"
 }
   ]
 }
