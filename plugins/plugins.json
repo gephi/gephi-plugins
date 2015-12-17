@@ -419,6 +419,27 @@
   },
   "last_update": "May 26, 2013",
   "description": "<h3>Introduction</h3>\n<p>This plugin exports gephi graphs with geocoordinates to KMZ files for Google Earth or other GIS software.</p>\n<h3>Plugin Owner’s Notes</h3>\n<p>To use this plugin, first make sure your Nodes table has geocoordiante columns, such as x and y or longitude and latitude. Go to Preview, then choose File &gt; Export &gt; Graph file, and select “KMZ” from the dropdown menu. The tool will attempt to guess which columns contain the geodata; columns can also be specified by clicking the “Options” button in the file selection window.</p>\n<p>Aside from moving the nodes and edges to the appropriate geocoordinates, this plugin attempts to preserve the appearance of your graph preview as best as possible as it appears in the Preview mode (although curved edges are not supported).</p>\n<p>ExportToEarth was developed during the NEH Summer Institute for Advanced Topics in Digital Humanities on Digital Cultural Mapping (http://hypercities.com/NEH/) at UCLA. Thanks to <a href=\"http://ryan.cordell.us/\" target=\"_blank\">Ryan Cordell</a>,&nbsp;<a href=\"http://zoepster.blogspot.com/\" target=\"_blank\">Zoe Borovsky</a>, and <a href=\"http://unt.academia.edu/PaulaLupkin\" target=\"_blank\">Paula Lupkin</a> for being the impetus behind its development, not to mention the alpha testers.</p>"
+},{
+  "id": "top-weight-edge-filter",
+  "name": "Top Weight Edge Filter",
+  "catchphrase": "",
+  "types": [
+    "filter"
+  ],
+  "images": [],
+  "authors": [
+    {
+      "name": "Illyoung Choi",
+      "link": "http://www.cs.arizona.edu/~iychoi/"
+    }
+  ],
+  "sourcecode": "https://github.com/iychoi/gephi-plugins/tree/master/TopEdgeWeight",
+  "license": "Other (Tell us in the Description)",
+  "versions": {
+    "0.8.2": "0.8.2/cs-arizona-edu-topedgeweightfilter.nbm"
+  },
+  "last_update": "May 11, 2015",
+  "description": "<p>Keep top N weighted edges in a graph or per a node.<br>\nMIT License</p>"
 }
   ]
 }
