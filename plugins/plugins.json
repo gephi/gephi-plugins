@@ -140,6 +140,29 @@
   },
   "last_update": "May 30, 2014",
   "description": "<p>The Markov Clustering plugin for Gephi. This plugin finds clusters in graph, which can be used in Social Network Analysis.</p>\n<p>Clustering on Graphs: The Markov Cluster Algorithm (MCL)</p>\n<p>MCL details are freely available at http://www.micans.org/mcl/</p>"
+},{
+  "id": "molecular-complex-detection-mcode-clustering",
+  "name": "Molecular Complex Detection (MCODE) Clustering",
+  "catchphrase": "",
+  "types": [
+    "clusters"
+  ],
+  "images": [
+    "imgs/molecular-complex-detection-mcode-clustering/mcode.png"
+  ],
+  "authors": [
+    {
+      "name": "Jaroslav Kuchar",
+      "link": "https://github.com/jaroslav-kuchar/"
+    }
+  ],
+  "sourcecode": "https://github.com/jaroslav-kuchar/MCodeClustering",
+  "license": "GPL v3",
+  "versions": {
+    "0.8.2": "0.8.2/cz-cvut-fit-krizeji1-mcode.nbm"
+  },
+  "last_update": "May 29, 2014",
+  "description": "<p>The Molecular Complex Detection clustering plugin for Gephi. This plugin finds clusters in graph, which can be used in Social Network Analysis.</p>\n<p>Clustering on Graphs:</p>\n<p>details are available at http://www.biomedcentral.com/1471-2105/4/2</p>"
 }
   ]
 }
