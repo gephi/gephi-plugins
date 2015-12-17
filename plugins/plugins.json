@@ -698,6 +698,27 @@
   },
   "last_update": "August 7, 2014",
   "description": "<h3>Introduction</h3>\n<p>Neo4j Graph Database support</p>\n<h3>Plugin Owner’s Notes</h3>\n<p>This plugin adds support for Neo4j graph database. You can open Neo4j 2.1.3 database directory and manipulate with graph as any other Gephi graph. You can also export any graph into Neo4j database, you can filter import or export and you can use debugging as well as lazy loading support.</p>\n<h4>Features</h4>\n<ul>\n<li>Import all data from Neo4j database</li>\n<li>Traversal and filtered import</li>\n<li>Export to Neo4J</li>\n<li>Lazy loading, use the mouse to expand nodes</li>\n</ul>\n<h4>Neo4j</h4>\n<p>Supports the 2.1.3 version of&nbsp;<a href=\"http://neo4j.org/download/\">Neo4j</a>. If you have trouble with other versions of Neo4j please let us know.</p>\n<h4>Known problems</h4>\n<p>Neo4j 2.0 refuses to work under any Java version previous to Java 7. If you are stuck with Java 6, you can download a Neo4j 1.9 version of this plugin for manual installation that may suffice you <a title=\"Neo4j 1.9M4 plugin\" href=\"https://marketplace.gephi.org/wp-content/uploads/2014/08/neo4j-plugin-1.9M4.zip?022bbc\">here</a>.</p>\n<h4>Preview</h4>\n<div id=\"attachment_2444\" class=\"wp-caption alignnone\" style=\"width: 519px\"><a href=\"https://marketplace.gephi.org/wp-content/uploads/2013/01/Open-database-dialog.png?022bbc\"><img class=\"size-full wp-image-2444\" title=\"Open-database-dialog\" alt=\"\" src=\"https://marketplace.gephi.org/wp-content/uploads/2013/01/Open-database-dialog.png?022bbc\" width=\"509\" height=\"403\"></a><p class=\"wp-caption-text\">Open Neo4J Database from Gephi</p></div>\n<p>&nbsp;</p>\n<div id=\"attachment_3868\" class=\"wp-caption alignnone\" style=\"width: 539px\"><a href=\"https://marketplace.gephi.org/wp-content/uploads/2013/01/gephi_neo4j-2.png?022bbc\"><img class=\"size-full wp-image-3868\" title=\"gephi_neo4j-2\" alt=\"\" src=\"https://marketplace.gephi.org/wp-content/uploads/2013/01/gephi_neo4j-2.png?022bbc\" width=\"529\" height=\"291\"></a><p class=\"wp-caption-text\">Full Import</p></div>\n<p>&nbsp;</p>\n<div id=\"attachment_3869\" class=\"wp-caption alignnone\" style=\"width: 551px\"><a href=\"https://marketplace.gephi.org/wp-content/uploads/2013/01/gephi_neo4j-3.png?022bbc\"><img class=\"size-full wp-image-3869\" title=\"gephi_neo4j-3\" alt=\"\" src=\"https://marketplace.gephi.org/wp-content/uploads/2013/01/gephi_neo4j-3.png?022bbc\" width=\"541\" height=\"629\"></a><p class=\"wp-caption-text\">Traversal Import</p></div>\n<h4>Code</h4>\n<p>The code is hosted on&nbsp;<a href=\"https://github.com/gephi/gephi-plugins/tree/neo4j-plugin\">GitHub</a>&nbsp;in a ‘neo4j-plugin’ branch of the ‘gephi-plugins’ repository.</p>\n<p>The plugin is composed of four modules:<br>\n* Neo4jWrapper: Wrapper around Neo4j JARs<br>\n* Neo4jPlugin: Business logic<br>\n* DesktopNeo4j: User interface<br>\n* Neo4jGraphDatabase: Empty module that depends on all other three</p>\n<p>To build, simply run:<br>\n<code>ant clean nbms</code></p>"
+},{
+  "id": "mds-layout",
+  "name": "MDS Layout",
+  "catchphrase": "",
+  "types": [
+    "layout"
+  ],
+  "images": [],
+  "authors": [
+    {
+      "name": "Wouter Spekkink",
+      "link": "http://www.wouterspekkink.org"
+    }
+  ],
+  "sourcecode": "https://github.com/WouterSpekkink/MDSLayout.git",
+  "license": "GPL v3",
+  "versions": {
+    "0.8.2": "0.8.2/org-wouterspekkink-mdslayout1.nbm"
+  },
+  "last_update": "March 18, 2015",
+  "description": "<p>The layout takes the coordinates of a Multidimensional Scaling (MDS) configuration as inputs and uses these coordinates to layout the nodes of a graph. MDS is sometimes used in Social Network Analysis to create layouts that reflect some type of distance between the nodes. This distance can be based on the length of paths between the nodes, but it can also be based on (dis)similarities in attributes of nodes.</p>\n<p>A separate plugin is available for MDS analysis (<a href=\"https://marketplace.gephi.org/plugin/mds-statistics/\">MDS Statistics) </a>from the Gephi Marketplace. It is also possible to perform the MDS analysis with external software (e.g. R or SPSS). In the latter case the coordinates of the MDS configuration have to be added to the nodes list manually.</p>\n<p>If you have the results of an MDS analysis, add the coordinates as variables to your nodes list. When importing the nodes list, make sure that you import the nodes as ‘doubles.’ Otherwise the layout plugin won’t be able to read the coordinates and use them for the layout.</p>"
 }
   ]
 }
