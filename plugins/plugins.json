@@ -484,6 +484,31 @@
   },
   "last_update": "December 31, 2014",
   "description": "<p>Plugin contains generator which implementation is based on BA Model. Algorithm was modified with ageing and growing functions which develop original preferential attachment of nodes. User can choose growing and ageing function and initialize parameters (e.g. probability).</p>"
+},{
+  "id": "architectural-graphml",
+  "name": "Architectural GraphML",
+  "catchphrase": "",
+  "types": [
+    "generator",
+    "layout"
+  ],
+  "images": [
+    "imgs/architectural-graphml/2013-12-08-16_03_28-Gephi-0.8.2-Project-0.png",
+    "imgs/architectural-graphml/2013-11-15-00_03_52-Gephi-0.8.2-Project-0.png"
+  ],
+  "authors": [
+    {
+      "name": "TUM Architecture",
+      "link": "http://ksd.ai.ar.tum.de/"
+    }
+  ],
+  "sourcecode": "https://github.com/KSD-research-group/plugin4gephi",
+  "license": "GPL v2",
+  "versions": {
+    "0.8.2": "0.8.2/net.tum_.graphml-layout17.nbm"
+  },
+  "last_update": "November 13, 2014",
+  "description": "<p>This plugin is developed as part of the “KSD research group”, where the German Research Center for Artificial Intelligence GmbH (DFKI), University of Kaiserslautern and the Technische Universität München (TUM) take part.</p>\n<p><i>“During the design process architects and students often study the plans of buildings that have already been built or designed. Such information is available conventionally as a form of collective memory in architectural monographs and journals as well on the internet. […]<br>\nOur goal [of the KSD research group] is to support the early stages of the design process using information technology in order to find similar built architectural solutions as a source of inspiration, an explicit solution, or a means to better understand current or design problems. […]<br>\nTo formalize architectural situations digitally we propose to create semantic fingerprints of buildings, to be used to identify a building as we use actual fingerprints to identify of individuals. In order to map the spatial structure of architectural situations, graph-based approaches are being investigated to mathematically represent fingerprints for information such as space and their connections, alignment, orientation or urban integration.”</i></p>\n<p align=\"right\">http://ksd.ai.ar.tum.de/category/aim/</p>\n<p>This plugin supports the creation of those fingerprints as graphs. Furthermore, it adds a spatial dimension to Gephi by displaying the original ground plans. Additionally, some tools were added to evaluate the created fingerprints by colorizing the nodes / edges and setting its weight.</p>\n<p>This work was supported, lead and made possible by the leader of the “KSD research group” Dipl. Ing. Architekt Christoph Langenhan from the Technische Universität München. It has been implemented by Thomas Stocker as Interdisciplinary project (IDP) between the Chair for Architectural Informatics from Prof. Dr.-Ing. Frank Petzold and the informatics department.</p>\n<p>&nbsp;</p>\n<p>For further information refer to:</p>\n<p>Dipl. Ing. Architekt Christoph Langenhan<br>\nTechnische Universität München<br>\nChair for Architectural Informatics<br>\nProf. Dr.-Ing. Frank Petzold<br>\n<a href=\"http://ksd.ai.ar.tum.de\">http://ksd.ai.ar.tum.de</a></p>"
 }
   ]
 }
