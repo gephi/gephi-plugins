@@ -647,6 +647,33 @@
   },
   "last_update": "May 30, 2013",
   "description": "<p>Allows importing of RDF data from a Virtuoso server. Uses the import spigot functionality</p>"
+},{
+  "id": "semanticwebimport",
+  "name": "SemanticWebImport",
+  "catchphrase": "",
+  "types": [
+    "imports"
+  ],
+  "images": [
+    "imgs/semanticwebimport/RDF.png",
+    "imgs/semanticwebimport/Tab2.png",
+    "imgs/semanticwebimport/réseau_social_isicil_zoom_communauté_énergie.png",
+    "imgs/semanticwebimport/psychedelic-music-on-wikipedia2.png",
+    "imgs/semanticwebimport/proglanginfluence.png"
+  ],
+  "authors": [
+    {
+      "name": "Erwan Demairy",
+      "link": "http://www-sop.inria.fr/dream/Team/Edemairy"
+    }
+  ],
+  "sourcecode": "git://scm.gforge.inria.fr/segviz-public/gephi-plugins.git",
+  "license": "Cecill-C",
+  "versions": {
+    "0.8.2": "0.8.2/fr-inria-edelweiss-semantic3.nbm"
+  },
+  "last_update": "July 3, 2013",
+  "description": "<p>This plugins allows to apply a SPARQL request on: 1. a set of RDF local files, i.e. on your computer. This is done by using the Corese SPARQL engine; 2. a SPARQL SOAP or REST end-point. It provides also the following functionalities: – statistics on the types present in the rdf obtained (if the rdf:type relations are provided in the construct request). – a filter on the type of the nodes. – filtering on the nodes, based on a SPARQL “Select” request.<br>\nPlugin Owner’s Notes</p>\n<p>Some examples are available: – the humans example use local files and the Corese engine. To make it run, choose “humans” in the bottom drop-list, the click on the “Load” button, then Start. – the DBPedia-Movies example access to dbpedia in order to depict the relationships between the actors, directors and movies. To make it run, choose “DBPedia-Movies” in the bottom drop-list, the click on the “Load” button, then Start.</p>"
 }
   ]
 }
