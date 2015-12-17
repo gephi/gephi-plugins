@@ -1134,6 +1134,28 @@
   },
   "last_update": "February 21, 2015",
   "description": "<p>The plugin finds a minimum spanning tree of a graph using Kruskal’s Algorithm.</p>"
+},{
+  "id": "clique-detector",
+  "name": "Clique Detector",
+  "catchphrase": "",
+  "types": [
+    "metrics",
+    "tools"
+  ],
+  "images": [],
+  "authors": [
+    {
+      "name": "Mir Saman Tajbakhsh",
+      "link": "https://github.com/mirsamantajbakhsh/"
+    }
+  ],
+  "sourcecode": "https://github.com/mirsamantajbakhsh/CliqueDetector",
+  "license": "GPL v3",
+  "versions": {
+    "0.8.2": "0.8.2/org-urmiauniversity-it-mst-cliquedetector.nbm"
+  },
+  "last_update": "February 14, 2015",
+  "description": "<p>A simple clique detector of specific size in graphs.</p>"
 }
   ]
 }
