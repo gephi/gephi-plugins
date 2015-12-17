@@ -440,6 +440,30 @@
   },
   "last_update": "May 11, 2015",
   "description": "<p>Keep top N weighted edges in a graph or per a node.<br>\nMIT License</p>"
+},{
+  "id": "kbrace-filter",
+  "name": "KBrace filter",
+  "catchphrase": "",
+  "types": [
+    "filter"
+  ],
+  "images": [
+    "imgs/kbrace-filter/kbrace-img.png"
+  ],
+  "authors": [
+    {
+      "name": "Mathieu Bastian",
+      "link": "https://github.com/mbastian"
+    }
+  ],
+  "sourcecode": "https://github.com/mbastian/gephi-plugins/tree/kbrace-filter",
+  "license": "Apache v2",
+  "versions": {
+    "0.8.2": "0.8.2",
+    "0.8.1-beta": "0.8.1-beta"
+  },
+  "last_update": "January 4, 2013",
+  "description": "<h3>Introduction</h3>\n<p>The k-brace filter is a variant of the k-core. Instead of the degree it uses the edge’s embededness (number of common neighbors). It is useful to highlight dense connected components in social networks. The filter works only on undirected graphs. As defined in the paper “the k-brace of a graph is the subgraph formed by repeatedly deleting all edges of embeddedness less than k and then deleting all single-node connected components”</p>\n<h3>Plugin Owner’s Notes</h3>\n<p>Reference: Structural diversity in social contagion Johan Ugander, Lars Backstrom, Cameron Marlow, and Jon Kleinberg PNAS (2012)<br>\n<a title=\"http://www.pnas.org/content/early/2012/03/27/1116502109.full.pdf\" href=\"http://www.pnas.org/content/early/2012/03/27/1116502109.full.pdf\">http://www.pnas.org/content/early/2012/03/27/1116502109.full.pdf</a></p>"
 }
   ]
 }
