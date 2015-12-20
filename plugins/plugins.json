@@ -74,6 +74,7 @@
       "id": "label-propagation-clustering",
       "name": "Label Propagation Clustering",
       "short_description": "",
+      "category": "Clustering",
       "types": [
         "clusters"
       ],
@@ -104,6 +105,7 @@
       "id": "girvan-newman-clustering",
       "name": "Girvan Newman Clustering",
       "short_description": "",
+      "category": "Clustering",
       "types": [
         "clusters"
       ],
@@ -134,6 +136,7 @@
       "id": "markov-cluster-algorithm-mcl",
       "name": "Markov Cluster Algorithm (MCL)",
       "short_description": "",
+      "category": "Clustering",
       "types": [
         "clusters"
       ],
@@ -168,6 +171,7 @@
       "id": "molecular-complex-detection-mcode-clustering",
       "name": "Molecular Complex Detection (MCODE) Clustering",
       "short_description": "",
+      "category": "Clustering",
       "types": [
         "clusters"
       ],
@@ -198,6 +202,7 @@
       "id": "gc-viz",
       "name": "GC-Viz",
       "short_description": "",
+      "category": "Layout",
       "types": [
         "clusters",
         "layout"
@@ -224,13 +229,14 @@
       "id": "chinese-whispers-clustering",
       "name": "Chinese Whispers Clustering",
       "short_description": "",
+      "category": "Clustering",
       "types": [
         "clusters"
       ],
       "images": [
         {
-            "image": "imgs/chinese-whispers-clustering/cw-new.png",
-            "thumbnail": "imgs/chinese-whispers-clustering/cw-new.png"
+          "image": "imgs/chinese-whispers-clustering/cw-new.png",
+          "thumbnail": "imgs/chinese-whispers-clustering/cw-new.png"
         }
       ],
       "authors": [
@@ -254,6 +260,7 @@
       "id": "recast-column",
       "name": "Recast column",
       "short_description": "",
+      "category": "Data Laboratory",
       "types": [
         "data laboratory"
       ],
@@ -284,6 +291,7 @@
       "id": "google-maps-exporter",
       "name": "Google Maps Exporter",
       "short_description": "",
+      "category": "Export",
       "types": [
         "exports"
       ],
@@ -326,6 +334,7 @@
       "id": "export-to-shp",
       "name": "Export to SHP",
       "short_description": "",
+      "category": "Export",
       "types": [
         "exports"
       ],
@@ -351,6 +360,7 @@
       "id": "sigmajs-exporter",
       "name": "Sigmajs Exporter",
       "short_description": "",
+      "category": "Export",
       "types": [
         "exports"
       ],
@@ -381,6 +391,7 @@
       "id": "seadragon-web-export",
       "name": "Seadragon Web Export",
       "short_description": "",
+      "category": "Export",
       "types": [
         "exports"
       ],
@@ -419,6 +430,7 @@
       "id": "loxa-web-site-export",
       "name": "Loxa Web Site Export",
       "short_description": "",
+      "category": "Export",
       "types": [
         "exports"
       ],
@@ -457,6 +469,7 @@
       "id": "json-exporter",
       "name": "JSON Exporter",
       "short_description": "",
+      "category": "Export",
       "types": [
         "exports"
       ],
@@ -482,6 +495,7 @@
       "id": "graph-streaming",
       "name": "Graph Streaming",
       "short_description": "",
+      "category": "Import",
       "types": [
         "exports",
         "imports"
@@ -513,6 +527,7 @@
       "id": "exporttoearth",
       "name": "ExportToEarth",
       "short_description": "",
+      "category": "Export",
       "types": [
         "exports"
       ],
@@ -543,6 +558,7 @@
       "id": "top-weight-edge-filter",
       "name": "Top Weight Edge Filter",
       "short_description": "",
+      "category": "Filter",
       "types": [
         "filter"
       ],
@@ -568,6 +584,7 @@
       "id": "kbrace-filter",
       "name": "KBrace filter",
       "short_description": "",
+      "category": "Filter",
       "types": [
         "filter"
       ],
@@ -598,6 +615,7 @@
       "id": "generalized-ba-model-with-getting-old-nodes",
       "name": "Barabasi-Albert Model with getting old nodes",
       "short_description": "",
+      "category": "Generator",
       "types": [
         "generator"
       ],
@@ -623,6 +641,7 @@
       "id": "architectural-graphml",
       "name": "Architectural GraphML",
       "short_description": "",
+      "category": "Generator",
       "types": [
         "generator",
         "layout"
@@ -658,6 +677,7 @@
       "id": "excel-csv-converter-to-network",
       "name": "Excel / csv converter to network",
       "short_description": "",
+      "category": "Import",
       "types": [
         "generator",
         "imports"
@@ -705,6 +725,7 @@
       "id": "random-waypoint-and-truncated-levy-walk-mobility-graph-generators",
       "name": "Random Waypoint and Truncated Lévy Walk Mobility Graph Generators",
       "short_description": "",
+      "category": "Generator",
       "types": [
         "generator"
       ],
@@ -730,6 +751,7 @@
       "id": "complex-generators",
       "name": "Complex Generators",
       "short_description": "",
+      "category": "Generator",
       "types": [
         "generator"
       ],
@@ -755,6 +777,7 @@
       "id": "http-graph",
       "name": "HTTP Graph",
       "short_description": "",
+      "category": "Generator",
       "types": [
         "generator"
       ],
@@ -780,6 +803,7 @@
       "id": "similarity-computer",
       "name": "Similarity Computer",
       "short_description": "",
+      "category": "Import",
       "types": [
         "imports"
       ],
@@ -814,6 +838,7 @@
       "id": "virtuoso-importer",
       "name": "Virtuoso Importer",
       "short_description": "",
+      "category": "Import",
       "types": [
         "imports"
       ],
@@ -844,6 +869,7 @@
       "id": "semanticwebimport",
       "name": "SemanticWebImport",
       "short_description": "",
+      "category": "Import",
       "types": [
         "imports"
       ],
@@ -890,6 +916,7 @@
       "id": "neo4j-graph-database-support",
       "name": "Neo4J Graph Database Support",
       "short_description": "",
+      "category": "Import",
       "types": [
         "imports",
         "other category"
@@ -921,6 +948,7 @@
       "id": "mds-layout",
       "name": "MDS Layout",
       "short_description": "",
+      "category": "Layout",
       "types": [
         "layout"
       ],
@@ -946,6 +974,7 @@
       "id": "event-graph-layout",
       "name": "Event Graph Layout",
       "short_description": "",
+      "category": "Layout",
       "types": [
         "layout"
       ],
@@ -976,6 +1005,7 @@
       "id": "random-3d-layout",
       "name": "Random 3D Layout",
       "short_description": "",
+      "category": "Layout",
       "types": [
         "layout"
       ],
@@ -1006,6 +1036,7 @@
       "id": "network-splitter-3d",
       "name": "Network Splitter 3D",
       "short_description": "",
+      "category": "Layout",
       "types": [
         "layout"
       ],
@@ -1036,6 +1067,7 @@
       "id": "isometriclayout",
       "name": "IsometricLayout",
       "short_description": "",
+      "category": "Layout",
       "types": [
         "layout"
       ],
@@ -1066,6 +1098,7 @@
       "id": "maps-of-countries",
       "name": "Maps of Countries",
       "short_description": "",
+      "category": "Layout",
       "types": [
         "layout"
       ],
@@ -1096,6 +1129,7 @@
       "id": "force-atlas-3d",
       "name": "Force Atlas 3D",
       "short_description": "",
+      "category": "Layout",
       "types": [
         "layout"
       ],
@@ -1126,6 +1160,7 @@
       "id": "multipartite-layout",
       "name": "Multipartite Layout",
       "short_description": "",
+      "category": "Layout",
       "types": [
         "layout"
       ],
@@ -1151,6 +1186,7 @@
       "id": "hiveplot-layout",
       "name": "Hiveplot Layout",
       "short_description": "",
+      "category": "Layout",
       "types": [
         "layout"
       ],
@@ -1181,6 +1217,7 @@
       "id": "concentric-layout",
       "name": "Concentric Layout",
       "short_description": "",
+      "category": "Layout",
       "types": [
         "layout"
       ],
@@ -1211,6 +1248,7 @@
       "id": "alphabetical-sorter",
       "name": "Alphabetical Sorter",
       "short_description": "",
+      "category": "Layout",
       "types": [
         "layout"
       ],
@@ -1249,6 +1287,7 @@
       "id": "graphviz-layout",
       "name": "Graphviz Layout",
       "short_description": "",
+      "category": "Layout",
       "types": [
         "layout"
       ],
@@ -1279,6 +1318,7 @@
       "id": "noverlap",
       "name": "Noverlap",
       "short_description": "",
+      "category": "Layout",
       "types": [
         "layout"
       ],
@@ -1309,6 +1349,7 @@
       "id": "openord-layout",
       "name": "OpenOrd Layout",
       "short_description": "",
+      "category": "Layout",
       "types": [
         "layout"
       ],
@@ -1339,6 +1380,7 @@
       "id": "circular-layout",
       "name": "Circular Layout",
       "short_description": "",
+      "category": "Layout",
       "types": [
         "layout"
       ],
@@ -1373,6 +1415,7 @@
       "id": "layered-layout",
       "name": "Layered Layout",
       "short_description": "",
+      "category": "Layout",
       "types": [
         "layout"
       ],
@@ -1403,6 +1446,7 @@
       "id": "lineage",
       "name": "Lineage",
       "short_description": "",
+      "category": "Metric",
       "types": [
         "metrics"
       ],
@@ -1433,6 +1477,7 @@
       "id": "mds-statistics",
       "name": "MDS Statistics",
       "short_description": "",
+      "category": "Metric",
       "types": [
         "metrics"
       ],
@@ -1463,6 +1508,7 @@
       "id": "spanning-tree",
       "name": "Spanning Tree",
       "short_description": "",
+      "category": "Metric",
       "types": [
         "metrics"
       ],
@@ -1493,6 +1539,7 @@
       "id": "clique-detector",
       "name": "Clique Detector",
       "short_description": "",
+      "category": "Metric",
       "types": [
         "metrics",
         "tools"
@@ -1519,6 +1566,7 @@
       "id": "edge-betweenness-metric",
       "name": "Edge Betweenness Metric",
       "short_description": "",
+      "category": "Metric",
       "types": [
         "metrics"
       ],
@@ -1549,6 +1597,7 @@
       "id": "link-communities",
       "name": "Link Communities",
       "short_description": "",
+      "category": "Metric",
       "types": [
         "metrics"
       ],
@@ -1579,6 +1628,7 @@
       "id": "weakly-connected-components-using-disjoint-set",
       "name": "Weakly connected components using disjoint set",
       "short_description": "",
+      "category": "Metric",
       "types": [
         "metrics"
       ],
@@ -1604,6 +1654,7 @@
       "id": "weighted-cluster-coefficient",
       "name": "Weighted Cluster Coefficient",
       "short_description": "",
+      "category": "Metric",
       "types": [
         "metrics"
       ],
@@ -1634,6 +1685,7 @@
       "id": "social-network-analysis",
       "name": "Social Network Analysis",
       "short_description": "",
+      "category": "Metric",
       "types": [
         "metrics"
       ],
@@ -1664,6 +1716,7 @@
       "id": "multimode-networks-transformations-2",
       "name": "Multimode Networks Transformations",
       "short_description": "",
+      "category": "Tool",
       "types": [
         "metrics",
         "tools"
@@ -1690,6 +1743,7 @@
       "id": "polygon-nodes",
       "name": "Polygon Nodes",
       "short_description": "",
+      "category": "Preview",
       "types": [
         "preview"
       ],
@@ -1720,6 +1774,7 @@
       "id": "multi-colour-renderer",
       "name": "Multi Colour Renderer",
       "short_description": "",
+      "category": "Preview",
       "types": [
         "preview"
       ],
@@ -1754,6 +1809,7 @@
       "id": "image-preview",
       "name": "Image Preview",
       "short_description": "",
+      "category": "Preview",
       "types": [
         "preview"
       ],
@@ -1784,6 +1840,7 @@
       "id": "spatial-ranking",
       "name": "Spatial Ranking",
       "short_description": "",
+      "category": "Appearance",
       "types": [
         "ranking"
       ],
@@ -1814,6 +1871,7 @@
       "id": "give-color-to-edges",
       "name": "Give Color To Edges",
       "short_description": "",
+      "category": "Tool",
       "types": [
         "tools"
       ],
@@ -1844,6 +1902,7 @@
       "id": "clique-percolation",
       "name": "Clique Percolation",
       "short_description": "",
+      "category": "Tool",
       "types": [
         "tools"
       ],
@@ -1874,6 +1933,7 @@
       "id": "clique-percolation-method",
       "name": "Clique Percolation Method",
       "short_description": "",
+      "category": "Tool",
       "types": [
         "tools"
       ],
@@ -1904,6 +1964,7 @@
       "id": "give-color-to-nodes",
       "name": "Give color to nodes",
       "short_description": "",
+      "category": "Tool",
       "types": [
         "tools"
       ],
@@ -1942,6 +2003,7 @@
       "id": "scripting-plugin",
       "name": "Scripting Plugin",
       "short_description": "",
+      "category": "Tool",
       "types": [
         "tools"
       ],
