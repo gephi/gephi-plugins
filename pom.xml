@@ -4,7 +4,7 @@
 
     <groupId>org.gephi</groupId>
     <artifactId>gephi-plugins</artifactId>
-    <version>0.9-SNAPSHOT</version>
+    <version>0.9.0</version>
     <packaging>pom</packaging>
 
     <name>gephi-plugins</name>
@@ -18,7 +18,7 @@
     <!-- Properties -->
     <properties>
         <!-- Version of Gephi building plugins against. Plugins with anterior versions will be ignored -->
-        <gephi.version>0.9-SNAPSHOT</gephi.version>
+        <gephi.version>0.9.0</gephi.version>
         <clusters.path>${project.build.directory}/plugins_clusters</clusters.path>
         <github.global.server>github</github.global.server>
     </properties>
@@ -82,7 +82,7 @@
                 <plugin>
                     <groupId>org.gephi</groupId>
                     <artifactId>gephi-maven-plugin</artifactId>
-                    <version>1.0-SNAPSHOT</version>
+                    <version>1.1.1</version>
                     <configuration>
                         <gephiDirectory>${project.build.directory}/gephi-${gephi.version}</gephiDirectory>
                         <clusters>
