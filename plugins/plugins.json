@@ -229,10 +229,8 @@
       ],
       "images": [
         {
-          "image": {
             "image": "imgs/chinese-whispers-clustering/cw-new.png",
             "thumbnail": "imgs/chinese-whispers-clustering/cw-new.png"
-          }
         }
       ],
       "authors": [
