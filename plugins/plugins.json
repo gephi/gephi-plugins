@@ -73,7 +73,7 @@
     {
       "id": "label-propagation-clustering",
       "name": "Label Propagation Clustering",
-      "catchphrase": "",
+      "short_description": "",
       "types": [
         "clusters"
       ],
@@ -98,12 +98,12 @@
         }
       },
       "last_update": "June 23, 2014",
-      "description": "<p>A plugin that provides an implementation of the label propagation graph clustering algorithm described in (1).<br>\nThis plugin offers an animated mode which allows the visualization of the labels propagation over the graph nodes. This feature is helpful when studying the behaviour of the algorithm on specific use cases. The current implementation does not take into consideration edges weights/direction, it also lacks defensive/offensive propagation support (2) which improves the performance. These missing features will be added later.</p>\n<p>1. Raghavan, U. N., Albert, R., &amp; Kumara, S. (2007). Near linear time algorithm to detect community structures in large-scale networks. Physical Review E, 76(3), 036106.<br>\n2. Šubelj, L., &amp; Bajec, M. (2011). Unfolding communities in large complex networks: Combining defensive and offensive label propagation for core extraction. Physical Review E, 83(3), 036103.</p>"
+      "long_description": "<p>A plugin that provides an implementation of the label propagation graph clustering algorithm described in (1).<br>\nThis plugin offers an animated mode which allows the visualization of the labels propagation over the graph nodes. This feature is helpful when studying the behaviour of the algorithm on specific use cases. The current implementation does not take into consideration edges weights/direction, it also lacks defensive/offensive propagation support (2) which improves the performance. These missing features will be added later.</p>\n<p>1. Raghavan, U. N., Albert, R., &amp; Kumara, S. (2007). Near linear time algorithm to detect community structures in large-scale networks. Physical Review E, 76(3), 036106.<br>\n2. Šubelj, L., &amp; Bajec, M. (2011). Unfolding communities in large complex networks: Combining defensive and offensive label propagation for core extraction. Physical Review E, 83(3), 036103.</p>"
     },
     {
       "id": "girvan-newman-clustering",
       "name": "Girvan Newman Clustering",
-      "catchphrase": "",
+      "short_description": "",
       "types": [
         "clusters"
       ],
@@ -128,12 +128,12 @@
         }
       },
       "last_update": "May 30, 2014",
-      "description": "<p>The Girvan Newman Clustering plugin for Gephi. This plugin finds clusters in graph, which can be used in Social Network Analysis.</p>\n<p>The Girvan–Newman algorithm detects communities by progressively removing edges from the original network. The connected components of the remaining network are the comunnities. Instead of trying to construct a measure that tells us which edges are the most central to communities, the Girvan–Newman algorithm focuses on edges that are most likely “between” communities.</p>"
+      "long_description": "<p>The Girvan Newman Clustering plugin for Gephi. This plugin finds clusters in graph, which can be used in Social Network Analysis.</p>\n<p>The Girvan–Newman algorithm detects communities by progressively removing edges from the original network. The connected components of the remaining network are the comunnities. Instead of trying to construct a measure that tells us which edges are the most central to communities, the Girvan–Newman algorithm focuses on edges that are most likely “between” communities.</p>"
     },
     {
       "id": "markov-cluster-algorithm-mcl",
       "name": "Markov Cluster Algorithm (MCL)",
-      "catchphrase": "",
+      "short_description": "",
       "types": [
         "clusters"
       ],
@@ -162,12 +162,12 @@
         }
       },
       "last_update": "May 30, 2014",
-      "description": "<p>The Markov Clustering plugin for Gephi. This plugin finds clusters in graph, which can be used in Social Network Analysis.</p>\n<p>Clustering on Graphs: The Markov Cluster Algorithm (MCL)</p>\n<p>MCL details are freely available at http://www.micans.org/mcl/</p>"
+      "long_description": "<p>The Markov Clustering plugin for Gephi. This plugin finds clusters in graph, which can be used in Social Network Analysis.</p>\n<p>Clustering on Graphs: The Markov Cluster Algorithm (MCL)</p>\n<p>MCL details are freely available at http://www.micans.org/mcl/</p>"
     },
     {
       "id": "molecular-complex-detection-mcode-clustering",
       "name": "Molecular Complex Detection (MCODE) Clustering",
-      "catchphrase": "",
+      "short_description": "",
       "types": [
         "clusters"
       ],
@@ -192,12 +192,12 @@
         }
       },
       "last_update": "May 29, 2014",
-      "description": "<p>The Molecular Complex Detection clustering plugin for Gephi. This plugin finds clusters in graph, which can be used in Social Network Analysis.</p>\n<p>Clustering on Graphs:</p>\n<p>details are available at http://www.biomedcentral.com/1471-2105/4/2</p>"
+      "long_description": "<p>The Molecular Complex Detection clustering plugin for Gephi. This plugin finds clusters in graph, which can be used in Social Network Analysis.</p>\n<p>Clustering on Graphs:</p>\n<p>details are available at http://www.biomedcentral.com/1471-2105/4/2</p>"
     },
     {
       "id": "gc-viz",
       "name": "GC-Viz",
-      "catchphrase": "",
+      "short_description": "",
       "types": [
         "clusters",
         "layout"
@@ -218,12 +218,12 @@
         }
       },
       "last_update": "November 7, 2013",
-      "description": "<p>The GC-Viz plugin contains the algorithms GAMer and DB-CSC for the clustering of graphs with node attributes. It also contains a layout for visualizing and comparing the clustering results.</p>\n<p>The plugin has been developed by Brigitte Boden, Roman Haag and Houran Ketabdar.</p>\n<p>The plugin is described in the following paper: Brigitte Boden, Roman Haag, and Thomas Seidl. Detecting and exploring clusters in attributed graphs. In 22st ACM International Conference on Information and Knowledge Management, CIKM13, 2013.</p>"
+      "long_description": "<p>The GC-Viz plugin contains the algorithms GAMer and DB-CSC for the clustering of graphs with node attributes. It also contains a layout for visualizing and comparing the clustering results.</p>\n<p>The plugin has been developed by Brigitte Boden, Roman Haag and Houran Ketabdar.</p>\n<p>The plugin is described in the following paper: Brigitte Boden, Roman Haag, and Thomas Seidl. Detecting and exploring clusters in attributed graphs. In 22st ACM International Conference on Information and Knowledge Management, CIKM13, 2013.</p>"
     },
     {
       "id": "chinese-whispers-clustering",
       "name": "Chinese Whispers Clustering",
-      "catchphrase": "",
+      "short_description": "",
       "types": [
         "clusters"
       ],
@@ -248,12 +248,12 @@
         }
       },
       "last_update": "June 21, 2015",
-      "description": "<p>Chinese Whispers Clustering according to the <a href=\"http://wortschatz.uni-leipzig.de/~cbiemann/pub/2006/BiemannTextGraph06.pdf\">paper by Chris Biemann</a>. The algorithm is time-linear (w.r.t. the number of edges), non-deterministic and extremely fast!</p>\n<p>The current implementation represents a simple variant (no random class mutations yet), works single-threaded and allows for a randomized (rgb-space) coloring of the resulting clusters giving a fast visual feedback. For questions and ideas please contact the plugin author <a title=\"efer@informatik.uni-leipzig.de\" href=\"mailto:efer@informatik.uni-leipzig.de\">Thomas Efer</a>.</p>\n<p><strong><em>Changelog</em></strong>:</p>\n<ul>\n<li><em>2015-06-21, v. 0.8:</em> Novel cluster naming for greater workflow consistency<em>&nbsp;(contributions from Jörg Bliesener)</em></li>\n<li><em>2014-07-23, v. 0.7:</em> Added options for the handling of unconnected nodes</li>\n<li><em>2014-02-16, v. 0.6:</em>&nbsp;Added option to cluster only visible graph parts<em> (contributions from Jörg Bliesener)</em></li>\n<li><em></em><em>2014-02-08, v. 0.5:</em> Fixed freezing bug, Renewed settings UI<em> (contributions from Jörg Bliesener)</em></li>\n<li><em>2012-08-21, v. 0.3:</em> Stabilized color assignment, Added options for randomized node ordering, stepwise vs. continuous mode and minimum edge weight</li>\n<li><em>2012-08-16, v. 0.2:</em> Added options to control class propagation calculations (Modes: top / dist / dist-log / vote)</li>\n<li><em>2012-05-09, v. 0 .1:</em> Initial release</li>\n</ul>"
+      "long_description": "<p>Chinese Whispers Clustering according to the <a href=\"http://wortschatz.uni-leipzig.de/~cbiemann/pub/2006/BiemannTextGraph06.pdf\">paper by Chris Biemann</a>. The algorithm is time-linear (w.r.t. the number of edges), non-deterministic and extremely fast!</p>\n<p>The current implementation represents a simple variant (no random class mutations yet), works single-threaded and allows for a randomized (rgb-space) coloring of the resulting clusters giving a fast visual feedback. For questions and ideas please contact the plugin author <a title=\"efer@informatik.uni-leipzig.de\" href=\"mailto:efer@informatik.uni-leipzig.de\">Thomas Efer</a>.</p>\n<p><strong><em>Changelog</em></strong>:</p>\n<ul>\n<li><em>2015-06-21, v. 0.8:</em> Novel cluster naming for greater workflow consistency<em>&nbsp;(contributions from Jörg Bliesener)</em></li>\n<li><em>2014-07-23, v. 0.7:</em> Added options for the handling of unconnected nodes</li>\n<li><em>2014-02-16, v. 0.6:</em>&nbsp;Added option to cluster only visible graph parts<em> (contributions from Jörg Bliesener)</em></li>\n<li><em></em><em>2014-02-08, v. 0.5:</em> Fixed freezing bug, Renewed settings UI<em> (contributions from Jörg Bliesener)</em></li>\n<li><em>2012-08-21, v. 0.3:</em> Stabilized color assignment, Added options for randomized node ordering, stepwise vs. continuous mode and minimum edge weight</li>\n<li><em>2012-08-16, v. 0.2:</em> Added options to control class propagation calculations (Modes: top / dist / dist-log / vote)</li>\n<li><em>2012-05-09, v. 0 .1:</em> Initial release</li>\n</ul>"
     },
     {
       "id": "recast-column",
       "name": "Recast column",
-      "catchphrase": "",
+      "short_description": "",
       "types": [
         "data laboratory"
       ],
@@ -278,12 +278,12 @@
         }
       },
       "last_update": "February 19, 2013",
-      "description": "<h3>Introduction</h3>\n<p>Allows to recast column type in data laboratory.</p>\n<h3>Plugin Owner’s Notes</h3>\n<p>Useful when imported column has default type string, but contains numbers, or booleans, or chars. Has autoconvert option and gui. Also can get any or set any standart column, which is currently impossible to do with standart interface. Installed in Data Laboratory -&gt; More actions.</p>\n<p>Feel free to contact me with any questions or suggestions: megaterik at gmail.com.<br>\n–Taras Klaskovsky</p>"
+      "long_description": "<h3>Introduction</h3>\n<p>Allows to recast column type in data laboratory.</p>\n<h3>Plugin Owner’s Notes</h3>\n<p>Useful when imported column has default type string, but contains numbers, or booleans, or chars. Has autoconvert option and gui. Also can get any or set any standart column, which is currently impossible to do with standart interface. Installed in Data Laboratory -&gt; More actions.</p>\n<p>Feel free to contact me with any questions or suggestions: megaterik at gmail.com.<br>\n–Taras Klaskovsky</p>"
     },
     {
       "id": "google-maps-exporter",
       "name": "Google Maps Exporter",
-      "catchphrase": "",
+      "short_description": "",
       "types": [
         "exports"
       ],
@@ -320,12 +320,12 @@
         }
       },
       "last_update": "December 14, 2015",
-      "description": "<p>Exports graphs from Gephi for use with Google Maps API. Similar to browsing maps in Google Maps you can browse graphs the same way. Pre-rendering the graph makes it possible to view even large graphs fluently in browser.</p>\n<p>Usage:<br>\n* File &gt; Export &gt; Google Maps Exporter<br>\n* Open index.html or index2.html in export directory</p>\n<p>The exporter will render the graph as PNG tiles and output a HTML and JavaScript files. There are two examples: index.html + ui.js and index2.html + ui2.js. Custom functionality (eg. hovering over a node, clicking a node) can be added with Google Maps API.</p>\n<p>Live example at<br>\n<a title=\"https://googlemapsexporter.firebaseapp.com/index.html\" href=\"https://googlemapsexporter.firebaseapp.com/index.html\">https://googlemapsexporter.firebaseapp.com/index.html</a> and<br>\n<a title=\"https://googlemapsexporter.firebaseapp.com/index2.html\" href=\"https://googlemapsexporter.firebaseapp.com/index2.html\">https://googlemapsexporter.firebaseapp.com/index2.html</a></p>\n<div id=\"attachment_30917\" class=\"wp-caption alignnone\" style=\"width: 310px\"><a href=\"https://marketplace.gephi.org/wp-content/uploads/2014/11/gme-01.png?022bbc\"><img class=\"size-medium wp-image-30917\" title=\"Browsing a graph\" alt=\"gme-01\" src=\"https://marketplace.gephi.org/wp-content/uploads/2014/11/gme-01-300x259.png?022bbc\" width=\"300\" height=\"259\"></a><p class=\"wp-caption-text\">Browsing graph is similar to browsing Google Maps</p></div>\n<div id=\"attachment_30918\" class=\"wp-caption alignnone\" style=\"width: 310px\"><a href=\"https://marketplace.gephi.org/wp-content/uploads/2014/11/gme-02.png?022bbc\"><img class=\"size-medium wp-image-30918\" title=\"Browsing with node data visible\" alt=\"\" src=\"https://marketplace.gephi.org/wp-content/uploads/2014/11/gme-02-300x247.png?022bbc\" width=\"300\" height=\"247\"></a><p class=\"wp-caption-text\">Visible nodes are updated on the data table below graph. Table is automatically updated while panning and zooming in on the graph. Columns can be ordered.</p></div>\n<p>&nbsp;</p>"
+      "long_description": "<p>Exports graphs from Gephi for use with Google Maps API. Similar to browsing maps in Google Maps you can browse graphs the same way. Pre-rendering the graph makes it possible to view even large graphs fluently in browser.</p>\n<p>Usage:<br>\n* File &gt; Export &gt; Google Maps Exporter<br>\n* Open index.html or index2.html in export directory</p>\n<p>The exporter will render the graph as PNG tiles and output a HTML and JavaScript files. There are two examples: index.html + ui.js and index2.html + ui2.js. Custom functionality (eg. hovering over a node, clicking a node) can be added with Google Maps API.</p>\n<p>Live example at<br>\n<a title=\"https://googlemapsexporter.firebaseapp.com/index.html\" href=\"https://googlemapsexporter.firebaseapp.com/index.html\">https://googlemapsexporter.firebaseapp.com/index.html</a> and<br>\n<a title=\"https://googlemapsexporter.firebaseapp.com/index2.html\" href=\"https://googlemapsexporter.firebaseapp.com/index2.html\">https://googlemapsexporter.firebaseapp.com/index2.html</a></p>\n<div id=\"attachment_30917\" class=\"wp-caption alignnone\" style=\"width: 310px\"><a href=\"https://marketplace.gephi.org/wp-content/uploads/2014/11/gme-01.png?022bbc\"><img class=\"size-medium wp-image-30917\" title=\"Browsing a graph\" alt=\"gme-01\" src=\"https://marketplace.gephi.org/wp-content/uploads/2014/11/gme-01-300x259.png?022bbc\" width=\"300\" height=\"259\"></a><p class=\"wp-caption-text\">Browsing graph is similar to browsing Google Maps</p></div>\n<div id=\"attachment_30918\" class=\"wp-caption alignnone\" style=\"width: 310px\"><a href=\"https://marketplace.gephi.org/wp-content/uploads/2014/11/gme-02.png?022bbc\"><img class=\"size-medium wp-image-30918\" title=\"Browsing with node data visible\" alt=\"\" src=\"https://marketplace.gephi.org/wp-content/uploads/2014/11/gme-02-300x247.png?022bbc\" width=\"300\" height=\"247\"></a><p class=\"wp-caption-text\">Visible nodes are updated on the data table below graph. Table is automatically updated while panning and zooming in on the graph. Columns can be ordered.</p></div>\n<p>&nbsp;</p>"
     },
     {
       "id": "export-to-shp",
       "name": "Export to SHP",
-      "catchphrase": "",
+      "short_description": "",
       "types": [
         "exports"
       ],
@@ -345,12 +345,12 @@
         }
       },
       "last_update": "April 16, 2013",
-      "description": "<p>This Plugin exports two Shapefiles: one for the edges, and one for the nodes. The shapefiles (the respective DBF-Files) contain the columns of the edge and shape tables. It adds the current width/size and color in gephi to two additional columns.</p>\n<p>The geography is rather simple. The location info is either read from columns in the node table (I use parts of David Sheppard’s ExportToEarth Exporter to do that) or from a fake geography – that is the current position of the nodes in the gephi layout.</p>\n<p>One can then easily import the two datasets into QGIS or any other mapping tool and add a symbology. The only drawback of this simple solution is that in such tools you won’t be able to draw arrows or even more arrows that don’t intersect when they go into both directions.</p>\n<p>Copyright (c) 2013 by Roman Seidl – romanAeTgranul.at</p>\n<p>This Program uses code copyright (c) 2012 by David Shepard</p>"
+      "long_description": "<p>This Plugin exports two Shapefiles: one for the edges, and one for the nodes. The shapefiles (the respective DBF-Files) contain the columns of the edge and shape tables. It adds the current width/size and color in gephi to two additional columns.</p>\n<p>The geography is rather simple. The location info is either read from columns in the node table (I use parts of David Sheppard’s ExportToEarth Exporter to do that) or from a fake geography – that is the current position of the nodes in the gephi layout.</p>\n<p>One can then easily import the two datasets into QGIS or any other mapping tool and add a symbology. The only drawback of this simple solution is that in such tools you won’t be able to draw arrows or even more arrows that don’t intersect when they go into both directions.</p>\n<p>Copyright (c) 2013 by Roman Seidl – romanAeTgranul.at</p>\n<p>This Program uses code copyright (c) 2012 by David Shepard</p>"
     },
     {
       "id": "sigmajs-exporter",
       "name": "Sigmajs Exporter",
-      "catchphrase": "",
+      "short_description": "",
       "types": [
         "exports"
       ],
@@ -375,12 +375,12 @@
         }
       },
       "last_update": "August 9, 2013",
-      "description": "<p>Export your network from Gephi to a predefined Sigma.js template. Choose to include search, group selection, explanatory text, etc. without having to do any HTML/JavaScript coding. Upload the output to any webserver and enjoy a rich HTML5 interactive visualization of your network.</p>\n<p>Example output is available at: <a href=\"http://blogs.oii.ox.ac.uk/vis/?page_id=115\">http://blogs.oii.ox.ac.uk/vis/?page_id=115</a> More features are coming and better validation is needed, but I’m making this alpha version of the code available quickly because of the demand I’ve received for it. More <a href=\"http://blogs.oii.ox.ac.uk/vis/\">information on the project</a> is available on <a href=\"http://blogs.oii.ox.ac.uk/vis/\">our blog</a>. The underlying <a href=\"https://github.com/oxfordinternetinstitute/InteractiveVis/\">HTML5/CSS/JS framework used to render the graphs</a> is also available on <a href=\"https://github.com/oxfordinternetinstitute/InteractiveVis/\">GitHub as a separate project</a> and changes / pull requests are welcome.</p>\n<p>Once installed, restart Gephi and you will see a <strong>Export to sigma.js </strong>option on the <strong>File-&gt;Export</strong> menu. Choose a location to export to, set export customization options, and click OK. The resulting folder can be uploaded to any webserver to showcase your network. Please note, due to browser security restrictions in Chrome you will not be able to view the result without a webserver (Other browsers may work locally).</p>\n<p>Please report any issues or feature requests on the <a href=\"https://github.com/oxfordinternetinstitute/gephi-plugins/issues/\">GitHub page</a>.</p>\n<p>&nbsp;</p>\n<p>Release notes:</p>\n<p>1.0 (6 Nov 2012) Initial release</p>\n<p>1.1 (Jan 2013) Updated for 0.8.2 Gephi release</p>\n<p>1.1.1 (Feb 2013) Store edge weight to the ‘size’ attribute in the data so that this is displayed by Sigma.js. It is likely necessary to tweak the minEdgeSize and maxEdgeSize values in config.json for your particular configuration. The config.json files is now in pretty-print mode to make it easier to view and edit.</p>\n<p>1.2 (Aug 2013)</p>\n<ul>\n<li>Fix error in configuration causing ‘dim’ option not to work</li>\n<li>Force UTF-8 encoding on Mac/Windows for data/config files</li>\n<li>Fix error when graph had no edges</li>\n<li>Export edge color if given; if not use blend of source and target nodes’ colors</li>\n<li>Fix error when export path given was invalid</li>\n<li>Offer option to replace node ids with numbers (can be more compact for large graphs)</li>\n</ul>"
+      "long_description": "<p>Export your network from Gephi to a predefined Sigma.js template. Choose to include search, group selection, explanatory text, etc. without having to do any HTML/JavaScript coding. Upload the output to any webserver and enjoy a rich HTML5 interactive visualization of your network.</p>\n<p>Example output is available at: <a href=\"http://blogs.oii.ox.ac.uk/vis/?page_id=115\">http://blogs.oii.ox.ac.uk/vis/?page_id=115</a> More features are coming and better validation is needed, but I’m making this alpha version of the code available quickly because of the demand I’ve received for it. More <a href=\"http://blogs.oii.ox.ac.uk/vis/\">information on the project</a> is available on <a href=\"http://blogs.oii.ox.ac.uk/vis/\">our blog</a>. The underlying <a href=\"https://github.com/oxfordinternetinstitute/InteractiveVis/\">HTML5/CSS/JS framework used to render the graphs</a> is also available on <a href=\"https://github.com/oxfordinternetinstitute/InteractiveVis/\">GitHub as a separate project</a> and changes / pull requests are welcome.</p>\n<p>Once installed, restart Gephi and you will see a <strong>Export to sigma.js </strong>option on the <strong>File-&gt;Export</strong> menu. Choose a location to export to, set export customization options, and click OK. The resulting folder can be uploaded to any webserver to showcase your network. Please note, due to browser security restrictions in Chrome you will not be able to view the result without a webserver (Other browsers may work locally).</p>\n<p>Please report any issues or feature requests on the <a href=\"https://github.com/oxfordinternetinstitute/gephi-plugins/issues/\">GitHub page</a>.</p>\n<p>&nbsp;</p>\n<p>Release notes:</p>\n<p>1.0 (6 Nov 2012) Initial release</p>\n<p>1.1 (Jan 2013) Updated for 0.8.2 Gephi release</p>\n<p>1.1.1 (Feb 2013) Store edge weight to the ‘size’ attribute in the data so that this is displayed by Sigma.js. It is likely necessary to tweak the minEdgeSize and maxEdgeSize values in config.json for your particular configuration. The config.json files is now in pretty-print mode to make it easier to view and edit.</p>\n<p>1.2 (Aug 2013)</p>\n<ul>\n<li>Fix error in configuration causing ‘dim’ option not to work</li>\n<li>Force UTF-8 encoding on Mac/Windows for data/config files</li>\n<li>Fix error when graph had no edges</li>\n<li>Export edge color if given; if not use blend of source and target nodes’ colors</li>\n<li>Fix error when export path given was invalid</li>\n<li>Offer option to replace node ids with numbers (can be more compact for large graphs)</li>\n</ul>"
     },
     {
       "id": "seadragon-web-export",
       "name": "Seadragon Web Export",
-      "catchphrase": "",
+      "short_description": "",
       "types": [
         "exports"
       ],
@@ -413,12 +413,12 @@
         }
       },
       "last_update": "January 4, 2013",
-      "description": "<p>Export networks on the web with the <a href=\"http://www.seadragon.com\">Seadragon</a> dynamic exploration tool.</p>\n<p>* When a graph is loaded, go to <strong>File &gt; Export &gt; Seadragon Web</strong> and get the HTML file ready to use<br>\n* Zoom and pan into the graph<br>\n* Seadragon is pure Javascript and works on <strong>all modern browsers</strong><br>\n* As it uses image tiles (like Google Maps), there is <strong>no graph size limit</strong><br>\n* Export is similar as PDF and includes all settings from Preview</p>\n<p>Seadragon is a Microsoft Live Labs application and is released under Ms-PL license (Microsoft’s open source license) . Kudos to them for this great library.<br>\nExample Sample with <a href=\"http://diseasome.eu\">Diseasome</a> Network dataset directly exported from Gephi How to use the Plugin</p>\n<p style=\"margin-bottom: 25px; margin-top: 20px;\">Install the plugin from Gephi, “Tools &gt; Plugin” and find <strong>Seadragon Web Export</strong>. After restarting Gephi, the plugin is installed in the export menu. Load a sample network and try the plugin. Go to the Preview tab to configure the rendering settings like colors, labels and edges.</p>\n<div id=\"attachment_3895\" class=\"wp-caption alignnone\" style=\"width: 488px\"><a href=\"https://marketplace.gephi.org/wp-content/uploads/2013/01/seadragon-plugin-export.png?022bbc\"><img class=\"size-full wp-image-3895\" title=\"seadragon-plugin-export\" src=\"https://marketplace.gephi.org/wp-content/uploads/2013/01/seadragon-plugin-export.png?022bbc\" alt=\"\" width=\"478\" height=\"383\"></a><p class=\"wp-caption-text\">Export directly from Gephi Export menu</p></div>\n<p style=\"margin-bottom: 25px; margin-top: 20px;\">The settings asks for a valid directory where to export the files and the size of the canvas. Bigger is the canvas, more you can zoom in, but it takes longer time to generate and to load. If the process hangs and never finishes, reduce the dimensions as you’re hitting the memory limit.</p>\n<div id=\"attachment_3896\" class=\"wp-caption alignnone\" style=\"width: 489px\"><a href=\"https://marketplace.gephi.org/wp-content/uploads/2013/01/seadragon-plugin-settings.png?022bbc\"><img class=\"size-full wp-image-3896\" title=\"seadragon-plugin-settings\" src=\"https://marketplace.gephi.org/wp-content/uploads/2013/01/seadragon-plugin-settings.png?022bbc\" alt=\"\" width=\"479\" height=\"399\"></a><p class=\"wp-caption-text\">Export settings, configure the size of the image</p></div>\n<p>Note that result on the local hard-drive can’t be viewed with Chrome, due to <a href=\"http://code.google.com/p/chromium/issues/detail?id=40787&amp;q=ajax%20local&amp;colspec=ID%20Stars%20Pri%20Area%20Feature%20Type%20Status%20Summary%20Modified%20Owner%20Mstone%20OS\">a bug</a>. Run Chrome with “–allow-file-access-from-files” option to make it work.</p>"
+      "long_description": "<p>Export networks on the web with the <a href=\"http://www.seadragon.com\">Seadragon</a> dynamic exploration tool.</p>\n<p>* When a graph is loaded, go to <strong>File &gt; Export &gt; Seadragon Web</strong> and get the HTML file ready to use<br>\n* Zoom and pan into the graph<br>\n* Seadragon is pure Javascript and works on <strong>all modern browsers</strong><br>\n* As it uses image tiles (like Google Maps), there is <strong>no graph size limit</strong><br>\n* Export is similar as PDF and includes all settings from Preview</p>\n<p>Seadragon is a Microsoft Live Labs application and is released under Ms-PL license (Microsoft’s open source license) . Kudos to them for this great library.<br>\nExample Sample with <a href=\"http://diseasome.eu\">Diseasome</a> Network dataset directly exported from Gephi How to use the Plugin</p>\n<p style=\"margin-bottom: 25px; margin-top: 20px;\">Install the plugin from Gephi, “Tools &gt; Plugin” and find <strong>Seadragon Web Export</strong>. After restarting Gephi, the plugin is installed in the export menu. Load a sample network and try the plugin. Go to the Preview tab to configure the rendering settings like colors, labels and edges.</p>\n<div id=\"attachment_3895\" class=\"wp-caption alignnone\" style=\"width: 488px\"><a href=\"https://marketplace.gephi.org/wp-content/uploads/2013/01/seadragon-plugin-export.png?022bbc\"><img class=\"size-full wp-image-3895\" title=\"seadragon-plugin-export\" src=\"https://marketplace.gephi.org/wp-content/uploads/2013/01/seadragon-plugin-export.png?022bbc\" alt=\"\" width=\"478\" height=\"383\"></a><p class=\"wp-caption-text\">Export directly from Gephi Export menu</p></div>\n<p style=\"margin-bottom: 25px; margin-top: 20px;\">The settings asks for a valid directory where to export the files and the size of the canvas. Bigger is the canvas, more you can zoom in, but it takes longer time to generate and to load. If the process hangs and never finishes, reduce the dimensions as you’re hitting the memory limit.</p>\n<div id=\"attachment_3896\" class=\"wp-caption alignnone\" style=\"width: 489px\"><a href=\"https://marketplace.gephi.org/wp-content/uploads/2013/01/seadragon-plugin-settings.png?022bbc\"><img class=\"size-full wp-image-3896\" title=\"seadragon-plugin-settings\" src=\"https://marketplace.gephi.org/wp-content/uploads/2013/01/seadragon-plugin-settings.png?022bbc\" alt=\"\" width=\"479\" height=\"399\"></a><p class=\"wp-caption-text\">Export settings, configure the size of the image</p></div>\n<p>Note that result on the local hard-drive can’t be viewed with Chrome, due to <a href=\"http://code.google.com/p/chromium/issues/detail?id=40787&amp;q=ajax%20local&amp;colspec=ID%20Stars%20Pri%20Area%20Feature%20Type%20Status%20Summary%20Modified%20Owner%20Mstone%20OS\">a bug</a>. Run Chrome with “–allow-file-access-from-files” option to make it work.</p>"
     },
     {
       "id": "loxa-web-site-export",
       "name": "Loxa Web Site Export",
-      "catchphrase": "",
+      "short_description": "",
       "types": [
         "exports"
       ],
@@ -451,12 +451,12 @@
         }
       },
       "last_update": "June 22, 2013",
-      "description": "<p>Loxa Web Site Export Plugin is a plugin developed for Gephi whose purpose is to allow easy publication of the analysis, descriptions and findings. The result of the implementation of the plugin is a fully functional website and easy customization, thereby allowing to publish the results of their work</p>\n<p>Features:</p>\n<p>Lets build a Web site for the project.<br>\nWorkspaces are the analysis performed, of which you can see a browse graph (using sigmajs), see statistics (number of nodes and arcs, weight and density of the graph), description of the analysis and lets you download files (from the graph and image – pdf format).<br>\nThe analysis information is stored in a JSON file for easy editing, which supports HTML tags to enhance your presentation.<br>\nThe most important and significant findings are displayed in the bottom of the image.<br>\nFull AJAX for asynchronous calls to the server to see statistics for each analysis.<br>\nIt works in most modern browsers (tested: Safari, Firefox, Chrome, Internet Explorer).</p>\n<p>Version 0.3:<br>\nVery quick generation<br>\nBrowse the graph using sigmajs. Now you can select nodes<br>\nNew interface<br>\nAnd now you can download the source code from GitHub</p>\n<p>Version 0.3.1:</p>\n<ul>\n<li>Support Gephi 0.8.2beta</li>\n<li><span style=\"line-height: 13px\">Redesign interface new style</span></li>\n<li>Search nodes via autocomplete, the node selected is placed in the center of the viewer of graph</li>\n<li>Get more information from project properties. In Gephi go to File-&gt;Properties and complete the form and this values will be used in the Website generated.</li>\n<li>Customization more easy!. The json file, now is in pretty format.</li>\n<li>Less clicks to view description and metrics.</li>\n<li>Now you can publish metrics and his values, with a description (it is shown when you click the metric name).</li>\n</ul>\n<p>To view all the new features, visit our web page.</p>"
+      "long_description": "<p>Loxa Web Site Export Plugin is a plugin developed for Gephi whose purpose is to allow easy publication of the analysis, descriptions and findings. The result of the implementation of the plugin is a fully functional website and easy customization, thereby allowing to publish the results of their work</p>\n<p>Features:</p>\n<p>Lets build a Web site for the project.<br>\nWorkspaces are the analysis performed, of which you can see a browse graph (using sigmajs), see statistics (number of nodes and arcs, weight and density of the graph), description of the analysis and lets you download files (from the graph and image – pdf format).<br>\nThe analysis information is stored in a JSON file for easy editing, which supports HTML tags to enhance your presentation.<br>\nThe most important and significant findings are displayed in the bottom of the image.<br>\nFull AJAX for asynchronous calls to the server to see statistics for each analysis.<br>\nIt works in most modern browsers (tested: Safari, Firefox, Chrome, Internet Explorer).</p>\n<p>Version 0.3:<br>\nVery quick generation<br>\nBrowse the graph using sigmajs. Now you can select nodes<br>\nNew interface<br>\nAnd now you can download the source code from GitHub</p>\n<p>Version 0.3.1:</p>\n<ul>\n<li>Support Gephi 0.8.2beta</li>\n<li><span style=\"line-height: 13px\">Redesign interface new style</span></li>\n<li>Search nodes via autocomplete, the node selected is placed in the center of the viewer of graph</li>\n<li>Get more information from project properties. In Gephi go to File-&gt;Properties and complete the form and this values will be used in the Website generated.</li>\n<li>Customization more easy!. The json file, now is in pretty format.</li>\n<li>Less clicks to view description and metrics.</li>\n<li>Now you can publish metrics and his values, with a description (it is shown when you click the metric name).</li>\n</ul>\n<p>To view all the new features, visit our web page.</p>"
     },
     {
       "id": "json-exporter",
       "name": "JSON Exporter",
-      "catchphrase": "",
+      "short_description": "",
       "types": [
         "exports"
       ],
@@ -476,12 +476,12 @@
         }
       },
       "last_update": "August 9, 2013",
-      "description": "<p>Exports the network to a JSON file with an array of nodes and an array of edges. This file is suitable to be used with the parseJSON plugin to Sigma.js. JSON allows Sigma.js to be faster and work</p>\n<p><strong> Why use JSON and not Gexf for Sigma?</strong><br>\nGexf is larger than JSON using extra bandwidth (important for mobile), does not parse correctly on Internet Explorer (yes there are still people using this browser), and is faster (everyone wants that!). More information <a href=\"http://blogs.oii.ox.ac.uk/vis/?p=149\" target=\"_blank\">here</a>.</p>\n<p>Sigma.js website: <a href=\"http://sigmajs.org/\" target=\"_blank\">http://sigmajs.org/</a></p>\n<p><strong>Sigma.js JSON parser</strong><br>\nUse the sigma.parseJson.js plugin to Sigma just as you use the parseGexf plugin and enjoy all the benefits of JSON.</p>\n<p>Release notes:<br>\nv1<br>\nInitial release</p>\n<p>v1.1 (Aug 2013)</p>\n<ul>\n<li>Switch to Google Gson for underlying JSON conversion fixing issues with improper escapes.</li>\n<li>Export edge attributes</li>\n<li>Export edge color</li>\n</ul>"
+      "long_description": "<p>Exports the network to a JSON file with an array of nodes and an array of edges. This file is suitable to be used with the parseJSON plugin to Sigma.js. JSON allows Sigma.js to be faster and work</p>\n<p><strong> Why use JSON and not Gexf for Sigma?</strong><br>\nGexf is larger than JSON using extra bandwidth (important for mobile), does not parse correctly on Internet Explorer (yes there are still people using this browser), and is faster (everyone wants that!). More information <a href=\"http://blogs.oii.ox.ac.uk/vis/?p=149\" target=\"_blank\">here</a>.</p>\n<p>Sigma.js website: <a href=\"http://sigmajs.org/\" target=\"_blank\">http://sigmajs.org/</a></p>\n<p><strong>Sigma.js JSON parser</strong><br>\nUse the sigma.parseJson.js plugin to Sigma just as you use the parseGexf plugin and enjoy all the benefits of JSON.</p>\n<p>Release notes:<br>\nv1<br>\nInitial release</p>\n<p>v1.1 (Aug 2013)</p>\n<ul>\n<li>Switch to Google Gson for underlying JSON conversion fixing issues with improper escapes.</li>\n<li>Export edge attributes</li>\n<li>Export edge color</li>\n</ul>"
     },
     {
       "id": "graph-streaming",
       "name": "Graph Streaming",
-      "catchphrase": "",
+      "short_description": "",
       "types": [
         "exports",
         "imports"
@@ -507,12 +507,12 @@
         }
       },
       "last_update": "April 18, 2013",
-      "description": "<h3>Introduction</h3>\n<p>The purpose of the Graph Streaming API is to build a unified framework for streaming graph objects. Gephi’s data structure and visualization engine has been built with the idea that a graph is not static and might change continuously. By connecting Gephi with external data-sources, we leverage its power to visualize and monitor complex systems or enterprise data in real-time. Moreover, the idea of streaming graph data goes beyond Gephi, and a unified and standardized API could bring interoperability with other available tools for graph and network analysis, as they could start to interoperate with other tools in a distributed and cooperative fashion.</p>\n<h3>Plugin Owner’s Notes</h3>\n<p>With the increasing level of connectivity and cooperation between systems, for a system that aim to be interoperable, it is imperative to comply with the available standards. Graph objects are abstractions that can represent a wide range of real-world structures, from computer networks to human interactions, and there are a lot of standards to exchange graph data in different formats, from text-based formats to xml-based formats. But the real-world structures are constantly changing, and the current formats are not suitable to exchange such type of dynamic data.</p>\n<p>A lot of well-established systems already stream data to its users using a streaming API. Twitter for example defined a Streaming API to allow near-realtime access to its data. They are using two different formats: XML and JSON, but JSON is strongly encouraged over XML, as JSON is more compact and parsing is greatly simplified.</p>\n<p>We are not the first to implement a Graph Streaming API, and another very interesting experience is the GraphStream Java Library. It is composed of an API that gives a way to add edges and nodes in a graph and make them evolve. The graphs are composed of nodes and edges that can appear, disappear or be modified, and these operations are called events. The sequence of operations that occur in a graph is seen as a stream of events.</p>\n<p>So, as other people already had successful experiences with graph streaming, why not start our work based on these experiences? That’s what we are doing, and beyond finding these experiences very useful, we are also trying to be compatible with the available work. This Gephi Graph Streaming release is using two formats: JSON for flexibility, and a text-based format, based in the GraphStream implementation.</p>\n<p>To illustrate how simple it will be to connect to a master, <a href=\"http://www.youtube.com/watch?v=7SW_FDiY0sg\" target=\"_blank\">this video</a> shows Gephi connecting to a master and visualizing the received graph data in real time. The graph in this demo is a part of the Amazon.com library, where the nodes represent books and the edges represent their similarities. For each book, a node is added, the similar books are explored, adding the similar ones as nodes and the similarity as an edge.</p>\n<p>The Graph Streaming specification goes beyond the simple fact that a client can pull data from a master: in fact, clients can interact with the master pushing data to it, in a REST architecture. The same data format used by the master to send graph events to the clients is used by clients to interact with the master.</p>\n<p>But what about connecting two different Gephi instances together? One instance will be master, and the other client. Using the Graph Streaming API, a change in a graph at the master’s workspace should cause a change in the client’s workspace, and a change at the client’s workspace will cause it to send requests to the master to update its graph accordingly. Both instances working in a distributed mode. In fact, different people could work in a distributed mode to construct a graph: it’s the Collaborative Graph Construction.</p>"
+      "long_description": "<h3>Introduction</h3>\n<p>The purpose of the Graph Streaming API is to build a unified framework for streaming graph objects. Gephi’s data structure and visualization engine has been built with the idea that a graph is not static and might change continuously. By connecting Gephi with external data-sources, we leverage its power to visualize and monitor complex systems or enterprise data in real-time. Moreover, the idea of streaming graph data goes beyond Gephi, and a unified and standardized API could bring interoperability with other available tools for graph and network analysis, as they could start to interoperate with other tools in a distributed and cooperative fashion.</p>\n<h3>Plugin Owner’s Notes</h3>\n<p>With the increasing level of connectivity and cooperation between systems, for a system that aim to be interoperable, it is imperative to comply with the available standards. Graph objects are abstractions that can represent a wide range of real-world structures, from computer networks to human interactions, and there are a lot of standards to exchange graph data in different formats, from text-based formats to xml-based formats. But the real-world structures are constantly changing, and the current formats are not suitable to exchange such type of dynamic data.</p>\n<p>A lot of well-established systems already stream data to its users using a streaming API. Twitter for example defined a Streaming API to allow near-realtime access to its data. They are using two different formats: XML and JSON, but JSON is strongly encouraged over XML, as JSON is more compact and parsing is greatly simplified.</p>\n<p>We are not the first to implement a Graph Streaming API, and another very interesting experience is the GraphStream Java Library. It is composed of an API that gives a way to add edges and nodes in a graph and make them evolve. The graphs are composed of nodes and edges that can appear, disappear or be modified, and these operations are called events. The sequence of operations that occur in a graph is seen as a stream of events.</p>\n<p>So, as other people already had successful experiences with graph streaming, why not start our work based on these experiences? That’s what we are doing, and beyond finding these experiences very useful, we are also trying to be compatible with the available work. This Gephi Graph Streaming release is using two formats: JSON for flexibility, and a text-based format, based in the GraphStream implementation.</p>\n<p>To illustrate how simple it will be to connect to a master, <a href=\"http://www.youtube.com/watch?v=7SW_FDiY0sg\" target=\"_blank\">this video</a> shows Gephi connecting to a master and visualizing the received graph data in real time. The graph in this demo is a part of the Amazon.com library, where the nodes represent books and the edges represent their similarities. For each book, a node is added, the similar books are explored, adding the similar ones as nodes and the similarity as an edge.</p>\n<p>The Graph Streaming specification goes beyond the simple fact that a client can pull data from a master: in fact, clients can interact with the master pushing data to it, in a REST architecture. The same data format used by the master to send graph events to the clients is used by clients to interact with the master.</p>\n<p>But what about connecting two different Gephi instances together? One instance will be master, and the other client. Using the Graph Streaming API, a change in a graph at the master’s workspace should cause a change in the client’s workspace, and a change at the client’s workspace will cause it to send requests to the master to update its graph accordingly. Both instances working in a distributed mode. In fact, different people could work in a distributed mode to construct a graph: it’s the Collaborative Graph Construction.</p>"
     },
     {
       "id": "exporttoearth",
       "name": "ExportToEarth",
-      "catchphrase": "",
+      "short_description": "",
       "types": [
         "exports"
       ],
@@ -537,12 +537,12 @@
         }
       },
       "last_update": "May 26, 2013",
-      "description": "<h3>Introduction</h3>\n<p>This plugin exports gephi graphs with geocoordinates to KMZ files for Google Earth or other GIS software.</p>\n<h3>Plugin Owner’s Notes</h3>\n<p>To use this plugin, first make sure your Nodes table has geocoordiante columns, such as x and y or longitude and latitude. Go to Preview, then choose File &gt; Export &gt; Graph file, and select “KMZ” from the dropdown menu. The tool will attempt to guess which columns contain the geodata; columns can also be specified by clicking the “Options” button in the file selection window.</p>\n<p>Aside from moving the nodes and edges to the appropriate geocoordinates, this plugin attempts to preserve the appearance of your graph preview as best as possible as it appears in the Preview mode (although curved edges are not supported).</p>\n<p>ExportToEarth was developed during the NEH Summer Institute for Advanced Topics in Digital Humanities on Digital Cultural Mapping (http://hypercities.com/NEH/) at UCLA. Thanks to <a href=\"http://ryan.cordell.us/\" target=\"_blank\">Ryan Cordell</a>,&nbsp;<a href=\"http://zoepster.blogspot.com/\" target=\"_blank\">Zoe Borovsky</a>, and <a href=\"http://unt.academia.edu/PaulaLupkin\" target=\"_blank\">Paula Lupkin</a> for being the impetus behind its development, not to mention the alpha testers.</p>"
+      "long_description": "<h3>Introduction</h3>\n<p>This plugin exports gephi graphs with geocoordinates to KMZ files for Google Earth or other GIS software.</p>\n<h3>Plugin Owner’s Notes</h3>\n<p>To use this plugin, first make sure your Nodes table has geocoordiante columns, such as x and y or longitude and latitude. Go to Preview, then choose File &gt; Export &gt; Graph file, and select “KMZ” from the dropdown menu. The tool will attempt to guess which columns contain the geodata; columns can also be specified by clicking the “Options” button in the file selection window.</p>\n<p>Aside from moving the nodes and edges to the appropriate geocoordinates, this plugin attempts to preserve the appearance of your graph preview as best as possible as it appears in the Preview mode (although curved edges are not supported).</p>\n<p>ExportToEarth was developed during the NEH Summer Institute for Advanced Topics in Digital Humanities on Digital Cultural Mapping (http://hypercities.com/NEH/) at UCLA. Thanks to <a href=\"http://ryan.cordell.us/\" target=\"_blank\">Ryan Cordell</a>,&nbsp;<a href=\"http://zoepster.blogspot.com/\" target=\"_blank\">Zoe Borovsky</a>, and <a href=\"http://unt.academia.edu/PaulaLupkin\" target=\"_blank\">Paula Lupkin</a> for being the impetus behind its development, not to mention the alpha testers.</p>"
     },
     {
       "id": "top-weight-edge-filter",
       "name": "Top Weight Edge Filter",
-      "catchphrase": "",
+      "short_description": "",
       "types": [
         "filter"
       ],
@@ -562,12 +562,12 @@
         }
       },
       "last_update": "May 11, 2015",
-      "description": "<p>Keep top N weighted edges in a graph or per a node.<br>\nMIT License</p>"
+      "long_description": "<p>Keep top N weighted edges in a graph or per a node.<br>\nMIT License</p>"
     },
     {
       "id": "kbrace-filter",
       "name": "KBrace filter",
-      "catchphrase": "",
+      "short_description": "",
       "types": [
         "filter"
       ],
@@ -592,12 +592,12 @@
         }
       },
       "last_update": "January 4, 2013",
-      "description": "<h3>Introduction</h3>\n<p>The k-brace filter is a variant of the k-core. Instead of the degree it uses the edge’s embededness (number of common neighbors). It is useful to highlight dense connected components in social networks. The filter works only on undirected graphs. As defined in the paper “the k-brace of a graph is the subgraph formed by repeatedly deleting all edges of embeddedness less than k and then deleting all single-node connected components”</p>\n<h3>Plugin Owner’s Notes</h3>\n<p>Reference: Structural diversity in social contagion Johan Ugander, Lars Backstrom, Cameron Marlow, and Jon Kleinberg PNAS (2012)<br>\n<a title=\"http://www.pnas.org/content/early/2012/03/27/1116502109.full.pdf\" href=\"http://www.pnas.org/content/early/2012/03/27/1116502109.full.pdf\">http://www.pnas.org/content/early/2012/03/27/1116502109.full.pdf</a></p>"
+      "long_description": "<h3>Introduction</h3>\n<p>The k-brace filter is a variant of the k-core. Instead of the degree it uses the edge’s embededness (number of common neighbors). It is useful to highlight dense connected components in social networks. The filter works only on undirected graphs. As defined in the paper “the k-brace of a graph is the subgraph formed by repeatedly deleting all edges of embeddedness less than k and then deleting all single-node connected components”</p>\n<h3>Plugin Owner’s Notes</h3>\n<p>Reference: Structural diversity in social contagion Johan Ugander, Lars Backstrom, Cameron Marlow, and Jon Kleinberg PNAS (2012)<br>\n<a title=\"http://www.pnas.org/content/early/2012/03/27/1116502109.full.pdf\" href=\"http://www.pnas.org/content/early/2012/03/27/1116502109.full.pdf\">http://www.pnas.org/content/early/2012/03/27/1116502109.full.pdf</a></p>"
     },
     {
       "id": "generalized-ba-model-with-getting-old-nodes",
       "name": "Barabasi-Albert Model with getting old nodes",
-      "catchphrase": "",
+      "short_description": "",
       "types": [
         "generator"
       ],
@@ -617,12 +617,12 @@
         }
       },
       "last_update": "December 31, 2014",
-      "description": "<p>Plugin contains generator which implementation is based on BA Model. Algorithm was modified with ageing and growing functions which develop original preferential attachment of nodes. User can choose growing and ageing function and initialize parameters (e.g. probability).</p>"
+      "long_description": "<p>Plugin contains generator which implementation is based on BA Model. Algorithm was modified with ageing and growing functions which develop original preferential attachment of nodes. User can choose growing and ageing function and initialize parameters (e.g. probability).</p>"
     },
     {
       "id": "architectural-graphml",
       "name": "Architectural GraphML",
-      "catchphrase": "",
+      "short_description": "",
       "types": [
         "generator",
         "layout"
@@ -652,12 +652,12 @@
         }
       },
       "last_update": "November 13, 2014",
-      "description": "<p>This plugin is developed as part of the “KSD research group”, where the German Research Center for Artificial Intelligence GmbH (DFKI), University of Kaiserslautern and the Technische Universität München (TUM) take part.</p>\n<p><i>“During the design process architects and students often study the plans of buildings that have already been built or designed. Such information is available conventionally as a form of collective memory in architectural monographs and journals as well on the internet. […]<br>\nOur goal [of the KSD research group] is to support the early stages of the design process using information technology in order to find similar built architectural solutions as a source of inspiration, an explicit solution, or a means to better understand current or design problems. […]<br>\nTo formalize architectural situations digitally we propose to create semantic fingerprints of buildings, to be used to identify a building as we use actual fingerprints to identify of individuals. In order to map the spatial structure of architectural situations, graph-based approaches are being investigated to mathematically represent fingerprints for information such as space and their connections, alignment, orientation or urban integration.”</i></p>\n<p align=\"right\">http://ksd.ai.ar.tum.de/category/aim/</p>\n<p>This plugin supports the creation of those fingerprints as graphs. Furthermore, it adds a spatial dimension to Gephi by displaying the original ground plans. Additionally, some tools were added to evaluate the created fingerprints by colorizing the nodes / edges and setting its weight.</p>\n<p>This work was supported, lead and made possible by the leader of the “KSD research group” Dipl. Ing. Architekt Christoph Langenhan from the Technische Universität München. It has been implemented by Thomas Stocker as Interdisciplinary project (IDP) between the Chair for Architectural Informatics from Prof. Dr.-Ing. Frank Petzold and the informatics department.</p>\n<p>&nbsp;</p>\n<p>For further information refer to:</p>\n<p>Dipl. Ing. Architekt Christoph Langenhan<br>\nTechnische Universität München<br>\nChair for Architectural Informatics<br>\nProf. Dr.-Ing. Frank Petzold<br>\n<a href=\"http://ksd.ai.ar.tum.de\">http://ksd.ai.ar.tum.de</a></p>"
+      "long_description": "<p>This plugin is developed as part of the “KSD research group”, where the German Research Center for Artificial Intelligence GmbH (DFKI), University of Kaiserslautern and the Technische Universität München (TUM) take part.</p>\n<p><i>“During the design process architects and students often study the plans of buildings that have already been built or designed. Such information is available conventionally as a form of collective memory in architectural monographs and journals as well on the internet. […]<br>\nOur goal [of the KSD research group] is to support the early stages of the design process using information technology in order to find similar built architectural solutions as a source of inspiration, an explicit solution, or a means to better understand current or design problems. […]<br>\nTo formalize architectural situations digitally we propose to create semantic fingerprints of buildings, to be used to identify a building as we use actual fingerprints to identify of individuals. In order to map the spatial structure of architectural situations, graph-based approaches are being investigated to mathematically represent fingerprints for information such as space and their connections, alignment, orientation or urban integration.”</i></p>\n<p align=\"right\">http://ksd.ai.ar.tum.de/category/aim/</p>\n<p>This plugin supports the creation of those fingerprints as graphs. Furthermore, it adds a spatial dimension to Gephi by displaying the original ground plans. Additionally, some tools were added to evaluate the created fingerprints by colorizing the nodes / edges and setting its weight.</p>\n<p>This work was supported, lead and made possible by the leader of the “KSD research group” Dipl. Ing. Architekt Christoph Langenhan from the Technische Universität München. It has been implemented by Thomas Stocker as Interdisciplinary project (IDP) between the Chair for Architectural Informatics from Prof. Dr.-Ing. Frank Petzold and the informatics department.</p>\n<p>&nbsp;</p>\n<p>For further information refer to:</p>\n<p>Dipl. Ing. Architekt Christoph Langenhan<br>\nTechnische Universität München<br>\nChair for Architectural Informatics<br>\nProf. Dr.-Ing. Frank Petzold<br>\n<a href=\"http://ksd.ai.ar.tum.de\">http://ksd.ai.ar.tum.de</a></p>"
     },
     {
       "id": "excel-csv-converter-to-network",
       "name": "Excel / csv converter to network",
-      "catchphrase": "",
+      "short_description": "",
       "types": [
         "generator",
         "imports"
@@ -699,12 +699,12 @@
         }
       },
       "last_update": "November 25, 2014",
-      "description": "<h2>Author</h2>\n<p>Clement Levallois, <a href=\"http://www.em-lyon.com/en/faculte-recherche-enseignement-superieur/faculte-recherche-emlyon/corps-professoral/Permanent-Professors/Clement-LEVALLOIS\" target=\"_blank\">Assistant Professor at EMLYON Business School</a>.</p>\n<h2>Convert Excel and csv files into networks</h2>\n<p>This plugin helps transform your Excel files (or csv files) into a network, directly imported into Gephi. You can choose which entities, and which relations, form the network.</p>\n<p><strong><em>New since plugin version 1.4: you can create dynamic networks if your Excel file includes a column with a year or date indication.</em></strong></p>\n<h2>1. Quick how-to</h2>\n<p>- Install the plugin in Gephi (File -&gt; Tools -&gt; Plugins -&gt; Available).<br>\n- Restart Gephi</p>\n<p>In the Gephi menu, select File -&gt; Import Spigot.<br>\n- Select “Data importer”<br>\n- Get your Excel file ready!<br>\n- Follow the steps of the wizard.</p>\n<h2>2. To go further…</h2>\n<p>The plugin gives you the possibility to create network of two types of entities. Let’s say that your Excel file looks like:</p>\n<table border=\"1\">\n<tbody>\n<tr>\n<td width=\"80\" height=\"20\"><strong>Author</strong></td>\n<td width=\"80\"><strong>Book</strong></td>\n<td width=\"80\"><strong>Year</strong></td>\n<td width=\"300\"><strong>Sales of the book</strong></td>\n</tr>\n<tr>\n<td height=\"20\">David</td>\n<td>My life</td>\n<td>1972</td>\n<td>350 copies</td>\n</tr>\n<tr>\n<td height=\"20\">Mary</td>\n<td>My story</td>\n<td>1968</td>\n<td>400 copies</td>\n</tr>\n</tbody>\n</table>\n<p>In the wizard you’ll get to a window where you’ll select “Author” and “Book” as the two types of entities you want to connect:</p>\n<p>(click to enlarge)</p>\n<p><a href=\"https://marketplace.gephi.org/wp-content/uploads/2013/10/bipartite.jpg?022bbc\"><img class=\"alignnone size-medium wp-image-5762\" alt=\"bipartite\" src=\"https://marketplace.gephi.org/wp-content/uploads/2013/10/bipartite-300x241.jpg?022bbc\" width=\"300\" height=\"241\"></a></p>\n<p>And the result in Gephi will be:</p>\n<p><a href=\"https://marketplace.gephi.org/wp-content/uploads/2013/10/network-bipartite.jpg?022bbc\"><img class=\"alignnone size-medium wp-image-5763\" alt=\"network bipartite\" src=\"https://marketplace.gephi.org/wp-content/uploads/2013/10/network-bipartite-300x189.jpg?022bbc\" width=\"300\" height=\"189\"></a></p>\n<p>This looks fantastic, <strong>but in practice this type of networks gets quickly messy</strong> – lots of connections between both types of agents, making it hard to disentangle and to visualize.</p>\n<p>&nbsp;</p>\n<p>-&gt; For this reason, I’d suggest to also try the plugin on this type of files:</p>\n<table border=\"1\" cellspacing=\"0\" cellpadding=\"0\">\n<tbody>\n<tr>\n<td width=\"80\" height=\"20\"><strong>Author</strong></td>\n<td width=\"80\"><strong>Book</strong></td>\n<td width=\"80\"><strong>Year</strong></td>\n<td width=\"170\"><strong>Sales of the book</strong></td>\n<td width=\"300\"><strong>Literary agent</strong></td>\n</tr>\n<tr>\n<td height=\"20\">David</td>\n<td>My life</td>\n<td>1972</td>\n<td>350 copies</td>\n<td>Philip</td>\n</tr>\n<tr>\n<td height=\"20\">Mary</td>\n<td>My story</td>\n<td>1968</td>\n<td>&nbsp;400 copies</td>\n<td>Philip</td>\n</tr>\n</tbody>\n</table>\n<p>&nbsp;</p>\n<p>Here, by selecting a network made of ‘Authors’ and ‘Literary Agent’ in the plugin, the resulting network will be much more interesting (because it is made of one type of agents: persons).</p>\n<p>So in the plugin you select (click to enlarge):</p>\n<p><a href=\"https://marketplace.gephi.org/wp-content/uploads/2013/10/tttt.jpg?022bbc\"><img class=\"alignnone size-medium wp-image-5764\" alt=\"tttt\" src=\"https://marketplace.gephi.org/wp-content/uploads/2013/10/tttt-300x241.jpg?022bbc\" width=\"300\" height=\"241\"></a></p>\n<p>&nbsp;</p>\n<p>And this leads to something more meaningful, in my opinion at least:</p>\n<p>&nbsp;</p>\n<p><a href=\"https://marketplace.gephi.org/wp-content/uploads/2013/10/network.jpg?022bbc\"><img class=\"alignnone size-medium wp-image-5761\" alt=\"network\" src=\"https://marketplace.gephi.org/wp-content/uploads/2013/10/network-300x188.jpg?022bbc\" width=\"300\" height=\"188\"></a></p>\n<p>&nbsp;</p>\n<h2>3. Dynamics: what are the correct formats for time?</h2>\n<p>You need a column that includes indications of time. Several possibilties:</p>\n<h3>1) Years or dates</h3>\n<p>Dates must be formatted in yyy-mm-dd: <strong>2012-06-27</strong><br>\nYears are just yyyy: <strong>1968</strong></p>\n<p>&nbsp;</p>\n<h3>2) Durations or single values:</h3>\n<p>- Durations are just a start and end time separated with a comma:&nbsp;<strong>2012-06-27,2014-01-01</strong><br>\nOr for a duration in years: <strong>1958, 1999</strong></p>\n<p>- single values are, well: just a year: <strong>1876</strong> or just a date: <strong>1879-03-19</strong></p>\n<p>&nbsp;</p>\n<h2>4. Issues and feature requests?</h2>\n<p>Please post your comments and questions on Github:&nbsp;<a href=\"https://github.com/seinecle/My-Plugins-for-Gephi/issues\" target=\"_blank\">https://github.com/seinecle/My-Plugins-for-Gephi/issues</a></p>\n<p>I am Clement Levallois (<a href=\"https://twitter.com/seinecle\" target=\"_blank\">@seinecle</a>), Assistant Professor at EMLYON Business School, and you can see my other projects on <a href=\"http://www.clementlevallois.net\" target=\"_blank\">www.clementlevallois.net</a>.</p>\n<h2>5. Release history</h2>\n<p>Initial release (Nov. 2013).</p>\n<p>Version 1.1 (Nov. 2013). Added error messages helping the user navigate the plugin.</p>\n<p>Version 1.3 (March 2014). Bug fix: same names in different columns are now treated correctly. Bug report / analysis by Wouters A.H. Spekkink.</p>\n<p>Version 1.4 (September 2014). Time dimension added: if your file includes a column with a time stamp, the nodes and edges will be created at this time. Durations also possible. More info in the wizzard included in the plugin.</p>\n<p>Version 1.4.1 (September 2014). Bug fix: time intervals can now include spaces after the comma: “2013-05-13, 2013-05-14″ (previously, only&nbsp;”2013-05-13,2013-05-14″ would have worked.) Bug report by Anne van Summeren.</p>\n<p>Version 1.4.2 (September 2014). Bug fix: the names of entities to be connected had to be textual in Excel : “45″ would not be a correct value. Version 1.4.2 corrects that and adds minor bug fixes. Bug report by Prem Sankar C.</p>\n<p>Version 1.4.3 (November 2014). Bug fix: Null pointer exception when nodes have empty values. Bug report by Xin Xin of University of North Texas.</p>\n<p>&nbsp;</p>"
+      "long_description": "<h2>Author</h2>\n<p>Clement Levallois, <a href=\"http://www.em-lyon.com/en/faculte-recherche-enseignement-superieur/faculte-recherche-emlyon/corps-professoral/Permanent-Professors/Clement-LEVALLOIS\" target=\"_blank\">Assistant Professor at EMLYON Business School</a>.</p>\n<h2>Convert Excel and csv files into networks</h2>\n<p>This plugin helps transform your Excel files (or csv files) into a network, directly imported into Gephi. You can choose which entities, and which relations, form the network.</p>\n<p><strong><em>New since plugin version 1.4: you can create dynamic networks if your Excel file includes a column with a year or date indication.</em></strong></p>\n<h2>1. Quick how-to</h2>\n<p>- Install the plugin in Gephi (File -&gt; Tools -&gt; Plugins -&gt; Available).<br>\n- Restart Gephi</p>\n<p>In the Gephi menu, select File -&gt; Import Spigot.<br>\n- Select “Data importer”<br>\n- Get your Excel file ready!<br>\n- Follow the steps of the wizard.</p>\n<h2>2. To go further…</h2>\n<p>The plugin gives you the possibility to create network of two types of entities. Let’s say that your Excel file looks like:</p>\n<table border=\"1\">\n<tbody>\n<tr>\n<td width=\"80\" height=\"20\"><strong>Author</strong></td>\n<td width=\"80\"><strong>Book</strong></td>\n<td width=\"80\"><strong>Year</strong></td>\n<td width=\"300\"><strong>Sales of the book</strong></td>\n</tr>\n<tr>\n<td height=\"20\">David</td>\n<td>My life</td>\n<td>1972</td>\n<td>350 copies</td>\n</tr>\n<tr>\n<td height=\"20\">Mary</td>\n<td>My story</td>\n<td>1968</td>\n<td>400 copies</td>\n</tr>\n</tbody>\n</table>\n<p>In the wizard you’ll get to a window where you’ll select “Author” and “Book” as the two types of entities you want to connect:</p>\n<p>(click to enlarge)</p>\n<p><a href=\"https://marketplace.gephi.org/wp-content/uploads/2013/10/bipartite.jpg?022bbc\"><img class=\"alignnone size-medium wp-image-5762\" alt=\"bipartite\" src=\"https://marketplace.gephi.org/wp-content/uploads/2013/10/bipartite-300x241.jpg?022bbc\" width=\"300\" height=\"241\"></a></p>\n<p>And the result in Gephi will be:</p>\n<p><a href=\"https://marketplace.gephi.org/wp-content/uploads/2013/10/network-bipartite.jpg?022bbc\"><img class=\"alignnone size-medium wp-image-5763\" alt=\"network bipartite\" src=\"https://marketplace.gephi.org/wp-content/uploads/2013/10/network-bipartite-300x189.jpg?022bbc\" width=\"300\" height=\"189\"></a></p>\n<p>This looks fantastic, <strong>but in practice this type of networks gets quickly messy</strong> – lots of connections between both types of agents, making it hard to disentangle and to visualize.</p>\n<p>&nbsp;</p>\n<p>-&gt; For this reason, I’d suggest to also try the plugin on this type of files:</p>\n<table border=\"1\" cellspacing=\"0\" cellpadding=\"0\">\n<tbody>\n<tr>\n<td width=\"80\" height=\"20\"><strong>Author</strong></td>\n<td width=\"80\"><strong>Book</strong></td>\n<td width=\"80\"><strong>Year</strong></td>\n<td width=\"170\"><strong>Sales of the book</strong></td>\n<td width=\"300\"><strong>Literary agent</strong></td>\n</tr>\n<tr>\n<td height=\"20\">David</td>\n<td>My life</td>\n<td>1972</td>\n<td>350 copies</td>\n<td>Philip</td>\n</tr>\n<tr>\n<td height=\"20\">Mary</td>\n<td>My story</td>\n<td>1968</td>\n<td>&nbsp;400 copies</td>\n<td>Philip</td>\n</tr>\n</tbody>\n</table>\n<p>&nbsp;</p>\n<p>Here, by selecting a network made of ‘Authors’ and ‘Literary Agent’ in the plugin, the resulting network will be much more interesting (because it is made of one type of agents: persons).</p>\n<p>So in the plugin you select (click to enlarge):</p>\n<p><a href=\"https://marketplace.gephi.org/wp-content/uploads/2013/10/tttt.jpg?022bbc\"><img class=\"alignnone size-medium wp-image-5764\" alt=\"tttt\" src=\"https://marketplace.gephi.org/wp-content/uploads/2013/10/tttt-300x241.jpg?022bbc\" width=\"300\" height=\"241\"></a></p>\n<p>&nbsp;</p>\n<p>And this leads to something more meaningful, in my opinion at least:</p>\n<p>&nbsp;</p>\n<p><a href=\"https://marketplace.gephi.org/wp-content/uploads/2013/10/network.jpg?022bbc\"><img class=\"alignnone size-medium wp-image-5761\" alt=\"network\" src=\"https://marketplace.gephi.org/wp-content/uploads/2013/10/network-300x188.jpg?022bbc\" width=\"300\" height=\"188\"></a></p>\n<p>&nbsp;</p>\n<h2>3. Dynamics: what are the correct formats for time?</h2>\n<p>You need a column that includes indications of time. Several possibilties:</p>\n<h3>1) Years or dates</h3>\n<p>Dates must be formatted in yyy-mm-dd: <strong>2012-06-27</strong><br>\nYears are just yyyy: <strong>1968</strong></p>\n<p>&nbsp;</p>\n<h3>2) Durations or single values:</h3>\n<p>- Durations are just a start and end time separated with a comma:&nbsp;<strong>2012-06-27,2014-01-01</strong><br>\nOr for a duration in years: <strong>1958, 1999</strong></p>\n<p>- single values are, well: just a year: <strong>1876</strong> or just a date: <strong>1879-03-19</strong></p>\n<p>&nbsp;</p>\n<h2>4. Issues and feature requests?</h2>\n<p>Please post your comments and questions on Github:&nbsp;<a href=\"https://github.com/seinecle/My-Plugins-for-Gephi/issues\" target=\"_blank\">https://github.com/seinecle/My-Plugins-for-Gephi/issues</a></p>\n<p>I am Clement Levallois (<a href=\"https://twitter.com/seinecle\" target=\"_blank\">@seinecle</a>), Assistant Professor at EMLYON Business School, and you can see my other projects on <a href=\"http://www.clementlevallois.net\" target=\"_blank\">www.clementlevallois.net</a>.</p>\n<h2>5. Release history</h2>\n<p>Initial release (Nov. 2013).</p>\n<p>Version 1.1 (Nov. 2013). Added error messages helping the user navigate the plugin.</p>\n<p>Version 1.3 (March 2014). Bug fix: same names in different columns are now treated correctly. Bug report / analysis by Wouters A.H. Spekkink.</p>\n<p>Version 1.4 (September 2014). Time dimension added: if your file includes a column with a time stamp, the nodes and edges will be created at this time. Durations also possible. More info in the wizzard included in the plugin.</p>\n<p>Version 1.4.1 (September 2014). Bug fix: time intervals can now include spaces after the comma: “2013-05-13, 2013-05-14″ (previously, only&nbsp;”2013-05-13,2013-05-14″ would have worked.) Bug report by Anne van Summeren.</p>\n<p>Version 1.4.2 (September 2014). Bug fix: the names of entities to be connected had to be textual in Excel : “45″ would not be a correct value. Version 1.4.2 corrects that and adds minor bug fixes. Bug report by Prem Sankar C.</p>\n<p>Version 1.4.3 (November 2014). Bug fix: Null pointer exception when nodes have empty values. Bug report by Xin Xin of University of North Texas.</p>\n<p>&nbsp;</p>"
     },
     {
       "id": "random-waypoint-and-truncated-levy-walk-mobility-graph-generators",
       "name": "Random Waypoint and Truncated Lévy Walk Mobility Graph Generators",
-      "catchphrase": "",
+      "short_description": "",
       "types": [
         "generator"
       ],
@@ -724,12 +724,12 @@
         }
       },
       "last_update": "April 14, 2013",
-      "description": "<p>This plugins allows to generate graphs using Random Waypoint and Truncated Lévy Walk Mobility Models.<br>\n<a href=\"http://vimeo.com/45248043\">Graphs generated by Mobility Models | Gephi Plugin | Demo</a> from <a href=\"http://vimeo.com/user9965051\">umberto</a> on <a href=\"http://vimeo.com\">Vimeo</a>.</p>\n<p>&nbsp;</p>"
+      "long_description": "<p>This plugins allows to generate graphs using Random Waypoint and Truncated Lévy Walk Mobility Models.<br>\n<a href=\"http://vimeo.com/45248043\">Graphs generated by Mobility Models | Gephi Plugin | Demo</a> from <a href=\"http://vimeo.com/user9965051\">umberto</a> on <a href=\"http://vimeo.com\">Vimeo</a>.</p>\n<p>&nbsp;</p>"
     },
     {
       "id": "complex-generators",
       "name": "Complex Generators",
-      "catchphrase": "",
+      "short_description": "",
       "types": [
         "generator"
       ],
@@ -749,12 +749,12 @@
         }
       },
       "last_update": "February 13, 2013",
-      "description": "<p>This plugin contains a collection of generators that enable users to generate graphs with different topologies. The current version contains following generators:</p>\n<p>* Balanced Tree<br>\n* Barabasi Albert<br>\n* Barabasi Albert Generalized<br>\n* Barabasi Albert Simplified A<br>\n* Barabasi Albert Simplified B<br>\n* Erdos Renyi Gnm<br>\n* Erdos Renyi Gnp<br>\n* Kleinberg<br>\n* Watts Strogatz Alpha<br>\n* Watts Strogatz Beta</p>\n<p>Version 1.1 changes:</p>\n<p>* added timestamps to nodes and edges so it is possible to look through the process of evolution<br>\n* fixed bugs in Erdos-Renyi Gnp and Generalized Barabasi Albert generators</p>"
+      "long_description": "<p>This plugin contains a collection of generators that enable users to generate graphs with different topologies. The current version contains following generators:</p>\n<p>* Balanced Tree<br>\n* Barabasi Albert<br>\n* Barabasi Albert Generalized<br>\n* Barabasi Albert Simplified A<br>\n* Barabasi Albert Simplified B<br>\n* Erdos Renyi Gnm<br>\n* Erdos Renyi Gnp<br>\n* Kleinberg<br>\n* Watts Strogatz Alpha<br>\n* Watts Strogatz Beta</p>\n<p>Version 1.1 changes:</p>\n<p>* added timestamps to nodes and edges so it is possible to look through the process of evolution<br>\n* fixed bugs in Erdos-Renyi Gnp and Generalized Barabasi Albert generators</p>"
     },
     {
       "id": "http-graph",
       "name": "HTTP Graph",
-      "catchphrase": "",
+      "short_description": "",
       "types": [
         "generator"
       ],
@@ -774,12 +774,12 @@
         }
       },
       "last_update": "February 27, 2013",
-      "description": "<p>Runs a proxy server and collects data from your web browsing to generate a graph!</p>\n<p><iframe src=\"http://player.vimeo.com/video/18591468\" width=\"500\" height=\"281\" frameborder=\"0\" webkitallowfullscreen=\"\" mozallowfullscreen=\"\" allowfullscreen=\"\"></iframe>\n</p><p><a href=\"http://vimeo.com/18591468\">HTTP Graph — A Gephi plugin</a> from <a href=\"http://vimeo.com/user5689367\">phreakocious</a> on <a href=\"http://vimeo.com\">Vimeo</a>.</p>"
+      "long_description": "<p>Runs a proxy server and collects data from your web browsing to generate a graph!</p>\n<p><iframe src=\"http://player.vimeo.com/video/18591468\" width=\"500\" height=\"281\" frameborder=\"0\" webkitallowfullscreen=\"\" mozallowfullscreen=\"\" allowfullscreen=\"\"></iframe>\n</p><p><a href=\"http://vimeo.com/18591468\">HTTP Graph — A Gephi plugin</a> from <a href=\"http://vimeo.com/user5689367\">phreakocious</a> on <a href=\"http://vimeo.com\">Vimeo</a>.</p>"
     },
     {
       "id": "similarity-computer",
       "name": "Similarity Computer",
-      "catchphrase": "",
+      "short_description": "",
       "types": [
         "imports"
       ],
@@ -808,12 +808,12 @@
         }
       },
       "last_update": "September 12, 2015",
-      "description": "<h2>Author</h2>\n<p>Clement Levallois, <a href=\"http://www.em-lyon.com/en/faculte-recherche-enseignement-superieur/faculte-recherche-emlyon/corps-professoral/Professeurs-permanents/Clement-LEVALLOIS\" target=\"_blank\">Assistant Professor at EMLYON Business School</a>.</p>\n<h2>What it does</h2>\n<h3>Creates a network of entities based on their similarities.</h3>\n<p>Once installed, you’ll find the plugin in Gephi in the menu: File -&gt; Import Spigot -&gt;&nbsp;Data importer (by computing similarities).</p>\n<p>Example of input files (need to be csv format):</p>\n<p>toto,green<br>\nnana,green<br>\ndede,blue<br>\ngege,blue<br>\nriri,blue<br>\nfifi,yellow<br>\nfifi,blue</p>\n<p>-&gt; First column corresponds to persons, and the second column correspond to their tastes in color.</p>\n<p>-&gt; This plugin will create a network of persons where the persons with similar color tastes will be connected:</p>\n<p><a href=\"https://marketplace.gephi.org/wp-content/uploads/2014/09/screenshot.png?022bbc\"><img class=\"alignnone size-medium wp-image-25212\" alt=\"screenshot\" src=\"https://marketplace.gephi.org/wp-content/uploads/2014/09/screenshot-300x244.png?022bbc\" width=\"300\" height=\"244\"></a></p>\n<p>&nbsp;</p>\n<p>&nbsp;</p>\n<p>Weighted features are also possible in the input file (select the corresponding option in the wizzard):</p>\n<p>John,ice-cream,8<br>\nKate,ice-cream,6<br>\nHarold,soda,7<br>\nSerge,soda,10<br>\nClifford,ice-cream,9<br>\nAlice,cake,5<br>\nAlice,soda,8</p>\n<p>This plugin will compute a network of persons, based on the nature of their tastes in cakes, soda, etc. and <strong>based on the intensity of these tastes&nbsp;</strong>(as represented by the value for each line).</p>\n<p>&nbsp;</p>\n<p>&nbsp;</p>\n<p>Comments, feedback: levallois[@]em-lyon.com</p>"
+      "long_description": "<h2>Author</h2>\n<p>Clement Levallois, <a href=\"http://www.em-lyon.com/en/faculte-recherche-enseignement-superieur/faculte-recherche-emlyon/corps-professoral/Professeurs-permanents/Clement-LEVALLOIS\" target=\"_blank\">Assistant Professor at EMLYON Business School</a>.</p>\n<h2>What it does</h2>\n<h3>Creates a network of entities based on their similarities.</h3>\n<p>Once installed, you’ll find the plugin in Gephi in the menu: File -&gt; Import Spigot -&gt;&nbsp;Data importer (by computing similarities).</p>\n<p>Example of input files (need to be csv format):</p>\n<p>toto,green<br>\nnana,green<br>\ndede,blue<br>\ngege,blue<br>\nriri,blue<br>\nfifi,yellow<br>\nfifi,blue</p>\n<p>-&gt; First column corresponds to persons, and the second column correspond to their tastes in color.</p>\n<p>-&gt; This plugin will create a network of persons where the persons with similar color tastes will be connected:</p>\n<p><a href=\"https://marketplace.gephi.org/wp-content/uploads/2014/09/screenshot.png?022bbc\"><img class=\"alignnone size-medium wp-image-25212\" alt=\"screenshot\" src=\"https://marketplace.gephi.org/wp-content/uploads/2014/09/screenshot-300x244.png?022bbc\" width=\"300\" height=\"244\"></a></p>\n<p>&nbsp;</p>\n<p>&nbsp;</p>\n<p>Weighted features are also possible in the input file (select the corresponding option in the wizzard):</p>\n<p>John,ice-cream,8<br>\nKate,ice-cream,6<br>\nHarold,soda,7<br>\nSerge,soda,10<br>\nClifford,ice-cream,9<br>\nAlice,cake,5<br>\nAlice,soda,8</p>\n<p>This plugin will compute a network of persons, based on the nature of their tastes in cakes, soda, etc. and <strong>based on the intensity of these tastes&nbsp;</strong>(as represented by the value for each line).</p>\n<p>&nbsp;</p>\n<p>&nbsp;</p>\n<p>Comments, feedback: levallois[@]em-lyon.com</p>"
     },
     {
       "id": "virtuoso-importer",
       "name": "Virtuoso Importer",
-      "catchphrase": "",
+      "short_description": "",
       "types": [
         "imports"
       ],
@@ -838,12 +838,12 @@
         }
       },
       "last_update": "May 30, 2013",
-      "description": "<p>Allows importing of RDF data from a Virtuoso server. Uses the import spigot functionality</p>"
+      "long_description": "<p>Allows importing of RDF data from a Virtuoso server. Uses the import spigot functionality</p>"
     },
     {
       "id": "semanticwebimport",
       "name": "SemanticWebImport",
-      "catchphrase": "",
+      "short_description": "",
       "types": [
         "imports"
       ],
@@ -884,12 +884,12 @@
         }
       },
       "last_update": "July 3, 2013",
-      "description": "<p>This plugins allows to apply a SPARQL request on: 1. a set of RDF local files, i.e. on your computer. This is done by using the Corese SPARQL engine; 2. a SPARQL SOAP or REST end-point. It provides also the following functionalities: – statistics on the types present in the rdf obtained (if the rdf:type relations are provided in the construct request). – a filter on the type of the nodes. – filtering on the nodes, based on a SPARQL “Select” request.<br>\nPlugin Owner’s Notes</p>\n<p>Some examples are available: – the humans example use local files and the Corese engine. To make it run, choose “humans” in the bottom drop-list, the click on the “Load” button, then Start. – the DBPedia-Movies example access to dbpedia in order to depict the relationships between the actors, directors and movies. To make it run, choose “DBPedia-Movies” in the bottom drop-list, the click on the “Load” button, then Start.</p>"
+      "long_description": "<p>This plugins allows to apply a SPARQL request on: 1. a set of RDF local files, i.e. on your computer. This is done by using the Corese SPARQL engine; 2. a SPARQL SOAP or REST end-point. It provides also the following functionalities: – statistics on the types present in the rdf obtained (if the rdf:type relations are provided in the construct request). – a filter on the type of the nodes. – filtering on the nodes, based on a SPARQL “Select” request.<br>\nPlugin Owner’s Notes</p>\n<p>Some examples are available: – the humans example use local files and the Corese engine. To make it run, choose “humans” in the bottom drop-list, the click on the “Load” button, then Start. – the DBPedia-Movies example access to dbpedia in order to depict the relationships between the actors, directors and movies. To make it run, choose “DBPedia-Movies” in the bottom drop-list, the click on the “Load” button, then Start.</p>"
     },
     {
       "id": "neo4j-graph-database-support",
       "name": "Neo4J Graph Database Support",
-      "catchphrase": "",
+      "short_description": "",
       "types": [
         "imports",
         "other category"
@@ -915,12 +915,12 @@
         }
       },
       "last_update": "August 7, 2014",
-      "description": "<h3>Introduction</h3>\n<p>Neo4j Graph Database support</p>\n<h3>Plugin Owner’s Notes</h3>\n<p>This plugin adds support for Neo4j graph database. You can open Neo4j 2.1.3 database directory and manipulate with graph as any other Gephi graph. You can also export any graph into Neo4j database, you can filter import or export and you can use debugging as well as lazy loading support.</p>\n<h4>Features</h4>\n<ul>\n<li>Import all data from Neo4j database</li>\n<li>Traversal and filtered import</li>\n<li>Export to Neo4J</li>\n<li>Lazy loading, use the mouse to expand nodes</li>\n</ul>\n<h4>Neo4j</h4>\n<p>Supports the 2.1.3 version of&nbsp;<a href=\"http://neo4j.org/download/\">Neo4j</a>. If you have trouble with other versions of Neo4j please let us know.</p>\n<h4>Known problems</h4>\n<p>Neo4j 2.0 refuses to work under any Java version previous to Java 7. If you are stuck with Java 6, you can download a Neo4j 1.9 version of this plugin for manual installation that may suffice you <a title=\"Neo4j 1.9M4 plugin\" href=\"https://marketplace.gephi.org/wp-content/uploads/2014/08/neo4j-plugin-1.9M4.zip?022bbc\">here</a>.</p>\n<h4>Preview</h4>\n<div id=\"attachment_2444\" class=\"wp-caption alignnone\" style=\"width: 519px\"><a href=\"https://marketplace.gephi.org/wp-content/uploads/2013/01/Open-database-dialog.png?022bbc\"><img class=\"size-full wp-image-2444\" title=\"Open-database-dialog\" alt=\"\" src=\"https://marketplace.gephi.org/wp-content/uploads/2013/01/Open-database-dialog.png?022bbc\" width=\"509\" height=\"403\"></a><p class=\"wp-caption-text\">Open Neo4J Database from Gephi</p></div>\n<p>&nbsp;</p>\n<div id=\"attachment_3868\" class=\"wp-caption alignnone\" style=\"width: 539px\"><a href=\"https://marketplace.gephi.org/wp-content/uploads/2013/01/gephi_neo4j-2.png?022bbc\"><img class=\"size-full wp-image-3868\" title=\"gephi_neo4j-2\" alt=\"\" src=\"https://marketplace.gephi.org/wp-content/uploads/2013/01/gephi_neo4j-2.png?022bbc\" width=\"529\" height=\"291\"></a><p class=\"wp-caption-text\">Full Import</p></div>\n<p>&nbsp;</p>\n<div id=\"attachment_3869\" class=\"wp-caption alignnone\" style=\"width: 551px\"><a href=\"https://marketplace.gephi.org/wp-content/uploads/2013/01/gephi_neo4j-3.png?022bbc\"><img class=\"size-full wp-image-3869\" title=\"gephi_neo4j-3\" alt=\"\" src=\"https://marketplace.gephi.org/wp-content/uploads/2013/01/gephi_neo4j-3.png?022bbc\" width=\"541\" height=\"629\"></a><p class=\"wp-caption-text\">Traversal Import</p></div>\n<h4>Code</h4>\n<p>The code is hosted on&nbsp;<a href=\"https://github.com/gephi/gephi-plugins/tree/neo4j-plugin\">GitHub</a>&nbsp;in a ‘neo4j-plugin’ branch of the ‘gephi-plugins’ repository.</p>\n<p>The plugin is composed of four modules:<br>\n* Neo4jWrapper: Wrapper around Neo4j JARs<br>\n* Neo4jPlugin: Business logic<br>\n* DesktopNeo4j: User interface<br>\n* Neo4jGraphDatabase: Empty module that depends on all other three</p>\n<p>To build, simply run:<br>\n<code>ant clean nbms</code></p>"
+      "long_description": "<h3>Introduction</h3>\n<p>Neo4j Graph Database support</p>\n<h3>Plugin Owner’s Notes</h3>\n<p>This plugin adds support for Neo4j graph database. You can open Neo4j 2.1.3 database directory and manipulate with graph as any other Gephi graph. You can also export any graph into Neo4j database, you can filter import or export and you can use debugging as well as lazy loading support.</p>\n<h4>Features</h4>\n<ul>\n<li>Import all data from Neo4j database</li>\n<li>Traversal and filtered import</li>\n<li>Export to Neo4J</li>\n<li>Lazy loading, use the mouse to expand nodes</li>\n</ul>\n<h4>Neo4j</h4>\n<p>Supports the 2.1.3 version of&nbsp;<a href=\"http://neo4j.org/download/\">Neo4j</a>. If you have trouble with other versions of Neo4j please let us know.</p>\n<h4>Known problems</h4>\n<p>Neo4j 2.0 refuses to work under any Java version previous to Java 7. If you are stuck with Java 6, you can download a Neo4j 1.9 version of this plugin for manual installation that may suffice you <a title=\"Neo4j 1.9M4 plugin\" href=\"https://marketplace.gephi.org/wp-content/uploads/2014/08/neo4j-plugin-1.9M4.zip?022bbc\">here</a>.</p>\n<h4>Preview</h4>\n<div id=\"attachment_2444\" class=\"wp-caption alignnone\" style=\"width: 519px\"><a href=\"https://marketplace.gephi.org/wp-content/uploads/2013/01/Open-database-dialog.png?022bbc\"><img class=\"size-full wp-image-2444\" title=\"Open-database-dialog\" alt=\"\" src=\"https://marketplace.gephi.org/wp-content/uploads/2013/01/Open-database-dialog.png?022bbc\" width=\"509\" height=\"403\"></a><p class=\"wp-caption-text\">Open Neo4J Database from Gephi</p></div>\n<p>&nbsp;</p>\n<div id=\"attachment_3868\" class=\"wp-caption alignnone\" style=\"width: 539px\"><a href=\"https://marketplace.gephi.org/wp-content/uploads/2013/01/gephi_neo4j-2.png?022bbc\"><img class=\"size-full wp-image-3868\" title=\"gephi_neo4j-2\" alt=\"\" src=\"https://marketplace.gephi.org/wp-content/uploads/2013/01/gephi_neo4j-2.png?022bbc\" width=\"529\" height=\"291\"></a><p class=\"wp-caption-text\">Full Import</p></div>\n<p>&nbsp;</p>\n<div id=\"attachment_3869\" class=\"wp-caption alignnone\" style=\"width: 551px\"><a href=\"https://marketplace.gephi.org/wp-content/uploads/2013/01/gephi_neo4j-3.png?022bbc\"><img class=\"size-full wp-image-3869\" title=\"gephi_neo4j-3\" alt=\"\" src=\"https://marketplace.gephi.org/wp-content/uploads/2013/01/gephi_neo4j-3.png?022bbc\" width=\"541\" height=\"629\"></a><p class=\"wp-caption-text\">Traversal Import</p></div>\n<h4>Code</h4>\n<p>The code is hosted on&nbsp;<a href=\"https://github.com/gephi/gephi-plugins/tree/neo4j-plugin\">GitHub</a>&nbsp;in a ‘neo4j-plugin’ branch of the ‘gephi-plugins’ repository.</p>\n<p>The plugin is composed of four modules:<br>\n* Neo4jWrapper: Wrapper around Neo4j JARs<br>\n* Neo4jPlugin: Business logic<br>\n* DesktopNeo4j: User interface<br>\n* Neo4jGraphDatabase: Empty module that depends on all other three</p>\n<p>To build, simply run:<br>\n<code>ant clean nbms</code></p>"
     },
     {
       "id": "mds-layout",
       "name": "MDS Layout",
-      "catchphrase": "",
+      "short_description": "",
       "types": [
         "layout"
       ],
@@ -940,12 +940,12 @@
         }
       },
       "last_update": "March 18, 2015",
-      "description": "<p>The layout takes the coordinates of a Multidimensional Scaling (MDS) configuration as inputs and uses these coordinates to layout the nodes of a graph. MDS is sometimes used in Social Network Analysis to create layouts that reflect some type of distance between the nodes. This distance can be based on the length of paths between the nodes, but it can also be based on (dis)similarities in attributes of nodes.</p>\n<p>A separate plugin is available for MDS analysis (<a href=\"https://marketplace.gephi.org/plugin/mds-statistics/\">MDS Statistics) </a>from the Gephi Marketplace. It is also possible to perform the MDS analysis with external software (e.g. R or SPSS). In the latter case the coordinates of the MDS configuration have to be added to the nodes list manually.</p>\n<p>If you have the results of an MDS analysis, add the coordinates as variables to your nodes list. When importing the nodes list, make sure that you import the nodes as ‘doubles.’ Otherwise the layout plugin won’t be able to read the coordinates and use them for the layout.</p>"
+      "long_description": "<p>The layout takes the coordinates of a Multidimensional Scaling (MDS) configuration as inputs and uses these coordinates to layout the nodes of a graph. MDS is sometimes used in Social Network Analysis to create layouts that reflect some type of distance between the nodes. This distance can be based on the length of paths between the nodes, but it can also be based on (dis)similarities in attributes of nodes.</p>\n<p>A separate plugin is available for MDS analysis (<a href=\"https://marketplace.gephi.org/plugin/mds-statistics/\">MDS Statistics) </a>from the Gephi Marketplace. It is also possible to perform the MDS analysis with external software (e.g. R or SPSS). In the latter case the coordinates of the MDS configuration have to be added to the nodes list manually.</p>\n<p>If you have the results of an MDS analysis, add the coordinates as variables to your nodes list. When importing the nodes list, make sure that you import the nodes as ‘doubles.’ Otherwise the layout plugin won’t be able to read the coordinates and use them for the layout.</p>"
     },
     {
       "id": "event-graph-layout",
       "name": "Event Graph Layout",
-      "catchphrase": "",
+      "short_description": "",
       "types": [
         "layout"
       ],
@@ -970,12 +970,12 @@
         }
       },
       "last_update": "September 21, 2014",
-      "description": "<h2>Description</h2>\n<p>The event graph layout plugin was written to allow for the easy creation of event graphs. In an event graph the nodes represent events and the edges/arcs represent relationships between the events (e.g. causality). The layout plugin places the events in a user-specified order on the x-axis. If vertical force is activated, the plugin will push unconnected groups of events away from each other on the y-axis, and keep connected nodes together.</p>\n<h2>How to use</h2>\n<p>To use this plugin you need to add a numerical variable (integer, float or double) to your nodes that gives them a rank order. This rank order will be used to determine the position of the nodes on the x-axis. Typically, this order variable will indicate the order of events (represented by the nodes) in time. The order scale can be used to scale up or scale down the distances between the nodes on the x-axis.</p>\n<p>In its default setting the plugin will only lay out the nodes on the x-axis. If vertical force is activated the plugin will also lay out the nodes on the y-axis, based primarily on their degree of interconnectedness. Thus, groups of nodes that are highly interconnected tend to stay close to each other, and nodes that are not highly interconnected tend to drift away from each other. The vertical force can be used to increase or decrease the distance between the nodes on the y-axis.</p>\n<h2>Hints</h2>\n<ul>\n<li>For larger event graphs it may be helpful to increase the jitter tolerance somewhat if the vertical layout moves too slow.</li>\n<li>If you want to move the nodes on the y-axis with your mouse, but want to make sure that they keep their position on the x-axis, then run the plugin without vertical force activated</li>\n</ul>"
+      "long_description": "<h2>Description</h2>\n<p>The event graph layout plugin was written to allow for the easy creation of event graphs. In an event graph the nodes represent events and the edges/arcs represent relationships between the events (e.g. causality). The layout plugin places the events in a user-specified order on the x-axis. If vertical force is activated, the plugin will push unconnected groups of events away from each other on the y-axis, and keep connected nodes together.</p>\n<h2>How to use</h2>\n<p>To use this plugin you need to add a numerical variable (integer, float or double) to your nodes that gives them a rank order. This rank order will be used to determine the position of the nodes on the x-axis. Typically, this order variable will indicate the order of events (represented by the nodes) in time. The order scale can be used to scale up or scale down the distances between the nodes on the x-axis.</p>\n<p>In its default setting the plugin will only lay out the nodes on the x-axis. If vertical force is activated the plugin will also lay out the nodes on the y-axis, based primarily on their degree of interconnectedness. Thus, groups of nodes that are highly interconnected tend to stay close to each other, and nodes that are not highly interconnected tend to drift away from each other. The vertical force can be used to increase or decrease the distance between the nodes on the y-axis.</p>\n<h2>Hints</h2>\n<ul>\n<li>For larger event graphs it may be helpful to increase the jitter tolerance somewhat if the vertical layout moves too slow.</li>\n<li>If you want to move the nodes on the y-axis with your mouse, but want to make sure that they keep their position on the x-axis, then run the plugin without vertical force activated</li>\n</ul>"
     },
     {
       "id": "random-3d-layout",
       "name": "Random 3D Layout",
-      "catchphrase": "",
+      "short_description": "",
       "types": [
         "layout"
       ],
@@ -1000,12 +1000,12 @@
         }
       },
       "last_update": "May 14, 2014",
-      "description": "<p>A simple layout plugin that places nodes randomly within a 3D space.</p>\n<p>Each node is given an x, y, and z. While normally this Z is not seen in the 2D Gephi view, it is used by other 3D algorithms (like Force Atlas 3D) and can be exported.</p>"
+      "long_description": "<p>A simple layout plugin that places nodes randomly within a 3D space.</p>\n<p>Each node is given an x, y, and z. While normally this Z is not seen in the 2D Gephi view, it is used by other 3D algorithms (like Force Atlas 3D) and can be exported.</p>"
     },
     {
       "id": "network-splitter-3d",
       "name": "Network Splitter 3D",
-      "catchphrase": "",
+      "short_description": "",
       "types": [
         "layout"
       ],
@@ -1030,12 +1030,12 @@
         }
       },
       "last_update": "May 7, 2014",
-      "description": "<p>This layout can be used to split a network layout into distinct Z-Layers (Network Splitter 3D Z-Layers are user-defined clusters).<br>\nE.g. after using layouts such as: Yifan Hu, Fruchterman Reingold, Force Atlas, Circular, Layered, OpenOrd, etc.</p>\n<p>Computed Z-Layers can be used in Gephi ranking and/or partition procedures. To use this plugin it is quite simple: network nodes should have an attribute containing “[z]” in its name. E.g. something like “Degree [z]” or “YourNodeColumn[z]“.</p>\n<p>The Network Splitter 3D will compute and segment z-Levels regarding your “[z]” column values (with any ranges). If your network don’t have a “[z]” column, no problem, all nodes will be placed in Z-Layer 0 (Zero).</p>\n<p>Another usefull feature:<br>\nYou can use this plugin to rotate your graph over the X-Axis.</p>"
+      "long_description": "<p>This layout can be used to split a network layout into distinct Z-Layers (Network Splitter 3D Z-Layers are user-defined clusters).<br>\nE.g. after using layouts such as: Yifan Hu, Fruchterman Reingold, Force Atlas, Circular, Layered, OpenOrd, etc.</p>\n<p>Computed Z-Layers can be used in Gephi ranking and/or partition procedures. To use this plugin it is quite simple: network nodes should have an attribute containing “[z]” in its name. E.g. something like “Degree [z]” or “YourNodeColumn[z]“.</p>\n<p>The Network Splitter 3D will compute and segment z-Levels regarding your “[z]” column values (with any ranges). If your network don’t have a “[z]” column, no problem, all nodes will be placed in Z-Layer 0 (Zero).</p>\n<p>Another usefull feature:<br>\nYou can use this plugin to rotate your graph over the X-Axis.</p>"
     },
     {
       "id": "isometriclayout",
       "name": "IsometricLayout",
-      "catchphrase": "",
+      "short_description": "",
       "types": [
         "layout"
       ],
@@ -1060,12 +1060,12 @@
         }
       },
       "last_update": "April 9, 2014",
-      "description": "<p>This layout uses an isometric perspective to visualize networks. I.e. it generates 3D coordinates for all network nodes (x,y,z).<br>\nThus, is a method for the visual representation of three-dimensional nodes in two dimensions.<br>\nIt can be used to split a network into distinct Z-Layers (e.g. to better visualize high-performers and/or low-performers, or communities after using modularity algorithms).<br>\nBesides, computed Z-layers can be used in Gephi ranking and/or partition procedures.<br>\nTo use it, is quite simple, network nodes should have an attribute containing “[z]” in its name. E.g., something like “Degree [z]” or “YourNodeColumn[z]“.<br>\nThe IsometricLayout will compute and segment z-Levels regarding your “[z]” column values (with any ranges).<br>\nIf your network don’t have a “[z]” column, no problem, all nodes will be placed in Z-Layer 0 (Zero).</p>"
+      "long_description": "<p>This layout uses an isometric perspective to visualize networks. I.e. it generates 3D coordinates for all network nodes (x,y,z).<br>\nThus, is a method for the visual representation of three-dimensional nodes in two dimensions.<br>\nIt can be used to split a network into distinct Z-Layers (e.g. to better visualize high-performers and/or low-performers, or communities after using modularity algorithms).<br>\nBesides, computed Z-layers can be used in Gephi ranking and/or partition procedures.<br>\nTo use it, is quite simple, network nodes should have an attribute containing “[z]” in its name. E.g., something like “Degree [z]” or “YourNodeColumn[z]“.<br>\nThe IsometricLayout will compute and segment z-Levels regarding your “[z]” column values (with any ranges).<br>\nIf your network don’t have a “[z]” column, no problem, all nodes will be placed in Z-Layer 0 (Zero).</p>"
     },
     {
       "id": "maps-of-countries",
       "name": "Maps of Countries",
-      "catchphrase": "",
+      "short_description": "",
       "types": [
         "layout"
       ],
@@ -1090,12 +1090,12 @@
         }
       },
       "last_update": "August 5, 2015",
-      "description": "<h2>Author</h2>\n<p>Clement Levallois, <a href=\"http://www.em-lyon.com/en/faculte-recherche-enseignement-superieur/faculte-recherche-emlyon/corps-professoral/Permanent-Professors/Clement-LEVALLOIS\" target=\"_blank\">Assistant Professor at EMLYON Business School</a>.</p>\n<h2>Function of the plugin</h2>\n<p>Use this plugin to insert maps of countries and world regions in Gephi. Now also includes country sub-regions: states and territories of Australia. You can also control the thickness of the line with the “Weight” parameter.</p>\n<p>&nbsp;</p>\n<h2>Quick instructions</h2>\n<p>- Install the plugin, open a new Project, go to the layout tab and select the layout “Map Of Countries”.</p>\n<p>- Click on “Run” to load the map of the world.</p>\n<p>&nbsp;</p>\n<h2>All features explained</h2>\n<p>Besides showing the map of the world, you can show single countries, subregions (parts of continents), and regions (continents).<br>\nPlease refer to the original data source for the definitions of borders:&nbsp;<a href=\"http://thematicmapping.org/downloads/world_borders.php\">http://thematicmapping.org/downloads/world_borders.php</a>.</p>\n<p>&nbsp;</p>\n<p>1) To load just the <strong><span style=\"text-decoration: underline\">map of a single country</span></strong> (example: Laos):<br>\n-&gt; “No subregion” must be selected in the subregion dropdown menu<br>\n-&gt; “No region” must be selected in the region dropdown menu<br>\n-&gt; Select “Lao People’s Democratic Republic” in the country menu, and click “run”.</p>\n<p>2) To load just the <span style=\"text-decoration: underline\"><strong>map of a subregion</strong></span> (example of a subregion: South-Eastern Asia):</p>\n<p>-&gt; “World” must be selected in the countries dropdown menu<br>\n-&gt; “No region” must be selected in the region dropdown menu<br>\n-&gt; Select “South-Eastern Asia” in the subregion menu, and click “run”.</p>\n<p>3) To load just the <strong><span style=\"text-decoration: underline\">map of a region</span></strong> (example of a region: Asia):<br>\n-&gt; “World” must be selected in the countries dropdown menu<br>\n-&gt; “No subregion” must be selected in the subregion dropdown menu<br>\n-&gt; Select “Asia” in the region menu, and click “run”.</p>\n<p>&nbsp;</p>\n<h2>These maps and your network: how do they interact?</h2>\n<p><em><strong>Note: if your map and your network are slightly off mark, run the “Geolayout” plugin once to get them properly aligned.</strong></em></p>\n<p>- You can have a map and your network shown in the same project – that’s what this plugin is for!</p>\n<p>- Loading a new map will erase the one previously displayed, but will leave your network intact.</p>\n<p>- If you want to delete / modify the map manually, go to the data laboratory and look for nodes that have a label “background_map_node”</p>\n<p>- What if you apply a layout (like Force Atlas 2) to your network? Your network will move, but the map is “fixed” so it will stay as it is.</p>\n<p>- What if you apply the Geolayout plugin to your network? To do that you need your latitude attribute to be called “lat” and the longitude called “lng” for the nodes of your network. If you have that, your network will be nicely placed over the maps.</p>\n<p>Other questions? Open an issue on Github:&nbsp;<a href=\"https://github.com/seinecle/My-Plugins-for-Gephi/issues\">https://github.com/seinecle/My-Plugins-for-Gephi/issues</a></p>\n<p>&nbsp;</p>\n<h2>Release History</h2>\n<p>Sept. 24, 2013: 1.0, first release</p>\n<p>Oct 19, 2014: 1.1, removed labels from background nodes because they were just an inconvenience.</p>\n<p>Jan 5, 2015: 1.2, solved a null pointer exception.</p>\n<p>May 13, 2015: added Australian states / territories and built support to easily add more regions from other countries.</p>\n<p>Aug 05, 2015: 1.4, added a new feature: “Weight” allows to control the thickness of the lines of the borders</p>"
+      "long_description": "<h2>Author</h2>\n<p>Clement Levallois, <a href=\"http://www.em-lyon.com/en/faculte-recherche-enseignement-superieur/faculte-recherche-emlyon/corps-professoral/Permanent-Professors/Clement-LEVALLOIS\" target=\"_blank\">Assistant Professor at EMLYON Business School</a>.</p>\n<h2>Function of the plugin</h2>\n<p>Use this plugin to insert maps of countries and world regions in Gephi. Now also includes country sub-regions: states and territories of Australia. You can also control the thickness of the line with the “Weight” parameter.</p>\n<p>&nbsp;</p>\n<h2>Quick instructions</h2>\n<p>- Install the plugin, open a new Project, go to the layout tab and select the layout “Map Of Countries”.</p>\n<p>- Click on “Run” to load the map of the world.</p>\n<p>&nbsp;</p>\n<h2>All features explained</h2>\n<p>Besides showing the map of the world, you can show single countries, subregions (parts of continents), and regions (continents).<br>\nPlease refer to the original data source for the definitions of borders:&nbsp;<a href=\"http://thematicmapping.org/downloads/world_borders.php\">http://thematicmapping.org/downloads/world_borders.php</a>.</p>\n<p>&nbsp;</p>\n<p>1) To load just the <strong><span style=\"text-decoration: underline\">map of a single country</span></strong> (example: Laos):<br>\n-&gt; “No subregion” must be selected in the subregion dropdown menu<br>\n-&gt; “No region” must be selected in the region dropdown menu<br>\n-&gt; Select “Lao People’s Democratic Republic” in the country menu, and click “run”.</p>\n<p>2) To load just the <span style=\"text-decoration: underline\"><strong>map of a subregion</strong></span> (example of a subregion: South-Eastern Asia):</p>\n<p>-&gt; “World” must be selected in the countries dropdown menu<br>\n-&gt; “No region” must be selected in the region dropdown menu<br>\n-&gt; Select “South-Eastern Asia” in the subregion menu, and click “run”.</p>\n<p>3) To load just the <strong><span style=\"text-decoration: underline\">map of a region</span></strong> (example of a region: Asia):<br>\n-&gt; “World” must be selected in the countries dropdown menu<br>\n-&gt; “No subregion” must be selected in the subregion dropdown menu<br>\n-&gt; Select “Asia” in the region menu, and click “run”.</p>\n<p>&nbsp;</p>\n<h2>These maps and your network: how do they interact?</h2>\n<p><em><strong>Note: if your map and your network are slightly off mark, run the “Geolayout” plugin once to get them properly aligned.</strong></em></p>\n<p>- You can have a map and your network shown in the same project – that’s what this plugin is for!</p>\n<p>- Loading a new map will erase the one previously displayed, but will leave your network intact.</p>\n<p>- If you want to delete / modify the map manually, go to the data laboratory and look for nodes that have a label “background_map_node”</p>\n<p>- What if you apply a layout (like Force Atlas 2) to your network? Your network will move, but the map is “fixed” so it will stay as it is.</p>\n<p>- What if you apply the Geolayout plugin to your network? To do that you need your latitude attribute to be called “lat” and the longitude called “lng” for the nodes of your network. If you have that, your network will be nicely placed over the maps.</p>\n<p>Other questions? Open an issue on Github:&nbsp;<a href=\"https://github.com/seinecle/My-Plugins-for-Gephi/issues\">https://github.com/seinecle/My-Plugins-for-Gephi/issues</a></p>\n<p>&nbsp;</p>\n<h2>Release History</h2>\n<p>Sept. 24, 2013: 1.0, first release</p>\n<p>Oct 19, 2014: 1.1, removed labels from background nodes because they were just an inconvenience.</p>\n<p>Jan 5, 2015: 1.2, solved a null pointer exception.</p>\n<p>May 13, 2015: added Australian states / territories and built support to easily add more regions from other countries.</p>\n<p>Aug 05, 2015: 1.4, added a new feature: “Weight” allows to control the thickness of the lines of the borders</p>"
     },
     {
       "id": "force-atlas-3d",
       "name": "Force Atlas 3D",
-      "catchphrase": "",
+      "short_description": "",
       "types": [
         "layout"
       ],
@@ -1120,12 +1120,12 @@
         }
       },
       "last_update": "October 19, 2014",
-      "description": "<h2>Author</h2>\n<p>Clement Levallois, <a href=\"http://www.em-lyon.com/fr/faculte-recherche-enseignement-superieur/faculte-recherche-emlyon/corps-professoral/Professeurs-permanents/Clement-LEVALLOIS\" target=\"_blank\">Assistant Professor at EMLYON Business School</a>.</p>\n<p>The classic layout of Gephi extended to 3D.</p>\n<p>Versions:<br>\n1.0 — initial version (28 June 2013)<br>\n1.1 — conversion of nodes to spheres when layout in 3D (30 June 2013)</p>\n<p>&nbsp;</p>"
+      "long_description": "<h2>Author</h2>\n<p>Clement Levallois, <a href=\"http://www.em-lyon.com/fr/faculte-recherche-enseignement-superieur/faculte-recherche-emlyon/corps-professoral/Professeurs-permanents/Clement-LEVALLOIS\" target=\"_blank\">Assistant Professor at EMLYON Business School</a>.</p>\n<p>The classic layout of Gephi extended to 3D.</p>\n<p>Versions:<br>\n1.0 — initial version (28 June 2013)<br>\n1.1 — conversion of nodes to spheres when layout in 3D (30 June 2013)</p>\n<p>&nbsp;</p>"
     },
     {
       "id": "multipartite-layout",
       "name": "Multipartite Layout",
-      "catchphrase": "",
+      "short_description": "",
       "types": [
         "layout"
       ],
@@ -1145,12 +1145,12 @@
         }
       },
       "last_update": "June 1, 2013",
-      "description": "<p>To simplify analyzing connections between groups in multipartite graphs, minimizing edge crossings is a good way to do so. In this work, by using the algorithm suggested in the paper “An Edge Crossing Minimization Algorithm Based on Adjacency Matrix Transformation”, implementation for gephi platform is performed.</p>"
+      "long_description": "<p>To simplify analyzing connections between groups in multipartite graphs, minimizing edge crossings is a good way to do so. In this work, by using the algorithm suggested in the paper “An Edge Crossing Minimization Algorithm Based on Adjacency Matrix Transformation”, implementation for gephi platform is performed.</p>"
     },
     {
       "id": "hiveplot-layout",
       "name": "Hiveplot Layout",
-      "catchphrase": "",
+      "short_description": "",
       "types": [
         "layout"
       ],
@@ -1175,12 +1175,12 @@
         }
       },
       "last_update": "May 21, 2013",
-      "description": "<p>A Hiveplot Layout implementation for Gephi. For information about hiveplots visit www.hiveplot.com</p>"
+      "long_description": "<p>A Hiveplot Layout implementation for Gephi. For information about hiveplots visit www.hiveplot.com</p>"
     },
     {
       "id": "concentric-layout",
       "name": "Concentric Layout",
-      "catchphrase": "",
+      "short_description": "",
       "types": [
         "layout"
       ],
@@ -1205,12 +1205,12 @@
         }
       },
       "last_update": "March 18, 2013",
-      "description": "<p>On choosing a root node, this plugin allows you to layout the graph such the nodes that are ‘n’ hops away from the root lies on the ‘n’th circle.</p>\n<p>For a sample tutorial on how to use the plugin, check out the video below.</p>\n<p><iframe width=\"853\" height=\"480\" src=\"http://www.youtube.com/embed/RCI0qFLjtV0\" frameborder=\"0\" allowfullscreen=\"\"></iframe></p>"
+      "long_description": "<p>On choosing a root node, this plugin allows you to layout the graph such the nodes that are ‘n’ hops away from the root lies on the ‘n’th circle.</p>\n<p>For a sample tutorial on how to use the plugin, check out the video below.</p>\n<p><iframe width=\"853\" height=\"480\" src=\"http://www.youtube.com/embed/RCI0qFLjtV0\" frameborder=\"0\" allowfullscreen=\"\"></iframe></p>"
     },
     {
       "id": "alphabetical-sorter",
       "name": "Alphabetical Sorter",
-      "catchphrase": "",
+      "short_description": "",
       "types": [
         "layout"
       ],
@@ -1243,12 +1243,12 @@
         }
       },
       "last_update": "October 19, 2014",
-      "description": "<h2>Author</h2>\n<p>Clement Levallois, <a href=\"http://www.em-lyon.com/fr/faculte-recherche-enseignement-superieur/faculte-recherche-emlyon/corps-professoral/Professeurs-permanents/Clement-LEVALLOIS\" target=\"_blank\">Assistant Professor at EMLYON Business School</a>.</p>\n<h2>Function</h2>\n<p>Distributes the nodes according to the alphabetical order of their labels.<br>\nUseful to layout isolated nodes properly, for instance.</p>\n<p>Request for features, bug reports? Simply <a href=\"https://github.com/gephi/gephi-plugins/issues?state=open\" target=\"_blank\">open a ticket on Github</a>!</p>\n<p>&nbsp;</p>\n<p>version 1.0 (February 2013): initial release</p>\n<p>version 1.1 (May 2013): fixed issue when different nodes have identical labels.</p>"
+      "long_description": "<h2>Author</h2>\n<p>Clement Levallois, <a href=\"http://www.em-lyon.com/fr/faculte-recherche-enseignement-superieur/faculte-recherche-emlyon/corps-professoral/Professeurs-permanents/Clement-LEVALLOIS\" target=\"_blank\">Assistant Professor at EMLYON Business School</a>.</p>\n<h2>Function</h2>\n<p>Distributes the nodes according to the alphabetical order of their labels.<br>\nUseful to layout isolated nodes properly, for instance.</p>\n<p>Request for features, bug reports? Simply <a href=\"https://github.com/gephi/gephi-plugins/issues?state=open\" target=\"_blank\">open a ticket on Github</a>!</p>\n<p>&nbsp;</p>\n<p>version 1.0 (February 2013): initial release</p>\n<p>version 1.1 (May 2013): fixed issue when different nodes have identical labels.</p>"
     },
     {
       "id": "graphviz-layout",
       "name": "Graphviz Layout",
-      "catchphrase": "",
+      "short_description": "",
       "types": [
         "layout"
       ],
@@ -1273,12 +1273,12 @@
         }
       },
       "last_update": "April 25, 2015",
-      "description": "<p>This plugin makes a call to graphviz to lay out your your graphs.</p>\n<p>To use it, you must have graphviz installed on your system. All layout algorithms provided by graphviz are supported, along with most of the options relevant to Gephi usage.</p>"
+      "long_description": "<p>This plugin makes a call to graphviz to lay out your your graphs.</p>\n<p>To use it, you must have graphviz installed on your system. All layout algorithms provided by graphviz are supported, along with most of the options relevant to Gephi usage.</p>"
     },
     {
       "id": "noverlap",
       "name": "Noverlap",
-      "catchphrase": "",
+      "short_description": "",
       "types": [
         "layout"
       ],
@@ -1303,12 +1303,12 @@
         }
       },
       "last_update": "January 4, 2013",
-      "description": "<h3>Introduction</h3>\n<p>No overlap: prevents the round nodes from overlapping. Optimized for big graphs. Choose speed (vs. precision), ratio (more spacing around big nodes) and margin (constant space around nodes). Great to clean a graph after another layout. NB: doesn’t manage labels.</p>\n<h3>Plugin Owner’s Notes</h3>\n<p>Adds the “Noverlap” layout in the layouts list.</p>\n<h4>Parameters</h4>\n<ul>\n<li><strong>Speed</strong>: more efficient, so expected to be quicker, but implies a lack of precision.</li>\n<li><strong>Ratio</strong>: multiplies the effective radius. Ratio=1 and nodes will just “touch” each others. Ratio=2 and nodes will separate as if they were twice as big. Ratio=1.1 adds a 10% space around nodes, which is good looking. Ratio smaller than 1 allows overlapping. NB: these explanations take in account a null margin.</li>\n<li><strong>Margin</strong>: adds the margin to the radius. Margin=0 and there is no margin. Margin=10 and nodes will separate from at least 20 pixels (twice the margin, one time for each node). A negative margin allows overlapping.</li>\n</ul>\n<p>Of course the best solution is to use Margin and Ratio altogether. Which is the good setting? When we want to prevent overlap, we expect nodes to separate “well”. This means that nodes separate at least from a constant space. This is done with the “margin” parameter. But we also find that biggest nodes look better if they have a little bit more space around them that smaller nodes. This is done with the “ratio” parameter.</p>\n<p>UPDATE 1.2 Added the grid size setting. If you experience performance issues, raise grid size.</p>"
+      "long_description": "<h3>Introduction</h3>\n<p>No overlap: prevents the round nodes from overlapping. Optimized for big graphs. Choose speed (vs. precision), ratio (more spacing around big nodes) and margin (constant space around nodes). Great to clean a graph after another layout. NB: doesn’t manage labels.</p>\n<h3>Plugin Owner’s Notes</h3>\n<p>Adds the “Noverlap” layout in the layouts list.</p>\n<h4>Parameters</h4>\n<ul>\n<li><strong>Speed</strong>: more efficient, so expected to be quicker, but implies a lack of precision.</li>\n<li><strong>Ratio</strong>: multiplies the effective radius. Ratio=1 and nodes will just “touch” each others. Ratio=2 and nodes will separate as if they were twice as big. Ratio=1.1 adds a 10% space around nodes, which is good looking. Ratio smaller than 1 allows overlapping. NB: these explanations take in account a null margin.</li>\n<li><strong>Margin</strong>: adds the margin to the radius. Margin=0 and there is no margin. Margin=10 and nodes will separate from at least 20 pixels (twice the margin, one time for each node). A negative margin allows overlapping.</li>\n</ul>\n<p>Of course the best solution is to use Margin and Ratio altogether. Which is the good setting? When we want to prevent overlap, we expect nodes to separate “well”. This means that nodes separate at least from a constant space. This is done with the “margin” parameter. But we also find that biggest nodes look better if they have a little bit more space around them that smaller nodes. This is done with the “ratio” parameter.</p>\n<p>UPDATE 1.2 Added the grid size setting. If you experience performance issues, raise grid size.</p>"
     },
     {
       "id": "openord-layout",
       "name": "OpenOrd Layout",
-      "catchphrase": "",
+      "short_description": "",
       "types": [
         "layout"
       ],
@@ -1333,12 +1333,12 @@
         }
       },
       "last_update": "January 4, 2013",
-      "description": "<h3>Introduction</h3>\n<p>Force-Directed layout algorithm for real-world large-scale undirected graphs.</p>\n<h3>Plugin Owner’s Notes</h3>\n<p>It is one of the few force-directed layout algorithms that can scale to over 1 million nodes, making it ideal for large graphs. However, small graphs (hundreds or less) do not always end up looking so good. This algorithm expects undirected weighted graphs and aims to better distinguish clusters. It can be run in parallel to speed up computing.</p>\n<p>The algorithm is originally based on Frutcherman-Reingold and works with a fixed number of iterations. The algorithm is using simulated annealing and has five different phases: liquid, expansion, cool-down, crunch, and simmer. Each stage is a fraction of the total iterations and several parameters like temperature, attraction and damping are changing. The default schedule spends approximately 25% of its time in the liquid stage, 25% in the expansion stage, 25% in the cool-down stage, 10% in the crunch stage, and 15% in the simmer stage.</p>\n<p>The original OpenOrd C++ implementation is available at the following address : <a title=\"http://www.cs.sandia.gov/~smartin/software.html\" href=\"http://www.cs.sandia.gov/~smartin/software.html\">http://www.cs.sandia.gov/~smartin/software.html</a>. This plug-in version doesn’t include the multi-level version of the algorithm. The algorithm was formerly known as DrL, and before that VxOrd.<br>\nParallel</p>\n<p>OpenOrd can be run in parallel to speed up computation. Each thread will work on a subset of the nodes of the graph. It’s recommended to put the number of core minus 1 to keep a thread for display. For example on a quad-core computer, it’s good to use three threads.</p>\n<h4>Edge-Cutting</h4>\n<p>Edge-cutting in OpenOrd is specified using a fraction from 0 to 1. An edge-cutting value of 0 corresponds to the standard Frutcherman-Reingold layout algorithm (no cutting), while an edge-cutting value of 1 corresponds to aggressive cutting. Aggressive cutting promotes clustering but will not cut every edge. The default value for edge-cutting in OpenOrd is 0.8.</p>\n<h4>Layout on a grid</h4>\n<p><iframe src=\"http://player.vimeo.com/video/24731034?badge=0\" width=\"500\" height=\"281\" frameborder=\"0\" webkitallowfullscreen=\"\" mozallowfullscreen=\"\" allowfullscreen=\"\"></iframe>\n</p><p><a href=\"http://vimeo.com/24731034\">Gephi OpenOrd layout on a grid</a> from <a href=\"http://vimeo.com/gephi\">gephi</a> on <a href=\"http://vimeo.com\">Vimeo</a>.</p>\n<h4>Reference</h4>\n<p>S. Martin, W. M. Brown, R. Klavans, and K. Boyack (to appear, 2011), “OpenOrd: An Open-Source Toolbox for Large Graph Layout,” SPIE Conference on Visualization and Data Analysis (VDA).</p>\n<h4>Release history</h4>\n<ul>\n<li><strong>0.4</strong> (Feb 11): Configure time spent in each stage (liquid, expansion, cool-down, crunch and simmer)</li>\n<li><strong>0.3</strong> (Nov 10): First plugin release</li>\n</ul>"
+      "long_description": "<h3>Introduction</h3>\n<p>Force-Directed layout algorithm for real-world large-scale undirected graphs.</p>\n<h3>Plugin Owner’s Notes</h3>\n<p>It is one of the few force-directed layout algorithms that can scale to over 1 million nodes, making it ideal for large graphs. However, small graphs (hundreds or less) do not always end up looking so good. This algorithm expects undirected weighted graphs and aims to better distinguish clusters. It can be run in parallel to speed up computing.</p>\n<p>The algorithm is originally based on Frutcherman-Reingold and works with a fixed number of iterations. The algorithm is using simulated annealing and has five different phases: liquid, expansion, cool-down, crunch, and simmer. Each stage is a fraction of the total iterations and several parameters like temperature, attraction and damping are changing. The default schedule spends approximately 25% of its time in the liquid stage, 25% in the expansion stage, 25% in the cool-down stage, 10% in the crunch stage, and 15% in the simmer stage.</p>\n<p>The original OpenOrd C++ implementation is available at the following address : <a title=\"http://www.cs.sandia.gov/~smartin/software.html\" href=\"http://www.cs.sandia.gov/~smartin/software.html\">http://www.cs.sandia.gov/~smartin/software.html</a>. This plug-in version doesn’t include the multi-level version of the algorithm. The algorithm was formerly known as DrL, and before that VxOrd.<br>\nParallel</p>\n<p>OpenOrd can be run in parallel to speed up computation. Each thread will work on a subset of the nodes of the graph. It’s recommended to put the number of core minus 1 to keep a thread for display. For example on a quad-core computer, it’s good to use three threads.</p>\n<h4>Edge-Cutting</h4>\n<p>Edge-cutting in OpenOrd is specified using a fraction from 0 to 1. An edge-cutting value of 0 corresponds to the standard Frutcherman-Reingold layout algorithm (no cutting), while an edge-cutting value of 1 corresponds to aggressive cutting. Aggressive cutting promotes clustering but will not cut every edge. The default value for edge-cutting in OpenOrd is 0.8.</p>\n<h4>Layout on a grid</h4>\n<p><iframe src=\"http://player.vimeo.com/video/24731034?badge=0\" width=\"500\" height=\"281\" frameborder=\"0\" webkitallowfullscreen=\"\" mozallowfullscreen=\"\" allowfullscreen=\"\"></iframe>\n</p><p><a href=\"http://vimeo.com/24731034\">Gephi OpenOrd layout on a grid</a> from <a href=\"http://vimeo.com/gephi\">gephi</a> on <a href=\"http://vimeo.com\">Vimeo</a>.</p>\n<h4>Reference</h4>\n<p>S. Martin, W. M. Brown, R. Klavans, and K. Boyack (to appear, 2011), “OpenOrd: An Open-Source Toolbox for Large Graph Layout,” SPIE Conference on Visualization and Data Analysis (VDA).</p>\n<h4>Release history</h4>\n<ul>\n<li><strong>0.4</strong> (Feb 11): Configure time spent in each stage (liquid, expansion, cool-down, crunch and simmer)</li>\n<li><strong>0.3</strong> (Nov 10): First plugin release</li>\n</ul>"
     },
     {
       "id": "circular-layout",
       "name": "Circular Layout",
-      "catchphrase": "",
+      "short_description": "",
       "types": [
         "layout"
       ],
@@ -1367,12 +1367,12 @@
         }
       },
       "last_update": "March 2, 2013",
-      "description": "<h3>Introduction</h3>\n<p>This plugin provides three circular layouts; one simple circle (titled “Circular Layout”, one simple dual circle layout (titled “Dual Circle Layout”), and a grouped layout with radial axes (titled “Radial Axis Layout”).</p>\n<h3>Plugin Owner’s Notes</h3>\n<h4>Circular Layout</h4>\n<p>The Circular Layout draws nodes in a circle and offers the following options:</p>\n<ul>\n<li>Order nodes by Node ID.</li>\n<li>Order nodes in random order.</li>\n<li>Order nodes by degree, in degree, out degree, etc.</li>\n<li>Order nodes by attribute sort (based on data type of attribute).</li>\n<li>Allows drawing node order on circle either clockwise or counter-clockwise.</li>\n<li>By default scales circle to prevent node overlap.</li>\n<li>Allows a user entered fixed circle size.</li>\n</ul>\n<h4>Dual Circle Layout</h4>\n<p>The Dual Circle Layout draws nodes on two circles. By default it draws the top four “high” nodes on an internal circle, with the remaining nodes on an external circle.</p>\n<p>It offers the following options:</p>\n<ul>\n<li>Order nodes by degree, in degree, out degree, etc.</li>\n<li>Order nodes by attribute sort (based on data type of attribute).</li>\n<li>Allows placing “high” nodes on inside or outside circle.</li>\n<li>Allows setting number of “high” nodes to use on second circle.</li>\n<li>Allows drawing node order on circle either clockwise or counter-clockwise.</li>\n<li>By default scales circle to prevent node overlap.</li>\n</ul>\n<h4>Radial Axis Layout</h4>\n<p>The Radial Axis Layout groups nodes and draws the groups in axes (or spars) radiating outwards from a central circle.</p>\n<p>It offers the following options:</p>\n<ul>\n<li>Group nodes by degree, in degree, out degree, etc.</li>\n<li>Group nodes by attribute sort (based on data type of attribute).</li>\n<li>Draw axes/spars in ascending or descending order.</li>\n<li>Allows top, middle or bottom “knockdown” of axes/spars, along with ability to specify number of spars resulting after knockdown.</li>\n<li>Allows drawing in either clockwise or counter-clockwise.</li>\n<li>By default this layout tries to prevent node overlap but may fail in certain instances.</li>\n<li>Allows tuning of spacing between nodes to allow an easy way to overcome overlap issues.</li>\n<li>Allows uniform resize of nodes.</li>\n</ul>\n<h4>Release Notes</h4>\n<p><strong>v0.1: December 8th, 2010</strong><br>\nInitial Release.</p>\n<p><strong>v0.2: December 12th, 2010</strong><br>\nUser Interface changes (use of dropdown/combobox instead of check boxes).<br>\nCircle layout now defaults to “No Overlap”.</p>\n<p><strong>v0.3: December 14th, 2010</strong><br>\nAdded node ordering by In-Degree, Out-Degree, Mutual Degree, Children and Descendants (where graphs support it).<br>\nFixed boundary checking on Dual Circle Layout.</p>\n<p><strong>v0.4: April 30th, 2011</strong><br>\nFixed “missing” node ordering of Node-ID and Random.<br>\nRebuilt against 0.8-alpha.</p>\n<p><strong>v0.5.1: June 2nd, 2011</strong><br>\nIntroduced attribute ordering.<br>\nIntroduced Radial Axes Layout.</p>\n<p><strong>v0.6: June 24nd, 2011</strong><br>\nRe-add “Random” to sort option for CircleLayout<br>\nHonor “fixed” nodes<br>\nNodeComparator (all bundled layouts) now support null values in attribute data</p>\n<p><strong>v0.7: April 5th, 2012</strong><br>\nAdd Transition settings to allow simple transition between layouts.</p>"
+      "long_description": "<h3>Introduction</h3>\n<p>This plugin provides three circular layouts; one simple circle (titled “Circular Layout”, one simple dual circle layout (titled “Dual Circle Layout”), and a grouped layout with radial axes (titled “Radial Axis Layout”).</p>\n<h3>Plugin Owner’s Notes</h3>\n<h4>Circular Layout</h4>\n<p>The Circular Layout draws nodes in a circle and offers the following options:</p>\n<ul>\n<li>Order nodes by Node ID.</li>\n<li>Order nodes in random order.</li>\n<li>Order nodes by degree, in degree, out degree, etc.</li>\n<li>Order nodes by attribute sort (based on data type of attribute).</li>\n<li>Allows drawing node order on circle either clockwise or counter-clockwise.</li>\n<li>By default scales circle to prevent node overlap.</li>\n<li>Allows a user entered fixed circle size.</li>\n</ul>\n<h4>Dual Circle Layout</h4>\n<p>The Dual Circle Layout draws nodes on two circles. By default it draws the top four “high” nodes on an internal circle, with the remaining nodes on an external circle.</p>\n<p>It offers the following options:</p>\n<ul>\n<li>Order nodes by degree, in degree, out degree, etc.</li>\n<li>Order nodes by attribute sort (based on data type of attribute).</li>\n<li>Allows placing “high” nodes on inside or outside circle.</li>\n<li>Allows setting number of “high” nodes to use on second circle.</li>\n<li>Allows drawing node order on circle either clockwise or counter-clockwise.</li>\n<li>By default scales circle to prevent node overlap.</li>\n</ul>\n<h4>Radial Axis Layout</h4>\n<p>The Radial Axis Layout groups nodes and draws the groups in axes (or spars) radiating outwards from a central circle.</p>\n<p>It offers the following options:</p>\n<ul>\n<li>Group nodes by degree, in degree, out degree, etc.</li>\n<li>Group nodes by attribute sort (based on data type of attribute).</li>\n<li>Draw axes/spars in ascending or descending order.</li>\n<li>Allows top, middle or bottom “knockdown” of axes/spars, along with ability to specify number of spars resulting after knockdown.</li>\n<li>Allows drawing in either clockwise or counter-clockwise.</li>\n<li>By default this layout tries to prevent node overlap but may fail in certain instances.</li>\n<li>Allows tuning of spacing between nodes to allow an easy way to overcome overlap issues.</li>\n<li>Allows uniform resize of nodes.</li>\n</ul>\n<h4>Release Notes</h4>\n<p><strong>v0.1: December 8th, 2010</strong><br>\nInitial Release.</p>\n<p><strong>v0.2: December 12th, 2010</strong><br>\nUser Interface changes (use of dropdown/combobox instead of check boxes).<br>\nCircle layout now defaults to “No Overlap”.</p>\n<p><strong>v0.3: December 14th, 2010</strong><br>\nAdded node ordering by In-Degree, Out-Degree, Mutual Degree, Children and Descendants (where graphs support it).<br>\nFixed boundary checking on Dual Circle Layout.</p>\n<p><strong>v0.4: April 30th, 2011</strong><br>\nFixed “missing” node ordering of Node-ID and Random.<br>\nRebuilt against 0.8-alpha.</p>\n<p><strong>v0.5.1: June 2nd, 2011</strong><br>\nIntroduced attribute ordering.<br>\nIntroduced Radial Axes Layout.</p>\n<p><strong>v0.6: June 24nd, 2011</strong><br>\nRe-add “Random” to sort option for CircleLayout<br>\nHonor “fixed” nodes<br>\nNodeComparator (all bundled layouts) now support null values in attribute data</p>\n<p><strong>v0.7: April 5th, 2012</strong><br>\nAdd Transition settings to allow simple transition between layouts.</p>"
     },
     {
       "id": "layered-layout",
       "name": "Layered Layout",
-      "catchphrase": "",
+      "short_description": "",
       "types": [
         "layout"
       ],
@@ -1397,12 +1397,12 @@
         }
       },
       "last_update": "January 31, 2013",
-      "description": "<h3>Introduction</h3>\n<p>This plugin provides layout, where nodes are in different layers (orbits). Assignment of node to layer depends on the value of numerical attribute of node. This layout can very nicely visualize the “Small-World Phenomenon”, where the layer assignement depends on the distance between key node and the others (Erdös number in the SNA Metrics Plugin).</p>\n<h3>Plugin Owner’s Notes</h3>\n<p>This plugin provides layout, where nodes are in different layers (orbits). Assignment of node to layer depends on the value of numerical attribute of node. This layout can very nicely visualize the “Small-World Phenomenon”, where the layer assignement depends on the distance between key node and the others (Erdös number in the SNA Metrics Plugin).</p>"
+      "long_description": "<h3>Introduction</h3>\n<p>This plugin provides layout, where nodes are in different layers (orbits). Assignment of node to layer depends on the value of numerical attribute of node. This layout can very nicely visualize the “Small-World Phenomenon”, where the layer assignement depends on the distance between key node and the others (Erdös number in the SNA Metrics Plugin).</p>\n<h3>Plugin Owner’s Notes</h3>\n<p>This plugin provides layout, where nodes are in different layers (orbits). Assignment of node to layer depends on the value of numerical attribute of node. This layout can very nicely visualize the “Small-World Phenomenon”, where the layer assignement depends on the distance between key node and the others (Erdös number in the SNA Metrics Plugin).</p>"
     },
     {
       "id": "lineage",
       "name": "Lineage",
-      "catchphrase": "",
+      "short_description": "",
       "types": [
         "metrics"
       ],
@@ -1427,12 +1427,12 @@
         }
       },
       "last_update": "December 15, 2015",
-      "description": "<p>This plugin identifies the ancestors and descendants of a node (identified by the user) in a directed graph (not suitable for undirected graphs).</p>\n<p>Usage: After installing the plugin, the Lineage option can be found in the statistics menu. The user is asked to submit a node (use the Id, not the Label!) and the plugin will find the ancestors and descendants for that node. In the nodes list, a variable “Lineage” is added that indicates for each node whether it is the origin node, an ancestor, a descendant, both ancestor and descendant (it will be marked as a hybrid), or unrelated. Two boolean variables are also added that indicate for each node whether they are ancestor or descendant (they can be both when there are cycles in the graph). Two integers are added to record the distance of ancestors and descendants from the origin. The distances of ancestors are recorded as negative values.</p>\n<p>The “Lineage” variable can be used for (for example) partition coloring and filtering.</p>"
+      "long_description": "<p>This plugin identifies the ancestors and descendants of a node (identified by the user) in a directed graph (not suitable for undirected graphs).</p>\n<p>Usage: After installing the plugin, the Lineage option can be found in the statistics menu. The user is asked to submit a node (use the Id, not the Label!) and the plugin will find the ancestors and descendants for that node. In the nodes list, a variable “Lineage” is added that indicates for each node whether it is the origin node, an ancestor, a descendant, both ancestor and descendant (it will be marked as a hybrid), or unrelated. Two boolean variables are also added that indicate for each node whether they are ancestor or descendant (they can be both when there are cycles in the graph). Two integers are added to record the distance of ancestors and descendants from the origin. The distances of ancestors are recorded as negative values.</p>\n<p>The “Lineage” variable can be used for (for example) partition coloring and filtering.</p>"
     },
     {
       "id": "mds-statistics",
       "name": "MDS Statistics",
-      "catchphrase": "",
+      "short_description": "",
       "types": [
         "metrics"
       ],
@@ -1457,12 +1457,12 @@
         }
       },
       "last_update": "September 29, 2015",
-      "description": "<p>This plugin performs a Multidimensional Scaling Analysis, using the Stress Minimization algorithm included in the MDSJ library. The MDSJ library was created by Algorithmics Group of the University of Konstanz (see reference below). The MDSJ library was made available under the Creative Commons License “by-nc-sa” 3.0. The license is available at http://creativecommons.org/licenses/by-nc-sa/3.0/.</p>\n<p>The plugin uses path distances between nodes as input for the Multidimensional Scaling analysis, and it assigns geometric coordinates to the nodes in such a way that nodes with shorter path distances are close together and nodes with longer path distances are far apart. The plugin also reports a stress value that indicates the fit of the configuration. The lower the stress, the better the configuration represents that actual path distances between the nodes. A weight matrix is used to determine how much the distance between any pair of nodes contributes to stress (weight[i][j]&nbsp; = distance[i][j]^exponent). In the default setting, no weighting of the distances occurs (all distances are treated equally). It is also possible to downweigh large distances and upweigh small distances (an exponent of -2 is used). <a title=\"According to the authors of the MDSJ library this is the more common choice.\" href=\"http://www.inf.uni-konstanz.de/algo/software/mdsj/javadoc/\" target=\"_blank\">According to the authors of the MDSJ library this is the more common choice</a>.</p>\n<p>Optionally, edge weights can be interpreted by the plugin as representing distances / dissimilarities or proximities / similarities. In that case the distances between nodes will be based on the edge weights (which are first normalized to values from 1 to 2). These options will not make sense for all applications, and the plugin will in some cases return missing values.</p>\n<p>The plugin produces coordinates on up to 10 dimensions (to be selected by the user) and assigns these to the nodes in the nodes list (see the data laboratory). The coordinates can then be used by the MDS_Layout plugin <a title=\"needs to be downloaded separately\" href=\"https://marketplace.gephi.org/plugin/mds-layout/\" target=\"_blank\">(needs to be downloaded separately</a>).</p>\n<p>The direction of edges/paths is currently ignored. With directed paths the resulting MDS configuration typically has a lot of overlapping nodes.</p>\n<p>Reference:<br>\nAlgorithmics Group. MDSJ: Java Library for Multidimensional Scaling (Version 0.2). Available at http://www.inf.uni-konstanz.de/algo/software/mdsj/. University of Konstanz, 2009.</p>"
+      "long_description": "<p>This plugin performs a Multidimensional Scaling Analysis, using the Stress Minimization algorithm included in the MDSJ library. The MDSJ library was created by Algorithmics Group of the University of Konstanz (see reference below). The MDSJ library was made available under the Creative Commons License “by-nc-sa” 3.0. The license is available at http://creativecommons.org/licenses/by-nc-sa/3.0/.</p>\n<p>The plugin uses path distances between nodes as input for the Multidimensional Scaling analysis, and it assigns geometric coordinates to the nodes in such a way that nodes with shorter path distances are close together and nodes with longer path distances are far apart. The plugin also reports a stress value that indicates the fit of the configuration. The lower the stress, the better the configuration represents that actual path distances between the nodes. A weight matrix is used to determine how much the distance between any pair of nodes contributes to stress (weight[i][j]&nbsp; = distance[i][j]^exponent). In the default setting, no weighting of the distances occurs (all distances are treated equally). It is also possible to downweigh large distances and upweigh small distances (an exponent of -2 is used). <a title=\"According to the authors of the MDSJ library this is the more common choice.\" href=\"http://www.inf.uni-konstanz.de/algo/software/mdsj/javadoc/\" target=\"_blank\">According to the authors of the MDSJ library this is the more common choice</a>.</p>\n<p>Optionally, edge weights can be interpreted by the plugin as representing distances / dissimilarities or proximities / similarities. In that case the distances between nodes will be based on the edge weights (which are first normalized to values from 1 to 2). These options will not make sense for all applications, and the plugin will in some cases return missing values.</p>\n<p>The plugin produces coordinates on up to 10 dimensions (to be selected by the user) and assigns these to the nodes in the nodes list (see the data laboratory). The coordinates can then be used by the MDS_Layout plugin <a title=\"needs to be downloaded separately\" href=\"https://marketplace.gephi.org/plugin/mds-layout/\" target=\"_blank\">(needs to be downloaded separately</a>).</p>\n<p>The direction of edges/paths is currently ignored. With directed paths the resulting MDS configuration typically has a lot of overlapping nodes.</p>\n<p>Reference:<br>\nAlgorithmics Group. MDSJ: Java Library for Multidimensional Scaling (Version 0.2). Available at http://www.inf.uni-konstanz.de/algo/software/mdsj/. University of Konstanz, 2009.</p>"
     },
     {
       "id": "spanning-tree",
       "name": "Spanning Tree",
-      "catchphrase": "",
+      "short_description": "",
       "types": [
         "metrics"
       ],
@@ -1487,12 +1487,12 @@
         }
       },
       "last_update": "February 21, 2015",
-      "description": "<p>The plugin finds a minimum spanning tree of a graph using Kruskal’s Algorithm.</p>"
+      "long_description": "<p>The plugin finds a minimum spanning tree of a graph using Kruskal’s Algorithm.</p>"
     },
     {
       "id": "clique-detector",
       "name": "Clique Detector",
-      "catchphrase": "",
+      "short_description": "",
       "types": [
         "metrics",
         "tools"
@@ -1513,12 +1513,12 @@
         }
       },
       "last_update": "February 14, 2015",
-      "description": "<p>A simple clique detector of specific size in graphs.</p>"
+      "long_description": "<p>A simple clique detector of specific size in graphs.</p>"
     },
     {
       "id": "edge-betweenness-metric",
       "name": "Edge Betweenness Metric",
-      "catchphrase": "",
+      "short_description": "",
       "types": [
         "metrics"
       ],
@@ -1543,12 +1543,12 @@
         }
       },
       "last_update": "May 6, 2014",
-      "description": "<p>Edge Betweenness plugin for Gephi. This plugin allows compute Edge Betweenness metric, which can be used in Social Network Analysis.<br>\nEdge betweenness of an edge as the number of shortest paths between pairs of nodes that run along it.</p>"
+      "long_description": "<p>Edge Betweenness plugin for Gephi. This plugin allows compute Edge Betweenness metric, which can be used in Social Network Analysis.<br>\nEdge betweenness of an edge as the number of shortest paths between pairs of nodes that run along it.</p>"
     },
     {
       "id": "link-communities",
       "name": "Link Communities",
-      "catchphrase": "",
+      "short_description": "",
       "types": [
         "metrics"
       ],
@@ -1573,12 +1573,12 @@
         }
       },
       "last_update": "July 3, 2013",
-      "description": "<p align=\"JUSTIFY\">This Gephi plug-in implements the Link Communities algorithm proposed in the paper below.</p>\n<p align=\"JUSTIFY\">Yong-Yeol Ahn, James P. Bagrow &amp; Sune Lehmann, Link communities reveal multiscale complexity in networks, Nature 466, 761–764 (05 August 2010) <a id=\"nature\" href=\"http://www.nature.com/nature/journal/v466/n7307/full/nature09182.html\" target=\"_blank\">Paper</a></p>\n<p align=\"JUSTIFY\">The algorithm purpose is to reveal communities in undirected and unweigthed networks. It is an agglomerative method (like hierarchical clustering) that compares two links and, if similarity value is below a fixed threshold, puts those links into the same community. This method maintains communities overlap, because a node can belong to multiple links and so to different communities.</p>\n<p align=\"JUSTIFY\">Once the metric is computed, users should go to Partition → Edges → select Community. For a best visualization users can apply any visualization layout that Gephi provides, such as Force Atlas 2.</p>\n<p align=\"JUSTIFY\">This plugin has been developed by Danilo Domenino and Massimiliano Vella, under the supervision of Prof. Giancarlo Ruffo (for more information on related activities, see: <a id=\"yui_3_7_2_1_1372846362103_2110\" href=\"http://arcs.di.unito.it/\" target=\"_blank\">http://arcs.di.unito.it</a>).</p>"
+      "long_description": "<p align=\"JUSTIFY\">This Gephi plug-in implements the Link Communities algorithm proposed in the paper below.</p>\n<p align=\"JUSTIFY\">Yong-Yeol Ahn, James P. Bagrow &amp; Sune Lehmann, Link communities reveal multiscale complexity in networks, Nature 466, 761–764 (05 August 2010) <a id=\"nature\" href=\"http://www.nature.com/nature/journal/v466/n7307/full/nature09182.html\" target=\"_blank\">Paper</a></p>\n<p align=\"JUSTIFY\">The algorithm purpose is to reveal communities in undirected and unweigthed networks. It is an agglomerative method (like hierarchical clustering) that compares two links and, if similarity value is below a fixed threshold, puts those links into the same community. This method maintains communities overlap, because a node can belong to multiple links and so to different communities.</p>\n<p align=\"JUSTIFY\">Once the metric is computed, users should go to Partition → Edges → select Community. For a best visualization users can apply any visualization layout that Gephi provides, such as Force Atlas 2.</p>\n<p align=\"JUSTIFY\">This plugin has been developed by Danilo Domenino and Massimiliano Vella, under the supervision of Prof. Giancarlo Ruffo (for more information on related activities, see: <a id=\"yui_3_7_2_1_1372846362103_2110\" href=\"http://arcs.di.unito.it/\" target=\"_blank\">http://arcs.di.unito.it</a>).</p>"
     },
     {
       "id": "weakly-connected-components-using-disjoint-set",
       "name": "Weakly connected components using disjoint set",
-      "catchphrase": "",
+      "short_description": "",
       "types": [
         "metrics"
       ],
@@ -1598,12 +1598,12 @@
         }
       },
       "last_update": "April 3, 2013",
-      "description": "<p>This is a copy of Gephi internal Connected Components statistics module, only using much faster algorithm to obtain weakly connected components. It was redirected here from a pull request (https://github.com/gephi/gephi/pull/747) due to lack of time for proper testing that would be required to integrate it into the main program.</p>"
+      "long_description": "<p>This is a copy of Gephi internal Connected Components statistics module, only using much faster algorithm to obtain weakly connected components. It was redirected here from a pull request (https://github.com/gephi/gephi/pull/747) due to lack of time for proper testing that would be required to integrate it into the main program.</p>"
     },
     {
       "id": "weighted-cluster-coefficient",
       "name": "Weighted Cluster Coefficient",
-      "catchphrase": "",
+      "short_description": "",
       "types": [
         "metrics"
       ],
@@ -1628,12 +1628,12 @@
         }
       },
       "last_update": "April 14, 2013",
-      "description": "<p>This plugin allows to calculate the Weighted Cluster Coefficient for every node and the average value. The weighted clustering capture more precisely the effective level of cohesiveness and affinity due to the interaction strength.</p>\n<p>Reference: A. Barrat and M. Barthelemy and R. Pastor-Satorras and A. Vespignani (2004). The architecture of complex weighted networks. Proceedings of the National Academy of Sciences 101 (11): 3747–3752.</p>"
+      "long_description": "<p>This plugin allows to calculate the Weighted Cluster Coefficient for every node and the average value. The weighted clustering capture more precisely the effective level of cohesiveness and affinity due to the interaction strength.</p>\n<p>Reference: A. Barrat and M. Barthelemy and R. Pastor-Satorras and A. Vespignani (2004). The architecture of complex weighted networks. Proceedings of the National Academy of Sciences 101 (11): 3747–3752.</p>"
     },
     {
       "id": "social-network-analysis",
       "name": "Social Network Analysis",
-      "catchphrase": "",
+      "short_description": "",
       "types": [
         "metrics"
       ],
@@ -1658,12 +1658,12 @@
         }
       },
       "last_update": "July 3, 2013",
-      "description": "<h3>Introduction</h3>\n<p>This plugin allows compute metrics, which can be used in Social Network Analysis. This version contains: Erdös number – idea of “The Small-World Phenomenon”. Can be visualized using Layered Layout Plugin Neighborhood Overlap and Embeddedness – identification of strong and weak ties, local bridges Clustering Coefficient</p>\n<h3>Plugin Owner’s Notes</h3>\n<p>This plugin allows compute metrics, which can be used in Social Network Analysis. This version contains: Erdös number – idea of “The Small-World Phenomenon”. Can be visualized using Layered Layout Plugin Neighborhood Overlap and Embeddedness – identification of strong and weak ties, local bridges Clustering Coefficient</p>"
+      "long_description": "<h3>Introduction</h3>\n<p>This plugin allows compute metrics, which can be used in Social Network Analysis. This version contains: Erdös number – idea of “The Small-World Phenomenon”. Can be visualized using Layered Layout Plugin Neighborhood Overlap and Embeddedness – identification of strong and weak ties, local bridges Clustering Coefficient</p>\n<h3>Plugin Owner’s Notes</h3>\n<p>This plugin allows compute metrics, which can be used in Social Network Analysis. This version contains: Erdös number – idea of “The Small-World Phenomenon”. Can be visualized using Layered Layout Plugin Neighborhood Overlap and Embeddedness – identification of strong and weak ties, local bridges Clustering Coefficient</p>"
     },
     {
       "id": "multimode-networks-transformations-2",
       "name": "Multimode Networks Transformations",
-      "catchphrase": "",
+      "short_description": "",
       "types": [
         "metrics",
         "tools"
@@ -1684,12 +1684,12 @@
         }
       },
       "last_update": "January 31, 2013",
-      "description": "<h3>Introduction</h3>\n<p>This plugin allows multimode networks projection. For example: you can project your bipartite (2-mode) graph to monopartite (one-mode) graph. The projection/transformation is based on the matrix multiplication approach and allows different types of transformations. Not only bipartite graphs. The limitation is matrix multiplication – large matrix multiplication takes time and memory.</p>\n<h3>Plugin Owner’s Notes</h3>\n<p>This plugin allows multimode networks projection. For example: you can project your bipartite (2-mode) graph to monopartite (one-mode) graph. The projection/transformation is based on the matrix multiplication approach and allows different types of transformations. Not only bipartite graphs. The limitation is matrix multiplication – large matrix multiplication takes time and memory.</p>"
+      "long_description": "<h3>Introduction</h3>\n<p>This plugin allows multimode networks projection. For example: you can project your bipartite (2-mode) graph to monopartite (one-mode) graph. The projection/transformation is based on the matrix multiplication approach and allows different types of transformations. Not only bipartite graphs. The limitation is matrix multiplication – large matrix multiplication takes time and memory.</p>\n<h3>Plugin Owner’s Notes</h3>\n<p>This plugin allows multimode networks projection. For example: you can project your bipartite (2-mode) graph to monopartite (one-mode) graph. The projection/transformation is based on the matrix multiplication approach and allows different types of transformations. Not only bipartite graphs. The limitation is matrix multiplication – large matrix multiplication takes time and memory.</p>"
     },
     {
       "id": "polygon-nodes",
       "name": "Polygon Nodes",
-      "catchphrase": "",
+      "short_description": "",
       "types": [
         "preview"
       ],
@@ -1714,12 +1714,12 @@
         }
       },
       "last_update": "June 9, 2015",
-      "description": "<p>Polygon shaped nodes<br>\nDescription:<br>\nExtends default node renderer to support polygon shaped nodes with arbitrary number of sides. Add a column of Integers in the data table named “Polygon”, the value corresponds to the number of sides. The renderer must be enabled in the “Manage Renderers” tab.</p>\n<p>How to use:<br>\n1. In the “Data Laboratory” tab, add a column with the title “Polygon” and type “Integer”.<br>\n- This number in the Polygon column corresponds to the desired number of sides the node will have in the preview.<br>\n- NOTE: A null/invalid value (i.e. leaving the column blank or a value less than 3) will result in the node being rendered as a circle.<br>\n2. In the “Preview” tab, make sure “Polygon shaped nodes” is checked in the “Manager renderers” tab.<br>\n3. Then in the “Settings” tab make sure “Enable polygon shaped nodes” is checked.<br>\n4. When the preview is refreshed the nodes should be displayed as polygons with sides corresponding to the number in the “Polygon” column.</p>"
+      "long_description": "<p>Polygon shaped nodes<br>\nDescription:<br>\nExtends default node renderer to support polygon shaped nodes with arbitrary number of sides. Add a column of Integers in the data table named “Polygon”, the value corresponds to the number of sides. The renderer must be enabled in the “Manage Renderers” tab.</p>\n<p>How to use:<br>\n1. In the “Data Laboratory” tab, add a column with the title “Polygon” and type “Integer”.<br>\n- This number in the Polygon column corresponds to the desired number of sides the node will have in the preview.<br>\n- NOTE: A null/invalid value (i.e. leaving the column blank or a value less than 3) will result in the node being rendered as a circle.<br>\n2. In the “Preview” tab, make sure “Polygon shaped nodes” is checked in the “Manager renderers” tab.<br>\n3. Then in the “Settings” tab make sure “Enable polygon shaped nodes” is checked.<br>\n4. When the preview is refreshed the nodes should be displayed as polygons with sides corresponding to the number in the “Polygon” column.</p>"
     },
     {
       "id": "multi-colour-renderer",
       "name": "Multi Colour Renderer",
-      "catchphrase": "",
+      "short_description": "",
       "types": [
         "preview"
       ],
@@ -1748,12 +1748,12 @@
         }
       },
       "last_update": "May 7, 2014",
-      "description": "<p>Multi Colour Renderer is plugin for Gephi. This plugin allows rendering of nodes in “Preview” mode as a “multicolour pie”. Each node is rendered using multiple colours. The plugin uses an implementation proposed by the user Ferretti published on Gephi forum (http://forum.gephi.org/viewtopic.php?f=30&amp;t=1665)</p>\n<p>Code taken from forum and packaged as plugin. Supports only visualization in the Processing window, visualization export to PDF or SVG is not supported.</p>\n<p>Limitations:<br>\nOnly Processing window visualization is supported, export to PDF or SVG currently not supported.<br>\nInputs:<br>\n“colourList” attribute as String<br>\nthe comma delimited list of integers representing rgb of colours</p>\n<p>This plugin is used as visualization support for other plugins:<br>\nMCODE Clustering<br>\nGirvan Newman Clustering<br>\nMarkov Clustering</p>"
+      "long_description": "<p>Multi Colour Renderer is plugin for Gephi. This plugin allows rendering of nodes in “Preview” mode as a “multicolour pie”. Each node is rendered using multiple colours. The plugin uses an implementation proposed by the user Ferretti published on Gephi forum (http://forum.gephi.org/viewtopic.php?f=30&amp;t=1665)</p>\n<p>Code taken from forum and packaged as plugin. Supports only visualization in the Processing window, visualization export to PDF or SVG is not supported.</p>\n<p>Limitations:<br>\nOnly Processing window visualization is supported, export to PDF or SVG currently not supported.<br>\nInputs:<br>\n“colourList” attribute as String<br>\nthe comma delimited list of integers representing rgb of colours</p>\n<p>This plugin is used as visualization support for other plugins:<br>\nMCODE Clustering<br>\nGirvan Newman Clustering<br>\nMarkov Clustering</p>"
     },
     {
       "id": "image-preview",
       "name": "Image Preview",
-      "catchphrase": "",
+      "short_description": "",
       "types": [
         "preview"
       ],
@@ -1778,12 +1778,12 @@
         }
       },
       "last_update": "July 19, 2014",
-      "description": "<p>This is a plugin for Gephi, a graph visualization and manipulation software package.</p>\n<p>With this plugin, nodes can be given a attribute (column) called ‘image’ that contained a image file name. those images are then loaded from a given path (provided by the Preview Settings). The images appear in the preview window, and can be exported with the SVG/PDF/PNG option. Please note that this is an early version of the plugin, and still contains many bugs. Please feel free to supply any feedback you may have. Please note that we have very limited resources and can not guarantee any future updates or changes. If you wish to help, let us know.</p>\n<p>This plugin was developed by the Yale Computer Graphics Group. We released it in the hopes it will be useful, but make no guarantees that it will work (see the GPL for a full disclaimer).</p>\n<p>Feel free to create an issue on GitHub if you need to contact us.</p>"
+      "long_description": "<p>This is a plugin for Gephi, a graph visualization and manipulation software package.</p>\n<p>With this plugin, nodes can be given a attribute (column) called ‘image’ that contained a image file name. those images are then loaded from a given path (provided by the Preview Settings). The images appear in the preview window, and can be exported with the SVG/PDF/PNG option. Please note that this is an early version of the plugin, and still contains many bugs. Please feel free to supply any feedback you may have. Please note that we have very limited resources and can not guarantee any future updates or changes. If you wish to help, let us know.</p>\n<p>This plugin was developed by the Yale Computer Graphics Group. We released it in the hopes it will be useful, but make no guarantees that it will work (see the GPL for a full disclaimer).</p>\n<p>Feel free to create an issue on GitHub if you need to contact us.</p>"
     },
     {
       "id": "spatial-ranking",
       "name": "Spatial Ranking",
-      "catchphrase": "",
+      "short_description": "",
       "types": [
         "ranking"
       ],
@@ -1808,12 +1808,12 @@
         }
       },
       "last_update": "January 4, 2013",
-      "description": "<h3>Introduction</h3>\n<p>SpatialRanking is a plugin to map an attribute into a spatial coordinate.</p>\n<h3>Plugin Owner’s Notes</h3>\n<p>SpatialRanking is a plugin to map an attribute into a spatial coordinate. As any other ranking, it is possible to choose the spline, the minimal and maximal values. The SpatialRanking interface will be found in the ranking interface.</p>"
+      "long_description": "<h3>Introduction</h3>\n<p>SpatialRanking is a plugin to map an attribute into a spatial coordinate.</p>\n<h3>Plugin Owner’s Notes</h3>\n<p>SpatialRanking is a plugin to map an attribute into a spatial coordinate. As any other ranking, it is possible to choose the spline, the minimal and maximal values. The SpatialRanking interface will be found in the ranking interface.</p>"
     },
     {
       "id": "give-color-to-edges",
       "name": "Give Color To Edges",
-      "catchphrase": "",
+      "short_description": "",
       "types": [
         "tools"
       ],
@@ -1838,12 +1838,12 @@
         }
       },
       "last_update": "May 11, 2015",
-      "description": "<p>Colorizes edges according to an RGB or HEX attribute</p>"
+      "long_description": "<p>Colorizes edges according to an RGB or HEX attribute</p>"
     },
     {
       "id": "clique-percolation",
       "name": "Clique Percolation",
-      "catchphrase": "",
+      "short_description": "",
       "types": [
         "tools"
       ],
@@ -1868,12 +1868,12 @@
         }
       },
       "last_update": "October 16, 2015",
-      "description": "<p>Gephi plugin able to calculate centrality of a social network with different methods and percolation of cliques.</p>\n<p>Contributors &nbsp;:</p>\n<p><strong>Khouloud MOUKRIM</strong>&nbsp;&lt;moukrim.khouloud@gmail.com&gt;</p>\n<p><strong>Mohammed MIDAOUI AYOUB</strong> &lt;lakhyos@outlook.com&gt;</p>"
+      "long_description": "<p>Gephi plugin able to calculate centrality of a social network with different methods and percolation of cliques.</p>\n<p>Contributors &nbsp;:</p>\n<p><strong>Khouloud MOUKRIM</strong>&nbsp;&lt;moukrim.khouloud@gmail.com&gt;</p>\n<p><strong>Mohammed MIDAOUI AYOUB</strong> &lt;lakhyos@outlook.com&gt;</p>"
     },
     {
       "id": "clique-percolation-method",
       "name": "Clique Percolation Method",
-      "catchphrase": "",
+      "short_description": "",
       "types": [
         "tools"
       ],
@@ -1898,12 +1898,12 @@
         }
       },
       "last_update": "November 6, 2015",
-      "description": "<p>Clique Percolation Method is used to find overlapping communities by means of cliques of size k.</p>"
+      "long_description": "<p>Clique Percolation Method is used to find overlapping communities by means of cliques of size k.</p>"
     },
     {
       "id": "give-color-to-nodes",
       "name": "Give color to nodes",
-      "catchphrase": "",
+      "short_description": "",
       "types": [
         "tools"
       ],
@@ -1936,12 +1936,12 @@
         }
       },
       "last_update": "May 7, 2015",
-      "description": "<h2>Author</h2>\n<p>Clement Levallois, <a href=\"http://www.em-lyon.com/fr/faculte-recherche-enseignement-superieur/faculte-recherche-emlyon/corps-professoral/Professeurs-permanents/Clement-LEVALLOIS\" target=\"_blank\">Assistant Professor at EMLYON Business School</a>.</p>\n<h2>Function</h2>\n<p>Reads an attribute for nodes containing a RGB or #hex value. Colors nodes accordingly.</p>\n<h2>When is it useful?</h2>\n<p>This plugin gives you full control on the color of your nodes in Gephi. Define the color for each node as an attribute, that’s it!</p>\n<h2>Quick instructions</h2>\n<p>1. Your nodes should have an attribute containing “color” in its name. For example, something like “myColor” would work.<br>\n2. The value of this attribute for each node can be RGB (example: “255,0,0″ -&gt; for the red color) or hexadecimal (example: “#00FF00″ for bright green).<br>\n3. Click on this pic to enlarge the illustration:</p>\n<p><a href=\"https://marketplace.gephi.org/wp-content/uploads/2013/11/illustration.jpg?022bbc\"><img class=\"alignnone size-medium wp-image-5978\" alt=\"illustration\" src=\"https://marketplace.gephi.org/wp-content/uploads/2013/11/illustration-300x69.jpg?022bbc\" width=\"300\" height=\"69\"></a></p>\n<p>4. After installing the plugin, restart Gephi.<br>\n5. A new icon in the form of a color wheel appears on the left of the graph window (below existing icons). Click on the illustration below to see where the icon is exactly located:</p>\n<p><a href=\"https://marketplace.gephi.org/wp-content/uploads/2013/11/illustration2.jpg?022bbc\"><img class=\"alignnone size-medium wp-image-5984\" alt=\"illustration2\" src=\"https://marketplace.gephi.org/wp-content/uploads/2013/11/illustration2-300x191.jpg?022bbc\" width=\"300\" height=\"191\"></a></p>\n<p>6. Click on the icon, your nodes will be colored according to their color values!</p>\n<h2>Version history</h2>\n<p>1.0. initial release, 2013.</p>\n<p>1.1. The plugin now detects node attributes titled with the British spelling “colour”, in addition to “color”. April 2015.</p>\n<h2>Author of the plugin</h2>\n<p><a href=\"http://www.clementlevallois.net\" target=\"_blank\">Clement Levallois</a>. The original idea was suggested by <a href=\"http://www.frankvandermost.nl\" target=\"_blank\">Frank van der Most</a>.</p>\n<p>&nbsp;</p>\n<p>&nbsp;</p>"
+      "long_description": "<h2>Author</h2>\n<p>Clement Levallois, <a href=\"http://www.em-lyon.com/fr/faculte-recherche-enseignement-superieur/faculte-recherche-emlyon/corps-professoral/Professeurs-permanents/Clement-LEVALLOIS\" target=\"_blank\">Assistant Professor at EMLYON Business School</a>.</p>\n<h2>Function</h2>\n<p>Reads an attribute for nodes containing a RGB or #hex value. Colors nodes accordingly.</p>\n<h2>When is it useful?</h2>\n<p>This plugin gives you full control on the color of your nodes in Gephi. Define the color for each node as an attribute, that’s it!</p>\n<h2>Quick instructions</h2>\n<p>1. Your nodes should have an attribute containing “color” in its name. For example, something like “myColor” would work.<br>\n2. The value of this attribute for each node can be RGB (example: “255,0,0″ -&gt; for the red color) or hexadecimal (example: “#00FF00″ for bright green).<br>\n3. Click on this pic to enlarge the illustration:</p>\n<p><a href=\"https://marketplace.gephi.org/wp-content/uploads/2013/11/illustration.jpg?022bbc\"><img class=\"alignnone size-medium wp-image-5978\" alt=\"illustration\" src=\"https://marketplace.gephi.org/wp-content/uploads/2013/11/illustration-300x69.jpg?022bbc\" width=\"300\" height=\"69\"></a></p>\n<p>4. After installing the plugin, restart Gephi.<br>\n5. A new icon in the form of a color wheel appears on the left of the graph window (below existing icons). Click on the illustration below to see where the icon is exactly located:</p>\n<p><a href=\"https://marketplace.gephi.org/wp-content/uploads/2013/11/illustration2.jpg?022bbc\"><img class=\"alignnone size-medium wp-image-5984\" alt=\"illustration2\" src=\"https://marketplace.gephi.org/wp-content/uploads/2013/11/illustration2-300x191.jpg?022bbc\" width=\"300\" height=\"191\"></a></p>\n<p>6. Click on the icon, your nodes will be colored according to their color values!</p>\n<h2>Version history</h2>\n<p>1.0. initial release, 2013.</p>\n<p>1.1. The plugin now detects node attributes titled with the British spelling “colour”, in addition to “color”. April 2015.</p>\n<h2>Author of the plugin</h2>\n<p><a href=\"http://www.clementlevallois.net\" target=\"_blank\">Clement Levallois</a>. The original idea was suggested by <a href=\"http://www.frankvandermost.nl\" target=\"_blank\">Frank van der Most</a>.</p>\n<p>&nbsp;</p>\n<p>&nbsp;</p>"
     },
     {
       "id": "scripting-plugin",
       "name": "Scripting Plugin",
-      "catchphrase": "",
+      "short_description": "",
       "types": [
         "tools"
       ],
@@ -1956,7 +1956,7 @@
         }
       },
       "last_update": "February 12, 2013",
-      "description": "<h3>Introduction</h3>\n<p>A Python Scripting Console plugin for Gephi.</p>\n<h3>Plugin Owner’s Notes</h3>\n<p>This Scripting Plugin originated as a joint proposal with the <a href=\"http://graphexploration.cond.org/\">GUESS project</a> which aimed at porting the Gython language as a console plugin for Gephi during the <a href=\"http://code.google.com/soc/\">Google Summer of Code</a> 2011 program. For those who are not familiar with it, GUESS is a software that was originally created to support the interactive manipulation of graph structures. This feature is achieved through a mix of a visualization framework and a domain-specific embedded language called Gython.</p>\n<p>As you have probably already guessed, Gython is an extension of the <a href=\"http://www.python.org/\">Python programming language</a> or, more specifically, <a href=\"http://www.jython.org/\">Jython</a>, which is a Java implementation of Python. Thus, Gython is backwards-compatible with Python itself and can be used with many different Python 2.5 libraries without much pain.</p>\n<h4>Features</h4>\n<p>As of the current version (0.1.1), the plugin has the following features:</p>\n<p>Inspired by the Gython language from the GUESS project (i.e. additional operators for manipulating graphs). Based on Jython 2.5.2, which implements the Python 2.5 specification. Graph structure and attributes manipulation. Filtering support. Support for running layouts. Export API support (i.e. generate PDF/GEXF/PNG exports from within the console). Batch scripts support for automating tasks. Loads third-party Python libraries.</p>\n<h4>Documentation</h4>\n<p>The official documentation is available on the <a href=\"http://wiki.gephi.org/index.php/Scripting_Plugin\">wiki page</a>.</p>\n<h4>Source Code</h4>\n<p>The plugin’s source code is hosted on the <a href=\"https://github.com/gephi/gephi-plugins/tree/python-scripting-plugin\">python-scripting-plugin</a> branch of the gephi-plugins repository on GitHub.</p>\n<h4>Feedback</h4>\n<p>Please, leave us your feedback/bug report through our <a href=\"https://github.com/gephi/gephi-plugins/issues?labels=python-scripting-plugin\">Issues tracker</a> on GitHub.</p>"
+      "long_description": "<h3>Introduction</h3>\n<p>A Python Scripting Console plugin for Gephi.</p>\n<h3>Plugin Owner’s Notes</h3>\n<p>This Scripting Plugin originated as a joint proposal with the <a href=\"http://graphexploration.cond.org/\">GUESS project</a> which aimed at porting the Gython language as a console plugin for Gephi during the <a href=\"http://code.google.com/soc/\">Google Summer of Code</a> 2011 program. For those who are not familiar with it, GUESS is a software that was originally created to support the interactive manipulation of graph structures. This feature is achieved through a mix of a visualization framework and a domain-specific embedded language called Gython.</p>\n<p>As you have probably already guessed, Gython is an extension of the <a href=\"http://www.python.org/\">Python programming language</a> or, more specifically, <a href=\"http://www.jython.org/\">Jython</a>, which is a Java implementation of Python. Thus, Gython is backwards-compatible with Python itself and can be used with many different Python 2.5 libraries without much pain.</p>\n<h4>Features</h4>\n<p>As of the current version (0.1.1), the plugin has the following features:</p>\n<p>Inspired by the Gython language from the GUESS project (i.e. additional operators for manipulating graphs). Based on Jython 2.5.2, which implements the Python 2.5 specification. Graph structure and attributes manipulation. Filtering support. Support for running layouts. Export API support (i.e. generate PDF/GEXF/PNG exports from within the console). Batch scripts support for automating tasks. Loads third-party Python libraries.</p>\n<h4>Documentation</h4>\n<p>The official documentation is available on the <a href=\"http://wiki.gephi.org/index.php/Scripting_Plugin\">wiki page</a>.</p>\n<h4>Source Code</h4>\n<p>The plugin’s source code is hosted on the <a href=\"https://github.com/gephi/gephi-plugins/tree/python-scripting-plugin\">python-scripting-plugin</a> branch of the gephi-plugins repository on GitHub.</p>\n<h4>Feedback</h4>\n<p>Please, leave us your feedback/bug report through our <a href=\"https://github.com/gephi/gephi-plugins/issues?labels=python-scripting-plugin\">Issues tracker</a> on GitHub.</p>"
     }
   ]
 }
