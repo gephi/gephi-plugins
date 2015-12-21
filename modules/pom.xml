@@ -8,13 +8,49 @@
     <packaging>pom</packaging>
 
     <name>gephi-plugins-parent</name>
+    <description>Parent POM for all Gephi plugins</description>
+    <inceptionYear>2015</inceptionYear>
+    
+    <url>http://github.com/gephi/gephi-plugins</url>
+    
+    <!-- SCM -->
+    <scm>
+        <connection>scm:git:git://github.com/gephi/gephi-plugins.git</connection>
+        <developerConnection>scm:git:git@github.com:gephi/gephi-plugins.git</developerConnection>
+        <url>https://github.com/gephi/gephi-plugins</url>
+    </scm>
+    
+    <!-- License -->
+    <licenses>
+        <license>
+            <name>Apache 2.0</name>
+            <url>http://www.opensource.org/licenses/Apache-2.0</url>
+            <comments>Apache License, Version 2.0</comments>
+        </license>
+    </licenses>
+    
+    <!-- Developers -->
+    <developers>
+        <developer>
+            <id>mbastian</id>
+            <name>Mathieu Bastian</name>
+            <email>mathieu.bastian@gephi.org</email>
+        </developer>
+        <developer>
+            <id>eduramiba</id>
+            <name>Eduardo Ramos</name>
+            <email>eduardo.ramos@gephi.org</email>
+        </developer>
+    </developers>
 
+    <!-- Properties -->
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <gephi.version>0.9.0</gephi.version>
         <netbeans.version>RELEASE81</netbeans.version>
     </properties>
 
+    <!-- Repositories -->
     <repositories>
         <repository>
             <id>oss-sonatype</id>
@@ -34,6 +70,7 @@
         </repository>
     </repositories>
 
+    <!-- Dependencies -->
     <dependencyManagement>
         <dependencies>
             <dependency>
@@ -519,4 +556,43 @@
             </plugin>
         </plugins>
     </build>
+    
+    <!-- Custom profile only used to release this pom to sonatype-->
+    <profiles>
+        <profile>
+            <id>release-pom</id>
+            <build>
+                <plugins>
+                    <!-- GPG Signed Components -->
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-gpg-plugin</artifactId>
+                        <version>1.6</version>
+                        <executions>
+                            <execution>
+                                <id>sign-artifacts</id>
+                                <phase>verify</phase>
+                                <goals>
+                                    <goal>sign</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    
+                    <!-- Nexus staging, https://oss.sonatype.org/ -->
+                    <plugin>
+                        <groupId>org.sonatype.plugins</groupId>
+                        <artifactId>nexus-staging-maven-plugin</artifactId>
+                        <version>1.6.6</version>
+                        <extensions>true</extensions>
+                        <configuration>
+                            <serverId>ossrh</serverId>
+                            <nexusUrl>https://oss.sonatype.org/</nexusUrl>
+                            <autoReleaseAfterClose>true</autoReleaseAfterClose>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 </project>
