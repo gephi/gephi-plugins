@@ -28,6 +28,7 @@ The creation of a new plugin is simple thanks to our custom [Gephi Maven Plugin]
         mvn org.gephi:gephi-maven-plugin:generate
 
 This is an example of what this process will ask:
+
         Name of organization (e.g. my.company): org.foo
         Name of artifact (e.g my-plugin): my-plugin
         Version (e.g. 1.0.0): 1.0.0
