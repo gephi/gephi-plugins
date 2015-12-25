@@ -8,6 +8,9 @@ The process in which plugins are developed and submitted had an overhaul when Ge
 
 This section is a step-by-step guide to migrate 0.8 plugins. Before going through the code and configuration, let's summerize the key differences between the two environements.
 
+- The 0.8 base is built using Ant, whereas the 0.9 uses Maven. These two are significantly different. If you aren't familiar with Maven, you can start with [Maven in 5 Minutes]( https://maven.apache.org/guides/getting-started/maven-in-five-minutes.html). Maven configurations are defined in the `pom.xml` files.
+- The 0.8 base finds the Gephi modules into the `platform` folder checked in the repository, whereas the 0.9 base downloads everything from the central Maven repository, where all Gephi modules are available.
+
 `TODO`
 
 ## Get started
@@ -52,9 +55,11 @@ The plugin configuration is created. Now you can (in any order):
 
 ### Build a plugin
 
-Run the following command to compile and build your plugin
+Run the following command to compile and build your plugin:
 
        mvn clean package
+
+In addition of compiling and building the JAR and NBM, this command uses the `Gephi Maven Plugin` to verify the plugin's configuration. In care something is wrong it will fail and indicte the reason.
 
 ### Run Gephi with plugin
 
@@ -62,18 +67,25 @@ Run the following command to run Gephi with your plugin pre-installed. Make sure
 
        mvn org.gephi:gephi-maven-plugin:run
 
-## Submit your plugin
+In Gephi, when you navigate to `Tools` > `Plugins` you should see your plugin listed in `Installed`.
+
+## Submit a plugin
 
 Submitting a Gephi plugin for approval is a simple process based on GitHub's [pull request](https://help.github.com/articles/using-pull-requests/) mechanism.
 
-- First, make sure you're working on a fork of [gephi-plugins](https://github.com/gephi/gephi-plugins). You can check taht by running `git remote -v` and look at the url, it should contain your GitHub username, for example `git@github.com:username/gephi-plugins.git`.
+- First, make sure you're working on a fork of [gephi-plugins](https://github.com/gephi/gephi-plugins). You can check that by running `git remote -v` and look at the url, it should contain your GitHub username, for example `git@github.com:username/gephi-plugins.git`.
 
 - Add and commit your work. It's recommended to keep your fork synced with the upstream repository, as explained [here](https://help.github.com/articles/syncing-a-fork/), so you can run `git merge upstream/master` beforehand.
 
 - Push your commits to your fork with `git push origin master`.
 
-- Navigate to your fork's URL and create a pull request, submit. 
- 
+- Navigate to your fork's URL and create a pull request. Select `master-forge` instead of `master` as base branch.
+
+- Submit your pull request.
+
+## Update a plugin
+
+Updating a Gephi plugin has the same process as submiting it for the first time. Don't forget to merge from upstream's master branch.
 
 ## IDE Support
 
@@ -81,3 +93,29 @@ Submitting a Gephi plugin for approval is a simple process based on GitHub's [pu
 
 - Start Netbeans and go to `File` and then `Open Project`. Navigate to your fork repository, Netbeans automatically recognizes it as Maven project. 
 - Each plugin module can be found in the `Modules` folder.
+
+To run Gephi with your plugin pre-installed, right click on the `gephi-plugins` project and select `Run`.
+
+### IntelliJ IDEA
+
+- Start IntelliJ and `Open` the project by navigating to your fork repository. IntelliJ may prompt you to import the Maven project, select yes.
+
+To run Gephi with your plugin pre-installed when you click `Run`, create a `Maven` run configuration and enter `org.gephi:gephi-maven-plugin:run` in the command field. The working directory is simply the current project directory.
+
+## FAQ
+
+- What kind of plugins can I create?
+
+Gephi can be extended in many ways but the major categories are `Layout`, `Export`, `Import`, `Data Laboratory`, `Filter`, `Generator`, `Metric`, `Preview`, `Tool`, `Appearance` and `Clustering`. A good way to start is to look at examples with the [bootcamp](https://github.com/gephi/gephi-plugins-bootcamp).
+
+- How is this repository structured?
+
+The `modules` folder is where plugin modules go. Each plugin is defined in a in single folder in this directory. A plugin can be composed of multiple modules (it's called a suite then) but usually one is enough to do what you want.
+
+The `pom.xml` file in `modules` is the parent pom for plugins. A Maven pom can inherit configurations from a parent and that is something we use to keep each plugin's pom very simple. Notice that each plugin's pom (i.e. the `pom.xml` file in the plugin folder) has a `<parent>` defined.
+
+The `pom.xml` file at the root folder makes eveything fit together and notably lists the modules.
+
+- What is the difference between plugin and module?
+
+It's the same thing. We say module because Gephi is a modular application and is composed of many independent modules. Plugins also are modules but we call them plugin because they aren't in the _core_ Gephi.
