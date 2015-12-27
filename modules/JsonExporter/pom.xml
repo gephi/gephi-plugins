@@ -7,7 +7,7 @@
         <version>0.9.0</version>
     </parent>
 
-    <groupId>uk.ox.oii</groupId>
+    <groupId>org.gephi</groupId>
     <artifactId>jsonexporter-plugin</artifactId>
     <version>2.0.0</version>
     <packaging>nbm</packaging>
