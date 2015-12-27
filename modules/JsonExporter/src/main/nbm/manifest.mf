@@ -6,4 +6,4 @@ OpenIDE-Module-Long-Description: Exports the network to a JSON file with an arra
     Using JSON with Sigma.js improves load time and browser compatibility. <br/>
     GPLv3 License.<br/>
     Code at <a href="https://github.com/oxfordinternetinstitute/gephi-plugins/tree/jsonexporter-plugin">https://github.com/oxfordinternetinstitute/gephi-plugins/tree/jsonexporter-plugin</a>.
-OpenIDE-Module-Display-Category: Exporter
+OpenIDE-Module-Display-Category: Export
