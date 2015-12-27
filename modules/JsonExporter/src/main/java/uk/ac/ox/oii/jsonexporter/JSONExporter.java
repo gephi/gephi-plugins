@@ -1,19 +1,19 @@
 /*
- Copyright (C) 2012  Scott A. Hale
- Website: http://www.scotthale.net/
+Copyright (C) 2015  Scott A. Hale
+Website: http://www.scotthale.net/
 
- This program is free software: you can redistribute it and/or modify
- it under the terms of the GNU General Public License as published by
- the Free Software Foundation, either version 3 of the License, or
- (at your option) any later version.
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
 
- This program is distributed in the hope that it will be useful,
- but WITHOUT ANY WARRANTY; without even the implied warranty of
- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- GNU General Public License for more details.
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
 
- You should have received a copy of the GNU General Public License
- along with this program.  If not, see <http://www.gnu.org/license
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <http://www.gnu.org/license
  */
 package uk.ac.ox.oii.jsonexporter;
 
@@ -23,14 +23,13 @@ import java.io.FileNotFoundException;
 import java.io.Writer;
 import java.util.HashMap;
 import java.util.HashSet;
-import org.gephi.data.attributes.api.AttributeColumn;
-import org.gephi.data.attributes.api.AttributeRow;
+import java.util.Iterator;
+import org.gephi.graph.api.Column;
 import org.gephi.graph.api.Edge;
-import org.gephi.graph.api.EdgeData;
 import org.gephi.graph.api.Graph;
 import org.gephi.graph.api.GraphModel;
 import org.gephi.graph.api.Node;
-import org.gephi.graph.api.NodeData;
+import org.gephi.graph.api.Table;
 import org.gephi.io.exporter.spi.CharacterExporter;
 import org.gephi.io.exporter.spi.GraphExporter;
 import org.gephi.preview.types.EdgeColor;
@@ -42,10 +41,6 @@ import uk.ac.ox.oii.jsonexporter.model.GraphEdge;
 import uk.ac.ox.oii.jsonexporter.model.GraphElement;
 import uk.ac.ox.oii.jsonexporter.model.GraphNode;
 
-/**
- *
- * @author shale
- */
 public class JSONExporter implements GraphExporter, LongTask, CharacterExporter {
 
     private boolean exportVisible = false;
@@ -82,19 +77,19 @@ public class JSONExporter implements GraphExporter, LongTask, CharacterExporter 
                 //Write data.json
 
 
-
+                Table attModel = graphModel.getNodeTable();
                 HashSet<GraphElement> jNodes = new HashSet<GraphElement>();
                 Node[] nodeArray = graph.getNodes().toArray();
-                for (int i = 0; i < nodeArray.length; i++) {
+                
+                for (Node n : nodeArray) {
 
-                    Node n = nodeArray[i];
-                    NodeData nd = n.getNodeData();
-                    String id = nd.getId();
-                    String label = nd.getLabel();
-                    float x = nd.x();
-                    float y = nd.y();
-                    float size = nd.getSize();
-                    String color = "rgb(" + (int) (nd.r() * 255) + "," + (int) (nd.g() * 255) + "," + (int) (nd.b() * 255) + ")";
+                    String id = n.getId().toString();
+                    String label = n.getLabel();
+                    float x = n.x();
+                    float y = n.y();
+                    System.out.println(n.z());
+                    float size = n.size();
+                    String color = "rgb(" + (int) (n.r() * 255) + "," + (int) (n.g() * 255) + "," + (int) (n.b() * 255) + ")";
 
                     /*if (renumber) {
                      String newId=String.valueOf(nodeId);
@@ -110,23 +105,20 @@ public class JSONExporter implements GraphExporter, LongTask, CharacterExporter 
                     jNode.setSize(size);
                     jNode.setColor(color);
 
-                    AttributeRow nAttr = (AttributeRow) nd.getAttributes();
-                    for (int j = 0; j < nAttr.countValues(); j++) {
-                        Object valObj = nAttr.getValue(j);
-                        if (valObj == null) {
-                            continue;
-                        }
-                        String val = valObj.toString();
-                        AttributeColumn col = nAttr.getColumnAt(j);
-                        if (col == null) {
-                            continue;
-                        }
-                        String name = col.getTitle();
-                        if (name.equalsIgnoreCase("Id") || name.equalsIgnoreCase("Label")
-                                || name.equalsIgnoreCase("uid")) {
-                            continue;
-                        }
-                        jNode.putAttribute(name, val);
+                    
+                    for (Column col : attModel) {
+                            String name = col.getTitle();
+                            if (name.equalsIgnoreCase("Id") || name.equalsIgnoreCase("Label")
+                                    || name.equalsIgnoreCase("uid")) {
+                                continue;
+                            }
+
+                            Object valObj = n.getAttribute(col);
+                            if (valObj == null) {
+                                continue;
+                            }
+                            String val = valObj.toString();
+                            jNode.putAttribute(name, val);
 
                     }
 
@@ -142,10 +134,10 @@ public class JSONExporter implements GraphExporter, LongTask, CharacterExporter 
                 //Export edges. Progress is incremented at each step.
                 HashSet<GraphElement> jEdges = new HashSet<GraphElement>();
                 Edge[] edgeArray = graph.getEdges().toArray();
-                for (int i = 0; i < edgeArray.length; i++) {
-                    Edge e = edgeArray[i];
-                    String sourceId = e.getSource().getNodeData().getId();
-                    String targetId = e.getTarget().getNodeData().getId();
+
+                for (Edge e : edgeArray) {
+                    String sourceId = e.getSource().getId().toString();
+                    String targetId = e.getTarget().getId().toString();
 
                     /*if (renumber) {
                      sourceId = nodeIdMap.get(sourceId);
@@ -158,51 +150,47 @@ public class JSONExporter implements GraphExporter, LongTask, CharacterExporter 
                     jEdge.setTarget(targetId);
                     jEdge.setSize(e.getWeight());
 
-                    EdgeData ed = e.getEdgeData();
                     boolean mixColors=false;
                     String color="";
-                    if (ed!=null) {
-                        jEdge.setLabel(ed.getLabel());
-                        
-                        float r=ed.r();
-                        float g=ed.g();
-                        float b=ed.b();
+                    jEdge.setLabel(e.getLabel());
 
-                        if (r==-1 || g==-1 || b==-1) {
-                            //Mix colors
-                            mixColors=true;
-                        } else {
-                            color = "rgb(" + (int) (r* 255) + "," + (int) (g* 255) + "," + (int) (b* 255) + ")";
+                    float r=e.r();
+                    float g=e.g();
+                    float b=e.b();
+
+                    if (r==-1 || g==-1 || b==-1) {
+                        //Mix colors
+                        mixColors=true;
+                    } else {
+                        color = "rgb(" + (int) (r* 255) + "," + (int) (g* 255) + "," + (int) (b* 255) + ")";
+                    }
+
+                    Iterator<Column> eAttr = e.getAttributeColumns().iterator();
+                    while (eAttr.hasNext()) {
+                        Column col = eAttr.next();
+                        if (col == null) {
+                            continue;
+                        }
+                        String name = col.getTitle();
+                        if (name.equalsIgnoreCase("Id") || name.equalsIgnoreCase("Label")
+                                || name.equalsIgnoreCase("uid")) {
+                            continue;
                         }
 
-                        AttributeRow eAttr = (AttributeRow) ed.getAttributes();
-                        if (eAttr!=null) {
-                            for (int j = 0; j < eAttr.countValues(); j++) {
-                                Object valObj = eAttr.getValue(j);
-                                if (valObj == null) {
-                                    continue;
-                                }
-                                String val = valObj.toString();
-                                AttributeColumn col = eAttr.getColumnAt(j);
-                                if (col == null) {
-                                    continue;
-                                }
-                                String name = col.getTitle();
-                                if (name.equalsIgnoreCase("Id") || name.equalsIgnoreCase("Label")
-                                        || name.equalsIgnoreCase("uid")) {
-                                    continue;
-                                }
-                                jEdge.putAttribute(name, val);
-                            }
+                        Object valObj = e.getAttribute(col);
+                        if (valObj == null) {
+                            continue;
                         }
+                        String val = valObj.toString();
+                        jEdge.putAttribute(name, val);
                     }
                     
                     if (mixColors) {
                         //Source
-                        NodeData nd = e.getSource().getNodeData();
-                        Color source = new Color(nd.r(),nd.g(),nd.b());
-                        nd = e.getTarget().getNodeData();
-                        Color target = new Color(nd.r(),nd.g(),nd.b());
+                        Node n = e.getSource();
+                        Color source = new Color(n.r(),n.g(),n.b());
+                        n = e.getTarget();
+                        Color target = new Color(n.r(),n.g(),n.b());
                         Color result = colorMixer.getColor(null, source, target);
                         color = "rgb(" + result.getRed() + "," + result.getGreen() + "," + result.getBlue() + ")";
                     }

@@ -1,5 +1,5 @@
 /*
-Copyright (C) 2012  Scott A. Hale
+Copyright (C) 2015  Scott A. Hale
 Website: http://www.scotthale.net/
 
 This program is free software: you can redistribute it and/or modify
