@@ -10,8 +10,23 @@ This section is a step-by-step guide to migrate 0.8 plugins. Before going throug
 
 - The 0.8 base is built using Ant, whereas the 0.9 uses Maven. These two are significantly different. If you aren't familiar with Maven, you can start with [Maven in 5 Minutes]( https://maven.apache.org/guides/getting-started/maven-in-five-minutes.html). Maven configurations are defined in the `pom.xml` files.
 - The 0.8 base finds the Gephi modules into the `platform` folder checked in the repository, whereas the 0.9 base downloads everything from the central Maven repository, where all Gephi modules are available.
+- Maven requires to separate source files (e.g. .java) and resources files (e.g. .properties) into distinct folders. Sources are located in `src/main/java` and resources in `src/main/resources`.
 
-`TODO`
+A custom `migrate` goal is available in the [Gephi Maven Plugin](https://github.com/gephi/gephi-maven-plugin) to facilitate the migration from 0.8 to 0.9. This automated process migrates ant-based plugins to maven and takes care of copying the configuration and code. Follow these steps to migrate your plugin:
+
+- Fork and checkout this repository:
+
+        git clone git@github.com:username/gephi-plugins.git
+If you've already had a forked repository based on 0.8 we suggest to save your code somewhere, delete it and fork again as the history was cleared.
+
+- Copy your plugin folder at the root of this directory.
+
+- Run this command:
+
+       mvn org.gephi:gephi-maven-plugin:migrate
+This command will detect the ant-based plugin and migrate it. The resulting folder is then located into the `modules` folder.
+
+The plugin code can then be inspected in Netbeans or built via command line with `mvn clean package`.
 
 ## Get started
 
@@ -108,6 +123,14 @@ To run Gephi with your plugin pre-installed when you click `Run`, create a `Mave
 
 Gephi can be extended in many ways but the major categories are `Layout`, `Export`, `Import`, `Data Laboratory`, `Filter`, `Generator`, `Metric`, `Preview`, `Tool`, `Appearance` and `Clustering`. A good way to start is to look at examples with the [bootcamp](https://github.com/gephi/gephi-plugins-bootcamp).
 
+- In which language can plugins be created?
+
+Plugins can use any JVM languages (e.g. Scala, Python, Groovy) but the default option is Java. 
+
+- Can native librairies be used?
+
+Yes, native librairies can be used in modules.
+
 - How is this repository structured?
 
 The `modules` folder is where plugin modules go. Each plugin is defined in a in single folder in this directory. A plugin can be composed of multiple modules (it's called a suite then) but usually one is enough to do what you want.
@@ -115,6 +138,25 @@ The `modules` folder is where plugin modules go. Each plugin is defined in a in 
 The `pom.xml` file in `modules` is the parent pom for plugins. A Maven pom can inherit configurations from a parent and that is something we use to keep each plugin's pom very simple. Notice that each plugin's pom (i.e. the `pom.xml` file in the plugin folder) has a `<parent>` defined.
 
 The `pom.xml` file at the root folder makes eveything fit together and notably lists the modules.
+
+- Where are dependencies configured?
+
+Dependencies are configured in the `<dependencies>` section in the plugin folder's `pom.xml`. Each dependency has a `groupId`, an `artifactId` and a `version`. There are three types of dependencies a plugin can have: an external library, a Gephi module or a Netbeans module.
+
+The list of Gephi and Netbeans dependencies one can use can be found in the `modules/pom.xml` file. All possible dependencies are listed in the `<dependencyManagement>` section. Because each plugin module inherits from this parent pom the version can be omitted when the dependency is set. For instance, this is how a plugin depends on `GraphAPI` and Netbeans's `Lookup`.
+
+```
+<dependencies>
+     <dependency>
+         <groupId>org.netbeans.api</groupId>
+         <artifactId>org-openide-util-lookup</artifactId>
+     </dependency>
+     <dependency>
+         <groupId>org.gephi</groupId>
+         <artifactId>graph-api</artifactId>
+    </dependency>
+</dependencies>
+```
 
 - What is the difference between plugin and module?
 
