@@ -14,6 +14,7 @@
         <!-- Add here the paths of all modules (e.g. <module>modules/MyModule</module>) -->
         <module>modules/GeoLayout</module>
         <module>modules/LinkfluencePlugin</module>
+        <module>modules/KBraceFilter</module>
     </modules>
     
     <!-- Properties -->
