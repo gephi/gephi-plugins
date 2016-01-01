@@ -17,6 +17,7 @@ A custom `migrate` goal is available in the [Gephi Maven Plugin](https://github.
 - Fork and checkout this repository:
 
         git clone git@github.com:username/gephi-plugins.git
+
 If you've already had a forked repository based on 0.8 we suggest to save your code somewhere, delete it and fork again as the history was cleared.
 
 - Copy your plugin folder at the root of this directory.
@@ -24,6 +25,7 @@ If you've already had a forked repository based on 0.8 we suggest to save your c
 - Run this command:
 
        mvn org.gephi:gephi-maven-plugin:migrate
+
 This command will detect the ant-based plugin and migrate it. The resulting folder is then located into the `modules` folder.
 
 The plugin code can then be inspected in Netbeans or built via command line with `mvn clean package`.
