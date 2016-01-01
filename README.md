@@ -24,7 +24,7 @@ If you've already had a forked repository based on 0.8 we suggest to save your c
 
 - Run this command:
 
-       mvn org.gephi:gephi-maven-plugin:migrate
+        mvn org.gephi:gephi-maven-plugin:migrate
 
 This command will detect the ant-based plugin and migrate it. The resulting folder is then located into the `modules` folder.
 
