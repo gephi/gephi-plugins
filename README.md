@@ -113,11 +113,15 @@ Updating a Gephi plugin has the same process as submiting it for the first time.
 
 To run Gephi with your plugin pre-installed, right click on the `gephi-plugins` project and select `Run`.
 
+To debug Gephi with your plugin, right click on the `gephi-plugins` project and select `Debug`.
+
 ### IntelliJ IDEA
 
 - Start IntelliJ and `Open` the project by navigating to your fork repository. IntelliJ may prompt you to import the Maven project, select yes.
 
 To run Gephi with your plugin pre-installed when you click `Run`, create a `Maven` run configuration and enter `org.gephi:gephi-maven-plugin:run` in the command field. The working directory is simply the current project directory.
+
+To debug Gephi with your plugin, create a `Remote` configuration and switch the `Debugger mode` option to `Listen`. Then create a `Maven` run configuration like abobe but add `-Drun.params.debug="-J-Xdebug -J-Xnoagent -J-Xrunjdwp:transport=dt_socket,suspend=n,server=n,address=5005"` into the `Runner` > `VM Options` field. Then, go to the `Run` menu and first run debug with the remote configuration and then only run debug with the Maven configuration.
 
 ## FAQ
 
