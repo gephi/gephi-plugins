@@ -61,8 +61,16 @@
       <artifactId>org-openide-util</artifactId>
     </dependency>
     <dependency>
+      <groupId>org.netbeans.api</groupId>
+      <artifactId>org-openide-util-ui</artifactId>
+    </dependency>
+    <dependency>
       <groupId>org.gephi</groupId>
       <artifactId>project-api</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.gephi</groupId>
+      <artifactId>lib.validation</artifactId>
     </dependency>
     
     <dependency> 
