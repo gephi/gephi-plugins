@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <artifactId>gephi-plugin-parent</artifactId>
+        <groupId>org.gephi</groupId>
+        <version>0.9.0</version>
+    </parent>
+
+    <groupId>org.gephi.lib</groupId>
+    <artifactId>jetty</artifactId>
+    <version>1.0.0</version>
+    <packaging>nbm</packaging>
+
+    <name>JettyWrapper</name>
+
+    <dependencies>
+        
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>nbm-maven-plugin</artifactId>
+                <configuration>
+                    <author>Unknown</author>
+                    <sourceCodeUrl>$sourcecode_url</sourceCodeUrl>
+                    <publicPackages>
+                        
+                    <publicPackage>javax.servlet</publicPackage>
+                        <publicPackage>javax.servlet.annotation</publicPackage>
+                        <publicPackage>javax.servlet.descriptor</publicPackage>
+                        <publicPackage>javax.servlet.http</publicPackage>
+                        <publicPackage>org.eclipse.jetty.continuation</publicPackage>
+                        <publicPackage>org.eclipse.jetty.http</publicPackage>
+                        <publicPackage>org.eclipse.jetty.http.gzip</publicPackage>
+                        <publicPackage>org.eclipse.jetty.http.ssl</publicPackage>
+                        <publicPackage>org.eclipse.jetty.io</publicPackage>
+                        <publicPackage>org.eclipse.jetty.io.bio</publicPackage>
+                        <publicPackage>org.eclipse.jetty.io.nio</publicPackage>
+                        <publicPackage>org.eclipse.jetty.security</publicPackage>
+                        <publicPackage>org.eclipse.jetty.security.authentication</publicPackage>
+                        <publicPackage>org.eclipse.jetty.server</publicPackage>
+                        <publicPackage>org.eclipse.jetty.server.bio</publicPackage>
+                        <publicPackage>org.eclipse.jetty.server.handler</publicPackage>
+                        <publicPackage>org.eclipse.jetty.server.handler.jmx</publicPackage>
+                        <publicPackage>org.eclipse.jetty.server.jmx</publicPackage>
+                        <publicPackage>org.eclipse.jetty.server.nio</publicPackage>
+                        <publicPackage>org.eclipse.jetty.server.session</publicPackage>
+                        <publicPackage>org.eclipse.jetty.server.session.jmx</publicPackage>
+                        <publicPackage>org.eclipse.jetty.server.ssl</publicPackage>
+                        <publicPackage>org.eclipse.jetty.servlet</publicPackage>
+                        <publicPackage>org.eclipse.jetty.servlet.jmx</publicPackage>
+                        <publicPackage>org.eclipse.jetty.servlet.listener</publicPackage>
+                        <publicPackage>org.eclipse.jetty.util</publicPackage>
+                        <publicPackage>org.eclipse.jetty.util.ajax</publicPackage>
+                        <publicPackage>org.eclipse.jetty.util.component</publicPackage>
+                        <publicPackage>org.eclipse.jetty.util.log</publicPackage>
+                        <publicPackage>org.eclipse.jetty.util.resource</publicPackage>
+                        <publicPackage>org.eclipse.jetty.util.security</publicPackage>
+                        <publicPackage>org.eclipse.jetty.util.ssl</publicPackage>
+                        <publicPackage>org.eclipse.jetty.util.statistic</publicPackage>
+                        <publicPackage>org.eclipse.jetty.util.thread</publicPackage>
+                        <publicPackage>org.eclipse.jetty.websocket</publicPackage>
+                    </publicPackages>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+</project>
