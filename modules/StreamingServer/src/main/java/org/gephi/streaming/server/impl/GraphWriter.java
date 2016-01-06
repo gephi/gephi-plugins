@@ -45,13 +45,12 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import org.gephi.graph.api.Column;
 
-import org.gephi.data.attributes.api.AttributeRow;
-import org.gephi.data.attributes.api.AttributeValue;
-import org.gephi.data.properties.PropertiesColumn;
 import org.gephi.graph.api.Edge;
 import org.gephi.graph.api.Graph;
 import org.gephi.graph.api.Node;
+import org.gephi.graph.impl.GraphStoreConfiguration;
 import org.gephi.streaming.api.CompositeGraphEventHandler;
 import org.gephi.streaming.api.event.GraphEventBuilder;
 import org.gephi.streaming.api.GraphEventHandler;
@@ -123,14 +122,13 @@ public class GraphWriter extends CompositeGraphEventHandler {
 
     private Map<String, Object> getNodeAttributes(Node node) {
         Map<String, Object> attributes = new HashMap<String, Object>();
-        AttributeRow row = (AttributeRow) node.getAttributes();
-
-        if (row != null)
-            for (AttributeValue attributeValue: row.getValues()) {
-                if (attributeValue.getColumn().getIndex()!=PropertiesColumn.NODE_ID.getIndex()
-                        && attributeValue.getValue()!=null)
-                    attributes.put(attributeValue.getColumn().getTitle(), attributeValue.getValue());
+        for (Column column: node.getAttributeColumns()) {
+            if (column.getIndex() != GraphStoreConfiguration.ELEMENT_ID_INDEX) {
+                Object value = node.getAttribute(column);
+                if (value != null)
+                    attributes.put(column.getTitle(), value);
             }
+        }
 
         if (sendVizData) {
             attributes.put("x", node.x());
@@ -141,7 +139,7 @@ public class GraphWriter extends CompositeGraphEventHandler {
             attributes.put("g", node.g());
             attributes.put("b", node.b());
 
-            attributes.put("size", node.getAttribute("size"));
+            attributes.put("size", node.size());
         }
 
         return attributes;
@@ -149,20 +147,20 @@ public class GraphWriter extends CompositeGraphEventHandler {
 
     private Map<String, Object> getEdgeAttributes(Edge edge) {
         Map<String, Object> attributes = new HashMap<String, Object>();
-        AttributeRow row = (AttributeRow) edge.getAttributes();
-        if (row != null)
-            for (AttributeValue attributeValue: row.getValues()) {
-                if (attributeValue.getColumn().getIndex()!=PropertiesColumn.EDGE_ID.getIndex()
-                        && attributeValue.getValue()!=null)
-                     attributes.put(attributeValue.getColumn().getTitle(), attributeValue.getValue());
+        for (Column column: edge.getAttributeColumns()) {
+            if (column.getIndex() != GraphStoreConfiguration.ELEMENT_ID_INDEX) {
+                Object value = edge.getAttribute(column);
+                if (value != null)
+                    attributes.put(column.getTitle(), value);
             }
+        }
 
         if (sendVizData) {
-            
+
             attributes.put("r", edge.r());
             attributes.put("g", edge.g());
             attributes.put("b", edge.b());
-            
+
             attributes.put("weight", edge.getWeight());
         }
 

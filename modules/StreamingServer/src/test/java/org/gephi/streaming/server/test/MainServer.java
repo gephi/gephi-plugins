@@ -43,7 +43,6 @@ package org.gephi.streaming.server.test;
 
 import java.io.IOException;
 
-import org.gephi.data.attributes.api.AttributeController;
 import org.gephi.graph.api.GraphController;
 import org.gephi.graph.api.GraphModel;
 import org.gephi.project.api.ProjectController;
@@ -71,11 +70,8 @@ public class MainServer {
         projectController.newProject();
         Workspace workspace = projectController.newWorkspace(projectController.getCurrentProject());
 
-        AttributeController ac = Lookup.getDefault().lookup(AttributeController.class);
-        ac.getModel();
-
         GraphController graphController = Lookup.getDefault().lookup(GraphController.class);
-        GraphModel graphModel = graphController.getModel();
+        GraphModel graphModel = graphController.getGraphModel();
 
         StreamingServer server = Lookup.getDefault().lookup(StreamingServer.class);
         
@@ -85,7 +81,7 @@ public class MainServer {
         authenticationFilter.setPassword(server.getServerSettings().getPassword());
         authenticationFilter.setAuthenticationEnabled(server.getServerSettings().isBasicAuthentication());
 
-        ServerControllerImpl serverController = new ServerControllerImpl(graphModel.getHierarchicalMixedGraph());
+        ServerControllerImpl serverController = new ServerControllerImpl(graphModel.getGraph());
         server.register(serverController, "/graphstream");
 
         server.start();

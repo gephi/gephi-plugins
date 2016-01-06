@@ -47,11 +47,11 @@ import java.net.URL;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
-import org.gephi.data.attributes.api.AttributeController;
 
 import org.gephi.graph.api.Graph;
 import org.gephi.graph.api.GraphController;
 import org.gephi.graph.api.GraphModel;
+import org.gephi.graph.api.GraphObserver;
 import org.gephi.project.api.ProjectController;
 import org.gephi.streaming.api.CompositeGraphEventHandler;
 import org.gephi.streaming.api.Graph2EventListener;
@@ -68,6 +68,7 @@ import org.gephi.streaming.api.event.GraphEvent;
 import org.gephi.streaming.api.event.GraphEventBuilder;
 import org.gephi.streaming.impl.StreamingConnectionImpl;
 import org.gephi.streaming.server.impl.FilteredGraphEventHandler;
+import static org.junit.Assert.assertTrue;
 import org.junit.Test;
 import org.openide.util.Exceptions;
 import org.openide.util.Lookup;
@@ -90,13 +91,13 @@ public class GraphStreamingEventProcessorTest {
         String streamType = "DGS";
         URL url = this.getClass().getResource(DGS_RESOURCE);
 
-        AttributeController ac = Lookup.getDefault().lookup(AttributeController.class);
-        ac.getModel();
+//        AttributeController ac = Lookup.getDefault().lookup(AttributeController.class);
+//        ac.getModel();
         
         GraphController graphController = Lookup.getDefault().lookup(GraphController.class);
-        GraphModel graphModel = graphController.getModel();
+        GraphModel graphModel = graphController.getGraphModel();
         
-        Graph graph = graphModel.getHierarchicalMixedGraph();
+        Graph graph = graphModel.getGraph();
 
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         StreamWriterFactory factory = Lookup.getDefault().lookup(StreamWriterFactory.class);
@@ -115,9 +116,10 @@ public class GraphStreamingEventProcessorTest {
         GraphEventHandler composite = new CompositeGraphEventHandler(graphUpdaterHandler, eventCollector);
 
         Graph2EventListener listener = new Graph2EventListener(graph, new FilteredGraphEventHandler(streamWriter, processedEvents));
+        GraphObserver graphObserver = graphModel.createGraphObserver(graph, true);
 //        Graph2EventListener listener = new Graph2EventListener(graph, streamWriter);
-        graphModel.addGraphListener(listener);
-        ac.getModel().addAttributeListener(listener);
+//        graphModel.addGraphListener(listener);
+//        ac.getModel().addAttributeListener(listener);
 
         StreamingConnection connection = 
                 connectToStream(url, streamType, composite);
@@ -129,6 +131,9 @@ public class GraphStreamingEventProcessorTest {
         } catch (InterruptedException ex) {
             Exceptions.printStackTrace(ex);
         }
+        
+        assertTrue(graphObserver.hasGraphChanged());
+        listener.graphChanged(graphObserver.getDiff());
 
         System.out.println(out.toString());
         

@@ -41,13 +41,9 @@ Portions Copyrighted 2011 Gephi Consortium.
  */
 package org.gephi.streaming.server.impl;
 
-import org.gephi.data.attributes.api.AttributeController;
-import org.gephi.data.attributes.api.AttributeModel;
-import org.gephi.dynamic.api.DynamicModel;
 import org.gephi.graph.api.Graph;
 import org.gephi.streaming.api.CompositeGraphEventHandler;
 import org.gephi.streaming.api.GraphEventHandler;
-import org.openide.util.Lookup;
 
 /**
  * @author panisson
@@ -60,10 +56,7 @@ public class GraphBufferedEventHandler extends CompositeGraphEventHandler {
     public GraphBufferedEventHandler(Graph graph) {
         
         // check if graph is dynamic
-        AttributeModel attributeModel = Lookup.getDefault().lookup(AttributeController.class)
-                .getModel(graph.getModel().getWorkspace());
-        if (attributeModel.getNodeTable().hasColumn(DynamicModel.TIMEINTERVAL_COLUMN)
-            && attributeModel.getEdgeTable().hasColumn(DynamicModel.TIMEINTERVAL_COLUMN)) {
+        if (graph.getModel().isDynamic()) {
             this.graphWriter = new DynamicGraphWriter(graph, false);
         } else {
             this.graphWriter = new GraphWriter(graph, true);

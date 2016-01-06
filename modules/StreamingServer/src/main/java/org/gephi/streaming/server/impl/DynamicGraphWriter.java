@@ -46,16 +46,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeSet;
+import org.gephi.graph.api.Column;
 
-import org.gephi.data.attributes.api.AttributeRow;
-import org.gephi.data.attributes.api.AttributeValue;
-import org.gephi.data.attributes.type.DynamicType;
-import org.gephi.data.attributes.type.Interval;
-import org.gephi.data.properties.PropertiesColumn;
-import org.gephi.dynamic.api.DynamicModel;
 import org.gephi.graph.api.Edge;
 import org.gephi.graph.api.Graph;
 import org.gephi.graph.api.Node;
+import org.gephi.graph.impl.GraphStoreConfiguration;
 import org.gephi.streaming.api.GraphEventHandler;
 import org.gephi.streaming.api.event.ElementType;
 import org.gephi.streaming.api.event.EventType;
@@ -83,144 +79,148 @@ public class DynamicGraphWriter extends GraphWriter {
             Map<Double, List<GraphEvent>> remotion = new HashMap<Double, List<GraphEvent>>();
             Map<Double, List<GraphEvent>> changing = new HashMap<Double, List<GraphEvent>>();
             
-            for (Node node: graph.getNodes()) {
-                
-                String nodeId = (String) node.getId();
-                DynamicType timeInterval = (DynamicType)node.getAttribute(DynamicModel.TIMEINTERVAL_COLUMN);
-
-                List<Interval> ranges = timeInterval.getIntervals();
-                for (Interval range: ranges) {
-                    double created = range.getLow();
-                    double removed = range.getHigh();
-
-                    if (created < minRange) {
-                        minRange = created;
-                    }
-                    if (removed > maxRange) {
-                        maxRange = removed;
-                    }
-
-                    List<GraphEvent> createdAt = creation.get(created);
-                    if (createdAt == null) {
-                        createdAt = new ArrayList<GraphEvent>();
-                        creation.put(created, createdAt);
-                    }
-
-                    {
-                        Map<String, Object> attributes = getNodeAttributes(node);
-                        createdAt.add(eventBuilder.graphEvent(ElementType.NODE, EventType.ADD, nodeId, attributes));
-                    }
-
-                    List<GraphEvent> removedAt = remotion.get(removed);
-                    if (removedAt == null) {
-                        removedAt = new ArrayList<GraphEvent>();
-                        remotion.put(removed, removedAt);
-                    }
-                    {
-                        Map<String, Object> attributes = new HashMap<String, Object>();
-                        removedAt.add(eventBuilder.graphEvent(ElementType.NODE, EventType.REMOVE, nodeId, attributes));
-                    }
-                    
-                    AttributeRow row = (AttributeRow) node.getAttributes();
-                    if (row != null) {
-                        for (AttributeValue attributeValue : row.getValues()) {
-                            if (attributeValue.getValue() != null
-                                    && attributeValue.getColumn().getType().isDynamicType()
-                                    && !attributeValue.getColumn().getId().equals(DynamicModel.TIMEINTERVAL_COLUMN)) {
-
-                                DynamicType dynamicValue = (DynamicType)attributeValue.getValue();
-                                List<Interval> intervals = dynamicValue.getIntervals();
-
-                                for (Interval interval: intervals) {
-
-                                    Object value = interval.getValue();
-
-                                    List<GraphEvent> changedAt = changing.get(interval.getLow());
-                                    if (changedAt == null) {
-                                        changedAt = new ArrayList<GraphEvent>();
-                                        changing.put(interval.getLow(), changedAt);
-                                    }
-                                    Map<String, Object> attributes = new HashMap<String, Object>();
-                                    attributes.put(attributeValue.getColumn().getTitle(), value);
-
-                                    changedAt.add(eventBuilder.graphEvent(ElementType.NODE, EventType.CHANGE, nodeId, attributes));
-
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-
-            for (Edge edge: graph.getEdges()) {
-
-                String edgeId = (String) edge.getId();
-                DynamicType timeInterval = (DynamicType)edge.getAttributes(DynamicModel.TIMEINTERVAL_COLUMN);
-
-                List<Interval> ranges = timeInterval.getIntervals();
-                for (Interval range: ranges) {
-                    double created = range.getLow();
-                    double removed = range.getHigh();
-
-                    if (created < minRange) {
-                        minRange = created;
-                    }
-                    if (removed > maxRange) {
-                        maxRange = removed;
-                    }
-
-                    List<GraphEvent> createdAt = creation.get(created);
-                    if (createdAt == null) {
-                        createdAt = new ArrayList<GraphEvent>();
-                        creation.put(created, createdAt);
-                    }
-                    {
-                        Map<String, Object> attributes = getEdgeAttributes(edge);
-                        String sourceId = (String) edge.getSource().getId();
-                        String targetId = (String) edge.getTarget().getId();
-                        createdAt.add(eventBuilder.edgeAddedEvent(edgeId, sourceId, targetId, edge.isDirected(), attributes));
-                    }
-
-                    List<GraphEvent> removedAt = remotion.get(removed);
-                    if (removedAt == null) {
-                        removedAt = new ArrayList<GraphEvent>();
-                        remotion.put(removed, removedAt);
-                    }
-                    {
-                        Map<String, Object> attributes = new HashMap<String, Object>();
-                        removedAt.add(0,eventBuilder.graphEvent(ElementType.EDGE, EventType.REMOVE, edgeId, attributes));
-                    }
-                    
-                    AttributeRow row = (AttributeRow) edge.getAttributes();
-                    if (row != null) {
-                        for (AttributeValue attributeValue : row.getValues()) {
-                            if (attributeValue.getValue() != null
-                                    && attributeValue.getColumn().getType().isDynamicType()
-                                    && !attributeValue.getColumn().getId().equals(DynamicModel.TIMEINTERVAL_COLUMN)) {
-
-                                DynamicType dynamicValue = (DynamicType)attributeValue.getValue();
-                                List<Interval> intervals = dynamicValue.getIntervals();
-
-                                for (Interval interval: intervals) {
-
-                                    Object value = interval.getValue();
-
-                                    List<GraphEvent> changedAt = changing.get(interval.getLow());
-                                    if (changedAt == null) {
-                                        changedAt = new ArrayList<GraphEvent>();
-                                        changing.put(interval.getLow(), changedAt);
-                                    }
-                                    Map<String, Object> attributes = new HashMap<String, Object>();
-                                    attributes.put(attributeValue.getColumn().getTitle(), value);
-
-                                    changedAt.add(eventBuilder.graphEvent(ElementType.EDGE, EventType.CHANGE, edgeId, attributes));
-
-                                }
-                            }
-                        }
-                    }
-                }
-            }
+            // TODO: Implement handling of dynamic graphs
+            if (true)
+                throw new Exception("Handling of dynamic graphs is not supported");
+            
+//            for (Node node: graph.getNodes()) {
+//                
+//                String nodeId = (String) node.getId();
+//                DynamicType timeInterval = (DynamicType)node.getAttribute(DynamicModel.TIMEINTERVAL_COLUMN);
+//
+//                List<Interval> ranges = timeInterval.getIntervals();
+//                for (Interval range: ranges) {
+//                    double created = range.getLow();
+//                    double removed = range.getHigh();
+//
+//                    if (created < minRange) {
+//                        minRange = created;
+//                    }
+//                    if (removed > maxRange) {
+//                        maxRange = removed;
+//                    }
+//
+//                    List<GraphEvent> createdAt = creation.get(created);
+//                    if (createdAt == null) {
+//                        createdAt = new ArrayList<GraphEvent>();
+//                        creation.put(created, createdAt);
+//                    }
+//
+//                    {
+//                        Map<String, Object> attributes = getNodeAttributes(node);
+//                        createdAt.add(eventBuilder.graphEvent(ElementType.NODE, EventType.ADD, nodeId, attributes));
+//                    }
+//
+//                    List<GraphEvent> removedAt = remotion.get(removed);
+//                    if (removedAt == null) {
+//                        removedAt = new ArrayList<GraphEvent>();
+//                        remotion.put(removed, removedAt);
+//                    }
+//                    {
+//                        Map<String, Object> attributes = new HashMap<String, Object>();
+//                        removedAt.add(eventBuilder.graphEvent(ElementType.NODE, EventType.REMOVE, nodeId, attributes));
+//                    }
+//                    
+//                    AttributeRow row = (AttributeRow) node.getAttributes();
+//                    if (row != null) {
+//                        for (AttributeValue attributeValue : row.getValues()) {
+//                            if (attributeValue.getValue() != null
+//                                    && attributeValue.getColumn().getType().isDynamicType()
+//                                    && !attributeValue.getColumn().getId().equals(DynamicModel.TIMEINTERVAL_COLUMN)) {
+//
+//                                DynamicType dynamicValue = (DynamicType)attributeValue.getValue();
+//                                List<Interval> intervals = dynamicValue.getIntervals();
+//
+//                                for (Interval interval: intervals) {
+//
+//                                    Object value = interval.getValue();
+//
+//                                    List<GraphEvent> changedAt = changing.get(interval.getLow());
+//                                    if (changedAt == null) {
+//                                        changedAt = new ArrayList<GraphEvent>();
+//                                        changing.put(interval.getLow(), changedAt);
+//                                    }
+//                                    Map<String, Object> attributes = new HashMap<String, Object>();
+//                                    attributes.put(attributeValue.getColumn().getTitle(), value);
+//
+//                                    changedAt.add(eventBuilder.graphEvent(ElementType.NODE, EventType.CHANGE, nodeId, attributes));
+//
+//                                }
+//                            }
+//                        }
+//                    }
+//                }
+//            }
+//
+//            for (Edge edge: graph.getEdges()) {
+//
+//                String edgeId = (String) edge.getId();
+//                DynamicType timeInterval = (DynamicType)edge.getAttributes(DynamicModel.TIMEINTERVAL_COLUMN);
+//
+//                List<Interval> ranges = timeInterval.getIntervals();
+//                for (Interval range: ranges) {
+//                    double created = range.getLow();
+//                    double removed = range.getHigh();
+//
+//                    if (created < minRange) {
+//                        minRange = created;
+//                    }
+//                    if (removed > maxRange) {
+//                        maxRange = removed;
+//                    }
+//
+//                    List<GraphEvent> createdAt = creation.get(created);
+//                    if (createdAt == null) {
+//                        createdAt = new ArrayList<GraphEvent>();
+//                        creation.put(created, createdAt);
+//                    }
+//                    {
+//                        Map<String, Object> attributes = getEdgeAttributes(edge);
+//                        String sourceId = (String) edge.getSource().getId();
+//                        String targetId = (String) edge.getTarget().getId();
+//                        createdAt.add(eventBuilder.edgeAddedEvent(edgeId, sourceId, targetId, edge.isDirected(), attributes));
+//                    }
+//
+//                    List<GraphEvent> removedAt = remotion.get(removed);
+//                    if (removedAt == null) {
+//                        removedAt = new ArrayList<GraphEvent>();
+//                        remotion.put(removed, removedAt);
+//                    }
+//                    {
+//                        Map<String, Object> attributes = new HashMap<String, Object>();
+//                        removedAt.add(0,eventBuilder.graphEvent(ElementType.EDGE, EventType.REMOVE, edgeId, attributes));
+//                    }
+//                    
+//                    AttributeRow row = (AttributeRow) edge.getAttributes();
+//                    if (row != null) {
+//                        for (AttributeValue attributeValue : row.getValues()) {
+//                            if (attributeValue.getValue() != null
+//                                    && attributeValue.getColumn().getType().isDynamicType()
+//                                    && !attributeValue.getColumn().getId().equals(DynamicModel.TIMEINTERVAL_COLUMN)) {
+//
+//                                DynamicType dynamicValue = (DynamicType)attributeValue.getValue();
+//                                List<Interval> intervals = dynamicValue.getIntervals();
+//
+//                                for (Interval interval: intervals) {
+//
+//                                    Object value = interval.getValue();
+//
+//                                    List<GraphEvent> changedAt = changing.get(interval.getLow());
+//                                    if (changedAt == null) {
+//                                        changedAt = new ArrayList<GraphEvent>();
+//                                        changing.put(interval.getLow(), changedAt);
+//                                    }
+//                                    Map<String, Object> attributes = new HashMap<String, Object>();
+//                                    attributes.put(attributeValue.getColumn().getTitle(), value);
+//
+//                                    changedAt.add(eventBuilder.graphEvent(ElementType.EDGE, EventType.CHANGE, edgeId, attributes));
+//
+//                                }
+//                            }
+//                        }
+//                    }
+//                }
+//            }
             
             List<GraphEvent> pre;
             pre = creation.get(Double.NEGATIVE_INFINITY);
@@ -286,15 +286,13 @@ public class DynamicGraphWriter extends GraphWriter {
 
     private Map<String, Object> getNodeAttributes(Node node) {
         Map<String, Object> attributes = new HashMap<String, Object>();
-        AttributeRow row = (AttributeRow) node.getAttributes();
-
-        if (row != null)
-            for (AttributeValue attributeValue: row.getValues()) {
-                if (attributeValue.getColumn().getIndex()!=PropertiesColumn.NODE_ID.getIndex()
-                        && attributeValue.getValue()!=null
-                        && !attributeValue.getColumn().getType().isDynamicType())
-                    attributes.put(attributeValue.getColumn().getTitle(), attributeValue.getValue());
+        for (Column column: node.getAttributeColumns()) {
+            if (column.getIndex() != GraphStoreConfiguration.ELEMENT_ID_INDEX) {
+                Object value = node.getAttribute(column);
+                if (value != null)
+                    attributes.put(column.getTitle(), value);
             }
+        }
 
         if (sendVizData) {
             attributes.put("x", node.x());
@@ -305,7 +303,7 @@ public class DynamicGraphWriter extends GraphWriter {
             attributes.put("g", node.g());
             attributes.put("b", node.b());
 
-            attributes.put("size", node.getAttribute("size"));
+            attributes.put("size", node.size());
         }
 
         return attributes;
@@ -313,21 +311,20 @@ public class DynamicGraphWriter extends GraphWriter {
 
     private Map<String, Object> getEdgeAttributes(Edge edge) {
         Map<String, Object> attributes = new HashMap<String, Object>();
-        AttributeRow row = (AttributeRow) edge.getAttributes();
-        if (row != null)
-            for (AttributeValue attributeValue: row.getValues()) {
-                if (attributeValue.getColumn().getIndex()!=PropertiesColumn.EDGE_ID.getIndex()
-                        && attributeValue.getValue()!=null
-                        && !attributeValue.getColumn().getType().isDynamicType())
-                     attributes.put(attributeValue.getColumn().getTitle(), attributeValue.getValue());
+        for (Column column: edge.getAttributeColumns()) {
+            if (column.getIndex() != GraphStoreConfiguration.ELEMENT_ID_INDEX) {
+                Object value = edge.getAttribute(column);
+                if (value != null)
+                    attributes.put(column.getTitle(), value);
             }
+        }
 
         if (sendVizData) {
-            
+
             attributes.put("r", edge.r());
             attributes.put("g", edge.g());
             attributes.put("b", edge.b());
-            
+
             attributes.put("weight", edge.getWeight());
         }
 

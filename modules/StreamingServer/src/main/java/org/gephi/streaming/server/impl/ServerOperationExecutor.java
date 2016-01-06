@@ -48,14 +48,12 @@ import java.io.OutputStream;
 import java.net.SocketException;
 import java.util.HashMap;
 import java.util.Map;
+import org.gephi.graph.api.Column;
 
-import org.gephi.data.attributes.api.AttributeController;
-import org.gephi.data.attributes.api.AttributeRow;
-import org.gephi.data.attributes.api.AttributeValue;
-import org.gephi.data.properties.PropertiesColumn;
 import org.gephi.graph.api.Edge;
 import org.gephi.graph.api.Graph;
 import org.gephi.graph.api.Node;
+import org.gephi.graph.impl.GraphStoreConfiguration;
 import org.gephi.streaming.api.CompositeGraphEventHandler;
 import org.gephi.streaming.api.Graph2EventListener;
 import org.gephi.streaming.api.GraphEventHandler;
@@ -95,9 +93,9 @@ public class ServerOperationExecutor {
         eventBuilder = new GraphEventBuilder(this);
 
         Graph2EventListener changeListener = new Graph2EventListener(graph, graphBufferedOperationSupport);
-        graph.getGraphModel().addGraphListener(changeListener);
-        AttributeController ac = Lookup.getDefault().lookup(AttributeController.class);
-        ac.getModel().addAttributeListener(changeListener);
+//        graph.getGraphModel().addGraphListener(changeListener);
+//        AttributeController ac = Lookup.getDefault().lookup(AttributeController.class);
+//        ac.getModel().addAttributeListener(changeListener);
     }
     
     /**
@@ -150,7 +148,7 @@ public class ServerOperationExecutor {
         try {
             Node node = graph.getNode(id);
             if (node != null) {
-                String nodeId = node.getNodeData().getId();
+                String nodeId = node.getId().toString();
                 writer.handleGraphEvent(eventBuilder.graphEvent(ElementType.NODE, EventType.ADD, nodeId, getNodeAttributes(node)));
             }
         } finally {
@@ -178,9 +176,9 @@ public class ServerOperationExecutor {
         try {
             Edge edge = graph.getEdge(id);
             if (edge != null) {
-                String edgeId = edge.getEdgeData().getId();
-                String sourceId = edge.getSource().getNodeData().getId();
-                String targetId = edge.getTarget().getNodeData().getId();
+                String edgeId = edge.getId().toString();
+                String sourceId = edge.getSource().getId().toString();
+                String targetId = edge.getTarget().getId().toString();
                 writer.handleGraphEvent(eventBuilder.edgeAddedEvent(edgeId, sourceId, targetId, edge.isDirected(), getEdgeAttributes(edge)));
             }
         } finally {
@@ -226,25 +224,24 @@ public class ServerOperationExecutor {
     
     private Map<String, Object> getNodeAttributes(Node node) {
         Map<String, Object> attributes = new HashMap<String, Object>();
-        AttributeRow row = (AttributeRow) node.getNodeData().getAttributes();
-
-        if (row != null)
-            for (AttributeValue attributeValue: row.getValues()) {
-                if (attributeValue.getColumn().getIndex()!=PropertiesColumn.NODE_ID.getIndex()
-                        && attributeValue.getValue()!=null)
-                    attributes.put(attributeValue.getColumn().getTitle(), attributeValue.getValue());
+        for (Column column: node.getAttributeColumns()) {
+            if (column.getIndex() != GraphStoreConfiguration.ELEMENT_ID_INDEX) {
+                Object value = node.getAttribute(column);
+                if (value != null)
+                    attributes.put(column.getTitle(), value);
             }
+        }
 
         if (sendVizData) {
-            attributes.put("x", node.getNodeData().x());
-            attributes.put("y", node.getNodeData().y());
-            attributes.put("z", node.getNodeData().z());
+            attributes.put("x", node.x());
+            attributes.put("y", node.y());
+            attributes.put("z", node.z());
 
-            attributes.put("r", node.getNodeData().r());
-            attributes.put("g", node.getNodeData().g());
-            attributes.put("b", node.getNodeData().b());
+            attributes.put("r", node.r());
+            attributes.put("g", node.g());
+            attributes.put("b", node.b());
 
-            attributes.put("size", node.getNodeData().getSize());
+            attributes.put("size", node.size());
         }
 
         return attributes;
@@ -252,20 +249,20 @@ public class ServerOperationExecutor {
 
     private Map<String, Object> getEdgeAttributes(Edge edge) {
         Map<String, Object> attributes = new HashMap<String, Object>();
-        AttributeRow row = (AttributeRow) edge.getEdgeData().getAttributes();
-        if (row != null)
-            for (AttributeValue attributeValue: row.getValues()) {
-                if (attributeValue.getColumn().getIndex()!=PropertiesColumn.EDGE_ID.getIndex()
-                        && attributeValue.getValue()!=null)
-                     attributes.put(attributeValue.getColumn().getTitle(), attributeValue.getValue());
+        for (Column column: edge.getAttributeColumns()) {
+            if (column.getIndex() != GraphStoreConfiguration.ELEMENT_ID_INDEX) {
+                Object value = edge.getAttribute(column);
+                if (value != null)
+                    attributes.put(column.getTitle(), value);
             }
+        }
 
         if (sendVizData) {
-            
-            attributes.put("r", edge.getEdgeData().r());
-            attributes.put("g", edge.getEdgeData().g());
-            attributes.put("b", edge.getEdgeData().b());
-            
+
+            attributes.put("r", edge.r());
+            attributes.put("g", edge.g());
+            attributes.put("b", edge.b());
+
             attributes.put("weight", edge.getWeight());
         }
 

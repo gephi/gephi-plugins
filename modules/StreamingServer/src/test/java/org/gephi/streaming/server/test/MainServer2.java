@@ -51,7 +51,6 @@ import javax.servlet.http.HttpServletResponse;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
-import org.gephi.data.attributes.api.AttributeController;
 import org.gephi.graph.api.GraphController;
 import org.gephi.graph.api.GraphModel;
 import org.gephi.project.api.ProjectController;
@@ -83,13 +82,10 @@ public class MainServer2 extends HttpServlet {
         projectController.newProject();
         Workspace workspace = projectController.newWorkspace(projectController.getCurrentProject());
 
-        AttributeController ac = Lookup.getDefault().lookup(AttributeController.class);
-        ac.getModel();
-
         GraphController graphController = Lookup.getDefault().lookup(GraphController.class);
-        GraphModel graphModel = graphController.getModel();
+        GraphModel graphModel = graphController.getGraphModel();
 
-        serverController = new ServerControllerImpl(graphModel.getHierarchicalMixedGraph());
+        serverController = new ServerControllerImpl(graphModel.getGraph());
 
         final InputStream fileInputStream = this.getClass().getResourceAsStream(DGS_RESOURCE);
 
@@ -108,7 +104,7 @@ public class MainServer2 extends HttpServlet {
         };
 
         StreamReaderFactory factory = Lookup.getDefault().lookup(StreamReaderFactory.class);
-        final StreamReader streamReader = factory.createStreamReader("DGS", new GraphUpdaterEventHandler(graphModel.getHierarchicalMixedGraph()), new GraphEventBuilder(this));
+        final StreamReader streamReader = factory.createStreamReader("DGS", new GraphUpdaterEventHandler(graphModel.getGraph()), new GraphEventBuilder(this));
 
         new Thread() {
             @Override
@@ -139,7 +135,7 @@ public class MainServer2 extends HttpServlet {
    }
 
    public static void main(String[] list) throws Exception {
-        Server server = new Server(8080);
+        Server server = new Server(8081);
         ServletContextHandler context = new ServletContextHandler();
         context.setContextPath("/");
         context.addServlet(new ServletHolder(new MainServer2()), "/*");
