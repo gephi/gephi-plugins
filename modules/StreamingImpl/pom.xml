@@ -15,7 +15,7 @@
     <name>StreamingImpl</name>
 
     <dependencies>
-        
+
     <dependency>
       <groupId>org.gephi</groupId>
       <artifactId>filters-api</artifactId>
@@ -36,10 +36,16 @@
       <groupId>org.gephi</groupId>
       <artifactId>graph-api</artifactId>
     </dependency>
-      <dependency> 
+      <dependency>
         <groupId>org.gephi.streaming</groupId>
     <artifactId>api</artifactId>
     <version>1.0.0</version>
+    </dependency>
+    <dependency>
+        <groupId>junit</groupId>
+        <artifactId>junit</artifactId>
+        <version>4.10</version>
+        <scope>test</scope>
     </dependency>
   </dependencies>
 
@@ -52,7 +58,7 @@
                     <author>Unknown</author>
                     <sourceCodeUrl>$sourcecode_url</sourceCodeUrl>
                     <publicPackages>
-                        
+
                     </publicPackages>
                 </configuration>
             </plugin>
