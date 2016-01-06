@@ -1,0 +1,16 @@
+<rdf:RDF
+xmlns:kg='http://ns.inria.fr/edelweiss/2010/kgram/'
+xmlns:xsd='http://www.w3.org/2001/XMLSchema#'
+xmlns:xml='http://www.w3.org/XML/1998/namespace'
+xmlns:dbpedia-owl='http://dbpedia.org/ontology/'
+xmlns:owl='http://www.w3.org/2002/07/owl#'
+xmlns:rdf='http://www.w3.org/1999/02/22-rdf-syntax-ns#'
+xmlns:rdfs='http://www.w3.org/2000/01/rdf-schema#'
+xmlns:cos='http://www.inria.fr/acacia/corese#'>
+
+<rdf:Description rdf:about='http://dbpedia.org/resource/Tetris'>
+   <dbpedia-owl:developer rdf:resource='http://dbpedia.org/resource/Alexey_Pajitnov'/>
+   <dbpedia-owl:developer rdf:resource='http://dbpedia.org/resource/Vadim_Gerasimov'/>
+</rdf:Description>
+
+</rdf:RDF>

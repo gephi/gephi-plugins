@@ -1,0 +1,21 @@
+<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:wgs84_pos="http://www.w3.org/2003/01/geo/wgs84_pos#" xmlns:foaf="http://xmlns.com/foaf/0.1/" xmlns:admin="http://webns.net/mvcb/" xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#" xmlns:geo="http://www.geonames.org/ontology#">
+  <foaf:PersonalProfileDocument rdf:about="">
+    <foaf:maker rdf:resource="http://semantictweet.com/semantictweet"/>
+    <foaf:primaryTopic rdf:resource="http://semantictweet.com/inria#me"/>
+    <admin:generatorAgent rdf:resource="http://semantictweet.com/"/>
+    <admin:errorReportsTo rdf:resource="mailto:stephen@flinter.com"/>
+  </foaf:PersonalProfileDocument>
+  <foaf:Agent rdf:about="http://semantictweet.com/Maud_Charaf#me">
+    <foaf:name>Maud Charaf</foaf:name>
+    <foaf:nick>Maud_Charaf</foaf:nick>
+    <rdfs:seeAlso rdf:resource="http://semantictweet.com/Maud_Charaf"/>
+    <foaf:img rdf:resource="http://a0.twimg.com/profile_images/1237453111/180808_normal.jpg"/>
+  </foaf:Agent>
+  <foaf:Agent rdf:about="http://semantictweet.com/CandiceBachelet#me">
+    <foaf:name>Candice Bachelet</foaf:name>
+    <foaf:nick>CandiceBachelet</foaf:nick>
+    <rdfs:seeAlso rdf:resource="http://semantictweet.com/CandiceBachelet"/>
+    <foaf:homepage rdf:resource="http://www.candiceb-portfolio.com"/>
+    <foaf:img rdf:resource="http://a0.twimg.com/profile_images/1676818275/portrait_normal.jpg"/>
+  </foaf:Agent>
+</rdf:RDF>

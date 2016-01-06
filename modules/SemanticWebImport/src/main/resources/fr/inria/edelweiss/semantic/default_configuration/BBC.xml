@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+<comment>Properties to save.</comment>
+<entry key="Name">Example - BBC</entry>
+<entry key="SparqlRequest">construct{
+  ?x ?r ?y .
+  ?x rdf:type ?typex .
+  ?y rdf:type ?typey .
+} where {
+  ?x ?r ?y.
+  ?x rdf:type ?typex .
+  ?y rdf:type ?typey.
+}
+ limit 10000</entry>
+<entry key="restSparqlEndPointRequestProperties"/>
+<entry key="restSparqlEndPointRequestParameters"/>
+<entry key="restSparqlEndPointURL">http://dbtune.org/bbc/peel/sparql/</entry>
+<entry key="SparqlDriver">fr.inria.edelweiss.sparql.restdriver.SparqlRestEndPointDriver</entry>
+<entry key="restSparqlEndPointQuery">query</entry>
+</properties>

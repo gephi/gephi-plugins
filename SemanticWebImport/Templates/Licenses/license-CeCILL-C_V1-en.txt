@@ -1,0 +1,522 @@
+<#if licenseFirst??>
+${licenseFirst}
+</#if>
+${licensePrefix}CeCILL-C FREE SOFTWARE LICENSE AGREEMENT
+${licensePrefix}
+${licensePrefix}
+${licensePrefix}    Notice
+${licensePrefix}
+${licensePrefix}This Agreement is a Free Software license agreement that is the result
+${licensePrefix}of discussions between its authors in order to ensure compliance with
+${licensePrefix}the two main principles guiding its drafting:
+${licensePrefix}
+${licensePrefix}    * firstly, compliance with the principles governing the distribution
+${licensePrefix}      of Free Software: access to source code, broad rights granted to
+${licensePrefix}      users,
+${licensePrefix}    * secondly, the election of a governing law, French law, with which
+${licensePrefix}      it is conformant, both as regards the law of torts and
+${licensePrefix}      intellectual property law, and the protection that it offers to
+${licensePrefix}      both authors and holders of the economic rights over software.
+${licensePrefix}
+${licensePrefix}The authors of the CeCILL-C (for Ce[a] C[nrs] I[nria] L[ogiciel] L[ibre])
+${licensePrefix}license are:
+${licensePrefix}
+${licensePrefix}Commissariat � l'Energie Atomique - CEA, a public scientific, technical
+${licensePrefix}and industrial research establishment, having its principal place of
+${licensePrefix}business at 25 rue Leblanc, immeuble Le Ponant D, 75015 Paris, France.
+${licensePrefix}
+${licensePrefix}Centre National de la Recherche Scientifique - CNRS, a public scientific
+${licensePrefix}and technological establishment, having its principal place of business
+${licensePrefix}at 3 rue Michel-Ange, 75794 Paris cedex 16, France.
+${licensePrefix}
+${licensePrefix}Institut National de Recherche en Informatique et en Automatique -
+${licensePrefix}INRIA, a public scientific and technological establishment, having its
+${licensePrefix}principal place of business at Domaine de Voluceau, Rocquencourt, BP
+${licensePrefix}105, 78153 Le Chesnay cedex, France.
+${licensePrefix}
+${licensePrefix}
+${licensePrefix}    Preamble
+${licensePrefix}
+${licensePrefix}The purpose of this Free Software license agreement is to grant users
+${licensePrefix}the right to modify and re-use the software governed by this license.
+${licensePrefix}
+${licensePrefix}The exercising of this right is conditional upon the obligation to make
+${licensePrefix}available to the community the modifications made to the source code of
+${licensePrefix}the software so as to contribute to its evolution.
+${licensePrefix}
+${licensePrefix}In consideration of access to the source code and the rights to copy,
+${licensePrefix}modify and redistribute granted by the license, users are provided only
+${licensePrefix}with a limited warranty and the software's author, the holder of the
+${licensePrefix}economic rights, and the successive licensors only have limited liability.
+${licensePrefix}
+${licensePrefix}In this respect, the risks associated with loading, using, modifying
+${licensePrefix}and/or developing or reproducing the software by the user are brought to
+${licensePrefix}the user's attention, given its Free Software status, which may make it
+${licensePrefix}complicated to use, with the result that its use is reserved for
+${licensePrefix}developers and experienced professionals having in-depth computer
+${licensePrefix}knowledge. Users are therefore encouraged to load and test the
+${licensePrefix}suitability of the software as regards their requirements in conditions
+${licensePrefix}enabling the security of their systems and/or data to be ensured and,
+${licensePrefix}more generally, to use and operate it in the same conditions of
+${licensePrefix}security. This Agreement may be freely reproduced and published,
+${licensePrefix}provided it is not altered, and that no provisions are either added or
+${licensePrefix}removed herefrom.
+${licensePrefix}
+${licensePrefix}This Agreement may apply to any or all software for which the holder of
+${licensePrefix}the economic rights decides to submit the use thereof to its provisions.
+${licensePrefix}
+${licensePrefix}
+${licensePrefix}    Article 1 - DEFINITIONS
+${licensePrefix}
+${licensePrefix}For the purpose of this Agreement, when the following expressions
+${licensePrefix}commence with a capital letter, they shall have the following meaning:
+${licensePrefix}
+${licensePrefix}Agreement: means this license agreement, and its possible subsequent
+${licensePrefix}versions and annexes.
+${licensePrefix}
+${licensePrefix}Software: means the software in its Object Code and/or Source Code form
+${licensePrefix}and, where applicable, its documentation, "as is" when the Licensee
+${licensePrefix}accepts the Agreement.
+${licensePrefix}
+${licensePrefix}Initial Software: means the Software in its Source Code and possibly its
+${licensePrefix}Object Code form and, where applicable, its documentation, "as is" when
+${licensePrefix}it is first distributed under the terms and conditions of the Agreement.
+${licensePrefix}
+${licensePrefix}Modified Software: means the Software modified by at least one
+${licensePrefix}Integrated Contribution.
+${licensePrefix}
+${licensePrefix}Source Code: means all the Software's instructions and program lines to
+${licensePrefix}which access is required so as to modify the Software.
+${licensePrefix}
+${licensePrefix}Object Code: means the binary files originating from the compilation of
+${licensePrefix}the Source Code.
+${licensePrefix}
+${licensePrefix}Holder: means the holder(s) of the economic rights over the Initial
+${licensePrefix}Software.
+${licensePrefix}
+${licensePrefix}Licensee: means the Software user(s) having accepted the Agreement.
+${licensePrefix}
+${licensePrefix}Contributor: means a Licensee having made at least one Integrated
+${licensePrefix}Contribution.
+${licensePrefix}
+${licensePrefix}Licensor: means the Holder, or any other individual or legal entity, who
+${licensePrefix}distributes the Software under the Agreement.
+${licensePrefix}
+${licensePrefix}Integrated Contribution: means any or all modifications, corrections,
+${licensePrefix}translations, adaptations and/or new functions integrated into the
+${licensePrefix}Source Code by any or all Contributors.
+${licensePrefix}
+${licensePrefix}Related Module: means a set of sources files including their
+${licensePrefix}documentation that, without modification to the Source Code, enables
+${licensePrefix}supplementary functions or services in addition to those offered by the
+${licensePrefix}Software.
+${licensePrefix}
+${licensePrefix}Derivative Software: means any combination of the Software, modified or
+${licensePrefix}not, and of a Related Module.
+${licensePrefix}
+${licensePrefix}Parties: mean both the Licensee and the Licensor.
+${licensePrefix}
+${licensePrefix}These expressions may be used both in singular and plural form.
+${licensePrefix}
+${licensePrefix}
+${licensePrefix}    Article 2 - PURPOSE
+${licensePrefix}
+${licensePrefix}The purpose of the Agreement is the grant by the Licensor to the
+${licensePrefix}Licensee of a non-exclusive, transferable and worldwide license for the
+${licensePrefix}Software as set forth in Article 5 hereinafter for the whole term of the
+${licensePrefix}protection granted by the rights over said Software.
+${licensePrefix}
+${licensePrefix}
+${licensePrefix}    Article 3 - ACCEPTANCE
+${licensePrefix}
+${licensePrefix}3.1 The Licensee shall be deemed as having accepted the terms and
+${licensePrefix}conditions of this Agreement upon the occurrence of the first of the
+${licensePrefix}following events:
+${licensePrefix}
+${licensePrefix}    * (i) loading the Software by any or all means, notably, by
+${licensePrefix}      downloading from a remote server, or by loading from a physical
+${licensePrefix}      medium;
+${licensePrefix}    * (ii) the first time the Licensee exercises any of the rights
+${licensePrefix}      granted hereunder.
+${licensePrefix}
+${licensePrefix}3.2 One copy of the Agreement, containing a notice relating to the
+${licensePrefix}characteristics of the Software, to the limited warranty, and to the
+${licensePrefix}fact that its use is restricted to experienced users has been provided
+${licensePrefix}to the Licensee prior to its acceptance as set forth in Article 3.1
+${licensePrefix}hereinabove, and the Licensee hereby acknowledges that it has read and
+${licensePrefix}understood it.
+${licensePrefix}
+${licensePrefix}
+${licensePrefix}    Article 4 - EFFECTIVE DATE AND TERM
+${licensePrefix}
+${licensePrefix}
+${licensePrefix}      4.1 EFFECTIVE DATE
+${licensePrefix}
+${licensePrefix}The Agreement shall become effective on the date when it is accepted by
+${licensePrefix}the Licensee as set forth in Article 3.1.
+${licensePrefix}
+${licensePrefix}
+${licensePrefix}      4.2 TERM
+${licensePrefix}
+${licensePrefix}The Agreement shall remain in force for the entire legal term of
+${licensePrefix}protection of the economic rights over the Software.
+${licensePrefix}
+${licensePrefix}
+${licensePrefix}    Article 5 - SCOPE OF RIGHTS GRANTED
+${licensePrefix}
+${licensePrefix}The Licensor hereby grants to the Licensee, who accepts, the following
+${licensePrefix}rights over the Software for any or all use, and for the term of the
+${licensePrefix}Agreement, on the basis of the terms and conditions set forth hereinafter.
+${licensePrefix}
+${licensePrefix}Besides, if the Licensor owns or comes to own one or more patents
+${licensePrefix}protecting all or part of the functions of the Software or of its
+${licensePrefix}components, the Licensor undertakes not to enforce the rights granted by
+${licensePrefix}these patents against successive Licensees using, exploiting or
+${licensePrefix}modifying the Software. If these patents are transferred, the Licensor
+${licensePrefix}undertakes to have the transferees subscribe to the obligations set
+${licensePrefix}forth in this paragraph.
+${licensePrefix}
+${licensePrefix}
+${licensePrefix}      5.1 RIGHT OF USE
+${licensePrefix}
+${licensePrefix}The Licensee is authorized to use the Software, without any limitation
+${licensePrefix}as to its fields of application, with it being hereinafter specified
+${licensePrefix}that this comprises:
+${licensePrefix}
+${licensePrefix}   1. permanent or temporary reproduction of all or part of the Software
+${licensePrefix}      by any or all means and in any or all form.
+${licensePrefix}
+${licensePrefix}   2. loading, displaying, running, or storing the Software on any or
+${licensePrefix}      all medium.
+${licensePrefix}
+${licensePrefix}   3. entitlement to observe, study or test its operation so as to
+${licensePrefix}      determine the ideas and principles behind any or all constituent
+${licensePrefix}      elements of said Software. This shall apply when the Licensee
+${licensePrefix}      carries out any or all loading, displaying, running, transmission
+${licensePrefix}      or storage operation as regards the Software, that it is entitled
+${licensePrefix}      to carry out hereunder.
+${licensePrefix}
+${licensePrefix}
+${licensePrefix}      5.2 RIGHT OF MODIFICATION
+${licensePrefix}
+${licensePrefix}The right of modification includes the right to translate, adapt,
+${licensePrefix}arrange, or make any or all modifications to the Software, and the right
+${licensePrefix}to reproduce the resulting software. It includes, in particular, the
+${licensePrefix}right to create a Derivative Software.
+${licensePrefix}
+${licensePrefix}The Licensee is authorized to make any or all modification to the
+${licensePrefix}Software provided that it includes an explicit notice that it is the
+${licensePrefix}author of said modification and indicates the date of the creation thereof.
+${licensePrefix}
+${licensePrefix}
+${licensePrefix}      5.3 RIGHT OF DISTRIBUTION
+${licensePrefix}
+${licensePrefix}In particular, the right of distribution includes the right to publish,
+${licensePrefix}transmit and communicate the Software to the general public on any or
+${licensePrefix}all medium, and by any or all means, and the right to market, either in
+${licensePrefix}consideration of a fee, or free of charge, one or more copies of the
+${licensePrefix}Software by any means.
+${licensePrefix}
+${licensePrefix}The Licensee is further authorized to distribute copies of the modified
+${licensePrefix}or unmodified Software to third parties according to the terms and
+${licensePrefix}conditions set forth hereinafter.
+${licensePrefix}
+${licensePrefix}
+${licensePrefix}        5.3.1 DISTRIBUTION OF SOFTWARE WITHOUT MODIFICATION
+${licensePrefix}
+${licensePrefix}The Licensee is authorized to distribute true copies of the Software in
+${licensePrefix}Source Code or Object Code form, provided that said distribution
+${licensePrefix}complies with all the provisions of the Agreement and is accompanied by:
+${licensePrefix}
+${licensePrefix}   1. a copy of the Agreement,
+${licensePrefix}
+${licensePrefix}   2. a notice relating to the limitation of both the Licensor's
+${licensePrefix}      warranty and liability as set forth in Articles 8 and 9,
+${licensePrefix}
+${licensePrefix}and that, in the event that only the Object Code of the Software is
+${licensePrefix}redistributed, the Licensee allows effective access to the full Source
+${licensePrefix}Code of the Software at a minimum during the entire period of its
+${licensePrefix}distribution of the Software, it being understood that the additional
+${licensePrefix}cost of acquiring the Source Code shall not exceed the cost of
+${licensePrefix}transferring the data.
+${licensePrefix}
+${licensePrefix}
+${licensePrefix}        5.3.2 DISTRIBUTION OF MODIFIED SOFTWARE
+${licensePrefix}
+${licensePrefix}When the Licensee makes an Integrated Contribution to the Software, the
+${licensePrefix}terms and conditions for the distribution of the resulting Modified
+${licensePrefix}Software become subject to all the provisions of this Agreement.
+${licensePrefix}
+${licensePrefix}The Licensee is authorized to distribute the Modified Software, in
+${licensePrefix}source code or object code form, provided that said distribution
+${licensePrefix}complies with all the provisions of the Agreement and is accompanied by:
+${licensePrefix}
+${licensePrefix}   1. a copy of the Agreement,
+${licensePrefix}
+${licensePrefix}   2. a notice relating to the limitation of both the Licensor's
+${licensePrefix}      warranty and liability as set forth in Articles 8 and 9,
+${licensePrefix}
+${licensePrefix}and that, in the event that only the object code of the Modified
+${licensePrefix}Software is redistributed, the Licensee allows effective access to the
+${licensePrefix}full source code of the Modified Software at a minimum during the entire
+${licensePrefix}period of its distribution of the Modified Software, it being understood
+${licensePrefix}that the additional cost of acquiring the source code shall not exceed
+${licensePrefix}the cost of transferring the data.
+${licensePrefix}
+${licensePrefix}
+${licensePrefix}        5.3.3 DISTRIBUTION OF DERIVATIVE SOFTWARE
+${licensePrefix}
+${licensePrefix}When the Licensee creates Derivative Software, this Derivative Software
+${licensePrefix}may be distributed under a license agreement other than this Agreement,
+${licensePrefix}subject to compliance with the requirement to include a notice
+${licensePrefix}concerning the rights over the Software as defined in Article 6.4.
+${licensePrefix}In the event the creation of the Derivative Software required modification
+${licensePrefix}of the Source Code, the Licensee undertakes that:
+${licensePrefix}
+${licensePrefix}   1. the resulting Modified Software will be governed by this Agreement,
+${licensePrefix}   2. the Integrated Contributions in the resulting Modified Software
+${licensePrefix}      will be clearly identified and documented,
+${licensePrefix}   3. the Licensee will allow effective access to the source code of the
+${licensePrefix}      Modified Software, at a minimum during the entire period of
+${licensePrefix}      distribution of the Derivative Software, such that such
+${licensePrefix}      modifications may be carried over in a subsequent version of the
+${licensePrefix}      Software; it being understood that the additional cost of
+${licensePrefix}      purchasing the source code of the Modified Software shall not
+${licensePrefix}      exceed the cost of transferring the data.
+${licensePrefix}
+${licensePrefix}
+${licensePrefix}        5.3.4 COMPATIBILITY WITH THE CeCILL LICENSE
+${licensePrefix}
+${licensePrefix}When a Modified Software contains an Integrated Contribution subject to
+${licensePrefix}the CeCILL license agreement, or when a Derivative Software contains a
+${licensePrefix}Related Module subject to the CeCILL license agreement, the provisions
+${licensePrefix}set forth in the third item of Article 6.4 are optional.
+${licensePrefix}
+${licensePrefix}
+${licensePrefix}    Article 6 - INTELLECTUAL PROPERTY
+${licensePrefix}
+${licensePrefix}
+${licensePrefix}      6.1 OVER THE INITIAL SOFTWARE
+${licensePrefix}
+${licensePrefix}The Holder owns the economic rights over the Initial Software. Any or
+${licensePrefix}all use of the Initial Software is subject to compliance with the terms
+${licensePrefix}and conditions under which the Holder has elected to distribute its work
+${licensePrefix}and no one shall be entitled to modify the terms and conditions for the
+${licensePrefix}distribution of said Initial Software.
+${licensePrefix}
+${licensePrefix}The Holder undertakes that the Initial Software will remain ruled at
+${licensePrefix}least by this Agreement, for the duration set forth in Article 4.2.
+${licensePrefix}
+${licensePrefix}
+${licensePrefix}      6.2 OVER THE INTEGRATED CONTRIBUTIONS
+${licensePrefix}
+${licensePrefix}The Licensee who develops an Integrated Contribution is the owner of the
+${licensePrefix}intellectual property rights over this Contribution as defined by
+${licensePrefix}applicable law.
+${licensePrefix}
+${licensePrefix}
+${licensePrefix}      6.3 OVER THE RELATED MODULES
+${licensePrefix}
+${licensePrefix}The Licensee who develops a Related Module is the owner of the
+${licensePrefix}intellectual property rights over this Related Module as defined by
+${licensePrefix}applicable law and is free to choose the type of agreement that shall
+${licensePrefix}govern its distribution under the conditions defined in Article 5.3.3.
+${licensePrefix}
+${licensePrefix}
+${licensePrefix}      6.4 NOTICE OF RIGHTS
+${licensePrefix}
+${licensePrefix}The Licensee expressly undertakes:
+${licensePrefix}
+${licensePrefix}   1. not to remove, or modify, in any manner, the intellectual property
+${licensePrefix}      notices attached to the Software;
+${licensePrefix}
+${licensePrefix}   2. to reproduce said notices, in an identical manner, in the copies
+${licensePrefix}      of the Software modified or not;
+${licensePrefix}
+${licensePrefix}   3. to ensure that use of the Software, its intellectual property
+${licensePrefix}      notices and the fact that it is governed by the Agreement is
+${licensePrefix}      indicated in a text that is easily accessible, specifically from
+${licensePrefix}      the interface of any Derivative Software.
+${licensePrefix}
+${licensePrefix}The Licensee undertakes not to directly or indirectly infringe the
+${licensePrefix}intellectual property rights of the Holder and/or Contributors on the
+${licensePrefix}Software and to take, where applicable, vis-�-vis its staff, any and all
+${licensePrefix}measures required to ensure respect of said intellectual property rights
+${licensePrefix}of the Holder and/or Contributors.
+${licensePrefix}
+${licensePrefix}
+${licensePrefix}    Article 7 - RELATED SERVICES
+${licensePrefix}
+${licensePrefix}7.1 Under no circumstances shall the Agreement oblige the Licensor to
+${licensePrefix}provide technical assistance or maintenance services for the Software.
+${licensePrefix}
+${licensePrefix}However, the Licensor is entitled to offer this type of services. The
+${licensePrefix}terms and conditions of such technical assistance, and/or such
+${licensePrefix}maintenance, shall be set forth in a separate instrument. Only the
+${licensePrefix}Licensor offering said maintenance and/or technical assistance services
+${licensePrefix}shall incur liability therefor.
+${licensePrefix}
+${licensePrefix}7.2 Similarly, any Licensor is entitled to offer to its licensees, under
+${licensePrefix}its sole responsibility, a warranty, that shall only be binding upon
+${licensePrefix}itself, for the redistribution of the Software and/or the Modified
+${licensePrefix}Software, under terms and conditions that it is free to decide. Said
+${licensePrefix}warranty, and the financial terms and conditions of its application,
+${licensePrefix}shall be subject of a separate instrument executed between the Licensor
+${licensePrefix}and the Licensee.
+${licensePrefix}
+${licensePrefix}
+${licensePrefix}    Article 8 - LIABILITY
+${licensePrefix}
+${licensePrefix}8.1 Subject to the provisions of Article 8.2, the Licensee shall be
+${licensePrefix}entitled to claim compensation for any direct loss it may have suffered
+${licensePrefix}from the Software as a result of a fault on the part of the relevant
+${licensePrefix}Licensor, subject to providing evidence thereof.
+${licensePrefix}
+${licensePrefix}8.2 The Licensor's liability is limited to the commitments made under
+${licensePrefix}this Agreement and shall not be incurred as a result of in particular:
+${licensePrefix}(i) loss due the Licensee's total or partial failure to fulfill its
+${licensePrefix}obligations, (ii) direct or consequential loss that is suffered by the
+${licensePrefix}Licensee due to the use or performance of the Software, and (iii) more
+${licensePrefix}generally, any consequential loss. In particular the Parties expressly
+${licensePrefix}agree that any or all pecuniary or business loss (i.e. loss of data,
+${licensePrefix}loss of profits, operating loss, loss of customers or orders,
+${licensePrefix}opportunity cost, any disturbance to business activities) or any or all
+${licensePrefix}legal proceedings instituted against the Licensee by a third party,
+${licensePrefix}shall constitute consequential loss and shall not provide entitlement to
+${licensePrefix}any or all compensation from the Licensor.
+${licensePrefix}
+${licensePrefix}
+${licensePrefix}    Article 9 - WARRANTY
+${licensePrefix}
+${licensePrefix}9.1 The Licensee acknowledges that the scientific and technical
+${licensePrefix}state-of-the-art when the Software was distributed did not enable all
+${licensePrefix}possible uses to be tested and verified, nor for the presence of
+${licensePrefix}possible defects to be detected. In this respect, the Licensee's
+${licensePrefix}attention has been drawn to the risks associated with loading, using,
+${licensePrefix}modifying and/or developing and reproducing the Software which are
+${licensePrefix}reserved for experienced users.
+${licensePrefix}
+${licensePrefix}The Licensee shall be responsible for verifying, by any or all means,
+${licensePrefix}the suitability of the product for its requirements, its good working
+${licensePrefix}order, and for ensuring that it shall not cause damage to either persons
+${licensePrefix}or properties.
+${licensePrefix}
+${licensePrefix}9.2 The Licensor hereby represents, in good faith, that it is entitled
+${licensePrefix}to grant all the rights over the Software (including in particular the
+${licensePrefix}rights set forth in Article 5).
+${licensePrefix}
+${licensePrefix}9.3 The Licensee acknowledges that the Software is supplied "as is" by
+${licensePrefix}the Licensor without any other express or tacit warranty, other than
+${licensePrefix}that provided for in Article 9.2 and, in particular, without any warranty
+${licensePrefix}as to its commercial value, its secured, safe, innovative or relevant
+${licensePrefix}nature.
+${licensePrefix}
+${licensePrefix}Specifically, the Licensor does not warrant that the Software is free
+${licensePrefix}from any error, that it will operate without interruption, that it will
+${licensePrefix}be compatible with the Licensee's own equipment and software
+${licensePrefix}configuration, nor that it will meet the Licensee's requirements.
+${licensePrefix}
+${licensePrefix}9.4 The Licensor does not either expressly or tacitly warrant that the
+${licensePrefix}Software does not infringe any third party intellectual property right
+${licensePrefix}relating to a patent, software or any other property right. Therefore,
+${licensePrefix}the Licensor disclaims any and all liability towards the Licensee
+${licensePrefix}arising out of any or all proceedings for infringement that may be
+${licensePrefix}instituted in respect of the use, modification and redistribution of the
+${licensePrefix}Software. Nevertheless, should such proceedings be instituted against
+${licensePrefix}the Licensee, the Licensor shall provide it with technical and legal
+${licensePrefix}assistance for its defense. Such technical and legal assistance shall be
+${licensePrefix}decided on a case-by-case basis between the relevant Licensor and the
+${licensePrefix}Licensee pursuant to a memorandum of understanding. The Licensor
+${licensePrefix}disclaims any and all liability as regards the Licensee's use of the
+${licensePrefix}name of the Software. No warranty is given as regards the existence of
+${licensePrefix}prior rights over the name of the Software or as regards the existence
+${licensePrefix}of a trademark.
+${licensePrefix}
+${licensePrefix}
+${licensePrefix}    Article 10 - TERMINATION
+${licensePrefix}
+${licensePrefix}10.1 In the event of a breach by the Licensee of its obligations
+${licensePrefix}hereunder, the Licensor may automatically terminate this Agreement
+${licensePrefix}thirty (30) days after notice has been sent to the Licensee and has
+${licensePrefix}remained ineffective.
+${licensePrefix}
+${licensePrefix}10.2 A Licensee whose Agreement is terminated shall no longer be
+${licensePrefix}authorized to use, modify or distribute the Software. However, any
+${licensePrefix}licenses that it may have granted prior to termination of the Agreement
+${licensePrefix}shall remain valid subject to their having been granted in compliance
+${licensePrefix}with the terms and conditions hereof.
+${licensePrefix}
+${licensePrefix}
+${licensePrefix}    Article 11 - MISCELLANEOUS
+${licensePrefix}
+${licensePrefix}
+${licensePrefix}      11.1 EXCUSABLE EVENTS
+${licensePrefix}
+${licensePrefix}Neither Party shall be liable for any or all delay, or failure to
+${licensePrefix}perform the Agreement, that may be attributable to an event of force
+${licensePrefix}majeure, an act of God or an outside cause, such as defective
+${licensePrefix}functioning or interruptions of the electricity or telecommunications
+${licensePrefix}networks, network paralysis following a virus attack, intervention by
+${licensePrefix}government authorities, natural disasters, water damage, earthquakes,
+${licensePrefix}fire, explosions, strikes and labor unrest, war, etc.
+${licensePrefix}
+${licensePrefix}11.2 Any failure by either Party, on one or more occasions, to invoke
+${licensePrefix}one or more of the provisions hereof, shall under no circumstances be
+${licensePrefix}interpreted as being a waiver by the interested Party of its right to
+${licensePrefix}invoke said provision(s) subsequently.
+${licensePrefix}
+${licensePrefix}11.3 The Agreement cancels and replaces any or all previous agreements,
+${licensePrefix}whether written or oral, between the Parties and having the same
+${licensePrefix}purpose, and constitutes the entirety of the agreement between said
+${licensePrefix}Parties concerning said purpose. No supplement or modification to the
+${licensePrefix}terms and conditions hereof shall be effective as between the Parties
+${licensePrefix}unless it is made in writing and signed by their duly authorized
+${licensePrefix}representatives.
+${licensePrefix}
+${licensePrefix}11.4 In the event that one or more of the provisions hereof were to
+${licensePrefix}conflict with a current or future applicable act or legislative text,
+${licensePrefix}said act or legislative text shall prevail, and the Parties shall make
+${licensePrefix}the necessary amendments so as to comply with said act or legislative
+${licensePrefix}text. All other provisions shall remain effective. Similarly, invalidity
+${licensePrefix}of a provision of the Agreement, for any reason whatsoever, shall not
+${licensePrefix}cause the Agreement as a whole to be invalid.
+${licensePrefix}
+${licensePrefix}
+${licensePrefix}      11.5 LANGUAGE
+${licensePrefix}
+${licensePrefix}The Agreement is drafted in both French and English and both versions
+${licensePrefix}are deemed authentic.
+${licensePrefix}
+${licensePrefix}
+${licensePrefix}    Article 12 - NEW VERSIONS OF THE AGREEMENT
+${licensePrefix}
+${licensePrefix}12.1 Any person is authorized to duplicate and distribute copies of this
+${licensePrefix}Agreement.
+${licensePrefix}
+${licensePrefix}12.2 So as to ensure coherence, the wording of this Agreement is
+${licensePrefix}protected and may only be modified by the authors of the License, who
+${licensePrefix}reserve the right to periodically publish updates or new versions of the
+${licensePrefix}Agreement, each with a separate number. These subsequent versions may
+${licensePrefix}address new issues encountered by Free Software.
+${licensePrefix}
+${licensePrefix}12.3 Any Software distributed under a given version of the Agreement may
+${licensePrefix}only be subsequently distributed under the same version of the Agreement
+${licensePrefix}or a subsequent version.
+${licensePrefix}
+${licensePrefix}
+${licensePrefix}    Article 13 - GOVERNING LAW AND JURISDICTION
+${licensePrefix}
+${licensePrefix}13.1 The Agreement is governed by French law. The Parties agree to
+${licensePrefix}endeavor to seek an amicable solution to any disagreements or disputes
+${licensePrefix}that may arise during the performance of the Agreement.
+${licensePrefix}
+${licensePrefix}13.2 Failing an amicable solution within two (2) months as from their
+${licensePrefix}occurrence, and unless emergency proceedings are necessary, the
+${licensePrefix}disagreements or disputes shall be referred to the Paris Courts having
+${licensePrefix}jurisdiction, by the more diligent Party.
+${licensePrefix}
+${licensePrefix}
+${licensePrefix}Version 1.0 dated 2006-09-05.
+<#if licenseLast??>
+${licenseLast}
+</#if>

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+    "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd" >
+<svg contentScriptType="text/ecmascript" width="2211px"
+     xmlns:xlink="http://www.w3.org/1999/xlink" zoomAndPan="magnify"
+     contentStyleType="text/css" viewBox="-344 -131 689 262" height="841px"
+     preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg"
+     version="1.1">
+    <g id="edges">
+        <path fill="none"
+              d="M 309.752197,-96.158920 C 224.314896,66.205536 -147.387741,181.596237 -309.752197,96.158920"
+              stroke-width="1.0" stroke="#999999"/>
+    </g>
+    <g id="nodes">
+        <circle fill="#999999" stroke-width="1.0" r="10.0" cx="309.7522"
+                cy="-96.15892" stroke="#000000"/>
+        <circle fill="#999999" stroke-width="1.0" r="10.0" cx="-309.7522"
+                cy="96.15892" stroke="#000000"/>
+    </g>
+    <g id="label borders"/>
+    <g id="labels"/>
+</svg>

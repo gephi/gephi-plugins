@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+<comment>SparqlDriver</comment>
+<entry key="Name">DBPediaMovies</entry>
+<entry key="SparqlRequest">prefix gephi:&lt;http://gephi.org/&gt;
+CONSTRUCT{
+  ?film gephi:label ?title .
+  ?film gephi:category "film" .
+  ?director gephi:category "director" .
+  ?actor gephi:category "actor" .
+  ?film &lt;http://dbpedia.org/ontology/director&gt; ?director .
+  ?film &lt;http://dbpedia.org/ontology/starring&gt; ?actor
+} WHERE {
+  ?film rdfs:label ?title  .
+  ?film &lt;http://dbpedia.org/ontology/director&gt; ?director .
+  ?film &lt;http://dbpedia.org/ontology/starring&gt; ?actor
+  FILTER(lang(?title)="en")
+} LIMIT 10000</entry>
+<entry key="SparqlDriver">fr.inria.edelweiss.sparql.soap.SparqlSoapEndPointDriver</entry>
+<entry key="sparqlEndPointURL">http://dbpedia.org/sparql</entry>
+<entry key="rdfResourceList"/>
+</properties>
+

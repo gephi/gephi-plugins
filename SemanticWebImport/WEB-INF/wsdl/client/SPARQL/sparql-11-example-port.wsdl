@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<wsdl:definitions
+     targetNamespace="http://www.w3.org/2001/sw/DataAccess/sparql-11-example"
+     xmlns:tns="http://www.w3.org/2005/01/sparql-protocol-query"
+
+     xmlns:bindings="http://www.w3.org/2005/08/sparql-protocol-query/#"
+
+     xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+     xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+
+	 xmlns:st="http://www.w3.org/2005/09/sparql-protocol-types/#"
+
+     xmlns:http="http://schemas.xmlsoap.org/wsdl/http/"
+     xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/"
+
+     xmlns:xs="http://www.w3.org/2001/XMLSchema"
+
+     schemaLocation="http://www.w3.org/2004/08/wsdl" 
+     >
+
+  <wsdl:import namespace="http://www.w3.org/2005/08/sparql-protocol-query/#"
+  			   location="sparql-protocol-query-11.wsdl"/>
+
+  <wsdl:service name="SPARQLQueryService">
+    <wsdl:port binding="bindings:QuerySoapBinding" name="sparql-query">
+      <soap:address location="http://localhost:2525/axis/services/sparql-query"/>
+    </wsdl:port>
+  </wsdl:service>
+
+</wsdl:definitions>
+

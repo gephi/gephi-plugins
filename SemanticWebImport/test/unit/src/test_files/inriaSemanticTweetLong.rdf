@@ -1,0 +1,1505 @@
+<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:wgs84_pos="http://www.w3.org/2003/01/geo/wgs84_pos#" xmlns:foaf="http://xmlns.com/foaf/0.1/" xmlns:admin="http://webns.net/mvcb/" xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#" xmlns:geo="http://www.geonames.org/ontology#">
+  <foaf:PersonalProfileDocument rdf:about="">
+    <foaf:maker rdf:resource="http://semantictweet.com/semantictweet"/>
+    <foaf:primaryTopic rdf:resource="http://semantictweet.com/inria#me"/>
+    <admin:generatorAgent rdf:resource="http://semantictweet.com/"/>
+    <admin:errorReportsTo rdf:resource="mailto:stephen@flinter.com"/>
+  </foaf:PersonalProfileDocument>
+  <foaf:Agent rdf:about="http://semantictweet.com/Maud_Charaf#me">
+    <foaf:name>Maud Charaf</foaf:name>
+    <foaf:nick>Maud_Charaf</foaf:nick>
+    <rdfs:seeAlso rdf:resource="http://semantictweet.com/Maud_Charaf"/>
+    <foaf:img rdf:resource="http://a0.twimg.com/profile_images/1237453111/180808_normal.jpg"/>
+  </foaf:Agent>
+  <foaf:Agent rdf:about="http://semantictweet.com/CandiceBachelet#me">
+    <foaf:name>Candice Bachelet</foaf:name>
+    <foaf:nick>CandiceBachelet</foaf:nick>
+    <rdfs:seeAlso rdf:resource="http://semantictweet.com/CandiceBachelet"/>
+    <foaf:homepage rdf:resource="http://www.candiceb-portfolio.com"/>
+    <foaf:img rdf:resource="http://a0.twimg.com/profile_images/1676818275/portrait_normal.jpg"/>
+  </foaf:Agent>
+  <foaf:Agent rdf:about="http://semantictweet.com/paslap#me">
+    <foaf:name>pascallapointe</foaf:name>
+    <foaf:nick>paslap</foaf:nick>
+    <rdfs:seeAlso rdf:resource="http://semantictweet.com/paslap"/>
+    <foaf:homepage rdf:resource="http://www.sciencepresse.qc.ca"/>
+    <foaf:img rdf:resource="http://a1.twimg.com/profile_images/69614314/pascalphoto_normal.jpg"/>
+  </foaf:Agent>
+  <foaf:Agent rdf:about="http://semantictweet.com/Hugobiwan#me">
+    <foaf:name>Zolnir</foaf:name>
+    <foaf:nick>Hugobiwan</foaf:nick>
+    <rdfs:seeAlso rdf:resource="http://semantictweet.com/Hugobiwan"/>
+    <foaf:homepage rdf:resource="http://www.bibliotheque-francophone.org"/>
+    <foaf:img rdf:resource="http://a3.twimg.com/profile_images/413216198/hugobiwan_normal.jpg"/>
+  </foaf:Agent>
+  <foaf:Agent rdf:about="http://semantictweet.com/Powedia#me">
+    <foaf:name>Powedia</foaf:name>
+    <foaf:nick>Powedia</foaf:nick>
+    <rdfs:seeAlso rdf:resource="http://semantictweet.com/Powedia"/>
+    <foaf:homepage rdf:resource="http://www.powedia.com"/>
+    <foaf:img rdf:resource="http://a0.twimg.com/profile_images/772630509/Powedia-Logo-Twitter-zoom_normal.jpg"/>
+  </foaf:Agent>
+  <foaf:Agent rdf:about="http://semantictweet.com/Jocelyne_Dias#me">
+    <foaf:name>Jocelyne Dias</foaf:name>
+    <foaf:nick>Jocelyne_Dias</foaf:nick>
+    <rdfs:seeAlso rdf:resource="http://semantictweet.com/Jocelyne_Dias"/>
+    <foaf:img rdf:resource="http://a2.twimg.com/profile_images/1766222365/maroc2007__28-light__normal.JPG"/>
+  </foaf:Agent>
+  <foaf:Agent rdf:about="http://semantictweet.com/epietriga#me">
+    <foaf:name>Emmanuel Pietriga</foaf:name>
+    <foaf:nick>epietriga</foaf:nick>
+    <rdfs:seeAlso rdf:resource="http://semantictweet.com/epietriga"/>
+    <foaf:homepage rdf:resource="http://pages.saclay.inria.fr/emmanuel.pietriga/"/>
+    <foaf:img rdf:resource="http://a1.twimg.com/profile_images/1772719238/idATchi_normal.jpg"/>
+  </foaf:Agent>
+  <foaf:Agent rdf:about="http://semantictweet.com/tantignac#me">
+    <foaf:name>Thibaud Antignac</foaf:name>
+    <foaf:nick>tantignac</foaf:nick>
+    <rdfs:seeAlso rdf:resource="http://semantictweet.com/tantignac"/>
+    <foaf:homepage rdf:resource="http://thibaud.antignac.net"/>
+    <foaf:img rdf:resource="http://a0.twimg.com/profile_images/1644093889/IMG_0010_normal.JPG"/>
+  </foaf:Agent>
+  <foaf:Agent rdf:about="http://semantictweet.com/charlesruelle#me">
+    <foaf:name>Charles Ruelle</foaf:name>
+    <foaf:nick>charlesruelle</foaf:nick>
+    <rdfs:seeAlso rdf:resource="http://semantictweet.com/charlesruelle"/>
+    <foaf:img rdf:resource="http://a3.twimg.com/profile_images/1370266899/248235_10150267026499414_688929413_8878972_7310543_n_normal.jpg"/>
+  </foaf:Agent>
+  <foaf:Agent rdf:about="http://semantictweet.com/emeline_carre#me">
+    <foaf:name>emeline carr&#233;</foaf:name>
+    <foaf:nick>emeline_carre</foaf:nick>
+    <rdfs:seeAlso rdf:resource="http://semantictweet.com/emeline_carre"/>
+    <foaf:img rdf:resource="http://a1.twimg.com/profile_images/1696208855/377374_10150456735354928_659874927_8421173_1656876228_n_normal.jpg"/>
+  </foaf:Agent>
+  <foaf:Agent rdf:about="http://semantictweet.com/mathemagie#me">
+    <foaf:name>Aur&#233;lien Fache</foaf:name>
+    <foaf:nick>mathemagie</foaf:nick>
+    <rdfs:seeAlso rdf:resource="http://semantictweet.com/mathemagie"/>
+    <foaf:img rdf:resource="http://a1.twimg.com/profile_images/519547905/ownar2_normal.gif"/>
+  </foaf:Agent>
+  <foaf:Agent rdf:about="http://semantictweet.com/DelphineCuny#me">
+    <foaf:name>Delphine Cuny</foaf:name>
+    <foaf:nick>DelphineCuny</foaf:nick>
+    <rdfs:seeAlso rdf:resource="http://semantictweet.com/DelphineCuny"/>
+    <foaf:homepage rdf:resource="http://www.latribune.fr/media-telecom-entreprise.html"/>
+    <foaf:img rdf:resource="http://a2.twimg.com/profile_images/1778890461/image_normal.jpg"/>
+  </foaf:Agent>
+  <foaf:Agent rdf:about="http://semantictweet.com/Sandreene#me">
+    <foaf:name>Sandrine Cochard</foaf:name>
+    <foaf:nick>Sandreene</foaf:nick>
+    <rdfs:seeAlso rdf:resource="http://semantictweet.com/Sandreene"/>
+    <foaf:img rdf:resource="http://a3.twimg.com/profile_images/1620585201/profil_normal.jpg"/>
+  </foaf:Agent>
+  <foaf:Agent rdf:about="http://semantictweet.com/jlmissika#me">
+    <foaf:name>Jean-Louis Missika</foaf:name>
+    <foaf:nick>jlmissika</foaf:nick>
+    <rdfs:seeAlso rdf:resource="http://semantictweet.com/jlmissika"/>
+    <foaf:img rdf:resource="http://a0.twimg.com/profile_images/1764335325/PhotoJLM_normal.jpg"/>
+  </foaf:Agent>
+  <foaf:Agent rdf:about="http://semantictweet.com/FR3Aquitaine#me">
+    <foaf:name>France3 Aquitaine</foaf:name>
+    <foaf:nick>FR3Aquitaine</foaf:nick>
+    <rdfs:seeAlso rdf:resource="http://semantictweet.com/FR3Aquitaine"/>
+    <foaf:homepage rdf:resource="http://aquitaine.france3.fr"/>
+    <foaf:img rdf:resource="http://a3.twimg.com/profile_images/1421668143/aquitaine3_normal.jpg"/>
+  </foaf:Agent>
+  <foaf:Agent rdf:about="http://semantictweet.com/strategies1#me">
+    <foaf:name>Strategies</foaf:name>
+    <foaf:nick>strategies1</foaf:nick>
+    <rdfs:seeAlso rdf:resource="http://semantictweet.com/strategies1"/>
+    <foaf:homepage rdf:resource="http://www.strategies.fr"/>
+    <foaf:img rdf:resource="http://a0.twimg.com/profile_images/1694457380/Strat.png_normal.jpg"/>
+  </foaf:Agent>
+  <foaf:Agent rdf:about="http://semantictweet.com/fleurpellerin#me">
+    <foaf:name>Fleur Pellerin</foaf:name>
+    <foaf:nick>fleurpellerin</foaf:nick>
+    <rdfs:seeAlso rdf:resource="http://semantictweet.com/fleurpellerin"/>
+    <foaf:img rdf:resource="http://a0.twimg.com/profile_images/1642571179/FPtwitter_normal.jpg"/>
+  </foaf:Agent>
+  <foaf:Agent rdf:about="http://semantictweet.com/lsaccavini#me">
+    <foaf:name>Luc Saccavini</foaf:name>
+    <foaf:nick>lsaccavini</foaf:nick>
+    <rdfs:seeAlso rdf:resource="http://semantictweet.com/lsaccavini"/>
+    <foaf:img rdf:resource="http://a2.twimg.com/sticky/default_profile_images/default_profile_3_normal.png"/>
+  </foaf:Agent>
+  <foaf:Agent rdf:about="http://semantictweet.com/_lecollectif#me">
+    <foaf:name>Orange le collectif</foaf:name>
+    <foaf:nick>_lecollectif</foaf:nick>
+    <rdfs:seeAlso rdf:resource="http://semantictweet.com/_lecollectif"/>
+    <foaf:homepage rdf:resource="http://lecollectif.orange.fr"/>
+    <foaf:img rdf:resource="http://a0.twimg.com/profile_images/1610731403/lecollectif3_normal.png"/>
+  </foaf:Agent>
+  <foaf:Agent rdf:about="http://semantictweet.com/Anar_line#me">
+    <foaf:name>Celine Acharian</foaf:name>
+    <foaf:nick>Anar_line</foaf:nick>
+    <rdfs:seeAlso rdf:resource="http://semantictweet.com/Anar_line"/>
+    <foaf:homepage rdf:resource="http://www.inria.fr"/>
+    <foaf:img rdf:resource="http://a1.twimg.com/profile_images/1768213320/Photo_du_39419917-01-___10.56_normal.jpg"/>
+  </foaf:Agent>
+  <foaf:Agent rdf:about="http://semantictweet.com/ChGenest#me">
+    <foaf:name>Christine Genest</foaf:name>
+    <foaf:nick>ChGenest</foaf:nick>
+    <rdfs:seeAlso rdf:resource="http://semantictweet.com/ChGenest"/>
+    <foaf:img rdf:resource="http://a0.twimg.com/profile_images/1241046637/cg0092_normal.jpg"/>
+  </foaf:Agent>
+  <foaf:Agent rdf:about="http://semantictweet.com/LaGuirlande#me">
+    <foaf:name>Gu&#233;na&#235;lle Gault</foaf:name>
+    <foaf:nick>LaGuirlande</foaf:nick>
+    <rdfs:seeAlso rdf:resource="http://semantictweet.com/LaGuirlande"/>
+    <foaf:img rdf:resource="http://a3.twimg.com/profile_images/1283038382/LaGuirlande_normal.jpg"/>
+  </foaf:Agent>
+  <foaf:Agent rdf:about="http://semantictweet.com/z3zone#me">
+    <foaf:name>S&#233;bastien Cursan</foaf:name>
+    <foaf:nick>z3zone</foaf:nick>
+    <rdfs:seeAlso rdf:resource="http://semantictweet.com/z3zone"/>
+    <foaf:img rdf:resource="http://a2.twimg.com/profile_images/1631203007/sebmuseomix_carre_red_normal.jpg"/>
+  </foaf:Agent>
+  <foaf:Agent rdf:about="http://semantictweet.com/lcalderan#me">
+    <foaf:name> Lisette Calderan</foaf:name>
+    <foaf:nick>lcalderan</foaf:nick>
+    <rdfs:seeAlso rdf:resource="http://semantictweet.com/lcalderan"/>
+    <foaf:homepage rdf:resource="http://phototheque.inria.fr"/>
+    <foaf:img rdf:resource="http://a2.twimg.com/profile_images/1773340236/lisette-3-ptt_normal.jpg"/>
+  </foaf:Agent>
+  <foaf:Agent rdf:about="http://semantictweet.com/centraleparis#me">
+    <foaf:name>Ecole Centrale Paris</foaf:name>
+    <foaf:nick>centraleparis</foaf:nick>
+    <rdfs:seeAlso rdf:resource="http://semantictweet.com/centraleparis"/>
+    <foaf:homepage rdf:resource="http://www.ecp.fr"/>
+    <foaf:img rdf:resource="http://a3.twimg.com/profile_images/875431862/logo_centraleparis-72dpi_normal.jpg"/>
+  </foaf:Agent>
+  <foaf:Agent rdf:about="http://semantictweet.com/dominiqueleglu#me">
+    <foaf:name>Dominique LEGLU</foaf:name>
+    <foaf:nick>dominiqueleglu</foaf:nick>
+    <rdfs:seeAlso rdf:resource="http://semantictweet.com/dominiqueleglu"/>
+    <foaf:homepage rdf:resource="http://www.sciencesetavenir.fr"/>
+    <foaf:img rdf:resource="http://a1.twimg.com/profile_images/1706172066/portrait_DJL_normal.jpg"/>
+  </foaf:Agent>
+  <foaf:Agent rdf:about="http://semantictweet.com/mathildeD_V#me">
+    <foaf:name>Mathilde De Vos</foaf:name>
+    <foaf:nick>mathildeD_V</foaf:nick>
+    <rdfs:seeAlso rdf:resource="http://semantictweet.com/mathildeD_V"/>
+    <foaf:homepage rdf:resource="http://domus.grenet.fr/icm/icm2011m1cst_01/wp/"/>
+    <foaf:img rdf:resource="http://a2.twimg.com/profile_images/1274332350/Pomme1_normal.png"/>
+  </foaf:Agent>
+  <foaf:Agent rdf:about="http://semantictweet.com/PasseurSciences#me">
+    <foaf:name>Pierre Barth&#233;l&#233;my</foaf:name>
+    <foaf:nick>PasseurSciences</foaf:nick>
+    <rdfs:seeAlso rdf:resource="http://semantictweet.com/PasseurSciences"/>
+    <foaf:homepage rdf:resource="http://passeurdesciences.blog.lemonde.fr/"/>
+    <foaf:img rdf:resource="http://a0.twimg.com/profile_images/1719876457/PB-petit_normal.jpg"/>
+  </foaf:Agent>
+  <foaf:Agent rdf:about="http://semantictweet.com/nicolaspatte#me">
+    <foaf:name>Nicolas Patte</foaf:name>
+    <foaf:nick>nicolaspatte</foaf:nick>
+    <rdfs:seeAlso rdf:resource="http://semantictweet.com/nicolaspatte"/>
+    <foaf:homepage rdf:resource="http://nicolas.patte.free.fr/"/>
+    <foaf:img rdf:resource="http://a0.twimg.com/profile_images/1486321578/np22mars_normal.jpg"/>
+  </foaf:Agent>
+  <foaf:Agent rdf:about="http://semantictweet.com/LaCasemate#me">
+    <foaf:name>La Casemate</foaf:name>
+    <foaf:nick>LaCasemate</foaf:nick>
+    <rdfs:seeAlso rdf:resource="http://semantictweet.com/LaCasemate"/>
+    <foaf:homepage rdf:resource="http://www.ccsti-grenoble.org/"/>
+    <foaf:img rdf:resource="http://a0.twimg.com/profile_images/1764881183/logo-casemate_normal.png"/>
+  </foaf:Agent>
+  <foaf:Agent rdf:about="http://semantictweet.com/dimtate#me">
+    <foaf:name>d. tate</foaf:name>
+    <foaf:nick>dimtate</foaf:nick>
+    <rdfs:seeAlso rdf:resource="http://semantictweet.com/dimtate"/>
+    <foaf:img rdf:resource="http://a1.twimg.com/profile_images/469088466/Dimitri_sourire_normal.jpg"/>
+  </foaf:Agent>
+  <foaf:Agent rdf:about="http://semantictweet.com/aureliedarnaud#me">
+    <foaf:name>Aurelie Darnaud</foaf:name>
+    <foaf:nick>aureliedarnaud</foaf:nick>
+    <rdfs:seeAlso rdf:resource="http://semantictweet.com/aureliedarnaud"/>
+    <foaf:img rdf:resource="http://a2.twimg.com/profile_images/1766636532/photocv_normal.jpg"/>
+  </foaf:Agent>
+  <foaf:Agent rdf:about="http://semantictweet.com/oseo#me">
+    <foaf:name>OSEO</foaf:name>
+    <foaf:nick>oseo</foaf:nick>
+    <rdfs:seeAlso rdf:resource="http://semantictweet.com/oseo"/>
+    <foaf:homepage rdf:resource="http://www.oseo.fr"/>
+    <foaf:img rdf:resource="http://a3.twimg.com/profile_images/1706256374/oseoyoutube1_normal.jpg"/>
+  </foaf:Agent>
+  <foaf:Agent rdf:about="http://semantictweet.com/jossgervais#me">
+    <foaf:name>jossgervais</foaf:name>
+    <foaf:nick>jossgervais</foaf:nick>
+    <rdfs:seeAlso rdf:resource="http://semantictweet.com/jossgervais"/>
+    <foaf:img rdf:resource="http://a2.twimg.com/profile_images/1205527549/Joss_normal.jpg"/>
+  </foaf:Agent>
+  <foaf:Agent rdf:about="http://semantictweet.com/mecsci#me">
+    <foaf:name>MediationScientifiq</foaf:name>
+    <foaf:nick>mecsci</foaf:nick>
+    <rdfs:seeAlso rdf:resource="http://semantictweet.com/mecsci"/>
+    <foaf:img rdf:resource="http://a3.twimg.com/profile_images/1606119025/mecsci_normal.png"/>
+  </foaf:Agent>
+  <foaf:Agent rdf:about="http://semantictweet.com/joinoin#me">
+    <foaf:name>Jonathan Aceituno</foaf:name>
+    <foaf:nick>joinoin</foaf:nick>
+    <rdfs:seeAlso rdf:resource="http://semantictweet.com/joinoin"/>
+    <foaf:homepage rdf:resource="http://oin.name"/>
+    <foaf:img rdf:resource="http://a1.twimg.com/profile_images/486377224/Photo_du_70285883-10-___19.31_normal.jpg"/>
+  </foaf:Agent>
+  <foaf:Agent rdf:about="http://semantictweet.com/KTombre#me">
+    <foaf:name>Karl Tombre</foaf:name>
+    <foaf:nick>KTombre</foaf:nick>
+    <rdfs:seeAlso rdf:resource="http://semantictweet.com/KTombre"/>
+    <foaf:img rdf:resource="http://a1.twimg.com/profile_images/1700565288/IMG_1230_normal.JPG"/>
+  </foaf:Agent>
+  <foaf:Agent rdf:about="http://semantictweet.com/Julma#me">
+    <foaf:name>Julien Marboutin</foaf:name>
+    <foaf:nick>Julma</foaf:nick>
+    <rdfs:seeAlso rdf:resource="http://semantictweet.com/Julma"/>
+    <foaf:img rdf:resource="http://a2.twimg.com/profile_images/731571927/P7270115_normal.JPG"/>
+  </foaf:Agent>
+  <foaf:Agent rdf:about="http://semantictweet.com/pipomolo42#me">
+    <foaf:name>Alexandre Boeglin</foaf:name>
+    <foaf:nick>pipomolo42</foaf:nick>
+    <rdfs:seeAlso rdf:resource="http://semantictweet.com/pipomolo42"/>
+    <foaf:homepage rdf:resource="http://boeglin.org/"/>
+    <foaf:img rdf:resource="http://a2.twimg.com/profile_images/1265782775/avatar_normal.jpg"/>
+  </foaf:Agent>
+  <foaf:Agent rdf:about="http://semantictweet.com/sarveshnikumbh#me">
+    <foaf:name>Sarvesh Nikumbh</foaf:name>
+    <foaf:nick>sarveshnikumbh</foaf:nick>
+    <rdfs:seeAlso rdf:resource="http://semantictweet.com/sarveshnikumbh"/>
+    <foaf:homepage rdf:resource="http://cms.unipune.ac.in/~sarvesh"/>
+    <foaf:img rdf:resource="http://a2.twimg.com/profile_images/613253807/DSC01211_normal.JPG"/>
+  </foaf:Agent>
+  <foaf:Agent rdf:about="http://semantictweet.com/strngch#me">
+    <foaf:name>Satoru NOGUCHI</foaf:name>
+    <foaf:nick>strngch</foaf:nick>
+    <rdfs:seeAlso rdf:resource="http://semantictweet.com/strngch"/>
+    <foaf:img rdf:resource="http://a0.twimg.com/profile_images/1024392634/pic1_normal.png"/>
+  </foaf:Agent>
+  <foaf:Agent rdf:about="http://semantictweet.com/ncmarie#me">
+    <foaf:name>Nicolas MARIE</foaf:name>
+    <foaf:nick>ncmarie</foaf:nick>
+    <rdfs:seeAlso rdf:resource="http://semantictweet.com/ncmarie"/>
+    <foaf:img rdf:resource="http://a1.twimg.com/profile_images/810493258/phorospaceb_normal.JPG"/>
+  </foaf:Agent>
+  <foaf:Agent rdf:about="http://semantictweet.com/mattam_#me">
+    <foaf:name>Matthieu Sozeau</foaf:name>
+    <foaf:nick>mattam_</foaf:nick>
+    <rdfs:seeAlso rdf:resource="http://semantictweet.com/mattam_"/>
+    <foaf:homepage rdf:resource="http://mattam.org"/>
+    <foaf:img rdf:resource="http://a1.twimg.com/profile_images/1100637266/IMG_1319_normal.JPG"/>
+  </foaf:Agent>
+  <foaf:Agent rdf:about="http://semantictweet.com/yangeorget#me">
+    <foaf:name>yangeorget</foaf:name>
+    <foaf:nick>yangeorget</foaf:nick>
+    <rdfs:seeAlso rdf:resource="http://semantictweet.com/yangeorget"/>
+    <foaf:homepage rdf:resource="http://www.carva.org/yan.georget"/>
+    <foaf:img rdf:resource="http://a3.twimg.com/profile_images/1304192333/yan_normal.JPG"/>
+  </foaf:Agent>
+  <foaf:Agent rdf:about="http://semantictweet.com/pauline_PDP#me">
+    <foaf:name>Pauline DreuxPalassy</foaf:name>
+    <foaf:nick>pauline_PDP</foaf:nick>
+    <rdfs:seeAlso rdf:resource="http://semantictweet.com/pauline_PDP"/>
+    <foaf:homepage rdf:resource="http://www.doyoubuzz.com/pauline-dreux-palassy"/>
+    <foaf:img rdf:resource="http://a2.twimg.com/profile_images/1758783449/IMG_2238_normal.jpg"/>
+  </foaf:Agent>
+  <foaf:Agent rdf:about="http://semantictweet.com/geomark#me">
+    <foaf:name>George Markomanolis</foaf:name>
+    <foaf:nick>geomark</foaf:nick>
+    <rdfs:seeAlso rdf:resource="http://semantictweet.com/geomark"/>
+    <foaf:homepage rdf:resource="http://www.markomanolis.com"/>
+    <foaf:img rdf:resource="http://a1.twimg.com/profile_images/342595126/me_normal.jpg"/>
+  </foaf:Agent>
+  <foaf:Agent rdf:about="http://semantictweet.com/nkrislock#me">
+    <foaf:name>Nathan Krislock</foaf:name>
+    <foaf:nick>nkrislock</foaf:nick>
+    <rdfs:seeAlso rdf:resource="http://semantictweet.com/nkrislock"/>
+    <foaf:homepage rdf:resource="http://sites.google.com/site/nathankrislock"/>
+    <foaf:img rdf:resource="http://a0.twimg.com/profile_images/15407602/nathan_tiny_normal.jpg"/>
+  </foaf:Agent>
+  <foaf:Agent rdf:about="http://semantictweet.com/jjcadavid#me">
+    <foaf:name>jjcadavid</foaf:name>
+    <foaf:nick>jjcadavid</foaf:nick>
+    <rdfs:seeAlso rdf:resource="http://semantictweet.com/jjcadavid"/>
+    <foaf:homepage rdf:resource="http://www.facebook.com/juanjosecg"/>
+    <foaf:img rdf:resource="http://a3.twimg.com/profile_images/408998273/me2008_normal.jpg"/>
+  </foaf:Agent>
+  <foaf:Agent rdf:about="http://semantictweet.com/baghdadi_r#me">
+    <foaf:name>Baghdadi r</foaf:name>
+    <foaf:nick>baghdadi_r</foaf:nick>
+    <rdfs:seeAlso rdf:resource="http://semantictweet.com/baghdadi_r"/>
+    <foaf:homepage rdf:resource="http://www.di.ens.fr/~baghdadi/"/>
+    <foaf:img rdf:resource="http://a1.twimg.com/profile_images/1229808527/Modified-version2_normal.jpg"/>
+  </foaf:Agent>
+  <foaf:Agent rdf:about="http://semantictweet.com/laurentromary#me">
+    <foaf:name>Laurent Romary</foaf:name>
+    <foaf:nick>laurentromary</foaf:nick>
+    <rdfs:seeAlso rdf:resource="http://semantictweet.com/laurentromary"/>
+    <foaf:img rdf:resource="http://a3.twimg.com/profile_images/1583731782/twit_normal.jpg"/>
+  </foaf:Agent>
+  <foaf:Agent rdf:about="http://semantictweet.com/duportet#me">
+    <foaf:name>Xavier Duportet</foaf:name>
+    <foaf:nick>duportet</foaf:nick>
+    <rdfs:seeAlso rdf:resource="http://semantictweet.com/duportet"/>
+    <foaf:homepage rdf:resource="http://www.xavierduportet.com"/>
+    <foaf:img rdf:resource="http://a0.twimg.com/profile_images/1222765197/portrait_normal.jpg"/>
+  </foaf:Agent>
+  <foaf:Agent rdf:about="http://semantictweet.com/hoaproject#me">
+    <foaf:name>Ivan Enderlin</foaf:name>
+    <foaf:nick>hoaproject</foaf:nick>
+    <rdfs:seeAlso rdf:resource="http://semantictweet.com/hoaproject"/>
+    <foaf:homepage rdf:resource="http://hoa-project.net/"/>
+    <foaf:img rdf:resource="http://a1.twimg.com/profile_images/796740034/twitterProfilePhoto_normal.jpg"/>
+  </foaf:Agent>
+  <foaf:Agent rdf:about="http://semantictweet.com/lukostaz#me">
+    <foaf:name>Luca Costabello</foaf:name>
+    <foaf:nick>lukostaz</foaf:nick>
+    <rdfs:seeAlso rdf:resource="http://semantictweet.com/lukostaz"/>
+    <foaf:homepage rdf:resource="http://www-sop.inria.fr/members/Luca.Costabello/"/>
+    <foaf:img rdf:resource="http://a2.twimg.com/profile_images/1572937767/tmp_fsquare_normal.jpg"/>
+  </foaf:Agent>
+  <foaf:Agent rdf:about="http://semantictweet.com/JeanFred#me">
+    <foaf:name>Jean-Fr&#233;d&#233;ric</foaf:name>
+    <foaf:nick>JeanFred</foaf:nick>
+    <rdfs:seeAlso rdf:resource="http://semantictweet.com/JeanFred"/>
+    <foaf:img rdf:resource="http://a3.twimg.com/profile_images/1517322239/352039091_d0773f0fd2_o_normal.jpg"/>
+  </foaf:Agent>
+  <foaf:Agent rdf:about="http://semantictweet.com/Forge_INRIA#me">
+    <foaf:name>Forge INRIA </foaf:name>
+    <foaf:nick>Forge_INRIA</foaf:nick>
+    <rdfs:seeAlso rdf:resource="http://semantictweet.com/Forge_INRIA"/>
+    <foaf:homepage rdf:resource="http://gforge.inria.fr"/>
+    <foaf:img rdf:resource="http://a2.twimg.com/profile_images/1680484177/logoinria_bigger_normal.jpg"/>
+  </foaf:Agent>
+  <foaf:Agent rdf:about="http://semantictweet.com/rmod_inria#me">
+    <foaf:name>RMod group @ INRIA</foaf:name>
+    <foaf:nick>rmod_inria</foaf:nick>
+    <rdfs:seeAlso rdf:resource="http://semantictweet.com/rmod_inria"/>
+    <foaf:homepage rdf:resource="http://rmod.lille.inria.fr"/>
+    <foaf:img rdf:resource="http://a1.twimg.com/profile_images/1073217639/rmod_normal.png"/>
+  </foaf:Agent>
+  <foaf:Agent rdf:about="http://semantictweet.com/gcharrie#me">
+    <foaf:name>Ghislain Charrier</foaf:name>
+    <foaf:nick>gcharrie</foaf:nick>
+    <rdfs:seeAlso rdf:resource="http://semantictweet.com/gcharrie"/>
+    <foaf:homepage rdf:resource="http://graal.ens-lyon.fr/~gcharrie"/>
+    <foaf:img rdf:resource="http://a1.twimg.com/profile_images/1237558117/27860_1319581862868_1030426453_30786332_471187_n_normal.jpg"/>
+  </foaf:Agent>
+  <foaf:Agent rdf:about="http://semantictweet.com/cybunk#me">
+    <foaf:name>Samuel Huron</foaf:name>
+    <foaf:nick>cybunk</foaf:nick>
+    <rdfs:seeAlso rdf:resource="http://semantictweet.com/cybunk"/>
+    <foaf:homepage rdf:resource="http://www.cybunk.com"/>
+    <foaf:img rdf:resource="http://a1.twimg.com/profile_images/309624209/Cy2_normal.png"/>
+  </foaf:Agent>
+  <foaf:Agent rdf:about="http://semantictweet.com/bubbleT2012#me">
+    <foaf:name>bubble.t</foaf:name>
+    <foaf:nick>bubbleT2012</foaf:nick>
+    <rdfs:seeAlso rdf:resource="http://semantictweet.com/bubbleT2012"/>
+    <foaf:homepage rdf:resource="http://dev.fabelier.org/bubble-t/"/>
+    <foaf:img rdf:resource="http://a1.twimg.com/profile_images/1679403634/bgd-readme2_normal.png"/>
+  </foaf:Agent>
+  <foaf:Agent rdf:about="http://semantictweet.com/koutaous#me">
+    <foaf:name>sabah khalfa</foaf:name>
+    <foaf:nick>koutaous</foaf:nick>
+    <rdfs:seeAlso rdf:resource="http://semantictweet.com/koutaous"/>
+    <foaf:img rdf:resource="http://a2.twimg.com/sticky/default_profile_images/default_profile_3_normal.png"/>
+  </foaf:Agent>
+  <foaf:Agent rdf:about="http://semantictweet.com/isabellemathieu#me">
+    <foaf:name>Isabelle Mathieu</foaf:name>
+    <foaf:nick>isabellemathieu</foaf:nick>
+    <rdfs:seeAlso rdf:resource="http://semantictweet.com/isabellemathieu"/>
+    <foaf:homepage rdf:resource="http://www.emarketinglicious.fr/blog"/>
+    <foaf:img rdf:resource="http://a1.twimg.com/profile_images/1667601041/isabelle-mathieu-4-bn-400px_normal.jpg"/>
+  </foaf:Agent>
+  <foaf:Agent rdf:about="http://semantictweet.com/yannguegan#me">
+    <foaf:name>Yann Guegan</foaf:name>
+    <foaf:nick>yannguegan</foaf:nick>
+    <rdfs:seeAlso rdf:resource="http://semantictweet.com/yannguegan"/>
+    <foaf:homepage rdf:resource="http://www.rue89.com/"/>
+    <foaf:img rdf:resource="http://a2.twimg.com/profile_images/1549811788/grimace3_normal.jpg"/>
+  </foaf:Agent>
+  <foaf:Agent rdf:about="http://semantictweet.com/BatonBoys#me">
+    <foaf:name>Loguy</foaf:name>
+    <foaf:nick>BatonBoys</foaf:nick>
+    <rdfs:seeAlso rdf:resource="http://semantictweet.com/BatonBoys"/>
+    <foaf:homepage rdf:resource="http://www.loguy.com"/>
+    <foaf:img rdf:resource="http://a3.twimg.com/profile_images/855362373/Loguy_normal.jpg"/>
+  </foaf:Agent>
+  <foaf:Agent rdf:about="http://semantictweet.com/LaboBnF#me">
+    <foaf:name>LaboBnF</foaf:name>
+    <foaf:nick>LaboBnF</foaf:nick>
+    <rdfs:seeAlso rdf:resource="http://semantictweet.com/LaboBnF"/>
+    <foaf:homepage rdf:resource="http://labobnf.blogspot.com"/>
+    <foaf:img rdf:resource="http://a3.twimg.com/profile_images/847600924/labobnf-logo-twitter-square_normal.png"/>
+  </foaf:Agent>
+  <foaf:Agent rdf:about="http://semantictweet.com/CIGREF#me">
+    <foaf:name>CIGREF</foaf:name>
+    <foaf:nick>CIGREF</foaf:nick>
+    <rdfs:seeAlso rdf:resource="http://semantictweet.com/CIGREF"/>
+    <foaf:homepage rdf:resource="http://www.cigref.fr"/>
+    <foaf:img rdf:resource="http://a1.twimg.com/profile_images/1209226449/favicon_normal.png"/>
+  </foaf:Agent>
+  <foaf:Agent rdf:about="http://semantictweet.com/miladus#me">
+    <foaf:name>Miladus Edenensis</foaf:name>
+    <foaf:nick>miladus</foaf:nick>
+    <rdfs:seeAlso rdf:resource="http://semantictweet.com/miladus"/>
+    <foaf:homepage rdf:resource="http://notules.org"/>
+    <foaf:img rdf:resource="http://a2.twimg.com/profile_images/24545662/miladus_normal.jpg"/>
+  </foaf:Agent>
+  <foaf:Agent rdf:about="http://semantictweet.com/Sciences_Avenir#me">
+    <foaf:name>Sciences et Avenir</foaf:name>
+    <foaf:nick>Sciences_Avenir</foaf:nick>
+    <rdfs:seeAlso rdf:resource="http://semantictweet.com/Sciences_Avenir"/>
+    <foaf:homepage rdf:resource="http://www.sciencesetavenir.fr"/>
+    <foaf:img rdf:resource="http://a0.twimg.com/profile_images/946325995/sciences_avenir_normal.jpg"/>
+  </foaf:Agent>
+  <foaf:Agent rdf:about="http://semantictweet.com/BFMTV#me">
+    <foaf:name>BFMTV</foaf:name>
+    <foaf:nick>BFMTV</foaf:nick>
+    <rdfs:seeAlso rdf:resource="http://semantictweet.com/BFMTV"/>
+    <foaf:homepage rdf:resource="http://www.bfmtv.com"/>
+    <foaf:img rdf:resource="http://a2.twimg.com/profile_images/995697759/bfmtvhd_normal.png"/>
+  </foaf:Agent>
+  <foaf:Agent rdf:about="http://semantictweet.com/ParisDiderot#me">
+    <foaf:name>Univ Paris Diderot</foaf:name>
+    <foaf:nick>ParisDiderot</foaf:nick>
+    <rdfs:seeAlso rdf:resource="http://semantictweet.com/ParisDiderot"/>
+    <foaf:homepage rdf:resource="http://www.univ-paris-diderot.fr"/>
+    <foaf:img rdf:resource="http://a1.twimg.com/profile_images/1467353538/upd_twitter_130_normal.jpg"/>
+  </foaf:Agent>
+  <foaf:Agent rdf:about="http://semantictweet.com/MichelAlbergant#me">
+    <foaf:name>Michel Alberganti</foaf:name>
+    <foaf:nick>MichelAlbergant</foaf:nick>
+    <rdfs:seeAlso rdf:resource="http://semantictweet.com/MichelAlbergant"/>
+    <foaf:img rdf:resource="http://a2.twimg.com/profile_images/1675360533/Logo_VSP_transparent_VideoSurInternet_normal.png"/>
+  </foaf:Agent>
+  <foaf:Agent rdf:about="http://semantictweet.com/Paris#me">
+    <foaf:name>Paris</foaf:name>
+    <foaf:nick>Paris</foaf:nick>
+    <rdfs:seeAlso rdf:resource="http://semantictweet.com/Paris"/>
+    <foaf:homepage rdf:resource="http://www.paris.fr"/>
+    <foaf:img rdf:resource="http://a2.twimg.com/profile_images/1662601570/twitter-paris-hiver_normal.gif"/>
+  </foaf:Agent>
+  <foaf:Agent rdf:about="http://semantictweet.com/smartplanetfr#me">
+    <foaf:name>SmartPlanet.fr</foaf:name>
+    <foaf:nick>smartplanetfr</foaf:nick>
+    <rdfs:seeAlso rdf:resource="http://semantictweet.com/smartplanetfr"/>
+    <foaf:homepage rdf:resource="http://www.smartplanet.fr/"/>
+    <foaf:img rdf:resource="http://a1.twimg.com/profile_images/1238297293/smartplanet_twitter_2_normal.jpg"/>
+  </foaf:Agent>
+  <foaf:Agent rdf:about="http://semantictweet.com/timberners_lee#me">
+    <foaf:name>Tim Berners-Lee</foaf:name>
+    <foaf:nick>timberners_lee</foaf:nick>
+    <rdfs:seeAlso rdf:resource="http://semantictweet.com/timberners_lee"/>
+    <foaf:homepage rdf:resource="http://www.w3.org/People/Berners-Lee/"/>
+    <foaf:img rdf:resource="http://a2.twimg.com/profile_images/1325092609/94d9da15ab89e3e2b4a5b9a5174f5618_normal.jpg"/>
+  </foaf:Agent>
+  <foaf:Agent rdf:about="http://semantictweet.com/pierrecap#me">
+    <foaf:name>Pierre Cappeli</foaf:name>
+    <foaf:nick>pierrecap</foaf:nick>
+    <rdfs:seeAlso rdf:resource="http://semantictweet.com/pierrecap"/>
+    <foaf:img rdf:resource="http://a2.twimg.com/profile_images/1748154203/tw_13667556_1326298745_normal.jpg"/>
+  </foaf:Agent>
+  <foaf:Agent rdf:about="http://semantictweet.com/lesinfosdejo#me">
+    <foaf:name>Joanna J.</foaf:name>
+    <foaf:nick>lesinfosdejo</foaf:nick>
+    <rdfs:seeAlso rdf:resource="http://semantictweet.com/lesinfosdejo"/>
+    <foaf:homepage rdf:resource="http://www.scoop.it/t/mediation-vulgarisation-scientifique"/>
+    <foaf:img rdf:resource="http://a3.twimg.com/profile_images/1384313296/211920_564367966_1690086_n_normal.jpg"/>
+  </foaf:Agent>
+  <foaf:Agent rdf:about="http://semantictweet.com/Xavier75#me">
+    <foaf:name>Xavier Niel</foaf:name>
+    <foaf:nick>Xavier75</foaf:nick>
+    <rdfs:seeAlso rdf:resource="http://semantictweet.com/Xavier75"/>
+    <foaf:img rdf:resource="http://a1.twimg.com/profile_images/1736737355/XN_normal.PNG"/>
+  </foaf:Agent>
+  <foaf:Agent rdf:about="http://semantictweet.com/groupeTraces#me">
+    <foaf:name>Meriem Fresson</foaf:name>
+    <foaf:nick>groupeTraces</foaf:nick>
+    <rdfs:seeAlso rdf:resource="http://semantictweet.com/groupeTraces"/>
+    <foaf:homepage rdf:resource="http://www.groupe-traces.fr"/>
+    <foaf:img rdf:resource="http://a3.twimg.com/profile_images/1079000641/logo_traces2_normal.jpg"/>
+  </foaf:Agent>
+  <foaf:Agent rdf:about="http://semantictweet.com/Sciencefestiva1#me">
+    <foaf:name>Sciencefestivals</foaf:name>
+    <foaf:nick>Sciencefestiva1</foaf:nick>
+    <rdfs:seeAlso rdf:resource="http://semantictweet.com/Sciencefestiva1"/>
+    <foaf:homepage rdf:resource="http://www.sciencefestivals.eu"/>
+    <foaf:img rdf:resource="http://a0.twimg.com/profile_images/1659139513/eusea-logo_normal.jpg"/>
+  </foaf:Agent>
+  <foaf:Agent rdf:about="http://semantictweet.com/i_montaigne#me">
+    <foaf:name>Institut Montaigne</foaf:name>
+    <foaf:nick>i_montaigne</foaf:nick>
+    <rdfs:seeAlso rdf:resource="http://semantictweet.com/i_montaigne"/>
+    <foaf:homepage rdf:resource="http://www.institutmontaigne.org"/>
+    <foaf:img rdf:resource="http://a2.twimg.com/profile_images/732231404/avatar_institut_montaigne_normal.jpg"/>
+  </foaf:Agent>
+  <foaf:Agent rdf:about="http://semantictweet.com/bluetouff#me">
+    <foaf:name>Olivier Laurelli</foaf:name>
+    <foaf:nick>bluetouff</foaf:nick>
+    <rdfs:seeAlso rdf:resource="http://semantictweet.com/bluetouff"/>
+    <foaf:homepage rdf:resource="http://reflets.info"/>
+    <foaf:img rdf:resource="http://a3.twimg.com/profile_images/1767105980/7b81a1d7-059c-422c-b263-265745c15b8d_normal.png"/>
+  </foaf:Agent>
+  <foaf:Agent rdf:about="http://semantictweet.com/nlaffont#me">
+    <foaf:name>Nicolas Laffont</foaf:name>
+    <foaf:nick>nlaffont</foaf:nick>
+    <rdfs:seeAlso rdf:resource="http://semantictweet.com/nlaffont"/>
+    <foaf:homepage rdf:resource="http://laffontnicolas.free.fr/index_fr.html"/>
+    <foaf:img rdf:resource="http://a3.twimg.com/profile_images/1314145673/IMGP2151b_normal.jpg"/>
+  </foaf:Agent>
+  <foaf:Agent rdf:about="http://semantictweet.com/nitot#me">
+    <foaf:name>Tristan Nitot</foaf:name>
+    <foaf:nick>nitot</foaf:nick>
+    <rdfs:seeAlso rdf:resource="http://semantictweet.com/nitot"/>
+    <foaf:homepage rdf:resource="http://standblog.org/"/>
+    <foaf:img rdf:resource="http://a0.twimg.com/profile_images/1164927829/avatar-tristan_normal.jpg"/>
+  </foaf:Agent>
+  <foaf:Agent rdf:about="http://semantictweet.com/epelboin#me">
+    <foaf:name>Fabrice Epelboin</foaf:name>
+    <foaf:nick>epelboin</foaf:nick>
+    <rdfs:seeAlso rdf:resource="http://semantictweet.com/epelboin"/>
+    <foaf:homepage rdf:resource="http://about.me/epelboin"/>
+    <foaf:img rdf:resource="http://a2.twimg.com/profile_images/1215979900/twitavatar_normal.jpg"/>
+  </foaf:Agent>
+  <foaf:Agent rdf:about="http://semantictweet.com/univbordeaux#me">
+    <foaf:name>Universit&#233; Bordeaux</foaf:name>
+    <foaf:nick>univbordeaux</foaf:nick>
+    <rdfs:seeAlso rdf:resource="http://semantictweet.com/univbordeaux"/>
+    <foaf:homepage rdf:resource="http://www.univ-bordeaux.fr"/>
+    <foaf:img rdf:resource="http://a0.twimg.com/profile_images/817077565/Logo-UBx_normal.jpg"/>
+  </foaf:Agent>
+  <foaf:Agent rdf:about="http://semantictweet.com/UAntillesGuyane#me">
+    <foaf:name>Univ Antilles Guyane</foaf:name>
+    <foaf:nick>UAntillesGuyane</foaf:nick>
+    <rdfs:seeAlso rdf:resource="http://semantictweet.com/UAntillesGuyane"/>
+    <foaf:homepage rdf:resource="http://www.univ-ag.fr"/>
+    <foaf:img rdf:resource="http://a3.twimg.com/profile_images/609602172/UAG-U_normal.gif"/>
+  </foaf:Agent>
+  <foaf:Agent rdf:about="http://semantictweet.com/Yale#me">
+    <foaf:name>Yale University</foaf:name>
+    <foaf:nick>Yale</foaf:nick>
+    <rdfs:seeAlso rdf:resource="http://semantictweet.com/Yale"/>
+    <foaf:homepage rdf:resource="http://www.yale.edu"/>
+    <foaf:img rdf:resource="http://a2.twimg.com/profile_images/1356410088/Yale_Y-300px_normal.jpg"/>
+  </foaf:Agent>
+  <foaf:Agent rdf:about="http://semantictweet.com/Harvard#me">
+    <foaf:name>Harvard University</foaf:name>
+    <foaf:nick>Harvard</foaf:nick>
+    <rdfs:seeAlso rdf:resource="http://semantictweet.com/Harvard"/>
+    <foaf:homepage rdf:resource="http://harvard.edu"/>
+    <foaf:img rdf:resource="http://a0.twimg.com/profile_images/1163303038/Shield_RGB_Twitter_normal.png"/>
+  </foaf:Agent>
+  <foaf:Agent rdf:about="http://semantictweet.com/Princeton#me">
+    <foaf:name>Princeton University</foaf:name>
+    <foaf:nick>Princeton</foaf:nick>
+    <rdfs:seeAlso rdf:resource="http://semantictweet.com/Princeton"/>
+    <foaf:homepage rdf:resource="http://www.princeton.edu"/>
+    <foaf:img rdf:resource="http://a2.twimg.com/profile_images/93079724/PU_twitter_logo_normal.jpg"/>
+  </foaf:Agent>
+  <foaf:Agent rdf:about="http://semantictweet.com/Cambridge_Uni#me">
+    <foaf:name>Cambridge University</foaf:name>
+    <foaf:nick>Cambridge_Uni</foaf:nick>
+    <rdfs:seeAlso rdf:resource="http://semantictweet.com/Cambridge_Uni"/>
+    <foaf:homepage rdf:resource="http://www.cam.ac.uk/"/>
+    <foaf:img rdf:resource="http://a1.twimg.com/profile_images/1682839218/blue_logo_image_normal.png"/>
+  </foaf:Agent>
+  <foaf:Agent rdf:about="http://semantictweet.com/UniofOxford#me">
+    <foaf:name>Oxford University</foaf:name>
+    <foaf:nick>UniofOxford</foaf:nick>
+    <rdfs:seeAlso rdf:resource="http://semantictweet.com/UniofOxford"/>
+    <foaf:homepage rdf:resource="http://www.ox.ac.uk"/>
+    <foaf:img rdf:resource="http://a3.twimg.com/profile_images/268772250/logo_for_web_normal.jpg"/>
+  </foaf:Agent>
+  <foaf:Agent rdf:about="http://semantictweet.com/Stanford#me">
+    <foaf:name>Stanford University</foaf:name>
+    <foaf:nick>Stanford</foaf:nick>
+    <rdfs:seeAlso rdf:resource="http://semantictweet.com/Stanford"/>
+    <foaf:homepage rdf:resource="http://www.stanford.edu"/>
+    <foaf:img rdf:resource="http://a0.twimg.com/profile_images/125789429/stanford_icon_normal.png"/>
+  </foaf:Agent>
+  <foaf:Agent rdf:about="http://semantictweet.com/SorbonneParis1#me">
+    <foaf:name>Universit&#233; Paris 1</foaf:name>
+    <foaf:nick>SorbonneParis1</foaf:nick>
+    <rdfs:seeAlso rdf:resource="http://semantictweet.com/SorbonneParis1"/>
+    <foaf:homepage rdf:resource="http://www.univ-paris1.fr"/>
+    <foaf:img rdf:resource="http://a3.twimg.com/profile_images/1438440732/icone-application-UP172dpi_normal.jpg"/>
+  </foaf:Agent>
+  <foaf:Agent rdf:about="http://semantictweet.com/AssasTwits#me">
+    <foaf:name>Univ Panth&#233;on-Assas</foaf:name>
+    <foaf:nick>AssasTwits</foaf:nick>
+    <rdfs:seeAlso rdf:resource="http://semantictweet.com/AssasTwits"/>
+    <foaf:homepage rdf:resource="http://www.u-paris2.fr"/>
+    <foaf:img rdf:resource="http://a2.twimg.com/profile_images/1365919604/logoMoy_domebl_fd186C_normal.jpg"/>
+  </foaf:Agent>
+  <foaf:Agent rdf:about="http://semantictweet.com/Paris_Sorbonne#me">
+    <foaf:name>Paris-Sorbonne</foaf:name>
+    <foaf:nick>Paris_Sorbonne</foaf:nick>
+    <rdfs:seeAlso rdf:resource="http://semantictweet.com/Paris_Sorbonne"/>
+    <foaf:homepage rdf:resource="http://www.paris-sorbonne.fr"/>
+    <foaf:img rdf:resource="http://a1.twimg.com/profile_images/1176678167/34196_134662936557421_120111891345859_257043_3901055_n_normal.jpg"/>
+  </foaf:Agent>
+  <foaf:Agent rdf:about="http://semantictweet.com/gdelalande#me">
+    <foaf:name>Guillaume Delalande</foaf:name>
+    <foaf:nick>gdelalande</foaf:nick>
+    <rdfs:seeAlso rdf:resource="http://semantictweet.com/gdelalande"/>
+    <foaf:homepage rdf:resource="http://lci.tf1.fr/redaction-lci/guillaume-delalande-5575623.html"/>
+    <foaf:img rdf:resource="http://a3.twimg.com/profile_images/401829772/n646905747_2841_normal.jpg"/>
+  </foaf:Agent>
+  <foaf:Agent rdf:about="http://semantictweet.com/pierremerckle#me">
+    <foaf:name>Pierre Merckl&#233;</foaf:name>
+    <foaf:nick>pierremerckle</foaf:nick>
+    <rdfs:seeAlso rdf:resource="http://semantictweet.com/pierremerckle"/>
+    <foaf:homepage rdf:resource="http://pierremerckle.fr"/>
+    <foaf:img rdf:resource="http://a3.twimg.com/profile_images/1368756338/Trombine_normal.jpg"/>
+  </foaf:Agent>
+  <foaf:Agent rdf:about="http://semantictweet.com/maxplanckpress#me">
+    <foaf:name>Max Planck Society</foaf:name>
+    <foaf:nick>maxplanckpress</foaf:nick>
+    <rdfs:seeAlso rdf:resource="http://semantictweet.com/maxplanckpress"/>
+    <foaf:homepage rdf:resource="http://www.mpg.de/english/"/>
+    <foaf:img rdf:resource="http://a3.twimg.com/profile_images/1148707192/maxplanckpress_logo_normal.png"/>
+  </foaf:Agent>
+  <foaf:Agent rdf:about="http://semantictweet.com/FradiFrad#me">
+    <foaf:name>Andr&#233;a Fradin</foaf:name>
+    <foaf:nick>FradiFrad</foaf:nick>
+    <rdfs:seeAlso rdf:resource="http://semantictweet.com/FradiFrad"/>
+    <foaf:homepage rdf:resource="http://owni.fr"/>
+    <foaf:img rdf:resource="http://a2.twimg.com/profile_images/1015033866/bell_normal.jpg"/>
+  </foaf:Agent>
+  <foaf:Agent rdf:about="http://semantictweet.com/cinemathequefr#me">
+    <foaf:name>La Cin&#233;math&#232;que</foaf:name>
+    <foaf:nick>cinemathequefr</foaf:nick>
+    <rdfs:seeAlso rdf:resource="http://semantictweet.com/cinemathequefr"/>
+    <foaf:homepage rdf:resource="http://www.cinematheque.fr"/>
+    <foaf:img rdf:resource="http://a1.twimg.com/profile_images/1649981719/twitter-layout_d_c_11-f_v_12_normal.jpg"/>
+  </foaf:Agent>
+  <foaf:Agent rdf:about="http://semantictweet.com/lesinrocks#me">
+    <foaf:name>les inrocks</foaf:name>
+    <foaf:nick>lesinrocks</foaf:nick>
+    <rdfs:seeAlso rdf:resource="http://semantictweet.com/lesinrocks"/>
+    <foaf:homepage rdf:resource="http://www.lesinrocks.com/"/>
+    <foaf:img rdf:resource="http://a1.twimg.com/profile_images/1374906616/Image_3_reasonably_small-du_normal.png"/>
+  </foaf:Agent>
+  <foaf:Agent rdf:about="http://semantictweet.com/patrick9clement#me">
+    <foaf:name>patrick clement enst</foaf:name>
+    <foaf:nick>patrick9clement</foaf:nick>
+    <rdfs:seeAlso rdf:resource="http://semantictweet.com/patrick9clement"/>
+    <foaf:homepage rdf:resource="http://www.infres.enst.fr/~clement/"/>
+    <foaf:img rdf:resource="http://a2.twimg.com/profile_images/1780142227/patrick-clement_normal.jpg"/>
+  </foaf:Agent>
+  <foaf:Agent rdf:about="http://semantictweet.com/technologiecb#me">
+    <foaf:name>M.Anastasy</foaf:name>
+    <foaf:nick>technologiecb</foaf:nick>
+    <rdfs:seeAlso rdf:resource="http://semantictweet.com/technologiecb"/>
+    <foaf:homepage rdf:resource="http://technologiecb.free.fr"/>
+    <foaf:img rdf:resource="http://a2.twimg.com/profile_images/1748367666/engrenages_normal.jpg"/>
+  </foaf:Agent>
+  <foaf:Agent rdf:about="http://semantictweet.com/OlivierChapuis#me">
+    <foaf:name>Olivier Chapuis</foaf:name>
+    <foaf:nick>OlivierChapuis</foaf:nick>
+    <rdfs:seeAlso rdf:resource="http://semantictweet.com/OlivierChapuis"/>
+    <foaf:img rdf:resource="http://a2.twimg.com/sticky/default_profile_images/default_profile_3_normal.png"/>
+  </foaf:Agent>
+  <foaf:Agent rdf:about="http://semantictweet.com/VidalLaurent#me">
+    <foaf:name>vidal laurent</foaf:name>
+    <foaf:nick>VidalLaurent</foaf:nick>
+    <rdfs:seeAlso rdf:resource="http://semantictweet.com/VidalLaurent"/>
+    <foaf:img rdf:resource="http://a0.twimg.com/sticky/default_profile_images/default_profile_1_normal.png"/>
+  </foaf:Agent>
+  <foaf:Agent rdf:about="http://semantictweet.com/HeloBouillard#me">
+    <foaf:name>H&#233;lo&#239;se Bouillard</foaf:name>
+    <foaf:nick>HeloBouillard</foaf:nick>
+    <rdfs:seeAlso rdf:resource="http://semantictweet.com/HeloBouillard"/>
+    <foaf:img rdf:resource="http://a3.twimg.com/profile_images/1783336027/helo_1_normal.jpg"/>
+  </foaf:Agent>
+  <foaf:Agent rdf:about="http://semantictweet.com/framaka#me">
+    <foaf:name>Alexis Kauffmann</foaf:name>
+    <foaf:nick>framaka</foaf:nick>
+    <rdfs:seeAlso rdf:resource="http://semantictweet.com/framaka"/>
+    <foaf:homepage rdf:resource="http://framablog.org"/>
+    <foaf:img rdf:resource="http://a0.twimg.com/profile_images/1767457088/photo69_normal.JPG"/>
+  </foaf:Agent>
+  <foaf:Agent rdf:about="http://semantictweet.com/DNArchi#me">
+    <foaf:name>DNArchi</foaf:name>
+    <foaf:nick>DNArchi</foaf:nick>
+    <rdfs:seeAlso rdf:resource="http://semantictweet.com/DNArchi"/>
+    <foaf:homepage rdf:resource="http://dnarchi.fr"/>
+    <foaf:img rdf:resource="http://a2.twimg.com/profile_images/1780392297/DNA_twitter_3_normal.jpg"/>
+  </foaf:Agent>
+  <foaf:Agent rdf:about="http://semantictweet.com/nicolasbronsard#me">
+    <foaf:name>nicolas bronsard</foaf:name>
+    <foaf:nick>nicolasbronsard</foaf:nick>
+    <rdfs:seeAlso rdf:resource="http://semantictweet.com/nicolasbronsard"/>
+    <foaf:img rdf:resource="http://a1.twimg.com/profile_images/1782748102/Photo_du_26-01-12___16.23_normal.jpg"/>
+  </foaf:Agent>
+  <foaf:Agent rdf:about="http://semantictweet.com/VTSMPCetim#me">
+    <foaf:name>picco</foaf:name>
+    <foaf:nick>VTSMPCetim</foaf:nick>
+    <rdfs:seeAlso rdf:resource="http://semantictweet.com/VTSMPCetim"/>
+    <foaf:img rdf:resource="http://a3.twimg.com/sticky/default_profile_images/default_profile_0_normal.png"/>
+  </foaf:Agent>
+  <foaf:Agent rdf:about="http://semantictweet.com/openKMQ3D#me">
+    <foaf:name>Thomas Kumlehn</foaf:name>
+    <foaf:nick>openKMQ3D</foaf:nick>
+    <rdfs:seeAlso rdf:resource="http://semantictweet.com/openKMQ3D"/>
+    <foaf:homepage rdf:resource="http://openKMQ.blogspot.com"/>
+    <foaf:img rdf:resource="http://a3.twimg.com/profile_images/1170665409/openKMQlogo_square_normal.png"/>
+  </foaf:Agent>
+  <foaf:Agent rdf:about="http://semantictweet.com/institut_eduter#me">
+    <foaf:name>Eduter</foaf:name>
+    <foaf:nick>institut_eduter</foaf:nick>
+    <rdfs:seeAlso rdf:resource="http://semantictweet.com/institut_eduter"/>
+    <foaf:homepage rdf:resource="http://www.eduter.fr"/>
+    <foaf:img rdf:resource="http://a1.twimg.com/profile_images/1782231179/eduter-twit_normal.jpg"/>
+  </foaf:Agent>
+  <foaf:Agent rdf:about="http://semantictweet.com/AntidotNet#me">
+    <foaf:name>Antidot </foaf:name>
+    <foaf:nick>AntidotNet</foaf:nick>
+    <rdfs:seeAlso rdf:resource="http://semantictweet.com/AntidotNet"/>
+    <foaf:homepage rdf:resource="http://www.antidot.eu"/>
+    <foaf:img rdf:resource="http://a2.twimg.com/profile_images/492528816/logo_petit_normal.gif"/>
+  </foaf:Agent>
+  <foaf:Agent rdf:about="http://semantictweet.com/Netva_fr#me">
+    <foaf:name>Netva</foaf:name>
+    <foaf:nick>Netva_fr</foaf:nick>
+    <rdfs:seeAlso rdf:resource="http://semantictweet.com/Netva_fr"/>
+    <foaf:homepage rdf:resource="http://netvafrance.com/"/>
+    <foaf:img rdf:resource="http://a2.twimg.com/profile_images/1701896911/mail.google.com_normal.jpg"/>
+  </foaf:Agent>
+  <foaf:Agent rdf:about="http://semantictweet.com/Cfr#me">
+    <foaf:name>Stan Serebryakov</foaf:name>
+    <foaf:nick>Cfr</foaf:nick>
+    <rdfs:seeAlso rdf:resource="http://semantictweet.com/Cfr"/>
+    <foaf:homepage rdf:resource="http://claimid.com/cfr"/>
+    <foaf:img rdf:resource="http://a2.twimg.com/profile_images/675492908/sqcfr_normal.jpg"/>
+  </foaf:Agent>
+  <foaf:Agent rdf:about="http://semantictweet.com/Sandra_Pereira_#me">
+    <foaf:name>Sandra Pereira</foaf:name>
+    <foaf:nick>Sandra_Pereira_</foaf:nick>
+    <rdfs:seeAlso rdf:resource="http://semantictweet.com/Sandra_Pereira_"/>
+    <foaf:img rdf:resource="http://a3.twimg.com/profile_images/1475680823/Capture_normal.jpg"/>
+  </foaf:Agent>
+  <foaf:Agent rdf:about="http://semantictweet.com/FTA_P#me">
+    <foaf:name>f.ta</foaf:name>
+    <foaf:nick>FTA_P</foaf:nick>
+    <rdfs:seeAlso rdf:resource="http://semantictweet.com/FTA_P"/>
+    <foaf:img rdf:resource="http://a0.twimg.com/sticky/default_profile_images/default_profile_1_normal.png"/>
+  </foaf:Agent>
+  <foaf:Agent rdf:about="http://semantictweet.com/blogueur#me">
+    <foaf:name>Blogueur</foaf:name>
+    <foaf:nick>blogueur</foaf:nick>
+    <rdfs:seeAlso rdf:resource="http://semantictweet.com/blogueur"/>
+    <foaf:img rdf:resource="http://a0.twimg.com/profile_images/1778181915/thumbbig-66787_normal.jpg"/>
+  </foaf:Agent>
+  <foaf:Agent rdf:about="http://semantictweet.com/carolecabreton#me">
+    <foaf:name>carole cabreton</foaf:name>
+    <foaf:nick>carolecabreton</foaf:nick>
+    <rdfs:seeAlso rdf:resource="http://semantictweet.com/carolecabreton"/>
+    <foaf:img rdf:resource="http://a3.twimg.com/sticky/default_profile_images/default_profile_4_normal.png"/>
+  </foaf:Agent>
+  <foaf:Agent rdf:about="http://semantictweet.com/chubillau#me">
+    <foaf:name>chubillau</foaf:name>
+    <foaf:nick>chubillau</foaf:nick>
+    <rdfs:seeAlso rdf:resource="http://semantictweet.com/chubillau"/>
+    <foaf:img rdf:resource="http://a3.twimg.com/sticky/default_profile_images/default_profile_0_normal.png"/>
+  </foaf:Agent>
+  <foaf:Agent rdf:about="http://semantictweet.com/jenetwittepas#me">
+    <foaf:name>milka</foaf:name>
+    <foaf:nick>jenetwittepas</foaf:nick>
+    <rdfs:seeAlso rdf:resource="http://semantictweet.com/jenetwittepas"/>
+    <foaf:img rdf:resource="http://a0.twimg.com/profile_images/1552860984/IMG_4463_normal.JPG"/>
+  </foaf:Agent>
+  <foaf:Agent rdf:about="http://semantictweet.com/vdumontier#me">
+    <foaf:name>Valentin Dumontier</foaf:name>
+    <foaf:nick>vdumontier</foaf:nick>
+    <rdfs:seeAlso rdf:resource="http://semantictweet.com/vdumontier"/>
+    <foaf:homepage rdf:resource="http://www.vdumontier.fr"/>
+    <foaf:img rdf:resource="http://a3.twimg.com/profile_images/1264644678/download_normal.jpg"/>
+  </foaf:Agent>
+  <foaf:Agent rdf:about="http://semantictweet.com/MauriceCynthia#me">
+    <foaf:name>Maurice Cynthia</foaf:name>
+    <foaf:nick>MauriceCynthia</foaf:nick>
+    <rdfs:seeAlso rdf:resource="http://semantictweet.com/MauriceCynthia"/>
+    <foaf:img rdf:resource="http://a0.twimg.com/profile_images/1764176354/CynthiaProfil_96x96_normal.jpg"/>
+  </foaf:Agent>
+  <foaf:Agent rdf:about="http://semantictweet.com/plncfc#me">
+    <foaf:name>Pln</foaf:name>
+    <foaf:nick>plncfc</foaf:nick>
+    <rdfs:seeAlso rdf:resource="http://semantictweet.com/plncfc"/>
+    <foaf:img rdf:resource="http://a3.twimg.com/sticky/default_profile_images/default_profile_4_normal.png"/>
+  </foaf:Agent>
+  <foaf:Agent rdf:about="http://semantictweet.com/test_esr#me">
+    <foaf:name>Test_ESR</foaf:name>
+    <foaf:nick>test_esr</foaf:nick>
+    <rdfs:seeAlso rdf:resource="http://semantictweet.com/test_esr"/>
+    <foaf:img rdf:resource="http://a2.twimg.com/sticky/default_profile_images/default_profile_3_normal.png"/>
+  </foaf:Agent>
+  <foaf:Agent rdf:about="http://semantictweet.com/jjvie#me">
+    <foaf:name>Jill-J&#234;nn Vie</foaf:name>
+    <foaf:nick>jjvie</foaf:nick>
+    <rdfs:seeAlso rdf:resource="http://semantictweet.com/jjvie"/>
+    <foaf:homepage rdf:resource="http://www.jill-jenn.net"/>
+    <foaf:img rdf:resource="http://a1.twimg.com/profile_images/1383470677/jiji_normal.png"/>
+  </foaf:Agent>
+  <foaf:Agent rdf:about="http://semantictweet.com/ximad#me">
+    <foaf:name>ximad</foaf:name>
+    <foaf:nick>ximad</foaf:nick>
+    <rdfs:seeAlso rdf:resource="http://semantictweet.com/ximad"/>
+    <foaf:img rdf:resource="http://a2.twimg.com/profile_images/74448313/imad_normal.png"/>
+  </foaf:Agent>
+  <foaf:Agent rdf:about="http://semantictweet.com/Jo7peron#me">
+    <foaf:name>Joseph P&#233;ron</foaf:name>
+    <foaf:nick>Jo7peron</foaf:nick>
+    <rdfs:seeAlso rdf:resource="http://semantictweet.com/Jo7peron"/>
+    <foaf:img rdf:resource="http://a3.twimg.com/profile_images/1783152575/Copie_de_banksy_06_normal.png"/>
+  </foaf:Agent>
+  <foaf:Agent rdf:about="http://semantictweet.com/Smyrnh1922#me">
+    <foaf:name>Ioannis Papadopoulos</foaf:name>
+    <foaf:nick>Smyrnh1922</foaf:nick>
+    <rdfs:seeAlso rdf:resource="http://semantictweet.com/Smyrnh1922"/>
+    <foaf:img rdf:resource="http://a0.twimg.com/profile_images/1779997821/Winter_normal.jpg"/>
+  </foaf:Agent>
+  <foaf:Agent rdf:about="http://semantictweet.com/lemonway#me">
+    <foaf:name>Lemon Way</foaf:name>
+    <foaf:nick>lemonway</foaf:nick>
+    <rdfs:seeAlso rdf:resource="http://semantictweet.com/lemonway"/>
+    <foaf:homepage rdf:resource="https://www.facebook.com/lemonway"/>
+    <foaf:img rdf:resource="http://a1.twimg.com/profile_images/1677322676/LOGO_LEMONWAY__rectangle__normal.jpg"/>
+  </foaf:Agent>
+  <foaf:Agent rdf:about="http://semantictweet.com/Just3Dit#me">
+    <foaf:name>Just 3D it !</foaf:name>
+    <foaf:nick>Just3Dit</foaf:nick>
+    <rdfs:seeAlso rdf:resource="http://semantictweet.com/Just3Dit"/>
+    <foaf:homepage rdf:resource="http://www.discover-my-implant.com/"/>
+    <foaf:img rdf:resource="http://a2.twimg.com/profile_images/1777744541/Capture_d__cran_2012-01-24___12.41.13_normal.png"/>
+  </foaf:Agent>
+  <foaf:Agent rdf:about="http://semantictweet.com/NicolasCom3D#me">
+    <foaf:name>Nicolas COM3D</foaf:name>
+    <foaf:nick>NicolasCom3D</foaf:nick>
+    <rdfs:seeAlso rdf:resource="http://semantictweet.com/NicolasCom3D"/>
+    <foaf:homepage rdf:resource="http://www.com3d.fr/"/>
+    <foaf:img rdf:resource="http://a2.twimg.com/profile_images/1360707134/COM3Dlogo_normal.jpg"/>
+  </foaf:Agent>
+  <foaf:Agent rdf:about="http://semantictweet.com/Thomas_Pilorin#me">
+    <foaf:name>Thomas Pilorin</foaf:name>
+    <foaf:nick>Thomas_Pilorin</foaf:nick>
+    <rdfs:seeAlso rdf:resource="http://semantictweet.com/Thomas_Pilorin"/>
+    <foaf:img rdf:resource="http://a0.twimg.com/profile_images/1510488682/monk_normal.jpg"/>
+  </foaf:Agent>
+  <foaf:Agent rdf:about="http://semantictweet.com/niclabscl#me">
+    <foaf:name>NIC Chile Labs</foaf:name>
+    <foaf:nick>niclabscl</foaf:nick>
+    <rdfs:seeAlso rdf:resource="http://semantictweet.com/niclabscl"/>
+    <foaf:homepage rdf:resource="http://www.niclabs.cl"/>
+    <foaf:img rdf:resource="http://a1.twimg.com/profile_images/1219066565/logo_niclabs_300px_normal.jpg"/>
+  </foaf:Agent>
+  <foaf:Agent rdf:about="http://semantictweet.com/JaquesGrobler1#me">
+    <foaf:name>Jaques Grobler</foaf:name>
+    <foaf:nick>JaquesGrobler1</foaf:nick>
+    <rdfs:seeAlso rdf:resource="http://semantictweet.com/JaquesGrobler1"/>
+    <foaf:img rdf:resource="http://a2.twimg.com/profile_images/1783508033/Our_Greenpatch__66__normal.JPG"/>
+  </foaf:Agent>
+  <foaf:Agent rdf:about="http://semantictweet.com/phbridon#me">
+    <foaf:name>Philippe Bridon</foaf:name>
+    <foaf:nick>phbridon</foaf:nick>
+    <rdfs:seeAlso rdf:resource="http://semantictweet.com/phbridon"/>
+    <foaf:img rdf:resource="http://a0.twimg.com/profile_images/1440275341/phbridon_2011_normal.jpg"/>
+  </foaf:Agent>
+  <foaf:Agent rdf:about="http://semantictweet.com/Intelcia_Group#me">
+    <foaf:name>Intelcia</foaf:name>
+    <foaf:nick>Intelcia_Group</foaf:nick>
+    <rdfs:seeAlso rdf:resource="http://semantictweet.com/Intelcia_Group"/>
+    <foaf:homepage rdf:resource="http://www.intelcia.com"/>
+    <foaf:img rdf:resource="http://a1.twimg.com/profile_images/1631175278/intelcia_group_normal.gif"/>
+  </foaf:Agent>
+  <foaf:Agent rdf:about="http://semantictweet.com/LesBonsTuiss#me">
+    <foaf:name>LesBonsTuiss</foaf:name>
+    <foaf:nick>LesBonsTuiss</foaf:nick>
+    <rdfs:seeAlso rdf:resource="http://semantictweet.com/LesBonsTuiss"/>
+    <foaf:homepage rdf:resource="http://www.lesbonstuiss.com"/>
+    <foaf:img rdf:resource="http://a1.twimg.com/profile_images/1418953748/logo_cpt_sociaux_normal.png"/>
+  </foaf:Agent>
+  <foaf:Agent rdf:about="http://semantictweet.com/zox9999#me">
+    <foaf:name>mathieu zox </foaf:name>
+    <foaf:nick>zox9999</foaf:nick>
+    <rdfs:seeAlso rdf:resource="http://semantictweet.com/zox9999"/>
+    <foaf:img rdf:resource="http://a2.twimg.com/profile_images/1775572259/biohazard_skull_2_normal.png"/>
+  </foaf:Agent>
+  <foaf:Agent rdf:about="http://semantictweet.com/myleneprieur#me">
+    <foaf:name>Myl&#232;ne Prieur</foaf:name>
+    <foaf:nick>myleneprieur</foaf:nick>
+    <rdfs:seeAlso rdf:resource="http://semantictweet.com/myleneprieur"/>
+    <foaf:img rdf:resource="http://a2.twimg.com/profile_images/1655179296/308562_10150297435729172_799719171_7652456_6548363_n_normal.jpg"/>
+  </foaf:Agent>
+  <foaf:Agent rdf:about="http://semantictweet.com/leftrightmirror#me">
+    <foaf:name>leftrightmirror</foaf:name>
+    <foaf:nick>leftrightmirror</foaf:nick>
+    <rdfs:seeAlso rdf:resource="http://semantictweet.com/leftrightmirror"/>
+    <foaf:img rdf:resource="http://a2.twimg.com/sticky/default_profile_images/default_profile_3_normal.png"/>
+  </foaf:Agent>
+  <foaf:Agent rdf:about="http://semantictweet.com/PascalNogaro#me">
+    <foaf:name>Pascal Nogaro</foaf:name>
+    <foaf:nick>PascalNogaro</foaf:nick>
+    <rdfs:seeAlso rdf:resource="http://semantictweet.com/PascalNogaro"/>
+    <foaf:homepage rdf:resource="http://www.pepsteam.com/pepstice/"/>
+    <foaf:img rdf:resource="http://a2.twimg.com/profile_images/1768594476/image_normal.jpg"/>
+  </foaf:Agent>
+  <foaf:Agent rdf:about="http://semantictweet.com/rdesjours#me">
+    <foaf:name>desjours romain</foaf:name>
+    <foaf:nick>rdesjours</foaf:nick>
+    <rdfs:seeAlso rdf:resource="http://semantictweet.com/rdesjours"/>
+    <foaf:homepage rdf:resource="http://www.dviz.fr/"/>
+    <foaf:img rdf:resource="http://a1.twimg.com/profile_images/1362457429/rdesjours1_normal.jpg"/>
+  </foaf:Agent>
+  <foaf:Agent rdf:about="http://semantictweet.com/FLecellier#me">
+    <foaf:name>Fran&#231;ois Lecellier</foaf:name>
+    <foaf:nick>FLecellier</foaf:nick>
+    <rdfs:seeAlso rdf:resource="http://semantictweet.com/FLecellier"/>
+    <foaf:homepage rdf:resource="http://francois.lecellier.org"/>
+    <foaf:img rdf:resource="http://a0.twimg.com/profile_images/1777672061/header4_normal.jpg"/>
+  </foaf:Agent>
+  <foaf:Agent rdf:about="http://semantictweet.com/AntoineCervezas#me">
+    <foaf:name>Antoine Cervezas</foaf:name>
+    <foaf:nick>AntoineCervezas</foaf:nick>
+    <rdfs:seeAlso rdf:resource="http://semantictweet.com/AntoineCervezas"/>
+    <foaf:img rdf:resource="http://a3.twimg.com/profile_images/1745682812/antoine_cervezas_normal.jpg"/>
+  </foaf:Agent>
+  <foaf:Agent rdf:about="http://semantictweet.com/MarjorieLequet#me">
+    <foaf:name>MarjorieLequet</foaf:name>
+    <foaf:nick>MarjorieLequet</foaf:nick>
+    <rdfs:seeAlso rdf:resource="http://semantictweet.com/MarjorieLequet"/>
+    <foaf:img rdf:resource="http://a0.twimg.com/sticky/default_profile_images/default_profile_1_normal.png"/>
+  </foaf:Agent>
+  <foaf:Agent rdf:about="http://semantictweet.com/olfa_h#me">
+    <foaf:name>olfa</foaf:name>
+    <foaf:nick>olfa_h</foaf:nick>
+    <rdfs:seeAlso rdf:resource="http://semantictweet.com/olfa_h"/>
+    <foaf:img rdf:resource="http://a0.twimg.com/sticky/default_profile_images/default_profile_1_normal.png"/>
+  </foaf:Agent>
+  <foaf:Agent rdf:about="http://semantictweet.com/synestheorie#me">
+    <foaf:name>Projet Synesth&#233;orie</foaf:name>
+    <foaf:nick>synestheorie</foaf:nick>
+    <rdfs:seeAlso rdf:resource="http://semantictweet.com/synestheorie"/>
+    <foaf:homepage rdf:resource="http://synestheorie.fr/"/>
+    <foaf:img rdf:resource="http://a0.twimg.com/profile_images/1629027996/visu_fond_noir_2_normal.jpg"/>
+  </foaf:Agent>
+  <foaf:Agent rdf:about="http://semantictweet.com/WhynotWallas#me">
+    <foaf:name>Sebastian Cantaut</foaf:name>
+    <foaf:nick>WhynotWallas</foaf:nick>
+    <rdfs:seeAlso rdf:resource="http://semantictweet.com/WhynotWallas"/>
+    <foaf:img rdf:resource="http://a1.twimg.com/profile_images/1665937640/Sniper-Soldier-icon_normal.png"/>
+  </foaf:Agent>
+  <foaf:Agent rdf:about="http://semantictweet.com/Chaaarliiine#me">
+    <foaf:name>Ch@</foaf:name>
+    <foaf:nick>Chaaarliiine</foaf:nick>
+    <rdfs:seeAlso rdf:resource="http://semantictweet.com/Chaaarliiine"/>
+    <foaf:img rdf:resource="http://a3.twimg.com/profile_images/1772735575/email_at_sign_normal.png"/>
+  </foaf:Agent>
+  <foaf:Agent rdf:about="http://semantictweet.com/FlowersINRIA#me">
+    <foaf:name>Flowers INRIA</foaf:name>
+    <foaf:nick>FlowersINRIA</foaf:nick>
+    <rdfs:seeAlso rdf:resource="http://semantictweet.com/FlowersINRIA"/>
+    <foaf:homepage rdf:resource="http://flowers.inria.fr/"/>
+    <foaf:img rdf:resource="http://a1.twimg.com/profile_images/1775791414/ErgoRobotsFondationCartier_normal.jpg"/>
+  </foaf:Agent>
+  <foaf:Agent rdf:about="http://semantictweet.com/Sciences_nat#me">
+    <foaf:name>Sciences_nat</foaf:name>
+    <foaf:nick>Sciences_nat</foaf:nick>
+    <rdfs:seeAlso rdf:resource="http://semantictweet.com/Sciences_nat"/>
+    <foaf:img rdf:resource="http://a0.twimg.com/profile_images/1698482338/einstein_3_normal.jpg"/>
+  </foaf:Agent>
+  <foaf:Agent rdf:about="http://semantictweet.com/casimedia#me">
+    <foaf:name>Benoit Mention</foaf:name>
+    <foaf:nick>casimedia</foaf:nick>
+    <rdfs:seeAlso rdf:resource="http://semantictweet.com/casimedia"/>
+    <foaf:homepage rdf:resource="http://casimedia.net"/>
+    <foaf:img rdf:resource="http://a3.twimg.com/profile_images/1736078435/n2011-12-30_18.56.29_2__normal.jpg"/>
+  </foaf:Agent>
+  <foaf:Agent rdf:about="http://semantictweet.com/CentroScienza#me">
+    <foaf:name>CentroScienza</foaf:name>
+    <foaf:nick>CentroScienza</foaf:nick>
+    <rdfs:seeAlso rdf:resource="http://semantictweet.com/CentroScienza"/>
+    <foaf:homepage rdf:resource="http://www.centroscienza.it"/>
+    <foaf:img rdf:resource="http://a1.twimg.com/profile_images/1267699242/logo_cs_normal.jpg"/>
+  </foaf:Agent>
+  <foaf:Agent rdf:about="http://semantictweet.com/GofFranckyGo#me">
+    <foaf:name>Franck.Moret</foaf:name>
+    <foaf:nick>GofFranckyGo</foaf:nick>
+    <rdfs:seeAlso rdf:resource="http://semantictweet.com/GofFranckyGo"/>
+    <foaf:img rdf:resource="http://a2.twimg.com/profile_images/1778461903/p.txt_normal.jpeg"/>
+  </foaf:Agent>
+  <foaf:Agent rdf:about="http://semantictweet.com/Soufianze#me">
+    <foaf:name>Soufiane Boumaaz</foaf:name>
+    <foaf:nick>Soufianze</foaf:nick>
+    <rdfs:seeAlso rdf:resource="http://semantictweet.com/Soufianze"/>
+    <foaf:img rdf:resource="http://a0.twimg.com/profile_images/1220233265/200820103801_normal.JPG"/>
+  </foaf:Agent>
+  <foaf:Agent rdf:about="http://semantictweet.com/Abou_Yaareb#me">
+    <foaf:name>&#1571;&#1576;&#1608; &#1610;&#1593;&#1585;&#1576; &#1575;&#1604;&#1605;&#1585;&#1586;&#1608;&#1602;&#1610;</foaf:name>
+    <foaf:nick>Abou_Yaareb</foaf:nick>
+    <rdfs:seeAlso rdf:resource="http://semantictweet.com/Abou_Yaareb"/>
+    <foaf:homepage rdf:resource="https://www.facebook.com/AbouYaarebMarzouki"/>
+    <foaf:img rdf:resource="http://a3.twimg.com/profile_images/1743832786/IMG_0246_normal.JPG"/>
+  </foaf:Agent>
+  <foaf:Agent rdf:about="http://semantictweet.com/maryy33#me">
+    <foaf:name>marilyne berthaud</foaf:name>
+    <foaf:nick>maryy33</foaf:nick>
+    <rdfs:seeAlso rdf:resource="http://semantictweet.com/maryy33"/>
+    <foaf:img rdf:resource="http://a2.twimg.com/profile_images/1213910960/100_4258_normal.jpg"/>
+  </foaf:Agent>
+  <foaf:Agent rdf:about="http://semantictweet.com/LaunayCharlotte#me">
+    <foaf:name>Charlotte Launay</foaf:name>
+    <foaf:nick>LaunayCharlotte</foaf:nick>
+    <rdfs:seeAlso rdf:resource="http://semantictweet.com/LaunayCharlotte"/>
+    <foaf:img rdf:resource="http://a2.twimg.com/profile_images/1318254787/ch_normal.jpg"/>
+  </foaf:Agent>
+  <foaf:Agent rdf:about="http://semantictweet.com/EcologieI#me">
+    <foaf:name>Ecologie@Innovation</foaf:name>
+    <foaf:nick>EcologieI</foaf:nick>
+    <rdfs:seeAlso rdf:resource="http://semantictweet.com/EcologieI"/>
+    <foaf:homepage rdf:resource="http://developpementdurablexxis.blogspot.com"/>
+    <foaf:img rdf:resource="http://a1.twimg.com/profile_images/1516111871/ecologie2490_normal.jpg"/>
+  </foaf:Agent>
+  <foaf:Agent rdf:about="http://semantictweet.com/ecolemultimedia#me">
+    <foaf:name>L'Ecole Multimedia</foaf:name>
+    <foaf:nick>ecolemultimedia</foaf:nick>
+    <rdfs:seeAlso rdf:resource="http://semantictweet.com/ecolemultimedia"/>
+    <foaf:homepage rdf:resource="http://www.ecole-multimedia.com/"/>
+    <foaf:img rdf:resource="http://a0.twimg.com/profile_images/1192159984/logo_normal.jpg"/>
+  </foaf:Agent>
+  <foaf:Agent rdf:about="http://semantictweet.com/FrancoRedBlue#me">
+    <foaf:name>Franco</foaf:name>
+    <foaf:nick>FrancoRedBlue</foaf:nick>
+    <rdfs:seeAlso rdf:resource="http://semantictweet.com/FrancoRedBlue"/>
+    <foaf:img rdf:resource="http://a3.twimg.com/sticky/default_profile_images/default_profile_4_normal.png"/>
+  </foaf:Agent>
+  <foaf:Agent rdf:about="http://semantictweet.com/quesh_twit#me">
+    <foaf:name>quesh_twit</foaf:name>
+    <foaf:nick>quesh_twit</foaf:nick>
+    <rdfs:seeAlso rdf:resource="http://semantictweet.com/quesh_twit"/>
+    <foaf:homepage rdf:resource="http://www.quesh.fr"/>
+    <foaf:img rdf:resource="http://a1.twimg.com/profile_images/1101375738/twitter_73x73_normal.png"/>
+  </foaf:Agent>
+  <foaf:Agent rdf:about="http://semantictweet.com/Sevegui#me">
+    <foaf:name>S&#233;verine Guillemard</foaf:name>
+    <foaf:nick>Sevegui</foaf:nick>
+    <rdfs:seeAlso rdf:resource="http://semantictweet.com/Sevegui"/>
+    <foaf:img rdf:resource="http://a0.twimg.com/profile_images/1764698823/image1326917670_normal.png"/>
+  </foaf:Agent>
+  <foaf:Agent rdf:about="http://semantictweet.com/jyr9438#me">
+    <foaf:name>ZIBOU ( ruellan )</foaf:name>
+    <foaf:nick>jyr9438</foaf:nick>
+    <rdfs:seeAlso rdf:resource="http://semantictweet.com/jyr9438"/>
+    <foaf:img rdf:resource="http://a1.twimg.com/profile_images/1400320898/image_du_chat_normal.jpg"/>
+  </foaf:Agent>
+  <foaf:Agent rdf:about="http://semantictweet.com/rinocerose#me">
+    <foaf:name>Rin&#244;&#231;&#233;r&#244;se</foaf:name>
+    <foaf:nick>rinocerose</foaf:nick>
+    <rdfs:seeAlso rdf:resource="http://semantictweet.com/rinocerose"/>
+    <foaf:homepage rdf:resource="http://rinocerose.com/rino_site_uk.htm"/>
+    <foaf:img rdf:resource="http://a0.twimg.com/profile_images/1470738846/rinocerose_normal.jpg"/>
+  </foaf:Agent>
+  <foaf:Agent rdf:about="http://semantictweet.com/Capucinenet1#me">
+    <foaf:name>Capucine.net</foaf:name>
+    <foaf:nick>Capucinenet1</foaf:nick>
+    <rdfs:seeAlso rdf:resource="http://semantictweet.com/Capucinenet1"/>
+    <foaf:homepage rdf:resource="http://www.capucine.net"/>
+    <foaf:img rdf:resource="http://a3.twimg.com/profile_images/1756674562/Capucine_normal.jpg"/>
+  </foaf:Agent>
+  <foaf:Agent rdf:about="http://semantictweet.com/moscoup#me">
+    <foaf:name>Lego</foaf:name>
+    <foaf:nick>moscoup</foaf:nick>
+    <rdfs:seeAlso rdf:resource="http://semantictweet.com/moscoup"/>
+    <foaf:img rdf:resource="http://a1.twimg.com/sticky/default_profile_images/default_profile_2_normal.png"/>
+  </foaf:Agent>
+  <foaf:Agent rdf:about="http://semantictweet.com/onrasleaw#me">
+    <foaf:name>onra sleaw</foaf:name>
+    <foaf:nick>onrasleaw</foaf:nick>
+    <rdfs:seeAlso rdf:resource="http://semantictweet.com/onrasleaw"/>
+    <foaf:img rdf:resource="http://a2.twimg.com/sticky/default_profile_images/default_profile_3_normal.png"/>
+  </foaf:Agent>
+  <foaf:Agent rdf:about="http://semantictweet.com/CelineSpanna#me">
+    <foaf:name>Spannaccini</foaf:name>
+    <foaf:nick>CelineSpanna</foaf:nick>
+    <rdfs:seeAlso rdf:resource="http://semantictweet.com/CelineSpanna"/>
+    <foaf:img rdf:resource="http://a3.twimg.com/sticky/default_profile_images/default_profile_4_normal.png"/>
+  </foaf:Agent>
+  <foaf:Agent rdf:about="http://semantictweet.com/MBouilhol#me">
+    <foaf:name>Marine Bouilhol</foaf:name>
+    <foaf:nick>MBouilhol</foaf:nick>
+    <rdfs:seeAlso rdf:resource="http://semantictweet.com/MBouilhol"/>
+    <foaf:img rdf:resource="http://a2.twimg.com/profile_images/1594577932/image_normal.jpg"/>
+  </foaf:Agent>
+  <foaf:Agent rdf:about="http://semantictweet.com/DonFerdie#me">
+    <foaf:name>Ferdinand Roesch</foaf:name>
+    <foaf:nick>DonFerdie</foaf:nick>
+    <rdfs:seeAlso rdf:resource="http://semantictweet.com/DonFerdie"/>
+    <foaf:homepage rdf:resource="http://www.scientigeek.com"/>
+    <foaf:img rdf:resource="http://a0.twimg.com/profile_images/1620897389/Ferdinand_ROESCHrecad_normal.jpg"/>
+  </foaf:Agent>
+  <foaf:Agent rdf:about="http://semantictweet.com/dicodufutur#me">
+    <foaf:name>Dico du futur </foaf:name>
+    <foaf:nick>dicodufutur</foaf:nick>
+    <rdfs:seeAlso rdf:resource="http://semantictweet.com/dicodufutur"/>
+    <foaf:homepage rdf:resource="http://www.dicodufutur.org"/>
+    <foaf:img rdf:resource="http://a0.twimg.com/profile_images/1221812469/50_normal.png"/>
+  </foaf:Agent>
+  <foaf:Agent rdf:about="http://semantictweet.com/Seieff#me">
+    <foaf:name>Simon Andreieff</foaf:name>
+    <foaf:nick>Seieff</foaf:nick>
+    <rdfs:seeAlso rdf:resource="http://semantictweet.com/Seieff"/>
+    <foaf:homepage rdf:resource="http://www.radioair.net/air10/index.html"/>
+    <foaf:img rdf:resource="http://a2.twimg.com/profile_images/606849065/Ensor_normal.jpg"/>
+  </foaf:Agent>
+  <foaf:Agent rdf:about="http://semantictweet.com/DukhonLaloy#me">
+    <foaf:name>Dukhon Laloy</foaf:name>
+    <foaf:nick>DukhonLaloy</foaf:nick>
+    <rdfs:seeAlso rdf:resource="http://semantictweet.com/DukhonLaloy"/>
+    <foaf:img rdf:resource="http://a1.twimg.com/profile_images/1782563126/v2H8bE3k_normal"/>
+  </foaf:Agent>
+  <foaf:Agent rdf:about="http://semantictweet.com/Foup#me">
+    <foaf:name>J&#233;r&#233;mie Gomez</foaf:name>
+    <foaf:nick>Foup</foaf:nick>
+    <rdfs:seeAlso rdf:resource="http://semantictweet.com/Foup"/>
+    <foaf:img rdf:resource="http://a1.twimg.com/profile_images/1778638591/166903_10150410602971442_716781441_8766209_559098349_n_normal.jpg"/>
+  </foaf:Agent>
+  <foaf:Agent rdf:about="http://semantictweet.com/JPH_R#me">
+    <foaf:name>J-Philippe Reculeau</foaf:name>
+    <foaf:nick>JPH_R</foaf:nick>
+    <rdfs:seeAlso rdf:resource="http://semantictweet.com/JPH_R"/>
+    <foaf:homepage rdf:resource="http://jph.reculeau.fr/"/>
+    <foaf:img rdf:resource="http://a2.twimg.com/profile_images/952930573/brunfan_b_w_normal.jpg"/>
+  </foaf:Agent>
+  <foaf:Agent rdf:about="http://semantictweet.com/martinlessard#me">
+    <foaf:name>Martin Lessard</foaf:name>
+    <foaf:nick>martinlessard</foaf:nick>
+    <rdfs:seeAlso rdf:resource="http://semantictweet.com/martinlessard"/>
+    <foaf:homepage rdf:resource="http://zeroseconde.com"/>
+    <foaf:img rdf:resource="http://a0.twimg.com/profile_images/1265932967/martinlesssard-hi-res_normal.jpg"/>
+  </foaf:Agent>
+  <foaf:Agent rdf:about="http://semantictweet.com/stevenfayen25#me">
+    <foaf:name>Benjamin Faye</foaf:name>
+    <foaf:nick>stevenfayen25</foaf:nick>
+    <rdfs:seeAlso rdf:resource="http://semantictweet.com/stevenfayen25"/>
+    <foaf:homepage rdf:resource="http://aoes-asso.org"/>
+    <foaf:img rdf:resource="http://a0.twimg.com/profile_images/1279218429/youtube_normal.png"/>
+  </foaf:Agent>
+  <foaf:Agent rdf:about="http://semantictweet.com/peuplequimanque#me">
+    <foaf:name>le peuple qui manque</foaf:name>
+    <foaf:nick>peuplequimanque</foaf:nick>
+    <rdfs:seeAlso rdf:resource="http://semantictweet.com/peuplequimanque"/>
+    <foaf:homepage rdf:resource="http://www.lepeuplequimanque.org/"/>
+    <foaf:img rdf:resource="http://a2.twimg.com/profile_images/1365042094/image_normal.jpg"/>
+  </foaf:Agent>
+  <foaf:Agent rdf:about="http://semantictweet.com/FLVacances#me">
+    <foaf:name>FLVacances</foaf:name>
+    <foaf:nick>FLVacances</foaf:nick>
+    <rdfs:seeAlso rdf:resource="http://semantictweet.com/FLVacances"/>
+    <foaf:homepage rdf:resource="http://www.flvacances.com/"/>
+    <foaf:img rdf:resource="http://a3.twimg.com/profile_images/1500003703/FLV_normal.jpg"/>
+  </foaf:Agent>
+  <foaf:Agent rdf:about="http://semantictweet.com/tappof#me">
+    <foaf:name>Tiziano Fogli</foaf:name>
+    <foaf:nick>tappof</foaf:nick>
+    <rdfs:seeAlso rdf:resource="http://semantictweet.com/tappof"/>
+    <foaf:homepage rdf:resource="http://fogli.web.cs.unibo.it"/>
+    <foaf:img rdf:resource="http://a1.twimg.com/profile_images/628334996/37_normal.jpg"/>
+  </foaf:Agent>
+  <foaf:Agent rdf:about="http://semantictweet.com/FASEGERONTO#me">
+    <foaf:name>FASE GERONTO</foaf:name>
+    <foaf:nick>FASEGERONTO</foaf:nick>
+    <rdfs:seeAlso rdf:resource="http://semantictweet.com/FASEGERONTO"/>
+    <foaf:homepage rdf:resource="http://www.fase-geronto.fr"/>
+    <foaf:img rdf:resource="http://a2.twimg.com/profile_images/1752014341/FASE_normal.jpg"/>
+  </foaf:Agent>
+  <foaf:Agent rdf:about="http://semantictweet.com/cyplec#me">
+    <foaf:name>Cyprien L.</foaf:name>
+    <foaf:nick>cyplec</foaf:nick>
+    <rdfs:seeAlso rdf:resource="http://semantictweet.com/cyplec"/>
+    <foaf:img rdf:resource="http://a2.twimg.com/profile_images/1539605025/gaston_-_copie_normal.jpg"/>
+  </foaf:Agent>
+  <foaf:Agent rdf:about="http://semantictweet.com/RonanChupaChups#me">
+    <foaf:name>French Touch</foaf:name>
+    <foaf:nick>RonanChupaChups</foaf:nick>
+    <rdfs:seeAlso rdf:resource="http://semantictweet.com/RonanChupaChups"/>
+    <foaf:img rdf:resource="http://a2.twimg.com/profile_images/1695310833/image_normal.jpg"/>
+  </foaf:Agent>
+  <foaf:Agent rdf:about="http://semantictweet.com/anemoff#me">
+    <foaf:name>Anthony Nemoff</foaf:name>
+    <foaf:nick>anemoff</foaf:nick>
+    <rdfs:seeAlso rdf:resource="http://semantictweet.com/anemoff"/>
+    <foaf:homepage rdf:resource="http://anemoff.com"/>
+    <foaf:img rdf:resource="http://a3.twimg.com/profile_images/1312509750/portrait_viadeo_normal.jpg"/>
+  </foaf:Agent>
+  <foaf:Agent rdf:about="http://semantictweet.com/Pequena_Bruja#me">
+    <foaf:name>Mina Ali</foaf:name>
+    <foaf:nick>Pequena_Bruja</foaf:nick>
+    <rdfs:seeAlso rdf:resource="http://semantictweet.com/Pequena_Bruja"/>
+    <foaf:img rdf:resource="http://a1.twimg.com/profile_images/1671131808/peinture2_normal.jpg"/>
+  </foaf:Agent>
+  <foaf:Agent rdf:about="http://semantictweet.com/mamewotoko#me">
+    <foaf:name>Takashi Masuyama</foaf:name>
+    <foaf:nick>mamewotoko</foaf:nick>
+    <rdfs:seeAlso rdf:resource="http://semantictweet.com/mamewotoko"/>
+    <foaf:homepage rdf:resource="http://www002.upp.so-net.ne.jp/mamewo/"/>
+    <foaf:img rdf:resource="http://a0.twimg.com/profile_images/1238464175/IMG_0090_normal.JPG"/>
+  </foaf:Agent>
+  <foaf:Agent rdf:about="http://semantictweet.com/GettySales#me">
+    <foaf:name>Quentin Kerdaffrec</foaf:name>
+    <foaf:nick>GettySales</foaf:nick>
+    <rdfs:seeAlso rdf:resource="http://semantictweet.com/GettySales"/>
+    <foaf:img rdf:resource="http://a0.twimg.com/profile_images/1761266966/Logo_Getty_G_bigger_1__normal.jpg"/>
+  </foaf:Agent>
+  <foaf:Agent rdf:about="http://semantictweet.com/Cultnum#me">
+    <foaf:name>Cultnum</foaf:name>
+    <foaf:nick>Cultnum</foaf:nick>
+    <rdfs:seeAlso rdf:resource="http://semantictweet.com/Cultnum"/>
+    <foaf:img rdf:resource="http://a1.twimg.com/profile_images/1768690182/online-learning_normal.jpg"/>
+  </foaf:Agent>
+  <foaf:Agent rdf:about="http://semantictweet.com/Mohammad_RMAYTI#me">
+    <foaf:name>Mohammad RMAYTI</foaf:name>
+    <foaf:nick>Mohammad_RMAYTI</foaf:nick>
+    <rdfs:seeAlso rdf:resource="http://semantictweet.com/Mohammad_RMAYTI"/>
+    <foaf:img rdf:resource="http://a2.twimg.com/profile_images/1745920499/k_normal.jpg"/>
+  </foaf:Agent>
+  <foaf:Agent rdf:about="http://semantictweet.com/TERA_Env#me">
+    <foaf:name>TERA Environnement</foaf:name>
+    <foaf:nick>TERA_Env</foaf:nick>
+    <rdfs:seeAlso rdf:resource="http://semantictweet.com/TERA_Env"/>
+    <foaf:homepage rdf:resource="http://www.tera-environnement.com"/>
+    <foaf:img rdf:resource="http://a1.twimg.com/profile_images/1761259753/logo_TERA_Env_twitter_normal.jpg"/>
+  </foaf:Agent>
+  <foaf:Agent rdf:about="http://semantictweet.com/primevere22#me">
+    <foaf:name>omrane</foaf:name>
+    <foaf:nick>primevere22</foaf:nick>
+    <rdfs:seeAlso rdf:resource="http://semantictweet.com/primevere22"/>
+    <foaf:img rdf:resource="http://a2.twimg.com/profile_images/1646026933/image_normal.jpg"/>
+  </foaf:Agent>
+  <foaf:Agent rdf:about="http://semantictweet.com/ValerieMPascual#me">
+    <foaf:name>Valerie Pascual</foaf:name>
+    <foaf:nick>ValerieMPascual</foaf:nick>
+    <rdfs:seeAlso rdf:resource="http://semantictweet.com/ValerieMPascual"/>
+    <foaf:img rdf:resource="http://a1.twimg.com/sticky/default_profile_images/default_profile_2_normal.png"/>
+  </foaf:Agent>
+  <foaf:Agent rdf:about="http://semantictweet.com/uju_#me">
+    <foaf:name>JulesDeChezSmithEnFa</foaf:name>
+    <foaf:nick>uju_</foaf:nick>
+    <rdfs:seeAlso rdf:resource="http://semantictweet.com/uju_"/>
+    <foaf:homepage rdf:resource="http://www.netvibes.com/indexion"/>
+    <foaf:img rdf:resource="http://a1.twimg.com/profile_images/1134337626/1984_normal.jpg"/>
+  </foaf:Agent>
+  <foaf:Agent rdf:about="http://semantictweet.com/___Mc__#me">
+    <foaf:name>Marc Jeanmougin</foaf:name>
+    <foaf:nick>___Mc__</foaf:nick>
+    <rdfs:seeAlso rdf:resource="http://semantictweet.com/___Mc__"/>
+    <foaf:img rdf:resource="http://a1.twimg.com/profile_images/1291264305/saturnafterequinox_cassini_big_normal.jpg"/>
+  </foaf:Agent>
+  <foaf:Agent rdf:about="http://semantictweet.com/map93200#me">
+    <foaf:name>Marie-Anne Portier</foaf:name>
+    <foaf:nick>map93200</foaf:nick>
+    <rdfs:seeAlso rdf:resource="http://semantictweet.com/map93200"/>
+    <foaf:img rdf:resource="http://a2.twimg.com/profile_images/1753994169/image_normal.jpg"/>
+  </foaf:Agent>
+  <foaf:Agent rdf:about="http://semantictweet.com/inria#me">
+    <foaf:name>Inria</foaf:name>
+    <foaf:nick>inria</foaf:nick>
+    <rdfs:seeAlso rdf:resource="http://semantictweet.com/inria"/>
+    <foaf:homepage rdf:resource="http://www.inria.fr"/>
+    <foaf:img rdf:resource="http://a3.twimg.com/profile_images/1430240083/logoinria_normal.jpg"/>
+    <foaf:knows rdf:resource="http://semantictweet.com/Maud_Charaf#me"/>
+    <foaf:knows rdf:resource="http://semantictweet.com/CandiceBachelet#me"/>
+    <foaf:knows rdf:resource="http://semantictweet.com/paslap#me"/>
+    <foaf:knows rdf:resource="http://semantictweet.com/Hugobiwan#me"/>
+    <foaf:knows rdf:resource="http://semantictweet.com/Powedia#me"/>
+    <foaf:knows rdf:resource="http://semantictweet.com/Jocelyne_Dias#me"/>
+    <foaf:knows rdf:resource="http://semantictweet.com/epietriga#me"/>
+    <foaf:knows rdf:resource="http://semantictweet.com/tantignac#me"/>
+    <foaf:knows rdf:resource="http://semantictweet.com/charlesruelle#me"/>
+    <foaf:knows rdf:resource="http://semantictweet.com/emeline_carre#me"/>
+    <foaf:knows rdf:resource="http://semantictweet.com/mathemagie#me"/>
+    <foaf:knows rdf:resource="http://semantictweet.com/DelphineCuny#me"/>
+    <foaf:knows rdf:resource="http://semantictweet.com/Sandreene#me"/>
+    <foaf:knows rdf:resource="http://semantictweet.com/jlmissika#me"/>
+    <foaf:knows rdf:resource="http://semantictweet.com/FR3Aquitaine#me"/>
+    <foaf:knows rdf:resource="http://semantictweet.com/strategies1#me"/>
+    <foaf:knows rdf:resource="http://semantictweet.com/fleurpellerin#me"/>
+    <foaf:knows rdf:resource="http://semantictweet.com/lsaccavini#me"/>
+    <foaf:knows rdf:resource="http://semantictweet.com/_lecollectif#me"/>
+    <foaf:knows rdf:resource="http://semantictweet.com/Anar_line#me"/>
+    <foaf:knows rdf:resource="http://semantictweet.com/ChGenest#me"/>
+    <foaf:knows rdf:resource="http://semantictweet.com/LaGuirlande#me"/>
+    <foaf:knows rdf:resource="http://semantictweet.com/z3zone#me"/>
+    <foaf:knows rdf:resource="http://semantictweet.com/lcalderan#me"/>
+    <foaf:knows rdf:resource="http://semantictweet.com/centraleparis#me"/>
+    <foaf:knows rdf:resource="http://semantictweet.com/dominiqueleglu#me"/>
+    <foaf:knows rdf:resource="http://semantictweet.com/mathildeD_V#me"/>
+    <foaf:knows rdf:resource="http://semantictweet.com/PasseurSciences#me"/>
+    <foaf:knows rdf:resource="http://semantictweet.com/nicolaspatte#me"/>
+    <foaf:knows rdf:resource="http://semantictweet.com/LaCasemate#me"/>
+    <foaf:knows rdf:resource="http://semantictweet.com/dimtate#me"/>
+    <foaf:knows rdf:resource="http://semantictweet.com/aureliedarnaud#me"/>
+    <foaf:knows rdf:resource="http://semantictweet.com/oseo#me"/>
+    <foaf:knows rdf:resource="http://semantictweet.com/jossgervais#me"/>
+    <foaf:knows rdf:resource="http://semantictweet.com/mecsci#me"/>
+    <foaf:knows rdf:resource="http://semantictweet.com/joinoin#me"/>
+    <foaf:knows rdf:resource="http://semantictweet.com/KTombre#me"/>
+    <foaf:knows rdf:resource="http://semantictweet.com/Julma#me"/>
+    <foaf:knows rdf:resource="http://semantictweet.com/pipomolo42#me"/>
+    <foaf:knows rdf:resource="http://semantictweet.com/sarveshnikumbh#me"/>
+    <foaf:knows rdf:resource="http://semantictweet.com/strngch#me"/>
+    <foaf:knows rdf:resource="http://semantictweet.com/ncmarie#me"/>
+    <foaf:knows rdf:resource="http://semantictweet.com/mattam_#me"/>
+    <foaf:knows rdf:resource="http://semantictweet.com/yangeorget#me"/>
+    <foaf:knows rdf:resource="http://semantictweet.com/pauline_PDP#me"/>
+    <foaf:knows rdf:resource="http://semantictweet.com/geomark#me"/>
+    <foaf:knows rdf:resource="http://semantictweet.com/nkrislock#me"/>
+    <foaf:knows rdf:resource="http://semantictweet.com/jjcadavid#me"/>
+    <foaf:knows rdf:resource="http://semantictweet.com/baghdadi_r#me"/>
+    <foaf:knows rdf:resource="http://semantictweet.com/laurentromary#me"/>
+    <foaf:knows rdf:resource="http://semantictweet.com/duportet#me"/>
+    <foaf:knows rdf:resource="http://semantictweet.com/hoaproject#me"/>
+    <foaf:knows rdf:resource="http://semantictweet.com/lukostaz#me"/>
+    <foaf:knows rdf:resource="http://semantictweet.com/JeanFred#me"/>
+    <foaf:knows rdf:resource="http://semantictweet.com/Forge_INRIA#me"/>
+    <foaf:knows rdf:resource="http://semantictweet.com/rmod_inria#me"/>
+    <foaf:knows rdf:resource="http://semantictweet.com/gcharrie#me"/>
+    <foaf:knows rdf:resource="http://semantictweet.com/cybunk#me"/>
+    <foaf:knows rdf:resource="http://semantictweet.com/bubbleT2012#me"/>
+    <foaf:knows rdf:resource="http://semantictweet.com/koutaous#me"/>
+    <foaf:knows rdf:resource="http://semantictweet.com/isabellemathieu#me"/>
+    <foaf:knows rdf:resource="http://semantictweet.com/yannguegan#me"/>
+    <foaf:knows rdf:resource="http://semantictweet.com/BatonBoys#me"/>
+    <foaf:knows rdf:resource="http://semantictweet.com/LaboBnF#me"/>
+    <foaf:knows rdf:resource="http://semantictweet.com/CIGREF#me"/>
+    <foaf:knows rdf:resource="http://semantictweet.com/miladus#me"/>
+    <foaf:knows rdf:resource="http://semantictweet.com/Sciences_Avenir#me"/>
+    <foaf:knows rdf:resource="http://semantictweet.com/BFMTV#me"/>
+    <foaf:knows rdf:resource="http://semantictweet.com/ParisDiderot#me"/>
+    <foaf:knows rdf:resource="http://semantictweet.com/MichelAlbergant#me"/>
+    <foaf:knows rdf:resource="http://semantictweet.com/Paris#me"/>
+    <foaf:knows rdf:resource="http://semantictweet.com/smartplanetfr#me"/>
+    <foaf:knows rdf:resource="http://semantictweet.com/timberners_lee#me"/>
+    <foaf:knows rdf:resource="http://semantictweet.com/pierrecap#me"/>
+    <foaf:knows rdf:resource="http://semantictweet.com/lesinfosdejo#me"/>
+    <foaf:knows rdf:resource="http://semantictweet.com/Xavier75#me"/>
+    <foaf:knows rdf:resource="http://semantictweet.com/groupeTraces#me"/>
+    <foaf:knows rdf:resource="http://semantictweet.com/Sciencefestiva1#me"/>
+    <foaf:knows rdf:resource="http://semantictweet.com/i_montaigne#me"/>
+    <foaf:knows rdf:resource="http://semantictweet.com/bluetouff#me"/>
+    <foaf:knows rdf:resource="http://semantictweet.com/nlaffont#me"/>
+    <foaf:knows rdf:resource="http://semantictweet.com/nitot#me"/>
+    <foaf:knows rdf:resource="http://semantictweet.com/epelboin#me"/>
+    <foaf:knows rdf:resource="http://semantictweet.com/univbordeaux#me"/>
+    <foaf:knows rdf:resource="http://semantictweet.com/UAntillesGuyane#me"/>
+    <foaf:knows rdf:resource="http://semantictweet.com/Yale#me"/>
+    <foaf:knows rdf:resource="http://semantictweet.com/Harvard#me"/>
+    <foaf:knows rdf:resource="http://semantictweet.com/Princeton#me"/>
+    <foaf:knows rdf:resource="http://semantictweet.com/Cambridge_Uni#me"/>
+    <foaf:knows rdf:resource="http://semantictweet.com/UniofOxford#me"/>
+    <foaf:knows rdf:resource="http://semantictweet.com/Stanford#me"/>
+    <foaf:knows rdf:resource="http://semantictweet.com/SorbonneParis1#me"/>
+    <foaf:knows rdf:resource="http://semantictweet.com/AssasTwits#me"/>
+    <foaf:knows rdf:resource="http://semantictweet.com/Paris_Sorbonne#me"/>
+    <foaf:knows rdf:resource="http://semantictweet.com/gdelalande#me"/>
+    <foaf:knows rdf:resource="http://semantictweet.com/pierremerckle#me"/>
+    <foaf:knows rdf:resource="http://semantictweet.com/maxplanckpress#me"/>
+    <foaf:knows rdf:resource="http://semantictweet.com/FradiFrad#me"/>
+    <foaf:knows rdf:resource="http://semantictweet.com/cinemathequefr#me"/>
+    <foaf:knows rdf:resource="http://semantictweet.com/lesinrocks#me"/>
+    <foaf:knows rdf:resource="http://semantictweet.com/patrick9clement#me"/>
+    <foaf:knows rdf:resource="http://semantictweet.com/technologiecb#me"/>
+    <foaf:knows rdf:resource="http://semantictweet.com/OlivierChapuis#me"/>
+    <foaf:knows rdf:resource="http://semantictweet.com/VidalLaurent#me"/>
+    <foaf:knows rdf:resource="http://semantictweet.com/HeloBouillard#me"/>
+    <foaf:knows rdf:resource="http://semantictweet.com/framaka#me"/>
+    <foaf:knows rdf:resource="http://semantictweet.com/DNArchi#me"/>
+    <foaf:knows rdf:resource="http://semantictweet.com/nicolasbronsard#me"/>
+    <foaf:knows rdf:resource="http://semantictweet.com/VTSMPCetim#me"/>
+    <foaf:knows rdf:resource="http://semantictweet.com/openKMQ3D#me"/>
+    <foaf:knows rdf:resource="http://semantictweet.com/institut_eduter#me"/>
+    <foaf:knows rdf:resource="http://semantictweet.com/AntidotNet#me"/>
+    <foaf:knows rdf:resource="http://semantictweet.com/Netva_fr#me"/>
+    <foaf:knows rdf:resource="http://semantictweet.com/Cfr#me"/>
+    <foaf:knows rdf:resource="http://semantictweet.com/Sandra_Pereira_#me"/>
+    <foaf:knows rdf:resource="http://semantictweet.com/FTA_P#me"/>
+    <foaf:knows rdf:resource="http://semantictweet.com/blogueur#me"/>
+    <foaf:knows rdf:resource="http://semantictweet.com/carolecabreton#me"/>
+    <foaf:knows rdf:resource="http://semantictweet.com/chubillau#me"/>
+    <foaf:knows rdf:resource="http://semantictweet.com/jenetwittepas#me"/>
+    <foaf:knows rdf:resource="http://semantictweet.com/vdumontier#me"/>
+    <foaf:knows rdf:resource="http://semantictweet.com/MauriceCynthia#me"/>
+    <foaf:knows rdf:resource="http://semantictweet.com/plncfc#me"/>
+    <foaf:knows rdf:resource="http://semantictweet.com/test_esr#me"/>
+    <foaf:knows rdf:resource="http://semantictweet.com/jjvie#me"/>
+    <foaf:knows rdf:resource="http://semantictweet.com/ximad#me"/>
+    <foaf:knows rdf:resource="http://semantictweet.com/Jo7peron#me"/>
+    <foaf:knows rdf:resource="http://semantictweet.com/Smyrnh1922#me"/>
+    <foaf:knows rdf:resource="http://semantictweet.com/lemonway#me"/>
+    <foaf:knows rdf:resource="http://semantictweet.com/Just3Dit#me"/>
+    <foaf:knows rdf:resource="http://semantictweet.com/NicolasCom3D#me"/>
+    <foaf:knows rdf:resource="http://semantictweet.com/Thomas_Pilorin#me"/>
+    <foaf:knows rdf:resource="http://semantictweet.com/niclabscl#me"/>
+    <foaf:knows rdf:resource="http://semantictweet.com/JaquesGrobler1#me"/>
+    <foaf:knows rdf:resource="http://semantictweet.com/phbridon#me"/>
+    <foaf:knows rdf:resource="http://semantictweet.com/Intelcia_Group#me"/>
+    <foaf:knows rdf:resource="http://semantictweet.com/LesBonsTuiss#me"/>
+    <foaf:knows rdf:resource="http://semantictweet.com/zox9999#me"/>
+    <foaf:knows rdf:resource="http://semantictweet.com/myleneprieur#me"/>
+    <foaf:knows rdf:resource="http://semantictweet.com/leftrightmirror#me"/>
+    <foaf:knows rdf:resource="http://semantictweet.com/PascalNogaro#me"/>
+    <foaf:knows rdf:resource="http://semantictweet.com/rdesjours#me"/>
+    <foaf:knows rdf:resource="http://semantictweet.com/FLecellier#me"/>
+    <foaf:knows rdf:resource="http://semantictweet.com/AntoineCervezas#me"/>
+    <foaf:knows rdf:resource="http://semantictweet.com/MarjorieLequet#me"/>
+    <foaf:knows rdf:resource="http://semantictweet.com/olfa_h#me"/>
+    <foaf:knows rdf:resource="http://semantictweet.com/synestheorie#me"/>
+    <foaf:knows rdf:resource="http://semantictweet.com/WhynotWallas#me"/>
+    <foaf:knows rdf:resource="http://semantictweet.com/Chaaarliiine#me"/>
+    <foaf:knows rdf:resource="http://semantictweet.com/FlowersINRIA#me"/>
+    <foaf:knows rdf:resource="http://semantictweet.com/Sciences_nat#me"/>
+    <foaf:knows rdf:resource="http://semantictweet.com/casimedia#me"/>
+    <foaf:knows rdf:resource="http://semantictweet.com/CentroScienza#me"/>
+    <foaf:knows rdf:resource="http://semantictweet.com/GofFranckyGo#me"/>
+    <foaf:knows rdf:resource="http://semantictweet.com/Soufianze#me"/>
+    <foaf:knows rdf:resource="http://semantictweet.com/Abou_Yaareb#me"/>
+    <foaf:knows rdf:resource="http://semantictweet.com/maryy33#me"/>
+    <foaf:knows rdf:resource="http://semantictweet.com/LaunayCharlotte#me"/>
+    <foaf:knows rdf:resource="http://semantictweet.com/EcologieI#me"/>
+    <foaf:knows rdf:resource="http://semantictweet.com/ecolemultimedia#me"/>
+    <foaf:knows rdf:resource="http://semantictweet.com/FrancoRedBlue#me"/>
+    <foaf:knows rdf:resource="http://semantictweet.com/quesh_twit#me"/>
+    <foaf:knows rdf:resource="http://semantictweet.com/Sevegui#me"/>
+    <foaf:knows rdf:resource="http://semantictweet.com/jyr9438#me"/>
+    <foaf:knows rdf:resource="http://semantictweet.com/rinocerose#me"/>
+    <foaf:knows rdf:resource="http://semantictweet.com/Capucinenet1#me"/>
+    <foaf:knows rdf:resource="http://semantictweet.com/moscoup#me"/>
+    <foaf:knows rdf:resource="http://semantictweet.com/onrasleaw#me"/>
+    <foaf:knows rdf:resource="http://semantictweet.com/CelineSpanna#me"/>
+    <foaf:knows rdf:resource="http://semantictweet.com/MBouilhol#me"/>
+    <foaf:knows rdf:resource="http://semantictweet.com/DonFerdie#me"/>
+    <foaf:knows rdf:resource="http://semantictweet.com/dicodufutur#me"/>
+    <foaf:knows rdf:resource="http://semantictweet.com/Seieff#me"/>
+    <foaf:knows rdf:resource="http://semantictweet.com/DukhonLaloy#me"/>
+    <foaf:knows rdf:resource="http://semantictweet.com/Foup#me"/>
+    <foaf:knows rdf:resource="http://semantictweet.com/JPH_R#me"/>
+    <foaf:knows rdf:resource="http://semantictweet.com/martinlessard#me"/>
+    <foaf:knows rdf:resource="http://semantictweet.com/stevenfayen25#me"/>
+    <foaf:knows rdf:resource="http://semantictweet.com/peuplequimanque#me"/>
+    <foaf:knows rdf:resource="http://semantictweet.com/FLVacances#me"/>
+    <foaf:knows rdf:resource="http://semantictweet.com/tappof#me"/>
+    <foaf:knows rdf:resource="http://semantictweet.com/FASEGERONTO#me"/>
+    <foaf:knows rdf:resource="http://semantictweet.com/cyplec#me"/>
+    <foaf:knows rdf:resource="http://semantictweet.com/RonanChupaChups#me"/>
+    <foaf:knows rdf:resource="http://semantictweet.com/anemoff#me"/>
+    <foaf:knows rdf:resource="http://semantictweet.com/Pequena_Bruja#me"/>
+    <foaf:knows rdf:resource="http://semantictweet.com/mamewotoko#me"/>
+    <foaf:knows rdf:resource="http://semantictweet.com/GettySales#me"/>
+    <foaf:knows rdf:resource="http://semantictweet.com/Cultnum#me"/>
+    <foaf:knows rdf:resource="http://semantictweet.com/Mohammad_RMAYTI#me"/>
+    <foaf:knows rdf:resource="http://semantictweet.com/TERA_Env#me"/>
+    <foaf:knows rdf:resource="http://semantictweet.com/primevere22#me"/>
+    <foaf:knows rdf:resource="http://semantictweet.com/ValerieMPascual#me"/>
+    <foaf:knows rdf:resource="http://semantictweet.com/uju_#me"/>
+    <foaf:knows rdf:resource="http://semantictweet.com/___Mc__#me"/>
+    <foaf:knows rdf:resource="http://semantictweet.com/map93200#me"/>
+  </foaf:Agent>
+</rdf:RDF>

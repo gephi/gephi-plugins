@@ -1,0 +1,349 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<rdf:RDF
+	xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+	xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+	xmlns:owl="http://www.w3.org/2002/07/owl#"
+	xmlns:dbpedia-owl="http://dbpedia.org/ontology/"
+	xmlns:foaf="http://xmlns.com/foaf/0.1/"
+	xmlns:dbpprop="http://dbpedia.org/property/"
+	xmlns:dcterms="http://purl.org/dc/terms/"
+	xmlns:geo="http://www.w3.org/2003/01/geo/wgs84_pos#"
+	xmlns:georss="http://www.georss.org/georss/"
+	xmlns:ns9="http://www.w3.org/ns/prov#"
+	xmlns:ns10="http://dbpedia.org/ontology/PopulatedPlace/" >
+  <rdf:Description rdf:about="http://dbpedia.org/resource/Fernand_Bouisson">
+    <dbpedia-owl:deathPlace rdf:resource="http://dbpedia.org/resource/Antibes" />
+    <dbpprop:deathPlace rdf:resource="http://dbpedia.org/resource/Antibes" />
+    <dbpprop:placeOfDeath rdf:resource="http://dbpedia.org/resource/Antibes" />
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dbpedia.org/resource/Canton_of_Antibes-Centre">
+    <dbpprop:chieftown rdf:resource="http://dbpedia.org/resource/Antibes" />
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dbpedia.org/resource/Nice_C%C3%B4te_d&#39;Azur_Airport">
+    <dbpprop:cityServed rdf:resource="http://dbpedia.org/resource/Antibes" />
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dbpedia.org/resource/M83_(band)">
+    <dbpprop:origin rdf:resource="http://dbpedia.org/resource/Antibes" />
+    <dbpedia-owl:hometown rdf:resource="http://dbpedia.org/resource/Antibes" />
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dbpedia.org/resource/Princess_Anastasia_of_Montenegro">
+    <dbpedia-owl:deathPlace rdf:resource="http://dbpedia.org/resource/Antibes" />
+    <dbpprop:deathPlace rdf:resource="http://dbpedia.org/resource/Antibes" />
+    <dbpprop:placeOfDeath rdf:resource="http://dbpedia.org/resource/Antibes" />
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dbpedia.org/resource/FC_Antibes">
+    <dbpprop:ground rdf:resource="http://dbpedia.org/resource/Antibes" />
+    <dbpedia-owl:ground rdf:resource="http://dbpedia.org/resource/Antibes" />
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dbpedia.org/resource/Kamel_Larbi">
+    <dbpedia-owl:birthPlace rdf:resource="http://dbpedia.org/resource/Antibes" />
+    <dbpprop:placeOfBirth rdf:resource="http://dbpedia.org/resource/Antibes" />
+    <dbpprop:cityofbirth rdf:resource="http://dbpedia.org/resource/Antibes" />
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dbpedia.org/resource/Franck_Iacono">
+    <dbpedia-owl:birthPlace rdf:resource="http://dbpedia.org/resource/Antibes" />
+    <dbpprop:birthPlace rdf:resource="http://dbpedia.org/resource/Antibes" />
+    <dbpprop:placeOfBirth rdf:resource="http://dbpedia.org/resource/Antibes" />
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dbpedia.org/resource/France_3_C%C3%B4te_d&#39;Azur">
+    <dbpprop:headquarters rdf:resource="http://dbpedia.org/resource/Antibes" />
+    <dbpedia-owl:headquarter rdf:resource="http://dbpedia.org/resource/Antibes" />
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dbpedia.org/resource/Live_in_Antibes">
+    <dbpedia-owl:recordedIn rdf:resource="http://dbpedia.org/resource/Antibes" />
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dbpedia.org/resource/Olympique_Antibes">
+    <dbpprop:location rdf:resource="http://dbpedia.org/resource/Antibes" />
+    <dbpedia-owl:location rdf:resource="http://dbpedia.org/resource/Antibes" />
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dbpedia.org/resource/Antibes">
+    <rdf:type rdf:resource="http://dbpedia.org/class/yago/RomanTownsAndCitiesInProvence" />
+    <rdf:type rdf:resource="http://www.opengis.net/gml/_Feature" />
+    <rdf:type rdf:resource="http://dbpedia.org/ontology/PopulatedPlace" />
+    <rdf:type rdf:resource="http://dbpedia.org/ontology/Settlement" />
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Thing" />
+    <rdf:type rdf:resource="http://dbpedia.org/class/yago/ArchaeologicalSitesInFrance" />
+    <rdf:type rdf:resource="http://dbpedia.org/class/yago/AncientGreekCities" />
+    <rdf:type rdf:resource="http://schema.org/Place" />
+    <rdf:type rdf:resource="http://dbpedia.org/class/yago/GeoclassPopulatedPlace" />
+    <rdf:type rdf:resource="http://dbpedia.org/class/yago/CommunesOfAlpes-Maritimes" />
+    <rdf:type rdf:resource="http://dbpedia.org/ontology/Place" />
+    <rdf:type rdf:resource="http://dbpedia.org/class/yago/PopulatedPlacesEstablishedInThe6thCenturyBC" />
+    <owl:sameAs rdf:resource="http://dbpedia.org/resource/Antibes" />
+    <owl:sameAs rdf:resource="http://rdf.freebase.com/ns/m.01hh1y" />
+    <owl:sameAs rdf:resource="http://it.dbpedia.org/resource/Antibes" />
+    <owl:sameAs rdf:resource="http://ja.dbpedia.org/resource/アンティーブ" />
+    <owl:sameAs rdf:resource="http://pt.dbpedia.org/resource/Antibes" />
+    <owl:sameAs rdf:resource="http://cs.dbpedia.org/resource/Antibes" />
+    <owl:sameAs rdf:resource="http://pl.dbpedia.org/resource/Antibes" />
+    <owl:sameAs rdf:resource="http://ru.dbpedia.org/resource/Антиб" />
+    <owl:sameAs rdf:resource="http://de.dbpedia.org/resource/Antibes" />
+    <owl:sameAs rdf:resource="http://el.dbpedia.org/resource/Αντίμπ" />
+    <owl:sameAs rdf:resource="http://fr.dbpedia.org/resource/Antibes" />
+    <owl:sameAs rdf:resource="http://ko.dbpedia.org/resource/앙티브" />
+    <owl:sameAs rdf:resource="http://es.dbpedia.org/resource/Antibes" />
+    <rdfs:label xml:lang="ja">アンティーブ</rdfs:label>
+    <rdfs:label xml:lang="pl">Antibes</rdfs:label>
+    <rdfs:label xml:lang="ko">앙티브</rdfs:label>
+    <rdfs:label xml:lang="uk">Антіб</rdfs:label>
+    <rdfs:label xml:lang="pt">Antibes</rdfs:label>
+    <rdfs:label xml:lang="fr">Antibes</rdfs:label>
+    <rdfs:label xml:lang="ru">Антиб</rdfs:label>
+    <rdfs:label xml:lang="nl">Antibes</rdfs:label>
+    <rdfs:label xml:lang="de">Antibes</rdfs:label>
+    <rdfs:label xml:lang="es">Antibes</rdfs:label>
+    <rdfs:label xml:lang="zh">昂蒂布</rdfs:label>
+    <rdfs:label xml:lang="vi">Antibes</rdfs:label>
+    <rdfs:label xml:lang="en">Antibes</rdfs:label>
+    <rdfs:label xml:lang="hu">Antibes</rdfs:label>
+    <rdfs:label xml:lang="ca">Antíbol</rdfs:label>
+    <rdfs:label xml:lang="sv">Antibes</rdfs:label>
+    <rdfs:label xml:lang="fi">Antibes</rdfs:label>
+    <rdfs:label xml:lang="cs">Antibes</rdfs:label>
+    <rdfs:label xml:lang="no">Antibes</rdfs:label>
+    <rdfs:label xml:lang="it">Antibes</rdfs:label>
+    <rdfs:comment xml:lang="ru">Анти́б — курортный город на Лазурном Берегу, департамент Приморские Альпы, регион Прованс-Альпы-Лазурный Берег, Франция. Население — 72 300 жителей (2005). Расположен на мысе Гаруп Средиземного моря между Каннами и Ниццей. В Антибе самый большой (по суммарному тоннажу) яхтенный порт на Лазурном Берегу. Построен он в шестидесятые годы XX века на месте римской гавани. На самом деле это не один, а целых пять портов — Вобан, Галис, Крутон, Оливьетт, Салис.</rdfs:comment>
+    <rdfs:comment xml:lang="pl">Antibes – miejscowość i gmina we Francji, w regionie Prowansja-Alpy-Lazurowe Wybrzeże, w departamencie Alpy Nadmorskie. Znane kąpielisko i ośrodek wypoczynkowy nad Morzem Śródziemnym. Według danych na rok 1990 gminę zamieszkiwało 70 005 osób, a gęstość zaludnienia wynosiła 2644 osoby/km² (wśród 963 gmin regionu Prowansja-Alpy-W.  Lazurowe Antibes plasuje się na 6. miejscu pod względem liczby ludności, natomiast pod względem powierzchni na miejscu 385.).</rdfs:comment>
+    <rdfs:comment xml:lang="de">Antibes ist eine Stadt mit 75.553 Einwohnern (Stand 1.  Januar 2009) im Südosten Frankreichs im Département Alpes-Maritimes (06) der Region Provence-Alpes-Côte d’Azur. Sie liegt am Fuße der Alpen und an der Küste des Mittelmeers, östlich von Cannes und westlich von Nizza (Nice).</rdfs:comment>
+    <rdfs:comment xml:lang="es">Antibes es una localidad y comuna francesa (municipio) situada en el departamento de Alpes Marítimos, en la región Provenza-Alpes-Costa Azul. También se utiliza la denominación Antibes Juan-les-Pins incluso en textos oficiales. Juan-les-Pins es una zona turística que pertenece a esta localidad. En idioma occitano se denomina Antíbol según la norma clásica o Antibo en la norma mistraliana.</rdfs:comment>
+    <rdfs:comment xml:lang="fr">Antibes ou Antibes Juan-les-Pins est une commune française, située dans le département des Alpes-Maritimes et la région Provence-Alpes-Côte d&#39;Azur. Ses habitants sont les Antibois ou Antipolitains (en occitan provençal Antibolencs / Antiboulen).</rdfs:comment>
+    <rdfs:comment xml:lang="it">Antibes Juan-les-Pins, o più semplicemente Antibes, è un comune francese di 76.580 abitanti situato nel dipartimento delle Alpi Marittime nella regione della Provenza-Alpi-Costa Azzurra. I suoi abitanti si chiamano antibois (in occitano provenzale antibolencs o antiboulen, in italiano antiboini).</rdfs:comment>
+    <rdfs:comment xml:lang="ca">Antíbol és un municipi francès, situat al departament dels Alps Marítims, a la regió de Provença – Alps – Costa Blava. L&#39;any 2005 tenia 72.300 habitants. Es troba ubicat dins la zona coneguda amb el nom de Costa Blava,molt a prop del cap d&#39;Antíbol, que li dóna nom. La seva economia està basada en el turisme i l&#39;exportació, destacant les de flors, olives i taronges.</rdfs:comment>
+    <rdfs:comment xml:lang="sv">Antibes, stad i sydöstra Frankrike, departementet Alpes-Maritimes, vid Rivieran. 73 000 (2004). Antibes har en ålderdomlig stadskärna med ett labyrintiskt nät av gator, gränder och torg. Här finns en borg som uppfördes på 1500-talet av fursteätten Grimaldi i vilken det numera finns ett museum över Picasso. Picasso verkade i flera år i Antibes och dess grannorter. Borgens murverk finns kvar längs havet och hamnen och är populära att promenera på.</rdfs:comment>
+    <rdfs:comment xml:lang="en">Antibes is a resort town in the Alpes-Maritimes department in southeastern France. It lies on the Mediterranean in the Côte d&#39;Azur, located between Cannes and Nice. The town of Juan-les-Pins is within the commune of Antibes. The Sophia-Antipolis technology park is northwest of Antibes.</rdfs:comment>
+    <rdfs:comment xml:lang="fi">Antibes on vanha kauppa-, sotilas- ja hallintokaupunki Etelä-Ranskassa Välimeren rannalla, Alpes-Maritimesin departementissa. Asukkaita siellä on (2006) 75 820, ja sen pinta-ala on 26,48 neliökilometriä.</rdfs:comment>
+    <rdfs:comment xml:lang="ko">앙티브는 프랑스 동남부의 알프마리팀 주에 있는 도시이다.</rdfs:comment>
+    <rdfs:comment xml:lang="pt">Antibes é uma comuna francesa situada no departamento de Alpes-Maritimes, na região de Provence-Alpes-Côte d&#39;Azur. A comuna tem uma superfície de 26,48 km². Tem uma longitude de 7° 07&#39; 26&quot; Este uma latitude de 43° 34&#39; 51&quot; Norte. Atinge a altitude máxima de 2. 648 m de altitude.</rdfs:comment>
+    <rdfs:comment xml:lang="cs">Antibes je město v regionu Provence-Alpes-Côte d&#39;Azur. V Antibes je stará pevnost, delfinárium, aquapark a další turisticky zajímavé objekty. Město je situováno na pobřeží Středozemního moře a má kolem 72 tisíc obyvatel. Město je oblíbenou letní destinací a jezdí sem mnoho francouzských i zahraničních turistů. V exilu zde pobýval mj. i černohorský král Nikola I. Petrović Njegoš se svou manželkou, královnou Milenou.</rdfs:comment>
+    <rdfs:comment xml:lang="zh">昂蒂布（法语：Antibes）是法国普罗旺斯-阿尔卑斯-蓝色海岸大区滨海阿尔卑斯省的一个市镇（法国最小行政区划单位），面积26.48平方公里，人口72,412人（1999年）。</rdfs:comment>
+    <rdfs:comment xml:lang="no">Antibes er en by og kommune i det sørøstre Frankrike, på Côte d&#39;Azur. Byen ligger mellom Cannes og Nice. Antibes var opprinnelig en akhaisk gresk koloni ved navn Antipolis og kan strekke sine historiske aner 2.600 år tilbake. Innbyggertallet i dag er omkring 75 000 (2005). Antibes var tidligere sterkt befestet, men anleggene ble i hovedsak revet på 1860-tallet. I dag er det Fort Carré, bygd av Vauban og fortifikasjonene langs havnen som minner om byens betydning i tidligere tider.</rdfs:comment>
+    <rdfs:comment xml:lang="nl">Antibes is een gemeente in het Franse departement Alpes-Maritimes en telt 72.412 inwoners (1999), die Antibois worden genoemd. De plaats maakt deel uit van het arrondissement Grasse.</rdfs:comment>
+    <rdfs:comment xml:lang="ja">アンティーブ（仏語：Antibes,古代ギリシア語：Antipolis）はフランス南部アルプ＝マリティーム県にある保養地。</rdfs:comment>
+    <rdfs:comment xml:lang="vi">Antibes là một thị trấn ở tỉnh Alpes-Maritimes, vùng Provence-Alpes-Côte d’Azur ở đông nam nước Pháp.</rdfs:comment>
+    <rdfs:comment xml:lang="hu">Antibes város Dél-Franciaországban, a Francia Riviérán. Az Antibes és Juan-les-Pins alkotta város népességét 80 ezerre becsülik holtszezonban és 175 ezerre a nyári időszakban. Az Antibes-Juan-les-Pins agglomeráció a megye második legnagyobb városa Nizza után. Antibes körülbelül 2400 éves, területén gyakorlatilag két külön város fejlődött ki, az óváros (Vieille Ville) és az azt körbevevő új város.</rdfs:comment>
+    <rdfs:comment xml:lang="uk">Анті́б — місто та муніципалітет у Франції, у регіоні Прованс-Альпи-Лазурний берег, департамент Приморські Альпи. Населення — осіб (2009). Муніципалітет розташований на відстані близько 700 км на південний схід від Парижа, 145 км на схід від Марселя, 18 км на південний захід від Ніцци.</rdfs:comment>
+    <dbpedia-owl:wikiPageExternalLink rdf:resource="http://www.antibes-juanlespins.com/" />
+    <dbpedia-owl:wikiPageExternalLink rdf:resource="http://www.antibes-photos.com/" />
+    <dbpedia-owl:wikiPageExternalLink rdf:resource="http://www.insee.fr/en/home/home_page.asp" />
+    <foaf:depiction rdf:resource="http://upload.wikimedia.org/wikipedia/commons/a/aa/Antibesbordmer.JPG" />
+    <foaf:name xml:lang="en">Antibes</foaf:name>
+    <dcterms:subject rdf:resource="http://dbpedia.org/resource/Category:French_Riviera" />
+    <dcterms:subject rdf:resource="http://dbpedia.org/resource/Category:Populated_places_established_in_the_6th_century_BC" />
+    <dcterms:subject rdf:resource="http://dbpedia.org/resource/Category:Ancient_Greek_cities" />
+    <dcterms:subject rdf:resource="http://dbpedia.org/resource/Category:Massalian_colonies" />
+    <dcterms:subject rdf:resource="http://dbpedia.org/resource/Category:Communes_of_Alpes-Maritimes" />
+    <dcterms:subject rdf:resource="http://dbpedia.org/resource/Category:Roman_towns_and_cities_in_Provence" />
+    <dcterms:subject rdf:resource="http://dbpedia.org/resource/Category:Archaeological_sites_in_France" />
+    <dcterms:subject rdf:resource="http://dbpedia.org/resource/Category:Antibes" />
+    <foaf:homepage rdf:resource="http://www.antibes-juanlespins.com/" />
+    <geo:lat rdf:datatype="http://www.w3.org/2001/XMLSchema#float">43.5808</geo:lat>
+    <geo:long rdf:datatype="http://www.w3.org/2001/XMLSchema#float">7.1239</geo:long>
+    <dbpprop:name xml:lang="en">Antibes</dbpprop:name>
+    <dbpprop:elevationMinM rdf:datatype="http://www.w3.org/2001/XMLSchema#int">0</dbpprop:elevationMinM>
+    <dbpprop:elevationMaxM rdf:datatype="http://www.w3.org/2001/XMLSchema#int">163</dbpprop:elevationMaxM>
+    <dbpedia-owl:abstract xml:lang="pl">Antibes – miejscowość i gmina we Francji, w regionie Prowansja-Alpy-Lazurowe Wybrzeże, w departamencie Alpy Nadmorskie. Znane kąpielisko i ośrodek wypoczynkowy nad Morzem Śródziemnym. Według danych na rok 1990 gminę zamieszkiwało 70 005 osób, a gęstość zaludnienia wynosiła 2644 osoby/km² (wśród 963 gmin regionu Prowansja-Alpy-W.  Lazurowe Antibes plasuje się na 6. miejscu pod względem liczby ludności, natomiast pod względem powierzchni na miejscu 385.). W drugiej połowie lat czterdziestych XX w. w Antibes przebywał i tworzył Pablo Picasso. Jego ceramiczne dzieła stanowią trzon tutejszego Muzeum Picassa.</dbpedia-owl:abstract>
+    <dbpedia-owl:abstract xml:lang="fr">Antibes ou Antibes Juan-les-Pins est une commune française, située dans le département des Alpes-Maritimes et la région Provence-Alpes-Côte d&#39;Azur. Ses habitants sont les Antibois ou Antipolitains (en occitan provençal Antibolencs / Antiboulen).</dbpedia-owl:abstract>
+    <dbpedia-owl:abstract xml:lang="ja">アンティーブ（仏語：Antibes,古代ギリシア語：Antipolis）はフランス南部アルプ＝マリティーム県にある保養地。</dbpedia-owl:abstract>
+    <dbpedia-owl:abstract xml:lang="es">Antibes es una localidad y comuna francesa (municipio) situada en el departamento de Alpes Marítimos, en la región Provenza-Alpes-Costa Azul. También se utiliza la denominación Antibes Juan-les-Pins incluso en textos oficiales. Juan-les-Pins es una zona turística que pertenece a esta localidad. En idioma occitano se denomina Antíbol según la norma clásica o Antibo en la norma mistraliana.</dbpedia-owl:abstract>
+    <dbpedia-owl:abstract xml:lang="vi">Antibes là một thị trấn ở tỉnh Alpes-Maritimes, vùng Provence-Alpes-Côte d’Azur ở đông nam nước Pháp.</dbpedia-owl:abstract>
+    <dbpedia-owl:abstract xml:lang="pt">Antibes é uma comuna francesa situada no departamento de Alpes-Maritimes, na região de Provence-Alpes-Côte d&#39;Azur. A comuna tem uma superfície de 26,48 km². Tem uma longitude de 7° 07&#39; 26&quot; Este uma latitude de 43° 34&#39; 51&quot; Norte. Atinge a altitude máxima de 2. 648 m de altitude.</dbpedia-owl:abstract>
+    <dbpedia-owl:abstract xml:lang="ko">앙티브는 프랑스 동남부의 알프마리팀 주에 있는 도시이다.</dbpedia-owl:abstract>
+    <dbpedia-owl:abstract xml:lang="cs">Antibes je město v regionu Provence-Alpes-Côte d&#39;Azur. V Antibes je stará pevnost, delfinárium, aquapark a další turisticky zajímavé objekty. Město je situováno na pobřeží Středozemního moře a má kolem 72 tisíc obyvatel. Město je oblíbenou letní destinací a jezdí sem mnoho francouzských i zahraničních turistů. V exilu zde pobýval mj. i černohorský král Nikola I. Petrović Njegoš se svou manželkou, královnou Milenou. Historie: Antibes les (antýb / ántýb) se nachází v departementu Alpes-Maritimes v regionu Provence-Alpes-Côte d´Azur, mezi Cannes a Nice. Je to jedno z nejstarších sídel Azurového pobřeží - skvost dějin Provence. Nejdříve se na území dnešní Provence uchytili Řekové, a to roku 600 před n.l. v Marseille, obchodní stanice měli též v Nice a Antibes. Římská Province (-125/-117) sahala od Ženevského jezera až po Pyreneje a Toulouse. Zde však byla řecká obchodní stanice už na území Galie cisalpinské, spojené administrativně se severní Itálií (Lombardií) = tehdy to bylo řecké město Antipolis. Je to město s patrně největším počtem historických památek na Azurovém pobřeží a má také zachovalou středověkou zástavbu. V moři u Antibes se nalezl vrak plavidla Etrusků, kteří do oblasti jižní Francie připlouvali již od 7. století před n.l. Nejprve to byl řecký, poté římský přístav. Zachovalo se několik římských památek, hradby, krypta a ruiny chrámů. Od roku 1386 patřilo přístavní městečko rodu Grimaldiů. Mělo vojenský význam u tehdejších hranic se Savojskem. / Bývalá diecése v Antibes byla založena pravděpodobně v 5. století a trvala do roku 1244 a poté v letech 1385 až 1732 zde byl apoštolský vikariát podřízený Svaté stolici, dnes je město příslušné k diecési v Nice. Bývalá katedrála Notre-Dame de la Platéa stojí od roku 1200, rekonstruovaná byla v 18. století. Do kostela se přinášely votivní dary námořníků. Starobylé městečko ležící při patě skalnatého poloostrova Cap d´Antibes je střediskem květinářství – uličky a náměstí mají květinovou výzdobu. Město splývá s letoviskem Juan les Pins. Písečné pláže (s jemným zla¬tým pískem) na juanské straně jsou převážně placené, na antibeské straně bezplatné – možnost koupání je na písečné pláži v těsné blízkosti Starého města. Dlouhá oblázková pláž nad Antibes asi 2 km směrem na Nice. Město je symbolem luxusního života na Riviéře již od 20. let 20. století. Město Antibes proslulo několika festivaly, např. v červnu festivalem jazzu. Každoročně se dále koná v Antibes v březnu Jazz Festival (v New Orleans-les-Pins), v dubnu veletrh starožitností, v říjnu mezinárodní festival podmořského potápění. / www. antibesjuanlespins. com / Městečko má dva rozměrné přístavy rekreačních plavidel - přístav hydroplánů a přístav jachet. Novější přístav u Port Vauban je pro „vyšší třídy“ a říká se mu přístav či „nábřeží miliardářů“. V roce 1925 mělo městečko 12 tisíc obyvatel. Průmysl loďařský, chemický a voňavkářský. Obchodní středisko. Vývoz jižního ovoce, solených ryb a vína. Severně od Antibes se nachází supermoderní průmyslová zóna Sophia Antipolis (francouzské „Silikonové údolí“), jejíž obchodní příjem již převyšuje příjem z turistiky na Azurovém pobřeží. / Stanice vlaků navazujících na TGV Sud-Est. / V říjnu se v Antibes konává Ralley. Jižněji je pláž, na které se vylodil Napoleon po návratu z Elby. Zdejší osobnosti z kultury: Na mysu Cap d´Antibes v příboji dováděli F. Scott Fitzgerald, Ernest Hemingway a jejich přátelé. V březnu 1955 zemřel sebevraždou v Antibes francouzský malíř ruského původu Nicolas de Staël (*1914) = vyskočil z okna svého ateliéru (s výhledem na moře), ve kterém žil od roku 1954. Od roku 1972 žil a roku 1989 zemřel v Antibes abstraktní malíř Hans Hartung (*1904 v Lipsku). Pobývali zde dále malíři Juan Miró, Max Ernst a Amadeo Modigliani. / V červenci 1946 se z Paříže do sousedního Golfe-Juanu přestěhoval Pablo Picasso (1881-1973), který se zde léčil z depresí, a svůj pobyt v Golfe-Juanu střídal s pobytem v antibeském muzeu, kde měl k dispozici ateliér (pak se roku 1948 usadil v blízké obci Vallauris). V té době žil s Françoise Gillotovou. Namaloval zde za 4 měsíce působivý soubor prací, které daroval muzeu, a tlumočil v nich antické legendy a divy, které kdysi donesli na západní pobřeží Středozemního moře řečtí námořníci. Zde u moře maloval v té době také chobotnice, sépie a ryby. Architektura: Možnost procházky po starém opevnění města. Peynetmuseum, Marine- a Napoleonmuseum. V pevnosti Saint-André je dnes malé, ale zajímavé Archeologické muzeum s antickými kovovými předměty a nálezy podmořské archeologie. Provensálské trhy – městská tržnice pochází z 12. století, má litinovou konstrukci. Zámek Grimaldiů z 12. století s archeologickými sbírkami obsahuje i první stálé Picassovo muzeum s jeho tvorbou od roku 1930, keramika, dále je zde současné umění a zahrada se sochami. Na terase Musée Picasso je kovová plastika od Armana „A ma jolie“ v kubistickém Picassově stylu. / Do hvězdice uspořádaná pevnost Fort-Carré (1550-17. století) poblíž Antibes na Azurovém pobřeží, kterou vystavěl maršál Sébastien Le Prestre markýz de Vauban (1633-1707) za vlády Ludvíka XIV. , je typickým příkladem nového typu opevnění té doby. Vauban byl francouzský maršál, vojenský inženýr a projektant pevností, používající složité soustavy bastionů, glacis = neosázený volný pruh země před hradbami, příkopů, eskarp, kasemat apod. / Jižním směrem cesta k Cap d´Antibes vede mezi mořem a piniovými lesíky s báječnými výhledy. Parc Exflora má více tematicky zaměřených zahrad na rozloze asi 5 ha přímo u moře. Vila Thuret: v centru poloostrova leží na ploše kolem 4 ha nejstarší botanická zahrada Azurového pobřeží s 3 tisíci rostlinných druhů. Je ošetřována Francouzským institutem pro zemědělský výzkum. Nedaleko Antibes (severovýchodně) je mořský park Marineland s největší evropskou vodní show = akváriem a delfináriem - kosatky, delfíni, lachtani, tučňáci i žraloci. Komplex mořského parku s 19 akvárii a bazény se středomořskou faunou a flórou. Mořské muzeum s maketami živočichů a filmy.</dbpedia-owl:abstract>
+    <dbpedia-owl:abstract xml:lang="zh">昂蒂布（法语：Antibes）是法国普罗旺斯-阿尔卑斯-蓝色海岸大区滨海阿尔卑斯省的一个市镇（法国最小行政区划单位），面积26.48平方公里，人口72,412人（1999年）。</dbpedia-owl:abstract>
+    <dbpedia-owl:abstract xml:lang="nl">Antibes is een gemeente in het Franse departement Alpes-Maritimes en telt 72.412 inwoners (1999), die Antibois worden genoemd. De plaats maakt deel uit van het arrondissement Grasse.</dbpedia-owl:abstract>
+    <dbpedia-owl:abstract xml:lang="de">Antibes ist eine Stadt mit 75.553 Einwohnern (Stand 1.  Januar 2009) im Südosten Frankreichs im Département Alpes-Maritimes (06) der Region Provence-Alpes-Côte d’Azur. Sie liegt am Fuße der Alpen und an der Küste des Mittelmeers, östlich von Cannes und westlich von Nizza (Nice).</dbpedia-owl:abstract>
+    <dbpedia-owl:abstract xml:lang="ru">Анти́б — курортный город на Лазурном Берегу, департамент Приморские Альпы, регион Прованс-Альпы-Лазурный Берег, Франция. Население — 72 300 жителей (2005). Расположен на мысе Гаруп Средиземного моря между Каннами и Ниццей. В Антибе самый большой (по суммарному тоннажу) яхтенный порт на Лазурном Берегу. Построен он в шестидесятые годы XX века на месте римской гавани. На самом деле это не один, а целых пять портов — Вобан, Галис, Крутон, Оливьетт, Салис. Вместе с мысом Антиб и городком Жюан-ле-Пен составляет единую административную единицу.</dbpedia-owl:abstract>
+    <dbpedia-owl:abstract xml:lang="it">Antibes Juan-les-Pins, o più semplicemente Antibes, è un comune francese di 76.580 abitanti situato nel dipartimento delle Alpi Marittime nella regione della Provenza-Alpi-Costa Azzurra. I suoi abitanti si chiamano antibois (in occitano provenzale antibolencs o antiboulen, in italiano antiboini).</dbpedia-owl:abstract>
+    <dbpedia-owl:abstract xml:lang="sv">Antibes, stad i sydöstra Frankrike, departementet Alpes-Maritimes, vid Rivieran. 73 000 (2004). Antibes har en ålderdomlig stadskärna med ett labyrintiskt nät av gator, gränder och torg. Här finns en borg som uppfördes på 1500-talet av fursteätten Grimaldi i vilken det numera finns ett museum över Picasso. Picasso verkade i flera år i Antibes och dess grannorter. Borgens murverk finns kvar längs havet och hamnen och är populära att promenera på. Ett annat bemärkt byggnadsverk är fortet Le Fort Carré, byggt 1550, på en kulle med fin utsikt över Antibes hamn. Antibes är året runt en livlig och välbesökt stad med gott om restauranger och affärer. Inom kommunen ligger också badorten Juan-les-Pins, där de flesta stränderna och hotellen finns. Antibes är tack vare närheten till teknologi- och forskningnscentrat Sophia Antipolis en av de mest snabbväxande städerna längs den franska medelhavskusten. Inom kommunens gränser ryms även halvön Cap d&#39;Antibes som är ett av världens mest exklusiva villaområden. Antibes hamn, Port Vauban, är en av Europas största privatbåtshamnar. Bland annat finns en sektion längst ut med lyxjakter i en storleksklass som ger ytterst framskjutna positioner bland världens 100 största yachter. http://powerandmotoryacht. com/megayachts/0805top100/ Staden grundades som Antipolis på 300-talet f. Kr. av grekerna. Noterbart är att den närliggande högteknologiska forsknings- och företagsbyn Sophia-Antipolis är en levande rest av den gamla grekisk-romerska benämningen. För svenskar är Antibes också intressant för att nationalskalden Evert Taube här under tjugo år, från 1951 till 1971, hade sin skrivarlya på det lilla strandhotellet Petite Réserve. Han vistades där i månadslånga perioder och övergick då från det han är mest känd för, visorna, till att skriva prosa. Ett tiotal prosaböcker emanerar från Taubes tid på Petite Réserve. Hotellet är nu i svensk ägo och man vinnlägger sig på många sätt om att vårda minnet av Evert Taube.</dbpedia-owl:abstract>
+    <dbpedia-owl:abstract xml:lang="en">Antibes is a resort town in the Alpes-Maritimes department in southeastern France. It lies on the Mediterranean in the Côte d&#39;Azur, located between Cannes and Nice. The town of Juan-les-Pins is within the commune of Antibes. The Sophia-Antipolis technology park is northwest of Antibes.</dbpedia-owl:abstract>
+    <dbpedia-owl:abstract xml:lang="no">Antibes er en by og kommune i det sørøstre Frankrike, på Côte d&#39;Azur. Byen ligger mellom Cannes og Nice. Antibes var opprinnelig en akhaisk gresk koloni ved navn Antipolis og kan strekke sine historiske aner 2.600 år tilbake. Innbyggertallet i dag er omkring 75 000 (2005). Antibes var tidligere sterkt befestet, men anleggene ble i hovedsak revet på 1860-tallet. I dag er det Fort Carré, bygd av Vauban og fortifikasjonene langs havnen som minner om byens betydning i tidligere tider. Antibes har en av de største lystbåthavnene på Côte d’Azur. Den nye havnen ble anlagt på 1960-tallet der det tidligere hadde vært en romersk havn. Byen var tidligere en betydelig fiskehavn, men i dag drives bare et mindre fiske for lokalt forbruk. Parfymeindustrien i byen var også viktigere tidligere. Denne var basert på blomsterproduksjonen, blant annet av lavendel, i omegn. I dag finner man kommersiell parfyme- og kosmetikkproduksjon i Grasse.</dbpedia-owl:abstract>
+    <dbpedia-owl:abstract xml:lang="uk">Анті́б — місто та муніципалітет у Франції, у регіоні Прованс-Альпи-Лазурний берег, департамент Приморські Альпи. Населення — осіб (2009). Муніципалітет розташований на відстані близько 700 км на південний схід від Парижа, 145 км на схід від Марселя, 18 км на південний захід від Ніцци.</dbpedia-owl:abstract>
+    <dbpedia-owl:abstract xml:lang="ca">Antíbol és un municipi francès, situat al departament dels Alps Marítims, a la regió de Provença – Alps – Costa Blava. L&#39;any 2005 tenia 72.300 habitants. Es troba ubicat dins la zona coneguda amb el nom de Costa Blava,molt a prop del cap d&#39;Antíbol, que li dóna nom. La seva economia està basada en el turisme i l&#39;exportació, destacant les de flors, olives i taronges.</dbpedia-owl:abstract>
+    <dbpedia-owl:abstract xml:lang="hu">Antibes város Dél-Franciaországban, a Francia Riviérán. Az Antibes és Juan-les-Pins alkotta város népességét 80 ezerre becsülik holtszezonban és 175 ezerre a nyári időszakban. Az Antibes-Juan-les-Pins agglomeráció a megye második legnagyobb városa Nizza után. Antibes körülbelül 2400 éves, területén gyakorlatilag két külön város fejlődött ki, az óváros (Vieille Ville) és az azt körbevevő új város.</dbpedia-owl:abstract>
+    <dbpedia-owl:abstract xml:lang="fi">Antibes on vanha kauppa-, sotilas- ja hallintokaupunki Etelä-Ranskassa Välimeren rannalla, Alpes-Maritimesin departementissa. Asukkaita siellä on (2006) 75 820, ja sen pinta-ala on 26,48 neliökilometriä.</dbpedia-owl:abstract>
+    <georss:point xml:lang="en">43.5808 7.1239</georss:point>
+    <dbpprop:region xml:lang="en">Provence-Alpes-Côte d&#39;Azur</dbpprop:region>
+    <dbpprop:latitude rdf:datatype="http://www.w3.org/2001/XMLSchema#int">44</dbpprop:latitude>
+    <dbpprop:areaKm rdf:datatype="http://www.w3.org/2001/XMLSchema#int">26</dbpprop:areaKm>
+    <dbpprop:wikiPageUsesTemplate rdf:resource="http://dbpedia.org/resource/Template:Infobox_French_commune" />
+    <dbpprop:intercommunality xml:lang="en">Sophia Antipolis</dbpprop:intercommunality>
+    <dbpprop:term rdf:datatype="http://www.w3.org/2001/XMLSchema#int">2008</dbpprop:term>
+    <dbpedia-owl:thumbnail rdf:resource="http://upload.wikimedia.org/wikipedia/commons/thumb/a/aa/Antibesbordmer.JPG/200px-Antibesbordmer.JPG" />
+    <dbpprop:longitude rdf:datatype="http://www.w3.org/2001/XMLSchema#int">7</dbpprop:longitude>
+    <dbpprop:population rdf:datatype="http://www.w3.org/2001/XMLSchema#int">76994</dbpprop:population>
+    <dbpprop:elevationM rdf:datatype="http://www.w3.org/2001/XMLSchema#int">9</dbpprop:elevationM>
+    <dbpprop:postalCode rdf:datatype="http://www.w3.org/2001/XMLSchema#int">6600</dbpprop:postalCode>
+    <dbpprop:imageCoatOfArms xml:lang="en">Antibes-blason.jpg</dbpprop:imageCoatOfArms>
+    <dbpprop:department xml:lang="en">Alpes-Maritimes</dbpprop:department>
+    <dbpprop:arrondissement xml:lang="en">Grasse</dbpprop:arrondissement>
+    <dbpprop:mayor xml:lang="en">Jean Leonetti</dbpprop:mayor>
+    <dbpprop:insee rdf:datatype="http://www.w3.org/2001/XMLSchema#int">6004</dbpprop:insee>
+    <dbpprop:populationDate rdf:datatype="http://www.w3.org/2001/XMLSchema#int">2008</dbpprop:populationDate>
+    <dbpedia-owl:minimumElevation rdf:datatype="http://www.w3.org/2001/XMLSchema#double">NAN</dbpedia-owl:minimumElevation>
+    <dbpedia-owl:populationTotal rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">76994</dbpedia-owl:populationTotal>
+    <dbpedia-owl:area rdf:datatype="http://www.w3.org/2001/XMLSchema#double">2.648e+07</dbpedia-owl:area>
+    <dbpedia-owl:maximumElevation rdf:datatype="http://www.w3.org/2001/XMLSchema#double">163.0</dbpedia-owl:maximumElevation>
+    <dbpedia-owl:elevation rdf:datatype="http://www.w3.org/2001/XMLSchema#double">NAN</dbpedia-owl:elevation>
+    <dbpedia-owl:postalCode xml:lang="en">06600</dbpedia-owl:postalCode>
+    <dbpedia-owl:department rdf:resource="http://dbpedia.org/resource/Alpes-Maritimes" />
+    <dbpedia-owl:country rdf:resource="http://dbpedia.org/resource/France" />
+    <ns9:wasDerivedFrom rdf:resource="http://en.wikipedia.org/wiki/Antibes?oldid=495469178" />
+    <dbpprop:hasPhotoCollection rdf:resource="http://www4.wiwiss.fu-berlin.de/flickrwrappr/photos/Antibes" />
+    <foaf:isPrimaryTopicOf rdf:resource="http://en.wikipedia.org/wiki/Antibes" />
+    <ns10:area rdf:datatype="http://dbpedia.org/datatype/squareKilometre">26.48</ns10:area>
+    <geo:geometry rdf:datatype="http://www.openlinksw.com/schemas/virtrdf#Geometry">POINT(7.1239 43.5808)</geo:geometry>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dbpedia.org/resource/Nicholas_I_of_Montenegro">
+    <dbpedia-owl:deathPlace rdf:resource="http://dbpedia.org/resource/Antibes" />
+    <dbpprop:deathPlace rdf:resource="http://dbpedia.org/resource/Antibes" />
+    <dbpprop:placeOfDeath rdf:resource="http://dbpedia.org/resource/Antibes" />
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dbpedia.org/resource/Christophe_Gans">
+    <dbpedia-owl:birthPlace rdf:resource="http://dbpedia.org/resource/Antibes" />
+    <dbpprop:birthPlace rdf:resource="http://dbpedia.org/resource/Antibes" />
+    <dbpprop:placeOfBirth rdf:resource="http://dbpedia.org/resource/Antibes" />
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dbpedia.org/resource/Joseph_Auguste_%C3%89mile_Vaudremer">
+    <dbpedia-owl:deathPlace rdf:resource="http://dbpedia.org/resource/Antibes" />
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dbpedia.org/resource/Duke_Peter_Alexandrovich_of_Oldenburg">
+    <dbpedia-owl:deathPlace rdf:resource="http://dbpedia.org/resource/Antibes" />
+    <dbpprop:deathPlace rdf:resource="http://dbpedia.org/resource/Antibes" />
+    <dbpprop:placeOfDeath rdf:resource="http://dbpedia.org/resource/Antibes" />
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dbpedia.org/resource/EuroBasket_1999">
+    <dbpprop:place rdf:resource="http://dbpedia.org/resource/Antibes" />
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dbpedia.org/resource/Nicholas_Romanov,_Prince_of_Russia">
+    <dbpedia-owl:birthPlace rdf:resource="http://dbpedia.org/resource/Antibes" />
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dbpedia.org/resource/1937%E2%80%9338_in_Swedish_football">
+    <dbpprop:stadium rdf:resource="http://dbpedia.org/resource/Antibes" />
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dbpedia.org/resource/Laurent_Gagnier">
+    <dbpedia-owl:birthPlace rdf:resource="http://dbpedia.org/resource/Antibes" />
+    <dbpprop:birthPlace rdf:resource="http://dbpedia.org/resource/Antibes" />
+    <dbpprop:placeOfBirth rdf:resource="http://dbpedia.org/resource/Antibes" />
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dbpedia.org/resource/Laurent_Gras_(chef)">
+    <dbpedia-owl:birthPlace rdf:resource="http://dbpedia.org/resource/Antibes" />
+    <dbpprop:birthPlace rdf:resource="http://dbpedia.org/resource/Antibes" />
+    <dbpprop:placeOfBirth rdf:resource="http://dbpedia.org/resource/Antibes" />
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dbpedia.org/resource/Charles_Victor_Naudin">
+    <dbpedia-owl:deathPlace rdf:resource="http://dbpedia.org/resource/Antibes" />
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dbpedia.org/resource/Eric_Ripert">
+    <dbpedia-owl:birthPlace rdf:resource="http://dbpedia.org/resource/Antibes" />
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dbpedia.org/resource/Honor%C3%A9_Charles_Reille">
+    <dbpedia-owl:birthPlace rdf:resource="http://dbpedia.org/resource/Antibes" />
+    <dbpprop:birthPlace rdf:resource="http://dbpedia.org/resource/Antibes" />
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dbpedia.org/resource/Canton_of_Antibes-Biot">
+    <dbpprop:chieftown rdf:resource="http://dbpedia.org/resource/Antibes" />
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dbpedia.org/resource/Milena_Vukoti%C4%87">
+    <dbpedia-owl:deathPlace rdf:resource="http://dbpedia.org/resource/Antibes" />
+    <dbpprop:deathPlace rdf:resource="http://dbpedia.org/resource/Antibes" />
+    <dbpprop:placeOfDeath rdf:resource="http://dbpedia.org/resource/Antibes" />
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dbpedia.org/resource/Grand_Duke_Nicholas_Nikolaevich_of_Russia_(1856%E2%80%931929)">
+    <dbpedia-owl:deathPlace rdf:resource="http://dbpedia.org/resource/Antibes" />
+    <dbpprop:deathPlace rdf:resource="http://dbpedia.org/resource/Antibes" />
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dbpedia.org/resource/Marineland_(Antibes)">
+    <dbpprop:location rdf:resource="http://dbpedia.org/resource/Antibes" />
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dbpedia.org/resource/Christophe_Kalfayan">
+    <dbpedia-owl:birthPlace rdf:resource="http://dbpedia.org/resource/Antibes" />
+    <dbpprop:birthPlace rdf:resource="http://dbpedia.org/resource/Antibes" />
+    <dbpprop:placeOfBirth rdf:resource="http://dbpedia.org/resource/Antibes" />
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dbpedia.org/resource/Desmond_Leslie">
+    <dbpedia-owl:deathPlace rdf:resource="http://dbpedia.org/resource/Antibes" />
+    <dbpprop:placeOfDeath rdf:resource="http://dbpedia.org/resource/Antibes" />
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dbpedia.org/resource/1938_FIFA_World_Cup">
+    <dbpprop:stadium rdf:resource="http://dbpedia.org/resource/Antibes" />
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dbpedia.org/resource/Grand_Duke_Peter_Nikolaevich_of_Russia">
+    <dbpedia-owl:deathPlace rdf:resource="http://dbpedia.org/resource/Antibes" />
+    <dbpprop:deathPlace rdf:resource="http://dbpedia.org/resource/Antibes" />
+    <dbpprop:placeOfDeath rdf:resource="http://dbpedia.org/resource/Antibes" />
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dbpedia.org/resource/Hans_Hartung">
+    <dbpedia-owl:deathPlace rdf:resource="http://dbpedia.org/resource/Antibes" />
+    <dbpprop:deathPlace rdf:resource="http://dbpedia.org/resource/Antibes" />
+    <dbpprop:placeOfDeath rdf:resource="http://dbpedia.org/resource/Antibes" />
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dbpedia.org/resource/Gustave_Emile_Boissonade">
+    <dbpedia-owl:deathPlace rdf:resource="http://dbpedia.org/resource/Antibes" />
+    <dbpprop:deathPlace rdf:resource="http://dbpedia.org/resource/Antibes" />
+    <dbpprop:placeOfDeath rdf:resource="http://dbpedia.org/resource/Antibes" />
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dbpedia.org/resource/Gare_d&#39;Antibes">
+    <dbpprop:address rdf:resource="http://dbpedia.org/resource/Antibes" />
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dbpedia.org/resource/Fort_Carr%C3%A9">
+    <dbpprop:location rdf:resource="http://dbpedia.org/resource/Antibes" />
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dbpedia.org/resource/Prince_Dimitri_Romanov">
+    <dbpedia-owl:birthPlace rdf:resource="http://dbpedia.org/resource/Antibes" />
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dbpedia.org/resource/Count_Flemming_Valdemar_of_Rosenborg">
+    <dbpedia-owl:deathPlace rdf:resource="http://dbpedia.org/resource/Antibes" />
+    <dbpprop:deathPlace rdf:resource="http://dbpedia.org/resource/Antibes" />
+    <dbpprop:placeOfDeath rdf:resource="http://dbpedia.org/resource/Antibes" />
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dbpedia.org/resource/Soul_Call">
+    <dbpedia-owl:recordedIn rdf:resource="http://dbpedia.org/resource/Antibes" />
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dbpedia.org/resource/Katinka_Andr%C3%A1ssy">
+    <dbpedia-owl:deathPlace rdf:resource="http://dbpedia.org/resource/Antibes" />
+    <dbpprop:deathPlace rdf:resource="http://dbpedia.org/resource/Antibes" />
+    <dbpprop:placeOfDeath rdf:resource="http://dbpedia.org/resource/Antibes" />
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dbpedia.org/resource/Josette_Andriot">
+    <dbpedia-owl:deathPlace rdf:resource="http://dbpedia.org/resource/Antibes" />
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dbpedia.org/resource/Luc-Arthur_Vebobe">
+    <dbpedia-owl:birthPlace rdf:resource="http://dbpedia.org/resource/Antibes" />
+    <dbpprop:birthPlace rdf:resource="http://dbpedia.org/resource/Antibes" />
+    <dbpprop:placeOfBirth rdf:resource="http://dbpedia.org/resource/Antibes" />
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dbpedia.org/resource/Edouard_Jean_Bague">
+    <dbpedia-owl:deathPlace rdf:resource="http://dbpedia.org/resource/Antibes" />
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dbpedia.org/resource/Numa_Andoire">
+    <dbpedia-owl:deathPlace rdf:resource="http://dbpedia.org/resource/Antibes" />
+    <dbpprop:deathPlace rdf:resource="http://dbpedia.org/resource/Antibes" />
+    <dbpprop:placeOfDeath rdf:resource="http://dbpedia.org/resource/Antibes" />
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dbpedia.org/resource/Louis_Valentin">
+    <dbpedia-owl:deathPlace rdf:resource="http://dbpedia.org/resource/Antibes" />
+    <dbpprop:deathPlace rdf:resource="http://dbpedia.org/resource/Antibes" />
+    <dbpprop:placeOfDeath rdf:resource="http://dbpedia.org/resource/Antibes" />
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dbpedia.org/resource/Jacques_Barnaud">
+    <dbpedia-owl:birthPlace rdf:resource="http://dbpedia.org/resource/Antibes" />
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dbpedia.org/resource/Pierre_Sansot">
+    <dbpedia-owl:birthPlace rdf:resource="http://dbpedia.org/resource/Antibes" />
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dbpedia.org/resource/Antion">
+    <dbpedia-owl:wikiPageRedirects rdf:resource="http://dbpedia.org/resource/Antibes" />
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dbpedia.org/resource/Cap_d&#39;Antibes">
+    <dbpedia-owl:wikiPageRedirects rdf:resource="http://dbpedia.org/resource/Antibes" />
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dbpedia.org/resource/Antibes_and_Grasse">
+    <dbpedia-owl:wikiPageRedirects rdf:resource="http://dbpedia.org/resource/Antibes" />
+  </rdf:Description>
+  <rdf:Description rdf:about="http://en.wikipedia.org/wiki/Antibes">
+    <foaf:primaryTopic rdf:resource="http://dbpedia.org/resource/Antibes" />
+  </rdf:Description>
+  <rdf:Description rdf:about="http://mpii.de/yago/resource/Antibes">
+    <owl:sameAs rdf:resource="http://dbpedia.org/resource/Antibes" />
+  </rdf:Description>
+</rdf:RDF>
