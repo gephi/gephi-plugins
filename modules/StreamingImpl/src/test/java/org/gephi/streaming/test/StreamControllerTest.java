@@ -82,8 +82,8 @@ public class StreamControllerTest {
 //        projectController.openWorkspace(workspace);
 
         GraphController graphController = Lookup.getDefault().lookup(GraphController.class);
-        GraphModel graphModel = graphController.getModel();
-        Graph graph = graphModel.getHierarchicalMixedGraph();
+        GraphModel graphModel = graphController.getGraphModel();
+        Graph graph = graphModel.getGraph();
 
         // Connect to stream - Streaming API
 

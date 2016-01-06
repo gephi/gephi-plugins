@@ -296,8 +296,8 @@ public abstract class AbstractStreamProcessorTest {
         Workspace workspace = projectController.newWorkspace(projectController.getCurrentProject());
 
         GraphController graphController = Lookup.getDefault().lookup(GraphController.class);
-        GraphModel graphModel = graphController.getModel();
-        Graph graph = graphModel.getHierarchicalMixedGraph();
+        GraphModel graphModel = graphController.getGraphModel();
+        Graph graph = graphModel.getGraph();
 
         GraphUpdaterEventHandler graphUpdaterHandler = new GraphUpdaterEventHandler(graph);
 
@@ -348,8 +348,8 @@ public abstract class AbstractStreamProcessorTest {
         Workspace workspace = projectController.newWorkspace(projectController.getCurrentProject());
 
         GraphController graphController = Lookup.getDefault().lookup(GraphController.class);
-        GraphModel graphModel = graphController.getModel();
-        Graph graph = graphModel.getHierarchicalMixedGraph();
+        GraphModel graphModel = graphController.getGraphModel();
+        Graph graph = graphModel.getGraph();
 
         GraphUpdaterEventHandler graphUpdaterHandler = new GraphUpdaterEventHandler(graph);
         

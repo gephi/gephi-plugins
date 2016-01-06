@@ -48,6 +48,7 @@ import org.gephi.graph.api.Graph;
 import org.gephi.graph.api.GraphController;
 import org.gephi.graph.api.GraphFactory;
 import org.gephi.graph.api.GraphModel;
+import org.gephi.graph.api.GraphObserver;
 import org.gephi.graph.api.Node;
 import org.gephi.project.api.ProjectController;
 import org.gephi.project.api.Workspace;
@@ -69,13 +70,14 @@ public class Graph2EventListenerTest {
         projectController.newWorkspace(projectController.getCurrentProject());
 
         GraphController graphController = Lookup.getDefault().lookup(GraphController.class);
-        GraphModel graphModel = graphController.getModel();
-        Graph graph = graphModel.getHierarchicalMixedGraph();
+        GraphModel graphModel = graphController.getGraphModel();
+        Graph graph = graphModel.getGraph();
         GraphFactory factory = graphModel.factory();
 
         MockGraphEventHandler handler = new MockGraphEventHandler();
         final Graph2EventListener graph2EventListener = new Graph2EventListener(graph, handler);
-        graph.getGraphModel().addGraphListener(graph2EventListener);
+        
+        GraphObserver graphObserver = graphModel.createGraphObserver(graph, true);
 
         Node node1 = factory.newNode();
         graph.addNode(node1);
@@ -84,14 +86,16 @@ public class Graph2EventListenerTest {
 
         Edge edge = factory.newEdge(node1, node2);
         graph.addEdge(edge);
+        
+        assertTrue(graphObserver.hasGraphChanged());
+        graph2EventListener.graphChanged(graphObserver.getDiff());
 
         graph.removeEdge(edge);
         graph.removeNode(node1);
         graph.removeNode(node2);
-        try {
-            Thread.sleep(1000);
-        } catch (InterruptedException ex) { }
 
+        assertTrue(graphObserver.hasGraphChanged());
+        graph2EventListener.graphChanged(graphObserver.getDiff());
         assertEquals(6, handler.getEventCount());
     }
 

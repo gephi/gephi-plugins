@@ -57,7 +57,7 @@ import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.apache.commons.codec.binary.Base64;
-import org.gephi.data.attributes.api.AttributeController;
+//import org.gephi.data.attributes.api.AttributeController;
 import org.gephi.graph.api.Graph;
 import org.gephi.streaming.api.Graph2EventListener;
 import org.gephi.streaming.api.GraphEventHandler;
@@ -116,9 +116,9 @@ public class StreamingControllerImpl implements StreamingController {
         ClientEventHandler handler = new ClientEventHandler(endpoint, filterededIds);
         final Graph2EventListener graph2EventListener = new Graph2EventListener(graph, handler);
         
-        graph.getModel().addGraphListener(graph2EventListener);
-        AttributeController ac = Lookup.getDefault().lookup(AttributeController.class);
-        ac.getModel().addAttributeListener(graph2EventListener);
+//        graph.getModel().addGraphListener(graph2EventListener);
+//        AttributeController ac = Lookup.getDefault().lookup(AttributeController.class);
+//        ac.getModel().addAttributeListener(graph2EventListener);
 
         if (report!=null) {
             report.setSource(endpoint.getUrl().toString());
@@ -157,9 +157,9 @@ public class StreamingControllerImpl implements StreamingController {
 
             @Override
                 public void onConnectionClosed(StreamingConnection connection) {
-                    graph.getModel().removeGraphListener(graph2EventListener);
-                    AttributeController ac = Lookup.getDefault().lookup(AttributeController.class);
-                    ac.getModel().removeAttributeListener(graph2EventListener);
+//                    graph.getModel().removeGraphListener(graph2EventListener);
+//                    AttributeController ac = Lookup.getDefault().lookup(AttributeController.class);
+//                    ac.getModel().removeAttributeListener(graph2EventListener);
 
                     container.waitForDispatchAllEvents();
                     container.stop();

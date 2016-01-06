@@ -334,6 +334,9 @@ public class GraphUpdaterEventHandler implements GraphEventHandler {
         }
         
         else if (!node.getAttributeKeys().isEmpty()) {
+            if (!graph.getModel().getNodeTable().hasColumn(attributeName)) {
+                graph.getModel().getNodeTable().addColumn(attributeName, value.getClass());
+            }
             node.setAttribute(attributeName, value);
         }
     }
@@ -344,6 +347,9 @@ public class GraphUpdaterEventHandler implements GraphEventHandler {
             injectEdgeProperty(p, value, edge);
         }
         else if (! edge.getAttributeKeys().isEmpty()) {
+            if (!graph.getModel().getEdgeTable().hasColumn(attributeName)) {
+                graph.getModel().getEdgeTable().addColumn(attributeName, value.getClass());
+            }
             edge.setAttribute(attributeName, value);
         }
     }

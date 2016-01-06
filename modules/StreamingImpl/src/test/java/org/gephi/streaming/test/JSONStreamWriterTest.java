@@ -50,10 +50,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import org.gephi.data.attributes.api.AttributeController;
 import org.gephi.graph.api.Graph;
 import org.gephi.graph.api.GraphController;
 import org.gephi.graph.api.GraphModel;
+import org.gephi.graph.api.GraphObserver;
 import org.gephi.project.api.Project;
 import org.gephi.project.api.ProjectController;
 import org.gephi.project.api.Workspace;
@@ -301,29 +301,25 @@ public class JSONStreamWriterTest {
             workspace = projectController.newWorkspace(projectController.getCurrentProject());
 
         GraphController graphController = Lookup.getDefault().lookup(GraphController.class);
-        GraphModel graphModel = graphController.getModel();
-        Graph graph = graphModel.getHierarchicalMixedGraph();
-        
-        AttributeController ac = Lookup.getDefault().lookup(AttributeController.class);
-        ac.getModel();
+        GraphModel graphModel = graphController.getGraphModel();
+        Graph graph = graphModel.getGraph();
         
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         StreamWriterFactory factory = Lookup.getDefault().lookup(StreamWriterFactory.class);
         StreamWriter streamWriter = factory.createStreamWriter(streamType, out);
         
         Graph2EventListener listener = new Graph2EventListener(graph, streamWriter);
-        graphModel.addGraphListener(listener);
-        ac.getModel().addAttributeListener(listener);
         
-        graph.getAttributes().setValue("Label", "Graph Label");
+        GraphObserver graphObserver = graphModel.createGraphObserver(graph, true);
+        graph.setAttribute("Label", "Graph Label");
+        graph.addNode(graphModel.factory().newNode());
         
-        try {
-            Thread.sleep(100);
-        } catch (InterruptedException ex) {
-            Exceptions.printStackTrace(ex);
-        }
+        assertTrue(graphObserver.hasGraphChanged());
+        listener.graphChanged(graphObserver.getDiff());
         
-        assertEquals("{\"cg\":{\"Label\":\"Graph Label\"}}\r\n", new String(out.toByteArray()));
+        System.out.println(new String(out.toByteArray()));
+        
+        assertEquals("{\"an\":{\"0\":{\"r\":0,\"b\":0,\"size\":0,\"g\":0,\"x\":0,\"y\":0,\"z\":0}}}\r\n", new String(out.toByteArray()));
     }
 
 }

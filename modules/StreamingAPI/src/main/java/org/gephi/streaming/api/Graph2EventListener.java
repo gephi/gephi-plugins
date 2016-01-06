@@ -42,23 +42,15 @@ Portions Copyrighted 2011 Gephi Consortium.
 
 package org.gephi.streaming.api;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import org.gephi.data.attributes.api.AttributeEvent;
-import org.gephi.data.attributes.api.AttributeListener;
-import org.gephi.data.attributes.api.AttributeRow;
-import org.gephi.data.attributes.api.AttributeValue;
-import org.gephi.data.properties.PropertiesColumn;
+import org.gephi.graph.api.Column;
 import org.gephi.graph.api.Edge;
-import org.gephi.graph.api.EdgeData;
 import org.gephi.graph.api.Graph;
-import org.gephi.graph.api.GraphEvent;
-import org.gephi.graph.api.GraphListener;
-import org.gephi.graph.api.GraphView;
+import org.gephi.graph.api.GraphDiff;
 import org.gephi.graph.api.Node;
-import org.gephi.graph.api.NodeData;
+import org.gephi.graph.api.TableDiff;
+import org.gephi.graph.impl.GraphStoreConfiguration;
 import org.gephi.streaming.api.event.ElementType;
 import org.gephi.streaming.api.event.EventType;
 import org.gephi.streaming.api.event.GraphEventBuilder;
@@ -67,7 +59,7 @@ import org.gephi.streaming.api.event.GraphEventBuilder;
  *
  * @author panisson
  */
-public class Graph2EventListener implements GraphListener, AttributeListener {
+public class Graph2EventListener { // implements GraphListener, AttributeListener {
 
     private GraphEventHandler eventHandler;
     private GraphEventBuilder eventBuilder;
@@ -80,181 +72,157 @@ public class Graph2EventListener implements GraphListener, AttributeListener {
         this.eventHandler = eventHandler;
     }
 
-    @Override
-    public void graphChanged(GraphEvent event) {
-
-        switch (event.getEventType()) {
-            case ADD_NODES_AND_EDGES:
-                
-                if (event.getData().addedEdges() != null)
-                for (Edge edge: event.getData().addedEdges()) {
-                    String edgeId = edge.getEdgeData().getId();
-                    org.gephi.streaming.api.event.GraphEvent e = 
-                            eventBuilder.edgeAddedEvent(edgeId, edge.getSource().getNodeData().getId(),
-                            edge.getTarget().getNodeData().getId(), edge.isDirected(), 
-                            getEdgeAttributes(edge));
-                    eventHandler.handleGraphEvent(e);
-                }
-                
-                if (event.getData().addedNodes() != null)
-                for (Node node: event.getData().addedNodes()) {
-                    String nodeId = node.getNodeData().getId();
-                    org.gephi.streaming.api.event.GraphEvent e = 
-                            eventBuilder.graphEvent(ElementType.NODE, EventType.ADD, nodeId, 
-                            getNodeAttributes(node));
-                    eventHandler.handleGraphEvent(e);
-                }
-            break;
-            case MOVE_NODES:
-                
-                for (Node node: event.getData().movedNodes()) {
-                    String nodeId = node.getNodeData().getId();
-                    org.gephi.streaming.api.event.GraphEvent e = 
-                            eventBuilder.graphEvent(ElementType.NODE, EventType.CHANGE, nodeId, 
-                            getNodeAttributes(node));
-                    eventHandler.handleGraphEvent(e);
-                }
-                break;
-                
-            case REMOVE_NODES_AND_EDGES:
-                
-                if (event.getData().removedEdges() != null)
-                for (Edge edge: event.getData().removedEdges()) {
-                    String edgeId = edge.getEdgeData().getId();
-                    org.gephi.streaming.api.event.GraphEvent e = 
-                            eventBuilder.graphEvent(ElementType.EDGE, EventType.REMOVE, edgeId, null);
-                    eventHandler.handleGraphEvent(e);
-                }
-                
-                if (event.getData().removedNodes() != null)
-                for (Node node: event.getData().removedNodes()) {
-                    String nodeId = node.getNodeData().getId();
-                    org.gephi.streaming.api.event.GraphEvent e = 
-                            eventBuilder.graphEvent(ElementType.NODE, EventType.REMOVE, nodeId, null);
-                    eventHandler.handleGraphEvent(e);
-                }
-                break;
+    public void graphChanged(GraphDiff graphDiff) {
+        
+        for (Node node: graphDiff.getAddedNodes()) {
+            String nodeId = node.getId().toString();
+            org.gephi.streaming.api.event.GraphEvent e = 
+                    eventBuilder.graphEvent(ElementType.NODE, EventType.ADD, nodeId, 
+                    getNodeAttributes(node));
+            eventHandler.handleGraphEvent(e);
         }
-
+        
+        for (Edge edge: graphDiff.getAddedEdges()) {
+            String edgeId = edge.getId().toString();
+            org.gephi.streaming.api.event.GraphEvent e = 
+                    eventBuilder.edgeAddedEvent(edgeId, edge.getSource().getId().toString(),
+                    edge.getTarget().getId().toString(), edge.isDirected(), 
+                    getEdgeAttributes(edge));
+            eventHandler.handleGraphEvent(e);
+        }
+        
+        for (Edge edge: graphDiff.getRemovedEdges()) {
+            String edgeId = edge.getId().toString();
+            org.gephi.streaming.api.event.GraphEvent e = 
+                    eventBuilder.graphEvent(ElementType.EDGE, EventType.REMOVE, edgeId, null);
+            eventHandler.handleGraphEvent(e);
+        }
+        
+        for (Node node: graphDiff.getRemovedNodes()) {
+            String nodeId = node.getId().toString();
+            org.gephi.streaming.api.event.GraphEvent e = 
+                    eventBuilder.graphEvent(ElementType.NODE, EventType.REMOVE, nodeId, null);
+            eventHandler.handleGraphEvent(e);
+        }
     }
 
-    @Override
-    public void attributesChanged(AttributeEvent event) {
-        switch (event.getEventType()) {
-        case ADD_COLUMN:
-            break;
-        case REMOVE_COLUMN:
-            break;
-        case SET_VALUE:
-
-            Map<String, List<AttributeValue>> nodeChangeTable = new HashMap<String, List<AttributeValue>>();
-            Map<String, List<AttributeValue>> edgeChangeTable = new HashMap<String, List<AttributeValue>>();
-            List<AttributeValue> graphChangeList = new ArrayList<AttributeValue>();
-
-            for (int i=0; i<event.getData().getTouchedObjects().length; i++) {
-                Object data = event.getData().getTouchedObjects()[i];
-                AttributeValue value = event.getData().getTouchedValues()[i];
-
-                String id;
-                if (data instanceof NodeData) {
-                    NodeData nodeData = (NodeData)data;
-                    id = nodeData.getId();
-                    if (graph.getNode(id)==null) {
-                        continue;
-                    }
-                    List<AttributeValue> values = nodeChangeTable.get(id);
-                    if (values==null) {
-                        values = new ArrayList<AttributeValue>();
-                        nodeChangeTable.put(id, values);
-                    }
-                    values.add(value);
-
-                } else if (data instanceof EdgeData) {
-                    EdgeData edgeData = (EdgeData)data;
-                    id = edgeData.getId();
-                    if (graph.getEdge(id)==null) {
-                        continue;
-                    }
-
-                    List<AttributeValue> values = edgeChangeTable.get(id);
-                    if (values==null) {
-                        values = new ArrayList<AttributeValue>();
-                        edgeChangeTable.put(id, values);
-                    }
-                    values.add(value);
-                } else if (data instanceof GraphView) {
-                    graphChangeList.add(value);
-                    
-                } else {
-                    throw new RuntimeException("Unrecognized graph object type");
-                }
-            }
-            
-            Map<String, Object> graphAttributes = new HashMap<String, Object>();
-            for (AttributeValue value: graphChangeList) {
-                graphAttributes.put(value.getColumn().getTitle(), value.getValue());
-            }
-            if (!graphAttributes.isEmpty()) {
-                org.gephi.streaming.api.event.GraphEvent streamingEvent =
-                        eventBuilder.graphEvent(ElementType.GRAPH, EventType.CHANGE, null, graphAttributes);
-                eventHandler.handleGraphEvent(streamingEvent);
-            }
-            
-            for (Map.Entry<String, List<AttributeValue>> entry: nodeChangeTable.entrySet()) {
-                Map<String, Object> attributes = new HashMap<String, Object>();
-                for (AttributeValue value: entry.getValue()) {
-                    if (value.getColumn().getIndex() != PropertiesColumn.NODE_ID.getIndex()
-                       && value.getColumn().getIndex() != PropertiesColumn.EDGE_ID.getIndex())
-                        attributes.put(value.getColumn().getTitle(), value.getValue());
-                }
-                
-                if (!attributes.isEmpty()) {
-                    org.gephi.streaming.api.event.GraphEvent streamingEvent =
-                            eventBuilder.graphEvent(ElementType.NODE, EventType.CHANGE, entry.getKey(), attributes);
-                    eventHandler.handleGraphEvent(streamingEvent);
-                }
-            }
-
-            for (Map.Entry<String, List<AttributeValue>> entry: edgeChangeTable.entrySet()) {
-                Map<String, Object> attributes = new HashMap<String, Object>();
-                for (AttributeValue value: entry.getValue()) {
-                    if (value.getColumn().getIndex() != PropertiesColumn.NODE_ID.getIndex()
-                       && value.getColumn().getIndex() != PropertiesColumn.EDGE_ID.getIndex())
-                        attributes.put(value.getColumn().getTitle(), value.getValue());
-                }
-
-                if (!attributes.isEmpty()) {
-                    org.gephi.streaming.api.event.GraphEvent streamingEvent =
-                            eventBuilder.graphEvent(ElementType.EDGE, EventType.CHANGE, entry.getKey(), attributes);
-                    eventHandler.handleGraphEvent(streamingEvent);
-                }
-            }
-
-            break;
-        }
+    public void attributesChanged(TableDiff tableDiff) {
+        //TODO: Reimplement this method
+        
+//        switch (event.getEventType()) {
+//        case ADD_COLUMN:
+//            break;
+//        case REMOVE_COLUMN:
+//            break;
+//        case SET_VALUE:
+//
+//            Map<String, List<AttributeValue>> nodeChangeTable = new HashMap<String, List<AttributeValue>>();
+//            Map<String, List<AttributeValue>> edgeChangeTable = new HashMap<String, List<AttributeValue>>();
+//            List<AttributeValue> graphChangeList = new ArrayList<AttributeValue>();
+//
+//            for (int i=0; i<event.getData().getTouchedObjects().length; i++) {
+//                Object data = event.getData().getTouchedObjects()[i];
+//                AttributeValue value = event.getData().getTouchedValues()[i];
+//
+//                String id;
+//                if (data instanceof NodeData) {
+//                    NodeData nodeData = (NodeData)data;
+//                    id = nodeData.getId();
+//                    if (graph.getNode(id)==null) {
+//                        continue;
+//                    }
+//                    List<AttributeValue> values = nodeChangeTable.get(id);
+//                    if (values==null) {
+//                        values = new ArrayList<AttributeValue>();
+//                        nodeChangeTable.put(id, values);
+//                    }
+//                    values.add(value);
+//
+//                } else if (data instanceof EdgeData) {
+//                    EdgeData edgeData = (EdgeData)data;
+//                    id = edgeData.getId();
+//                    if (graph.getEdge(id)==null) {
+//                        continue;
+//                    }
+//
+//                    List<AttributeValue> values = edgeChangeTable.get(id);
+//                    if (values==null) {
+//                        values = new ArrayList<AttributeValue>();
+//                        edgeChangeTable.put(id, values);
+//                    }
+//                    values.add(value);
+//                } else if (data instanceof GraphView) {
+//                    graphChangeList.add(value);
+//                    
+//                } else {
+//                    throw new RuntimeException("Unrecognized graph object type");
+//                }
+//            }
+//            
+//            Map<String, Object> graphAttributes = new HashMap<String, Object>();
+//            for (AttributeValue value: graphChangeList) {
+//                graphAttributes.put(value.getColumn().getTitle(), value.getValue());
+//            }
+//            if (!graphAttributes.isEmpty()) {
+//                org.gephi.streaming.api.event.GraphEvent streamingEvent =
+//                        eventBuilder.graphEvent(ElementType.GRAPH, EventType.CHANGE, null, graphAttributes);
+//                eventHandler.handleGraphEvent(streamingEvent);
+//            }
+//            
+//            for (Map.Entry<String, List<AttributeValue>> entry: nodeChangeTable.entrySet()) {
+//                Map<String, Object> attributes = new HashMap<String, Object>();
+//                for (AttributeValue value: entry.getValue()) {
+//                    if (value.getColumn().getIndex() != PropertiesColumn.NODE_ID.getIndex()
+//                       && value.getColumn().getIndex() != PropertiesColumn.EDGE_ID.getIndex())
+//                        attributes.put(value.getColumn().getTitle(), value.getValue());
+//                }
+//                
+//                if (!attributes.isEmpty()) {
+//                    org.gephi.streaming.api.event.GraphEvent streamingEvent =
+//                            eventBuilder.graphEvent(ElementType.NODE, EventType.CHANGE, entry.getKey(), attributes);
+//                    eventHandler.handleGraphEvent(streamingEvent);
+//                }
+//            }
+//
+//            for (Map.Entry<String, List<AttributeValue>> entry: edgeChangeTable.entrySet()) {
+//                Map<String, Object> attributes = new HashMap<String, Object>();
+//                for (AttributeValue value: entry.getValue()) {
+//                    if (value.getColumn().getIndex() != PropertiesColumn.NODE_ID.getIndex()
+//                       && value.getColumn().getIndex() != PropertiesColumn.EDGE_ID.getIndex())
+//                        attributes.put(value.getColumn().getTitle(), value.getValue());
+//                }
+//
+//                if (!attributes.isEmpty()) {
+//                    org.gephi.streaming.api.event.GraphEvent streamingEvent =
+//                            eventBuilder.graphEvent(ElementType.EDGE, EventType.CHANGE, entry.getKey(), attributes);
+//                    eventHandler.handleGraphEvent(streamingEvent);
+//                }
+//            }
+//
+//            break;
+//        }
     }
 
     private Map<String, Object> getNodeAttributes(Node node) {
         Map<String, Object> attributes = new HashMap<String, Object>();
-        AttributeRow row = (AttributeRow) node.getNodeData().getAttributes();
-
-        if (row != null)
-            for (AttributeValue attributeValue: row.getValues()) {
-                if (attributeValue.getColumn().getIndex()!=PropertiesColumn.NODE_ID.getIndex()
-                        && attributeValue.getValue()!=null)
-                    attributes.put(attributeValue.getColumn().getTitle(), attributeValue.getValue());
+        for (Column column: node.getAttributeColumns()) {
+            if (column.getIndex() != GraphStoreConfiguration.ELEMENT_ID_INDEX) {
+                Object value = node.getAttribute(column);
+                if (value != null)
+                    attributes.put(column.getTitle(), value);
             }
+        }
 
         if (sendVizData) {
-            attributes.put("x", node.getNodeData().x());
-            attributes.put("y", node.getNodeData().y());
-            attributes.put("z", node.getNodeData().z());
+            attributes.put("x", node.x());
+            attributes.put("y", node.y());
+            attributes.put("z", node.z());
 
-            attributes.put("r", node.getNodeData().r());
-            attributes.put("g", node.getNodeData().g());
-            attributes.put("b", node.getNodeData().b());
+            attributes.put("r", node.r());
+            attributes.put("g", node.g());
+            attributes.put("b", node.b());
 
-            attributes.put("size", node.getNodeData().getSize());
+            attributes.put("size", node.size());
         }
 
         return attributes;
@@ -262,19 +230,19 @@ public class Graph2EventListener implements GraphListener, AttributeListener {
 
     private Map<String, Object> getEdgeAttributes(Edge edge) {
         Map<String, Object> attributes = new HashMap<String, Object>();
-        AttributeRow row = (AttributeRow) edge.getEdgeData().getAttributes();
-        if (row != null)
-            for (AttributeValue attributeValue: row.getValues()) {
-                if (attributeValue.getColumn().getIndex()!=PropertiesColumn.EDGE_ID.getIndex()
-                        && attributeValue.getValue()!=null)
-                     attributes.put(attributeValue.getColumn().getTitle(), attributeValue.getValue());
+        for (Column column: edge.getAttributeColumns()) {
+            if (column.getIndex() != GraphStoreConfiguration.ELEMENT_ID_INDEX) {
+                Object value = edge.getAttribute(column);
+                if (value != null)
+                    attributes.put(column.getTitle(), value);
             }
+        }
 
         if (sendVizData) {
 
-            attributes.put("r", edge.getEdgeData().r());
-            attributes.put("g", edge.getEdgeData().g());
-            attributes.put("b", edge.getEdgeData().b());
+            attributes.put("r", edge.r());
+            attributes.put("g", edge.g());
+            attributes.put("b", edge.b());
 
             attributes.put("weight", edge.getWeight());
         }

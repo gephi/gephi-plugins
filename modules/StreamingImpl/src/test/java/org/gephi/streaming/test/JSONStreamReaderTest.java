@@ -246,8 +246,8 @@ public class JSONStreamReaderTest {
             workspace = projectController.newWorkspace(projectController.getCurrentProject());
 
         GraphController graphController = Lookup.getDefault().lookup(GraphController.class);
-        GraphModel graphModel = graphController.getModel();
-        Graph graph = graphModel.getHierarchicalMixedGraph();
+        GraphModel graphModel = graphController.getGraphModel();
+        Graph graph = graphModel.getGraph();
         
         GraphEventHandler handler = new GraphUpdaterEventHandler(graph);
 
@@ -268,8 +268,8 @@ public class JSONStreamReaderTest {
         
         Node a = graph.getNode("A");
         
-        assertEquals(3.0, a.getNodeData().getSize(), 0.0);
-        assertEquals(a.getNodeData().getAttributes().getValue("key"), "value");
+        assertEquals(3.0, a.size(), 0.0);
+        assertEquals(a.getAttribute("key"), "value");
     }
     
     @Test
@@ -284,8 +284,8 @@ public class JSONStreamReaderTest {
             workspace = projectController.newWorkspace(projectController.getCurrentProject());
 
         GraphController graphController = Lookup.getDefault().lookup(GraphController.class);
-        GraphModel graphModel = graphController.getModel();
-        Graph graph = graphModel.getHierarchicalMixedGraph();
+        GraphModel graphModel = graphController.getGraphModel();
+        Graph graph = graphModel.getGraph();
         
         GraphEventHandler handler = new GraphUpdaterEventHandler(graph);
 
@@ -303,7 +303,7 @@ public class JSONStreamReaderTest {
             Exceptions.printStackTrace(ex);
         }
         
-        assertEquals("Graph Label", graph.getAttributes().getValue("label"));
+        assertEquals("Graph Label", graph.getAttribute("label"));
         
     }
     
@@ -319,8 +319,8 @@ public class JSONStreamReaderTest {
             workspace = projectController.newWorkspace(projectController.getCurrentProject());
 
         GraphController graphController = Lookup.getDefault().lookup(GraphController.class);
-        GraphModel graphModel = graphController.getModel();
-        Graph graph = graphModel.getHierarchicalMixedGraph();
+        GraphModel graphModel = graphController.getGraphModel();
+        Graph graph = graphModel.getGraph();
         
         GraphEventHandler handler = new GraphUpdaterEventHandler(graph);
 
@@ -330,8 +330,8 @@ public class JSONStreamReaderTest {
         
         String evstr = "{\"an\":{\"A\":{\"label\":\"Streaming Node A\",\"size\":2}}}\n\r";
         evstr += "{\"an\":{\"B\":{\"label\":\"Streaming Node B\",\"size\":2}}}\n\r";
-        evstr += "{\"ae\":{\"AB\":{\"source\":\"A\",\"target\":\"B\",\"directed\":false,\"label\":\"Edge AB\",\"size\":2}}}\n\r";
-        evstr += "{\"ce\":{\"AB\":{\"label\":\"Edge AB changed\",\"size\":3, \"key\":\"value\"}}}\n\r";
+        evstr += "{\"ae\":{\"AB\":{\"source\":\"A\",\"target\":\"B\",\"directed\":false,\"label\":\"Edge AB\",\"weight\":2}}}\n\r";
+        evstr += "{\"ce\":{\"AB\":{\"label\":\"Edge AB changed\",\"weight\":3, \"key\":\"value\"}}}\n\r";
         ByteArrayInputStream bais = new ByteArrayInputStream(evstr.getBytes());
         
         streamReader.processStream(bais);
@@ -343,8 +343,8 @@ public class JSONStreamReaderTest {
         
         Edge ab = graph.getEdge("AB");
         
-        assertEquals(3.0, ab.getEdgeData().getSize(), 0.0);
-        assertEquals(ab.getEdgeData().getAttributes().getValue("key"), "value");
+        assertEquals(3.0, ab.getWeight(), 0.0);
+        assertEquals(ab.getAttribute("key"), "value");
         
     }
     

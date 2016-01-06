@@ -42,10 +42,13 @@ Portions Copyrighted 2011 Gephi Consortium.
 
 package org.gephi.streaming.test;
 
-import org.gephi.data.attributes.api.AttributeController;
+import java.util.HashMap;
+import java.util.Map;
 import org.gephi.graph.api.Graph;
 import org.gephi.graph.api.GraphController;
 import org.gephi.graph.api.GraphModel;
+import org.gephi.graph.api.GraphObserver;
+import org.gephi.graph.api.TableObserver;
 import org.gephi.project.api.Project;
 import org.gephi.project.api.ProjectController;
 import org.gephi.project.api.Workspace;
@@ -55,6 +58,7 @@ import org.gephi.streaming.api.GraphUpdaterEventHandler;
 import org.gephi.streaming.api.event.ElementType;
 import org.gephi.streaming.api.event.EventType;
 import org.gephi.streaming.api.event.GraphEventBuilder;
+import static org.junit.Assert.assertTrue;
 import org.junit.Test;
 import org.openide.util.Exceptions;
 import org.openide.util.Lookup;
@@ -78,8 +82,8 @@ public class ListenersTest {
 //        projectController.openWorkspace(workspace);
 
         GraphController graphController = Lookup.getDefault().lookup(GraphController.class);
-        GraphModel graphModel = graphController.getModel();
-        Graph graph = graphModel.getHierarchicalMixedGraph();
+        GraphModel graphModel = graphController.getGraphModel();
+        Graph graph = graphModel.getGraph();
 
         GraphEventHandler printerHandler = new GraphEventHandler() {
 
@@ -90,9 +94,8 @@ public class ListenersTest {
         };
 
         Graph2EventListener listener = new Graph2EventListener(graph, printerHandler);
-        graph.getGraphModel().addGraphListener(listener);
-        AttributeController ac = Lookup.getDefault().lookup(AttributeController.class);
-        ac.getModel().addAttributeListener(listener);
+        
+        GraphObserver graphObserver = graphModel.createGraphObserver(graph, true);
 
         GraphUpdaterEventHandler graphUpdaterHandler = new GraphUpdaterEventHandler(graph);
         GraphEventBuilder eventBuilder = new GraphEventBuilder(this);
@@ -100,12 +103,17 @@ public class ListenersTest {
         graphUpdaterHandler.handleGraphEvent(eventBuilder.graphEvent(ElementType.NODE, EventType.ADD, "A", null));
         graphUpdaterHandler.handleGraphEvent(eventBuilder.graphEvent(ElementType.NODE, EventType.ADD, "B", null));
         graphUpdaterHandler.handleGraphEvent(eventBuilder.edgeAddedEvent("AB", "A", "B", false, null));
-
-        try {
-            Thread.sleep(1000);
-        } catch (InterruptedException ex) {
-            Exceptions.printStackTrace(ex);
-        }
+        
+        assertTrue(graphObserver.hasGraphChanged());
+        listener.graphChanged(graphObserver.getDiff());
+        
+        TableObserver nodeObserver = graphModel.getNodeTable().createTableObserver(true);
+        Map<String,Object> attributes = new HashMap<String,Object>();
+        attributes.put("bbb", 2.0);
+        graphUpdaterHandler.handleGraphEvent(eventBuilder.graphEvent(ElementType.NODE, EventType.CHANGE, "A", attributes));
+        
+        assertTrue(nodeObserver.hasTableChanged());
+        listener.attributesChanged(nodeObserver.getDiff());
     }
 
 }

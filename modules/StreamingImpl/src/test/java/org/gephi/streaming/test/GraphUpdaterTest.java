@@ -72,7 +72,7 @@ public class GraphUpdaterTest {
         projectController.newProject();
 
         GraphController graphController = Lookup.getDefault().lookup(GraphController.class);
-        graphModel = graphController.getModel();
+        graphModel = graphController.getGraphModel();
     }
 
     @After
@@ -81,7 +81,7 @@ public class GraphUpdaterTest {
 
     @Test
     public void testUpdateGraph() {
-        Graph graph = graphModel.getMixedGraph();
+        Graph graph = graphModel.getGraph();
         GraphUpdaterEventHandler operationSupport = new GraphUpdaterEventHandler(graph);
         Map<String,Object> attributes = new HashMap<String, Object>();
         GraphEventBuilder eventBuilder = new GraphEventBuilder(this);
@@ -91,14 +91,14 @@ public class GraphUpdaterTest {
         operationSupport.handleGraphEvent(eventBuilder.graphEvent(ElementType.NODE, EventType.ADD, "1", attributes));
         Node node1 = graph.getNode("1");
         assertNotNull(node1);
-        assertEquals("1", node1.getNodeData().getAttributes().getValue("label"));
+        assertEquals("1", node1.getAttribute("label"));
 
         attributes.clear();
         attributes.put("label", "2");
         operationSupport.handleGraphEvent(eventBuilder.graphEvent(ElementType.NODE, EventType.ADD, "2", attributes));
         Node node2 = graph.getNode("2");
         assertNotNull(node2);
-        assertEquals("2", node2.getNodeData().getAttributes().getValue("label"));
+        assertEquals("2", node2.getAttribute("label"));
 
         attributes.clear();
         attributes.put("weight", 0.5f);
@@ -132,7 +132,7 @@ public class GraphUpdaterTest {
         operationSupport.handleGraphEvent(eventBuilder.graphEvent(ElementType.NODE, EventType.CHANGE, "1", attributes));
         node1 = graph.getNode("1");
         assertNotNull(node1);
-        assertEquals("Node 1", node1.getNodeData().getAttributes().getValue("label"));
+        assertEquals("Node 1", node1.getAttribute("label"));
 
         attributes.clear();
         attributes.put("label", null);
@@ -140,8 +140,8 @@ public class GraphUpdaterTest {
         node1 = graph.getNode("1");
         assertNotNull(node1);
         assertNull("Label should be null but was "+
-                node1.getNodeData().getAttributes().getValue("label"),
-            node1.getNodeData().getAttributes().getValue("label"));
+                node1.getAttribute("label"),
+            node1.getAttribute("label"));
 
         attributes.clear();
         attributes.put("label", "Node 1");
@@ -152,16 +152,16 @@ public class GraphUpdaterTest {
         operationSupport.handleGraphEvent(eventBuilder.graphEvent(ElementType.NODE, EventType.CHANGE, "1", attributes));
         node1 = graph.getNode("1");
         assertNotNull(node1);
-        assertEquals("Node 1", node1.getNodeData().getAttributes().getValue("label"));
-        assertEquals("myattributevalue", node1.getNodeData().getAttributes().getValue("myattribute"));
+        assertEquals("Node 1", node1.getAttribute("label"));
+        assertEquals("myattributevalue", node1.getAttribute("myattribute"));
 
         attributes.clear();
         attributes.put("myattribute", null);
         operationSupport.handleGraphEvent(eventBuilder.graphEvent(ElementType.NODE, EventType.CHANGE, "1", attributes));
         node1 = graph.getNode("1");
         assertNotNull(node1);
-        assertEquals("Node 1", node1.getNodeData().getAttributes().getValue("label"));
-        assertNull(node1.getNodeData().getAttributes().getValue("myattribute"));
+        assertEquals("Node 1", node1.getAttribute("label"));
+        assertNull(node1.getAttribute("myattribute"));
 
         attributes.clear();
         attributes.put("label", "Node 1");
@@ -175,14 +175,14 @@ public class GraphUpdaterTest {
         operationSupport.handleGraphEvent(eventBuilder.graphEvent(ElementType.NODE, EventType.CHANGE, "1", attributes));
         node1 = graph.getNode("1");
         assertNotNull(node1);
-        assertEquals("Node 1", node1.getNodeData().getAttributes().getValue("label"));
-        assertEquals(5, node1.getNodeData().getSize(), 1.0e-5);
-        assertEquals(0.5, node1.getNodeData().r(), 1.0e-5);
-        assertEquals(0.6, node1.getNodeData().g(), 1.0e-5);
-        assertEquals(0.7, node1.getNodeData().b(), 1.0e-5);
-        assertEquals(1, node1.getNodeData().x(), 1.0e-5);
-        assertEquals(2, node1.getNodeData().y(), 1.0e-5);
-        assertEquals(3, node1.getNodeData().z(), 1.0e-5);
+        assertEquals("Node 1", node1.getAttribute("label"));
+        assertEquals(5, node1.size(), 1.0e-5);
+        assertEquals(0.5, node1.r(), 1.0e-2);
+        assertEquals(0.6, node1.g(), 1.0e-2);
+        assertEquals(0.7, node1.b(), 1.0e-2);
+        assertEquals(1, node1.x(), 1.0e-5);
+        assertEquals(2, node1.y(), 1.0e-5);
+        assertEquals(3, node1.z(), 1.0e-5);
 
     }
 
