@@ -157,7 +157,7 @@ The second option is preferable when the short or long description have too many
 This applies for suite plugins with multiple modules. Besides creating the module folder, edit the `pom.xml` file and add the folder path to `<modules>`, like in this example:
 
 ```
-<!-- List of modules -->
+    <!-- List of modules -->
     <modules>
         <!-- Add here the paths of all modules (e.g. <module>modules/MyModule</module>) -->
         <module>modules/ExampleModule</module> 
