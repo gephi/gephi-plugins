@@ -15,7 +15,31 @@
     <name>GraphStreaming</name>
 
     <dependencies>
-        
+        <dependency>
+            <groupId>org.gephi.streaming</groupId>
+            <artifactId>api</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.gephi.streaming</groupId>
+            <artifactId>impl</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.gephi.streaming</groupId>
+            <artifactId>server</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.gephi.desktop</groupId>
+            <artifactId>streaming</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+         <dependency>
+            <groupId>org.gephi.lib</groupId>
+            <artifactId>jetty</artifactId>
+            <version>1.0.0</version>
+        </dependency>
     </dependencies>
 
     <build>
