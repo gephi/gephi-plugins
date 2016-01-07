@@ -68,6 +68,7 @@ public class RdfAnalyzer implements LongTask, Runnable {
             logger.log(Level.INFO, "Number of triples parsed: {0}", parser.getTripleNumber());
         } catch (Exception e) {
             logger.log(Level.INFO, "error when obtaining the nodes and edges: {0}", e.getMessage());
+	    e.printStackTrace();
         }
 
         Progress.progress(progressTicket);

@@ -66,7 +66,7 @@ public class RdfParser {
         arp.getHandlers().setStatementHandler(statementHandler);
 
         // parsing.
-
+	GephiUtils.addAttributeToNodes(GephiUtils.SPARQLID,String.class);
         try {
             arp.load(getFileToParse());
         } catch (SAXException ex) {
