@@ -7,11 +7,12 @@
     <version>0.9.0</version>
     <packaging>pom</packaging>
 
-    <name>gephi-plugins</name>
+    <name>multimode-plugins</name>
     
     <!-- List of modules -->
     <modules>
         <!-- Add here the paths of all modules (e.g. <module>modules/MyModule</module>) -->
+        <module>modules/Multimode-Networks</module>
     </modules>
     
     <!-- Properties -->
