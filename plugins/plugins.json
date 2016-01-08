@@ -15,7 +15,7 @@
         }
       ],
       "category": "Layout",
-      "last_update": "January 6, 2016",
+      "last_update": "January 8, 2016",
       "images": [
         {
           "image": "imgs/geolayout-plugin/geolayout_example.png",
@@ -37,7 +37,7 @@
         },
         "0.9.0": {
           "url": "0.9.0/geolayout-plugin-0.9.0.nbm",
-          "last_update": "January 6, 2016"
+          "last_update": "January 8, 2016"
         }
       },
       "sourcecode": "https://github.com/gephi/gephi-plugins/geolayout-plugin",
@@ -58,7 +58,7 @@
         }
       ],
       "category": "Tool",
-      "last_update": "January 6, 2016",
+      "last_update": "January 8, 2016",
       "images": [
         {
           "image": "imgs/linkfluence-plugin/img.png",
@@ -72,7 +72,7 @@
         },
         "0.9.0": {
           "url": "0.9.0/linkfluence-plugin-0.9.0.nbm",
-          "last_update": "January 6, 2016"
+          "last_update": "January 8, 2016"
         }
       },
       "sourcecode": "https://github.com/gephi/gephi-plugins/linkfluence-plugin",
@@ -601,7 +601,7 @@
         }
       ],
       "category": "Filter",
-      "last_update": "January 6, 2016",
+      "last_update": "January 8, 2016",
       "images": [
         {
           "image": "imgs/kbrace-filter/kbrace-img.png",
@@ -615,7 +615,7 @@
         },
         "0.9.0": {
           "url": "0.9.0/kbrace-filter-1.0.0.nbm",
-          "last_update": "January 6, 2016"
+          "last_update": "January 8, 2016"
         }
       },
       "sourcecode": "https://github.com/mbastian/gephi-plugins/tree/kbrace-filter",
