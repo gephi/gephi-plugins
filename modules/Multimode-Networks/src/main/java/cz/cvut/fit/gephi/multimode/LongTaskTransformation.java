@@ -1,6 +1,8 @@
 package cz.cvut.fit.gephi.multimode;
 
 import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.gephi.graph.api.Column;
 
 import org.gephi.graph.api.*;
@@ -14,7 +16,7 @@ import org.openide.util.Lookup;
  * @author Jaroslav Kuchar
  */
 public class LongTaskTransformation implements LongTask, Runnable {
-    
+    private Logger logger = Logger.getLogger(LongTaskTransformation.class.getName()); 
     private ProgressTicket progressTicket;
     private boolean cancelled = false;
     private Column attributeColumn = null;
@@ -87,8 +89,7 @@ public class LongTaskTransformation implements LongTask, Runnable {
                         firstMatrix.set(i, firstHorizontal.indexOf(neighbour), 1);
                     }
                 } catch (UnsupportedOperationException ex) {
-                    System.out.println("exception");
-                    // TODO - exception handler
+                    logger.log(Level.SEVERE, null, ex);
                 }
             }
         }
@@ -104,8 +105,7 @@ public class LongTaskTransformation implements LongTask, Runnable {
                         secondMatrix.set(i, secondHorizontal.indexOf(neighbour), 1);
                     }
                 } catch (UnsupportedOperationException ex) {
-                    System.out.println("exception");
-                    // TODO - exception handler
+                    logger.log(Level.SEVERE, null, ex);
                 }
             }
         }
