@@ -26,6 +26,8 @@ public class LongTaskTransformation implements LongTask, Runnable {
     private boolean removeEdges = true;
     private boolean removeNodes = true;
     
+    private static final int EDGE_TYPE = 1;
+    
     public LongTaskTransformation(Column attributeColumn, String inDimension, String commonDimension, String outDimension, boolean removeEdges, boolean removeNodes) {
         this.attributeColumn = attributeColumn;
         this.inDimension = inDimension;
@@ -167,12 +169,18 @@ public class LongTaskTransformation implements LongTask, Runnable {
         for (int i = 0; i < result.getM(); i++) {
             for (int j = 0; j < result.getN(); j++) {
                 if (graph.contains(firstVertical.get(i)) && graph.contains(secondHorizontal.get(j)) && graph.getEdge(firstVertical.get(i), secondHorizontal.get(j)) == null && result.get(i, j) > 0) {
-                    Edge ee = graphModel.factory().newEdge(firstVertical.get(i), secondHorizontal.get(j),1, (float) result.get(i, j), graphModel.isDirected());
-                    if (!ee.isSelfLoop()) {
+                    Node node1 = firstVertical.get(i);
+                    Node node2 = secondHorizontal.get(j);
+                    if(node1 != node2){
+                        Edge ee = graph.getEdge(node1, node2, EDGE_TYPE);
+                        if(ee == null){ //Add if not already existing
+                            ee = graphModel.factory().newEdge(firstVertical.get(i), secondHorizontal.get(j), EDGE_TYPE, (float) result.get(i, j), graphModel.isDirected());
+                            graph.addEdge(ee);
+                        }
                         
+                        ee.setWeight(result.get(i, j));
                         ee.setAttribute(MMNT, inDimension + "<--->" + outDimension);
                         ee.setLabel(inDimension + "-" + outDimension);
-                        graph.addEdge(ee);
                     }
                 }
             }
