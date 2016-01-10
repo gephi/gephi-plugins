@@ -8,6 +8,9 @@ import org.gephi.graph.api.Graph;
 import org.gephi.graph.api.GraphController;
 import org.gephi.graph.api.Node;
 import org.gephi.graph.api.Table;
+import org.gephi.project.api.ProjectController;
+import org.gephi.project.api.Workspace;
+import org.gephi.project.api.WorkspaceListener;
 import org.gephi.utils.longtask.api.LongTaskExecutor;
 import org.netbeans.api.settings.ConvertAsProperties;
 import org.openide.awt.ActionID;
@@ -40,12 +43,36 @@ import org.openide.windows.TopComponent;
  * @author Jaroslav Kuchar
  */
 public final class MultiModeWindowTopComponent extends TopComponent {
-
+    private final ProjectController projectController;
     public MultiModeWindowTopComponent() {
         initComponents();
         setName(Bundle.CTL_MultiModeWindowTopComponent());
         setToolTipText(Bundle.HINT_MultiModeWindowTopComponent());
+        
+        // Make sure project and workspace exists
+        projectController = Lookup.getDefault().lookup(ProjectController.class);
+        checkPluginEnabling();
+        projectController.addWorkspaceListener(new WorkspaceListener(){
+            public void initialize(Workspace wrkspc) {
+                load.setEnabled(true);
+            }
 
+            public void select(Workspace wrkspc) {
+                checkPluginEnabling();
+            }
+
+            public void unselect(Workspace wrkspc) {
+                checkPluginEnabling();
+            }
+
+            public void close(Workspace wrkspc) {
+                checkPluginEnabling();
+            }
+
+            public void disable() {
+                checkPluginEnabling();
+            }
+        });
     }
 
     /**
@@ -110,6 +137,7 @@ public final class MultiModeWindowTopComponent extends TopComponent {
         });
 
         org.openide.awt.Mnemonics.setLocalizedText(load, org.openide.util.NbBundle.getMessage(MultiModeWindowTopComponent.class, "MultiModeWindowTopComponent.load.text")); // NOI18N
+        load.setEnabled(false);
         load.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 loadActionPerformed(evt);
@@ -338,5 +366,19 @@ public final class MultiModeWindowTopComponent extends TopComponent {
     void readProperties(java.util.Properties p) {
         String version = p.getProperty("version");
         // TODO read your settings according to their version
+    }
+    
+    private boolean isProjectWorkspaceOk(){
+        return projectController.getCurrentProject()!= null && 
+               projectController.getCurrentWorkspace() != null;
+    }
+    private void checkPluginEnabling(){
+        if(isProjectWorkspaceOk()) {
+            load.setEnabled(true);
+            graphColoring.setEnabled(true);
+        } else {
+            load.setEnabled(false);
+            graphColoring.setEnabled(false);
+        }
     }
 }
