@@ -44,7 +44,7 @@ public class GraphColoring {
                     String.class,
                     Origin.DATA,
                     NodeColor.BLACK.getValue(),
-                    false);
+                    true);
         } else {
             colorColumn = nodeTable.getColumn(colorColumnName);
         }
