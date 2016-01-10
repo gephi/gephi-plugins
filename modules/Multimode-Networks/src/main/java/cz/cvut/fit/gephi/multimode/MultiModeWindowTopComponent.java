@@ -2,10 +2,8 @@ package cz.cvut.fit.gephi.multimode;
 
 import java.util.HashSet;
 import java.util.Set;
-import javax.swing.JOptionPane;
-import org.gephi.datalab.api.AttributeColumnsController;
-import org.gephi.graph.api.Column;
 
+import org.gephi.graph.api.Column;
 import org.gephi.graph.api.Graph;
 import org.gephi.graph.api.GraphController;
 import org.gephi.graph.api.Node;
