@@ -82,7 +82,7 @@
                 <plugin>
                     <groupId>org.gephi</groupId>
                     <artifactId>gephi-maven-plugin</artifactId>
-                    <version>1.1.1</version>
+                    <version>1.2.3</version>
                     <configuration>
                         <gephiDirectory>${project.build.directory}/gephi-${gephi.version}</gephiDirectory>
                         <clusters>
