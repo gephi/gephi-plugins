@@ -1,8 +1,0 @@
-<#if licenseFirst??>
-${licenseFirst}
-</#if>
-${licensePrefix}Copyright (c) 2011, INRIA
-${licensePrefix}All rights reserved.
-<#if licenseLast??>
-${licenseLast}
-</#if>

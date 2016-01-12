@@ -1,9 +1,0 @@
-prefix foaf:<http://xmlns.com/foaf/0.1/>
-prefix gephi:<http://gephi.org/>
-construct {
-  ?x foaf:knows ?y .
-  ?x gephi:picture ?i
-} where {
-  ?x foaf:knows ?y .
-  ?x foaf:img ?i
-}

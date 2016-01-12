@@ -1,5 +1,0 @@
-Manifest-Version: 1.0
-OpenIDE-Module: fr.inria.edelweiss.semantic/1
-OpenIDE-Module-Implementation-Version: 2
-OpenIDE-Module-Localizing-Bundle: fr/inria/edelweiss/semantic/Bundle.properties
-
