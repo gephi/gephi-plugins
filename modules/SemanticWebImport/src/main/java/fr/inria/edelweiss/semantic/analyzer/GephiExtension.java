@@ -139,10 +139,10 @@ public class GephiExtension {
         } else {
             String nameNewAttribute = edgeLabel.replaceFirst(GEPHI_PREFIX, "");
             if (gephiUtil.isEdge(sourceLabel)) {
-                gephiUtil.addAttributeToEdges(nameNewAttribute);
+                gephiUtil.addAttributeToEdges(nameNewAttribute, String.class);
 		gephiUtil.setEdgeAttr(sourceLabel, nameNewAttribute, targetLabel);
             } else {
-                gephiUtil.addAttributeToNodes(nameNewAttribute);
+                gephiUtil.addAttributeToNodes(nameNewAttribute, String.class);
 		gephiUtil.setNodeAttr(sourceLabel, nameNewAttribute, targetLabel);
             }
         }
