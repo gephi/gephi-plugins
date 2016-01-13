@@ -51,6 +51,7 @@
                     <author>Andre Panisson</author>
                     <sourceCodeUrl>$sourcecode_url</sourceCodeUrl>
                     <homePageUrl>gephi.org</homePageUrl>
+                    <licenseName>CDDL 1.0 and GNU GPL v3</licenseName>
                     <publicPackages>
                         
                     </publicPackages>
