@@ -91,11 +91,6 @@ public class ServerOperationExecutor {
         writerFactory = Lookup.getDefault().lookup(StreamWriterFactory.class);
         readerFactory = Lookup.getDefault().lookup(StreamReaderFactory.class);
         eventBuilder = new GraphEventBuilder(this);
-
-        Graph2EventListener changeListener = new Graph2EventListener(graph, graphBufferedOperationSupport);
-//        graph.getGraphModel().addGraphListener(changeListener);
-//        AttributeController ac = Lookup.getDefault().lookup(AttributeController.class);
-//        ac.getModel().addAttributeListener(changeListener);
     }
     
     /**
@@ -267,5 +262,9 @@ public class ServerOperationExecutor {
         }
 
         return attributes;
+    }
+    
+    public GraphEventHandler getEventHandler() {
+        return graphBufferedOperationSupport;
     }
 }

@@ -46,12 +46,17 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import javax.servlet.AsyncContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.gephi.graph.api.Graph;
+import org.gephi.graph.api.GraphObserver;
+import org.gephi.graph.api.TableObserver;
+import org.gephi.streaming.api.Graph2EventListener;
 import org.gephi.streaming.server.ServerController;
 import org.openide.util.Exceptions;
 
@@ -82,10 +87,48 @@ public class ServerControllerImpl implements ServerController {
     
     private final ServerOperationExecutor executor;
     
+        private class StreamingGraphObserver extends TimerTask {
+        
+        private static final long PERIOD = 10;
+        private final GraphObserver graphObserver;
+        private final TableObserver tableObserver;
+        private Graph2EventListener changeListener;
+        private final Timer timer;
+        
+        public StreamingGraphObserver(GraphObserver graphObserver, TableObserver tableObserver, Graph2EventListener changeListener) {
+            this.graphObserver = graphObserver;
+            this.tableObserver = tableObserver;
+            this.changeListener = changeListener;
+            
+            this.timer =  new Timer("Streaming Observer Thread", true);
+            timer.schedule(this, PERIOD, PERIOD);
+            
+        }
+        
+        public void run() {
+            if (this.graphObserver.hasGraphChanged()) {
+                this.changeListener.graphChanged(graphObserver.getDiff());
+            }
+            if(this.tableObserver.hasTableChanged()) {
+                this.changeListener.attributesChanged(tableObserver.getDiff());
+            }
+        }
+        
+        public void shutdown() {
+           timer.cancel();
+       }
+    }
+    
+    private final StreamingGraphObserver streamingGraphObserver;
+    
     public ServerControllerImpl(Graph graph) {
         clientManager = new ClientManagerImpl();
         executor = new ServerOperationExecutor(graph, clientManager);
         
+        Graph2EventListener changeListener = new Graph2EventListener(graph, executor.getEventHandler());
+        GraphObserver graphObserver = graph.getModel().createGraphObserver(graph, true);
+        TableObserver tableObserver = graph.getModel().getNodeTable().createTableObserver(true);
+        streamingGraphObserver = new StreamingGraphObserver(graphObserver, tableObserver, changeListener);
     }
 
     /* (non-Javadoc)
@@ -200,6 +243,7 @@ public class ServerControllerImpl implements ServerController {
      */
     public void stop() {
         clientManager.stopAll();
+        streamingGraphObserver.shutdown();
     }
     
     private void executeError(HttpServletResponse response, String message) throws IOException {
