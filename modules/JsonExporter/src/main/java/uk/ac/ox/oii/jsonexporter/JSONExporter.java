@@ -161,8 +161,8 @@ public class JSONExporter implements GraphExporter, LongTask, CharacterExporter 
                     Iterator<Column> eAttr = e.getAttributeColumns().iterator();
                     while (eAttr.hasNext()) {
                         Column col = eAttr.next();
-                        if (col.isProperty()) {
-                            //Excludes id, label, weight
+                        if (col.isProperty() || "weight".equalsIgnoreCase(col.getId())) {
+                            //isProperty() excludes id, label, but not weight
                             continue;
                         }
                         String name = col.getTitle();
