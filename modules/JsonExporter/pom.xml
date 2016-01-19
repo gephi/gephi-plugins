@@ -7,45 +7,45 @@
         <version>0.9.0</version>
     </parent>
 
-    <groupId>org.gephi</groupId>
+    <groupId>uk.ac.ox.oii</groupId>
     <artifactId>jsonexporter-plugin</artifactId>
     <version>2.0.0</version>
     <packaging>nbm</packaging>
-
+    
     <name>Json Exporter</name>
 
     <dependencies>
         <dependency>
             <groupId>com.google.code.gson</groupId>
             <artifactId>gson</artifactId>
-            <version>2.2.2</version>
+            <version>2.5</version>
         </dependency>
         <dependency>
-            <groupId>${project.groupId}</groupId>
+            <groupId>org.gephi</groupId>
             <artifactId>utils-longtask</artifactId>
         </dependency>
         <dependency>
-            <groupId>${project.parent.groupId}</groupId>
+            <groupId>org.gephi</groupId>
             <artifactId>layout-api</artifactId>
         </dependency>
         <dependency>
-            <groupId>${project.parent.groupId}</groupId>
+            <groupId>org.gephi</groupId>
             <artifactId>io-exporter-api</artifactId>
         </dependency>
         <dependency>
-            <groupId>${project.parent.groupId}</groupId>
+            <groupId>org.gephi</groupId>
             <artifactId>preview-api</artifactId>
         </dependency>
         <dependency>
-            <groupId>${project.parent.groupId}</groupId>
+            <groupId>org.gephi</groupId>
             <artifactId>project-api</artifactId>
         </dependency>
         <dependency>
-            <groupId>${project.parent.groupId}</groupId>
+            <groupId>org.gephi</groupId>
             <artifactId>graph-api</artifactId>
         </dependency>
         <dependency>
-            <groupId>${project.parent.groupId}</groupId>
+            <groupId>org.gephi</groupId>
             <artifactId>ui-propertyeditor</artifactId>
         </dependency>
         <dependency>

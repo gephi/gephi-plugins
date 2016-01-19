@@ -24,6 +24,8 @@ import java.io.Writer;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.gephi.graph.api.Column;
 import org.gephi.graph.api.Edge;
 import org.gephi.graph.api.Graph;
@@ -52,15 +54,16 @@ public class JSONExporter implements GraphExporter, LongTask, CharacterExporter 
 
     @Override
     public boolean execute() {
+        Graph graph = null;
         try {
             if (writer != null) {//path.getParentFile().exists()
                 GraphModel graphModel = workspace.getLookup().lookup(GraphModel.class);
-                Graph graph = null;
                 if (exportVisible) {
                     graph = graphModel.getGraphVisible();
                 } else {
                     graph = graphModel.getGraph();
                 }
+                graph.readLock();
 
                 //Count the number of tasks (nodes + edges) and start the progress
                 int tasks = graph.getNodeCount() + graph.getEdgeCount();
@@ -87,7 +90,7 @@ public class JSONExporter implements GraphExporter, LongTask, CharacterExporter 
                     String label = n.getLabel();
                     float x = n.x();
                     float y = n.y();
-                    System.out.println(n.z());
+                    //float z=n.z();
                     float size = n.size();
                     String color = "rgb(" + (int) (n.r() * 255) + "," + (int) (n.g() * 255) + "," + (int) (n.b() * 255) + ")";
 
@@ -108,8 +111,8 @@ public class JSONExporter implements GraphExporter, LongTask, CharacterExporter 
                     
                     for (Column col : attModel) {
                             String name = col.getTitle();
-                            if (name.equalsIgnoreCase("Id") || name.equalsIgnoreCase("Label")
-                                    || name.equalsIgnoreCase("uid")) {
+                            String cid = col.getId();
+                            if (cid.equalsIgnoreCase("id") || cid.equalsIgnoreCase("label")) {
                                 continue;
                             }
 
@@ -149,34 +152,20 @@ public class JSONExporter implements GraphExporter, LongTask, CharacterExporter 
                     jEdge.setSource(sourceId);
                     jEdge.setTarget(targetId);
                     jEdge.setSize(e.getWeight());
-
-                    boolean mixColors=false;
-                    String color="";
                     jEdge.setLabel(e.getLabel());
 
                     float r=e.r();
                     float g=e.g();
                     float b=e.b();
 
-                    if (r==-1 || g==-1 || b==-1) {
-                        //Mix colors
-                        mixColors=true;
-                    } else {
-                        color = "rgb(" + (int) (r* 255) + "," + (int) (g* 255) + "," + (int) (b* 255) + ")";
-                    }
-
                     Iterator<Column> eAttr = e.getAttributeColumns().iterator();
                     while (eAttr.hasNext()) {
                         Column col = eAttr.next();
-                        if (col == null) {
+                        if (col.isProperty()) {
+                            //Excludes id, label, weight
                             continue;
                         }
                         String name = col.getTitle();
-                        if (name.equalsIgnoreCase("Id") || name.equalsIgnoreCase("Label")
-                                || name.equalsIgnoreCase("uid")) {
-                            continue;
-                        }
-
                         Object valObj = e.getAttribute(col);
                         if (valObj == null) {
                             continue;
@@ -185,8 +174,11 @@ public class JSONExporter implements GraphExporter, LongTask, CharacterExporter 
                         jEdge.putAttribute(name, val);
                     }
                     
-                    if (mixColors) {
-                        //Source
+                    String color;
+                    if (e.alpha()!=0) {
+                        color = "rgb(" + (int) (r* 255) + "," + (int) (g* 255) + "," + (int) (b* 255) + ")";
+                    } else {
+                        //no colour has been set. Colour will be mix of connected nodes
                         Node n = e.getSource();
                         Color source = new Color(n.r(),n.g(),n.b());
                         n = e.getTarget();
@@ -199,7 +191,7 @@ public class JSONExporter implements GraphExporter, LongTask, CharacterExporter 
                     jEdges.add(jEdge);
 
                     if (cancel) {
-                        return false;
+                        return false; //returning false if the task was cancelled
                     }
                     Progress.progress(progress);
                 }
@@ -213,32 +205,19 @@ public class JSONExporter implements GraphExporter, LongTask, CharacterExporter 
 
                 //Finish progress
                 Progress.finish(progress);
-                return true;
             } else {
                 throw new FileNotFoundException("Writer is null");
             }
         } catch (Exception e) {
-            e.printStackTrace();
-            throw new RuntimeException(e);
+            Logger.getLogger(JSONExporter.class.getName()).log(Level.SEVERE, null, e);
         } finally {
-            /*try {
-             /if (writer != null) {
-             writer.close();
-             }
-             } catch (java.io.IOException e) {
-             // failed to close file
-             System.err.println(e);
-             }*/
+            if (graph!=null) {
+                graph.readUnlock();
+            }
         }
+        return !cancel; //true if task has not been cancelled and we've gotten to the end
     }
 
-    /*     public File getPath() {
-     return path;
-     }
-    
-     public void setPath(File path) {
-     this.path = path;
-     }*/
     @Override
     public void setWorkspace(Workspace workspace) {
         this.workspace = workspace;
