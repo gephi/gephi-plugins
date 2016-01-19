@@ -76,11 +76,12 @@
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>nbm-maven-plugin</artifactId>
                 <configuration>
+                    <licenseName>GPL v3</licenseName>
+                    <licenseFile>gpl-3.0.txt</licenseFile>
                     <author>Scott A. Hale, Oxford Internet Institute</author>
                     <sourceCodeUrl>http://github.com/oxfordinternetinstitute/gephi-plugins</sourceCodeUrl>
                     <homePageUrl>http://blogs.oii.ox.ac.uk/vis/</homePageUrl>
                     <publicPackages>
-                        
                     </publicPackages>
                 </configuration>
             </plugin>

@@ -1,5 +1,5 @@
 /*
- Copyright Scott A. Hale, 2012
+ Copyright Scott A. Hale, 2016
  * 
  
  Base on code from 
