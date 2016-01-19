@@ -15,6 +15,7 @@
         <module>modules/GeoLayout</module>
         <module>modules/LinkfluencePlugin</module>
         <module>modules/KBraceFilter</module>
+        <module>modules/Multimode-Networks</module>
     </modules>
     
     <!-- Properties -->
