@@ -15,7 +15,7 @@
         }
       ],
       "category": "Layout",
-      "last_update": "January 8, 2016",
+      "last_update": "January 19, 2016",
       "images": [
         {
           "image": "imgs/geolayout-plugin/geolayout_example.png",
@@ -37,7 +37,7 @@
         },
         "0.9.0": {
           "url": "0.9.0/geolayout-plugin-0.9.0.nbm",
-          "last_update": "January 8, 2016"
+          "last_update": "January 19, 2016"
         }
       },
       "sourcecode": "https://github.com/gephi/gephi-plugins/geolayout-plugin",
@@ -58,7 +58,7 @@
         }
       ],
       "category": "Tool",
-      "last_update": "January 8, 2016",
+      "last_update": "January 19, 2016",
       "images": [
         {
           "image": "imgs/linkfluence-plugin/img.png",
@@ -72,7 +72,7 @@
         },
         "0.9.0": {
           "url": "0.9.0/linkfluence-plugin-0.9.0.nbm",
-          "last_update": "January 8, 2016"
+          "last_update": "January 19, 2016"
         }
       },
       "sourcecode": "https://github.com/gephi/gephi-plugins/linkfluence-plugin",
@@ -601,7 +601,7 @@
         }
       ],
       "category": "Filter",
-      "last_update": "January 8, 2016",
+      "last_update": "January 19, 2016",
       "images": [
         {
           "image": "imgs/kbrace-filter/kbrace-img.png",
@@ -615,7 +615,7 @@
         },
         "0.9.0": {
           "url": "0.9.0/kbrace-filter-1.0.0.nbm",
-          "last_update": "January 8, 2016"
+          "last_update": "January 19, 2016"
         }
       },
       "sourcecode": "https://github.com/mbastian/gephi-plugins/tree/kbrace-filter",
@@ -2023,6 +2023,32 @@
       },
       "sourcecode": "https://github.com/gephi/gephi-plugins/tree/python-scripting-plugin",
       "homepage": null
+    },
+    {
+      "id": "multimode",
+      "name": "MultimodeNetworksTransformationPlugin",
+      "short_description": "Multimode Networks Transformations",
+      "long_description": "This plugin allows multimode networks projection. You can project your bipartite (2-mode) graph to monopartite (one-mode) graph. The projection/transformation is based on the matrix multiplication approach and allows different types of transformations. The limitation is matrix multiplication - large matrix multiplication takes time and memory.",
+      "readme": null,
+      "license": "license",
+      "authors": [
+        {
+          "name": "Jaroslav Kuchar",
+          "email": null,
+          "link": null
+        }
+      ],
+      "category": "Tool",
+      "last_update": "January 19, 2016",
+      "images": null,
+      "versions": {
+        "0.9.0": {
+          "url": "0.9.0/multimode-1.0.0.nbm",
+          "last_update": "January 19, 2016"
+        }
+      },
+      "sourcecode": "https://github.com/totetmatt/gephi-plugins/tree/multimode-network",
+      "homepage": "https://github.com/jaroslav-kuchar/Multimode-Networks"
     }
   ]
 }
