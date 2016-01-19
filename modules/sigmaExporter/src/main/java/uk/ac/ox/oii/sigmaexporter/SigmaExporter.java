@@ -24,16 +24,16 @@ import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
-import org.gephi.data.attributes.api.AttributeColumn;
-import org.gephi.data.attributes.api.AttributeRow;
-import org.gephi.data.attributes.api.AttributeValue;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import org.gephi.graph.api.Column;
 import org.gephi.graph.api.Edge;
-import org.gephi.graph.api.EdgeData;
 import org.gephi.graph.api.Graph;
 import org.gephi.graph.api.GraphModel;
 import org.gephi.graph.api.Node;
-import org.gephi.graph.api.NodeData;
+import org.gephi.graph.api.Table;
 import org.gephi.io.exporter.spi.Exporter;
 import org.gephi.preview.types.EdgeColor;
 import org.gephi.project.api.Workspace;
@@ -74,8 +74,7 @@ public class SigmaExporter implements Exporter, LongTask {
 
                     ZipHandler.extractZip(zipStream, pathFile.getAbsolutePath());
                 } catch (Exception e) {
-                    e.printStackTrace();
-                    throw new RuntimeException(e);
+                    Logger.getLogger(SigmaExporter.class.getName()).log(Level.SEVERE, null, e);
                 }
 
 
@@ -99,8 +98,7 @@ public class SigmaExporter implements Exporter, LongTask {
                     
                     gsonPretty.toJson(config, writer);
                 } catch (Exception e) {
-                    e.printStackTrace();
-                    throw new RuntimeException(e);
+                    Logger.getLogger(SigmaExporter.class.getName()).log(Level.SEVERE, null, e);
                 } finally {
                     if (writer != null) {
                         writer.close();
@@ -117,27 +115,26 @@ public class SigmaExporter implements Exporter, LongTask {
                 int nodeId=0;
                 EdgeColor colorMixer = new EdgeColor(EdgeColor.Mode.MIXED);
                 //Write data.json
+                Graph graph = null;
                 try {
                     GraphModel graphModel = workspace.getLookup().lookup(GraphModel.class);
-                    Graph graph = null;
                     graph = graphModel.getGraphVisible();
+                    graph.readLock();
 
                     //Count the number of tasks (nodes + edges) and start the progress
                     int tasks = graph.getNodeCount() + graph.getEdgeCount();
                     Progress.start(progress, tasks);
-
+                    
+                    Table attModel = graphModel.getNodeTable();
                     HashSet<GraphElement> jNodes = new HashSet<GraphElement>();
                     Node[] nodeArray = graph.getNodes().toArray();
-                    for (int i = 0; i < nodeArray.length; i++) {
-
-                        Node n = nodeArray[i];
-                        NodeData nd = n.getNodeData();
-                        String id = nd.getId();
-                        String label = nd.getLabel();
-                        float x = nd.x();
-                        float y = nd.y();
-                        float size = nd.getSize();
-                        String color = "rgb(" + (int) (nd.r() * 255) + "," + (int) (nd.g() * 255) + "," + (int) (nd.b() * 255) + ")";
+                    for (Node n : nodeArray) {
+                        String id = n.getId().toString();
+                        String label = n.getLabel();
+                        float x = n.x();
+                        float y = n.y();
+                        float size = n.size();
+                        String color = "rgb(" + (int) (n.r() * 255) + "," + (int) (n.g() * 255) + "," + (int) (n.b() * 255) + ")";
 
                         if (renumber) {
                            String newId=String.valueOf(nodeId);
@@ -153,24 +150,19 @@ public class SigmaExporter implements Exporter, LongTask {
                         jNode.setSize(size);
                         jNode.setColor(color);
 
-                        AttributeRow nAttr = (AttributeRow) nd.getAttributes();
-                        for (int j = 0; j < nAttr.countValues(); j++) {
-                            Object valObj = nAttr.getValue(j);
+                        for (Column col : attModel) {
+                            String cid = col.getId();
+                            if (cid.equalsIgnoreCase("id") || cid.equalsIgnoreCase("label")) {
+                                continue;
+                            }
+
+                            Object valObj = n.getAttribute(col);
                             if (valObj == null) {
                                 continue;
                             }
-                            String val = valObj.toString();
-                            AttributeColumn col = nAttr.getColumnAt(j);
-                            if (col == null) {
-                                continue;
-                            }
                             String name = col.getTitle();
-                            if (name.equalsIgnoreCase("Id") || name.equalsIgnoreCase("Label")
-                                    || name.equalsIgnoreCase("uid")) {
-                                continue;
-                            }
+                            String val = valObj.toString();
                             jNode.putAttribute(name, val);
-
                         }
 
                         jNodes.add(jNode);
@@ -185,10 +177,9 @@ public class SigmaExporter implements Exporter, LongTask {
                     //Export edges. Progress is incremented at each step.
                     HashSet<GraphElement> jEdges = new HashSet<GraphElement>();
                     Edge[] edgeArray = graph.getEdges().toArray();
-                    for (int i = 0; i < edgeArray.length; i++) {
-                        Edge e = edgeArray[i];
-                        String sourceId = e.getSource().getNodeData().getId();
-                        String targetId = e.getTarget().getNodeData().getId();
+                    for (Edge e : edgeArray) {
+                        String sourceId = e.getSource().getId().toString();
+                        String targetId = e.getTarget().getId().toString();
                         
                         if (renumber) {
                             sourceId = nodeIdMap.get(sourceId);
@@ -201,29 +192,37 @@ public class SigmaExporter implements Exporter, LongTask {
                         jEdge.setSource(sourceId);
                         jEdge.setTarget(targetId);
                         jEdge.setSize(e.getWeight());
+                        jEdge.setLabel(e.getLabel());
                         
-                        EdgeData ed = e.getEdgeData();
-                        boolean mixColors=false;
-                        String color="";
-                        if (ed!=null) {
-                            float r=ed.r();
-                            float g=ed.g();
-                            float b=ed.b();
+                        float r=e.r();
+                        float g=e.g();
+                        float b=e.b();
 
-                            if (r==-1 || g==-1 || b==-1) {
-                                mixColors=true;//We'll mix colors
-                            } else {
-                                color = "rgb(" + (int) (r* 255) + "," + (int) (g* 255) + "," + (int) (b* 255) + ")";
+                        Iterator<Column> eAttr = e.getAttributeColumns().iterator();
+                        while (eAttr.hasNext()) {
+                            Column col = eAttr.next();
+                            if (col.isProperty() || "weight".equalsIgnoreCase(col.getId())) {
+                                //isProperty() excludes id, label, but not weight
+                                continue;
                             }
+                            String name = col.getTitle();
+                            Object valObj = e.getAttribute(col);
+                            if (valObj == null) {
+                                continue;
+                            }
+                            String val = valObj.toString();
+                            jEdge.putAttribute(name, val);
                         }
-                        
-                        if (mixColors) {
-                            //Source
-                            NodeData nd = e.getSource().getNodeData();
-                            Color source = new Color(nd.r(),nd.g(),nd.b());
-                            //Target
-                            nd = e.getTarget().getNodeData();
-                            Color target = new Color(nd.r(),nd.g(),nd.b());
+
+                        String color;
+                        if (e.alpha()!=0) {
+                            color = "rgb(" + (int) (r* 255) + "," + (int) (g* 255) + "," + (int) (b* 255) + ")";
+                        } else {
+                            //no colour has been set. Colour will be mix of connected nodes
+                            Node n = e.getSource();
+                            Color source = new Color(n.r(),n.g(),n.b());
+                            n = e.getTarget();
+                            Color target = new Color(n.r(),n.g(),n.b());
                             Color result = colorMixer.getColor(null, source, target);
                             color = "rgb(" + result.getRed() + "," + result.getGreen() + "," + result.getBlue() + ")";
                         }
@@ -248,9 +247,11 @@ public class SigmaExporter implements Exporter, LongTask {
                     gson.toJson(json, writer);
                     
                 } catch (Exception e) {
-                    e.printStackTrace();
-                    new RuntimeException(e);
+                    Logger.getLogger(SigmaExporter.class.getName()).log(Level.SEVERE, null, e);
                 } finally {
+                    if (graph!=null) {
+                        graph.readUnlock();
+                    }
                     if (writer != null) {
                         writer.close();
                         writer = null;
@@ -260,18 +261,15 @@ public class SigmaExporter implements Exporter, LongTask {
                         outStream = null;
                     }
                 }
-
-
-                //Finish progress
-                Progress.finish(progress);
-                return true;
             } else {
                 throw new Exception("Invalid path. Please make sure the specified directory exists. The network will be exported into a new 'network' directory in this directory.");
             }
         } catch (Exception e) {
-            //e.printStackTrace();
-            throw new RuntimeException(e);
+            Logger.getLogger(SigmaExporter.class.getName()).log(Level.SEVERE, null, e);
         }
+        //Finish progress
+        Progress.finish(progress);
+        return !cancel; //true if task has not been cancelled and we've gotten to the end
     }
 
     public ConfigFile getConfigFile() {
@@ -280,17 +278,10 @@ public class SigmaExporter implements Exporter, LongTask {
 
     public List<String> getNodeAttributes() {
         List<String> attr = new ArrayList<String>();
-
-        //GraphController graphController = Lookup.getDefault().lookup(GraphController.class);
-        //GraphModel graphModel = graphController.getModel(workspace);
-        //Graph graph = graphModel.getGraphVisible();
         GraphModel graphModel = workspace.getLookup().lookup(GraphModel.class);
-        Graph graph = graphModel.getGraphVisible();
-        if (graph.getNodeCount()>0) {
-            AttributeRow ar = (AttributeRow) (graph.getNodes().toArray()[0].getNodeData().getAttributes());
-            for (AttributeValue av : ar.getValues()) {
-                attr.add(av.getColumn().getTitle());
-            }
+        Table attModel = graphModel.getNodeTable();
+        for (Column col : attModel) {
+            attr.add(col.getTitle());
         }
         return attr;
     }
