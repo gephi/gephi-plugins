@@ -15,7 +15,7 @@
         }
       ],
       "category": "Layout",
-      "last_update": "January 19, 2016",
+      "last_update": "January 20, 2016",
       "images": [
         {
           "image": "imgs/geolayout-plugin/geolayout_example.png",
@@ -37,7 +37,7 @@
         },
         "0.9.0": {
           "url": "0.9.0/geolayout-plugin-0.9.0.nbm",
-          "last_update": "January 19, 2016"
+          "last_update": "January 20, 2016"
         }
       },
       "sourcecode": "https://github.com/gephi/gephi-plugins/geolayout-plugin",
@@ -58,7 +58,7 @@
         }
       ],
       "category": "Tool",
-      "last_update": "January 19, 2016",
+      "last_update": "January 20, 2016",
       "images": [
         {
           "image": "imgs/linkfluence-plugin/img.png",
@@ -72,7 +72,7 @@
         },
         "0.9.0": {
           "url": "0.9.0/linkfluence-plugin-0.9.0.nbm",
-          "last_update": "January 19, 2016"
+          "last_update": "January 20, 2016"
         }
       },
       "sourcecode": "https://github.com/gephi/gephi-plugins/linkfluence-plugin",
@@ -601,7 +601,7 @@
         }
       ],
       "category": "Filter",
-      "last_update": "January 19, 2016",
+      "last_update": "January 20, 2016",
       "images": [
         {
           "image": "imgs/kbrace-filter/kbrace-img.png",
@@ -615,7 +615,7 @@
         },
         "0.9.0": {
           "url": "0.9.0/kbrace-filter-1.0.0.nbm",
-          "last_update": "January 19, 2016"
+          "last_update": "January 20, 2016"
         }
       },
       "sourcecode": "https://github.com/mbastian/gephi-plugins/tree/kbrace-filter",
@@ -2039,16 +2039,42 @@
         }
       ],
       "category": "Tool",
-      "last_update": "January 19, 2016",
+      "last_update": "January 20, 2016",
       "images": null,
       "versions": {
         "0.9.0": {
           "url": "0.9.0/multimode-1.0.0.nbm",
-          "last_update": "January 19, 2016"
+          "last_update": "January 20, 2016"
         }
       },
       "sourcecode": "https://github.com/totetmatt/gephi-plugins/tree/multimode-network",
       "homepage": "https://github.com/jaroslav-kuchar/Multimode-Networks"
+    },
+    {
+      "id": "jsonexporter-plugin",
+      "name": "JSON Exporter",
+      "short_description": "Export a graph from Gephi to a JSON file for use with Sigma.js",
+      "long_description": "Exports the network to a JSON file with an array of nodes and an array of edges. \u003cbr/\u003e   This file is suitable to be used with the parseJSON plugin to Sigma.js. \u003cbr/\u003e   Using JSON with Sigma.js improves load time and browser compatibility. \u003cbr/\u003e   GPLv3 License.\u003cbr/\u003e   Code at \u003ca href\u003d\"https://github.com/oxfordinternetinstitute/gephi-plugins/tree/jsonexporter-plugin\"\u003ehttps://github.com/oxfordinternetinstitute/gephi-plugins/tree/jsonexporter-plugin\u003c/a\u003e.",
+      "readme": "## Introduction\n\nA Gephi plugin to create a JSON file of your network graph.\n\n## Plugin Owner\u0027s Notes\n\nThis plugin contains a export plugin that takes the current graph and creates a simple JSON file with the nodes and edges of the graph and their attributes. The JSON file has two arrays: one, named \"nodes\", contains one JSON object for each node in the graph and the other, named \"edges\", has one JSON object for each edge.\n\nThis file is suitable to be used with the [JSON parser for Sigma.js](https://github.com/jacomyal/sigma.js/tree/master/plugins/sigma.parsers.json). Using JSON with Sigma.js improves load time and browser compatibility.\n\nThe code is available under a GPLv3 License.\n\n",
+      "license": "GPL v3",
+      "authors": [
+        {
+          "name": "Scott A. Hale",
+          "email": "",
+          "link": "http://www.scotthale.net/"
+        }
+      ],
+      "category": "Export",
+      "last_update": "January 20, 2016",
+      "images": null,
+      "versions": {
+        "0.9.0": {
+          "url": "0.9.0/jsonexporter-plugin-2.0.0.nbm",
+          "last_update": "January 20, 2016"
+        }
+      },
+      "sourcecode": "http://github.com/oxfordinternetinstitute/gephi-plugins",
+      "homepage": "http://blogs.oii.ox.ac.uk/vis/"
     }
   ]
 }
