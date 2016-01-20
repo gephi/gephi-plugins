@@ -49,7 +49,7 @@
     </dependency>
   </dependencies>
   <properties>
-    <skipTests>true</skipTests>
+    <skipTests>false</skipTests>
   </properties>
     <build>
         <plugins>

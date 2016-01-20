@@ -84,6 +84,7 @@ public class ListenersTest {
         GraphController graphController = Lookup.getDefault().lookup(GraphController.class);
         GraphModel graphModel = graphController.getGraphModel();
         Graph graph = graphModel.getGraph();
+        graph.clear();
 
         GraphEventHandler printerHandler = new GraphEventHandler() {
 
