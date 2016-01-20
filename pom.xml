@@ -16,6 +16,7 @@
         <module>modules/LinkfluencePlugin</module>
         <module>modules/KBraceFilter</module>
         <module>modules/Multimode-Networks</module>
+        <module>modules/JsonExporter</module>
     </modules>
     
     <!-- Properties -->
