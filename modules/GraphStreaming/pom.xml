@@ -36,8 +36,8 @@
             <version>${project.version}</version>
         </dependency>
          <dependency>
-            <groupId>org.gephi.lib</groupId>
-            <artifactId>jetty</artifactId>
+            <groupId>org.gephi</groupId>
+            <artifactId>jetty-library-wrapper</artifactId>
             <version>${project.version}</version>
         </dependency>
     </dependencies>

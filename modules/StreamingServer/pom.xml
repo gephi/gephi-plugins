@@ -16,26 +16,6 @@
 
     <dependencies>
         <dependency>
-            <groupId>javax.servlet</groupId>
-            <artifactId>javax.servlet-api</artifactId>
-            <version>3.1.0</version>
-        </dependency>
-        <dependency>
-            <groupId>org.eclipse.jetty</groupId>
-            <artifactId>jetty-websocket</artifactId>
-            <version>8.1.17.v20150415</version>
-        </dependency>
-        <dependency>
-            <groupId>org.eclipse.jetty</groupId>
-            <artifactId>jetty-server</artifactId>
-            <version>8.1.17.v20150415</version>
-        </dependency>
-        <dependency>
-            <groupId>org.eclipse.jetty</groupId>
-            <artifactId>jetty-servlet</artifactId>
-            <version>8.1.17.v20150415</version>
-        </dependency>
-        <dependency>
             <groupId>org.gephi</groupId>
             <artifactId>streaming-api</artifactId>
             <version>${project.version}</version>
@@ -43,6 +23,11 @@
         <dependency>
             <groupId>org.gephi</groupId>
             <artifactId>streaming-impl</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.gephi</groupId>
+            <artifactId>jetty-library-wrapper</artifactId>
             <version>${project.version}</version>
         </dependency>
 
