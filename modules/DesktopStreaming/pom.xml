@@ -76,12 +76,12 @@
     <dependency> 
         <groupId>org.gephi.streaming</groupId>
     <artifactId>api</artifactId>
-    <version>1.0.0</version>
+    <version>${project.version}</version>
     </dependency>
     <dependency>
         <groupId>org.gephi.streaming</groupId>
         <artifactId>server</artifactId>
-        <version>1.0.0</version>
+        <version>${project.version}</version>
     </dependency>
     
   </dependencies>
@@ -92,8 +92,8 @@
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>nbm-maven-plugin</artifactId>
                 <configuration>
-                    <author>Unknown</author>
-                    <sourceCodeUrl>$sourcecode_url</sourceCodeUrl>
+                    <author>Andre Panisson</author>
+                    <sourceCodeUrl>https://github.com/panisson/gephi-plugins/tree/graph-streaming</sourceCodeUrl>
                     <publicPackages>
                         
                     </publicPackages>

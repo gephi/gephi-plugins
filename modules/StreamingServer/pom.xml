@@ -16,59 +16,59 @@
 
     <dependencies>
         <dependency>
-	<groupId>javax.servlet</groupId>
-	<artifactId>javax.servlet-api</artifactId>
-	<version>3.1.0</version>
-</dependency>
-<dependency>
-	<groupId>org.eclipse.jetty</groupId>
-	<artifactId>jetty-websocket</artifactId>
-	<version>8.1.17.v20150415</version>
-</dependency>
-<dependency>
-	<groupId>org.eclipse.jetty</groupId>
-	<artifactId>jetty-server</artifactId>
-	<version>8.1.17.v20150415</version>
-</dependency>
-<dependency>
-	<groupId>org.eclipse.jetty</groupId>
-	<artifactId>jetty-servlet</artifactId>
-	<version>8.1.17.v20150415</version>
-</dependency>
-<dependency>
-      <groupId>org.gephi.streaming</groupId>
-    <artifactId>api</artifactId>
-    <version>1.0.0</version>
-</dependency>
-<dependency>
-      <groupId>org.gephi.streaming</groupId>
-    <artifactId>impl</artifactId>
-    <version>1.0.0</version>
-</dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>javax.servlet-api</artifactId>
+            <version>3.1.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.jetty</groupId>
+            <artifactId>jetty-websocket</artifactId>
+            <version>8.1.17.v20150415</version>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.jetty</groupId>
+            <artifactId>jetty-server</artifactId>
+            <version>8.1.17.v20150415</version>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.jetty</groupId>
+            <artifactId>jetty-servlet</artifactId>
+            <version>8.1.17.v20150415</version>
+        </dependency>
+        <dependency>
+            <groupId>org.gephi.streaming</groupId>
+            <artifactId>api</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.gephi.streaming</groupId>
+            <artifactId>impl</artifactId>
+            <version>${project.version}</version>
+        </dependency>
 
-    <dependency>
-      <groupId>org.netbeans.api</groupId>
-      <artifactId>org-openide-util-lookup</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.gephi</groupId>
-      <artifactId>graph-api</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.netbeans.api</groupId>
-      <artifactId>org-openide-util</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.gephi</groupId>
-      <artifactId>project-api</artifactId>
-    </dependency>
-    <dependency>
-        <groupId>junit</groupId>
-        <artifactId>junit</artifactId>
-        <version>4.10</version>
-        <scope>test</scope>
-    </dependency>
-  </dependencies>
+        <dependency>
+            <groupId>org.netbeans.api</groupId>
+            <artifactId>org-openide-util-lookup</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.gephi</groupId>
+            <artifactId>graph-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.netbeans.api</groupId>
+            <artifactId>org-openide-util</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.gephi</groupId>
+            <artifactId>project-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.10</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
 
     <build>
         <plugins>
@@ -76,8 +76,8 @@
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>nbm-maven-plugin</artifactId>
                 <configuration>
-                    <author>Unknown</author>
-                    <sourceCodeUrl>$sourcecode_url</sourceCodeUrl>
+                    <author>Andre Panisson</author>
+                    <sourceCodeUrl>https://github.com/panisson/gephi-plugins/tree/graph-streaming</sourceCodeUrl>
                     <publicPackages>
 
                     <publicPackage>org.gephi.streaming.server</publicPackage>

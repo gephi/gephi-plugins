@@ -18,27 +18,27 @@
         <dependency>
             <groupId>org.gephi.streaming</groupId>
             <artifactId>api</artifactId>
-            <version>1.0.0</version>
+            <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>org.gephi.streaming</groupId>
             <artifactId>impl</artifactId>
-            <version>1.0.0</version>
+            <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>org.gephi.streaming</groupId>
             <artifactId>server</artifactId>
-            <version>1.0.0</version>
+            <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>org.gephi.desktop</groupId>
             <artifactId>streaming</artifactId>
-            <version>1.0.0</version>
+            <version>${project.version}</version>
         </dependency>
          <dependency>
             <groupId>org.gephi.lib</groupId>
             <artifactId>jetty</artifactId>
-            <version>1.0.0</version>
+            <version>${project.version}</version>
         </dependency>
     </dependencies>
 
@@ -49,7 +49,7 @@
                 <artifactId>nbm-maven-plugin</artifactId>
                 <configuration>
                     <author>Andre Panisson</author>
-                    <sourceCodeUrl>$sourcecode_url</sourceCodeUrl>
+                    <sourceCodeUrl>https://github.com/panisson/gephi-plugins/tree/graph-streaming</sourceCodeUrl>
                     <homePageUrl>gephi.org</homePageUrl>
                     <licenseName>CDDL 1.0 and GNU GPL v3</licenseName>
                     <publicPackages>
