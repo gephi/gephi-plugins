@@ -7,8 +7,8 @@
         <version>0.9.0</version>
     </parent>
 
-    <groupId>org.gephi.desktop</groupId>
-    <artifactId>streaming</artifactId>
+    <groupId>org.gephi</groupId>
+    <artifactId>desktop-streaming</artifactId>
     <version>1.0.0</version>
     <packaging>nbm</packaging>
 
@@ -74,13 +74,13 @@
     </dependency>
     
     <dependency> 
-        <groupId>org.gephi.streaming</groupId>
-    <artifactId>api</artifactId>
+        <groupId>org.gephi</groupId>
+    <artifactId>streaming-api</artifactId>
     <version>${project.version}</version>
     </dependency>
     <dependency>
-        <groupId>org.gephi.streaming</groupId>
-        <artifactId>server</artifactId>
+        <groupId>org.gephi</groupId>
+        <artifactId>streaming-server</artifactId>
         <version>${project.version}</version>
     </dependency>
     
