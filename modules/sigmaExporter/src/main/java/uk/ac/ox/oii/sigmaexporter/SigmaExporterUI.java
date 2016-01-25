@@ -7,8 +7,6 @@
  Authors : Mathieu Bastian <mathieu.bastian@gephi.org>
  Website : http://www.gephi.org
 
- Contributor(s):
-
  Portions Copyrighted 2011 Gephi Consortium.
  */
 package uk.ac.ox.oii.sigmaexporter;
