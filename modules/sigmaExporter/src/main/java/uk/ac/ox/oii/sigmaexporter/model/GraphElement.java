@@ -1,15 +1,10 @@
 /*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
+ Copyright Scott A. Hale, 2016
  */
 package uk.ac.ox.oii.sigmaexporter.model;
 
 import java.util.HashMap;
 
-/**
- *
- * @author shale
- */
 public class GraphElement {
 	private HashMap<String,String> attributes;
         private String color;

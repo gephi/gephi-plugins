@@ -79,6 +79,7 @@
                     <licenseName>GPL v3</licenseName>
                     <licenseFile>gpl-3.0.txt</licenseFile>
                     <author>Scott A. Hale, Oxford Internet Institute</author>
+                    <authorUrl>http://www.scotthale.net/</authorUrl>
                     <sourceCodeUrl>http://github.com/oxfordinternetinstitute/gephi-plugins</sourceCodeUrl>
                     <homePageUrl>http://blogs.oii.ox.ac.uk/vis/</homePageUrl>
                     <publicPackages>

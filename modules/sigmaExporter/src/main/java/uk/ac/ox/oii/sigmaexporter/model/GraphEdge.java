@@ -1,6 +1,5 @@
 /*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
+ Copyright Scott A. Hale, 2016
  */
 package uk.ac.ox.oii.sigmaexporter.model;
 

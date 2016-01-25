@@ -1,6 +1,5 @@
 /*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
+ Copyright Scott A. Hale, 2016
  */
 package uk.ac.ox.oii.sigmaexporter.model;
 
@@ -8,10 +7,6 @@ import java.io.Serializable;
 import java.util.HashMap;
 import java.util.prefs.Preferences;
 
-/**
- *
- * @author shale
- */
 public class ConfigFile implements Serializable{
     
     private final String type;

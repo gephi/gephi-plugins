@@ -3,7 +3,7 @@
  * 
  
  Base on code from 
- Copyright 2008-2011 Gephi
+ Copyright 2008-2016 Gephi
  Authors : Mathieu Bastian <mathieu.bastian@gephi.org>
  Website : http://www.gephi.org
 
