@@ -1,0 +1,5 @@
+Manifest-Version: 1.0
+OpenIDE-Module-Name: Node Color Manager
+OpenIDE-Module-Short-Description: allow you share node colors among multi graph
+OpenIDE-Module-Long-Description: Useful if you want to keep the same node to be the same color across diffrent graph/projects
+OpenIDE-Module-Display-Category: Tool
