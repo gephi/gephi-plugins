@@ -15,7 +15,7 @@
         }
       ],
       "category": "Layout",
-      "last_update": "January 20, 2016",
+      "last_update": "February 1, 2016",
       "images": [
         {
           "image": "imgs/geolayout-plugin/geolayout_example.png",
@@ -37,7 +37,7 @@
         },
         "0.9.0": {
           "url": "0.9.0/geolayout-plugin-0.9.0.nbm",
-          "last_update": "January 20, 2016"
+          "last_update": "February 1, 2016"
         }
       },
       "sourcecode": "https://github.com/gephi/gephi-plugins/geolayout-plugin",
@@ -58,7 +58,7 @@
         }
       ],
       "category": "Tool",
-      "last_update": "January 20, 2016",
+      "last_update": "February 1, 2016",
       "images": [
         {
           "image": "imgs/linkfluence-plugin/img.png",
@@ -72,7 +72,7 @@
         },
         "0.9.0": {
           "url": "0.9.0/linkfluence-plugin-0.9.0.nbm",
-          "last_update": "January 20, 2016"
+          "last_update": "February 1, 2016"
         }
       },
       "sourcecode": "https://github.com/gephi/gephi-plugins/linkfluence-plugin",
@@ -601,7 +601,7 @@
         }
       ],
       "category": "Filter",
-      "last_update": "January 20, 2016",
+      "last_update": "February 1, 2016",
       "images": [
         {
           "image": "imgs/kbrace-filter/kbrace-img.png",
@@ -615,7 +615,7 @@
         },
         "0.9.0": {
           "url": "0.9.0/kbrace-filter-1.0.0.nbm",
-          "last_update": "January 20, 2016"
+          "last_update": "February 1, 2016"
         }
       },
       "sourcecode": "https://github.com/mbastian/gephi-plugins/tree/kbrace-filter",
@@ -2039,12 +2039,12 @@
         }
       ],
       "category": "Tool",
-      "last_update": "January 20, 2016",
+      "last_update": "February 1, 2016",
       "images": null,
       "versions": {
         "0.9.0": {
           "url": "0.9.0/multimode-1.0.0.nbm",
-          "last_update": "January 20, 2016"
+          "last_update": "February 1, 2016"
         }
       },
       "sourcecode": "https://github.com/totetmatt/gephi-plugins/tree/multimode-network",
@@ -2065,12 +2065,38 @@
         }
       ],
       "category": "Export",
-      "last_update": "January 20, 2016",
+      "last_update": "February 1, 2016",
       "images": null,
       "versions": {
         "0.9.0": {
           "url": "0.9.0/jsonexporter-plugin-2.0.0.nbm",
-          "last_update": "January 20, 2016"
+          "last_update": "February 1, 2016"
+        }
+      },
+      "sourcecode": "http://github.com/oxfordinternetinstitute/gephi-plugins",
+      "homepage": "http://blogs.oii.ox.ac.uk/vis/"
+    },
+    {
+      "id": "sigmaexporter",
+      "name": "SigmaExporter",
+      "short_description": "Export a graph from Gephi to a HTML5 interactive display using Sigma.js",
+      "long_description": "Exports the network to a collection of files that form a HTML5 interactive network display that can run in any modern web browser.\u003cbr/\u003e   GPLv3 License.\u003cbr/\u003e   Code at \u003ca href\u003d\"https://github.com/oxfordinternetinstitute/gephi-plugins/tree/sigmaexporter-plugin\"\u003ehttps://github.com/oxfordinternetinstitute/gephi-plugins/tree/sigmaexporter-plugin\u003c/a\u003e.",
+      "readme": "## Introduction\n\nA Gephi plugin to create an HTML5 interactive display of your network graph that runs in any modern web browser.\n\n## Plugin Owner\u0027s Notes\n\nThis plugin contains an export plugin that takes the current graph and creates files to display your network interactively with HTML5. It uses the [open-source sigma.js library](https://github.com/jacomyal/sigma.js). The network data is placed in a ``data.json file`` (using a format equivalent to the [JSONExporter plugin](https://github.com/oxfordinternetinstitute/gephi-plugins/tree/jsonexporter-plugin)) and configuration details (author name, description, etc.) are stored in a ``config.json`` file. Other HTML, CSS, and JavaScript files are copied without modification from a standard template.\n\nSimple customization is possible through manually editing the ``config.json`` file as explained on the [project wiki](https://github.com/oxfordinternetinstitute/gephi-plugins/wiki).\n\nThe Java code of this exporter is available under a GPLv3 License.\n\nThe HTML5 template was initially created through the [InteractiveVis project](http://blogs.oii.ox.ac.uk/vis/), and subsequently updated by the [NEXUS: Real Time Data Fusion and Network Analysis for Urban Systems project](http://www.oii.ox.ac.uk/research/projects/?id\u003d149) at the [Oxford Internet Institute, University of Oxford](http://www.oii.ox.ac.uk/).\n\n**Important** The files will not run locally with Chrome due to JavaScript security settings. Once uploaded to a webserver, the network will display in any modern web browser (including Chrome). [The HTML/JavaScript/CSS code is available at this repository](https://github.com/oxfordinternetinstitute/InteractiveVis/tree/master/network).\n\nThe InteractiveVis project of the Oxford Internet Institute with funding by JISC aimed to allow easy creation of interactive visualisations for geospatial and network data using native web technologies (HTML5, CSS3, and SVG) and allow these visualisations to be self-contained so that they may run entirely offline in ebooks and other media. The project surveyed existing solutions and built the necessary components to fill in missing features and smooth over incompatibilities in between existing libraries. More information about the project is available on the [project blog](http//blogs.oii.ox.ac.uk/vis/).\n\nThe project is maintained by [Scott Hale](http://www.scotthale.net/)\n",
+      "license": "GPL v3",
+      "authors": [
+        {
+          "name": "Scott A. Hale, Oxford Internet Institute",
+          "email": null,
+          "link": "http://www.scotthale.net/"
+        }
+      ],
+      "category": "Export",
+      "last_update": "February 1, 2016",
+      "images": null,
+      "versions": {
+        "0.9.0": {
+          "url": "0.9.0/sigmaexporter-0.9.0.nbm",
+          "last_update": "February 1, 2016"
         }
       },
       "sourcecode": "http://github.com/oxfordinternetinstitute/gephi-plugins",
