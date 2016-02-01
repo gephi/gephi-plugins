@@ -9,7 +9,6 @@
 
     <groupId>edu.buaa.act</groupId>
     <artifactId>gephi-plugin-node-color-manager</artifactId>
-    <version>1.0.0</version>
     <packaging>nbm</packaging>
 
     <name>Node Color Manager</name>
