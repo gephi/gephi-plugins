@@ -18,6 +18,7 @@
         <module>modules/Multimode-Networks</module>
         <module>modules/JsonExporter</module>
         <module>modules/SigmaExporter</module>
+        <module>modules/NodeColorManager</module>
     </modules>
     
     <!-- Properties -->
