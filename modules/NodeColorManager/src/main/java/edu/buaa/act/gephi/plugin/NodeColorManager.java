@@ -14,20 +14,34 @@ import org.openide.NotifyDescriptor;
 import org.openide.util.Lookup;
 import org.openide.util.lookup.ServiceProvider;
 
+import java.io.File;
 import javax.swing.*;
+import javax.swing.filechooser.FileFilter;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
 import java.io.*;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 
 /**
  * Created by song on 16-1-29.
+ *
+ * Node Color Manager
+ *
+ * Save node colors to a file, so you can share colors among multiple graphs.
+ *
+ * The big deal is NodeColorManagerUI, which contains two button and an icon.
+ *
+ * ColorTextFilter is used to filter files when open an FileChooser, so you
+ * should save file with ".txt" as file name extension --- note this is optional.
+ *
+ * Save/restore mechanism is implement writeFile() / readFile(), other "spaghetti
+ * codes" are mostly logic about ui, since I'm new to GUI programming.
  */
 
 @ServiceProvider(service = Tool.class)
@@ -35,17 +49,11 @@ public class NodeColorManager implements Tool{
 
     private final NodeColorManagerUI ui = new NodeColorManagerUI();
 
-    public NodeColorManager(){
-//        System.out.println("[Node Color Manager] Plugin initialized...");
-    }
+    private String filePathName = System.getProperty("user.home");
 
-    public void select() {
+    public void select() {}
 
-    }
-
-    public void unselect() {
-
-    }
+    public void unselect() {}
 
     public ToolEventListener[] getListeners() {
         return new ToolEventListener[0];
@@ -59,160 +67,63 @@ public class NodeColorManager implements Tool{
         return ToolSelectionType.SELECTION;
     }
 
-    private boolean isValidFileName(String fileName){
-        if(fileName.matches("^[^.\\\\/:*?\"<>|]?[^\\\\/:*?\"<>|]*")){
-            String newFileName = fileName.replaceAll("^[.\\\\/:*?\"<>|]?[\\\\/:*?\"<>|]*", "");
-            if(newFileName.length()>0){
-                return true;
-            }
-        }
-        return false;
-    }
 
-    private void operate(String op) throws UnsupportedEncodingException, IOException {
-        ProjectController pc = Lookup.getDefault().lookup(ProjectController.class);
-        if (pc.getCurrentProject() == null) {
-            DialogDisplayer.getDefault().notify(new NotifyDescriptor.Message("No project opened in Gephi."));
-            return;
-        }
 
-        GraphController gc = Lookup.getDefault().lookup(GraphController.class);
-        GraphModel graphModel = gc.getGraphModel();
-        Graph graph = graphModel.getGraph();
-
-        //System.out.println(System.getProperty("user.dir"));
-        String fileName = ui.getText();
-        if(!isValidFileName(fileName)){
-            DialogDisplayer.getDefault().notify(new NotifyDescriptor.Message("invalid file name! Should not contains :/\\<>[]|?*"));
-            return;
-        }
-
-        File file = new File(fileName);
-        if (file.getParentFile() != null && !file.getParentFile().exists()) {
-            file.getParentFile().mkdirs();
-        }
-
-        if (op.equals("restore")) {
-            if (!file.exists()) {
-                file.createNewFile();
-            }
-            BufferedReader br = new BufferedReader(new FileReader(file));
-            DialogDisplayer.getDefault().notify(new NotifyDescriptor.Message("node color will be restore from "+file.getAbsolutePath()));
-            String lineContent;
-            Map<String, Node> nodeMap = new HashMap<String, Node>();
-            for (Node node : graph.getNodes()) {
-                nodeMap.put(node.getLabel(), node);
-            }
-            while ((lineContent = br.readLine()) != null) {
-                String[] content = lineContent.split(":rgb:");
-                String nodeName = content[0];
-                String[] position = content[1].split(",");
-                Node node = nodeMap.get(nodeName);
-                if (node == null) {
-                    Logger.getLogger(NodeColorManager.class.getName()).log(Level.SEVERE, node+" is null");
-                } else {
-                    node.setR(Float.valueOf(position[0]));
-                    node.setG(Float.valueOf(position[1]));
-                    node.setB(Float.valueOf(position[2]));
-                }
-            }
-            br.close();
-        } else {
-            if(file.exists()){
-                if(!ui.overwriteWithoutWarning){
-                    if(DialogDisplayer.getDefault().notify(
-                            new NotifyDescriptor.Confirmation(
-                                    "file "+file.getAbsolutePath()+" exist, overwrite? (check \"overwrite\" box to " +
-                                            "ignore this warning)",
-                                    "Warning",NotifyDescriptor.OK_CANCEL_OPTION))==NotifyDescriptor.OK_OPTION){
-                        //do nothing
-                    }else{
-                        return;
-                    }
-                }else{
-                    //do nothing
-                }
-            }else{
-                file.createNewFile();
-            }
-            StringBuilder str = new StringBuilder();
-            for (Node node : graph.getNodes().toArray()) {
-                str.append(node.getLabel())
-                        .append(":rgb:")
-                        .append(node.r()).append(",")
-                        .append(node.g()).append(",")
-                        .append(node.b()).append("\n");
-            }
-            BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(file));
-            bos.write(str.toString().getBytes("UTF-8"));
-            bos.close();
-            DialogDisplayer.getDefault().notify(new NotifyDescriptor.Message("node color saved to "+file.getAbsolutePath()));
-        }
-    }
-
-    private class NodeColorManagerUI implements ToolUI{
-
-        private JTextField fileInput;
-        private boolean overwriteWithoutWarning=false;
-        public String getText() {
-            return fileInput.getText();
-        }
+    private class NodeColorManagerUI extends Component implements ToolUI{
 
         public JPanel getPropertiesBar(Tool tool) {
-            final NodeColorManager myTool = (NodeColorManager) tool;
             JPanel panel = new JPanel();
 
             //Buttons
-            JButton saveToColumnButton = new JButton("save color");
-            saveToColumnButton.setDefaultCapable(true);
-            saveToColumnButton.addActionListener(new ActionListener() {
+            JButton saveButton = new JButton("save color");
+            saveButton.setToolTipText("Choose a file to save color of nodes in current graph.");
+            saveButton.setDefaultCapable(true);
+            saveButton.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
                     try {
-                        myTool.operate("save");
+                        saveToFile();
                     } catch (IOException ex) {
                         Logger.getLogger(NodeColorManager.class.getName()).log(Level.SEVERE, null, ex);
-                        DialogDisplayer.getDefault().notify(new NotifyDescriptor.Message("Error: unable to save to file. See log for detail."));
+                        notice("Error: unable to save to file. See log for detail.");
+                    } catch (NoOpenProjectException e1) {
+                        notice("Error: No project open in Gephi.");
                     }
                 }
+
             });
-            final JCheckBox jCheckBox = new JCheckBox("overwrite", false);
-            jCheckBox.addItemListener(new ItemListener() {
-                public void itemStateChanged(ItemEvent e) {
-                    if (e.getStateChange() == ItemEvent.SELECTED) {
-                        overwriteWithoutWarning = true;
-                    } else {
-                        overwriteWithoutWarning=false;
-                    }
-                }
-            });
-            JButton applyToLayoutButton = new JButton("restore color");
-            applyToLayoutButton.setDefaultCapable(true);
-            applyToLayoutButton.addActionListener(new ActionListener() {
+
+            JButton restoreFromFileToGraphButton = new JButton("restore color");
+            restoreFromFileToGraphButton.setToolTipText("Choose a color file to paint nodes in current graph");
+            restoreFromFileToGraphButton.setDefaultCapable(true);
+            restoreFromFileToGraphButton.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
                     try {
-                        myTool.operate("restore");
+                        restoreFromFile();
                     } catch (IOException ex) {
                         Logger.getLogger(NodeColorManager.class.getName()).log(Level.SEVERE, null, ex);
-                        DialogDisplayer.getDefault().notify(new NotifyDescriptor.Message("Error: unable to restore from file."));
-//                        DialogDisplayer.getDefault().
+                        notice("Error: unable to restoreFromFile from file.");
+                    } catch (NoOpenProjectException e1) {
+                        notice("Error: No project open in Gephi.");
+                    } catch (FileFormatException e1) {
+                        notice("Restore Failed:\n" +
+                                "Parse Error: This is not a valid file saved by [Node Color Manager].\n" +
+                                e1.getMessage());
                     }
                 }
             });
-            fileInput = new JTextField("save to/restore from file:", 16);
-            panel.add(saveToColumnButton);
-            panel.add(jCheckBox);
-            panel.add(applyToLayoutButton);
-            panel.add(fileInput);
+
+            panel.add(saveButton);
+            panel.add(restoreFromFileToGraphButton);
+
             return panel;
         }
 
         public Icon getIcon() {
             return new ImageIcon(getClass().getResource("/nodeColorManagerIcon16x16.png"));
-//            return new ImageIcon(getClass().getResource("/plus.png"));
         }
 
         public String getName() {
-            return "share Node color among multi graphs";
+            return "share Node color among multiple graph";
         }
 
         public String getDescription() {
@@ -223,8 +134,188 @@ public class NodeColorManager implements Tool{
             return 1200;
         }
 
-        public NodeColorManagerUI(){
-//            System.out.println("[Node Color Manager] UI initialized");
+        public void notice(String content){
+            DialogDisplayer.getDefault().notify(new NotifyDescriptor.Message(content));
+        }
+
+        private Graph getGraph() throws NoOpenProjectException {
+            ProjectController pc = Lookup.getDefault().lookup(ProjectController.class);
+            if (pc.getCurrentProject() == null) {
+                throw new NoOpenProjectException();
+            }
+            GraphController gc = Lookup.getDefault().lookup(GraphController.class);
+            GraphModel graphModel = gc.getGraphModel();
+            return graphModel.getGraph();
+        }
+
+        public void restoreFromFile() throws IOException, NoOpenProjectException, FileFormatException {
+            Graph graph = getGraph();
+            File file = new File(filePathName);
+
+            JFileChooser jFileChooser = new JFileChooser(file);
+            ColorTextFilter filter = new ColorTextFilter();
+            jFileChooser.addChoosableFileFilter(filter);
+//            jFileChooser.setFileFilter(filter);
+            if(jFileChooser.showOpenDialog(ui)==JFileChooser.APPROVE_OPTION){
+                file = jFileChooser.getSelectedFile();
+                if (!file.exists()) {
+                    notice("file not found!");
+                    return;
+                }else{
+                    String result = readFile(file, graph);
+                    notice("Restore Finish:\n"+
+                            "File: "+file.getAbsolutePath()+"\n"+result
+                    );
+                }
+            }
+        }
+
+        private String readFile(File file, Graph graph) throws FileNotFoundException, FileFormatException {
+            Map<String, Node> nodeMap = new HashMap<String, Node>();
+            for (Node node : graph.getNodes()) {
+                nodeMap.put(node.getLabel(), node);
+            }
+
+            int nodeRestoreCount = 0;
+            int lineCount = 0;
+            Scanner sc = new Scanner(file);
+            while (sc.hasNextLine()) {
+                String lineContent = sc.nextLine();
+                if(lineContent.length()>0){
+                    String[] content = lineContent.split(":rgb:");
+                    if(content.length!=2){
+                        throw new FileFormatException("File: "+file.getAbsolutePath()+"\nLine: "+(lineCount+1));
+                    }
+                    lineCount++;
+                    String nodeName = content[0];
+                    String[] position = content[1].split(",");
+                    Node node = nodeMap.get(nodeName);
+                    if (node == null) {
+                        //do nothing;continue next line;
+                    } else {
+                        nodeRestoreCount++;
+                        node.setR(Float.valueOf(position[0]));
+                        node.setG(Float.valueOf(position[1]));
+                        node.setB(Float.valueOf(position[2]));
+                    }
+                }
+            }
+            sc.close();
+            return "Node Read from file: "+lineCount+"\nNode restored in graph: "+nodeRestoreCount+"\n";
+        }
+
+
+        private void saveToFile() throws IOException, NoOpenProjectException {
+            File file;
+            while(true) {
+                file = new File(filePathName);
+                JFileChooser jFileChooser = new JFileChooser(file);
+                ColorTextFilter filter = new ColorTextFilter();
+                jFileChooser.addChoosableFileFilter(filter);
+//                jFileChooser.setFileFilter(filter);
+                if (jFileChooser.showSaveDialog(ui) == JFileChooser.APPROVE_OPTION) {
+                    file = jFileChooser.getSelectedFile();
+                    if (file.exists()) {
+                        if (DialogDisplayer.getDefault().notify(
+                                new NotifyDescriptor.Confirmation(
+                                        "file " + file.getAbsolutePath() + " exist, overwrite?",
+                                        "Warning",
+                                        NotifyDescriptor.OK_CANCEL_OPTION
+                                )) == NotifyDescriptor.OK_OPTION) {
+
+                            break;
+                        } else {
+                            return;
+                        }
+                    } else {
+                        if(!isValidFileName(file.getName()) ||
+                                (file.getParentFile() == null) ||
+                                (!file.getParentFile().exists())
+                                ){
+                            notice("Save Failed\ninvalid file name. Should not contains /\\:*?<>");
+                            //continue;
+                        }else{
+                            file.createNewFile();
+                            break;
+                        }
+                    }
+                } else {
+                    return;
+                }
+            }
+            filePathName = file.getAbsolutePath();
+            Graph graph = getGraph();
+            int nodeCount = writeFile(file,graph);
+            notice(nodeCount+" node color saved to " + file.getAbsolutePath());
+        }
+
+        private int writeFile(File file,Graph graph) throws IOException {
+            Map<String, Node> nodeMap = new HashMap();
+            for (Node node : graph.getNodes()) {
+                nodeMap.put(node.getLabel(), node);
+            }
+
+            int bufSize = 8192;
+            FileWriter fileWriter = new FileWriter(file);
+            BufferedWriter bufferedWriter = new BufferedWriter(fileWriter, bufSize);
+            PrintWriter writer = new PrintWriter(bufferedWriter);
+
+            int nodeCount = 0;
+            for (Map.Entry<String,Node> entry : nodeMap.entrySet()) {
+                Node node = entry.getValue();
+                writer.printf("%s:rgb:%f,%f,%f",
+                        node.getLabel(), node.r(), node.g(), node.b());
+                writer.println();
+                nodeCount++;
+            }
+            writer.flush();
+            writer.close();
+            return nodeCount;
+        }
+
+        private boolean isValidFileName(String fileName){
+            if(fileName.matches("^[^.\\\\/:*?\"<>|]?[^\\\\/:*?\"<>|]*")){
+                String newFileName = fileName.replaceAll("^[.\\\\/:*?\"<>|]?[\\\\/:*?\"<>|]*", "");
+                if(newFileName.length()>0){
+                    return true;
+                }
+            }
+            return false;
+        }
+
+    }
+
+    private static String getExtension(File f) {
+        String ext = null;
+        String s = f.getName();
+        int i = s.lastIndexOf('.');
+
+        if (i > 0 &&  i < s.length() - 1) {
+            ext = s.substring(i+1).toLowerCase();
+        }
+        return ext;
+    }
+
+    public static class ColorTextFilter extends FileFilter {
+
+        //Accept all directories and all txt files
+        public boolean accept(File f) {
+            if (f.isDirectory()) {
+                return true;
+            }
+            String extension = getExtension(f);
+            if (extension != null) {
+                if (extension.equals("txt")) {
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+            return false;
+        }
+        //The description of this filter
+        public String getDescription() {
+            return "text file (*.txt)";
         }
     }
 }
