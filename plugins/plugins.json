@@ -15,7 +15,7 @@
         }
       ],
       "category": "Layout",
-      "last_update": "February 1, 2016",
+      "last_update": "February 5, 2016",
       "images": [
         {
           "image": "imgs/geolayout-plugin/geolayout_example.png",
@@ -37,7 +37,7 @@
         },
         "0.9.0": {
           "url": "0.9.0/geolayout-plugin-0.9.0.nbm",
-          "last_update": "February 1, 2016"
+          "last_update": "February 5, 2016"
         }
       },
       "sourcecode": "https://github.com/gephi/gephi-plugins/geolayout-plugin",
@@ -58,7 +58,7 @@
         }
       ],
       "category": "Tool",
-      "last_update": "February 1, 2016",
+      "last_update": "February 5, 2016",
       "images": [
         {
           "image": "imgs/linkfluence-plugin/img.png",
@@ -72,7 +72,7 @@
         },
         "0.9.0": {
           "url": "0.9.0/linkfluence-plugin-0.9.0.nbm",
-          "last_update": "February 1, 2016"
+          "last_update": "February 5, 2016"
         }
       },
       "sourcecode": "https://github.com/gephi/gephi-plugins/linkfluence-plugin",
@@ -601,7 +601,7 @@
         }
       ],
       "category": "Filter",
-      "last_update": "February 1, 2016",
+      "last_update": "February 5, 2016",
       "images": [
         {
           "image": "imgs/kbrace-filter/kbrace-img.png",
@@ -615,7 +615,7 @@
         },
         "0.9.0": {
           "url": "0.9.0/kbrace-filter-1.0.0.nbm",
-          "last_update": "February 1, 2016"
+          "last_update": "February 5, 2016"
         }
       },
       "sourcecode": "https://github.com/mbastian/gephi-plugins/tree/kbrace-filter",
@@ -2039,12 +2039,12 @@
         }
       ],
       "category": "Tool",
-      "last_update": "February 1, 2016",
+      "last_update": "February 5, 2016",
       "images": null,
       "versions": {
         "0.9.0": {
           "url": "0.9.0/multimode-1.0.0.nbm",
-          "last_update": "February 1, 2016"
+          "last_update": "February 5, 2016"
         }
       },
       "sourcecode": "https://github.com/totetmatt/gephi-plugins/tree/multimode-network",
@@ -2065,12 +2065,12 @@
         }
       ],
       "category": "Export",
-      "last_update": "February 1, 2016",
+      "last_update": "February 5, 2016",
       "images": null,
       "versions": {
         "0.9.0": {
           "url": "0.9.0/jsonexporter-plugin-2.0.0.nbm",
-          "last_update": "February 1, 2016"
+          "last_update": "February 5, 2016"
         }
       },
       "sourcecode": "http://github.com/oxfordinternetinstitute/gephi-plugins",
@@ -2091,16 +2091,42 @@
         }
       ],
       "category": "Export",
-      "last_update": "February 1, 2016",
+      "last_update": "February 5, 2016",
       "images": null,
       "versions": {
         "0.9.0": {
           "url": "0.9.0/sigmaexporter-0.9.0.nbm",
-          "last_update": "February 1, 2016"
+          "last_update": "February 5, 2016"
         }
       },
       "sourcecode": "http://github.com/oxfordinternetinstitute/gephi-plugins",
       "homepage": "http://blogs.oii.ox.ac.uk/vis/"
+    },
+    {
+      "id": "gephi-plugin-node-color-manager",
+      "name": "Node Color Manager",
+      "short_description": "Share node colors among multiple graph",
+      "long_description": "Useful if you want to keep the same node to be the same color across different graph/projects, by using a file to keep track of node colors among multiple graph.   Note that the tool identify nodes by their labels, so your graph must have unique label for each node. If two or more node has same label, only one will be restored. When restore from file, only the nodes which match the labels in file would be colored, others will remain their original color.   Source code: https://github.com/songjinghe/gephi-plugins-1, more details: https://github.com/songjinghe/gephi-plugins-1/wiki",
+      "readme": "## Node Color Manager\n\n\u003e Tool which can save/restore node colors to/from file.\n\nthis plugin is useful if you have to keep the same node to be the same color across diffrent graph/projects\n\nthis plugin will export the node color to a file ( you must specify where it is ) and later you can restore the colors from that file in a diffrent graph/project\n\n\n# how to use\n\nThe tool has two button and a text field. you should fill the text field with file name( or absolute path ) and press \"save\" button, then the colors were saved to the file you specified in the text field. The same works for \"restore\" button.\n\n\n# color file format\n\na Unix style(line break with LF) pure text file, just like below:\n\n```\nMyriel:rgb:0.35686275,0.35686275,0.9607843\nNapoleon:rgb:0.35686275,0.35686275,0.9607843\nMlleBaptistine:rgb:0.9607843,0.35686275,0.35686275\nMmeMagloire:rgb:0.9607843,0.35686275,0.35686275\nCountessDeLo:rgb:0.35686275,0.35686275,0.9607843\nGeborand:rgb:0.35686275,0.35686275,0.9607843\nChamptercier:rgb:0.35686275,0.35686275,0.9607843\nCravatte:rgb:0.35686275,0.35686275,0.9607843\nCount:rgb:0.35686275,0.35686275,0.9607843\nOldMan:rgb:0.35686275,0.35686275,0.9607843\nLabarre:rgb:0.9607843,0.35686275,0.35686275\n```\n\nwhich is\n\n```\n[node label]:rgb:[red value],[green value],[blue value]\n```\n\nif you want a #XXYYZZ color format, you can get `XX\u003d Integer.toHexString(Math.round([red value]*255))` in Java\n\n\n# Notes\n\nThe tool identify nodes by their labels, so your graph must have unique label for each node.If two or more node has same label, only one will be restored.\n\nWhen restore from file, only the nodes which match the labels in file would be colored, others will remain their original color.\n\n# Feed back\n\nplease use issue.\n",
+      "license": "GPLv3",
+      "authors": [
+        {
+          "name": "Song Jinghe",
+          "email": null,
+          "link": null
+        }
+      ],
+      "category": "Tool",
+      "last_update": "February 5, 2016",
+      "images": null,
+      "versions": {
+        "0.9.0": {
+          "url": "0.9.0/gephi-plugin-node-color-manager-1.0.0.nbm",
+          "last_update": "February 5, 2016"
+        }
+      },
+      "sourcecode": "https://github.com/gephi/gephi-plugins/gephi-plugin-node-color-manager",
+      "homepage": null
     }
   ]
 }
