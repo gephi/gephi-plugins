@@ -34,17 +34,15 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.Map;
-import java.util.HashMap;
 import java.util.MissingResourceException;
-import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.swing.JOptionPane;
 
 import org.gephi.graph.api.Edge;
 import org.gephi.graph.api.Graph;
 import org.gephi.graph.api.Node;
-// import org.gephi.graph.api.NodeData;
 import org.gephi.layout.plugin.AbstractLayout;
 import org.gephi.layout.spi.Layout;
 import org.gephi.layout.spi.LayoutBuilder;
@@ -80,7 +78,22 @@ public class GraphvizLayout extends AbstractLayout implements Layout {
         // Prepare input
         final StringBuffer dotfile = new StringBuffer();
 
-        dotfile.append("digraph g {\n");
+        String graphtype;
+        String edgearrow;
+        
+        if(graph.isDirected()) {
+            graphtype = "digraph";
+            edgearrow = " -> ";
+        } else if(graph.isUndirected()) {
+            graphtype = "graph";
+            edgearrow = " -- ";
+        } else {
+            //graphviz does not support mixed graphs
+            graphtype = "digraph";
+            edgearrow = " -> ";
+        }
+        
+        dotfile.append(String.format("%s g {\n", graphtype));
         dotfile.append("layout = \"").append(this.algoName).append("\";\n");
         dotfile.append("rankdir = \"").append(this.rankDir).append("\";\n");
         dotfile.append("overlap = \"").append(this.overlap).append("\";\n");
@@ -98,8 +111,6 @@ public class GraphvizLayout extends AbstractLayout implements Layout {
                 dotfile.append("];\n");
             }
             for (final Edge e : this.graph.getEdges()) {
-                final String edgearrow = e.isDirected() ? "->" : "--";
-
                 dotfile.append(e.getSource().getId());
                 dotfile.append(edgearrow);
                 dotfile.append(e.getTarget().getId());
@@ -252,11 +263,9 @@ public class GraphvizLayout extends AbstractLayout implements Layout {
             while ((line = outputFromGraphviz.readLine()) != null) {
                 entireOutput.append(line);
                 entireOutput.append("\n");
-//                System.out.println("line");
             }
             
             final String regex = "^\\s*(?<nodeid>\\S+)\\s+\\[.*?[, ]?pos=\"(?<pos>[^\"]+?)\".*?\\]";
-//            System.out.println(entireOutput);
             final Pattern pat = Pattern.compile(regex, Pattern.MULTILINE | Pattern.CASE_INSENSITIVE | Pattern.DOTALL);
             Matcher matcher = pat.matcher(entireOutput.toString());
             while(matcher.find()) {
@@ -264,18 +273,17 @@ public class GraphvizLayout extends AbstractLayout implements Layout {
                 
                 final Node n = graph.getNode(nodeid);
                 if(null == n) {
-                    System.err.println("Cannot find nodeid " + nodeid);
+                    Logger.getLogger("").log(Level.WARNING, "Cannot find nodeid {0}", nodeid);
                     continue;
                 }
                 String pos = matcher.group("pos");
                 String[] pair = pos.trim().split("[, ]");
                 if(pair.length != 2) {
-                    System.err.println("Don't know what to do with coordinates != 2; " + pos);
+                    Logger.getLogger("").log(Level.WARNING, "Don''t know what to do with coordinates != 2; {0}", pos);
                     continue;
                 }
                 BigDecimal x_bd = new BigDecimal(pair[0]);
                 BigDecimal y_bd = new BigDecimal(pair[1]);
-//                System.out.println("Node " + nodeid + " : " + pos + " = " + x_bd.floatValue() + "," + y_bd.floatValue());
                 n.setX(x_bd.floatValue());
                 n.setY(y_bd.floatValue());
             }
@@ -284,29 +292,16 @@ public class GraphvizLayout extends AbstractLayout implements Layout {
             Exceptions.printStackTrace(e);            
         }
 
-        InputStream err = null;
-        try {
+        try (InputStream err = dotprocess.getErrorStream()) {
             // Dump any errors
-            {
-                err = dotprocess.getErrorStream();
-                final InputStreamReader glue = new InputStreamReader(err);
-                final BufferedReader errorsFromGraphviz = new BufferedReader(glue);
-                String line;
-                while ((line = errorsFromGraphviz.readLine()) != null) {
-                    {
-                        System.err.println(line);
-                    }
-                }
+            final InputStreamReader glue = new InputStreamReader(err);
+            final BufferedReader errorsFromGraphviz = new BufferedReader(glue);
+            String line;
+            while ((line = errorsFromGraphviz.readLine()) != null) {
+                Logger.getLogger("").warning(line);
             }
         } catch (IOException e) {
             Exceptions.printStackTrace(e);            
-        } finally {
-            try {
-                if (err != null) {
-                    err.close();
-                }
-            } catch (IOException e) {
-            }
         }
     }
 }
