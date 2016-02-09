@@ -76,15 +76,20 @@
       <groupId>org.gephi</groupId>
       <artifactId>utils-longtask</artifactId>
     </dependency>
+    <dependency>
+	<groupId>edu.stanford.nlp</groupId>
+	<artifactId>stanford-parser</artifactId>
+	<version>3.5.2</version>
+    </dependency>
         <dependency>
             <groupId>fr.inria.wimmics</groupId>
-            <artifactId>corese</artifactId>
-            <version>3.1.3</version>
+            <artifactId>kgengine</artifactId>
+            <version>3.1.4-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>fr.inria.wimmics</groupId>
-            <artifactId>arp</artifactId>
-            <version>2.2.b</version>
+            <artifactId>corese</artifactId>
+            <version>3.1.4-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>com.hp.hpl.jena</groupId>
@@ -115,6 +120,11 @@
             <groupId>org.netbeans.api</groupId>
             <artifactId>org-openide-util</artifactId>
         </dependency>
+        <dependency>
+            <groupId>fr.inria.wimmics</groupId>
+            <artifactId>SparqlSoapLib</artifactId>
+            <version>1.0.0-SNAPSHOT</version>
+        </dependency>
     </dependencies>
 
     <build>
@@ -131,15 +141,9 @@
                     <publicPackages>
                         
                     </publicPackages>
+                    <verifyRuntime>skip</verifyRuntime>
                 </configuration>
             </plugin>
         </plugins>
     </build>
-    <repositories>
-	    <repository>
-		    <id>nexus-unice</id>
-		    <name>Nexus of the Nice University</name>
-		    <url>http://nyx.unice.fr:9007/nexus/content/repositories/i3s-public</url>
-	    </repository>
-    </repositories>
 </project>
