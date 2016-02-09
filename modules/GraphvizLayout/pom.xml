@@ -59,7 +59,8 @@
                     <licenseName>license</licenseName>
                     <licenseFile>license.txt</licenseFile>
                     <author>Gary "ChunkyKs" Briggs</author>
-                    <sourceCodeUrl>$sourcecode_url</sourceCodeUrl>
+                    <authorEmail>chunky@icculus.org</authorEmail>
+                    <sourceCodeUrl>https://github.com/chunky/gephi-plugins</sourceCodeUrl>
                     <publicPackages>
                         
                     <publicPackage>org.icculus.chunky.gephigraphviz</publicPackage>
