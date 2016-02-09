@@ -4,11 +4,13 @@
  */
 package fr.inria.edelweiss.sparql.semantictweet;
 
+import fr.inria.edelweiss.sparql.DriverParametersPanel;
+import java.util.Observable;
 /**
  *
  * @author edemairy
  */
-public class SemanticTweetDriverParametersPanel extends javax.swing.JPanel {
+public class SemanticTweetDriverParametersPanel extends DriverParametersPanel<SemanticTweetDriverParameters> {
 
     SemanticTweetDriverParameters parameters;
 
@@ -20,7 +22,7 @@ public class SemanticTweetDriverParametersPanel extends javax.swing.JPanel {
         initComponents();
     }
 
-    SemanticTweetDriverParametersPanel(SemanticTweetDriverParameters aThis) {
+    public SemanticTweetDriverParametersPanel(SemanticTweetDriverParameters aThis) {
         this();
         parameters = aThis;
         fillParameters();
@@ -168,5 +170,9 @@ public class SemanticTweetDriverParametersPanel extends javax.swing.JPanel {
     public void setRootUrl(javax.swing.JTextField rootUrl) {
         this.rootUrl = rootUrl;
     }
+
+	public void update(Observable o, Object arg) {
+		fillParameters();
+	}
 
 }
