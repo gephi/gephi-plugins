@@ -88,23 +88,29 @@ public class GraphvizLayout extends AbstractLayout implements Layout {
             dotfile.append("concentrate=true;\n");
         }
 
-        for (final Node n : this.graph.getNodes()) {
-            dotfile.append(n.getId());
-            dotfile.append(" [");
-            dotfile.append("pos=\"").append(n.x()).append(',').append(n.y()).append('"');
-            dotfile.append("];\n");
-        }
-        for (final Edge e : this.graph.getEdges()) {
-            final String edgearrow = e.isDirected() ? "->" : "--";
+        try {
+            graph.readLock();
+        
+            for (final Node n : this.graph.getNodes()) {
+                dotfile.append(n.getId());
+                dotfile.append(" [");
+                dotfile.append("pos=\"").append(n.x()).append(',').append(n.y()).append('"');
+                dotfile.append("];\n");
+            }
+            for (final Edge e : this.graph.getEdges()) {
+                final String edgearrow = e.isDirected() ? "->" : "--";
 
-            dotfile.append(e.getSource().getId());
-            dotfile.append(edgearrow);
-            dotfile.append(e.getTarget().getId());
-            dotfile.append(" [weight=");
-            dotfile.append(e.getWeight());
-            dotfile.append("];\n");
+                dotfile.append(e.getSource().getId());
+                dotfile.append(edgearrow);
+                dotfile.append(e.getTarget().getId());
+                dotfile.append(" [weight=");
+                dotfile.append(e.getWeight());
+                dotfile.append("];\n");
+            }
+            dotfile.append("}\n");
+        } finally {
+            graph.readUnlock();
         }
-        dotfile.append("}\n");
 
         // Call Graphviz
         // we are calling it directly. However, there is also a java binding
@@ -249,14 +255,6 @@ public class GraphvizLayout extends AbstractLayout implements Layout {
 //                System.out.println("line");
             }
             
-            // For some reason this one wasn't working
-            // Node n = graph.getNode(nodeid);
-            // ... so we map all nodes temporarily
-            final Map<Object, Node> nodeMapper = new HashMap<>();
-            for (final Node currentNode : this.graph.getNodes()) {
-                nodeMapper.put(currentNode.getId(), currentNode);
-            }
-
             final String regex = "^\\s*(?<nodeid>\\S+)\\s+\\[.*?[, ]?pos=\"(?<pos>[^\"]+?)\".*?\\]";
 //            System.out.println(entireOutput);
             final Pattern pat = Pattern.compile(regex, Pattern.MULTILINE | Pattern.CASE_INSENSITIVE | Pattern.DOTALL);
@@ -264,7 +262,7 @@ public class GraphvizLayout extends AbstractLayout implements Layout {
             while(matcher.find()) {
                 final String nodeid = matcher.group("nodeid");
                 
-                final Node n = nodeMapper.get(nodeid);
+                final Node n = graph.getNode(nodeid);
                 if(null == n) {
                     System.err.println("Cannot find nodeid " + nodeid);
                     continue;
