@@ -19,6 +19,7 @@
         <module>modules/JsonExporter</module>
         <module>modules/SigmaExporter</module>
         <module>modules/NodeColorManager</module>
+        <module>modules/GraphvizLayout</module>
     </modules>
     
     <!-- Properties -->
