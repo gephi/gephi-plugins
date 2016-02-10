@@ -31,10 +31,6 @@
           "url": "0.8.2/org-gephi-plugins-layout-geo.nbm",
           "last_update": "January 4, 2013"
         },
-        "0.9-SNAPSHOT": {
-          "url": "0.9-SNAPSHOT/geolayout-plugin-0.9-SNAPSHOT.nbm",
-          "last_update": "December 13, 2015"
-        },
         "0.9.0": {
           "url": "0.9.0/geolayout-plugin-0.9.0.nbm",
           "last_update": "February 10, 2016"
@@ -66,10 +62,6 @@
         }
       ],
       "versions": {
-        "0.9-SNAPSHOT": {
-          "url": "0.9-SNAPSHOT/linkfluence-plugin-0.9-SNAPSHOT.nbm",
-          "last_update": "December 13, 2015"
-        },
         "0.9.0": {
           "url": "0.9.0/linkfluence-plugin-0.9.0.nbm",
           "last_update": "February 10, 2016"
@@ -364,37 +356,6 @@
       "homepage": null
     },
     {
-      "id": "sigmajs-exporter",
-      "name": "Sigmajs Exporter",
-      "short_description": "",
-      "long_description": "\u003cp\u003eExport your network from Gephi to a predefined Sigma.js template. Choose to include search, group selection, explanatory text, etc. without having to do any HTML/JavaScript coding. Upload the output to any webserver and enjoy a rich HTML5 interactive visualization of your network.\u003c/p\u003e\n\u003cp\u003eExample output is available at: \u003ca href\u003d\"http://blogs.oii.ox.ac.uk/vis/?page_id\u003d115\"\u003ehttp://blogs.oii.ox.ac.uk/vis/?page_id\u003d115\u003c/a\u003e More features are coming and better validation is needed, but I’m making this alpha version of the code available quickly because of the demand I’ve received for it. More \u003ca href\u003d\"http://blogs.oii.ox.ac.uk/vis/\"\u003einformation on the project\u003c/a\u003e is available on \u003ca href\u003d\"http://blogs.oii.ox.ac.uk/vis/\"\u003eour blog\u003c/a\u003e. The underlying \u003ca href\u003d\"https://github.com/oxfordinternetinstitute/InteractiveVis/\"\u003eHTML5/CSS/JS framework used to render the graphs\u003c/a\u003e is also available on \u003ca href\u003d\"https://github.com/oxfordinternetinstitute/InteractiveVis/\"\u003eGitHub as a separate project\u003c/a\u003e and changes / pull requests are welcome.\u003c/p\u003e\n\u003cp\u003eOnce installed, restart Gephi and you will see a \u003cstrong\u003eExport to sigma.js \u003c/strong\u003eoption on the \u003cstrong\u003eFile-\u0026gt;Export\u003c/strong\u003e menu. Choose a location to export to, set export customization options, and click OK. The resulting folder can be uploaded to any webserver to showcase your network. Please note, due to browser security restrictions in Chrome you will not be able to view the result without a webserver (Other browsers may work locally).\u003c/p\u003e\n\u003cp\u003ePlease report any issues or feature requests on the \u003ca href\u003d\"https://github.com/oxfordinternetinstitute/gephi-plugins/issues/\"\u003eGitHub page\u003c/a\u003e.\u003c/p\u003e\n\u003cp\u003e\u0026nbsp;\u003c/p\u003e\n\u003cp\u003eRelease notes:\u003c/p\u003e\n\u003cp\u003e1.0 (6 Nov 2012) Initial release\u003c/p\u003e\n\u003cp\u003e1.1 (Jan 2013) Updated for 0.8.2 Gephi release\u003c/p\u003e\n\u003cp\u003e1.1.1 (Feb 2013) Store edge weight to the ‘size’ attribute in the data so that this is displayed by Sigma.js. It is likely necessary to tweak the minEdgeSize and maxEdgeSize values in config.json for your particular configuration. The config.json files is now in pretty-print mode to make it easier to view and edit.\u003c/p\u003e\n\u003cp\u003e1.2 (Aug 2013)\u003c/p\u003e\n\u003cul\u003e\n\u003cli\u003eFix error in configuration causing ‘dim’ option not to work\u003c/li\u003e\n\u003cli\u003eForce UTF-8 encoding on Mac/Windows for data/config files\u003c/li\u003e\n\u003cli\u003eFix error when graph had no edges\u003c/li\u003e\n\u003cli\u003eExport edge color if given; if not use blend of source and target nodes’ colors\u003c/li\u003e\n\u003cli\u003eFix error when export path given was invalid\u003c/li\u003e\n\u003cli\u003eOffer option to replace node ids with numbers (can be more compact for large graphs)\u003c/li\u003e\n\u003c/ul\u003e",
-      "readme": null,
-      "license": "GPL v3",
-      "authors": [
-        {
-          "name": "Scott Hale",
-          "email": null,
-          "link": "http://www.scotthale.net/"
-        }
-      ],
-      "category": "Export",
-      "last_update": "August 9, 2013",
-      "images": [
-        {
-          "image": "imgs/sigmajs-exporter/twitter-620.png",
-          "thumbnail": "imgs/sigmajs-exporter/twitter-620.png"
-        }
-      ],
-      "versions": {
-        "0.8.2": {
-          "url": "0.8.2/uk-ac-ox-oii-sigmaexporter2.nbm",
-          "last_update": "August 9, 2013"
-        }
-      },
-      "sourcecode": "https://github.com/oxfordinternetinstitute/gephi-plugins/tree/JSONExporter/sigmaExporter",
-      "homepage": null
-    },
-    {
       "id": "seadragon-web-export",
       "name": "Seadragon Web Export",
       "short_description": "",
@@ -470,32 +431,6 @@
         }
       },
       "sourcecode": "https://github.com/jorgaf/LoxaWebSiteExport",
-      "homepage": null
-    },
-    {
-      "id": "json-exporter",
-      "name": "JSON Exporter",
-      "short_description": "",
-      "long_description": "\u003cp\u003eExports the network to a JSON file with an array of nodes and an array of edges. This file is suitable to be used with the parseJSON plugin to Sigma.js. JSON allows Sigma.js to be faster and work\u003c/p\u003e\n\u003cp\u003e\u003cstrong\u003e Why use JSON and not Gexf for Sigma?\u003c/strong\u003e\u003cbr\u003e\nGexf is larger than JSON using extra bandwidth (important for mobile), does not parse correctly on Internet Explorer (yes there are still people using this browser), and is faster (everyone wants that!). More information \u003ca href\u003d\"http://blogs.oii.ox.ac.uk/vis/?p\u003d149\" target\u003d\"_blank\"\u003ehere\u003c/a\u003e.\u003c/p\u003e\n\u003cp\u003eSigma.js website: \u003ca href\u003d\"http://sigmajs.org/\" target\u003d\"_blank\"\u003ehttp://sigmajs.org/\u003c/a\u003e\u003c/p\u003e\n\u003cp\u003e\u003cstrong\u003eSigma.js JSON parser\u003c/strong\u003e\u003cbr\u003e\nUse the sigma.parseJson.js plugin to Sigma just as you use the parseGexf plugin and enjoy all the benefits of JSON.\u003c/p\u003e\n\u003cp\u003eRelease notes:\u003cbr\u003e\nv1\u003cbr\u003e\nInitial release\u003c/p\u003e\n\u003cp\u003ev1.1 (Aug 2013)\u003c/p\u003e\n\u003cul\u003e\n\u003cli\u003eSwitch to Google Gson for underlying JSON conversion fixing issues with improper escapes.\u003c/li\u003e\n\u003cli\u003eExport edge attributes\u003c/li\u003e\n\u003cli\u003eExport edge color\u003c/li\u003e\n\u003c/ul\u003e",
-      "readme": null,
-      "license": "GPL v3",
-      "authors": [
-        {
-          "name": "Scott Hale",
-          "email": null,
-          "link": "http://www.scotthale.net/"
-        }
-      ],
-      "category": "Export",
-      "last_update": "August 9, 2013",
-      "images": [],
-      "versions": {
-        "0.8.2": {
-          "url": "0.8.2/uk-ac-ox-oii-jsonexporter9.nbm",
-          "last_update": "August 9, 2013"
-        }
-      },
-      "sourcecode": "https://github.com/oxfordinternetinstitute/gephi-plugins/tree/JSONExporter",
       "homepage": null
     },
     {
@@ -1291,37 +1226,6 @@
       "homepage": null
     },
     {
-      "id": "graphviz-layout",
-      "name": "Graphviz Layout",
-      "short_description": "",
-      "long_description": "\u003cp\u003eThis plugin makes a call to graphviz to lay out your your graphs.\u003c/p\u003e\n\u003cp\u003eTo use it, you must have graphviz installed on your system. All layout algorithms provided by graphviz are supported, along with most of the options relevant to Gephi usage.\u003c/p\u003e",
-      "readme": null,
-      "license": "Zlib",
-      "authors": [
-        {
-          "name": "Gary Briggs",
-          "email": null,
-          "link": "http://icculus.org/~chunky/"
-        }
-      ],
-      "category": "Layout",
-      "last_update": "April 25, 2015",
-      "images": [
-        {
-          "image": "imgs/graphviz-layout/gephi_dot-1.png",
-          "thumbnail": "imgs/graphviz-layout/gephi_dot-1.png"
-        }
-      ],
-      "versions": {
-        "0.8.2": {
-          "url": "0.8.2/org-icculus-chunky-gephigraphviz3.nbm",
-          "last_update": "April 25, 2015"
-        }
-      },
-      "sourcecode": "https://github.com/chunky/gephi_graphviz",
-      "homepage": null
-    },
-    {
       "id": "noverlap",
       "name": "Noverlap",
       "short_description": "",
@@ -1719,32 +1623,6 @@
       "homepage": null
     },
     {
-      "id": "multimode-networks-transformations-2",
-      "name": "Multimode Networks Transformations",
-      "short_description": "",
-      "long_description": "\u003ch3\u003eIntroduction\u003c/h3\u003e\n\u003cp\u003eThis plugin allows multimode networks projection. For example: you can project your bipartite (2-mode) graph to monopartite (one-mode) graph. The projection/transformation is based on the matrix multiplication approach and allows different types of transformations. Not only bipartite graphs. The limitation is matrix multiplication – large matrix multiplication takes time and memory.\u003c/p\u003e\n\u003ch3\u003ePlugin Owner’s Notes\u003c/h3\u003e\n\u003cp\u003eThis plugin allows multimode networks projection. For example: you can project your bipartite (2-mode) graph to monopartite (one-mode) graph. The projection/transformation is based on the matrix multiplication approach and allows different types of transformations. Not only bipartite graphs. The limitation is matrix multiplication – large matrix multiplication takes time and memory.\u003c/p\u003e",
-      "readme": null,
-      "license": "GPL v3",
-      "authors": [
-        {
-          "name": "Jaroslav Kuchar",
-          "email": null,
-          "link": "https://github.com/jaroslav-kuchar"
-        }
-      ],
-      "category": "Tool",
-      "last_update": "January 31, 2013",
-      "images": [],
-      "versions": {
-        "0.8.2": {
-          "url": "0.8.2/cz-cvut-fit-gephi-multimode1.nbm",
-          "last_update": "January 31, 2013"
-        }
-      },
-      "sourcecode": "https://github.com/jaroslav-kuchar/Multimode-Networks",
-      "homepage": null
-    },
-    {
       "id": "polygon-nodes",
       "name": "Polygon Nodes",
       "short_description": "",
@@ -2042,6 +1920,10 @@
       "last_update": "February 10, 2016",
       "images": null,
       "versions": {
+        "0.8.2": {
+          "url": "0.8.2/cz-cvut-fit-gephi-multimode1.nbm",
+          "last_update": "January 31, 2013"
+        },
         "0.9.0": {
           "url": "0.9.0/multimode-1.0.0.nbm",
           "last_update": "February 10, 2016"
@@ -2068,6 +1950,10 @@
       "last_update": "February 10, 2016",
       "images": null,
       "versions": {
+        "0.8.2": {
+          "url": "0.8.2/uk-ac-ox-oii-jsonexporter9.nbm",
+          "last_update": "August 9, 2013"
+        },
         "0.9.0": {
           "url": "0.9.0/jsonexporter-plugin-2.0.0.nbm",
           "last_update": "February 10, 2016"
@@ -2094,6 +1980,10 @@
       "last_update": "February 10, 2016",
       "images": null,
       "versions": {
+        "0.8.2": {
+          "url": "0.8.2/uk-ac-ox-oii-sigmaexporter2.nbm",
+          "last_update": "August 9, 2013"
+        },
         "0.9.0": {
           "url": "0.9.0/sigmaexporter-0.9.0.nbm",
           "last_update": "February 10, 2016"
@@ -2155,6 +2045,10 @@
         }
       ],
       "versions": {
+        "0.8.2": {
+          "url": "0.8.2/org-icculus-chunky-gephigraphviz3.nbm",
+          "last_update": "April 25, 2015"
+        },
         "0.9.0": {
           "url": "0.9.0/gephigraphviz-1.0.0.nbm",
           "last_update": "February 10, 2016"
