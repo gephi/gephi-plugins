@@ -23,7 +23,6 @@ import org.gephi.utils.longtask.api.LongTaskExecutor;
 import org.gephi.utils.longtask.api.LongTaskListener;
 import org.gephi.utils.longtask.spi.LongTask;
 import org.openide.util.Lookup;
-import org.gephi.datalab.api.AttributeColumnsController;
 import org.gephi.graph.api.Table;
 
 
@@ -43,7 +42,7 @@ public class SemanticWebImportParser implements LongTaskListener {
 	private RequestParameters parameters;
 	private RdfAnalyzer analyzer;
 	private SparqlDriver driver;
-	private Semaphore waitEndPopulate = new Semaphore(0);
+	private final Semaphore waitEndPopulate = new Semaphore(0);
 	private LongTaskListener listener; // listener waiting for the end of the population task.
 	LongTaskExecutor executor = new LongTaskExecutor(true);
 
@@ -103,7 +102,6 @@ public class SemanticWebImportParser implements LongTaskListener {
 //        if (resetWorkspace) {
 //            model.getNodeTable().clear();
 //        }
-		AttributeColumnsController ac = Lookup.getDefault().lookup(AttributeColumnsController.class);
 		Table nodeTable = model.getNodeTable();
 		if (!nodeTable.hasColumn("namespace")) {
 			nodeTable.addColumn("namespace", String.class);

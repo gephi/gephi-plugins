@@ -14,7 +14,6 @@ import org.gephi.graph.api.GraphModel;
 import org.gephi.graph.api.Graph;
 import org.gephi.graph.api.Node;
 import org.gephi.graph.api.Edge;
-import org.gephi.datalab.api.AttributeColumnsController;
 import org.gephi.project.api.ProjectController;
 import org.openide.util.Exceptions;
 import org.openide.util.Lookup;
@@ -89,7 +88,7 @@ public class GephiUtils {
 	public static float convertFloat(final String id) {
 		float decodedNum = 0;
 		try {
-			decodedNum = Float.valueOf(id.replaceAll("\"", "\\\"")).floatValue();
+			decodedNum = Float.parseFloat(id.replaceAll("\"", "\\\""));
 		} catch (NumberFormatException ex) {
 			Exceptions.printStackTrace(ex);
 		}
@@ -100,7 +99,7 @@ public class GephiUtils {
 	public static float convertFloatColor(final String id) {
 		float decodedNum = 0, temp;
 		try {
-			temp = Float.valueOf(id.replaceAll("\"", "\\\"")).floatValue();
+			temp = Float.parseFloat(id.replaceAll("\"", "\\\""));
 			decodedNum = (temp % 256) / 255;
 		} catch (NumberFormatException ex) {
 			Exceptions.printStackTrace(ex);
@@ -219,7 +218,6 @@ public class GephiUtils {
 	}
 	
 	public static void addAttributeToNodes(final String columnName, Class klass) {
-		AttributeColumnsController ac = Lookup.getDefault().lookup(AttributeColumnsController.class);
 		Table nodeTable = getCurrentGraph().getModel().getNodeTable();
 		if (!nodeTable.hasColumn(columnName)) {
 			nodeTable.addColumn(columnName, klass);
@@ -278,7 +276,6 @@ public class GephiUtils {
 	}
 	
 	public static void addAttributeToEdges(String columnName, Class klass) {
-		AttributeColumnsController ac = Lookup.getDefault().lookup(AttributeColumnsController.class);
 		Table edgeTable = getCurrentGraph().getModel().getEdgeTable();
 		if (!edgeTable.hasColumn(columnName)) {
 			edgeTable.addColumn(columnName, klass);
@@ -305,17 +302,19 @@ public class GephiUtils {
 	}
 	
 	public void setNodeAttr(String sourceLabel, String nameNewAttribute, String targetLabel) {
-		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+		Node n = findNode(sourceLabel);
+		n.setAttribute(nameNewAttribute, targetLabel);
 	}
 	
 	public void setEdgeAttr(String sourceLabel, String nameNewAttribute, String targetLabel) {
-		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+		Edge e = graph.getEdge(sourceLabel);
+		e.setAttribute(nameNewAttribute, targetLabel);
 	}
 	
 	static public class SplittedName {
 		
-		private String id;
-		private String namespace;
+		private final String id;
+		private final String namespace;
 		
 		public SplittedName(final String namespace, String id) {
 			this.namespace = namespace;
