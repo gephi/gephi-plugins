@@ -265,7 +265,7 @@ public class GraphvizLayout extends AbstractLayout implements Layout {
                 entireOutput.append("\n");
             }
             
-            final String regex = "^\\s*(?<nodeid>\\S+)\\s+\\[.*?[, ]?pos=\"(?<pos>[^\"]+?)\".*?\\]";
+            final String regex = "^\\s*(?<nodeid>\\S+)\\s+\\[[^\\]]*?[, ]?pos=\"(?<pos>[^\"]+?)\".*?\\]";
             final Pattern pat = Pattern.compile(regex, Pattern.MULTILINE | Pattern.CASE_INSENSITIVE | Pattern.DOTALL);
             Matcher matcher = pat.matcher(entireOutput.toString());
             while(matcher.find()) {
@@ -273,7 +273,7 @@ public class GraphvizLayout extends AbstractLayout implements Layout {
                 
                 final Node n = graph.getNode(nodeid);
                 if(null == n) {
-                    Logger.getLogger("").log(Level.WARNING, "Cannot find nodeid {0}", nodeid);
+                    Logger.getLogger("").log(Level.WARNING, "Cannot find nodeid \"{0}\" from matcher group \"{1}\"", new Object[] { nodeid, matcher.group() } );
                     continue;
                 }
                 String pos = matcher.group("pos");
