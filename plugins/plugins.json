@@ -15,7 +15,7 @@
         }
       ],
       "category": "Layout",
-      "last_update": "February 10, 2016",
+      "last_update": "February 11, 2016",
       "images": [
         {
           "image": "imgs/geolayout-plugin/geolayout_example.png",
@@ -33,7 +33,7 @@
         },
         "0.9.0": {
           "url": "0.9.0/geolayout-plugin-0.9.0.nbm",
-          "last_update": "February 10, 2016"
+          "last_update": "February 11, 2016"
         }
       },
       "sourcecode": "https://github.com/gephi/gephi-plugins/geolayout-plugin",
@@ -54,7 +54,7 @@
         }
       ],
       "category": "Tool",
-      "last_update": "February 10, 2016",
+      "last_update": "February 11, 2016",
       "images": [
         {
           "image": "imgs/linkfluence-plugin/img.png",
@@ -64,7 +64,7 @@
       "versions": {
         "0.9.0": {
           "url": "0.9.0/linkfluence-plugin-0.9.0.nbm",
-          "last_update": "February 10, 2016"
+          "last_update": "February 11, 2016"
         }
       },
       "sourcecode": "https://github.com/gephi/gephi-plugins/linkfluence-plugin",
@@ -536,7 +536,7 @@
         }
       ],
       "category": "Filter",
-      "last_update": "February 10, 2016",
+      "last_update": "February 11, 2016",
       "images": [
         {
           "image": "imgs/kbrace-filter/kbrace-img.png",
@@ -550,7 +550,7 @@
         },
         "0.9.0": {
           "url": "0.9.0/kbrace-filter-1.0.0.nbm",
-          "last_update": "February 10, 2016"
+          "last_update": "February 11, 2016"
         }
       },
       "sourcecode": "https://github.com/mbastian/gephi-plugins/tree/kbrace-filter",
@@ -1917,7 +1917,7 @@
         }
       ],
       "category": "Tool",
-      "last_update": "February 10, 2016",
+      "last_update": "February 11, 2016",
       "images": null,
       "versions": {
         "0.8.2": {
@@ -1926,7 +1926,7 @@
         },
         "0.9.0": {
           "url": "0.9.0/multimode-1.0.0.nbm",
-          "last_update": "February 10, 2016"
+          "last_update": "February 11, 2016"
         }
       },
       "sourcecode": "https://github.com/totetmatt/gephi-plugins/tree/multimode-network",
@@ -1947,7 +1947,7 @@
         }
       ],
       "category": "Export",
-      "last_update": "February 10, 2016",
+      "last_update": "February 11, 2016",
       "images": null,
       "versions": {
         "0.8.2": {
@@ -1956,7 +1956,7 @@
         },
         "0.9.0": {
           "url": "0.9.0/jsonexporter-plugin-2.0.0.nbm",
-          "last_update": "February 10, 2016"
+          "last_update": "February 11, 2016"
         }
       },
       "sourcecode": "http://github.com/oxfordinternetinstitute/gephi-plugins",
@@ -1977,7 +1977,7 @@
         }
       ],
       "category": "Export",
-      "last_update": "February 10, 2016",
+      "last_update": "February 11, 2016",
       "images": null,
       "versions": {
         "0.8.2": {
@@ -1986,7 +1986,7 @@
         },
         "0.9.0": {
           "url": "0.9.0/sigmaexporter-0.9.0.nbm",
-          "last_update": "February 10, 2016"
+          "last_update": "February 11, 2016"
         }
       },
       "sourcecode": "http://github.com/oxfordinternetinstitute/gephi-plugins",
@@ -2007,12 +2007,12 @@
         }
       ],
       "category": "Tool",
-      "last_update": "February 10, 2016",
+      "last_update": "February 11, 2016",
       "images": null,
       "versions": {
         "0.9.0": {
           "url": "0.9.0/gephi-plugin-node-color-manager-1.0.0.nbm",
-          "last_update": "February 10, 2016"
+          "last_update": "February 11, 2016"
         }
       },
       "sourcecode": "https://github.com/gephi/gephi-plugins/gephi-plugin-node-color-manager",
@@ -2033,7 +2033,7 @@
         }
       ],
       "category": "Layout",
-      "last_update": "February 10, 2016",
+      "last_update": "February 11, 2016",
       "images": [
         {
           "image": "imgs/gephigraphviz/GraphVizLayout_example.png",
@@ -2051,7 +2051,7 @@
         },
         "0.9.0": {
           "url": "0.9.0/gephigraphviz-1.0.0.nbm",
-          "last_update": "February 10, 2016"
+          "last_update": "February 11, 2016"
         }
       },
       "sourcecode": "https://github.com/chunky/gephi-plugins",
