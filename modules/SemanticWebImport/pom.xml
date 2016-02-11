@@ -78,12 +78,13 @@
 		<dependency>
 			<groupId>fr.inria.wimmics</groupId>
 			<artifactId>kgengine</artifactId>
-			<version>3.1.4-SNAPSHOT</version>
+			<version>3.2.0</version>
 		</dependency>
 		<dependency>
 			<groupId>fr.inria.wimmics</groupId>
 			<artifactId>corese</artifactId>
-			<version>3.1.4-SNAPSHOT</version>
+			<version>3.2.0</version>
+		 <type>jar</type>
 		</dependency>
 		<dependency>
 			<groupId>com.hp.hpl.jena</groupId>
@@ -108,11 +109,11 @@
 			<groupId>org.netbeans.api</groupId>
 			<artifactId>org-openide-util</artifactId>
 		</dependency>
-		<dependency>
-			<groupId>fr.inria.wimmics</groupId>
-			<artifactId>SparqlSoapLib</artifactId>
-			<version>1.0.0-SNAPSHOT</version>
-		</dependency>
+	 <dependency>
+	  <groupId>fr.inria.wimmics</groupId>
+	  <artifactId>SparqlSoapLib</artifactId>
+	  <version>1.0.0</version>
+	 </dependency>
 	</dependencies>
 	<build>
 		<plugins>
