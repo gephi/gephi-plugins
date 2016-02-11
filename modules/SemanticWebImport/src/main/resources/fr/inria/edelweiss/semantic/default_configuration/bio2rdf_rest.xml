@@ -2,12 +2,13 @@
 <!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
 <properties>
 <comment>Properties to save.</comment>
-<entry key="Name">Exemple - Bio2RDF SOAP services for GO SPARQL endpoint</entry>
+<entry key="Name">Example - REST services access</entry>
+<entry key="restSparqlEndPointQuery">query</entry>
 <entry key="SparqlRequest">construct {
 ?x ?r ?y 
 } where {
 ?x ?r ?y 
 } limit 100</entry>
-<entry key="sparqlEndPointURL">http://bio2rdf.org/sparql</entry>
-<entry key="SparqlDriver">fr.inria.edelweiss.sparql.soap.SparqlSoapEndPointDriver</entry>
+<entry key="restSparqlEndPointURL">http://bio2rdf.org/sparql/</entry>
+<entry key="SparqlDriver">fr.inria.edelweiss.sparql.restdriver.SparqlRestEndPointDriver</entry>
 </properties>

@@ -24,6 +24,8 @@ public class SparqlSoapEndPointDriverParameters extends SparqlDriverParameters {
 
     public void setUrl(String text) {
         url = text;
+	setChanged();
+	notifyObservers();
     }
 
     public String getUrl() {

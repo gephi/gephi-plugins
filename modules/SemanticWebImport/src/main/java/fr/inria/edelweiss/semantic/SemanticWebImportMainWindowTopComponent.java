@@ -132,9 +132,9 @@ public final class SemanticWebImportMainWindowTopComponent extends TopComponent 
 			} else {
 				logger.log(Level.INFO, "No SPARQL driver found with name: \"{0}\"", driverName);
 			}
-			refreshActiveSparqlDriver();
 			sparqlDriver.getParameters().readProperties(currentProperties);
-
+			refreshActiveSparqlDriver();
+			
 			// Set the sparql request.
 			String sparqlRequest = configurationManager.getCurrentProperties().getProperty(ConfigurationManager.SPARQL_REQUEST);
 			sparqlRequestEditor.setQueryText(sparqlRequest);
@@ -773,10 +773,10 @@ public final class SemanticWebImportMainWindowTopComponent extends TopComponent 
 				Constructor<?> constructor = loader.loadClass(panelClassName).getDeclaredConstructor(sparqlDriver.getParameters().getClass());
 				DriverParametersPanel newPanel = (DriverParametersPanel) constructor.newInstance(sparqlDriver.getParameters());
 				if (newPanel != null) {
+					newPanel.setParameters(parameters);
 					parametersPanel.add(newPanel);
 					parametersPanel.setVisible(true);
 					parametersPanel.validate();
-					newPanel.setParameters(parameters);
 				}
 
 				parameters.addObserver(newPanel);

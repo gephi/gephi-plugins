@@ -91,6 +91,8 @@ public class SparqlRestEndPointDriverParameters extends SparqlDriverParameters {
 
     public final void setEndPointUrl(final String newUrl) {
         this.endPointUrl = newUrl;
+	setChanged();
+	notifyObservers();
     }
 
     String makeRequest() {
@@ -114,6 +116,8 @@ public class SparqlRestEndPointDriverParameters extends SparqlDriverParameters {
      */
     public void setQueryTagName(String queryTagName) {
         this.queryTagName = queryTagName;
+	setChanged();
+	notifyObservers();
     }
 
     public Map<String, String> getRequestProperties() {
@@ -122,6 +126,8 @@ public class SparqlRestEndPointDriverParameters extends SparqlDriverParameters {
 
     private void setRequestProperties(Map<String, String> readMapInProperties) {
         requestProperties = readMapInProperties;
+	setChanged();
+	notifyObservers();
     }
 
     public Map<String, String> getRequestParameters() {
@@ -130,5 +136,7 @@ public class SparqlRestEndPointDriverParameters extends SparqlDriverParameters {
 
     private void setRequestParameters(Map<String, String> readMapInProperties) {
         requestParameters = readMapInProperties;
+	setChanged();
+	notifyObservers();
     }
 }
