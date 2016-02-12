@@ -78,12 +78,12 @@
 		<dependency>
 			<groupId>fr.inria.wimmics</groupId>
 			<artifactId>kgengine</artifactId>
-			<version>3.2.0</version>
+			<version>3.2.1</version>
 		</dependency>
 		<dependency>
 			<groupId>fr.inria.wimmics</groupId>
 			<artifactId>corese</artifactId>
-			<version>3.2.0</version>
+			<version>3.2.1</version>
 		 <type>jar</type>
 		</dependency>
 		<dependency>
