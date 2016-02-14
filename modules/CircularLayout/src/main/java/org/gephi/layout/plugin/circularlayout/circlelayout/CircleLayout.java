@@ -31,6 +31,7 @@ import org.gephi.graph.api.*;
 import org.gephi.graph.spi.LayoutData;
 import org.gephi.layout.plugin.AbstractLayout;
 import org.gephi.layout.plugin.circularlayout.nodecomparator.NodeComparator;
+import org.gephi.layout.plugin.circularlayout.layouthelper.*;
 import org.gephi.layout.spi.Layout;
 import org.gephi.layout.spi.LayoutBuilder;
 import org.gephi.layout.spi.LayoutProperty;
@@ -41,16 +42,14 @@ import org.openide.util.NbBundle;
  *
  * @author Matt
  */
-public class CircleLayout extends AbstractLayout implements Layout {
+public class CircleLayout extends LayoutHelper implements Layout {
 
     private Graph graph;
-    private boolean converged;
     private double diameter;
     private boolean boolfixeddiameter;
     private String strNodeplacement;
     private boolean boolNoOverlap = true;
     private boolean boolTransition = true;
-    private String strNodePlacementDirection;
     static final double TWO_PI = (2 * Math.PI);
     private Double intSteps = 1.0;
 
@@ -60,34 +59,11 @@ public class CircleLayout extends AbstractLayout implements Layout {
         this.boolfixeddiameter = boolfixeddiameter;
     }
 
-    public static Map getPlacementMap() {
-        GraphController graphController = Lookup.getDefault().lookup(GraphController.class);
-        GraphModel objGraphModel = graphController.getGraphModel();
-        Map<String, String> map = new TreeMap<String, String>();
-        map.put("Random", NbBundle.getMessage(CircleLayout.class, "CircleLayout.NodePlacement.Random.name"));
-        map.put("NodeID", NbBundle.getMessage(CircleLayout.class, "CircleLayout.NodePlacement.NodeID.name"));
-        map.put("Degree", NbBundle.getMessage(CircleLayout.class, "CircleLayout.NodePlacement.Degree.name"));
-        if (objGraphModel.isDirected()) {
-            map.put("InDegree", NbBundle.getMessage(CircleLayout.class, "CircleLayout.NodePlacement.InDegree.name"));
-            map.put("OutDegree", NbBundle.getMessage(CircleLayout.class, "CircleLayout.NodePlacement.OutDegree.name"));
-            map.put("MutualDegree", NbBundle.getMessage(CircleLayout.class, "CircleLayout.NodePlacement.Mutual.name"));
-        }
-        for (Column c : objGraphModel.getNodeTable()) {
-            map.put(c.getTitle() + "-Att", c.getTitle() + " (Attribute)");
-        }
-        return map;
-    }
 
-    public static Map getRotationMap() {
-        Map<String, String> map = new TreeMap<String, String>();
-        map.put("CCW", NbBundle.getMessage(CircleLayout.class, "CircleLayout.NodePlacement.CCW"));
-        map.put("CW", NbBundle.getMessage(CircleLayout.class, "CircleLayout.NodePlacement.CW"));
-        return map;
-    }
 
     @Override
     public void initAlgo() {
-        converged = false;
+        this.setConverged(false);
         graph = graphModel.getGraphVisible();
         graph = graphModel.getGraphVisible();
         float[] nodeCoords = new float[2];
@@ -130,7 +106,7 @@ public class CircleLayout extends AbstractLayout implements Layout {
             Arrays.sort(nodes, new NodeComparator(graph, nodes, NodeComparator.CompareType.METHOD, this.strNodeplacement, false));
         }
 
-        if ("CW".equals(this.strNodePlacementDirection)) {
+        if (this.isCW()) {
             theta = -theta;
         }
 
@@ -161,7 +137,7 @@ public class CircleLayout extends AbstractLayout implements Layout {
 
     @Override
     public void goAlgo() {
-        converged = true;
+        this.setConverged(true);
         TempLayoutData position = null;
         Node[] nodes = graph.getNodes().toArray();
         for (Node n : nodes) {
@@ -172,7 +148,7 @@ public class CircleLayout extends AbstractLayout implements Layout {
                     float nextDistance = Math.abs(n.x() + position.xdistance - position.finishx);
                     if (nextDistance < currentDistance) {
                         n.setX(n.x() + position.xdistance);
-                        converged = false;
+                        this.setConverged(false);
                     } else {
                         n.setX(position.finishx);
                     }
@@ -180,7 +156,7 @@ public class CircleLayout extends AbstractLayout implements Layout {
                     nextDistance = Math.abs(n.y() + position.ydistance - position.finishy);
                     if (nextDistance < currentDistance) {
                         n.setY(n.y() + position.ydistance);
-                        converged = false;
+                        this.setConverged(false);
                     } else {
                         n.setY(position.finishy);
                     }
@@ -198,7 +174,7 @@ public class CircleLayout extends AbstractLayout implements Layout {
 
     @Override
     public boolean canAlgo() {
-        return !converged;
+        return !this.isConverged();
     }
 
     @Override
@@ -231,7 +207,7 @@ public class CircleLayout extends AbstractLayout implements Layout {
                     NbBundle.getMessage(getClass(), "CircleLayout.NodePlacement.NodeOrdering.desc"),
                     "getNodePlacement", "setNodePlacement", LayoutComboBoxEditor.class));
             properties.add(LayoutProperty.createProperty(
-                    this, String.class,
+                    this, CircularDirection.class,
                     NbBundle.getMessage(getClass(), "CircleLayout.NodePlacement.Direction.name"),
                     PLACEMENT_CATEGORY,
                     NbBundle.getMessage(getClass(), "CircleLayout.NodePlacement.Direction.desc"),
@@ -266,7 +242,7 @@ public class CircleLayout extends AbstractLayout implements Layout {
         setBoolFixedDiameter(false);
         setNodePlacement("NodeID");
         setNodePlacementNoOverlap(true);
-        setNodePlacementDirection("CCW");
+        setNodePlacementDirection(CircularDirection.CCW);
         setNodePlacementTransition(false);
         setTransitionSteps(100000.0);
     }
@@ -298,14 +274,6 @@ public class CircleLayout extends AbstractLayout implements Layout {
         return diameter;
     }
 
-    public String getNodePlacementDirection() {
-        return this.strNodePlacementDirection;
-    }
-
-    public void setNodePlacementDirection(String strNodePlacementDirection) {
-        this.strNodePlacementDirection = strNodePlacementDirection;
-    }
-
     public boolean isNodePlacementNoOverlap() {
         return boolNoOverlap;
     }
@@ -332,19 +300,4 @@ public class CircleLayout extends AbstractLayout implements Layout {
     public void setTransitionSteps(Double steps) {
         intSteps = steps;
     }
-
-    private float[] cartCoors(double radius, int whichInt, double theta) {
-        float[] coOrds = new float[2];
-        coOrds[0] = (float) (radius * (Math.cos((theta * whichInt) + (Math.PI / 2))));
-        coOrds[1] = (float) (radius * (Math.sin((theta * whichInt) + (Math.PI / 2))));
-        return coOrds;
-    }
-}
-
-class TempLayoutData implements LayoutData {
-
-    public float finishx = 0;
-    public float finishy = 0;
-    public float xdistance = 0;
-    public float ydistance = 0;
 }

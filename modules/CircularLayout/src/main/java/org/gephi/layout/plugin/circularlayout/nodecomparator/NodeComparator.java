@@ -4,6 +4,7 @@ package org.gephi.layout.plugin.circularlayout.nodecomparator;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.Comparator;
+import org.gephi.graph.api.*;
 import org.gephi.graph.api.Graph;
 import org.gephi.graph.api.Node;
 
