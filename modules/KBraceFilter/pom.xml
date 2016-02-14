@@ -4,7 +4,7 @@
     <parent>
         <artifactId>gephi-plugin-parent</artifactId>
         <groupId>org.gephi</groupId>
-        <version>0.9.0</version>
+        <version>0.9.1</version>
     </parent>
 
     <groupId>org.gephi</groupId>
@@ -27,6 +27,10 @@
         <dependency>
             <groupId>org.gephi</groupId>
             <artifactId>graph-api</artifactId>
+        </dependency>
+	<dependency>
+            <groupId>org.gephi</groupId>
+            <artifactId>project-api</artifactId>
         </dependency>
         <dependency>
             <groupId>org.netbeans.api</groupId>
