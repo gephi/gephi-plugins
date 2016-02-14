@@ -33,6 +33,7 @@ import org.gephi.layout.spi.LayoutBuilder;
 import org.openide.util.Lookup;
 import org.openide.util.NbBundle;
 import org.openide.util.NbBundle.Messages;
+import org.gephi.layout.plugin.circularlayout.nodecomparator.NodeComparator;
 
 /**
  *
@@ -43,6 +44,9 @@ public abstract class LayoutHelper implements Layout {
       protected GraphModel graphModel;
       private boolean converged;
       private CircularDirection NodePlacementDirection = CircularDirection.CW;
+      private Double intSteps = 1.0;
+      private boolean boolNoOverlap = true;
+      private boolean boolTransition = true;
 
       public static enum CircularDirection {
           CCW,
@@ -80,6 +84,10 @@ public abstract class LayoutHelper implements Layout {
        return !isConverged() && graphModel != null;
    }
 
+   @Override
+   public void endAlgo() {
+   }
+
    public void setConverged(boolean converged) {
        this.converged = converged;
    }
@@ -110,9 +118,49 @@ public abstract class LayoutHelper implements Layout {
      return false;
    }
 
+   public boolean isNodePlacementNoOverlap() {
+       return boolNoOverlap;
+   }
+
+   public void setNodePlacementNoOverlap(Boolean boolNoOverlap) {
+       this.boolNoOverlap = boolNoOverlap;
+   }
+
+   public boolean isNodePlacementTransition() {
+       return boolTransition;
+   }
+
+   public void setNodePlacementTransition(Boolean boolTransition) {
+       this.boolTransition = boolTransition;
+   }
+
+   public Double getTransitionSteps() {
+       return intSteps;
+   }
+
+   public void setTransitionSteps(Double steps) {
+       intSteps = steps;
+   }
+
+  public Node[] sortNodes(Node[] nodes, String strNodeplacement) {
+    Graph graph = this.graphModel.getGraphVisible();
+    if (strNodeplacement.equals("Random")) {
+        List nodesList = Arrays.asList(nodes);
+        Collections.shuffle(nodesList);
+    } else if (strNodeplacement.equals("NodeID")) {
+        Arrays.sort(nodes, new NodeComparator(graph, nodes, NodeComparator.CompareType.NODEID, null, false));
+    } else if (strNodeplacement.endsWith("-Att")) {
+        Arrays.sort(nodes, new NodeComparator(graph, nodes, NodeComparator.CompareType.ATTRIBUTE, strNodeplacement.substring(0, strNodeplacement.length() - 4), false));
+    } else if (getPlacementMap().containsKey(strNodeplacement)) {
+        Arrays.sort(nodes, new NodeComparator(graph, nodes, NodeComparator.CompareType.METHOD, strNodeplacement, false));
+    }
+    return nodes;
+  }
+
   public static Map getPlacementMap() {
       return getPlacementMap(true);
   }
+
   public static Map getPlacementMap(boolean IncludeRandom) {
       GraphController graphController = Lookup.getDefault().lookup(GraphController.class);
       GraphModel objGraphModel = graphController.getGraphModel();

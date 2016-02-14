@@ -31,7 +31,7 @@ import javax.swing.JOptionPane;
 import org.gephi.graph.api.*;
 import org.gephi.graph.spi.LayoutData;
 import org.gephi.layout.plugin.AbstractLayout;
-import org.gephi.layout.plugin.circularlayout.nodecomparator.NodeComparator;
+import org.gephi.layout.plugin.circularlayout.layouthelper.*;
 import org.gephi.layout.spi.Layout;
 import org.gephi.layout.spi.LayoutBuilder;
 import org.gephi.layout.spi.LayoutProperty;
@@ -42,41 +42,12 @@ import org.openide.util.NbBundle;
  *
  * @author Matt Groeninger
  */
-public class DualCircleLayout extends AbstractLayout implements Layout {
-
+public class DualCircleLayout extends LayoutHelper implements Layout {
     private Graph graph;
-    private boolean converged;
     private boolean highdegreeoutside;
     private int secondarynodecount;
     static double TWO_PI = (2 * Math.PI);
-    private String strNodePlacementDirection;
     private String attribute;
-    private Double intSteps = 1.0;
-    private boolean boolTransition = true;
-
-    public static Map getAttributeMap() {
-        GraphController graphController = Lookup.getDefault().lookup(GraphController.class);
-        GraphModel objGraphModel = graphController.getGraphModel();
-        Map<String, String> map = new TreeMap<String, String>();
-        map.put("NodeID", NbBundle.getMessage(DualCircleLayout.class, "DualCircleLayout.NodePlacement.NodeID.name"));
-        map.put("Degree", NbBundle.getMessage(DualCircleLayout.class, "DualCircleLayout.NodePlacement.Degree.name"));
-        if (objGraphModel.isDirected()) {
-            map.put("InDegree", NbBundle.getMessage(DualCircleLayout.class, "DualCircleLayout.NodePlacement.InDegree.name"));
-            map.put("OutDegree", NbBundle.getMessage(DualCircleLayout.class, "DualCircleLayout.NodePlacement.OutDegree.name"));
-            map.put("MutualDegree", NbBundle.getMessage(DualCircleLayout.class, "DualCircleLayout.NodePlacement.Mutual.name"));
-        }
-        for (Column c : objGraphModel.getNodeTable()) {
-            map.put(c.getTitle() + "-Att", c.getTitle() + " (Attribute)");
-        }
-        return map;
-    }
-
-    public static Map getRotationMap() {
-        Map<String, String> map = new TreeMap<String, String>();
-        map.put("CCW", NbBundle.getMessage(DualCircleLayout.class, "DualCircleLayout.NodePlacement.CCW"));
-        map.put("CW", NbBundle.getMessage(DualCircleLayout.class, "DualCircleLayout.NodePlacement.CW"));
-        return map;
-    }
 
     public DualCircleLayout(LayoutBuilder layoutBuilder, int secondarynodecount) {
         super(layoutBuilder);
@@ -85,8 +56,8 @@ public class DualCircleLayout extends AbstractLayout implements Layout {
 
     @Override
     public void initAlgo() {
-        converged = false;
-        graph = graphModel.getGraphVisible();
+        this.setConverged(false);
+        this.graph = graphModel.getGraphVisible();
         float[] nodeCoords = new float[2];
         double tmpsecondarycirc = 0;
         double tmpprimarycirc = 0;
@@ -98,18 +69,13 @@ public class DualCircleLayout extends AbstractLayout implements Layout {
         double primary_scale = 1;
         double secondary_scale = 1;
         double correct_theta = 0;
-        if (this.strNodePlacementDirection.equals("CW")) {
+
+        if (this.isCW()) {
             twopi = -twopi;
         }
-        Node[] nodes = graph.getNodes().toArray();
+        Node[] nodes = this.graph.getNodes().toArray();
 
-        if (this.attribute.equals("NodeID")) {
-            Arrays.sort(nodes, new NodeComparator(graph, nodes, NodeComparator.CompareType.NODEID, null, false));
-        } else if (this.attribute.endsWith("-Att")) {
-            Arrays.sort(nodes, new NodeComparator(graph, nodes, NodeComparator.CompareType.ATTRIBUTE, this.attribute.substring(0, this.attribute.length() - 4), false));
-        } else if (getAttributeMap().containsKey(this.attribute)) {
-            Arrays.sort(nodes, new NodeComparator(graph, nodes, NodeComparator.CompareType.METHOD, this.attribute, false));
-        }
+        nodes = sortNodes(nodes,this.attribute);
 
         for (Node n : nodes) {
             if (!n.isFixed()) {
@@ -181,26 +147,26 @@ public class DualCircleLayout extends AbstractLayout implements Layout {
                 posData.finishx = n.x();
                 posData.finishy = n.y();
             }
-            posData.xdistance = (float) (1 / intSteps) * (nodeCoords[0] - n.x());
-            posData.ydistance = (float) (1 / intSteps) * (nodeCoords[1] - n.y());
+            posData.xdistance = (float) (1 / this.getTransitionSteps()) * (nodeCoords[0] - n.x());
+            posData.ydistance = (float) (1 / this.getTransitionSteps()) * (nodeCoords[1] - n.y());
             n.setLayoutData(posData);
         }
     }
 
     @Override
     public void goAlgo() {
-        converged = true;
+        this.setConverged(true);
         TempLayoutData position = null;
-        Node[] nodes = graph.getNodes().toArray();
+        Node[] nodes = this.graph.getNodes().toArray();
         for (Node n : nodes) {
             if (n.getLayoutData() != null) {
                 position = n.getLayoutData();
-                if (boolTransition) {
+                if (this.isNodePlacementNoOverlap()) {
                     float currentDistance = Math.abs(n.x() - position.finishx);
                     float nextDistance = Math.abs(n.x() + position.xdistance - position.finishx);
                     if (nextDistance < currentDistance) {
                         n.setX(n.x() + position.xdistance);
-                        converged = false;
+                        this.setConverged(false);
                     } else {
                         n.setX(position.finishx);
                     }
@@ -208,7 +174,7 @@ public class DualCircleLayout extends AbstractLayout implements Layout {
                     nextDistance = Math.abs(n.y() + position.ydistance - position.finishy);
                     if (nextDistance < currentDistance) {
                         n.setY(n.y() + position.ydistance);
-                        converged = false;
+                        this.setConverged(false);
                     } else {
                         n.setY(position.finishy);
                     }
@@ -225,14 +191,6 @@ public class DualCircleLayout extends AbstractLayout implements Layout {
         }
     }
 
-    @Override
-    public boolean canAlgo() {
-        return !converged;
-    }
-
-    @Override
-    public void endAlgo() {
-    }
 
     @Override
     public LayoutProperty[] getProperties() {
@@ -259,7 +217,7 @@ public class DualCircleLayout extends AbstractLayout implements Layout {
                     NbBundle.getMessage(getClass(), "DualCircleLayout.attribue.desc"),
                     "getAttribute", "setAttribute", LayoutComboBoxEditor.class));
             properties.add(LayoutProperty.createProperty(
-                    this, String.class,
+                    this, CircularDirection.class,
                     NbBundle.getMessage(getClass(), "DualCircleLayout.NodePlacement.Direction.name"),
                     NbBundle.getMessage(getClass(), "DualCircleLayout.Category.NodePlacement.name"),
                     NbBundle.getMessage(getClass(), "DualCircleLayout.NodePlacement.Direction.desc"),
@@ -286,7 +244,7 @@ public class DualCircleLayout extends AbstractLayout implements Layout {
     public void resetPropertiesValues() {
         setInnerNodeCount(4);
         setHighDegreeOutside(false);
-        setNodePlacementDirection("CCW");
+        setNodePlacementDirection(CircularDirection.CCW);
         setAttribute("NodeID");
         setNodePlacementTransition(false);
         setTransitionSteps(100000.0);
@@ -324,14 +282,6 @@ public class DualCircleLayout extends AbstractLayout implements Layout {
         this.highdegreeoutside = highdegreeoutside;
     }
 
-    public String getNodePlacementDirection() {
-        return this.strNodePlacementDirection;
-    }
-
-    public void setNodePlacementDirection(String strNodePlacementDirection) {
-        this.strNodePlacementDirection = strNodePlacementDirection;
-    }
-
     public String getAttribute() {
         return this.attribute;
     }
@@ -339,35 +289,4 @@ public class DualCircleLayout extends AbstractLayout implements Layout {
     public void setAttribute(String attribute) {
         this.attribute = attribute;
     }
-
-    public boolean isNodePlacementTransition() {
-        return boolTransition;
-    }
-
-    public void setNodePlacementTransition(Boolean boolTransition) {
-        this.boolTransition = boolTransition;
-    }
-
-    public Double getTransitionSteps() {
-        return intSteps;
-    }
-
-    public void setTransitionSteps(Double steps) {
-        intSteps = steps;
-    }
-
-    private float[] cartCoors(double radius, int whichInt, double theta) {
-        float[] coOrds = new float[2];
-        coOrds[0] = (float) (radius * (Math.cos((theta * whichInt) + (Math.PI / 2))));
-        coOrds[1] = (float) (radius * (Math.sin((theta * whichInt) + (Math.PI / 2))));
-        return coOrds;
-    }
-}
-
-class TempLayoutData implements LayoutData {
-
-    public float finishx = 0;
-    public float finishy = 0;
-    public float xdistance = 0;
-    public float ydistance = 0;
 }

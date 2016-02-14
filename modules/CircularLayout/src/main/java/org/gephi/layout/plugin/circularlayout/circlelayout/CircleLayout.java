@@ -29,8 +29,6 @@ package org.gephi.layout.plugin.circularlayout.circlelayout;
 import java.util.*;
 import org.gephi.graph.api.*;
 import org.gephi.graph.spi.LayoutData;
-import org.gephi.layout.plugin.AbstractLayout;
-import org.gephi.layout.plugin.circularlayout.nodecomparator.NodeComparator;
 import org.gephi.layout.plugin.circularlayout.layouthelper.*;
 import org.gephi.layout.spi.Layout;
 import org.gephi.layout.spi.LayoutBuilder;
@@ -48,10 +46,7 @@ public class CircleLayout extends LayoutHelper implements Layout {
     private double diameter;
     private boolean boolfixeddiameter;
     private String strNodeplacement;
-    private boolean boolNoOverlap = true;
-    private boolean boolTransition = true;
     static final double TWO_PI = (2 * Math.PI);
-    private Double intSteps = 1.0;
 
     public CircleLayout(LayoutBuilder layoutBuilder, double diameter, boolean boolfixeddiameter) {
         super(layoutBuilder);
@@ -64,47 +59,36 @@ public class CircleLayout extends LayoutHelper implements Layout {
     @Override
     public void initAlgo() {
         this.setConverged(false);
-        graph = graphModel.getGraphVisible();
-        graph = graphModel.getGraphVisible();
+        this.graph = graphModel.getGraphVisible();
         float[] nodeCoords = new float[2];
         double tmpcirc = 0;
         double tmpdiameter = 0;
         int index = 0;
-        int nodecount = graph.getNodeCount();
+        int nodecount = this.graph.getNodeCount();
         double noderadius = 0;
         double theta = TWO_PI / nodecount;
         double lasttheta = 0;
         TempLayoutData posData;
 
-        if (!this.boolfixeddiameter) {
-            Node[] nodes = graph.getNodes().toArray();
-            for (Node n : nodes) {
-                if (!n.isFixed()) {
-                    tmpcirc += (n.size() * 2);
-                }
+        Node[] nodes = this.graph.getNodes().toArray();
+        for (Node n : nodes) {
+            if (!n.isFixed()) {
+                tmpcirc += (n.size() * 2);
             }
-            tmpcirc = (tmpcirc * 1.2);
-            tmpdiameter = tmpcirc / Math.PI;
-            if (this.boolNoOverlap) {
-                theta = (TWO_PI / tmpcirc);
-            }
-        } else {
-            tmpdiameter = this.diameter;
+        }
+        tmpcirc = (tmpcirc * 1.2);
+        tmpdiameter = tmpcirc / Math.PI;
+        if (this.isNodePlacementNoOverlap()) {
+            theta = (TWO_PI / tmpcirc);
+        }
+
+        if (this.isBoolFixedDiameter() && (tmpdiameter < this.diameter)) {
+          tmpdiameter = this.diameter;
         }
         double radius = tmpdiameter / 2;
 
         //determine Node placement
-        Node[] nodes = graph.getNodes().toArray();
-        if (this.strNodeplacement.equals("Random")) {
-            List nodesList = Arrays.asList(nodes);
-            Collections.shuffle(nodesList);
-        } else if (this.strNodeplacement.equals("NodeID")) {
-            Arrays.sort(nodes, new NodeComparator(graph, nodes, NodeComparator.CompareType.NODEID, null, false));
-        } else if (this.strNodeplacement.endsWith("-Att")) {
-            Arrays.sort(nodes, new NodeComparator(graph, nodes, NodeComparator.CompareType.ATTRIBUTE, this.strNodeplacement.substring(0, this.strNodeplacement.length() - 4), false));
-        } else if (getPlacementMap().containsKey(this.strNodeplacement)) {
-            Arrays.sort(nodes, new NodeComparator(graph, nodes, NodeComparator.CompareType.METHOD, this.strNodeplacement, false));
-        }
+        nodes = sortNodes(nodes,this.strNodeplacement);
 
         if (this.isCW()) {
             theta = -theta;
@@ -113,7 +97,7 @@ public class CircleLayout extends LayoutHelper implements Layout {
         for (Node n : nodes) {
             posData = new TempLayoutData();
             if (!n.isFixed()) {
-                if (this.boolNoOverlap) {
+                if (this.isNodePlacementNoOverlap()) {
                     noderadius = (n.size());
                     double noderadian = (theta * noderadius * 1.2);
                     nodeCoords = this.cartCoors(radius, 1, lasttheta + noderadian);
@@ -128,8 +112,8 @@ public class CircleLayout extends LayoutHelper implements Layout {
                 posData.finishx = n.x();
                 posData.finishy = n.y();
             }
-            posData.xdistance = (float) (1 / intSteps) * (nodeCoords[0] - n.x());
-            posData.ydistance = (float) (1 / intSteps) * (nodeCoords[1] - n.y());
+            posData.xdistance = (float) (1 / this.getTransitionSteps()) * (nodeCoords[0] - n.x());
+            posData.ydistance = (float) (1 / this.getTransitionSteps()) * (nodeCoords[1] - n.y());
             n.setLayoutData(posData);
 
         }
@@ -139,11 +123,11 @@ public class CircleLayout extends LayoutHelper implements Layout {
     public void goAlgo() {
         this.setConverged(true);
         TempLayoutData position = null;
-        Node[] nodes = graph.getNodes().toArray();
+        Node[] nodes = this.graph.getNodes().toArray();
         for (Node n : nodes) {
             if (n.getLayoutData() != null) {
                 position = n.getLayoutData();
-                if (boolTransition) {
+                if (this.isNodePlacementTransition()) {
                     float currentDistance = Math.abs(n.x() - position.finishx);
                     float nextDistance = Math.abs(n.x() + position.xdistance - position.finishx);
                     if (nextDistance < currentDistance) {
@@ -170,15 +154,6 @@ public class CircleLayout extends LayoutHelper implements Layout {
                 }
             }
         }
-    }
-
-    @Override
-    public boolean canAlgo() {
-        return !this.isConverged();
-    }
-
-    @Override
-    public void endAlgo() {
     }
 
     @Override
@@ -257,9 +232,6 @@ public class CircleLayout extends LayoutHelper implements Layout {
 
     public void setBoolFixedDiameter(Boolean boolfixeddiameter) {
         this.boolfixeddiameter = boolfixeddiameter;
-        if (this.boolfixeddiameter && this.boolNoOverlap) {
-            setNodePlacementNoOverlap(false);
-        }
     }
 
     public boolean isBoolFixedDiameter() {
@@ -274,30 +246,4 @@ public class CircleLayout extends LayoutHelper implements Layout {
         return diameter;
     }
 
-    public boolean isNodePlacementNoOverlap() {
-        return boolNoOverlap;
-    }
-
-    public void setNodePlacementNoOverlap(Boolean boolNoOverlap) {
-        this.boolNoOverlap = boolNoOverlap;
-        if (this.boolfixeddiameter && this.boolNoOverlap) {
-            setBoolFixedDiameter(false);
-        }
-    }
-
-    public boolean isNodePlacementTransition() {
-        return boolTransition;
-    }
-
-    public void setNodePlacementTransition(Boolean boolTransition) {
-        this.boolTransition = boolTransition;
-    }
-
-    public Double getTransitionSteps() {
-        return intSteps;
-    }
-
-    public void setTransitionSteps(Double steps) {
-        intSteps = steps;
-    }
 }
