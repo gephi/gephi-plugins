@@ -50,7 +50,6 @@ import org.gephi.graph.api.Graph;
 import org.gephi.graph.api.GraphDiff;
 import org.gephi.graph.api.Node;
 import org.gephi.graph.api.TableDiff;
-import org.gephi.graph.impl.GraphStoreConfiguration;
 import org.gephi.streaming.api.event.ElementType;
 import org.gephi.streaming.api.event.EventType;
 import org.gephi.streaming.api.event.GraphEventBuilder;
@@ -107,7 +106,7 @@ public class Graph2EventListener { // implements GraphListener, AttributeListene
     }
 
     public void attributesChanged(TableDiff tableDiff) {
-        //TODO: Reimplement this method
+        //TODO: Reimplement this method, check diffs in columnObserver when available
         
 //        switch (event.getEventType()) {
 //        case ADD_COLUMN:
@@ -206,7 +205,7 @@ public class Graph2EventListener { // implements GraphListener, AttributeListene
     private Map<String, Object> getNodeAttributes(Node node) {
         Map<String, Object> attributes = new HashMap<String, Object>();
         for (Column column: node.getAttributeColumns()) {
-            if (column.getIndex() != GraphStoreConfiguration.ELEMENT_ID_INDEX) {
+            if (!column.isProperty()) {
                 Object value = node.getAttribute(column);
                 if (value != null)
                     attributes.put(column.getTitle(), value);
@@ -231,7 +230,7 @@ public class Graph2EventListener { // implements GraphListener, AttributeListene
     private Map<String, Object> getEdgeAttributes(Edge edge) {
         Map<String, Object> attributes = new HashMap<String, Object>();
         for (Column column: edge.getAttributeColumns()) {
-            if (column.getIndex() != GraphStoreConfiguration.ELEMENT_ID_INDEX) {
+            if (!column.isProperty()) {
                 Object value = edge.getAttribute(column);
                 if (value != null)
                     attributes.put(column.getTitle(), value);
