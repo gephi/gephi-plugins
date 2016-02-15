@@ -42,6 +42,8 @@ Portions Copyrighted 2011 Gephi Consortium.
 package org.gephi.streaming.server.impl;
 
 import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -57,6 +59,7 @@ import org.gephi.streaming.server.AuthenticationFilter;
  */
 public class BasicAuthenticationFilter implements AuthenticationFilter {
     
+    private static final Logger logger = Logger.getLogger(BasicAuthenticationFilter.class.getName());
     private static final String REALM = "Gephi GraphStreaming";
     
     private String user;
@@ -94,11 +97,11 @@ public class BasicAuthenticationFilter implements AuthenticationFilter {
         
         encoded = encoded.replace("Basic ", "");
         
-        String decoded = null;
+        String decoded;
         try {
             decoded = new String(Base64.decode(encoded));
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.log(Level.WARNING, "Unable to decode authorization header", e);
             return false;
         }
         

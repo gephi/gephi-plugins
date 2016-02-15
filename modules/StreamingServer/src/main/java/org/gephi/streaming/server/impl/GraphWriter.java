@@ -53,6 +53,7 @@ import org.gephi.streaming.api.event.GraphEventBuilder;
 import org.gephi.streaming.api.GraphEventHandler;
 import org.gephi.streaming.api.event.ElementType;
 import org.gephi.streaming.api.event.EventType;
+import org.openide.util.Exceptions;
 
 /**
  * @author panisson
@@ -111,7 +112,7 @@ public class GraphWriter extends CompositeGraphEventHandler {
 //            }
 
         } catch (Exception e) {
-            e.printStackTrace();
+            Exceptions.printStackTrace(e);
         } finally {
             graph.readUnlock();
         }

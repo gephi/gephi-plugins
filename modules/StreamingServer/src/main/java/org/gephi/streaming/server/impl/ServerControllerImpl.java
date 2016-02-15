@@ -48,6 +48,8 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.servlet.AsyncContext;
 import javax.servlet.http.HttpServletRequest;
@@ -66,6 +68,7 @@ import org.openide.util.Exceptions;
  */
 public class ServerControllerImpl implements ServerController {
 
+    private static final Logger logger = Logger.getLogger(ServerControllerImpl.class.getName());
     private ClientManagerImpl clientManager;
     
     private enum Operations {
@@ -230,6 +233,7 @@ public class ServerControllerImpl implements ServerController {
                 return;
             }
         } catch (Exception e) {
+            logger.log(Level.WARNING, "Error executing operation", e);
             e.printStackTrace();
             try {
                 executeError(response, "Error: "+e.getMessage());
