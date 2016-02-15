@@ -75,7 +75,7 @@ public class DualCircleLayout extends LayoutHelper implements Layout {
         }
         Node[] nodes = this.graph.getNodes().toArray();
 
-        nodes = sortNodes(nodes,this.attribute);
+        nodes = sortNodes(nodes,this.attribute,false);
 
         for (Node n : nodes) {
             if (!n.isFixed()) {

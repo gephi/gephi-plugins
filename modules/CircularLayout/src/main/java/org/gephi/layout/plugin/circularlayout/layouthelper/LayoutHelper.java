@@ -104,6 +104,14 @@ public abstract class LayoutHelper implements Layout {
        this.NodePlacementDirection = NodePlacementDirection;
    }
 
+   public void setNodePlacementDirection(String NodePlacementDirection) {
+     for (CircularDirection enumValue : (CircularDirection.class).getEnumConstants()) {
+       if (enumValue.name().equalsIgnoreCase(NodePlacementDirection)) {
+         this.NodePlacementDirection = enumValue;
+       }
+      }
+   }
+
    public boolean isCW() {
      if (this.NodePlacementDirection == CircularDirection.CW) {
        return true;
@@ -142,17 +150,17 @@ public abstract class LayoutHelper implements Layout {
        intSteps = steps;
    }
 
-  public Node[] sortNodes(Node[] nodes, String strNodeplacement) {
+  public Node[] sortNodes(Node[] nodes, String strNodeplacement, boolean sortdirection) {
     Graph graph = this.graphModel.getGraphVisible();
     if (strNodeplacement.equals("Random")) {
         List nodesList = Arrays.asList(nodes);
         Collections.shuffle(nodesList);
     } else if (strNodeplacement.equals("NodeID")) {
-        Arrays.sort(nodes, new NodeComparator(graph, nodes, NodeComparator.CompareType.NODEID, null, false));
+        Arrays.sort(nodes, new NodeComparator(graph, nodes, NodeComparator.CompareType.NODEID, null, sortdirection));
     } else if (strNodeplacement.endsWith("-Att")) {
-        Arrays.sort(nodes, new NodeComparator(graph, nodes, NodeComparator.CompareType.ATTRIBUTE, strNodeplacement.substring(0, strNodeplacement.length() - 4), false));
+        Arrays.sort(nodes, new NodeComparator(graph, nodes, NodeComparator.CompareType.ATTRIBUTE, strNodeplacement.substring(0, strNodeplacement.length() - 4), sortdirection));
     } else if (getPlacementMap().containsKey(strNodeplacement)) {
-        Arrays.sort(nodes, new NodeComparator(graph, nodes, NodeComparator.CompareType.METHOD, strNodeplacement, false));
+        Arrays.sort(nodes, new NodeComparator(graph, nodes, NodeComparator.CompareType.METHOD, strNodeplacement, sortdirection));
     }
     return nodes;
   }
@@ -179,6 +187,29 @@ public abstract class LayoutHelper implements Layout {
           map.put(c.getId() + "-Att", c.getTitle() + " (Attribute)");
       }
       return map;
+  }
+
+  public Object getLayerAttribute(Node n, String Placement) {
+      Object layout = null;
+      Graph graph = graphModel.getGraphVisible();
+      if (Placement.equals("Random")) {
+                layout = 1;
+      } else if (Placement.equals("NodeID")) {
+          layout = n.getId();
+      } else if (Placement.equals("Degree")) {
+          layout = graph.getDegree(n);
+      } else if (Placement.equals("InDegree")) {
+          DirectedGraph objGraph = graphModel.getDirectedGraph();
+          layout = objGraph.getInDegree(n);
+      } else if (Placement.equals("OutDegree")) {
+          GraphController graphController = Lookup.getDefault().lookup(GraphController.class);
+          DirectedGraph objGraph = graphModel.getDirectedGraph();
+          layout = objGraph.getOutDegree(n);
+      } else {
+          Placement = Placement.substring(0, Placement.length() - 4);
+          layout = n.getAttribute(Placement);
+      }
+      return layout;
   }
 
   public static Map getRotationMap() {

@@ -88,7 +88,7 @@ public class CircleLayout extends LayoutHelper implements Layout {
         double radius = tmpdiameter / 2;
 
         //determine Node placement
-        nodes = sortNodes(nodes,this.strNodeplacement);
+        nodes = sortNodes(nodes,this.strNodeplacement, false);
 
         if (this.isCW()) {
             theta = -theta;

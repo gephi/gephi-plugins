@@ -29,10 +29,7 @@ package org.gephi.layout.plugin.circularlayout.radialaxislayout;
 import java.util.*;
 import org.gephi.graph.api.*;
 import org.gephi.graph.spi.LayoutData;
-import org.gephi.graph.api.NodeProperties;
-import org.gephi.graph.api.Element;
-import org.gephi.layout.plugin.AbstractLayout;
-import org.gephi.layout.plugin.circularlayout.nodecomparator.NodeComparator;
+import org.gephi.layout.plugin.circularlayout.layouthelper.*;
 import org.gephi.layout.spi.Layout;
 import org.gephi.layout.spi.LayoutBuilder;
 import org.gephi.layout.spi.LayoutProperty;
@@ -43,10 +40,9 @@ import org.openide.util.NbBundle;
  *
  * @author Matt
  */
-public class RadialAxisLayout extends AbstractLayout implements Layout {
+public class RadialAxisLayout extends LayoutHelper implements Layout {
 
     private Graph graph;
-    private boolean converged;
     private String strNodeplacement;
     private String strNodePlacementDirection;
     private String strKnockdown;
@@ -66,28 +62,6 @@ public class RadialAxisLayout extends AbstractLayout implements Layout {
         super(layoutBuilder);
     }
 
-    public static Map getPlacementMap() {
-        GraphController graphController = Lookup.getDefault().lookup(GraphController.class);
-        GraphModel objGraphModel = graphController.getGraphModel();
-        Map<String, String> map = new TreeMap<String, String>();
-        map.put("Degree", NbBundle.getMessage(RadialAxisLayout.class, "RadialAxisLayout.NodePlacement.Degree.name"));
-        if (objGraphModel.isDirected()) {
-            map.put("InDegree", NbBundle.getMessage(RadialAxisLayout.class, "RadialAxisLayout.NodePlacement.InDegree.name"));
-            map.put("OutDegree", NbBundle.getMessage(RadialAxisLayout.class, "RadialAxisLayout.NodePlacement.OutDegree.name"));
-        }
-        for (Column c : objGraphModel.getNodeTable()) {
-            map.put(c.getTitle() + "-Att", c.getTitle() + " (Attribute)");
-        }
-        return map;
-    }
-
-    public static Map getRotationMap() {
-        Map<String, String> map = new TreeMap<String, String>();
-        map.put("CCW", NbBundle.getMessage(RadialAxisLayout.class, "RadialAxisLayout.NodePlacement.CCW"));
-        map.put("CW", NbBundle.getMessage(RadialAxisLayout.class, "RadialAxisLayout.NodePlacement.CW"));
-        return map;
-    }
-
     public static Map getKnockDownRangeMap() {
         Map<String, String> map = new TreeMap<String, String>();
         map.put("TOP", NbBundle.getMessage(RadialAxisLayout.class, "RadialAxisLayout.KnockDownRange.TOP"));
@@ -98,7 +72,7 @@ public class RadialAxisLayout extends AbstractLayout implements Layout {
 
     @Override
     public void initAlgo() {
-        converged = false;
+        this.setConverged(false);
         this.graph = graphModel.getGraphVisible();
         graph.readLock();
         float[] nodeCoords = new float[2];
@@ -111,13 +85,8 @@ public class RadialAxisLayout extends AbstractLayout implements Layout {
         Node[] nodes = graph.getNodes().toArray();
         double nodecount = nodes.length;
 
-        if (this.strNodeplacement.equals("NodeID")) {
-            Arrays.sort(nodes, new NodeComparator(graph, nodes, NodeComparator.CompareType.NODEID, null, true));
-        } else if (this.strNodeplacement.endsWith("-Att")) {
-            Arrays.sort(nodes, new NodeComparator(graph, nodes, NodeComparator.CompareType.ATTRIBUTE, this.strNodeplacement.substring(0, this.strNodeplacement.length() - 4), true));
-        } else if (getPlacementMap().containsKey(this.strNodeplacement)) {
-            Arrays.sort(nodes, new NodeComparator(graph, nodes, NodeComparator.CompareType.METHOD, this.strNodeplacement, true));
-        }
+        //determine Node placement
+        nodes = sortNodes(nodes,this.strNodeplacement,true);
 
         int i = 0;
         Object lastlayer = null;
@@ -189,13 +158,8 @@ public class RadialAxisLayout extends AbstractLayout implements Layout {
             }
             if (currentindex > previousindex) {
                 Node[] shortnodes = NodeList.subList(previousindex, currentindex).toArray(new Node[0]);
-                if (this.strSparNodePlacement.equals("NodeID")) {
-                    Arrays.sort(shortnodes, new NodeComparator(graph, shortnodes, NodeComparator.CompareType.NODEID, null, this.boolSparOrderingDirection));
-                } else if (this.strSparNodePlacement.endsWith("-Att")) {
-                    Arrays.sort(shortnodes, new NodeComparator(graph, shortnodes, NodeComparator.CompareType.ATTRIBUTE, this.strSparNodePlacement.substring(0, this.strSparNodePlacement.length() - 4), this.boolSparOrderingDirection));
-                } else if (getPlacementMap().containsKey(this.strSparNodePlacement)) {
-                    Arrays.sort(shortnodes, new NodeComparator(graph, shortnodes, NodeComparator.CompareType.METHOD, this.strSparNodePlacement, this.boolSparOrderingDirection));
-                }
+                //determine Node placement
+                shortnodes = sortNodes(shortnodes,this.strSparNodePlacement,this.isSparOrderingDirection());
 
                 NodeList.removeAll(Arrays.asList(shortnodes));
                 NodeList.addAll(previousindex, Arrays.asList(shortnodes));
@@ -227,7 +191,7 @@ public class RadialAxisLayout extends AbstractLayout implements Layout {
         theta = (TWO_PI / tmpcirc);
         double thetainc = TWO_PI / group;
 
-        if ("CW".equals(this.strNodePlacementDirection)) {
+        if (this.isCW()) {
             theta = -theta;
         }
         GroupLayoutData position = null;
@@ -284,7 +248,7 @@ public class RadialAxisLayout extends AbstractLayout implements Layout {
 
     @Override
     public void goAlgo() {
-        converged = true;
+        this.setConverged(true);
         GroupLayoutData position = null;
         Node[] nodes = graph.getNodes().toArray();
         for (Node n : nodes) {
@@ -295,7 +259,7 @@ public class RadialAxisLayout extends AbstractLayout implements Layout {
                     float nextDistance = Math.abs(n.x() + position.xdistance - position.finishx);
                     if (nextDistance < currentDistance) {
                         n.setX(n.x() + position.xdistance);
-                        converged = false;
+                        this.setConverged(false);
                     } else {
                         n.setX(position.finishx);
                     }
@@ -303,7 +267,7 @@ public class RadialAxisLayout extends AbstractLayout implements Layout {
                     nextDistance = Math.abs(n.y() + position.ydistance - position.finishy);
                     if (nextDistance < currentDistance) {
                         n.setY(n.y() + position.ydistance);
-                        converged = false;
+                        this.setConverged(false);
                     } else {
                         n.setY(position.finishy);
                     }
@@ -320,15 +284,6 @@ public class RadialAxisLayout extends AbstractLayout implements Layout {
     }
 
     @Override
-    public boolean canAlgo() {
-        return !converged;
-    }
-
-    @Override
-    public void endAlgo() {
-    }
-
-    @Override
     public LayoutProperty[] getProperties() {
         List<LayoutProperty> properties = new ArrayList<LayoutProperty>();
         final String PLACEMENT_CATEGORY = NbBundle.getMessage(getClass(), "RadialAxisLayout.Category.Placement.name");
@@ -342,9 +297,9 @@ public class RadialAxisLayout extends AbstractLayout implements Layout {
                     NbBundle.getMessage(getClass(), "RadialAxisLayout.NodePlacement.NodeOrdering.name"),
                     PLACEMENT_CATEGORY,
                     NbBundle.getMessage(getClass(), "RadialAxisLayout.NodePlacement.NodeOrdering.desc"),
-                    "getNodePlacement", "setNodePlacement", LayoutComboBoxEditor.class));
+                    "getNodePlacement", "setNodePlacement", LayoutComboBoxEditorNoRand.class));
             properties.add(LayoutProperty.createProperty(
-                    this, String.class,
+                    this,  CircularDirection.class,
                     NbBundle.getMessage(getClass(), "RadialAxisLayout.NodePlacement.Direction.name"),
                     PLACEMENT_CATEGORY,
                     NbBundle.getMessage(getClass(), "RadialAxisLayout.NodePlacement.Direction.desc"),
@@ -354,7 +309,7 @@ public class RadialAxisLayout extends AbstractLayout implements Layout {
                     NbBundle.getMessage(getClass(), "RadialAxisLayout.Spars.NodeOrdering.name"),
                     PLACEMENT_CATEGORY,
                     NbBundle.getMessage(getClass(), "RadialAxisLayout.Spars.NodeOrdering.desc"),
-                    "getSparNodePlacement", "setSparNodePlacement", LayoutComboBoxEditor.class));
+                    "getSparNodePlacement", "setSparNodePlacement", LayoutComboBoxEditorNoRand.class));
             properties.add(LayoutProperty.createProperty(
                     this, Boolean.class,
                     NbBundle.getMessage(getClass(), "RadialAxisLayout.Spars.SparOrderingDirection.name"),
@@ -426,7 +381,7 @@ public class RadialAxisLayout extends AbstractLayout implements Layout {
     @Override
     public void resetPropertiesValues() {
         setNodePlacement("Degree");
-        setNodePlacementDirection("CCW");
+        setNodePlacementDirection(CircularDirection.CCW);
         setSparSpiral(false);
         setKnockdownSpars(false);
         setSparOrderingDirection(false);
@@ -448,14 +403,6 @@ public class RadialAxisLayout extends AbstractLayout implements Layout {
         return this.strNodeplacement;
     }
 
-    public String getNodePlacementDirection() {
-        return this.strNodePlacementDirection;
-    }
-
-    public void setNodePlacementDirection(String strNodePlacementDirection) {
-        this.strNodePlacementDirection = strNodePlacementDirection;
-    }
-
     public Boolean isKnockdownSpars() {
         return this.boolKnockdownSpars;
     }
@@ -470,7 +417,6 @@ public class RadialAxisLayout extends AbstractLayout implements Layout {
 
     public void setSparOrderingDirection(Boolean boolSparOrderingDirection) {
         this.boolSparOrderingDirection = boolSparOrderingDirection;
-
     }
 
     public void setKnockDownRange(String strKnockdown) {
@@ -527,61 +473,5 @@ public class RadialAxisLayout extends AbstractLayout implements Layout {
 
     public void setScalingWidth(Double dScalingWidth) {
         this.dScalingWidth = dScalingWidth;
-    }
-
-    public Object getLayerAttribute(Node n, String Placement) {
-        Object layout = null;
-        if (Placement.equals("NodeID")) {
-            layout = n.getId();
-        } else if (Placement.equals("Degree")) {
-            layout = graph.getDegree(n);
-        } else if (Placement.equals("InDegree")) {
-            GraphController graphController = Lookup.getDefault().lookup(GraphController.class);
-            GraphModel objGraphModel = graphController.getGraphModel();
-            DirectedGraph objGraph = objGraphModel.getDirectedGraph();
-            layout = objGraph.getInDegree(n);
-        } else if (Placement.equals("OutDegree")) {
-            GraphController graphController = Lookup.getDefault().lookup(GraphController.class);
-            GraphModel objGraphModel = graphController.getGraphModel();
-            DirectedGraph objGraph = objGraphModel.getDirectedGraph();
-            layout = objGraph.getOutDegree(n);
-        } else {
-            Placement = Placement.substring(0, Placement.length() - 4);
-            layout = n.getAttribute(Placement);
-        }
-        return layout;
-    }
-
-    public boolean isNodePlacementTransition() {
-        return boolTransition;
-    }
-
-    public void setNodePlacementTransition(Boolean boolTransition) {
-        this.boolTransition = boolTransition;
-    }
-
-    public Double getTransitionSteps() {
-        return intSteps;
-    }
-
-    public void setTransitionSteps(Double steps) {
-        intSteps = steps;
-    }
-
-    private float[] cartCoors(double radius, double whichInt, double theta) {
-        float[] coOrds = new float[2];
-        coOrds[0] = (float) (radius * (Math.cos((theta * whichInt) + (Math.PI / 2))));
-        coOrds[1] = (float) (radius * (Math.sin((theta * whichInt) + (Math.PI / 2))));
-        return coOrds;
-    }
-
-    public class GroupLayoutData implements LayoutData {
-
-        public int group = 0;
-        public int order = 0;
-        public float finishx = 0;
-        public float finishy = 0;
-        public float xdistance = 0;
-        public float ydistance = 0;
     }
 }
