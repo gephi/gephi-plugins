@@ -9,13 +9,13 @@
 
     <groupId>org.gephi.layout.plugin</groupId>
     <artifactId>circularlayout</artifactId>
-    <version>1.0.0</version>
+    <version>0.9</version>
     <packaging>nbm</packaging>
 
     <name>CircularLayout</name>
 
     <dependencies>
-        
+
     <dependency>
       <groupId>org.gephi</groupId>
       <artifactId>ui-utils</artifactId>
@@ -66,7 +66,7 @@
                     <sourceCodeUrl>$sourcecode_url</sourceCodeUrl>
                     <homePageUrl>http://gephi.org/plugins/circular-layout/</homePageUrl>
                     <publicPackages>
-                        
+
                     </publicPackages>
                 </configuration>
             </plugin>
