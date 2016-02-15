@@ -186,15 +186,18 @@ public class StreamingUIController {
         // Get active graph instance - Project and Graph API
         ProjectController projectController = Lookup.getDefault().lookup(ProjectController.class);
         Project project = projectController.getCurrentProject();
-        if (project==null)
-            projectController.newProject();
+        if (project==null) {
+            logger.log(Level.WARNING, "Project not initialized during synchronize.");
+            return;
+        }
         Workspace workspace = projectController.getCurrentWorkspace();
-        if (workspace==null)
-            workspace = projectController.newWorkspace(projectController.getCurrentProject());
-//        projectController.openWorkspace(workspace);
+        if (workspace==null){
+            logger.log(Level.WARNING, "Workspace not initialized during synchronize.");
+            return;
+        }
 
         GraphController graphController = Lookup.getDefault().lookup(GraphController.class);
-        GraphModel graphModel = graphController.getGraphModel();
+        GraphModel graphModel = graphController.getGraphModel(workspace);
         Graph graph = graphModel.getGraph();
         graph.clear();
 
@@ -257,18 +260,18 @@ public class StreamingUIController {
         ProjectController projectController = Lookup.getDefault().lookup(ProjectController.class);
         Project project = projectController.getCurrentProject();
         if (project==null) {
-            //TODO: Invalid project
+            logger.log(Level.WARNING, "Project not initialized during startMaster.");
             return;
         }
         
         Workspace workspace = projectController.getCurrentWorkspace();
         if (workspace==null) {
-            //TODO: Invalid workspace
+            logger.log(Level.WARNING, "Workspace not initialized during startMaster.");
             return;
         }
         
         GraphController graphController = Lookup.getDefault().lookup(GraphController.class);
-        Graph graph = graphController.getGraphModel().getGraph();
+        Graph graph = graphController.getGraphModel(workspace).getGraph();
 
         WorkspaceInformation wi = workspace.getLookup().lookup(WorkspaceInformation.class);
         String context = "/"+wi.getName().replaceAll(" ", "").toLowerCase();
