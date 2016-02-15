@@ -320,24 +320,24 @@ public class GraphUpdaterEventHandler implements GraphEventHandler {
         NodeProperties p = properties.getNodeProperty(attributeName);
         if (p != null) {
             injectNodeProperty(p, value, node);
+        } else {
+            if (!graph.getModel().getNodeTable().hasColumn(attributeName)) {
+                graph.getModel().getNodeTable().addColumn(attributeName, value.getClass());
+            }
+            node.setAttribute(attributeName, value);
         }
-        
-        if (!graph.getModel().getNodeTable().hasColumn(attributeName)) {
-            graph.getModel().getNodeTable().addColumn(attributeName, value.getClass());
-        }
-        node.setAttribute(attributeName, value);
     }
     
     private void addEdgeAttribute(Edge edge, String attributeName, Object value) {
         EdgeProperties p = properties.getEdgeProperty(attributeName);
         if (p != null) {
             injectEdgeProperty(p, value, edge);
-        }
-        
-        if (!graph.getModel().getEdgeTable().hasColumn(attributeName)) {
-            graph.getModel().getEdgeTable().addColumn(attributeName, value.getClass());
-        }
+        } else {
+            if (!graph.getModel().getEdgeTable().hasColumn(attributeName)) {
+                graph.getModel().getEdgeTable().addColumn(attributeName, value.getClass());
+            }
         edge.setAttribute(attributeName, value);
+        }
     }
     
     private void injectNodeProperty(NodeProperties p, Object value, Node node) {
