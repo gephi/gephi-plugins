@@ -54,6 +54,7 @@ import org.gephi.graph.api.Edge;
 import org.gephi.graph.api.Graph;
 import org.gephi.graph.api.Node;
 import org.gephi.graph.impl.GraphStoreConfiguration;
+import org.gephi.streaming.api.AttributeUtils;
 import org.gephi.streaming.api.CompositeGraphEventHandler;
 import org.gephi.streaming.api.Graph2EventListener;
 import org.gephi.streaming.api.GraphEventHandler;
@@ -79,7 +80,6 @@ public class ServerOperationExecutor {
     private final Graph graph;
     private final StreamWriterFactory writerFactory;
     private final StreamReaderFactory readerFactory;
-    private boolean sendVizData = true;
     private final GraphEventBuilder eventBuilder;
     private ClientManagerImpl clientManager;
     
@@ -144,7 +144,8 @@ public class ServerOperationExecutor {
             Node node = graph.getNode(id);
             if (node != null) {
                 String nodeId = node.getId().toString();
-                writer.handleGraphEvent(eventBuilder.graphEvent(ElementType.NODE, EventType.ADD, nodeId, getNodeAttributes(node)));
+                writer.handleGraphEvent(eventBuilder.graphEvent(ElementType.NODE, EventType.ADD, nodeId,
+                        AttributeUtils.getNodeAttributes(node)));
             }
         } finally {
             graph.readUnlock();
@@ -174,7 +175,8 @@ public class ServerOperationExecutor {
                 String edgeId = edge.getId().toString();
                 String sourceId = edge.getSource().getId().toString();
                 String targetId = edge.getTarget().getId().toString();
-                writer.handleGraphEvent(eventBuilder.edgeAddedEvent(edgeId, sourceId, targetId, edge.isDirected(), getEdgeAttributes(edge)));
+                writer.handleGraphEvent(eventBuilder.edgeAddedEvent(edgeId, sourceId, targetId, edge.isDirected(),
+                        AttributeUtils.getEdgeAttributes(edge)));
             }
         } finally {
             graph.readUnlock();
@@ -215,53 +217,6 @@ public class ServerOperationExecutor {
         
         StreamReader reader = readerFactory.createStreamReader(format, cos, eventBuilder);
         reader.processStream(inputStream);
-    }
-    
-    private Map<String, Object> getNodeAttributes(Node node) {
-        Map<String, Object> attributes = new HashMap<String, Object>();
-        for (Column column: node.getAttributeColumns()) {
-            if (column.getIndex() != GraphStoreConfiguration.ELEMENT_ID_INDEX) {
-                Object value = node.getAttribute(column);
-                if (value != null)
-                    attributes.put(column.getTitle(), value);
-            }
-        }
-
-        if (sendVizData) {
-            attributes.put("x", node.x());
-            attributes.put("y", node.y());
-            attributes.put("z", node.z());
-
-            attributes.put("r", node.r());
-            attributes.put("g", node.g());
-            attributes.put("b", node.b());
-
-            attributes.put("size", node.size());
-        }
-
-        return attributes;
-    }
-
-    private Map<String, Object> getEdgeAttributes(Edge edge) {
-        Map<String, Object> attributes = new HashMap<String, Object>();
-        for (Column column: edge.getAttributeColumns()) {
-            if (column.getIndex() != GraphStoreConfiguration.ELEMENT_ID_INDEX) {
-                Object value = edge.getAttribute(column);
-                if (value != null)
-                    attributes.put(column.getTitle(), value);
-            }
-        }
-
-        if (sendVizData) {
-
-            attributes.put("r", edge.r());
-            attributes.put("g", edge.g());
-            attributes.put("b", edge.b());
-
-            attributes.put("weight", edge.getWeight());
-        }
-
-        return attributes;
     }
     
     public GraphEventHandler getEventHandler() {

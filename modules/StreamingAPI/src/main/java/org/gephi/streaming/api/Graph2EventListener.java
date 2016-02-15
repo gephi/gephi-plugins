@@ -63,7 +63,6 @@ public class Graph2EventListener { // implements GraphListener, AttributeListene
     private GraphEventHandler eventHandler;
     private GraphEventBuilder eventBuilder;
     private Graph graph;
-    private boolean sendVizData = true;
 
     public Graph2EventListener(Graph graph, GraphEventHandler eventHandler) {
         this.graph = graph;
@@ -77,7 +76,7 @@ public class Graph2EventListener { // implements GraphListener, AttributeListene
             String nodeId = node.getId().toString();
             org.gephi.streaming.api.event.GraphEvent e = 
                     eventBuilder.graphEvent(ElementType.NODE, EventType.ADD, nodeId, 
-                    getNodeAttributes(node));
+                    AttributeUtils.getNodeAttributes(node));
             eventHandler.handleGraphEvent(e);
         }
         
@@ -86,7 +85,7 @@ public class Graph2EventListener { // implements GraphListener, AttributeListene
             org.gephi.streaming.api.event.GraphEvent e = 
                     eventBuilder.edgeAddedEvent(edgeId, edge.getSource().getId().toString(),
                     edge.getTarget().getId().toString(), edge.isDirected(), 
-                    getEdgeAttributes(edge));
+                    AttributeUtils.getEdgeAttributes(edge));
             eventHandler.handleGraphEvent(e);
         }
         
@@ -201,52 +200,4 @@ public class Graph2EventListener { // implements GraphListener, AttributeListene
 //            break;
 //        }
     }
-
-    private Map<String, Object> getNodeAttributes(Node node) {
-        Map<String, Object> attributes = new HashMap<String, Object>();
-        for (Column column: node.getAttributeColumns()) {
-            if (!column.isProperty()) {
-                Object value = node.getAttribute(column);
-                if (value != null)
-                    attributes.put(column.getTitle(), value);
-            }
-        }
-
-        if (sendVizData) {
-            attributes.put("x", node.x());
-            attributes.put("y", node.y());
-            attributes.put("z", node.z());
-
-            attributes.put("r", node.r());
-            attributes.put("g", node.g());
-            attributes.put("b", node.b());
-
-            attributes.put("size", node.size());
-        }
-
-        return attributes;
-    }
-
-    private Map<String, Object> getEdgeAttributes(Edge edge) {
-        Map<String, Object> attributes = new HashMap<String, Object>();
-        for (Column column: edge.getAttributeColumns()) {
-            if (!column.isProperty()) {
-                Object value = edge.getAttribute(column);
-                if (value != null)
-                    attributes.put(column.getTitle(), value);
-            }
-        }
-
-        if (sendVizData) {
-
-            attributes.put("r", edge.r());
-            attributes.put("g", edge.g());
-            attributes.put("b", edge.b());
-
-            attributes.put("weight", edge.getWeight());
-        }
-
-        return attributes;
-    }
-
 }

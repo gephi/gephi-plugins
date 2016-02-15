@@ -41,16 +41,13 @@ Portions Copyrighted 2011 Gephi Consortium.
  */
 package org.gephi.streaming.server.impl;
 
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Set;
-import org.gephi.graph.api.Column;
 
 import org.gephi.graph.api.Edge;
 import org.gephi.graph.api.Graph;
 import org.gephi.graph.api.Node;
-import org.gephi.graph.impl.GraphStoreConfiguration;
+import org.gephi.streaming.api.AttributeUtils;
 import org.gephi.streaming.api.CompositeGraphEventHandler;
 import org.gephi.streaming.api.event.GraphEventBuilder;
 import org.gephi.streaming.api.GraphEventHandler;
@@ -85,7 +82,7 @@ public class GraphWriter extends CompositeGraphEventHandler {
                 String nodeId = (String) node.getId();
                 operationSupport.handleGraphEvent(
                         eventBuilder.graphEvent(ElementType.NODE,
-                        EventType.ADD, nodeId, getNodeAttributes(node)));
+                        EventType.ADD, nodeId, AttributeUtils.getNodeAttributes(node)));
                 writtenNodes.add(nodeId);
 
                 for (Edge edge: graph.getEdges(node)) {
@@ -97,7 +94,7 @@ public class GraphWriter extends CompositeGraphEventHandler {
                         && writtenNodes.contains(targetId) ) {
                         operationSupport.handleGraphEvent(
                                 eventBuilder.edgeAddedEvent(edgeId, sourceId,
-                                targetId, edge.isDirected(), getEdgeAttributes(edge)));
+                                targetId, edge.isDirected(), AttributeUtils.getEdgeAttributes(edge)));
                         writtenEdges.add(edgeId);
                     }
                 }
@@ -119,52 +116,4 @@ public class GraphWriter extends CompositeGraphEventHandler {
             graph.readUnlock();
         }
     }
-
-    private Map<String, Object> getNodeAttributes(Node node) {
-        Map<String, Object> attributes = new HashMap<String, Object>();
-        for (Column column: node.getAttributeColumns()) {
-            if (column.getIndex() != GraphStoreConfiguration.ELEMENT_ID_INDEX) {
-                Object value = node.getAttribute(column);
-                if (value != null)
-                    attributes.put(column.getTitle(), value);
-            }
-        }
-
-        if (sendVizData) {
-            attributes.put("x", node.x());
-            attributes.put("y", node.y());
-            attributes.put("z", node.z());
-
-            attributes.put("r", node.r());
-            attributes.put("g", node.g());
-            attributes.put("b", node.b());
-
-            attributes.put("size", node.size());
-        }
-
-        return attributes;
-    }
-
-    private Map<String, Object> getEdgeAttributes(Edge edge) {
-        Map<String, Object> attributes = new HashMap<String, Object>();
-        for (Column column: edge.getAttributeColumns()) {
-            if (column.getIndex() != GraphStoreConfiguration.ELEMENT_ID_INDEX) {
-                Object value = edge.getAttribute(column);
-                if (value != null)
-                    attributes.put(column.getTitle(), value);
-            }
-        }
-
-        if (sendVizData) {
-
-            attributes.put("r", edge.r());
-            attributes.put("g", edge.g());
-            attributes.put("b", edge.b());
-
-            attributes.put("weight", edge.getWeight());
-        }
-
-        return attributes;
-    }
-
 }
