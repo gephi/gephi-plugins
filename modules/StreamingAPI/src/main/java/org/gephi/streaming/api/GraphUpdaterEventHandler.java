@@ -214,34 +214,34 @@ public class GraphUpdaterEventHandler implements GraphEventHandler {
             return;
         }
         
+        graph.writeLock();
+        
         Node source = graph.getNode(fromNodeId);
         if (source==null) {
             log("Edge added event ignored for edge "+edgeId+": Source node "+fromNodeId+" not found");
+            graph.writeUnlock();
             return;
         }
 
         Node target = graph.getNode(toNodeId);
         if (target==null) {
             log("Edge added event ignored for edge "+edgeId+": Target node "+toNodeId+" not found");
+            graph.writeUnlock();
             return;
         }
+            
+        edge = factory.newEdge(edgeId, source, target,0 , 1.0f, directed);
 
-        if(source!=null && target!=null) {
-            
-            edge = factory.newEdge(edgeId, source, target,0 , 1.0f, directed);
-            
-            if (attributes!=null && attributes.size() > 0) {
-                for(Map.Entry<String, Object> entry: attributes.entrySet()) {
-                    this.addEdgeAttribute(edge, entry.getKey(), entry.getValue());
-                }
+        if (attributes!=null && attributes.size() > 0) {
+            for(Map.Entry<String, Object> entry: attributes.entrySet()) {
+                this.addEdgeAttribute(edge, entry.getKey(), entry.getValue());
             }
-            
-            graph.writeLock();
-            graph.addEdge(edge);
-            
-            // graph.setId(edge, edgeId);
-            graph.writeUnlock();
         }
+
+
+        graph.addEdge(edge);
+        
+        graph.writeUnlock();
     }
     
     private void edgeChanged(String edgeId, Map<String, Object> attributes) {
@@ -265,9 +265,7 @@ public class GraphUpdaterEventHandler implements GraphEventHandler {
     private void edgeRemoved(String edgeId) {
         Edge edge = graph.getEdge(edgeId);
         if (edge!=null) {
-            graph.writeLock();
             graph.removeEdge(edge);
-            graph.writeUnlock();
         } else {
             log("Edge removed event ignored for edge "+edgeId+": Edge not found");
         }
@@ -284,10 +282,8 @@ public class GraphUpdaterEventHandler implements GraphEventHandler {
                 }
             }
             
-            graph.writeLock();
             // graph.setId(node, nodeId);
             graph.addNode(node);
-            graph.writeUnlock();
         } else {
             log("Node added event ignored for node "+nodeId+": Node already exists");
         }
@@ -314,14 +310,7 @@ public class GraphUpdaterEventHandler implements GraphEventHandler {
     private void nodeRemoved(String nodeId) {
         Node node = graph.getNode(nodeId);
         if (node!=null) {
-            graph.writeLock();
-
-            for (Edge edge: graph.getEdges(node).toArray()) {
-                graph.removeEdge(edge);
-            }
-
             graph.removeNode(node);
-            graph.writeUnlock();
         } else {
             log("Node changed event ignored for node "+nodeId+": Node not found");
         }
@@ -333,12 +322,10 @@ public class GraphUpdaterEventHandler implements GraphEventHandler {
             injectNodeProperty(p, value, node);
         }
         
-        else if (!node.getAttributeKeys().isEmpty()) {
-            if (!graph.getModel().getNodeTable().hasColumn(attributeName)) {
-                graph.getModel().getNodeTable().addColumn(attributeName, value.getClass());
-            }
-            node.setAttribute(attributeName, value);
+        if (!graph.getModel().getNodeTable().hasColumn(attributeName)) {
+            graph.getModel().getNodeTable().addColumn(attributeName, value.getClass());
         }
+        node.setAttribute(attributeName, value);
     }
     
     private void addEdgeAttribute(Edge edge, String attributeName, Object value) {
@@ -346,12 +333,11 @@ public class GraphUpdaterEventHandler implements GraphEventHandler {
         if (p != null) {
             injectEdgeProperty(p, value, edge);
         }
-        else if (! edge.getAttributeKeys().isEmpty()) {
-            if (!graph.getModel().getEdgeTable().hasColumn(attributeName)) {
-                graph.getModel().getEdgeTable().addColumn(attributeName, value.getClass());
-            }
-            edge.setAttribute(attributeName, value);
+        
+        if (!graph.getModel().getEdgeTable().hasColumn(attributeName)) {
+            graph.getModel().getEdgeTable().addColumn(attributeName, value.getClass());
         }
+        edge.setAttribute(attributeName, value);
     }
     
     private void injectNodeProperty(NodeProperties p, Object value, Node node) {
@@ -499,6 +485,7 @@ public class GraphUpdaterEventHandler implements GraphEventHandler {
 
     private void applyFilter(FilterEvent filterEvent) {
         
+        graph.writeLock();
         Filter filter = filterEvent.getFilter();
         if (filter instanceof NodeFilter) {
             NodeFilter nodeFilter = (NodeFilter)filter;
@@ -511,24 +498,21 @@ public class GraphUpdaterEventHandler implements GraphEventHandler {
                             log("Unsupported FilterEvent of type ADD");
                             break;
                         case CHANGE:
-                            graph.writeLock();
                             if (attributes!=null && attributes.size() > 0) {
                                 for(Map.Entry<String, Object> entry: attributes.entrySet()) {
                                     this.addNodeAttribute(node, entry.getKey(), entry.getValue());
                                 }
                             }
-                            graph.writeUnlock();
+                            
                             break;
                         case REMOVE:
-                            graph.writeLock();
                             graph.removeNode(node);
-                            graph.writeUnlock();
                             break;
                     }
                 }
             }
         }
-
+        
         if (filter instanceof EdgeFilter) {
             EdgeFilter edgeFilter = (EdgeFilter)filter;
             Map<String, Object> attributes = filterEvent.getAttributes();
@@ -540,23 +524,20 @@ public class GraphUpdaterEventHandler implements GraphEventHandler {
                             log("Unsupported FilterEvent of type ADD");
                             break;
                         case CHANGE:
-                            graph.writeLock();
                             if (attributes!=null && attributes.size() > 0) {
                                 for(Map.Entry<String, Object> entry: attributes.entrySet()) {
                                     this.addEdgeAttribute(edge, entry.getKey(), entry.getValue());
                                 }
                             }
-                            graph.writeUnlock();
                             break;
                         case REMOVE:
-                            graph.writeLock();
                             graph.removeEdge(edge);
-                            graph.writeUnlock();
                             break;
                     }
                 }
             }
         }
+        graph.writeUnlock();
         
     }
 
