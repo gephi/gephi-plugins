@@ -4,7 +4,7 @@
 
     <groupId>org.gephi</groupId>
     <artifactId>gephi-plugin-parent</artifactId>
-    <version>0.9.0</version>
+    <version>0.9.1</version>
     <packaging>pom</packaging>
 
     <name>gephi-plugins-parent</name>
@@ -46,7 +46,7 @@
     <!-- Properties -->
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <gephi.version>0.9.0</gephi.version>
+        <gephi.version>0.9.1</gephi.version>
         <netbeans.version>RELEASE81</netbeans.version>
     </properties>
 
@@ -557,8 +557,28 @@
         </plugins>
     </build>
     
-    <!-- Custom profile only used to release this pom to sonatype-->
     <profiles>
+        <!-- Custom profile only used to build and package all modules at once -->
+        <profile>
+            <id>release</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>nbm-maven-plugin</artifactId>
+                        <extensions>true</extensions>
+                        <configuration>
+                            <!-- Keystore location. Run Maven with '-Dkeystorepassword=' to specify the passphrase -->
+                            <keystore>keystore.ks</keystore>
+                            <keystorealias>gephi</keystorealias>
+                            <keystorepassword>${keystore.password}</keystorepassword>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+
+        <!-- Custom profile only used to release this pom to sonatype-->
         <profile>
             <id>release-pom</id>
             <build>
