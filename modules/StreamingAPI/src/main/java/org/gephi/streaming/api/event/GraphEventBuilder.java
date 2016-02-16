@@ -43,11 +43,6 @@ package org.gephi.streaming.api.event;
 
 import java.util.Map;
 
-import org.gephi.streaming.api.event.EdgeAddedEvent;
-import org.gephi.streaming.api.event.ElementEvent;
-import org.gephi.streaming.api.event.ElementType;
-import org.gephi.streaming.api.event.EventType;
-import org.gephi.streaming.api.event.GraphEvent;
 
 /**
  * An event builder
@@ -58,10 +53,10 @@ import org.gephi.streaming.api.event.GraphEvent;
  */
 public class GraphEventBuilder {
     
-    private Object source;
+    private final Object source;
     
     /**
-     * @param container
+     * @param source
      */
     public GraphEventBuilder(Object source) {
         this.source = source;

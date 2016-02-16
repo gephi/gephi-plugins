@@ -41,7 +41,6 @@ Portions Copyrighted 2011 Gephi Consortium.
  */
 package org.gephi.streaming.api.event;
 
-import java.util.Collections;
 import java.util.Map;
 
 /**
