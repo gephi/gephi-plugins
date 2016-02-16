@@ -1,0 +1,5 @@
+Manifest-Version: 1.0
+OpenIDE-Module-Name: Twitter
+OpenIDE-Module-Short-Description: Twitter Stream
+OpenIDE-Module-Long-Description: Get Twitter Stream displayed
+OpenIDE-Module-Display-Category: Import
