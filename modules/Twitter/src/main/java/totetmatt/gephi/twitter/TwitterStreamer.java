@@ -37,7 +37,6 @@ public class TwitterStreamer {
         try {
             long id = UserIdResolver.resolve(screenName);
             userTracking.put(screenName, id);
-            System.out.println(id);
         } catch (IOException ex) {
             Exceptions.printStackTrace(ex);
         }
