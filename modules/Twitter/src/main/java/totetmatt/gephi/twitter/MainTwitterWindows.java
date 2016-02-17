@@ -511,7 +511,8 @@ public final class MainTwitterWindows extends TopComponent {
                 Logger.getLogger(MainTwitterWindows.class.getName()).log(Level.SEVERE, null, ex);
             }
         } else {
-            /* TODO: error handling */ }
+            Logger.getLogger(MainTwitterWindows.class.getName()).log(Level.SEVERE, null, new Exception("Desktop method isn't supported")); 
+        }
     }//GEN-LAST:event_credential_goto_twitter_buttonActionPerformed
 
     private void credential_load_buttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_credential_load_buttonActionPerformed
@@ -548,8 +549,6 @@ public final class MainTwitterWindows extends TopComponent {
                 Logger.getLogger(MainTwitterWindows.class.getName()).log(Level.SEVERE, null, ex);
             }
             refreshTracking();
-        } else {
-            //log.append("Open command cancelled by user." + newline);
         }
     }//GEN-LAST:event_load_tracking_buttonActionPerformed
 
@@ -569,8 +568,6 @@ public final class MainTwitterWindows extends TopComponent {
             } catch (IOException ex) {
                 Logger.getLogger(MainTwitterWindows.class.getName()).log(Level.SEVERE, null, ex);
             }
-        } else {
-            //log.append("Open command cancelled by user." + newline);
         }
     }//GEN-LAST:event_save_tracking_buttonActionPerformed
 
