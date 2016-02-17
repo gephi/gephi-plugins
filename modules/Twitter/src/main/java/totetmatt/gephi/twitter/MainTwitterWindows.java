@@ -7,6 +7,8 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Collection;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListModel;
 import javax.swing.JFileChooser;
@@ -504,8 +506,9 @@ public final class MainTwitterWindows extends TopComponent {
             try {
                 Desktop.getDesktop().browse(new URI("https://apps.twitter.com/"));
             } catch (IOException e) {
-                /* TODO: error handling */ } catch (URISyntaxException ex) {
-                Exceptions.printStackTrace(ex);
+               Logger.getLogger(MainTwitterWindows.class.getName()).log(Level.SEVERE, null, e);
+            } catch (URISyntaxException ex) {
+                Logger.getLogger(MainTwitterWindows.class.getName()).log(Level.SEVERE, null, ex);
             }
         } else {
             /* TODO: error handling */ }
@@ -540,9 +543,9 @@ public final class MainTwitterWindows extends TopComponent {
             try {
                 streamer.loadTracking(file);
             } catch (IOException ex) {
-                Exceptions.printStackTrace(ex);
+                Logger.getLogger(MainTwitterWindows.class.getName()).log(Level.SEVERE, null, ex);
             } catch (JSONException ex) {
-                Exceptions.printStackTrace(ex);
+                Logger.getLogger(MainTwitterWindows.class.getName()).log(Level.SEVERE, null, ex);
             }
             refreshTracking();
         } else {
@@ -562,9 +565,9 @@ public final class MainTwitterWindows extends TopComponent {
             try {
                 streamer.saveTracking(file);
             } catch (JSONException ex) {
-                Exceptions.printStackTrace(ex);
+                Logger.getLogger(MainTwitterWindows.class.getName()).log(Level.SEVERE, null, ex);
             } catch (IOException ex) {
-                Exceptions.printStackTrace(ex);
+                Logger.getLogger(MainTwitterWindows.class.getName()).log(Level.SEVERE, null, ex);
             }
         } else {
             //log.append("Open command cancelled by user." + newline);

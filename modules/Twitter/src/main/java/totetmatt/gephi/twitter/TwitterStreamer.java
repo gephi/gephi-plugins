@@ -9,6 +9,8 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.apache.commons.lang3.ArrayUtils;
 import org.openide.util.Exceptions;
 import org.openide.util.lookup.ServiceProvider;
@@ -38,7 +40,7 @@ public class TwitterStreamer {
             long id = UserIdResolver.resolve(screenName);
             userTracking.put(screenName, id);
         } catch (IOException ex) {
-            Exceptions.printStackTrace(ex);
+            Logger.getLogger(MainTwitterWindows.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
