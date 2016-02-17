@@ -8,11 +8,11 @@
     </parent>
 
     <groupId>totetmatt</groupId>
-    <artifactId>twitter</artifactId>
+    <artifactId>twitter-streaming-importer</artifactId>
     <version>1.0.0</version>
     <packaging>nbm</packaging>
 
-    <name>Twitter</name>
+    <name>TwitterStreamingImporter</name>
 
     <dependencies>
         <!-- Insert dependencies here -->

@@ -12,7 +12,7 @@
     <!-- List of modules -->
     <modules>
         <!-- Add here the paths of all modules (e.g. <module>modules/MyModule</module>) -->
-        <module>modules/Twitter</module>
+        <module>modules/TwitterStreamingImporter</module>
     </modules>
     
     <!-- Properties -->
