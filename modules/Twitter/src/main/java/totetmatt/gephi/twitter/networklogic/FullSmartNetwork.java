@@ -24,7 +24,7 @@ public class FullSmartNetwork extends Networklogic {
     }
 
     @Override
-    public void onStatus(Status status) {
+    public void processStatus(Status status) {
         processStatus(status, null);
     }
 

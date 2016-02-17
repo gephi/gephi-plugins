@@ -35,8 +35,12 @@ public abstract class Networklogic implements StatusListener {
     }
     
     // This is call for each tweet received, it *needs* to be defined afterward.
-    public abstract void onStatus(Status status) ;
-    
+    public final void onStatus(Status status) {
+        graphController.getGraphModel().getGraph().writeLock();
+        processStatus(status);
+        graphController.getGraphModel().getGraph().writeUnlock();   
+    }
+    public abstract void processStatus(Status status);
     // This is mainly for the name in the UI.
     public abstract String getName();
     

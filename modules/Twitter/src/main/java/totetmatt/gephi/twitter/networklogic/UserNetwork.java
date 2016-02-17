@@ -24,7 +24,7 @@ public class UserNetwork extends Networklogic {
     }
 
     @Override
-    public void onStatus(Status status) {
+    public void processStatus(Status status) {
         // get the original user from the tweet
         String originScreenName = status.getUser().getScreenName().toLowerCase();
 
