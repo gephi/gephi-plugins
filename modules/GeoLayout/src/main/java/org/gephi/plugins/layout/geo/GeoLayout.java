@@ -45,7 +45,6 @@ import java.util.ArrayList;
 import java.util.List;
 import org.gephi.graph.api.Column;
 import org.gephi.graph.api.Graph;
-import org.gephi.graph.api.GraphController;
 import org.gephi.graph.api.GraphModel;
 import org.gephi.graph.api.Node;
 import org.gephi.graph.spi.LayoutData;
@@ -54,7 +53,6 @@ import org.gephi.layout.spi.LayoutBuilder;
 import org.gephi.layout.spi.LayoutProperty;
 import org.gephi.ui.propertyeditor.NodeColumnAllNumbersEditor;
 import org.openide.util.Exceptions;
-import org.openide.util.Lookup;
 import org.openide.util.NbBundle;
 
 /**
@@ -87,23 +85,23 @@ public class GeoLayout implements Layout {
 
     public GeoLayout(GeoLayoutBuilder builder) {
         this.builder = builder;
-        resetPropertiesValues();
     }
 
     @Override
     public void resetPropertiesValues() {
-        GraphModel attModel = Lookup.getDefault().lookup(GraphController.class).getGraphModel();
-        for (Column c : attModel.getNodeTable()) {
-            if (c.getId().equalsIgnoreCase("latitude")
-                    || c.getId().equalsIgnoreCase("lat")
-                    || c.getTitle().equalsIgnoreCase("latitude")
-                    || c.getTitle().equalsIgnoreCase("lat")) {
-                latitude = c;
-            } else if (c.getId().equalsIgnoreCase("longitude")
-                    || c.getId().equalsIgnoreCase("lon")
-                    || c.getTitle().equalsIgnoreCase("longitude")
-                    || c.getTitle().equalsIgnoreCase("lon")) {
-                longitude = c;
+        if (graphModel != null) {
+            for (Column c : graphModel.getNodeTable()) {
+                if (c.getId().equalsIgnoreCase("latitude")
+                        || c.getId().equalsIgnoreCase("lat")
+                        || c.getTitle().equalsIgnoreCase("latitude")
+                        || c.getTitle().equalsIgnoreCase("lat")) {
+                    latitude = c;
+                } else if (c.getId().equalsIgnoreCase("longitude")
+                        || c.getId().equalsIgnoreCase("lon")
+                        || c.getTitle().equalsIgnoreCase("longitude")
+                        || c.getTitle().equalsIgnoreCase("lon")) {
+                    longitude = c;
+                }
             }
         }
     }
@@ -535,6 +533,7 @@ public class GeoLayout implements Layout {
     @Override
     public void setGraphModel(GraphModel graphModel) {
         this.graphModel = graphModel;
+        resetPropertiesValues();
     }
 
     @Override
