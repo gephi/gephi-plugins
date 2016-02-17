@@ -84,7 +84,7 @@
                     <author>@totetmatt</author>
                     <authorEmail>matthieu.totet@gmail.com</authorEmail>
                     <authorUrl>http://matthieu-totet.fr/</authorUrl>
-                    <sourceCodeUrl>$sourcecode_url</sourceCodeUrl>
+                    <sourceCodeUrl>https://github.com/totetmatt/gephi-plugins/tree/twitter</sourceCodeUrl>
                     <publicPackages>
                         <!-- Insert public packages -->
                     </publicPackages>
