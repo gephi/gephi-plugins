@@ -103,7 +103,7 @@ public final class MainTwitterWindows extends TopComponent {
             }
 
         });
-        streamer.getCredentialProperty().load();
+      
     }
 
     private boolean isProjectWorkspaceOk() {

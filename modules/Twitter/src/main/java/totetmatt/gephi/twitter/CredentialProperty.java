@@ -14,7 +14,7 @@ class CredentialProperty {
     String tokenSecret = "";
 
     public CredentialProperty() {
-
+        load();
     }
 
     public String getConsumerKey() {

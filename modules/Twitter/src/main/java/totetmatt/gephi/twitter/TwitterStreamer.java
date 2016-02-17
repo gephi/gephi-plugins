@@ -12,15 +12,18 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.apache.commons.lang3.ArrayUtils;
-import org.openide.util.Exceptions;
 import org.openide.util.lookup.ServiceProvider;
 import totetmatt.gephi.twitter.networklogic.Networklogic;
-import totetmatt.gephi.twitter.utils.UserIdResolver;
 import twitter4j.FilterQuery;
 import twitter4j.JSONException;
 import twitter4j.JSONObject;
+import twitter4j.ResponseList;
+import twitter4j.Twitter;
+import twitter4j.TwitterException;
+import twitter4j.TwitterFactory;
 import twitter4j.TwitterStream;
 import twitter4j.TwitterStreamFactory;
+import twitter4j.User;
 import twitter4j.auth.AccessToken;
 
 /**
@@ -30,16 +33,24 @@ import twitter4j.auth.AccessToken;
 @ServiceProvider(service = TwitterStreamer.class)
 public class TwitterStreamer {
 
-    TwitterStream twitter;
+    TwitterStream twitterStream;
+    Twitter twitter;
     CredentialProperty credentialProperty = new CredentialProperty();
     List<String> wordTracking = new ArrayList<String>();
     Map<String, Long> userTracking = new HashMap<String, Long>();
 
     public void addUser(String screenName) {
+        twitter = new TwitterFactory().getInstance();
+        AccessToken accessToken = new AccessToken(credentialProperty.getToken(), credentialProperty.getTokenSecret());
+        twitter.setOAuthConsumer(credentialProperty.getConsumerKey(), credentialProperty.getConsumerSecret());
+        twitter.setOAuthAccessToken(accessToken);
         try {
-            long id = UserIdResolver.resolve(screenName);
-            userTracking.put(screenName, id);
-        } catch (IOException ex) {
+            ResponseList<User> response = twitter.users().lookupUsers(new String[]{screenName});
+            for(User u:response){
+                  userTracking.put(u.getScreenName().toLowerCase(), u.getId());
+            }
+        } 
+        catch (TwitterException ex) {
             Logger.getLogger(MainTwitterWindows.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
@@ -62,16 +73,14 @@ public class TwitterStreamer {
         return credentialProperty;
     }
 
-    public TwitterStreamer() {
-
-    }
+    public TwitterStreamer() {}
 
     /* Start a new stream with new query parameter */
     public void start(Networklogic networkLogic) {
         AccessToken accessToken = new AccessToken(credentialProperty.getToken(), credentialProperty.getTokenSecret());
-        twitter = new TwitterStreamFactory().getInstance();
-        twitter.setOAuthConsumer(credentialProperty.getConsumerKey(), credentialProperty.getConsumerSecret());
-        twitter.setOAuthAccessToken(accessToken);
+        twitterStream = new TwitterStreamFactory().getInstance();
+        twitterStream.setOAuthConsumer(credentialProperty.getConsumerKey(), credentialProperty.getConsumerSecret());
+        twitterStream.setOAuthAccessToken(accessToken);
         FilterQuery fq = new FilterQuery();
 
         Collection<String> tmpWordTrack = new ArrayList<String>();
@@ -102,13 +111,13 @@ public class TwitterStreamer {
 
         networkLogic.setTrack(track);
 
-        twitter.addListener(networkLogic);
-        twitter.filter(fq);
+        twitterStream.addListener(networkLogic);
+        twitterStream.filter(fq);
     }
 
     /* Stop the running stream*/
     public void stop() {
-        twitter.shutdown();
+        twitterStream.shutdown();
     }
 
     /* Save all tracking parameters in a file*/
