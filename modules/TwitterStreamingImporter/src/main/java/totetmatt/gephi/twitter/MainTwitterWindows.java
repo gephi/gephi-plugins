@@ -27,21 +27,6 @@ import org.openide.util.Lookup;
 import totetmatt.gephi.twitter.networklogic.Networklogic;
 import twitter4j.JSONException;
 
-/**
- * Example of a custom module.
- * <p>
- * New modules are created with a right click on the module and then New >
- * Window. Then, one can customize the default position by changing the mode
- * setting in the <code>@TopComponent.Registration</code> annotation:
- * <ul>
- * <li>rankingmode: Top left, where the appearance is.</li>
- * <li>layoutmode: Bottom left, where the layout is.</li>
- * <li>graphmode: Central, like the graph or data laboratory.</li>
- * <li>filtersmode: Right, like filters or statistics.</li>
- * </ul>
- *
- * @author Mathieu Bastian
- */
 @ConvertAsProperties(dtd = "-//org.gephi.plugins.example.panel//Simple//EN",
         autostore = false)
 @TopComponent.Description(preferredID = "MainTwitterWindows",
