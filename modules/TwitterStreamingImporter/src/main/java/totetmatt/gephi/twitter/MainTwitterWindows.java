@@ -32,7 +32,7 @@ import twitter4j.JSONException;
 @TopComponent.Description(preferredID = "MainTwitterWindows",
         //iconBase="SET/PATH/TO/ICON/HERE", 
         persistenceType = TopComponent.PERSISTENCE_ALWAYS)
-@TopComponent.Registration(mode = "graphmode", openAtStartup = true)
+@TopComponent.Registration(mode = "layoutmode", openAtStartup = true)
 @ActionID(category = "Window", id = "org.gephi.plugins.twitter.panel.MainTwitterWindows")
 @ActionReference(path = "Menu/Window", position = 333)
 @TopComponent.OpenActionRegistration(displayName = "#CTL_SimpleAction",
