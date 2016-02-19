@@ -111,6 +111,7 @@ public class TwitterStreamer {
 
         networkLogic.setTrack(track);
 
+        networkLogic.refreshGraphModel();
         twitterStream.addListener(networkLogic);
         twitterStream.filter(fq);
     }

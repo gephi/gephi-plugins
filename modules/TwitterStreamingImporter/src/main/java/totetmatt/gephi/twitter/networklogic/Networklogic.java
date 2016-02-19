@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.gephi.graph.api.GraphController;
+import org.gephi.graph.api.GraphModel;
 import org.openide.util.Lookup;
 import twitter4j.StallWarning;
 import twitter4j.Status;
@@ -27,8 +28,8 @@ public abstract class Networklogic implements StatusListener {
     public final static Color STANDARD_COLOR_URL= new Color(0,0,0.5f);
     public final static Color STANDARD_COLOR_SYMBOL = new Color(0.5f,0,0.5f);
     
-    protected GraphController graphController = Lookup.getDefault().lookup(GraphController.class);
-
+    protected GraphModel graphModel;
+    
     public Networklogic(){
        
     }
@@ -36,15 +37,20 @@ public abstract class Networklogic implements StatusListener {
         this.track = track;
     }
     
+    // Used to keep reference to the "current" workspace
+    // Should be called before a new stream
+    public void refreshGraphModel(){
+        graphModel = Lookup.getDefault().lookup(GraphController.class).getGraphModel();
+    }
     // This is call for each tweet received, it *needs* to be defined afterward.
     public final void onStatus(Status status) {
         try {
-            graphController.getGraphModel().getGraph().writeLock();
+            graphModel.getGraph().writeLock();
             processStatus(status);  
         } catch (Exception e){
             Logger.getLogger(Networklogic.class.getName()).log(Level.SEVERE, null, e);
         } finally {
-            graphController.getGraphModel().getGraph().writeUnlock();  
+            graphModel.getGraph().writeUnlock();  
         }
     }
     public abstract void processStatus(Status status);

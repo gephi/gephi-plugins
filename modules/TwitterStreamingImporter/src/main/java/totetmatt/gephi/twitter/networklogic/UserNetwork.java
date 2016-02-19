@@ -36,29 +36,25 @@ public class UserNetwork extends Networklogic {
             if (!originScreenName.equals(targetScreenName)) {
 
                 // Create or get the nodes
-                Node origin = graphController.getGraphModel().getGraph().getNode("@" + originScreenName);
+                Node origin = graphModel.getGraph().getNode("@" + originScreenName);
                 if (origin == null) {
-                    origin = graphController.getGraphModel()
-                            .factory()
-                            .newNode("@" + originScreenName);
+                    origin = graphModel.factory().newNode("@" + originScreenName);
                     origin.setLabel("@" + originScreenName);
                     origin.setColor(STANDARD_COLOR_USER);
                     origin.setX((float) Math.random());
                     origin.setY((float) Math.random());
 
-                    graphController.getGraphModel().getGraph().addNode(origin);
+                    graphModel.getGraph().addNode(origin);
                 }
 
-                Node target = graphController.getGraphModel().getGraph().getNode("@" + targetScreenName);
+                Node target = graphModel.getGraph().getNode("@" + targetScreenName);
                 if (target == null) {
-                    target = graphController.getGraphModel()
-                            .factory()
-                            .newNode("@" + targetScreenName);
+                    target = graphModel.factory().newNode("@" + targetScreenName);
                     target.setLabel("@" + targetScreenName);
                     target.setColor(STANDARD_COLOR_USER);
                     target.setX((float) Math.random());
                     target.setY((float) Math.random());
-                    graphController.getGraphModel().getGraph().addNode(target);
+                    graphModel.getGraph().addNode(target);
                 }
                 int typeEdge;
                 if (status.isRetweet()) {
@@ -67,17 +63,15 @@ public class UserNetwork extends Networklogic {
                     typeEdge = MENTION;
                 }
                 // Check if there is already an edge for the nodes
-                Edge mentionEdge = graphController.getGraphModel()
-                        .getGraph()
-                        .getEdge(origin, target, typeEdge);
+                Edge mentionEdge = graphModel.getGraph().getEdge(origin, target, typeEdge);
 
                 if (mentionEdge == null) { // If no, create it
-                    mentionEdge = graphController.getGraphModel()
+                    mentionEdge = graphModel
                             .factory()
                             .newEdge(origin, target, typeEdge, true);
                     mentionEdge.setWeight(1.0);
                     mentionEdge.setColor(Color.GRAY);
-                    graphController.getGraphModel().getGraph().addEdge(mentionEdge);
+                    graphModel.getGraph().addEdge(mentionEdge);
                 } else { // If yes, increment the weight
                     mentionEdge.setWeight(mentionEdge.getWeight() + 1);
                 }

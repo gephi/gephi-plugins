@@ -29,16 +29,14 @@ public class FullSmartNetwork extends Networklogic {
     }
 
     public void processStatus(Status status, Node retweetUser) {
-        Node tweet = graphController.getGraphModel().getGraph().getNode("" + status.getId());
+        Node tweet = graphModel.getGraph().getNode("" + status.getId());
         if (tweet == null) {
-            tweet = graphController.getGraphModel()
-                    .factory()
-                    .newNode("" + status.getId());
+            tweet = graphModel.factory().newNode("" + status.getId());
             tweet.setLabel(status.getText());
             tweet.setColor(STANDARD_COLOR_TWEET);
             tweet.setX((float) Math.random());
             tweet.setY((float) Math.random());
-            graphController.getGraphModel().getGraph().addNode(tweet);
+            graphModel.getGraph().addNode(tweet);
         }
         /**/
 
@@ -82,94 +80,80 @@ public class FullSmartNetwork extends Networklogic {
     }
 
     private Node createMedia(String media) {
-        Node mediaNode = graphController.getGraphModel().getGraph().getNode(media);
+        Node mediaNode = graphModel.getGraph().getNode(media);
         if (mediaNode == null) {
-            mediaNode = graphController.getGraphModel()
-                    .factory()
-                    .newNode(media);
+            mediaNode = graphModel.factory().newNode(media);
             mediaNode.setLabel(media);
             mediaNode.setColor(STANDARD_COLOR_MEDIA);
             mediaNode.setX((float) Math.random());
             mediaNode.setY((float) Math.random());
-            graphController.getGraphModel().getGraph().addNode(mediaNode);
+            graphModel.getGraph().addNode(mediaNode);
         }
         return mediaNode;
     }
 
     private Node createSymbol(String symbol) {
-        Node symbolNode = graphController.getGraphModel().getGraph().getNode("$" + symbol);
+        Node symbolNode = graphModel.getGraph().getNode("$" + symbol);
         if (symbolNode == null) {
-            symbolNode = graphController.getGraphModel()
-                    .factory()
-                    .newNode("$" + symbol);
+            symbolNode = graphModel.factory().newNode("$" + symbol);
             symbolNode.setLabel("$" + symbol);
             symbolNode.setColor(STANDARD_COLOR_SYMBOL);
             symbolNode.setX((float) Math.random());
             symbolNode.setY((float) Math.random());
-            graphController.getGraphModel().getGraph().addNode(symbolNode);
+            graphModel.getGraph().addNode(symbolNode);
         }
         return symbolNode;
     }
 
     private Node createLink(String url) {
 
-        Node linkNode = graphController.getGraphModel().getGraph().getNode(url);
+        Node linkNode = graphModel.getGraph().getNode(url);
         if (linkNode == null) {
-            linkNode = graphController.getGraphModel()
-                    .factory()
-                    .newNode(url);
+            linkNode = graphModel.factory().newNode(url);
             linkNode.setLabel(url);
             linkNode.setColor(STANDARD_COLOR_HASHTAG);
             linkNode.setX((float) Math.random());
             linkNode.setY((float) Math.random());
-            graphController.getGraphModel().getGraph().addNode(linkNode);
+            graphModel.getGraph().addNode(linkNode);
         }
         return linkNode;
     }
 
     private Node createHashtag(String hashtag) {
         hashtag = hashtag.toLowerCase();
-        Node hashtagNode = graphController.getGraphModel().getGraph().getNode("#" + hashtag);
+        Node hashtagNode = graphModel.getGraph().getNode("#" + hashtag);
         if (hashtagNode == null) {
-            hashtagNode = graphController.getGraphModel()
-                    .factory()
-                    .newNode("#" + hashtag);
+            hashtagNode = graphModel.factory().newNode("#" + hashtag);
             hashtagNode.setLabel("#" + hashtag);
             hashtagNode.setColor(STANDARD_COLOR_HASHTAG);
             hashtagNode.setX((float) Math.random());
             hashtagNode.setY((float) Math.random());
-            graphController.getGraphModel().getGraph().addNode(hashtagNode);
+            graphModel.getGraph().addNode(hashtagNode);
         }
         return hashtagNode;
     }
 
     private Node createUser(String screenName) {
         screenName = screenName.toLowerCase();
-        Node user = graphController.getGraphModel().getGraph().getNode("@" + screenName);
+        Node user = graphModel.getGraph().getNode("@" + screenName);
         if (user == null) {
-            user = graphController.getGraphModel()
-                    .factory()
-                    .newNode("@" + screenName);
+            user = graphModel.factory().newNode("@" + screenName);
             user.setLabel("@" + screenName);
             user.setColor(STANDARD_COLOR_USER);
             user.setX((float) Math.random());
             user.setY((float) Math.random());
-            graphController.getGraphModel().getGraph().addNode(user);
+            graphModel.getGraph().addNode(user);
         }
         return user;
     }
 
     private void createLink(Node origin, Node target) {
-        Edge link = graphController.getGraphModel()
-                .getGraph()
-                .getEdge(origin, target);
+        Edge link = graphModel.getGraph().getEdge(origin, target);
         if (link == null) {
-            link = graphController.getGraphModel()
-                    .factory()
-                    .newEdge(origin, target);
+            link = graphModel.factory().newEdge(origin, target);
             link.setWeight(1.0);
             link.setColor(Color.GRAY);
-            graphController.getGraphModel().getGraph().addEdge(link);
+            graphModel.getGraph().addEdge(link);
         }
     }
 
