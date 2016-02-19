@@ -39,6 +39,7 @@ public class TwitterStreamer {
     List<String> wordTracking = new ArrayList<String>();
     Map<String, Long> userTracking = new HashMap<String, Long>();
 
+    private boolean running = false;
     public void addUser(String screenName) {
         twitter = new TwitterFactory().getInstance();
         AccessToken accessToken = new AccessToken(credentialProperty.getToken(), credentialProperty.getTokenSecret());
@@ -113,12 +114,16 @@ public class TwitterStreamer {
 
         networkLogic.refreshGraphModel();
         twitterStream.addListener(networkLogic);
+        running=true;
         twitterStream.filter(fq);
     }
 
     /* Stop the running stream*/
     public void stop() {
-        twitterStream.shutdown();
+        if(running){
+            twitterStream.shutdown();
+        } 
+        running = false;
     }
 
     /* Save all tracking parameters in a file*/
