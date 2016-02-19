@@ -111,7 +111,7 @@ public class FullSmartNetwork extends Networklogic {
         if (linkNode == null) {
             linkNode = graphModel.factory().newNode(url);
             linkNode.setLabel(url);
-            linkNode.setColor(STANDARD_COLOR_HASHTAG);
+            linkNode.setColor(STANDARD_COLOR_URL);
             linkNode.setX((float) Math.random());
             linkNode.setY((float) Math.random());
             graphModel.getGraph().addNode(linkNode);
