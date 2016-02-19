@@ -1,6 +1,8 @@
 package totetmatt.gephi.twitter.networklogic;
 
 import java.awt.Color;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.gephi.graph.api.GraphController;
 import org.openide.util.Lookup;
 import twitter4j.StallWarning;
@@ -36,9 +38,14 @@ public abstract class Networklogic implements StatusListener {
     
     // This is call for each tweet received, it *needs* to be defined afterward.
     public final void onStatus(Status status) {
-        graphController.getGraphModel().getGraph().writeLock();
-        processStatus(status);
-        graphController.getGraphModel().getGraph().writeUnlock();   
+        try {
+            graphController.getGraphModel().getGraph().writeLock();
+            processStatus(status);  
+        } catch (Exception e){
+            Logger.getLogger(Networklogic.class.getName()).log(Level.SEVERE, null, e);
+        } finally {
+            graphController.getGraphModel().getGraph().writeUnlock();  
+        }
     }
     public abstract void processStatus(Status status);
     // This is mainly for the name in the UI.
