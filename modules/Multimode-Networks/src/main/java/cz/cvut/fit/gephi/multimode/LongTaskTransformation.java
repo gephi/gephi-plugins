@@ -46,6 +46,10 @@ public class LongTaskTransformation implements LongTask, Runnable {
         GraphController graphController = Lookup.getDefault().lookup(GraphController.class);
         GraphModel graphModel = graphController.getGraphModel();
         Graph graph = graphModel.getGraphVisible();
+        
+        // Need to do that now because removing all edges later will creates error
+        // on undirected graph
+        boolean isDirectedGraph = graphModel.isDirected();
         //Graph graph = graphModel.getUndirectedGraphVisible();
         Node[] nodes = graph.getNodes().toArray();
 
@@ -174,7 +178,7 @@ public class LongTaskTransformation implements LongTask, Runnable {
                     if(node1 != node2){
                         Edge ee = graph.getEdge(node1, node2, EDGE_TYPE);
                         if(ee == null){ //Add if not already existing
-                            ee = graphModel.factory().newEdge(firstVertical.get(i), secondHorizontal.get(j), EDGE_TYPE, (float) result.get(i, j), graphModel.isDirected());
+                            ee = graphModel.factory().newEdge(firstVertical.get(i), secondHorizontal.get(j), EDGE_TYPE, (float) result.get(i, j), isDirectedGraph);
                             graph.addEdge(ee);
                         }
                         
