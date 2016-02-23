@@ -11,6 +11,7 @@ import org.gephi.filters.api.FilterLibrary;
 import org.gephi.filters.spi.Category;
 import org.gephi.filters.spi.Filter;
 import org.gephi.filters.spi.FilterBuilder;
+import org.gephi.project.api.Workspace;
 import org.openide.util.lookup.ServiceProvider;
 
 /**
@@ -44,7 +45,7 @@ public class TypeFilterBuilder implements FilterBuilder {
     }
 
     @Override
-    public Filter getFilter() {
+    public Filter getFilter(Workspace workspace) {
         return new TypeFilter();
     }
 
