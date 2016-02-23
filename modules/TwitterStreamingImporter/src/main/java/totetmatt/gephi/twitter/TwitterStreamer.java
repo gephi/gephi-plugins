@@ -73,7 +73,9 @@ public class TwitterStreamer {
     public CredentialProperty getCredentialProperty() {
         return credentialProperty;
     }
-
+    public void setCredentialProperty(CredentialProperty credentialProperty) {
+        this.credentialProperty = credentialProperty;
+    }
     public TwitterStreamer() {}
 
     /* Start a new stream with new query parameter */
