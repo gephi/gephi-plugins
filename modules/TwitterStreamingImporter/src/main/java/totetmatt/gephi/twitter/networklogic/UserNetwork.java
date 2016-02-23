@@ -2,7 +2,9 @@ package totetmatt.gephi.twitter.networklogic;
 
 import java.awt.Color;
 import org.gephi.graph.api.Edge;
+import org.gephi.graph.api.GraphController;
 import org.gephi.graph.api.Node;
+import org.openide.util.Lookup;
 import org.openide.util.lookup.ServiceProvider;
 import twitter4j.Status;
 import twitter4j.UserMentionEntity;
@@ -16,13 +18,19 @@ import twitter4j.UserMentionEntity;
 @ServiceProvider(service = Networklogic.class)
 public class UserNetwork extends Networklogic {
 
-    static private int MENTION = 1;
-    static private int RETWEET = 2;
+    private int MENTION;
+    private int RETWEET;
 
     public UserNetwork() {
-
+     
     }
 
+    @Override
+    public void refreshGraphModel(){
+        super.refreshGraphModel();
+        MENTION = graphModel.addEdgeType("Mention");
+        RETWEET = graphModel.addEdgeType("Retweet");
+    }
     @Override
     public void processStatus(Status status) {
         // get the original user from the tweet
