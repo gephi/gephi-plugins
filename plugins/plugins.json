@@ -15,7 +15,7 @@
         }
       ],
       "category": "Layout",
-      "last_update": "February 22, 2016",
+      "last_update": "February 23, 2016",
       "images": [
         {
           "image": "imgs/geolayout-plugin/geolayout_example.png",
@@ -37,7 +37,7 @@
         },
         "0.9.1": {
           "url": "0.9.1/geolayout-plugin-0.9.1.1.nbm",
-          "last_update": "February 22, 2016"
+          "last_update": "February 23, 2016"
         }
       },
       "sourcecode": "https://github.com/gephi/gephi-plugins/geolayout-plugin",
@@ -58,7 +58,7 @@
         }
       ],
       "category": "Tool",
-      "last_update": "February 22, 2016",
+      "last_update": "February 23, 2016",
       "images": [
         {
           "image": "imgs/linkfluence-plugin/img.png",
@@ -72,7 +72,7 @@
         },
         "0.9.1": {
           "url": "0.9.1/linkfluence-plugin-0.9.0.nbm",
-          "last_update": "February 22, 2016"
+          "last_update": "February 23, 2016"
         }
       },
       "sourcecode": "https://github.com/gephi/gephi-plugins/linkfluence-plugin",
@@ -544,7 +544,7 @@
         }
       ],
       "category": "Filter",
-      "last_update": "February 22, 2016",
+      "last_update": "February 23, 2016",
       "images": [
         {
           "image": "imgs/kbrace-filter/kbrace-img.png",
@@ -562,7 +562,7 @@
         },
         "0.9.1": {
           "url": "0.9.1/kbrace-filter-1.0.0.nbm",
-          "last_update": "February 22, 2016"
+          "last_update": "February 23, 2016"
         }
       },
       "sourcecode": "https://github.com/mbastian/gephi-plugins/tree/kbrace-filter",
@@ -1929,7 +1929,7 @@
         }
       ],
       "category": "Tool",
-      "last_update": "February 22, 2016",
+      "last_update": "February 23, 2016",
       "images": null,
       "versions": {
         "0.8.2": {
@@ -1942,7 +1942,7 @@
         },
         "0.9.1": {
           "url": "0.9.1/multimode-1.0.0.nbm",
-          "last_update": "February 22, 2016"
+          "last_update": "February 23, 2016"
         }
       },
       "sourcecode": "https://github.com/totetmatt/gephi-plugins/tree/multimode-network",
@@ -1963,7 +1963,7 @@
         }
       ],
       "category": "Export",
-      "last_update": "February 22, 2016",
+      "last_update": "February 23, 2016",
       "images": null,
       "versions": {
         "0.8.2": {
@@ -1976,7 +1976,7 @@
         },
         "0.9.1": {
           "url": "0.9.1/jsonexporter-plugin-2.0.0.nbm",
-          "last_update": "February 22, 2016"
+          "last_update": "February 23, 2016"
         }
       },
       "sourcecode": "http://github.com/oxfordinternetinstitute/gephi-plugins",
@@ -1997,7 +1997,7 @@
         }
       ],
       "category": "Export",
-      "last_update": "February 22, 2016",
+      "last_update": "February 23, 2016",
       "images": null,
       "versions": {
         "0.8.2": {
@@ -2010,7 +2010,7 @@
         },
         "0.9.1": {
           "url": "0.9.1/sigmaexporter-0.9.0.nbm",
-          "last_update": "February 22, 2016"
+          "last_update": "February 23, 2016"
         }
       },
       "sourcecode": "http://github.com/oxfordinternetinstitute/gephi-plugins",
@@ -2031,7 +2031,7 @@
         }
       ],
       "category": "Tool",
-      "last_update": "February 22, 2016",
+      "last_update": "February 23, 2016",
       "images": null,
       "versions": {
         "0.9.0": {
@@ -2040,7 +2040,7 @@
         },
         "0.9.1": {
           "url": "0.9.1/gephi-plugin-node-color-manager-1.0.0.nbm",
-          "last_update": "February 22, 2016"
+          "last_update": "February 23, 2016"
         }
       },
       "sourcecode": "https://github.com/gephi/gephi-plugins/gephi-plugin-node-color-manager",
@@ -2061,7 +2061,7 @@
         }
       ],
       "category": "Layout",
-      "last_update": "February 22, 2016",
+      "last_update": "February 23, 2016",
       "images": [
         {
           "image": "imgs/gephigraphviz/GraphVizLayout_example.png",
@@ -2083,7 +2083,7 @@
         },
         "0.9.1": {
           "url": "0.9.1/gephigraphviz-1.0.0.nbm",
-          "last_update": "February 22, 2016"
+          "last_update": "February 23, 2016"
         }
       },
       "sourcecode": "https://github.com/chunky/gephi-plugins",
@@ -2104,16 +2104,42 @@
         }
       ],
       "category": "Import",
-      "last_update": "February 22, 2016",
+      "last_update": "February 23, 2016",
       "images": null,
       "versions": {
         "0.9.1": {
           "url": "0.9.1/graphstreaming-1.0.0.zip",
-          "last_update": "February 22, 2016"
+          "last_update": "February 23, 2016"
         }
       },
       "sourcecode": "https://github.com/panisson/gephi-plugins/tree/graph-streaming",
       "homepage": "gephi.org"
+    },
+    {
+      "id": "circularlayout",
+      "name": "Circular Layout",
+      "short_description": "This plugin provides three circular layouts; one simple circle (titled \"Circular Layout\", one is a dual circle layout (titled \"Dual Circle Layout\"), and the third is a grouped layout with radial axes (title \"Radial Axis Layout\").",
+      "long_description": "This plugin contains three separate circular layouts: \"Circular Layout\", \"Dual Circle Layout\", and the \"Radial Axis Layout\".\u003ch3\u003eCircular Layout\u003c/h3\u003e\u003cp\u003eThe Circular Layout draws nodes in a circle and offers the following options:\u003cul\u003e\u003cli\u003eOrder nodes by Node ID.\u003c/li\u003e\u003cli\u003eOrder nodes in random order.\u003c/li\u003e\u003cli\u003eOrder nodes by degree, in degree, out degree, etc.\u003c/li\u003e\u003cli\u003eOrder nodes by attribute sort (based on data type of attribute).\u003c/li\u003e\u003cli\u003eAllows drawing node order on circle either clockwise or counter-clockwise.\u003c/li\u003e\u003cli\u003eBy default scales circle to prevent node overlap.\u003c/li\u003e\u003cli\u003eAllows a user entered fixed circle size.\u003c/li\u003e\u003c/ul\u003e\u003cbr /\u003e\u003c/p\u003e\u003ch3\u003eDual Circle Layout\u003c/h3\u003e\u003cp\u003eThe Dual Circle Layout draws nodes on two circles.  By default it draws the top four \"high degree\" nodes on an internal circle, with the remaining nodes on an external circle.\u003cbr /\u003eIt offers the following options:\u003cul\u003e\u003cli\u003eOrder nodes by degree, in degree, out degree, etc.\u003c/li\u003e\u003cli\u003eOrder nodes by attribute sort (based on data type of attribute).\u003c/li\u003e\u003cli\u003eAllows placing \"high\" nodes on inside or outside circle.\u003c/li\u003e\u003cli\u003eAllows setting number of \"high\" nodes to use on second circle.\u003c/li\u003e\u003cli\u003eAllows drawing node order on circle either clockwise or counter-clockwise.\u003c/li\u003e\u003cli\u003eBy default scales circle to prevent node overlap.\u003c/li\u003e\u003c/ul\u003e\u003c/p\u003e\u003ch3\u003eRadial Axis Layout\u003c/h3\u003e\u003cp\u003eThe Radial Axis Layout groups nodes and draws the groups in axes (or spars) radiating outwards from a central circle.\u003cbr /\u003eIt offers the following options:\u003cul\u003e\u003cli\u003eGroup nodes by degree, in degree, out degree, etc.\u003c/li\u003e\u003cli\u003eGroup nodes by attribute sort (based on data type of attribute).\u003c/li\u003e\u003cli\u003eDraw axes/spars in ascending or descending order.\u003c/li\u003e\u003cli\u003eAllows top, middle or bottom \"knockdown\" of axes/spars, along with ability to specify number of spars resulting after knockdown.\u003c/li\u003e\u003cli\u003eAllows drawing in either clockwise or counter-clockwise.\u003c/li\u003e\u003cli\u003eBy default this layout tries to prevent node overlap but may fail in certain instances.\u003c/li\u003e\u003cli\u003eAllows tuning of spacing between nodes to allow an easy way to overcome overlap issues.\u003c/li\u003e\u003cli\u003eAllows uniform resize of nodes.\u003c/li\u003e\u003c/ul\u003e\u003c/p\u003e",
+      "readme": null,
+      "license": "BSDLicense",
+      "authors": [
+        {
+          "name": "Matt Groeninger",
+          "email": null,
+          "link": null
+        }
+      ],
+      "category": "Layout",
+      "last_update": "February 23, 2016",
+      "images": null,
+      "versions": {
+        "0.9.1": {
+          "url": "0.9.1/circularlayout-0.9.1.nbm",
+          "last_update": "February 23, 2016"
+        }
+      },
+      "sourcecode": "https://github.com/mgroeninger/gephi-plugins",
+      "homepage": "http://gephi.org/plugins/circular-layout/"
     }
   ]
 }
