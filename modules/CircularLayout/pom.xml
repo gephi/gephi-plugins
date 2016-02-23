@@ -4,12 +4,12 @@
     <parent>
         <artifactId>gephi-plugin-parent</artifactId>
         <groupId>org.gephi</groupId>
-        <version>0.9.0</version>
+        <version>0.9.1</version>
     </parent>
 
     <groupId>org.gephi.layout.plugin</groupId>
     <artifactId>circularlayout</artifactId>
-    <version>0.9</version>
+    <version>0.9.1</version>
     <packaging>nbm</packaging>
 
     <name>CircularLayout</name>
@@ -63,7 +63,7 @@
                     <licenseName>BSDLicense</licenseName>
                     <licenseFile>BSDLicense</licenseFile>
                     <author>Matt Groeninger</author>
-                    <sourceCodeUrl>$sourcecode_url</sourceCodeUrl>
+                    <sourceCodeUrl>https://github.com/mgroeninger/gephi-plugins</sourceCodeUrl>
                     <homePageUrl>http://gephi.org/plugins/circular-layout/</homePageUrl>
                     <publicPackages>
 

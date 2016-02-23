@@ -27,6 +27,8 @@
 package org.gephi.layout.plugin.circularlayout.radialaxislayout;
 
 import java.util.*;
+import java.util.logging.Logger;
+import java.util.logging.Level;
 import org.gephi.graph.api.*;
 import org.gephi.graph.spi.LayoutData;
 import org.gephi.layout.plugin.circularlayout.layouthelper.*;
@@ -278,12 +280,13 @@ public class RadialAxisLayout extends LayoutHelper implements Layout
          position.ydistance = (float)(1 / intSteps) * (position.finishy - n.y());
          n.setLayoutData(position);
       }
-      graph.readUnlock();
+      this.graph.readUnlock();
    }
 
    @Override
    public void goAlgo()
    {
+      this.graph.readLock();
       this.setConverged(true);
       GroupLayoutData position = null;
       Node[]          nodes    = graph.getNodes().toArray();
@@ -329,6 +332,7 @@ public class RadialAxisLayout extends LayoutHelper implements Layout
             }
          }
       }
+      this.graph.readUnlock();
    }
 
    @Override
@@ -423,7 +427,7 @@ public class RadialAxisLayout extends LayoutHelper implements Layout
                            "getTransitionSteps", "setTransitionSteps"));
       }
       catch (Exception e) {
-         e.printStackTrace();
+        Logger.getLogger(RadialAxisLayout.class.getName()).log(Level.SEVERE, null, e);
       }
       return properties.toArray(new LayoutProperty[0]);
    }

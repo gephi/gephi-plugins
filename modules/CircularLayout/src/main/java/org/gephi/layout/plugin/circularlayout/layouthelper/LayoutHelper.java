@@ -27,6 +27,8 @@
 package org.gephi.layout.plugin.circularlayout.layouthelper;
 
 import java.util.*;
+import java.util.logging.Logger;
+import java.util.logging.Level;
 import org.gephi.graph.api.*;
 import org.gephi.layout.spi.Layout;
 import org.gephi.layout.spi.LayoutBuilder;
@@ -82,6 +84,7 @@ public abstract class LayoutHelper implements Layout
    public void setGraphModel(GraphModel graphModel)
    {
       this.graphModel = graphModel;
+      this.resetPropertiesValues();
    }
 
    @Override
@@ -103,6 +106,14 @@ public abstract class LayoutHelper implements Layout
    public boolean isConverged()
    {
       return converged;
+   }
+
+   public void resetPropertiesValues()
+   {
+      setNodePlacementNoOverlap(true);
+      setNodePlacementDirection(CircularDirection.CCW);
+      setNodePlacementTransition(false);
+      setTransitionSteps(100000.0);
    }
 
    public CircularDirection getNodePlacementDirection()
@@ -203,26 +214,29 @@ public abstract class LayoutHelper implements Layout
       return getPlacementMap(true);
    }
 
-   public static Map getPlacementMap(boolean IncludeRandom)
+   public static Map getPlacementMap(boolean boolIncludeRandom)
    {
       GraphController graphController = Lookup.getDefault().lookup(GraphController.class);
       GraphModel      objGraphModel   = graphController.getGraphModel();
 
       Map<String, String> map = new TreeMap<String, String>();
-      if (IncludeRandom)
+      if (boolIncludeRandom)
       {
          map.put("Random", Bundle.Layout_NodePlacement_Random_name());
       }
       map.put("NodeID", Bundle.Layout_NodePlacement_NodeID_name());
       map.put("Degree", Bundle.Layout_NodePlacement_Degree_name());
-      if (objGraphModel.isDirected())
+      if (objGraphModel != null)
       {
-         map.put("InDegree", Bundle.Layout_NodePlacement_InDegree_name());
-         map.put("OutDegree", Bundle.Layout_NodePlacement_OutDegree_name());
-      }
-      for (Column c : objGraphModel.getNodeTable())
-      {
-         map.put(c.getId() + "-Att", c.getTitle() + " (Attribute)");
+         if (objGraphModel.isDirected())
+         {
+            map.put("InDegree", Bundle.Layout_NodePlacement_InDegree_name());
+            map.put("OutDegree", Bundle.Layout_NodePlacement_OutDegree_name());
+         }
+         for (Column c : objGraphModel.getNodeTable())
+         {
+            map.put(c.getId() + "-Att", c.getTitle() + " (Attribute)");
+         }
       }
       return map;
    }
@@ -251,8 +265,7 @@ public abstract class LayoutHelper implements Layout
       }
       else if (Placement.equals("OutDegree"))
       {
-         GraphController graphController = Lookup.getDefault().lookup(GraphController.class);
-         DirectedGraph   objGraph        = graphModel.getDirectedGraph();
+         DirectedGraph objGraph = graphModel.getDirectedGraph();
          layout = objGraph.getOutDegree(n);
       }
       else

@@ -1,6 +1,7 @@
 package org.gephi.layout.plugin.circularlayout.nodecomparator;
 
-
+import java.util.logging.Logger;
+import java.util.logging.Level;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.Comparator;
@@ -139,8 +140,8 @@ public class NodeComparator implements Comparator<Object>
             throw new RuntimeException("NodeComparator does not currently support ''" + c.getName() + "''!");
          }
       }
-      catch (Exception nsme) {
-         System.out.println("Error " + nsme.toString());
+      catch (Exception e) {
+        Logger.getLogger(NodeComparator.class.getName()).log(Level.SEVERE, null, e);
       }
       return rv * getSortOrder();
    }

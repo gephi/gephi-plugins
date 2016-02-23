@@ -27,6 +27,8 @@
 package org.gephi.layout.plugin.circularlayout.dualcirclelayout;
 
 import java.util.*;
+import java.util.logging.Logger;
+import java.util.logging.Level;
 import javax.swing.JOptionPane;
 import org.gephi.graph.api.*;
 import org.gephi.graph.spi.LayoutData;
@@ -61,6 +63,7 @@ public class DualCircleLayout extends LayoutHelper implements Layout
    {
       this.setConverged(false);
       this.graph = graphModel.getGraphVisible();
+      this.graph.readLock();
       float[] nodeCoords       = new float[2];
       double  tmpsecondarycirc = 0;
       double  tmpprimarycirc   = 0;
@@ -174,11 +177,13 @@ public class DualCircleLayout extends LayoutHelper implements Layout
          posData.ydistance = (float)(1 / this.getTransitionSteps()) * (nodeCoords[1] - n.y());
          n.setLayoutData(posData);
       }
+      this.graph.readUnlock();
    }
 
    @Override
    public void goAlgo()
    {
+      this.graph.readLock();
       this.setConverged(true);
       TempLayoutData position = null;
       Node[]         nodes    = this.graph.getNodes().toArray();
@@ -224,6 +229,7 @@ public class DualCircleLayout extends LayoutHelper implements Layout
             }
          }
       }
+      this.graph.readUnlock();
    }
 
    @Override
@@ -271,7 +277,7 @@ public class DualCircleLayout extends LayoutHelper implements Layout
                            "getTransitionSteps", "setTransitionSteps"));
       }
       catch (Exception e) {
-         e.printStackTrace();
+         Logger.getLogger(DualCircleLayout.class.getName()).log(Level.SEVERE, null, e);
       }
       return properties.toArray(new LayoutProperty[0]);
    }
@@ -289,28 +295,32 @@ public class DualCircleLayout extends LayoutHelper implements Layout
 
    public void setInnerNodeCount(Integer intsecondarynodecount)
    {
-      GraphController graphController = Lookup.getDefault().lookup(GraphController.class);
-      GraphModel      objGraphModel   = graphController.getGraphModel();
-
-      graph = objGraphModel.getGraphVisible();
-      if (intsecondarynodecount > graph.getNodeCount())
+      if (graphModel != null)
       {
-         JOptionPane.showMessageDialog(null,
-                                       NbBundle.getMessage(getClass(), "DualCircleLayout.setInnerNodeCount.TooHigh.message"),
-                                       NbBundle.getMessage(getClass(), "DualCircleLayout.setInnerNodeCount.TooHigh.title"),
-                                       JOptionPane.WARNING_MESSAGE);
-      }
-      else if (intsecondarynodecount < 1)
-      {
-         JOptionPane.showMessageDialog(null,
-                                       NbBundle.getMessage(getClass(), "DualCircleLayout.setInnerNodeCount.TooLow.message"),
-                                       NbBundle.getMessage(getClass(), "DualCircleLayout.setInnerNodeCount.TooLow.title"),
-                                       JOptionPane.WARNING_MESSAGE);
+         graph = this.graphModel.getGraphVisible();
+         if (intsecondarynodecount > graph.getNodeCount())
+         {
+            JOptionPane.showMessageDialog(null,
+                                          NbBundle.getMessage(getClass(), "DualCircleLayout.setInnerNodeCount.TooHigh.message"),
+                                          NbBundle.getMessage(getClass(), "DualCircleLayout.setInnerNodeCount.TooHigh.title"),
+                                          JOptionPane.WARNING_MESSAGE);
+         }
+         else if (intsecondarynodecount < 1)
+         {
+            JOptionPane.showMessageDialog(null,
+                                          NbBundle.getMessage(getClass(), "DualCircleLayout.setInnerNodeCount.TooLow.message"),
+                                          NbBundle.getMessage(getClass(), "DualCircleLayout.setInnerNodeCount.TooLow.title"),
+                                          JOptionPane.WARNING_MESSAGE);
+         }
+         else
+         {
+            //TODO: add node count check to do boundary checking on user input
+            this.secondarynodecount = intsecondarynodecount;
+         }
       }
       else
       {
-         //TODO: add node count check to do boundary checking on user input
-         this.secondarynodecount = intsecondarynodecount;
+         this.secondarynodecount = 0;
       }
    }
 
