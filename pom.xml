@@ -26,6 +26,7 @@
         <module>modules/StreamingImpl</module>
         <module>modules/JettyWrapper</module>
         <module>modules/StreamingServer</module>
+        <module>modules/CircularLayout</module>
     </modules>
     
     <!-- Properties -->
