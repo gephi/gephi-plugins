@@ -109,12 +109,12 @@
 			<groupId>org.netbeans.api</groupId>
 			<artifactId>org-openide-util</artifactId>
 		</dependency>
-	 <dependency>
+<!--	 <dependency>
 	  <groupId>fr.inria.wimmics</groupId>
 	  <artifactId>SparqlSoapLib</artifactId>
 	  <version>1.0.0</version>
-	 </dependency>
-	</dependencies>
+	 </dependency>-->
+	</dependencies> 
 	<build>
 		<plugins>
 			<plugin>
