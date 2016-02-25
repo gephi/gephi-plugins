@@ -58,7 +58,7 @@ public class GeoAttributeFinder {
         for (String name : bundle.get("LongitudeShortNames").split(",")) {
             lonAttributes.add(name + "$");
         }
-        latAttributes.add("^x$");
+        lonAttributes.add("^x$");
         for (String name : bundle.get("LongitudeShortNames").split(",")) {
             latAttributes.add("(.*)" + name + "(.*)");
         }
