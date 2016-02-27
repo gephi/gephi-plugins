@@ -1,10 +1,7 @@
 package totetmatt.gephi.twitter;
 
-import java.awt.Desktop;
 import java.io.File;
 import java.io.IOException;
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.Collection;
 import java.util.Map;
 import java.util.logging.Level;
@@ -12,25 +9,23 @@ import java.util.logging.Logger;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListModel;
 import javax.swing.JFileChooser;
-
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableModel;
 import org.gephi.project.api.ProjectController;
 import org.gephi.project.api.WorkspaceListener;
-import org.openide.util.NbBundle;
-import org.openide.windows.TopComponent;
 import org.netbeans.api.settings.ConvertAsProperties;
 import org.openide.awt.ActionID;
 import org.openide.awt.ActionReference;
-import org.openide.util.Exceptions;
 import org.openide.util.Lookup;
+import org.openide.util.NbBundle;
+import org.openide.windows.TopComponent;
 import totetmatt.gephi.twitter.networklogic.Networklogic;
 import twitter4j.JSONException;
 
 @ConvertAsProperties(dtd = "-//org.gephi.plugins.example.panel//Simple//EN",
         autostore = false)
 @TopComponent.Description(preferredID = "MainTwitterWindows",
-        //iconBase="SET/PATH/TO/ICON/HERE", 
+        iconBase = "totetmatt/gephi/twitter/resources/twitterlogo.png", 
         persistenceType = TopComponent.PERSISTENCE_ALWAYS)
 @TopComponent.Registration(mode = "layoutmode", openAtStartup = true)
 @ActionID(category = "Window", id = "org.gephi.plugins.twitter.panel.MainTwitterWindows")
