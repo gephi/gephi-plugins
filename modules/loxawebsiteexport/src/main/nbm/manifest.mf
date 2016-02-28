@@ -1,0 +1,5 @@
+Manifest-Version: 1.0
+OpenIDE-Module-Name: Loxa Web Site Export
+OpenIDE-Module-Short-Description: Help you to publish your analysis like a Web page
+OpenIDE-Module-Long-Description: Loxa Web Site Export Plugin is a plugin developed for Gephi whose purpose is to allow easy publication of the analysis, descriptions and findings when applying the concepts of social network analysis using Gephi. The result of the running the plugin is a fully functional website and easy customization, thereby allowing to publish the results of their work.
+OpenIDE-Module-Display-Category: Export
