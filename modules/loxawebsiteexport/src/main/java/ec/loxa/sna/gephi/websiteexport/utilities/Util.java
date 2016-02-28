@@ -19,9 +19,7 @@ public class Util {
     public static final String PREFIX = "FilesWebSite/";
     
     
-    public void unZip(String zipFilePath){
-        System.out.printf("Zip: %s\n", zipFilePath);
-        System.out.printf("Salida: %s\n", getDirectoryToExtract().getAbsolutePath());
+    public void unZip(String zipFilePath){        
         ZipUtil.unpack(new File(zipFilePath), getDirectoryToExtract(), new NameMapper() {
             @Override
             public String map(String name) {

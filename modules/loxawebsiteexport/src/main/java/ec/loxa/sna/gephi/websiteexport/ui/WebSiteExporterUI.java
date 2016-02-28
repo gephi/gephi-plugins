@@ -106,7 +106,6 @@ public class WebSiteExporterUI implements ExporterClassUI {
         if (result == NotifyDescriptor.OK_OPTION) {
             wsPanelSettings.unsetup(true);
             settings.save(wsExporter);
-            //filePath = wsExporter.getPath().getAbsolutePath();
             if (wsPanelSettings.getSelectedWorkspaces().length > 0) {
                 wsExporter.setSelectedWorkspaces(wsPanelSettings.getSelectedWorkspaces());
 

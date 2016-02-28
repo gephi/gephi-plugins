@@ -28,6 +28,7 @@ import org.netbeans.validation.api.builtin.Validators;
 import org.netbeans.validation.api.ui.ValidationGroup;
 import org.netbeans.validation.api.ui.ValidationPanel;
 import org.openide.util.Lookup;
+import org.openide.util.NbBundle;
 import org.openide.util.NbPreferences;
 import org.openide.windows.WindowManager;
 
@@ -86,16 +87,19 @@ public class WebSiteSettingsPanel extends javax.swing.JPanel {
                     while (t.hasNext()) {
                         String tMsg= t.next();
                         File fTemp = new File(tMsg);
-                        if (!fTemp.exists()){
-                            System.out.println(fTemp.getName());
+                        if (!fTemp.exists()){                            
                             sb.append(fTemp.getName()).append(", ");
                             miss = true;
                         }
                     }
 
-                    if (miss)
-                        JOptionPane.showMessageDialog(null, "files missing: "+sb.deleteCharAt(sb.length()-2));
-                    else {
+                    if (miss) {
+                        //JOptionPane.showMessageDialog(null, "files missing: "+sb.deleteCharAt(sb.length()-2));
+                        JOptionPane.showMessageDialog(WindowManager.getDefault().getMainWindow(),
+                                    NbBundle.getMessage(WebSiteExporterUI.class, "WebSiteExporterUI.Error.FilesNoExistsDescription"),
+                                    NbBundle.getMessage(WebSiteExporterUI.class, "WebSiteExporterUI.Error.FilesNoExistsTitle"),
+                                    JOptionPane.ERROR_MESSAGE);
+                    } else {
                         txtPath.setText(fChooser.getSelectedFile().getPath());
                         append = true;
                     }
@@ -259,7 +263,7 @@ public class WebSiteSettingsPanel extends javax.swing.JPanel {
             pnlWSettingsLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(pnlWSettingsLayout.createSequentialGroup()
                 .addContainerGap()
-                .add(pnlWSettingsLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                .add(pnlWSettingsLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING, false)
                     .add(pnlWSettingsLayout.createSequentialGroup()
                         .add(lblPath)
                         .add(18, 18, 18)
@@ -267,12 +271,12 @@ public class WebSiteSettingsPanel extends javax.swing.JPanel {
                     .add(pnlWSettingsLayout.createSequentialGroup()
                         .add(lblWorkspace)
                         .add(18, 18, 18)
-                        .add(jScrollPane1)))
+                        .add(jScrollPane1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 422, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)))
                 .add(18, 18, 18)
                 .add(pnlWSettingsLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
                     .add(btnBrowse)
                     .add(btnAppend))
-                .addContainerGap())
+                .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         pnlWSettingsLayout.setVerticalGroup(
             pnlWSettingsLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
@@ -316,7 +320,7 @@ public class WebSiteSettingsPanel extends javax.swing.JPanel {
                     .add(chbDynamic)
                     .add(chbColors)
                     .add(chbAttributes))
-                .addContainerGap(538, Short.MAX_VALUE))
+                .addContainerGap(120, Short.MAX_VALUE))
         );
         pnlGEXFSettingsLayout.setVerticalGroup(
             pnlGEXFSettingsLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
@@ -356,7 +360,7 @@ public class WebSiteSettingsPanel extends javax.swing.JPanel {
                     .add(rbnPGD)
                     .add(rbnHide)
                     .add(rbnFishEye))
-                .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(180, Short.MAX_VALUE))
         );
         pnlGraphThemeLayout.setVerticalGroup(
             pnlGraphThemeLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
