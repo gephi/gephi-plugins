@@ -61,6 +61,15 @@ public class AttributeColumnSelectionPanel extends JPanel {
     private Map<String, Column> columnNames = new HashMap<String, Column>();
     private Map<JCheckBox, Column> checkBoxesToColumns = new HashMap<JCheckBox, Column>();
 
+    private static final int MIN_EDGE_WIDTH = 1,
+                          MAX_EDGE_WIDTH = 20,
+                          MIN_NODE_RADIUS = 20,
+            MAX_NODE_RADIUS = 100
+    ;
+    public static final int DEFAULT_EDGE_WIDTH = MAX_EDGE_WIDTH / 2,
+                         DEFAULT_NODE_RADIUS = (MAX_NODE_RADIUS - MIN_NODE_RADIUS) / 8 + MIN_NODE_RADIUS
+            ;
+
 
     private ActionListener longitudeColumnSelector = new ActionListener() {
 
@@ -200,7 +209,7 @@ public class AttributeColumnSelectionPanel extends JPanel {
         sliderPanel.setLayout(sliderLayout);
 //        sliderPanel.add(new JLabel("Max node radius"));
         sliderPanel.add(new JLabel(bundle.get("MaxNodeRadius")));
-        JSlider nodeRadius = new JSlider(JSlider.HORIZONTAL, 20, 100, maxNodeRadius);
+        JSlider nodeRadius = new JSlider(JSlider.HORIZONTAL, MIN_NODE_RADIUS, MAX_NODE_RADIUS, maxNodeRadius);
         nodeRadius.addChangeListener(maxNodeRadiusSliderResponder);
         nodeRadius.setMajorTickSpacing(10);
         nodeRadius.setPaintTicks(true);
@@ -208,7 +217,7 @@ public class AttributeColumnSelectionPanel extends JPanel {
         sliderPanel.add(nodeRadius);
 //        sliderPanel.add(new JLabel("Max edge width"));
         sliderPanel.add(new JLabel(bundle.get("MaxEdgeWidth")));
-        JSlider edgeWidth = new JSlider(JSlider.HORIZONTAL, 1, 20, maxEdgeWidth);
+        JSlider edgeWidth = new JSlider(JSlider.HORIZONTAL, MIN_EDGE_WIDTH, MAX_EDGE_WIDTH, maxEdgeWidth);
         edgeWidth.addChangeListener(maxEdgeWithSliderResponder);
         edgeWidth.setMajorTickSpacing(5);
         edgeWidth.setPaintTicks(true);

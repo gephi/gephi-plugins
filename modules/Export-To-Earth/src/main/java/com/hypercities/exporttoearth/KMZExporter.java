@@ -84,8 +84,8 @@ public class KMZExporter implements GraphExporter, ByteExporter, LongTask {
     private Column latitudeColumn;
     private Column[] columnsToExport;
 
-    private int maxEdgeWidth  = 0;
-    private int maxNodeRadius = 0;
+    private int maxEdgeWidth  = AttributeColumnSelectionPanel.DEFAULT_EDGE_WIDTH;
+    private int maxNodeRadius = AttributeColumnSelectionPanel.DEFAULT_NODE_RADIUS;
 
     @Override
     public void setExportVisible(boolean bln) {
