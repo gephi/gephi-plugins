@@ -43,7 +43,7 @@ import org.openide.util.lookup.ServiceProvider;
 @ServiceProvider(service = ExporterUI.class)
 public class KMZExporterUI implements ExporterUI {
 
-    private AttributeColumnSelectionPanel panel;
+    private ColumnSelectionPanel panel;
     private KMZExporter exporter;
 
     private GraphModel model;
@@ -72,7 +72,7 @@ public class KMZExporterUI implements ExporterUI {
         latitudeColumn = gaf.getLatitudeColumn();
         // for each column, create a new label, checkbox, lat radio button and lon radio button
         // checkboxes are stored in a hash of objects, item to column name
-        panel = new AttributeColumnSelectionPanel(columns, longitudeColumn, latitudeColumn);
+        panel = new ColumnSelectionPanel(columns, longitudeColumn, latitudeColumn);
         return panel;
     }
 
