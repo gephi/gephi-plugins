@@ -46,6 +46,8 @@ import java.util.zip.ZipOutputStream;
 import javax.swing.JOptionPane;
 import org.gephi.graph.api.Column;
 import org.gephi.graph.api.Edge;
+import org.gephi.graph.api.Graph;
+import org.gephi.graph.api.GraphController;
 import org.gephi.graph.api.GraphModel;
 import org.gephi.graph.api.Node;
 import org.gephi.io.exporter.spi.ByteExporter;
@@ -109,27 +111,23 @@ public class KMZExporter implements GraphExporter, ByteExporter, LongTask {
     @Override
     public boolean execute() {
 
-        PreviewController controller = Lookup.getDefault().lookup(PreviewController.class);
-        PreviewProperties props = controller.getModel(workspace).getProperties();
-        PreviewModel previewModel = workspace.getLookup().lookup(PreviewModel.class);
-        int width = 50;
-        int height = 50;
-        props.putValue("width", width);
-        props.putValue("height", height);
-
         // 1. Validate -- do we have lat/lon columns?
         ticket.start();
         Progress.start(ticket);
 
 
-        int renderablesCount = 0;
-        ArrayList<NodeItem> validNodes = new ArrayList<NodeItem>();
-        double invalidNodeCount = 0,
-                totalNodes = 0;
+        GraphController graphController = Lookup.getDefault().lookup(GraphController.class);
+        GraphModel model = graphController.getGraphModel(workspace);
 
-        GraphModel model = Lookup.getDefault().lookup(GraphModel.class);
-//        AttributeModel model = Lookup.getDefault().lookup(AttributeController.class).getModel();
-        Float maxSize = new Float(0.0);
+
+        Graph graph = model.getGraph();
+
+        ArrayList<Node> validNodes = new ArrayList<Node>();
+        float maxSize = 0.0f;
+        double invalidNodeCount = 0,
+                totalNodes = graph.getNodeCount()
+        ;
+
 
         if (longitudeColumn == null || latitudeColumn == null) {
             GeoAttributeFinder gaf = new GeoAttributeFinder();
@@ -137,41 +135,40 @@ public class KMZExporter implements GraphExporter, ByteExporter, LongTask {
             setColumnsToUse(gaf.getLongitudeColumn(), gaf.getLatitudeColumn(), ColumnUtils.getColumns(model.getNodeTable()));
         }
 
-        for (Item ni : previewModel.getItems(Item.NODE)) {
-            Node n = (Node) ni.getSource();
-            Float size = (Float) ni.getData(NodeItem.SIZE);
-
+        for (Node node : graph.getNodes()) {
+            float size = node.size();
             if (size > maxSize) {
                 maxSize = size;
             }
 
             boolean hasLat = false,
-                    hasLon = false;
+                    hasLon = false
+            ;
 
-            if (n.getAttribute(latitudeColumn) != null) {
+            if (node.getAttribute(latitudeColumn) != null) {
                 hasLat = true;
             }
-            if (n.getAttribute(longitudeColumn) != null) {
+            if (node.getAttribute(longitudeColumn) != null) {
                 hasLon = true;
             }
 
             if (hasLat && hasLon) {
-                validNodes.add((NodeItem) ni);
-                renderablesCount++;
+                validNodes.add(node);
             } else {
                 invalidNodeCount++;
             }
-            totalNodes++;
         }
 
-        float maxWeight = 0, 
-                minWeight = 0;
-        for (Item i : previewModel.getItems(Item.EDGE)) {
-            Float weight = (Float) i.getData(EdgeItem.WEIGHT);
+        double maxWeight = 0, 
+              minWeight = 0
+        ;
+
+        for (Edge edge : graph.getEdges()) {
+            double weight = edge.getWeight();
             if (weight > maxWeight) {
                 maxWeight = weight;
-                renderablesCount++;
             }
+
             if (minWeight == 0 || weight < minWeight) {
                 minWeight = weight;
             }
@@ -205,24 +202,22 @@ public class KMZExporter implements GraphExporter, ByteExporter, LongTask {
         ticket.setDisplayName("Finding nodes");
         ticket.start(validNodes.size());
 
-        HashMap<Integer, Color> modularityClassColors = new HashMap<Integer, Color>();
         HashMap<Object, Color> nodeColors = new HashMap<Object, Color>();
         IconRenderer renderer = new IconRenderer(maxNodeRadius);
 
         double maxScale = 2.0;
-        for (NodeItem ni : validNodes) {
-            Node n = (Node) ni.getSource();
-            renderer.render(ni, props);
+        for (Node n : validNodes) {
+            renderer.render(n);
             String iconFilename = renderer.getLastFilename();
-            Float weight = (Float) ni.getData(NodeItem.SIZE);
+            float weight = n.size();
 
             String description = "";
             for (Column ac : columnsToExport) {
                 description += ac.getTitle() + ": " + n.getAttribute(ac) + "\n";
             }
             
-            nodeColors.put(n.getId(), (Color) ni.getData(NodeItem.COLOR));
-            Placemark placemark = folder.createAndAddPlacemark().withName((String) n.getAttribute("Label")).withDescription(description);
+            nodeColors.put(n.getId(), (Color) n.getColor());
+            Placemark placemark = folder.createAndAddPlacemark().withName(n.getLabel()).withDescription(description);
 
             Style style = folder.createAndAddStyle().withId("style_" + styleCounter);
             style.createAndSetIconStyle().withScale((weight / maxSize) * maxScale).withIcon(new Icon().withHref(iconFilename));
@@ -245,67 +240,43 @@ public class KMZExporter implements GraphExporter, ByteExporter, LongTask {
 
         ticket.setDisplayName("Exporting edges");
         // 2b. produce edges
-        EdgeColor ec = previewModel.getProperties().getValue(PreviewProperty.EDGE_COLOR);
-        for (Item i : previewModel.getItems(Item.EDGE)) {
-            Edge e = (Edge) i.getSource();
-            Node source =  e.getSource();
-            Node targe =  e.getTarget();
-            // It's possible for an edge to have a source or target that doesn't
-            // have geocoordinates, so we skip those.
-            if (source == null || targe == null) {
+        for (Edge edge : graph.getEdges()) {
+            Node source = edge.getSource();
+            Node target = edge.getTarget();
+
+            if (source == null || target == null) {
                 continue;
             }
+
             if (source.getAttribute(latitudeColumn) == null 
                     || source.getAttribute(longitudeColumn) == null
-                    || targe.getAttribute(latitudeColumn) == null 
-                    || targe.getAttribute(longitudeColumn) == null) {
+                    || target.getAttribute(latitudeColumn) == null 
+                    || target.getAttribute(longitudeColumn) == null) {
                 continue;
             }
-            float weight = (Float) i.getData(EdgeItem.WEIGHT);
 
-            String title = i.getData(EdgeItem.EDGE_LABEL);
+            double weight = edge.getWeight();
+            String title = edge.getLabel();
+
             if (title == null) {
-                title = source.getAttribute("Label") + " and " + targe.getAttribute("Label");
+                title = source.getLabel() + " and " + target.getLabel();
             }
-            String description = "";
-            for (Column ac : ColumnUtils.getColumns(model.getEdgeTable())) {
-                if ((ac.getTitle() == null ? latitudeColumn != null
-                        : !ac.getTitle().equals(latitudeColumn.getTitle()))
-                        && (ac.getTitle() == null ? longitudeColumn != null
-                        : !ac.getTitle().equals(longitudeColumn.getTitle()))) {
 
-                    // Filter labels with null attributes
-                    if (e.getAttribute(ac) != null) {
-                        description += ac.getTitle() + ": " + e.getAttribute(ac) + "\n";
-                    }
+            String description = "";
+            for (Column column : edge.getAttributeColumns()) {
+                if (column == latitudeColumn || column == longitudeColumn) {
+                    continue;
+                }
+
+                if (edge.getAttribute(column) != null) {
+                    description += column.getTitle() + ": " + edge.getAttribute(column) + "\n";
                 }
             }
 
-            // Default is whitish
-            
-            
-            Color color = i.getData(EdgeItem.COLOR);
-            switch(ec.getMode()) {
-                case SOURCE:
-                    color = nodeColors.get(e.getSource().getId());
-                    break;
-                case TARGET:
-                    color = nodeColors.get(e.getTarget().getId());
-                    break;
-                case MIXED:
-                    EdgeColor tempEdgeColor = new EdgeColor(ec.getMode());
-                    color = tempEdgeColor.getColor(null, 
-                            nodeColors.get(e.getSource().getId()), 
-                            nodeColors.get(e.getTarget().getId())
-                    );
-                    break;
-                default:
-                    color = (Color) i.getData(EdgeItem.COLOR);
-            }
-            
             String colorCode = "#33ffffff";
+            Color color = edge.getColor();
             if (color != null) {
-                colorCode = "#" + Integer.toHexString(color.getAlpha()) + ""
+                colorCode = "#" + Integer.toHexString(color.getAlpha())
                         + Integer.toHexString(color.getRed())
                         + Integer.toHexString(color.getGreen())
                         + Integer.toHexString(color.getBlue());
@@ -325,8 +296,8 @@ public class KMZExporter implements GraphExporter, ByteExporter, LongTask {
             placemark.setStyleUrl("#style_" + styleCounter);
 
             placemark.createAndSetLineString().addToCoordinates((Double) source.getAttribute(longitudeColumn),
-                    (Double) source.getAttribute(latitudeColumn), 0).addToCoordinates((Double) targe.getAttribute(longitudeColumn),
-                    (Double) targe.getAttribute(latitudeColumn), 0).withTessellate(Boolean.TRUE).withExtrude(Boolean.TRUE);
+                    (Double) source.getAttribute(latitudeColumn), 0).addToCoordinates((Double) target.getAttribute(longitudeColumn),
+                    (Double) target.getAttribute(latitudeColumn), 0).withTessellate(Boolean.TRUE).withExtrude(Boolean.TRUE);
 
             styleCounter++;
 
@@ -335,6 +306,8 @@ public class KMZExporter implements GraphExporter, ByteExporter, LongTask {
                 return false;
             }
         }
+
+
         try {
             writeKMZ(kml, renderer);
             JOptionPane.showMessageDialog(null, "Export complete",

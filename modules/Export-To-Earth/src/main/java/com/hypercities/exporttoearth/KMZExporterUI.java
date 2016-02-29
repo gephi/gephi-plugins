@@ -26,10 +26,12 @@ package com.hypercities.exporttoearth;
 
 import javax.swing.JPanel;
 import org.gephi.graph.api.Column;
+import org.gephi.graph.api.GraphController;
 import org.gephi.graph.api.GraphModel;
 import org.gephi.graph.api.Table;
 import org.gephi.io.exporter.spi.Exporter;
 import org.gephi.io.exporter.spi.ExporterUI;
+import org.gephi.project.api.ProjectController;
 import org.openide.util.Lookup;
 import org.openide.util.lookup.ServiceProvider;
 
@@ -51,6 +53,11 @@ public class KMZExporterUI implements ExporterUI {
     @Override
     public JPanel getPanel() {
         // get all fields
+        GraphController graphController = Lookup.getDefault().lookup(GraphController.class);
+        ProjectController projectController = Lookup.getDefault().lookup(ProjectController.class);
+        if (model == null) {
+            model = graphController.getGraphModel(projectController.getCurrentWorkspace());
+        }
 
         Table nodeTable = model.getNodeTable();
         Column[] columns = new Column[nodeTable.countColumns()];
@@ -71,7 +78,6 @@ public class KMZExporterUI implements ExporterUI {
 
     @Override
     public void setup(Exporter exprtr) {
-        model = Lookup.getDefault().lookup(GraphModel.class);
         exporter = (KMZExporter)exprtr;
     }
 
@@ -95,8 +101,11 @@ public class KMZExporterUI implements ExporterUI {
     }
 
     @Override
-    public boolean isUIForExporter(Exporter exprtr) {
-        return exprtr instanceof KMZExporter;
+    public boolean isUIForExporter(Exporter exporter) {
+        if (exporter instanceof KMZExporter) {
+            this.exporter = (KMZExporter)exporter;
+        }
+        return exporter instanceof KMZExporter;
     }
 
     @Override

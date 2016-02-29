@@ -207,7 +207,7 @@ public class AttributeColumnSelectionPanel extends JPanel {
         nodeRadius.setPaintLabels(true);
         sliderPanel.add(nodeRadius);
 //        sliderPanel.add(new JLabel("Max edge width"));
-        sliderPanel.add(new JLabel(bundle.get("MaxNodeRadius")));
+        sliderPanel.add(new JLabel(bundle.get("MaxEdgeWidth")));
         JSlider edgeWidth = new JSlider(JSlider.HORIZONTAL, 1, 20, maxEdgeWidth);
         edgeWidth.addChangeListener(maxEdgeWithSliderResponder);
         edgeWidth.setMajorTickSpacing(5);

@@ -34,6 +34,7 @@ import java.util.Map;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 import javax.imageio.ImageIO;
+import org.gephi.graph.api.Node;
 import org.gephi.preview.api.Item;
 import org.gephi.preview.api.PreviewProperties;
 import org.gephi.preview.api.PreviewProperty;
@@ -56,6 +57,35 @@ public class IconRenderer {
 
     public IconRenderer(int maxRadius) {
         this.maxRadius = maxRadius;
+    }
+
+    public void render(Node node) {
+        Color color = node.getColor();
+        Color borderColor = color;
+
+        int size = maxRadius,
+            borderSize = 2 * maxRadius / 20;
+
+        lastFilename = "tiles-" + size + "-" + color.getRed() + "-"
+                + color.getGreen() + "-" + color.getBlue() + ".png";
+        // If the circle has already been generated, don't regenerate it.
+        if (filenames.contains(lastFilename)) {
+            return;
+        }
+        filenames.add(lastFilename);
+
+        BufferedImage img = new BufferedImage(size, size, BufferedImage.TYPE_INT_ARGB);
+        Graphics2D graphics = img.createGraphics();
+
+        graphics.setColor(color);
+        graphics.fillOval(borderSize, borderSize, size - borderSize, size - borderSize);
+
+        if (borderSize > 0) {
+            graphics.setColor(borderColor);
+            graphics.drawOval(borderSize, borderSize, size - borderSize, size - borderSize);
+        }
+
+        images.put(lastFilename, img);
     }
 
     public void render(Item item, PreviewProperties pp) {
