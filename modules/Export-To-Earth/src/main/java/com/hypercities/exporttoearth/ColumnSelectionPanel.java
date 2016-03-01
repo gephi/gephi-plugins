@@ -63,7 +63,7 @@ public class ColumnSelectionPanel extends JPanel {
                           MIN_NODE_RADIUS = 20,
             MAX_NODE_RADIUS = 100
     ;
-    public static final int DEFAULT_EDGE_WIDTH = MAX_EDGE_WIDTH / 2,
+    public static final int DEFAULT_EDGE_WIDTH = 2,
                          DEFAULT_NODE_RADIUS = (MAX_NODE_RADIUS - MIN_NODE_RADIUS) / 8 + MIN_NODE_RADIUS
             ;
 
@@ -111,7 +111,7 @@ public class ColumnSelectionPanel extends JPanel {
 
     private static BundleAccessor bundle = BundleAccessor.forClass(ColumnSelectionPanel.class);
 
-    private int maxEdgeWidth = 10;
+    private int maxEdgeWidth = DEFAULT_EDGE_WIDTH;
     private ChangeListener maxEdgeWithSliderResponder = new ChangeListener() {
 
         @Override
@@ -124,7 +124,7 @@ public class ColumnSelectionPanel extends JPanel {
 
     };
 
-    private int maxNodeRadius = 80;
+    private int maxNodeRadius = DEFAULT_NODE_RADIUS;
     private ChangeListener maxNodeRadiusSliderResponder = new ChangeListener() {
 
         @Override

@@ -73,7 +73,7 @@
                 <configuration>
                     <author>Dave Shepard</author>
                     <sourceCodeUrl>http://github.com/shepdl/gephi-plugins</sourceCodeUrl>
-                    <licenseName>MIT</licenseName>
+                    <licenseName>3-clause BSD</licenseName>
                     <publicPackages>
                         
                     </publicPackages>
