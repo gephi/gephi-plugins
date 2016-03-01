@@ -33,6 +33,7 @@ import org.gephi.io.exporter.spi.Exporter;
 import org.gephi.io.exporter.spi.ExporterUI;
 import org.gephi.project.api.ProjectController;
 import org.openide.util.Lookup;
+import org.openide.util.NbBundle;
 import org.openide.util.lookup.ServiceProvider;
 
 /**
@@ -49,6 +50,11 @@ public class KMZExporterUI implements ExporterUI {
     private GraphModel model;
     private Column longitudeColumn;
     private Column latitudeColumn;
+
+
+    private String getMessage(String message) {
+        return NbBundle.getMessage(KMZExporterUI.class, message);
+    }
 
     @Override
     public JPanel getPanel() {
@@ -110,7 +116,7 @@ public class KMZExporterUI implements ExporterUI {
 
     @Override
     public String getDisplayName() {
-        return "Select latitude and longitude fields";
+        return getMessage("UIDisplayName");
     }
     
 }
