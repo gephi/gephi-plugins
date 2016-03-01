@@ -90,14 +90,14 @@ public class GeoAttributeFinder {
     }
 
     /**
-     * @return the longitudeColumn
+     * @return the column selected as the longitude column
      */
     public Column getLongitudeColumn() {
         return longitudeColumn;
     }
 
     /**
-     * @return the latitudeColumn
+     * @return the column selected as the latitude column
      */
     public Column getLatitudeColumn() {
         return latitudeColumn;

@@ -326,7 +326,7 @@ public class KMZExporter implements GraphExporter, ByteExporter, LongTask {
         }
     }
 
-    private synchronized void writeKMZ(Kml kml, IconRenderer icons) throws IOException {
+    private void writeKMZ(Kml kml, IconRenderer icons) throws IOException {
         ZipOutputStream out = new ZipOutputStream(outputStream);
         ZipEntry entry = new ZipEntry("doc.kml");
         out.putNextEntry(entry);

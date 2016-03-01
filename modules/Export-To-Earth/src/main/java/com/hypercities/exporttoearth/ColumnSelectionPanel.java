@@ -51,7 +51,6 @@ import org.openide.util.NbBundle;
  */
 public class ColumnSelectionPanel extends JPanel {
     
-    // Fields that will be exposed.
     private Column longitudeColumn;
     private Column latitudeColumn;
     private ArrayList<Column> columnsToExport = new ArrayList<Column>();
@@ -74,7 +73,7 @@ public class ColumnSelectionPanel extends JPanel {
             ;
 
 
-    private ActionListener longitudeColumnSelector = new ActionListener() {
+    private final ActionListener longitudeColumnSelector = new ActionListener() {
 
         @Override
         /**
@@ -85,7 +84,7 @@ public class ColumnSelectionPanel extends JPanel {
         }
     };
 
-    private ActionListener latitudeColumnSelector = new ActionListener() {
+    private final ActionListener latitudeColumnSelector = new ActionListener() {
 
         @Override
         public void actionPerformed(ActionEvent ae) {
@@ -93,7 +92,7 @@ public class ColumnSelectionPanel extends JPanel {
         }
     };
 
-    private ItemListener columnSelectorResponder = new ItemListener() {
+    private final ItemListener columnSelectorResponder = new ItemListener() {
 
         @Override
         public void itemStateChanged(ItemEvent ie) {
@@ -116,7 +115,7 @@ public class ColumnSelectionPanel extends JPanel {
     };
 
     private int maxEdgeWidth = DEFAULT_EDGE_WIDTH;
-    private ChangeListener maxEdgeWithSliderResponder = new ChangeListener() {
+    private final ChangeListener maxEdgeWithSliderResponder = new ChangeListener() {
 
         @Override
         public void stateChanged(ChangeEvent ce) {
@@ -129,7 +128,7 @@ public class ColumnSelectionPanel extends JPanel {
     };
 
     private int maxNodeRadius = DEFAULT_NODE_RADIUS;
-    private ChangeListener maxNodeRadiusSliderResponder = new ChangeListener() {
+    private final ChangeListener maxNodeRadiusSliderResponder = new ChangeListener() {
 
         @Override
         public void stateChanged(ChangeEvent ce) {
@@ -169,7 +168,6 @@ public class ColumnSelectionPanel extends JPanel {
         for (Column column : allColumns) {
             String title = column.getTitle();
             columnNames.put(title, column);
-            JLabel label = new JLabel(title);
             
             JCheckBox checkbox = new JCheckBox(title);
             checkBoxesToColumns.put(checkbox, column);
@@ -196,7 +194,6 @@ public class ColumnSelectionPanel extends JPanel {
 
         }
         add(columnSelectionPane);
-        // checkboxes are stored in a hash of objects, item to column name
 
         // Width and Edge sliders
         JPanel sliderPanel = new JPanel();

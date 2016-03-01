@@ -50,7 +50,6 @@ public class KMZExporterBuilder implements GraphFileExporterBuilder {
 
     @Override
     public String getName() {
-//        return "KMZ File Export";
         return NbBundle.getMessage(KMZExporterBuilder.class, "KMZFileExport");
     }
 }
