@@ -29,6 +29,7 @@ import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import org.gephi.graph.api.Column;
+import org.openide.util.NbBundle;
 
 /**
  * Find columns with geographic attributes in Data Laboratory.
@@ -40,26 +41,28 @@ public class GeoAttributeFinder {
     private Column longitudeColumn;
     private Column latitudeColumn;
 
-    private static BundleAccessor bundle = BundleAccessor.forClass(GeoAttributeFinder.class);
+    private String getMessage(String resource) {
+        return NbBundle.getMessage(GeoAttributeFinder.class, resource);
+    }
 
     Column[] findGeoFields(Column[] columns) {
         ArrayList<String> latAttributes = new ArrayList<String>();
-        latAttributes.add(bundle.get("Latitude"));
-        for (String name : bundle.get("LatitudeShortNames").split(",")) {
+        latAttributes.add(getMessage("Latitude"));
+        for (String name : getMessage("LatitudeShortNames").split(",")) {
             latAttributes.add(name + "$");
         }
         latAttributes.add("^y$");
-        for (String name : bundle.get("LatitudeShortNames").split(",")) {
+        for (String name : getMessage("LatitudeShortNames").split(",")) {
             latAttributes.add("(.*)" + name + "(.*)");
         }
 
         ArrayList<String> lonAttributes = new ArrayList<String>();
-        lonAttributes.add(bundle.get("Longitude"));
-        for (String name : bundle.get("LongitudeShortNames").split(",")) {
+        lonAttributes.add(getMessage("Longitude"));
+        for (String name : getMessage("LongitudeShortNames").split(",")) {
             lonAttributes.add(name + "$");
         }
         lonAttributes.add("^x$");
-        for (String name : bundle.get("LongitudeShortNames").split(",")) {
+        for (String name : getMessage("LongitudeShortNames").split(",")) {
             latAttributes.add("(.*)" + name + "(.*)");
         }
 

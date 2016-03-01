@@ -42,6 +42,7 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import org.gephi.graph.api.Column;
+import org.openide.util.NbBundle;
 
 /**
  * UI for attribute selection.
@@ -57,6 +58,11 @@ public class ColumnSelectionPanel extends JPanel {
 
     private Map<String, Column> columnNames = new HashMap<String, Column>();
     private Map<JCheckBox, Column> checkBoxesToColumns = new HashMap<JCheckBox, Column>();
+
+
+    private String getMessage(String resource) {
+        return NbBundle.getMessage(ColumnSelectionPanel.class, resource);
+    }
 
     private static final int MIN_EDGE_WIDTH = 1,
                           MAX_EDGE_WIDTH = 20,
@@ -109,8 +115,6 @@ public class ColumnSelectionPanel extends JPanel {
         } // end itemStateChanged
     };
 
-    private static BundleAccessor bundle = BundleAccessor.forClass(ColumnSelectionPanel.class);
-
     private int maxEdgeWidth = DEFAULT_EDGE_WIDTH;
     private ChangeListener maxEdgeWithSliderResponder = new ChangeListener() {
 
@@ -158,9 +162,9 @@ public class ColumnSelectionPanel extends JPanel {
         // for each column, create a new label, checkbox, lat radio button and lon radio button
         GridLayout layout = new GridLayout(0, 3);
         columnSelectionPane.setLayout(layout);
-        columnSelectionPane.add(new JLabel(bundle.get("IncludeColumn")));
-        columnSelectionPane.add(new JLabel(bundle.get("Longitude")));
-        columnSelectionPane.add(new JLabel(bundle.get("Latitude")));
+        columnSelectionPane.add(new JLabel(getMessage("IncludeColumn")));
+        columnSelectionPane.add(new JLabel(getMessage("Longitude")));
+        columnSelectionPane.add(new JLabel(getMessage("Latitude")));
 
         for (Column column : allColumns) {
             String title = column.getTitle();
@@ -198,14 +202,14 @@ public class ColumnSelectionPanel extends JPanel {
         JPanel sliderPanel = new JPanel();
         BoxLayout sliderLayout = new BoxLayout(sliderPanel, BoxLayout.Y_AXIS);
         sliderPanel.setLayout(sliderLayout);
-        sliderPanel.add(new JLabel(bundle.get("MaxNodeRadius")));
+        sliderPanel.add(new JLabel(getMessage("MaxNodeRadius")));
         JSlider nodeRadius = new JSlider(JSlider.HORIZONTAL, MIN_NODE_RADIUS, MAX_NODE_RADIUS, maxNodeRadius);
         nodeRadius.addChangeListener(maxNodeRadiusSliderResponder);
         nodeRadius.setMajorTickSpacing(10);
         nodeRadius.setPaintTicks(true);
         nodeRadius.setPaintLabels(true);
         sliderPanel.add(nodeRadius);
-        sliderPanel.add(new JLabel(bundle.get("MaxEdgeWidth")));
+        sliderPanel.add(new JLabel(getMessage("MaxEdgeWidth")));
         JSlider edgeWidth = new JSlider(JSlider.HORIZONTAL, MIN_EDGE_WIDTH, MAX_EDGE_WIDTH, maxEdgeWidth);
         edgeWidth.addChangeListener(maxEdgeWithSliderResponder);
         edgeWidth.setMajorTickSpacing(5);

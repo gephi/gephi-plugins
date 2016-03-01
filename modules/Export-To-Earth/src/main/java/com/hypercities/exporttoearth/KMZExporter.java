@@ -47,6 +47,7 @@ import org.gephi.graph.api.Graph;
 import org.gephi.graph.api.GraphController;
 import org.gephi.graph.api.GraphModel;
 import org.gephi.graph.api.Node;
+import org.gephi.graph.api.Table;
 import org.gephi.io.exporter.spi.ByteExporter;
 import org.gephi.io.exporter.spi.GraphExporter;
 import org.gephi.project.api.Workspace;
@@ -54,6 +55,7 @@ import org.gephi.utils.longtask.spi.LongTask;
 import org.gephi.utils.progress.Progress;
 import org.gephi.utils.progress.ProgressTicket;
 import org.openide.util.Lookup;
+import org.openide.util.NbBundle;
 
 /**
  * Exports Gephi graphs to KMZ files.
@@ -75,6 +77,21 @@ public class KMZExporter implements GraphExporter, ByteExporter, LongTask {
 
     private int maxEdgeWidth  = ColumnSelectionPanel.DEFAULT_EDGE_WIDTH;
     private int maxNodeRadius = ColumnSelectionPanel.DEFAULT_NODE_RADIUS;
+
+    private static Column[] getColumns(Table table) {
+        Column[] columns = new Column[table.countColumns()];
+
+        for (int i = 0; i < columns.length; i++) {
+            columns[i] = table.getColumn(i);
+        }
+
+        return columns;
+    }
+    
+
+    private String getMessage(String resourceName) {
+        return NbBundle.getMessage(KMZExporter.class, resourceName);
+    }
 
     @Override
     public void setExportVisible(boolean bln) {
@@ -111,6 +128,7 @@ public class KMZExporter implements GraphExporter, ByteExporter, LongTask {
 
         Graph graph = model.getGraph();
 
+        ticket.setDisplayName(getMessage("EvaluatingGraph"));
         ArrayList<Node> validNodes = new ArrayList<Node>();
         float maxSize = 0.0f;
         double invalidNodeCount = 0,
@@ -120,8 +138,8 @@ public class KMZExporter implements GraphExporter, ByteExporter, LongTask {
 
         if (longitudeColumn == null || latitudeColumn == null) {
             GeoAttributeFinder gaf = new GeoAttributeFinder();
-            gaf.findGeoFields(ColumnUtils.getColumns(model.getNodeTable()));
-            setColumnsToUse(gaf.getLongitudeColumn(), gaf.getLatitudeColumn(), ColumnUtils.getColumns(model.getNodeTable()));
+            gaf.findGeoFields(getColumns(model.getNodeTable()));
+            setColumnsToUse(gaf.getLongitudeColumn(), gaf.getLatitudeColumn(), getColumns(model.getNodeTable()));
         }
 
         for (Node node : graph.getNodes()) {
@@ -165,21 +183,20 @@ public class KMZExporter implements GraphExporter, ByteExporter, LongTask {
 
         if (invalidNodeCount == totalNodes) {
             // no valid nodes: exit
-            String message = "Although columns with geocoordinates were found,"
-                    + " all of the values in them were null."
-                    + " This may have happened because the Preview needs to be "
-                    + " refreshed. Please click the Refresh button and try again."
-            ;
-
-            JOptionPane.showMessageDialog(null, message, "Geocoordinates Not Found", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, 
+                    getMessage("NoGeocoordinatesFoundWarningMessage"), 
+                    getMessage("NoGeoCoordinatesFoundWarningTitle"), 
+                    JOptionPane.ERROR_MESSAGE
+            );
             return false;
         } else if (invalidNodeCount > validNodes.size()) {
-            double nodesWithoutCoordinates = invalidNodeCount / totalNodes;
-            String message = "Warning: " + (int) (nodesWithoutCoordinates * 100)
-                    + "% of the nodes in this graph have no geocoordinates.\n"
-                    + " A KMZ will still be produced, but it may not have very many"
-                    + " nodes or edges.";
-            JOptionPane.showMessageDialog(null, message, "Few geocoordinates found.", JOptionPane.ERROR_MESSAGE);
+            int nodesWithoutCoordinates = (int)(invalidNodeCount / totalNodes * 100);
+            JOptionPane.showMessageDialog(null, 
+                    String.format(getMessage("FewGeocoordinatesFoundWarningMessage"), 
+                            nodesWithoutCoordinates),
+                    getMessage("FewGeocoordinatesFoundWarningTItle"),
+                    JOptionPane.ERROR_MESSAGE
+            );
         }
 
         // 2. Produce export
@@ -188,8 +205,8 @@ public class KMZExporter implements GraphExporter, ByteExporter, LongTask {
         // 2a. produce nodes
         int styleCounter = 0;
 
-        ticket.setDisplayName("Finding nodes");
         ticket.start(validNodes.size());
+        ticket.setDisplayName(getMessage("ExportingNodes"));
 
         HashMap<Object, Color> nodeColors = new HashMap<Object, Color>();
         IconRenderer renderer = new IconRenderer(maxNodeRadius);
@@ -221,13 +238,8 @@ public class KMZExporter implements GraphExporter, ByteExporter, LongTask {
             }
         }
 
-        if (styleCounter == 0) {
-            JOptionPane.showMessageDialog(null, "Sorry, the Preview has not been rendered correctly.\n"
-                    + " Please try switching to Preview mode and running the plugin again.");
-            return false;
-        }
 
-        ticket.setDisplayName("Exporting edges");
+        ticket.setDisplayName(getMessage("ExportingEdges"));
         // 2b. produce edges
         for (Edge edge : graph.getEdges()) {
             Node source = edge.getSource();
@@ -297,14 +309,17 @@ public class KMZExporter implements GraphExporter, ByteExporter, LongTask {
         }
 
 
+        ticket.setDisplayName(getMessage("WritingKMZFile"));
         try {
             writeKMZ(kml, renderer);
-            JOptionPane.showMessageDialog(null, "Export complete",
-                    "KML Export complete.", JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(null, getMessage("ExportCompleteMessage"),
+                getMessage("ExportCompleteTitle"), JOptionPane.INFORMATION_MESSAGE
+            );
         } catch (IOException ex) {
             Logger.getLogger(KMZExporter.class.getName()).log(Level.SEVERE, null, ex);
-            JOptionPane.showMessageDialog(null, "Error saving.",
-                    "Sorry, could not write the file.", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, getMessage("ExportSaveErrorMessage"),
+                    getMessage("ExportSaveErrorTitle"), JOptionPane.ERROR_MESSAGE
+            );
         } finally {
             ticket.finish();
             return true;
