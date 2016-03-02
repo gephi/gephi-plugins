@@ -262,7 +262,7 @@ public class KMZExporter implements GraphExporter, ByteExporter, LongTask {
             String title = edge.getLabel();
 
             if (title == null) {
-                title = source.getLabel() + " and " + target.getLabel();
+                title = source.getLabel() + " " + getMessage("and") + " " + target.getLabel();
             }
 
             String description = "";
