@@ -31,7 +31,6 @@ import de.micromata.opengis.kml.v_2_2_0.Kml;
 import de.micromata.opengis.kml.v_2_2_0.Placemark;
 import de.micromata.opengis.kml.v_2_2_0.Style;
 import java.awt.Color;
-import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.ArrayList;
@@ -68,7 +67,6 @@ public class KMZExporter implements GraphExporter, ByteExporter, LongTask {
     private Workspace workspace;
     private boolean cancelled;
     private ProgressTicket ticket;
-    private File rootDir;
     private OutputStream outputStream;
 
     private Column longitudeColumn;
@@ -124,9 +122,13 @@ public class KMZExporter implements GraphExporter, ByteExporter, LongTask {
 
         GraphController graphController = Lookup.getDefault().lookup(GraphController.class);
         GraphModel model = graphController.getGraphModel(workspace);
+        Graph graph;
+        if (exportVisible) {
+            graph = model.getGraphVisible();
+        } else {
+            graph = model.getGraph();
+        }
 
-
-        Graph graph = model.getGraph();
 
         ticket.setDisplayName(getMessage("EvaluatingGraph"));
         ArrayList<Node> validNodes = new ArrayList<Node>();
