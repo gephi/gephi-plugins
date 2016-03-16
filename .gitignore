@@ -1,2 +1,10 @@
-.DS_Store
 **/target/**
+/modules/ExcelCsvImporter/build/
+/modules/ExcelCsvImporter/nbproject/private/
+/ExcelCsvImporter/build/
+/ExcelCsvImporter/nbproject/private/
+/target/
+/MapOfCountries/build/
+/MapOfCountries/nbproject/private/
+/ExcelCsvImporter_/build/
+/ExcelCsvImporter_/nbproject/private/
