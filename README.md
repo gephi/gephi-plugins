@@ -198,3 +198,7 @@ Public packages are configured in the module's `pom.xml` file. Edit the `<public
 #### What is the difference between plugin and module?
 
 It's the same thing. We say module because Gephi is a modular application and is composed of many independent modules. Plugins also are modules but we call them plugin because they aren't in the _core_ Gephi.
+
+#### When running the plugin in Netbeans I get an error "Running standalone modules or suites requires..."
+
+This error appears when you try to run a module. To run Gephi with your plugin you need to run the `gephi-plugins` project, not your module.
