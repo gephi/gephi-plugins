@@ -49,7 +49,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.LinkedList;
-import javax.swing.JOptionPane;
 import org.gephi.filters.spi.EdgeFilter;
 import org.gephi.filters.spi.NodeFilter;
 import org.gephi.graph.api.Edge;
