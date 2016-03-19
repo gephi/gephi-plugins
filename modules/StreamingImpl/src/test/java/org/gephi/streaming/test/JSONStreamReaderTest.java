@@ -49,6 +49,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.LinkedList;
+import javax.swing.JOptionPane;
 import org.gephi.filters.spi.EdgeFilter;
 import org.gephi.filters.spi.NodeFilter;
 import org.gephi.graph.api.Edge;
@@ -442,7 +443,7 @@ public class JSONStreamReaderTest {
         StreamReader streamReader = factory.createStreamReader(streamType, handler, eventBuilder);
         
         String evstr = "{\"an\":{\"Unicode1\":{\"label\":\"Съешь же ещё этих мягких французских булок да выпей чаю.\"}}}\n\r";
-        ByteArrayInputStream bais = new ByteArrayInputStream(evstr.getBytes());
+        ByteArrayInputStream bais = new ByteArrayInputStream(evstr.getBytes("UTF-8"));
 
         streamReader.processStream(bais);
         GraphEvent event = handler.getGraphEvent();
