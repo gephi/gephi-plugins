@@ -28,6 +28,7 @@
         <module>modules/StreamingServer</module>
         <module>modules/CircularLayout</module>
         <module>modules/SemanticWebImport</module>
+        <module>modules/loxawebsiteexport</module>
     </modules>
     
     <!-- Properties -->
