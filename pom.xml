@@ -7,7 +7,7 @@
     <version>0.9.1</version>
     <packaging>pom</packaging>
 
-    <name>graph-streaming</name>
+    <name>gephi-plugins</name>
     
     <!-- List of modules -->
     <modules>
@@ -27,6 +27,7 @@
         <module>modules/JettyWrapper</module>
         <module>modules/StreamingServer</module>
         <module>modules/CircularLayout</module>
+        <module>modules/SemanticWebImport</module>
     </modules>
     
     <!-- Properties -->
