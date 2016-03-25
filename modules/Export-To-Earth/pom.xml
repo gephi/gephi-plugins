@@ -4,7 +4,7 @@
     <parent>
         <artifactId>gephi-plugin-parent</artifactId>
         <groupId>org.gephi</groupId>
-        <version>0.9.0</version>
+        <version>0.9.1</version>
     </parent>
 
     <groupId>com.hypercities</groupId>
@@ -73,7 +73,7 @@
                 <version>3.0</version>
                 <configuration>
                     <author>Dave Shepard</author>
-                    <sourceCodeUrl>http://github.com/shepdl/gephi-plugins</sourceCodeUrl>
+                    <sourceCodeUrl>http://github.com/shepdl/gephi-plugins/tree/export-to-earth</sourceCodeUrl>
                     <licenseName>3-clause BSD</licenseName>
                     <publicPackages>
                         
