@@ -87,4 +87,8 @@ public class MockAttributeColumn<T> implements Column {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
+    public ColumnObserver createColumnObserver(boolean withDiff) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
 }

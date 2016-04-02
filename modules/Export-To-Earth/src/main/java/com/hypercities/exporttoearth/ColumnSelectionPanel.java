@@ -33,6 +33,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import javax.swing.BoxLayout;
+import javax.swing.ButtonGroup;
 import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -165,6 +166,8 @@ public class ColumnSelectionPanel extends JPanel {
         columnSelectionPane.add(new JLabel(getMessage("Longitude")));
         columnSelectionPane.add(new JLabel(getMessage("Latitude")));
 
+        ButtonGroup lonGroup = new ButtonGroup();
+        ButtonGroup latGroup = new ButtonGroup();
         for (Column column : allColumns) {
             String title = column.getTitle();
             columnNames.put(title, column);
@@ -178,11 +181,13 @@ public class ColumnSelectionPanel extends JPanel {
             columnSelectionPane.add(checkbox);
 
             JRadioButton lonButton = new JRadioButton();
+            lonButton.setActionCommand(title);
             lonButton.addActionListener(longitudeColumnSelector);
             if (column == longitudeColumn) {
                 lonButton.setSelected(true);
             }
             columnSelectionPane.add(lonButton);
+            lonGroup.add(lonButton);
 
             JRadioButton latButton = new JRadioButton();
             latButton.addActionListener(latitudeColumnSelector);
@@ -191,7 +196,7 @@ public class ColumnSelectionPanel extends JPanel {
                 latButton.setSelected(true);
             }
             columnSelectionPane.add(latButton);
-
+            latGroup.add(latButton);
         }
         add(columnSelectionPane);
 

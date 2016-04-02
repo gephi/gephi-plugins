@@ -40,6 +40,7 @@ import java.util.logging.Logger;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 import javax.swing.JOptionPane;
+import org.gephi.graph.api.AttributeUtils;
 import org.gephi.graph.api.Column;
 import org.gephi.graph.api.Edge;
 import org.gephi.graph.api.Graph;
@@ -63,6 +64,7 @@ import org.openide.util.NbBundle;
  */
 public class KMZExporter implements GraphExporter, ByteExporter, LongTask {
 
+    private Logger logger = Logger.getLogger("");
     private boolean exportVisible;
     private Workspace workspace;
     private boolean cancelled;
@@ -102,6 +104,8 @@ public class KMZExporter implements GraphExporter, ByteExporter, LongTask {
     }
 
     public void setColumnsToUse(Column longitudeColumn, Column latitudeColumn, Column[] columnsToExport) {
+        logger.log(Level.INFO, "Long column: {0}", longitudeColumn);
+        logger.log(Level.INFO, "Lat column: {0}", latitudeColumn);
         this.longitudeColumn = longitudeColumn;
         this.latitudeColumn = latitudeColumn;
         this.columnsToExport = columnsToExport;
@@ -112,14 +116,18 @@ public class KMZExporter implements GraphExporter, ByteExporter, LongTask {
         maxNodeRadius = radius;
     }
 
+    private boolean checkNumericColumn(Column col) {
+        return AttributeUtils.isNumberType(col.getTypeClass())
+                && !AttributeUtils.isArrayType(col.getTypeClass())
+                && !AttributeUtils.isDynamicType(col.getTypeClass());
+    }
+
     @Override
     public boolean execute() {
-
-        // 1. Validate -- do we have lat/lon columns?
-        ticket.start();
+        ticket.setDisplayName(getMessage("EvaluatingGraph"));
         Progress.start(ticket);
-
-
+        
+        // 1. Validate -- do we have lat/lon columns?
         GraphController graphController = Lookup.getDefault().lookup(GraphController.class);
         GraphModel model = graphController.getGraphModel(workspace);
         Graph graph;
@@ -130,18 +138,37 @@ public class KMZExporter implements GraphExporter, ByteExporter, LongTask {
         }
 
 
-        ticket.setDisplayName(getMessage("EvaluatingGraph"));
         ArrayList<Node> validNodes = new ArrayList<Node>();
         float maxSize = 0.0f;
         double invalidNodeCount = 0,
                 totalNodes = graph.getNodeCount()
         ;
-
-
         if (longitudeColumn == null || latitudeColumn == null) {
             GeoAttributeFinder gaf = new GeoAttributeFinder();
             gaf.findGeoFields(getColumns(model.getNodeTable()));
             setColumnsToUse(gaf.getLongitudeColumn(), gaf.getLatitudeColumn(), getColumns(model.getNodeTable()));
+        }
+        
+        if (longitudeColumn == null || latitudeColumn == null) {
+            JOptionPane.showMessageDialog(null, 
+                    getMessage("MissingGeocoordinatesFoundWarningMessage"), 
+                    getMessage("MissingGeocoordinatesFoundWarningTitle"), 
+                    JOptionPane.ERROR_MESSAGE
+            );
+            
+            Progress.finish(ticket);
+            return false;
+        }
+        
+        if(!checkNumericColumn(longitudeColumn) || !checkNumericColumn(latitudeColumn)){
+            JOptionPane.showMessageDialog(null, 
+                    getMessage("NotNumericGeocoordinatesFoundWarningMessage"), 
+                    getMessage("NotNumericGeocoordinatesFoundWarningTitle"), 
+                    JOptionPane.ERROR_MESSAGE
+            );
+            
+            Progress.finish(ticket);
+            return false;
         }
 
         for (Node node : graph.getNodes()) {
@@ -190,6 +217,8 @@ public class KMZExporter implements GraphExporter, ByteExporter, LongTask {
                     getMessage("NoGeoCoordinatesFoundWarningTitle"), 
                     JOptionPane.ERROR_MESSAGE
             );
+            
+            Progress.finish(ticket);
             return false;
         } else if (invalidNodeCount > validNodes.size()) {
             int nodesWithoutCoordinates = (int)(invalidNodeCount / totalNodes * 100);
@@ -207,8 +236,7 @@ public class KMZExporter implements GraphExporter, ByteExporter, LongTask {
         // 2a. produce nodes
         int styleCounter = 0;
 
-        ticket.start(validNodes.size());
-        ticket.setDisplayName(getMessage("ExportingNodes"));
+        Progress.setDisplayName(ticket, getMessage("ExportingNodes"));
 
         HashMap<Object, Color> nodeColors = new HashMap<Object, Color>();
         IconRenderer renderer = new IconRenderer(maxNodeRadius);
@@ -219,11 +247,12 @@ public class KMZExporter implements GraphExporter, ByteExporter, LongTask {
             String iconFilename = renderer.getLastFilename();
             float weight = n.size();
 
-            String description = "";
+            StringBuilder sb = new StringBuilder();
             for (Column ac : columnsToExport) {
-                description += ac.getTitle() + ": " + n.getAttribute(ac) + "\n";
+                sb.append(ac.getTitle()).append(": ").append(n.getAttribute(ac)).append("\n");
             }
             
+            String description = sb.toString();
             nodeColors.put(n.getId(), (Color) n.getColor());
             Placemark placemark = folder.createAndAddPlacemark().withName(n.getLabel()).withDescription(description);
 
@@ -231,8 +260,13 @@ public class KMZExporter implements GraphExporter, ByteExporter, LongTask {
             style.createAndSetIconStyle().withScale((weight / maxSize) * maxScale).withIcon(new Icon().withHref(iconFilename));
 
             placemark.setStyleUrl("#style_" + styleCounter);
-            placemark.createAndSetPoint().addToCoordinates((Double) n.getAttribute(longitudeColumn),
-                    (Double) n.getAttribute(latitudeColumn));
+            
+            double longValue = ((Number) n.getAttribute(longitudeColumn)).doubleValue();
+            double latValue = ((Number) n.getAttribute(latitudeColumn)).doubleValue();
+            placemark.createAndSetPoint().addToCoordinates(
+                    longValue,
+                    latValue
+            );
             styleCounter++;
 
             if (cancelled) {
@@ -241,7 +275,7 @@ public class KMZExporter implements GraphExporter, ByteExporter, LongTask {
         }
 
 
-        ticket.setDisplayName(getMessage("ExportingEdges"));
+        Progress.setDisplayName(ticket, getMessage("ExportingEdges"));
         // 2b. produce edges
         for (Edge edge : graph.getEdges()) {
             Node source = edge.getSource();
@@ -265,24 +299,28 @@ public class KMZExporter implements GraphExporter, ByteExporter, LongTask {
                 title = source.getLabel() + " " + getMessage("and") + " " + target.getLabel();
             }
 
-            String description = "";
+            StringBuilder sb = new StringBuilder();
             for (Column column : edge.getAttributeColumns()) {
                 if (column == latitudeColumn || column == longitudeColumn) {
                     continue;
                 }
 
                 if (edge.getAttribute(column) != null) {
-                    description += column.getTitle() + ": " + edge.getAttribute(column) + "\n";
+                    sb.append(column.getTitle()).append(": ").append(edge.getAttribute(column)).append("\n");
                 }
             }
+            String description = sb.toString();
 
             String colorCode = "#33ffffff";
             Color color = edge.getColor();
-            if (color != null) {
-                colorCode = "#" + Integer.toHexString(color.getAlpha())
-                        + Integer.toHexString(color.getRed())
-                        + Integer.toHexString(color.getGreen())
-                        + Integer.toHexString(color.getBlue());
+            if (color != null && edge.alpha() > 0) {//0 alpha means the edge has no specific color
+                colorCode = String.format(
+                        "#%02x%02x%02x%02x",
+                        color.getAlpha(),
+                        color.getRed(), 
+                        color.getGreen(), 
+                        color.getBlue()
+                );
             }
 
             Placemark placemark = folder.createAndAddPlacemark().withDescription(description).withName(title);
@@ -298,12 +336,16 @@ public class KMZExporter implements GraphExporter, ByteExporter, LongTask {
             style.createAndSetLineStyle().withWidth(edgeWidth).withColorMode(ColorMode.NORMAL).withColor(colorCode);
             placemark.setStyleUrl("#style_" + styleCounter);
 
-            placemark.createAndSetLineString().addToCoordinates((Double) source.getAttribute(longitudeColumn),
-                    (Double) source.getAttribute(latitudeColumn), 0).addToCoordinates((Double) target.getAttribute(longitudeColumn),
-                    (Double) target.getAttribute(latitudeColumn), 0).withTessellate(Boolean.TRUE).withExtrude(Boolean.TRUE);
+            double longValueSource = ((Number) source.getAttribute(longitudeColumn)).doubleValue();
+            double latValueSource = ((Number) source.getAttribute(latitudeColumn)).doubleValue();
+            double longValueTarget = ((Number) target.getAttribute(longitudeColumn)).doubleValue();
+            double latValueTarget = ((Number) target.getAttribute(latitudeColumn)).doubleValue();
+            placemark.createAndSetLineString()
+                    .addToCoordinates(longValueSource, latValueSource, 0)
+                    .addToCoordinates(longValueTarget, latValueTarget, 0)
+                    .withTessellate(Boolean.TRUE).withExtrude(Boolean.TRUE);
 
             styleCounter++;
-
 
             if (cancelled) {
                 return false;
@@ -311,7 +353,7 @@ public class KMZExporter implements GraphExporter, ByteExporter, LongTask {
         }
 
 
-        ticket.setDisplayName(getMessage("WritingKMZFile"));
+        Progress.setDisplayName(ticket, getMessage("WritingKMZFile"));
         try {
             writeKMZ(kml, renderer);
             JOptionPane.showMessageDialog(null, getMessage("ExportCompleteMessage"),
@@ -323,9 +365,10 @@ public class KMZExporter implements GraphExporter, ByteExporter, LongTask {
                     getMessage("ExportSaveErrorTitle"), JOptionPane.ERROR_MESSAGE
             );
         } finally {
-            ticket.finish();
-            return true;
+            Progress.finish(ticket);
         }
+        
+        return true;
     }
 
     private void writeKMZ(Kml kml, IconRenderer icons) throws IOException {
