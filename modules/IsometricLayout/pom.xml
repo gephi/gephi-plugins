@@ -16,6 +16,14 @@
 
     <dependencies>
         <!-- Insert dependencies here -->
+       <dependency>
+            <groupId>org.gephi</groupId>
+            <artifactId>layout-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.gephi</groupId>
+            <artifactId>graph-api</artifactId>
+        </dependency>
     </dependencies>
 
     <build>
@@ -25,9 +33,10 @@
                 <artifactId>nbm-maven-plugin</artifactId>
                 <configuration>
                     <licenseName>GPL v3</licenseName>
+                    <licenseFile>gpl-3.0.txt</licenseFile>
                     <author>Alexandre Barão</author>
                     <authorEmail>barao.alexandre@gmail.com</authorEmail>
-                    <authorUrl></authorUrl>
+                     <authorUrl>https://pt.linkedin.com/in/alexandrebarao</authorUrl>
                     <sourceCodeUrl>$sourcecode_url</sourceCodeUrl>
                     <publicPackages>
                         <!-- Insert public packages -->
