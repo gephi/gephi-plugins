@@ -11,7 +11,7 @@ E.g., something like “Degree [z]” or “YourNodeColumn[z]“.
 The IsometricLayout will compute and segment z-Levels regarding your “[z]” column values (with any ranges).
 If your network don’t have a “[z]” column, no problem, all nodes will be placed in Z-Layer 0 (Zero).  
   
-Examples:  
+##Examples:  
   
 
 ![Isometric Layout View](http://www.relationalcapitalvalue.com/myresources/iso-shot-1.png)  
