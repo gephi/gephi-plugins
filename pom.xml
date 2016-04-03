@@ -30,6 +30,7 @@
         <module>modules/SemanticWebImport</module>
         <module>modules/loxawebsiteexport</module>
         <module>modules/Export-To-Earth</module>
+        <module>modules/MapOfCountries</module>
     </modules>
     
     <!-- Properties -->
