@@ -1,0 +1,5 @@
+Manifest-Version: 1.0
+OpenIDE-Module-Name: Isometric Layout
+OpenIDE-Module-Short-Description: Short
+OpenIDE-Module-Long-Description: Long
+OpenIDE-Module-Display-Category: Layout
