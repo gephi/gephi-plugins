@@ -1,0 +1,5 @@
+Manifest-Version: 1.0
+OpenIDE-Module-Name: Network Splitter 3D
+OpenIDE-Module-Short-Description: Short
+OpenIDE-Module-Long-Description: Long
+OpenIDE-Module-Display-Category: Layout
