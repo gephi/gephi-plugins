@@ -62,6 +62,7 @@
                     <licenseName>GPL v3</licenseName>
                     <licenseFile>gpl-3.0.txt</licenseFile>
                     <author>Eduardo Ramos</author>
+                    <sourceCodeUrl>https://github.com/eduramiba/gephi-plugins/tree/linkfluence-plugin</sourceCodeUrl>
                 </configuration>
             </plugin>
         </plugins>
