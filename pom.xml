@@ -29,6 +29,7 @@
         <module>modules/CircularLayout</module>
         <module>modules/SemanticWebImport</module>
         <module>modules/loxawebsiteexport</module>
+        <module>modules/Export-To-Earth</module>
     </modules>
     
     <!-- Properties -->
