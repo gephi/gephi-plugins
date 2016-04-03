@@ -156,7 +156,6 @@ public class NetworkSplitter3D implements Layout {
         if ( firstTime ) {
               for (Node n : graph.getNodes()) {
                 Node3D p = new Node3D(n.getStoreId(), n.x(),n.y(),n.z() );
-                System.out.println("First time Store ID=" + n.getStoreId());
                 nodes3D.add(p);
               }
               firstTime=false;
