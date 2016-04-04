@@ -179,6 +179,13 @@ def setVisible(subgraph):
     global visible
     visible = subgraph
 
+def execurl(url):
+    '''
+    Allow to load an external Python file from an URL and `exec` it as if were local
+    :param url: URL for the file to load
+    '''
+    import urllib
+    exec urllib.urlopen(url).read() in globals()
 
 #
 # Handy aliases
