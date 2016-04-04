@@ -1,2 +1,5 @@
 .DS_Store
 **/target/**
+/GiveColorToEdges/build/
+/GiveColorToEdges/nbproject/private/
+/target/
