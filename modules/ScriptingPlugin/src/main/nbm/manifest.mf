@@ -1,0 +1,5 @@
+Manifest-Version: 1.0
+OpenIDE-Module-Name: Scripting Plugin
+OpenIDE-Module-Short-Description: Scripting Plugin for Gephi
+OpenIDE-Module-Long-Description: Scripting Plugin for Gephi
+OpenIDE-Module-Display-Category: Tool
