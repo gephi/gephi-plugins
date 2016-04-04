@@ -15,7 +15,7 @@
         }
       ],
       "category": "Layout",
-      "last_update": "March 22, 2016",
+      "last_update": "April 4, 2016",
       "images": [
         {
           "image": "imgs/geolayout-plugin/geolayout_example.png",
@@ -37,7 +37,7 @@
         },
         "0.9.1": {
           "url": "0.9.1/geolayout-plugin-0.9.1.1.nbm",
-          "last_update": "March 22, 2016"
+          "last_update": "April 4, 2016"
         }
       },
       "sourcecode": "https://github.com/gephi/gephi-plugins/geolayout-plugin",
@@ -58,7 +58,7 @@
         }
       ],
       "category": "Tool",
-      "last_update": "March 22, 2016",
+      "last_update": "April 4, 2016",
       "images": [
         {
           "image": "imgs/linkfluence-plugin/img.png",
@@ -72,7 +72,7 @@
         },
         "0.9.1": {
           "url": "0.9.1/linkfluence-plugin-0.9.0.nbm",
-          "last_update": "March 22, 2016"
+          "last_update": "April 4, 2016"
         }
       },
       "sourcecode": "https://github.com/eduramiba/gephi-plugins/tree/linkfluence-plugin",
@@ -475,32 +475,31 @@
     {
       "id": "exporttoearth",
       "name": "ExportToEarth",
-      "short_description": "",
-      "long_description": "\u003ch3\u003eIntroduction\u003c/h3\u003e\n\u003cp\u003eThis plugin exports gephi graphs with geocoordinates to KMZ files for Google Earth or other GIS software.\u003c/p\u003e\n\u003ch3\u003ePlugin Owner’s Notes\u003c/h3\u003e\n\u003cp\u003eTo use this plugin, first make sure your Nodes table has geocoordiante columns, such as x and y or longitude and latitude. Go to Preview, then choose File \u0026gt; Export \u0026gt; Graph file, and select “KMZ” from the dropdown menu. The tool will attempt to guess which columns contain the geodata; columns can also be specified by clicking the “Options” button in the file selection window.\u003c/p\u003e\n\u003cp\u003eAside from moving the nodes and edges to the appropriate geocoordinates, this plugin attempts to preserve the appearance of your graph preview as best as possible as it appears in the Preview mode (although curved edges are not supported).\u003c/p\u003e\n\u003cp\u003eExportToEarth was developed during the NEH Summer Institute for Advanced Topics in Digital Humanities on Digital Cultural Mapping (http://hypercities.com/NEH/) at UCLA. Thanks to \u003ca href\u003d\"http://ryan.cordell.us/\" target\u003d\"_blank\"\u003eRyan Cordell\u003c/a\u003e,\u0026nbsp;\u003ca href\u003d\"http://zoepster.blogspot.com/\" target\u003d\"_blank\"\u003eZoe Borovsky\u003c/a\u003e, and \u003ca href\u003d\"http://unt.academia.edu/PaulaLupkin\" target\u003d\"_blank\"\u003ePaula Lupkin\u003c/a\u003e for being the impetus behind its development, not to mention the alpha testers.\u003c/p\u003e",
+      "short_description": "Export networks with geographic attributes to Google Earth",
+      "long_description": "This plugin exports networks with geographic dimensions to a KMZ file, which can be opened in Google Earth.\n\nThe tool will attempt to guess which columns contain geodata. Columns can also be specified by clicking the “Options” button in the file selection window.\n\nExportToEarth was developed during the NEH Summer Institute for Advanced Topics in Digital Humanities on Digital Cultural Mapping (http://hypercities.com/NEH/) at UCLA. Thanks to Ryan Cordell, Zoe Borovsky, and Paula Lupkin for being the impetus behind its development, not to mention the alpha testers.",
       "readme": null,
       "license": "3-clause BSD",
       "authors": [
         {
-          "name": "David Shepard",
+          "name": "Dave Shepard",
           "email": null,
-          "link": "https://github.com/shepdl/"
+          "link": null
         }
       ],
       "category": "Export",
-      "last_update": "May 26, 2013",
-      "images": [
-        {
-          "image": "imgs/exporttoearth/ExportToEarthForMarketplace-e1354074501870.png",
-          "thumbnail": "imgs/exporttoearth/ExportToEarthForMarketplace-e1354074501870.png"
-        }
-      ],
+      "last_update": "April 4, 2016",
+      "images": null,
       "versions": {
         "0.8.2": {
           "url": "0.8.2/com-hypercities-exporttoearth1.nbm",
           "last_update": "May 26, 2013"
+        },
+        "0.9.1": {
+          "url": "0.9.1/exporttoearth-1.0.0.nbm",
+          "last_update": "April 4, 2016"
         }
       },
-      "sourcecode": "https://github.com/shepdl/Export-To-Earth",
+      "sourcecode": "http://github.com/shepdl/gephi-plugins/tree/export-to-earth",
       "homepage": null
     },
     {
@@ -544,7 +543,7 @@
         }
       ],
       "category": "Filter",
-      "last_update": "March 22, 2016",
+      "last_update": "April 4, 2016",
       "images": [
         {
           "image": "imgs/kbrace-filter/kbrace-img.png",
@@ -562,7 +561,7 @@
         },
         "0.9.1": {
           "url": "0.9.1/kbrace-filter-1.0.0.nbm",
-          "last_update": "March 22, 2016"
+          "last_update": "April 4, 2016"
         }
       },
       "sourcecode": "https://github.com/mbastian/gephi-plugins/tree/kbrace-filter",
@@ -1929,7 +1928,7 @@
         }
       ],
       "category": "Tool",
-      "last_update": "March 22, 2016",
+      "last_update": "April 4, 2016",
       "images": null,
       "versions": {
         "0.8.2": {
@@ -1942,7 +1941,7 @@
         },
         "0.9.1": {
           "url": "0.9.1/multimode-1.0.0.nbm",
-          "last_update": "March 22, 2016"
+          "last_update": "April 4, 2016"
         }
       },
       "sourcecode": "https://github.com/totetmatt/gephi-plugins/tree/multimode-network",
@@ -1963,7 +1962,7 @@
         }
       ],
       "category": "Export",
-      "last_update": "March 22, 2016",
+      "last_update": "April 4, 2016",
       "images": null,
       "versions": {
         "0.8.2": {
@@ -1976,7 +1975,7 @@
         },
         "0.9.1": {
           "url": "0.9.1/jsonexporter-plugin-2.0.0.nbm",
-          "last_update": "March 22, 2016"
+          "last_update": "April 4, 2016"
         }
       },
       "sourcecode": "http://github.com/oxfordinternetinstitute/gephi-plugins",
@@ -1997,7 +1996,7 @@
         }
       ],
       "category": "Export",
-      "last_update": "March 22, 2016",
+      "last_update": "April 4, 2016",
       "images": null,
       "versions": {
         "0.8.2": {
@@ -2010,7 +2009,7 @@
         },
         "0.9.1": {
           "url": "0.9.1/sigmaexporter-0.9.0.nbm",
-          "last_update": "March 22, 2016"
+          "last_update": "April 4, 2016"
         }
       },
       "sourcecode": "http://github.com/oxfordinternetinstitute/gephi-plugins",
@@ -2031,7 +2030,7 @@
         }
       ],
       "category": "Tool",
-      "last_update": "March 22, 2016",
+      "last_update": "April 4, 2016",
       "images": null,
       "versions": {
         "0.9.0": {
@@ -2040,7 +2039,7 @@
         },
         "0.9.1": {
           "url": "0.9.1/gephi-plugin-node-color-manager-1.0.0.nbm",
-          "last_update": "March 22, 2016"
+          "last_update": "April 4, 2016"
         }
       },
       "sourcecode": "https://github.com/gephi/gephi-plugins/gephi-plugin-node-color-manager",
@@ -2061,7 +2060,7 @@
         }
       ],
       "category": "Layout",
-      "last_update": "March 22, 2016",
+      "last_update": "April 4, 2016",
       "images": [
         {
           "image": "imgs/gephigraphviz/GraphVizLayout_example.png",
@@ -2083,7 +2082,7 @@
         },
         "0.9.1": {
           "url": "0.9.1/gephigraphviz-1.0.0.nbm",
-          "last_update": "March 22, 2016"
+          "last_update": "April 4, 2016"
         }
       },
       "sourcecode": "https://github.com/chunky/gephi-plugins",
@@ -2104,12 +2103,12 @@
         }
       ],
       "category": "Import",
-      "last_update": "March 22, 2016",
+      "last_update": "April 4, 2016",
       "images": null,
       "versions": {
         "0.9.1": {
           "url": "0.9.1/graphstreaming-1.0.0.zip",
-          "last_update": "March 22, 2016"
+          "last_update": "April 4, 2016"
         }
       },
       "sourcecode": "https://github.com/panisson/gephi-plugins/tree/graph-streaming",
@@ -2130,12 +2129,12 @@
         }
       ],
       "category": "Layout",
-      "last_update": "March 22, 2016",
+      "last_update": "April 4, 2016",
       "images": null,
       "versions": {
         "0.9.1": {
           "url": "0.9.1/circularlayout-0.9.1.nbm",
-          "last_update": "March 22, 2016"
+          "last_update": "April 4, 2016"
         }
       },
       "sourcecode": "https://github.com/mgroeninger/gephi-plugins",
@@ -2156,7 +2155,7 @@
         }
       ],
       "category": "Import",
-      "last_update": "March 22, 2016",
+      "last_update": "April 4, 2016",
       "images": [
         {
           "image": "imgs/semantic/icon.png",
@@ -2174,7 +2173,7 @@
       "versions": {
         "0.9.1": {
           "url": "0.9.1/semantic-1.0.0.nbm",
-          "last_update": "March 22, 2016"
+          "last_update": "April 4, 2016"
         }
       },
       "sourcecode": "https://github.com/Wimmics/gephi-semantic-web-import",
@@ -2195,7 +2194,7 @@
         }
       ],
       "category": "Export",
-      "last_update": "March 22, 2016",
+      "last_update": "April 4, 2016",
       "images": [
         {
           "image": "imgs/loxawebsiteexport/logo_final.png",
@@ -2205,11 +2204,37 @@
       "versions": {
         "0.9.1": {
           "url": "0.9.1/loxawebsiteexport-0.3.2.nbm",
-          "last_update": "March 22, 2016"
+          "last_update": "April 4, 2016"
         }
       },
       "sourcecode": "https://github.com/jorgaf/gephi-plugins",
       "homepage": null
+    },
+    {
+      "id": "clementlevallois",
+      "name": "Map Of Countries",
+      "short_description": "A layout to display maps in the backgrounds of networks",
+      "long_description": "\u003ch1\u003eMap of Countries\u003c/h1\u003e\nThis plugin allows you to displays maps of countries, world regions, and regions within countries that you choose from a list. This can be useful if you want to plot geolocalized networks on it.\u003cbr\u003e\n\u003cbr\u003e\n\n\u003ch3\u003eRelease history\u003c/h3\u003e\nSept. 24, 2013: 1.0, first release\u003cbr\u003e\nOct 19, 2014: 1.1, removed labels from background nodes because they were just an inconvenience.\nJan 1, 2015: 1.2, fixed a null pointer exception.\u003cbr\u003e\nMay 13, 2015: 1.3, added a new feature: districts and regions from countries. Australian states / territories are the first addition.\u003cbr\u003e\nAug 05, 2015: 1.4, added a new feature: \"Weight\" allows to control the thickness of the lines of the borders\u003cbr\u003e\n\u003cbr\u003e\n\n\u003ch3\u003eComments and feedbacks\u003ch3\u003e\n\u003ca href\u003d\"http://www.clementlevallois.net\"\u003ewww.clementlevallois.net\u003c/a\u003e.\u003cbr\u003e\n\u003cbr\u003e\n\n\u003ch3\u003eAcknowledgements\u003c/h3\u003e\nThanks to Alexis Jacomy who built \"GeoLayout\", on which this plugin is very largely based.\n\u003cbr\u003e\n\u003cbr\u003e\nThe maps are provided by Bjorn Sandvik, thematicmapping.org. The note attached to the dataset says:\u003cbr\u003e\n\u003cbr\u003e\n\"Use this dataset with care, as several of the borders are disputed.\u003cbr\u003e\n\u003cbr\u003e\nThe original shapefile (world_borders.zip, 3.2 MB) was downloaded from the Mapping Hacks website:\u003cbr\u003e\nhttp://www.mappinghacks.com/data \u003cbr\u003e\n\u003cbr\u003e\nThe dataset was derived by Schuyler Erle from public domain sources.\u003cbr\u003e\nSean Gilles did some clean up and made some enhancements.\"\u003cbr\u003e\n\u003cbr\u003e\n\u003cbr\u003e\nDataset for Australian states from: \u003ca href\u003d\"http://www.abs.gov.au/ausstats/abs@.nsf/mf/1259.0.30.001?OpenDocument\"\u003eAustralian Bureau of Statistics.\u003cbr\u003e",
+      "readme": null,
+      "license": "Apache v2",
+      "authors": [
+        {
+          "name": "Clement Levallois",
+          "email": null,
+          "link": null
+        }
+      ],
+      "category": "Layout",
+      "last_update": "April 4, 2016",
+      "images": null,
+      "versions": {
+        "0.9.1": {
+          "url": "0.9.1/clementlevallois-1.0.0.nbm",
+          "last_update": "April 4, 2016"
+        }
+      },
+      "sourcecode": "https://github.com/seinecle/gephi-plugins/tree/mapOfCountriesBranch",
+      "homepage": "http://www.clementlevallois.net"
     }
   ]
 }
