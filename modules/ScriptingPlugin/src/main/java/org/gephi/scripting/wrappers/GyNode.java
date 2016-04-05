@@ -119,6 +119,21 @@ public class GyNode extends PyObject {
     }
 
     @Override
+    public PyObject __getitem__(PyObject key) {
+        return __getattr__(key.asString());
+    }
+
+    @Override
+    public void __setitem__(String key, PyObject value) {
+        __setattr__(key, value);
+    }
+
+    @Override
+    public void __setitem__(PyObject key, PyObject value) {
+        __setattr__(key.asString(), value);
+    }
+    
+    @Override
     public void __setattr__(String name, PyObject value) {
         if (name.equals("color")) {
             Color color = (Color) value.__tojava__(Color.class);

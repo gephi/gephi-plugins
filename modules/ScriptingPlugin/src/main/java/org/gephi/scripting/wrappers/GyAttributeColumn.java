@@ -41,26 +41,12 @@ Portions Copyrighted 2011 Gephi Consortium.
  */
 package org.gephi.scripting.wrappers;
 
-//import org.gephi.data.attributes.api.AttributeColumn;
-//import org.gephi.data.attributes.api.AttributeType;
-//import org.gephi.data.attributes.api.AttributeUtils;
-import static com.oracle.jrockit.jfr.DataType.BOOLEAN;
-import javax.lang.model.util.ElementFilter;
 import org.gephi.filters.api.FilterController; //new import
-import org.gephi.filters.api.FilterLibrary;
 import org.gephi.filters.api.Query;
 import org.gephi.filters.api.Range;
-//import org.gephi.filters.plugin.attribute.AttributeEqualBuilder;
-import org.gephi.filters.plugin.attribute.AttributeRangeBuilder;
-//import org.gephi.filters.plugin.attribute.AttributeRangeBuilder.AttributeRangeFilter;
-import org.gephi.filters.plugin.dynamic.DynamicRangeBuilder;
-import org.gephi.filters.plugin.dynamic.DynamicRangeBuilder.DynamicRangeFilter; // new Import
 import org.gephi.filters.spi.Filter;
-import org.gephi.filters.spi.FilterBuilder;
-import org.gephi.filters.spi.NodeFilter;    // new import
 import org.gephi.graph.api.AttributeUtils;
 import org.gephi.graph.api.Column;
-import org.gephi.graph.api.GraphModel; //new import
 import org.gephi.scripting.util.GyNamespace; //new import
 import org.openide.util.Lookup;  // new import
 import org.python.core.Py;

@@ -80,6 +80,7 @@
                 <configuration>
                     <licenseName>Apache 2.0</licenseName>
                     <author>Luiz Ribeiro</author>
+                    <homePageUrl>https://github.com/gephi/gephi/wiki/Scripting-Plugin</homePageUrl>
                     <sourceCodeUrl>https://github.com/gephi/gephi-plugins/tree/python-scripting-plugin</sourceCodeUrl>
                     <nbmResources>
                         <nbmResource>

@@ -287,23 +287,19 @@ public final class GyNamespace extends PyStringMap {
             ret = new GyAttributeTopology(this, GyAttributeTopology.Type.OUT_DEGREE);
         } else if (key.startsWith(NODE_PREFIX)) {
             // Check if it is a node
-            String strId = key.substring(EDGE_PREFIX.length());
-            if (Pattern.compile("[1-9][0-9]*").matcher(strId).matches()) {
-                Graph graph = graphModel.getGraph();
-                Node node = graph.getNode(strId);
-                if (node != null) {
-                    ret = new GyNode(this, node);
-                }
+            String strId = key.substring(NODE_PREFIX.length());
+            Graph graph = graphModel.getGraph();
+            Node node = graph.getNode(strId);
+            if (node != null) {
+                ret = new GyNode(this, node);
             }
         } else if (key.startsWith(EDGE_PREFIX)) {
             // Check if it is an edge
             String strId = key.substring(EDGE_PREFIX.length());
-            if (Pattern.compile("[1-9][0-9]*").matcher(strId).matches()) {
-                Graph graph = graphModel.getGraph();
-                Edge edge = graph.getEdge(strId);
-                if (edge != null) {
-                    ret = new GyEdge(this, edge);
-                }
+            Graph graph = graphModel.getGraph();
+            Edge edge = graph.getEdge(strId);
+            if (edge != null) {
+                ret = new GyEdge(this, edge);
             }
         }
 
