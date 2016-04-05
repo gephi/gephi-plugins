@@ -83,10 +83,6 @@ public class GySubGraph extends PyObject {
     protected GraphView underlyingGraphView;
     /** The query that was used to construct this subgraph */
     protected Query constructionQuery;
-    // Hack to get a few attributes into jythonconsole's auto-completion
-    // TODO: get rid of this ugly hack (:
-    public PyList nodes;
-    public PyList edges;
 
     /**
      * Constructor for the subgraph wrapper.
@@ -193,5 +189,14 @@ public class GySubGraph extends PyObject {
         }
 
         return new GySubGraph(namespace, query);
+    }
+
+    @Override
+    public PyObject __dir__() {
+        PyList list = new PyList();
+        list.add("nodes");
+        list.add("edges");
+        
+        return list;
     }
 }

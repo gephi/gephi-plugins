@@ -43,6 +43,7 @@ package org.gephi.scripting.wrappers;
 
 import java.awt.Color;
 import java.util.Iterator;
+import org.gephi.graph.api.Column;
 import org.gephi.graph.api.GraphModel; // new import
 import org.gephi.graph.api.Edge;
 import org.gephi.graph.api.Node;
@@ -81,19 +82,6 @@ public class GyNode extends PyObject {
     private final GyNamespace namespace;
     /** The edge underlying on this wrapper */
     private final Node underlyingNode;
-    // Hack to get a few attributes into jythonconsole's auto-completion
-    // TODO: get rid of this ugly hack (:
-    public int color;
-    public float size;
-    public String label;
-    public int position;
-    public float x;
-    public float y;
-    public boolean fixed;
-    public int indegree;
-    public int outdegree;
-    public int degree;
-    public PyList neighbors;
 
     /**
      * Constructor for the node wrapper.
@@ -327,5 +315,27 @@ public class GyNode extends PyObject {
         }
 
         return null;
+    }
+
+    @Override
+    public PyObject __dir__() {
+        PyList list = new PyList();
+        list.add("color");
+        list.add("size");
+        list.add("label");
+        list.add("position");
+        list.add("x");
+        list.add("y");
+        list.add("fixed");
+        list.add("indegree");
+        list.add("outdegree");
+        list.add("degree");
+        list.add("neighbors");
+        
+        for (Column column : namespace.getGraphModel().getNodeTable()) {
+            list.add(column.getId());
+        }
+        
+        return list;
     }
 }

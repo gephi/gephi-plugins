@@ -41,6 +41,7 @@ Portions Copyrighted 2011 Gephi Consortium.
  */
 package org.gephi.scripting.wrappers;
 import java.awt.Color;
+import org.gephi.graph.api.Column;
 //import org.gephi.data.attributes.api.AttributeModel;
 import org.gephi.graph.api.GraphModel;
 import org.gephi.graph.api.Edge;
@@ -48,6 +49,7 @@ import org.gephi.scripting.util.GyNamespace;
 import org.python.core.Py;
 import org.python.core.PyFloat;
 import org.python.core.PyInteger;
+import org.python.core.PyList;
 import org.python.core.PyObject;
 import org.python.core.PyString;
 
@@ -73,14 +75,6 @@ public class GyEdge extends PyObject {
     private final GyNamespace namespace;
     /** The edge underlying on this wrapper */
     private final Edge underlyingEdge;
-    // Hack to get a few attributes into jythonconsole's auto-completion
-    // TODO: get rid of this ugly hack (:
-    public int color;
-    public float weight;
-    public String label;
-    public boolean directed;
-    public GyNode source;
-    public GyNode target;
 
     /**
      * Constructor for the edge wrapper.
@@ -188,5 +182,22 @@ public class GyEdge extends PyObject {
 
             return super.__findattr_ex__(name);
         }
+    }
+
+    @Override
+    public PyObject __dir__() {
+        PyList list = new PyList();
+        list.add("color");
+        list.add("weight");
+        list.add("label");
+        list.add("directed");
+        list.add("source");
+        list.add("target");
+        
+        for (Column column : namespace.getGraphModel().getEdgeTable()) {
+            list.add(column.getId());
+        }
+        
+        return list;
     }
 }

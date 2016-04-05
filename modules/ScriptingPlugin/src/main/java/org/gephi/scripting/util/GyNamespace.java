@@ -176,13 +176,13 @@ public final class GyNamespace extends PyStringMap {
         } else if (key.equals("outdegree")) {
             // Checks if the key is the out degree topology attribute
             throw Py.NameError(key + " is a reserved variable name.");
-        } else if (key.startsWith(NODE_PREFIX)) {
+        } else if (key.startsWith(NODE_PREFIX) && key.length() > 1) {
             // Checks if key matches a node reserved variable name
             String id = key.substring(NODE_PREFIX.length());
             if (Pattern.compile("[0-9]+").matcher(id).matches()) {
                 throw Py.NameError(key + " is a reserved variable name.");
             }
-        } else if (key.startsWith(EDGE_PREFIX)) {
+        } else if (key.startsWith(EDGE_PREFIX) && key.length() > 1) {
             // Checks if key matches an edge reserved variable name
             String id = key.substring(EDGE_PREFIX.length());
             if (Pattern.compile("[0-9]+").matcher(id).matches()) {
@@ -302,15 +302,12 @@ public final class GyNamespace extends PyStringMap {
                 ret = new GyEdge(this, edge);
             }
         }
-
-        if (ret != null) {
-            // Update the namespace binding, in case something was found
-            super.__setitem__(key, ret);
-        } else {
+        
+        if(ret == null){
             // Check if it is an attribute column
             // Note that attribute columns are not stored in the namespace binding
             // and are always looked up by the namespace
-            
+
             // get attribute tables from GraphModel!
             //AttributeColumn nodeColumn = attributeModel.getNodeTable().getColumn(key);
             //AttributeColumn edgeColumn = attributeModel.getEdgeTable().getColumn(key);
