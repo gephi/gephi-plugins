@@ -39,16 +39,13 @@ Contributor(s):
 
 Portions Copyrighted 2011 Gephi Consortium.
  */
-
-
 package org.alexandrebarao.isometriclayout;
 
 /**
  *
- * @author Alexandre Barão (IsometricLayout Algorithm for Gephi API 0.9.1) 
- * 
+ * @author Alexandre Barão (IsometricLayout Algorithm for Gephi API 0.9.1)
+ *
  */
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -61,63 +58,58 @@ import org.gephi.layout.spi.Layout;
 import org.gephi.layout.spi.LayoutBuilder;
 import org.gephi.layout.spi.LayoutProperty;
 
-
-
-
 public class IsometricLayout implements Layout {
 
     // Global isometric layout settings
     public static final String ISOMETRIC_Z_VALUE = "ISOMETRIC_Z_VALUE";
-    
+
     // grid origin (may be used for smooth translation)
-    float xOrigin=0f;
-    float yOrigin=0f;
-  
+    float xOrigin = 0f;
+    float yOrigin = 0f;
+
     // Layout properties
-    private int zlevels=0;
-    private int zdistance=1;
-    private float horizontalScale=100f;
-    private float verticalScale=getHorizontalScale()*0.577f; // tan 30º (isometric 3D system)
-    private boolean horizontal=false;
-    private boolean reverse=false;
-    
+    private int zlevels = 0;
+    private int zdistance = 1;
+    private float horizontalScale = 100f;
+    private float verticalScale = getHorizontalScale() * 0.577f; // tan 30º (isometric 3D system)
+    private boolean horizontal = false;
+    private boolean reverse = false;
+
     // Data Laboratory
-    
     private Column columnZ;
     private Column colResult;
- 
+
     //Architecture
     private final LayoutBuilder builder;
     private GraphModel graphModel;
-   
+
     //Flags
     private boolean executing = false;
-  
 
     public IsometricLayout(IsometricLayoutBuilder builder) {
         this.builder = builder;
     }
-    
+
     // 3D to 2D 
     float xGridToScreen(float xg, float yg) {
-        return ( (xOrigin+ xg * getHorizontalScale() + yg * getHorizontalScale()));
+        return ((xOrigin + xg * getHorizontalScale() + yg * getHorizontalScale()));
     }
 
     // 3D to 2D 
     float yGridToScreen(float xg, float yg, float zg) {
-        
-        return ( (yOrigin - yg * getVerticalScale() + xg * getVerticalScale() - zg * 2f * getVerticalScale() ));
-    } 
-    
+
+        return ((yOrigin - yg * getVerticalScale() + xg * getVerticalScale() - zg * 2f * getVerticalScale()));
+    }
+
     @Override
     public void resetPropertiesValues() {
-        zlevels=0;
-        zdistance=10;
-        horizontalScale=100f;
-        verticalScale=getHorizontalScale()*0.577f; // tan 30º (isometric 3D system)
+        zlevels = 0;
+        zdistance = 10;
+        horizontalScale = 100f;
+        verticalScale = getHorizontalScale() * 0.577f; // tan 30º (isometric 3D system)
         setHorizontal(false);
         setReverse(false);
-      
+
     }
 
     @Override
@@ -127,159 +119,134 @@ public class IsometricLayout implements Layout {
 
     @Override
     public void goAlgo() {
-        
+
         Graph graph = graphModel.getGraphVisible();
-      
+
         // Try to find an updated column [z] in data table (nodes).
-        
         columnZ = null;
-        
+
         Table nodeTable = graph.getModel().getNodeTable();
-        
-        for ( int i=0; i<nodeTable.countColumns(); i++) {
-    
+
+        for (int i = 0; i < nodeTable.countColumns(); i++) {
+
             Column c = nodeTable.getColumn(i);
-            
+
             if (c.getTitle().toLowerCase().contains("[z]")) {
                 columnZ = c;
                 break;
             }
         }
-        
-        
+
         // Look if the result column already exist and create it if needed.
         // Results may be used later in partition and ranking procedures.
-        
         colResult = nodeTable.getColumn(ISOMETRIC_Z_VALUE);
         if (colResult == null) {
             colResult = nodeTable.addColumn(ISOMETRIC_Z_VALUE, "Computed Z-Level", Integer.class, 0);
         }
-        
-        
-        
-        
+
         graph.readLock();
-        
+
         // Iterate on all nodes
         int nodeCount = graph.getNodeCount();
-        
+
         Node[] nodes = graph.getNodes().toArray();
-        
-      
+
         // Detect maximum value of the user-defined [z] column.
-        double maxZvalueFromColumnZ=0; 
-        
-        for (int i = 0 ; i< nodeCount; i++ ) {
-                   Node n = nodes[i]; 
-                   
-                   if ( columnZ != null ) {
-                        double zV ;
-                        
-                        zV = getDataLaboratoryValue(n, columnZ);
-                        
-                        if ( zV > maxZvalueFromColumnZ ) {
-                            maxZvalueFromColumnZ = zV; 
-                        }
-                   }
+        double maxZvalueFromColumnZ = 0;
+
+        for (int i = 0; i < nodeCount; i++) {
+            Node n = nodes[i];
+
+            if (columnZ != null) {
+                double zV;
+
+                zV = getDataLaboratoryValue(n, columnZ);
+
+                if (zV > maxZvalueFromColumnZ) {
+                    maxZvalueFromColumnZ = zV;
+                }
+            }
         }
-        
-        
-        
+
         // Compute z-level of each node and store it in the Gephi Data Laboratory. 
         int maxZLevel = 0;
-        for (int i = 0 ; i< nodeCount; i++ ) {
-                   Node n = nodes[i]; 
-                   double zV = 0f;
-                   if ( columnZ != null ){
-                        zV = getDataLaboratoryValue(n, columnZ);
-                    }
-                   int z_level=0;
-                   if ( maxZvalueFromColumnZ != 0 ) {
-                        z_level = (int) Math.round( (((zV * (double)(zlevels) / maxZvalueFromColumnZ) )));
-                        if ( z_level > maxZLevel ) {
-                            maxZLevel = z_level;
-                        }
-                   }
-                   
-                   n.setAttribute(colResult, z_level);
-                   
-         }
-        
- 
+        for (int i = 0; i < nodeCount; i++) {
+            Node n = nodes[i];
+            double zV = 0f;
+            if (columnZ != null) {
+                zV = getDataLaboratoryValue(n, columnZ);
+            }
+            int z_level = 0;
+            if (maxZvalueFromColumnZ != 0) {
+                z_level = (int) Math.round((((zV * (double) (zlevels) / maxZvalueFromColumnZ))));
+                if (z_level > maxZLevel) {
+                    maxZLevel = z_level;
+                }
+            }
+
+            n.setAttribute(colResult, z_level);
+
+        }
+
         // Detect how many isometric x,y grid scales are needed (z grid scales are on properties user demand)
-        int xGridScales = (int) Math.round(Math.sqrt(nodeCount))+1;
-        int yGridScales = (int) Math.round(Math.sqrt(nodeCount))+1;
-      
+        int xGridScales = (int) Math.round(Math.sqrt(nodeCount)) + 1;
+        int yGridScales = (int) Math.round(Math.sqrt(nodeCount)) + 1;
+
         // Draw isometric network (splitting layers if needed)
         int k = 0;
         for (int i = 0; i < xGridScales; i++) {
-         
-            for ( int j=0; j<yGridScales; j++ ) {
-               
-                if ( k < nodeCount ) {
-                  Node node = nodes[k];
-             
-                   int zGrid = 0; // 3D height of each node (z-axis)
-                  
-                   if ( colResult!= null ) {
-                        zGrid= (Integer) (node.getAttribute(colResult));
-                        zGrid*=zdistance;
-                   }
-             
-                   
-                   if ( isHorizontal() ) {
-                        node.setX(yGridToScreen(i,j,(float) ((isReverse()? zGrid: maxZLevel-zGrid))) );
-                        node.setY(xGridToScreen(i,j));
-                   } else {
-                        node.setX(xGridToScreen(i,j));
-                        node.setY(yGridToScreen(i,j,(float) ((isReverse()? zGrid: maxZLevel-zGrid))) );
-                   }
-               
-                   ++k;
+
+            for (int j = 0; j < yGridScales; j++) {
+
+                if (k < nodeCount) {
+                    Node node = nodes[k];
+
+                    int zGrid = 0; // 3D height of each node (z-axis)
+
+                    if (colResult != null) {
+                        zGrid = (Integer) (node.getAttribute(colResult));
+                        zGrid *= zdistance;
+                    }
+
+                    if (isHorizontal()) {
+                        node.setX(yGridToScreen(i, j, (float) ((isReverse() ? zGrid : maxZLevel - zGrid))));
+                        node.setY(xGridToScreen(i, j));
+                    } else {
+                        node.setX(xGridToScreen(i, j));
+                        node.setY(yGridToScreen(i, j, (float) ((isReverse() ? zGrid : maxZLevel - zGrid))));
+                    }
+
+                    ++k;
                 }
             }
-            
+
         }
-        
-        
-        
+
         graph.readUnlock();
         endAlgo();
-        
-        
+
     }
 
-    
     public double getDataLaboratoryValue(Node n, Column col) {
-        
-                   double z = 0f;
-                   
-                   
-                   if ( col.getTypeClass()== String.class ) { 
-                        String colString = (String) (n.getAttribute(col));
-                        z = Double.valueOf(colString).doubleValue();
-                   }
-                   
-                   if ( col.getTypeClass()== Integer.class ) { 
-                        Integer colString = (Integer) (n.getAttribute(col));
-                        z = colString.intValue();
-                   }
-                   
-                   if ( col.getTypeClass()== Float.class ) { 
-                        Float colString = (Float) (n.getAttribute(col));
-                        z = colString.floatValue();
-                   }
-                   
-                   if ( col.getTypeClass()== Double.class ) { 
-                        Double colString = (Double) (n.getAttribute(col));
-                        z = colString.doubleValue();
-                   }
-                   
-                   return z;
+
+        double z = 0f;
+
+        if (n.getAttribute(col) instanceof Number) {
+
+            z = ((Number) (n.getAttribute(col))).doubleValue();
+
+        } else if (col.getTypeClass() == String.class) {
+
+            try {
+                z = Double.parseDouble(((String) (n.getAttribute(col))).trim());
+            } catch (NumberFormatException nfe) {
+                System.out.println("NumberFormatException from data laboratory cell: " + nfe.getMessage());
+            }
+        }
+
+        return z;
     }
-    
-    
-    
+
     @Override
     public void endAlgo() {
         executing = false;
@@ -302,37 +269,35 @@ public class IsometricLayout implements Layout {
                     ISOMETRICLAYOUT,
                     "Z-maximum levels to compute node clusters. Node column '[z]' is needed in Gephi Data Laboratory.",
                     "getZlevels", "setZlevels"));
-               
-             properties.add(LayoutProperty.createProperty(
+
+            properties.add(LayoutProperty.createProperty(
                     this, Integer.class,
                     "Z-Distance",
                     ISOMETRICLAYOUT,
                     "Layer distance between each Z-Level layout. Use 'Z' units.",
                     "getZdistance", "setZdistance"));
-            
-             properties.add(LayoutProperty.createProperty(
+
+            properties.add(LayoutProperty.createProperty(
                     this, Float.class,
                     "Scale",
                     ISOMETRICLAYOUT,
                     "The isometric grid scale (pixels).",
                     "getHorizontalScale", "setHorizontalScale"));
-                     
-             properties.add(LayoutProperty.createProperty(
+
+            properties.add(LayoutProperty.createProperty(
                     this, Boolean.class,
                     "Horizontal Z-Axis",
                     ISOMETRICLAYOUT,
                     "Execute layout with Z-Axis horizontal.",
-                    "isHorizontal", "setHorizontal"));  
-             
-             properties.add(LayoutProperty.createProperty(
+                    "isHorizontal", "setHorizontal"));
+
+            properties.add(LayoutProperty.createProperty(
                     this, Boolean.class,
                     "Reverse 0-Level Origin",
                     ISOMETRICLAYOUT,
                     "0-Level is showed on: top layer (vertical layout); or right layer (horizontal layout).",
-                    "isReverse", "setReverse"));  
-                         
-                         
-            
+                    "isReverse", "setReverse"));
+
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -361,10 +326,10 @@ public class IsometricLayout implements Layout {
      * @param scale the scale to set
      */
     public void setHorizontalScale(Float scale) {
-        
+
         this.horizontalScale = scale;
-        setVerticalScale(horizontalScale*0.577f); // tan 30º
-       
+        setVerticalScale(horizontalScale * 0.577f); // tan 30º
+
     }
 
     /**
@@ -393,7 +358,7 @@ public class IsometricLayout implements Layout {
      */
     public void setVerticalScale(Float verticalScale) {
         this.verticalScale = verticalScale;
-       
+
     }
 
     /**
@@ -437,6 +402,5 @@ public class IsometricLayout implements Layout {
     public void setReverse(Boolean reverse) {
         this.reverse = reverse;
     }
-
 
 }

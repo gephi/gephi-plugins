@@ -14,9 +14,9 @@ If your network don’t have a “[z]” column, no problem, all nodes will be p
 ##Examples:  
   
 
-![Isometric Layout View](http://www.relationalcapitalvalue.com/myresources/iso-shot-1.png)  
+![Isometric Layout View](http://www.relationalcapitalvalue.com/myresources/example-0-isometric-layout.png)  
   
-![Isometric Layout View](http://www.relationalcapitalvalue.com/myresources/iso-shot-2.png)  
+ 
   
   
 Learning trail with a quick tutorial at:  
