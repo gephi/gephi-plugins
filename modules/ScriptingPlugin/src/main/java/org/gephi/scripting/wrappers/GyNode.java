@@ -78,9 +78,9 @@ import org.python.core.PyTuple;
 public class GyNode extends PyObject {
 
     /** The namespace in which this object is inserted */
-    private GyNamespace namespace;
+    private final GyNamespace namespace;
     /** The edge underlying on this wrapper */
-    private Node underlyingNode;
+    private final Node underlyingNode;
     // Hack to get a few attributes into jythonconsole's auto-completion
     // TODO: get rid of this ugly hack (:
     public int color;

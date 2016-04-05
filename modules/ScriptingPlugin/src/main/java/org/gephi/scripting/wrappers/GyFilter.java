@@ -64,7 +64,7 @@ import org.python.core.PySet;
 public class GyFilter extends PyObject {
 
     /** The namespace in which this object is inserted */
-    private GyNamespace namespace;
+    private final GyNamespace namespace;
     /** The underlying query object */
     private Query underlyingQuery;
 

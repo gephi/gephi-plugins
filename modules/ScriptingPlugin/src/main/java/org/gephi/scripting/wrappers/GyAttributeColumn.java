@@ -44,6 +44,8 @@ package org.gephi.scripting.wrappers;
 import org.gephi.filters.api.FilterController; //new import
 import org.gephi.filters.api.Query;
 import org.gephi.filters.api.Range;
+import org.gephi.filters.plugin.attribute.AttributeEqualBuilder;
+import org.gephi.filters.plugin.attribute.AttributeRangeBuilder.AttributeRangeFilter;
 import org.gephi.filters.spi.Filter;
 import org.gephi.graph.api.AttributeUtils;
 import org.gephi.graph.api.Column;
@@ -54,24 +56,25 @@ import org.python.core.PyObject;
 
 /**
  * Wraps an attribute column, so that it is exposed to the scripting language.
- * 
- * Objects of the type <code>GyAttributeColumn</code> are exposed to the
- * scripting language by <code>GyNamespace</code>. Once the user tries to access
- * a variable whose name matches an attribute column name, a new
- * <code>GyAttributeColumn</code> is instantiated and returned.
- * 
+ *
+ * Objects of the type <code>GyAttributeColumn</code> are exposed to the scripting language by <code>GyNamespace</code>. Once the user tries to access a variable whose name matches an attribute column
+ * name, a new <code>GyAttributeColumn</code> is instantiated and returned.
+ *
  * @author Luiz Ribeiro
  */
 public class GyAttributeColumn extends GyAttribute {
 
-    /** The underlying attribute column */
-    private Column underlyingAttributeColumn;
-    
+    /**
+     * The underlying attribute column
+     */
+    private final Column underlyingAttributeColumn;
+
     /**
      * Constructor for the attribute column wrapper.
-     * @param namespace         the namespace in which this wrapper is inserted
-     * @param attributeColumn   the underlying attribute column
-     * @param isNodeColumn 
+     *
+     * @param namespace the namespace in which this wrapper is inserted
+     * @param attributeColumn the underlying attribute column
+     * @param isNodeColumn
      */
     public GyAttributeColumn(GyNamespace namespace, Column attributeColumn) {
         super(namespace);
@@ -80,7 +83,7 @@ public class GyAttributeColumn extends GyAttribute {
 
     @Override
     public String toString() {
-        if (AttributeUtils.isNodeColumn(underlyingAttributeColumn)) {
+        if (isNodeAttribute()) {
             return "Node Attribute '" + underlyingAttributeColumn.getId() + "' (" + underlyingAttributeColumn.getTypeClass() + ")";
         } else {
             return "Edge Attribute '" + underlyingAttributeColumn.getId() + "' (" + underlyingAttributeColumn.getTypeClass() + ")";
@@ -103,20 +106,20 @@ public class GyAttributeColumn extends GyAttribute {
 
     @Override
     protected Query buildRangeQuery(Range range) {
-        /*
-        //if (underlyingAttributeColumn.isNumber() == false) {
-        if (true){
+        if (!underlyingAttributeColumn.isNumber() || underlyingAttributeColumn.isArray() || underlyingAttributeColumn.isDynamic()) {
             throw Py.TypeError("unsupported operator for attribute type '" + underlyingAttributeColumn.getTypeClass() + "'");
         }
+
         FilterController filterController = Lookup.getDefault().lookup(FilterController.class);
-        FilterBuilder[] builders = Lookup.getDefault().lookup(DynamicRangeBuilder.class).getBuilders();
-        DynamicRangeFilter dynamicRangeFilter = (DynamicRangeFilter) builders[0].getFilter(); // i hope [0] is getting the right builder! Need to relate to Column!
-        dynamicRangeFilter.setRange(range);
-        */
-        Query query = null;// = filterController.createQuery(dynamicRangeFilter);
-        
-        
-        return query;
+        AttributeRangeFilter rangeFilter;
+        if (isNodeAttribute()) {
+            rangeFilter = new AttributeRangeFilter.Node(underlyingAttributeColumn);
+        } else {
+            rangeFilter = new AttributeRangeFilter.Edge(underlyingAttributeColumn);
+        }
+
+        rangeFilter.setRange(range);
+        return filterController.createQuery(rangeFilter);
     }
 
     @Override
@@ -124,39 +127,55 @@ public class GyAttributeColumn extends GyAttribute {
         FilterController filterController = Lookup.getDefault().lookup(FilterController.class);
         Filter attributeEqualFilter;
         Query query;
-        /*
-        if (underlyingAttributeColumn.isNumber()) {
-            Filter filter;
 
-            filter = new AttributeEqualBuilder.EqualNumberFilter(underlyingAttributeColumn);
+        if (underlyingAttributeColumn.isArray() || underlyingAttributeColumn.isDynamic()) {
+            throw Py.TypeError("unsupported operator for attribute type '" + underlyingAttributeColumn.getTypeClass() + "'");
+        }
+
+        if (underlyingAttributeColumn.isNumber()) {
+            AttributeEqualBuilder.EqualNumberFilter filter;
+
+            if (isNodeAttribute()) {
+                filter = new AttributeEqualBuilder.EqualNumberFilter.Node(underlyingAttributeColumn);
+            } else {
+                filter = new AttributeEqualBuilder.EqualNumberFilter.Edge(underlyingAttributeColumn);
+            }
 
             attributeEqualFilter = filter;
             query = filterController.createQuery(attributeEqualFilter);
 
-            filter.setMatch((Number) match.__tojava__(underlyingAttributeColumn.getType().getType()));
-        } else if (AttributeUtils.getDefault().isStringColumn(underlyingAttributeColumn)) {
+            filter.setMatch((Number) match.__tojava__(underlyingAttributeColumn.getTypeClass()));
+        } else if (AttributeUtils.isStringType(underlyingAttributeColumn.getTypeClass())) {
             AttributeEqualBuilder.EqualStringFilter filter;
 
-            filter = new AttributeEqualBuilder.EqualStringFilter(underlyingAttributeColumn);
+            if (isNodeAttribute()) {
+                filter = new AttributeEqualBuilder.EqualStringFilter.Node(underlyingAttributeColumn);
+            } else {
+                filter = new AttributeEqualBuilder.EqualStringFilter.Edge(underlyingAttributeColumn);
+            }
 
             attributeEqualFilter = filter;
             query = filterController.createQuery(attributeEqualFilter);
 
             filter.setColumn(underlyingAttributeColumn);
             filter.setPattern(match.toString());
-        } else if (underlyingAttributeColumn.getType() == AttributeType.BOOLEAN) {
+        } else if (AttributeUtils.isBooleanType(underlyingAttributeColumn.getTypeClass())) {
             AttributeEqualBuilder.EqualBooleanFilter filter;
 
-            filter = new AttributeEqualBuilder.EqualBooleanFilter(underlyingAttributeColumn);
+            if (isNodeAttribute()) {
+                filter = new AttributeEqualBuilder.EqualBooleanFilter.Node(underlyingAttributeColumn);
+            } else {
+                filter = new AttributeEqualBuilder.EqualBooleanFilter.Edge(underlyingAttributeColumn);
+            }
 
             query = filterController.createQuery(filter);
 
             filter.setColumn(underlyingAttributeColumn);
             filter.setMatch((Boolean) match.__tojava__(Boolean.class));
-        } else {*/
-        throw Py.TypeError("unsupported operator for attribute type '" + underlyingAttributeColumn.getTypeClass() + "'");
-        //}
+        } else {
+            throw Py.TypeError("unsupported operator for attribute type '" + underlyingAttributeColumn.getTypeClass() + "'");
+        }
 
-        //return query;
+        return query;
     }
 }

@@ -108,13 +108,12 @@ public class GyGraph extends GySubGraph {
      * @return          the newly created edge
      */
     public GyEdge addDirectedEdge(GyNode source, GyNode target) {
-        GyEdge ret = null;
         Edge edge;
 
         // Instantiates the new edge and adds it to the graph
         edge = namespace.getGraphModel().factory().newEdge(source.getNode(), target.getNode(), (int) 1.0f, true);
         namespace.getGraphModel().getDirectedGraph().addEdge(edge);
-        ret = namespace.getGyEdge((String) edge.getId());
+        GyEdge ret = namespace.getGyEdge((String) edge.getId());
 
         return ret;
     }
@@ -138,13 +137,12 @@ public class GyGraph extends GySubGraph {
      * @return          the newly created edge
      */
     public GyEdge addUndirectedEdge(GyNode source, GyNode target) {
-        GyEdge ret = null;
         Edge edge;
 
         // Instantiates the new edge and adds it to the graph
         edge = namespace.getGraphModel().factory().newEdge(source.getNode(), target.getNode(), (int) 1.0f, false);
         namespace.getGraphModel().getUndirectedGraph().addEdge(edge);
-        ret = namespace.getGyEdge((String) edge.getId());
+        GyEdge ret = namespace.getGyEdge((String) edge.getId());
 
         return ret;
     }

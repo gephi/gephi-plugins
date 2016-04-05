@@ -70,9 +70,9 @@ import org.python.core.PyString;
 public class GyEdge extends PyObject {
 
     /** The namespace in which this object is inserted */
-    private GyNamespace namespace;
+    private final GyNamespace namespace;
     /** The edge underlying on this wrapper */
-    private Edge underlyingEdge;
+    private final Edge underlyingEdge;
     // Hack to get a few attributes into jythonconsole's auto-completion
     // TODO: get rid of this ugly hack (:
     public int color;

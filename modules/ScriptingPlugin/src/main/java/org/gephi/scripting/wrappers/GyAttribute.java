@@ -47,7 +47,6 @@ import org.gephi.filters.api.Range;
 import org.gephi.filters.plugin.operator.NOTBuilderEdge.NotOperatorEdge;
 import org.gephi.filters.plugin.operator.NOTBuilderNode.NOTOperatorNode;
 import org.gephi.filters.spi.Filter;
-import org.gephi.filters.spi.FilterBuilder;
 import org.gephi.scripting.util.GyNamespace;
 import org.openide.util.Lookup;
 import org.python.core.Py;
@@ -232,7 +231,7 @@ abstract class GyAttribute extends PyObject {
             notFilter = new NotOperatorEdge();
         }
 
-        notEqualsQuery = filterController.createQuery((FilterBuilder) notFilter);
+        notEqualsQuery = filterController.createQuery(notFilter);
         filterController.setSubQuery(notEqualsQuery, equalsQuery);
 
         return new GyFilter(namespace, notEqualsQuery);

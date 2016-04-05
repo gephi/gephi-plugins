@@ -85,9 +85,9 @@ public final class GyNamespace extends PyStringMap {
     /** Visible subgraph's variable name */
     public static final String VISIBLE_NAME = "visible";
     /** Workspace related to this namespace */
-    private Workspace workspace;
+    private final Workspace workspace;
     /** Workspace's graph model */
-    private GraphModel graphModel; // use public Table getNodeTable(); and  public Table getEdgeTable(); instead of AttributeModel
+    private final GraphModel graphModel; // use public Table getNodeTable(); and  public Table getEdgeTable(); instead of AttributeModel
     /** Workspace's attribute model */
     //private AttributeModel attributeModel;  // AttributeModel has been Removed in Gephi 0.9. Get Attributes directly from GraphModel!
                             
