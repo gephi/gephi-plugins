@@ -19,15 +19,12 @@ If your network don’t have a “[z]” column, no problem, all nodes will be p
 Another usefull feature:  
 You can use this plugin to rotate your graph over the X-Axis.  
   
-Examples:  
+##Examples:  
   
-![Network Splitter 3D](http://www.relationalcapitalvalue.com/myresources/split-shot-1.png)  
+![Network Splitter 3D](http://www.relationalcapitalvalue.com/myresources/example-0-networksplitter3d-layout.png)  
   
-![Network Splitter 3D](http://www.relationalcapitalvalue.com/myresources/split-shot-2.png)  
-  
-![Network Splitter 3D](http://www.relationalcapitalvalue.com/myresources/split-shot-3.png)  
 
-Learning trail with a quick tutorial at:  
+##Learning trail with a quick tutorial at:  
 http://www.relationalcapitalvalue.com/gephiplugins.html  
 
 
