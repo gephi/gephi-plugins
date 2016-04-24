@@ -2235,6 +2235,37 @@
       },
       "sourcecode": "https://github.com/seinecle/gephi-plugins/tree/mapOfCountriesBranch",
       "homepage": "http://www.clementlevallois.net"
+    },
+    {
+      "id": "scripting.plugin",
+      "name": "Scripting Plugin",
+      "short_description": "A Python Scripting Console plugin for Gephi.",
+      "long_description": "This Scripting Plugin originated as a joint proposal with the \u003ca href\u003d\"http://graphexploration.cond.org\"\u003eGUESS project\u003c/a\u003e which aimed at porting the Gython language as a console plugin for Gephi during the Google Summer of Code 2011 program. For those who are not familiar with it, GUESS is a software that was originally created to support the interactive manipulation of graph structures. This feature is achieved through a mix of a visualization framework and a domain-specific embedded language called Gython.\u003cbr/\u003e\u003cbr/\u003eAs you have probably already guessed, Gython is an extension of the Python programming language or, more specifically, Jython, which is a Java implementation of Python. Thus, Gython is backwards-compatible with Python itself and can be used with many different Python 2.5 libraries without much pain.\u003cbr/\u003e\u003cbr/\u003eInspired by the Gython language from the GUESS project (i.e. additional operators for manipulating graphs). Based on Jython 2.5.2, which implements the Python 2.5 specification. Graph structure and attributes manipulation. Filtering support. Support for running layouts. Export API support (i.e. generate PDF/GEXF/PNG exports from within the console). Batch scripts support for automating tasks. Loads third-party Python libraries.\u003cbr/\u003e\u003cbr/\u003eThe official documentation is available on the \u003ca href\u003d\"https://github.com/gephi/gephi/wiki/Scripting-Plugin\"\u003ewiki page\u003c/a\u003e.\u003cbr/\u003e\u003cbr/\u003eThe plugin’s source code is hosted on the python-scripting-plugin branch of the gephi-plugins repository on GitHub.",
+      "readme": null,
+      "license": "Apache 2.0",
+      "authors": [
+        {
+          "name": "Luiz Ribeiro",
+          "email": null,
+          "link": null
+        }
+      ],
+      "category": "Tool",
+      "last_update": "April 24, 2016",
+      "images": [
+        {
+          "image": "imgs/scripting.plugin/img1.png",
+          "thumbnail": "imgs/scripting.plugin/img1-thumbnail.png"
+        }
+      ],
+      "versions": {
+        "0.9.1": {
+          "url": "0.9.1/scripting.plugin-0.9.1.nbm",
+          "last_update": "April 24, 2016"
+        }
+      },
+      "sourcecode": "https://github.com/gephi/gephi-plugins/tree/python-scripting-plugin",
+      "homepage": "https://github.com/gephi/gephi/wiki/Scripting-Plugin"
     }
   ]
 }
