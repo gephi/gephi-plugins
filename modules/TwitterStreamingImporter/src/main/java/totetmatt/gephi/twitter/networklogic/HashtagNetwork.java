@@ -51,21 +51,8 @@ public class HashtagNetwork extends Networklogic {
                 }
             }
         }
-
     }
-    private Node createHashtag(String hashtag) {
-        hashtag = hashtag.toLowerCase();
-        Node hashtagNode = graphModel.getGraph().getNode("#" + hashtag);
-        if (hashtagNode == null) {
-            hashtagNode = graphModel.factory().newNode("#" + hashtag);
-            hashtagNode.setLabel("#" + hashtag);
-            hashtagNode.setColor(STANDARD_COLOR_HASHTAG);
-            hashtagNode.setX((float) Math.random());
-            hashtagNode.setY((float) Math.random());
-            graphModel.getGraph().addNode(hashtagNode);
-        }
-        return hashtagNode;
-    }
+    
     @Override
     public String getName() {
         return "Hashtag Network";

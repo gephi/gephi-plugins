@@ -2,9 +2,7 @@ package totetmatt.gephi.twitter.networklogic;
 
 import java.awt.Color;
 import org.gephi.graph.api.Edge;
-import org.gephi.graph.api.GraphController;
 import org.gephi.graph.api.Node;
-import org.openide.util.Lookup;
 import org.openide.util.lookup.ServiceProvider;
 import twitter4j.Status;
 import twitter4j.UserMentionEntity;
@@ -44,26 +42,9 @@ public class UserNetwork extends Networklogic {
             if (!originScreenName.equals(targetScreenName)) {
 
                 // Create or get the nodes
-                Node origin = graphModel.getGraph().getNode("@" + originScreenName);
-                if (origin == null) {
-                    origin = graphModel.factory().newNode("@" + originScreenName);
-                    origin.setLabel("@" + originScreenName);
-                    origin.setColor(STANDARD_COLOR_USER);
-                    origin.setX((float) Math.random());
-                    origin.setY((float) Math.random());
-
-                    graphModel.getGraph().addNode(origin);
-                }
-
-                Node target = graphModel.getGraph().getNode("@" + targetScreenName);
-                if (target == null) {
-                    target = graphModel.factory().newNode("@" + targetScreenName);
-                    target.setLabel("@" + targetScreenName);
-                    target.setColor(STANDARD_COLOR_USER);
-                    target.setX((float) Math.random());
-                    target.setY((float) Math.random());
-                    graphModel.getGraph().addNode(target);
-                }
+                Node origin = createUser(originScreenName);
+                Node target = createUser(targetScreenName);
+                
                 int typeEdge;
                 if (status.isRetweet()) {
                     typeEdge = RETWEET;
