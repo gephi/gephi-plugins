@@ -1,0 +1,4 @@
+Manifest-Version: 1.0
+OpenIDE-Module-Name: Scripting Plugin
+OpenIDE-Module-Display-Category: Tool
+OpenIDE-Module-Localizing-Bundle: org/gephi/scripting/plugin/Bundle.properties

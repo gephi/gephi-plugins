@@ -31,6 +31,7 @@
         <module>modules/loxawebsiteexport</module>
         <module>modules/Export-To-Earth</module>
         <module>modules/MapOfCountries</module>
+        <module>modules/ScriptingPlugin</module>
     </modules>
     
     <!-- Properties -->
