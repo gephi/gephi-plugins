@@ -6,7 +6,7 @@ import org.openide.util.NbPreferences;
  *
  * @author totetmatt
  */
-class CredentialProperty {
+public class CredentialProperty {
 
     String consumerKey = "";
     String consumerSecret = "";

@@ -64,14 +64,14 @@
             <version>1.8.3</version>
         </dependency>
         <dependency>
-	<groupId>org.apache.commons</groupId>
-	<artifactId>commons-lang3</artifactId>
-	<version>3.4</version>
-</dependency>
-<dependency>
-      <groupId>org.gephi</groupId>
-     <artifactId>project-api</artifactId>
-</dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+            <version>3.4</version>
+        </dependency>
+        <dependency>
+            <groupId>org.gephi</groupId>
+            <artifactId>project-api</artifactId>
+        </dependency>
     </dependencies>
 
     <build>
