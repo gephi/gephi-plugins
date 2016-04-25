@@ -32,6 +32,7 @@
         <module>modules/Export-To-Earth</module>
         <module>modules/MapOfCountries</module>
         <module>modules/ScriptingPlugin</module>
+        <module>modules/TwitterStreamingImporter</module>
     </modules>
     
     <!-- Properties -->
