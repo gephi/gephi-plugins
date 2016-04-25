@@ -15,7 +15,7 @@
         }
       ],
       "category": "Layout",
-      "last_update": "April 24, 2016",
+      "last_update": "April 25, 2016",
       "images": [
         {
           "image": "imgs/geolayout-plugin/geolayout_example.png",
@@ -37,7 +37,7 @@
         },
         "0.9.1": {
           "url": "0.9.1/geolayout-plugin-0.9.1.1.nbm",
-          "last_update": "April 24, 2016"
+          "last_update": "April 25, 2016"
         }
       },
       "sourcecode": "https://github.com/gephi/gephi-plugins/geolayout-plugin",
@@ -58,7 +58,7 @@
         }
       ],
       "category": "Tool",
-      "last_update": "April 24, 2016",
+      "last_update": "April 25, 2016",
       "images": [
         {
           "image": "imgs/linkfluence-plugin/img.png",
@@ -72,7 +72,7 @@
         },
         "0.9.1": {
           "url": "0.9.1/linkfluence-plugin-0.9.0.nbm",
-          "last_update": "April 24, 2016"
+          "last_update": "April 25, 2016"
         }
       },
       "sourcecode": "https://github.com/eduramiba/gephi-plugins/tree/linkfluence-plugin",
@@ -487,7 +487,7 @@
         }
       ],
       "category": "Export",
-      "last_update": "April 24, 2016",
+      "last_update": "April 25, 2016",
       "images": null,
       "versions": {
         "0.8.2": {
@@ -496,7 +496,7 @@
         },
         "0.9.1": {
           "url": "0.9.1/exporttoearth-1.0.0.nbm",
-          "last_update": "April 24, 2016"
+          "last_update": "April 25, 2016"
         }
       },
       "sourcecode": "http://github.com/shepdl/gephi-plugins/tree/export-to-earth",
@@ -543,7 +543,7 @@
         }
       ],
       "category": "Filter",
-      "last_update": "April 24, 2016",
+      "last_update": "April 25, 2016",
       "images": [
         {
           "image": "imgs/kbrace-filter/kbrace-img.png",
@@ -561,7 +561,7 @@
         },
         "0.9.1": {
           "url": "0.9.1/kbrace-filter-1.0.0.nbm",
-          "last_update": "April 24, 2016"
+          "last_update": "April 25, 2016"
         }
       },
       "sourcecode": "https://github.com/mbastian/gephi-plugins/tree/kbrace-filter",
@@ -1928,7 +1928,7 @@
         }
       ],
       "category": "Tool",
-      "last_update": "April 24, 2016",
+      "last_update": "April 25, 2016",
       "images": null,
       "versions": {
         "0.8.2": {
@@ -1941,7 +1941,7 @@
         },
         "0.9.1": {
           "url": "0.9.1/multimode-1.0.0.nbm",
-          "last_update": "April 24, 2016"
+          "last_update": "April 25, 2016"
         }
       },
       "sourcecode": "https://github.com/totetmatt/gephi-plugins/tree/multimode-network",
@@ -1962,7 +1962,7 @@
         }
       ],
       "category": "Export",
-      "last_update": "April 24, 2016",
+      "last_update": "April 25, 2016",
       "images": null,
       "versions": {
         "0.8.2": {
@@ -1975,7 +1975,7 @@
         },
         "0.9.1": {
           "url": "0.9.1/jsonexporter-plugin-2.0.0.nbm",
-          "last_update": "April 24, 2016"
+          "last_update": "April 25, 2016"
         }
       },
       "sourcecode": "http://github.com/oxfordinternetinstitute/gephi-plugins",
@@ -1996,7 +1996,7 @@
         }
       ],
       "category": "Export",
-      "last_update": "April 24, 2016",
+      "last_update": "April 25, 2016",
       "images": null,
       "versions": {
         "0.8.2": {
@@ -2009,7 +2009,7 @@
         },
         "0.9.1": {
           "url": "0.9.1/sigmaexporter-0.9.0.nbm",
-          "last_update": "April 24, 2016"
+          "last_update": "April 25, 2016"
         }
       },
       "sourcecode": "http://github.com/oxfordinternetinstitute/gephi-plugins",
@@ -2030,7 +2030,7 @@
         }
       ],
       "category": "Tool",
-      "last_update": "April 24, 2016",
+      "last_update": "April 25, 2016",
       "images": null,
       "versions": {
         "0.9.0": {
@@ -2039,7 +2039,7 @@
         },
         "0.9.1": {
           "url": "0.9.1/gephi-plugin-node-color-manager-1.0.0.nbm",
-          "last_update": "April 24, 2016"
+          "last_update": "April 25, 2016"
         }
       },
       "sourcecode": "https://github.com/gephi/gephi-plugins/gephi-plugin-node-color-manager",
@@ -2060,7 +2060,7 @@
         }
       ],
       "category": "Layout",
-      "last_update": "April 24, 2016",
+      "last_update": "April 25, 2016",
       "images": [
         {
           "image": "imgs/gephigraphviz/GraphVizLayout_example.png",
@@ -2082,7 +2082,7 @@
         },
         "0.9.1": {
           "url": "0.9.1/gephigraphviz-1.0.0.nbm",
-          "last_update": "April 24, 2016"
+          "last_update": "April 25, 2016"
         }
       },
       "sourcecode": "https://github.com/chunky/gephi-plugins",
@@ -2103,12 +2103,12 @@
         }
       ],
       "category": "Import",
-      "last_update": "April 24, 2016",
+      "last_update": "April 25, 2016",
       "images": null,
       "versions": {
         "0.9.1": {
           "url": "0.9.1/graphstreaming-1.0.0.zip",
-          "last_update": "April 24, 2016"
+          "last_update": "April 25, 2016"
         }
       },
       "sourcecode": "https://github.com/panisson/gephi-plugins/tree/graph-streaming",
@@ -2129,12 +2129,12 @@
         }
       ],
       "category": "Layout",
-      "last_update": "April 24, 2016",
+      "last_update": "April 25, 2016",
       "images": null,
       "versions": {
         "0.9.1": {
           "url": "0.9.1/circularlayout-0.9.1.nbm",
-          "last_update": "April 24, 2016"
+          "last_update": "April 25, 2016"
         }
       },
       "sourcecode": "https://github.com/mgroeninger/gephi-plugins",
@@ -2155,7 +2155,7 @@
         }
       ],
       "category": "Import",
-      "last_update": "April 24, 2016",
+      "last_update": "April 25, 2016",
       "images": [
         {
           "image": "imgs/semantic/icon.png",
@@ -2173,7 +2173,7 @@
       "versions": {
         "0.9.1": {
           "url": "0.9.1/semantic-1.0.0.nbm",
-          "last_update": "April 24, 2016"
+          "last_update": "April 25, 2016"
         }
       },
       "sourcecode": "https://github.com/Wimmics/gephi-semantic-web-import",
@@ -2194,7 +2194,7 @@
         }
       ],
       "category": "Export",
-      "last_update": "April 24, 2016",
+      "last_update": "April 25, 2016",
       "images": [
         {
           "image": "imgs/loxawebsiteexport/logo_final.png",
@@ -2204,7 +2204,7 @@
       "versions": {
         "0.9.1": {
           "url": "0.9.1/loxawebsiteexport-0.3.2.nbm",
-          "last_update": "April 24, 2016"
+          "last_update": "April 25, 2016"
         }
       },
       "sourcecode": "https://github.com/jorgaf/gephi-plugins",
@@ -2225,12 +2225,12 @@
         }
       ],
       "category": "Layout",
-      "last_update": "April 24, 2016",
+      "last_update": "April 25, 2016",
       "images": null,
       "versions": {
         "0.9.1": {
           "url": "0.9.1/clementlevallois-1.0.0.nbm",
-          "last_update": "April 24, 2016"
+          "last_update": "April 25, 2016"
         }
       },
       "sourcecode": "https://github.com/seinecle/gephi-plugins/tree/mapOfCountriesBranch",
@@ -2251,7 +2251,7 @@
         }
       ],
       "category": "Tool",
-      "last_update": "April 24, 2016",
+      "last_update": "April 25, 2016",
       "images": [
         {
           "image": "imgs/scripting.plugin/img1.png",
@@ -2261,11 +2261,58 @@
       "versions": {
         "0.9.1": {
           "url": "0.9.1/scripting.plugin-0.9.1.nbm",
-          "last_update": "April 24, 2016"
+          "last_update": "April 25, 2016"
         }
       },
       "sourcecode": "https://github.com/gephi/gephi-plugins/tree/python-scripting-plugin",
       "homepage": "https://github.com/gephi/gephi/wiki/Scripting-Plugin"
+    },
+    {
+      "id": "twitter-streaming-importer",
+      "name": "TwitterStreamingImporter",
+      "short_description": "Realtime Twitter Graph Importer",
+      "long_description": "\u003cp\u003eThis plugin connects to the Twitter Streaming API and represents tweets as graph.\u003c/p\u003e\u003cp\u003eIt includes two possible ways to represent a graph:\u003cul\u003e\u003cli\u003eFull Smart Network: A full representation with nodes for Users, Tweets, Hashtags, Urls, Media and Symbols\u003c/li\u003e\u003cli\u003eUser Network: A weighted User to User network with parallel edges for RT and Mentions\u003c/li\u003e\u003cli\u003eHashtag Network : A weighted Hashtag to Hashtag network\u003c/li\u003e\u003c/p\u003e",
+      "readme": "## Twitter Stream Plugin\n\n### Description\nPlugin that use the Twitter Stream Api and represent tweet as graph.\n\n3 methods of representation (network logic):\n\n* Full Smart Netowrk : Do a full representation of User, Tweet, Hashtag, Url, Media \u0026 Symbol \n* User Network : Do a weighter User to User network with parallel edges for RT and Mentions\n* Hashtag Network : A weighted Hashtag to Hashtag network\n",
+      "license": "Apache 2.0",
+      "authors": [
+        {
+          "name": "@totetmatt",
+          "email": "matthieu.totet@gmail.com",
+          "link": "http://matthieu-totet.fr/"
+        }
+      ],
+      "category": "Import",
+      "last_update": "April 25, 2016",
+      "images": [
+        {
+          "image": "imgs/twitter-streaming-importer/A_Screenshot.png",
+          "thumbnail": "imgs/twitter-streaming-importer/A_Screenshot-thumbnail.png"
+        },
+        {
+          "image": "imgs/twitter-streaming-importer/B_User_Network.png",
+          "thumbnail": "imgs/twitter-streaming-importer/B_User_Network-thumbnail.png"
+        },
+        {
+          "image": "imgs/twitter-streaming-importer/C_Smart_Full_Network.png",
+          "thumbnail": "imgs/twitter-streaming-importer/C_Smart_Full_Network-thumbnail.png"
+        },
+        {
+          "image": "imgs/twitter-streaming-importer/D_LiveDemo.png",
+          "thumbnail": "imgs/twitter-streaming-importer/D_LiveDemo-thumbnail.png"
+        },
+        {
+          "image": "imgs/twitter-streaming-importer/E_Example_Postprocessing.png",
+          "thumbnail": "imgs/twitter-streaming-importer/E_Example_Postprocessing-thumbnail.png"
+        }
+      ],
+      "versions": {
+        "0.9.1": {
+          "url": "0.9.1/twitter-streaming-importer-1.0.0.nbm",
+          "last_update": "April 25, 2016"
+        }
+      },
+      "sourcecode": "https://github.com/totetmatt/gephi-plugins/tree/twitter",
+      "homepage": null
     }
   ]
 }
