@@ -1,0 +1,5 @@
+Manifest-Version: 1.0
+OpenIDE-Module-Name: Gravity Plugin
+OpenIDE-Module-Short-Description: FA2 Modification
+OpenIDE-Module-Long-Description: FA2 Modification multiple sources of gravity
+OpenIDE-Module-Display-Category: Layout
