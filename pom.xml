@@ -33,6 +33,7 @@
         <module>modules/MapOfCountries</module>
         <module>modules/ScriptingPlugin</module>
         <module>modules/TwitterStreamingImporter</module>
+        <module>modules/IsometricLayout</module>
     </modules>
     
     <!-- Properties -->
