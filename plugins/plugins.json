@@ -988,32 +988,36 @@
     {
       "id": "network-splitter-3d",
       "name": "Network Splitter 3D",
-      "short_description": "",
-      "long_description": "\u003cp\u003eThis layout can be used to split a network layout into distinct Z-Layers (Network Splitter 3D Z-Layers are user-defined clusters).\u003cbr\u003e\nE.g. after using layouts such as: Yifan Hu, Fruchterman Reingold, Force Atlas, Circular, Layered, OpenOrd, etc.\u003c/p\u003e\n\u003cp\u003eComputed Z-Layers can be used in Gephi ranking and/or partition procedures. To use this plugin it is quite simple: network nodes should have an attribute containing “[z]�? in its name. E.g. something like “Degree [z]�? or “YourNodeColumn[z]“.\u003c/p\u003e\n\u003cp\u003eThe Network Splitter 3D will compute and segment z-Levels regarding your “[z]�? column values (with any ranges). If your network don’t have a “[z]�? column, no problem, all nodes will be placed in Z-Layer 0 (Zero).\u003c/p\u003e\n\u003cp\u003eAnother usefull feature:\u003cbr\u003e\nYou can use this plugin to rotate your graph over the X-Axis.\u003c/p\u003e",
-      "readme": null,
+      "short_description": "This layout can be used to split a network layout into distinct Z-Layers. E.g. after using layouts such as: Yifan Hu, Fruchterman Reingold, Force Atlas, Circular, Layered, OpenOrd, etc.",
+      "long_description": "Network Splitter 3D Z-Layers are user-defined clusters and can be used in Gephi ranking and/or partition procedures. You can also use this plugin to rotate your graph over the X-Axis.",
+      "readme": "## Network Splitter 3D\n\n\nThis layout can be used to split a network layout into distinct Z-Layers  \n(Network Splitter 3D Z-Layers are user-defined clusters).  \n\nE.g. after using layouts such as: Yifan Hu, Fruchterman Reingold, Force Atlas, Circular, Layered, OpenOrd, etc.  \n\nComputed Z-Layers can be used in Gephi ranking and/or partition procedures.  \n\nTo use this plugin it is quite simple: network nodes should have an attribute containing “[z]” in its name.  \nE.g. something like “Degree [z]” or “YourNodeColumn[z]“.  \n\nThe Network Splitter 3D will compute and segment z-Levels regarding your “[z]” column values (with any ranges).  \n  \nIf your network don’t have a “[z]” column, no problem, all nodes will be placed in Z-Layer 0 (Zero).  \n  \n  \nAnother usefull feature:  \nYou can use this plugin to rotate your graph over the X-Axis.  \n  \n##Examples:  \n  \n![Network Splitter 3D](http://www.relationalcapitalvalue.com/myresources/example-0-networksplitter3d-layout.png)  \n  \n\n##Learning trail with a quick tutorial at:  \nhttp://www.relationalcapitalvalue.com/gephiplugins.html  \n\n\n",
       "license": "GPL v3",
       "authors": [
         {
           "name": "Alexandre Barão",
-          "email": null,
-          "link": "http://pt.linkedin.com/in/alexandrebarao"
+          "email": "barao.alexandre@gmail.com",
+          "link": "https://pt.linkedin.com/in/alexandrebarao"
         }
       ],
       "category": "Layout",
-      "last_update": "May 7, 2014",
+      "last_update": "May 21, 2016",
       "images": [
         {
-          "image": "imgs/network-splitter-3d/networksplitter3d_logo.jpg",
-          "thumbnail": "imgs/network-splitter-3d/networksplitter3d_logo.jpg"
+          "image": "imgs/network-splitter-3d/example-0-networksplitter3d-layout.png",
+          "thumbnail": "imgs/network-splitter-3d/example-0-networksplitter3d-layout-thumbnail.png"
         }
       ],
       "versions": {
         "0.8.2": {
           "url": "0.8.2/org-alexandrebarao-networksplitter3d.nbm",
           "last_update": "May 7, 2014"
+        },
+        "0.9.1": {
+          "url": "0.9.1/network-splitter-3d-1.0.0.nbm",
+          "last_update": "May 21, 2016"
         }
       },
-      "sourcecode": "http://www.relationalcapitalvalue.com/gephi/plugins/networksplitter3d/NetworkSplitter3D.zip",
+      "sourcecode": "https://github.com/alexandrebarao",
       "homepage": null
     },
     {
@@ -2319,7 +2323,7 @@
       "name": "Isometric Layout",
       "short_description": "This layout uses an isometric perspective to visualize networks.",
       "long_description": "Generates 3D isometric coordinates for all network nodes (x,y,z) and can be also used to split a network into distinct Z-Layers.",
-      "readme": "## Isometric Layout\n\nThis layout uses an isometric perspective to visualize networks. \nI.e. it generates 3D coordinates for all network nodes (x,y,z).\nThus, is a method for the visual representation of three-dimensional nodes in two dimensions.\nIt can be used to split a network into distinct Z-Layers \n(e.g. to better visualize high-performers and/or low-performers, or communities after using modularity algorithms).\nBesides, computed Z-layers can be used in Gephi ranking and/or partition procedures.\nTo use it, is quite simple, network nodes should have an attribute containing “[z]” in its name. \nE.g., something like “Degree [z]” or “YourNodeColumn[z]“.\nThe IsometricLayout will compute and segment z-Levels regarding your “[z]” column values (with any ranges).\nIf your network don’t have a “[z]” column, no problem, all nodes will be placed in Z-Layer 0 (Zero).  \n  \n##Examples:  \n  \n\n![Isometric Layout View](http://www.relationalcapitalvalue.com/myresources/example-0-isometric-layout.png)  \n  \n \n  \n  \nLearning trail with a quick tutorial at:  \nhttp://www.relationalcapitalvalue.com/gephiplugins.html  \n  \n  \n\n",
+      "readme": "## Isometric Layout\n\nThis layout uses an isometric perspective to visualize networks. \nI.e. it generates 3D coordinates for all network nodes (x,y,z).\nThus, is a method for the visual representation of three-dimensional nodes in two dimensions.\nIt can be used to split a network into distinct Z-Layers \n(e.g. to better visualize high-performers and/or low-performers, or communities after using modularity algorithms).\nBesides, computed Z-layers can be used in Gephi ranking and/or partition procedures.\nTo use it, is quite simple, network nodes should have an attribute containing \"[z]\" in its name. \nE.g., something like \"Degree [z]\" or \"YourNodeColumn[z]\".\nThe IsometricLayout will compute and segment z-Levels regarding your \"[z]\" column values (with any ranges).\nIf your network don\u0027t have a \"[z]\" column, no problem, all nodes will be placed in Z-Layer 0 (Zero).  \n  \n##Examples:  \n  \n\n![Isometric Layout View](http://www.relationalcapitalvalue.com/myresources/example-0-isometric-layout.png)  \n  \n \n  \n  \nLearning trail with a quick tutorial at:  \nhttp://www.relationalcapitalvalue.com/gephiplugins.html  \n  \n  \n\n",
       "license": "GPL v3",
       "authors": [
         {
