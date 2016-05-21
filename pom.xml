@@ -34,6 +34,7 @@
         <module>modules/ScriptingPlugin</module>
         <module>modules/TwitterStreamingImporter</module>
         <module>modules/IsometricLayout</module>
+        <module>modules/NetworkSplitter3D</module>
     </modules>
     
     <!-- Properties -->

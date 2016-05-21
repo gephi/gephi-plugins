@@ -6,10 +6,10 @@ Thus, is a method for the visual representation of three-dimensional nodes in tw
 It can be used to split a network into distinct Z-Layers 
 (e.g. to better visualize high-performers and/or low-performers, or communities after using modularity algorithms).
 Besides, computed Z-layers can be used in Gephi ranking and/or partition procedures.
-To use it, is quite simple, network nodes should have an attribute containing “[z]” in its name. 
-E.g., something like “Degree [z]” or “YourNodeColumn[z]“.
-The IsometricLayout will compute and segment z-Levels regarding your “[z]” column values (with any ranges).
-If your network don’t have a “[z]” column, no problem, all nodes will be placed in Z-Layer 0 (Zero).  
+To use it, is quite simple, network nodes should have an attribute containing "[z]" in its name. 
+E.g., something like "Degree [z]" or "YourNodeColumn[z]".
+The IsometricLayout will compute and segment z-Levels regarding your "[z]" column values (with any ranges).
+If your network don't have a "[z]" column, no problem, all nodes will be placed in Z-Layer 0 (Zero).  
   
 ##Examples:  
   
