@@ -19,19 +19,16 @@
         <dependency>
             <groupId>org.gephi</groupId>
             <artifactId>graph-api</artifactId>
-            <version>${gephi.version}</version>
             <type>jar</type>
         </dependency>
         <dependency>
             <groupId>org.gephi</groupId>
             <artifactId>ui-propertyeditor</artifactId>
-            <version>${gephi.version}</version>
             <type>jar</type>
         </dependency>
         <dependency>
             <groupId>org.gephi</groupId>
             <artifactId>layout-api</artifactId>
-            <version>${gephi.version}</version>
         </dependency>
     </dependencies>
 
