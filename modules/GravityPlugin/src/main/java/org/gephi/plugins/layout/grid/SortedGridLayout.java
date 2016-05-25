@@ -103,6 +103,7 @@ public class SortedGridLayout implements Layout {
                 public int compare(Node o1, Node o2) {
                     Number n1 = (Number) o1.getAttribute(column);
                     Number n2 = (Number) o2.getAttribute(column);
+                    
                     if (n1.doubleValue() < n2.doubleValue()) {
                         return 1;
                     } else if (n1.doubleValue() > n2.doubleValue()) {
