@@ -42,6 +42,7 @@
 package org.gephi.plugins.layout.forceAtlas2Custom;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -98,7 +99,7 @@ public class ForceAtlas2 implements Layout {
     @Override
     public void initAlgo() {
         // For sources of gravity
-        Map<Integer, Integer> gravityMap = new HashMap<Integer, Integer>();
+        List<Integer> gravityList = new ArrayList<Integer>();
         
         speed = 1.;
         speedEfficiency = 1.;
@@ -119,13 +120,9 @@ public class ForceAtlas2 implements Layout {
             }
             
             Integer block = (Integer) n.getAttribute("block");
-            Integer gravitySource = gravityMap.get(block);
-            if (gravitySource == null){
-                i++;
-                gravityMap.put(block, i);
-                gravitySource = i;
+            if(!gravityList.contains(block)){
+                gravityList.add(block);
             }
-            
             
             ForceAtlas2LayoutData nLayout = n.getLayoutData();
             nLayout.mass = 1 + graph.getDegree(n);
@@ -133,11 +130,18 @@ public class ForceAtlas2 implements Layout {
             nLayout.old_dy = 0;
             nLayout.dx = 0;
             nLayout.dy = 0;
-            nLayout.gravitySource = gravitySource;
         }
         
-        for (Map.Entry pair : gravityMap.entrySet()) {
-            System.out.println(pair.getKey() + " = " + pair.getValue());
+        Collections.sort(gravityList);
+        for(Integer block : gravityList){
+            System.out.println(block + " = " + gravityList.indexOf(block));
+        }
+            
+        for(Node n : nodes){
+            Integer block = (Integer) n.getAttribute("block");
+            
+            ForceAtlas2LayoutData nLayout = n.getLayoutData();
+            nLayout.gravitySource = gravityList.indexOf(block);
         }
 
         pool = Executors.newFixedThreadPool(threadCount);
