@@ -126,14 +126,14 @@ public class ForceAtlas2 implements Layout {
                 gravitySource = i;
             }
             
+            
             ForceAtlas2LayoutData nLayout = n.getLayoutData();
             nLayout.mass = 1 + graph.getDegree(n);
             nLayout.old_dx = 0;
             nLayout.old_dy = 0;
             nLayout.dx = 0;
             nLayout.dy = 0;
-            nLayout.gx = gravitySource* 1000;
-            nLayout.gy = 0;
+            nLayout.gravitySource = gravitySource;
         }
         
         for (Map.Entry pair : gravityMap.entrySet()) {
