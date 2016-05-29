@@ -1,0 +1,5 @@
+Manifest-Version: 1.0
+OpenIDE-Module-Name: Lineage
+OpenIDE-Module-Short-Description: A plugin for identifying ancestors and descendants of nodes in directed graphs.
+OpenIDE-Module-Long-Description: This plugin requires the user to select a node, and then the plugin will identify the ancestors and descendants of that node, also reporting the distance of these from the origin node.
+OpenIDE-Module-Display-Category: Metric

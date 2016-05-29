@@ -1,0 +1,19 @@
+OpenIDE-Module-Display-Category=Plugin
+OpenIDE-Module-Long-Description=\
+    This plugin finds all the ancestors and descendants of an input node for a directed graph. \
+    The user has to identify the input node with the node's Id value (not the label value). \
+    The origin node, as well as its ancestors and descendants are reported in a variable called "Lineage" (see data laboratory). \
+    When a node is both an ancestor and a descendant, it is marked as a Hybrid and stored that way in the "Lineage" column. \
+    The plugin also adds three boolean variables that mark for each node whether they are the origin node, an ancestor, or a descendant. \
+    Finally, for two columns are added to report the distance of each ancestor (negative values) and each descendant (positive values). \
+    All unrelated nodes have a distance of 0 and should be ignored.
+OpenIDE-Module-Name=Lineage
+
+OpenIDE-Module-Short-Description=Find Ancestors and Descendants of a node
+
+AncestorsPanel.originField.text=jTextField1
+LineagePanel.originTextField.text=jTextField1
+LineagePanel.jLabel1.text=Enter Id (not the Label) of the node for which you want to identify ancestors and descendants.
+LineagePanel.jLabel2.text=This plugin can be used to identify the ancestors and descendants of a node chosen by the user.
+LineagePanel.jLabel3.text= ""
+LineagePanel.jLabel4.text=A variable is added to the nodes list to record the results.
