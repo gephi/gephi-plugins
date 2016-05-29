@@ -1,5 +1,5 @@
 Manifest-Version: 1.0
 OpenIDE-Module-Name: MdsMetric
 OpenIDE-Module-Short-Description: This plugin uses the MDSJ library to do multidimensional scaling in Gephi.
-OpenIDE-Module-Long-Description: The pto apply multidimensional scaling to networks in Gephi. This produces a set of coordinates that can be used as input for the MDS layout plugin (needs to be installed separately).
+OpenIDE-Module-Long-Description: The plugin uses the MDSJ library to apply multidimensional scaling to networks in Gephi. This produces a set of coordinates that can be used as input for the MDS layout plugin (needs to be installed separately).
 OpenIDE-Module-Display-Category: Metric
