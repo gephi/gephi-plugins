@@ -1,5 +1,0 @@
-Manifest-Version: 1.0
-OpenIDE-Module-Name: EventGraphLayout
-OpenIDE-Module-Short-Description: Layout algorithm for event graphs
-OpenIDE-Module-Long-Description: he event graph layout plugin was written to allow for the easy creation of event graphs. In an event graph the nodes represent events and the edges/arcs represent relationships between the events (e.g. causality). The layout plugin places the events in a user-specified order on the x-axis. 
-OpenIDE-Module-Display-Category: Layout
