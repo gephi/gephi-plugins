@@ -1,0 +1,1 @@
+This is a plugin that finds the ancestors and descendants of a node identified by the user. The plugin only gives meaningful results for directed graphs. The results are recorded in a variable that is added to the nodes list in the data laboratory.
