@@ -132,7 +132,7 @@ public class TimeForce implements Layout {
         }
         graph = graphModel.getGraphVisible();
 
-        Number ord;
+        double ord;
         
         graph.readLock();
         Node[] nodes = graph.getNodes().toArray();
@@ -227,16 +227,14 @@ public class TimeForce implements Layout {
                 
                 //ord = (Double) n.getAttribute(order, graph.getView());
                 
-                ord = (Number) n.getAttribute(order);
-                
-                double doubleOrd = ord.doubleValue();
+                ord = ((Number) n.getAttribute(order)).doubleValue();
                 
                 double averageX = 0;
                 double averageY = 0;
           
-                doubleOrd = doubleOrd * (double) orderScale;
+                ord = ord * (double) orderScale;
                     
-                float ordFloat = (float) doubleOrd;
+                float ordFloat = (float) ord;
                 n.setX(ordFloat);
                 if (vertical == true) {
                     n.setY((float) y);
