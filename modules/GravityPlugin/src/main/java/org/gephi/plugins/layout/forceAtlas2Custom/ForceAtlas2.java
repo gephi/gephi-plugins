@@ -1,4 +1,10 @@
 /*
+ Original source by code from Gephi
+ Modifications made by Surya Rastogi
+ Modified for Individual Project for completion of degree in BEng Computing 
+*/
+
+/*
  Copyright 2008-2011 Gephi
  Authors : Mathieu Jacomy <mathieu.jacomy@gmail.com>
  Website : http://www.gephi.org
@@ -69,6 +75,7 @@ import org.openide.util.NbBundle;
  * @author Mathieu Jacomy
  */
 public class ForceAtlas2 implements Layout {
+    
 
     private GraphModel graphModel;
     private Graph graph;
@@ -90,6 +97,7 @@ public class ForceAtlas2 implements Layout {
     private Region rootRegion;
     double outboundAttCompensation = 1;
     private ExecutorService pool;
+    private static final double MAX_GRAVITY = 100;
 
     public ForceAtlas2(ForceAtlas2Builder layoutBuilder) {
         this.layoutBuilder = layoutBuilder;
@@ -99,7 +107,7 @@ public class ForceAtlas2 implements Layout {
     @Override
     public void initAlgo() {
         // For sources of gravity
-        List<Integer> gravityList = new ArrayList<Integer>();
+        List<Integer> gravityXList = new ArrayList<Integer>();
         
         speed = 1.;
         speedEfficiency = 1.;
@@ -112,16 +120,22 @@ public class ForceAtlas2 implements Layout {
         // Initialise layout data
         
         // Gravity sources counter
-        int i = 0; 
+        double min = Double.POSITIVE_INFINITY;
+        double max = 0;
         for (Node n : nodes) {
             if (n.getLayoutData() == null || !(n.getLayoutData() instanceof ForceAtlas2LayoutData)) {
                 ForceAtlas2LayoutData nLayout = new ForceAtlas2LayoutData();
                 n.setLayoutData(nLayout);
             }
             
+            
             Integer block = (Integer) n.getAttribute("block");
-            if(!gravityList.contains(block)){
-                gravityList.add(block);
+            
+            if (block < min){
+                min = block;
+            }
+            if (block > max) {
+                max = block;
             }
             
             ForceAtlas2LayoutData nLayout = n.getLayoutData();
@@ -131,18 +145,20 @@ public class ForceAtlas2 implements Layout {
             nLayout.dx = 0;
             nLayout.dy = 0;
         }
-        
-        Collections.sort(gravityList);
-        for(Integer block : gravityList){
-            System.out.println(block + " = " + gravityList.indexOf(block));
+        double range = max - min;
+        double scale = 1;
+        if (range > MAX_GRAVITY) {
+            scale = range/MAX_GRAVITY;
         }
-            
+        
         for(Node n : nodes){
             Integer block = (Integer) n.getAttribute("block");
-            
             ForceAtlas2LayoutData nLayout = n.getLayoutData();
-            nLayout.gravitySource = gravityList.indexOf(block);
+            //Center middle source of gravity
+            nLayout.gravitySource = ((((block - min) - range/2)/scale));
+            System.out.println("Block: " + block + " Gravity: " + nLayout.gravitySource);
         }
+        System.out.println("Min: " + min + " Max: " + max + " Range: " + range + " Scale: " + scale);
 
         pool = Executors.newFixedThreadPool(threadCount);
         currentThreadCount = threadCount;
