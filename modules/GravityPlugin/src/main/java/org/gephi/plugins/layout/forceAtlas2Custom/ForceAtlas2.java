@@ -126,8 +126,21 @@ public class ForceAtlas2 implements Layout {
             }
             
             // Calculating data for multiple sources of gravity
-            Integer block_y = (Integer) n.getAttribute("block");
-            Integer block_x = (Integer) n.getAttribute("block");
+            double block_y = 0.0;
+            double block_x = 0.0;
+            
+            try {
+                block_x = (Integer) n.getAttribute("gravity_x");
+            }
+            catch (IllegalArgumentException ex){
+                System.out.println("LOG: Missing 'gravity_x' attribute, using 0.0");
+            }
+            try {
+                block_y = (Integer) n.getAttribute("gravity_y");;
+            }
+            catch (IllegalArgumentException ex){
+                System.out.println("LOG: Missing 'gravity_y' attribute, using 0.0");
+            }
             
             if (block_x < min_x){
                 min_x = block_x;
@@ -164,8 +177,22 @@ public class ForceAtlas2 implements Layout {
         
         
         for(Node n : nodes){
-            Integer block_y = (Integer) n.getAttribute("block");
-            Integer block_x = (Integer) n.getAttribute("block");
+            double block_y = 0.0;
+            double block_x = 0.0;
+            
+            try {
+                block_x = (Integer) n.getAttribute("gravity_x");
+            }
+            catch (IllegalArgumentException ex){
+                System.out.println("LOG: Missing 'gravity_x' attribute, using 0.0");
+            }
+            try {
+                block_y = (Integer) n.getAttribute("gravity_y");;
+            }
+            catch (IllegalArgumentException ex){
+                System.out.println("LOG: Missing 'gravity_y' attribute, using 0.0");
+            }
+            
             
             ForceAtlas2LayoutData nLayout = n.getLayoutData();
             //Center middle source of gravity
