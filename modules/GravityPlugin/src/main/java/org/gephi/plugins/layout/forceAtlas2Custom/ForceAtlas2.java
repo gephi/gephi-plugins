@@ -94,6 +94,8 @@ public class ForceAtlas2 implements Layout {
     double outboundAttCompensation = 1;
     private ExecutorService pool;
     private static final double MAX_GRAVITY = 100;
+    private double gravityXRatio;
+    private double gravityYRatio;
 
     public ForceAtlas2(ForceAtlas2Builder layoutBuilder) {
         this.layoutBuilder = layoutBuilder;
@@ -123,6 +125,7 @@ public class ForceAtlas2 implements Layout {
                 n.setLayoutData(nLayout);
             }
             
+            // Calculating data for multiple sources of gravity
             Integer block_y = (Integer) n.getAttribute("block");
             Integer block_x = (Integer) n.getAttribute("block");
             
@@ -168,11 +171,11 @@ public class ForceAtlas2 implements Layout {
             //Center middle source of gravity
             nLayout.gravity_x = ((((block_x - min_x) - range_x/2)/scale_x));
             nLayout.gravity_y = ((((block_y - min_y) - range_y/2)/scale_y));
-            System.out.println("BlockX: " + block_x + " GravityX: " + nLayout.gravity_x);
-            System.out.println("BlockY: " + block_y + " GravityY: " + nLayout.gravity_y);
+            //System.out.println("BlockX: " + block_x + " GravityX: " + nLayout.gravity_x);
+            //System.out.println("BlockY: " + block_y + " GravityY: " + nLayout.gravity_y);
         }
-        System.out.println("MinX: " + min_x + " MaxX: " + max_x + " RangeX: " + range_x + " ScaleX: " + scale_x);
-        System.out.println("MinY: " + min_y + " MaxY: " + max_y + " RangeY: " + range_y + " ScaleY: " + scale_y);
+        //System.out.println("MinX: " + min_x + " MaxX: " + max_x + " RangeX: " + range_x + " ScaleX: " + scale_x);
+        //System.out.println("MinY: " + min_y + " MaxY: " + max_y + " RangeY: " + range_y + " ScaleY: " + scale_y);
 
         pool = Executors.newFixedThreadPool(threadCount);
         currentThreadCount = threadCount;
@@ -230,7 +233,7 @@ public class ForceAtlas2 implements Layout {
         for (int t = taskCount; t > 0; t--) {
             int from = (int) Math.floor(nodes.length * (t - 1) / taskCount);
             int to = (int) Math.floor(nodes.length * t / taskCount);
-            Future future = pool.submit(new NodesThread(nodes, from, to, isBarnesHutOptimize(), getBarnesHutTheta(), getGravity(), (isStrongGravityMode()) ? (ForceFactory.builder.getStrongGravity(getScalingRatio())) : (Repulsion), getScalingRatio(), rootRegion, Repulsion));
+            Future future = pool.submit(new NodesThread(nodes, from, to, isBarnesHutOptimize(), getBarnesHutTheta(), getGravity(), (isStrongGravityMode()) ? (ForceFactory.builder.getStrongGravity(getScalingRatio(), gravityXRatio, gravityYRatio)) : (Repulsion), getScalingRatio(), rootRegion, Repulsion));
             threads.add(future);
         }
         for (Future future : threads) {
@@ -379,7 +382,21 @@ public class ForceAtlas2 implements Layout {
                     "ForceAtlas2.scalingRatio.name",
                     NbBundle.getMessage(getClass(), "ForceAtlas2.scalingRatio.desc"),
                     "getScalingRatio", "setScalingRatio"));
-
+            properties.add(LayoutProperty.createProperty(
+                    this, Double.class,
+                    NbBundle.getMessage(getClass(), "ForceAtlas2.gravityXRatio.name"),
+                    FORCEATLAS2_TUNING,
+                    "ForceAtlas2.gravityXRatio.name",
+                    NbBundle.getMessage(getClass(), "ForceAtlas2.gravityXRatio.desc"),
+                    "getGravityXRatio", "setGravityXRatio"));
+            properties.add(LayoutProperty.createProperty(
+                    this, Double.class,
+                    NbBundle.getMessage(getClass(), "ForceAtlas2.gravityYRatio.name"),
+                    FORCEATLAS2_TUNING,
+                    "ForceAtlas2.gravityYRatio.name",
+                    NbBundle.getMessage(getClass(), "ForceAtlas2.gravityYRatio.desc"),
+                    "getGravityYRatio", "setGravityYRatio"));
+            
             properties.add(LayoutProperty.createProperty(
                     this, Boolean.class,
                     NbBundle.getMessage(getClass(), "ForceAtlas2.strongGravityMode.name"),
@@ -483,6 +500,9 @@ public class ForceAtlas2 implements Layout {
         }
         setStrongGravityMode(false);
         setGravity(1.);
+        
+        setGravityXRatio(2.5);
+        setGravityYRatio(2.5);
 
         // Behavior
         setOutboundAttractionDistribution(false);
@@ -551,6 +571,22 @@ public class ForceAtlas2 implements Layout {
 
     public void setScalingRatio(Double scalingRatio) {
         this.scalingRatio = scalingRatio;
+    }
+    
+    public Double getGravityXRatio() {
+        return this.gravityXRatio;
+    }
+
+    public void setGravityXRatio(Double gravityXRatio) {
+        this.gravityXRatio = gravityXRatio;
+    }
+    
+    public Double getGravityYRatio() {
+        return this.gravityYRatio;
+    }
+
+    public void setGravityYRatio(Double gravityYRatio) {
+        this.gravityYRatio = gravityYRatio;
     }
 
     public Boolean isStrongGravityMode() {

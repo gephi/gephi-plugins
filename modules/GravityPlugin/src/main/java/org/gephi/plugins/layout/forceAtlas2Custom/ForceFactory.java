@@ -64,8 +64,8 @@ public class ForceFactory {
         }
     }
 
-    public RepulsionForce getStrongGravity(double coefficient) {
-        return new strongGravity(coefficient);
+    public RepulsionForce getStrongGravity(double coefficient, double gravityXRatio, double gravityYRatio) {
+        return new strongGravity(coefficient, gravityXRatio, gravityYRatio);
     }
 
     public AttractionForce buildAttraction(boolean logAttraction, boolean distributedAttraction, boolean adjustBySize, double coefficient) {
@@ -271,9 +271,13 @@ public class ForceFactory {
     private class strongGravity extends RepulsionForce {
 
         private double coefficient;
+        private double gravityXCoeff;
+        private double gravityYCoeff;
 
-        public strongGravity(double c) {
+        public strongGravity(double c, double gravityXRatio, double gravityYRatio) {
             coefficient = c;
+            gravityXCoeff = gravityXRatio;
+            gravityYCoeff = gravityYRatio;
         }
 
         @Override
@@ -291,8 +295,8 @@ public class ForceFactory {
             ForceAtlas2LayoutData nLayout = n.getLayoutData();
 
             // Get the distance
-            double gx = nLayout.gravity_x * (2.5 * coefficient);
-            double gy = nLayout.gravity_y * (2.5 * coefficient);
+            double gx = nLayout.gravity_x * (gravityXCoeff * coefficient);
+            double gy = nLayout.gravity_y * (gravityYCoeff * coefficient);
                     
             double xDist = n.x() - gx;
             double yDist = n.y() - gy;
