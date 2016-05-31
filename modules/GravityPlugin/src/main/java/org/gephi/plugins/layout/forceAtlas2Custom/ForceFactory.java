@@ -291,10 +291,11 @@ public class ForceFactory {
             ForceAtlas2LayoutData nLayout = n.getLayoutData();
 
             // Get the distance
-            double gx = nLayout.gravitySource * (2.5 * coefficient);
+            double gx = nLayout.gravity_x * (2.5 * coefficient);
+            double gy = nLayout.gravity_y * (2.5 * coefficient);
                     
             double xDist = n.x() - gx;
-            double yDist = n.y();
+            double yDist = n.y() - gy;
             double distance = (float) Math.sqrt(xDist * xDist + yDist * yDist);
 
             if (distance > 0) {

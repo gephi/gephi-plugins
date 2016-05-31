@@ -48,11 +48,7 @@
 package org.gephi.plugins.layout.forceAtlas2Custom;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -105,10 +101,7 @@ public class ForceAtlas2 implements Layout {
     }
 
     @Override
-    public void initAlgo() {
-        // For sources of gravity
-        List<Integer> gravityXList = new ArrayList<Integer>();
-        
+    public void initAlgo() {        
         speed = 1.;
         speedEfficiency = 1.;
 
@@ -119,23 +112,31 @@ public class ForceAtlas2 implements Layout {
 
         // Initialise layout data
         
-        // Gravity sources counter
-        double min = Double.POSITIVE_INFINITY;
-        double max = 0;
+        // Gravity sources adjustment parameters
+        double min_x = Double.POSITIVE_INFINITY;
+        double max_x = 0;
+        double min_y = Double.POSITIVE_INFINITY;
+        double max_y = 0;
         for (Node n : nodes) {
             if (n.getLayoutData() == null || !(n.getLayoutData() instanceof ForceAtlas2LayoutData)) {
                 ForceAtlas2LayoutData nLayout = new ForceAtlas2LayoutData();
                 n.setLayoutData(nLayout);
             }
             
+            Integer block_y = (Integer) n.getAttribute("block");
+            Integer block_x = (Integer) n.getAttribute("block");
             
-            Integer block = (Integer) n.getAttribute("block");
-            
-            if (block < min){
-                min = block;
+            if (block_x < min_x){
+                min_x = block_x;
             }
-            if (block > max) {
-                max = block;
+            if (block_x > max_x) {
+                max_x = block_x;
+            }
+            if (block_y < min_y){
+                min_y = block_y;
+            }
+            if (block_y > max_y) {
+                max_y = block_y;
             }
             
             ForceAtlas2LayoutData nLayout = n.getLayoutData();
@@ -145,20 +146,33 @@ public class ForceAtlas2 implements Layout {
             nLayout.dx = 0;
             nLayout.dy = 0;
         }
-        double range = max - min;
-        double scale = 1;
-        if (range > MAX_GRAVITY) {
-            scale = range/MAX_GRAVITY;
+        
+        double range_x = max_x - min_x;
+        double scale_x = 1;
+        if (range_x > MAX_GRAVITY) {
+            scale_x = range_x/MAX_GRAVITY;
         }
         
+        double range_y = max_y - min_y;
+        double scale_y = 1;
+        if (range_y > MAX_GRAVITY) {
+            scale_y = range_y/MAX_GRAVITY;
+        }
+        
+        
         for(Node n : nodes){
-            Integer block = (Integer) n.getAttribute("block");
+            Integer block_y = (Integer) n.getAttribute("block");
+            Integer block_x = (Integer) n.getAttribute("block");
+            
             ForceAtlas2LayoutData nLayout = n.getLayoutData();
             //Center middle source of gravity
-            nLayout.gravitySource = ((((block - min) - range/2)/scale));
-            System.out.println("Block: " + block + " Gravity: " + nLayout.gravitySource);
+            nLayout.gravity_x = ((((block_x - min_x) - range_x/2)/scale_x));
+            nLayout.gravity_y = ((((block_y - min_y) - range_y/2)/scale_y));
+            System.out.println("BlockX: " + block_x + " GravityX: " + nLayout.gravity_x);
+            System.out.println("BlockY: " + block_y + " GravityY: " + nLayout.gravity_y);
         }
-        System.out.println("Min: " + min + " Max: " + max + " Range: " + range + " Scale: " + scale);
+        System.out.println("MinX: " + min_x + " MaxX: " + max_x + " RangeX: " + range_x + " ScaleX: " + scale_x);
+        System.out.println("MinY: " + min_y + " MaxY: " + max_y + " RangeY: " + range_y + " ScaleY: " + scale_y);
 
         pool = Executors.newFixedThreadPool(threadCount);
         currentThreadCount = threadCount;

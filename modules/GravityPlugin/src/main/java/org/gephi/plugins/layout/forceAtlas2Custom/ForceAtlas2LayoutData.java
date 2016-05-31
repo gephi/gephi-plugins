@@ -56,5 +56,6 @@ public class ForceAtlas2LayoutData implements LayoutData {
     public double old_dy = 0;
     public double mass = 1;
     // Gravity source
-    public double gravitySource = 0;
+    public double gravity_x = 0;
+    public double gravity_y = 0;
 }
