@@ -119,6 +119,8 @@ public class ForceAtlas2 implements Layout {
         double max_x = 0;
         double min_y = Double.POSITIVE_INFINITY;
         double max_y = 0;
+        int missing = 0;
+
         for (Node n : nodes) {
             if (n.getLayoutData() == null || !(n.getLayoutData() instanceof ForceAtlas2LayoutData)) {
                 ForceAtlas2LayoutData nLayout = new ForceAtlas2LayoutData();
@@ -128,18 +130,19 @@ public class ForceAtlas2 implements Layout {
             // Calculating data for multiple sources of gravity
             double block_y = 0.0;
             double block_x = 0.0;
-            
             try {
                 block_x = (Integer) n.getAttribute("gravity_x");
             }
             catch (IllegalArgumentException ex){
-                System.out.println("LOG: Missing 'gravity_x' attribute, using 0.0");
+                missing++;
+                //System.out.println("LOG: Missing 'gravity_x' attribute, using 0.0");
             }
             try {
                 block_y = (Integer) n.getAttribute("gravity_y");;
             }
             catch (IllegalArgumentException ex){
-                System.out.println("LOG: Missing 'gravity_y' attribute, using 0.0");
+                missing++;
+                //System.out.println("LOG: Missing 'gravity_y' attribute, using 0.0");
             }
             
             if (block_x < min_x){
@@ -184,13 +187,13 @@ public class ForceAtlas2 implements Layout {
                 block_x = (Integer) n.getAttribute("gravity_x");
             }
             catch (IllegalArgumentException ex){
-                System.out.println("LOG: Missing 'gravity_x' attribute, using 0.0");
+                //System.out.println("LOG: Missing 'gravity_x' attribute, using 0.0");
             }
             try {
                 block_y = (Integer) n.getAttribute("gravity_y");;
             }
             catch (IllegalArgumentException ex){
-                System.out.println("LOG: Missing 'gravity_y' attribute, using 0.0");
+                //System.out.println("LOG: Missing 'gravity_y' attribute, using 0.0");
             }
             
             
@@ -203,7 +206,10 @@ public class ForceAtlas2 implements Layout {
         }
         //System.out.println("MinX: " + min_x + " MaxX: " + max_x + " RangeX: " + range_x + " ScaleX: " + scale_x);
         //System.out.println("MinY: " + min_y + " MaxY: " + max_y + " RangeY: " + range_y + " ScaleY: " + scale_y);
-
+        if (missing > 0) {
+            System.out.println("Some nodes missing attributes(" + missing + ") 'gravity_x' or 'gravity_y', using 0.0 instead");
+        }
+        
         pool = Executors.newFixedThreadPool(threadCount);
         currentThreadCount = threadCount;
     }
