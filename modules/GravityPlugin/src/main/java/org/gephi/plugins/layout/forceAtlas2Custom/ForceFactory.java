@@ -271,7 +271,9 @@ public class ForceFactory {
     private class strongGravity extends RepulsionForce {
 
         private double coefficient;
+        // Scaling distance between x gravities
         private double gravityXCoeff;
+        // Scalind distance between y gravities
         private double gravityYCoeff;
 
         public strongGravity(double c, double gravityXRatio, double gravityYRatio) {
@@ -294,7 +296,7 @@ public class ForceFactory {
         public void apply(Node n, double g) {
             ForceAtlas2LayoutData nLayout = n.getLayoutData();
 
-            // Get the distance
+            // Get the distance to respective sources of gravity 
             double gx = nLayout.gravity_x * (gravityXCoeff * coefficient);
             double gy = nLayout.gravity_y * (gravityYCoeff * coefficient);
                     

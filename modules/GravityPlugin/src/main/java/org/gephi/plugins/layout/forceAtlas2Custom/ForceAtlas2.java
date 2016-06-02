@@ -113,7 +113,6 @@ public class ForceAtlas2 implements Layout {
         Node[] nodes = graph.getNodes().toArray();
 
         // Initialise layout data
-        
         // Gravity sources adjustment parameters
         double min_x = Double.POSITIVE_INFINITY;
         double max_x = 0;
@@ -128,35 +127,27 @@ public class ForceAtlas2 implements Layout {
             }
             
             // Calculating data for multiple sources of gravity
-            double block_y = 0.0;
-            double block_x = 0.0;
+            double gravity_y = 0.0;
+            double gravity_x = 0.0;
+            // Try to access gravity_x and gravity_y attributes
             try {
-                block_x = (Integer) n.getAttribute("gravity_x");
+                gravity_x = (Double) n.getAttribute("gravity_x");
             }
             catch (IllegalArgumentException ex){
                 missing++;
-                //System.out.println("LOG: Missing 'gravity_x' attribute, using 0.0");
             }
             try {
-                block_y = (Integer) n.getAttribute("gravity_y");;
+                gravity_y = (Double) n.getAttribute("gravity_y");;
             }
             catch (IllegalArgumentException ex){
                 missing++;
-                //System.out.println("LOG: Missing 'gravity_y' attribute, using 0.0");
             }
             
-            if (block_x < min_x){
-                min_x = block_x;
-            }
-            if (block_x > max_x) {
-                max_x = block_x;
-            }
-            if (block_y < min_y){
-                min_y = block_y;
-            }
-            if (block_y > max_y) {
-                max_y = block_y;
-            }
+            // Calculate gravity range to scale down if needed
+            if (gravity_x < min_x) min_x = gravity_x;
+            if (gravity_x > max_x) max_x = gravity_x;           
+            if (gravity_y < min_y) min_y = gravity_y;            
+            if (gravity_y > max_y) max_y = gravity_y;
             
             ForceAtlas2LayoutData nLayout = n.getLayoutData();
             nLayout.mass = 1 + graph.getDegree(n);
@@ -166,46 +157,42 @@ public class ForceAtlas2 implements Layout {
             nLayout.dy = 0;
         }
         
+        // Scaling down gravity_x
         double range_x = max_x - min_x;
         double scale_x = 1;
         if (range_x > MAX_GRAVITY) {
             scale_x = range_x/MAX_GRAVITY;
         }
-        
+        // Scaling down gravity_y
         double range_y = max_y - min_y;
         double scale_y = 1;
         if (range_y > MAX_GRAVITY) {
             scale_y = range_y/MAX_GRAVITY;
         }
         
-        
+        // Setting Layout data for gravity sources
         for(Node n : nodes){
-            double block_y = 0.0;
-            double block_x = 0.0;
+            double gravity_y = 0.0;
+            double gravity_x = 0.0;
             
             try {
-                block_x = (Integer) n.getAttribute("gravity_x");
+                gravity_x = (Double) n.getAttribute("gravity_x");
             }
             catch (IllegalArgumentException ex){
-                //System.out.println("LOG: Missing 'gravity_x' attribute, using 0.0");
             }
+            
             try {
-                block_y = (Integer) n.getAttribute("gravity_y");;
+                gravity_y = (Double) n.getAttribute("gravity_y");;
             }
             catch (IllegalArgumentException ex){
-                //System.out.println("LOG: Missing 'gravity_y' attribute, using 0.0");
             }
-            
-            
+
             ForceAtlas2LayoutData nLayout = n.getLayoutData();
             //Center middle source of gravity
-            nLayout.gravity_x = ((((block_x - min_x) - range_x/2)/scale_x));
-            nLayout.gravity_y = ((((block_y - min_y) - range_y/2)/scale_y));
-            //System.out.println("BlockX: " + block_x + " GravityX: " + nLayout.gravity_x);
-            //System.out.println("BlockY: " + block_y + " GravityY: " + nLayout.gravity_y);
+            nLayout.gravity_x = ((((gravity_x - min_x) - range_x/2)/scale_x));
+            nLayout.gravity_y = ((((gravity_y - min_y) - range_y/2)/scale_y));
         }
-        //System.out.println("MinX: " + min_x + " MaxX: " + max_x + " RangeX: " + range_x + " ScaleX: " + scale_x);
-        //System.out.println("MinY: " + min_y + " MaxY: " + max_y + " RangeY: " + range_y + " ScaleY: " + scale_y);
+        
         if (missing > 0) {
             System.out.println("Some nodes missing attributes(" + missing + ") 'gravity_x' or 'gravity_y', using 0.0 instead");
         }

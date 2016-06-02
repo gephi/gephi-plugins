@@ -15,7 +15,6 @@
     <name>Gravity Plugin</name>
 
     <dependencies>
-        <!-- Insert dependencies here -->
         <dependency>
             <groupId>org.gephi</groupId>
             <artifactId>graph-api</artifactId>
@@ -48,7 +47,6 @@
                     <authorUrl></authorUrl>
                     <sourceCodeUrl>$sourcecode_url</sourceCodeUrl>
                     <publicPackages>
-                        <!-- Insert public packages -->
                     </publicPackages>
                 </configuration>
             </plugin>
