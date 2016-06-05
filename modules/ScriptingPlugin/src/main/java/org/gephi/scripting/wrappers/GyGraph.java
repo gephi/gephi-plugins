@@ -90,6 +90,13 @@ public class GyGraph extends GySubGraph {
 
         // Instantiates the new node and adds it to the graph
         node = namespace.getGraphModel().factory().newNode();
+        
+        //Default size not too small:
+        node.setSize(10);
+        //Set random position to the node:
+        node.setX((float) ((0.01 + Math.random()) * 1000) - 500);
+        node.setY((float) ((0.01 + Math.random()) * 1000) - 500);
+        
         namespace.getGraphModel().getGraph().addNode(node);
         ret = namespace.getGyNode((String) node.getId());
 

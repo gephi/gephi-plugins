@@ -50,7 +50,6 @@ import org.gephi.filters.plugin.graph.InDegreeRangeBuilder;
 import org.gephi.filters.plugin.graph.InDegreeRangeBuilder.InDegreeRangeFilter;
 import org.gephi.filters.plugin.graph.OutDegreeRangeBuilder;
 import org.gephi.filters.plugin.graph.OutDegreeRangeBuilder.OutDegreeRangeFilter;
-import org.gephi.filters.spi.FilterBuilder;
 import org.gephi.scripting.util.GyNamespace;
 import org.openide.util.Lookup;
 import org.python.core.Py;
@@ -133,15 +132,15 @@ public class GyAttributeTopology extends GyAttribute {
 
         if (topologyType == Type.DEGREE) {
             DegreeRangeFilter degreeRangeFilter = new DegreeRangeBuilder.DegreeRangeFilter();
-            query = filterController.createQuery((FilterBuilder) degreeRangeFilter);
+            query = filterController.createQuery(degreeRangeFilter);
             degreeRangeFilter.setRange(range);
         } else if (topologyType == Type.IN_DEGREE) {
             InDegreeRangeFilter inDegreeRangeFilter = new InDegreeRangeBuilder.InDegreeRangeFilter();
-            query = filterController.createQuery((FilterBuilder) inDegreeRangeFilter);
+            query = filterController.createQuery(inDegreeRangeFilter);
             inDegreeRangeFilter.setRange(range);
         } else if (topologyType == Type.OUT_DEGREE) {
             OutDegreeRangeFilter outDegreeRangeFilter = new OutDegreeRangeBuilder.OutDegreeRangeFilter();
-            query = filterController.createQuery((FilterBuilder) outDegreeRangeFilter);
+            query = filterController.createQuery(outDegreeRangeFilter);
             outDegreeRangeFilter.setRange(range);
         } else {
             // Shouldn't happen ever
