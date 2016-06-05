@@ -44,7 +44,6 @@ package org.gephi.scripting.wrappers;
 import java.util.Iterator;
 import org.gephi.filters.api.FilterController;
 import org.gephi.filters.api.Query;
-import org.gephi.filters.spi.FilterBuilder;
 import org.gephi.graph.api.Edge;
 import org.gephi.graph.api.EdgeIterable;
 import org.gephi.graph.api.Graph;
@@ -181,7 +180,7 @@ public class GySubGraph extends PyObject {
 
         if (constructionQuery != null) {
             // If we have a construction query for this subgraph, use it as a sub query
-            query = filterController.createQuery((FilterBuilder) filter.getUnderlyingQuery().getFilter());
+            query = filterController.createQuery(filter.getUnderlyingQuery().getFilter());
             filterController.setSubQuery(query, constructionQuery);
         } else {
             // If this is the main graph, just use the filter passed as argument

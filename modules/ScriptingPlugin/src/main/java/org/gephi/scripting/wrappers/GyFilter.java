@@ -45,7 +45,6 @@ import org.gephi.filters.api.FilterController;
 import org.gephi.filters.api.Query;
 import org.gephi.filters.plugin.operator.INTERSECTIONBuilder.IntersectionOperator;
 import org.gephi.filters.plugin.operator.UNIONBuilder.UnionOperator;
-import org.gephi.filters.spi.FilterBuilder;
 import org.gephi.scripting.util.GyNamespace;
 import org.openide.util.Lookup;
 import org.python.core.PyObject;
@@ -98,8 +97,9 @@ public class GyFilter extends PyObject {
     public PyObject __and__(PyObject obj) {
         if (obj instanceof GyFilter) {
             FilterController filterController = Lookup.getDefault().lookup(FilterController.class);
+            
             IntersectionOperator intersectionOperator = new IntersectionOperator();
-            Query andQuery = filterController.createQuery((FilterBuilder) intersectionOperator);
+            Query andQuery = filterController.createQuery(intersectionOperator);
             GyFilter otherFilter = (GyFilter) obj;
 
             filterController.setSubQuery(andQuery, underlyingQuery);
@@ -116,7 +116,7 @@ public class GyFilter extends PyObject {
         if (obj instanceof GyFilter) {
             FilterController filterController = Lookup.getDefault().lookup(FilterController.class);
             UnionOperator unionOperator = new UnionOperator();
-            Query orQuery = filterController.createQuery((FilterBuilder) unionOperator);
+            Query orQuery = filterController.createQuery(unionOperator);
             GyFilter otherFilter = (GyFilter) obj;
 
             filterController.setSubQuery(orQuery, underlyingQuery);

@@ -80,6 +80,8 @@ def addFilter(filter, name = None):
 
     FilterController.add(filter.getUnderlyingQuery())
 
+def removeFilter(filter):
+    FilterController.remove(filter.getUnderlyingQuery())
 
 #
 # Attributes API support
@@ -192,6 +194,7 @@ def execurl(url):
 #
 
 add_filter = addFilter
+remove_filter = removeFilter
 get_node_attributes = getNodeAttributes
 get_edge_attributes = getEdgeAttributes
 get_layout_builders = getLayoutBuilders
