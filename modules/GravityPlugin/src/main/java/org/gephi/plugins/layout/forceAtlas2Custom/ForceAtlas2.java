@@ -133,15 +133,23 @@ public class ForceAtlas2 implements Layout {
             try {
                 gravity_x = (Double) n.getAttribute("gravity_x");
             }
-            catch (IllegalArgumentException ex){
+            catch (IllegalArgumentException  ex){
                 missing++;
             }
+            catch (NullPointerException ex){
+                missing++;
+            }
+            
             try {
                 gravity_y = (Double) n.getAttribute("gravity_y");;
             }
             catch (IllegalArgumentException ex){
                 missing++;
             }
+            catch (NullPointerException ex){
+                missing++;
+            }
+            
             
             // Calculate gravity range to scale down if needed
             if (gravity_x < min_x) min_x = gravity_x;
@@ -180,11 +188,15 @@ public class ForceAtlas2 implements Layout {
             }
             catch (IllegalArgumentException ex){
             }
+            catch (NullPointerException ex){  
+            }
             
             try {
                 gravity_y = (Double) n.getAttribute("gravity_y");;
             }
             catch (IllegalArgumentException ex){
+            }
+            catch (NullPointerException ex){  
             }
 
             ForceAtlas2LayoutData nLayout = n.getLayoutData();
