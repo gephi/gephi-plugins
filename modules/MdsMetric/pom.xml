@@ -33,8 +33,6 @@
             <groupId>MDSJ-Group</groupId>
             <artifactId>MDSJ</artifactId>
             <version>0.2</version>
-	    <scope>system</scope>
-	    <systemPath>${basedir}/src/main/resources/org/wouterspekkink/plugins/metric/mdsstatistics/mdsj.jar</systemPath>
         </dependency>
                 <dependency>
             <groupId>org.netbeans.api</groupId>
