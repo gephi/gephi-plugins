@@ -2365,7 +2365,28 @@
       ],
       "category": "Import",
       "last_update": "August 27, 2016",
-      "images": null,
+      "images": [
+        {
+          "image": "imgs/ExcelCsvImporter/1.png",
+          "thumbnail": "imgs/ExcelCsvImporter/1-thumbnail.png"
+        },
+        {
+          "image": "imgs/ExcelCsvImporter/bipartite.png",
+          "thumbnail": "imgs/ExcelCsvImporter/bipartite-thumbnail.png"
+        },
+        {
+          "image": "imgs/ExcelCsvImporter/excel.png",
+          "thumbnail": "imgs/ExcelCsvImporter/excel-thumbnail.png"
+        },
+        {
+          "image": "imgs/ExcelCsvImporter/network-bipartite.png",
+          "thumbnail": "imgs/ExcelCsvImporter/network-bipartite-thumbnail.png"
+        },
+        {
+          "image": "imgs/ExcelCsvImporter/network.png",
+          "thumbnail": "imgs/ExcelCsvImporter/network-thumbnail.png"
+        }
+      ],
       "versions": {
         "0.9.1": {
           "url": "0.9.1/ExcelCsvImporter-1.0.0.nbm",
