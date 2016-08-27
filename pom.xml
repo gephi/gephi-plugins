@@ -35,6 +35,7 @@
         <module>modules/TwitterStreamingImporter</module>
         <module>modules/IsometricLayout</module>
         <module>modules/NetworkSplitter3D</module>
+        <module>modules/ExcelCsvImporter</module>
     </modules>
     
     <!-- Properties -->
