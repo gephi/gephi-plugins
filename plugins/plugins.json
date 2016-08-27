@@ -15,7 +15,7 @@
         }
       ],
       "category": "Layout",
-      "last_update": "June 5, 2016",
+      "last_update": "August 27, 2016",
       "images": [
         {
           "image": "imgs/geolayout-plugin/geolayout_example.png",
@@ -37,7 +37,7 @@
         },
         "0.9.1": {
           "url": "0.9.1/geolayout-plugin-0.9.1.1.nbm",
-          "last_update": "June 5, 2016"
+          "last_update": "August 27, 2016"
         }
       },
       "sourcecode": "https://github.com/gephi/gephi-plugins/geolayout-plugin",
@@ -58,7 +58,7 @@
         }
       ],
       "category": "Tool",
-      "last_update": "June 5, 2016",
+      "last_update": "August 27, 2016",
       "images": [
         {
           "image": "imgs/linkfluence-plugin/img.png",
@@ -72,7 +72,7 @@
         },
         "0.9.1": {
           "url": "0.9.1/linkfluence-plugin-0.9.0.nbm",
-          "last_update": "June 5, 2016"
+          "last_update": "August 27, 2016"
         }
       },
       "sourcecode": "https://github.com/eduramiba/gephi-plugins/tree/linkfluence-plugin",
@@ -487,7 +487,7 @@
         }
       ],
       "category": "Export",
-      "last_update": "June 5, 2016",
+      "last_update": "August 27, 2016",
       "images": null,
       "versions": {
         "0.8.2": {
@@ -496,7 +496,7 @@
         },
         "0.9.1": {
           "url": "0.9.1/exporttoearth-1.0.0.nbm",
-          "last_update": "June 5, 2016"
+          "last_update": "August 27, 2016"
         }
       },
       "sourcecode": "http://github.com/shepdl/gephi-plugins/tree/export-to-earth",
@@ -543,7 +543,7 @@
         }
       ],
       "category": "Filter",
-      "last_update": "June 5, 2016",
+      "last_update": "August 27, 2016",
       "images": [
         {
           "image": "imgs/kbrace-filter/kbrace-img.png",
@@ -561,7 +561,7 @@
         },
         "0.9.1": {
           "url": "0.9.1/kbrace-filter-1.0.0.nbm",
-          "last_update": "June 5, 2016"
+          "last_update": "August 27, 2016"
         }
       },
       "sourcecode": "https://github.com/mbastian/gephi-plugins/tree/kbrace-filter",
@@ -1000,7 +1000,7 @@
         }
       ],
       "category": "Layout",
-      "last_update": "June 5, 2016",
+      "last_update": "August 27, 2016",
       "images": [
         {
           "image": "imgs/network-splitter-3d/example-0-networksplitter3d-layout.png",
@@ -1014,7 +1014,7 @@
         },
         "0.9.1": {
           "url": "0.9.1/network-splitter-3d-1.0.0.nbm",
-          "last_update": "June 5, 2016"
+          "last_update": "August 27, 2016"
         }
       },
       "sourcecode": "https://github.com/alexandrebarao",
@@ -1932,7 +1932,7 @@
         }
       ],
       "category": "Tool",
-      "last_update": "June 5, 2016",
+      "last_update": "August 27, 2016",
       "images": null,
       "versions": {
         "0.8.2": {
@@ -1945,7 +1945,7 @@
         },
         "0.9.1": {
           "url": "0.9.1/multimode-1.0.0.nbm",
-          "last_update": "June 5, 2016"
+          "last_update": "August 27, 2016"
         }
       },
       "sourcecode": "https://github.com/totetmatt/gephi-plugins/tree/multimode-network",
@@ -1966,7 +1966,7 @@
         }
       ],
       "category": "Export",
-      "last_update": "June 5, 2016",
+      "last_update": "August 27, 2016",
       "images": null,
       "versions": {
         "0.8.2": {
@@ -1979,7 +1979,7 @@
         },
         "0.9.1": {
           "url": "0.9.1/jsonexporter-plugin-2.0.0.nbm",
-          "last_update": "June 5, 2016"
+          "last_update": "August 27, 2016"
         }
       },
       "sourcecode": "http://github.com/oxfordinternetinstitute/gephi-plugins",
@@ -2000,7 +2000,7 @@
         }
       ],
       "category": "Export",
-      "last_update": "June 5, 2016",
+      "last_update": "August 27, 2016",
       "images": null,
       "versions": {
         "0.8.2": {
@@ -2013,7 +2013,7 @@
         },
         "0.9.1": {
           "url": "0.9.1/sigmaexporter-0.9.0.nbm",
-          "last_update": "June 5, 2016"
+          "last_update": "August 27, 2016"
         }
       },
       "sourcecode": "http://github.com/oxfordinternetinstitute/gephi-plugins",
@@ -2034,7 +2034,7 @@
         }
       ],
       "category": "Tool",
-      "last_update": "June 5, 2016",
+      "last_update": "August 27, 2016",
       "images": null,
       "versions": {
         "0.9.0": {
@@ -2043,7 +2043,7 @@
         },
         "0.9.1": {
           "url": "0.9.1/gephi-plugin-node-color-manager-1.0.0.nbm",
-          "last_update": "June 5, 2016"
+          "last_update": "August 27, 2016"
         }
       },
       "sourcecode": "https://github.com/gephi/gephi-plugins/gephi-plugin-node-color-manager",
@@ -2064,7 +2064,7 @@
         }
       ],
       "category": "Layout",
-      "last_update": "June 5, 2016",
+      "last_update": "August 27, 2016",
       "images": [
         {
           "image": "imgs/gephigraphviz/GraphVizLayout_example.png",
@@ -2086,7 +2086,7 @@
         },
         "0.9.1": {
           "url": "0.9.1/gephigraphviz-1.0.0.nbm",
-          "last_update": "June 5, 2016"
+          "last_update": "August 27, 2016"
         }
       },
       "sourcecode": "https://github.com/chunky/gephi-plugins",
@@ -2107,12 +2107,12 @@
         }
       ],
       "category": "Import",
-      "last_update": "June 5, 2016",
+      "last_update": "August 27, 2016",
       "images": null,
       "versions": {
         "0.9.1": {
           "url": "0.9.1/graphstreaming-1.0.0.zip",
-          "last_update": "June 5, 2016"
+          "last_update": "August 27, 2016"
         }
       },
       "sourcecode": "https://github.com/panisson/gephi-plugins/tree/graph-streaming",
@@ -2133,12 +2133,12 @@
         }
       ],
       "category": "Layout",
-      "last_update": "June 5, 2016",
+      "last_update": "August 27, 2016",
       "images": null,
       "versions": {
         "0.9.1": {
           "url": "0.9.1/circularlayout-0.9.1.nbm",
-          "last_update": "June 5, 2016"
+          "last_update": "August 27, 2016"
         }
       },
       "sourcecode": "https://github.com/mgroeninger/gephi-plugins",
@@ -2159,7 +2159,7 @@
         }
       ],
       "category": "Import",
-      "last_update": "June 5, 2016",
+      "last_update": "August 27, 2016",
       "images": [
         {
           "image": "imgs/semantic/icon.png",
@@ -2177,7 +2177,7 @@
       "versions": {
         "0.9.1": {
           "url": "0.9.1/semantic-1.0.0.nbm",
-          "last_update": "June 5, 2016"
+          "last_update": "August 27, 2016"
         }
       },
       "sourcecode": "https://github.com/Wimmics/gephi-semantic-web-import",
@@ -2198,7 +2198,7 @@
         }
       ],
       "category": "Export",
-      "last_update": "June 5, 2016",
+      "last_update": "August 27, 2016",
       "images": [
         {
           "image": "imgs/loxawebsiteexport/logo_final.png",
@@ -2208,7 +2208,7 @@
       "versions": {
         "0.9.1": {
           "url": "0.9.1/loxawebsiteexport-0.3.2.nbm",
-          "last_update": "June 5, 2016"
+          "last_update": "August 27, 2016"
         }
       },
       "sourcecode": "https://github.com/jorgaf/gephi-plugins",
@@ -2229,12 +2229,12 @@
         }
       ],
       "category": "Layout",
-      "last_update": "June 5, 2016",
+      "last_update": "August 27, 2016",
       "images": null,
       "versions": {
         "0.9.1": {
           "url": "0.9.1/clementlevallois-1.0.0.nbm",
-          "last_update": "June 5, 2016"
+          "last_update": "August 27, 2016"
         }
       },
       "sourcecode": "https://github.com/seinecle/gephi-plugins/tree/mapOfCountriesBranch",
@@ -2255,7 +2255,7 @@
         }
       ],
       "category": "Tool",
-      "last_update": "June 5, 2016",
+      "last_update": "August 27, 2016",
       "images": [
         {
           "image": "imgs/scripting.plugin/img1.png",
@@ -2265,7 +2265,7 @@
       "versions": {
         "0.9.1": {
           "url": "0.9.1/scripting.plugin-0.9.1.1.nbm",
-          "last_update": "June 5, 2016"
+          "last_update": "August 27, 2016"
         }
       },
       "sourcecode": "https://github.com/gephi/gephi-plugins/tree/python-scripting-plugin",
@@ -2286,7 +2286,7 @@
         }
       ],
       "category": "Import",
-      "last_update": "June 5, 2016",
+      "last_update": "August 27, 2016",
       "images": [
         {
           "image": "imgs/twitter-streaming-importer/A_Screenshot.png",
@@ -2312,7 +2312,7 @@
       "versions": {
         "0.9.1": {
           "url": "0.9.1/twitter-streaming-importer-1.0.0.nbm",
-          "last_update": "June 5, 2016"
+          "last_update": "August 27, 2016"
         }
       },
       "sourcecode": "https://github.com/totetmatt/gephi-plugins/tree/twitter",
@@ -2333,7 +2333,7 @@
         }
       ],
       "category": "Layout",
-      "last_update": "June 5, 2016",
+      "last_update": "August 27, 2016",
       "images": [
         {
           "image": "imgs/isometric-layout/example-0-isometric-layout.png",
@@ -2343,11 +2343,37 @@
       "versions": {
         "0.9.1": {
           "url": "0.9.1/isometric-layout-1.0.0.nbm",
-          "last_update": "June 5, 2016"
+          "last_update": "August 27, 2016"
         }
       },
       "sourcecode": "https://github.com/alexandrebarao",
       "homepage": null
+    },
+    {
+      "id": "ExcelCsvImporter",
+      "name": "Convert Excel and csv files to networks",
+      "short_description": "Converts Excel files and csv files into networks",
+      "long_description": "\u003ch2\u003eConvert Excel and csv files to networks (including dynamic!)\u003c/h2\u003e\n\nThis plugin helps you import Excel files and csv files into Gephi, by transforming them into networks.\u003cbr\u003e\nIt takes the rows of your file and let you define which relations should be found in it.\u003cbr\u003e\n\u003cbr\u003e\nPlease post issues and ask for feature request on \u003ca href\u003d\"https://github.com/seinecle/My-Plugins-for-Gephi\"\u003eGithub\u003c/a\u003e.\u003cbr\u003e\n\u003cbr\u003e\nOr contact me (Clement Levallois) via Twitter @seinecle.\u003cbr\u003e\n\u003cbr\u003e\n\n\n\u003ch3\u003eRelease History:\u003c/h3\u003e\n\u003cb\u003eVersion 1.4.3 (November 2014)\u003c/b\u003e\u003cbr\u003e\n-\u003e Bug fix for a null pointer exception. Bug report by Xin Xin of University of North Texas.\u003cbr\u003e\n\u003cbr\u003e\n\u003cb\u003eVersion 1.4.2 (September 2014)\u003c/b\u003e\u003cbr\u003e\n-\u003e Bug fix for numerical values in Excel file: now \"96\" is accepted as a valid name for the name of node (before, the line would have been ignored). Added a warning that for Excel, only .xlsx files are accepted (not .xls)\u003cbr\u003e\n\u003cbr\u003e\n\u003cb\u003eVersion 1.4.1 (September 2014)\u003c/b\u003e\u003cbr\u003e\n-\u003e Bug fix for time intervals in the Excel file: now \"2013-05-12, 2013-05-13\" is accepted. The bug was that the space after the comma would have caused the line to be ignored.\u003cbr\u003e\n\u003cbr\u003e\n\u003cb\u003eVersion 1.4 (September 2014)\u003c/b\u003e\u003cbr\u003e\n-\u003e Added support for temporal networks.\u003cbr\u003e\n\u003cbr\u003e\n\u003cb\u003eVersion 1.3 (March 2014)\u003c/b\u003e\u003cbr\u003e\n-\u003e Bug fix (suggested by Wouters A.H. Spekkink)\u003cbr\u003e\nSame names in different columns of the Excel of csv files are now correctly analyzed.\u003cbr\u003e\n\u003cbr\u003e\n\u003cb\u003eVersion 1.0 (October 2013)\u003c/b\u003e\u003cbr\u003e\n-\u003e Initial release.\u003cbr\u003e",
+      "readme": null,
+      "license": "Apache v2",
+      "authors": [
+        {
+          "name": "Clement Levalllois (@seinecle)",
+          "email": null,
+          "link": null
+        }
+      ],
+      "category": "Import",
+      "last_update": "August 27, 2016",
+      "images": null,
+      "versions": {
+        "0.9.1": {
+          "url": "0.9.1/ExcelCsvImporter-1.0.0.nbm",
+          "last_update": "August 27, 2016"
+        }
+      },
+      "sourcecode": "https://github.com/seinecle/gephi-plugins/tree/ExcelCsvImporter",
+      "homepage": "http://www.clementlevallois.net"
     }
   ]
 }
