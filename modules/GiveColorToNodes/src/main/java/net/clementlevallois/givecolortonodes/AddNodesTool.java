@@ -100,6 +100,9 @@ public class AddNodesTool implements Tool {
 
         for (Node node : graph.getNodes().toArray()) {
             String colorString = (String) node.getAttribute(color);
+            if (colorString == null) {
+                colorString = "";
+            }
             if (colorString.contains(",") && (rgb = colorString.split(",")).length == 3) {
                 node.setR(Float.valueOf(rgb[0]) / 255f);
                 node.setG(Float.valueOf(rgb[1]) / 255f);
