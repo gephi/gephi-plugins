@@ -4,7 +4,7 @@
     <parent>
         <artifactId>gephi-plugin-parent</artifactId>
         <groupId>org.gephi</groupId>
-        <version>0.9.0</version>
+        <version>0.9.1</version>
     </parent>
 
     <groupId>oracle-troubadour.co.uk</groupId>
@@ -15,11 +15,10 @@
     <name>Oracle Driver</name>
 
     <dependencies>
-       <dependency>
-	  <groupId>org.gephi</groupId>
-	  <artifactId>db-drivers</artifactId>
-	  <version>0.9.0</version>
-       </dependency>
+        <dependency>
+            <groupId>org.gephi</groupId>
+            <artifactId>db-drivers</artifactId>
+        </dependency>
     </dependencies>
 
     <build>
@@ -32,10 +31,10 @@
                     <author>Stuart Turton</author>
                     <authorEmail></authorEmail>
                     <authorUrl></authorUrl>
-                    <sourceCodeUrl>$sourcecode_url</sourceCodeUrl>
+                    <sourceCodeUrl>https://github.com/sturton/gephi-plugins</sourceCodeUrl>
                     <publicPackages>
                         <!-- Insert public packages -->
-			<publicPackage>uk.co.oracletroubadour</publicPackage>
+                        <publicPackage>uk.co.oracletroubadour</publicPackage>
                     </publicPackages>
                 </configuration>
             </plugin>
