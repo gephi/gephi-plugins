@@ -27,8 +27,8 @@
             <artifactId>ui-propertyeditor</artifactId>
         </dependency>
         <dependency>
-             <groupId>org.gephi</groupId>
-             <artifactId>graph-api</artifactId>
+            <groupId>org.gephi</groupId>
+            <artifactId>graph-api</artifactId>
         </dependency>
         <dependency>
             <groupId>org.netbeans.api</groupId>
@@ -51,7 +51,7 @@
                     <author>Wouter Spekkink</author>
                     <authorEmail>wouterspekkink@gmail.com</authorEmail>
                     <authorUrl>www.wouterspekkink.org</authorUrl>
-                    <sourceCodeUrl>$sourcecode_url</sourceCodeUrl>
+                    <sourceCodeUrl>https://github.com/WouterSpekkink/gephi-plugins/tree/eventgraphlayout</sourceCodeUrl>
                     <publicPackages>
                         <!-- Insert public packages -->
                         <publicPackage></publicPackage>

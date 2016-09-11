@@ -42,7 +42,6 @@
 
  Portions Copyrighted 2011 Gephi Consortium.
  */
-
 package org.wouterspekkink.plugins.layout.eventgraph;
 
 import org.gephi.graph.api.Node;
@@ -58,21 +57,18 @@ public class ForceFactory {
     private ForceFactory() {
     }
 
-    ;
-
     public RepulsionForce buildRepulsion(double coefficient) {
         return new linRepulsion(coefficient);
     }
-    
 
     public RepulsionForce getStrongGravity(double coefficient) {
         return new strongGravity(coefficient);
     }
-    
+
     public AttractionForce buildAttraction(double coefficient) {
         return new logAttraction_antiCollision(coefficient);
     }
-    
+
     public abstract class AttractionForce {
 
         public abstract void apply(Node n1, Node n2, double e); // Model for node-node attraction (e is for edge weight if needed)
@@ -84,10 +80,8 @@ public class ForceFactory {
 
         public abstract void apply(Node n, double g);           // Model for gravitation (anti-repulsion)
     }
-    
-    
+
     //Repulsion
-    
     private class linRepulsion extends RepulsionForce {
 
         private double coefficient;
@@ -100,7 +94,7 @@ public class ForceFactory {
         public void apply(Node n1, Node n2) {
             TimeForceLayoutData n1Layout = n1.getLayoutData();
             TimeForceLayoutData n2Layout = n2.getLayoutData();
-            
+
             // Get the distance
             double xDist = n1.x() - n2.x();
             double yDist = n1.y() - n2.y();
@@ -117,7 +111,7 @@ public class ForceFactory {
                 n2Layout.dy -= yDist * factor;
             }
         }
-        
+
         @Override
         public void apply(Node n, double g) {
             TimeForceLayoutData nLayout = n.getLayoutData();
@@ -137,39 +131,39 @@ public class ForceFactory {
         }
     }
     //Gravity
-         
+
     private class strongGravity extends RepulsionForce {
 
-    private double coefficient;
+        private double coefficient;
 
-    public strongGravity(double c) {
-       coefficient = c / 2;
-    }
+        public strongGravity(double c) {
+            coefficient = c / 2;
+        }
 
-    @Override
-    public void apply(Node n1, Node n2) {
-        // Not Relevant
-    }
+        @Override
+        public void apply(Node n1, Node n2) {
+            // Not Relevant
+        }
 
-    @Override
-    public void apply(Node n, double g) {
-        TimeForceLayoutData nLayout = n.getLayoutData();
+        @Override
+        public void apply(Node n, double g) {
+            TimeForceLayoutData nLayout = n.getLayoutData();
 
-        // Get the distance
-        double xDist = n.x();
-        double yDist = n.y();
-        double distance = (float) Math.sqrt(xDist * xDist + yDist * yDist);
+            // Get the distance
+            double xDist = n.x();
+            double yDist = n.y();
+            double distance = (float) Math.sqrt(xDist * xDist + yDist * yDist);
 
-        if (distance > 0) {
-            // NB: factor = force / distance
-            double factor = coefficient * nLayout.mass * g;
+            if (distance > 0) {
+                // NB: factor = force / distance
+                double factor = coefficient * nLayout.mass * g;
 
-            nLayout.dx -= xDist * factor;
-            nLayout.dy -= yDist * factor;
+                nLayout.dx -= xDist * factor;
+                nLayout.dy -= yDist * factor;
+            }
         }
     }
-    }
-        
+
     //Attraction
     private class logAttraction_antiCollision extends AttractionForce {
 
@@ -201,6 +195,6 @@ public class ForceFactory {
                 n2Layout.dy -= yDist * factor;
             }
         }
-    }    
-    
+    }
+
 }
