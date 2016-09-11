@@ -29,7 +29,7 @@ Version 3 license, then the option applies only if the new code is
 made subject to such option by the copyright holder.
 Contributor(s): Wouter Spekkink
 
-*/
+ */
 package org.wouterspekkink.plugins.metric.lineage;
 
 import javax.swing.JPanel;
@@ -38,16 +38,15 @@ import org.gephi.statistics.spi.StatisticsUI;
 import org.openide.util.lookup.ServiceProvider;
 
 /**
- * 
+ *
  * @author wouter
  */
-
 @ServiceProvider(service = StatisticsUI.class)
-public class LineageUI implements StatisticsUI{
-    
+public class LineageUI implements StatisticsUI {
+
     private Lineage statistic;
     private LineagePanel panel;
-    
+
     @Override
     public JPanel getSettingsPanel() {
         panel = new LineagePanel();
@@ -100,5 +99,5 @@ public class LineageUI implements StatisticsUI{
     public String getShortDescription() {
         return null;
     }
-    
+
 }

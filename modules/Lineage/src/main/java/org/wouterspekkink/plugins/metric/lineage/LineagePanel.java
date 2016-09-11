@@ -29,7 +29,7 @@ Version 3 license, then the option applies only if the new code is
 made subject to such option by the copyright holder.
 Contributor(s): Wouter Spekkink
 
-*/
+ */
 package org.wouterspekkink.plugins.metric.lineage;
 
 /**
@@ -42,13 +42,13 @@ public class LineagePanel extends javax.swing.JPanel {
         initComponents();
     }
 
-       public String originNode() {
+    public String originNode() {
         try {
             return originTextField.getText();
         } catch (Exception e) {
-            
+
         }
-        
+
         return "";
     }
 
