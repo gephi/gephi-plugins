@@ -29,21 +29,18 @@ Version 3 license, then the option applies only if the new code is
 made subject to such option by the copyright holder.
 Contributor(s): Wouter Spekkink
 
-*/
+ */
 package org.wouterspekkink.plugins.metric.lineage;
 
 /**
  * @author wouter
  */
-
-
 import org.gephi.statistics.spi.Statistics;
 import org.gephi.statistics.spi.StatisticsBuilder;
 import org.openide.util.lookup.ServiceProvider;
 
 @ServiceProvider(service = StatisticsBuilder.class)
 public class LineageBuilder implements StatisticsBuilder {
-    
 
     @Override
     public String getName() {
