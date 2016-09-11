@@ -39,7 +39,6 @@ Contributor(s):
 
 Portions Copyrighted 2011 Gephi Consortium.
  */
-
 package org.wouterspekkink.plugins.layout.eventgraph;
 
 import javax.swing.Icon;
@@ -53,7 +52,6 @@ import org.openide.util.lookup.ServiceProvider;
  *
  * @author Mathieu Jacomy
  */
-
 @ServiceProvider(service = LayoutBuilder.class)
 public class TimeForceBuilder implements LayoutBuilder {
     private TimeForceUI ui = new TimeForceUI();

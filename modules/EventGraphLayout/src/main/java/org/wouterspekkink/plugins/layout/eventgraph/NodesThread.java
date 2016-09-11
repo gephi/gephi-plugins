@@ -39,7 +39,6 @@ Contributor(s):
 
 Portions Copyrighted 2011 Gephi Consortium.
  */
-
 package org.wouterspekkink.plugins.layout.eventgraph;
 
 import org.gephi.graph.api.Node;
@@ -49,7 +48,8 @@ import org.wouterspekkink.plugins.layout.eventgraph.ForceFactory.RepulsionForce;
  *
  * @author Mathieu Jacomy
  */
-public class NodesThread implements Runnable{
+public class NodesThread implements Runnable {
+
     private Node[] nodes;
     private int from;
     private int to;
@@ -67,7 +67,7 @@ public class NodesThread implements Runnable{
         this.GravityForce = GravityForce;
         this.scaling = scaling;
     }
-    
+
     @Override
     public void run() {
         // Repulsion
@@ -78,14 +78,11 @@ public class NodesThread implements Runnable{
                 Repulsion.apply(n1, n2);
             }
         }
-    
 
-    // Gravity
-    for (int nIndex = from; nIndex < to; nIndex++) {
-        Node n = nodes[nIndex];
-        GravityForce.apply(n, gravity / scaling);
-    }
+        // Gravity
+        for (int nIndex = from; nIndex < to; nIndex++) {
+            Node n = nodes[nIndex];
+            GravityForce.apply(n, gravity / scaling);
+        }
     }
 }
-    
-
