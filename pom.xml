@@ -37,6 +37,7 @@
         <module>modules/NetworkSplitter3D</module>
         <module>modules/ExcelCsvImporter</module>
         <module>modules/OracleDriver</module>
+        <module>modules/EventGraphLayout</module>
     </modules>
     
     <!-- Properties -->
