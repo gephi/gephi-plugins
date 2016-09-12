@@ -38,6 +38,7 @@
         <module>modules/ExcelCsvImporter</module>
         <module>modules/OracleDriver</module>
         <module>modules/EventGraphLayout</module>
+        <module>modules/Lineage</module>
     </modules>
     
     <!-- Properties -->
