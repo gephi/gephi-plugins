@@ -15,7 +15,7 @@
         }
       ],
       "category": "Layout",
-      "last_update": "August 27, 2016",
+      "last_update": "September 12, 2016",
       "images": [
         {
           "image": "imgs/geolayout-plugin/geolayout_example.png",
@@ -37,7 +37,7 @@
         },
         "0.9.1": {
           "url": "0.9.1/geolayout-plugin-0.9.1.1.nbm",
-          "last_update": "August 27, 2016"
+          "last_update": "September 12, 2016"
         }
       },
       "sourcecode": "https://github.com/gephi/gephi-plugins/geolayout-plugin",
@@ -58,7 +58,7 @@
         }
       ],
       "category": "Tool",
-      "last_update": "August 27, 2016",
+      "last_update": "September 12, 2016",
       "images": [
         {
           "image": "imgs/linkfluence-plugin/img.png",
@@ -72,7 +72,7 @@
         },
         "0.9.1": {
           "url": "0.9.1/linkfluence-plugin-0.9.0.nbm",
-          "last_update": "August 27, 2016"
+          "last_update": "September 12, 2016"
         }
       },
       "sourcecode": "https://github.com/eduramiba/gephi-plugins/tree/linkfluence-plugin",
@@ -487,7 +487,7 @@
         }
       ],
       "category": "Export",
-      "last_update": "August 27, 2016",
+      "last_update": "September 12, 2016",
       "images": null,
       "versions": {
         "0.8.2": {
@@ -496,7 +496,7 @@
         },
         "0.9.1": {
           "url": "0.9.1/exporttoearth-1.0.0.nbm",
-          "last_update": "August 27, 2016"
+          "last_update": "September 12, 2016"
         }
       },
       "sourcecode": "http://github.com/shepdl/gephi-plugins/tree/export-to-earth",
@@ -543,7 +543,7 @@
         }
       ],
       "category": "Filter",
-      "last_update": "August 27, 2016",
+      "last_update": "September 12, 2016",
       "images": [
         {
           "image": "imgs/kbrace-filter/kbrace-img.png",
@@ -561,7 +561,7 @@
         },
         "0.9.1": {
           "url": "0.9.1/kbrace-filter-1.0.0.nbm",
-          "last_update": "August 27, 2016"
+          "last_update": "September 12, 2016"
         }
       },
       "sourcecode": "https://github.com/mbastian/gephi-plugins/tree/kbrace-filter",
@@ -1000,7 +1000,7 @@
         }
       ],
       "category": "Layout",
-      "last_update": "August 27, 2016",
+      "last_update": "September 12, 2016",
       "images": [
         {
           "image": "imgs/network-splitter-3d/example-0-networksplitter3d-layout.png",
@@ -1014,7 +1014,7 @@
         },
         "0.9.1": {
           "url": "0.9.1/network-splitter-3d-1.0.0.nbm",
-          "last_update": "August 27, 2016"
+          "last_update": "September 12, 2016"
         }
       },
       "sourcecode": "https://github.com/alexandrebarao",
@@ -1371,32 +1371,31 @@
     {
       "id": "lineage",
       "name": "Lineage",
-      "short_description": "",
-      "long_description": "\u003cp\u003eThis plugin identifies the ancestors and descendants of a node (identified by the user) in a directed graph (not suitable for undirected graphs).\u003c/p\u003e\n\u003cp\u003eUsage: After installing the plugin, the Lineage option can be found in the statistics menu. The user is asked to submit a node (use the Id, not the Label!) and the plugin will find the ancestors and descendants for that node. In the nodes list, a variable “Lineage�? is added that indicates for each node whether it is the origin node, an ancestor, a descendant, both ancestor and descendant (it will be marked as a hybrid), or unrelated. Two boolean variables are also added that indicate for each node whether they are ancestor or descendant (they can be both when there are cycles in the graph). Two integers are added to record the distance of ancestors and descendants from the origin. The distances of ancestors are recorded as negative values.\u003c/p\u003e\n\u003cp\u003eThe “Lineage�? variable can be used for (for example) partition coloring and filtering.\u003c/p\u003e",
-      "readme": null,
-      "license": "GPL v3",
+      "short_description": "The lineage plugin identifies the ancestors and descendants of a user-selected origin node in a directed graph.",
+      "long_description": "\u003cp\u003eThis plugin identifies the ancestors and descendants of a node (identified by the user) in a directed graph (not suitable for undirected graphs).\u003c/p\u003e\n\u003cp\u003eUsage: After installing the plugin, the Lineage option can be found in the statistics menu. The user is asked to submit a node (use the Id, not the Label!) and the plugin will find the ancestors and descendants for that node. In the nodes list, a variable “Lineage” is added that indicates for each node whether it is the origin node, an ancestor, a descendant, both ancestor and descendant (it will be marked as a hybrid), or unrelated. Two boolean variables are also added that indicate for each node whether they are ancestor or descendant (they can be both when there are cycles in the graph). Two integers are added to record the distance of ancestors and descendants from the origin. The distances of ancestors are recorded as negative values.\u003c/p\u003e\n\u003cp\u003eThe “Lineage” variable can be used for (for example) partition coloring and filtering.\u003c/p\u003e",
+      "readme": "This plugin identifies the ancestors and descendants of a node (identified by the user) in a directed graph (not suitable for undirected graphs).\n\nUsage: After installing the plugin, the Lineage option can be found in the statistics menu. The user is asked to submit a node (use the Id, not the Label!) and the plugin will find the ancestors and descendants for that node. In the nodes list, a variable “Lineage” is added that indicates for each node whether it is the origin node, an ancestor, a descendant, both ancestor and descendant (it will be marked as a hybrid), or unrelated. Two boolean variables are also added that indicate for each node whether they are ancestor or descendant (they can be both when there are cycles in the graph). Two integers are added to record the distance of ancestors and descendants from the origin. The distances of ancestors are recorded as negative values.\n\nThe “Lineage” variable can be used for (for example) partition coloring and filtering.\n",
+      "license": "GPL 3.0",
       "authors": [
         {
           "name": "Wouter Spekkink",
-          "email": null,
-          "link": "http://www.wouterspekkink.org/"
+          "email": "wouterspekkink@gmail.com",
+          "link": "www.wouterspekkink.org"
         }
       ],
       "category": "Metric",
-      "last_update": "December 15, 2015",
-      "images": [
-        {
-          "image": "imgs/lineage/Picture.png",
-          "thumbnail": "imgs/lineage/Picture.png"
-        }
-      ],
+      "last_update": "September 12, 2016",
+      "images": null,
       "versions": {
         "0.8.2": {
           "url": "0.8.2/org-wouterspekkink-lineage2.nbm",
           "last_update": "December 15, 2015"
+        },
+        "0.9.1": {
+          "url": "0.9.1/lineage-0.9.1.nbm",
+          "last_update": "September 12, 2016"
         }
       },
-      "sourcecode": "https://github.com/WouterSpekkink/Lineage",
+      "sourcecode": "$sourcecode_url",
       "homepage": null
     },
     {
@@ -1932,7 +1931,7 @@
         }
       ],
       "category": "Tool",
-      "last_update": "August 27, 2016",
+      "last_update": "September 12, 2016",
       "images": null,
       "versions": {
         "0.8.2": {
@@ -1945,7 +1944,7 @@
         },
         "0.9.1": {
           "url": "0.9.1/multimode-1.0.0.nbm",
-          "last_update": "August 27, 2016"
+          "last_update": "September 12, 2016"
         }
       },
       "sourcecode": "https://github.com/totetmatt/gephi-plugins/tree/multimode-network",
@@ -1966,7 +1965,7 @@
         }
       ],
       "category": "Export",
-      "last_update": "August 27, 2016",
+      "last_update": "September 12, 2016",
       "images": null,
       "versions": {
         "0.8.2": {
@@ -1979,7 +1978,7 @@
         },
         "0.9.1": {
           "url": "0.9.1/jsonexporter-plugin-2.0.0.nbm",
-          "last_update": "August 27, 2016"
+          "last_update": "September 12, 2016"
         }
       },
       "sourcecode": "http://github.com/oxfordinternetinstitute/gephi-plugins",
@@ -2000,7 +1999,7 @@
         }
       ],
       "category": "Export",
-      "last_update": "August 27, 2016",
+      "last_update": "September 12, 2016",
       "images": null,
       "versions": {
         "0.8.2": {
@@ -2013,7 +2012,7 @@
         },
         "0.9.1": {
           "url": "0.9.1/sigmaexporter-0.9.0.nbm",
-          "last_update": "August 27, 2016"
+          "last_update": "September 12, 2016"
         }
       },
       "sourcecode": "http://github.com/oxfordinternetinstitute/gephi-plugins",
@@ -2034,7 +2033,7 @@
         }
       ],
       "category": "Tool",
-      "last_update": "August 27, 2016",
+      "last_update": "September 12, 2016",
       "images": null,
       "versions": {
         "0.9.0": {
@@ -2043,7 +2042,7 @@
         },
         "0.9.1": {
           "url": "0.9.1/gephi-plugin-node-color-manager-1.0.0.nbm",
-          "last_update": "August 27, 2016"
+          "last_update": "September 12, 2016"
         }
       },
       "sourcecode": "https://github.com/gephi/gephi-plugins/gephi-plugin-node-color-manager",
@@ -2064,7 +2063,7 @@
         }
       ],
       "category": "Layout",
-      "last_update": "August 27, 2016",
+      "last_update": "September 12, 2016",
       "images": [
         {
           "image": "imgs/gephigraphviz/GraphVizLayout_example.png",
@@ -2086,7 +2085,7 @@
         },
         "0.9.1": {
           "url": "0.9.1/gephigraphviz-1.0.0.nbm",
-          "last_update": "August 27, 2016"
+          "last_update": "September 12, 2016"
         }
       },
       "sourcecode": "https://github.com/chunky/gephi-plugins",
@@ -2107,12 +2106,12 @@
         }
       ],
       "category": "Import",
-      "last_update": "August 27, 2016",
+      "last_update": "September 12, 2016",
       "images": null,
       "versions": {
         "0.9.1": {
           "url": "0.9.1/graphstreaming-1.0.0.zip",
-          "last_update": "August 27, 2016"
+          "last_update": "September 12, 2016"
         }
       },
       "sourcecode": "https://github.com/panisson/gephi-plugins/tree/graph-streaming",
@@ -2133,12 +2132,12 @@
         }
       ],
       "category": "Layout",
-      "last_update": "August 27, 2016",
+      "last_update": "September 12, 2016",
       "images": null,
       "versions": {
         "0.9.1": {
           "url": "0.9.1/circularlayout-0.9.1.nbm",
-          "last_update": "August 27, 2016"
+          "last_update": "September 12, 2016"
         }
       },
       "sourcecode": "https://github.com/mgroeninger/gephi-plugins",
@@ -2159,7 +2158,7 @@
         }
       ],
       "category": "Import",
-      "last_update": "August 27, 2016",
+      "last_update": "September 12, 2016",
       "images": [
         {
           "image": "imgs/semantic/icon.png",
@@ -2177,7 +2176,7 @@
       "versions": {
         "0.9.1": {
           "url": "0.9.1/semantic-1.0.0.nbm",
-          "last_update": "August 27, 2016"
+          "last_update": "September 12, 2016"
         }
       },
       "sourcecode": "https://github.com/Wimmics/gephi-semantic-web-import",
@@ -2198,7 +2197,7 @@
         }
       ],
       "category": "Export",
-      "last_update": "August 27, 2016",
+      "last_update": "September 12, 2016",
       "images": [
         {
           "image": "imgs/loxawebsiteexport/logo_final.png",
@@ -2208,7 +2207,7 @@
       "versions": {
         "0.9.1": {
           "url": "0.9.1/loxawebsiteexport-0.3.2.nbm",
-          "last_update": "August 27, 2016"
+          "last_update": "September 12, 2016"
         }
       },
       "sourcecode": "https://github.com/jorgaf/gephi-plugins",
@@ -2229,12 +2228,12 @@
         }
       ],
       "category": "Layout",
-      "last_update": "August 27, 2016",
+      "last_update": "September 12, 2016",
       "images": null,
       "versions": {
         "0.9.1": {
           "url": "0.9.1/clementlevallois-1.0.0.nbm",
-          "last_update": "August 27, 2016"
+          "last_update": "September 12, 2016"
         }
       },
       "sourcecode": "https://github.com/seinecle/gephi-plugins/tree/mapOfCountriesBranch",
@@ -2255,7 +2254,7 @@
         }
       ],
       "category": "Tool",
-      "last_update": "August 27, 2016",
+      "last_update": "September 12, 2016",
       "images": [
         {
           "image": "imgs/scripting.plugin/img1.png",
@@ -2265,7 +2264,7 @@
       "versions": {
         "0.9.1": {
           "url": "0.9.1/scripting.plugin-0.9.1.1.nbm",
-          "last_update": "August 27, 2016"
+          "last_update": "September 12, 2016"
         }
       },
       "sourcecode": "https://github.com/gephi/gephi-plugins/tree/python-scripting-plugin",
@@ -2286,7 +2285,7 @@
         }
       ],
       "category": "Import",
-      "last_update": "August 27, 2016",
+      "last_update": "September 12, 2016",
       "images": [
         {
           "image": "imgs/twitter-streaming-importer/A_Screenshot.png",
@@ -2312,7 +2311,7 @@
       "versions": {
         "0.9.1": {
           "url": "0.9.1/twitter-streaming-importer-1.0.0.nbm",
-          "last_update": "August 27, 2016"
+          "last_update": "September 12, 2016"
         }
       },
       "sourcecode": "https://github.com/totetmatt/gephi-plugins/tree/twitter",
@@ -2333,7 +2332,7 @@
         }
       ],
       "category": "Layout",
-      "last_update": "August 27, 2016",
+      "last_update": "September 12, 2016",
       "images": [
         {
           "image": "imgs/isometric-layout/example-0-isometric-layout.png",
@@ -2343,7 +2342,7 @@
       "versions": {
         "0.9.1": {
           "url": "0.9.1/isometric-layout-1.0.0.nbm",
-          "last_update": "August 27, 2016"
+          "last_update": "September 12, 2016"
         }
       },
       "sourcecode": "https://github.com/alexandrebarao",
@@ -2364,7 +2363,7 @@
         }
       ],
       "category": "Import",
-      "last_update": "August 27, 2016",
+      "last_update": "September 12, 2016",
       "images": [
         {
           "image": "imgs/ExcelCsvImporter/1.png",
@@ -2390,11 +2389,68 @@
       "versions": {
         "0.9.1": {
           "url": "0.9.1/ExcelCsvImporter-1.0.0.nbm",
-          "last_update": "August 27, 2016"
+          "last_update": "September 12, 2016"
         }
       },
       "sourcecode": "https://github.com/seinecle/gephi-plugins/tree/ExcelCsvImporter",
       "homepage": "http://www.clementlevallois.net"
+    },
+    {
+      "id": "oracle-driver",
+      "name": "Oracle Driver",
+      "short_description": "Import from Oracle database",
+      "long_description": "Import data from an Oracle database using Oracle full client or Instant Client.\n\n\u003ch2\u003eOracle Driver\u003c/h2\u003e\n\u003cp\u003eThis SQLDriver implementation allows Gephi to use Oracle data.\u003c/p\u003e\n\u003cp\u003e\u003cstrong\u003eNo Oracle code is packaged in this module\u003c/strong\u003e: it locates the Oracle JDBC drivers using 2 environment variables:-\u003c/p\u003e\n\u003col\u003e\n\u003cli\u003e$JDBC_PATH  - a path of directories containing JDBC JAR files: any JAR files matching the file pattern “ojdbc*.jar” is considered a  valid Oracle JDBC JAR;\u003c/li\u003e\n\u003cli\u003e$ORACLE_HOME - the usual Oracle environment variable specifying the location of the Oracle client or Instant Client.\u003c/li\u003e\n\u003c/ol\u003e\n\u003cp\u003eThis plugin has been tested under Windows (Windows 7) and OSX (El Capitan)\u003c/p\u003e\n\u003ch2\u003eMacOS Problems\u003c/h2\u003e\n\u003cp\u003eExporting environment variables which are visible to GUI applications under OSX seems to be a non-trivial task; this approach was attempted and failed: running the application from the command line works\u003c/p\u003e\n\u003ch3\u003eFailed\u003c/h3\u003e\n\u003cpre\u003e\u003ccode\u003estumacbook:Downloads sturton$ defaults write   ~/.MacOSX/environment.plist  ORACLE_HOME -string \u0026quot;$ORACLE_HOME\u0026quot; \nstumacbook:Downloads sturton$ defaults write   ~/.MacOSX/environment.plist  JDBC_PATH -string \u0026quot;$ORACLE_HOME\u0026quot; \nstumacbook:Downloads sturton$ defaults read   ~/.MacOSX/environment.plist  \n{\n    \u0026quot;JDBC_PATH\u0026quot; \u003d \u0026quot;/Users/sturton/Developer/instantclient_11_2\u0026quot;;\n    \u0026quot;ORACLE_HOME\u0026quot; \u003d \u0026quot;/Users/sturton/Developer/instantclient_11_2\u0026quot;;\n}\nstumacbook:Downloads sturton$ export TWO_TASK\u003d192.168.0.23:1521/orcl\nstumacbook:Downloads sturton$ sqlplus system/oracle\n\nSQL*Plus: Release 11.2.0.4.0 Production on Thu Mar 3 19:16:50 2016\n\nCopyright (c) 1982, 2013, Oracle.  All rights reserved.\n\n\nConnected to:\nOracle Database 11g Enterprise Edition Release 11.2.0.2.0 - Production\nWith the Partitioning, OLAP, Data Mining and Real Application Testing options\n\nSQL\u0026gt; \n\u003c/code\u003e\u003c/pre\u003e\n\u003ch3\u003eSucceeded\u003c/h3\u003e\n\u003cpre\u003e\u003ccode\u003estumacbook:OracleDriver sturton$  /Applications/Gephi.app/Contents/MacOS/gephi \n\u003c/code\u003e\u003c/pre\u003e\n\u003ch2\u003eImporting From Oracle\u003c/h2\u003e\n\u003cp\u003eThe queries below may be used to import the dependencies between database objects in the Oracle Developer Day VM example schemas\u003c/p\u003e\n\u003ch3\u003eNode Query\u003c/h3\u003e\n\u003cpre\u003e\u003ccode\u003eSELECT       \nDISTINCT     \ndbms_utility.get_hash_value(owner||\u0027~\u0027||object_type||\u0027~\u0027||object_name, 1000000, 4194304  ) id   \n,CASE WHEN object_type LIKE  \u0027JAVA%\u0027 \n  THEN dbms_java.longname (object_name) \n  ELSE object_name \n  END label     \n,owner  \n, object_type       \n,COUNT(*) OVER (PARTITION BY dbms_utility.get_hash_value(owner||\u0027~\u0027||object_type||\u0027~\u0027||object_name, 1000000, 4194304  )) duplication    \n,CASE   \n  WHEN  REGEXP_INSTR(object_type, \u0027PACKAGE.*|TYPE.*|TABLE|VIEW|TRIGGER|PROCEDURE|FUNCTION\u0027) \u0026gt; 0     \n    THEN \u0027Y\u0027    \n  ELSE \u0027N\u0027      \n  END IS_BASE   \n,CASE   \n  WHEN REGEXP_INSTR(object_type, \u0027PROCEDURE|FUNCTION|TRIGGER|TYPE.*|PACKAGE.*\u0027) \u0026gt; 0 \n  THEN \u0027PLSQL\u0027  \n  ELSE \u0027DDL\u0027    \n  END NAMESPACE   \n,CASE   \n  WHEN OBJECT_TYPE IN (\u0027TABLE\u0027,\u0027VIEW\u0027,\u0027MATERIALIZED VIEW\u0027 )     \n    THEN \u0027http://localhost:9090/DeveloperDay/schemaspy/\u0027||OWNER||\u0027/tables/\u0027||OBJECT_NAME||\u0027.html\u0027   \n  WHEN  REGEXP_INSTR(OBJECT_TYPE, \u0027PROCEDURE|FUNCTION|TRIGGER\u0027) \u0026gt; 0   \n    THEN \u0027http://localhost:9090/DeveloperDay/pldoc/\u0027 || \u0027_\u0027 || OWNER ||\u0027.html#\u0027 || LOWER(OBJECT_NAME)   \n  WHEN  REGEXP_INSTR(OBJECT_TYPE, \u0027PACKAGE.*|TYPE.*\u0027) \u0026gt; 0       \n    THEN \u0027http://localhost:9090/DeveloperDay/pldoc/\u0027 || OBJECT_NAME ||\u0027.html\u0027   \n  WHEN  REGEXP_INSTR(OBJECT_TYPE, \u0027PACKAGE BODY|TYPE BODY\u0027) \u0026gt; 0   \n    THEN \u0027http://localhost:9090/DeveloperDay/pldoc/_\u0027 || OBJECT_NAME ||\u0027.html\u0027  \n  ELSE \u0027 \u0027      END DOCUMENTATION_URL   \nFROM DBA_OBJECTS_AE     \nWHERE REGEXP_LIKE(owner , \u0027^PLS$|^HR$|^OE$|^DEMO$\u0027)     \nAND INSTR(object_name, \u0027$\u0027) \u003d 0  \nORDER BY id\n\u003c/code\u003e\u003c/pre\u003e\n\u003ch3\u003e\u003ca id\u003d\"Edge_Query_89\"\u003e\u003c/a\u003eEdge Query\u003c/h3\u003e\n\u003cpre\u003e\u003ccode\u003eSELECT \ndbms_utility.get_hash_value(owner||\u0027~\u0027||type||\u0027~\u0027||name, 1000000, 4194304  ) source\n,dbms_utility.get_hash_value(referenced_owner||\u0027~\u0027||referenced_type||\u0027~\u0027||referenced_name, 1000000, 4194304  ) target\n,dependency_type \nfrom DBA_DEPENDENCIES \nWHERE REGEXP_LIKE(owner , \u0027^PLS$|^HR$|^OE$|^DEMO$\u0027 ) \nAND REGEXP_LIKE(referenced_owner , \u0027^PLS$|^HR$|^OE$|^DEMO$\u0027 ) \n\u003c/code\u003e\u003c/pre\u003e",
+      "readme": "## Oracle Driver\n\nThis SQLDriver implementation allows Gephi to use Oracle data.\n\n **No Oracle code is packaged in this module**: it locates the Oracle JDBC drivers using 2 environment variables:-\n\n1. $JDBC_PATH  - a path of directories containing JDBC JAR files: any JAR files matching the file pattern \"ojdbc\\*.jar\" is considered a  valid Oracle JDBC JAR;\n2. $ORACLE_HOME - the usual Oracle environment variable specifying the location of the Oracle client or Instant Client. \n\n\nThis plugin has been tested under Windows (Windows 7) and OSX (El Capitan)\n\n## MacOS Problems\nExporting environment variables which are visible to GUI applications under OSX seems to be a non-trivial task; this approach was attempted and failed: running the application from the command line works    \n\n### Failed \n\n```\nstumacbook:Downloads sturton$ defaults write   ~/.MacOSX/environment.plist  ORACLE_HOME -string \"$ORACLE_HOME\" \nstumacbook:Downloads sturton$ defaults write   ~/.MacOSX/environment.plist  JDBC_PATH -string \"$ORACLE_HOME\" \nstumacbook:Downloads sturton$ defaults read   ~/.MacOSX/environment.plist  \n{\n    \"JDBC_PATH\" \u003d \"/Users/sturton/Developer/instantclient_11_2\";\n    \"ORACLE_HOME\" \u003d \"/Users/sturton/Developer/instantclient_11_2\";\n}\nstumacbook:Downloads sturton$ export TWO_TASK\u003d192.168.0.23:1521/orcl\nstumacbook:Downloads sturton$ sqlplus system/oracle\n\nSQL*Plus: Release 11.2.0.4.0 Production on Thu Mar 3 19:16:50 2016\n\nCopyright (c) 1982, 2013, Oracle.  All rights reserved.\n\n\nConnected to:\nOracle Database 11g Enterprise Edition Release 11.2.0.2.0 - Production\nWith the Partitioning, OLAP, Data Mining and Real Application Testing options\n\nSQL\u003e \n```\n\n### Succeeded  \n\n```\nstumacbook:OracleDriver sturton$  /Applications/Gephi.app/Contents/MacOS/gephi \n```\n\n## Importing From Oracle \n\nThe queries below may be used to import the dependencies between database objects in the Oracle Developer Day VM example schemas \n\n### Node Query\n\n```\nSELECT  \t \nDISTINCT \t \ndbms_utility.get_hash_value(owner||\u0027~\u0027||object_type||\u0027~\u0027||object_name, 1000000, 4194304  ) id \t\n,CASE WHEN object_type LIKE  \u0027JAVA%\u0027 \n  THEN dbms_java.longname (object_name) \n  ELSE object_name \n  END label \t\n,owner \t\n, object_type   \t\n,COUNT(*) OVER (PARTITION BY dbms_utility.get_hash_value(owner||\u0027~\u0027||object_type||\u0027~\u0027||object_name, 1000000, 4194304  )) duplication \t\n,CASE \t\n  WHEN  REGEXP_INSTR(object_type, \u0027PACKAGE.*|TYPE.*|TABLE|VIEW|TRIGGER|PROCEDURE|FUNCTION\u0027) \u003e 0   \t\n    THEN \u0027Y\u0027 \t\n  ELSE \u0027N\u0027  \t\n  END IS_BASE \t\n,CASE \t\n  WHEN REGEXP_INSTR(object_type, \u0027PROCEDURE|FUNCTION|TRIGGER|TYPE.*|PACKAGE.*\u0027) \u003e 0 \n  THEN \u0027PLSQL\u0027 \t\n  ELSE \u0027DDL\u0027 \t\n  END NAMESPACE   \n,CASE \t\n  WHEN OBJECT_TYPE IN (\u0027TABLE\u0027,\u0027VIEW\u0027,\u0027MATERIALIZED VIEW\u0027 )  \t\n    THEN \u0027http://localhost:9090/DeveloperDay/schemaspy/\u0027||OWNER||\u0027/tables/\u0027||OBJECT_NAME||\u0027.html\u0027 \t\n  WHEN  REGEXP_INSTR(OBJECT_TYPE, \u0027PROCEDURE|FUNCTION|TRIGGER\u0027) \u003e 0   \n    THEN \u0027http://localhost:9090/DeveloperDay/pldoc/\u0027 || \u0027_\u0027 || OWNER ||\u0027.html#\u0027 || LOWER(OBJECT_NAME) \t\n  WHEN  REGEXP_INSTR(OBJECT_TYPE, \u0027PACKAGE.*|TYPE.*\u0027) \u003e 0   \t\n    THEN \u0027http://localhost:9090/DeveloperDay/pldoc/\u0027 || OBJECT_NAME ||\u0027.html\u0027 \t\n  WHEN  REGEXP_INSTR(OBJECT_TYPE, \u0027PACKAGE BODY|TYPE BODY\u0027) \u003e 0   \n    THEN \u0027http://localhost:9090/DeveloperDay/pldoc/_\u0027 || OBJECT_NAME ||\u0027.html\u0027 \t\n  ELSE \u0027 \u0027  \tEND DOCUMENTATION_URL   \nFROM DBA_OBJECTS_AE \t\nWHERE REGEXP_LIKE(owner , \u0027^PLS$|^HR$|^OE$|^DEMO$\u0027) \t\nAND INSTR(object_name, \u0027$\u0027) \u003d 0  \nORDER BY id\n```\n\n### Edge Query\n\n```\nSELECT \ndbms_utility.get_hash_value(owner||\u0027~\u0027||type||\u0027~\u0027||name, 1000000, 4194304  ) source\n,dbms_utility.get_hash_value(referenced_owner||\u0027~\u0027||referenced_type||\u0027~\u0027||referenced_name, 1000000, 4194304  ) target\n,dependency_type \nfrom DBA_DEPENDENCIES \nWHERE REGEXP_LIKE(owner , \u0027^PLS$|^HR$|^OE$|^DEMO$\u0027 ) \nAND REGEXP_LIKE(referenced_owner , \u0027^PLS$|^HR$|^OE$|^DEMO$\u0027 ) \n```\n",
+      "license": "BSD",
+      "authors": [
+        {
+          "name": "Stuart Turton",
+          "email": "",
+          "link": ""
+        }
+      ],
+      "category": "Import",
+      "last_update": "September 12, 2016",
+      "images": null,
+      "versions": {
+        "0.9.1": {
+          "url": "0.9.1/oracle-driver-0.0.1.nbm",
+          "last_update": "September 12, 2016"
+        }
+      },
+      "sourcecode": "https://github.com/sturton/gephi-plugins",
+      "homepage": null
+    },
+    {
+      "id": "eventgraphlayout",
+      "name": "EventGraphLayout",
+      "short_description": "Layout algorithm for event graphs",
+      "long_description": "\u003ch2\u003eDescription\u003c/h2\u003e\u003cp\u003eThe event graph layout plugin was written to allow for the easy creation of event graphs. In an event graph the nodes represent events and the edges/arcs represent relationships between the events (e.g. causality). The layout plugin places the events in a user-specified order on the x-axis. If vertical force is activated, the plugin will push unconnected groups of events away from each other on the y-axis, and keep connected nodes together.\u003c/p\u003e\u003ch2\u003eHow to use\u003c/h2\u003e\u003cp\u003eTo use this plugin you need to add a numerical variable (integer, float or double) to your nodes that gives them a rank order. This rank order will be used to determine the position of the nodes on the x-axis. Typically, this order variable will indicate the order of events (represented by the nodes) in time. The order scale can be used to scale up or scale down the distances between the nodes on the x-axis.\u003c/p\u003e\u003cp\u003eIn its default setting the plugin will only lay out the nodes on the x-axis. If vertical force is activated the plugin will also lay out the nodes on the y-axis, based primarily on their degree of interconnectedness. Thus, groups of nodes that are highly interconnected tend to stay close to each other, and nodes that are not highly interconnected tend to drift away from each other. The vertical force can be used to increase or decrease the distance between the nodes on the y-axis.\u003c/p\u003e\u003ch2\u003eHints\u003c/h2\u003e\u003cul\u003e\u003cli\u003eFor larger event graphs it may be helpful to increase the jitter tolerance somewhat if the vertical layout moves too slow.\u003c/li\u003e\u003cli\u003eIf you want to move the nodes on the y-axis with your mouse, but want to make sure that they keep their position on the x-axis, then run the plugin without vertical force activated\u003c/li\u003e\u003c/ul\u003e",
+      "readme": "## EventGraphLayout\n\nAuthor: Wouter Spekkink (wouterspekkink(at)gmail.com)\n\nThis is the source code for the Event Graph Layout plugin for Gephi (http://gephi.org/).\n\nMost of the code used for this layout plugin is the original source code of the Force Atlas 2 plugin. Probably about 99 percent of the code is a stripped-down version of the Force Atlas 2 source code and some minor additions were made to add the options that were required for the event graph layout. Some inspiration for the implementation of the ideas for this plugin was taken from the GeoLayout plugin. The event graph layout plugin was written to allow for the easy creation of event graphs. In an event graph the nodes represent events and the edges/arcs represent relationships between the events (e.g. causality). The layout plugin places the events in a user-specified order on the x-axis. If vertical force is activated, the plugin will push unconnected groups of events away from each other on the y-axis, and keep connected nodes together. The user needs to add numerical variable to the node list and import it as integer, float or double. The variable should indicate the positions of the node on the x-axis. Once activated, the layout plugin will run continuously until the user stops it. If the plugin is activated, then the position of the nodes on the x-axis will remain fixed, but the user is free to move nodes on the y-axis. This is only useful if the user turns of the verticla force option. \n\nThe plugin has only a few controls:\nScale of order: determines the distance between the nodes on the x-axis.\nOrder: a dropdown selection menu to select the user-supplied \u0027order-variable.\u0027\nSet Vertical Force: turn vertical force on or off. \nVertical scale: determines the distance between the nodes on the y-axis.\nStrong Gravity Mode: activates stronger gravity.\nGravity: set the strength of the gravity.\nJitter Tolerance: Sets \nCenter: Centers the graph. Sometimes useful for smaller datasets.\n\nAn example of an application of the layout plugin is used in a forthcoming publication:\n\nSpekkink, W.A.H. (forthcoming). Building Capacity for Sustainable Regional Industrial Systems: \nAn Event Sequence Analysis of Developments in the Sloe Area and Canal Zone. \nAccepted for publication in the Journal of Cleaner Production.\nAvailable online at: http://www.sciencedirect.com/science/article/pii/S0959652614008506\n",
+      "license": "GPL 3.0",
+      "authors": [
+        {
+          "name": "Wouter Spekkink",
+          "email": "wouterspekkink@gmail.com",
+          "link": "www.wouterspekkink.org"
+        }
+      ],
+      "category": "Layout",
+      "last_update": "September 12, 2016",
+      "images": [
+        {
+          "image": "imgs/eventgraphlayout/img.png",
+          "thumbnail": "imgs/eventgraphlayout/img-thumbnail.png"
+        }
+      ],
+      "versions": {
+        "0.9.1": {
+          "url": "0.9.1/eventgraphlayout-1.0.0.nbm",
+          "last_update": "September 12, 2016"
+        }
+      },
+      "sourcecode": "https://github.com/WouterSpekkink/gephi-plugins/tree/eventgraphlayout",
+      "homepage": null
     }
   ]
 }
