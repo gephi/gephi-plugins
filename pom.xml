@@ -56,20 +56,12 @@
 
     <!-- Dependencies -->
     <dependencies>
-        <!--
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>gephi</artifactId>
             <version>${gephi.version}</version>
             <classifier>linux</classifier>
             <type>tar.gz</type>
-        </dependency>
-        -->
-        <dependency>
-            <groupId>org.gephi</groupId>
-            <artifactId>project-api</artifactId>
-            <version>0.9.1</version>
-            <type>jar</type>
         </dependency>
     </dependencies>
     

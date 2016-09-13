@@ -1,6 +1,4 @@
-
 package dk.icourts.filterfromfile;
-
 
 import javax.swing.Icon;
 import javax.swing.JPanel;
@@ -11,9 +9,9 @@ import org.openide.util.lookup.ServiceProvider;
 import org.gephi.filters.spi.FilterBuilder;
 import org.gephi.project.api.Workspace;
 
-
 /**
  * Builder for the {@link FilterFromFile} filter
+ *
  * @author Yannis Panagis
  */
 @ServiceProvider(service = FilterBuilder.class)
@@ -47,13 +45,11 @@ public class FilterFromFileBuilder implements FilterBuilder {
     @Override
     public JPanel getPanel(Filter filter) {
         FilterFrmFilePanel panel = new FilterFrmFilePanel((FilterFromFile) filter);
-        return panel;     
+        return panel;
     }
 
     @Override
     public void destroy(Filter filter) {
         //Do nothing
     }
-
-    
 }
