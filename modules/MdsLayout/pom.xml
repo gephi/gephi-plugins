@@ -24,7 +24,7 @@
             <groupId>org.gephi</groupId>
             <artifactId>layout-api</artifactId>
         </dependency>
-                <dependency>
+        <dependency>
             <groupId>org.gephi</groupId>
             <artifactId>ui-propertyeditor</artifactId>
         </dependency>
@@ -47,8 +47,8 @@
                     <licenseName>GPL 3.0</licenseName>
                     <author>Wouter Spekkink</author>
                     <authorEmail>wouterspekkink@gmail.com</authorEmail>
-                    <authorUrl>www.wouterspekkink.org</authorUrl>
-                    <sourceCodeUrl>$sourcecode_url</sourceCodeUrl>
+                    <authorUrl>http://www.wouterspekkink.org</authorUrl>
+                    <sourceCodeUrl>https://github.com/WouterSpekkink/gephi-plugins/tree/mdslayout</sourceCodeUrl>
                     <publicPackages>
                         <!-- Insert public packages -->
                     </publicPackages>
