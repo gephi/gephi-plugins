@@ -30,8 +30,7 @@ made subject to such option by the copyright holder.
 Contributor(s): Wouter Spekkink
 
 The plugin structure was inspired by the structure of the GeoLayout plugin.
-*/
-
+ */
 package org.wouterspekkink.plugins.layout.mdslayout;
 
 import java.util.ArrayList;
@@ -45,23 +44,20 @@ import org.gephi.layout.spi.Layout;
 import org.gephi.layout.spi.LayoutBuilder;
 import org.gephi.layout.spi.LayoutProperty;
 import org.gephi.ui.propertyeditor.NodeColumnNumbersEditor;
-import org.openide.util.Exceptions;
-import org.openide.util.Lookup;
 
 /**
  *
  * @author wouter
  */
-
 public class MDSLayout implements Layout {
-    
+
     private final MDSLayoutBuilder builder;
     private GraphModel graphModel;
     //Params
     private double scale = 1000;
     private Column dimension1;
     private Column dimension2;
-  
+    private boolean converged = false;
 
     public MDSLayout(MDSLayoutBuilder builder) {
         this.builder = builder;
@@ -70,27 +66,29 @@ public class MDSLayout implements Layout {
 
     @Override
     public void resetPropertiesValues() {
-        if (graphModel != null)
-        for (Column c : graphModel.getNodeTable()) {
-            if (c.getId().equalsIgnoreCase("dimension1")
-                    || c.getId().equalsIgnoreCase("dim1")
-                    || c.getTitle().equalsIgnoreCase("dimension1")
-                    || c.getTitle().equalsIgnoreCase("dim1")) {
-                dimension1 = c;
-            } else if (c.getId().equalsIgnoreCase("dimension2")
-                    || c.getId().equalsIgnoreCase("dim2")
-                    || c.getTitle().equalsIgnoreCase("dimension2")
-                    || c.getTitle().equalsIgnoreCase("dim2")) {
-                dimension2 = c;
+        if (graphModel != null) {
+            for (Column c : graphModel.getNodeTable()) {
+                if (c.getId().equalsIgnoreCase("dimension1")
+                        || c.getId().equalsIgnoreCase("dim1")
+                        || c.getTitle().equalsIgnoreCase("dimension1")
+                        || c.getTitle().equalsIgnoreCase("dim1")) {
+                    dimension1 = c;
+                } else if (c.getId().equalsIgnoreCase("dimension2")
+                        || c.getId().equalsIgnoreCase("dim2")
+                        || c.getTitle().equalsIgnoreCase("dimension2")
+                        || c.getTitle().equalsIgnoreCase("dim2")) {
+                    dimension2 = c;
+                }
             }
         }
     }
 
     @Override
     public void initAlgo() {
+        converged = false;
     }
-    
-     @Override
+
+    @Override
     public void goAlgo() {
         double dim1 = 0;
         double dim2 = 0;
@@ -107,7 +105,7 @@ public class MDSLayout implements Layout {
         // Set valid and non valid nodes:
         for (Node n : nodes) {
             //AttributeRow row = (AttributeRow) n.getNodeData().getAttributes();
-            
+
             if (n.getAttribute(dimension1) != null && n.getAttribute(dimension2) != null) {
                 validNodes.add(n);
             } else {
@@ -118,7 +116,7 @@ public class MDSLayout implements Layout {
         for (Node n : validNodes) {
             if (n.getLayoutData() == null || !(n.getLayoutData() instanceof MDSLayoutData)) {
                 n.setLayoutData(new MDSLayoutData());
-                }
+            }
             dim1 = getDoubleValue(n, dimension1);
             dim2 = getDoubleValue(n, dimension2);
 
@@ -128,7 +126,6 @@ public class MDSLayout implements Layout {
             n.setX(nodeX);
             n.setY(nodeY);
         }
-
 
         if (validNodes.size() > 0 && unvalidNodes.size() > 0) {
             Node tempNode = validNodes.get(0);
@@ -168,11 +165,13 @@ public class MDSLayout implements Layout {
             }
         }
         graph.readUnlock();
+        
+        converged = true;//Stop infinite iteration after 1 single step
     }
-    
+
     public double getDoubleValue(Node node, Column column) {
-        return ((Double) node.getAttribute(column));
-        }
+        return ((Number) node.getAttribute(column)).doubleValue();
+    }
 
     @Override
     public void endAlgo() {
@@ -180,9 +179,10 @@ public class MDSLayout implements Layout {
 
     @Override
     public boolean canAlgo() {
-        return dimension1 != null && dimension2 != null;
+        return dimension1 != null && dimension2 != null
+                && !converged;
     }
-    
+
     @Override
     public LayoutProperty[] getProperties() {
         List<LayoutProperty> properties = new ArrayList<LayoutProperty>();
@@ -212,7 +212,7 @@ public class MDSLayout implements Layout {
         }
         return properties.toArray(new LayoutProperty[0]);
     }
-    
+
     @Override
     public void setGraphModel(GraphModel graphModel) {
         this.graphModel = graphModel;
@@ -253,6 +253,5 @@ public class MDSLayout implements Layout {
         public double x = 0f;
         public double y = 0f;
     }
-    
-}
 
+}
