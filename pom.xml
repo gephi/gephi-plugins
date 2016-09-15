@@ -39,6 +39,7 @@
         <module>modules/OracleDriver</module>
         <module>modules/EventGraphLayout</module>
         <module>modules/Lineage</module>
+        <module>modules/MdsLayout</module>
     </modules>
     
     <!-- Properties -->
