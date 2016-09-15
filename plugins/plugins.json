@@ -15,7 +15,7 @@
         }
       ],
       "category": "Layout",
-      "last_update": "September 12, 2016",
+      "last_update": "September 15, 2016",
       "images": [
         {
           "image": "imgs/geolayout-plugin/geolayout_example.png",
@@ -37,7 +37,7 @@
         },
         "0.9.1": {
           "url": "0.9.1/geolayout-plugin-0.9.1.1.nbm",
-          "last_update": "September 12, 2016"
+          "last_update": "September 15, 2016"
         }
       },
       "sourcecode": "https://github.com/gephi/gephi-plugins/geolayout-plugin",
@@ -58,7 +58,7 @@
         }
       ],
       "category": "Tool",
-      "last_update": "September 12, 2016",
+      "last_update": "September 15, 2016",
       "images": [
         {
           "image": "imgs/linkfluence-plugin/img.png",
@@ -72,7 +72,7 @@
         },
         "0.9.1": {
           "url": "0.9.1/linkfluence-plugin-0.9.0.nbm",
-          "last_update": "September 12, 2016"
+          "last_update": "September 15, 2016"
         }
       },
       "sourcecode": "https://github.com/eduramiba/gephi-plugins/tree/linkfluence-plugin",
@@ -487,7 +487,7 @@
         }
       ],
       "category": "Export",
-      "last_update": "September 12, 2016",
+      "last_update": "September 15, 2016",
       "images": null,
       "versions": {
         "0.8.2": {
@@ -496,7 +496,7 @@
         },
         "0.9.1": {
           "url": "0.9.1/exporttoearth-1.0.0.nbm",
-          "last_update": "September 12, 2016"
+          "last_update": "September 15, 2016"
         }
       },
       "sourcecode": "http://github.com/shepdl/gephi-plugins/tree/export-to-earth",
@@ -543,7 +543,7 @@
         }
       ],
       "category": "Filter",
-      "last_update": "September 12, 2016",
+      "last_update": "September 15, 2016",
       "images": [
         {
           "image": "imgs/kbrace-filter/kbrace-img.png",
@@ -561,7 +561,7 @@
         },
         "0.9.1": {
           "url": "0.9.1/kbrace-filter-1.0.0.nbm",
-          "last_update": "September 12, 2016"
+          "last_update": "September 15, 2016"
         }
       },
       "sourcecode": "https://github.com/mbastian/gephi-plugins/tree/kbrace-filter",
@@ -1000,7 +1000,7 @@
         }
       ],
       "category": "Layout",
-      "last_update": "September 12, 2016",
+      "last_update": "September 15, 2016",
       "images": [
         {
           "image": "imgs/network-splitter-3d/example-0-networksplitter3d-layout.png",
@@ -1014,7 +1014,7 @@
         },
         "0.9.1": {
           "url": "0.9.1/network-splitter-3d-1.0.0.nbm",
-          "last_update": "September 12, 2016"
+          "last_update": "September 15, 2016"
         }
       },
       "sourcecode": "https://github.com/alexandrebarao",
@@ -1383,7 +1383,7 @@
         }
       ],
       "category": "Metric",
-      "last_update": "September 12, 2016",
+      "last_update": "September 15, 2016",
       "images": null,
       "versions": {
         "0.8.2": {
@@ -1392,7 +1392,7 @@
         },
         "0.9.1": {
           "url": "0.9.1/lineage-0.9.1.nbm",
-          "last_update": "September 12, 2016"
+          "last_update": "September 15, 2016"
         }
       },
       "sourcecode": "$sourcecode_url",
@@ -1931,7 +1931,7 @@
         }
       ],
       "category": "Tool",
-      "last_update": "September 12, 2016",
+      "last_update": "September 15, 2016",
       "images": null,
       "versions": {
         "0.8.2": {
@@ -1944,7 +1944,7 @@
         },
         "0.9.1": {
           "url": "0.9.1/multimode-1.0.0.nbm",
-          "last_update": "September 12, 2016"
+          "last_update": "September 15, 2016"
         }
       },
       "sourcecode": "https://github.com/totetmatt/gephi-plugins/tree/multimode-network",
@@ -1965,7 +1965,7 @@
         }
       ],
       "category": "Export",
-      "last_update": "September 12, 2016",
+      "last_update": "September 15, 2016",
       "images": null,
       "versions": {
         "0.8.2": {
@@ -1978,7 +1978,7 @@
         },
         "0.9.1": {
           "url": "0.9.1/jsonexporter-plugin-2.0.0.nbm",
-          "last_update": "September 12, 2016"
+          "last_update": "September 15, 2016"
         }
       },
       "sourcecode": "http://github.com/oxfordinternetinstitute/gephi-plugins",
@@ -1999,7 +1999,7 @@
         }
       ],
       "category": "Export",
-      "last_update": "September 12, 2016",
+      "last_update": "September 15, 2016",
       "images": null,
       "versions": {
         "0.8.2": {
@@ -2012,7 +2012,7 @@
         },
         "0.9.1": {
           "url": "0.9.1/sigmaexporter-0.9.0.nbm",
-          "last_update": "September 12, 2016"
+          "last_update": "September 15, 2016"
         }
       },
       "sourcecode": "http://github.com/oxfordinternetinstitute/gephi-plugins",
@@ -2033,7 +2033,7 @@
         }
       ],
       "category": "Tool",
-      "last_update": "September 12, 2016",
+      "last_update": "September 15, 2016",
       "images": null,
       "versions": {
         "0.9.0": {
@@ -2042,7 +2042,7 @@
         },
         "0.9.1": {
           "url": "0.9.1/gephi-plugin-node-color-manager-1.0.0.nbm",
-          "last_update": "September 12, 2016"
+          "last_update": "September 15, 2016"
         }
       },
       "sourcecode": "https://github.com/gephi/gephi-plugins/gephi-plugin-node-color-manager",
@@ -2063,7 +2063,7 @@
         }
       ],
       "category": "Layout",
-      "last_update": "September 12, 2016",
+      "last_update": "September 15, 2016",
       "images": [
         {
           "image": "imgs/gephigraphviz/GraphVizLayout_example.png",
@@ -2085,7 +2085,7 @@
         },
         "0.9.1": {
           "url": "0.9.1/gephigraphviz-1.0.0.nbm",
-          "last_update": "September 12, 2016"
+          "last_update": "September 15, 2016"
         }
       },
       "sourcecode": "https://github.com/chunky/gephi-plugins",
@@ -2106,12 +2106,12 @@
         }
       ],
       "category": "Import",
-      "last_update": "September 12, 2016",
+      "last_update": "September 15, 2016",
       "images": null,
       "versions": {
         "0.9.1": {
           "url": "0.9.1/graphstreaming-1.0.0.zip",
-          "last_update": "September 12, 2016"
+          "last_update": "September 15, 2016"
         }
       },
       "sourcecode": "https://github.com/panisson/gephi-plugins/tree/graph-streaming",
@@ -2132,12 +2132,12 @@
         }
       ],
       "category": "Layout",
-      "last_update": "September 12, 2016",
+      "last_update": "September 15, 2016",
       "images": null,
       "versions": {
         "0.9.1": {
           "url": "0.9.1/circularlayout-0.9.1.nbm",
-          "last_update": "September 12, 2016"
+          "last_update": "September 15, 2016"
         }
       },
       "sourcecode": "https://github.com/mgroeninger/gephi-plugins",
@@ -2158,7 +2158,7 @@
         }
       ],
       "category": "Import",
-      "last_update": "September 12, 2016",
+      "last_update": "September 15, 2016",
       "images": [
         {
           "image": "imgs/semantic/icon.png",
@@ -2176,7 +2176,7 @@
       "versions": {
         "0.9.1": {
           "url": "0.9.1/semantic-1.0.0.nbm",
-          "last_update": "September 12, 2016"
+          "last_update": "September 15, 2016"
         }
       },
       "sourcecode": "https://github.com/Wimmics/gephi-semantic-web-import",
@@ -2197,7 +2197,7 @@
         }
       ],
       "category": "Export",
-      "last_update": "September 12, 2016",
+      "last_update": "September 15, 2016",
       "images": [
         {
           "image": "imgs/loxawebsiteexport/logo_final.png",
@@ -2207,7 +2207,7 @@
       "versions": {
         "0.9.1": {
           "url": "0.9.1/loxawebsiteexport-0.3.2.nbm",
-          "last_update": "September 12, 2016"
+          "last_update": "September 15, 2016"
         }
       },
       "sourcecode": "https://github.com/jorgaf/gephi-plugins",
@@ -2228,12 +2228,12 @@
         }
       ],
       "category": "Layout",
-      "last_update": "September 12, 2016",
+      "last_update": "September 15, 2016",
       "images": null,
       "versions": {
         "0.9.1": {
           "url": "0.9.1/clementlevallois-1.0.0.nbm",
-          "last_update": "September 12, 2016"
+          "last_update": "September 15, 2016"
         }
       },
       "sourcecode": "https://github.com/seinecle/gephi-plugins/tree/mapOfCountriesBranch",
@@ -2254,7 +2254,7 @@
         }
       ],
       "category": "Tool",
-      "last_update": "September 12, 2016",
+      "last_update": "September 15, 2016",
       "images": [
         {
           "image": "imgs/scripting.plugin/img1.png",
@@ -2264,7 +2264,7 @@
       "versions": {
         "0.9.1": {
           "url": "0.9.1/scripting.plugin-0.9.1.1.nbm",
-          "last_update": "September 12, 2016"
+          "last_update": "September 15, 2016"
         }
       },
       "sourcecode": "https://github.com/gephi/gephi-plugins/tree/python-scripting-plugin",
@@ -2285,7 +2285,7 @@
         }
       ],
       "category": "Import",
-      "last_update": "September 12, 2016",
+      "last_update": "September 15, 2016",
       "images": [
         {
           "image": "imgs/twitter-streaming-importer/A_Screenshot.png",
@@ -2311,7 +2311,7 @@
       "versions": {
         "0.9.1": {
           "url": "0.9.1/twitter-streaming-importer-1.0.0.nbm",
-          "last_update": "September 12, 2016"
+          "last_update": "September 15, 2016"
         }
       },
       "sourcecode": "https://github.com/totetmatt/gephi-plugins/tree/twitter",
@@ -2332,7 +2332,7 @@
         }
       ],
       "category": "Layout",
-      "last_update": "September 12, 2016",
+      "last_update": "September 15, 2016",
       "images": [
         {
           "image": "imgs/isometric-layout/example-0-isometric-layout.png",
@@ -2342,7 +2342,7 @@
       "versions": {
         "0.9.1": {
           "url": "0.9.1/isometric-layout-1.0.0.nbm",
-          "last_update": "September 12, 2016"
+          "last_update": "September 15, 2016"
         }
       },
       "sourcecode": "https://github.com/alexandrebarao",
@@ -2363,7 +2363,7 @@
         }
       ],
       "category": "Import",
-      "last_update": "September 12, 2016",
+      "last_update": "September 15, 2016",
       "images": [
         {
           "image": "imgs/ExcelCsvImporter/1.png",
@@ -2389,7 +2389,7 @@
       "versions": {
         "0.9.1": {
           "url": "0.9.1/ExcelCsvImporter-1.0.0.nbm",
-          "last_update": "September 12, 2016"
+          "last_update": "September 15, 2016"
         }
       },
       "sourcecode": "https://github.com/seinecle/gephi-plugins/tree/ExcelCsvImporter",
@@ -2410,12 +2410,12 @@
         }
       ],
       "category": "Import",
-      "last_update": "September 12, 2016",
+      "last_update": "September 15, 2016",
       "images": null,
       "versions": {
         "0.9.1": {
           "url": "0.9.1/oracle-driver-0.0.1.nbm",
-          "last_update": "September 12, 2016"
+          "last_update": "September 15, 2016"
         }
       },
       "sourcecode": "https://github.com/sturton/gephi-plugins",
@@ -2436,7 +2436,7 @@
         }
       ],
       "category": "Layout",
-      "last_update": "September 12, 2016",
+      "last_update": "September 15, 2016",
       "images": [
         {
           "image": "imgs/eventgraphlayout/img.png",
@@ -2446,10 +2446,36 @@
       "versions": {
         "0.9.1": {
           "url": "0.9.1/eventgraphlayout-1.0.0.nbm",
-          "last_update": "September 12, 2016"
+          "last_update": "September 15, 2016"
         }
       },
       "sourcecode": "https://github.com/WouterSpekkink/gephi-plugins/tree/eventgraphlayout",
+      "homepage": null
+    },
+    {
+      "id": "mdslayout",
+      "name": "MdsLayout",
+      "short_description": "This plugin takes a set of coordinates on 2 dimensions and creates a layout based on those coordinates.",
+      "long_description": "\u003cp\u003eThe layout takes the coordinates of a Multidimensional Scaling (MDS) configuration as inputs and uses these coordinates to layout the nodes of a graph. MDS is sometimes used in Social Network Analysis to create layouts that reflect some type of distance between the nodes. This distance can be based on the length of paths between the nodes, but it can also be based on (dis)similarities in attributes of nodes.\u003c/p\u003e \u003cp\u003eA separate plugin is available for MDS analysis (MDS Statistics) from the Gephi Marketplace. It is also possible to perform the MDS analysis with external software (e.g. R or SPSS). In the latter case the coordinates of the MDS configuration have to be added to the nodes list manually.\u003c/p\u003e \u003cp\u003eIf you have the results of an MDS analysis, add the coordinates as variables to your nodes list. When importing the nodes list, make sure that you import the nodes as ‘doubles.’ Otherwise the layout plugin won’t be able to read the coordinates and use them for the layout.\u003c/p\u003e",
+      "readme": "# MDSLayout\nMDS Layout\n",
+      "license": "GPL 3.0",
+      "authors": [
+        {
+          "name": "Wouter Spekkink",
+          "email": "wouterspekkink@gmail.com",
+          "link": "http://www.wouterspekkink.org"
+        }
+      ],
+      "category": "Layout",
+      "last_update": "September 15, 2016",
+      "images": null,
+      "versions": {
+        "0.9.1": {
+          "url": "0.9.1/mdslayout-0.9.1.nbm",
+          "last_update": "September 15, 2016"
+        }
+      },
+      "sourcecode": "https://github.com/WouterSpekkink/gephi-plugins/tree/mdslayout",
       "homepage": null
     }
   ]
