@@ -317,6 +317,7 @@ public class LongTaskTransformation implements LongTask, Runnable {
                                 //iniWeight= (float)(iniWeight/(Math.sqrt(secondWeights[j])*Math.sqrt(firstWeights[i]))) ; //that is the cosine distance
                                 iniWeight= (float)(100.0-200.0*Math.acos(iniWeight/(Math.sqrt(secondWeights[j])*Math.sqrt(firstWeights[i])))/Math.PI) ; //that is the cosine distance
                                 // now we weight it by the number of components
+                                iniWeight=Math.round(iniWeight * 100) / 100;
                                 float finalWeight= (float) 100.0* (float) Math.sqrt( resultUnw.get(i, j) / minDim) ; // how many components in common
                                     // System.out.println("going to create");
                                     if (iniWeight > threshold) {
