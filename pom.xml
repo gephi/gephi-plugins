@@ -22,6 +22,7 @@
         <module>modules/GraphvizLayout</module>
         <module>modules/GraphStreaming</module>
         <module>modules/DesktopStreaming</module>
+        <module>modules/StreamingAPI</module>
         <module>modules/StreamingImpl</module>
         <module>modules/JettyWrapper</module>
         <module>modules/StreamingServer</module>
