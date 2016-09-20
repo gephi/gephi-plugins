@@ -15,30 +15,27 @@
     <name>filterfromfile</name>
 
     <dependencies>
-        
-    <dependency>
-      <groupId>org.gephi</groupId>
-      <artifactId>graph-api</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.netbeans.api</groupId>
-      <artifactId>org-openide-util</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.gephi</groupId>
-      <artifactId>filters-api</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.netbeans.api</groupId>
-      <artifactId>org-openide-util-lookup</artifactId>
-    </dependency>
-    <dependency>
+        <dependency>
+            <groupId>org.gephi</groupId>
+            <artifactId>graph-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.netbeans.api</groupId>
+            <artifactId>org-openide-util</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.gephi</groupId>
+            <artifactId>filters-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.netbeans.api</groupId>
+            <artifactId>org-openide-util-lookup</artifactId>
+        </dependency>
+        <dependency>
             <groupId>org.gephi</groupId>
             <artifactId>project-api</artifactId>
-            <version>0.9.1</version>
-            <type>jar</type>
-    </dependency>
-  </dependencies>
+        </dependency>
+    </dependencies>
 
     <build>
         <plugins>
@@ -47,7 +44,7 @@
                 <artifactId>nbm-maven-plugin</artifactId>
                 <configuration>
                     <author>Ioannis Panagis</author>
-                    <sourceCodeUrl>$sourcecode_url</sourceCodeUrl>
+                    <sourceCodeUrl>https://github.com/ypanagis/gephi-plugins</sourceCodeUrl>
                     <licenseName>Apache 2 GPL</licenseName>
                     <licenseFile>apachegpl2.txt</licenseFile>
                     <homePageUrl>http://jura.ku.dk/icourts/staff</homePageUrl>
