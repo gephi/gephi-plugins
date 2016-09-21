@@ -41,6 +41,7 @@
         <module>modules/Lineage</module>
         <module>modules/MdsLayout</module>
         <module>modules/filterfromfile</module>
+        <module>modules/GiveColorToNodes</module>
     </modules>
     
     <!-- Properties -->
