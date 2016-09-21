@@ -2503,6 +2503,76 @@
       },
       "sourcecode": "https://github.com/ypanagis/gephi-plugins",
       "homepage": "http://jura.ku.dk/icourts/staff"
+    },
+    {
+      "id": "givecolortonodes",
+      "name": "Give Colors To Nodes",
+      "short_description": "Color nodes according to a RGB or HEX color attribute",
+      "long_description": "This plugin tries to find a node attribute with \"color\" or \"colour\" in its name. Then it reads RGB of #hex values in this attribute and colors nodes accordingly.\n\n\u003ch3\u003eWhen is it useful?\u003c/h3\u003e\nThis plugin gives you full control on the color of your nodes in Gephi. Define the color for each node as an attribute, that\u0027s it!\n\n\u003ch3\u003eAuthor of the plugin\u003c/h3\u003e\n\u003ca href\u003d\"http://www.clementlevallois.net\"\u003eClement Levallois\u003c/a\u003e. The original idea was suggested by \u003ca href\u003d\"http://www.frankvandermost.nl/\"\u003eFrank van der Most\u003c/a\u003e.",
+      "readme": null,
+      "license": "Apache v2",
+      "authors": [
+        {
+          "name": "Clement Levallois (@seinecle)",
+          "email": null,
+          "link": null
+        }
+      ],
+      "category": "Tool",
+      "last_update": "September 21, 2016",
+      "images": [
+        {
+          "image": "imgs/givecolortonodes/1.illustration.png",
+          "thumbnail": "imgs/givecolortonodes/1.illustration-thumbnail.png"
+        },
+        {
+          "image": "imgs/givecolortonodes/2.illustration2.png",
+          "thumbnail": "imgs/givecolortonodes/2.illustration2-thumbnail.png"
+        },
+        {
+          "image": "imgs/givecolortonodes/3.colourwheel.png",
+          "thumbnail": "imgs/givecolortonodes/3.colourwheel-thumbnail.png"
+        }
+      ],
+      "versions": {
+        "0.9.1": {
+          "url": "0.9.1/givecolortonodes-1.0.0.nbm",
+          "last_update": "September 21, 2016"
+        }
+      },
+      "sourcecode": "https://github.com/seinecle/gephi-plugins/tree/GiveColorsToNodes",
+      "homepage": "http://www.clementlevallois.net"
+    },
+    {
+      "id": "givecolortoedges",
+      "name": "Give Colors To Edges",
+      "short_description": "Color edges according to a RGB or HEX color attribute",
+      "long_description": "This plugin tries to find an edge attribute with \"color\" or \"colour\" in its name. Then it reads RGB of #hex values in this attribute and colors edges accordingly.\n\n\u003ch3\u003eWhen is it useful?\u003c/h3\u003e\nThis plugin gives you full control on the color of your edges in Gephi. Define the color for each edge as an attribute, that\u0027s it!\n\n\u003ch3\u003eAuthor of the plugin\u003c/h3\u003e\n\u003ca href\u003d\"http://www.clementlevallois.net\"\u003eClement Levallois\u003c/a\u003e. The original idea was suggested by Davin Hall.",
+      "readme": null,
+      "license": "Apache v2",
+      "authors": [
+        {
+          "name": "Clement Levallois (@seinecle)",
+          "email": null,
+          "link": null
+        }
+      ],
+      "category": "Tool",
+      "last_update": "September 21, 2016",
+      "images": [
+        {
+          "image": "imgs/givecolortoedges/colourwheel.png",
+          "thumbnail": "imgs/givecolortoedges/colourwheel-thumbnail.png"
+        }
+      ],
+      "versions": {
+        "0.9.1": {
+          "url": "0.9.1/givecolortoedges-1.0.0.nbm",
+          "last_update": "September 21, 2016"
+        }
+      },
+      "sourcecode": "https://github.com/seinecle/gephi-plugins/tree/GiveColorsToEdges",
+      "homepage": "http://www.clementlevallois.net"
     }
   ]
 }
