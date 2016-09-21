@@ -1,5 +1,0 @@
-Manifest-Version: 1.0
-OpenIDE-Module: net.clementlevallois.givecolortonodes
-OpenIDE-Module-Localizing-Bundle: net/clementlevallois/givecolortonodes/Bundle.properties
-OpenIDE-Module-Specification-Version: 1.2
-
