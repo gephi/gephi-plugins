@@ -42,6 +42,7 @@
         <module>modules/MdsLayout</module>
         <module>modules/filterfromfile</module>
         <module>modules/GiveColorToNodes</module>
+        <module>modules/GiveColorToEdges</module>
     </modules>
     
     <!-- Properties -->
