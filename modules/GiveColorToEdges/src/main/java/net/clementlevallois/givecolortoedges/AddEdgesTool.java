@@ -1,13 +1,13 @@
 /*
- Copyright 2008-2011 Gephi
- Authors : Mathieu Bastian <mathieu.bastian@gephi.org>
+ Copyright 2008-2016 Gephi
+ Authors : Clement Levallois
  Website : http://www.gephi.org
 
  This file is part of Gephi.
 
  DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
 
- Copyright 2011 Gephi Consortium. All rights reserved.
+ Copyright 2016 Gephi Consortium. All rights reserved.
 
  The contents of this file are subject to the terms of either the GNU
  General Public License Version 3 only ("GPL") or the Common
@@ -37,12 +37,11 @@
 
  Contributor(s):
 
- Portions Copyrighted 2011 Gephi Consortium.
+ Portions Copyrighted 2016 Gephi Consortium.
  */
 package net.clementlevallois.givecolortoedges;
 
 import java.awt.Color;
-import java.util.Iterator;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JPanel;
@@ -52,8 +51,6 @@ import org.gephi.graph.api.Graph;
 import org.gephi.graph.api.GraphController;
 import org.gephi.graph.api.GraphModel;
 import org.gephi.project.api.ProjectController;
-import org.gephi.tools.spi.MouseClickEventListener;
-import org.gephi.tools.spi.NodeClickEventListener;
 import org.gephi.tools.spi.Tool;
 import org.gephi.tools.spi.ToolEventListener;
 import org.gephi.tools.spi.ToolSelectionType;
@@ -63,27 +60,6 @@ import org.openide.NotifyDescriptor;
 import org.openide.util.Lookup;
 import org.openide.util.lookup.ServiceProvider;
 
-/**
- * Tool which reacts to clicks on the canvas by adding nodes and edges.
- * <p>
- * The tool works with two
- * <code>ToolEventListener</code> listeners: One {@link MouseClickEventListener}
- * to react on a click on a empty part of the canvas and one
- * {@link NodeClickEventListener} to react on a click on multiple nodes. The
- * tool is creating a node at the mouse location and adds edges from the newly
- * created node to all selected nodes. That works when the user increases its
- * mouse selection area.
- * <p>
- * The tool also uses some non-api methods of
- * <code>VizController</code>. It's not really recommended at this point but we
- * needed it for the mouse position. The new Visualization API coming in a
- * future version will expose much more things...
- * <p>
- * This tool class also has an UI class which displays a simple checkbox in the
- * properties bar. The checkbox triggers a layout algorithm.
- *
- * @author Mathieu Bastian
- */
 @ServiceProvider(service = Tool.class)
 public class AddEdgesTool implements Tool {
 
@@ -106,45 +82,41 @@ public class AddEdgesTool implements Tool {
         GraphModel graphModel = gc.getGraphModel();
         Graph graph = graphModel.getGraph();
 
-        Iterator<Column> it = graphModel.getEdgeTable().iterator();
-        while (it.hasNext()) {
-            Column c = it.next();
-            if (c.getId().toLowerCase().contains("color")||c.getId().toLowerCase().contains("colour")) {
+        for (Column c : graphModel.getEdgeTable().toArray()) {
+            if (c.getTypeClass().equals(String.class) && (c.getId().toLowerCase().contains("color") || c.getId().toLowerCase().contains("colour"))) {
                 color = c;
                 break;
             }
         }
+
         if (color == null) {
-            d = new NotifyDescriptor.Message("No edge attribute containing \"color\" or \"colour\" could be found");
+            d = new NotifyDescriptor.Message("No String edge attribute containing \"color\" or \"colour\" could be found");
             DialogDisplayer.getDefault().notify(d);
             return;
         }
 
         Color hex;
+        String[] rgb;
 
         for (Edge edge : graph.getEdges().toArray()) {
             String colorString = (String) edge.getAttribute(color);
-            if (colorString.contains(",")) {
-                String[] RGB = colorString.split(",");
-                edge.setR(Float.valueOf(RGB[0])/255f);
-                edge.setG(Float.valueOf(RGB[1])/255f);
-                edge.setB(Float.valueOf(RGB[2])/255f);
+            if (colorString == null) {
+                colorString = "";
+            }
+            if (colorString.contains(",") && (rgb = colorString.split(",")).length == 3) {
+                edge.setR(Float.valueOf(rgb[0]) / 255f);
+                edge.setG(Float.valueOf(rgb[1]) / 255f);
+                edge.setB(Float.valueOf(rgb[2]) / 255f);
             } else if (colorString.contains("#")) {
                 hex = Color.decode(colorString);
-                edge.setR(Float.valueOf(hex.getRed())/255);
-                edge.setG(Float.valueOf(hex.getGreen())/255);
-                edge.setB(Float.valueOf(hex.getBlue())/255);
+                edge.setColor(hex);
             } else {
-                d = new NotifyDescriptor.Message("No rgb or hex color format detected in " + color.getTitle());
+                d = new NotifyDescriptor.Message("No rgb or hex color format detected in " + color.getTitle() + " for edge " + edge.getId());
                 DialogDisplayer.getDefault().notify(d);
                 return;
 
             }
         }
-
-
-
-
     }
 
     @Override
@@ -163,7 +135,7 @@ public class AddEdgesTool implements Tool {
 
     @Override
     public ToolSelectionType getSelectionType() {
-        return ToolSelectionType.SELECTION;
+        return ToolSelectionType.NONE;
     }
 
     private static class AddEdgesToolUI implements ToolUI {
