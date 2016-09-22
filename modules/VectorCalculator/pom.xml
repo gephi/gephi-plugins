@@ -48,7 +48,7 @@
                     <author>Jonas Persson</author>
                     <authorEmail></authorEmail>
                     <authorUrl></authorUrl>
-                    <sourceCodeUrl>$sourcecode_url</sourceCodeUrl>
+                    <sourceCodeUrl>https://github.com/d99joper/gephi-plugins/</sourceCodeUrl>
                     <publicPackages>
                         <!-- Insert public packages -->
                     </publicPackages>
