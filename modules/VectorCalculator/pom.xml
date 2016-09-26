@@ -48,7 +48,7 @@
                     <author>Jonas Persson</author>
                     <authorEmail></authorEmail>
                     <authorUrl></authorUrl>
-                    <sourceCodeUrl>https://github.com/d99joper/gephi-plugins/</sourceCodeUrl>
+                    <sourceCodeUrl>https://github.com/d99joper/gephi-plugins/tree/master/modules/VectorCalculator/</sourceCodeUrl>
                     <publicPackages>
                         <!-- Insert public packages -->
                     </publicPackages>
