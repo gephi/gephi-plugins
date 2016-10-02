@@ -39,31 +39,23 @@ Contributor(s):
 
 Portions Copyrighted 2011 Gephi Consortium.
  */
-package org.gephi.plugins.layout.forceAtlas2Custom;
+package org.gephi.plugins.layout.forceAtlas2.multigravity;
 
-import org.gephi.graph.api.Node;
-import org.gephi.plugins.layout.forceAtlas2Custom.ForceFactory.RepulsionForce;
+import org.gephi.graph.spi.LayoutData;
 
 /**
- *
+ * Data stored in Nodes and used by ForceAtlas2
  * @author Mathieu Jacomy
  */
-public class OperationNodeRegionRepulse extends Operation {
+public class ForceAtlas2LayoutData implements LayoutData {
+    //Data
 
-    private final Node n;
-    private final Region r;
-    private final RepulsionForce f;
-    private final double theta;
-
-    public OperationNodeRegionRepulse(Node n, Region r, RepulsionForce f, double theta) {
-        this.n = n;
-        this.f = f;
-        this.r = r;
-        this.theta = theta;
-    }
-
-    @Override
-    public void execute() {
-        r.applyForce(n, f, theta);
-    }
+    public double dx = 0;
+    public double dy = 0;
+    public double old_dx = 0;
+    public double old_dy = 0;
+    public double mass = 1;
+    // Gravity source
+    public double gravity_x = 0;
+    public double gravity_y = 0;
 }

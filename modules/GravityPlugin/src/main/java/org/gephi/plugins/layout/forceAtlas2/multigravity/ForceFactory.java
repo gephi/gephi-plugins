@@ -39,7 +39,7 @@
 
  Portions Copyrighted 2011 Gephi Consortium.
  */
-package org.gephi.plugins.layout.forceAtlas2Custom;
+package org.gephi.plugins.layout.forceAtlas2.multigravity;
 
 import org.gephi.graph.api.Node;
 
