@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package PS.gephi.plugins;
 
 import javax.swing.JPanel;
@@ -12,53 +7,56 @@ import org.openide.util.lookup.ServiceProvider;
 
 /**
  *
- * @author Jonas
+ * @author Jonas Persson
  */
-
 @ServiceProvider(service = StatisticsUI.class)
 public class VectorStatisticsUI implements StatisticsUI{
 
-    private VectorStatisticsPanel _panel;
-    private VectorStatistics _metric;
+    private VectorStatisticsPanel panel;
     
+    @Override
     public JPanel getSettingsPanel() {
-        _panel = new VectorStatisticsPanel();
-        return _panel;
+        return panel = new VectorStatisticsPanel();
     }
 
+    @Override
     public void setup(Statistics ststcs) {
-        this._metric = (VectorStatistics) ststcs;
-        this._metric.lat = this._panel.getLatitudeColumnName();
-        this._metric.lon = this._panel.getLongitudeColumnName();
+        VectorStatistics metric = (VectorStatistics) ststcs;
+        metric.setLatAttribute(panel.getLatitudeColumnName());
+        metric.setLonAttribute(panel.getLongitudeColumnName());
     }
 
+    @Override
     public void unsetup() {
-        //_panel = null;
     }
 
+    @Override
     public Class<? extends Statistics> getStatisticsClass() {
         return VectorStatistics.class;
     }
 
+    @Override
     public String getValue() {
         return null;
     }
 
+    @Override
     public String getDisplayName() {
         return "Avg. edge length (km)";
     }
 
+    @Override
     public String getShortDescription() {
         return "Measures the distance and direction of the edges by label type.";
     }
 
+    @Override
     public String getCategory() {
         return StatisticsUI.CATEGORY_EDGE_OVERVIEW;
     }
 
+    @Override
     public int getPosition() {
         return 800;
     }
-    
-    
 }

@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package PS.gephi.plugins;
 
 import org.gephi.statistics.spi.Statistics;
@@ -13,22 +8,23 @@ import org.openide.util.lookup.ServiceProvider;
  *
  * @author Jonas Persson
  */
-
 @ServiceProvider(service = StatisticsBuilder.class)
 public class VectorStatisticsBuilder implements StatisticsBuilder {
 
+    @Override
     public String getName() {
         return "Vector calculations";
     }
 
+    @Override
     public Statistics getStatistics() {
         return new VectorStatistics();
     }
 
+    @Override
     public Class<? extends Statistics> getStatisticsClass() {
         return VectorStatistics.class;
     }
-    
 }
 
   
