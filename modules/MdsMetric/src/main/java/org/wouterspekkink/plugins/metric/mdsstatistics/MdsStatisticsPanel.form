@@ -161,9 +161,6 @@
           <ResourceString bundle="org/wouterspekkink/mdsstatistics/Bundle.properties" key="MdsStatisticsPanel.noWeightsButton.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
         </Property>
       </Properties>
-      <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="noWeightsButtonActionPerformed"/>
-      </Events>
     </Component>
     <Component class="javax.swing.JRadioButton" name="equalWeight">
       <Properties>
@@ -174,9 +171,6 @@
           <ResourceString bundle="org/wouterspekkink/mdsstatistics/Bundle.properties" key="MdsStatisticsPanel.equalWeight.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
         </Property>
       </Properties>
-      <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="equalWeightActionPerformed"/>
-      </Events>
     </Component>
     <Component class="javax.swing.JRadioButton" name="downWeight">
       <Properties>
@@ -187,9 +181,6 @@
           <ResourceString bundle="org/wouterspekkink/mdsstatistics/Bundle.properties" key="MdsStatisticsPanel.downWeight.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
         </Property>
       </Properties>
-      <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="downWeightActionPerformed"/>
-      </Events>
     </Component>
     <Component class="javax.swing.JRadioButton" name="dim2Button">
       <Properties>
