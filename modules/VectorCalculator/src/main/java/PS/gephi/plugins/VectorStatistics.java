@@ -274,9 +274,9 @@ public class VectorStatistics implements Statistics {
         return (Math.toDegrees(Math.atan2(y, x)) + 360) % 360;
     }
 
+    private static final int EARTH_RADIUS = 6371; // Radius of the earth
+    
     private void FindEndNode(String label, double dist, double bearing) {
-        final int R = 6371; // Radius of the earth
-
         _Node startNode;
         if (label != null) {
             startNode = labelCurrentEndNode.get(label);
@@ -287,11 +287,11 @@ public class VectorStatistics implements Statistics {
         double lat1 = Math.toRadians(startNode.lat);
         double lon1 = Math.toRadians(startNode.lon);
 
-        double lat2 = Math.asin(Math.sin(lat1) * Math.cos(dist / R)
-                + Math.cos(lat1) * Math.sin(dist / R) * Math.cos(Math.toRadians(bearing)));
+        double lat2 = Math.asin(Math.sin(lat1) * Math.cos(dist / EARTH_RADIUS)
+                + Math.cos(lat1) * Math.sin(dist / EARTH_RADIUS) * Math.cos(Math.toRadians(bearing)));
 
-        double a = Math.atan2(Math.sin(Math.toRadians(bearing)) * Math.sin(dist / R) * Math.cos(lat1),
-                Math.cos(dist / R) - Math.sin(lat1) * Math.sin(lat2));
+        double a = Math.atan2(Math.sin(Math.toRadians(bearing)) * Math.sin(dist / EARTH_RADIUS) * Math.cos(lat1),
+                Math.cos(dist / EARTH_RADIUS) - Math.sin(lat1) * Math.sin(lat2));
 
         double lon2 = lon1 + a;
 
@@ -312,8 +312,6 @@ public class VectorStatistics implements Statistics {
     }
 
     private static double CalculateDistance(double lon1, double lon2, double lat1, double lat2) {
-        final int R = 6371; // Radius of the earth
-
         Double latDistance = Math.toRadians(lat2 - lat1);
         Double lonDistance = Math.toRadians(lon2 - lon1);
         Double a = Math.sin(latDistance / 2) * Math.sin(latDistance / 2)
@@ -321,7 +319,7 @@ public class VectorStatistics implements Statistics {
                 * Math.sin(lonDistance / 2) * Math.sin(lonDistance / 2);
         Double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
 
-        double distance = R * c;//* 1000; // convert to meters
+        double distance = EARTH_RADIUS * c;//* 1000; // convert to meters
 
         return distance;
     }
