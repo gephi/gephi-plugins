@@ -34,26 +34,24 @@ Link to license: http://creativecommons.org/licenses/by-nc-sa/3.0/
 Ref: "Algorithmics Group. MDSJ: Java Library for Multidimensional Scaling (Version 0.2). 
 Available at http://www.inf.uni-konstanz.de/algo/software/mdsj/. University of Konstanz, 2009."
 
-*/
+ */
 package org.wouterspekkink.plugins.metric.mdsstatistics;
 
 /**
- * The plugin makes use of the MDSJ library, which is available under the Creative Commons License "by-nc-sa" 3.0.
- * Link to license: http://creativecommons.org/licenses/by-nc-sa/3.0/
- * Ref: "Algorithmics Group. MDSJ: Java Library for Multidimensional Scaling (Version 0.2). 
- * Available at http://www.inf.uni-konstanz.de/algo/software/mdsj/. University of Konstanz, 2009."
+ * The plugin makes use of the MDSJ library, which is available under the Creative Commons License "by-nc-sa" 3.0. Link to license: http://creativecommons.org/licenses/by-nc-sa/3.0/ Ref: "Algorithmics
+ * Group. MDSJ: Java Library for Multidimensional Scaling (Version 0.2). Available at http://www.inf.uni-konstanz.de/algo/software/mdsj/. University of Konstanz, 2009."
  *
- * For the calculation of shortest paths the plugin uses the algorithm originally used by Gephi as a step in
- * the calculation of centrality metrics.
- * 
+ * For the calculation of shortest paths the plugin uses the algorithm originally used by Gephi as a step in the calculation of centrality metrics.
+ *
  * @author wouter
  */
 public class MdsStatisticsPanel extends javax.swing.JPanel {
 
-    /** Creates new form MdsStatisticsPanel */
+    /**
+     * Creates new form MdsStatisticsPanel
+     */
     public MdsStatisticsPanel() {
         initComponents();
-        
     }
 
     public void setDissimilarity(boolean dissimilarity, boolean similarity) {
@@ -65,30 +63,32 @@ public class MdsStatisticsPanel extends javax.swing.JPanel {
             edgeTypeButtonGroup.setSelected(noWeightsButton.getModel(), true);
         }
     }
-    
+
     public boolean isNoWeights() {
         return noWeightsButton.isSelected();
     }
-    
+
     public boolean isDissimilarity() {
         return edgeWeightDissimilarity.isSelected();
     }
-    
+
     public boolean isSimilarity() {
         return edgeWeightSimilarity.isSelected();
     }
-    
+
     public void setDistanceWeight(int weight) {
-        switch(weight) {
+        switch (weight) {
             case 0:
                 weighDistanceButtonGroup.setSelected(equalWeight.getModel(), true);
+                break;
             case -2:
                 weighDistanceButtonGroup.setSelected(downWeight.getModel(), true);
+                break;
             default:
                 weighDistanceButtonGroup.setSelected(equalWeight.getModel(), true);
         }
     }
-    
+
     public int getDistanceWeight() {
         if (equalWeight.isSelected()) {
             return 0;
@@ -96,54 +96,63 @@ public class MdsStatisticsPanel extends javax.swing.JPanel {
             return -2;
         }
     }
-    
+
     public void setNumberDimensions(int number) {
-        switch(number) {
+        switch (number) {
             case 2:
                 dimButtonGroup.setSelected(dim2Button.getModel(), true);
+                break;
             case 3:
                 dimButtonGroup.setSelected(dim3Button.getModel(), true);
+                break;
             case 4:
                 dimButtonGroup.setSelected(dim4Button.getModel(), true);
+                break;
             case 5:
                 dimButtonGroup.setSelected(dim5Button.getModel(), true);
+                break;
             case 6:
                 dimButtonGroup.setSelected(dim6Button.getModel(), true);
+                break;
             case 7:
                 dimButtonGroup.setSelected(dim7Button.getModel(), true);
+                break;
             case 8:
                 dimButtonGroup.setSelected(dim8Button.getModel(), true);
-            case 9: 
+                break;
+            case 9:
                 dimButtonGroup.setSelected(dim9Button.getModel(), true);
+                break;
             case 10:
                 dimButtonGroup.setSelected(dim10Button.getModel(), true);
+                break;
             default:
                 dimButtonGroup.setSelected(dim2Button.getModel(), true);
         }
     }
-    
+
     public int getNumberDimensions() {
-            if (dim2Button.isSelected()) {
-                return 2;
-            } else if (dim3Button.isSelected()) {
-                return 3;
-            } else if (dim4Button.isSelected()) {
-                return 4;
-            } else if (dim5Button.isSelected()) {
-                return 5;
-            } else if (dim6Button.isSelected()) {
-                return 6;
-            } else if (dim7Button.isSelected()) {
-                return 7;
-            } else if (dim8Button.isSelected()) {
-                return 8;
-            } else if (dim9Button.isSelected()) {
-                return 9;
-            } else {
-                return 10;
-            }
+        if (dim2Button.isSelected()) {
+            return 2;
+        } else if (dim3Button.isSelected()) {
+            return 3;
+        } else if (dim4Button.isSelected()) {
+            return 4;
+        } else if (dim5Button.isSelected()) {
+            return 5;
+        } else if (dim6Button.isSelected()) {
+            return 6;
+        } else if (dim7Button.isSelected()) {
+            return 7;
+        } else if (dim8Button.isSelected()) {
+            return 8;
+        } else if (dim9Button.isSelected()) {
+            return 9;
+        } else {
+            return 10;
+        }
     }
-   
+
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
@@ -183,27 +192,12 @@ public class MdsStatisticsPanel extends javax.swing.JPanel {
 
         edgeTypeButtonGroup.add(noWeightsButton);
         noWeightsButton.setText(org.openide.util.NbBundle.getMessage(MdsStatisticsPanel.class, "MdsStatisticsPanel.noWeightsButton.text")); // NOI18N
-        noWeightsButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                noWeightsButtonActionPerformed(evt);
-            }
-        });
 
         weighDistanceButtonGroup.add(equalWeight);
         equalWeight.setText(org.openide.util.NbBundle.getMessage(MdsStatisticsPanel.class, "MdsStatisticsPanel.equalWeight.text")); // NOI18N
-        equalWeight.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                equalWeightActionPerformed(evt);
-            }
-        });
 
         weighDistanceButtonGroup.add(downWeight);
         downWeight.setText(org.openide.util.NbBundle.getMessage(MdsStatisticsPanel.class, "MdsStatisticsPanel.downWeight.text")); // NOI18N
-        downWeight.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                downWeightActionPerformed(evt);
-            }
-        });
 
         dimButtonGroup.add(dim2Button);
         dim2Button.setText(org.openide.util.NbBundle.getMessage(MdsStatisticsPanel.class, "MdsStatisticsPanel.dim2Button.text")); // NOI18N
@@ -352,18 +346,6 @@ public class MdsStatisticsPanel extends javax.swing.JPanel {
         License2.getAccessibleContext().setAccessibleName(org.openide.util.NbBundle.getMessage(MdsStatisticsPanel.class, "MdsStatisticsPanel.License2.text")); // NOI18N
     }// </editor-fold>//GEN-END:initComponents
 
-    private void noWeightsButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_noWeightsButtonActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_noWeightsButtonActionPerformed
-
-    private void downWeightActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_downWeightActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_downWeightActionPerformed
-
-    private void equalWeightActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_equalWeightActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_equalWeightActionPerformed
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel DimLabel;
     private javax.swing.JLabel Introduction;
@@ -393,5 +375,4 @@ public class MdsStatisticsPanel extends javax.swing.JPanel {
     private javax.swing.JRadioButton noWeightsButton;
     private javax.swing.ButtonGroup weighDistanceButtonGroup;
     // End of variables declaration//GEN-END:variables
-}      
-
+}

@@ -34,7 +34,7 @@ Link to license: http://creativecommons.org/licenses/by-nc-sa/3.0/
 Ref: "Algorithmics Group. MDSJ: Java Library for Multidimensional Scaling (Version 0.2). 
 Available at http://www.inf.uni-konstanz.de/algo/software/mdsj/. University of Konstanz, 2009."
 
-*/
+ */
 package org.wouterspekkink.plugins.metric.mdsstatistics;
 
 import javax.swing.JPanel;
@@ -43,23 +43,19 @@ import org.gephi.statistics.spi.StatisticsUI;
 import org.openide.util.lookup.ServiceProvider;
 
 /**
- * The plugin makes use of the MDSJ library, which is available under the Creative Commons License "by-nc-sa" 3.0.
- * Link to license: http://creativecommons.org/licenses/by-nc-sa/3.0/
- * Ref: "Algorithmics Group. MDSJ: Java Library for Multidimensional Scaling (Version 0.2). 
- * Available at http://www.inf.uni-konstanz.de/algo/software/mdsj/. University of Konstanz, 2009."
+ * The plugin makes use of the MDSJ library, which is available under the Creative Commons License "by-nc-sa" 3.0. Link to license: http://creativecommons.org/licenses/by-nc-sa/3.0/ Ref: "Algorithmics
+ * Group. MDSJ: Java Library for Multidimensional Scaling (Version 0.2). Available at http://www.inf.uni-konstanz.de/algo/software/mdsj/. University of Konstanz, 2009."
  *
- * For the calculation of shortest paths the plugin uses the algorithm originally used by Gephi as a step in
- * the calculation of centrality metrics.
- * 
+ * For the calculation of shortest paths the plugin uses the algorithm originally used by Gephi as a step in the calculation of centrality metrics.
+ *
  * @author wouter
  */
-
 @ServiceProvider(service = StatisticsUI.class)
-public class MdsStatisticsUI implements StatisticsUI{
-    
+public class MdsStatisticsUI implements StatisticsUI {
+
     private MdsStatistics statistic;
     private MdsStatisticsPanel panel;
-    
+
     @Override
     public JPanel getSettingsPanel() {
         panel = new MdsStatisticsPanel();
@@ -118,5 +114,5 @@ public class MdsStatisticsUI implements StatisticsUI{
     public String getShortDescription() {
         return null;
     }
-    
+
 }
