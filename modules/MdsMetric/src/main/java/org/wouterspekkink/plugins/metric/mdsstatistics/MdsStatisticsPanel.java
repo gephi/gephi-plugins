@@ -169,12 +169,11 @@ public class MdsStatisticsPanel extends javax.swing.JPanel {
         Ref2 = new javax.swing.JLabel();
         DimLabel = new javax.swing.JLabel();
         edgesLabel = new javax.swing.JLabel();
-        jLabel1 = new javax.swing.JLabel();
         License1 = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
         License2 = new javax.swing.JLabel();
         License3 = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
+        License4 = new javax.swing.JLabel();
+        jLabel1 = new javax.swing.JLabel();
 
         edgeTypeButtonGroup.add(edgeWeightDissimilarity);
         edgeWeightDissimilarity.setText(org.openide.util.NbBundle.getMessage(MdsStatisticsPanel.class, "MdsStatisticsPanel.edgeWeightDissimilarity.text")); // NOI18N
@@ -239,21 +238,19 @@ public class MdsStatisticsPanel extends javax.swing.JPanel {
 
         Ref2.setText(org.openide.util.NbBundle.getMessage(MdsStatisticsPanel.class, "MdsStatisticsPanel.Ref2.text_2")); // NOI18N
 
-        DimLabel.setText(org.openide.util.NbBundle.getMessage(MdsStatisticsPanel.class, "MdsStatisticsPanel.DimLabel.text_2")); // NOI18N
+        DimLabel.setText(org.openide.util.NbBundle.getMessage(MdsStatisticsPanel.class, "MdsStatisticsPanel.DimLabel.text")); // NOI18N
 
         edgesLabel.setText(org.openide.util.NbBundle.getMessage(MdsStatisticsPanel.class, "MdsStatisticsPanel.edgesLabel.text_2")); // NOI18N
 
-        jLabel1.setText(org.openide.util.NbBundle.getMessage(MdsStatisticsPanel.class, "MdsStatisticsPanel.jLabel1.text_2")); // NOI18N
-
         License1.setText(org.openide.util.NbBundle.getMessage(MdsStatisticsPanel.class, "MdsStatisticsPanel.License1.text")); // NOI18N
-
-        jLabel3.setText(org.openide.util.NbBundle.getMessage(MdsStatisticsPanel.class, "MdsStatisticsPanel.License2.text")); // NOI18N
 
         License2.setText(org.openide.util.NbBundle.getMessage(MdsStatisticsPanel.class, "MdsStatisticsPanel.License2.text")); // NOI18N
 
         License3.setText(org.openide.util.NbBundle.getMessage(MdsStatisticsPanel.class, "MdsStatisticsPanel.License3.text")); // NOI18N
 
-        jLabel2.setText(org.openide.util.NbBundle.getMessage(MdsStatisticsPanel.class, "MdsStatisticsPanel.License4.text")); // NOI18N
+        License4.setText(org.openide.util.NbBundle.getMessage(MdsStatisticsPanel.class, "MdsStatisticsPanel.License4.text")); // NOI18N
+
+        jLabel1.setText(org.openide.util.NbBundle.getMessage(MdsStatisticsPanel.class, "MdsStatisticsPanel.stressCalculationLabel.text")); // NOI18N
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -283,7 +280,6 @@ public class MdsStatisticsPanel extends javax.swing.JPanel {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(dim10Button))
                     .addComponent(DimLabel)
-                    .addComponent(jLabel3)
                     .addComponent(License1)
                     .addComponent(Ref1)
                     .addGroup(layout.createSequentialGroup()
@@ -291,7 +287,7 @@ public class MdsStatisticsPanel extends javax.swing.JPanel {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(License3)
                             .addComponent(License2)
-                            .addComponent(jLabel2)))
+                            .addComponent(License4)))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(edgesLabel)
@@ -301,8 +297,8 @@ public class MdsStatisticsPanel extends javax.swing.JPanel {
                         .addGap(170, 170, 170)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(downWeight)
-                            .addComponent(jLabel1)
-                            .addComponent(equalWeight))))
+                            .addComponent(equalWeight)
+                            .addComponent(jLabel1))))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -321,10 +317,10 @@ public class MdsStatisticsPanel extends javax.swing.JPanel {
                     .addComponent(dim8Button)
                     .addComponent(dim9Button)
                     .addComponent(dim10Button))
-                .addGap(53, 53, 53)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(edgesLabel, javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.TRAILING))
+                .addGap(37, 37, 37)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(edgesLabel)
+                    .addComponent(jLabel1))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(noWeightsButton)
@@ -335,24 +331,25 @@ public class MdsStatisticsPanel extends javax.swing.JPanel {
                     .addComponent(equalWeight))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(edgeWeightSimilarity)
-                .addGap(24, 24, 24)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 36, Short.MAX_VALUE)
                 .addComponent(Introduction)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(Ref1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(Ref2)
-                .addGap(25, 25, 25)
+                .addGap(18, 18, 18)
                 .addComponent(License1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(License2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(License3)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel2)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jLabel3)
-                .addGap(45, 45, 45))
+                .addComponent(License4)
+                .addContainerGap())
         );
+
+        DimLabel.getAccessibleContext().setAccessibleName(org.openide.util.NbBundle.getMessage(MdsStatisticsPanel.class, "MdsStatisticsPanel.DimLabel.text")); // NOI18N
+        License2.getAccessibleContext().setAccessibleName(org.openide.util.NbBundle.getMessage(MdsStatisticsPanel.class, "MdsStatisticsPanel.License2.text")); // NOI18N
     }// </editor-fold>//GEN-END:initComponents
 
     private void noWeightsButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_noWeightsButtonActionPerformed
@@ -373,6 +370,7 @@ public class MdsStatisticsPanel extends javax.swing.JPanel {
     private javax.swing.JLabel License1;
     private javax.swing.JLabel License2;
     private javax.swing.JLabel License3;
+    private javax.swing.JLabel License4;
     private javax.swing.JLabel Ref1;
     private javax.swing.JLabel Ref2;
     private javax.swing.JRadioButton dim10Button;
@@ -392,8 +390,6 @@ public class MdsStatisticsPanel extends javax.swing.JPanel {
     private javax.swing.JLabel edgesLabel;
     private javax.swing.JRadioButton equalWeight;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
     private javax.swing.JRadioButton noWeightsButton;
     private javax.swing.ButtonGroup weighDistanceButtonGroup;
     // End of variables declaration//GEN-END:variables

@@ -37,10 +37,11 @@ Available at http://www.inf.uni-konstanz.de/algo/software/mdsj/. University of K
 */
 package org.wouterspekkink.plugins.metric.mdsstatistics;
 
-
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Stack;
+import mdsj.MDSJ;
+import mdsj.StressMinimization;
 import org.gephi.graph.api.Table;
 import org.gephi.graph.api.Column;
 import org.gephi.graph.api.Graph;
@@ -48,8 +49,6 @@ import org.gephi.graph.api.GraphModel;
 import org.gephi.graph.api.Node;
 import org.gephi.graph.api.Edge;
 import org.gephi.statistics.spi.Statistics;
-import mdsj.MDSJ;
-import mdsj.StressMinimization;
 import org.gephi.graph.api.DirectedGraph;
 import org.gephi.graph.api.EdgeIterable;
 import org.gephi.graph.api.GraphController;
@@ -73,11 +72,6 @@ import org.gephi.utils.progress.ProgressTicket;
 
 
 public class MdsStatistics implements Statistics, LongTask {
-    
-    /* Currently I am assuming that we're working with only two dimensions
-    Later I might want to add an iterator to determine the number of
-    dimensions to be used. */
-    
     public static final String DIM_1 = "Dimension_1";
     public static final String DIM_2 = "Dimension_2";
     public static final String DIM_3 = "Dimension_3";
@@ -89,33 +83,19 @@ public class MdsStatistics implements Statistics, LongTask {
     public static final String DIM_9 = "Dimension_9";
     public static final String DIM_10 = "Dimension_10";
     public static final String WEIGHT = "Weight";
-    
     private double stress;
-        
     private int N;
-    
-    //Doesn't do anything now.
     private boolean isDirected;
-
     private boolean useDissimilarity = false;
     private boolean useSimilarity = false;
     private String reportString = "";
     private String reportStringTwo = "";
-
-    //Distance matrix for path distances
-    double [][] pathDistances;
-    
-    //Weight matrix for MDS calculations; check whether it works as expected.
-    double [][] weightMatrix; 
-    
-    //When using weights for distances
-    double [][] weightDist;
-    
+    double [][] pathDistances;  //Distance matrix for path distances   
+    double [][] weightMatrix; //Weight matrix for MDS calculations
+    double [][] weightDist; //When using weights for distances
     private ProgressTicket progress;
     private boolean isCanceled;
-    
     int distanceWeight = 0;
-
     int numberDimensions = 2;
     
     public MdsStatistics() {
@@ -474,7 +454,13 @@ public class MdsStatistics implements Statistics, LongTask {
         //process is currently modifying it.
         hgraph.readLock();
         
-        N = hgraph.getNodeCount();
+        N = hgraph.getNodeCount();  
+        //The conditional below prevents a Gephi-crashing error when the plugin
+        //is run on an empty graph.
+        if (N == 0) {
+            hgraph.readUnlock();
+            return;
+        }    
         HashMap<Node, Integer> indicies = createIndiciesMap(hgraph);
                 
         pathDistances = new double[N][N];
@@ -486,7 +472,6 @@ public class MdsStatistics implements Statistics, LongTask {
             }
         }
             
-        //Check whether the length-method works like it should.
         pathDistances = calculateDistanceMetrics(hgraph, indicies, isDirected);
 
         //Handle (dis)similarities
@@ -526,7 +511,7 @@ public class MdsStatistics implements Statistics, LongTask {
             }
         }
        
-        //Need something here to calculate coordinates
+        //Calculate coordinates
         weightMatrix = StressMinimization.weightMatrix(pathDistances, distanceWeight);
         double output [][] = MDSJ.stressMinimization(pathDistances, weightMatrix, numberDimensions);
         stress = StressMinimization.normalizedStress(pathDistances, weightMatrix, output);
@@ -601,9 +586,7 @@ public class MdsStatistics implements Statistics, LongTask {
         hgraph.readUnlock();
     }
         
-    // Let's see how I can use the stuff below
-    //public Map<String, double[]> calculateDistanceMetrics(Graph hgraph, HashMap<Node, Integer> indicies, boolean directed, boolean normalized) {
-    // Does not work yet.
+    //Calculate the distances
     public double[][] calculateDistanceMetrics(Graph hgraph, HashMap<Node, Integer> indicies, boolean directed) {
         int n = hgraph.getNodeCount();
         
@@ -659,6 +642,7 @@ public class MdsStatistics implements Statistics, LongTask {
         }
         return distances;
     }
+    
     private void setInitParametersForNode(Node s, LinkedList<Node>[] P, double[] d, int index, int n) {           
             for (int j = 0; j < n; j++) {
                 P[j] = new LinkedList<Node>();
@@ -728,9 +712,9 @@ public class MdsStatistics implements Statistics, LongTask {
     public void setDistanceWeight(int weight) {
         distanceWeight = weight;
         if(weight == 0) {
-            reportStringTwo = "(all distances treated equally)";
+            reportStringTwo = " (all distances treated equally).";
         } else if (weight == -2) {
-            reportStringTwo = "(large distances downweighted and small distances upweighted)";
+            reportStringTwo = " (large distances downweighted and small distances upweighted).";
         }
     }
     
@@ -752,8 +736,7 @@ public class MdsStatistics implements Statistics, LongTask {
         //One could add a distribution histogram for instance
         String report = "<HTML> <BODY> <h1>Stress value</h1> "
                 + "<hr>"
-                + "<br> Stress of this MDS configuration: " + stress +"<br />"
-                + "<br>" + reportStringTwo + "<br />"
+                + "<br> Stress of this MDS configuration: " + stress + reportStringTwo + "<br />"
                 + "<br> <br />"
                 + "<br>" + reportString + "<br />"
                 + "<br> <br />"

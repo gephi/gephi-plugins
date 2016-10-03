@@ -16,7 +16,7 @@
 
     <dependencies>
         <!-- Insert dependencies here -->
-                 <dependency>
+        <dependency>
              <groupId>org.gephi</groupId>
              <artifactId>graph-api</artifactId>
         </dependency>
@@ -30,11 +30,6 @@
             <type>jar</type>
         </dependency>
         <dependency>
-            <groupId>MDSJ-Group</groupId>
-            <artifactId>MDSJ</artifactId>
-            <version>0.2</version>
-        </dependency>
-                <dependency>
             <groupId>org.netbeans.api</groupId>
             <artifactId>org-openide-util-lookup</artifactId>
         </dependency>
@@ -42,8 +37,25 @@
             <groupId>org.netbeans.api</groupId>
             <artifactId>org-openide-util</artifactId>
         </dependency>
-    </dependencies>
+        <dependency>
+            <groupId>uni-konstanz.de.algo</groupId>
+            <artifactId>mdsj</artifactId>
+            <version>0.2</version>
+        </dependency>
+            
 
+    </dependencies>
+    
+    <repositories>
+        <repository>
+            <id>gephi-thirdparty</id>
+            <url>https://raw.github.com/gephi/gephi/mvn-thirdparty-repo/</url>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+    </repositories>
+    
     <build>
         <plugins>
             <plugin>
@@ -54,7 +66,7 @@
                     <author>Wouter Spekkink</author>
                     <authorEmail>wouterspekkink@gmail.com</authorEmail>
                     <authorUrl>www.wouterspekkink.org</authorUrl>
-                    <sourceCodeUrl>$sourcecode_url</sourceCodeUrl>
+                    <sourceCodeUrl>https://github.com/WouterSpekkink/gephi-plugins/tree/mds_metric</sourceCodeUrl>
                     <publicPackages>
                         <!-- Insert public packages -->
                     </publicPackages>
