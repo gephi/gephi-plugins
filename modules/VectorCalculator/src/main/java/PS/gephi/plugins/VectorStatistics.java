@@ -140,8 +140,6 @@ public class VectorStatistics implements Statistics {
 
                 // Also set the end node accumulated over all labels
                 FindEndNode(null, dist, bearing);
-
-                //CalculateVectorMagnitude(label, e);
             }
 
             CreateReport();
@@ -183,6 +181,11 @@ public class VectorStatistics implements Statistics {
     }
 
     private void CreateReport() {
+        if (firstNode == null) {
+            report = "The graph has no edges";
+            return;
+        }
+
         List<Double> standardDeviations = new ArrayList<>();
 
         // caluculate the totals
@@ -275,7 +278,7 @@ public class VectorStatistics implements Statistics {
     }
 
     private static final int EARTH_RADIUS = 6371; // Radius of the earth
-    
+
     private void FindEndNode(String label, double dist, double bearing) {
         _Node startNode;
         if (label != null) {
