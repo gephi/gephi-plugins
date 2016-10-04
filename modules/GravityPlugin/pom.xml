@@ -45,7 +45,7 @@
                     <author>Surya</author>
                     <authorEmail></authorEmail>
                     <authorUrl></authorUrl>
-                    <sourceCodeUrl>$sourcecode_url</sourceCodeUrl>
+                    <sourceCodeUrl>https://github.com/suryanash/gephi-plugins</sourceCodeUrl>
                     <publicPackages>
                     </publicPackages>
                 </configuration>

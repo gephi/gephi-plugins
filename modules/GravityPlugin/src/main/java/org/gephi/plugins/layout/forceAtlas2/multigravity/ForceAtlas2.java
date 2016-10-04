@@ -2,9 +2,9 @@
  Original source by code from Gephi
  Modifications made by Surya Rastogi
  Modified for Individual Project for completion of degree in BEng Computing 
-*/
+ */
 
-/*
+ /*
  Copyright 2008-2011 Gephi
  Authors : Mathieu Jacomy <mathieu.jacomy@gmail.com>
  Website : http://www.gephi.org
@@ -45,7 +45,7 @@
 
  Portions Copyrighted 2011 Gephi Consortium.
  */
-package org.gephi.plugins.layout.forceAtlas2Custom;
+package org.gephi.plugins.layout.forceAtlas2.multigravity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -53,12 +53,14 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.gephi.graph.api.Edge;
 import org.gephi.graph.api.Graph;
 import org.gephi.graph.api.GraphModel;
 import org.gephi.graph.api.Node;
-import org.gephi.plugins.layout.forceAtlas2Custom.ForceFactory.AttractionForce;
-import org.gephi.plugins.layout.forceAtlas2Custom.ForceFactory.RepulsionForce;
+import org.gephi.plugins.layout.forceAtlas2.multigravity.ForceFactory.AttractionForce;
+import org.gephi.plugins.layout.forceAtlas2.multigravity.ForceFactory.RepulsionForce;
 import org.gephi.layout.spi.Layout;
 import org.gephi.layout.spi.LayoutBuilder;
 import org.gephi.layout.spi.LayoutProperty;
@@ -72,6 +74,8 @@ import org.openide.util.NbBundle;
  */
 public class ForceAtlas2 implements Layout {
     
+    private static final String GRAVITY_ATTR_X = "gravity_x";
+    private static final String GRAVITY_ATTR_Y = "gravity_y";
 
     private GraphModel graphModel;
     private Graph graph;
@@ -103,7 +107,7 @@ public class ForceAtlas2 implements Layout {
     }
 
     @Override
-    public void initAlgo() {        
+    public void initAlgo() {
         speed = 1.;
         speedEfficiency = 1.;
 
@@ -125,38 +129,41 @@ public class ForceAtlas2 implements Layout {
                 ForceAtlas2LayoutData nLayout = new ForceAtlas2LayoutData();
                 n.setLayoutData(nLayout);
             }
-            
+
             // Calculating data for multiple sources of gravity
             double gravity_y = 0.0;
             double gravity_x = 0.0;
             // Try to access gravity_x and gravity_y attributes
             try {
-                gravity_x = (Double) n.getAttribute("gravity_x");
-            }
-            catch (IllegalArgumentException  ex){
+                gravity_x = ((Number) n.getAttribute(GRAVITY_ATTR_X)).doubleValue();
+            } catch (IllegalArgumentException ex) {
+                missing++;
+            } catch (NullPointerException ex) {
                 missing++;
             }
-            catch (NullPointerException ex){
-                missing++;
-            }
-            
+
             try {
-                gravity_y = (Double) n.getAttribute("gravity_y");;
-            }
-            catch (IllegalArgumentException ex){
+                gravity_y = ((Number) n.getAttribute(GRAVITY_ATTR_Y)).doubleValue();
+            } catch (IllegalArgumentException ex) {
+                missing++;
+            } catch (NullPointerException ex) {
                 missing++;
             }
-            catch (NullPointerException ex){
-                missing++;
-            }
-            
-            
+
             // Calculate gravity range to scale down if needed
-            if (gravity_x < min_x) min_x = gravity_x;
-            if (gravity_x > max_x) max_x = gravity_x;           
-            if (gravity_y < min_y) min_y = gravity_y;            
-            if (gravity_y > max_y) max_y = gravity_y;
-            
+            if (gravity_x < min_x) {
+                min_x = gravity_x;
+            }
+            if (gravity_x > max_x) {
+                max_x = gravity_x;
+            }
+            if (gravity_y < min_y) {
+                min_y = gravity_y;
+            }
+            if (gravity_y > max_y) {
+                max_y = gravity_y;
+            }
+
             ForceAtlas2LayoutData nLayout = n.getLayoutData();
             nLayout.mass = 1 + graph.getDegree(n);
             nLayout.old_dx = 0;
@@ -164,51 +171,47 @@ public class ForceAtlas2 implements Layout {
             nLayout.dx = 0;
             nLayout.dy = 0;
         }
-        
+
         // Scaling down gravity_x
         double range_x = max_x - min_x;
         double scale_x = 1;
         if (range_x > MAX_GRAVITY) {
-            scale_x = range_x/MAX_GRAVITY;
+            scale_x = range_x / MAX_GRAVITY;
         }
         // Scaling down gravity_y
         double range_y = max_y - min_y;
         double scale_y = 1;
         if (range_y > MAX_GRAVITY) {
-            scale_y = range_y/MAX_GRAVITY;
+            scale_y = range_y / MAX_GRAVITY;
         }
-        
+
         // Setting Layout data for gravity sources
-        for(Node n : nodes){
+        for (Node n : nodes) {
             double gravity_y = 0.0;
             double gravity_x = 0.0;
-            
+
             try {
-                gravity_x = (Double) n.getAttribute("gravity_x");
+                gravity_x = ((Number) n.getAttribute(GRAVITY_ATTR_X)).doubleValue();
+            } catch (IllegalArgumentException ex) {
+            } catch (NullPointerException ex) {
             }
-            catch (IllegalArgumentException ex){
-            }
-            catch (NullPointerException ex){  
-            }
-            
+
             try {
-                gravity_y = (Double) n.getAttribute("gravity_y");;
-            }
-            catch (IllegalArgumentException ex){
-            }
-            catch (NullPointerException ex){  
+                gravity_y = ((Number) n.getAttribute(GRAVITY_ATTR_Y)).doubleValue();
+            } catch (IllegalArgumentException ex) {
+            } catch (NullPointerException ex) {
             }
 
             ForceAtlas2LayoutData nLayout = n.getLayoutData();
             //Center middle source of gravity
-            nLayout.gravity_x = ((((gravity_x - min_x) - range_x/2)/scale_x));
-            nLayout.gravity_y = ((((gravity_y - min_y) - range_y/2)/scale_y));
+            nLayout.gravity_x = ((((gravity_x - min_x) - range_x / 2) / scale_x));
+            nLayout.gravity_y = ((((gravity_y - min_y) - range_y / 2) / scale_y));
         }
-        
+
         if (missing > 0) {
-            System.out.println("Some nodes missing attributes(" + missing + ") 'gravity_x' or 'gravity_y', using 0.0 instead");
+            Logger.getLogger("").log(Level.INFO, "Some nodes missing attributes({0}) ''gravity_x'' or ''gravity_y'', using 0.0 instead", missing);
         }
-        
+
         pool = Executors.newFixedThreadPool(threadCount);
         currentThreadCount = threadCount;
     }
@@ -428,7 +431,7 @@ public class ForceAtlas2 implements Layout {
                     "ForceAtlas2.gravityYRatio.name",
                     NbBundle.getMessage(getClass(), "ForceAtlas2.gravityYRatio.desc"),
                     "getGravityYRatio", "setGravityYRatio"));
-            
+
             properties.add(LayoutProperty.createProperty(
                     this, Boolean.class,
                     NbBundle.getMessage(getClass(), "ForceAtlas2.strongGravityMode.name"),
@@ -510,7 +513,7 @@ public class ForceAtlas2 implements Layout {
                     "getThreadsCount", "setThreadsCount"));
 
         } catch (Exception e) {
-            e.printStackTrace();
+            Exceptions.printStackTrace(e);
         }
 
         return properties.toArray(new LayoutProperty[0]);
@@ -532,7 +535,7 @@ public class ForceAtlas2 implements Layout {
         }
         setStrongGravityMode(false);
         setGravity(1.);
-        
+
         setGravityXRatio(2.5);
         setGravityYRatio(2.5);
 
@@ -604,7 +607,7 @@ public class ForceAtlas2 implements Layout {
     public void setScalingRatio(Double scalingRatio) {
         this.scalingRatio = scalingRatio;
     }
-    
+
     public Double getGravityXRatio() {
         return this.gravityXRatio;
     }
@@ -612,7 +615,7 @@ public class ForceAtlas2 implements Layout {
     public void setGravityXRatio(Double gravityXRatio) {
         this.gravityXRatio = gravityXRatio;
     }
-    
+
     public Double getGravityYRatio() {
         return this.gravityYRatio;
     }

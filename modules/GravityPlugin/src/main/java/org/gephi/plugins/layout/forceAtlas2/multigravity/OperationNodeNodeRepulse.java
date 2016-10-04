@@ -39,13 +39,29 @@ Contributor(s):
 
 Portions Copyrighted 2011 Gephi Consortium.
  */
-package org.gephi.plugins.layout.forceAtlas2Custom;
+package org.gephi.plugins.layout.forceAtlas2.multigravity;
+
+import org.gephi.graph.api.Node;
+import org.gephi.plugins.layout.forceAtlas2.multigravity.ForceFactory.RepulsionForce;
 
 /**
  *
  * @author Mathieu Jacomy
  */
-public abstract class Operation {
+public class OperationNodeNodeRepulse extends Operation {
 
-    public abstract void execute();
+    private final Node n1;
+    private final Node n2;
+    private final RepulsionForce f;
+
+    public OperationNodeNodeRepulse(Node n1, Node n2, RepulsionForce f) {
+        this.n1 = n1;
+        this.n2 = n2;
+        this.f = f;
+    }
+
+    @Override
+    public void execute() {
+        f.apply(n1, n2);
+    }
 }

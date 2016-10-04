@@ -39,31 +39,31 @@ Contributor(s):
 
 Portions Copyrighted 2011 Gephi Consortium.
  */
-package org.gephi.plugins.layout.forceAtlas2Custom;
+package org.gephi.plugins.layout.forceAtlas2.multigravity;
 
 import org.gephi.graph.api.Node;
-import org.gephi.plugins.layout.forceAtlas2Custom.ForceFactory.AttractionForce;
+import org.gephi.plugins.layout.forceAtlas2.multigravity.ForceFactory.RepulsionForce;
 
 /**
  *
  * @author Mathieu Jacomy
  */
-public class OperationNodeNodeAttract extends Operation {
+public class OperationNodeRegionRepulse extends Operation {
 
-    private final Node n1;
-    private final Node n2;
-    private final AttractionForce f;
-    private final double coefficient;
+    private final Node n;
+    private final Region r;
+    private final RepulsionForce f;
+    private final double theta;
 
-    public OperationNodeNodeAttract(Node n1, Node n2, AttractionForce f, double coefficient) {
-        this.n1 = n1;
-        this.n2 = n2;
+    public OperationNodeRegionRepulse(Node n, Region r, RepulsionForce f, double theta) {
+        this.n = n;
         this.f = f;
-        this.coefficient = coefficient;
+        this.r = r;
+        this.theta = theta;
     }
 
     @Override
     public void execute() {
-        f.apply(n1, n2, coefficient);
+        r.applyForce(n, f, theta);
     }
 }

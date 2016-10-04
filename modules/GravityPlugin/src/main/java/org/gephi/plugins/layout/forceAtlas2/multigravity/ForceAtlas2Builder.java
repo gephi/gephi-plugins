@@ -39,29 +39,66 @@ Contributor(s):
 
 Portions Copyrighted 2011 Gephi Consortium.
  */
-package org.gephi.plugins.layout.forceAtlas2Custom;
+package org.gephi.plugins.layout.forceAtlas2.multigravity;
 
-import org.gephi.graph.api.Node;
-import org.gephi.plugins.layout.forceAtlas2Custom.ForceFactory.RepulsionForce;
+import javax.swing.Icon;
+import javax.swing.JPanel;
+import org.gephi.layout.spi.Layout;
+import org.gephi.layout.spi.LayoutBuilder;
+import org.gephi.layout.spi.LayoutUI;
+import org.openide.util.NbBundle;
+import org.openide.util.lookup.ServiceProvider;
 
 /**
- *
+ * Layout Builder
  * @author Mathieu Jacomy
  */
-public class OperationNodeRepulse extends Operation {
+@ServiceProvider(service = LayoutBuilder.class)
+public class ForceAtlas2Builder implements LayoutBuilder {
 
-    private Node n;
-    private RepulsionForce f;
-    private double coefficient;
+    private ForceAtlas2UI ui = new ForceAtlas2UI();
 
-    public OperationNodeRepulse(Node n, RepulsionForce f, double coefficient) {
-        this.n = n;
-        this.f = f;
-        this.coefficient = coefficient;
+    @Override
+    public String getName() {
+        return NbBundle.getMessage(ForceAtlas2.class, "ForceAtlas2.name");
     }
 
     @Override
-    public void execute() {
-        f.apply(n, coefficient);
+    public LayoutUI getUI() {
+        return ui;
+    }
+
+    @Override
+    public ForceAtlas2 buildLayout() {
+        ForceAtlas2 layout = new ForceAtlas2(this);
+        return layout;
+    }
+
+    private class ForceAtlas2UI implements LayoutUI {
+
+        @Override
+        public String getDescription() {
+            return NbBundle.getMessage(ForceAtlas2.class, "ForceAtlas2.description");
+        }
+
+        @Override
+        public Icon getIcon() {
+            return null;
+        }
+
+        @Override
+        public JPanel getSimplePanel(Layout layout) {
+            return null;
+        }
+
+        @Override
+        public int getQualityRank() {
+            return 4;
+        }
+
+        @Override
+        public int getSpeedRank() {
+            return 4;
+        }
     }
 }

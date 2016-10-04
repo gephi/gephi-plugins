@@ -39,66 +39,63 @@ Contributor(s):
 
 Portions Copyrighted 2011 Gephi Consortium.
  */
-package org.gephi.plugins.layout.forceAtlas2Custom;
+package org.gephi.plugins.layout.forceAtlas2.multigravity;
 
-import javax.swing.Icon;
-import javax.swing.JPanel;
-import org.gephi.layout.spi.Layout;
-import org.gephi.layout.spi.LayoutBuilder;
-import org.gephi.layout.spi.LayoutUI;
-import org.openide.util.NbBundle;
-import org.openide.util.lookup.ServiceProvider;
+import org.gephi.graph.api.Node;
+import org.gephi.plugins.layout.forceAtlas2.multigravity.ForceFactory.RepulsionForce;
 
 /**
- * Layout Builder
+ *
  * @author Mathieu Jacomy
  */
-@ServiceProvider(service = LayoutBuilder.class)
-public class ForceAtlas2Builder implements LayoutBuilder {
+public class NodesThread implements Runnable {
 
-    private ForceAtlas2UI ui = new ForceAtlas2UI();
+    private Node[] nodes;
+    private int from;
+    private int to;
+    private Region rootRegion;
+    private boolean barnesHutOptimize;
+    private RepulsionForce Repulsion;
+    private double barnesHutTheta;
+    private double gravity;
+    private RepulsionForce GravityForce;
+    private double scaling;
 
-    @Override
-    public String getName() {
-        return NbBundle.getMessage(ForceAtlas2.class, "ForceAtlas2.name");
+    public NodesThread(Node[] nodes, int from, int to, boolean barnesHutOptimize, double barnesHutTheta, double gravity, RepulsionForce GravityForce, double scaling, Region rootRegion, RepulsionForce Repulsion) {
+        this.nodes = nodes;
+        this.from = from;
+        this.to = to;
+        this.rootRegion = rootRegion;
+        this.barnesHutOptimize = barnesHutOptimize;
+        this.Repulsion = Repulsion;
+        this.barnesHutTheta = barnesHutTheta;
+        this.gravity = gravity;
+        this.GravityForce = GravityForce;
+        this.scaling = scaling;
     }
 
     @Override
-    public LayoutUI getUI() {
-        return ui;
-    }
-
-    @Override
-    public ForceAtlas2 buildLayout() {
-        ForceAtlas2 layout = new ForceAtlas2(this);
-        return layout;
-    }
-
-    private class ForceAtlas2UI implements LayoutUI {
-
-        @Override
-        public String getDescription() {
-            return NbBundle.getMessage(ForceAtlas2.class, "ForceAtlas2.description");
+    public void run() {
+        // Repulsion
+        if (barnesHutOptimize) {
+            for (int nIndex = from; nIndex < to; nIndex++) {
+                Node n = nodes[nIndex];
+                rootRegion.applyForce(n, Repulsion, barnesHutTheta);
+            }
+        } else {
+            for (int n1Index = from; n1Index < to; n1Index++) {
+                Node n1 = nodes[n1Index];
+                for (int n2Index = 0; n2Index < n1Index; n2Index++) {
+                    Node n2 = nodes[n2Index];
+                    Repulsion.apply(n1, n2);
+                }
+            }
         }
 
-        @Override
-        public Icon getIcon() {
-            return null;
-        }
-
-        @Override
-        public JPanel getSimplePanel(Layout layout) {
-            return null;
-        }
-
-        @Override
-        public int getQualityRank() {
-            return 4;
-        }
-
-        @Override
-        public int getSpeedRank() {
-            return 4;
+        // Gravity
+        for (int nIndex = from; nIndex < to; nIndex++) {
+            Node n = nodes[nIndex];
+            GravityForce.apply(n, gravity / scaling);
         }
     }
 }
