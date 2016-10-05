@@ -44,6 +44,7 @@
         <module>modules/GiveColorToNodes</module>
         <module>modules/GiveColorToEdges</module>
         <module>modules/GravityPlugin</module>
+        <module>modules/MdsMetric</module>
     </modules>
     
     <!-- Properties -->
