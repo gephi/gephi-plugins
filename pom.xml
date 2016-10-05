@@ -45,6 +45,7 @@
         <module>modules/GiveColorToEdges</module>
         <module>modules/GravityPlugin</module>
         <module>modules/MdsMetric</module>
+        <module>modules/VectorCalculator</module>
     </modules>
     
     <!-- Properties -->
