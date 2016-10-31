@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <artifactId>gephi-plugin-parent</artifactId>
+        <groupId>org.gephi</groupId>
+        <version>0.9.1</version>
+    </parent>
+
+    <groupId>com.carlschroedl.gephi</groupId>
+    <artifactId>spanningtree</artifactId>
+    <version>1.0.0</version>
+    <packaging>nbm</packaging>
+
+    <name>SpanningTree</name>
+
+    <dependencies>
+        
+    <dependency>
+      <groupId>org.gephi</groupId>
+      <artifactId>statistics-api</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.gephi</groupId>
+      <artifactId>utils-longtask</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.gephi</groupId>
+      <artifactId>graph-api</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.netbeans.api</groupId>
+      <artifactId>org-openide-util-lookup</artifactId>
+    </dependency>
+  </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>nbm-maven-plugin</artifactId>
+                <configuration>
+                    <licenseName>gpl-3.0</licenseName>
+                    <licenseFile>gpl-3.0.txt</licenseFile>
+                    <author>Carl Schroedl carlschroedl@gmail.com</author>
+                    <sourceCodeUrl>http://github.com/carlschroedl/gephi-plugins</sourceCodeUrl>
+                    <homePageUrl>https://github.com/carlschroedl/gephi-plugins/tree/spanning-tree</homePageUrl>
+                    <publicPackages>
+                        
+                    <publicPackage>com.carlschroedl.gephi.spanningtree</publicPackage>
+                    </publicPackages>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+</project>
