@@ -4,11 +4,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.PriorityQueue;
 import javax.swing.JPanel;
-import org.gephi.data.attributes.api.AttributeColumn;
-import org.gephi.data.attributes.api.AttributeModel;
-import org.gephi.data.attributes.api.AttributeOrigin;
-import org.gephi.data.attributes.api.AttributeTable;
-import org.gephi.data.attributes.api.AttributeType;
+import org.gephi.graph.api.Column;
+import org.gephi.graph.api.GraphModel;
+import org.gephi.graph.api.Table;
+import org.gephi.graph.api.Origin;
 import org.gephi.graph.api.Edge;
 import org.gephi.graph.api.Graph;
 import org.gephi.graph.api.GraphModel;
@@ -25,28 +24,28 @@ public class KruskalsAlgorithm extends SpanningTreeAlgorithm {
     private static final String name = "Kruskal's Algorithm";
     private ProgressTicket progressTicket;
     private boolean cancel;
-    private HashMap<Integer, KNode> kNodes;
+    private HashMap<Object, KNode> kNodes;
     private double STweight;    //spanning tree weight
     private int edgesInST;      //number of edges in spanning tree
     private static final String ST_COL_ID = "spanningtree";     //not displayed to user
     private static final String ST_COL_NAME = "Spanning Tree";  //displayed to user
 
     @Override
-    public void execute(Graph graph, AttributeModel attributeModel) {
+    public void execute(GraphModel graphModel) {
         //See http://wiki.gephi.org/index.php/HowTo_write_a_metric#Implementation_help
+        Graph graph = graphModel.getGraph();
         graph.writeLock();
-        kNodes = new HashMap<Integer, KNode>();
+        kNodes = new HashMap<Object, KNode>();
         PriorityQueue<KEdge> edgeQ = new PriorityQueue<KEdge>();
         this.STweight = 0;
         this.edgesInST = 0;
-
         //<new attributes for the spanning tree>
 
-        AttributeTable edgeTable = attributeModel.getEdgeTable();
-        AttributeColumn stEdgeCol = edgeTable.getColumn(ST_COL_ID);
+        Table edgeTable = graphModel.getEdgeTable();
+        Column stEdgeCol = edgeTable.getColumn(ST_COL_ID);
 
         if (stEdgeCol == null) {
-            stEdgeCol = edgeTable.addColumn(ST_COL_ID, ST_COL_NAME, AttributeType.INT, AttributeOrigin.COMPUTED, 0);
+            edgeTable.addColumn(ST_COL_ID, ST_COL_NAME, Boolean.class, false);
         }
 
         //</new attributes for the spanning tree>
@@ -79,7 +78,7 @@ public class KruskalsAlgorithm extends SpanningTreeAlgorithm {
                     //and yes, it IS ok to use != instead of !blah.equals()
 
                     //change edge's Spanning Tree Attribute to non-default value
-                    tempKEdge.edge.getAttributes().setValue(ST_COL_ID, 1);
+                    tempKEdge.edge.setAttribute(ST_COL_ID, true);
 
                     ++edgesInST;
                     this.STweight += tempKEdge.weight;
@@ -94,7 +93,7 @@ public class KruskalsAlgorithm extends SpanningTreeAlgorithm {
                 Progress.progress(progressTicket, edgesInST);
                 if (cancel) {
                     //remove the spanning tree column
-                    attributeModel.getEdgeTable().removeColumn(stEdgeCol);
+                    graphModel.getEdgeTable().removeColumn(stEdgeCol);
                     break;
                 }
             }//end while
@@ -126,12 +125,6 @@ public class KruskalsAlgorithm extends SpanningTreeAlgorithm {
     @Override
     public void setProgressTicket(ProgressTicket progressTicket) {
         this.progressTicket = progressTicket;
-    }
-
-    @Override
-    public void execute(GraphModel graphModel, AttributeModel attributeModel) {
-        throw new UnsupportedOperationException("Not supported yet, "
-                + "needs a Graph, not a GraphModel");
     }
 
     @Override
@@ -323,7 +316,7 @@ public class KruskalsAlgorithm extends SpanningTreeAlgorithm {
 
         KEdge(Edge e) {
             this.edge = e;
-            int srcID = e.getSource().getId();
+            Object srcID = e.getSource().getId();
             if (kNodes.containsKey(srcID)) {
                 this.source = kNodes.get(srcID);
             } else {
@@ -331,7 +324,7 @@ public class KruskalsAlgorithm extends SpanningTreeAlgorithm {
                 kNodes.put(srcID, this.source);
             }
 
-            int targetID = e.getTarget().getId();
+            Object targetID = e.getTarget().getId();
             if (kNodes.containsKey(targetID)) {
                 this.target = kNodes.get(targetID);
             } else {

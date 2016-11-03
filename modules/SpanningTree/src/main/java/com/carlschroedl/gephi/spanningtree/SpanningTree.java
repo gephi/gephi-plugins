@@ -1,6 +1,5 @@
 package com.carlschroedl.gephi.spanningtree;
 
-import org.gephi.data.attributes.api.AttributeModel;
 import org.gephi.graph.api.Graph;
 import org.gephi.graph.api.GraphModel;
 import org.gephi.statistics.spi.Statistics;
@@ -25,14 +24,9 @@ public class SpanningTree implements Statistics, LongTask {
     }
     
     @Override
-    //wrapper method for the UI only, selects the currently visible graph
-    public void execute(GraphModel graphModel, AttributeModel attributeModel) {
-        this.execute(graphModel.getGraphVisible(), attributeModel);
-    }
-    //a more general version of execute()
-    public void execute(Graph graph, AttributeModel attributeModel){
+    public void execute(GraphModel graphModel){
         this.stAlgorithm = new KruskalsAlgorithm();
-        stAlgorithm.execute(graph, attributeModel);
+        stAlgorithm.execute(graphModel);
         
     }
     /** Only useful if the algorithm takes graph type into account. */

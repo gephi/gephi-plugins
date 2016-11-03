@@ -1,8 +1,7 @@
 package com.carlschroedl.gephi.spanningtree;
 
 import javax.swing.JPanel;
-import org.gephi.data.attributes.api.AttributeModel;
-import org.gephi.graph.api.Graph;
+import org.gephi.graph.api.GraphModel;
 import org.gephi.statistics.spi.Statistics;
 import org.gephi.utils.longtask.spi.LongTask;
 
@@ -23,7 +22,7 @@ import org.gephi.utils.longtask.spi.LongTask;
 
 public abstract class SpanningTreeAlgorithm implements LongTask, Statistics{
               
-    public abstract void execute(Graph graph, AttributeModel attributeModel);
+    public abstract void execute(GraphModel graphModel);
     public abstract JPanel getOptions();
 
     
