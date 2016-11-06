@@ -36,24 +36,25 @@
         <groupId>org.gephi</groupId>
         <artifactId>io-importer-api</artifactId>
     </dependency>
-<!--    <dependency>
-        <groupId>org.gephi</groupId>
-        <artifactId>io-importer-api</artifactId>
-    </dependency>-->
     <dependency>
         <groupId>org.gephi</groupId>
-        <artifactId>desktop-import</artifactId>
+        <artifactId>io-importer-plugin</artifactId>
     </dependency>
     <dependency>
         <groupId>org.gephi</groupId>
         <artifactId>io-processor-plugin</artifactId>
     </dependency>
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>4.10</version>
-            <scope>test</scope>
-        </dependency>
+    <dependency>
+        <groupId>org.netbeans.modules</groupId>
+        <artifactId>org-netbeans-modules-masterfs</artifactId> <!-- See http://wiki.netbeans.org/UsingFileSystemsMasterfs -->
+        <scope>test</scope>
+    </dependency>
+    <dependency>
+        <groupId>junit</groupId>
+        <artifactId>junit</artifactId>
+        <version>4.10</version>
+        <scope>test</scope>
+    </dependency>
     </dependencies>
 
     <build>
