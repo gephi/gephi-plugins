@@ -5,15 +5,22 @@
  */
 package com.carlschroedl.gephi.spanningtree;
 
-import org.gephi.desktop.importer.api.ImportControllerUI;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URI;
 import java.net.URISyntaxException;
+import java.net.URL;
+import java.util.Collection;
 import javax.swing.JPanel;
+import org.gephi.graph.api.Edge;
+import org.gephi.graph.api.EdgeIterable;
+import org.gephi.graph.api.Graph;
 import org.gephi.graph.api.GraphController;
 import org.gephi.graph.api.GraphModel;
+import org.gephi.graph.api.Node;
 import org.gephi.io.importer.api.Container;
 import org.gephi.io.importer.api.EdgeDirectionDefault;
 import org.gephi.utils.progress.ProgressTicket;
@@ -40,77 +47,107 @@ import org.openide.util.Utilities;
  */
 public class KruskalsAlgorithmTest {
     
-    GraphModel graphModel;
-    
+    KruskalsAlgorithm instance;
+    static ProjectController projectController;
+    private static final String PATH = "/com/carlschroedl/gephi/spanningtree/initial/wiki_kruskal_example.gephi";
     public KruskalsAlgorithmTest() {
     }
     
     @BeforeClass
     public static void setUpClass() {
+        projectController = Lookup.getDefault().lookup(ProjectController.class);
+	projectController.newProject();
     }
     
     @AfterClass
     public static void tearDownClass() {
+        projectController.closeCurrentProject();
     }
     
-    @Before
-public void setUp() {
-	ProjectController projectController = Lookup.getDefault().lookup(ProjectController.class);
-	projectController.newProject();
-	projectController.newWorkspace(projectController.getCurrentProject());
-        ImportControllerUI importControllerUi = Lookup.getDefault().lookup(ImportControllerUI.class);
-	ImportController importController = importControllerUi.getImportController();
+    private static boolean nodesHaveSameEdges(EdgeIterable aEdges, EdgeIterable bEdges){
+        boolean equal = true;
+        Collection<Edge> aEdgeCollection = aEdges.toCollection();
+        for(Edge bEdge : bEdges){
+            if(!aEdgeCollection.contains(bEdge)){
+                equal = false;
+                break;
+            }
+        }
+        return equal;
+    }
+    
+    private static boolean equalGraphs(Graph a, Graph b){
+        boolean equal = true;
+        a.writeLock();
+        b.writeLock();
+        try{
+            if(a.getNodeCount() == b.getNodeCount() && a.getEdgeCount() == b.getEdgeCount()){
+                for(Node n : a.getNodes()){
+                    if(!b.contains(n)){
+                        equal = false;
+                        break;
+                    } else if(!nodesHaveSameEdges(a.getEdges(n), b.getEdges(n))){
+                           equal = false; 
+                    }
+                }
+            } else {
+                equal = false;
+            }            
+        } finally {
+            a.writeUnlock();
+            b.writeUnlock();
+        }
+        return equal;
+    }
+    /**
+     * 
+     * This method imports the file from the specified classpath-relative url
+     * into a graph. Each graph gets it's own workspace. The workspaces are not
+     * cleaned up after use. Workspaces should be cleaned up by ProjectController
+     * 
+     * @param path classpath resource
+     * @return the graph model of the file at 'path'
+     */
+    private GraphModel getGraphModelFromFile(String path){
+	GraphModel graphModelFromFile = null;
+        projectController.newWorkspace(projectController.getCurrentProject());
+	ImportController importController = Lookup.getDefault().lookup(ImportController.class);
         
 	Container container;
 	try {
-		File file = new File(getClass().getResource("/com/carlschroedl/gephi/spanningtree/initial/wiki_kruskal_example.gephi").toURI());
-		InputStream is = getClass().getResourceAsStream("/com/carlschroedl/gephi/spanningtree/initial/wiki_kruskal_example.gephi");
-                FileImporter fi = importController.getFileImporter(file);
-                container = importController.importFile(is, fi);
-	}
-	catch (Exception ex) {
-		Exceptions.printStackTrace(ex);
-		return;
-	}
+            URL url = this.getClass().getResource(PATH);
+            URI uri = url.toURI();
+            File file = new File(uri);
+            container = importController.importFile(file);
+	} catch (FileNotFoundException ex) {
+            throw new RuntimeException(ex);
+	} catch (URISyntaxException ex) {
+            throw new RuntimeException(ex);
+        }
 
 	importController.process(container, new DefaultProcessor(), projectController.getCurrentWorkspace());
-
-	GraphController graphController = Lookup.getDefault().lookup(GraphController.class);
-	graphModel = graphController.getGraphModel();
+	graphModelFromFile = projectController.getCurrentProject().getLookup().lookup(GraphModel.class);
+        return graphModelFromFile;
+    }
+    
+    @Before
+    public void setUp() {
+        instance = new KruskalsAlgorithm();
     }
     
     @After
     public void tearDown() {
+        projectController.closeCurrentProject();
     }
 
     /**
      * Test of execute method, of class KruskalsAlgorithm.
      */
     @org.junit.Test
-    public void testExecute() throws IOException, URISyntaxException{
-        
-        //Init a project - and therefore a workspace
-        ProjectController pc = Lookup.getDefault().lookup(ProjectController.class);
-        pc.newProject();
-        Workspace workspace = pc.getCurrentWorkspace();
-
-        ImportController importController = Lookup.getDefault().lookup(ImportController.class);
-//        ImportController importController = new ImportControllerImpl();
-        Container container;
-//        InputStream stream = getClass().getResourceAsStream("/com/carlschroedl/gephi/spanningtree/initial/wiki_kruskal_example.gephi");
-        File file = Utilities.toFile(getClass().getResource("/com/carlschroedl/gephi/spanningtree/initial/wiki_kruskal_example.gephi").toURI());
-//        FileImporterBuilder fib = Lookup.getDefault().lookup(FileImporterBuilder.class);
-//        FileImporter fi = fib.buildImporter();
-//        container = importController.importFile(stream, fi);
-        container = importController.importFile(file);
-        container.getLoader().setEdgeDefault(EdgeDirectionDefault.DIRECTED);   //Force DIRECTED
-        container.getLoader().setAllowAutoNode(false);  //Don't create missing nodes
-        
-        //Append imported data to GraphAPI
-        importController.process(container, new DefaultProcessor(), workspace);
-        
-        
-        fail("The test case is a prototype.");
+    public void testExecute(){
+        GraphModel a = getGraphModelFromFile(PATH);
+        GraphModel b = getGraphModelFromFile(PATH);
+        assertTrue(equalGraphs(a.getGraph(), b.getGraph()));
     }
 
     
