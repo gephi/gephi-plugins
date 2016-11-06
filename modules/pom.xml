@@ -433,7 +433,7 @@
                 <artifactId>org-openide-filesystems</artifactId>
                 <version>${netbeans.version}</version>
             </dependency>
-			<dependency>
+            <dependency>
                 <groupId>org.netbeans.modules</groupId>
                 <artifactId>org-netbeans-modules-masterfs</artifactId>
                 <version>${netbeans.version}</version>
