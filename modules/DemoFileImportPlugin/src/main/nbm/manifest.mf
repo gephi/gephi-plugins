@@ -1,0 +1,5 @@
+Manifest-Version: 1.0
+OpenIDE-Module-Name: Demo File Import Plugin
+OpenIDE-Module-Short-Description: Demonstrate inability to import file during test
+OpenIDE-Module-Long-Description: Tries several ways to import files from test classes
+OpenIDE-Module-Display-Category: Other Category
