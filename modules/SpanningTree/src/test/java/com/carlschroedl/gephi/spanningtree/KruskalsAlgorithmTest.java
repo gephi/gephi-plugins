@@ -35,6 +35,8 @@ import org.gephi.io.importer.impl.ImportControllerImpl;
 import org.gephi.io.importer.spi.FileImporter;
 import org.gephi.io.importer.spi.FileImporterBuilder;
 import org.gephi.io.processor.plugin.DefaultProcessor;
+import org.gephi.io.processor.plugin.MultiProcessor;
+import org.gephi.io.processor.spi.Processor;
 import org.gephi.project.api.ProjectController;
 import org.gephi.project.api.Workspace;
 import org.openide.util.Exceptions;
@@ -49,7 +51,7 @@ public class KruskalsAlgorithmTest {
     
     KruskalsAlgorithm instance;
     static ProjectController projectController;
-    private static final String PATH = "/com/carlschroedl/gephi/spanningtree/initial/wiki_kruskal_example.gephi";
+    private static final String PATH = "/com/carlschroedl/gephi/spanningtree/initial/wiki_kruskal_example_initial.graphml";
     public KruskalsAlgorithmTest() {
     }
     
@@ -124,7 +126,8 @@ public class KruskalsAlgorithmTest {
 	} catch (URISyntaxException ex) {
             throw new RuntimeException(ex);
         }
-
+        Processor processor = new MultiProcessor();
+        processor.setWorkspace(projectController.getCurrentWorkspace());
 	importController.process(container, new DefaultProcessor(), projectController.getCurrentWorkspace());
 	graphModelFromFile = projectController.getCurrentProject().getLookup().lookup(GraphModel.class);
         return graphModelFromFile;
