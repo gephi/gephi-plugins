@@ -40,7 +40,7 @@ import org.openide.util.Lookup;
 public class PrestigeSettingsPanel extends javax.swing.JPanel {
 
     private static final Logger LOG = Logger.getLogger(PrestigeSettingsPanel.class.getName());
-    public static final String DESCRIPTION_URL = "https://github.com/michihenninger/prestige-gephi-plugin";
+    public static final String DESCRIPTION_URL = "https://github.com/michihenninger/prestige-gephi-plugin/tree/prestige-plugin/modules";
 
     public PrestigeSettingsPanel() {
         initComponents();
