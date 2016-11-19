@@ -189,11 +189,8 @@ public class GyGraph extends GySubGraph {
     public PyDictionary getNodeAttributes() {
         GraphModel graphModel = namespace.getGraphModel();
         PyDictionary dict = new PyDictionary();
-        int i = 0;
-        while (i< graphModel.getNodeTable().countColumns()){
-            Column column = graphModel.getNodeTable().getColumn(i);
+        for (Column column : graphModel.getNodeTable().toArray()) {
             dict.put(Py.java2py(column.getTitle()), new GyAttributeColumn(namespace, column));
-            i++;
         }
 
         return dict;
@@ -202,13 +199,9 @@ public class GyGraph extends GySubGraph {
     public PyDictionary getEdgeAttributes() {
         GraphModel graphModel = namespace.getGraphModel();
         PyDictionary dict = new PyDictionary();
-        int i = 0;
-        while (i< graphModel.getEdgeTable().countColumns()){
-            Column column = graphModel.getNodeTable().getColumn(i);
+        for (Column column : graphModel.getEdgeTable().toArray()) {
             dict.put(Py.java2py(column.getTitle()), new GyAttributeColumn(namespace, column));
-            i++;
         }
-
 
         return dict;
     }
