@@ -15,12 +15,14 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.Collection;
 import javax.swing.JPanel;
+import org.gephi.graph.api.Configuration;
 import org.gephi.graph.api.Edge;
 import org.gephi.graph.api.EdgeIterable;
 import org.gephi.graph.api.Graph;
 import org.gephi.graph.api.GraphController;
 import org.gephi.graph.api.GraphModel;
 import org.gephi.graph.api.Node;
+import org.gephi.graph.impl.GraphModelImpl;
 import org.gephi.io.importer.api.Container;
 import org.gephi.io.importer.api.EdgeDirectionDefault;
 import org.gephi.utils.progress.ProgressTicket;
@@ -112,24 +114,30 @@ public class KruskalsAlgorithmTest {
      */
     private GraphModel getGraphModelFromFile(String path){
 	GraphModel graphModelFromFile = null;
-        projectController.newWorkspace(projectController.getCurrentProject());
-	ImportController importController = Lookup.getDefault().lookup(ImportController.class);
+        Workspace workspace = projectController.newWorkspace(projectController.getCurrentProject());
+        projectController.openWorkspace(workspace);
+        GraphModel gm = new GraphModelImpl();
+        workspace.add(gm);
+        ImportController ic = new ImportControllerImpl();
+        workspace.add(ic);
+        
+	Lookup lookup = workspace.getLookup();
         
 	Container container;
 	try {
             URL url = this.getClass().getResource(PATH);
             URI uri = url.toURI();
             File file = new File(uri);
-            container = importController.importFile(file);
+            container = ic.importFile(file);
 	} catch (FileNotFoundException ex) {
             throw new RuntimeException(ex);
 	} catch (URISyntaxException ex) {
             throw new RuntimeException(ex);
         }
         Processor processor = new MultiProcessor();
-        processor.setWorkspace(projectController.getCurrentWorkspace());
-	importController.process(container, new DefaultProcessor(), projectController.getCurrentWorkspace());
-	graphModelFromFile = projectController.getCurrentProject().getLookup().lookup(GraphModel.class);
+        processor.setWorkspace(workspace);
+	ic.process(container, new DefaultProcessor(), projectController.getCurrentWorkspace());
+	graphModelFromFile = lookup.lookup(GraphModel.class);
         return graphModelFromFile;
     }
     
