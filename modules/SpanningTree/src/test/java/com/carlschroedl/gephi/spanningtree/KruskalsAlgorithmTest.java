@@ -11,12 +11,15 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 import org.gephi.graph.api.Edge;
 import org.gephi.graph.api.EdgeIterable;
 import org.gephi.graph.api.Graph;
 import org.gephi.graph.api.GraphModel;
 import org.gephi.graph.api.Node;
 import org.gephi.graph.impl.GraphModelImpl;
+import org.gephi.graph.impl.utils.MapDeepEquals;
 import org.gephi.io.importer.api.Container;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -31,6 +34,7 @@ import org.gephi.io.processor.spi.Processor;
 import org.gephi.project.api.ProjectController;
 import org.gephi.project.api.Workspace;
 import org.openide.util.Lookup;
+import org.openide.util.Pair;
 
 /**
  *
@@ -56,41 +60,6 @@ public class KruskalsAlgorithmTest {
         projectController.closeCurrentProject();
     }
 
-    private static boolean nodesHaveSameEdges(EdgeIterable aEdges, EdgeIterable bEdges) {
-        boolean equal = true;
-        Collection<Edge> aEdgeCollection = aEdges.toCollection();
-        for (Edge bEdge : bEdges) {
-            if (!aEdgeCollection.contains(bEdge)) {
-                equal = false;
-                break;
-            }
-        }
-        return equal;
-    }
-
-    private static boolean equalGraphs(Graph a, Graph b) {
-        boolean equal = true;
-        a.writeLock();
-        b.writeLock();
-        try {
-            if (a.getNodeCount() == b.getNodeCount() && a.getEdgeCount() == b.getEdgeCount()) {
-                for (Node n : a.getNodes()) {
-                    if (!b.contains(n)) {
-                        equal = false;
-                        break;
-                    } else if (!nodesHaveSameEdges(a.getEdges(n), b.getEdges(n))) {
-                        equal = false;
-                    }
-                }
-            } else {
-                equal = false;
-            }
-        } finally {
-            a.writeUnlock();
-            b.writeUnlock();
-        }
-        return equal;
-    }
 
     /**
      *
@@ -148,7 +117,7 @@ public class KruskalsAlgorithmTest {
     public void testExecute() {
         GraphModel a = getGraphModelFromFile(PATH);
         GraphModel b = getGraphModelFromFile(PATH);
-        assertTrue(equalGraphs(a.getGraph(), b.getGraph()));
+        assertTrue(GraphTopologyEquals.graphsHaveSameTopology(a.getGraph(), b.getGraph()));
     }
 
 }
