@@ -11,9 +11,14 @@ import org.gephi.graph.impl.utils.MapDeepEquals;
 import org.openide.util.Pair;
 
 /**
- *
- * @author carlschroedl
- */
+ * This class determines whether two graphs have the same nodes and edges. Nodes
+ * from different graphs are considered equal if and only if their node ids are 
+ * equal. Edges from different graphs are considered equal if and only if their 
+ * source node ids, target node ids, and weights are equal. Two graphs are equal
+ * if and only if all of their nodes and edges are equal, and they have the same
+ * number of edges and nodes.
+ * All other node and edge attributes are ignored in this comparison.
+  */
 public class GraphTopologyEquals {
 
     private static Pair getSourceTargetPair(Edge e) {

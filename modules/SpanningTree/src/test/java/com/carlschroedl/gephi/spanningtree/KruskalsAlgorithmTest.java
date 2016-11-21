@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.carlschroedl.gephi.spanningtree;
 
 import java.io.File;
@@ -43,7 +38,8 @@ import org.openide.util.Pair;
 public class KruskalsAlgorithmTest {
 
     KruskalsAlgorithm instance;
-    static ProjectController projectController;
+    GraphModelLoader loader;
+    ProjectController projectController;
     private static final String PATH = "/com/carlschroedl/gephi/spanningtree/initial/wiki_kruskal_example_initial.graphml";
 
     public KruskalsAlgorithmTest() {
@@ -51,57 +47,19 @@ public class KruskalsAlgorithmTest {
 
     @BeforeClass
     public static void setUpClass() {
-        projectController = Lookup.getDefault().lookup(ProjectController.class);
-        projectController.newProject();
+
     }
 
     @AfterClass
     public static void tearDownClass() {
-        projectController.closeCurrentProject();
-    }
 
-
-    /**
-     *
-     * This method imports the file from the specified classpath-relative url
-     * into a graph. Each graph gets it's own workspace. The workspaces are not
-     * cleaned up after use. Workspaces should be cleaned up by
-     * ProjectController
-     *
-     * @param path classpath resource
-     * @return the graph model of the file at 'path'
-     */
-    private GraphModel getGraphModelFromFile(String path) {
-        GraphModel graphModelFromFile = null;
-        Workspace workspace = projectController.newWorkspace(projectController.getCurrentProject());
-        projectController.openWorkspace(workspace);
-        GraphModel gm = new GraphModelImpl();
-        workspace.add(gm);
-        ImportController ic = new ImportControllerImpl();
-        workspace.add(ic);
-
-        Lookup lookup = workspace.getLookup();
-
-        Container container;
-        try {
-            URL url = this.getClass().getResource(PATH);
-            URI uri = url.toURI();
-            File file = new File(uri);
-            container = ic.importFile(file);
-        } catch (FileNotFoundException ex) {
-            throw new RuntimeException(ex);
-        } catch (URISyntaxException ex) {
-            throw new RuntimeException(ex);
-        }
-        Processor processor = new MultiProcessor();
-        processor.setWorkspace(workspace);
-        ic.process(container, new DefaultProcessor(), projectController.getCurrentWorkspace());
-        graphModelFromFile = lookup.lookup(GraphModel.class);
-        return graphModelFromFile;
     }
 
     @Before
     public void setUp() {
+        projectController = Lookup.getDefault().lookup(ProjectController.class);
+        projectController.newProject();
+        loader = new GraphModelLoader(projectController);
         instance = new KruskalsAlgorithm();
     }
 
@@ -115,8 +73,8 @@ public class KruskalsAlgorithmTest {
      */
     @org.junit.Test
     public void testExecute() {
-        GraphModel a = getGraphModelFromFile(PATH);
-        GraphModel b = getGraphModelFromFile(PATH);
+        GraphModel a = loader.fromFile(PATH);
+        GraphModel b = loader.fromFile(PATH);
         assertTrue(GraphTopologyEquals.graphsHaveSameTopology(a.getGraph(), b.getGraph()));
     }
 
