@@ -72,8 +72,10 @@ public class FullSmartNetwork extends Networklogic {
         }
         
         for (URLEntity link : status.getURLEntities()) {
-            Node linkNode = createUrl(link.getExpandedURL());
-            createLink(tweet, linkNode, HAS_LINK);
+            if(!link.getExpandedURL().isEmpty()){
+                Node linkNode = createUrl(link.getExpandedURL());
+                createLink(tweet, linkNode, HAS_LINK);
+            }
         }
         
         for (SymbolEntity symbol : status.getSymbolEntities()) {
