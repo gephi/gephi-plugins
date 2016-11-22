@@ -3,9 +3,11 @@ package totetmatt.gephi.twitter.networklogic;
 import java.awt.Color;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.gephi.graph.api.Configuration;
 import org.gephi.graph.api.GraphController;
 import org.gephi.graph.api.GraphModel;
 import org.gephi.graph.api.Node;
+import org.gephi.graph.api.TimeRepresentation;
 import org.openide.util.Lookup;
 import twitter4j.StallWarning;
 import twitter4j.Status;
@@ -82,6 +84,9 @@ public abstract class Networklogic implements StatusListener {
     // Should be called before a new stream
     public void refreshGraphModel() {
         graphModel = Lookup.getDefault().lookup(GraphController.class).getGraphModel();
+        Configuration conf = new Configuration();
+        conf.setTimeRepresentation(TimeRepresentation.TIMESTAMP);
+        graphModel.setConfiguration(conf);
         if(!graphModel.getNodeTable().hasColumn(TWITTER_TYPE_COLUMN_ID)){
             graphModel.getNodeTable().addColumn(TWITTER_TYPE_COLUMN_ID, "Twitter Type", String.class, null);
             

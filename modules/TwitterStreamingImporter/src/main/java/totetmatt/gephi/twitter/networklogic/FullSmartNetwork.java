@@ -2,9 +2,11 @@ package totetmatt.gephi.twitter.networklogic;
 
 import java.awt.Color;
 import java.util.Arrays;
+import java.util.Calendar;
 import org.gephi.graph.api.Column;
 import org.gephi.graph.api.Edge;
 import org.gephi.graph.api.Node;
+import org.joda.time.LocalTime;
 import org.openide.util.lookup.ServiceProvider;
 import twitter4j.HashtagEntity;
 import twitter4j.MediaEntity;
@@ -52,18 +54,25 @@ public class FullSmartNetwork extends Networklogic {
     }
 
     public void processStatus(Status status, Node retweetUser) {
+        long currentMillis = LocalTime.now().toDateTimeToday().getMillis();
+        
         Node tweet = createTweet(status);
+        tweet.addTimestamp(currentMillis);
+        
         if(status.getGeoLocation() != null){
             tweet.setAttribute(NODE_TWEET_GEO_LATITUDE, status.getGeoLocation().getLatitude());
             tweet.setAttribute(NODE_TWEET_GEO_LONGITUDE, status.getGeoLocation().getLongitude());
+            
+            
         }
         Node user = createUser(status.getUser().getScreenName());
-        
+        user.addTimestamp(currentMillis);
         createLink(user, tweet, TWEETS);
         // Retweet are handled later
         if (!status.isRetweet()) {
             for (UserMentionEntity mention : status.getUserMentionEntities()) {
                 Node mentionNode = createUser(mention.getScreenName());
+                mentionNode.addTimestamp(currentMillis);
                 createLink(tweet, mentionNode, HAS_MENTION);
             }
         }
@@ -71,6 +80,7 @@ public class FullSmartNetwork extends Networklogic {
         for (HashtagEntity hashtag : status.getHashtagEntities()) {
             if (!Arrays.asList(track).contains(hashtag.getText().toLowerCase())) {
                 Node hashtagNode = createHashtag(hashtag.getText());
+                hashtagNode.addTimestamp(currentMillis);
                 createLink(tweet, hashtagNode, HAS_HASHTAG);
             }
         }
@@ -78,17 +88,20 @@ public class FullSmartNetwork extends Networklogic {
         for (URLEntity link : status.getURLEntities()) {
             if(!link.getExpandedURL().isEmpty()){
                 Node linkNode = createUrl(link.getExpandedURL());
+                linkNode.addTimestamp(currentMillis);
                 createLink(tweet, linkNode, HAS_LINK);
             }
         }
         
         for (SymbolEntity symbol : status.getSymbolEntities()) {
             Node symbolNode = createSymbol(symbol.getText());
+            symbolNode.addTimestamp(currentMillis);
             createLink(tweet, symbolNode, HAS_SYMBOL);
         }
         
         for (MediaEntity media : status.getMediaEntities()) {
             Node mediaNode = createMedia(media.getMediaURL());
+            mediaNode.addTimestamp(currentMillis);
             createLink(tweet, mediaNode, HAS_MEDIA);
         }
         
