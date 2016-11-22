@@ -2,6 +2,7 @@ package totetmatt.gephi.twitter.networklogic;
 
 import java.awt.Color;
 import java.util.Arrays;
+import org.gephi.graph.api.Column;
 import org.gephi.graph.api.Edge;
 import org.gephi.graph.api.Node;
 import org.openide.util.lookup.ServiceProvider;
@@ -52,7 +53,10 @@ public class FullSmartNetwork extends Networklogic {
 
     public void processStatus(Status status, Node retweetUser) {
         Node tweet = createTweet(status);
-
+        if(status.getGeoLocation() != null){
+            tweet.setAttribute(NODE_TWEET_GEO_LATITUDE, status.getGeoLocation().getLatitude());
+            tweet.setAttribute(NODE_TWEET_GEO_LONGITUDE, status.getGeoLocation().getLongitude());
+        }
         Node user = createUser(status.getUser().getScreenName());
         
         createLink(user, tweet, TWEETS);

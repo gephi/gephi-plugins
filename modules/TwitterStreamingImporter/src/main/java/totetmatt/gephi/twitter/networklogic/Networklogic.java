@@ -46,6 +46,7 @@ public abstract class Networklogic implements StatusListener {
         }
     }
 
+    // Type 
     public static final String TWITTER_TYPE_COLUMN_ID = "twitter_type";
     public static final String TWITTER_TYPE_USER = "User";
     public static final String TWITTER_TYPE_TWEET = "Tweet";
@@ -53,6 +54,10 @@ public abstract class Networklogic implements StatusListener {
     public static final String TWITTER_TYPE_MEDIA = "Media";
     public static final String TWITTER_TYPE_URL = "URL";
     public static final String TWITTER_TYPE_SYMBOL = "Symbol";
+    
+    // Column for Nodes
+    public static final String NODE_TWEET_GEO_LATITUDE = "lat";
+    public static final String NODE_TWEET_GEO_LONGITUDE = "lng";
 
     // Basic Color code used since the beginning.
     // Not real standard but ensure same color code for all node type
@@ -79,6 +84,9 @@ public abstract class Networklogic implements StatusListener {
         graphModel = Lookup.getDefault().lookup(GraphController.class).getGraphModel();
         if(!graphModel.getNodeTable().hasColumn(TWITTER_TYPE_COLUMN_ID)){
             graphModel.getNodeTable().addColumn(TWITTER_TYPE_COLUMN_ID, "Twitter Type", String.class, null);
+            
+            graphModel.getNodeTable().addColumn(NODE_TWEET_GEO_LATITUDE, Double.class,null);
+            graphModel.getNodeTable().addColumn(NODE_TWEET_GEO_LONGITUDE, Double.class,null);
         }
     }
 
