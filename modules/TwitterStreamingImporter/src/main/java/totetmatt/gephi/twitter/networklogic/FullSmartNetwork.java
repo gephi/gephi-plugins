@@ -30,6 +30,8 @@ public class FullSmartNetwork extends Networklogic {
     private int HAS_LINK;
     private int HAS_SYMBOL;
     private int TWEETS;
+    private int QUOTES;
+    private int QUOTES_FROM;
 
     public FullSmartNetwork() {
 
@@ -50,24 +52,25 @@ public class FullSmartNetwork extends Networklogic {
 
     @Override
     public void processStatus(Status status) {
-        processStatus(status, null);
+        processStatus(status, null,-1);
     }
 
-    public void processStatus(Status status, Node retweetUser) {
+    public void processStatus(Status status, Node retweetUser,int link_kind) {
         long currentMillis = LocalTime.now().toDateTimeToday().getMillis();
         
         Node tweet = createTweet(status);
         tweet.addTimestamp(currentMillis);
+        tweet.setAttribute(NODE_TWEET_CREATED_AT, status.getCreatedAt());
+        tweet.setAttribute(NODE_TWEET_LANG,status.getLang());
         
         if(status.getGeoLocation() != null){
             tweet.setAttribute(NODE_TWEET_GEO_LATITUDE, status.getGeoLocation().getLatitude());
             tweet.setAttribute(NODE_TWEET_GEO_LONGITUDE, status.getGeoLocation().getLongitude());
-            
-            
         }
         Node user = createUser(status.getUser().getScreenName());
         user.addTimestamp(currentMillis);
         createLink(user, tweet, TWEETS);
+      
         // Retweet are handled later
         if (!status.isRetweet()) {
             for (UserMentionEntity mention : status.getUserMentionEntities()) {
@@ -106,13 +109,23 @@ public class FullSmartNetwork extends Networklogic {
         }
         
         if (status.getRetweetedStatus() != null) {
-            processStatus(status.getRetweetedStatus(), user);
+            processStatus(status.getRetweetedStatus(), user,RETWEETS);
+        }
+        
+        if(status.getQuotedStatus() != null) {
+            processStatus(status.getRetweetedStatus(), user,QUOTES);
         }
         
         // We link to the original content to give more "weight"
         if (retweetUser != null) {
-            createLink(retweetUser, user, RETWEETS_FROM);
-            createLink(retweetUser, tweet, RETWEETS);
+            if(link_kind == RETWEETS) {
+                createLink(retweetUser, user, RETWEETS_FROM);
+                createLink(retweetUser, tweet, RETWEETS);
+            } else if (link_kind == QUOTES) {
+                createLink(retweetUser, user, QUOTES_FROM);
+                createLink(retweetUser, tweet, QUOTES);
+            }
+            
         }
     }
     

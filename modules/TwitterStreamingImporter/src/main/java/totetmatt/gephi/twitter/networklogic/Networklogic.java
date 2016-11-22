@@ -1,6 +1,7 @@
 package totetmatt.gephi.twitter.networklogic;
 
 import java.awt.Color;
+import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.gephi.graph.api.Configuration;
@@ -60,6 +61,8 @@ public abstract class Networklogic implements StatusListener {
     // Column for Nodes
     public static final String NODE_TWEET_GEO_LATITUDE = "lat";
     public static final String NODE_TWEET_GEO_LONGITUDE = "lng";
+    public static final String NODE_TWEET_CREATED_AT = "created_at";
+    public static final String NODE_TWEET_LANG = "lang";
 
     // Basic Color code used since the beginning.
     // Not real standard but ensure same color code for all node type
@@ -92,6 +95,9 @@ public abstract class Networklogic implements StatusListener {
             
             graphModel.getNodeTable().addColumn(NODE_TWEET_GEO_LATITUDE, Double.class,null);
             graphModel.getNodeTable().addColumn(NODE_TWEET_GEO_LONGITUDE, Double.class,null);
+            graphModel.getNodeTable().addColumn(NODE_TWEET_CREATED_AT, Date.class);
+            graphModel.getNodeTable().addColumn(NODE_TWEET_LANG,String.class);
+            
         }
     }
 
