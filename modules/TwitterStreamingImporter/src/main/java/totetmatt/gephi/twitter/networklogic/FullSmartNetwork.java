@@ -62,22 +62,15 @@ public class FullSmartNetwork extends Networklogic {
         
         Node tweet = createTweet(status);
         tweet.addTimestamp(currentMillis);
-        tweet.setAttribute(NODE_TWEET_CREATED_AT, status.getCreatedAt().toString());
-        tweet.setAttribute(NODE_TWEET_LANG,status.getLang());
-       
         
-        if(status.getGeoLocation() != null){
-            tweet.setAttribute(NODE_TWEET_GEO_LATITUDE, status.getGeoLocation().getLatitude());
-            tweet.setAttribute(NODE_TWEET_GEO_LONGITUDE, status.getGeoLocation().getLongitude());
-        }
-        Node user = createUser(status.getUser().getScreenName());
+        Node user = createUser(status.getUser());
         user.addTimestamp(currentMillis);
         createLink(user, tweet, TWEETS);
       
         // Retweet are handled later
         if (!status.isRetweet()) {
             for (UserMentionEntity mention : status.getUserMentionEntities()) {
-                Node mentionNode = createUser(mention.getScreenName());
+                Node mentionNode = createUser(mention);
                 mentionNode.addTimestamp(currentMillis);
                 createLink(tweet, mentionNode, HAS_MENTION);
             }

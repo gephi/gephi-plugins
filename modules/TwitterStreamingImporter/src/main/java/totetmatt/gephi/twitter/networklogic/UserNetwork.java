@@ -42,8 +42,8 @@ public class UserNetwork extends Networklogic {
             if (!originScreenName.equals(targetScreenName)) {
 
                 // Create or get the nodes
-                Node origin = createUser(originScreenName);
-                Node target = createUser(targetScreenName);
+                Node origin = createUser(status.getUser());
+                Node target = createUser(mention);
                 
                 int typeEdge;
                 if (status.isRetweet()) {

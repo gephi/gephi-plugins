@@ -14,6 +14,8 @@ import twitter4j.StallWarning;
 import twitter4j.Status;
 import twitter4j.StatusDeletionNotice;
 import twitter4j.StatusListener;
+import twitter4j.User;
+import twitter4j.UserMentionEntity;
 
 /**
  *
@@ -61,8 +63,17 @@ public abstract class Networklogic implements StatusListener {
     // Column for Nodes
     public static final String NODE_TWEET_GEO_LATITUDE = "lat";
     public static final String NODE_TWEET_GEO_LONGITUDE = "lng";
-    public static final String NODE_TWEET_CREATED_AT = "created_at";
-    public static final String NODE_TWEET_LANG = "lang";
+    public static final String NODE_CREATED_AT = "created_at";
+    public static final String NODE_LANG = "lang";
+    
+    public static final String NODE_USER_DESCRIPTION = "description";
+    public static final String NODE_USER_EMAIL = "email";
+    public static final String NODE_USER_PROFILE_IMAGE = "profile_image";
+    public static final String NODE_USER_FRIENDS_COUNT = "friends_count";
+    public static final String NODE_USER_FOLLOWERS_COUNT = "followers_count";
+    public static final String NODE_USER_REAL_NAME = "real_name";
+    public static final String NODE_USER_LOCATION = "location";
+
 
     // Basic Color code used since the beginning.
     // Not real standard but ensure same color code for all node type
@@ -98,8 +109,18 @@ public abstract class Networklogic implements StatusListener {
             
             graphModel.getNodeTable().addColumn(NODE_TWEET_GEO_LATITUDE, Double.class,null);
             graphModel.getNodeTable().addColumn(NODE_TWEET_GEO_LONGITUDE, Double.class,null);
-            graphModel.getNodeTable().addColumn(NODE_TWEET_CREATED_AT, String.class);
-            graphModel.getNodeTable().addColumn(NODE_TWEET_LANG,String.class);
+            graphModel.getNodeTable().addColumn(NODE_CREATED_AT, String.class);
+            graphModel.getNodeTable().addColumn(NODE_LANG,String.class);
+            
+            graphModel.getNodeTable().addColumn(NODE_USER_DESCRIPTION,String.class);
+            graphModel.getNodeTable().addColumn(NODE_USER_EMAIL,String.class);
+            graphModel.getNodeTable().addColumn(NODE_USER_PROFILE_IMAGE,String.class);
+            graphModel.getNodeTable().addColumn(NODE_USER_FRIENDS_COUNT,Integer.class);
+            graphModel.getNodeTable().addColumn(NODE_USER_FOLLOWERS_COUNT,Integer.class);
+            graphModel.getNodeTable().addColumn(NODE_USER_REAL_NAME,String.class);
+            graphModel.getNodeTable().addColumn(NODE_USER_LOCATION,String.class);
+            
+
             
         }
     }
@@ -139,7 +160,17 @@ public abstract class Networklogic implements StatusListener {
     }
 
     protected Node createTweet(Status status) {
-        return createNode(String.valueOf(status.getId()), status.getText(), NodeType.TWEET);
+        Node tweet = createNode(String.valueOf(status.getId()), status.getText(), NodeType.TWEET);
+        
+        tweet.setAttribute(NODE_CREATED_AT, status.getCreatedAt().toString());
+        tweet.setAttribute(NODE_LANG,status.getLang());
+       
+        
+        if(status.getGeoLocation() != null){
+            tweet.setAttribute(NODE_TWEET_GEO_LATITUDE, status.getGeoLocation().getLatitude());
+            tweet.setAttribute(NODE_TWEET_GEO_LONGITUDE, status.getGeoLocation().getLongitude());
+        }
+        return tweet;
     }
 
     protected Node createMedia(String media) {
@@ -161,9 +192,22 @@ public abstract class Networklogic implements StatusListener {
         return createNode(hashtag, hashtag, NodeType.HASHTAG);
     }
 
-    protected Node createUser(String screenName) {
-        screenName = "@" + screenName.toLowerCase();
-
+    protected Node createUser(User u) {
+        String screenName = "@" + u.getScreenName().toLowerCase();
+        Node user = createNode(screenName, screenName, NodeType.USER);
+        user.setAttribute(NODE_LANG, u.getLang());
+        user.setAttribute(NODE_USER_DESCRIPTION,u.getDescription());
+        user.setAttribute(NODE_USER_EMAIL,u.getEmail());
+        user.setAttribute(NODE_USER_PROFILE_IMAGE, u.getBiggerProfileImageURL());
+        user.setAttribute(NODE_USER_FRIENDS_COUNT,  u.getFriendsCount());
+        user.setAttribute(NODE_USER_FOLLOWERS_COUNT,u.getFollowersCount());
+        user.setAttribute(NODE_USER_REAL_NAME,u.getName());
+        user.setAttribute(NODE_CREATED_AT,u.getCreatedAt().toString());
+        user.setAttribute(NODE_USER_LOCATION,u.getLocation());           
+        return user;
+    }
+    protected Node createUser(UserMentionEntity u) {
+        String screenName = "@" + u.getScreenName().toLowerCase();
         return createNode(screenName, screenName, NodeType.USER);
     }
 
