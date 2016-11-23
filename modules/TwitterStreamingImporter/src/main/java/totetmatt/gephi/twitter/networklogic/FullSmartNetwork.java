@@ -48,6 +48,8 @@ public class FullSmartNetwork extends Networklogic {
         HAS_LINK = graphModel.addEdgeType("Has_link");
         HAS_SYMBOL = graphModel.addEdgeType("Has_symbol");
         TWEETS = graphModel.addEdgeType("Tweets");
+        QUOTES = graphModel.addEdgeType("Quotes");
+        QUOTES_FROM = graphModel.addEdgeType("Quotes_from");
     }
 
     @Override
@@ -60,8 +62,9 @@ public class FullSmartNetwork extends Networklogic {
         
         Node tweet = createTweet(status);
         tweet.addTimestamp(currentMillis);
-        tweet.setAttribute(NODE_TWEET_CREATED_AT, status.getCreatedAt());
+        tweet.setAttribute(NODE_TWEET_CREATED_AT, status.getCreatedAt().toString());
         tweet.setAttribute(NODE_TWEET_LANG,status.getLang());
+       
         
         if(status.getGeoLocation() != null){
             tweet.setAttribute(NODE_TWEET_GEO_LATITUDE, status.getGeoLocation().getLatitude());
@@ -113,7 +116,7 @@ public class FullSmartNetwork extends Networklogic {
         }
         
         if(status.getQuotedStatus() != null) {
-            processStatus(status.getRetweetedStatus(), user,QUOTES);
+            processStatus(status.getQuotedStatus(), user,QUOTES);
         }
         
         // We link to the original content to give more "weight"

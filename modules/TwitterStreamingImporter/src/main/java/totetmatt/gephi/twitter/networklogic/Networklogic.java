@@ -87,15 +87,18 @@ public abstract class Networklogic implements StatusListener {
     // Should be called before a new stream
     public void refreshGraphModel() {
         graphModel = Lookup.getDefault().lookup(GraphController.class).getGraphModel();
-        Configuration conf = new Configuration();
-        conf.setTimeRepresentation(TimeRepresentation.TIMESTAMP);
-        graphModel.setConfiguration(conf);
+        if(graphModel.getGraph().getEdgeCount() == 0 && graphModel.getGraph().getNodeCount() == 0){
+            Configuration conf = new Configuration();
+            conf.setTimeRepresentation(TimeRepresentation.TIMESTAMP);
+            graphModel.setConfiguration(conf);
+        }
+
         if(!graphModel.getNodeTable().hasColumn(TWITTER_TYPE_COLUMN_ID)){
             graphModel.getNodeTable().addColumn(TWITTER_TYPE_COLUMN_ID, "Twitter Type", String.class, null);
             
             graphModel.getNodeTable().addColumn(NODE_TWEET_GEO_LATITUDE, Double.class,null);
             graphModel.getNodeTable().addColumn(NODE_TWEET_GEO_LONGITUDE, Double.class,null);
-            graphModel.getNodeTable().addColumn(NODE_TWEET_CREATED_AT, Date.class);
+            graphModel.getNodeTable().addColumn(NODE_TWEET_CREATED_AT, String.class);
             graphModel.getNodeTable().addColumn(NODE_TWEET_LANG,String.class);
             
         }
