@@ -79,7 +79,7 @@
                     <author>Michael Henninger</author>
                     <authorEmail></authorEmail>
                     <authorUrl></authorUrl>
-                    <sourceCodeUrl>$sourcecode_url</sourceCodeUrl>
+                    <sourceCodeUrl>https://github.com/michihenninger/prestige-gephi-plugin/tree/prestige-plugin</sourceCodeUrl>
                     <publicPackages>
                         <!-- Insert public packages -->
                     </publicPackages>

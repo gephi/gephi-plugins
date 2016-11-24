@@ -30,6 +30,7 @@ import org.gephi.graph.api.Graph;
 import org.gephi.graph.api.GraphModel;
 import org.gephi.graph.api.Node;
 import org.gephi.plugins.prestige.util.GraphUtil;
+import org.gephi.utils.progress.Progress;
 import org.gephi.utils.progress.ProgressTicket;
 
 /**
@@ -64,7 +65,7 @@ public class RankCalculator extends CancableCalculation {
         double min = Double.MAX_VALUE;
         double max = Double.MIN_VALUE;
         LOG.info("Start calculating Rank Prestige");
-        pt.setDisplayName("Rank Prestige calculations");
+        Progress.setDisplayName(pt, "Rank Prestige calculations");
         graph.readLock();
         Iterator<Node> it = graph.getNodes().iterator();
         LOG.info("Calculating Rank for every node");

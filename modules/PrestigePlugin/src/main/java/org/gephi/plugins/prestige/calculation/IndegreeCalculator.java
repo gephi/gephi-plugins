@@ -26,6 +26,7 @@ import java.util.logging.Logger;
 import org.gephi.graph.api.Edge;
 import org.gephi.graph.api.Graph;
 import org.gephi.graph.api.Node;
+import org.gephi.utils.progress.Progress;
 import org.gephi.utils.progress.ProgressTicket;
 
 /**
@@ -49,7 +50,7 @@ public class IndegreeCalculator extends CancableCalculation {
     @Override
     protected SortedMap<Double, Integer> calculateNodeMetrics(Graph graph, ProgressTicket pt) {
         LOG.info("Start indegree calculations");
-        pt.setDisplayName("Indegree Prestige calculations");
+        Progress.setDisplayName(pt, "Indegree Prestige calculations");
         graph.readLock();
         Iterator<Edge> it = graph.getEdges().iterator();
         Map<Node, Set<Node>> alreadyKnownSourceNodes = Maps.newHashMap();

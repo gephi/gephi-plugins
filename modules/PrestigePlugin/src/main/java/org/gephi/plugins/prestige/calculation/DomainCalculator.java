@@ -26,6 +26,7 @@ import java.util.logging.Logger;
 import org.gephi.graph.api.Graph;
 import org.gephi.graph.api.Node;
 import org.gephi.plugins.prestige.util.GraphUtil;
+import org.gephi.utils.progress.Progress;
 import org.gephi.utils.progress.ProgressTicket;
 
 /**
@@ -46,7 +47,7 @@ public class DomainCalculator extends CancableCalculation {
     @Override
     protected SortedMap<Double, Integer> calculateNodeMetrics(Graph graph, ProgressTicket pt) {
         LOG.info("Start calculating domain prestige");
-        pt.setDisplayName("Domain Prestige calculations");
+        Progress.setDisplayName(pt, "Domain Prestige calculations");
         graph.readLock();
         Iterator<Node> it = graph.getNodes().iterator();
         while (!isCanceled() && it.hasNext()) {

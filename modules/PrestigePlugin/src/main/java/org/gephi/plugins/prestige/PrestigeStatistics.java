@@ -27,6 +27,7 @@ import org.gephi.plugins.prestige.ui.PrestigeSettingsPanel;
 import org.gephi.plugins.prestige.util.ReportChartUtil;
 import org.gephi.statistics.spi.Statistics;
 import org.gephi.utils.longtask.spi.LongTask;
+import org.gephi.utils.progress.Progress;
 import org.gephi.utils.progress.ProgressTicket;
 
 /**
@@ -66,18 +67,21 @@ public class PrestigeStatistics implements Statistics, LongTask {
             return;
         }
 
-        processTicket.start();
+        Progress.start(processTicket, 4);
         if (indegree) {
             indegreeResultDistribution = indegreeCalculator.calculate(gm, processTicket);
         }
+        Progress.progress(processTicket);
 
         if (domain) {
             domainResultDistribution = domainCalculator.calculate(gm, processTicket);
         }
+        Progress.progress(processTicket);
 
         if (proximity) {
             proximityResultDistribution = proximityCalculator.calculate(gm, processTicket);
         }
+        Progress.progress(processTicket);
 
         if (rank) {
             if (prominenceAttributeId == null) {
@@ -87,7 +91,9 @@ public class PrestigeStatistics implements Statistics, LongTask {
                 rankResultDistribution = rankCalculator.calculate(gm, processTicket);
             }
         }
-        processTicket.finish("Finished");
+        Progress.progress(processTicket);
+        
+        Progress.finish(processTicket);
     }
 
     public String getReport() {
