@@ -1,8 +1,6 @@
 package totetmatt.gephi.twitter.networklogic;
 
 import java.awt.Color;
-import java.util.Date;
-import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.gephi.graph.api.Configuration;
