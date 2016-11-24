@@ -66,6 +66,9 @@ public abstract class Networklogic implements StatusListener {
     // Used to keep reference to the "current" workspace
     // Should be called before a new stream
     public void refreshGraphModel() {
+        for(NodeType v :NodeType.values()){
+            System.out.println(v);
+        }
         graphModel = Lookup.getDefault().lookup(GraphController.class).getGraphModel();
         if(graphModel.getGraph().getEdgeCount() == 0 && graphModel.getGraph().getNodeCount() == 0){
             Configuration conf = new Configuration();
@@ -73,7 +76,7 @@ public abstract class Networklogic implements StatusListener {
             graphModel.setConfiguration(conf);
         }
         
-        for(TwitterNodeColumn c :TwitterNodeColumn.AllColumns.values()){
+        for(TwitterNodeColumn c :TwitterNodeColumn.values()){
             if(!graphModel.getNodeTable().hasColumn(c.label)){
                 graphModel.getNodeTable().addColumn(c.label, c.classType,null);
             }
@@ -102,7 +105,7 @@ public abstract class Networklogic implements StatusListener {
             node = graphModel.factory().newNode(id);
             node.setLabel(label);
             node.setColor(color);
-            node.setAttribute(TwitterNodeColumn.label("NODE_TYPE"), typeText);
+            node.setAttribute(TwitterNodeColumn.NODE_TYPE.label, typeText);
 
             node.setSize(10);
             node.setX((float) ((0.01 + Math.random()) * 1000) - 500);
@@ -117,13 +120,13 @@ public abstract class Networklogic implements StatusListener {
     protected Node createTweet(Status status) {
         Node tweet = createNode(String.valueOf(status.getId()), status.getText(), NodeType.TWEET);
         
-        tweet.setAttribute(TwitterNodeColumn.label("NODE_CREATED_AT"), status.getCreatedAt().toString());
-        tweet.setAttribute(TwitterNodeColumn.label("NODE_LANG"),status.getLang());
+        tweet.setAttribute(TwitterNodeColumn.NODE_CREATED_AT.label, status.getCreatedAt().toString());
+        tweet.setAttribute(TwitterNodeColumn.NODE_LANG.label,status.getLang());
        
         
         if(status.getGeoLocation() != null){
-            tweet.setAttribute(TwitterNodeColumn.label("NODE_TWEET_GEO_LATITUDE"), status.getGeoLocation().getLatitude());
-            tweet.setAttribute(TwitterNodeColumn.label("NODE_TWEET_GEO_LONGITUDE"), status.getGeoLocation().getLongitude());
+            tweet.setAttribute(TwitterNodeColumn.NODE_TWEET_GEO_LATITUDE.label, status.getGeoLocation().getLatitude());
+            tweet.setAttribute(TwitterNodeColumn.NODE_TWEET_GEO_LONGITUDE.label, status.getGeoLocation().getLongitude());
         }
         return tweet;
     }
@@ -150,15 +153,15 @@ public abstract class Networklogic implements StatusListener {
     protected Node createUser(User u) {
         String screenName = "@" + u.getScreenName().toLowerCase();
         Node user = createNode(screenName, screenName, NodeType.USER);
-        user.setAttribute(TwitterNodeColumn.label("NODE_LANG"), u.getLang());
-        user.setAttribute(TwitterNodeColumn.label("NODE_USER_DESCRIPTION"),u.getDescription());
-        user.setAttribute(TwitterNodeColumn.label("NODE_USER_EMAIL"),u.getEmail());
-        user.setAttribute(TwitterNodeColumn.label("NODE_USER_PROFILE_IMAGE"), u.getBiggerProfileImageURL());
-        user.setAttribute(TwitterNodeColumn.label("NODE_USER_FRIENDS_COUNT"),  u.getFriendsCount());
-        user.setAttribute(TwitterNodeColumn.label("NODE_USER_FOLLOWERS_COUNT"),u.getFollowersCount());
-        user.setAttribute(TwitterNodeColumn.label("NODE_USER_REAL_NAME"),u.getName());
-        user.setAttribute(TwitterNodeColumn.label("NODE_CREATED_AT"),u.getCreatedAt().toString());
-        user.setAttribute(TwitterNodeColumn.label("NODE_USER_LOCATION"),u.getLocation());           
+        user.setAttribute(TwitterNodeColumn.NODE_LANG.label, u.getLang());
+        user.setAttribute(TwitterNodeColumn.NODE_USER_DESCRIPTION.label,u.getDescription());
+        user.setAttribute(TwitterNodeColumn.NODE_USER_EMAIL.label,u.getEmail());
+        user.setAttribute(TwitterNodeColumn.NODE_USER_PROFILE_IMAGE.label, u.getBiggerProfileImageURL());
+        user.setAttribute(TwitterNodeColumn.NODE_USER_FRIENDS_COUNT.label,  u.getFriendsCount());
+        user.setAttribute(TwitterNodeColumn.NODE_USER_FOLLOWERS_COUNT.label,u.getFollowersCount());
+        user.setAttribute(TwitterNodeColumn.NODE_USER_REAL_NAME.label,u.getName());
+        user.setAttribute(TwitterNodeColumn.NODE_CREATED_AT.label,u.getCreatedAt().toString());
+        user.setAttribute(TwitterNodeColumn.NODE_USER_LOCATION.label,u.getLocation());           
         return user;
     }
     protected Node createUser(UserMentionEntity u) {
