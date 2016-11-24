@@ -64,9 +64,6 @@ public abstract class Networklogic implements StatusListener {
     // Used to keep reference to the "current" workspace
     // Should be called before a new stream
     public void refreshGraphModel() {
-        for(NodeType v :NodeType.values()){
-            System.out.println(v);
-        }
         graphModel = Lookup.getDefault().lookup(GraphController.class).getGraphModel();
         if(graphModel.getGraph().getEdgeCount() == 0 && graphModel.getGraph().getNodeCount() == 0){
             Configuration conf = new Configuration();
