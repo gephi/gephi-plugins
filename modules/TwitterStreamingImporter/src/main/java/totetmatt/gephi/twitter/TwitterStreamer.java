@@ -25,6 +25,7 @@ import twitter4j.TwitterStream;
 import twitter4j.TwitterStreamFactory;
 import twitter4j.User;
 import twitter4j.auth.AccessToken;
+import twitter4j.util.function.Consumer;
 
 /**
  *
@@ -120,6 +121,13 @@ public class TwitterStreamer {
         networkLogic.refreshGraphModel();
         twitterStream.addListener(networkLogic);
         running = true;
+        twitterStream.onException(new Consumer<Exception> (){
+            @Override
+            public void accept(Exception t)  {
+                stop();
+                throw new UnsupportedOperationException(t);
+            }
+        });
         twitterStream.filter(fq);
     }
 
