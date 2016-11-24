@@ -100,7 +100,7 @@ public class RankCalculator extends CancableCalculation {
         }
 
         calculateNormalizedRanks(graph, min, max);
-        graph.readUnlockAll();
+        graph.readUnlock();
         LOG.info("Finished calculating Rank Prestige");
         return aggregateStatistics(graph, pt, RANK_KEY);
     }

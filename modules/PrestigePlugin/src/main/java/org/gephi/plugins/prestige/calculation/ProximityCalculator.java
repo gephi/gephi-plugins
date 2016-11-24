@@ -53,7 +53,7 @@ public class ProximityCalculator extends CancableCalculation {
             Node node = it.next();
             calculateProximityPrestigeForNode(node, graph);
         }
-        graph.readUnlockAll();
+        graph.readUnlock();
         LOG.info("Finished calculating proximity");
         return aggregateStatistics(graph, pt, PROXIMITY_KEY);
     }

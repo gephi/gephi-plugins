@@ -54,7 +54,7 @@ public class DomainCalculator extends CancableCalculation {
             Node node = it.next();
             calculateDomainPrestigeForNode(node, graph);
         }
-        graph.readUnlockAll();
+        graph.readUnlock();
         LOG.info("Finished calculating domain prestige");
         return aggregateStatistics(graph, pt, DOMAIN_KEY);
     }

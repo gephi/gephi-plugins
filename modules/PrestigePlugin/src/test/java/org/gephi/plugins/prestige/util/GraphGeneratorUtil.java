@@ -72,7 +72,6 @@ public final class GraphGeneratorUtil {
     public static GraphModel generateCompelteDirectedGraphWithSelfLoops(int n) {
         GraphModel model = generateCompleteDirectedGraph(n);
         Graph graph = model.getGraph();
-        graph.readUnlockAll();
         graph.writeLock();
         Iterator<Node> it = graph.getNodes().iterator();
         while (it.hasNext()) {
