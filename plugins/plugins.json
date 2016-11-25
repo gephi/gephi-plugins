@@ -15,7 +15,7 @@
         }
       ],
       "category": "Layout",
-      "last_update": "November 19, 2016",
+      "last_update": "November 25, 2016",
       "images": [
         {
           "image": "imgs/geolayout-plugin/geolayout_example.png",
@@ -37,7 +37,7 @@
         },
         "0.9.1": {
           "url": "0.9.1/geolayout-plugin-0.9.1.1.nbm",
-          "last_update": "November 19, 2016"
+          "last_update": "November 25, 2016"
         }
       },
       "sourcecode": "https://github.com/gephi/gephi-plugins/geolayout-plugin",
@@ -58,7 +58,7 @@
         }
       ],
       "category": "Tool",
-      "last_update": "November 19, 2016",
+      "last_update": "November 25, 2016",
       "images": [
         {
           "image": "imgs/linkfluence-plugin/img.png",
@@ -72,7 +72,7 @@
         },
         "0.9.1": {
           "url": "0.9.1/linkfluence-plugin-0.9.0.nbm",
-          "last_update": "November 19, 2016"
+          "last_update": "November 25, 2016"
         }
       },
       "sourcecode": "https://github.com/eduramiba/gephi-plugins/tree/linkfluence-plugin",
@@ -487,7 +487,7 @@
         }
       ],
       "category": "Export",
-      "last_update": "November 19, 2016",
+      "last_update": "November 25, 2016",
       "images": null,
       "versions": {
         "0.8.2": {
@@ -496,7 +496,7 @@
         },
         "0.9.1": {
           "url": "0.9.1/exporttoearth-1.0.0.nbm",
-          "last_update": "November 19, 2016"
+          "last_update": "November 25, 2016"
         }
       },
       "sourcecode": "http://github.com/shepdl/gephi-plugins/tree/export-to-earth",
@@ -543,7 +543,7 @@
         }
       ],
       "category": "Filter",
-      "last_update": "November 19, 2016",
+      "last_update": "November 25, 2016",
       "images": [
         {
           "image": "imgs/kbrace-filter/kbrace-img.png",
@@ -561,7 +561,7 @@
         },
         "0.9.1": {
           "url": "0.9.1/kbrace-filter-1.0.0.nbm",
-          "last_update": "November 19, 2016"
+          "last_update": "November 25, 2016"
         }
       },
       "sourcecode": "https://github.com/mbastian/gephi-plugins/tree/kbrace-filter",
@@ -1000,7 +1000,7 @@
         }
       ],
       "category": "Layout",
-      "last_update": "November 19, 2016",
+      "last_update": "November 25, 2016",
       "images": [
         {
           "image": "imgs/network-splitter-3d/example-0-networksplitter3d-layout.png",
@@ -1014,7 +1014,7 @@
         },
         "0.9.1": {
           "url": "0.9.1/network-splitter-3d-1.0.0.nbm",
-          "last_update": "November 19, 2016"
+          "last_update": "November 25, 2016"
         }
       },
       "sourcecode": "https://github.com/alexandrebarao",
@@ -1383,7 +1383,7 @@
         }
       ],
       "category": "Metric",
-      "last_update": "November 19, 2016",
+      "last_update": "November 25, 2016",
       "images": null,
       "versions": {
         "0.8.2": {
@@ -1392,7 +1392,7 @@
         },
         "0.9.1": {
           "url": "0.9.1/lineage-0.9.1.nbm",
-          "last_update": "November 19, 2016"
+          "last_update": "November 25, 2016"
         }
       },
       "sourcecode": "$sourcecode_url",
@@ -1931,7 +1931,7 @@
         }
       ],
       "category": "Tool",
-      "last_update": "November 19, 2016",
+      "last_update": "November 25, 2016",
       "images": null,
       "versions": {
         "0.8.2": {
@@ -1944,7 +1944,7 @@
         },
         "0.9.1": {
           "url": "0.9.1/multimode-1.0.0.nbm",
-          "last_update": "November 19, 2016"
+          "last_update": "November 25, 2016"
         }
       },
       "sourcecode": "https://github.com/totetmatt/gephi-plugins/tree/multimode-network",
@@ -1965,7 +1965,7 @@
         }
       ],
       "category": "Export",
-      "last_update": "November 19, 2016",
+      "last_update": "November 25, 2016",
       "images": null,
       "versions": {
         "0.8.2": {
@@ -1978,7 +1978,7 @@
         },
         "0.9.1": {
           "url": "0.9.1/jsonexporter-plugin-2.0.0.nbm",
-          "last_update": "November 19, 2016"
+          "last_update": "November 25, 2016"
         }
       },
       "sourcecode": "http://github.com/oxfordinternetinstitute/gephi-plugins",
@@ -1999,7 +1999,7 @@
         }
       ],
       "category": "Export",
-      "last_update": "November 19, 2016",
+      "last_update": "November 25, 2016",
       "images": null,
       "versions": {
         "0.8.2": {
@@ -2012,7 +2012,7 @@
         },
         "0.9.1": {
           "url": "0.9.1/sigmaexporter-0.9.0.nbm",
-          "last_update": "November 19, 2016"
+          "last_update": "November 25, 2016"
         }
       },
       "sourcecode": "http://github.com/oxfordinternetinstitute/gephi-plugins",
@@ -2033,7 +2033,7 @@
         }
       ],
       "category": "Tool",
-      "last_update": "November 19, 2016",
+      "last_update": "November 25, 2016",
       "images": null,
       "versions": {
         "0.9.0": {
@@ -2042,7 +2042,7 @@
         },
         "0.9.1": {
           "url": "0.9.1/gephi-plugin-node-color-manager-1.0.0.nbm",
-          "last_update": "November 19, 2016"
+          "last_update": "November 25, 2016"
         }
       },
       "sourcecode": "https://github.com/gephi/gephi-plugins/gephi-plugin-node-color-manager",
@@ -2063,7 +2063,7 @@
         }
       ],
       "category": "Layout",
-      "last_update": "November 19, 2016",
+      "last_update": "November 25, 2016",
       "images": [
         {
           "image": "imgs/gephigraphviz/GraphVizLayout_example.png",
@@ -2085,7 +2085,7 @@
         },
         "0.9.1": {
           "url": "0.9.1/gephigraphviz-1.0.0.nbm",
-          "last_update": "November 19, 2016"
+          "last_update": "November 25, 2016"
         }
       },
       "sourcecode": "https://github.com/chunky/gephi-plugins",
@@ -2106,12 +2106,12 @@
         }
       ],
       "category": "Import",
-      "last_update": "November 19, 2016",
+      "last_update": "November 25, 2016",
       "images": null,
       "versions": {
         "0.9.1": {
           "url": "0.9.1/graphstreaming-1.0.0.zip",
-          "last_update": "November 19, 2016"
+          "last_update": "November 25, 2016"
         }
       },
       "sourcecode": "https://github.com/panisson/gephi-plugins/tree/graph-streaming",
@@ -2132,12 +2132,12 @@
         }
       ],
       "category": "Layout",
-      "last_update": "November 19, 2016",
+      "last_update": "November 25, 2016",
       "images": null,
       "versions": {
         "0.9.1": {
           "url": "0.9.1/circularlayout-0.9.1.nbm",
-          "last_update": "November 19, 2016"
+          "last_update": "November 25, 2016"
         }
       },
       "sourcecode": "https://github.com/mgroeninger/gephi-plugins",
@@ -2158,7 +2158,7 @@
         }
       ],
       "category": "Import",
-      "last_update": "November 19, 2016",
+      "last_update": "November 25, 2016",
       "images": [
         {
           "image": "imgs/semantic/icon.png",
@@ -2176,7 +2176,7 @@
       "versions": {
         "0.9.1": {
           "url": "0.9.1/semantic-1.0.0.nbm",
-          "last_update": "November 19, 2016"
+          "last_update": "November 25, 2016"
         }
       },
       "sourcecode": "https://github.com/Wimmics/gephi-semantic-web-import",
@@ -2197,7 +2197,7 @@
         }
       ],
       "category": "Export",
-      "last_update": "November 19, 2016",
+      "last_update": "November 25, 2016",
       "images": [
         {
           "image": "imgs/loxawebsiteexport/logo_final.png",
@@ -2207,7 +2207,7 @@
       "versions": {
         "0.9.1": {
           "url": "0.9.1/loxawebsiteexport-0.3.2.nbm",
-          "last_update": "November 19, 2016"
+          "last_update": "November 25, 2016"
         }
       },
       "sourcecode": "https://github.com/jorgaf/gephi-plugins",
@@ -2228,12 +2228,12 @@
         }
       ],
       "category": "Layout",
-      "last_update": "November 19, 2016",
+      "last_update": "November 25, 2016",
       "images": null,
       "versions": {
         "0.9.1": {
           "url": "0.9.1/clementlevallois-1.0.0.nbm",
-          "last_update": "November 19, 2016"
+          "last_update": "November 25, 2016"
         }
       },
       "sourcecode": "https://github.com/seinecle/gephi-plugins/tree/mapOfCountriesBranch",
@@ -2254,7 +2254,7 @@
         }
       ],
       "category": "Tool",
-      "last_update": "November 19, 2016",
+      "last_update": "November 25, 2016",
       "images": [
         {
           "image": "imgs/scripting.plugin/img1.png",
@@ -2264,7 +2264,7 @@
       "versions": {
         "0.9.1": {
           "url": "0.9.1/scripting.plugin-0.9.1.2.nbm",
-          "last_update": "November 19, 2016"
+          "last_update": "November 25, 2016"
         }
       },
       "sourcecode": "https://github.com/gephi/gephi-plugins/tree/python-scripting-plugin",
@@ -2285,7 +2285,7 @@
         }
       ],
       "category": "Import",
-      "last_update": "November 19, 2016",
+      "last_update": "November 25, 2016",
       "images": [
         {
           "image": "imgs/twitter-streaming-importer/A_Screenshot.png",
@@ -2311,7 +2311,7 @@
       "versions": {
         "0.9.1": {
           "url": "0.9.1/twitter-streaming-importer-1.0.0.nbm",
-          "last_update": "November 19, 2016"
+          "last_update": "November 25, 2016"
         }
       },
       "sourcecode": "https://github.com/totetmatt/gephi-plugins/tree/twitter",
@@ -2332,7 +2332,7 @@
         }
       ],
       "category": "Layout",
-      "last_update": "November 19, 2016",
+      "last_update": "November 25, 2016",
       "images": [
         {
           "image": "imgs/isometric-layout/example-0-isometric-layout.png",
@@ -2342,7 +2342,7 @@
       "versions": {
         "0.9.1": {
           "url": "0.9.1/isometric-layout-1.0.0.nbm",
-          "last_update": "November 19, 2016"
+          "last_update": "November 25, 2016"
         }
       },
       "sourcecode": "https://github.com/alexandrebarao",
@@ -2363,7 +2363,7 @@
         }
       ],
       "category": "Import",
-      "last_update": "November 19, 2016",
+      "last_update": "November 25, 2016",
       "images": [
         {
           "image": "imgs/ExcelCsvImporter/1.png",
@@ -2389,7 +2389,7 @@
       "versions": {
         "0.9.1": {
           "url": "0.9.1/ExcelCsvImporter-1.0.0.nbm",
-          "last_update": "November 19, 2016"
+          "last_update": "November 25, 2016"
         }
       },
       "sourcecode": "https://github.com/seinecle/gephi-plugins/tree/ExcelCsvImporter",
@@ -2410,12 +2410,12 @@
         }
       ],
       "category": "Import",
-      "last_update": "November 19, 2016",
+      "last_update": "November 25, 2016",
       "images": null,
       "versions": {
         "0.9.1": {
           "url": "0.9.1/oracle-driver-0.0.1.nbm",
-          "last_update": "November 19, 2016"
+          "last_update": "November 25, 2016"
         }
       },
       "sourcecode": "https://github.com/sturton/gephi-plugins",
@@ -2436,7 +2436,7 @@
         }
       ],
       "category": "Layout",
-      "last_update": "November 19, 2016",
+      "last_update": "November 25, 2016",
       "images": [
         {
           "image": "imgs/eventgraphlayout/img.png",
@@ -2446,7 +2446,7 @@
       "versions": {
         "0.9.1": {
           "url": "0.9.1/eventgraphlayout-1.0.0.nbm",
-          "last_update": "November 19, 2016"
+          "last_update": "November 25, 2016"
         }
       },
       "sourcecode": "https://github.com/WouterSpekkink/gephi-plugins/tree/eventgraphlayout",
@@ -2467,12 +2467,12 @@
         }
       ],
       "category": "Layout",
-      "last_update": "November 19, 2016",
+      "last_update": "November 25, 2016",
       "images": null,
       "versions": {
         "0.9.1": {
           "url": "0.9.1/mdslayout-0.9.1.nbm",
-          "last_update": "November 19, 2016"
+          "last_update": "November 25, 2016"
         }
       },
       "sourcecode": "https://github.com/WouterSpekkink/gephi-plugins/tree/mdslayout",
@@ -2493,12 +2493,12 @@
         }
       ],
       "category": "Filter",
-      "last_update": "November 19, 2016",
+      "last_update": "November 25, 2016",
       "images": null,
       "versions": {
         "0.9.1": {
           "url": "0.9.1/graphfilter-1.0.0.nbm",
-          "last_update": "November 19, 2016"
+          "last_update": "November 25, 2016"
         }
       },
       "sourcecode": "https://github.com/ypanagis/gephi-plugins",
@@ -2519,7 +2519,7 @@
         }
       ],
       "category": "Tool",
-      "last_update": "November 19, 2016",
+      "last_update": "November 25, 2016",
       "images": [
         {
           "image": "imgs/givecolortonodes/1.illustration.png",
@@ -2537,7 +2537,7 @@
       "versions": {
         "0.9.1": {
           "url": "0.9.1/givecolortonodes-1.0.0.nbm",
-          "last_update": "November 19, 2016"
+          "last_update": "November 25, 2016"
         }
       },
       "sourcecode": "https://github.com/seinecle/gephi-plugins/tree/GiveColorsToNodes",
@@ -2558,7 +2558,7 @@
         }
       ],
       "category": "Tool",
-      "last_update": "November 19, 2016",
+      "last_update": "November 25, 2016",
       "images": [
         {
           "image": "imgs/givecolortoedges/colourwheel.png",
@@ -2568,7 +2568,7 @@
       "versions": {
         "0.9.1": {
           "url": "0.9.1/givecolortoedges-1.0.0.nbm",
-          "last_update": "November 19, 2016"
+          "last_update": "November 25, 2016"
         }
       },
       "sourcecode": "https://github.com/seinecle/gephi-plugins/tree/GiveColorsToEdges",
@@ -2589,7 +2589,7 @@
         }
       ],
       "category": "Layout",
-      "last_update": "November 19, 2016",
+      "last_update": "November 25, 2016",
       "images": [
         {
           "image": "imgs/gravity-plugin/FA2snake.png",
@@ -2607,7 +2607,7 @@
       "versions": {
         "0.9.1": {
           "url": "0.9.1/gravity-plugin-1.0.0.nbm",
-          "last_update": "November 19, 2016"
+          "last_update": "November 25, 2016"
         }
       },
       "sourcecode": "https://github.com/suryanash/gephi-plugins",
@@ -2628,7 +2628,7 @@
         }
       ],
       "category": "Metric",
-      "last_update": "November 19, 2016",
+      "last_update": "November 25, 2016",
       "images": [
         {
           "image": "imgs/mdsmetric/img.png",
@@ -2638,7 +2638,7 @@
       "versions": {
         "0.9.1": {
           "url": "0.9.1/mdsmetric-0.9.1.nbm",
-          "last_update": "November 19, 2016"
+          "last_update": "November 25, 2016"
         }
       },
       "sourcecode": "https://github.com/WouterSpekkink/gephi-plugins/tree/mds_metric",
@@ -2659,15 +2659,41 @@
         }
       ],
       "category": "Metric",
-      "last_update": "November 19, 2016",
+      "last_update": "November 25, 2016",
       "images": null,
       "versions": {
         "0.9.1": {
           "url": "0.9.1/vector-calculator-0.5.0.nbm",
-          "last_update": "November 19, 2016"
+          "last_update": "November 25, 2016"
         }
       },
       "sourcecode": "https://github.com/d99joper/gephi-plugins/tree/master/modules/VectorCalculator/",
+      "homepage": null
+    },
+    {
+      "id": "prestige-plugin",
+      "name": "Prestige Plugin",
+      "short_description": "Plugin calculates several prestige metrics",
+      "long_description": "Plugin calculates indegree prestige, domain prestige, proximity prestige and rank prestige on directed graphs.",
+      "readme": "### Gephi Prestige Metrics\n\nThis plugin can calculate the following four prestige metrics on DIRECTED Graphs.\n\n## Indegree Prestige\nThe *Indegree Prestige* metric for a node *v* is defined by the number of other nodes that are directly pointing to *v*. As a result there are two additional node properties created:\n- **pr_indegree**: Indegree prestige of *v*\n- **pr_indegree_normalized** : Normalized *Indegree prestige*, which is calculated by dividing \"Indegree Prestige\" by (Number of nodes -1). This value will always between 0 and 1 (0 \u003d no other nodes are directly pointing to *v*, wherease 1 means that all other nodes are directly pointing to *v*)\n\n## Domain Prestige\nThe *Domain Prestige* metric for a node *v* is the fraction of nodes within a network that are directly od indirectly pointing to *v*. This answers the question: Which fraction of the network can reach node *v*. The Result is stored in the node property **pr_domain**\n\n## Proximity Prestige\nThe *Proximity Prestige* can be seen as an extension of the *Indegree Prestige*. *Indegree Prestige* is a local measurement because only directly connected nodes are counted. Proximity prestige for a node *v* also considers nodes that are indirectly pointing to *v*. The path lengths are used for weighting; shorter paths are more valuable.\n\nThe formula is:\n\nParemeters:\n\n`v`: Node for which the *Proximity Prestige* is calculated\n\n`I`: Set of nodes which are directly or indirectly pointing to *v*\n\n`Sum(d)`: Sum of all shortest paths from all Nodes in `I` to `v`\n\n*above* \u003d Fraction of Nodes pointing (directly or indirectly) to *v* \u003d `|I| / (n-1)`\n\n*below* \u003d Average shortest path lengths of Nodes pointing to *v*: `SUM(d) / |I|`\n\nProxiityPrestige (v) \u003d `above / below`\n\nThe result is stored in the node attribute **pr_proximity**.\n\n## Rank Prestige\nThe *Rank Prestige* is similar to the *Indegree Prestige*. But instead of just counting the number of connected nodes the rank / status / prominence of the neighbour nodes is considered and must be defined. Therefore the setup is a bit more complicated. You have to select a nummeric or boolean attribute called *prominence*, which indicates the status of a person (e.g. Number of fans).\nTo calculate the *Rank Prestige* of a node *v*, all the *prominence* values from nodes directly pointing to *v* are summed up.\n\nThere is an option to *log-transform* the result.\n\nFinally two node attributes are created:\n- **pr_rank**: Rank-Value for node\n- **pr_rank_min-max-normalized**: Min-Max-Normalized Rank-Value for node\n",
+      "license": "GPLv3",
+      "authors": [
+        {
+          "name": "Michael Henninger",
+          "email": "",
+          "link": ""
+        }
+      ],
+      "category": "Metric",
+      "last_update": "November 25, 2016",
+      "images": null,
+      "versions": {
+        "0.9.1": {
+          "url": "0.9.1/prestige-plugin-1.0.0.nbm",
+          "last_update": "November 25, 2016"
+        }
+      },
+      "sourcecode": "https://github.com/michihenninger/prestige-gephi-plugin/tree/prestige-plugin",
       "homepage": null
     }
   ]
