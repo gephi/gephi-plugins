@@ -46,6 +46,7 @@
         <module>modules/GravityPlugin</module>
         <module>modules/MdsMetric</module>
         <module>modules/VectorCalculator</module>
+        <module>modules/PrestigePlugin</module>
     </modules>
     
     <!-- Properties -->
