@@ -213,11 +213,6 @@ public class PrestigeSettingsPanel extends javax.swing.JPanel {
         cmbRankAttributes.setModel(new javax.swing.DefaultComboBoxModel<Column>());
 
         chkRankLogScale.setText(org.openide.util.NbBundle.getMessage(PrestigeSettingsPanel.class, "PrestigeSettingsPanel.chkRankLogScale.text")); // NOI18N
-        chkRankLogScale.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                chkRankLogScaleActionPerformed(evt);
-            }
-        });
 
         jLabel4.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
         jLabel4.setText(org.openide.util.NbBundle.getMessage(PrestigeSettingsPanel.class, "PrestigeSettingsPanel.jLabel4.text")); // NOI18N
@@ -257,20 +252,10 @@ public class PrestigeSettingsPanel extends javax.swing.JPanel {
         jLabel12.setText(org.openide.util.NbBundle.getMessage(PrestigeSettingsPanel.class, "PrestigeSettingsPanel.jLabel12.text")); // NOI18N
 
         txtRankDefault.setText(org.openide.util.NbBundle.getMessage(PrestigeSettingsPanel.class, "PrestigeSettingsPanel.txtRankDefault.text")); // NOI18N
-        txtRankDefault.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtRankDefaultActionPerformed(evt);
-            }
-        });
 
         btnIndegree.setText(org.openide.util.NbBundle.getMessage(PrestigeSettingsPanel.class, "PrestigeSettingsPanel.btnIndegree.text")); // NOI18N
 
         btnDomain.setText(org.openide.util.NbBundle.getMessage(PrestigeSettingsPanel.class, "PrestigeSettingsPanel.btnDomain.text")); // NOI18N
-        btnDomain.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnDomainActionPerformed(evt);
-            }
-        });
 
         btnProximity.setText(org.openide.util.NbBundle.getMessage(PrestigeSettingsPanel.class, "PrestigeSettingsPanel.btnProximity.text")); // NOI18N
 
@@ -427,18 +412,6 @@ public class PrestigeSettingsPanel extends javax.swing.JPanel {
 
     txtRankDefault.addKeyListener(kl);
     }// </editor-fold>//GEN-END:initComponents
-
-    private void chkRankLogScaleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chkRankLogScaleActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_chkRankLogScaleActionPerformed
-
-    private void txtRankDefaultActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtRankDefaultActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtRankDefaultActionPerformed
-
-    private void btnDomainActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDomainActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnDomainActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnDomain;

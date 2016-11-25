@@ -253,9 +253,6 @@
           <ResourceString bundle="org/gephi/plugins/prestige/ui/Bundle.properties" key="PrestigeSettingsPanel.chkRankLogScale.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
         </Property>
       </Properties>
-      <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="chkRankLogScaleActionPerformed"/>
-      </Events>
     </Component>
     <Component class="javax.swing.JSeparator" name="jSeparator1">
     </Component>
@@ -393,9 +390,6 @@
           <ResourceString bundle="org/gephi/plugins/prestige/ui/Bundle.properties" key="PrestigeSettingsPanel.txtRankDefault.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
         </Property>
       </Properties>
-      <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="txtRankDefaultActionPerformed"/>
-      </Events>
       <AuxValues>
         <AuxValue name="JavaCodeGenerator_AddingCodePost" type="java.lang.String" value="KeyAdapter kl = new KeyAdapter() {&#xa;&#xa;    @Override&#xa;    public void keyTyped(KeyEvent e) {&#xa;    char c = e.getKeyChar();&#xa;        if (!((c &gt;= &apos;0&apos;) &amp;&amp; (c &lt;= &apos;9&apos;) ||&#xa;        (c == KeyEvent.VK_BACK_SPACE) ||&#xa;        (c == KeyEvent.VK_DELETE))) {&#xa;            getToolkit().beep();&#xa;            e.consume();&#xa;        }&#xa;    }&#xa;};&#xa;&#xa;txtRankDefault.addKeyListener(kl);"/>
       </AuxValues>
@@ -413,9 +407,6 @@
           <ResourceString bundle="org/gephi/plugins/prestige/ui/Bundle.properties" key="PrestigeSettingsPanel.btnDomain.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
         </Property>
       </Properties>
-      <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnDomainActionPerformed"/>
-      </Events>
     </Component>
     <Component class="javax.swing.JButton" name="btnProximity">
       <Properties>

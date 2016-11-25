@@ -26,6 +26,7 @@ import java.util.logging.Logger;
 import org.gephi.graph.api.Graph;
 import org.gephi.graph.api.Node;
 import org.gephi.plugins.prestige.util.GraphUtil;
+import org.gephi.utils.progress.Progress;
 import org.gephi.utils.progress.ProgressTicket;
 
 /**
@@ -45,14 +46,14 @@ public class ProximityCalculator extends CancableCalculation {
     @Override
     protected SortedMap<Double, Integer> calculateNodeMetrics(Graph graph, ProgressTicket pt) {
         LOG.info("Start calculating proximity");
-        pt.setDisplayName("Proximity Prestige calculations");
+        Progress.setDisplayName(pt, "Proximity Prestige calculations");
         graph.readLock();
         Iterator<Node> it = graph.getNodes().iterator();
         while (!isCanceled() && it.hasNext()) {
             Node node = it.next();
             calculateProximityPrestigeForNode(node, graph);
         }
-        graph.readUnlockAll();
+        graph.readUnlock();
         LOG.info("Finished calculating proximity");
         return aggregateStatistics(graph, pt, PROXIMITY_KEY);
     }

@@ -21,12 +21,14 @@ import org.gephi.plugins.prestige.calculation.DomainCalculator;
 import org.gephi.plugins.prestige.calculation.ProximityCalculator;
 import java.util.SortedMap;
 import java.util.logging.Logger;
+import org.gephi.graph.api.Graph;
 import org.gephi.graph.api.GraphModel;
 import org.gephi.plugins.prestige.calculation.RankCalculator;
 import org.gephi.plugins.prestige.ui.PrestigeSettingsPanel;
 import org.gephi.plugins.prestige.util.ReportChartUtil;
 import org.gephi.statistics.spi.Statistics;
 import org.gephi.utils.longtask.spi.LongTask;
+import org.gephi.utils.progress.Progress;
 import org.gephi.utils.progress.ProgressTicket;
 
 /**
@@ -66,28 +68,39 @@ public class PrestigeStatistics implements Statistics, LongTask {
             return;
         }
 
-        processTicket.start();
-        if (indegree) {
-            indegreeResultDistribution = indegreeCalculator.calculate(gm, processTicket);
-        }
+        Graph graph = gm.getGraph();
 
-        if (domain) {
-            domainResultDistribution = domainCalculator.calculate(gm, processTicket);
-        }
-
-        if (proximity) {
-            proximityResultDistribution = proximityCalculator.calculate(gm, processTicket);
-        }
-
-        if (rank) {
-            if (prominenceAttributeId == null) {
-                LOG.severe("No prominence attribute selected. Can not calculate rank prestige.");
-            } else {
-                rankCalculator = new RankCalculator(prominenceAttributeId, rankDoLogTransformation, rankDefaultValueIfNan, gm);
-                rankResultDistribution = rankCalculator.calculate(gm, processTicket);
+        graph.readLock();
+        try {
+            Progress.start(processTicket, 4);
+            if (indegree) {
+                indegreeResultDistribution = indegreeCalculator.calculate(gm, processTicket);
             }
+            Progress.progress(processTicket);
+
+            if (domain) {
+                domainResultDistribution = domainCalculator.calculate(gm, processTicket);
+            }
+            Progress.progress(processTicket);
+
+            if (proximity) {
+                proximityResultDistribution = proximityCalculator.calculate(gm, processTicket);
+            }
+            Progress.progress(processTicket);
+
+            if (rank) {
+                if (prominenceAttributeId == null) {
+                    LOG.severe("No prominence attribute selected. Can not calculate rank prestige.");
+                } else {
+                    rankCalculator = new RankCalculator(prominenceAttributeId, rankDoLogTransformation, rankDefaultValueIfNan, gm);
+                    rankResultDistribution = rankCalculator.calculate(gm, processTicket);
+                }
+            }
+            Progress.progress(processTicket);
+        } finally {
+            graph.readUnlockAll();
+            Progress.finish(processTicket);
         }
-        processTicket.finish("Finished");
     }
 
     public String getReport() {
