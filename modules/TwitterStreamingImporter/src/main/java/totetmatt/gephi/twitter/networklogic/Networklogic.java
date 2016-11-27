@@ -118,8 +118,12 @@ public abstract class Networklogic implements StatusListener {
         
         tweet.setAttribute(TwitterNodeColumn.NODE_CREATED_AT.label, status.getCreatedAt().toString());
         tweet.setAttribute(TwitterNodeColumn.NODE_LANG.label,status.getLang());
-       
-        
+        if(status.getPlace() != null){
+            tweet.setAttribute(TwitterNodeColumn.NODE_TWEET_PLACE_COUNTRY.label, status.getPlace().getCountry());
+            tweet.setAttribute(TwitterNodeColumn.NODE_TWEET_PLACE_TYPE.label, status.getPlace().getPlaceType());
+            tweet.setAttribute(TwitterNodeColumn.NODE_TWEET_PLACE_FULLNAME.label, status.getPlace().getFullName());
+            tweet.setAttribute(TwitterNodeColumn.NODE_TWEET_PLACE_NAME.label, status.getPlace().getName());
+        }
         if(status.getGeoLocation() != null){
             tweet.setAttribute(TwitterNodeColumn.NODE_TWEET_GEO_LATITUDE.label, status.getGeoLocation().getLatitude());
             tweet.setAttribute(TwitterNodeColumn.NODE_TWEET_GEO_LONGITUDE.label, status.getGeoLocation().getLongitude());

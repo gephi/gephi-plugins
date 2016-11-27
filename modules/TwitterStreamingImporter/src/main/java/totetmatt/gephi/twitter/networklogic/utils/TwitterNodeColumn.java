@@ -8,6 +8,10 @@ public enum TwitterNodeColumn {
     NODE_TYPE("twitter_type",String.class),
     NODE_TWEET_GEO_LATITUDE("lat",Double.class),
     NODE_TWEET_GEO_LONGITUDE("lng",Double.class),
+    NODE_TWEET_PLACE_COUNTRY("place_country",String.class),
+    NODE_TWEET_PLACE_TYPE("place_type",String.class),
+    NODE_TWEET_PLACE_FULLNAME("place_fullname",String.class),
+    NODE_TWEET_PLACE_NAME("place_name",String.class),
     NODE_CREATED_AT("created_at",String.class),
     NODE_LANG("lang",String.class),
 
