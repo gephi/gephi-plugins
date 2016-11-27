@@ -68,7 +68,7 @@ public class FullSmartNetwork extends Networklogic {
         createLink(user, tweet, TWEETS);
       
         // Retweet are handled later
-        if (!status.isRetweet()) {
+        if (!status.isRetweet() && status.getQuotedStatus() != null) {
             for (UserMentionEntity mention : status.getUserMentionEntities()) {
                 Node mentionNode = createUser(mention);
                 mentionNode.addTimestamp(currentMillis);

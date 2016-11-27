@@ -7,6 +7,7 @@ import org.gephi.graph.api.Configuration;
 import org.gephi.graph.api.GraphController;
 import org.gephi.graph.api.GraphModel;
 import org.gephi.graph.api.Node;
+import org.gephi.graph.api.Origin;
 import org.gephi.graph.api.TimeRepresentation;
 import org.openide.util.Lookup;
 import totetmatt.gephi.twitter.networklogic.utils.TwitterNodeColumn;
@@ -73,7 +74,7 @@ public abstract class Networklogic implements StatusListener {
         
         for(TwitterNodeColumn c :TwitterNodeColumn.values()){
             if(!graphModel.getNodeTable().hasColumn(c.label)){
-                graphModel.getNodeTable().addColumn(c.label, c.classType,null);
+                graphModel.getNodeTable().addColumn(c.label, c.classType,Origin.DATA);
             }
         }
     }

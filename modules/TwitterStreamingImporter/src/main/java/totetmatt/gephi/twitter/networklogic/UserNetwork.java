@@ -3,6 +3,7 @@ package totetmatt.gephi.twitter.networklogic;
 import java.awt.Color;
 import org.gephi.graph.api.Edge;
 import org.gephi.graph.api.Node;
+import org.joda.time.LocalTime;
 import org.openide.util.lookup.ServiceProvider;
 import twitter4j.Status;
 import twitter4j.UserMentionEntity;
@@ -31,6 +32,7 @@ public class UserNetwork extends Networklogic {
     }
     @Override
     public void processStatus(Status status) {
+        long currentMillis = LocalTime.now().toDateTimeToday().getMillis();
         // get the original user from the tweet
         String originScreenName = status.getUser().getScreenName().toLowerCase();
 
@@ -45,6 +47,7 @@ public class UserNetwork extends Networklogic {
                 Node origin = createUser(status.getUser());
                 Node target = createUser(mention);
                 
+                
                 int typeEdge;
                 if (status.isRetweet()) {
                     typeEdge = RETWEET;
@@ -53,7 +56,7 @@ public class UserNetwork extends Networklogic {
                 }
                 // Check if there is already an edge for the nodes
                 Edge mentionEdge = graphModel.getGraph().getEdge(origin, target, typeEdge);
-
+                
                 if (mentionEdge == null) { // If no, create it
                     mentionEdge = graphModel
                             .factory()
@@ -64,6 +67,7 @@ public class UserNetwork extends Networklogic {
                 } else { // If yes, increment the weight
                     mentionEdge.setWeight(mentionEdge.getWeight() + 1);
                 }
+                mentionEdge.addTimestamp(currentMillis);
                 if (status.getRetweetedStatus() != null) {
                     onStatus(status.getRetweetedStatus());
                 }
