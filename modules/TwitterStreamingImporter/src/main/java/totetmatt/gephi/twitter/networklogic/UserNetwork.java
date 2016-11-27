@@ -19,6 +19,7 @@ public class UserNetwork extends Networklogic {
 
     private int MENTION;
     private int RETWEET;
+    private int QUOTE;
 
     public UserNetwork() {
      
@@ -29,9 +30,13 @@ public class UserNetwork extends Networklogic {
         super.refreshGraphModel();
         MENTION = graphModel.addEdgeType("Mention");
         RETWEET = graphModel.addEdgeType("Retweet");
+        QUOTE   = graphModel.addEdgeType("Quote");
     }
     @Override
     public void processStatus(Status status) {
+        processStatus(status,false);
+    }
+    public void processStatus(Status status,boolean isQuote) {
         long currentMillis = LocalTime.now().toDateTimeToday().getMillis();
         // get the original user from the tweet
         String originScreenName = status.getUser().getScreenName().toLowerCase();
@@ -50,10 +55,14 @@ public class UserNetwork extends Networklogic {
                 target.addTimestamp(currentMillis);
                 
                 int typeEdge;
-                if (status.isRetweet()) {
-                    typeEdge = RETWEET;
+                if(!isQuote){
+                    if (status.isRetweet()) {
+                        typeEdge = RETWEET;
+                    } else {
+                        typeEdge = MENTION;
+                    }
                 } else {
-                    typeEdge = MENTION;
+                    typeEdge = QUOTE;
                 }
                 // Check if there is already an edge for the nodes
                 Edge mentionEdge = graphModel.getGraph().getEdge(origin, target, typeEdge);
@@ -71,6 +80,9 @@ public class UserNetwork extends Networklogic {
                 mentionEdge.addTimestamp(currentMillis);
                 if (status.getRetweetedStatus() != null) {
                     onStatus(status.getRetweetedStatus());
+                }
+                if(status.getQuotedStatus() != null) {   
+                    processStatus(status.getQuotedStatus(),true);
                 }
             }
 
