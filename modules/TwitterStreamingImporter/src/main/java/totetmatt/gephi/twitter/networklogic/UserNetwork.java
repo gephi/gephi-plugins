@@ -34,9 +34,6 @@ public class UserNetwork extends Networklogic {
     }
     @Override
     public void processStatus(Status status) {
-        processStatus(status,false);
-    }
-    public void processStatus(Status status,boolean isQuote) {
         long currentMillis = LocalTime.now().toDateTimeToday().getMillis();
         // get the original user from the tweet
         String originScreenName = status.getUser().getScreenName().toLowerCase();
@@ -55,14 +52,10 @@ public class UserNetwork extends Networklogic {
                 target.addTimestamp(currentMillis);
                 
                 int typeEdge;
-                if(!isQuote){
-                    if (status.isRetweet()) {
-                        typeEdge = RETWEET;
-                    } else {
-                        typeEdge = MENTION;
-                    }
+                if (status.isRetweet()) {
+                    typeEdge = RETWEET;
                 } else {
-                    typeEdge = QUOTE;
+                    typeEdge = MENTION;
                 }
                 // Check if there is already an edge for the nodes
                 Edge mentionEdge = graphModel.getGraph().getEdge(origin, target, typeEdge);
@@ -81,8 +74,20 @@ public class UserNetwork extends Networklogic {
                 if (status.getRetweetedStatus() != null) {
                     onStatus(status.getRetweetedStatus());
                 }
-                if(status.getQuotedStatus() != null) {   
-                    processStatus(status.getQuotedStatus(),true);
+                if(status.getQuotedStatus() != null) {
+                    target = createUser(status.getQuotedStatus().getUser());
+                    Edge quoteEdge = graphModel.getGraph().getEdge(origin, target, QUOTE);
+                    if (quoteEdge == null) { // If no, create it
+                    quoteEdge = graphModel
+                            .factory()
+                            .newEdge(origin, target, QUOTE, true);
+                    quoteEdge.setWeight(1.0);
+                    quoteEdge.setColor(Color.GRAY);
+                    graphModel.getGraph().addEdge(quoteEdge);
+                    } else { // If yes, increment the weight
+                        quoteEdge.setWeight(quoteEdge.getWeight() + 1);
+                    }
+                    quoteEdge.addTimestamp(currentMillis);
                 }
             }
 
