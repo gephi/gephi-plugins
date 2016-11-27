@@ -46,7 +46,8 @@ public class UserNetwork extends Networklogic {
                 // Create or get the nodes
                 Node origin = createUser(status.getUser());
                 Node target = createUser(mention);
-                
+                origin.addTimestamp(currentMillis);
+                target.addTimestamp(currentMillis);
                 
                 int typeEdge;
                 if (status.isRetweet()) {
