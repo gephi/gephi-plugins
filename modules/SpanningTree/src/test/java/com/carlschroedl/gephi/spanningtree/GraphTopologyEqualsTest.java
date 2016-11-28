@@ -39,17 +39,23 @@ public class GraphTopologyEqualsTest {
     }
 
     @Test
+    public void testEmptyGraphsEqual(){
+        GraphModel a0 = loader.fromScratch();
+        GraphModel b0 = loader.fromScratch();
+        assertTrue(GraphTopologyEquals.graphsHaveSameTopology(a0.getGraph(), b0.getGraph()));
+    }
+    
+    @Test
     public void testSameGraphsAreEqual() {
         GraphModel a = loader.fromFile(PATH);
         GraphModel b = loader.fromFile(PATH);
         assertTrue(GraphTopologyEquals.graphsHaveSameTopology(a.getGraph(), b.getGraph()));
+        
     }
     
     @Test
     public void testDifferentNodeCounts() {
-//        GraphModel a = loader.fromFile(PATH);
         GraphModel a = loader.fromScratch();
-//        GraphModel b = loader.fromFile(PATH);
         GraphModel b = loader.fromScratch();
         NodeImpl n = new NodeImpl(Integer.MAX_VALUE);
         b.getGraph().addNode(n);
@@ -58,8 +64,8 @@ public class GraphTopologyEqualsTest {
     
     @Test
     public void testDifferentEdgeCount() {
-        GraphModel aModel = loader.fromFile(PATH);
-        GraphModel bModel = loader.fromFile(PATH);
+        GraphModel aModel = loader.fromScratch();
+        GraphModel bModel = loader.fromScratch();
         Graph a = aModel.getGraph();
         Graph b = bModel.getGraph();
         NodeImpl n1a = new NodeImpl(Integer.MAX_VALUE);
