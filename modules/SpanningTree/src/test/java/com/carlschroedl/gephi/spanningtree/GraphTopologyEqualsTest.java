@@ -114,4 +114,38 @@ public class GraphTopologyEqualsTest {
         assertFalse("two graphs are not equal if they have different directions of edges", GraphTopologyEquals.graphsHaveSameTopology(a, b));
     }
 
+    @Test
+    public void testSameTotalEdgeCountButDifferingEdgePlacement() {
+        final String ID_1 = "" + Integer.MAX_VALUE;
+        final String ID_2 = "" + Integer.MIN_VALUE;
+        final String ID_3 = "" + 0;
+        final int WEIGHT = 1;
+        GraphModel aModel = loader.fromScratch();
+        GraphModel bModel = loader.fromScratch();
+        GraphFactory aFactory = aModel.factory();
+        GraphFactory bFactory = bModel.factory();
+        Graph a = aModel.getGraph();
+        Graph b = bModel.getGraph();
+        Node n1a = aFactory.newNode(ID_1);
+        Node n2a = aFactory.newNode(ID_2);
+        Node n3a = aFactory.newNode(ID_3);
+        a.addNode(n1a);
+        a.addNode(n2a);
+        a.addNode(n3a);
+        
+        Node n1b = bFactory.newNode(ID_1);
+        Node n2b = bFactory.newNode(ID_2);
+        Node n3b = bFactory.newNode(ID_3);
+        b.addNode(n1b);
+        b.addNode(n2b);
+        b.addNode(n3b);
+        //add an edge between node 1 and 2 in graph a
+        Edge ea= aFactory.newEdge(n1a, n2a, 0, WEIGHT, true);
+        a.addEdge(ea);
+        //add an edge between node 2 and 3 in graph b
+        Edge eb= bFactory.newEdge(n2b, n3b, 0, WEIGHT, true);
+        b.addEdge(eb);
+        assertFalse("two graphs are not equal if the same node in both graphs have different numbers of edges", GraphTopologyEquals.graphsHaveSameTopology(a, b));
+    }
+    
 }
