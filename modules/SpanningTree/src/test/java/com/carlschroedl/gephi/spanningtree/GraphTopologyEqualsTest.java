@@ -1,0 +1,111 @@
+package com.carlschroedl.gephi.spanningtree;
+
+import javafx.scene.NodeBuilder;
+import org.gephi.graph.api.Edge;
+import org.gephi.graph.api.Graph;
+import org.gephi.graph.api.GraphFactory;
+import org.gephi.graph.api.GraphModel;
+import org.gephi.graph.api.Node;
+import org.gephi.graph.impl.EdgeImpl;
+import org.gephi.graph.impl.NodeImpl;
+import org.gephi.project.api.ProjectController;
+import org.junit.After;
+import org.junit.AfterClass;
+import org.junit.Before;
+import org.junit.BeforeClass;
+import static org.junit.Assert.*;
+import org.junit.Test;
+import org.openide.util.Lookup;
+
+public class GraphTopologyEqualsTest {
+
+    GraphModelLoader loader;
+    ProjectController projectController;
+    private static final String PATH = "/com/carlschroedl/gephi/spanningtree/initial/wiki_kruskal_example_initial.graphml";
+
+    public GraphTopologyEqualsTest() {
+    }
+
+    @Before
+    public void setUp() {
+        projectController = Lookup.getDefault().lookup(ProjectController.class);
+        projectController.newProject();
+        loader = new GraphModelLoader(projectController);
+    }
+
+    @After
+    public void tearDown() {
+        projectController.closeCurrentProject();
+    }
+
+    @Test
+    public void testSameGraphsAreEqual() {
+        GraphModel a = loader.fromFile(PATH);
+        GraphModel b = loader.fromFile(PATH);
+        assertTrue(GraphTopologyEquals.graphsHaveSameTopology(a.getGraph(), b.getGraph()));
+    }
+    
+    @Test
+    public void testDifferentNodeCounts() {
+//        GraphModel a = loader.fromFile(PATH);
+        GraphModel a = loader.fromScratch();
+//        GraphModel b = loader.fromFile(PATH);
+        GraphModel b = loader.fromScratch();
+        NodeImpl n = new NodeImpl(Integer.MAX_VALUE);
+        b.getGraph().addNode(n);
+        assertFalse("two graphs are not equal if they have different node counts", GraphTopologyEquals.graphsHaveSameTopology(a.getGraph(), b.getGraph()));
+    }
+    
+    @Test
+    public void testDifferentEdgeCount() {
+        GraphModel aModel = loader.fromFile(PATH);
+        GraphModel bModel = loader.fromFile(PATH);
+        Graph a = aModel.getGraph();
+        Graph b = bModel.getGraph();
+        NodeImpl n1a = new NodeImpl(Integer.MAX_VALUE);
+        NodeImpl n2a = new NodeImpl(Integer.MIN_VALUE);
+        a.addNode(n1a);
+        a.addNode(n2a);
+        
+        NodeImpl n1b = new NodeImpl(Integer.MAX_VALUE);
+        NodeImpl n2b = new NodeImpl(Integer.MIN_VALUE);
+        b.addNode(n1b);
+        b.addNode(n2b);
+        //add an edge between the new nodes in one graph, but not the other
+        Edge e;
+        e = new EdgeImpl(Integer.MAX_VALUE - 1, n1a, n2a, 0, 1, true);
+        a.addEdge(e);
+        assertFalse("two graphs are not equal if they have different numbers of edges", GraphTopologyEquals.graphsHaveSameTopology(a, b));
+    }
+
+        @Test
+    public void testDifferentEdgeDirection() {
+        final String ID_1 = "" + Integer.MAX_VALUE;
+        final String ID_2 = "" + Integer.MIN_VALUE;
+        final int WEIGHT = 1;
+        GraphModel aModel = loader.fromScratch();
+        GraphModel bModel = loader.fromScratch();
+        GraphFactory aFactory = aModel.factory();
+        GraphFactory bFactory = bModel.factory();
+        Graph a = aModel.getGraph();
+        Graph b = bModel.getGraph();
+        Node n1a = aFactory.newNode(ID_1);
+        Node n2a = aFactory.newNode(ID_2);
+        a.addNode(n1a);
+        a.addNode(n2a);
+        
+        Node n1b = bFactory.newNode(ID_1);
+        Node n2b = bFactory.newNode(ID_2);
+        b.addNode(n1b);
+        b.addNode(n2b);
+        //add an edge between the new nodes in one graph, but not the other
+        Edge ea= aFactory.newEdge(n1a, n2a, 0, WEIGHT, true);
+        a.addEdge(ea);
+        
+        //edge in the 'b' graph points in the opposite direction
+        Edge eb= bFactory.newEdge(n2b, n1b, 0, WEIGHT, true);
+        b.addEdge(eb);
+        assertFalse("two graphs are not equal if they have different directions of edges", GraphTopologyEquals.graphsHaveSameTopology(a, b));
+    }
+
+}

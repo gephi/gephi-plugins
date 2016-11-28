@@ -5,6 +5,7 @@ import java.io.FileNotFoundException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
+import org.gephi.graph.api.GraphController;
 import org.gephi.graph.api.GraphModel;
 import org.gephi.io.importer.api.Container;
 import org.gephi.io.importer.api.ImportController;
@@ -55,4 +56,19 @@ public class GraphModelLoader {
         graphModelFromFile = lookup.lookup(GraphModel.class);
         return graphModelFromFile;
     }
+    
+    /**
+     * Creates and returns a new empty GraphModel. Side effect: This method 
+     * creates a new workspace in the current project and opens it. The user of 
+     * this method is responsible for any necessary cleanup of the workspace or 
+     * project after loading.
+     * @return a new empty GraphModel
+     */
+    public GraphModel fromScratch(){
+        Workspace workspace = projectController.newWorkspace(projectController.getCurrentProject());
+        projectController.openWorkspace(workspace);
+        GraphModel graphModel = Lookup.getDefault().lookup(GraphController.class).getGraphModel(workspace);
+        return graphModel;
+    }
+    
 }

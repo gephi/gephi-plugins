@@ -38,16 +38,15 @@ public class GraphTopologyEquals {
         boolean equal = true;
         if (aEdgeCollection.size() == bEdgeCollection.size()) {
             Map<Pair<Object, Object>, Double> aEdgeMap = new HashMap<Pair<Object, Object>, Double>();
-
             for (Edge aEdge : aEdgeCollection) {
                 double weight = aEdge.getWeight();
                 aEdgeMap.put(getSourceTargetPair(aEdge), weight);
             }
 
             Map<Pair<Object, Object>, Double> bEdgeMap = new HashMap<Pair<Object, Object>, Double>();
-            for (Edge aEdge : aEdgeCollection) {
-                double weight = aEdge.getWeight();
-                bEdgeMap.put(getSourceTargetPair(aEdge), weight);
+            for (Edge bEdge : bEdgeCollection) {
+                double weight = bEdge.getWeight();
+                bEdgeMap.put(getSourceTargetPair(bEdge), weight);
             }
 
             equal = MapDeepEquals.mapDeepEquals(aEdgeMap, bEdgeMap);
@@ -68,9 +67,13 @@ public class GraphTopologyEquals {
                     if (null == bNode) {
                         equal = false;
                         break;
-                    } else if (!edgeCollectionsAreEqual(a.getEdges(aNode).toCollection(), b.getEdges(aNode).toCollection())) {
-                        equal = false;
-                        break;
+                    } else {
+                        Collection<Edge> aEdges = a.getEdges(aNode).toCollection();
+                        Collection<Edge> bEdges = b.getEdges(bNode).toCollection();
+                        if (!edgeCollectionsAreEqual(aEdges, bEdges)) {
+                            equal = false;
+                            break;
+                        }
                     }
                 }
             } else {
