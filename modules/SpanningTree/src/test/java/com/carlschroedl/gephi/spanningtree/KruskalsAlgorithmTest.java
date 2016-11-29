@@ -39,6 +39,7 @@ import org.gephi.filters.plugin.attribute.AttributeRangeBuilder;
 import org.gephi.filters.spi.Filter;
 import org.gephi.filters.spi.FilterBuilder;
 import org.gephi.graph.api.Column;
+import org.junit.Ignore;
 
 /**
  *
@@ -85,19 +86,33 @@ public class KruskalsAlgorithmTest {
     public void testExecute() {
         GraphModel initialGraphModel = loader.fromFile(INITIAL_GRAPH_PATH);
         instance.execute(initialGraphModel);
-        Column column = initialGraphModel.getEdgeTable().getColumn(KruskalsAlgorithm.SPANNING_TREE_COLUMN_ID);
+        Graph actualMinimumSpanningTree = filterOutNonMinimumSpanningTreeEdges(initialGraphModel);
+        
+        GraphModel expectedGraphModel = loader.fromFile(FINAL_GRAPH_PATH);
+        Graph expectedMinimumSpanningTree = filterOutNonMinimumSpanningTreeEdges(expectedGraphModel);
+        
+        assertTrue(
+                GraphTopologyEquals.graphsHaveSameTopology(actualMinimumSpanningTree, expectedMinimumSpanningTree)
+        );
+    }
+    
+    /**
+     * Filters out edges that are not part of the minimum spanning tree. Side 
+     * Effect: modifies the visible graph of the parameterized GraphModel so 
+     * that only minimum spanning tree edges are visible.
+     * @param graphModel
+     * @return a Graph, the minimum spanning tree
+     */
+    private Graph filterOutNonMinimumSpanningTreeEdges(GraphModel graphModel){
+        Column column = graphModel.getEdgeTable().getColumn(KruskalsAlgorithm.SPANNING_TREE_COLUMN_ID);
         AttributeEqualBuilder.EqualBooleanFilter.Edge filter = new AttributeEqualBuilder.EqualBooleanFilter.Edge(column);
         filter.setMatch(true);
         FilterController filterController = Lookup.getDefault().lookup(FilterController.class);
         Query query = filterController.createQuery(filter);
         GraphView view = filterController.filter(query);
-        initialGraphModel.setVisibleView(view);
-        Graph actualMinimumSpanningTree = initialGraphModel.getGraphVisible();
-        
-        GraphModel expectedGraphModel = loader.fromFile(FINAL_GRAPH_PATH);
-        assertTrue(
-                GraphTopologyEquals.graphsHaveSameTopology(actualMinimumSpanningTree, expectedGraphModel.getGraph())
-        );
+        graphModel.setVisibleView(view);
+        Graph minimumSpanningTree = graphModel.getGraphVisible();
+        return minimumSpanningTree;
     }
 
 }
