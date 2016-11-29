@@ -65,14 +65,14 @@ public class FullSmartNetwork extends Networklogic {
         
         Node user = createUser(status.getUser());
         user.addTimestamp(currentMillis);
-        createLink(user, tweet, TWEETS);
+        createLink(user, tweet, TWEETS,currentMillis);
       
         // Retweet are handled later
         if (!status.isRetweet() && status.getQuotedStatus() != null) {
             for (UserMentionEntity mention : status.getUserMentionEntities()) {
                 Node mentionNode = createUser(mention);
                 mentionNode.addTimestamp(currentMillis);
-                createLink(tweet, mentionNode, HAS_MENTION);
+                createLink(tweet, mentionNode, HAS_MENTION,currentMillis);
             }
         }
         
@@ -80,7 +80,7 @@ public class FullSmartNetwork extends Networklogic {
             if (!Arrays.asList(track).contains(hashtag.getText().toLowerCase())) {
                 Node hashtagNode = createHashtag(hashtag.getText());
                 hashtagNode.addTimestamp(currentMillis);
-                createLink(tweet, hashtagNode, HAS_HASHTAG);
+                createLink(tweet, hashtagNode, HAS_HASHTAG,currentMillis);
             }
         }
         
@@ -88,20 +88,20 @@ public class FullSmartNetwork extends Networklogic {
             if(!link.getExpandedURL().isEmpty()){
                 Node linkNode = createUrl(link.getExpandedURL());
                 linkNode.addTimestamp(currentMillis);
-                createLink(tweet, linkNode, HAS_LINK);
+                createLink(tweet, linkNode, HAS_LINK,currentMillis);
             }
         }
         
         for (SymbolEntity symbol : status.getSymbolEntities()) {
             Node symbolNode = createSymbol(symbol.getText());
             symbolNode.addTimestamp(currentMillis);
-            createLink(tweet, symbolNode, HAS_SYMBOL);
+            createLink(tweet, symbolNode, HAS_SYMBOL,currentMillis);
         }
         
         for (MediaEntity media : status.getMediaEntities()) {
             Node mediaNode = createMedia(media.getMediaURL());
             mediaNode.addTimestamp(currentMillis);
-            createLink(tweet, mediaNode, HAS_MEDIA);
+            createLink(tweet, mediaNode, HAS_MEDIA,currentMillis);
         }
         
         if (status.getRetweetedStatus() != null) {
@@ -115,17 +115,17 @@ public class FullSmartNetwork extends Networklogic {
         // We link to the original content to give more "weight"
         if (retweetUser != null) {
             if(link_kind == RETWEETS) {
-                createLink(retweetUser, user, RETWEETS_FROM);
-                createLink(retweetUser, tweet, RETWEETS);
+                createLink(retweetUser, user, RETWEETS_FROM,currentMillis);
+                createLink(retweetUser, tweet, RETWEETS,currentMillis);
             } else if (link_kind == QUOTES) {
-                createLink(retweetUser, user, QUOTES_FROM);
-                createLink(retweetUser, tweet, QUOTES);
+                createLink(retweetUser, user, QUOTES_FROM,currentMillis);
+                createLink(retweetUser, tweet, QUOTES,currentMillis);
             }
             
         }
     }
     
-    private void createLink(Node origin, Node target, int type) {
+    private void createLink(Node origin, Node target, int type,double timestamp) {
         Edge link = graphModel.getGraph().getEdge(origin, target, type);
         if (link == null) {
             link = graphModel.factory().newEdge(origin, target, type, true);
@@ -133,6 +133,7 @@ public class FullSmartNetwork extends Networklogic {
             link.setColor(Color.GRAY);
             graphModel.getGraph().addEdge(link);
         }
+        link.addTimestamp(timestamp);
     }
 
     @Override

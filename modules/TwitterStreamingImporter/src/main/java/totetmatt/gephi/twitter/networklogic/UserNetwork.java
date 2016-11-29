@@ -59,7 +59,6 @@ public class UserNetwork extends Networklogic {
                 }
                 // Check if there is already an edge for the nodes
                 createLink(origin, target, typeEdge,currentMillis);
-                Edge mentionEdge = graphModel.getGraph().getEdge(origin, target, typeEdge);
                 
                 if (status.getRetweetedStatus() != null) {
                     onStatus(status.getRetweetedStatus());
