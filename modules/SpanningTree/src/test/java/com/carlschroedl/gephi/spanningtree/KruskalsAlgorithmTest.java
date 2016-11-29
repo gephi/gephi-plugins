@@ -79,8 +79,8 @@ public class KruskalsAlgorithmTest {
      */
     private Graph filterOutNonMinimumSpanningTreeEdges(GraphModel graphModel){
         Column column = graphModel.getEdgeTable().getColumn(KruskalsAlgorithm.SPANNING_TREE_COLUMN_ID);
-        AttributeEqualBuilder.EqualBooleanFilter.Edge filter = new AttributeEqualBuilder.EqualBooleanFilter.Edge(column);
-        filter.setMatch(true);
+        AttributeEqualBuilder.EqualNumberFilter.Edge filter = new AttributeEqualBuilder.EqualNumberFilter.Edge(column);
+        filter.setMatch(KruskalsAlgorithm.IN_SPANNING_TREE);
         FilterController filterController = Lookup.getDefault().lookup(FilterController.class);
         Query query = filterController.createQuery(filter);
         GraphView view = filterController.filter(query);
