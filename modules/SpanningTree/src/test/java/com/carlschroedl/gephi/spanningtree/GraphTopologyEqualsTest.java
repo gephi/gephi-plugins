@@ -148,4 +148,23 @@ public class GraphTopologyEqualsTest {
         assertFalse("two graphs are not equal if the same node in both graphs have different numbers of edges", GraphTopologyEquals.graphsHaveSameTopology(a, b));
     }
     
+    @Test
+    public void testGraphsWithDifferentNodeIds(){
+        //ensure graphs are not equal when node ids match even though the node counts match
+        
+        GraphModel aModel = loader.fromScratch();
+        GraphModel bModel = loader.fromScratch();
+        GraphFactory aFactory = aModel.factory();
+        GraphFactory bFactory = bModel.factory();
+        Graph a = aModel.getGraph();
+        Graph b = bModel.getGraph();
+        //create nodes with different ids
+        Node aNode = aFactory.newNode("0");
+        Node bNode = bFactory.newNode("1");
+        
+        a.addNode(aNode);
+        b.addNode(bNode);
+        
+        assertFalse("two graphs are not equal if one graph has a node that the other does not", GraphTopologyEquals.graphsHaveSameTopology(a, b));
+    }
 }
