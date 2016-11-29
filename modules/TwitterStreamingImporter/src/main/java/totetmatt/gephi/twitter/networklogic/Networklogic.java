@@ -8,6 +8,7 @@ import org.gephi.graph.api.GraphController;
 import org.gephi.graph.api.GraphModel;
 import org.gephi.graph.api.Node;
 import org.gephi.graph.api.Origin;
+import org.gephi.graph.api.TimeFormat;
 import org.gephi.graph.api.TimeRepresentation;
 import org.openide.util.Lookup;
 import totetmatt.gephi.twitter.networklogic.utils.TwitterNodeColumn;
@@ -66,15 +67,23 @@ public abstract class Networklogic implements StatusListener {
     // Should be called before a new stream
     public void refreshGraphModel() {
         graphModel = Lookup.getDefault().lookup(GraphController.class).getGraphModel();
-        if(graphModel.getGraph().getEdgeCount() == 0 && graphModel.getGraph().getNodeCount() == 0){
+        graphModel.setTimeFormat(TimeFormat.DATETIME);
+        if (graphModel.getConfiguration().getTimeRepresentation() != TimeRepresentation.TIMESTAMP) {
             Configuration conf = new Configuration();
             conf.setTimeRepresentation(TimeRepresentation.TIMESTAMP);
-            graphModel.setConfiguration(conf);
+            try {
+                graphModel.setConfiguration(conf);
+            } catch (IllegalStateException e) {
+                throw new RuntimeException("Timestamp time representation is needed but the current workspace uses "
+                        + graphModel.getConfiguration().getTimeRepresentation()
+                        + " and it can't be automatically changed when the graph is not in its initial status. Please create an empty workspace for use with twitter streaming.",
+                        e);
+            }
         }
-        
-        for(TwitterNodeColumn c :TwitterNodeColumn.values()){
-            if(!graphModel.getNodeTable().hasColumn(c.label)){
-                graphModel.getNodeTable().addColumn(c.label, c.classType,Origin.DATA);
+
+        for (TwitterNodeColumn c : TwitterNodeColumn.values()) {
+            if (!graphModel.getNodeTable().hasColumn(c.label)) {
+                graphModel.getNodeTable().addColumn(c.label, c.classType, Origin.DATA);
             }
         }
     }
@@ -115,16 +124,16 @@ public abstract class Networklogic implements StatusListener {
 
     protected Node createTweet(Status status) {
         Node tweet = createNode(String.valueOf(status.getId()), status.getText(), NodeType.TWEET);
-        
+
         tweet.setAttribute(TwitterNodeColumn.NODE_CREATED_AT.label, status.getCreatedAt().toString());
-        tweet.setAttribute(TwitterNodeColumn.NODE_LANG.label,status.getLang());
-        if(status.getPlace() != null){
+        tweet.setAttribute(TwitterNodeColumn.NODE_LANG.label, status.getLang());
+        if (status.getPlace() != null) {
             tweet.setAttribute(TwitterNodeColumn.NODE_TWEET_PLACE_COUNTRY.label, status.getPlace().getCountry());
             tweet.setAttribute(TwitterNodeColumn.NODE_TWEET_PLACE_TYPE.label, status.getPlace().getPlaceType());
             tweet.setAttribute(TwitterNodeColumn.NODE_TWEET_PLACE_FULLNAME.label, status.getPlace().getFullName());
             tweet.setAttribute(TwitterNodeColumn.NODE_TWEET_PLACE_NAME.label, status.getPlace().getName());
         }
-        if(status.getGeoLocation() != null){
+        if (status.getGeoLocation() != null) {
             tweet.setAttribute(TwitterNodeColumn.NODE_TWEET_GEO_LATITUDE.label, status.getGeoLocation().getLatitude());
             tweet.setAttribute(TwitterNodeColumn.NODE_TWEET_GEO_LONGITUDE.label, status.getGeoLocation().getLongitude());
         }
@@ -154,16 +163,17 @@ public abstract class Networklogic implements StatusListener {
         String screenName = "@" + u.getScreenName().toLowerCase();
         Node user = createNode(screenName, screenName, NodeType.USER);
         user.setAttribute(TwitterNodeColumn.NODE_LANG.label, u.getLang());
-        user.setAttribute(TwitterNodeColumn.NODE_USER_DESCRIPTION.label,u.getDescription());
-        user.setAttribute(TwitterNodeColumn.NODE_USER_EMAIL.label,u.getEmail());
+        user.setAttribute(TwitterNodeColumn.NODE_USER_DESCRIPTION.label, u.getDescription());
+        user.setAttribute(TwitterNodeColumn.NODE_USER_EMAIL.label, u.getEmail());
         user.setAttribute(TwitterNodeColumn.NODE_USER_PROFILE_IMAGE.label, u.getBiggerProfileImageURL());
-        user.setAttribute(TwitterNodeColumn.NODE_USER_FRIENDS_COUNT.label,  u.getFriendsCount());
-        user.setAttribute(TwitterNodeColumn.NODE_USER_FOLLOWERS_COUNT.label,u.getFollowersCount());
-        user.setAttribute(TwitterNodeColumn.NODE_USER_REAL_NAME.label,u.getName());
-        user.setAttribute(TwitterNodeColumn.NODE_CREATED_AT.label,u.getCreatedAt().toString());
-        user.setAttribute(TwitterNodeColumn.NODE_USER_LOCATION.label,u.getLocation());           
+        user.setAttribute(TwitterNodeColumn.NODE_USER_FRIENDS_COUNT.label, u.getFriendsCount());
+        user.setAttribute(TwitterNodeColumn.NODE_USER_FOLLOWERS_COUNT.label, u.getFollowersCount());
+        user.setAttribute(TwitterNodeColumn.NODE_USER_REAL_NAME.label, u.getName());
+        user.setAttribute(TwitterNodeColumn.NODE_CREATED_AT.label, u.getCreatedAt().toString());
+        user.setAttribute(TwitterNodeColumn.NODE_USER_LOCATION.label, u.getLocation());
         return user;
     }
+
     protected Node createUser(UserMentionEntity u) {
         String screenName = "@" + u.getScreenName().toLowerCase();
         return createNode(screenName, screenName, NodeType.USER);
