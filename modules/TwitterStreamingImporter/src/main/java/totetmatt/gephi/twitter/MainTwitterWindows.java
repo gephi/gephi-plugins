@@ -238,6 +238,11 @@ public final class MainTwitterWindows extends TopComponent {
         });
 
         ut_add_textfield.setText(org.openide.util.NbBundle.getMessage(MainTwitterWindows.class, "MainTwitterWindows.ut_add_textfield.text")); // NOI18N
+        ut_add_textfield.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                ut_add_textfieldKeyReleased(evt);
+            }
+        });
 
         org.openide.awt.Mnemonics.setLocalizedText(ut_delete_button, org.openide.util.NbBundle.getMessage(MainTwitterWindows.class, "MainTwitterWindows.ut_delete_button.text")); // NOI18N
         ut_delete_button.addActionListener(new java.awt.event.ActionListener() {
@@ -448,8 +453,7 @@ public final class MainTwitterWindows extends TopComponent {
     }//GEN-LAST:event_ut_delete_buttonActionPerformed
 
     private void ut_add_buttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ut_add_buttonActionPerformed
-        streamer.addUser(ut_add_textfield.getText().trim().toLowerCase());
-        refreshUserList();
+        addUser();
     }//GEN-LAST:event_ut_add_buttonActionPerformed
 
     private void wt_delete_buttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_wt_delete_buttonActionPerformed
@@ -466,11 +470,24 @@ public final class MainTwitterWindows extends TopComponent {
             addWord();
         }
     }//GEN-LAST:event_wt_add_textfieldKeyReleased
-    private void refreshTracking() {
+
+    private void ut_add_textfieldKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_ut_add_textfieldKeyReleased
+        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
+            addUser();
+        }
+    }//GEN-LAST:event_ut_add_textfieldKeyReleased
+    
+     private void refreshTracking() {
         refreshWordList();
         refreshUserList();
     }
 
+    private void addUser(){
+        streamer.addUser(ut_add_textfield.getText().trim().toLowerCase());
+        ut_add_textfield.setText("");
+        refreshUserList();
+    }
+    
     private void addWord() {
         streamer.addWordTracking(wt_add_textfield.getText().trim().toLowerCase());
         wt_add_textfield.setText("");
