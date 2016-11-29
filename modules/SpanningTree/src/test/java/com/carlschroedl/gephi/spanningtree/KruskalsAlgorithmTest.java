@@ -92,8 +92,8 @@ public class KruskalsAlgorithmTest {
         Query query = filterController.createQuery(filter);
         GraphView view = filterController.filter(query);
         initialGraphModel.setVisibleView(view);
-        Graph actualMinimumSpanningTree = initialGraphModel.getUndirectedGraphVisible();
-
+        Graph actualMinimumSpanningTree = initialGraphModel.getGraphVisible();
+        
         GraphModel expectedGraphModel = loader.fromFile(FINAL_GRAPH_PATH);
         assertTrue(
                 GraphTopologyEquals.graphsHaveSameTopology(actualMinimumSpanningTree, expectedGraphModel.getGraph())
