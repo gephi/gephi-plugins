@@ -58,43 +58,38 @@ public class UserNetwork extends Networklogic {
                     typeEdge = MENTION;
                 }
                 // Check if there is already an edge for the nodes
+                createLink(origin, target, typeEdge,currentMillis);
                 Edge mentionEdge = graphModel.getGraph().getEdge(origin, target, typeEdge);
                 
-                if (mentionEdge == null) { // If no, create it
-                    mentionEdge = graphModel
-                            .factory()
-                            .newEdge(origin, target, typeEdge, true);
-                    mentionEdge.setWeight(1.0);
-                    mentionEdge.setColor(Color.GRAY);
-                    graphModel.getGraph().addEdge(mentionEdge);
-                } else { // If yes, increment the weight
-                    mentionEdge.setWeight(mentionEdge.getWeight() + 1);
-                }
-                mentionEdge.addTimestamp(currentMillis);
                 if (status.getRetweetedStatus() != null) {
                     onStatus(status.getRetweetedStatus());
                 }
+                
                 if(status.getQuotedStatus() != null) {
                     target = createUser(status.getQuotedStatus().getUser());
-                    Edge quoteEdge = graphModel.getGraph().getEdge(origin, target, QUOTE);
-                    if (quoteEdge == null) { // If no, create it
-                    quoteEdge = graphModel
-                            .factory()
-                            .newEdge(origin, target, QUOTE, true);
-                    quoteEdge.setWeight(1.0);
-                    quoteEdge.setColor(Color.GRAY);
-                    graphModel.getGraph().addEdge(quoteEdge);
-                    } else { // If yes, increment the weight
-                        quoteEdge.setWeight(quoteEdge.getWeight() + 1);
-                    }
-                    quoteEdge.addTimestamp(currentMillis);
+                    createLink(origin, target, QUOTE,currentMillis);
                 }
+                   
             }
 
         }
 
     }
-
+    
+    private void createLink(Node origin, Node target, int type,long currentMillis) {
+        Edge edge = graphModel.getGraph().getEdge(origin, target, type);
+                    if (edge == null) { // If no, create it
+                    edge = graphModel
+                            .factory()
+                            .newEdge(origin, target, type, true);
+                    edge.setWeight(1.0);
+                    edge.setColor(Color.GRAY);
+                    graphModel.getGraph().addEdge(edge);
+                    } else { // If yes, increment the weight
+                        edge.setWeight(edge.getWeight() + 1);
+                    }
+                    edge.addTimestamp(currentMillis);
+    }
     @Override
     public String getName() {
         return "User Network";
