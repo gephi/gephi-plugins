@@ -1,6 +1,5 @@
 package com.carlschroedl.gephi.spanningtree;
 
-import javafx.scene.NodeBuilder;
 import org.gephi.graph.api.Edge;
 import org.gephi.graph.api.Graph;
 import org.gephi.graph.api.GraphFactory;
@@ -10,9 +9,7 @@ import org.gephi.graph.impl.EdgeImpl;
 import org.gephi.graph.impl.NodeImpl;
 import org.gephi.project.api.ProjectController;
 import org.junit.After;
-import org.junit.AfterClass;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import static org.junit.Assert.*;
 import org.junit.Test;
 import org.openide.util.Lookup;
