@@ -1,5 +1,6 @@
 package com.carlschroedl.gephi.spanningtree;
 
+import org.gephi.filters.plugin.attribute.AttributeEqualBuilder;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.net.URI;
@@ -12,6 +13,7 @@ import org.gephi.graph.api.Edge;
 import org.gephi.graph.api.EdgeIterable;
 import org.gephi.graph.api.Graph;
 import org.gephi.graph.api.GraphModel;
+import org.gephi.graph.api.GraphView;
 import org.gephi.graph.api.Node;
 import org.gephi.graph.impl.GraphModelImpl;
 import org.gephi.graph.impl.utils.MapDeepEquals;
@@ -30,6 +32,13 @@ import org.gephi.project.api.ProjectController;
 import org.gephi.project.api.Workspace;
 import org.openide.util.Lookup;
 import org.openide.util.Pair;
+import org.gephi.filters.api.FilterController;
+import org.gephi.filters.api.Query;
+import org.gephi.filters.api.Range;
+import org.gephi.filters.plugin.attribute.AttributeRangeBuilder;
+import org.gephi.filters.spi.Filter;
+import org.gephi.filters.spi.FilterBuilder;
+import org.gephi.graph.api.Column;
 
 /**
  *
@@ -40,7 +49,8 @@ public class KruskalsAlgorithmTest {
     KruskalsAlgorithm instance;
     GraphModelLoader loader;
     ProjectController projectController;
-    private static final String PATH = "/com/carlschroedl/gephi/spanningtree/initial/wiki_kruskal_example_initial.graphml";
+    private static final String INITIAL_GRAPH_PATH = "/com/carlschroedl/gephi/spanningtree/initial/wiki_kruskal_example_initial.graphml";
+    private static final String FINAL_GRAPH_PATH = "/com/carlschroedl/gephi/spanningtree/mst/wiki_kruskal_example_mst.graphml";
 
     public KruskalsAlgorithmTest() {
     }
@@ -73,9 +83,21 @@ public class KruskalsAlgorithmTest {
      */
     @org.junit.Test
     public void testExecute() {
-        GraphModel a = loader.fromFile(PATH);
-        GraphModel b = loader.fromFile(PATH);
-        assertTrue(GraphTopologyEquals.graphsHaveSameTopology(a.getGraph(), b.getGraph()));
+        GraphModel initialGraphModel = loader.fromFile(INITIAL_GRAPH_PATH);
+        instance.execute(initialGraphModel);
+        Column column = initialGraphModel.getEdgeTable().getColumn(KruskalsAlgorithm.SPANNING_TREE_COLUMN_ID);
+        AttributeEqualBuilder.EqualBooleanFilter.Edge filter = new AttributeEqualBuilder.EqualBooleanFilter.Edge(column);
+        filter.setMatch(true);
+        FilterController filterController = Lookup.getDefault().lookup(FilterController.class);
+        Query query = filterController.createQuery(filter);
+        GraphView view = filterController.filter(query);
+        initialGraphModel.setVisibleView(view);
+        Graph actualMinimumSpanningTree = initialGraphModel.getUndirectedGraphVisible();
+
+        GraphModel expectedGraphModel = loader.fromFile(FINAL_GRAPH_PATH);
+        assertTrue(
+                GraphTopologyEquals.graphsHaveSameTopology(actualMinimumSpanningTree, expectedGraphModel.getGraph())
+        );
     }
 
 }

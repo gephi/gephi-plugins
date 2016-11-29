@@ -63,6 +63,24 @@
         <version>4.10</version>
         <scope>test</scope>
     </dependency>
+        <dependency>
+            <groupId>org.gephi</groupId>
+            <artifactId>filters-api</artifactId>
+            <scope>test</scope>
+            <type>jar</type>
+        </dependency>
+        <dependency>
+            <groupId>org.gephi</groupId>
+            <artifactId>filters-plugin</artifactId>
+            <scope>test</scope>
+            <type>jar</type>
+        </dependency>
+        <dependency>
+            <groupId>org.gephi</groupId>
+            <artifactId>filters-impl</artifactId>
+            <scope>test</scope>
+            <type>jar</type>
+        </dependency>
     </dependencies>
 
     <build>

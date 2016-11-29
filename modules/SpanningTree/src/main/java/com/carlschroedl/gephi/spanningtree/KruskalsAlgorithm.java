@@ -27,7 +27,7 @@ public class KruskalsAlgorithm extends SpanningTreeAlgorithm {
     private HashMap<Object, KNode> kNodes;
     private double STweight;    //spanning tree weight
     private int edgesInST;      //number of edges in spanning tree
-    private static final String ST_COL_ID = "spanningtree";     //not displayed to user
+    public static final String SPANNING_TREE_COLUMN_ID = "spanningtree";     //not displayed to user
     private static final String ST_COL_NAME = "Spanning Tree";  //displayed to user
 
     @Override
@@ -42,10 +42,10 @@ public class KruskalsAlgorithm extends SpanningTreeAlgorithm {
         //<new attributes for the spanning tree>
 
         Table edgeTable = graphModel.getEdgeTable();
-        Column stEdgeCol = edgeTable.getColumn(ST_COL_ID);
+        Column stEdgeCol = edgeTable.getColumn(SPANNING_TREE_COLUMN_ID);
 
         if (stEdgeCol == null) {
-            edgeTable.addColumn(ST_COL_ID, ST_COL_NAME, Boolean.class, false);
+            edgeTable.addColumn(SPANNING_TREE_COLUMN_ID, ST_COL_NAME, Boolean.class, false);
         }
 
         //</new attributes for the spanning tree>
@@ -78,7 +78,7 @@ public class KruskalsAlgorithm extends SpanningTreeAlgorithm {
                     //and yes, it IS ok to use != instead of !blah.equals()
 
                     //change edge's Spanning Tree Attribute to non-default value
-                    tempKEdge.edge.setAttribute(ST_COL_ID, true);
+                    tempKEdge.edge.setAttribute(SPANNING_TREE_COLUMN_ID, true);
 
                     ++edgesInST;
                     this.STweight += tempKEdge.weight;
