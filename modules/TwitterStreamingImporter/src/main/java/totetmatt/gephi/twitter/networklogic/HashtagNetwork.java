@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.util.Arrays;
 import org.gephi.graph.api.Edge;
 import org.gephi.graph.api.Node;
+import org.joda.time.LocalTime;
 import org.openide.util.lookup.ServiceProvider;
 import twitter4j.HashtagEntity;
 import twitter4j.Status;
@@ -29,6 +30,7 @@ public class HashtagNetwork extends Networklogic {
 
     @Override
     public void processStatus(Status status) {
+        long currentMillis = LocalTime.now().toDateTimeToday().getMillis();
         for(HashtagEntity h1:status.getHashtagEntities()){
             if(!Arrays.asList(this.track).contains(h1.getText().toLowerCase())) {
                 for(HashtagEntity h2:status.getHashtagEntities()){
@@ -36,7 +38,8 @@ public class HashtagNetwork extends Networklogic {
                        !h1.getText().toLowerCase().equals(h2.getText().toLowerCase())) {
                         Node n1 = createHashtag(h1.getText().toLowerCase());
                         Node n2 = createHashtag(h2.getText().toLowerCase());
-
+                        n1.addTimestamp(currentMillis);
+                        n2.addTimestamp(currentMillis);
                         Edge link = graphModel.getGraph().getEdge(n1, n2);
                         if (link == null) {
                             link = graphModel.factory().newEdge(n1, n2,false);
@@ -46,6 +49,7 @@ public class HashtagNetwork extends Networklogic {
                         } else {
                             link.setWeight(link.getWeight()+1);
                         }
+                        link.addTimestamp(currentMillis);
 
                     }
                 }

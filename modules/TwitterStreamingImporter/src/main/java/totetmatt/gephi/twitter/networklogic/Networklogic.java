@@ -3,14 +3,21 @@ package totetmatt.gephi.twitter.networklogic;
 import java.awt.Color;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.gephi.graph.api.Configuration;
 import org.gephi.graph.api.GraphController;
 import org.gephi.graph.api.GraphModel;
 import org.gephi.graph.api.Node;
+import org.gephi.graph.api.Origin;
+import org.gephi.graph.api.TimeFormat;
+import org.gephi.graph.api.TimeRepresentation;
 import org.openide.util.Lookup;
+import totetmatt.gephi.twitter.networklogic.utils.TwitterNodeColumn;
 import twitter4j.StallWarning;
 import twitter4j.Status;
 import twitter4j.StatusDeletionNotice;
 import twitter4j.StatusListener;
+import twitter4j.User;
+import twitter4j.UserMentionEntity;
 
 /**
  *
@@ -46,23 +53,6 @@ public abstract class Networklogic implements StatusListener {
         }
     }
 
-    public static final String TWITTER_TYPE_COLUMN_ID = "twitter_type";
-    public static final String TWITTER_TYPE_USER = "User";
-    public static final String TWITTER_TYPE_TWEET = "Tweet";
-    public static final String TWITTER_TYPE_HASHTAG = "Hashtag";
-    public static final String TWITTER_TYPE_MEDIA = "Media";
-    public static final String TWITTER_TYPE_URL = "URL";
-    public static final String TWITTER_TYPE_SYMBOL = "Symbol";
-
-    // Basic Color code used since the beginning.
-    // Not real standard but ensure same color code for all node type
-    public final static Color STANDARD_COLOR_USER = new Color(0.5f, 0, 0);
-    public final static Color STANDARD_COLOR_TWEET = new Color(0.5f, 0.5f, 0);
-    public final static Color STANDARD_COLOR_HASHTAG = new Color(0, 0.5f, 0);
-    public final static Color STANDARD_COLOR_MEDIA = new Color(0, 0.5f, 0.5f);
-    public final static Color STANDARD_COLOR_URL = new Color(0, 0, 0.5f);
-    public final static Color STANDARD_COLOR_SYMBOL = new Color(0.5f, 0, 0.5f);
-
     protected GraphModel graphModel;
 
     public Networklogic() {
@@ -77,8 +67,24 @@ public abstract class Networklogic implements StatusListener {
     // Should be called before a new stream
     public void refreshGraphModel() {
         graphModel = Lookup.getDefault().lookup(GraphController.class).getGraphModel();
-        if(!graphModel.getNodeTable().hasColumn(TWITTER_TYPE_COLUMN_ID)){
-            graphModel.getNodeTable().addColumn(TWITTER_TYPE_COLUMN_ID, "Twitter Type", String.class, null);
+        graphModel.setTimeFormat(TimeFormat.DATETIME);
+        if (graphModel.getConfiguration().getTimeRepresentation() != TimeRepresentation.TIMESTAMP) {
+            Configuration conf = new Configuration();
+            conf.setTimeRepresentation(TimeRepresentation.TIMESTAMP);
+            try {
+                graphModel.setConfiguration(conf);
+            } catch (IllegalStateException e) {
+                throw new RuntimeException("Timestamp time representation is needed but the current workspace uses "
+                        + graphModel.getConfiguration().getTimeRepresentation()
+                        + " and it can't be automatically changed when the graph is not in its initial status. Please create an empty workspace for use with twitter streaming.",
+                        e);
+            }
+        }
+
+        for (TwitterNodeColumn c : TwitterNodeColumn.values()) {
+            if (!graphModel.getNodeTable().hasColumn(c.label)) {
+                graphModel.getNodeTable().addColumn(c.label, c.classType, Origin.DATA);
+            }
         }
     }
 
@@ -104,7 +110,7 @@ public abstract class Networklogic implements StatusListener {
             node = graphModel.factory().newNode(id);
             node.setLabel(label);
             node.setColor(color);
-            node.setAttribute(TWITTER_TYPE_COLUMN_ID, typeText);
+            node.setAttribute(TwitterNodeColumn.NODE_TYPE.label, typeText);
 
             node.setSize(10);
             node.setX((float) ((0.01 + Math.random()) * 1000) - 500);
@@ -117,7 +123,21 @@ public abstract class Networklogic implements StatusListener {
     }
 
     protected Node createTweet(Status status) {
-        return createNode(String.valueOf(status.getId()), status.getText(), NodeType.TWEET);
+        Node tweet = createNode(String.valueOf(status.getId()), status.getText(), NodeType.TWEET);
+
+        tweet.setAttribute(TwitterNodeColumn.NODE_CREATED_AT.label, status.getCreatedAt().toString());
+        tweet.setAttribute(TwitterNodeColumn.NODE_LANG.label, status.getLang());
+        if (status.getPlace() != null) {
+            tweet.setAttribute(TwitterNodeColumn.NODE_TWEET_PLACE_COUNTRY.label, status.getPlace().getCountry());
+            tweet.setAttribute(TwitterNodeColumn.NODE_TWEET_PLACE_TYPE.label, status.getPlace().getPlaceType());
+            tweet.setAttribute(TwitterNodeColumn.NODE_TWEET_PLACE_FULLNAME.label, status.getPlace().getFullName());
+            tweet.setAttribute(TwitterNodeColumn.NODE_TWEET_PLACE_NAME.label, status.getPlace().getName());
+        }
+        if (status.getGeoLocation() != null) {
+            tweet.setAttribute(TwitterNodeColumn.NODE_TWEET_GEO_LATITUDE.label, status.getGeoLocation().getLatitude());
+            tweet.setAttribute(TwitterNodeColumn.NODE_TWEET_GEO_LONGITUDE.label, status.getGeoLocation().getLongitude());
+        }
+        return tweet;
     }
 
     protected Node createMedia(String media) {
@@ -139,9 +159,23 @@ public abstract class Networklogic implements StatusListener {
         return createNode(hashtag, hashtag, NodeType.HASHTAG);
     }
 
-    protected Node createUser(String screenName) {
-        screenName = "@" + screenName.toLowerCase();
+    protected Node createUser(User u) {
+        String screenName = "@" + u.getScreenName().toLowerCase();
+        Node user = createNode(screenName, screenName, NodeType.USER);
+        user.setAttribute(TwitterNodeColumn.NODE_LANG.label, u.getLang());
+        user.setAttribute(TwitterNodeColumn.NODE_USER_DESCRIPTION.label, u.getDescription());
+        user.setAttribute(TwitterNodeColumn.NODE_USER_EMAIL.label, u.getEmail());
+        user.setAttribute(TwitterNodeColumn.NODE_USER_PROFILE_IMAGE.label, u.getBiggerProfileImageURL());
+        user.setAttribute(TwitterNodeColumn.NODE_USER_FRIENDS_COUNT.label, u.getFriendsCount());
+        user.setAttribute(TwitterNodeColumn.NODE_USER_FOLLOWERS_COUNT.label, u.getFollowersCount());
+        user.setAttribute(TwitterNodeColumn.NODE_USER_REAL_NAME.label, u.getName());
+        user.setAttribute(TwitterNodeColumn.NODE_CREATED_AT.label, u.getCreatedAt().toString());
+        user.setAttribute(TwitterNodeColumn.NODE_USER_LOCATION.label, u.getLocation());
+        return user;
+    }
 
+    protected Node createUser(UserMentionEntity u) {
+        String screenName = "@" + u.getScreenName().toLowerCase();
         return createNode(screenName, screenName, NodeType.USER);
     }
 
