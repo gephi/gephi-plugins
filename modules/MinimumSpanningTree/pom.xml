@@ -95,8 +95,7 @@
                     <sourceCodeUrl>https://github.com/carlschroedl/gephi-plugins</sourceCodeUrl>
                     <homePageUrl>https://github.com/carlschroedl/gephi-plugins/tree/minimum-spanning-tree-plugin</homePageUrl>
                     <publicPackages>
-                        
-                    <publicPackage>com.carlschroedl.gephi.spanningtree</publicPackage>
+                        <publicPackage>com.carlschroedl.gephi.plugin.minimumspanningtree</publicPackage>
                     </publicPackages>
                 </configuration>
             </plugin>
