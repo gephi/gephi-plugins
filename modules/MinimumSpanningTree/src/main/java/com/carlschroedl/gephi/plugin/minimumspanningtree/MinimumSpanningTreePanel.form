@@ -52,7 +52,9 @@
         <Component class="javax.swing.JTextPane" name="jTextPane1">
           <Properties>
             <Property name="editable" type="boolean" value="false"/>
-            <Property name="text" type="java.lang.String" value="This Plugin will cacluate the Minimum Spanning Tree of the graph using Kruskall&apos;s Algorithm.&#xa;An additional attribute with the name &quot;Spanning Tree&quot; will be added to each graph member. If the graph member is in the spanning tree, the value in the &quot;Spanning Tree&quot; attribute will be &quot;1&quot;, otherwise it will be &quot;0&quot;."/>
+            <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
+              <ResourceString bundle="com/carlschroedl/gephi/plugin/minimumspanningtree/Bundle.properties" key="MinimumSpanningTreePanel.jTextPane1.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+            </Property>
           </Properties>
         </Component>
       </SubComponents>

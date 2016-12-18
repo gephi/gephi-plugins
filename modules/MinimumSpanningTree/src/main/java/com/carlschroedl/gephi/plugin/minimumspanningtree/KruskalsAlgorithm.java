@@ -17,7 +17,7 @@ import org.gephi.utils.progress.ProgressTicket;
  *
  * @author Carl Schroedl <carlschroedl@gmail.com>
  */
-public class KruskalsAlgorithm extends SpanningTreeAlgorithm {
+public class KruskalsAlgorithm extends MinimumSpanningTreeAlgorithm {
 
     private static final String name = "Kruskal's Algorithm";
     private ProgressTicket progressTicket;
@@ -28,7 +28,7 @@ public class KruskalsAlgorithm extends SpanningTreeAlgorithm {
     public static final String SPANNING_TREE_COLUMN_ID = "spanningtree";     //not displayed to user
     public static final int IN_SPANNING_TREE = 1;
     public static final int NOT_IN_SPANNING_TREE = 0;
-    private static final String ST_COL_NAME = "Spanning Tree";  //displayed to user
+    private static final String ST_COL_NAME = "Minimum Spanning Tree";  //displayed to user
 
     @Override
     public void execute(GraphModel graphModel) {
@@ -129,12 +129,12 @@ public class KruskalsAlgorithm extends SpanningTreeAlgorithm {
 
     @Override
     public String getReport() {
-        return "Number of edges in spanning tree: "
+        return "Number of edges in the minimum spanning tree: "
                 + this.edgesInST
-                + "<br/> Weight of spanning tree: "
+                + "<br/> Weight of the minimum spanning tree: "
                 + this.STweight
-                + "<br/> Every graph member in the spanning tree now has an attribute \"Spanning Tree\" set equal to \"1\"."
-                + "<br/> The spanning tree can be visualized by creating a Filter on the Attribute \"Spanning Tree\" with value = \"1\"";
+                + "<br/> Every edge in the minimum spanning tree now has an attribute \"" + ST_COL_NAME + "\" set equal to \"1\"."
+                + "<br/> The minimum spanning tree can be visualized by creating a Filter on the Attribute \"" + ST_COL_NAME + "\" with value = \"1\"";
     }
 
     // <editor-fold defaultstate="collapsed" desc="Inner Helper Classes">

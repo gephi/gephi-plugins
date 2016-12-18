@@ -13,14 +13,14 @@ import org.gephi.utils.longtask.spi.LongTask;
 /*
  * Implementations must provide the following @ServiceProvider Annotation:
  *
- * @ServiceProvider(service = SpanningTreeAlgorithm.class) 
+ * @ServiceProvider(service = MinimumSpanningTreeAlgorithm.class) 
  * 
  * Failure to add this annotation will prevent the implementation from being
  * detected and used at runtime. In essence, the UI will not be aware of the 
  * algorithm.
  */
 
-public abstract class SpanningTreeAlgorithm implements LongTask, Statistics{
+public abstract class MinimumSpanningTreeAlgorithm implements LongTask, Statistics{
               
     public abstract void execute(GraphModel graphModel);
     public abstract JPanel getOptions();

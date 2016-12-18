@@ -9,21 +9,21 @@ import org.openide.util.lookup.ServiceProvider;
  * See http://wiki.gephi.org/index.php/HowTo_write_a_metric#Create_StatisticsBuilder
  */
 @ServiceProvider(service = StatisticsBuilder.class)
-public class SpanningTreeBuilder implements StatisticsBuilder {
+public class MinimumSpanningTreeBuilder implements StatisticsBuilder {
     
     @Override
     public String getName() {
-        return "Spanning Tree";
+        return "Minimum Spanning Tree";
     }
 
     @Override
     public Statistics getStatistics() {
-        return new SpanningTree();
+        return new MinimumSpanningTree();
     }
     
     @Override
     public Class<? extends Statistics> getStatisticsClass() {
-        return SpanningTree.class;
+        return MinimumSpanningTree.class;
     }
 
 }

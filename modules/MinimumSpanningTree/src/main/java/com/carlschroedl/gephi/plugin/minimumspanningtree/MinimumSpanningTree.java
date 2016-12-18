@@ -12,15 +12,15 @@ import org.gephi.utils.progress.ProgressTicket;
  *
  * @author Carl Schroedl <carlschroedl@gmail.com>
  */
-public class SpanningTree implements Statistics, LongTask {
+public class MinimumSpanningTree implements Statistics, LongTask {
 
     private boolean cancel = false;
     private ProgressTicket progressTicket;
-    private SpanningTreeAlgorithm stAlgorithm;
+    private MinimumSpanningTreeAlgorithm stAlgorithm;
     
     private boolean directed;
     
-    public SpanningTree(){
+    public MinimumSpanningTree(){
     }
     
     @Override

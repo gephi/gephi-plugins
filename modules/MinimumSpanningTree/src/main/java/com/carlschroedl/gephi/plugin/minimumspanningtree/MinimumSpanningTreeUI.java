@@ -16,18 +16,18 @@ import org.openide.util.lookup.ServiceProvider;
  * @author Carl Schroedl <carlschroedl@gmail.com>
  */
 @ServiceProvider(service = StatisticsUI.class)
-public class SpanningTreeUI implements StatisticsUI {
+public class MinimumSpanningTreeUI implements StatisticsUI {
 
-    private SpanningTreePanel panel;
+    private MinimumSpanningTreePanel panel;
 /*    
-    public SpanningTreeUI(){
-        this.myMetric = new SpanningTree();
+    public MinimumSpanningTreeUI(){
+        this.myMetric = new MinimumSpanningTree();
     }
   */  
     
     @Override
     public JPanel getSettingsPanel() {
-        panel = new SpanningTreePanel(this);
+        panel = new MinimumSpanningTreePanel(this);
         return panel; //null if no panel exists
     }
 
@@ -42,7 +42,7 @@ public class SpanningTreeUI implements StatisticsUI {
 
     @Override
     public Class<? extends Statistics> getStatisticsClass() {
-        return SpanningTree.class;
+        return MinimumSpanningTree.class;
     }
 
     @Override
@@ -54,16 +54,11 @@ public class SpanningTreeUI implements StatisticsUI {
 
     @Override
     public String getDisplayName() {
-        return "Spanning Tree";
+        return "Minimum Spanning Tree";
     }
 
     @Override
     public String getCategory() {
-        //The category is just where you want your metric to be displayed: NODE, EDGE or NETWORK.
-        //Choose between:
-        //- StatisticsUI.CATEGORY_NODE_OVERVIEW
-        //- StatisticsUI.CATEGORY_EDGE_OVERVIEW
-        //- StatisticsUI.CATEGORY_NETWORK_OVERVIEW
         return StatisticsUI.CATEGORY_NETWORK_OVERVIEW;
     }
 
@@ -77,6 +72,6 @@ public class SpanningTreeUI implements StatisticsUI {
 
     @Override
     public String getShortDescription() {
-        return "Calculate Spanning Tree for a Graph";
+        return "Calculate a minimum spanning tree for a graph";
     }
 }
