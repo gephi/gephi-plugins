@@ -1,4 +1,4 @@
-package com.carlschroedl.gephi.spanningtree;
+package com.carlschroedl.gephi.plugin.minimumspanningtree;
 
 import java.util.ArrayList;
 import java.util.HashMap;

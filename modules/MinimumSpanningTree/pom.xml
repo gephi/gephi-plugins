@@ -92,8 +92,8 @@
                     <licenseName>gpl-3.0</licenseName>
                     <licenseFile>gpl-3.0.txt</licenseFile>
                     <author>Carl Schroedl carlschroedl@gmail.com</author>
-                    <sourceCodeUrl>http://github.com/carlschroedl/gephi-plugins</sourceCodeUrl>
-                    <homePageUrl>https://github.com/carlschroedl/gephi-plugins/tree/spanning-tree</homePageUrl>
+                    <sourceCodeUrl>https://github.com/carlschroedl/gephi-plugins</sourceCodeUrl>
+                    <homePageUrl>https://github.com/carlschroedl/gephi-plugins/tree/minimum-spanning-tree-plugin</homePageUrl>
                     <publicPackages>
                         
                     <publicPackage>com.carlschroedl.gephi.spanningtree</publicPackage>

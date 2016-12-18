@@ -1,4 +1,4 @@
-package com.carlschroedl.gephi.spanningtree;
+package com.carlschroedl.gephi.plugin.minimumspanningtree;
 
 import org.gephi.graph.api.Graph;
 import org.gephi.graph.api.GraphModel;

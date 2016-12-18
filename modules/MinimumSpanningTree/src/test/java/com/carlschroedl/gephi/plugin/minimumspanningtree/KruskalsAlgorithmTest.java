@@ -1,4 +1,4 @@
-package com.carlschroedl.gephi.spanningtree;
+package com.carlschroedl.gephi.plugin.minimumspanningtree;
 
 import org.gephi.filters.plugin.attribute.AttributeEqualBuilder;
 import org.gephi.graph.api.Graph;
@@ -24,8 +24,8 @@ public class KruskalsAlgorithmTest {
     KruskalsAlgorithm instance;
     GraphModelLoader loader;
     ProjectController projectController;
-    private static final String INITIAL_GRAPH_PATH = "/com/carlschroedl/gephi/spanningtree/initial/wiki_kruskal_example_initial.graphml";
-    private static final String FINAL_GRAPH_PATH = "/com/carlschroedl/gephi/spanningtree/mst/wiki_kruskal_example_mst.graphml";
+    private static final String INITIAL_GRAPH_PATH = "/com/carlschroedl/gephi/plugin/minimumspanningtree/initial/wiki_kruskal_example_initial.graphml";
+    private static final String FINAL_GRAPH_PATH = "/com/carlschroedl/gephi/plugin/minimumspanningtree/mst/wiki_kruskal_example_mst.graphml";
 
     public KruskalsAlgorithmTest() {
     }

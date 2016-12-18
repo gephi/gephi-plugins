@@ -1,4 +1,4 @@
-package com.carlschroedl.gephi.spanningtree;
+package com.carlschroedl.gephi.plugin.minimumspanningtree;
 
 import org.gephi.graph.api.Edge;
 import org.gephi.graph.api.Graph;
@@ -18,7 +18,7 @@ public class GraphTopologyEqualsTest {
 
     GraphModelLoader loader;
     ProjectController projectController;
-    private static final String PATH = "/com/carlschroedl/gephi/spanningtree/initial/wiki_kruskal_example_initial.graphml";
+    private static final String PATH = "/com/carlschroedl/gephi/plugin/minimumspanningtree/initial/wiki_kruskal_example_initial.graphml";
 
     public GraphTopologyEqualsTest() {
     }
