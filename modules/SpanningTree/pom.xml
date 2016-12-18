@@ -8,11 +8,11 @@
     </parent>
 
     <groupId>com.carlschroedl.gephi</groupId>
-    <artifactId>spanningtree</artifactId>
+    <artifactId>spanning-tree-plugin</artifactId>
     <version>1.0.0</version>
     <packaging>nbm</packaging>
 
-    <name>SpanningTree</name>
+    <name>Minimum Spanning Tree Plugin</name>
 
     <dependencies>
         <dependency>
