@@ -96,6 +96,10 @@ public final class MultiModeWindowTopComponent extends TopComponent {
         jSeparator1 = new javax.swing.JSeparator();
         graphColoring = new javax.swing.JButton();
         bipartiteLabel = new javax.swing.JLabel();
+        directed = new javax.swing.JCheckBox();
+        jLabel1 = new javax.swing.JLabel();
+        threshold = new javax.swing.JTextField();
+        proportional = new javax.swing.JCheckBox();
 
         attributes.setToolTipText(org.openide.util.NbBundle.getMessage(MultiModeWindowTopComponent.class, "MultiModeWindowTopComponent.attributes.toolTipText")); // NOI18N
         attributes.setEnabled(false);
@@ -138,6 +142,11 @@ public final class MultiModeWindowTopComponent extends TopComponent {
 
         org.openide.awt.Mnemonics.setLocalizedText(load, org.openide.util.NbBundle.getMessage(MultiModeWindowTopComponent.class, "MultiModeWindowTopComponent.load.text")); // NOI18N
         load.setEnabled(false);
+        load.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                loadMouseClicked(evt);
+            }
+        });
         load.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 loadActionPerformed(evt);
@@ -153,6 +162,33 @@ public final class MultiModeWindowTopComponent extends TopComponent {
 
         org.openide.awt.Mnemonics.setLocalizedText(bipartiteLabel, org.openide.util.NbBundle.getMessage(MultiModeWindowTopComponent.class, "MultiModeWindowTopComponent.bipartiteLabel.text")); // NOI18N
 
+        org.openide.awt.Mnemonics.setLocalizedText(directed, org.openide.util.NbBundle.getMessage(MultiModeWindowTopComponent.class, "MultiModeWindowTopComponent.directed.text")); // NOI18N
+        directed.setToolTipText(org.openide.util.NbBundle.getMessage(MultiModeWindowTopComponent.class, "MultiModeWindowTopComponent.directed.toolTipText")); // NOI18N
+
+        org.openide.awt.Mnemonics.setLocalizedText(jLabel1, org.openide.util.NbBundle.getMessage(MultiModeWindowTopComponent.class, "MultiModeWindowTopComponent.jLabel1.text")); // NOI18N
+        jLabel1.setToolTipText(org.openide.util.NbBundle.getMessage(MultiModeWindowTopComponent.class, "MultiModeWindowTopComponent.jLabel1.toolTipText")); // NOI18N
+
+        threshold.setText(org.openide.util.NbBundle.getMessage(MultiModeWindowTopComponent.class, "MultiModeWindowTopComponent.threshold.text")); // NOI18N
+        threshold.setToolTipText(org.openide.util.NbBundle.getMessage(MultiModeWindowTopComponent.class, "MultiModeWindowTopComponent.threshold.toolTipText")); // NOI18N
+        threshold.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                thresholdActionPerformed(evt);
+            }
+        });
+        threshold.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                thresholdFocusLost(evt);
+            }
+        });
+
+        org.openide.awt.Mnemonics.setLocalizedText(proportional, org.openide.util.NbBundle.getMessage(MultiModeWindowTopComponent.class, "MultiModeWindowTopComponent.proportional.text")); // NOI18N
+        proportional.setToolTipText(org.openide.util.NbBundle.getMessage(MultiModeWindowTopComponent.class, "MultiModeWindowTopComponent.proportional.toolTipText")); // NOI18N
+        proportional.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                proportionalActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -160,37 +196,54 @@ public final class MultiModeWindowTopComponent extends TopComponent {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jSeparator1, javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(removeNodes)
-                            .addComponent(removeEdges))
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(removeNodes)
+                                .addGap(52, 52, 52)
+                                .addComponent(proportional))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(removeEdges)
+                                .addGap(54, 54, 54)
+                                .addComponent(directed)))
+                        .addGap(0, 31, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(attributeLabel)
-                                    .addComponent(leftlabel)
-                                    .addComponent(rightLabel))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(secondMatrix, 0, 191, Short.MAX_VALUE)
-                                    .addComponent(firstMatrix, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(leftlabel)
+                                            .addComponent(rightLabel))
+                                        .addGap(27, 27, 27))
+                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                        .addComponent(attributeLabel)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)))
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(firstMatrix, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(secondMatrix, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                     .addComponent(attributes, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addGap(0, 0, Short.MAX_VALUE)
-                                .addComponent(start))
-                            .addComponent(jSeparator1, javax.swing.GroupLayout.Alignment.TRAILING))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(graphColoring)
+                                        .addGap(35, 35, 35)
+                                        .addComponent(bipartiteLabel))
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addGap(141, 141, 141)
+                                        .addComponent(start)))
+                                .addGap(0, 0, Short.MAX_VALUE)))
                         .addContainerGap())))
             .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(load)
-                    .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(graphColoring)
-                        .addGap(32, 32, 32)
-                        .addComponent(bipartiteLabel)))
+                .addComponent(load)
                 .addGap(0, 0, Short.MAX_VALUE))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(81, 81, 81)
+                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(1, 1, 1)
+                .addComponent(threshold, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -210,10 +263,18 @@ public final class MultiModeWindowTopComponent extends TopComponent {
                     .addComponent(secondMatrix, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(rightLabel))
                 .addGap(18, 18, 18)
-                .addComponent(removeEdges)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(removeNodes)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(directed)
+                    .addComponent(removeEdges))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(removeNodes)
+                    .addComponent(proportional))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel1)
+                    .addComponent(threshold, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(11, 11, 11)
                 .addComponent(start)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -221,7 +282,7 @@ public final class MultiModeWindowTopComponent extends TopComponent {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(graphColoring)
                     .addComponent(bipartiteLabel))
-                .addContainerGap(60, Short.MAX_VALUE))
+                .addContainerGap(80, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -297,7 +358,13 @@ public final class MultiModeWindowTopComponent extends TopComponent {
 
     private void startActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_startActionPerformed
         LongTaskExecutor executor = new LongTaskExecutor(true);
-        LongTaskTransformation longTask = new LongTaskTransformation((Column) attributes.getSelectedItem(), ((ValueCombination) firstMatrix.getSelectedItem()).getFirst(), ((ValueCombination) firstMatrix.getSelectedItem()).getSecond(), ((ValueCombination) secondMatrix.getSelectedItem()).getSecond(), removeEdges.isSelected(), removeNodes.isSelected());
+        LongTaskTransformation longTask = new LongTaskTransformation(
+                (Column) attributes.getSelectedItem(), 
+                ((ValueCombination) firstMatrix.getSelectedItem()).getFirst(), 
+                ((ValueCombination) firstMatrix.getSelectedItem()).getSecond(),
+                ((ValueCombination) secondMatrix.getSelectedItem()).getSecond(), 
+                Float.parseFloat(threshold.getText()),
+                removeEdges.isSelected(), removeNodes.isSelected(),proportional.isSelected(),directed.isSelected());
         executor.execute(longTask, longTask, "Transformation...", null);
 
         if (attributes.getItemCount() > 0 && (removeEdges.isSelected() || removeNodes.isSelected())) {
@@ -330,20 +397,47 @@ public final class MultiModeWindowTopComponent extends TopComponent {
         boolean bipartite = gc.bipartite();
         bipartiteLabel.setText("Bipartite: " + bipartite);
     }//GEN-LAST:event_graphColoringActionPerformed
+
+    private void thresholdActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_thresholdActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_thresholdActionPerformed
+
+    private void thresholdFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_thresholdFocusLost
+        float f;
+        try {
+        f=Float.parseFloat(threshold.getText());
+        }
+        catch (Exception e){
+            threshold.setText("0.0");
+        }
+    }//GEN-LAST:event_thresholdFocusLost
+
+    private void loadMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_loadMouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_loadMouseClicked
+
+    private void proportionalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_proportionalActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_proportionalActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel attributeLabel;
     private javax.swing.JComboBox attributes;
     private javax.swing.JLabel bipartiteLabel;
+    private javax.swing.JCheckBox directed;
     private javax.swing.JComboBox firstMatrix;
     private javax.swing.JButton graphColoring;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JLabel leftlabel;
     private javax.swing.JButton load;
+    private javax.swing.JCheckBox proportional;
     private javax.swing.JCheckBox removeEdges;
     private javax.swing.JCheckBox removeNodes;
     private javax.swing.JLabel rightLabel;
     private javax.swing.JComboBox secondMatrix;
     private javax.swing.JButton start;
+    private javax.swing.JTextField threshold;
     // End of variables declaration//GEN-END:variables
 
     @Override

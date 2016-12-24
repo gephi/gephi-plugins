@@ -9,7 +9,7 @@
 
     <groupId>cz.cvut.fit.gephi</groupId>
     <artifactId>multimode</artifactId>
-    <version>1.0.0</version>
+    <version>1.0.1</version>
     <packaging>nbm</packaging>
 
     <name>Multimode-Networks</name>
