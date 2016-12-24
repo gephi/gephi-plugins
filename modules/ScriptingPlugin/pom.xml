@@ -9,7 +9,7 @@
 
     <groupId>org.gephi</groupId>
     <artifactId>scripting.plugin</artifactId>
-    <version>0.9.1.1</version>
+    <version>0.9.1.2</version>
     <packaging>nbm</packaging>
 
     <name>ScriptingPlugin</name>

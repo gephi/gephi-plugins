@@ -2,8 +2,11 @@ package totetmatt.gephi.twitter.networklogic;
 
 import java.awt.Color;
 import java.util.Arrays;
+import java.util.Calendar;
+import org.gephi.graph.api.Column;
 import org.gephi.graph.api.Edge;
 import org.gephi.graph.api.Node;
+import org.joda.time.LocalTime;
 import org.openide.util.lookup.ServiceProvider;
 import twitter4j.HashtagEntity;
 import twitter4j.MediaEntity;
@@ -27,6 +30,8 @@ public class FullSmartNetwork extends Networklogic {
     private int HAS_LINK;
     private int HAS_SYMBOL;
     private int TWEETS;
+    private int QUOTES;
+    private int QUOTES_FROM;
 
     public FullSmartNetwork() {
 
@@ -43,61 +48,84 @@ public class FullSmartNetwork extends Networklogic {
         HAS_LINK = graphModel.addEdgeType("Has_link");
         HAS_SYMBOL = graphModel.addEdgeType("Has_symbol");
         TWEETS = graphModel.addEdgeType("Tweets");
+        QUOTES = graphModel.addEdgeType("Quotes");
+        QUOTES_FROM = graphModel.addEdgeType("Quotes_from");
     }
 
     @Override
     public void processStatus(Status status) {
-        processStatus(status, null);
+        processStatus(status, null,-1);
     }
 
-    public void processStatus(Status status, Node retweetUser) {
-        Node tweet = createTweet(status);
-
-        Node user = createUser(status.getUser().getScreenName());
+    public void processStatus(Status status, Node retweetUser,int link_kind) {
+        long currentMillis = LocalTime.now().toDateTimeToday().getMillis();
         
-        createLink(user, tweet, TWEETS);
+        Node tweet = createTweet(status);
+        tweet.addTimestamp(currentMillis);
+        
+        Node user = createUser(status.getUser());
+        user.addTimestamp(currentMillis);
+        createLink(user, tweet, TWEETS,currentMillis);
+      
         // Retweet are handled later
-        if (!status.isRetweet()) {
+        if (!status.isRetweet() && status.getQuotedStatus() != null) {
             for (UserMentionEntity mention : status.getUserMentionEntities()) {
-                Node mentionNode = createUser(mention.getScreenName());
-                createLink(tweet, mentionNode, HAS_MENTION);
+                Node mentionNode = createUser(mention);
+                mentionNode.addTimestamp(currentMillis);
+                createLink(tweet, mentionNode, HAS_MENTION,currentMillis);
             }
         }
         
         for (HashtagEntity hashtag : status.getHashtagEntities()) {
             if (!Arrays.asList(track).contains(hashtag.getText().toLowerCase())) {
                 Node hashtagNode = createHashtag(hashtag.getText());
-                createLink(tweet, hashtagNode, HAS_HASHTAG);
+                hashtagNode.addTimestamp(currentMillis);
+                createLink(tweet, hashtagNode, HAS_HASHTAG,currentMillis);
             }
         }
         
         for (URLEntity link : status.getURLEntities()) {
-            Node linkNode = createUrl(link.getExpandedURL());
-            createLink(tweet, linkNode, HAS_LINK);
+            if(!link.getExpandedURL().isEmpty()){
+                Node linkNode = createUrl(link.getExpandedURL());
+                linkNode.addTimestamp(currentMillis);
+                createLink(tweet, linkNode, HAS_LINK,currentMillis);
+            }
         }
         
         for (SymbolEntity symbol : status.getSymbolEntities()) {
             Node symbolNode = createSymbol(symbol.getText());
-            createLink(tweet, symbolNode, HAS_SYMBOL);
+            symbolNode.addTimestamp(currentMillis);
+            createLink(tweet, symbolNode, HAS_SYMBOL,currentMillis);
         }
         
         for (MediaEntity media : status.getMediaEntities()) {
             Node mediaNode = createMedia(media.getMediaURL());
-            createLink(tweet, mediaNode, HAS_MEDIA);
+            mediaNode.addTimestamp(currentMillis);
+            createLink(tweet, mediaNode, HAS_MEDIA,currentMillis);
         }
         
         if (status.getRetweetedStatus() != null) {
-            processStatus(status.getRetweetedStatus(), user);
+            processStatus(status.getRetweetedStatus(), user,RETWEETS);
+        }
+        
+        if(status.getQuotedStatus() != null) {
+            processStatus(status.getQuotedStatus(), user,QUOTES);
         }
         
         // We link to the original content to give more "weight"
         if (retweetUser != null) {
-            createLink(retweetUser, user, RETWEETS_FROM);
-            createLink(retweetUser, tweet, RETWEETS);
+            if(link_kind == RETWEETS) {
+                createLink(retweetUser, user, RETWEETS_FROM,currentMillis);
+                createLink(retweetUser, tweet, RETWEETS,currentMillis);
+            } else if (link_kind == QUOTES) {
+                createLink(retweetUser, user, QUOTES_FROM,currentMillis);
+                createLink(retweetUser, tweet, QUOTES,currentMillis);
+            }
+            
         }
     }
     
-    private void createLink(Node origin, Node target, int type) {
+    private void createLink(Node origin, Node target, int type,double timestamp) {
         Edge link = graphModel.getGraph().getEdge(origin, target, type);
         if (link == null) {
             link = graphModel.factory().newEdge(origin, target, type, true);
@@ -105,6 +133,7 @@ public class FullSmartNetwork extends Networklogic {
             link.setColor(Color.GRAY);
             graphModel.getGraph().addEdge(link);
         }
+        link.addTimestamp(timestamp);
     }
 
     @Override
