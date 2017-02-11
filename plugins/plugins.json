@@ -2695,6 +2695,32 @@
       },
       "sourcecode": "https://github.com/michihenninger/prestige-gephi-plugin/tree/prestige-plugin",
       "homepage": null
+    },
+    {
+      "id": "httpgraph",
+      "name": "HttpGraph",
+      "short_description": "Generate a graph of the web while you\u0027re browsing",
+      "long_description": "\u003cbr /\u003e\nThis plugin runs a proxy server in Java and collects data from your web browsing to generate a graph of the web. \u003cbr /\u003e\n\u003cbr /\u003e\nAll you have to do is configure the proxy setting in your browser for http://127.0.0.1:8088 (or a port of your choosing) \u003cbr /\u003e\n\u003cbr /\u003e\n** Don\u0027t forget to disable this browser setting when\u003cbr /\u003e\n** you\u0027re done or your browing won\u0027t work! \u003cbr /\u003e\n\u003cbr /\u003e\nProxy functionality provided by Membrane ESB - http://membrane-soa.org/esb/\u003cbr /\u003e\nA video that shows how this works is available on Vimeo - http://vimeo.com/18591468\u003cbr /\u003e\n\u003cbr /\u003e\nMany thanks to @kutsalb for his patience and repeated educational floggings.  Retraining a perl apologist in Java is no trivial task!\u003cbr /\u003e\n\u003cbr /\u003e",
+      "readme": "## HTTP Graph\n\nHTTP Graph is a plugin for Gephi which lets you build a graph of web relationships as you browse.  Data is collected by a Chrome extension and sent to the plugin via REST.  It can also collect this data by acting as a proxy server but due to the prevalence of HTTPS these days, it\u0027s not as effective as when this was written in 2010.\n                                      \n[Video demo](https://vimeo.com/18591468)    \n[Gephi blog post](https://gephi.wordpress.com/2011/02/21/the-http-graph-plugin/)\n\n[Install the HTTP Graph Collector extension](https://chrome.google.com/webstore/detail/http-graph-collector/lkkdeokncfjlinldgikoabgknklnnkoe)\n\n![HTTP Graph Diagram](https://cdn.rawgit.com/phreakocious/gephi-plugins/master/modules/HttpGraph/HTTPGraph.svg)\n\n\n",
+      "license": "license",
+      "authors": [
+        {
+          "name": "phreakocious",
+          "email": null,
+          "link": null
+        }
+      ],
+      "category": "Generator",
+      "last_update": "February 11, 2017",
+      "images": null,
+      "versions": {
+        "0.9.1": {
+          "url": "0.9.1/httpgraph-1.0.8.nbm",
+          "last_update": "February 11, 2017"
+        }
+      },
+      "sourcecode": "http://github.com/phreakocious/gephi-plugins",
+      "homepage": "http://phreakocious.net"
     }
   ]
 }
