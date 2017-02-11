@@ -47,6 +47,7 @@
         <module>modules/MdsMetric</module>
         <module>modules/VectorCalculator</module>
         <module>modules/PrestigePlugin</module>
+        <module>modules/HttpGraph</module>
     </modules>
     
     <!-- Properties -->
