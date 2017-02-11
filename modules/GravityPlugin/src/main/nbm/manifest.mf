@@ -1,0 +1,5 @@
+Manifest-Version: 1.0
+OpenIDE-Module-Name: MultiGravity ForceAtlas 2
+OpenIDE-Module-Short-Description: Force Atlas 2 Modification with multiple sources of gravity
+OpenIDE-Module-Display-Category: Layout
+OpenIDE-Module-Localizing-Bundle: org/gephi/plugins/layout/forceAtlas2/multigravity/Bundle.properties
