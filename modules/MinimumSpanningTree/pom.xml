@@ -20,11 +20,6 @@
             <artifactId>org-openide-util</artifactId>
         </dependency>
     <dependency>
-        <groupId>org.gephi</groupId>
-        <artifactId>graphstore</artifactId>
-        <version>0.5.3</version>
-    </dependency>
-    <dependency>
       <groupId>org.gephi</groupId>
       <artifactId>statistics-api</artifactId>
     </dependency>
