@@ -3,6 +3,8 @@ package com.carlschroedl.gephi.plugin.minimumspanningtree;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.PriorityQueue;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JPanel;
 import org.gephi.graph.api.Column;
 import org.gephi.graph.api.Table;
@@ -12,6 +14,7 @@ import org.gephi.graph.api.GraphModel;
 import org.gephi.graph.api.Node;
 import org.gephi.utils.progress.Progress;
 import org.gephi.utils.progress.ProgressTicket;
+import org.openide.util.Exceptions;
 
 /**
  *
@@ -99,7 +102,7 @@ public class KruskalsAlgorithm extends MinimumSpanningTreeAlgorithm {
             }//end while
 
         } catch (Exception e) {
-            e.printStackTrace();
+            Exceptions.printStackTrace(e);
         } finally {
             //Unlock graph
             graph.writeUnlock();
@@ -174,7 +177,7 @@ public class KruskalsAlgorithm extends MinimumSpanningTreeAlgorithm {
             if (DEBUG) {
                 //cut off last arrow
                 dbg = dbg.substring(0, dbg.length() - ARROW.length());
-                System.out.println(dbg);
+                Logger.getLogger("KruskalsAlgorithm").fine(dbg);
             }
             return x;
         }
@@ -251,7 +254,6 @@ public class KruskalsAlgorithm extends MinimumSpanningTreeAlgorithm {
      */
     private class KNode {
 
-        private ArrayList<KEdge> edges = new ArrayList<KEdge>();
         private String label = "";      //used only for testing
         private DisjointSet djsPointer; //the associated disjoint set
         private Node node;              //the original Node
@@ -268,10 +270,6 @@ public class KruskalsAlgorithm extends MinimumSpanningTreeAlgorithm {
         KNode(String label, DisjointSet djsPointer) {
             this.label = label;
             this.djsPointer = djsPointer;
-        }
-
-        public void addKEdge(KEdge e) {
-            edges.add(e);
         }
 
         @Override
@@ -345,6 +343,7 @@ public class KruskalsAlgorithm extends MinimumSpanningTreeAlgorithm {
             this(source, target, 1);
         }
 
+        @Override
         public String toString() {
             return "[" + this.source.toString()
                     + "]<====" + this.weight

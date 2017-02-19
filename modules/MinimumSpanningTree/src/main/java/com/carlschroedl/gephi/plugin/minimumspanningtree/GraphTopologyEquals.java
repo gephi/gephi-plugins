@@ -6,7 +6,6 @@ import java.util.Map;
 import org.gephi.graph.api.Edge;
 import org.gephi.graph.api.Graph;
 import org.gephi.graph.api.Node;
-import org.gephi.graph.impl.utils.MapDeepEquals;
 import org.openide.util.Pair;
 
 /**
