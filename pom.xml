@@ -48,6 +48,7 @@
         <module>modules/VectorCalculator</module>
         <module>modules/PrestigePlugin</module>
         <module>modules/HttpGraph</module>
+        <module>modules/MinimumSpanningTree</module>
     </modules>
     
     <!-- Properties -->
