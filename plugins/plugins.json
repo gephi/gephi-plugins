@@ -2721,6 +2721,45 @@
       },
       "sourcecode": "http://github.com/phreakocious/gephi-plugins",
       "homepage": "http://phreakocious.net"
+    },
+    {
+      "id": "spanning-tree-plugin",
+      "name": "Minimum Spanning Tree",
+      "short_description": "Calculates a Minimum Spanning Tree for a Graph",
+      "long_description": "The Minimum Spanning Tree Gephi Plugin permits users to calculate minimum spanning trees using Kruskal\u0027s Algorithm",
+      "readme": null,
+      "license": "gpl-3.0",
+      "authors": [
+        {
+          "name": "Carl Schroedl carlschroedl@gmail.com",
+          "email": null,
+          "link": null
+        }
+      ],
+      "category": "Other Category",
+      "last_update": "February 19, 2017",
+      "images": [
+        {
+          "image": "imgs\\spanning-tree-plugin/after-running-minimum-spanning-tree.png",
+          "thumbnail": "imgs\\spanning-tree-plugin/after-running-minimum-spanning-tree-thumbnail.png"
+        },
+        {
+          "image": "imgs\\spanning-tree-plugin/before-running-minimum-spanning-tree.png",
+          "thumbnail": "imgs\\spanning-tree-plugin/before-running-minimum-spanning-tree-thumbnail.png"
+        },
+        {
+          "image": "imgs\\spanning-tree-plugin/minimum-spanning-tree-filter.png",
+          "thumbnail": "imgs\\spanning-tree-plugin/minimum-spanning-tree-filter-thumbnail.png"
+        }
+      ],
+      "versions": {
+        "0.9.1": {
+          "url": "0.9.1/spanning-tree-plugin-1.0.0.nbm",
+          "last_update": "February 19, 2017"
+        }
+      },
+      "sourcecode": "https://github.com/carlschroedl/gephi-plugins",
+      "homepage": "https://github.com/carlschroedl/gephi-plugins/tree/minimum-spanning-tree-plugin"
     }
   ]
 }
