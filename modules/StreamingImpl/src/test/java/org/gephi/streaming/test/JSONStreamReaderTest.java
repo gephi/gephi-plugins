@@ -442,7 +442,7 @@ public class JSONStreamReaderTest {
         StreamReader streamReader = factory.createStreamReader(streamType, handler, eventBuilder);
         
         String evstr = "{\"an\":{\"Unicode1\":{\"label\":\"Съешь же ещё этих мягких французских булок да выпей чаю.\"}}}\n\r";
-        ByteArrayInputStream bais = new ByteArrayInputStream(evstr.getBytes());
+        ByteArrayInputStream bais = new ByteArrayInputStream(evstr.getBytes("UTF-8"));
 
         streamReader.processStream(bais);
         GraphEvent event = handler.getGraphEvent();

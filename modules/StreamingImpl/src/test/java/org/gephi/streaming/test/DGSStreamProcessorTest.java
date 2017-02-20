@@ -41,6 +41,7 @@ Portions Copyrighted 2011 Gephi Consortium.
  */
 package org.gephi.streaming.test;
 
+import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -64,8 +65,7 @@ public class DGSStreamProcessorTest extends AbstractStreamProcessorTest {
     
     @Test
     public void testDGS2JSON() throws IOException {
-
-        OutputStream out = new FileOutputStream("/tmp/a.json");
+        OutputStream out = new FileOutputStream(new File(System.getProperty("java.io.tmpdir"), "a.json"));
 
         StreamWriterFactory writerFactory = Lookup.getDefault().lookup(StreamWriterFactory.class);
 //       ByteArrayOutputStream out = new ByteArrayOutputStream();
