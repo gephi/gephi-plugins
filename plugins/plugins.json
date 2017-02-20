@@ -2106,12 +2106,12 @@
         }
       ],
       "category": "Import",
-      "last_update": "November 29, 2016",
+      "last_update": "February 20, 2017",
       "images": null,
       "versions": {
         "0.9.1": {
-          "url": "0.9.1/graphstreaming-1.0.0.zip",
-          "last_update": "November 29, 2016"
+          "url": "0.9.1/graphstreaming-1.0.1.zip",
+          "last_update": "February 20, 2017"
         }
       },
       "sourcecode": "https://github.com/panisson/gephi-plugins/tree/graph-streaming",
