@@ -1,0 +1,121 @@
+package net.clementlevallois.utils;
+
+/*
+ Copyright 2008-2013 Clement Levallois
+ Authors : Clement Levallois <clementlevallois@gmail.com>
+ Website : http://www.clementlevallois.net
+
+
+ DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
+
+ Copyright 2013 Clement Levallois. All rights reserved.
+
+ The contents of this file are subject to the terms of either the GNU
+ General Public License Version 3 only ("GPL") or the Common
+ Development and Distribution License("CDDL") (collectively, the
+ "License"). You may not use this file except in compliance with the
+ License. You can obtain a copy of the License at
+ http://gephi.org/about/legal/license-notice/
+ or /cddl-1.0.txt and /gpl-3.0.txt. See the License for the
+ specific language governing permissions and limitations under the
+ License.  When distributing the software, include this License Header
+ Notice in each file and include the License files at
+ /cddl-1.0.txt and /gpl-3.0.txt. If applicable, add the following below the
+ License Header, with the fields enclosed by brackets [] replaced by
+ your own identifying information:
+ "Portions Copyrighted [year] [name of copyright owner]"
+
+ If you wish your version of this file to be governed by only the CDDL
+ or only the GPL Version 3, indicate your decision by adding
+ "[Contributor] elects to include this software in this distribution
+ under the [CDDL or GPL Version 3] license." If you do not indicate a
+ single choice of license, a recipient has the option to distribute
+ your version of this file under either the CDDL, the GPL Version 3 or
+ to extend the choice of license to its licensees as provided above.
+ However, if you add GPL Version 3 code and therefore, elected the GPL
+ Version 3 license, then the option applies only if the new code is
+ made subject to such option by the copyright holder.
+
+ Contributor(s): Clement Levallois
+
+ */
+
+
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+
+public class Clock {
+
+    private long start;
+    private String action;
+    private String logText;
+    private final String newLine = "\n";
+    private final String interval = "-------------------------------\n\n";
+
+    public Clock(String action) {
+        this.action = action;
+        startClock();
+    }
+
+    void startClock() {
+
+        start = System.currentTimeMillis();
+        logText = action + "..." + newLine;
+        //GUI_Screen_1.logArea.setText(GUI_Screen_1.logArea.getText().concat(logText));
+        //GUI_Screen_1.logArea.setCaretPosition(GUI_Screen_1.logArea.getText().length());
+
+        //GUI_Screen_1.logArea.repaint();
+
+        System.out.print(logText);
+    }
+
+    public void printElapsedTime() {
+
+        long currentTime = System.currentTimeMillis();
+        long elapsedTime = currentTime - start;
+
+        if (elapsedTime
+                < 1000) {
+            Logger.getLogger("").log(Level.INFO,"still " + action.toLowerCase() + ", " + elapsedTime + " milliseconds]");
+
+        } else {
+            Logger.getLogger("").log(Level.INFO,"still " + action.toLowerCase() + ", " + elapsedTime / 1000 + " seconds]");
+        }
+
+    }
+
+    public long getElapsedTime() {
+
+        long currentTime = System.currentTimeMillis();
+        return (currentTime - start);
+
+    }
+
+    public void closeAndPrintClock() {
+
+        long currentTime = System.currentTimeMillis();
+        long totalTime = currentTime - start;
+
+        if (totalTime
+                < 1000) {
+            logText = "finished [took: " + totalTime + " milliseconds]" + newLine + interval;
+            System.out.print(logText);
+        } else if (totalTime < 10000) {
+            logText = "finished [took: " + totalTime / 1000 + " seconds] (" + totalTime + " ms)" + newLine + interval;
+            System.out.print(logText);
+        } else if (totalTime < 60000) {
+            logText = "finished [took: " + totalTime / 1000 + " seconds]" + newLine + interval;
+            System.out.print(logText);
+        } else {
+            logText = "finished [took: " + totalTime / 60000 + " minutes " + Math.round((totalTime % 60000) / 1000) + " seconds]" + newLine + interval;
+            System.out.print(logText);
+
+        }
+        //GUI_Screen_1.logArea.setText(GUI_Screen_1.logArea.getText().concat(logText));
+        //GUI_Screen_1.logArea.setCaretPosition(GUI_Screen_1.logArea.getText().length());
+
+
+
+    }
+}
