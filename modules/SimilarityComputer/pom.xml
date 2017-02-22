@@ -9,7 +9,7 @@
 
     <groupId>SimilarityComputer</groupId>
     <artifactId>SimilarityComputer</artifactId>
-    <version>1.0.0</version>
+    <version>1.1.0</version>
     <packaging>nbm</packaging>
 
     <name>Similarity Computer</name>
@@ -154,19 +154,6 @@
             </exclusions>
         </dependency>
     </dependencies>
-    <repositories>
-        <repository>
-            <id>sonatype-snapshots</id>
-            <url>https://oss.sonatype.org/content/repositories/snapshots/</url>
-            <releases>
-                <enabled>false</enabled>
-            </releases>
-            <snapshots>
-                <enabled>true</enabled>
-            </snapshots>
-        </repository>
-    </repositories>
-
     <build>
         <plugins>
             <plugin>
@@ -176,7 +163,7 @@
                     <licenseName>Apache v2</licenseName>
                     <licenseFile>Apache v2.txt</licenseFile>
                     <author>Clement Levalllois (@seinecle)</author>
-                    <sourceCodeUrl>$sourcecode_url</sourceCodeUrl>
+                    <sourceCodeUrl>https://github.com/seinecle/gephi-plugins/tree/similaritycomputer</sourceCodeUrl>
                     <homePageUrl>http://www.clementlevallois.net</homePageUrl>
                     <publicPackages>
                         

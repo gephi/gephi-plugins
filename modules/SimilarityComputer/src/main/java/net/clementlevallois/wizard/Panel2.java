@@ -1,4 +1,4 @@
-package Wizard;
+package net.clementlevallois.wizard;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -77,8 +77,8 @@ public class Panel2 extends javax.swing.JPanel {
             }
         });
 
-        jLabelPicture.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/weights-ok.png"))); // NOI18N
-        org.openide.awt.Mnemonics.setLocalizedText(jLabelPicture, org.openide.util.NbBundle.getMessage(Panel2.class, "Panel2.jLabelPicture.text_1")); // NOI18N
+        jLabelPicture.setIcon(new javax.swing.ImageIcon(getClass().getResource("/net/clementlevallois/images/weights-ok.png"))); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(jLabelPicture, null);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -109,10 +109,10 @@ public class Panel2 extends javax.swing.JPanel {
         MyFileImporter.setWeightedAttributes(jCheckBoxWeight.isSelected());
 
         if (jCheckBoxWeight.isSelected()) {
-            jLabelPicture.setIcon(new ImageIcon(getClass().getResource("/images/weights-ok.png")));
+            jLabelPicture.setIcon(new ImageIcon(getClass().getResource("/net/clementlevallois/images/weights-ok.png")));
         }
         else {
-            jLabelPicture.setIcon(new ImageIcon(getClass().getResource("/images/no-weights.png")));
+            jLabelPicture.setIcon(new ImageIcon(getClass().getResource("/net/clementlevallois/images/no-weights.png")));
         }
 
     }//GEN-LAST:event_jCheckBoxWeightActionPerformed

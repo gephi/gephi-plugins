@@ -54,28 +54,10 @@ import org.gephi.utils.longtask.spi.LongTask;
 import org.gephi.utils.progress.ProgressTicket;
 import org.openide.util.Exceptions;
 
-/**
- * File importer example which can import the Matrix Market file format. This
- * format is a text-based representation of a matrix and can be tested with
- * <a
- * href="http://www2.research.att.com/~yifanhu/GALLERY/GRAPHS/index.html">Yifan
- * Hu's matrix gallery</a>.
- * <p>
- * The example show how graph data should be set in the {@link ContainerLoader}
- * instance. It shows how {@link NodeDraft} and {@link EdgeDraft} are created
- * from the factory. It also append logs in the {@link Report} class, which is
- * the standard way to report messages and issues.
- *
- * @author Mathieu Bastian
- */
 public class MyFileImporter implements WizardImporter, LongTask {
 
     public static ContainerLoader container;
     private static Report report;
-    private static CsvParser csvParser;
-    public static boolean innerLinksIncluded;
-    public static boolean removeDuplicates;
-    public static boolean removeSelfLoops;
     private ProgressTicket progressTicket;
     private boolean cancel = false;
     private static String[] headers;
@@ -87,16 +69,7 @@ public class MyFileImporter implements WizardImporter, LongTask {
     private static String textDelimiter = "\"";
     public static String sheetName;
     private static String fieldDelimiter = ",";
-    private static String firstConnectedAgent;
-    private static String secondConnectedAgent;
-    public static Integer firstConnectedAgentIndex;
-    public static Integer secondConnectedAgentIndex;
-    public static String firstConnectorDelimiter;
-    public static String secondConnectorDelimiter;
     public static Boolean headersPresent = true;
-    public static String timeField;
-    public static int timeFieldIndex;
-    private static final String[] alphabet = {"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"};
 
     @Override
     public boolean execute(ContainerLoader loader) {
@@ -168,23 +141,6 @@ public class MyFileImporter implements WizardImporter, LongTask {
     public static void setFileName(String fileName) {
         MyFileImporter.fileName = fileName;
     }
-
-    public static String getFirstConnectedAgent() {
-        return firstConnectedAgent;
-    }
-
-    public static void setFirstConnectedAgent(String firstConnectedAgent) {
-        MyFileImporter.firstConnectedAgent = firstConnectedAgent;
-    }
-
-    public static String getSecondConnectedAgent() {
-        return secondConnectedAgent;
-    }
-
-    public static void setSecondConnectedAgent(String secondConnectedAgent) {
-        MyFileImporter.secondConnectedAgent = secondConnectedAgent;
-    }
-
 
     @Override
     public ContainerLoader getContainer() {

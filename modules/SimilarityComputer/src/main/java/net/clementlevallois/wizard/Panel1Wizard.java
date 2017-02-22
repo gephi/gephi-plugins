@@ -1,13 +1,11 @@
-package Wizard;
+package net.clementlevallois.wizard;
 
-import java.awt.Component;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
-import java.util.ArrayList;
+import java.awt.Font;
 import java.util.List;
+import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
-import net.clementlevallois.controller.MyFileImporter;
 import org.openide.WizardDescriptor;
+import org.openide.WizardValidationException;
 import org.openide.util.HelpCtx;
 
 /*
@@ -49,21 +47,17 @@ import org.openide.util.HelpCtx;
  Contributor(s): Clement Levallois
 
  */
-public class Panel2Wizard implements WizardDescriptor.Panel<WizardDescriptor>, PropertyChangeListener {
+public class Panel1Wizard implements WizardDescriptor.ValidatingPanel {
 
     private List<ChangeListener> listeners; //these allow you to tell Gephi when UI changes are made
-    private Component component;
+    private Panel1 component;
+    public static boolean isValid = true;
 
     @Override
-    public void propertyChange(PropertyChangeEvent evt) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public Component getComponent() {
+    public Panel1 getComponent() {
         if (component == null) {
-            Panel2 panel2 = new Panel2();
-            component = panel2;
+            component = new Panel1();
+
         }
         return component;
     }
@@ -75,29 +69,46 @@ public class Panel2Wizard implements WizardDescriptor.Panel<WizardDescriptor>, P
 
     @Override
     public boolean isValid() {
-        return true;             //if you implement the change listeners properly, this should contain actual logic
+        return isValid;
+    }
+
+    @Override
+    public void readSettings(Object data) {
+    }
+
+    @Override
+    public void storeSettings(Object data) {
+    }
+
+    protected final void fireChangeEvent(Object source, boolean oldState, boolean newState) {
+        if (oldState != newState) {
+            ChangeEvent ev = new ChangeEvent(source);
+            for (ChangeListener listener : listeners) {
+                listener.stateChanged(ev);
+            }
+        }
     }
 
     @Override
     public void addChangeListener(ChangeListener cl) {
-        if (listeners == null) {
-            listeners = new ArrayList();
-        }
-
-        listeners.add(cl);
     }
 
     @Override
     public void removeChangeListener(ChangeListener cl) {
-        listeners.remove(cl);
     }
 
     @Override
-    public void readSettings(WizardDescriptor data) {
-
-    }
-
-    @Override
-    public void storeSettings(WizardDescriptor data) {
+    public void validate() throws WizardValidationException {
+        if (Panel1.fileSelectedName == null) {
+            throw new WizardValidationException(null, "Please select an Excel or csv  file", null);
+        }
+        else if (Panel1.fileSelectedName.endsWith("xls")) {
+            throw new WizardValidationException(null, "Please convert your excel file ending with .xls to the new format: ending in .xlsx", null);
+        }
+        else if (!Panel1.fileSelectedName.endsWith("xlsx") & Panel1.selectedFileDelimiter == null) {
+            Font font = new Font("Tahoma", Font.BOLD, 11);
+            Panel1.jLabelFieldDelimiter.setFont(font);
+            throw new WizardValidationException(null, "Please select a field delimiter", null);
+        }
     }
 }

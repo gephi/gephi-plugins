@@ -39,11 +39,8 @@ package net.clementlevallois.utils;
  Contributor(s): Clement Levallois
 
  */
-
-
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
 
 public class Clock {
 
@@ -62,12 +59,7 @@ public class Clock {
 
         start = System.currentTimeMillis();
         logText = action + "..." + newLine;
-        //GUI_Screen_1.logArea.setText(GUI_Screen_1.logArea.getText().concat(logText));
-        //GUI_Screen_1.logArea.setCaretPosition(GUI_Screen_1.logArea.getText().length());
-
-        //GUI_Screen_1.logArea.repaint();
-
-        System.out.print(logText);
+        Logger.getLogger("").log(Level.INFO, logText);
     }
 
     public void printElapsedTime() {
@@ -77,19 +69,17 @@ public class Clock {
 
         if (elapsedTime
                 < 1000) {
-            Logger.getLogger("").log(Level.INFO,"still " + action.toLowerCase() + ", " + elapsedTime + " milliseconds]");
+            Logger.getLogger("").log(Level.INFO, "still " + action.toLowerCase() + ", " + elapsedTime + " milliseconds]");
 
         } else {
-            Logger.getLogger("").log(Level.INFO,"still " + action.toLowerCase() + ", " + elapsedTime / 1000 + " seconds]");
+            Logger.getLogger("").log(Level.INFO, "still " + action.toLowerCase() + ", " + elapsedTime / 1000 + " seconds]");
         }
 
     }
 
     public long getElapsedTime() {
-
         long currentTime = System.currentTimeMillis();
         return (currentTime - start);
-
     }
 
     public void closeAndPrintClock() {
@@ -100,22 +90,14 @@ public class Clock {
         if (totalTime
                 < 1000) {
             logText = "finished [took: " + totalTime + " milliseconds]" + newLine + interval;
-            System.out.print(logText);
         } else if (totalTime < 10000) {
             logText = "finished [took: " + totalTime / 1000 + " seconds] (" + totalTime + " ms)" + newLine + interval;
-            System.out.print(logText);
         } else if (totalTime < 60000) {
             logText = "finished [took: " + totalTime / 1000 + " seconds]" + newLine + interval;
-            System.out.print(logText);
         } else {
             logText = "finished [took: " + totalTime / 60000 + " minutes " + Math.round((totalTime % 60000) / 1000) + " seconds]" + newLine + interval;
-            System.out.print(logText);
-
         }
-        //GUI_Screen_1.logArea.setText(GUI_Screen_1.logArea.getText().concat(logText));
-        //GUI_Screen_1.logArea.setCaretPosition(GUI_Screen_1.logArea.getText().length());
-
-
+        Logger.getLogger("").log(Level.INFO, logText);
 
     }
 }

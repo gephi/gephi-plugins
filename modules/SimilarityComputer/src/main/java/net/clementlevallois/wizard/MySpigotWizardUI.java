@@ -1,15 +1,13 @@
-package Wizard;
+package net.clementlevallois.wizard;
 
-import java.awt.Component;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
-import java.util.ArrayList;
-import java.util.List;
-import javax.swing.event.ChangeListener;
+import com.google.common.collect.HashBiMap;
+import net.clementlevallois.computer.VectorsBuilder;
 import net.clementlevallois.controller.MyFileImporter;
-import net.clementlevallois.controller.Controller;
-import org.openide.WizardDescriptor;
-import org.openide.util.HelpCtx;
+import org.gephi.io.importer.spi.Importer;
+import org.gephi.io.importer.spi.ImporterWizardUI;
+import org.gephi.io.importer.spi.WizardImporter;
+import org.openide.WizardDescriptor.Panel;
+import org.openide.util.lookup.ServiceProvider;
 
 /*
  Copyright 2008-2013 Clement Levallois
@@ -50,56 +48,52 @@ import org.openide.util.HelpCtx;
  Contributor(s): Clement Levallois
 
  */
-public class Panel3Wizard implements WizardDescriptor.Panel<WizardDescriptor>, PropertyChangeListener {
+@ServiceProvider(service = ImporterWizardUI.class)
+public class MySpigotWizardUI implements ImporterWizardUI {
 
-    private List<ChangeListener> listeners; //these allow you to tell Gephi when UI changes are made
-    private Component component;
+    private Panel[] panels = null;
 
     @Override
-    public void propertyChange(PropertyChangeEvent evt) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public String getDisplayName() {
+        return "Similarity Computer";
     }
 
     @Override
-    public Component getComponent() {
-        if (component == null) {
-            Panel3 panel3 = new Panel3();
-            component = panel3;
+    public String getCategory() {
+        return "Data importer / network builder";
+    }
+
+    @Override
+    public String getDescription() {
+        return "This plugin helps you create a network by computing similarities between entities.\n Feedback and feature requests are welcome!\n contact: @seinecle on Twitter.";
+    }
+
+    @Override
+    public Panel[] getPanels() {
+        if (panels == null) {
+            panels = new Panel[3];
+            panels[0] = new Panel1Wizard();
+            panels[1] = new Panel2Wizard();
+            panels[2] = new Panel3Wizard();
         }
-        return component;
+        return panels;
     }
 
     @Override
-    public HelpCtx getHelp() {
-        return HelpCtx.DEFAULT_HELP;
+    public void setup(Panel panel) {
+        //Before opening the wizard
     }
 
     @Override
-    public boolean isValid() {
-        return true;             //if you implement the change listeners properly, this should contain actual logic
-    }
-
-    @Override
-    public void addChangeListener(ChangeListener cl) {
-        if (listeners == null) {
-            listeners = new ArrayList();
-        }
-
-        listeners.add(cl);
-    }
-
-    @Override
-    public void removeChangeListener(ChangeListener cl) {
-        listeners.remove(cl);
-    }
-
-    @Override
-    public void readSettings(WizardDescriptor data) {
+    public void unsetup(WizardImporter importer, Panel panel) {
+        //When the wizard has been closed
         MyFileImporter.setWeightedAttributes(Panel2.jCheckBoxWeight.isSelected());
-
+        panels = null;
+        VectorsBuilder.mapNodesBuilder = HashBiMap.create();
     }
 
     @Override
-    public void storeSettings(WizardDescriptor data) {
+    public boolean isUIForImporter(Importer importer) {
+        return importer instanceof MyFileImporter;
     }
 }

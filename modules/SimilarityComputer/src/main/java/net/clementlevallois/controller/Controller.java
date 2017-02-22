@@ -2,7 +2,7 @@ package net.clementlevallois.controller;
 
 import net.clementlevallois.controller.MyFileImporter;
 import net.clementlevallois.utils.Utils;
-import Wizard.Panel1;
+import net.clementlevallois.wizard.Panel1;
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashMultiset;
 import com.google.common.collect.Multiset;
@@ -25,6 +25,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import net.clementlevallois.computer.CosineCalculation;
 import net.clementlevallois.computer.VectorsBuilder;
+import net.clementlevallois.graphgenerator.GraphOperations;
 import net.clementlevallois.parsers.CsvParser;
 import net.clementlevallois.parsers.ExcelParser;
 import net.clementlevallois.utils.Pair;
@@ -106,7 +107,7 @@ public class Controller {
     public void run() throws FileNotFoundException, InvalidFormatException, ExecutionException, IOException, InterruptedException {
 
         if (MyFileImporter.getFileName().endsWith("xls") | MyFileImporter.getFileName().endsWith("xlsx")) {
-            ExcelParser excelParser = new ExcelParser(MyFileImporter.getFilePathAndName());
+            ExcelParser excelParser = new ExcelParser(MyFileImporter.getFilePathAndName(), MyFileImporter.sheetName);
             datastruct = excelParser.parse();
         } else {
             CsvParser csvParser = new CsvParser(MyFileImporter.getFilePathAndName(), MyFileImporter.getTextDelimiter(), MyFileImporter.getFieldDelimiter() );
@@ -137,75 +138,12 @@ public class Controller {
 
         container = MyFileImporter.container;
         container.setEdgeDefault(EdgeDirectionDefault.UNDIRECTED);
-
-        NodeDraft node;
-
-        //add nodes
-        for (String nodeName : datastruct.keySet()) {
-            node = container.factory().newNodeDraft(nodeName);
-            node.setLabel(nodeName);
-            container.addNode(node);
-        }
-
-        //add edges
-        Integer idEdge = 0;
-        EdgeDraft edge;
-        Iterator<MatrixEntry> itSM;
-
-        List<PairWithWeight> edges = new ArrayList();
-
-        for (FlexCompColMatrix simMatrix : similarityMatrices) {
-
-            itSM = simMatrix.iterator();
-
-            while (itSM.hasNext()) {
-
-                MatrixEntry currElement = itSM.next();
-                double csCoeff = currElement.get();
-                if (csCoeff <= 0) {
-                    continue;
-                }
-                if (currElement.column() == currElement.row()) {
-                    continue;
-                }
-
-                String source = container.getNode(VectorsBuilder.mapNodes.inverse().get((int) currElement.column())).getId();
-                String target = container.getNode(VectorsBuilder.mapNodes.inverse().get((int) currElement.row())).getId();
-
-                
-                //complex stuff just to add the weights of multiple edges between nodes (because they are similar on multiple attributes)
-                Pair pair;
-                if (source.compareTo(target) < 0) {
-                    pair = new Pair(source, target);
-                } else {
-                    pair = new Pair(target, source);
-                }
-                PairWithWeight pww = new PairWithWeight();
-                pww.setPair(pair);
-                pww.setWeight(csCoeff);
-                if (edges.contains(pww)){
-                    PairWithWeight get = edges.remove(edges.indexOf(pww));
-                    get.setWeight(get.getWeight()+csCoeff);
-                    edges.add(get);
-                }
-                else{
-                    edges.add(pww);                    
-                }
-
-            }
-        }
-
-            //now we can add all these edges
-            for (PairWithWeight pww : edges) {
-                
-                edge = container.factory().newEdgeDraft(String.valueOf(idEdge));
-                idEdge = idEdge + 1;
-                edge.setSource(container.getNode((String)pww.getPair().getLeft()));
-                edge.setTarget(container.getNode((String)pww.getPair().getRight()));
-                edge.setWeight((float) pww.getWeight());
-                edge.setDirection(EdgeDirection.UNDIRECTED);
-                container.addEdge(edge);
-            }
+        
+        GraphOperations graphOperations = new GraphOperations();
+        graphOperations.createGraph(container, datastruct, similarityMatrices);
+        
+        Logger.getLogger("").log(Level.INFO, "Graph created!");
+        
 
     }
 }

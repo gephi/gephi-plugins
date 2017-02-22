@@ -1,4 +1,4 @@
-package Wizard;
+package net.clementlevallois.wizard;
 
 import java.io.File;
 import java.io.IOException;
@@ -9,10 +9,11 @@ import javax.swing.event.ListSelectionListener;
 import net.clementlevallois.parsers.ExcelParser;
 import net.clementlevallois.controller.MyFileImporter;
 import java.awt.Font;
-import java.io.FileNotFoundException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.DefaultListModel;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import net.clementlevallois.utils.Utils;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.openide.util.Exceptions;
@@ -79,6 +80,7 @@ public class Panel1 extends javax.swing.JPanel {
         jScrollPaneExcelSheets.setVisible(false);
         jLabelExcelSheets.setVisible(false);
 
+
         jListFieldDelimiter.addListSelectionListener(new ListSelectionListener() {
             @Override
             public void valueChanged(ListSelectionEvent e) {
@@ -95,6 +97,7 @@ public class Panel1 extends javax.swing.JPanel {
                 selectedSheet = (String) ((JList) e.getSource()).getSelectedValue();
             }
         });
+        
 
     }
 
@@ -122,20 +125,19 @@ public class Panel1 extends javax.swing.JPanel {
         jTextArea1 = new javax.swing.JTextArea();
 
         jCheckBoxMenuItem1.setSelected(true);
-        org.openide.awt.Mnemonics.setLocalizedText(jCheckBoxMenuItem1, org.openide.util.NbBundle.getMessage(Panel1.class, "Panel1.jCheckBoxMenuItem1.text")); // NOI18N
+        jCheckBoxMenuItem1.setText(null);
 
-        org.openide.awt.Mnemonics.setLocalizedText(jButtonSelectFile, org.openide.util.NbBundle.getMessage(Panel1.class, "Panel1.jButtonSelectFile.text")); // NOI18N
+        jButtonSelectFile.setText(org.openide.util.NbBundle.getMessage(Panel1.class, "Panel1.jButtonSelectFile.text")); // NOI18N
         jButtonSelectFile.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonSelectFileActionPerformed(evt);
             }
         });
 
-        org.openide.awt.Mnemonics.setLocalizedText(jLabelFieldDelimiter, org.openide.util.NbBundle.getMessage(Panel1.class, "Panel1.jLabelFieldDelimiter.text")); // NOI18N
+        jLabelFieldDelimiter.setText(org.openide.util.NbBundle.getMessage(Panel1.class, "Panel1.jLabelFieldDelimiter.text")); // NOI18N
 
-        org.openide.awt.Mnemonics.setLocalizedText(jLabel2, org.openide.util.NbBundle.getMessage(Panel1.class, "Panel1.jLabel2.text")); // NOI18N
+        jLabel2.setText(org.openide.util.NbBundle.getMessage(Panel1.class, "Panel1.jLabel2.text")); // NOI18N
 
-        jTextFieldTextDelimiter.setText(org.openide.util.NbBundle.getMessage(Panel1.class, "Panel1.jTextFieldTextDelimiter.text")); // NOI18N
         jTextFieldTextDelimiter.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jTextFieldTextDelimiterActionPerformed(evt);
@@ -156,14 +158,14 @@ public class Panel1 extends javax.swing.JPanel {
         jScrollPane1.setViewportView(jListFieldDelimiter);
 
         jCheckBoxHeadersIncluded.setSelected(true);
-        org.openide.awt.Mnemonics.setLocalizedText(jCheckBoxHeadersIncluded, org.openide.util.NbBundle.getMessage(Panel1.class, "Panel1.jCheckBoxHeadersIncluded.text")); // NOI18N
+        jCheckBoxHeadersIncluded.setText(org.openide.util.NbBundle.getMessage(Panel1.class, "Panel1.jCheckBoxHeadersIncluded.text")); // NOI18N
         jCheckBoxHeadersIncluded.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jCheckBoxHeadersIncludedActionPerformed(evt);
             }
         });
 
-        org.openide.awt.Mnemonics.setLocalizedText(jLabelExcelSheets, org.openide.util.NbBundle.getMessage(Panel1.class, "Panel1.jLabelExcelSheets.text")); // NOI18N
+        jLabelExcelSheets.setText(org.openide.util.NbBundle.getMessage(Panel1.class, "Panel1.jLabelExcelSheets.text")); // NOI18N
 
         jListExcelSheets.setModel(new javax.swing.AbstractListModel() {
             String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
@@ -171,6 +173,11 @@ public class Panel1 extends javax.swing.JPanel {
             public Object getElementAt(int i) { return strings[i]; }
         });
         jListExcelSheets.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        jListExcelSheets.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
+            public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
+                jListExcelSheetsValueChanged(evt);
+            }
+        });
         jScrollPaneExcelSheets.setViewportView(jListExcelSheets);
 
         jTextArea1.setColumns(20);
@@ -283,11 +290,9 @@ public class Panel1 extends javax.swing.JPanel {
                 jLabelExcelSheets.setVisible(false);
 
             }
-        } catch (IOException ex) {
+        } catch (IOException | InvalidFormatException ex) {
             Exceptions.printStackTrace(ex);
 
-        } catch (InvalidFormatException ex) {
-            Exceptions.printStackTrace(ex);
         }
 
     }//GEN-LAST:event_jButtonSelectFileActionPerformed
@@ -309,6 +314,10 @@ public class Panel1 extends javax.swing.JPanel {
         }
 
     }//GEN-LAST:event_jTextFieldTextDelimiterActionPerformed
+
+    private void jListExcelSheetsValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_jListExcelSheetsValueChanged
+        MyFileImporter.sheetName = selectedSheet;
+    }//GEN-LAST:event_jListExcelSheetsValueChanged
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButtonSelectFile;
@@ -340,4 +349,5 @@ public class Panel1 extends javax.swing.JPanel {
     public String[] getHeaders() {
         return headers;
     }
+
 }

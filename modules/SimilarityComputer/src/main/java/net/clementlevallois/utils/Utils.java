@@ -48,37 +48,6 @@ import java.util.Set;
  */
 public class Utils {
 
-    public List<String> getListOfLinks(String[] arrayOfObjects, boolean selfLoopsReomoved) {
-        List<String> listObjects = new ArrayList();
-
-        if (selfLoopsReomoved) {
-            Set<String> setObjects = new HashSet();
-            setObjects.addAll(Arrays.asList(arrayOfObjects));
-            listObjects.addAll(setObjects);
-        }
-        else{
-            listObjects.addAll(Arrays.asList(arrayOfObjects));
-        }
-            
-        List<String> listPairs = new ArrayList();
-        Iterator<String> listIterator1 = listObjects.listIterator();
-        Iterator<String> listIterator2;
-        int count = 1;
-        String object1;
-        while (listIterator1.hasNext()) {
-            object1 = listIterator1.next().trim();
-            listIterator2 = listObjects.listIterator(count++);
-            while (listIterator2.hasNext()) {
-                String object2 = listIterator2.next().trim();
-                if (object2.compareTo(object1) > 0) {
-                    listPairs.add(object2 + "|" + object1);
-                } else {
-                    listPairs.add(object1 + "|" + object2);
-                }
-            }
-        }
-        return listPairs;
-    }
 
     public static String getCharacter(String labelCharacter) {
         if (labelCharacter == null) {
