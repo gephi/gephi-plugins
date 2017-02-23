@@ -174,7 +174,7 @@ public class ForceAtlas2 implements Layout {
             nLayout.dx = 0;
             nLayout.dy = 0;
             nLayout.dz = 0;
-            if (!threeD) {
+            if (threeD) {
                 n.setZ((float) (Math.random() * 0.01));
             }
         }
