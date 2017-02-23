@@ -63,7 +63,7 @@
                     <licenseName>Apache v2</licenseName>
                     <licenseFile>Apache v2.txt</licenseFile>
                     <author>Clement Levallois</author>
-                    <sourceCodeUrl>$sourcecode_url</sourceCodeUrl>
+                    <sourceCodeUrl>https://github.com/seinecle/gephi-plugins/tree/force-atlas-3D</sourceCodeUrl>
                     <homePageUrl>http://www.clementlevallois.net</homePageUrl>
                     <publicPackages>
                         
