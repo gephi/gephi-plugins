@@ -1,0 +1,5 @@
+Manifest-Version: 1.0
+OpenIDE-Module: net.clementlevallois.ForceAtlas3D/1
+OpenIDE-Module-Localizing-Bundle: net/clementlevallois/ForceAtlas3D/Bundle.properties
+OpenIDE-Module-Specification-Version: 1.1
+

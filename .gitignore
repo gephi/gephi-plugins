@@ -1,2 +1,5 @@
 .DS_Store
 **/target/**
+/ForceAtlas3D/build/
+/ForceAtlas3D/nbproject/private/
+/target/
