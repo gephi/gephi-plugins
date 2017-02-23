@@ -49,6 +49,7 @@
         <module>modules/PrestigePlugin</module>
         <module>modules/HttpGraph</module>
         <module>modules/MinimumSpanningTree</module>
+        <module>modules/SimilarityComputer</module>
     </modules>
     
     <!-- Properties -->
