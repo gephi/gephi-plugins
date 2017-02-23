@@ -9,10 +9,10 @@
 
     <groupId>net</groupId>
     <artifactId>clementlevallois</artifactId>
-    <version>1.0.0</version>
+    <version>1.5.0</version>
     <packaging>nbm</packaging>
 
-    <name>MapOfCountries</name>
+    <name>Map Of Countries</name>
 
     <dependencies>
         
