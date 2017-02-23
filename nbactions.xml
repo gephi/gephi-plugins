@@ -19,8 +19,8 @@
         </properties>
     </action>
     <action>
-            <actionName>CUSTOM-Migrate really</actionName>
-            <displayName>Migrate really</displayName>
+            <actionName>CUSTOM-migrate</actionName>
+            <displayName>migrate</displayName>
             <goals>
                 <goal>org.gephi:gephi-maven-plugin:migrate</goal>
             </goals>
