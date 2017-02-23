@@ -1,16 +1,10 @@
 package net.clementlevallois.computer;
 
 import com.google.common.collect.BiMap;
-import net.clementlevallois.utils.Pair;
 import com.google.common.collect.HashBiMap;
-import com.google.common.collect.HashMultiset;
 import com.google.common.collect.ImmutableBiMap;
-import com.google.common.collect.Maps;
 import com.google.common.collect.Multiset;
-import com.google.common.collect.TreeMultimap;
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.util.Map.Entry;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;

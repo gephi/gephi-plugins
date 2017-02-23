@@ -45,7 +45,7 @@ import java.util.logging.Logger;
 public class Clock {
 
     private long start;
-    private String action;
+    private final String action;
     private String logText;
     private final String newLine = "\n";
     private final String interval = "-------------------------------\n\n";
@@ -55,7 +55,7 @@ public class Clock {
         startClock();
     }
 
-    void startClock() {
+    private void startClock() {
 
         start = System.currentTimeMillis();
         logText = action + "..." + newLine;

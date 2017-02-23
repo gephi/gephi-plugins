@@ -1,12 +1,5 @@
 package net.clementlevallois.utils;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
-
 /*
  Copyright 2008-2013 Clement Levallois
  Authors : Clement Levallois <clementlevallois@gmail.com>

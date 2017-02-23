@@ -1,10 +1,5 @@
 package net.clementlevallois.controller;
 
-import net.clementlevallois.controller.MyFileImporter;
-import net.clementlevallois.utils.Utils;
-import net.clementlevallois.wizard.Panel1;
-import com.google.common.collect.BiMap;
-import com.google.common.collect.HashMultiset;
 import com.google.common.collect.Multiset;
 import java.io.BufferedWriter;
 import java.io.FileNotFoundException;
@@ -12,7 +7,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -28,17 +22,12 @@ import net.clementlevallois.computer.VectorsBuilder;
 import net.clementlevallois.graphgenerator.GraphOperations;
 import net.clementlevallois.parsers.CsvParser;
 import net.clementlevallois.parsers.ExcelParser;
-import net.clementlevallois.utils.Pair;
-import net.clementlevallois.utils.PairWithWeight;
-import no.uib.cipr.matrix.MatrixEntry;
 import no.uib.cipr.matrix.sparse.FlexCompColMatrix;
 import no.uib.cipr.matrix.sparse.SparseVector;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.gephi.io.importer.api.ContainerLoader;
-import org.gephi.io.importer.api.EdgeDirection;
 import org.gephi.io.importer.api.EdgeDirectionDefault;
-import org.gephi.io.importer.api.EdgeDraft;
-import org.gephi.io.importer.api.NodeDraft;
+import org.gephi.io.importer.api.Report;
 
 /*
  Copyright 2008-2013 Clement Levallois
@@ -85,8 +74,7 @@ public class Controller {
     // ##### parameters
     //
     //
-    public static String filePath;
-    ContainerLoader container;
+    private final ContainerLoader container;
 
     //
     // ##### objects and variables
@@ -100,18 +88,21 @@ public class Controller {
 
     private Map<String, Map<String, Multiset<String>>> datastruct = new HashMap();
 
-    public Controller(String filePath) {
-        this.filePath = filePath;
+    public Controller(ContainerLoader container) {
+        this.container = container;
     }
 
-    public void run() throws FileNotFoundException, InvalidFormatException, ExecutionException, IOException, InterruptedException {
-
+    public Report run() throws FileNotFoundException, InvalidFormatException, ExecutionException, IOException, InterruptedException {
+        Report report;
+        
         if (MyFileImporter.getFileName().endsWith("xls") | MyFileImporter.getFileName().endsWith("xlsx")) {
             ExcelParser excelParser = new ExcelParser(MyFileImporter.getFilePathAndName(), MyFileImporter.sheetName);
             datastruct = excelParser.parse();
+            report = excelParser.getReport();
         } else {
-            CsvParser csvParser = new CsvParser(MyFileImporter.getFilePathAndName(), MyFileImporter.getTextDelimiter(), MyFileImporter.getFieldDelimiter() );
+            CsvParser csvParser = new CsvParser(MyFileImporter.getFilePathAndName(), MyFileImporter.getTextDelimiter(), MyFileImporter.getFieldDelimiter());
             datastruct = csvParser.parse();
+            report = csvParser.getReport();
         }
 
         VectorsBuilder vectorsBuilder = new VectorsBuilder();
@@ -136,14 +127,13 @@ public class Controller {
 
         Logger.getLogger("").log(Level.INFO, "Cosine calculated!");
 
-        container = MyFileImporter.container;
         container.setEdgeDefault(EdgeDirectionDefault.UNDIRECTED);
-        
+
         GraphOperations graphOperations = new GraphOperations();
         graphOperations.createGraph(container, datastruct, similarityMatrices);
-        
+
         Logger.getLogger("").log(Level.INFO, "Graph created!");
         
-
+        return report;
     }
 }
