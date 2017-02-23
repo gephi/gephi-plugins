@@ -11,7 +11,10 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import javax.swing.JOptionPane;
 import org.gephi.io.importer.api.ContainerLoader;
+import org.gephi.io.importer.api.Issue;
+import org.gephi.io.importer.api.Report;
 import org.openide.util.Exceptions;
 
 /*
@@ -55,30 +58,30 @@ import org.openide.util.Exceptions;
  */
 public class CsvParser {
 
-    String filePath;
-    public CsvReader csvReader;
-    String textDelimiter;
-    String fieldDelimiter;
-    ContainerLoader container;
+    private final String filePath;
+    private CsvReader csvReader;
+    private final String textDelimiter;
+    private final String fieldDelimiter;
     
-    BufferedReader br;
+    private BufferedReader br;
+    
 
-    private Map<String, Map<String, Multiset<String>>> datastruct = new HashMap();
-    private Map<Integer, String> mapColNumToHeader = new HashMap();
+    private final Map<String, Map<String, Multiset<String>>> datastruct = new HashMap();
+    private final Map<Integer, String> mapColNumToHeader = new HashMap<>();
 
-    private static final String[] alphabet = {"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"};
+    private final Report report = new Report();
+    
+    private static final String[] ALPHABET = {"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"};
 
     public CsvParser(String filePath, String textDelimiter, String fieldDelimiter) {
         this.filePath = filePath;
         this.fieldDelimiter = fieldDelimiter;
         this.textDelimiter = textDelimiter;
         this.init();
-
     }
 
-    public void init() {
+    private void init() {
         try {
-
             br = new BufferedReader(new FileReader(filePath));
 
             String textDelimiterAsAString = Utils.getCharacter(textDelimiter);
@@ -121,7 +124,7 @@ public class CsvParser {
 
             if (!MyFileImporter.headersPresent && csvReader.getCurrentRecord() == 1) {
                 for (int j = 0; j < csvReader.getValues().length; j++) {
-                    mapColNumToHeader.put(j, alphabet[j]);
+                    mapColNumToHeader.put(j, ALPHABET[j]);
                 }
                 columnCount = csvReader.getValues().length;
             }
@@ -159,7 +162,12 @@ public class CsvParser {
                     if (MyFileImporter.isWeightedAttributes()) {
                         if (previousColIsAttribute) {
                             attributeName = mapColNumToHeader.get(j - 1);
-                            float weight = Float.valueOf(cellContent);
+                            float weight = 0;
+                            try {
+                                weight = Float.valueOf(cellContent);
+                            } catch (NumberFormatException ex) {
+                                report.logIssue(new Issue("Expected a number at attribute " + attributeName + " but found value: " + cellContent, Issue.Level.SEVERE));
+                            }
                             Multiset<String> values = HashMultiset.create();
                             values.add(prevCellValue, Math.round(weight));
                             attributes.put(attributeName, values);
@@ -183,5 +191,9 @@ public class CsvParser {
         br.close();
         return datastruct;
 
+    }
+
+    public Report getReport() {
+        return report;
     }
 }

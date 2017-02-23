@@ -39,15 +39,8 @@ package net.clementlevallois.controller;
  Contributor(s): Clement Levallois
 
  */
-import net.clementlevallois.parsers.CsvParser;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.util.concurrent.ExecutionException;
 import javax.swing.DefaultListModel;
-import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.gephi.io.importer.api.ContainerLoader;
-import org.gephi.io.importer.api.EdgeDraft;
-import org.gephi.io.importer.api.NodeDraft;
 import org.gephi.io.importer.api.Report;
 import org.gephi.io.importer.spi.WizardImporter;
 import org.gephi.utils.longtask.spi.LongTask;
@@ -58,7 +51,6 @@ public class MyFileImporter implements WizardImporter, LongTask {
 
     public static ContainerLoader container;
     private static Report report;
-    private ProgressTicket progressTicket;
     private boolean cancel = false;
     private static String[] headers;
     private static String filePathAndName;
@@ -74,20 +66,11 @@ public class MyFileImporter implements WizardImporter, LongTask {
     @Override
     public boolean execute(ContainerLoader loader) {
         container = loader;
-        report = new Report();
 
-        Controller controller = new Controller(filePathAndName);
+        Controller controller = new Controller(container);
         try {
-            controller.run();
-        } catch (FileNotFoundException ex) {
-            Exceptions.printStackTrace(ex);
-        } catch (InvalidFormatException ex) {
-            Exceptions.printStackTrace(ex);
-        } catch (ExecutionException ex) {
-            Exceptions.printStackTrace(ex);
-        } catch (IOException ex) {
-            Exceptions.printStackTrace(ex);
-        } catch (InterruptedException ex) {
+            report = controller.run();
+        } catch (Exception ex) {
             Exceptions.printStackTrace(ex);
         }
 
@@ -152,10 +135,6 @@ public class MyFileImporter implements WizardImporter, LongTask {
         return report;
     }
 
-    public static Report getStaticReport() {
-        return report;
-    }
-
     @Override
     public boolean cancel() {
         cancel = true;
@@ -164,7 +143,6 @@ public class MyFileImporter implements WizardImporter, LongTask {
 
     @Override
     public void setProgressTicket(ProgressTicket progressTicket) {
-        this.progressTicket = progressTicket;
     }
 
     public static boolean isWeightedAttributes() {
@@ -174,6 +152,4 @@ public class MyFileImporter implements WizardImporter, LongTask {
     public static void setWeightedAttributes(boolean weightedAttributes) {
         MyFileImporter.weightedAttributes = weightedAttributes;
     }
-    
-    
 }
