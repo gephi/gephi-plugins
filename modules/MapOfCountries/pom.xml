@@ -6,7 +6,7 @@
         <groupId>org.gephi</groupId>
         <version>0.9.1</version>
     </parent>
-
+  
     <groupId>net.clementlevallois</groupId>
     <artifactId>mapofcountries</artifactId>
     <version>1.5.0</version>
