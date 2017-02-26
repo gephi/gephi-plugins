@@ -57,11 +57,11 @@
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>nbm-maven-plugin</artifactId>
-                <version>3.0</version>
                 <configuration>
                     <author>Dave Shepard</author>
                     <sourceCodeUrl>http://github.com/shepdl/gephi-plugins/tree/export-to-earth</sourceCodeUrl>
                     <licenseName>3-clause BSD</licenseName>
+                    <licenseFile>bsd-3clause-license.txt</licenseFile>
                     <publicPackages>
                         
                     </publicPackages>

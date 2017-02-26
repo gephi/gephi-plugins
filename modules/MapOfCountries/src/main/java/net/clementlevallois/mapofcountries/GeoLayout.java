@@ -107,6 +107,10 @@ public final class GeoLayout implements Layout {
                 graphModel.getNodeTable().addColumn("background_map", Boolean.class);
             }
             
+            if (!graphModel.getEdgeTable().hasColumn("background_map")){
+                graphModel.getNodeTable().addColumn("background_map", Boolean.class);
+            }
+            
             if (!graphModel.getNodeTable().hasColumn("lat")){
                 graphModel.getNodeTable().addColumn("lat", Double.class);
             }
@@ -156,7 +160,7 @@ public final class GeoLayout implements Layout {
             for (Edge e : graph.getEdges().toArray()) {
                 Node nodeSource = e.getSource();
                 Node nodeTarget = e.getTarget();
-                if (nodeSource.getAttribute("background_map") != null || nodeTarget.getAttribute("background_map") != null) {
+                if (Boolean.TRUE.equals(e.getAttribute("background_map"))) {
                     e.setWeight(this.weight);
                 }
             }

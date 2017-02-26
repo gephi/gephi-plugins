@@ -6,13 +6,13 @@
         <groupId>org.gephi</groupId>
         <version>0.9.1</version>
     </parent>
-
-    <groupId>net</groupId>
-    <artifactId>clementlevallois</artifactId>
-    <version>1.0.0</version>
+  
+    <groupId>net.clementlevallois</groupId>
+    <artifactId>mapofcountries</artifactId>
+    <version>1.5.0</version>
     <packaging>nbm</packaging>
 
-    <name>MapOfCountries</name>
+    <name>Map Of Countries</name>
 
     <dependencies>
         

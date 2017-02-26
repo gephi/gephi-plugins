@@ -132,7 +132,7 @@ public class StreamingControllerImpl implements StreamingController {
 
             @Override
             public void handleGraphEvent(GraphEvent event) {
-                logger.log(Level.INFO, "Received event {0}", event.toString());
+                //logger.log(Level.INFO, "Received event {0}", event.toString());
                 if (event instanceof ElementEvent) {
                     ElementEvent elementEvent = (ElementEvent)event;
                     if (elementEvent.getElementId()!=null) {
@@ -190,8 +190,7 @@ public class StreamingControllerImpl implements StreamingController {
 
         @Override
         public void handleGraphEvent(GraphEvent event) {
-            logger.log(Level.INFO, "{0};{1};Sending event {2}",
-                    new Object[]{Thread.currentThread().getId(), System.currentTimeMillis(), event.toString()});
+            //logger.log(Level.INFO, "{0};{1};Sending event {2}", new Object[]{Thread.currentThread().getId(), System.currentTimeMillis(), event.toString()});
             
             if (event instanceof ElementEvent) {
                 ElementEvent elementEvent = (ElementEvent)event;
@@ -206,7 +205,7 @@ public class StreamingControllerImpl implements StreamingController {
     }
 
     private void sendEvent(final StreamingEndpoint endpoint, GraphEvent event) {
-        logger.log(Level.FINE, "Sending event {0}", event.toString());
+        //logger.log(Level.FINE, "Sending event {0}", event.toString());
         try {
             URL url = new URL(endpoint.getUrl(),
                     endpoint.getUrl().getFile()+"?operation=updateGraph&format="

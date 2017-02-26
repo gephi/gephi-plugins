@@ -31,6 +31,25 @@
         <module>modules/loxawebsiteexport</module>
         <module>modules/Export-To-Earth</module>
         <module>modules/MapOfCountries</module>
+        <module>modules/ScriptingPlugin</module>
+        <module>modules/TwitterStreamingImporter</module>
+        <module>modules/IsometricLayout</module>
+        <module>modules/NetworkSplitter3D</module>
+        <module>modules/ExcelCsvImporter</module>
+        <module>modules/OracleDriver</module>
+        <module>modules/EventGraphLayout</module>
+        <module>modules/Lineage</module>
+        <module>modules/MdsLayout</module>
+        <module>modules/filterfromfile</module>
+        <module>modules/GiveColorToNodes</module>
+        <module>modules/GiveColorToEdges</module>
+        <module>modules/GravityPlugin</module>
+        <module>modules/MdsMetric</module>
+        <module>modules/VectorCalculator</module>
+        <module>modules/PrestigePlugin</module>
+        <module>modules/HttpGraph</module>
+        <module>modules/MinimumSpanningTree</module>
+        <module>modules/SimilarityComputer</module>
     </modules>
     
     <!-- Properties -->
