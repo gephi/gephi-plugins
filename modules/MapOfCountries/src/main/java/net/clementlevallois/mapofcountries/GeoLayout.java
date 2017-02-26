@@ -103,12 +103,12 @@ public final class GeoLayout implements Layout {
             float averageY = 0;
             Graph graph = graphModel.getGraph();
             
-            if (!graphModel.getNodeTable().hasColumn("background_map")){
-                graphModel.getNodeTable().addColumn("background_map", Boolean.class);
+            if (!graphModel.getNodeTable().hasColumn("background_map_node")){
+                graphModel.getNodeTable().addColumn("background_map_node", Boolean.class);
             }
             
-            if (!graphModel.getEdgeTable().hasColumn("background_map")){
-                graphModel.getNodeTable().addColumn("background_map", Boolean.class);
+            if (!graphModel.getEdgeTable().hasColumn("background_map_edge")){
+                graphModel.getEdgeTable().addColumn("background_map_edge", Boolean.class);
             }
             
             if (!graphModel.getNodeTable().hasColumn("lat")){
@@ -133,7 +133,7 @@ public final class GeoLayout implements Layout {
             }
             List<Node> nodesList = new ArrayList();
             for (Node n : graph.getNodes().toArray()) {
-                if (Boolean.TRUE.equals(n.getAttribute("background_map"))) {
+                if (Boolean.TRUE.equals(n.getAttribute("background_map_node"))) {
                     nodesList.add(n);
                 }
             }
@@ -158,9 +158,7 @@ public final class GeoLayout implements Layout {
                 }
             }
             for (Edge e : graph.getEdges().toArray()) {
-                Node nodeSource = e.getSource();
-                Node nodeTarget = e.getTarget();
-                if (Boolean.TRUE.equals(e.getAttribute("background_map"))) {
+                if (Boolean.TRUE.equals(e.getAttribute("background_map_edge"))) {
                     e.setWeight(this.weight);
                 }
             }
@@ -264,8 +262,6 @@ public final class GeoLayout implements Layout {
                     if (n.getLayoutData() == null || !(n.getLayoutData() instanceof GeoLayoutData)) {
                         n.setLayoutData(new GeoLayoutData());
                     }
-
-                    
 
                     lat = ((Number) n.getAttribute(latitude)).doubleValue();
                     lon = ((Number) n.getAttribute(longitude)).doubleValue();

@@ -1,2 +1,0 @@
-# MDSLayout
-MDS Layout
