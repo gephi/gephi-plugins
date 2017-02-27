@@ -69,7 +69,7 @@ public class ShapeFileReader {
 
         //removing previous map
         for (Node n : gr.getNodes().toArray()) {
-            if (Boolean.TRUE.equals(n.getAttribute("background_map"))) {
+            if (Boolean.TRUE.equals(n.getAttribute("background_map_node"))) {
                 gr.removeNode(n);
             }
         }
@@ -124,7 +124,7 @@ public class ShapeFileReader {
                     String lng = fields[i].split(":")[1].split(" ")[0].trim();
                     node = gm.factory().newNode(nodeId);
                     node.setSize(0f);
-                    node.setAttribute("background_map", true);
+                    node.setAttribute("background_map_node", true);
                     node.setAttribute("lat", Double.valueOf(lat));
                     node.setAttribute("lng", Double.valueOf(lng));
                     node.setFixed(true);
@@ -134,7 +134,7 @@ public class ShapeFileReader {
                     String sourceNode = "bckm_" + fields[i].trim().split(":")[1].trim().split(" ")[0].trim();
                     String targetNode = "bckm_" + fields[i].trim().split(":")[1].trim().split(" ")[1].trim();
                     edge = gm.factory().newEdge(gr.getNode(sourceNode), gr.getNode(targetNode), 0, 1d, false);
-                    edge.setAttribute("background_map", true);
+                    edge.setAttribute("background_map_edge", true);
                     gr.addEdge(edge);
                 }
             }
@@ -160,7 +160,7 @@ public class ShapeFileReader {
                     String lng = fields[i].split(":")[1].split(" ")[0].trim();
                     node = gm.factory().newNode(nodeId);
                     node.setSize(0f);
-                    node.setAttribute("background_map", true);
+                    node.setAttribute("background_map_node", true);
                     node.setAttribute("lat", Double.valueOf(lat));
                     node.setAttribute("lng", Double.valueOf(lng));
                     node.setFixed(true);
@@ -170,7 +170,7 @@ public class ShapeFileReader {
                     String sourceNode = "bckm_" + fields[i].trim().split(":")[1].trim().split(" ")[0].trim();
                     String targetNode = "bckm_" + fields[i].trim().split(":")[1].trim().split(" ")[1].trim();
                     edge = gm.factory().newEdge(gr.getNode(sourceNode), gr.getNode(targetNode), 0, 1d, false);
-                    edge.setAttribute("background_map", true);
+                    edge.setAttribute("background_map_edge", true);
                     gr.addEdge(edge);
                 }
             }
