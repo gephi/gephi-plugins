@@ -2785,12 +2785,12 @@
         }
       ],
       "category": "Layout",
-      "last_update": "February 24, 2017",
+      "last_update": "February 27, 2017",
       "images": null,
       "versions": {
         "0.9.1": {
-          "url": "0.9.1/mapofcountries-1.5.0.nbm",
-          "last_update": "February 24, 2017"
+          "url": "0.9.1/mapofcountries-1.5.1.nbm",
+          "last_update": "February 27, 2017"
         }
       },
       "sourcecode": "https://github.com/seinecle/gephi-plugins/tree/mapOfCountriesBranch",
