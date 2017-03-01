@@ -1,5 +1,0 @@
-Manifest-Version: 1.0
-OpenIDE-Module-Name: EventGraphLayout
-OpenIDE-Module-Short-Description: Layout algorithm for event graphs
-OpenIDE-Module-Long-Description: he event graph layout plugin was written to allow for the easy creation of event graphs. In an event graph the nodes represent events and the edges/arcs represent relationships between the events (e.g. causality). The layout plugin places the events in a user-specified order on the x-axis. If vertical force is activated, the plugin will push unconnected groups of events away from each other on the y-axis, and keep connected nodes together. The user needs to add numerical variable to the node list and import it as integer, float or double. The variable should indicate the positions of the node on the x-axis. Once activated, the layout plugin will run continuously until the user stops it. If the plugin is activated, then the position of the nodes on the x-axis will remain fixed, but the user is free to move nodes on the y-axis. This is only useful if the user turns of the vertical force option. 
-OpenIDE-Module-Display-Category: Layout
