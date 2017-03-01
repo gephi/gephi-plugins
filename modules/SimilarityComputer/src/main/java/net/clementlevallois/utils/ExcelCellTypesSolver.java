@@ -20,6 +20,7 @@ public class ExcelCellTypesSolver {
         }
         switch (cell.getCellType()) {
 
+
             case Cell.CELL_TYPE_STRING:
                 return cell.getRichStringCellValue().getString();
 

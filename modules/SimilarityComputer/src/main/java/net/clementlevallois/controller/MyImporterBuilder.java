@@ -56,7 +56,6 @@ import org.openide.util.lookup.ServiceProvider;
 @ServiceProvider(service = WizardImporterBuilder.class)
 public class MyImporterBuilder implements WizardImporterBuilder {
 
-
     @Override
     public WizardImporter buildImporter() {
         return new MyFileImporter();
@@ -66,6 +65,4 @@ public class MyImporterBuilder implements WizardImporterBuilder {
     public String getName() {
         return "Convert data tables in Excel or csv format into networks";
     }
-
-    
 }

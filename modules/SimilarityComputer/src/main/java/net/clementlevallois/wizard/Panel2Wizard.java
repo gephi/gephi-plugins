@@ -6,7 +6,6 @@ import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.event.ChangeListener;
-import net.clementlevallois.controller.MyFileImporter;
 import org.openide.WizardDescriptor;
 import org.openide.util.HelpCtx;
 

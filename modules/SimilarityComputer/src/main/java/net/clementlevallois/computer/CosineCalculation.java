@@ -1,6 +1,7 @@
 package net.clementlevallois.computer;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.Callable;
 import net.clementlevallois.utils.Clock;
@@ -49,7 +50,6 @@ import no.uib.cipr.matrix.sparse.SparseVector;
  */
 public class CosineCalculation implements Callable {
 
-    public static long cellTime;
     private final SparseVector[] listVectors;
     public Clock matrixClock;
     public List<Integer> nonZeroIndexListSource = new ArrayList();
@@ -86,7 +86,8 @@ public class CosineCalculation implements Callable {
         FlexCompColMatrix similarityMatrix = new FlexCompColMatrix(numNodes, numNodes);
 
         //1. iteration through all nodes of the similarityMatrix
-        norms = new ArrayList();
+        ArrayList<Double> norms = new ArrayList();
+
 
         matrixClock = new Clock("clocking the cosine calculus for "+ attribute);
 
@@ -115,6 +116,7 @@ public class CosineCalculation implements Callable {
                         listTargetIndex = new ArrayList();
                         for (int s = 0; s < targetIndexes.length; s++) {
                             listTargetIndex.add(targetIndexes[s]);
+
                         }
 
                         listSourceIndex.retainAll(listTargetIndex);
@@ -123,11 +125,9 @@ public class CosineCalculation implements Callable {
                             similarityMatrix.set(i, j, result);
                         }
                     }
-
                 } else {
                     similarityMatrix.set(i, j, 0);
                 }
-
             }
         }
         matrixClock.closeAndPrintClock();

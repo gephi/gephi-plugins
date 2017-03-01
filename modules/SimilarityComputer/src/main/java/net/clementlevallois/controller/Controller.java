@@ -28,6 +28,7 @@ import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.gephi.io.importer.api.ContainerLoader;
 import org.gephi.io.importer.api.EdgeDirectionDefault;
 
+
 /*
  Copyright 2008-2013 Clement Levallois
  Authors : Clement Levallois <clementlevallois@gmail.com>
@@ -73,16 +74,20 @@ public class Controller {
     private Map<String, Map<String, Multiset<String>>> datastruct = new HashMap();
 
     public Controller() {
+
     }
 
-    public void run() throws FileNotFoundException, InvalidFormatException, ExecutionException, IOException, InterruptedException {
-
+    public Report run() throws FileNotFoundException, InvalidFormatException, ExecutionException, IOException, InterruptedException {
+        Report report;
+        
         if (MyFileImporter.getFileName().endsWith("xls") | MyFileImporter.getFileName().endsWith("xlsx")) {
             ExcelParser excelParser = new ExcelParser(MyFileImporter.getFilePathAndName(), MyFileImporter.sheetName);
             datastruct = excelParser.parse();
+            report = excelParser.getReport();
         } else {
-            CsvParser csvParser = new CsvParser(MyFileImporter.getFilePathAndName(), MyFileImporter.getTextDelimiter(), MyFileImporter.getFieldDelimiter() );
+            CsvParser csvParser = new CsvParser(MyFileImporter.getFilePathAndName(), MyFileImporter.getTextDelimiter(), MyFileImporter.getFieldDelimiter());
             datastruct = csvParser.parse();
+            report = csvParser.getReport();
         }
 
         VectorsBuilder vectorsBuilder = new VectorsBuilder();
@@ -107,14 +112,13 @@ public class Controller {
 
         Logger.getLogger("").log(Level.INFO, "Cosine calculated!");
 
-        container = MyFileImporter.container;
         container.setEdgeDefault(EdgeDirectionDefault.UNDIRECTED);
-        
+
         GraphOperations graphOperations = new GraphOperations();
         graphOperations.createGraph(container, datastruct, similarityMatrices);
-        
+
         Logger.getLogger("").log(Level.INFO, "Graph created!");
         
-
+        return report;
     }
 }
