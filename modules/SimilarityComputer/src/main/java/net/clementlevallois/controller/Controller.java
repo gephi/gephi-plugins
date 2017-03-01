@@ -1,10 +1,5 @@
 package net.clementlevallois.controller;
 
-import net.clementlevallois.controller.MyFileImporter;
-import net.clementlevallois.utils.Utils;
-import net.clementlevallois.wizard.Panel1;
-import com.google.common.collect.BiMap;
-import com.google.common.collect.HashMultiset;
 import com.google.common.collect.Multiset;
 import java.io.BufferedWriter;
 import java.io.FileNotFoundException;
@@ -12,7 +7,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -28,17 +22,11 @@ import net.clementlevallois.computer.VectorsBuilder;
 import net.clementlevallois.graphgenerator.GraphOperations;
 import net.clementlevallois.parsers.CsvParser;
 import net.clementlevallois.parsers.ExcelParser;
-import net.clementlevallois.utils.Pair;
-import net.clementlevallois.utils.PairWithWeight;
-import no.uib.cipr.matrix.MatrixEntry;
 import no.uib.cipr.matrix.sparse.FlexCompColMatrix;
 import no.uib.cipr.matrix.sparse.SparseVector;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.gephi.io.importer.api.ContainerLoader;
-import org.gephi.io.importer.api.EdgeDirection;
 import org.gephi.io.importer.api.EdgeDirectionDefault;
-import org.gephi.io.importer.api.EdgeDraft;
-import org.gephi.io.importer.api.NodeDraft;
 
 /*
  Copyright 2008-2013 Clement Levallois
@@ -81,27 +69,10 @@ import org.gephi.io.importer.api.NodeDraft;
  */
 public class Controller {
 
-    //
-    // ##### parameters
-    //
-    //
-    public static String filePath;
     ContainerLoader container;
-
-    //
-    // ##### objects and variables
-    //
-    //
-    public static FlexCompColMatrix similarityMatrix;
-    static public int countFinishedThreads = 0;
-    static BufferedWriter bw;
-    static String currLine;
-    public static int countCalculus = 0;
-
     private Map<String, Map<String, Multiset<String>>> datastruct = new HashMap();
 
-    public Controller(String filePath) {
-        this.filePath = filePath;
+    public Controller() {
     }
 
     public void run() throws FileNotFoundException, InvalidFormatException, ExecutionException, IOException, InterruptedException {
@@ -122,7 +93,7 @@ public class Controller {
         Set<Callable<FlexCompColMatrix>> callables = new HashSet();
 
         for (String attribute : attributesToVectorsArrays.keySet()) {
-            callables.add(new CosineCalculation(attributesToVectorsArrays.get(attribute)));
+            callables.add(new CosineCalculation(attribute, attributesToVectorsArrays.get(attribute)));
         }
 
         List<Future<FlexCompColMatrix>> futures = executorService.invokeAll(callables);

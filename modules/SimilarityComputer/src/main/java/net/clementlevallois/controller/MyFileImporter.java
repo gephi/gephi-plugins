@@ -76,7 +76,7 @@ public class MyFileImporter implements WizardImporter, LongTask {
         container = loader;
         report = new Report();
 
-        Controller controller = new Controller(filePathAndName);
+        Controller controller = new Controller();
         try {
             controller.run();
         } catch (FileNotFoundException ex) {
