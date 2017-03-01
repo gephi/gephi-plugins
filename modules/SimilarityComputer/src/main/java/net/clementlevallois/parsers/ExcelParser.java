@@ -19,7 +19,8 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
-import org.gephi.io.importer.api.ContainerLoader;
+import org.gephi.io.importer.api.Issue;
+import org.gephi.io.importer.api.Report;
 
 /*
  Copyright 2008-2013 Clement Levallois
@@ -62,16 +63,16 @@ import org.gephi.io.importer.api.ContainerLoader;
  */
 public class ExcelParser {
 
-    String fileName;
-    String sheetName;
-    boolean headersPresent;
-    ContainerLoader container;
+    private String fileName;
+    private String sheetName;
 
-    private Map<String, Map<String, Multiset<String>>> datastruct = new HashMap();
-    private Map<Integer, String> mapColNumToHeader = new HashMap();
+    private final Map<String, Map<String, Multiset<String>>> datastruct = new HashMap();
+    private final Map<Integer, String> mapColNumToHeader = new HashMap();
+    
+    private final Report report = new Report();
 
-    private static final String[] alphabet = {"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"};
-
+    private static final String[] ALPHABET = {"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"};
+    
     public ExcelParser(String fileName, String sheetName) {
         this.fileName = fileName;
         this.sheetName = sheetName;
@@ -86,7 +87,6 @@ public class ExcelParser {
     }
 
     public Map<String, Map<String, Multiset<String>>> parse() throws FileNotFoundException, IOException, InvalidFormatException {
-
         InputStream inp;
         inp = new FileInputStream(fileName);
         Workbook wb = WorkbookFactory.create(inp);
@@ -110,7 +110,7 @@ public class ExcelParser {
         } else {
             row = sheet.getRow(0);
             for (int j = 0; j < row.getLastCellNum(); j++) {
-                mapColNumToHeader.put(j, alphabet[j]);
+                mapColNumToHeader.put(j, ALPHABET[j]);
             }
 
         }
@@ -170,7 +170,12 @@ public class ExcelParser {
                     if (MyFileImporter.isWeightedAttributes()) {
                         if (previousColIsAttribute) {
                             attributeName = mapColNumToHeader.get(j - 1);
-                            float weight = Float.valueOf(cellContent);
+                            float weight = 0;
+                            try {
+                                weight = Float.valueOf(cellContent);
+                            } catch (NumberFormatException ex) {
+                                report.logIssue(new Issue("Expected a number at attribute " + attributeName + " but found value: " + cellContent, Issue.Level.SEVERE));
+                            }
                             Multiset<String> values = HashMultiset.create();
                             values.add(prevCellValue, Math.round(weight));
                             attributes.put(attributeName, values);
@@ -240,7 +245,7 @@ public class ExcelParser {
         return numColumns;
     }
 
-    public void testDynamics() {
-
+    public Report getReport() {
+        return report;
     }
 }
