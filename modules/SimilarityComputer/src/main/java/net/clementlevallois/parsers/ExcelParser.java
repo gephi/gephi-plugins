@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 import net.clementlevallois.utils.ExcelCellTypesSolver;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.ss.usermodel.Cell;
@@ -18,8 +19,7 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
-import org.gephi.io.importer.api.Issue;
-import org.gephi.io.importer.api.Report;
+import org.gephi.io.importer.api.ContainerLoader;
 
 /*
  Copyright 2008-2013 Clement Levallois
@@ -62,16 +62,16 @@ import org.gephi.io.importer.api.Report;
  */
 public class ExcelParser {
 
-    private String fileName;
-    private String sheetName;
+    String fileName;
+    String sheetName;
+    boolean headersPresent;
+    ContainerLoader container;
 
-    private final Map<String, Map<String, Multiset<String>>> datastruct = new HashMap();
-    private final Map<Integer, String> mapColNumToHeader = new HashMap();
-    
-    private final Report report = new Report();
+    private Map<String, Map<String, Multiset<String>>> datastruct = new HashMap();
+    private Map<Integer, String> mapColNumToHeader = new HashMap();
 
-    private static final String[] ALPHABET = {"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"};
-    
+    private static final String[] alphabet = {"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"};
+
     public ExcelParser(String fileName, String sheetName) {
         this.fileName = fileName;
         this.sheetName = sheetName;
@@ -86,6 +86,7 @@ public class ExcelParser {
     }
 
     public Map<String, Map<String, Multiset<String>>> parse() throws FileNotFoundException, IOException, InvalidFormatException {
+
         InputStream inp;
         inp = new FileInputStream(fileName);
         Workbook wb = WorkbookFactory.create(inp);
@@ -109,7 +110,7 @@ public class ExcelParser {
         } else {
             row = sheet.getRow(0);
             for (int j = 0; j < row.getLastCellNum(); j++) {
-                mapColNumToHeader.put(j, ALPHABET[j]);
+                mapColNumToHeader.put(j, alphabet[j]);
             }
 
         }
@@ -150,26 +151,26 @@ public class ExcelParser {
 
             for (int j = 1; j < row.getLastCellNum(); j++) {
 
-                //value of the preceding cell. Useful for attributes which are weighted. See CASE 1 below.
+                //getting the header's name, which is the attributes name
+                attributeName = mapColNumToHeader.get(j);
+
+                //checking if the cell is empty / blank / null. If it is, it should be ignored for similarity computations. We do that by replacing the null value by a random string, to make sure this cell is unique -> dissimilar to any other.
+                
                 if (ExcelCellTypesSolver.anyCellToString(row.getCell(j)) == null || ExcelCellTypesSolver.anyCellToString(row.getCell(j)).isEmpty()) {
-                    datastruct.put(nodeName, attributes);
-                    breakNow = true;
-                    break;
-                } else {
+                    Multiset<String> values = HashMultiset.create();
+                    values.add(UUID.randomUUID().toString(), 1);
+                    attributes.put(attributeName, values);
+                }
+                
+                //if cell not empty / blank / null
+                else {
                     String cellContent = ExcelCellTypesSolver.anyCellToString(row.getCell(j));
-                    //getting the header's name, which is the attributes name
-                    attributeName = mapColNumToHeader.get(j);
 
                     // 1. CASE OF weighted values. One every two columns is an attribute, the other is a value for this attribute. Starting at column 1.
                     if (MyFileImporter.isWeightedAttributes()) {
                         if (previousColIsAttribute) {
                             attributeName = mapColNumToHeader.get(j - 1);
-                            float weight = 0;
-                            try {
-                                weight = Float.valueOf(cellContent);
-                            } catch (NumberFormatException ex) {
-                                report.logIssue(new Issue("Expected a number at attribute " + attributeName + " but found value: " + cellContent, Issue.Level.SEVERE));
-                            }
+                            float weight = Float.valueOf(cellContent);
                             Multiset<String> values = HashMultiset.create();
                             values.add(prevCellValue, Math.round(weight));
                             attributes.put(attributeName, values);
@@ -239,7 +240,7 @@ public class ExcelParser {
         return numColumns;
     }
 
-    public Report getReport() {
-        return report;
+    public void testDynamics() {
+
     }
 }

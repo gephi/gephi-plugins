@@ -84,8 +84,8 @@ public class VectorsBuilder {
             for (String attribute : attributes.keySet()) {
                 Map<String, Integer> valuesToIndex = attributesToValues.get(attribute);
                 if (valuesToIndex == null) {
-                    valuesToIndex = new TreeMap<String, Integer>();
-                };
+                    valuesToIndex = new TreeMap<>();
+                }
                 Set<String> values = attributes.get(attribute).elementSet();
                 for (String value : values) {
                     if (!valuesToIndex.keySet().contains(value)) {
@@ -99,8 +99,8 @@ public class VectorsBuilder {
 
         mapNodes = ImmutableBiMap.copyOf(mapNodesBuilder);
 
-        Logger.getLogger("").log(Level.INFO, "Number of nodes treated: " + datastruct.keySet().size());
-        Logger.getLogger("").log(Level.INFO, "Size of the list of vectors: " + setNodes.size());
+        Logger.getLogger("").log(Level.INFO, "Number of nodes treated: {0}", datastruct.keySet().size());
+        Logger.getLogger("").log(Level.INFO, "Size of the list of vectors: {0}", setNodes.size());
 
         //***
         //
@@ -146,8 +146,8 @@ public class VectorsBuilder {
         }
 
         Logger.getLogger("").log(Level.INFO, "adjacency matrix created!");
-        Logger.getLogger("").log(Level.INFO, "Number of sources (vectors): " + listVectors.length);
-        Logger.getLogger("").log(Level.INFO, "Number of targets (size of a vector): " + listVectors[0].size());
+        Logger.getLogger("").log(Level.INFO, "Number of sources (vectors): {0}", listVectors.length);
+        Logger.getLogger("").log(Level.INFO, "Number of targets (size of a vector): {0}", listVectors[0].size());
 
         matrixCreation.closeAndPrintClock();
 

@@ -23,12 +23,16 @@
  */
 package net.clementlevallois.graphgenerator;
 
+import com.google.common.collect.ImmutableBiMap;
 import com.google.common.collect.Multiset;
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import net.clementlevallois.computer.VectorsBuilder;
+import net.clementlevallois.utils.Clock;
 import net.clementlevallois.utils.Pair;
 import net.clementlevallois.utils.PairWithWeight;
 import no.uib.cipr.matrix.MatrixEntry;
@@ -44,8 +48,12 @@ import org.gephi.io.importer.api.NodeDraft;
  */
 public class GraphOperations {
 
+    Clock clock;
+    
     public void createGraph(ContainerLoader container, Map<String, Map<String, Multiset<String>>> datastruct, List<FlexCompColMatrix> similarityMatrices) {
         NodeDraft node;
+
+        clock = new Clock("adding nodes to Gephi");
 
         //add nodes
         for (String nodeName : datastruct.keySet()) {
@@ -54,20 +62,32 @@ public class GraphOperations {
             container.addNode(node);
         }
 
+        clock.closeAndPrintClock();
+
         //add edges
         Integer idEdge = 0;
         EdgeDraft edge;
         Iterator<MatrixEntry> itSM;
 
-        List<PairWithWeight> edges = new ArrayList();
+        Map<String,PairWithWeight> edges = new HashMap();
+
+        Logger.getLogger("").log(Level.INFO, "converting similarity matrices into a graph");
+
+        int i = 1;
 
         for (FlexCompColMatrix simMatrix : similarityMatrices) {
 
+            Logger.getLogger("").log(Level.INFO, "converting matrix " + i++);
+
             itSM = simMatrix.iterator();
+            MatrixEntry currElement;
+            clock = new Clock("iterating on the cells");
+            
+            ImmutableBiMap<Integer, String> inverse = VectorsBuilder.mapNodes.inverse();
 
             while (itSM.hasNext()) {
 
-                MatrixEntry currElement = itSM.next();
+                currElement = itSM.next();
                 double csCoeff = currElement.get();
                 if (csCoeff <= 0) {
                     continue;
@@ -76,8 +96,8 @@ public class GraphOperations {
                     continue;
                 }
 
-                String source = container.getNode(VectorsBuilder.mapNodes.inverse().get((int) currElement.column())).getId();
-                String target = container.getNode(VectorsBuilder.mapNodes.inverse().get((int) currElement.row())).getId();
+                String source = inverse.get((int) currElement.column());
+                String target = inverse.get((int) currElement.row());
 
                 //complex stuff just to add the weights of multiple edges between nodes (because they are similar on multiple attributes)
                 Pair pair;
@@ -89,19 +109,27 @@ public class GraphOperations {
                 PairWithWeight pww = new PairWithWeight();
                 pww.setPair(pair);
                 pww.setWeight(csCoeff);
-                if (edges.contains(pww)) {
-                    PairWithWeight get = edges.remove(edges.indexOf(pww));
+                String pwwId = pww.getPair().getId();
+                if (edges.keySet().contains(pwwId)) {
+                    PairWithWeight get = edges.remove(pwwId);
                     get.setWeight(get.getWeight() + csCoeff);
-                    edges.add(get);
+                    edges.put(pwwId,get);
                 } else {
-                    edges.add(pww);
+                    edges.put(pwwId,pww);
                 }
 
             }
+            clock.closeAndPrintClock();
         }
 
+        Logger.getLogger("").log(Level.INFO, "edges computed for all matrices");
+
+        clock = new Clock("Adding edges to Gephi");
+
         //now we can add all these edges
-        for (PairWithWeight pww : edges) {
+        for (String pwwId : edges.keySet()) {
+            
+            PairWithWeight pww = edges.get(pwwId);
 
             edge = container.factory().newEdgeDraft(String.valueOf(idEdge));
             idEdge = idEdge + 1;
@@ -111,6 +139,8 @@ public class GraphOperations {
             edge.setDirection(EdgeDirection.UNDIRECTED);
             container.addEdge(edge);
         }
+
+        clock.closeAndPrintClock();
 
     }
 

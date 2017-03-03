@@ -50,10 +50,7 @@ public class PairWithWeight {
             return false;
         }
         final PairWithWeight other = (PairWithWeight) obj;
-        if (!Objects.equals(this.pair, other.pair)) {
-            return false;
-        }
-        return true;
+        return Objects.equals(this.pair, other.pair);
     }
     
     

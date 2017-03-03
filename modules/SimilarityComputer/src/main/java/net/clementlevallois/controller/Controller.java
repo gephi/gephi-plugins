@@ -27,7 +27,6 @@ import no.uib.cipr.matrix.sparse.SparseVector;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.gephi.io.importer.api.ContainerLoader;
 import org.gephi.io.importer.api.EdgeDirectionDefault;
-import org.gephi.io.importer.api.Report;
 
 /*
  Copyright 2008-2013 Clement Levallois
@@ -70,39 +69,20 @@ import org.gephi.io.importer.api.Report;
  */
 public class Controller {
 
-    //
-    // ##### parameters
-    //
-    //
-    private final ContainerLoader container;
-
-    //
-    // ##### objects and variables
-    //
-    //
-    public static FlexCompColMatrix similarityMatrix;
-    static public int countFinishedThreads = 0;
-    static BufferedWriter bw;
-    static String currLine;
-    public static int countCalculus = 0;
-
+    ContainerLoader container;
     private Map<String, Map<String, Multiset<String>>> datastruct = new HashMap();
 
-    public Controller(ContainerLoader container) {
-        this.container = container;
+    public Controller() {
     }
 
-    public Report run() throws FileNotFoundException, InvalidFormatException, ExecutionException, IOException, InterruptedException {
-        Report report;
-        
+    public void run() throws FileNotFoundException, InvalidFormatException, ExecutionException, IOException, InterruptedException {
+
         if (MyFileImporter.getFileName().endsWith("xls") | MyFileImporter.getFileName().endsWith("xlsx")) {
             ExcelParser excelParser = new ExcelParser(MyFileImporter.getFilePathAndName(), MyFileImporter.sheetName);
             datastruct = excelParser.parse();
-            report = excelParser.getReport();
         } else {
-            CsvParser csvParser = new CsvParser(MyFileImporter.getFilePathAndName(), MyFileImporter.getTextDelimiter(), MyFileImporter.getFieldDelimiter());
+            CsvParser csvParser = new CsvParser(MyFileImporter.getFilePathAndName(), MyFileImporter.getTextDelimiter(), MyFileImporter.getFieldDelimiter() );
             datastruct = csvParser.parse();
-            report = csvParser.getReport();
         }
 
         VectorsBuilder vectorsBuilder = new VectorsBuilder();
@@ -113,7 +93,7 @@ public class Controller {
         Set<Callable<FlexCompColMatrix>> callables = new HashSet();
 
         for (String attribute : attributesToVectorsArrays.keySet()) {
-            callables.add(new CosineCalculation(attributesToVectorsArrays.get(attribute)));
+            callables.add(new CosineCalculation(attribute, attributesToVectorsArrays.get(attribute)));
         }
 
         List<Future<FlexCompColMatrix>> futures = executorService.invokeAll(callables);
@@ -127,13 +107,14 @@ public class Controller {
 
         Logger.getLogger("").log(Level.INFO, "Cosine calculated!");
 
+        container = MyFileImporter.container;
         container.setEdgeDefault(EdgeDirectionDefault.UNDIRECTED);
-
+        
         GraphOperations graphOperations = new GraphOperations();
         graphOperations.createGraph(container, datastruct, similarityMatrices);
-
+        
         Logger.getLogger("").log(Level.INFO, "Graph created!");
         
-        return report;
+
     }
 }
