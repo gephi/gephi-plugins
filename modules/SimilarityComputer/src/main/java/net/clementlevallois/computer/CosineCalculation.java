@@ -1,8 +1,6 @@
 package net.clementlevallois.computer;
 
-import net.clementlevallois.controller.Controller;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.Callable;
 import net.clementlevallois.utils.Clock;
@@ -52,23 +50,20 @@ import no.uib.cipr.matrix.sparse.SparseVector;
 public class CosineCalculation implements Callable {
 
     private final SparseVector[] listVectors;
+    private final String attribute;
 
-    public CosineCalculation(SparseVector[] listVectors) {
+    public CosineCalculation(String attribute, SparseVector[] listVectors) {
         this.listVectors = listVectors;
+        this.attribute = attribute;
     }
 
     @Override
     public FlexCompColMatrix call() throws Exception {
-
-        //to clarify: sources and targets refer to the 2 elements of a pair of nodes, that's all
-        //without a reference to which node was actually a source in the initial edge list, and which was a target
-        SparseVector svSource;
-        SparseVector svTarget;
+        SparseVector oneVector;
+        SparseVector anotherVector;
 
         //the number of nodes which will appear in the final similarity network
-        //corresponds to the number of vectors contained in the list created in AdjacencyMtrixBuilder
         int numNodes = listVectors.length;
-//      numTargets = VectorsBuilder.setTargetsShort.size();
 
         //this is where the adjacency matrix for the final network is built
         FlexCompColMatrix similarityMatrix = new FlexCompColMatrix(numNodes, numNodes);
@@ -76,12 +71,12 @@ public class CosineCalculation implements Callable {
         //1. iteration through all nodes of the similarityMatrix
         ArrayList<Double> norms = new ArrayList();
 
-        Clock matrixClock = new Clock("clocking the cosine calculus 2");
+        Clock matrixClock = new Clock("clocking the cosine calculus for " + attribute);
 
         for (int i = 0; i < numNodes; i++) {
-            svSource = listVectors[i];
-            norms.add(svSource.norm(Vector.Norm.Two));
-//            Logger.getLogger("").log(Level.INFO,"index source: " + i);
+
+            oneVector = listVectors[i];
+            norms.add(oneVector.norm(Vector.Norm.Two));
 
             for (int j = 0; j < numNodes; j++) {
                 if (listVectors[j] == null) {
@@ -89,25 +84,24 @@ public class CosineCalculation implements Callable {
                 }
 
                 if (j < i) {
-//                    Logger.getLogger("").log(Level.INFO,"index target: " + j);
-
-                    Controller.countCalculus++;
-
-                    svTarget = listVectors[j];
+                    anotherVector = listVectors[j];
 
                     synchronized (similarityMatrix) {
-                        List<Integer> listSourceIndex = new ArrayList<>();
-                        for (int index : svSource.getIndex()) {
-                            listSourceIndex.add(index);
+                        int[] sourceIndexes = oneVector.getIndex();
+                        List<Integer> listSourceIndex = new ArrayList();
+                        for (int s = 0; s < sourceIndexes.length; s++) {
+                            listSourceIndex.add(sourceIndexes[s]);
                         }
-                        List<Integer> listTargetIndex = new ArrayList<>();
-                        for (int index : svTarget.getIndex()) {
-                            listTargetIndex.add(index);
+                        int[] targetIndexes = anotherVector.getIndex();
+
+                        List<Integer> listTargetIndex = new ArrayList();
+                        for (int s = 0; s < targetIndexes.length; s++) {
+                            listTargetIndex.add(targetIndexes[s]);
                         }
 
                         listSourceIndex.retainAll(listTargetIndex);
                         if (!listSourceIndex.isEmpty()) {
-                            double result = svSource.dot(svTarget) / (norms.get(i) * norms.get(j));
+                            double result = oneVector.dot(anotherVector) / (norms.get(i) * norms.get(j));
                             similarityMatrix.set(i, j, result);
                         }
                     }

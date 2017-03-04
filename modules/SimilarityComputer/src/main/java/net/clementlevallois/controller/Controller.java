@@ -113,7 +113,7 @@ public class Controller {
         Set<Callable<FlexCompColMatrix>> callables = new HashSet();
 
         for (String attribute : attributesToVectorsArrays.keySet()) {
-            callables.add(new CosineCalculation(attributesToVectorsArrays.get(attribute)));
+            callables.add(new CosineCalculation(attribute, attributesToVectorsArrays.get(attribute)));
         }
 
         List<Future<FlexCompColMatrix>> futures = executorService.invokeAll(callables);

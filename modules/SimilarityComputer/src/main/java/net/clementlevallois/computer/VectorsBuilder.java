@@ -52,15 +52,8 @@ import no.uib.cipr.matrix.sparse.SparseVector;
  */
 public class VectorsBuilder {
 
-    private Set<String> setNodes;
-    private Map<String, Map<String, Integer>> attributesToValues = new TreeMap();
+    private final Map<String, Map<String, Integer>> attributesToValues = new TreeMap();
     public static BiMap<String, Integer> mapNodesBuilder = HashBiMap.create();
-
-    public Map<String, SparseVector[]> attributeTolistVectors;
-    public SparseVector[] listVectors;
-    private SparseVector vectorMJT;
-
-    public static ImmutableBiMap<String, Integer> mapNodes;
 
     public Map<String, SparseVector[]> sparseVectorArrayBuilder(Map<String, Map<String, Multiset<String>>> datastruct) throws IOException {
 
@@ -69,7 +62,7 @@ public class VectorsBuilder {
         //#### 1. reading the data structure and preparing sets and maps from it
         //
         //***
-        setNodes = new TreeSet();
+        Set<String> setNodes = new TreeSet();
         int n = 0;
 
         for (String key : datastruct.keySet()) {
@@ -84,8 +77,8 @@ public class VectorsBuilder {
             for (String attribute : attributes.keySet()) {
                 Map<String, Integer> valuesToIndex = attributesToValues.get(attribute);
                 if (valuesToIndex == null) {
-                    valuesToIndex = new TreeMap<String, Integer>();
-                };
+                    valuesToIndex = new TreeMap<>();
+                }
                 Set<String> values = attributes.get(attribute).elementSet();
                 for (String value : values) {
                     if (!valuesToIndex.keySet().contains(value)) {
@@ -97,10 +90,10 @@ public class VectorsBuilder {
 
         }
 
-        mapNodes = ImmutableBiMap.copyOf(mapNodesBuilder);
+        ImmutableBiMap<String, Integer> mapNodes = ImmutableBiMap.copyOf(mapNodesBuilder);
 
-        Logger.getLogger("").log(Level.INFO, "Number of nodes treated: " + datastruct.keySet().size());
-        Logger.getLogger("").log(Level.INFO, "Size of the list of vectors: " + setNodes.size());
+        Logger.getLogger("").log(Level.INFO, "Number of nodes treated: {0}", datastruct.keySet().size());
+        Logger.getLogger("").log(Level.INFO, "Size of the list of vectors: {0}", setNodes.size());
 
         //***
         //
@@ -112,10 +105,10 @@ public class VectorsBuilder {
         // FIRST LOOP: through all attributes
         Iterator<String> attributesToValuesIt = attributesToValues.keySet().iterator();
 
-        attributeTolistVectors = new HashMap();
+        Map<String, SparseVector[]> attributeTolistVectors = new HashMap();
 
+        SparseVector[] listVectors = null;
         while (attributesToValuesIt.hasNext()) {
-
             String attribute = attributesToValuesIt.next();
 
             listVectors = new SparseVector[setNodes.size()];
@@ -127,7 +120,7 @@ public class VectorsBuilder {
 
                 String node = nodesIt.next();
 
-                vectorMJT = new SparseVector(attributesToValues.get(attribute).size());
+                SparseVector vectorMJT = new SparseVector(attributesToValues.get(attribute).size());
 
                 Map<String, Multiset<String>> attributes;
 
@@ -146,8 +139,8 @@ public class VectorsBuilder {
         }
 
         Logger.getLogger("").log(Level.INFO, "adjacency matrix created!");
-        Logger.getLogger("").log(Level.INFO, "Number of sources (vectors): " + listVectors.length);
-        Logger.getLogger("").log(Level.INFO, "Number of targets (size of a vector): " + listVectors[0].size());
+        Logger.getLogger("").log(Level.INFO, "Number of sources (vectors): {0}", listVectors.length);
+        Logger.getLogger("").log(Level.INFO, "Number of targets (size of a vector): {0}", listVectors[0].size());
 
         matrixCreation.closeAndPrintClock();
 
