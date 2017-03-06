@@ -1,7 +1,7 @@
 package net.clementlevallois.controller;
 
+import com.google.common.collect.ImmutableBiMap;
 import com.google.common.collect.Multiset;
-import java.io.BufferedWriter;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -76,44 +76,52 @@ public class Controller {
     //
     private final ContainerLoader container;
 
-    //
-    // ##### objects and variables
-    //
-    //
-    public static FlexCompColMatrix similarityMatrix;
-    static public int countFinishedThreads = 0;
-    static BufferedWriter bw;
-    static String currLine;
-    public static int countCalculus = 0;
+    private final String selectedFileAndPath;
+    private final String selectedFieldDelimiter;
+    private final String selectedTextDelimiter;
+    private final String selectedSheet;
+    private final boolean headersPresent;
+    private final boolean weightedAttributes;
 
+    public Controller(ContainerLoader container, String selectedFileAndPath, String selectedFieldDelimiter, String selectedTextDelimiter, String selectedSheet, boolean headersPresent, boolean weightedAttributes) {
+        this.container = container;
+        this.selectedFileAndPath = selectedFileAndPath;
+        this.selectedFieldDelimiter = selectedFieldDelimiter;
+        this.selectedTextDelimiter = selectedTextDelimiter;
+        this.selectedSheet = selectedSheet;
+        this.headersPresent = headersPresent;
+        this.weightedAttributes = weightedAttributes;
+    }
+
+    
+    
     private Map<String, Map<String, Multiset<String>>> datastruct = new HashMap();
 
-    public Controller(ContainerLoader container) {
-        this.container = container;
-    }
+   
 
     public Report run() throws FileNotFoundException, InvalidFormatException, ExecutionException, IOException, InterruptedException {
         Report report;
         
-        if (MyFileImporter.getFileName().endsWith("xls") | MyFileImporter.getFileName().endsWith("xlsx")) {
-            ExcelParser excelParser = new ExcelParser(MyFileImporter.getFilePathAndName(), MyFileImporter.sheetName);
+        if (selectedFileAndPath.endsWith("xls") | selectedFileAndPath.endsWith("xlsx")) {
+            ExcelParser excelParser = new ExcelParser(selectedFileAndPath, selectedSheet,headersPresent,weightedAttributes);
             datastruct = excelParser.parse();
             report = excelParser.getReport();
         } else {
-            CsvParser csvParser = new CsvParser(MyFileImporter.getFilePathAndName(), MyFileImporter.getTextDelimiter(), MyFileImporter.getFieldDelimiter());
+            CsvParser csvParser = new CsvParser(selectedFileAndPath, selectedTextDelimiter, selectedFieldDelimiter,headersPresent,weightedAttributes);
             datastruct = csvParser.parse();
             report = csvParser.getReport();
         }
 
-        VectorsBuilder vectorsBuilder = new VectorsBuilder();
-        Map<String, SparseVector[]> attributesToVectorsArrays = vectorsBuilder.sparseVectorArrayBuilder(datastruct);
+        VectorsBuilder vectorsBuilder = new VectorsBuilder(datastruct);
+        ImmutableBiMap<String, Integer> dataPreparation = vectorsBuilder.dataPreparation();
+        Map<String, SparseVector[]> attributesToVectorsArrays = vectorsBuilder.sparseVectorArrayBuilder();
 
         ExecutorService executorService = Executors.newScheduledThreadPool(5);
 
         Set<Callable<FlexCompColMatrix>> callables = new HashSet();
 
         for (String attribute : attributesToVectorsArrays.keySet()) {
-            callables.add(new CosineCalculation(attributesToVectorsArrays.get(attribute)));
+            callables.add(new CosineCalculation(attribute, attributesToVectorsArrays.get(attribute)));
         }
 
         List<Future<FlexCompColMatrix>> futures = executorService.invokeAll(callables);
@@ -130,10 +138,10 @@ public class Controller {
         container.setEdgeDefault(EdgeDirectionDefault.UNDIRECTED);
 
         GraphOperations graphOperations = new GraphOperations();
-        graphOperations.createGraph(container, datastruct, similarityMatrices);
+        graphOperations.createGraph(container, datastruct, dataPreparation, similarityMatrices);
 
         Logger.getLogger("").log(Level.INFO, "Graph created!");
-        
+
         return report;
     }
 }

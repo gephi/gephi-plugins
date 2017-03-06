@@ -2,7 +2,7 @@
  * Copyright 2017 Clément Levallois
  * http://wwww.clementlevallois.net
  */
-package net.clementlevallois.utils;
+package net.clementlevallois.model;
 
 import java.util.Objects;
 
@@ -50,10 +50,7 @@ public class PairWithWeight {
             return false;
         }
         final PairWithWeight other = (PairWithWeight) obj;
-        if (!Objects.equals(this.pair, other.pair)) {
-            return false;
-        }
-        return true;
+        return Objects.equals(this.pair, other.pair);
     }
     
     

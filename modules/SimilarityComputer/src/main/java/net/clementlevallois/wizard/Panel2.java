@@ -1,13 +1,6 @@
 package net.clementlevallois.wizard;
 
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
-import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
-import javax.swing.JLabel;
-import net.clementlevallois.controller.MyFileImporter;
-import org.openide.util.Exceptions;
 
 /*
  Copyright 2008-2013 Clement Levallois
@@ -50,6 +43,9 @@ import org.openide.util.Exceptions;
  */
 public class Panel2 extends javax.swing.JPanel {
 
+    private boolean weightedAttributes;
+    
+    
     /**
      * Creates new form Panel4
      */
@@ -78,7 +74,7 @@ public class Panel2 extends javax.swing.JPanel {
         });
 
         jLabelPicture.setIcon(new javax.swing.ImageIcon(getClass().getResource("/net/clementlevallois/images/weights-ok.png"))); // NOI18N
-        org.openide.awt.Mnemonics.setLocalizedText(jLabelPicture, null);
+        org.openide.awt.Mnemonics.setLocalizedText(jLabelPicture, "null");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -106,9 +102,9 @@ public class Panel2 extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jCheckBoxWeightActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBoxWeightActionPerformed
-        MyFileImporter.setWeightedAttributes(jCheckBoxWeight.isSelected());
+        weightedAttributes = jCheckBoxWeight.isSelected();
 
-        if (jCheckBoxWeight.isSelected()) {
+        if (weightedAttributes) {
             jLabelPicture.setIcon(new ImageIcon(getClass().getResource("/net/clementlevallois/images/weights-ok.png")));
         }
         else {
@@ -118,7 +114,7 @@ public class Panel2 extends javax.swing.JPanel {
     }//GEN-LAST:event_jCheckBoxWeightActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    public static javax.swing.JCheckBox jCheckBoxWeight;
+    public javax.swing.JCheckBox jCheckBoxWeight;
     private javax.swing.JLabel jLabelPicture;
     // End of variables declaration//GEN-END:variables
 
@@ -126,5 +122,11 @@ public class Panel2 extends javax.swing.JPanel {
     public String getName() {
         return "Options";   //this will be the title of the panel in the wizard
     }
+
+    public boolean isWeightedAttributes() {
+        return jCheckBoxWeight.isSelected();
+    }
+    
+    
 
 }

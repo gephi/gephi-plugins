@@ -1,6 +1,5 @@
 package net.clementlevallois.parsers;
 
-import net.clementlevallois.controller.MyFileImporter;
 import net.clementlevallois.utils.Utils;
 import com.csvreader.CsvReader;
 import com.google.common.collect.HashMultiset;
@@ -11,8 +10,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
-import javax.swing.JOptionPane;
-import org.gephi.io.importer.api.ContainerLoader;
+import java.util.UUID;
 import org.gephi.io.importer.api.Issue;
 import org.gephi.io.importer.api.Report;
 import org.openide.util.Exceptions;
@@ -62,10 +60,11 @@ public class CsvParser {
     private CsvReader csvReader;
     private final String textDelimiter;
     private final String fieldDelimiter;
+    private final boolean headersPresent;
+    private final boolean weightedAttributes;
     
     private BufferedReader br;
     
-
     private final Map<String, Map<String, Multiset<String>>> datastruct = new HashMap();
     private final Map<Integer, String> mapColNumToHeader = new HashMap<>();
 
@@ -73,10 +72,12 @@ public class CsvParser {
     
     private static final String[] ALPHABET = {"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"};
 
-    public CsvParser(String filePath, String textDelimiter, String fieldDelimiter) {
+    public CsvParser(String filePath, String textDelimiter, String fieldDelimiter, boolean headersPresent, boolean weightedAttributes) {
         this.filePath = filePath;
         this.fieldDelimiter = fieldDelimiter;
         this.textDelimiter = textDelimiter;
+        this.headersPresent = headersPresent;
+        this.weightedAttributes = weightedAttributes;
         this.init();
     }
 
@@ -94,7 +95,7 @@ public class CsvParser {
 //            csvReader.setEscapeMode(CsvReader.ESCAPE_MODE_BACKSLASH);
             csvReader.setDelimiter(fieldDelimiterAsACharacter);
             csvReader.setTextQualifier(textDelimiterAsACharacter);
-            csvReader.setUseTextQualifier(true);            
+            csvReader.setUseTextQualifier(true);
 
         } catch (FileNotFoundException ex) {
             Exceptions.printStackTrace(ex);
@@ -108,7 +109,7 @@ public class CsvParser {
 
         int columnCount = 0;
 
-        if (MyFileImporter.headersPresent) {
+        if (headersPresent) {
             csvReader.readHeaders();
             for (int j = 0; j < csvReader.getHeaderCount(); j++) {
                 mapColNumToHeader.put(j, csvReader.getHeader(j));
@@ -122,7 +123,7 @@ public class CsvParser {
                 break;
             }
 
-            if (!MyFileImporter.headersPresent && csvReader.getCurrentRecord() == 1) {
+            if (!headersPresent && csvReader.getCurrentRecord() == 1) {
                 for (int j = 0; j < csvReader.getValues().length; j++) {
                     mapColNumToHeader.put(j, ALPHABET[j]);
                 }
@@ -148,18 +149,23 @@ public class CsvParser {
 
             for (int j = 1; j < columnCount; j++) {
 
-                //value of the preceding cell. Useful for attributes which are weighted. See CASE 1 below.
+                //getting the header's name, which is the attributes name
+                attributeName = mapColNumToHeader.get(j);
+
+                //checking if the field is null or empty. If it is, it should be ignored for similarity computations. We do that by replacing the null value by a random string, to make sure this cell is unique -> dissimilar to any other.
                 if (csvReader.get(j) == null || csvReader.get(j).isEmpty()) {
-                    datastruct.put(nodeName, attributes);
-                    breakNow = true;
-                    break;
-                } else {
+                    Multiset<String> values = HashMultiset.create();
+                    values.add(UUID.randomUUID().toString(), 1);
+                    attributes.put(attributeName, values);
+                }
+ 
+                //if field not empty / blank / null
+                 
+                else {
                     String cellContent = csvReader.get(j);
-                    //getting the header's name, which is the attributes name
-                    attributeName = mapColNumToHeader.get(j);
 
                     // 1. CASE OF weighted values. One every two columns is an attribute, the other is a value for this attribute. Starting at column 1.
-                    if (MyFileImporter.isWeightedAttributes()) {
+                    if (weightedAttributes) {
                         if (previousColIsAttribute) {
                             attributeName = mapColNumToHeader.get(j - 1);
                             float weight = 0;

@@ -6,8 +6,6 @@ import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.event.ChangeListener;
-import net.clementlevallois.controller.MyFileImporter;
-import net.clementlevallois.controller.Controller;
 import org.openide.WizardDescriptor;
 import org.openide.util.HelpCtx;
 
@@ -50,15 +48,10 @@ import org.openide.util.HelpCtx;
  Contributor(s): Clement Levallois
 
  */
-public class Panel3Wizard implements WizardDescriptor.Panel<WizardDescriptor>, PropertyChangeListener {
+public class Panel3Wizard implements WizardDescriptor.Panel<WizardDescriptor> {
 
     private List<ChangeListener> listeners; //these allow you to tell Gephi when UI changes are made
     private Component component;
-
-    @Override
-    public void propertyChange(PropertyChangeEvent evt) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
 
     @Override
     public Component getComponent() {
@@ -95,7 +88,6 @@ public class Panel3Wizard implements WizardDescriptor.Panel<WizardDescriptor>, P
 
     @Override
     public void readSettings(WizardDescriptor data) {
-        MyFileImporter.setWeightedAttributes(Panel2.jCheckBoxWeight.isSelected());
 
     }
 

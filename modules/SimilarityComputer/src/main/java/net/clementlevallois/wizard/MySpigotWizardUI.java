@@ -1,7 +1,5 @@
 package net.clementlevallois.wizard;
 
-import com.google.common.collect.HashBiMap;
-import net.clementlevallois.computer.VectorsBuilder;
 import net.clementlevallois.controller.MyFileImporter;
 import org.gephi.io.importer.spi.Importer;
 import org.gephi.io.importer.spi.ImporterWizardUI;
@@ -60,7 +58,7 @@ public class MySpigotWizardUI implements ImporterWizardUI {
 
     @Override
     public String getCategory() {
-        return "Data importer / network builder";
+        return "Data importer";
     }
 
     @Override
@@ -71,6 +69,7 @@ public class MySpigotWizardUI implements ImporterWizardUI {
     @Override
     public Panel[] getPanels() {
         if (panels == null) {
+            System.out.println("panels are null");
             panels = new Panel[3];
             panels[0] = new Panel1Wizard();
             panels[1] = new Panel2Wizard();
@@ -87,9 +86,7 @@ public class MySpigotWizardUI implements ImporterWizardUI {
     @Override
     public void unsetup(WizardImporter importer, Panel panel) {
         //When the wizard has been closed
-        MyFileImporter.setWeightedAttributes(Panel2.jCheckBoxWeight.isSelected());
-        panels = null;
-        VectorsBuilder.mapNodesBuilder = HashBiMap.create();
+//        panels = null;
     }
 
     @Override
