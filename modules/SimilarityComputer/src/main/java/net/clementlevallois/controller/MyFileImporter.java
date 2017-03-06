@@ -39,90 +39,71 @@ package net.clementlevallois.controller;
  Contributor(s): Clement Levallois
 
  */
+import java.io.IOException;
+import java.util.concurrent.ExecutionException;
 import javax.swing.DefaultListModel;
+import net.clementlevallois.wizard.Panel1;
+import net.clementlevallois.wizard.Panel2;
+import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.gephi.io.importer.api.ContainerLoader;
 import org.gephi.io.importer.api.Report;
+import org.gephi.io.importer.spi.ImporterWizardUI;
 import org.gephi.io.importer.spi.WizardImporter;
 import org.gephi.utils.longtask.spi.LongTask;
 import org.gephi.utils.progress.ProgressTicket;
+import org.openide.WizardDescriptor;
 import org.openide.util.Exceptions;
+import org.openide.util.Lookup;
 
 public class MyFileImporter implements WizardImporter, LongTask {
 
-    public static ContainerLoader container;
-    private static Report report;
+    public ContainerLoader container;
+    private Report report;
     private boolean cancel = false;
-    private static String[] headers;
-    private static String filePathAndName;
-    private static String fileName;
-    private static boolean weightedAttributes;
-    
-    private static DefaultListModel listModelHeaders = new DefaultListModel();
-    private static String textDelimiter = "\"";
-    public static String sheetName;
-    private static String fieldDelimiter = ",";
-    public static Boolean headersPresent = true;
+    private String[] headers;
+
+    private DefaultListModel listModelHeaders = new DefaultListModel();
 
     @Override
     public boolean execute(ContainerLoader loader) {
+
+        //Get Importer
+        ImporterWizardUI importer = null;
+        for (ImporterWizardUI wizardBuilder : Lookup.getDefault().lookupAll(ImporterWizardUI.class)) {
+            importer = wizardBuilder;
+        }
+
+        WizardDescriptor.Panel[] panels = importer.getPanels();
+        Panel1 panel1 = (Panel1) panels[0].getComponent();
+        Panel2 panel2 = (Panel2) panels[1].getComponent();
+
         container = loader;
 
-        Controller controller = new Controller(container);
+        Controller controller = new Controller(container, panel1.getSelectedFileAndPath(), panel1.getSelectedFieldDelimiter(), panel1.getSelectedTextDelimiter(), panel1.getSelectedSheet(), panel1.isHeadersPresent(), panel2.isWeightedAttributes());
+
         try {
             report = controller.run();
-        } catch (Exception ex) {
+        } catch (InvalidFormatException | ExecutionException | IOException | InterruptedException ex) {
             Exceptions.printStackTrace(ex);
         }
 
         return !cancel;
     }
 
-    public static String[] getHeaders() {
+    public String[] getHeaders() {
         return headers;
     }
 
-    public static void setHeaders(String[] headers) {
-        MyFileImporter.headers = headers;
+    public void setHeaders(String[] headers) {
+        headers = headers;
     }
 
-    public static DefaultListModel getListModelHeaders() {
+    public DefaultListModel getListModelHeaders() {
         return listModelHeaders;
     }
 
-    public static void setListModelHeaders(DefaultListModel listModelHeaders) {
-        MyFileImporter.listModelHeaders = listModelHeaders;
-    }
-
-    public static String getTextDelimiter() {
-        return textDelimiter;
-    }
-
-    public static void setTextDelimiter(String textDelimiter) {
-        MyFileImporter.textDelimiter = textDelimiter;
-    }
-
-    public static String getFieldDelimiter() {
-        return fieldDelimiter;
-    }
-
-    public static void setFieldDelimiter(String fieldDelimiter) {
-        MyFileImporter.fieldDelimiter = fieldDelimiter;
-    }
-
-    public static String getFilePathAndName() {
-        return filePathAndName;
-    }
-
-    public static String getFileName() {
-        return fileName;
-    }
-
-    public static void setFilePathAndName(String filePath) {
-        MyFileImporter.filePathAndName = filePath;
-    }
-
-    public static void setFileName(String fileName) {
-        MyFileImporter.fileName = fileName;
+    public void setListModelHeaders(DefaultListModel listModelHeaders) {
+        this.listModelHeaders = listModelHeaders;
     }
 
     @Override
@@ -145,11 +126,4 @@ public class MyFileImporter implements WizardImporter, LongTask {
     public void setProgressTicket(ProgressTicket progressTicket) {
     }
 
-    public static boolean isWeightedAttributes() {
-        return weightedAttributes;
-    }
-
-    public static void setWeightedAttributes(boolean weightedAttributes) {
-        MyFileImporter.weightedAttributes = weightedAttributes;
-    }
 }

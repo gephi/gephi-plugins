@@ -1,4 +1,4 @@
-package net.clementlevallois.utils;
+package net.clementlevallois.model;
 
 /*
  Copyright 2008-2013 Clement Levallois

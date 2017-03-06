@@ -1,6 +1,5 @@
 package net.clementlevallois.parsers;
 
-import net.clementlevallois.controller.MyFileImporter;
 import com.google.common.collect.HashMultiset;
 import com.google.common.collect.Multiset;
 import java.io.FileInputStream;
@@ -65,6 +64,8 @@ public class ExcelParser {
 
     private String fileName;
     private String sheetName;
+    private boolean headersPresent;
+    private boolean weightedAttributes;
 
     private final Map<String, Map<String, Multiset<String>>> datastruct = new HashMap();
     private final Map<Integer, String> mapColNumToHeader = new HashMap();
@@ -73,9 +74,11 @@ public class ExcelParser {
 
     private static final String[] ALPHABET = {"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"};
     
-    public ExcelParser(String fileName, String sheetName) {
+    public ExcelParser(String fileName, String sheetName, boolean headersPresent, boolean weightedAttributes) {
         this.fileName = fileName;
         this.sheetName = sheetName;
+        this.headersPresent = headersPresent;
+        this.weightedAttributes = weightedAttributes;
     }
 
     public ExcelParser(String fileName) {
@@ -101,7 +104,7 @@ public class ExcelParser {
         }
 
         //mapping the column numbers to the headers titles
-        if (MyFileImporter.headersPresent) {
+        if (headersPresent) {
             row = sheet.getRow(0);
             for (int j = 0; j < row.getLastCellNum(); j++) {
                 Cell cell = row.getCell(j);
@@ -167,7 +170,7 @@ public class ExcelParser {
                     String cellContent = ExcelCellTypesSolver.anyCellToString(row.getCell(j));
 
                     // 1. CASE OF weighted values. One every two columns is an attribute, the other is a value for this attribute. Starting at column 1.
-                    if (MyFileImporter.isWeightedAttributes()) {
+                    if (weightedAttributes) {
                         if (previousColIsAttribute) {
                             attributeName = mapColNumToHeader.get(j - 1);
                             float weight = 0;

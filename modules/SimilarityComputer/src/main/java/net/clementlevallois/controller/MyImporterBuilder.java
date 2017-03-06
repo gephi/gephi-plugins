@@ -43,16 +43,13 @@ import org.openide.util.lookup.ServiceProvider;
  Contributor(s): Clement Levallois
 
 
-import org.gephi.io.importer.spi.WizardImporter;
-import org.gephi.io.importer.spi.WizardImporterBuilder;
-import org.openide.util.lookup.ServiceProvider;
-
 /**
- * File Importer builder implementation for the Matrix Market file format. The
+ * File Importer builder implementation for the similarity computer. The
  * builder is responsible for creating the importer's instances.
  * 
  * @author Mathieu Bastian
  */
+
 @ServiceProvider(service = WizardImporterBuilder.class)
 public class MyImporterBuilder implements WizardImporterBuilder {
 

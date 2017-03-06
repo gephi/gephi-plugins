@@ -47,7 +47,7 @@ import org.openide.util.HelpCtx;
  Contributor(s): Clement Levallois
 
  */
-public class Panel1Wizard implements WizardDescriptor.ValidatingPanel {
+public class Panel1Wizard implements WizardDescriptor.ValidatingPanel<WizardDescriptor> {
 
     private List<ChangeListener> listeners; //these allow you to tell Gephi when UI changes are made
     private Panel1 component;
@@ -72,13 +72,7 @@ public class Panel1Wizard implements WizardDescriptor.ValidatingPanel {
         return isValid;
     }
 
-    @Override
-    public void readSettings(Object data) {
-    }
 
-    @Override
-    public void storeSettings(Object data) {
-    }
 
     protected final void fireChangeEvent(Object source, boolean oldState, boolean newState) {
         if (oldState != newState) {
@@ -99,16 +93,29 @@ public class Panel1Wizard implements WizardDescriptor.ValidatingPanel {
 
     @Override
     public void validate() throws WizardValidationException {
-        if (Panel1.fileSelectedName == null) {
+        
+        System.out.println("variable non statique de Panel 1: "+component.getName());
+        
+        if (component.getSelectedFileName() == null) {
             throw new WizardValidationException(null, "Please select an Excel or csv  file", null);
         }
-        else if (Panel1.fileSelectedName.endsWith("xls")) {
+        else if (component.getSelectedFileName().endsWith("xls")) {
             throw new WizardValidationException(null, "Please convert your excel file ending with .xls to the new format: ending in .xlsx", null);
         }
-        else if (!Panel1.fileSelectedName.endsWith("xlsx") & Panel1.selectedFileDelimiter == null) {
+        else if (!component.getSelectedFileName().endsWith("xlsx") & component.getSelectedFieldDelimiter() == null) {
             Font font = new Font("Tahoma", Font.BOLD, 11);
             Panel1.jLabelFieldDelimiter.setFont(font);
             throw new WizardValidationException(null, "Please select a field delimiter", null);
         }
+    }
+
+    @Override
+    public void readSettings(WizardDescriptor wiz) {
+
+    }
+
+    @Override
+    public void storeSettings(WizardDescriptor wiz) {
+
     }
 }

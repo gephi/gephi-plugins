@@ -31,10 +31,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import net.clementlevallois.computer.VectorsBuilder;
 import net.clementlevallois.utils.Clock;
-import net.clementlevallois.utils.Pair;
-import net.clementlevallois.utils.PairWithWeight;
+import net.clementlevallois.model.Pair;
+import net.clementlevallois.model.PairWithWeight;
 import no.uib.cipr.matrix.MatrixEntry;
 import no.uib.cipr.matrix.sparse.FlexCompColMatrix;
 import org.gephi.io.importer.api.ContainerLoader;
@@ -48,7 +47,8 @@ import org.gephi.io.importer.api.NodeDraft;
  */
 public class GraphOperations {
 
-    public void createGraph(ContainerLoader container, Map<String, Map<String, Multiset<String>>> datastruct, List<FlexCompColMatrix> similarityMatrices) {
+    public void createGraph(ContainerLoader container, Map<String, Map<String, Multiset<String>>> datastruct, ImmutableBiMap<String, Integer> dataPreparation, List<FlexCompColMatrix> similarityMatrices) {
+        
         NodeDraft node;
 
         Clock clock = new Clock("adding nodes to Gephi");
@@ -75,13 +75,13 @@ public class GraphOperations {
 
         for (FlexCompColMatrix simMatrix : similarityMatrices) {
 
-            Logger.getLogger("").log(Level.INFO, "converting matrix " + i++);
+            Logger.getLogger("").log(Level.INFO, "converting matrix {0}", i++);
 
             itSM = simMatrix.iterator();
             MatrixEntry currElement;
             clock = new Clock("iterating on the cells");
 
-            ImmutableBiMap<Integer, String> inverse = VectorsBuilder.mapNodes.inverse();
+            ImmutableBiMap<Integer, String> inverse = dataPreparation.inverse();
 
             while (itSM.hasNext()) {
 

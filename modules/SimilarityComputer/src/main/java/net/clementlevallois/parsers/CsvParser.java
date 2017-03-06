@@ -1,6 +1,5 @@
 package net.clementlevallois.parsers;
 
-import net.clementlevallois.controller.MyFileImporter;
 import net.clementlevallois.utils.Utils;
 import com.csvreader.CsvReader;
 import com.google.common.collect.HashMultiset;
@@ -61,6 +60,8 @@ public class CsvParser {
     private CsvReader csvReader;
     private final String textDelimiter;
     private final String fieldDelimiter;
+    private final boolean headersPresent;
+    private final boolean weightedAttributes;
     
     private BufferedReader br;
     
@@ -71,10 +72,12 @@ public class CsvParser {
     
     private static final String[] ALPHABET = {"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"};
 
-    public CsvParser(String filePath, String textDelimiter, String fieldDelimiter) {
+    public CsvParser(String filePath, String textDelimiter, String fieldDelimiter, boolean headersPresent, boolean weightedAttributes) {
         this.filePath = filePath;
         this.fieldDelimiter = fieldDelimiter;
         this.textDelimiter = textDelimiter;
+        this.headersPresent = headersPresent;
+        this.weightedAttributes = weightedAttributes;
         this.init();
     }
 
@@ -106,7 +109,7 @@ public class CsvParser {
 
         int columnCount = 0;
 
-        if (MyFileImporter.headersPresent) {
+        if (headersPresent) {
             csvReader.readHeaders();
             for (int j = 0; j < csvReader.getHeaderCount(); j++) {
                 mapColNumToHeader.put(j, csvReader.getHeader(j));
@@ -120,7 +123,7 @@ public class CsvParser {
                 break;
             }
 
-            if (!MyFileImporter.headersPresent && csvReader.getCurrentRecord() == 1) {
+            if (!headersPresent && csvReader.getCurrentRecord() == 1) {
                 for (int j = 0; j < csvReader.getValues().length; j++) {
                     mapColNumToHeader.put(j, ALPHABET[j]);
                 }
@@ -162,7 +165,7 @@ public class CsvParser {
                     String cellContent = csvReader.get(j);
 
                     // 1. CASE OF weighted values. One every two columns is an attribute, the other is a value for this attribute. Starting at column 1.
-                    if (MyFileImporter.isWeightedAttributes()) {
+                    if (weightedAttributes) {
                         if (previousColIsAttribute) {
                             attributeName = mapColNumToHeader.get(j - 1);
                             float weight = 0;

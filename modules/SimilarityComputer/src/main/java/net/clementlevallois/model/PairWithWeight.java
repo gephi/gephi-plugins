@@ -2,7 +2,7 @@
  * Copyright 2017 Clément Levallois
  * http://wwww.clementlevallois.net
  */
-package net.clementlevallois.utils;
+package net.clementlevallois.model;
 
 import java.util.Objects;
 

@@ -53,16 +53,22 @@ import no.uib.cipr.matrix.sparse.SparseVector;
 public class VectorsBuilder {
 
     private final Map<String, Map<String, Integer>> attributesToValues = new TreeMap();
-    public static BiMap<String, Integer> mapNodesBuilder = HashBiMap.create();
+    private BiMap<String, Integer> mapNodesBuilder = HashBiMap.create();
+    private Map<String, Map<String, Multiset<String>>> datastruct;
+    private Set<String> setNodes = new TreeSet();
+    private ImmutableBiMap<String, Integer> immutableBiMap;
 
-    public Map<String, SparseVector[]> sparseVectorArrayBuilder(Map<String, Map<String, Multiset<String>>> datastruct) throws IOException {
+    public VectorsBuilder(Map<String, Map<String, Multiset<String>>> datastruct) {
+        this.datastruct = datastruct;
+    }
 
+    public ImmutableBiMap<String, Integer> dataPreparation() {
         //***
         //
         //#### 1. reading the data structure and preparing sets and maps from it
         //
         //***
-        Set<String> setNodes = new TreeSet();
+
         int n = 0;
 
         for (String key : datastruct.keySet()) {
@@ -77,7 +83,7 @@ public class VectorsBuilder {
             for (String attribute : attributes.keySet()) {
                 Map<String, Integer> valuesToIndex = attributesToValues.get(attribute);
                 if (valuesToIndex == null) {
-                    valuesToIndex = new TreeMap<>();
+                    valuesToIndex = new TreeMap();
                 }
                 Set<String> values = attributes.get(attribute).elementSet();
                 for (String value : values) {
@@ -90,10 +96,15 @@ public class VectorsBuilder {
 
         }
 
-        ImmutableBiMap<String, Integer> mapNodes = ImmutableBiMap.copyOf(mapNodesBuilder);
-
         Logger.getLogger("").log(Level.INFO, "Number of nodes treated: {0}", datastruct.keySet().size());
         Logger.getLogger("").log(Level.INFO, "Size of the list of vectors: {0}", setNodes.size());
+
+        immutableBiMap = ImmutableBiMap.copyOf(mapNodesBuilder);
+
+        return immutableBiMap;
+    }
+
+    public Map<String, SparseVector[]> sparseVectorArrayBuilder() throws IOException {
 
         //***
         //
@@ -107,7 +118,7 @@ public class VectorsBuilder {
 
         Map<String, SparseVector[]> attributeTolistVectors = new HashMap();
 
-        SparseVector[] listVectors = null;
+        SparseVector[] listVectors;
         while (attributesToValuesIt.hasNext()) {
             String attribute = attributesToValuesIt.next();
 
@@ -115,14 +126,14 @@ public class VectorsBuilder {
 
             Iterator<String> nodesIt = setNodes.iterator();
 
+            Map<String, Multiset<String>> attributes;
+
             // INNER LOOP: for a given attribute: loop through all nodes.
             while (nodesIt.hasNext()) {
 
                 String node = nodesIt.next();
 
                 SparseVector vectorMJT = new SparseVector(attributesToValues.get(attribute).size());
-
-                Map<String, Multiset<String>> attributes;
 
                 attributes = datastruct.get(node);
 
@@ -132,15 +143,13 @@ public class VectorsBuilder {
                     int vectorPos = attributesToValues.get(attribute).get(value);
                     vectorMJT.set(vectorPos, (double) values.count(value));
                 }
-                listVectors[mapNodes.get(node)] = vectorMJT;
+                listVectors[immutableBiMap.get(node)] = vectorMJT;
             }
             attributeTolistVectors.put(attribute, listVectors);
 
         }
 
         Logger.getLogger("").log(Level.INFO, "adjacency matrix created!");
-        Logger.getLogger("").log(Level.INFO, "Number of sources (vectors): {0}", listVectors.length);
-        Logger.getLogger("").log(Level.INFO, "Number of targets (size of a vector): {0}", listVectors[0].size());
 
         matrixCreation.closeAndPrintClock();
 
