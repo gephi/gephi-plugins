@@ -93,9 +93,7 @@ public class Panel1Wizard implements WizardDescriptor.ValidatingPanel<WizardDesc
 
     @Override
     public void validate() throws WizardValidationException {
-        
-        System.out.println("variable non statique de Panel 1: "+component.getName());
-        
+      
         if (component.getSelectedFileName() == null) {
             throw new WizardValidationException(null, "Please select an Excel or csv  file", null);
         }

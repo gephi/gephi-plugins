@@ -58,12 +58,12 @@ public class SimilarityComputerWizardUI implements ImporterWizardUI {
 
     @Override
     public String getCategory() {
-        return "Data importer";
+        return "Data importer (similarities)";
     }
 
     @Override
     public String getDescription() {
-        return "This plugin helps you create a network by computing similarities between entities.\n Feedback and feature requests are welcome!\n contact: @seinecle on Twitter.";
+        return "This plugin creates a network by computing similarities between entities.\n Feedback and feature requests are welcome!\n contact: @seinecle on Twitter.";
     }
 
     @Override
