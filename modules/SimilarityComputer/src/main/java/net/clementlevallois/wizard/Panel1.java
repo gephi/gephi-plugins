@@ -7,7 +7,7 @@ import javax.swing.JList;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import net.clementlevallois.parsers.ExcelParser;
-import net.clementlevallois.controller.MyFileImporter;
+import net.clementlevallois.controller.SimilarityComputerImporter;
 import java.awt.Font;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -319,7 +319,7 @@ public class Panel1 extends javax.swing.JPanel {
     public javax.swing.JTextField jTextFieldTextDelimiter;
     // End of variables declaration//GEN-END:variables
 
-    public void unsetup(MyFileImporter importer) {
+    public void unsetup(SimilarityComputerImporter importer) {
         //Configure the importer
         //Example
         //importer.setOption(optionCheckbox.isSelected());

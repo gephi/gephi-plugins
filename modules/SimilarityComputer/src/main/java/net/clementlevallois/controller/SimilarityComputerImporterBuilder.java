@@ -1,10 +1,7 @@
-package net.clementlevallois.wizard;
+package net.clementlevallois.controller;
 
-import net.clementlevallois.controller.MyFileImporter;
-import org.gephi.io.importer.spi.Importer;
-import org.gephi.io.importer.spi.ImporterWizardUI;
 import org.gephi.io.importer.spi.WizardImporter;
-import org.openide.WizardDescriptor.Panel;
+import org.gephi.io.importer.spi.WizardImporterBuilder;
 import org.openide.util.lookup.ServiceProvider;
 
 /*
@@ -45,52 +42,24 @@ import org.openide.util.lookup.ServiceProvider;
 
  Contributor(s): Clement Levallois
 
+
+/**
+ * File Importer builder implementation for the similarity computer. The
+ * builder is responsible for creating the importer's instances.
+ * 
+ * @author Mathieu Bastian
  */
-@ServiceProvider(service = ImporterWizardUI.class)
-public class MySpigotWizardUI implements ImporterWizardUI {
 
-    private Panel[] panels = null;
+@ServiceProvider(service = WizardImporterBuilder.class)
+public class SimilarityComputerImporterBuilder implements WizardImporterBuilder {
 
     @Override
-    public String getDisplayName() {
-        return "Similarity Computer";
+    public WizardImporter buildImporter() {
+        return new SimilarityComputerImporter();
     }
 
     @Override
-    public String getCategory() {
-        return "Data importer";
-    }
-
-    @Override
-    public String getDescription() {
-        return "This plugin helps you create a network by computing similarities between entities.\n Feedback and feature requests are welcome!\n contact: @seinecle on Twitter.";
-    }
-
-    @Override
-    public Panel[] getPanels() {
-        if (panels == null) {
-            System.out.println("panels are null");
-            panels = new Panel[3];
-            panels[0] = new Panel1Wizard();
-            panels[1] = new Panel2Wizard();
-            panels[2] = new Panel3Wizard();
-        }
-        return panels;
-    }
-
-    @Override
-    public void setup(Panel panel) {
-        //Before opening the wizard
-    }
-
-    @Override
-    public void unsetup(WizardImporter importer, Panel panel) {
-        //When the wizard has been closed
-//        panels = null;
-    }
-
-    @Override
-    public boolean isUIForImporter(Importer importer) {
-        return importer instanceof MyFileImporter;
+    public String getName() {
+        return "Convert data tables in Excel or csv format into networks, based on attribute similarities";
     }
 }

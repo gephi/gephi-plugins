@@ -44,6 +44,7 @@ import java.util.concurrent.ExecutionException;
 import javax.swing.DefaultListModel;
 import net.clementlevallois.wizard.Panel1;
 import net.clementlevallois.wizard.Panel2;
+import net.clementlevallois.wizard.SimilarityComputerWizardUI;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.gephi.io.importer.api.ContainerLoader;
 import org.gephi.io.importer.api.Report;
@@ -55,7 +56,7 @@ import org.openide.WizardDescriptor;
 import org.openide.util.Exceptions;
 import org.openide.util.Lookup;
 
-public class MyFileImporter implements WizardImporter, LongTask {
+public class SimilarityComputerImporter implements WizardImporter, LongTask {
 
     public ContainerLoader container;
     private Report report;
@@ -69,7 +70,7 @@ public class MyFileImporter implements WizardImporter, LongTask {
 
         //Get Importer
         ImporterWizardUI importer = null;
-        for (ImporterWizardUI wizardBuilder : Lookup.getDefault().lookupAll(ImporterWizardUI.class)) {
+        for (ImporterWizardUI wizardBuilder : Lookup.getDefault().lookupAll(SimilarityComputerWizardUI.class)) {
             importer = wizardBuilder;
         }
 
@@ -95,7 +96,7 @@ public class MyFileImporter implements WizardImporter, LongTask {
     }
 
     public void setHeaders(String[] headers) {
-        headers = headers;
+        this.headers = headers;
     }
 
     public DefaultListModel getListModelHeaders() {
