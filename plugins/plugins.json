@@ -2763,8 +2763,8 @@
       ],
       "versions": {
         "0.9.1": {
-          "url": "0.9.1/SimilarityComputer-1.1.2.nbm",
-          "last_update": "March 6, 2017"
+          "url": "0.9.1/SimilarityComputer-1.1.3.nbm",
+          "last_update": "March 8, 2017"
         }
       },
       "sourcecode": "https://github.com/seinecle/gephi-plugins/tree/similaritycomputer",
