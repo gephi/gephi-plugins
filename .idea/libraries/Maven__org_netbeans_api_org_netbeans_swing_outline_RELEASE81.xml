@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Maven: org.netbeans.api:org-netbeans-swing-outline:RELEASE81">
+    <CLASSES>
+      <root url="jar://$MAVEN_REPOSITORY$/org/netbeans/api/org-netbeans-swing-outline/RELEASE81/org-netbeans-swing-outline-RELEASE81.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$MAVEN_REPOSITORY$/org/netbeans/api/org-netbeans-swing-outline/RELEASE81/org-netbeans-swing-outline-RELEASE81-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$MAVEN_REPOSITORY$/org/netbeans/api/org-netbeans-swing-outline/RELEASE81/org-netbeans-swing-outline-RELEASE81-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

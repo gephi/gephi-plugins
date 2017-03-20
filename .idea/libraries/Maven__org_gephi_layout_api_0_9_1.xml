@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Maven: org.gephi:layout-api:0.9.1">
+    <CLASSES>
+      <root url="jar://$MAVEN_REPOSITORY$/org/gephi/layout-api/0.9.1/layout-api-0.9.1.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$MAVEN_REPOSITORY$/org/gephi/layout-api/0.9.1/layout-api-0.9.1-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$MAVEN_REPOSITORY$/org/gephi/layout-api/0.9.1/layout-api-0.9.1-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>
