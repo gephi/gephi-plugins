@@ -103,6 +103,11 @@
             <artifactId>agensgraph-jdbc</artifactId>
             <version>1.1.0</version>
         </dependency>
+        <dependency>
+            <groupId>org.netbeans.api</groupId>
+            <artifactId>org-netbeans-modules-settings</artifactId>
+            <type>jar</type>
+        </dependency>
     </dependencies>
 
     <build>

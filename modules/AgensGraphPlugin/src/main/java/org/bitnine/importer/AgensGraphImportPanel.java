@@ -5,9 +5,6 @@
  */
 package org.bitnine.importer;
 
-//import java.awt.event.ActionEvent;
-//import java.awt.event.ActionListener;
-//import java.io.File;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Collection;
@@ -18,7 +15,7 @@ import org.gephi.io.database.drivers.SQLDriver;
 import org.gephi.io.database.drivers.SQLUtils;
 import org.gephi.io.importer.api.Database;
 import org.gephi.io.importer.plugin.database.EdgeListDatabaseImpl;
-//import org.gephi.ui.importer.plugin.AgensGraphDatabaseManager;
+import org.netbeans.api.settings.ConvertAsProperties;
 import org.netbeans.validation.api.Problems;
 import org.netbeans.validation.api.Validator;
 import org.netbeans.validation.api.builtin.Validators;
@@ -29,7 +26,7 @@ import org.openide.NotifyDescriptor;
 import org.openide.awt.ActionID;
 import org.openide.awt.ActionReference;
 import org.openide.util.NbBundle;
-//import org.openide.windows.TopComponent;
+import org.openide.windows.TopComponent;
 
 
 /**
@@ -37,23 +34,33 @@ import org.openide.util.NbBundle;
  * @author dehowefeng
  */
 
-//@TopComponent.Description(preferredID = "AgensGraphImportPanel",
-//	persistenceType = TopComponent.PERSISTENCE_ALWAYS)
+@ConvertAsProperties(dtd = "//org.bitnine//AgensGraphImport//EN", autostore = false)
+@TopComponent.Description(preferredID = "AgensGraphImportPanel",
+	persistenceType = TopComponent.PERSISTENCE_ALWAYS)
+@ActionID(category = "Window", id = "org.bitnine.AgensGraphImportPanel")
+@ActionReference(path = "Menu/Window")
+@TopComponent.OpenActionRegistration(displayName = "#CTL_AgensGraphImportPanel",
+	preferredID = "AgensGraphImportPanel")
+@TopComponent.Registration(mode = "editor", openAtStartup = true, roles = {"overview"})
 
-public class AgensGraphImportPanel extends javax.swing.JPanel {
-
+public class AgensGraphImportPanel extends TopComponent /*javax.swing.JPanel*/ {
+    
     private AgensGraphDatabaseManager databaseManager;
     private static String NEW_CONFIGURATION_NAME
             = NbBundle.getMessage(AgensGraphImportPanel.class,
-                    "AgensGraphImportUI.template.name");
+                    "AgensGraphImportPanel.template.name");
     private boolean inited = false;
     
     /**
-     * Creates new form AgensGraphImportUI
+     * Creates new form AgensGraphImportPanel
      */
     public AgensGraphImportPanel() {
         databaseManager = new AgensGraphDatabaseManager();
         initComponents();
+        setName(
+		NbBundle.getMessage(
+				AgensGraphImportPanel.class,
+				"CTL_AgensGraphImportPanel"));
         
     }
     static ValidationGroup group;
@@ -82,7 +89,7 @@ public class AgensGraphImportPanel extends javax.swing.JPanel {
 
             @Override
             public void run() {
-                    hostLabel.setText(NbBundle.getMessage(AgensGraphImportPanel.class, "AgensGraphImportUI.hostLabel.text"));
+                    hostLabel.setText(NbBundle.getMessage(AgensGraphImportPanel.class, "AgensGraphImportPanel.hostLabel.text"));
                     portTextField.setEnabled(true);
                     portLabel.setEnabled(true);
                     dbLabel.setEnabled(true);
@@ -91,9 +98,10 @@ public class AgensGraphImportPanel extends javax.swing.JPanel {
                     userTextField.setEnabled(true);
                     pwdLabel.setEnabled(true);
                     pwdTextField.setEnabled(true);
-                    group.validateAll();
+                    //group.validateAll(); //commented out for now
             }
         });
+   
     }
 
     public Database getSelectedDatabase() {
@@ -240,8 +248,6 @@ public class AgensGraphImportPanel extends javax.swing.JPanel {
 
         userLabel.setText("Username:");
 
-        pwdTextField.setText("jPasswordField1");
-
         javax.swing.GroupLayout connectionPanelLayout = new javax.swing.GroupLayout(connectionPanel);
         connectionPanel.setLayout(connectionPanelLayout);
         connectionPanelLayout.setHorizontalGroup(
@@ -264,17 +270,21 @@ public class AgensGraphImportPanel extends javax.swing.JPanel {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(connectionPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(connectionPanelLayout.createSequentialGroup()
-                        .addComponent(configurationCombo, 0, 459, Short.MAX_VALUE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(removeConfigurationButton, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(configNameTextField)
-                    .addComponent(portTextField)
-                    .addComponent(dbTextField)
-                    .addComponent(graphPathTextField)
-                    .addComponent(userTextField)
-                    .addComponent(hostTextField)
-                    .addComponent(pwdTextField))
-                .addGap(24, 24, 24))
+                        .addGroup(connectionPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(connectionPanelLayout.createSequentialGroup()
+                                .addComponent(configurationCombo, 0, 459, Short.MAX_VALUE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(removeConfigurationButton, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(configNameTextField)
+                            .addComponent(portTextField)
+                            .addComponent(dbTextField)
+                            .addComponent(graphPathTextField)
+                            .addComponent(hostTextField)
+                            .addComponent(pwdTextField))
+                        .addGap(24, 24, 24))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, connectionPanelLayout.createSequentialGroup()
+                        .addComponent(userTextField)
+                        .addContainerGap())))
         );
         connectionPanelLayout.setVerticalGroup(
             connectionPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -378,7 +388,7 @@ public class AgensGraphImportPanel extends javax.swing.JPanel {
         Connection conn = null;
         try {
             conn = getSelectedSQLDriver().getConnection(SQLUtils.getUrl(getSelectedSQLDriver(), hostTextField.getText(), (portTextField.getText().isEmpty() ? 0 : Integer.parseInt(portTextField.getText())), dbTextField.getText()), userTextField.getText(), new String(pwdTextField.getPassword()));
-            String message = NbBundle.getMessage(AgensGraphImportPanel.class, "EdgeListPanel.alert.connection_successful");
+            String message = NbBundle.getMessage(AgensGraphImportPanel.class, "AgensGraphImportPanel.alert.connection_successful");
             NotifyDescriptor.Message e = new NotifyDescriptor.Message(message, NotifyDescriptor.INFORMATION_MESSAGE);
             DialogDisplayer.getDefault().notifyLater(e);
         } catch (SQLException ex) {
@@ -409,7 +419,7 @@ public class AgensGraphImportPanel extends javax.swing.JPanel {
             model.removeElement(item);
             databaseManager.persist();
             String message = NbBundle.getMessage(AgensGraphImportPanel.class,
-                    "EdgeListPanel.alert.configuration_removed", item.toString());
+                    "AgensGraphImportPanel.alert.configuration_removed", item.toString());
             NotifyDescriptor.Message e = new NotifyDescriptor.Message(
                     message, NotifyDescriptor.INFORMATION_MESSAGE);
             DialogDisplayer.getDefault().notifyLater(e);
@@ -417,7 +427,7 @@ public class AgensGraphImportPanel extends javax.swing.JPanel {
 
         } else {
             String message = NbBundle.getMessage(AgensGraphImportPanel.class,
-                    "EdgeListPanel.alert.configuration_unsaved");
+                    "AgensGraphImportPanel.alert.configuration_unsaved");
             NotifyDescriptor.Message e = new NotifyDescriptor.Message(
                     message, NotifyDescriptor.ERROR_MESSAGE);
             DialogDisplayer.getDefault().notifyLater(e);
@@ -533,17 +543,10 @@ public class AgensGraphImportPanel extends javax.swing.JPanel {
         public boolean validate(Problems problems, String compName, String model) {
             if (!panel.inited) {
                 return true;
-            }
-            if (isSqlite(panel)) {
-                return Validators.FILE_MUST_BE_FILE.validate(problems, compName, model);
             } else {
                 return Validators.REQUIRE_NON_EMPTY_STRING.validate(problems, compName, model);
             }
         }
-    }
-
-    private static boolean isSqlite(AgensGraphImportPanel panel) {
-        return panel.getSelectedSQLDriver().getPrefix().equals("sqlite");
     }
 
     private static class NotEmptyValidator implements Validator<String> {
@@ -557,9 +560,6 @@ public class AgensGraphImportPanel extends javax.swing.JPanel {
         @Override
         public boolean validate(Problems problems, String compName, String model) {
             if (!panel.inited) {
-                return true;
-            }
-            if (isSqlite(panel)) {
                 return true;
             } else {
                 return Validators.REQUIRE_NON_EMPTY_STRING.validate(problems, compName, model);
@@ -579,15 +579,24 @@ public class AgensGraphImportPanel extends javax.swing.JPanel {
         public boolean validate(Problems problems, String compName, String model) {
             if (!panel.inited) {
                 return true;
-            }
-            if (isSqlite(panel)) {
-                return true;
             } else {
                 return Validators.REQUIRE_NON_EMPTY_STRING.validate(problems, compName, model)
                         && Validators.REQUIRE_VALID_INTEGER.validate(problems, compName, model)
                         && Validators.numberRange(1, 65535).validate(problems, compName, model);
             }
         }
+    }
+    
+    void writeProperties(java.util.Properties p) {
+        // better to version settings since initial version as advocated at
+        // http://wiki.apidesign.org/wiki/PropertyFiles
+        p.setProperty("version", "1.0");
+        // TODO store your settings
+    }
+
+    void readProperties(java.util.Properties p) {
+        String version = p.getProperty("version");
+        // TODO read your settings according to their version
     }
 }
 

@@ -13,9 +13,6 @@ import org.gephi.io.importer.plugin.database.ImporterEdgeList;
 import org.gephi.io.importer.spi.DatabaseImporter;
 import org.gephi.io.importer.spi.Importer;
 import org.gephi.io.importer.spi.ImporterUI;
-import org.openide.awt.ActionID;
-import org.openide.awt.ActionReference;
-import org.openide.awt.ActionRegistration;
 import org.openide.util.Lookup;
 import org.openide.util.NbBundle;
 import org.openide.util.lookup.ServiceProvider;
@@ -24,14 +21,7 @@ import org.openide.util.lookup.ServiceProvider;
  *
  * @author dehowefeng
  */
-@ActionID(
-        category = "Window", 
-        id = "org.bitnine.AgensGraphImporterUI"
-)
 
-@ActionReference(
-        path = "Menu/Window"
-)
 
 @ServiceProvider(service=ImporterUI.class)
 public class AgensGraphImporterUI implements ImporterUI {

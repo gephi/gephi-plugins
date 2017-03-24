@@ -68,20 +68,27 @@
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Group type="102" alignment="0" attributes="0">
-                              <Component id="configurationCombo" pref="459" max="32767" attributes="0"/>
-                              <EmptySpace max="-2" attributes="0"/>
-                              <Component id="removeConfigurationButton" min="-2" pref="25" max="-2" attributes="0"/>
+                          <Group type="102" attributes="0">
+                              <Group type="103" groupAlignment="0" attributes="0">
+                                  <Group type="102" alignment="0" attributes="0">
+                                      <Component id="configurationCombo" pref="459" max="32767" attributes="0"/>
+                                      <EmptySpace max="-2" attributes="0"/>
+                                      <Component id="removeConfigurationButton" min="-2" pref="25" max="-2" attributes="0"/>
+                                  </Group>
+                                  <Component id="configNameTextField" max="32767" attributes="0"/>
+                                  <Component id="portTextField" alignment="0" max="32767" attributes="0"/>
+                                  <Component id="dbTextField" alignment="0" max="32767" attributes="0"/>
+                                  <Component id="graphPathTextField" alignment="0" max="32767" attributes="0"/>
+                                  <Component id="hostTextField" alignment="0" max="32767" attributes="0"/>
+                                  <Component id="pwdTextField" max="32767" attributes="0"/>
+                              </Group>
+                              <EmptySpace min="24" pref="24" max="-2" attributes="0"/>
                           </Group>
-                          <Component id="configNameTextField" max="32767" attributes="0"/>
-                          <Component id="portTextField" alignment="0" max="32767" attributes="0"/>
-                          <Component id="dbTextField" alignment="0" max="32767" attributes="0"/>
-                          <Component id="graphPathTextField" alignment="0" max="32767" attributes="0"/>
-                          <Component id="userTextField" max="32767" attributes="0"/>
-                          <Component id="hostTextField" alignment="0" max="32767" attributes="0"/>
-                          <Component id="pwdTextField" max="32767" attributes="0"/>
+                          <Group type="102" alignment="1" attributes="0">
+                              <Component id="userTextField" max="32767" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                          </Group>
                       </Group>
-                      <EmptySpace min="24" pref="24" max="-2" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -225,9 +232,6 @@
             <Component class="javax.swing.JTextField" name="userTextField">
             </Component>
             <Component class="javax.swing.JPasswordField" name="pwdTextField">
-              <Properties>
-                <Property name="text" type="java.lang.String" value="jPasswordField1"/>
-              </Properties>
             </Component>
           </SubComponents>
         </Container>
