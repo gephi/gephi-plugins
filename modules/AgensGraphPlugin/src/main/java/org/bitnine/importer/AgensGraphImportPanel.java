@@ -11,10 +11,19 @@ import java.util.Collection;
 import java.util.logging.Logger;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.SwingUtilities;
+import org.gephi.desktop.importer.api.ImportControllerUI;
+import org.gephi.graph.api.GraphController;
+import org.gephi.graph.api.GraphModel;
 import org.gephi.io.database.drivers.SQLDriver;
 import org.gephi.io.database.drivers.SQLUtils;
 import org.gephi.io.importer.api.Database;
+import org.gephi.io.importer.api.ImportController;
 import org.gephi.io.importer.plugin.database.EdgeListDatabaseImpl;
+import org.gephi.io.importer.spi.DatabaseImporterBuilder;
+import org.gephi.io.importer.spi.ImporterUI;
+import org.gephi.project.api.ProjectController;
+import org.gephi.utils.longtask.api.LongTaskErrorHandler;
+import org.gephi.utils.longtask.api.LongTaskExecutor;
 import org.netbeans.api.settings.ConvertAsProperties;
 import org.netbeans.validation.api.Problems;
 import org.netbeans.validation.api.Validator;
@@ -25,9 +34,11 @@ import org.openide.DialogDisplayer;
 import org.openide.NotifyDescriptor;
 import org.openide.awt.ActionID;
 import org.openide.awt.ActionReference;
+import org.openide.util.Exceptions;
+import org.openide.util.Lookup;
 import org.openide.util.NbBundle;
 import org.openide.windows.TopComponent;
-
+import org.openide.windows.Workspace;
 
 /**
  *
@@ -51,11 +62,16 @@ public class AgensGraphImportPanel extends TopComponent /*javax.swing.JPanel*/ {
                     "AgensGraphImportPanel.template.name");
     private boolean inited = false;
     
+    private LongTaskExecutor executor;
+    private LongTaskErrorHandler errorHandler;
+    private ImportController controller;
+    
     /**
      * Creates new form AgensGraphImportPanel
      */
     public AgensGraphImportPanel() {
         databaseManager = new AgensGraphDatabaseManager();
+        
         initComponents();
         setName(
 		NbBundle.getMessage(
@@ -150,9 +166,8 @@ public class AgensGraphImportPanel extends TopComponent /*javax.swing.JPanel*/ {
         portTextField.setText(db.getPort() == 0 ? "" : "" + db.getPort());
         userTextField.setText(db.getUsername());
         pwdTextField.setText(db.getPasswd());
-        //driverComboBox.getModel().setSelectedItem(db.getSQLDriver());
-        //nodeQueryTextField.setText(db.getNodeQuery());
-        //edgeQueryTextField.setText(db.getEdgeQuery());
+        nodeQueryTextField.setText(db.getNodeQuery());
+        edgeQueryTextField.setText(db.getEdgeQuery());
 
         initDriverType();
     }
@@ -166,8 +181,8 @@ public class AgensGraphImportPanel extends TopComponent /*javax.swing.JPanel*/ {
                 ? Integer.parseInt(portTextField.getText()) : 0);
         db.setUsername(this.userTextField.getText());
         db.setSQLDriver(this.getSelectedSQLDriver());
-        //db.setNodeQuery(this.nodeQueryTextField.getText());
-        //db.setEdgeQuery(this.edgeQueryTextField.getText());
+        db.setNodeQuery(this.nodeQueryTextField.getText());
+        db.setEdgeQuery(this.edgeQueryTextField.getText());
         db.setNodeAttributesQuery("");
         db.setEdgeAttributesQuery("");
     }
@@ -202,8 +217,12 @@ public class AgensGraphImportPanel extends TopComponent /*javax.swing.JPanel*/ {
         pwdTextField = new javax.swing.JPasswordField();
         queryPanel = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        queryTextArea = new javax.swing.JTextArea();
-        execButton = new javax.swing.JButton();
+        nodeQueryTextField = new javax.swing.JTextArea();
+        nodeQueryLabel = new javax.swing.JLabel();
+        edgeQueryLabel = new javax.swing.JLabel();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        edgeQueryTextField = new javax.swing.JTextArea();
+        executeButton = new javax.swing.JButton();
 
         configurationLabel.setText("Configuration:");
 
@@ -270,21 +289,17 @@ public class AgensGraphImportPanel extends TopComponent /*javax.swing.JPanel*/ {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(connectionPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(connectionPanelLayout.createSequentialGroup()
-                        .addGroup(connectionPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(connectionPanelLayout.createSequentialGroup()
-                                .addComponent(configurationCombo, 0, 459, Short.MAX_VALUE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(removeConfigurationButton, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(configNameTextField)
-                            .addComponent(portTextField)
-                            .addComponent(dbTextField)
-                            .addComponent(graphPathTextField)
-                            .addComponent(hostTextField)
-                            .addComponent(pwdTextField))
-                        .addGap(24, 24, 24))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, connectionPanelLayout.createSequentialGroup()
-                        .addComponent(userTextField)
-                        .addContainerGap())))
+                        .addComponent(configurationCombo, 0, 459, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(removeConfigurationButton, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(configNameTextField)
+                    .addComponent(portTextField)
+                    .addComponent(dbTextField)
+                    .addComponent(graphPathTextField)
+                    .addComponent(hostTextField)
+                    .addComponent(pwdTextField)
+                    .addComponent(userTextField))
+                .addGap(24, 24, 24))
         );
         connectionPanelLayout.setVerticalGroup(
             connectionPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -295,26 +310,26 @@ public class AgensGraphImportPanel extends TopComponent /*javax.swing.JPanel*/ {
                     .addComponent(removeConfigurationButton)
                     .addComponent(configurationCombo, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
-                .addGroup(connectionPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(connectionPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(configNameLabel)
-                    .addComponent(configNameTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(connectionPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(hostTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(hostLabel))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(connectionPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(portTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(portLabel))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(connectionPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(dbTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(dbLabel))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(connectionPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(userTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(userLabel))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 18, Short.MAX_VALUE)
+                    .addComponent(configNameTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(connectionPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(hostLabel)
+                    .addComponent(hostTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(connectionPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(portLabel)
+                    .addComponent(portTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(connectionPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(dbLabel)
+                    .addComponent(dbTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(connectionPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(userLabel)
+                    .addComponent(userTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 20, Short.MAX_VALUE)
                 .addGroup(connectionPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(connectionPanelLayout.createSequentialGroup()
                         .addGap(51, 51, 51)
@@ -330,37 +345,62 @@ public class AgensGraphImportPanel extends TopComponent /*javax.swing.JPanel*/ {
 
         JPanel1.addTab("Connection", connectionPanel);
 
-        queryTextArea.setColumns(20);
-        queryTextArea.setRows(5);
-        jScrollPane1.setViewportView(queryTextArea);
+        nodeQueryTextField.setColumns(20);
+        nodeQueryTextField.setRows(5);
+        jScrollPane1.setViewportView(nodeQueryTextField);
+
+        nodeQueryLabel.setText("Node Query:");
+
+        edgeQueryLabel.setText("Edge Query:");
+
+        edgeQueryTextField.setColumns(20);
+        edgeQueryTextField.setRows(5);
+        jScrollPane2.setViewportView(edgeQueryTextField);
 
         javax.swing.GroupLayout queryPanelLayout = new javax.swing.GroupLayout(queryPanel);
         queryPanel.setLayout(queryPanelLayout);
         queryPanelLayout.setHorizontalGroup(
             queryPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, queryPanelLayout.createSequentialGroup()
+            .addGroup(queryPanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 645, Short.MAX_VALUE)
+                .addGroup(queryPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 645, Short.MAX_VALUE)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 645, Short.MAX_VALUE)
+                    .addGroup(queryPanelLayout.createSequentialGroup()
+                        .addGroup(queryPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(nodeQueryLabel)
+                            .addComponent(edgeQueryLabel))
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         queryPanelLayout.setVerticalGroup(
             queryPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(queryPanelLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 424, Short.MAX_VALUE)
-                .addContainerGap())
+                .addComponent(nodeQueryLabel)
+                .addGap(3, 3, 3)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(edgeQueryLabel)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(83, Short.MAX_VALUE))
         );
 
         JPanel1.addTab("Query", queryPanel);
 
-        execButton.setText("Execute");
+        executeButton.setText("Execute");
+        executeButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                executeButtonActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(JPanel1)
-            .addComponent(execButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(executeButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -368,7 +408,7 @@ public class AgensGraphImportPanel extends TopComponent /*javax.swing.JPanel*/ {
                 .addContainerGap()
                 .addComponent(JPanel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(execButton)
+                .addComponent(executeButton)
                 .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
@@ -435,6 +475,27 @@ public class AgensGraphImportPanel extends TopComponent /*javax.swing.JPanel*/ {
         // TODO add your handling code here:
     }//GEN-LAST:event_removeConfigurationButtonActionPerformed
 
+    private void executeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_executeButtonActionPerformed
+        executeAgensImport();// TODO add your handling code here:
+    }//GEN-LAST:event_executeButtonActionPerformed
+
+    
+    
+    public void executeAgensImport(){
+
+        ImportController importController = Lookup.getDefault().lookup(ImportController.class);
+        
+        AgensGraphDatabaseImpl db = new AgensGraphDatabaseImpl();
+        
+        ImporterAgensGraph agensGraphImporter = new ImporterAgensGraph();
+        Container container = importController.importDatabase(db, agensGraphImporter);
+        
+        
+ 
+//Import database
+        
+        
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTabbedPane JPanel1;
@@ -445,18 +506,22 @@ public class AgensGraphImportPanel extends TopComponent /*javax.swing.JPanel*/ {
     private javax.swing.JPanel connectionPanel;
     private javax.swing.JLabel dbLabel;
     private javax.swing.JTextField dbTextField;
-    private javax.swing.JButton execButton;
+    private javax.swing.JLabel edgeQueryLabel;
+    private javax.swing.JTextArea edgeQueryTextField;
+    private javax.swing.JButton executeButton;
     private javax.swing.JLabel graphPathLabel;
     private javax.swing.JTextField graphPathTextField;
     private javax.swing.JLabel hostLabel;
     private javax.swing.JTextField hostTextField;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JLabel nodeQueryLabel;
+    private javax.swing.JTextArea nodeQueryTextField;
     private javax.swing.JLabel portLabel;
     private javax.swing.JTextField portTextField;
     private javax.swing.JLabel pwdLabel;
     private javax.swing.JPasswordField pwdTextField;
     private javax.swing.JPanel queryPanel;
-    private javax.swing.JTextArea queryTextArea;
     private javax.swing.JButton removeConfigurationButton;
     private javax.swing.JButton testConnectionButton;
     private javax.swing.JLabel userLabel;

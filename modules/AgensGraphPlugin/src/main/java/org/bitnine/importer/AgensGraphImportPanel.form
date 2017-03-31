@@ -17,7 +17,7 @@
     <DimensionLayout dim="0">
       <Group type="103" groupAlignment="0" attributes="0">
           <Component id="JPanel1" max="32767" attributes="0"/>
-          <Component id="execButton" alignment="0" max="32767" attributes="0"/>
+          <Component id="executeButton" alignment="0" max="32767" attributes="0"/>
       </Group>
     </DimensionLayout>
     <DimensionLayout dim="1">
@@ -26,7 +26,7 @@
               <EmptySpace min="-2" max="-2" attributes="0"/>
               <Component id="JPanel1" max="32767" attributes="0"/>
               <EmptySpace type="unrelated" min="-2" max="-2" attributes="0"/>
-              <Component id="execButton" min="-2" max="-2" attributes="0"/>
+              <Component id="executeButton" min="-2" max="-2" attributes="0"/>
               <EmptySpace min="-2" max="-2" attributes="0"/>
           </Group>
       </Group>
@@ -68,27 +68,20 @@
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Group type="102" attributes="0">
-                              <Group type="103" groupAlignment="0" attributes="0">
-                                  <Group type="102" alignment="0" attributes="0">
-                                      <Component id="configurationCombo" pref="459" max="32767" attributes="0"/>
-                                      <EmptySpace max="-2" attributes="0"/>
-                                      <Component id="removeConfigurationButton" min="-2" pref="25" max="-2" attributes="0"/>
-                                  </Group>
-                                  <Component id="configNameTextField" max="32767" attributes="0"/>
-                                  <Component id="portTextField" alignment="0" max="32767" attributes="0"/>
-                                  <Component id="dbTextField" alignment="0" max="32767" attributes="0"/>
-                                  <Component id="graphPathTextField" alignment="0" max="32767" attributes="0"/>
-                                  <Component id="hostTextField" alignment="0" max="32767" attributes="0"/>
-                                  <Component id="pwdTextField" max="32767" attributes="0"/>
-                              </Group>
-                              <EmptySpace min="24" pref="24" max="-2" attributes="0"/>
-                          </Group>
-                          <Group type="102" alignment="1" attributes="0">
-                              <Component id="userTextField" max="32767" attributes="0"/>
+                          <Group type="102" alignment="0" attributes="0">
+                              <Component id="configurationCombo" pref="459" max="32767" attributes="0"/>
                               <EmptySpace max="-2" attributes="0"/>
+                              <Component id="removeConfigurationButton" min="-2" pref="25" max="-2" attributes="0"/>
                           </Group>
+                          <Component id="configNameTextField" max="32767" attributes="0"/>
+                          <Component id="portTextField" alignment="0" max="32767" attributes="0"/>
+                          <Component id="dbTextField" alignment="0" max="32767" attributes="0"/>
+                          <Component id="graphPathTextField" alignment="0" max="32767" attributes="0"/>
+                          <Component id="hostTextField" alignment="0" max="32767" attributes="0"/>
+                          <Component id="pwdTextField" max="32767" attributes="0"/>
+                          <Component id="userTextField" max="32767" attributes="0"/>
                       </Group>
+                      <EmptySpace min="24" pref="24" max="-2" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -102,31 +95,31 @@
                           <Component id="configurationCombo" alignment="3" min="-2" pref="25" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace type="separate" max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="3" attributes="0">
-                          <Component id="configNameLabel" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="configNameTextField" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Component id="configNameLabel" min="-2" max="-2" attributes="0"/>
+                          <Component id="configNameTextField" min="-2" pref="39" max="-2" attributes="0"/>
                       </Group>
-                      <EmptySpace max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="3" attributes="0">
-                          <Component id="hostTextField" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="hostLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Component id="hostLabel" min="-2" max="-2" attributes="0"/>
+                          <Component id="hostTextField" min="-2" pref="39" max="-2" attributes="0"/>
                       </Group>
-                      <EmptySpace max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="3" attributes="0">
-                          <Component id="portTextField" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="portLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Component id="portLabel" min="-2" max="-2" attributes="0"/>
+                          <Component id="portTextField" min="-2" pref="39" max="-2" attributes="0"/>
                       </Group>
-                      <EmptySpace max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="3" attributes="0">
-                          <Component id="dbTextField" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="dbLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Component id="dbLabel" min="-2" max="-2" attributes="0"/>
+                          <Component id="dbTextField" min="-2" pref="39" max="-2" attributes="0"/>
                       </Group>
-                      <EmptySpace max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="3" attributes="0">
-                          <Component id="userTextField" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="userLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Component id="userLabel" min="-2" max="-2" attributes="0"/>
+                          <Component id="userTextField" min="-2" pref="39" max="-2" attributes="0"/>
                       </Group>
-                      <EmptySpace pref="18" max="32767" attributes="0"/>
+                      <EmptySpace pref="20" max="32767" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Group type="102" attributes="0">
                               <EmptySpace min="-2" pref="51" max="-2" attributes="0"/>
@@ -247,9 +240,19 @@
           <Layout>
             <DimensionLayout dim="0">
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Group type="102" alignment="1" attributes="0">
+                  <Group type="102" attributes="0">
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="jScrollPane1" pref="645" max="32767" attributes="0"/>
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Component id="jScrollPane1" alignment="1" pref="645" max="32767" attributes="0"/>
+                          <Component id="jScrollPane2" alignment="1" pref="645" max="32767" attributes="0"/>
+                          <Group type="102" attributes="0">
+                              <Group type="103" groupAlignment="0" attributes="0">
+                                  <Component id="nodeQueryLabel" min="-2" max="-2" attributes="0"/>
+                                  <Component id="edgeQueryLabel" alignment="0" min="-2" max="-2" attributes="0"/>
+                              </Group>
+                              <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                          </Group>
+                      </Group>
                       <EmptySpace max="-2" attributes="0"/>
                   </Group>
               </Group>
@@ -257,9 +260,14 @@
             <DimensionLayout dim="1">
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" alignment="0" attributes="0">
+                      <Component id="nodeQueryLabel" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="3" max="-2" attributes="0"/>
+                      <Component id="jScrollPane1" min="-2" pref="170" max="-2" attributes="0"/>
+                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                      <Component id="edgeQueryLabel" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="jScrollPane1" pref="424" max="32767" attributes="0"/>
-                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="jScrollPane2" min="-2" pref="170" max="-2" attributes="0"/>
+                      <EmptySpace pref="83" max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -272,7 +280,32 @@
 
               <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
               <SubComponents>
-                <Component class="javax.swing.JTextArea" name="queryTextArea">
+                <Component class="javax.swing.JTextArea" name="nodeQueryTextField">
+                  <Properties>
+                    <Property name="columns" type="int" value="20"/>
+                    <Property name="rows" type="int" value="5"/>
+                  </Properties>
+                </Component>
+              </SubComponents>
+            </Container>
+            <Component class="javax.swing.JLabel" name="nodeQueryLabel">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Node Query:"/>
+              </Properties>
+            </Component>
+            <Component class="javax.swing.JLabel" name="edgeQueryLabel">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Edge Query:"/>
+              </Properties>
+            </Component>
+            <Container class="javax.swing.JScrollPane" name="jScrollPane2">
+              <AuxValues>
+                <AuxValue name="autoScrollPane" type="java.lang.Boolean" value="true"/>
+              </AuxValues>
+
+              <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
+              <SubComponents>
+                <Component class="javax.swing.JTextArea" name="edgeQueryTextField">
                   <Properties>
                     <Property name="columns" type="int" value="20"/>
                     <Property name="rows" type="int" value="5"/>
@@ -284,10 +317,13 @@
         </Container>
       </SubComponents>
     </Container>
-    <Component class="javax.swing.JButton" name="execButton">
+    <Component class="javax.swing.JButton" name="executeButton">
       <Properties>
         <Property name="text" type="java.lang.String" value="Execute"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="executeButtonActionPerformed"/>
+      </Events>
     </Component>
   </SubComponents>
 </Form>

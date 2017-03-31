@@ -65,7 +65,7 @@ public class AgensGraphImporterUI implements ImporterUI {
 
     @Override
     public String getDisplayName() {
-        return NbBundle.getMessage(getClass(), "EdgeListBuilder.displayName");
+        return NbBundle.getMessage(getClass(), "AgensGraphBuilder.displayName");
     }
 
     public String getIdentifier() {
