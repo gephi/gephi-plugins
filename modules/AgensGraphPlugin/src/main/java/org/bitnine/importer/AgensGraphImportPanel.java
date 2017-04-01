@@ -11,19 +11,19 @@ import java.util.Collection;
 import java.util.logging.Logger;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.SwingUtilities;
-import org.gephi.desktop.importer.api.ImportControllerUI;
+import org.gephi.desktop.project.api.ProjectControllerUI;
+import org.gephi.graph.api.DirectedGraph;
 import org.gephi.graph.api.GraphController;
 import org.gephi.graph.api.GraphModel;
 import org.gephi.io.database.drivers.SQLDriver;
 import org.gephi.io.database.drivers.SQLUtils;
+import org.gephi.io.importer.api.Container;
 import org.gephi.io.importer.api.Database;
 import org.gephi.io.importer.api.ImportController;
 import org.gephi.io.importer.plugin.database.EdgeListDatabaseImpl;
-import org.gephi.io.importer.spi.DatabaseImporterBuilder;
-import org.gephi.io.importer.spi.ImporterUI;
+import org.gephi.io.processor.plugin.DefaultProcessor;
 import org.gephi.project.api.ProjectController;
-import org.gephi.utils.longtask.api.LongTaskErrorHandler;
-import org.gephi.utils.longtask.api.LongTaskExecutor;
+import org.gephi.project.api.Workspace;
 import org.netbeans.api.settings.ConvertAsProperties;
 import org.netbeans.validation.api.Problems;
 import org.netbeans.validation.api.Validator;
@@ -34,11 +34,9 @@ import org.openide.DialogDisplayer;
 import org.openide.NotifyDescriptor;
 import org.openide.awt.ActionID;
 import org.openide.awt.ActionReference;
-import org.openide.util.Exceptions;
 import org.openide.util.Lookup;
 import org.openide.util.NbBundle;
 import org.openide.windows.TopComponent;
-import org.openide.windows.Workspace;
 
 /**
  *
@@ -61,9 +59,7 @@ public class AgensGraphImportPanel extends TopComponent /*javax.swing.JPanel*/ {
             = NbBundle.getMessage(AgensGraphImportPanel.class,
                     "AgensGraphImportPanel.template.name");
     private boolean inited = false;
-    
-    private LongTaskExecutor executor;
-    private LongTaskErrorHandler errorHandler;
+
     private ImportController controller;
     
     /**
@@ -482,18 +478,45 @@ public class AgensGraphImportPanel extends TopComponent /*javax.swing.JPanel*/ {
     
     
     public void executeAgensImport(){
+        Workspace workspace = null;
+        ProjectController pc = Lookup.getDefault().lookup(ProjectController.class);
+        ProjectControllerUI pcui = Lookup.getDefault().lookup(ProjectControllerUI.class);
+        if (pc.getCurrentProject() == null) {
+            pcui.newProject();
+            workspace = pc.getCurrentWorkspace();
+        }
 
         ImportController importController = Lookup.getDefault().lookup(ImportController.class);
+        GraphModel graphModel = Lookup.getDefault().lookup(GraphController.class).getGraphModel();
         
         AgensGraphDatabaseImpl db = new AgensGraphDatabaseImpl();
+        String DBName = dbTextField.getText();
+        String Host = hostTextField.getText();
+        String Username = userTextField.getText();
+        String Passwd = new String(pwdTextField.getPassword());
+        int Port = (!portTextField.getText().isEmpty()
+                ? Integer.parseInt(portTextField.getText()) : 0);
+        String NodeQuery = nodeQueryTextField.getText();
+        String EdgeQuery = edgeQueryTextField.getText();
+        
+        db.setDBName(DBName);
+        db.setHost(Host);
+        db.setUsername(Username);
+        db.setPasswd(Passwd);
+        db.setSQLDriver(new AgensGraphDriver());
+        db.setPort(Port);
+        db.setNodeQuery("SELECT id FROM imdb_graph.ag_vertex limit 10");
+        db.setEdgeQuery("SELECT id, start as source, \"end\" as target from imdb_graph.ag_edge limit 10");
         
         ImporterAgensGraph agensGraphImporter = new ImporterAgensGraph();
-        Container container = importController.importDatabase(db, agensGraphImporter);
+        Container container;
+        container = importController.importDatabase(db, agensGraphImporter);
         
+//Process Imported Database        
+        importController.process(container, new DefaultProcessor(), workspace);
         
- 
-//Import database
-        
+        DirectedGraph graph = graphModel.getDirectedGraph();
+
         
     }
 
