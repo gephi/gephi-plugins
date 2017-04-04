@@ -14,6 +14,8 @@ import java.sql.Statement;
 import java.sql.Time;
 import java.sql.Timestamp;
 import java.sql.Types;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.gephi.graph.api.TimeFormat;
 import org.gephi.io.database.drivers.SQLUtils;
 import org.gephi.io.importer.api.ColumnDraft;
@@ -45,6 +47,7 @@ public class ImporterAgensGraph implements DatabaseImporter {
 
     @Override
     public boolean execute(ContainerLoader container) {
+        Logger.getLogger(ImporterAgensGraph.class.getName()).log(Level.INFO, "execute() called");
         this.container = container;
         this.report = new Report();
         try {
@@ -69,6 +72,7 @@ public class ImporterAgensGraph implements DatabaseImporter {
 
     private void importData() throws Exception {
         //Connect database
+        Logger.getLogger(ImporterAgensGraph.class.getName()).log(Level.INFO, "importData() called");
         String url = SQLUtils.getUrl(database.getSQLDriver(), database.getHost(), database.getPort(), database.getDBName());
         try {
             report.log("Try to connect at " + url);
@@ -88,12 +92,34 @@ public class ImporterAgensGraph implements DatabaseImporter {
         }
 
         report.log(database.getPropertiesAssociations().getInfos());
+        
+        setGraphPath(connection);
         getNodes(connection);
         getEdges(connection);
         getNodesAttributes(connection);
         getEdgesAttributes(connection);
     }
 
+    private void setGraphPath(Connection connection) throws SQLException {
+        Logger.getLogger(ImporterAgensGraph.class.getName()).log(Level.INFO, "setGraphPath called");
+        
+        String graphPathQuery = "SET graph_path = " + database.getGraphPath() +";";
+        Statement s = connection.createStatement();
+        
+        Logger.getLogger(ImporterAgensGraph.class.getName()).log(Level.INFO, graphPathQuery);
+        
+        
+        try{
+            s.execute(graphPathQuery);
+            Logger.getLogger(ImporterAgensGraph.class.getName()).log(Level.INFO, "Graph Path Set");
+            
+        } catch (SQLException ex) {
+            report.logIssue(new Issue("Failed to set graph path with query", Issue.Level.SEVERE, ex));
+            return;
+        }
+        s.close();
+    }
+    
     private void getNodes(Connection connection) throws SQLException {
 
         //Factory

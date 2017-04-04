@@ -127,6 +127,11 @@
             <groupId>org.gephi</groupId>
             <artifactId>project-api</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.gephi</groupId>
+            <artifactId>desktop-import</artifactId>
+            <type>jar</type>
+        </dependency>
     </dependencies>
 
     <build>

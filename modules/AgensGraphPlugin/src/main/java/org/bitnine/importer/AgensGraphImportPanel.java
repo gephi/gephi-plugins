@@ -8,9 +8,12 @@ package org.bitnine.importer;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Collection;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.SwingUtilities;
+import org.gephi.desktop.importer.DesktopImportControllerUI;
+import org.gephi.desktop.importer.ReportPanel;
 import org.gephi.desktop.project.api.ProjectControllerUI;
 import org.gephi.graph.api.DirectedGraph;
 import org.gephi.graph.api.GraphController;
@@ -20,7 +23,6 @@ import org.gephi.io.database.drivers.SQLUtils;
 import org.gephi.io.importer.api.Container;
 import org.gephi.io.importer.api.Database;
 import org.gephi.io.importer.api.ImportController;
-import org.gephi.io.importer.plugin.database.EdgeListDatabaseImpl;
 import org.gephi.io.processor.plugin.DefaultProcessor;
 import org.gephi.project.api.ProjectController;
 import org.gephi.project.api.Workspace;
@@ -121,7 +123,7 @@ public class AgensGraphImportPanel extends TopComponent /*javax.swing.JPanel*/ {
                 = (ConfigurationComboModel) configurationCombo.getModel();
         ConfigurationComboItem item = (ConfigurationComboItem) model.getSelectedItem();
 
-        populateEdgeListDatabase(item.db);
+        populateAgensGraphDatabase(item.db);
 
         // add configuration if user changed the template configuration
         if (item.equals(model.templateConfiguration)) {
@@ -155,7 +157,7 @@ public class AgensGraphImportPanel extends TopComponent /*javax.swing.JPanel*/ {
         group.validateAll();
     }
     
-        private void populateForm(EdgeListDatabaseImpl db) {
+        private void populateForm(AgensGraphDatabaseImpl db) {
         configNameTextField.setText(db.getName());
         dbTextField.setText(db.getDBName());
         hostTextField.setText(db.getHost());
@@ -168,7 +170,7 @@ public class AgensGraphImportPanel extends TopComponent /*javax.swing.JPanel*/ {
         initDriverType();
     }
 
-    private void populateEdgeListDatabase(EdgeListDatabaseImpl db) {
+    private void populateAgensGraphDatabase(AgensGraphDatabaseImpl db) {
         db.setName(this.configNameTextField.getText());
         db.setDBName(this.dbTextField.getText());
         db.setHost(this.hostTextField.getText());
@@ -475,18 +477,20 @@ public class AgensGraphImportPanel extends TopComponent /*javax.swing.JPanel*/ {
         executeAgensImport();// TODO add your handling code here:
     }//GEN-LAST:event_executeButtonActionPerformed
 
-    
+    public ProjectControllerUI pcui = Lookup.getDefault().lookup(ProjectControllerUI.class);
+    public Workspace workspace = null;
     
     public void executeAgensImport(){
-        Workspace workspace = null;
+
         ProjectController pc = Lookup.getDefault().lookup(ProjectController.class);
-        ProjectControllerUI pcui = Lookup.getDefault().lookup(ProjectControllerUI.class);
+
         if (pc.getCurrentProject() == null) {
             pcui.newProject();
             workspace = pc.getCurrentWorkspace();
         }
 
         ImportController importController = Lookup.getDefault().lookup(ImportController.class);
+        //DesktopImportControllerUI importController = new DesktopImportControllerUI();
         GraphModel graphModel = Lookup.getDefault().lookup(GraphController.class).getGraphModel();
         
         AgensGraphDatabaseImpl db = new AgensGraphDatabaseImpl();
@@ -498,6 +502,7 @@ public class AgensGraphImportPanel extends TopComponent /*javax.swing.JPanel*/ {
                 ? Integer.parseInt(portTextField.getText()) : 0);
         String NodeQuery = nodeQueryTextField.getText();
         String EdgeQuery = edgeQueryTextField.getText();
+        String GraphPath = graphPathTextField.getText();
         
         db.setDBName(DBName);
         db.setHost(Host);
@@ -505,12 +510,27 @@ public class AgensGraphImportPanel extends TopComponent /*javax.swing.JPanel*/ {
         db.setPasswd(Passwd);
         db.setSQLDriver(new AgensGraphDriver());
         db.setPort(Port);
-        db.setNodeQuery("SELECT id FROM imdb_graph.ag_vertex limit 10");
-        db.setEdgeQuery("SELECT id, start as source, \"end\" as target from imdb_graph.ag_edge limit 10");
+        db.setNodeQuery(NodeQuery);
+        db.setEdgeQuery(EdgeQuery);
+        db.setGraphPath(GraphPath);
+        
+        Logger.getLogger(AgensGraphImportPanel.class.getName()).log(Level.INFO, "executeAgensImport() executed");
+                
+        db.setDBName("imdb");
+        db.setHost("localhost");
+        db.setUsername("dehowefeng");
+        db.setPasswd(Passwd);
+        db.setSQLDriver(new AgensGraphDriver());
+        db.setPort(5432);
+        db.setGraphPath("imdb_graph");
+        //db.setNodeQuery("SELECT id FROM imdb_graph.ag_vertex limit 10");
+        //db.setEdgeQuery("SELECT id, start as source, \"end\" as target from imdb_graph.ag_edge limit 10");
         
         ImporterAgensGraph agensGraphImporter = new ImporterAgensGraph();
         Container container;
         container = importController.importDatabase(db, agensGraphImporter);
+        //importController.importDatabase(db, agensGraphImporter);
+        
         
 //Process Imported Database        
         importController.process(container, new DefaultProcessor(), workspace);
@@ -563,16 +583,16 @@ public class AgensGraphImportPanel extends TopComponent /*javax.swing.JPanel*/ {
 
         public ConfigurationComboModel() {
             super();
-            Collection<Database> configs = databaseManager.getEdgeListDatabases();
+            Collection<Database> configs = databaseManager.getAgensGraphDatabases();
             for (Database db : configs) {
-                EdgeListDatabaseImpl dbe = (EdgeListDatabaseImpl) db;
+                AgensGraphDatabaseImpl dbe = (AgensGraphDatabaseImpl) db;
                 ConfigurationComboItem item = new ConfigurationComboItem(dbe);
                 this.insertElementAt(item, this.getSize());
             }
 
             // add template configuration option at end
-            EdgeListDatabaseImpl db = new EdgeListDatabaseImpl();
-            populateEdgeListDatabase(db);
+            AgensGraphDatabaseImpl db = new AgensGraphDatabaseImpl();
+            populateAgensGraphDatabase(db);
             templateConfiguration = new ConfigurationComboItem(db);
             templateConfiguration.setConfigurationName(NEW_CONFIGURATION_NAME);
             this.insertElementAt(templateConfiguration, this.getSize());
@@ -593,15 +613,15 @@ public class AgensGraphImportPanel extends TopComponent /*javax.swing.JPanel*/ {
 
     private class ConfigurationComboItem {
 
-        private final EdgeListDatabaseImpl db;
+        private final AgensGraphDatabaseImpl db;
         private String configurationName;
 
-        public ConfigurationComboItem(EdgeListDatabaseImpl db) {
+        public ConfigurationComboItem(AgensGraphDatabaseImpl db) {
             this.db = db;
             this.configurationName = db.getName();
         }
 
-        public EdgeListDatabaseImpl getDb() {
+        public AgensGraphDatabaseImpl getDb() {
             return db;
         }
 

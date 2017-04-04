@@ -19,6 +19,7 @@ public class AgensGraphDatabaseImpl extends AbstractDatabase{
     private String edgeQuery;
     private String nodeAttributesQuery;
     private String edgeAttributesQuery;
+    private String graphPath;
 
     public AgensGraphDatabaseImpl() {
 
@@ -45,6 +46,14 @@ public class AgensGraphDatabaseImpl extends AbstractDatabase{
         properties.addEdgePropertyAssociation(EdgeProperties.END, "end");
         properties.addEdgePropertyAssociation(EdgeProperties.START, "start_open");
         properties.addEdgePropertyAssociation(EdgeProperties.END_OPEN, "end_open");
+    }
+    
+    public String getGraphPath() {
+        return graphPath;
+    }
+
+    public void setGraphPath(String graphPath) {
+        this.graphPath = graphPath;
     }
 
     public String getEdgeAttributesQuery() {

@@ -17,7 +17,6 @@ import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 import org.gephi.io.importer.api.Database;
-import org.gephi.io.importer.plugin.database.EdgeListDatabaseImpl;
 import org.openide.filesystems.FileLock;
 import org.openide.filesystems.FileObject;
 import org.openide.filesystems.FileUtil;
@@ -29,30 +28,30 @@ import org.openide.filesystems.FileUtil;
 public class AgensGraphDatabaseManager {
 
     private FileObject databaseConfigurations;
-    private List<Database> edgeListDatabases = new ArrayList<>();
+    private List<Database> agensGraphDatabases = new ArrayList<>();
 
     public AgensGraphDatabaseManager() {
         load();
     }
 
-    public List<Database> getEdgeListDatabases() {
-        return edgeListDatabases;
+    public List<Database> getAgensGraphDatabases() {
+        return agensGraphDatabases;
     }
 
     public List<String> getNames() {
         List<String> names = new ArrayList<>();
-        for (Database db : edgeListDatabases) {
+        for (Database db : agensGraphDatabases) {
             names.add(db.getName());
         }
         return names;
     }
 
-    public void addDatabase(EdgeListDatabaseImpl db) {
-        edgeListDatabases.add(db);
+    public void addDatabase(AgensGraphDatabaseImpl db) {
+        agensGraphDatabases.add(db);
     }
 
-    public boolean removeDatabase(EdgeListDatabaseImpl db) {
-        return edgeListDatabases.remove(db);
+    public boolean removeDatabase(AgensGraphDatabaseImpl db) {
+        return agensGraphDatabases.remove(db);
     }
 
     public void persist() {
@@ -62,7 +61,7 @@ public class AgensGraphDatabaseManager {
     private void load() {
         if (databaseConfigurations == null) {
             databaseConfigurations
-                    = FileUtil.getConfigFile("EdgeListDatabase");
+                    = FileUtil.getConfigFile("AgensGraphDatabase");
         }
 
         if (databaseConfigurations != null) {
@@ -73,7 +72,7 @@ public class AgensGraphDatabaseManager {
                 ObjectInputStream ois = new ObjectInputStream(is);
                 List<Database> unserialized = (List<Database>) ois.readObject();
                 if (unserialized != null) {
-                    edgeListDatabases = unserialized;
+                    agensGraphDatabases = unserialized;
                 }
             } catch (java.io.InvalidClassException e) {
             } catch (EOFException eofe) {
@@ -104,11 +103,11 @@ public class AgensGraphDatabaseManager {
                 databaseConfigurations.delete();
             }
 
-            databaseConfigurations = FileUtil.getConfigRoot().createData("EdgeListDatabase");
+            databaseConfigurations = FileUtil.getConfigRoot().createData("AgensGraphDatabase");
             lock = databaseConfigurations.lock();
 
             ois = new ObjectOutputStream(databaseConfigurations.getOutputStream(lock));
-            ois.writeObject(edgeListDatabases);
+            ois.writeObject(agensGraphDatabases);
         } catch (IOException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();

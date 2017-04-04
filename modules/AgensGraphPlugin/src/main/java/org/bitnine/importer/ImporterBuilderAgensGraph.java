@@ -3,6 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
+
 package org.bitnine.importer;
 
 import org.gephi.io.importer.spi.DatabaseImporter;
@@ -13,10 +14,11 @@ import org.openide.util.lookup.ServiceProvider;
  *
  * @author dehowefeng
  */
+/*
 @ServiceProvider(service = DatabaseImporterBuilder.class)
 public class ImporterBuilderAgensGraph implements DatabaseImporterBuilder{
     
-        public static final String IDENTIFER = "agensgraph";
+    public static final String IDENTIFER = "agensgraph";
 
     @Override
     public DatabaseImporter buildImporter() {
@@ -29,3 +31,4 @@ public class ImporterBuilderAgensGraph implements DatabaseImporterBuilder{
     }
     
 }
+*/
