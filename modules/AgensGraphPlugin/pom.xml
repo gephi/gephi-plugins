@@ -129,8 +129,8 @@
         </dependency>
         <dependency>
             <groupId>org.gephi</groupId>
-            <artifactId>desktop-import</artifactId>
-            <type>jar</type>
+            <artifactId>utils-longtask</artifactId>
+            <version>0.9.1</version>
         </dependency>
     </dependencies>
 

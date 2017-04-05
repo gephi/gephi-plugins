@@ -12,8 +12,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.SwingUtilities;
-import org.gephi.desktop.importer.DesktopImportControllerUI;
-import org.gephi.desktop.importer.ReportPanel;
 import org.gephi.desktop.project.api.ProjectControllerUI;
 import org.gephi.graph.api.DirectedGraph;
 import org.gephi.graph.api.GraphController;
@@ -23,6 +21,7 @@ import org.gephi.io.database.drivers.SQLUtils;
 import org.gephi.io.importer.api.Container;
 import org.gephi.io.importer.api.Database;
 import org.gephi.io.importer.api.ImportController;
+import org.gephi.io.processor.plugin.AppendProcessor;
 import org.gephi.io.processor.plugin.DefaultProcessor;
 import org.gephi.project.api.ProjectController;
 import org.gephi.project.api.Workspace;
@@ -69,12 +68,12 @@ public class AgensGraphImportPanel extends TopComponent /*javax.swing.JPanel*/ {
      */
     public AgensGraphImportPanel() {
         databaseManager = new AgensGraphDatabaseManager();
-        
         initComponents();
         setName(
 		NbBundle.getMessage(
 				AgensGraphImportPanel.class,
 				"CTL_AgensGraphImportPanel"));
+        setup();
         
     }
     static ValidationGroup group;
@@ -139,11 +138,6 @@ public class AgensGraphImportPanel extends TopComponent /*javax.swing.JPanel*/ {
         return (SQLDriver) new AgensGraphDriver();
     }
 
-    /*public void setSQLDrivers(SQLDriver[] drivers) {
-        DefaultComboBoxModel driverModel = new DefaultComboBoxModel(drivers);
-        driverComboBox.setModel(driverModel);
-    }*/
-
     public void setup() {
         configurationCombo.setModel(new AgensGraphImportPanel.ConfigurationComboModel());
         ConfigurationComboModel model
@@ -154,7 +148,7 @@ public class AgensGraphImportPanel extends TopComponent /*javax.swing.JPanel*/ {
             this.removeConfigurationButton.setEnabled(true);
         }
         inited = true;
-        group.validateAll();
+        //group.validateAll();
     }
     
         private void populateForm(AgensGraphDatabaseImpl db) {
@@ -444,7 +438,14 @@ public class AgensGraphImportPanel extends TopComponent /*javax.swing.JPanel*/ {
     }//GEN-LAST:event_testConnectionButtonActionPerformed
 
     private void configurationComboActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_configurationComboActionPerformed
-        // TODO add your handling code here:
+            ConfigurationComboModel model
+                = (ConfigurationComboModel) configurationCombo.getModel();
+            ConfigurationComboItem item = (ConfigurationComboItem) model.getSelectedItem();
+        if (item.equals(model.templateConfiguration)) {
+            this.removeConfigurationButton.setEnabled(false);
+        } else {
+            this.removeConfigurationButton.setEnabled(true);
+        }
     }//GEN-LAST:event_configurationComboActionPerformed
 
     private void removeConfigurationButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_removeConfigurationButtonActionPerformed
@@ -470,27 +471,30 @@ public class AgensGraphImportPanel extends TopComponent /*javax.swing.JPanel*/ {
                     message, NotifyDescriptor.ERROR_MESSAGE);
             DialogDisplayer.getDefault().notifyLater(e);
         }
-        // TODO add your handling code here:
     }//GEN-LAST:event_removeConfigurationButtonActionPerformed
 
     private void executeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_executeButtonActionPerformed
-        executeAgensImport();// TODO add your handling code here:
+        executeAgensImport();
     }//GEN-LAST:event_executeButtonActionPerformed
 
-    public ProjectControllerUI pcui = Lookup.getDefault().lookup(ProjectControllerUI.class);
     public Workspace workspace = null;
+    public ProjectControllerUI pcui = Lookup.getDefault().lookup(ProjectControllerUI.class);
+    public ProjectController pc = Lookup.getDefault().lookup(ProjectController.class);
     
+    AgensGraphDatabaseImpl db_temp = new AgensGraphDatabaseImpl();
+
     public void executeAgensImport(){
-
-        ProjectController pc = Lookup.getDefault().lookup(ProjectController.class);
-
+        
+        
         if (pc.getCurrentProject() == null) {
             pcui.newProject();
             workspace = pc.getCurrentWorkspace();
         }
+        
+
 
         ImportController importController = Lookup.getDefault().lookup(ImportController.class);
-        //DesktopImportControllerUI importController = new DesktopImportControllerUI();
+        
         GraphModel graphModel = Lookup.getDefault().lookup(GraphController.class).getGraphModel();
         
         AgensGraphDatabaseImpl db = new AgensGraphDatabaseImpl();
@@ -516,27 +520,35 @@ public class AgensGraphImportPanel extends TopComponent /*javax.swing.JPanel*/ {
         
         Logger.getLogger(AgensGraphImportPanel.class.getName()).log(Level.INFO, "executeAgensImport() executed");
                 
-        db.setDBName("imdb");
-        db.setHost("localhost");
-        db.setUsername("dehowefeng");
-        db.setPasswd(Passwd);
-        db.setSQLDriver(new AgensGraphDriver());
-        db.setPort(5432);
-        db.setGraphPath("imdb_graph");
-        //db.setNodeQuery("SELECT id FROM imdb_graph.ag_vertex limit 10");
-        //db.setEdgeQuery("SELECT id, start as source, \"end\" as target from imdb_graph.ag_edge limit 10");
+        //db.setDBName("test");
+        //db.setHost("localhost");
+        //db.setUsername("dehowefeng");
+        //db.setPort(5432);
+        //db.setGraphPath("test_graph");
+        //db.setNodeQuery("MATCH (a) RETURN a.id AS id, a.name AS name, a.age AS age, a.breed AS breed, label(a) AS label;");
+        //db.setEdgeQuery("MATCH (a)-[r]->(b) RETURN a.id AS source, b.id AS target;");
         
         ImporterAgensGraph agensGraphImporter = new ImporterAgensGraph();
         Container container;
         container = importController.importDatabase(db, agensGraphImporter);
-        //importController.importDatabase(db, agensGraphImporter);
         
+        //Container[] containers = new Container[]{container};
         
-//Process Imported Database        
-        importController.process(container, new DefaultProcessor(), workspace);
+        if(!db.getGraphPath().equals(db_temp.getGraphPath())){
+            importController.process(container, new DefaultProcessor(), workspace);
+        }
+        else{
+            importController.process(container, new AppendProcessor(), workspace);
+        }
         
         DirectedGraph graph = graphModel.getDirectedGraph();
 
+        db_temp = db;
+        
+        Database db1 =  getSelectedDatabase();
+        
+        workspace = null;
+        
         
     }
 
@@ -600,7 +612,6 @@ public class AgensGraphImportPanel extends TopComponent /*javax.swing.JPanel*/ {
             ConfigurationComboItem selected = (ConfigurationComboItem) this.getElementAt(0);
             this.setSelectedItem(selected);
 
-            //driverComboBox.setSelectedItem(selected.db.getSQLDriver());
         }
 
         @Override
