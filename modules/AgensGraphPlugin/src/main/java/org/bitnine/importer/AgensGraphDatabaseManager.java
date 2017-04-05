@@ -31,7 +31,7 @@ public class AgensGraphDatabaseManager {
     private List<Database> agensGraphDatabases = new ArrayList<>();
 
     public AgensGraphDatabaseManager() {
-        load();
+       load();
     }
 
     public List<Database> getAgensGraphDatabases() {
@@ -93,7 +93,7 @@ public class AgensGraphDatabaseManager {
             }
         }
     }
-
+    
     private void doPersist() {
         FileLock lock = null;
         ObjectOutputStream ois = null;

@@ -8,12 +8,11 @@ package org.bitnine.importer;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Collection;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 import org.gephi.desktop.project.api.ProjectControllerUI;
-import org.gephi.graph.api.DirectedGraph;
 import org.gephi.graph.api.GraphController;
 import org.gephi.graph.api.GraphModel;
 import org.gephi.io.database.drivers.SQLDriver;
@@ -63,16 +62,20 @@ public class AgensGraphImportPanel extends TopComponent /*javax.swing.JPanel*/ {
 
     private ImportController controller;
     
+    private AgensGraphImportPanel agensGraphImportPanel;
     /**
      * Creates new form AgensGraphImportPanel
      */
     public AgensGraphImportPanel() {
+        this.agensGraphImportPanel = this;
         databaseManager = new AgensGraphDatabaseManager();
         initComponents();
         setName(
 		NbBundle.getMessage(
 				AgensGraphImportPanel.class,
 				"CTL_AgensGraphImportPanel"));
+        
+        ValidationPanel createValidationPanel = createValidationPanel(agensGraphImportPanel);
         setup();
         
     }
@@ -97,6 +100,7 @@ public class AgensGraphImportPanel extends TopComponent /*javax.swing.JPanel*/ {
         return validationPanel;
     }
         
+        
     private void initDriverType() {
         SwingUtilities.invokeLater(new Runnable() {
 
@@ -111,7 +115,7 @@ public class AgensGraphImportPanel extends TopComponent /*javax.swing.JPanel*/ {
                     userTextField.setEnabled(true);
                     pwdLabel.setEnabled(true);
                     pwdTextField.setEnabled(true);
-                    //group.validateAll(); //commented out for now
+                    group.validateAll();
             }
         });
    
@@ -148,7 +152,7 @@ public class AgensGraphImportPanel extends TopComponent /*javax.swing.JPanel*/ {
             this.removeConfigurationButton.setEnabled(true);
         }
         inited = true;
-        //group.validateAll();
+        group.validateAll();
     }
     
         private void populateForm(AgensGraphDatabaseImpl db) {
@@ -214,6 +218,8 @@ public class AgensGraphImportPanel extends TopComponent /*javax.swing.JPanel*/ {
         edgeQueryLabel = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
         edgeQueryTextField = new javax.swing.JTextArea();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        jTextArea1 = new javax.swing.JTextArea();
         executeButton = new javax.swing.JButton();
 
         configurationLabel.setText("Configuration:");
@@ -281,7 +287,7 @@ public class AgensGraphImportPanel extends TopComponent /*javax.swing.JPanel*/ {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(connectionPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(connectionPanelLayout.createSequentialGroup()
-                        .addComponent(configurationCombo, 0, 459, Short.MAX_VALUE)
+                        .addComponent(configurationCombo, 0, 486, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(removeConfigurationButton, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(configNameTextField)
@@ -321,7 +327,7 @@ public class AgensGraphImportPanel extends TopComponent /*javax.swing.JPanel*/ {
                 .addGroup(connectionPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(userLabel)
                     .addComponent(userTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 20, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 100, Short.MAX_VALUE)
                 .addGroup(connectionPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(connectionPanelLayout.createSequentialGroup()
                         .addGap(51, 51, 51)
@@ -338,7 +344,9 @@ public class AgensGraphImportPanel extends TopComponent /*javax.swing.JPanel*/ {
         JPanel1.addTab("Connection", connectionPanel);
 
         nodeQueryTextField.setColumns(20);
+        nodeQueryTextField.setFont(new java.awt.Font("DejaVu Sans Mono", 0, 15)); // NOI18N
         nodeQueryTextField.setRows(5);
+        nodeQueryTextField.setText("MATCH (a) \nRETURN id(a) AS id;");
         jScrollPane1.setViewportView(nodeQueryTextField);
 
         nodeQueryLabel.setText("Node Query:");
@@ -346,18 +354,33 @@ public class AgensGraphImportPanel extends TopComponent /*javax.swing.JPanel*/ {
         edgeQueryLabel.setText("Edge Query:");
 
         edgeQueryTextField.setColumns(20);
+        edgeQueryTextField.setFont(new java.awt.Font("DejaVu Sans Mono", 0, 15)); // NOI18N
         edgeQueryTextField.setRows(5);
+        edgeQueryTextField.setText("MATCH (a)-[r]->(b) \nRETURN a.id AS source, b.id AS target;");
         jScrollPane2.setViewportView(edgeQueryTextField);
+
+        jScrollPane3.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+        jScrollPane3.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER);
+
+        jTextArea1.setEditable(false);
+        jTextArea1.setBackground(new java.awt.Color(232, 232, 232));
+        jTextArea1.setColumns(20);
+        jTextArea1.setLineWrap(true);
+        jTextArea1.setRows(5);
+        jTextArea1.setText("Nodes are created with the node table, which is used to specify attribute names of nodes using aliases. \"id\" serves as the primary key, and more attribute columns are optional. \"source\" and \"target\" specify which nodes the edges start and finish from. ");
+        jTextArea1.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        jScrollPane3.setViewportView(jTextArea1);
 
         javax.swing.GroupLayout queryPanelLayout = new javax.swing.GroupLayout(queryPanel);
         queryPanel.setLayout(queryPanelLayout);
         queryPanelLayout.setHorizontalGroup(
             queryPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jScrollPane3)
             .addGroup(queryPanelLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(queryPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 645, Short.MAX_VALUE)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 645, Short.MAX_VALUE)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 672, Short.MAX_VALUE)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 672, Short.MAX_VALUE)
                     .addGroup(queryPanelLayout.createSequentialGroup()
                         .addGroup(queryPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(nodeQueryLabel)
@@ -368,14 +391,16 @@ public class AgensGraphImportPanel extends TopComponent /*javax.swing.JPanel*/ {
         queryPanelLayout.setVerticalGroup(
             queryPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(queryPanelLayout.createSequentialGroup()
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(nodeQueryLabel)
-                .addGap(3, 3, 3)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(edgeQueryLabel)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(83, Short.MAX_VALUE))
+                .addContainerGap(78, Short.MAX_VALUE))
         );
 
         JPanel1.addTab("Query", queryPanel);
@@ -406,7 +431,7 @@ public class AgensGraphImportPanel extends TopComponent /*javax.swing.JPanel*/ {
     }// </editor-fold>//GEN-END:initComponents
 
     private void configNameTextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_configNameTextFieldActionPerformed
-        // TODO add your handling code here:
+
     }//GEN-LAST:event_configNameTextFieldActionPerformed
 
     private void testConnectionButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_testConnectionButtonActionPerformed
@@ -485,14 +510,11 @@ public class AgensGraphImportPanel extends TopComponent /*javax.swing.JPanel*/ {
 
     public void executeAgensImport(){
         
-        
         if (pc.getCurrentProject() == null) {
             pcui.newProject();
             workspace = pc.getCurrentWorkspace();
         }
         
-
-
         ImportController importController = Lookup.getDefault().lookup(ImportController.class);
         
         GraphModel graphModel = Lookup.getDefault().lookup(GraphController.class).getGraphModel();
@@ -502,37 +524,52 @@ public class AgensGraphImportPanel extends TopComponent /*javax.swing.JPanel*/ {
         String Host = hostTextField.getText();
         String Username = userTextField.getText();
         String Passwd = new String(pwdTextField.getPassword());
-        int Port = (!portTextField.getText().isEmpty()
-                ? Integer.parseInt(portTextField.getText()) : 0);
+        int Port = 0;
         String NodeQuery = nodeQueryTextField.getText();
         String EdgeQuery = edgeQueryTextField.getText();
         String GraphPath = graphPathTextField.getText();
+        try{
+            Port = (!portTextField.getText().isEmpty()
+                ? Integer.parseInt(portTextField.getText()) : 0);
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(null,
+            "port must be a number between 1 and 65,535",
+            "Error",
+            JOptionPane.ERROR_MESSAGE);
+            return;
+        }
         
         db.setDBName(DBName);
         db.setHost(Host);
         db.setUsername(Username);
         db.setPasswd(Passwd);
-        db.setSQLDriver(new AgensGraphDriver());
         db.setPort(Port);
+        db.setSQLDriver(new AgensGraphDriver());
         db.setNodeQuery(NodeQuery);
         db.setEdgeQuery(EdgeQuery);
         db.setGraphPath(GraphPath);
         
-        Logger.getLogger(AgensGraphImportPanel.class.getName()).log(Level.INFO, "executeAgensImport() executed");
-                
-        //db.setDBName("test");
-        //db.setHost("localhost");
-        //db.setUsername("dehowefeng");
-        //db.setPort(5432);
-        //db.setGraphPath("test_graph");
-        //db.setNodeQuery("MATCH (a) RETURN a.id AS id, a.name AS name, a.age AS age, a.breed AS breed, label(a) AS label;");
-        //db.setEdgeQuery("MATCH (a)-[r]->(b) RETURN a.id AS source, b.id AS target;");
+        //Logger.getLogger(AgensGraphImportPanel.class.getName()).log(Level.INFO, "executeAgensImport() executed");
+        //connection error handling
+        Connection conn = null;
+        try {
+            conn = getSelectedSQLDriver().getConnection(SQLUtils.getUrl(getSelectedSQLDriver(), hostTextField.getText(), (portTextField.getText().isEmpty() ? 0 : Integer.parseInt(portTextField.getText())), dbTextField.getText()), userTextField.getText(), new String(pwdTextField.getPassword()));
+        } catch (SQLException ex) {
+            NotifyDescriptor.Exception e = new NotifyDescriptor.Exception(ex);
+            DialogDisplayer.getDefault().notifyLater(e);
+            return;
+        } finally {
+            if (conn != null) {
+                try {
+                    conn.close();
+                    Logger.getLogger("").info("Database connection terminated");
+                } catch (Exception e) {
+                    /* ignore close errors */ }
+            }
+        } 
         
         ImporterAgensGraph agensGraphImporter = new ImporterAgensGraph();
-        Container container;
-        container = importController.importDatabase(db, agensGraphImporter);
-        
-        //Container[] containers = new Container[]{container};
+        Container container = importController.importDatabase(db, agensGraphImporter);
         
         if(!db.getGraphPath().equals(db_temp.getGraphPath())){
             importController.process(container, new DefaultProcessor(), workspace);
@@ -541,14 +578,15 @@ public class AgensGraphImportPanel extends TopComponent /*javax.swing.JPanel*/ {
             importController.process(container, new AppendProcessor(), workspace);
         }
         
-        DirectedGraph graph = graphModel.getDirectedGraph();
+        //DirectedGraph graph = graphModel.getDirectedGraph();
 
         db_temp = db;
-        
-        Database db1 =  getSelectedDatabase();
-        
         workspace = null;
+        getSelectedDatabase();
         
+        agensGraphImportPanel.setup();
+        agensGraphImportPanel.revalidate();
+        agensGraphImportPanel.repaint();
         
     }
 
@@ -570,6 +608,8 @@ public class AgensGraphImportPanel extends TopComponent /*javax.swing.JPanel*/ {
     private javax.swing.JTextField hostTextField;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JTextArea jTextArea1;
     private javax.swing.JLabel nodeQueryLabel;
     private javax.swing.JTextArea nodeQueryTextField;
     private javax.swing.JLabel portLabel;
