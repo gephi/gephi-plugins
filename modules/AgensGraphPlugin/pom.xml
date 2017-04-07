@@ -145,9 +145,6 @@
                     <authorEmail></authorEmail>
                     <authorUrl></authorUrl>
                     <sourceCodeUrl>$sourcecode_url</sourceCodeUrl>
-                    <publicPackages>
-                        <!-- Insert public packages -->
-                    </publicPackages>
                 </configuration>
             </plugin>
         </plugins>
