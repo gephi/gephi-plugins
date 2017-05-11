@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package org.bitnine.importer;
 
 import java.sql.Connection;
@@ -54,15 +49,13 @@ import org.openide.windows.TopComponent;
 
 public class AgensGraphImportPanel extends TopComponent /*javax.swing.JPanel*/ {
     
-    private AgensGraphDatabaseManager databaseManager;
-    private static String NEW_CONFIGURATION_NAME
+    private final AgensGraphDatabaseManager databaseManager;
+    private static final String NEW_CONFIGURATION_NAME
             = NbBundle.getMessage(AgensGraphImportPanel.class,
                     "AgensGraphImportPanel.template.name");
     private boolean inited = false;
 
-    private ImportController controller;
-    
-    private AgensGraphImportPanel agensGraphImportPanel;
+    private final AgensGraphImportPanel agensGraphImportPanel;
     /**
      * Creates new form AgensGraphImportPanel
      */
@@ -517,19 +510,17 @@ public class AgensGraphImportPanel extends TopComponent /*javax.swing.JPanel*/ {
         
         ImportController importController = Lookup.getDefault().lookup(ImportController.class);
         
-        GraphModel graphModel = Lookup.getDefault().lookup(GraphController.class).getGraphModel();
-        
         AgensGraphDatabaseImpl db = new AgensGraphDatabaseImpl();
         String DBName = dbTextField.getText();
         String Host = hostTextField.getText();
         String Username = userTextField.getText();
         String Passwd = new String(pwdTextField.getPassword());
-        int Port = 0;
+        int port;
         String NodeQuery = nodeQueryTextField.getText();
         String EdgeQuery = edgeQueryTextField.getText();
         String GraphPath = graphPathTextField.getText();
         try{
-            Port = (!portTextField.getText().isEmpty()
+            port = (!portTextField.getText().isEmpty()
                 ? Integer.parseInt(portTextField.getText()) : 0);
         } catch (NumberFormatException e) {
             JOptionPane.showMessageDialog(null,
@@ -543,7 +534,7 @@ public class AgensGraphImportPanel extends TopComponent /*javax.swing.JPanel*/ {
         db.setHost(Host);
         db.setUsername(Username);
         db.setPasswd(Passwd);
-        db.setPort(Port);
+        db.setPort(port);
         db.setSQLDriver(new AgensGraphDriver());
         db.setNodeQuery(NodeQuery);
         db.setEdgeQuery(EdgeQuery);
@@ -692,7 +683,7 @@ public class AgensGraphImportPanel extends TopComponent /*javax.swing.JPanel*/ {
 
     private static class HostOrFileValidator implements Validator<String> {
 
-        private AgensGraphImportPanel panel;
+        private final AgensGraphImportPanel panel;
 
         public HostOrFileValidator(AgensGraphImportPanel panel) {
             this.panel = panel;
@@ -710,7 +701,7 @@ public class AgensGraphImportPanel extends TopComponent /*javax.swing.JPanel*/ {
 
     private static class NotEmptyValidator implements Validator<String> {
 
-        private AgensGraphImportPanel panel;
+        private final AgensGraphImportPanel panel;
 
         public NotEmptyValidator(AgensGraphImportPanel panel) {
             this.panel = panel;
@@ -728,7 +719,7 @@ public class AgensGraphImportPanel extends TopComponent /*javax.swing.JPanel*/ {
 
     private static class PortValidator implements Validator<String> {
 
-        private AgensGraphImportPanel panel;
+        private final AgensGraphImportPanel panel;
 
         public PortValidator(AgensGraphImportPanel panel) {
             this.panel = panel;

@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package org.bitnine.importer;
 
 /**
@@ -20,6 +15,7 @@ import org.gephi.io.importer.api.Database;
 import org.openide.filesystems.FileLock;
 import org.openide.filesystems.FileObject;
 import org.openide.filesystems.FileUtil;
+import org.openide.util.Exceptions;
 
 /**
  *
@@ -31,7 +27,7 @@ public class AgensGraphDatabaseManager {
     private List<Database> agensGraphDatabases = new ArrayList<>();
 
     public AgensGraphDatabaseManager() {
-       load();
+        load();
     }
 
     public List<Database> getAgensGraphDatabases() {
@@ -78,11 +74,9 @@ public class AgensGraphDatabaseManager {
             } catch (EOFException eofe) {
                 // Empty configuration: do nothing
             } catch (IOException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
+                Exceptions.printStackTrace(e);
             } catch (ClassNotFoundException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
+                Exceptions.printStackTrace(e);
             } finally {
                 if (is != null) {
                     try {
@@ -93,7 +87,7 @@ public class AgensGraphDatabaseManager {
             }
         }
     }
-    
+
     private void doPersist() {
         FileLock lock = null;
         ObjectOutputStream ois = null;
@@ -109,8 +103,7 @@ public class AgensGraphDatabaseManager {
             ois = new ObjectOutputStream(databaseConfigurations.getOutputStream(lock));
             ois.writeObject(agensGraphDatabases);
         } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            Exceptions.printStackTrace(e);
         } finally {
             if (ois != null) {
                 try {

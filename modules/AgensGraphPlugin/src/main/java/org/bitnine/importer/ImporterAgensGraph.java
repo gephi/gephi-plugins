@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package org.bitnine.importer;
 
 import java.sql.Connection;
@@ -66,7 +61,8 @@ public class ImporterAgensGraph implements DatabaseImporter {
             try {
                 connection.close();
                 report.log("Database connection terminated");
-            } catch (Exception e) { /* ignore close errors */ }
+            } catch (Exception e) {
+                /* ignore close errors */ }
         }
     }
 
@@ -83,16 +79,18 @@ public class ImporterAgensGraph implements DatabaseImporter {
                 try {
                     connection.close();
                     report.log("Database connection terminated");
-                } catch (Exception e) { /* ignore close errors */ }
+                } catch (Exception e) {
+                    /* ignore close errors */ }
             }
             report.logIssue(new Issue("Failed to connect at " + url, Issue.Level.CRITICAL, ex));
         }
+
         if (connection == null) {
             report.logIssue(new Issue("Failed to connect at " + url, Issue.Level.CRITICAL));
         }
 
         report.log(database.getPropertiesAssociations().getInfos());
-        
+
         setGraphPath(connection);
         getNodes(connection);
         getEdges(connection);
@@ -102,24 +100,19 @@ public class ImporterAgensGraph implements DatabaseImporter {
 
     private void setGraphPath(Connection connection) throws SQLException {
         Logger.getLogger(ImporterAgensGraph.class.getName()).log(Level.INFO, "setGraphPath called");
-        
-        String graphPathQuery = "SET graph_path = " + database.getGraphPath() +";";
-        Statement s = connection.createStatement();
-        
-       // Logger.getLogger(ImporterAgensGraph.class.getName()).log(Level.INFO, graphPathQuery);
-        
-        
-        try{
+
+        String graphPathQuery = "SET graph_path = " + database.getGraphPath() + ";";
+
+        // Logger.getLogger(ImporterAgensGraph.class.getName()).log(Level.INFO, graphPathQuery);
+        try (Statement s = connection.createStatement()) {
             s.execute(graphPathQuery);
             //Logger.getLogger(ImporterAgensGraph.class.getName()).log(Level.INFO, "Graph Path Set");
-            
+
         } catch (SQLException ex) {
             report.logIssue(new Issue("Failed to set graph path with query", Issue.Level.SEVERE, ex));
-            return;
         }
-        s.close();
     }
-    
+
     private void getNodes(Connection connection) throws SQLException {
 
         //Factory
@@ -128,53 +121,46 @@ public class ImporterAgensGraph implements DatabaseImporter {
         //Properties
         PropertiesAssociations properties = database.getPropertiesAssociations();
 
-        Statement s = connection.createStatement();
-        ResultSet rs = null;
-        try {
-            rs = s.executeQuery(database.getNodeQuery());
-        } catch (SQLException ex) {
-            report.logIssue(new Issue("Failed to execute Node query", Issue.Level.SEVERE, ex));
-            return;
-        }
-
-        findNodeAttributesColumns(rs);
-        ResultSetMetaData metaData = rs.getMetaData();
-        int columnsCount = metaData.getColumnCount();
-        while (rs.next()) {
-            String id = null;
-            for (int i = 0; i < columnsCount; i++) {
-                String columnName = metaData.getColumnLabel(i + 1);
-                NodeProperties p = properties.getNodeProperty(columnName);
-                if (p != null && p.equals(NodeProperties.ID)) {
-                    String ide = rs.getString(i + 1);
-                    if (ide != null) {
-                        id = ide;
+        try (Statement s = connection.createStatement(); ResultSet rs = s.executeQuery(database.getNodeQuery())) {
+            findNodeAttributesColumns(rs);
+            ResultSetMetaData metaData = rs.getMetaData();
+            int columnsCount = metaData.getColumnCount();
+            while (rs.next()) {
+                String id = null;
+                for (int i = 0; i < columnsCount; i++) {
+                    String columnName = metaData.getColumnLabel(i + 1);
+                    NodeProperties p = properties.getNodeProperty(columnName);
+                    if (p != null && p.equals(NodeProperties.ID)) {
+                        String ide = rs.getString(i + 1);
+                        if (ide != null) {
+                            id = ide;
+                        }
                     }
                 }
-            }
-            NodeDraft node;
-            if (id != null) {
-                node = factory.newNodeDraft(id);
-            } else {
-                node = factory.newNodeDraft();
-            }
-
-            for (int i = 0; i < columnsCount; i++) {
-                String columnName = metaData.getColumnLabel(i + 1);
-                NodeProperties p = properties.getNodeProperty(columnName);
-                if (p != null) {
-                    injectNodeProperty(p, rs, i + 1, node);
+                NodeDraft node;
+                if (id != null) {
+                    node = factory.newNodeDraft(id);
                 } else {
-                    //Inject node attributes
-                    ColumnDraft col = container.getNodeColumn(columnName);
-                    injectElementAttribute(rs, i + 1, col, node);
+                    node = factory.newNodeDraft();
                 }
+
+                for (int i = 0; i < columnsCount; i++) {
+                    String columnName = metaData.getColumnLabel(i + 1);
+                    NodeProperties p = properties.getNodeProperty(columnName);
+                    if (p != null) {
+                        injectNodeProperty(p, rs, i + 1, node);
+                    } else {
+                        //Inject node attributes
+                        ColumnDraft col = container.getNodeColumn(columnName);
+                        injectElementAttribute(rs, i + 1, col, node);
+                    }
+                }
+                injectTimeIntervalProperty(node);
+                container.addNode(node);
             }
-            injectTimeIntervalProperty(node);
-            container.addNode(node);
+        } catch (SQLException ex) {
+            report.logIssue(new Issue("Failed to execute Node query", Issue.Level.SEVERE, ex));
         }
-        rs.close();
-        s.close();
     }
 
     private void getEdges(Connection connection) throws SQLException {
@@ -185,51 +171,45 @@ public class ImporterAgensGraph implements DatabaseImporter {
         //Properties
         PropertiesAssociations properties = database.getPropertiesAssociations();
 
-        Statement s = connection.createStatement();
-        ResultSet rs = null;
-        try {
-            rs = s.executeQuery(database.getEdgeQuery());
-        } catch (SQLException ex) {
-            report.logIssue(new Issue("Failed to execute Edge query", Issue.Level.SEVERE, ex));
-            return;
-        }
-        findEdgeAttributesColumns(rs);
-        ResultSetMetaData metaData = rs.getMetaData();
-        int columnsCount = metaData.getColumnCount();
-        while (rs.next()) {
-            String id = null;
-            for (int i = 0; i < columnsCount; i++) {
-                String columnName = metaData.getColumnLabel(i + 1);
-                EdgeProperties p = properties.getEdgeProperty(columnName);
-                if (p != null && p.equals(EdgeProperties.ID)) {
-                    String ide = rs.getString(i + 1);
-                    if (ide != null) {
-                        id = ide;
+        try (Statement s = connection.createStatement(); ResultSet rs = s.executeQuery(database.getEdgeQuery())) {
+            findEdgeAttributesColumns(rs);
+            ResultSetMetaData metaData = rs.getMetaData();
+            int columnsCount = metaData.getColumnCount();
+            while (rs.next()) {
+                String id = null;
+                for (int i = 0; i < columnsCount; i++) {
+                    String columnName = metaData.getColumnLabel(i + 1);
+                    EdgeProperties p = properties.getEdgeProperty(columnName);
+                    if (p != null && p.equals(EdgeProperties.ID)) {
+                        String ide = rs.getString(i + 1);
+                        if (ide != null) {
+                            id = ide;
+                        }
                     }
                 }
-            }
-            EdgeDraft edge;
-            if (id != null) {
-                edge = factory.newEdgeDraft(id);
-            } else {
-                edge = factory.newEdgeDraft();
-            }
-            for (int i = 0; i < columnsCount; i++) {
-                String columnName = metaData.getColumnLabel(i + 1);
-                EdgeProperties p = properties.getEdgeProperty(columnName);
-                if (p != null) {
-                    injectEdgeProperty(p, rs, i + 1, edge);
+                EdgeDraft edge;
+                if (id != null) {
+                    edge = factory.newEdgeDraft(id);
                 } else {
-                    //Inject edge attributes
-                    ColumnDraft col = container.getEdgeColumn(columnName);
-                    injectElementAttribute(rs, i + 1, col, edge);
+                    edge = factory.newEdgeDraft();
                 }
+                for (int i = 0; i < columnsCount; i++) {
+                    String columnName = metaData.getColumnLabel(i + 1);
+                    EdgeProperties p = properties.getEdgeProperty(columnName);
+                    if (p != null) {
+                        injectEdgeProperty(p, rs, i + 1, edge);
+                    } else {
+                        //Inject edge attributes
+                        ColumnDraft col = container.getEdgeColumn(columnName);
+                        injectElementAttribute(rs, i + 1, col, edge);
+                    }
+                }
+                injectTimeIntervalProperty(edge);
+                container.addEdge(edge);
             }
-            injectTimeIntervalProperty(edge);
-            container.addEdge(edge);
+        } catch (SQLException ex) {
+            report.logIssue(new Issue("Failed to execute Edge query", Issue.Level.SEVERE, ex));
         }
-        rs.close();
-        s.close();
     }
 
     private void getNodesAttributes(Connection connection) throws SQLException {
