@@ -41,7 +41,9 @@ Portions Copyrighted 2011 Gephi Consortium.
  */
 package org.gephi.streaming.api;
 
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.gephi.filters.spi.EdgeFilter;
@@ -276,10 +278,26 @@ public class GraphUpdaterEventHandler implements GraphEventHandler {
         if (node==null) {
             node = factory.newNode(nodeId);
             
+            //Default size:
+            //https://github.com/gephi/gephi/issues/1447
+            node.setSize(10);
+            boolean positionSet = false;
+            
             if (attributes!=null && attributes.size() > 0) {
                 for(Map.Entry<String, Object> entry: attributes.entrySet()) {
+                    NodeProperties p = properties.getNodeProperty(entry.getKey());
+                    if(p == NodeProperties.X ||p == NodeProperties.Y || p == NodeProperties.Z) {
+                        positionSet = true;
+                    }
                     this.addNodeAttribute(node, entry.getKey(), entry.getValue());
                 }
+            }
+            
+            if(!positionSet) {
+                //Set a random position by default:
+                //https://github.com/gephi/gephi/issues/1447
+                node.setX((float) ((0.01 + Math.random()) * 1000) - 500);
+                node.setY((float) ((0.01 + Math.random()) * 1000) - 500);
             }
             
             // graph.setId(node, nodeId);
@@ -358,21 +376,15 @@ public class GraphUpdaterEventHandler implements GraphEventHandler {
                 break;
             case X:
                 float x = Float.valueOf(value.toString());
-                if (x != 0) {
-                    node.setX(x);
-                }
+                node.setX(x);
                 break;
             case Y:
                 float y = Float.valueOf(value.toString());
-                if (y != 0) {
-                    node.setY(y);
-                }
+                node.setY(y);
                 break;
             case Z:
                 float z = Float.valueOf(value.toString());
-                if (z != 0) {
-                    node.setZ(z);
-                }
+                node.setZ(z);
                 break;
             case R:
                 float r = Float.valueOf(value.toString());
@@ -404,7 +416,9 @@ public class GraphUpdaterEventHandler implements GraphEventHandler {
                 break;
             case SIZE:
                 float size = Float.valueOf(value.toString());
-                node.setSize(size);
+                if(size > 0) {
+                    node.setSize(size);
+                }
                 break;
         }
     }

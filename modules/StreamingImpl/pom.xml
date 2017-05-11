@@ -9,48 +9,48 @@
 
     <groupId>org.gephi</groupId>
     <artifactId>streaming-impl</artifactId>
-    <version>1.0.1</version>
+    <version>1.0.2</version>
     <packaging>nbm</packaging>
 
     <name>StreamingImpl</name>
 
     <dependencies>
 
-    <dependency>
-      <groupId>org.gephi</groupId>
-      <artifactId>filters-api</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.netbeans.api</groupId>
-      <artifactId>org-openide-filesystems</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.gephi</groupId>
-      <artifactId>core-library-wrapper</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.netbeans.api</groupId>
-      <artifactId>org-openide-util-lookup</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.gephi</groupId>
-      <artifactId>graph-api</artifactId>
-    </dependency>
-      <dependency>
-        <groupId>org.gephi</groupId>
-    <artifactId>streaming-api</artifactId>
-    <version>${project.version}</version>
-    </dependency>
-    <dependency>
-        <groupId>junit</groupId>
-        <artifactId>junit</artifactId>
-        <version>4.10</version>
-        <scope>test</scope>
-    </dependency>
-  </dependencies>
-  <properties>
-    <skipTests>false</skipTests>
-  </properties>
+        <dependency>
+            <groupId>org.gephi</groupId>
+            <artifactId>filters-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.netbeans.api</groupId>
+            <artifactId>org-openide-filesystems</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.gephi</groupId>
+            <artifactId>core-library-wrapper</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.netbeans.api</groupId>
+            <artifactId>org-openide-util-lookup</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.gephi</groupId>
+            <artifactId>graph-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.gephi</groupId>
+            <artifactId>streaming-api</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.10</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+    <properties>
+        <skipTests>false</skipTests>
+    </properties>
     <build>
         <plugins>
             <plugin>
