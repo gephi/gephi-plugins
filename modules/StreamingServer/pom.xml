@@ -9,7 +9,7 @@
 
     <groupId>org.gephi</groupId>
     <artifactId>streaming-server</artifactId>
-    <version>1.0.1</version>
+    <version>1.0.2</version>
     <packaging>nbm</packaging>
 
     <name>StreamingServer</name>
@@ -65,7 +65,7 @@
                     <sourceCodeUrl>https://github.com/panisson/gephi-plugins/tree/graph-streaming</sourceCodeUrl>
                     <publicPackages>
 
-                    <publicPackage>org.gephi.streaming.server</publicPackage>
+                        <publicPackage>org.gephi.streaming.server</publicPackage>
                     </publicPackages>
                 </configuration>
             </plugin>
