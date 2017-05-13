@@ -79,6 +79,7 @@ public class StreamingConnectionNode extends AbstractNode {
     private static Image sendrecImage = ImageUtilities.loadImage("org/gephi/desktop/streaming/resources/dot_sendrec.png", true);
     private static Image errorImage = ImageUtilities.loadImage("org/gephi/desktop/streaming/resources/dot_error.png", true);
 
+    private Action connectAction;
     private Action closeConnectionAction;
     private Action showReportAction;
     private Action removeFromViewAction;
@@ -112,6 +113,18 @@ public class StreamingConnectionNode extends AbstractNode {
                 setState(ConnectionState.ERROR);
             }
         });
+        
+        connectAction = new AbstractAction("Connect") {
+
+            public void actionPerformed(ActionEvent e) {
+                SwingUtilities.invokeLater(new Runnable() {
+                    public void run() {
+                    	StreamingUIController controller = Lookup.getDefault().lookup(StreamingUIController.class);
+                    	controller.connectToStream(connection.getStreamingEndpoint());
+                    }
+                });
+            }
+        };
 
         closeConnectionAction = new AbstractAction("Close connection") {
 
@@ -195,7 +208,7 @@ public class StreamingConnectionNode extends AbstractNode {
         if (state != ConnectionState.CLOSED) {
             return new Action[]{synchronizeAction, closeConnectionAction, showReportAction};
         } else {
-            return new Action[]{showReportAction, removeFromViewAction};
+            return new Action[]{connectAction, showReportAction, removeFromViewAction};
         }
     }
 

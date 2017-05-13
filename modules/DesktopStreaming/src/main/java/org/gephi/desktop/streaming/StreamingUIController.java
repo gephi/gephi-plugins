@@ -366,7 +366,7 @@ public class StreamingUIController {
         
     }
 
-    private void connectToStream(StreamingEndpoint endpoint) {
+    public void connectToStream(StreamingEndpoint endpoint) {
 
         // Get active graph instance - Project and Graph API
         ProjectController projectController = Lookup.getDefault().lookup(ProjectController.class);
