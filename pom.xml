@@ -12,6 +12,7 @@
     <!-- List of modules -->
     <modules>
         <!-- Add here the paths of all modules (e.g. <module>modules/MyModule</module>) -->
+        <module>modules/AgensGraphPlugin</module>
         <module>modules/GeoLayout</module>
         <module>modules/LinkfluencePlugin</module>
         <module>modules/KBraceFilter</module>
