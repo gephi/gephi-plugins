@@ -1,0 +1,8 @@
+Manifest-Version: 1.0
+OpenIDE-Module: org.gephi.linkfluence
+OpenIDE-Module-Name: Linkfluence Plugin
+OpenIDE-Module-Short-Description: Public plugin for Linkfluence with some extra data manipulation features and tools
+OpenIDE-Module-Long-Description: This plugin provides some extra features for Overview and Data Laboratory such as nodes massive tagging, opening of urls from nodes and copying columns to clipboard.
+OpenIDE-Module-Display-Category: Tool
+OpenIDE-Module-Localizing-Bundle: org/gephi/linkfluence/Bundle.properties
+OpenIDE-Module-Specification-Version: 1.0.9
