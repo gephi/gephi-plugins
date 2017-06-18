@@ -12,6 +12,7 @@
     <!-- List of modules -->
     <modules>
         <!-- Add here the paths of all modules (e.g. <module>modules/MyModule</module>) -->
+        <module>modules/ScalePlugin</module>
     </modules>
     
     <!-- Properties -->
@@ -20,6 +21,8 @@
         <gephi.version>0.9.1</gephi.version>
         <clusters.path>${project.build.directory}/plugins_clusters</clusters.path>
         <github.global.server>github</github.global.server>
+        <maven.compiler.source>1.7</maven.compiler.source>
+        <maven.compiler.target>1.7</maven.compiler.target>
     </properties>
     
     <!-- SCM -->
