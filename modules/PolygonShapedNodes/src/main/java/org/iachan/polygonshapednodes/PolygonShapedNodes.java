@@ -23,15 +23,12 @@ Updated by Daniel Iachan 2017, for Gephi 0.9.1
 package org.iachan.polygonshapednodes;
 
 import java.awt.*;
-import org.gephi.graph.api.GraphController;
-import org.gephi.graph.api.GraphModel;
 import org.gephi.graph.api.Node;
 import org.gephi.preview.api.*;
 import org.gephi.preview.plugin.items.NodeItem;
 import org.gephi.preview.plugin.renderers.NodeRenderer;
 import org.gephi.preview.spi.Renderer;
 import org.gephi.preview.types.DependantColor;
-import org.openide.util.Lookup;
 import org.openide.util.NbBundle;
 import org.openide.util.lookup.ServiceProvider;
 
@@ -51,6 +48,7 @@ public class PolygonShapedNodes extends NodeRenderer {
         return NbBundle.getMessage(PolygonShapedNodes.class, "PolygonShapedNodes.name");
     }
 
+    //Overrides the default Node render method
     @Override
     public void render(Item item, RenderTarget target, PreviewProperties properties) {
         if (target instanceof G2DTarget) {
@@ -83,7 +81,7 @@ public class PolygonShapedNodes extends NodeRenderer {
     }
 
     public void renderPolygonG2D(Item item, G2DTarget target, PreviewProperties properties, int numSides) {
-        //Params
+        //Get data about the polygon to be rendered
         Float x = item.getData(NodeItem.X);
         Float y = item.getData(NodeItem.Y);
         Float size = item.getData(NodeItem.SIZE);
