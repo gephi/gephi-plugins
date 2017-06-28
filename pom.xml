@@ -52,6 +52,7 @@
         <module>modules/SimilarityComputer</module>
         <module>modules/AgensGraphPlugin</module>
         <module>modules/PolygonShapedNodes</module>
+        <module>modules/ScalePlugin</module>
     </modules>
     
     <!-- Properties -->
