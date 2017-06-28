@@ -51,6 +51,7 @@
         <module>modules/MinimumSpanningTree</module>
         <module>modules/SimilarityComputer</module>
         <module>modules/AgensGraphPlugin</module>
+        <module>modules/PolygonShapedNodes</module>
     </modules>
     
     <!-- Properties -->
