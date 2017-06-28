@@ -50,6 +50,7 @@
         <module>modules/HttpGraph</module>
         <module>modules/MinimumSpanningTree</module>
         <module>modules/SimilarityComputer</module>
+        <module>modules/AgensGraphPlugin</module>
     </modules>
     
     <!-- Properties -->
