@@ -15,7 +15,7 @@
         }
       ],
       "category": "Layout",
-      "last_update": "November 29, 2016",
+      "last_update": "June 28, 2017",
       "images": [
         {
           "image": "imgs/geolayout-plugin/geolayout_example.png",
@@ -37,7 +37,7 @@
         },
         "0.9.1": {
           "url": "0.9.1/geolayout-plugin-0.9.1.1.nbm",
-          "last_update": "November 29, 2016"
+          "last_update": "June 28, 2017"
         }
       },
       "sourcecode": "https://github.com/gephi/gephi-plugins/geolayout-plugin",
@@ -58,7 +58,7 @@
         }
       ],
       "category": "Tool",
-      "last_update": "November 29, 2016",
+      "last_update": "June 28, 2017",
       "images": [
         {
           "image": "imgs/linkfluence-plugin/img.png",
@@ -72,7 +72,7 @@
         },
         "0.9.1": {
           "url": "0.9.1/linkfluence-plugin-0.9.0.nbm",
-          "last_update": "November 29, 2016"
+          "last_update": "June 28, 2017"
         }
       },
       "sourcecode": "https://github.com/eduramiba/gephi-plugins/tree/linkfluence-plugin",
@@ -487,7 +487,7 @@
         }
       ],
       "category": "Export",
-      "last_update": "November 29, 2016",
+      "last_update": "June 28, 2017",
       "images": null,
       "versions": {
         "0.8.2": {
@@ -496,7 +496,7 @@
         },
         "0.9.1": {
           "url": "0.9.1/exporttoearth-1.0.0.nbm",
-          "last_update": "November 29, 2016"
+          "last_update": "June 28, 2017"
         }
       },
       "sourcecode": "http://github.com/shepdl/gephi-plugins/tree/export-to-earth",
@@ -543,7 +543,7 @@
         }
       ],
       "category": "Filter",
-      "last_update": "November 29, 2016",
+      "last_update": "June 28, 2017",
       "images": [
         {
           "image": "imgs/kbrace-filter/kbrace-img.png",
@@ -561,7 +561,7 @@
         },
         "0.9.1": {
           "url": "0.9.1/kbrace-filter-1.0.0.nbm",
-          "last_update": "November 29, 2016"
+          "last_update": "June 28, 2017"
         }
       },
       "sourcecode": "https://github.com/mbastian/gephi-plugins/tree/kbrace-filter",
@@ -1000,7 +1000,7 @@
         }
       ],
       "category": "Layout",
-      "last_update": "November 29, 2016",
+      "last_update": "June 28, 2017",
       "images": [
         {
           "image": "imgs/network-splitter-3d/example-0-networksplitter3d-layout.png",
@@ -1014,7 +1014,7 @@
         },
         "0.9.1": {
           "url": "0.9.1/network-splitter-3d-1.0.0.nbm",
-          "last_update": "November 29, 2016"
+          "last_update": "June 28, 2017"
         }
       },
       "sourcecode": "https://github.com/alexandrebarao",
@@ -1383,7 +1383,7 @@
         }
       ],
       "category": "Metric",
-      "last_update": "November 29, 2016",
+      "last_update": "June 28, 2017",
       "images": null,
       "versions": {
         "0.8.2": {
@@ -1392,7 +1392,7 @@
         },
         "0.9.1": {
           "url": "0.9.1/lineage-0.9.1.nbm",
-          "last_update": "November 29, 2016"
+          "last_update": "June 28, 2017"
         }
       },
       "sourcecode": "$sourcecode_url",
@@ -1920,7 +1920,7 @@
       "id": "multimode",
       "name": "MultimodeNetworksTransformationPlugin",
       "short_description": "Multimode Networks Transformations",
-      "long_description": "This plugin allows multimode networks projection. You can project your bipartite (2-mode) graph to monopartite (one-mode) graph. The projection/transformation is based on the matrix multiplication approach and allows different types of transformations. The limitation is matrix multiplication - large matrix multiplication takes time and memory.",
+      "long_description": "This plugin allows multimode networks projection. You can project your bipartite (2-mode) graph to monopartite (one-mode) graph. The projection/transformation is based on the matrix multiplication approach and allows different types of transformations. The limitation is matrix multiplication - large matrix multiplication takes time and memory.Joan Codina: some modification are added to allow cosine similarity and filtering of low weight edges to simplify graph.",
       "readme": null,
       "license": "license",
       "authors": [
@@ -1931,7 +1931,7 @@
         }
       ],
       "category": "Tool",
-      "last_update": "November 29, 2016",
+      "last_update": "June 28, 2017",
       "images": null,
       "versions": {
         "0.8.2": {
@@ -1943,8 +1943,8 @@
           "last_update": "February 11, 2016"
         },
         "0.9.1": {
-          "url": "0.9.1/multimode-1.0.0.nbm",
-          "last_update": "November 29, 2016"
+          "url": "0.9.1/multimode-1.0.1.nbm",
+          "last_update": "June 28, 2017"
         }
       },
       "sourcecode": "https://github.com/totetmatt/gephi-plugins/tree/multimode-network",
@@ -1965,7 +1965,7 @@
         }
       ],
       "category": "Export",
-      "last_update": "November 29, 2016",
+      "last_update": "June 28, 2017",
       "images": null,
       "versions": {
         "0.8.2": {
@@ -1978,7 +1978,7 @@
         },
         "0.9.1": {
           "url": "0.9.1/jsonexporter-plugin-2.0.0.nbm",
-          "last_update": "November 29, 2016"
+          "last_update": "June 28, 2017"
         }
       },
       "sourcecode": "http://github.com/oxfordinternetinstitute/gephi-plugins",
@@ -1999,7 +1999,7 @@
         }
       ],
       "category": "Export",
-      "last_update": "November 29, 2016",
+      "last_update": "June 28, 2017",
       "images": null,
       "versions": {
         "0.8.2": {
@@ -2012,7 +2012,7 @@
         },
         "0.9.1": {
           "url": "0.9.1/sigmaexporter-0.9.0.nbm",
-          "last_update": "November 29, 2016"
+          "last_update": "June 28, 2017"
         }
       },
       "sourcecode": "http://github.com/oxfordinternetinstitute/gephi-plugins",
@@ -2033,7 +2033,7 @@
         }
       ],
       "category": "Tool",
-      "last_update": "November 29, 2016",
+      "last_update": "June 28, 2017",
       "images": null,
       "versions": {
         "0.9.0": {
@@ -2042,7 +2042,7 @@
         },
         "0.9.1": {
           "url": "0.9.1/gephi-plugin-node-color-manager-1.0.0.nbm",
-          "last_update": "November 29, 2016"
+          "last_update": "June 28, 2017"
         }
       },
       "sourcecode": "https://github.com/gephi/gephi-plugins/gephi-plugin-node-color-manager",
@@ -2063,7 +2063,7 @@
         }
       ],
       "category": "Layout",
-      "last_update": "November 29, 2016",
+      "last_update": "June 28, 2017",
       "images": [
         {
           "image": "imgs/gephigraphviz/GraphVizLayout_example.png",
@@ -2085,7 +2085,7 @@
         },
         "0.9.1": {
           "url": "0.9.1/gephigraphviz-1.0.0.nbm",
-          "last_update": "November 29, 2016"
+          "last_update": "June 28, 2017"
         }
       },
       "sourcecode": "https://github.com/chunky/gephi-plugins",
@@ -2106,12 +2106,12 @@
         }
       ],
       "category": "Import",
-      "last_update": "May 13, 2017",
+      "last_update": "June 28, 2017",
       "images": null,
       "versions": {
         "0.9.1": {
           "url": "0.9.1/graphstreaming-1.0.3.zip",
-          "last_update": "May 11, 2017"
+          "last_update": "June 28, 2017"
         }
       },
       "sourcecode": "https://github.com/panisson/gephi-plugins/tree/graph-streaming",
@@ -2132,12 +2132,12 @@
         }
       ],
       "category": "Layout",
-      "last_update": "November 29, 2016",
+      "last_update": "June 28, 2017",
       "images": null,
       "versions": {
         "0.9.1": {
           "url": "0.9.1/circularlayout-0.9.1.nbm",
-          "last_update": "November 29, 2016"
+          "last_update": "June 28, 2017"
         }
       },
       "sourcecode": "https://github.com/mgroeninger/gephi-plugins",
@@ -2158,7 +2158,7 @@
         }
       ],
       "category": "Import",
-      "last_update": "November 29, 2016",
+      "last_update": "June 28, 2017",
       "images": [
         {
           "image": "imgs/semantic/icon.png",
@@ -2176,7 +2176,7 @@
       "versions": {
         "0.9.1": {
           "url": "0.9.1/semantic-1.0.0.nbm",
-          "last_update": "November 29, 2016"
+          "last_update": "June 28, 2017"
         }
       },
       "sourcecode": "https://github.com/Wimmics/gephi-semantic-web-import",
@@ -2197,7 +2197,7 @@
         }
       ],
       "category": "Export",
-      "last_update": "November 29, 2016",
+      "last_update": "June 28, 2017",
       "images": [
         {
           "image": "imgs/loxawebsiteexport/logo_final.png",
@@ -2207,7 +2207,7 @@
       "versions": {
         "0.9.1": {
           "url": "0.9.1/loxawebsiteexport-0.3.2.nbm",
-          "last_update": "November 29, 2016"
+          "last_update": "June 28, 2017"
         }
       },
       "sourcecode": "https://github.com/jorgaf/gephi-plugins",
@@ -2228,7 +2228,7 @@
         }
       ],
       "category": "Tool",
-      "last_update": "November 29, 2016",
+      "last_update": "June 28, 2017",
       "images": [
         {
           "image": "imgs/scripting.plugin/img1.png",
@@ -2238,7 +2238,7 @@
       "versions": {
         "0.9.1": {
           "url": "0.9.1/scripting.plugin-0.9.1.2.nbm",
-          "last_update": "November 29, 2016"
+          "last_update": "June 28, 2017"
         }
       },
       "sourcecode": "https://github.com/gephi/gephi-plugins/tree/python-scripting-plugin",
@@ -2259,7 +2259,7 @@
         }
       ],
       "category": "Import",
-      "last_update": "November 29, 2016",
+      "last_update": "June 28, 2017",
       "images": [
         {
           "image": "imgs/twitter-streaming-importer/A_Screenshot.png",
@@ -2285,7 +2285,7 @@
       "versions": {
         "0.9.1": {
           "url": "0.9.1/twitter-streaming-importer-1.1.1.nbm",
-          "last_update": "November 29, 2016"
+          "last_update": "June 28, 2017"
         }
       },
       "sourcecode": "https://github.com/totetmatt/gephi-plugins/tree/twitter",
@@ -2306,7 +2306,7 @@
         }
       ],
       "category": "Layout",
-      "last_update": "November 29, 2016",
+      "last_update": "June 28, 2017",
       "images": [
         {
           "image": "imgs/isometric-layout/example-0-isometric-layout.png",
@@ -2316,7 +2316,7 @@
       "versions": {
         "0.9.1": {
           "url": "0.9.1/isometric-layout-1.0.0.nbm",
-          "last_update": "November 29, 2016"
+          "last_update": "June 28, 2017"
         }
       },
       "sourcecode": "https://github.com/alexandrebarao",
@@ -2337,7 +2337,7 @@
         }
       ],
       "category": "Import",
-      "last_update": "November 29, 2016",
+      "last_update": "June 28, 2017",
       "images": [
         {
           "image": "imgs/ExcelCsvImporter/1.png",
@@ -2363,7 +2363,7 @@
       "versions": {
         "0.9.1": {
           "url": "0.9.1/ExcelCsvImporter-1.0.0.nbm",
-          "last_update": "November 29, 2016"
+          "last_update": "June 28, 2017"
         }
       },
       "sourcecode": "https://github.com/seinecle/gephi-plugins/tree/ExcelCsvImporter",
@@ -2384,12 +2384,12 @@
         }
       ],
       "category": "Import",
-      "last_update": "November 29, 2016",
+      "last_update": "June 28, 2017",
       "images": null,
       "versions": {
         "0.9.1": {
           "url": "0.9.1/oracle-driver-0.0.1.nbm",
-          "last_update": "November 29, 2016"
+          "last_update": "June 28, 2017"
         }
       },
       "sourcecode": "https://github.com/sturton/gephi-plugins",
@@ -2410,7 +2410,7 @@
         }
       ],
       "category": "Layout",
-      "last_update": "November 29, 2016",
+      "last_update": "June 28, 2017",
       "images": [
         {
           "image": "imgs/eventgraphlayout/img.png",
@@ -2420,7 +2420,7 @@
       "versions": {
         "0.9.1": {
           "url": "0.9.1/eventgraphlayout-1.0.0.nbm",
-          "last_update": "November 29, 2016"
+          "last_update": "June 28, 2017"
         }
       },
       "sourcecode": "https://github.com/WouterSpekkink/gephi-plugins/tree/eventgraphlayout",
@@ -2441,12 +2441,12 @@
         }
       ],
       "category": "Layout",
-      "last_update": "November 29, 2016",
+      "last_update": "June 28, 2017",
       "images": null,
       "versions": {
         "0.9.1": {
           "url": "0.9.1/mdslayout-0.9.1.nbm",
-          "last_update": "November 29, 2016"
+          "last_update": "June 28, 2017"
         }
       },
       "sourcecode": "https://github.com/WouterSpekkink/gephi-plugins/tree/mdslayout",
@@ -2467,12 +2467,12 @@
         }
       ],
       "category": "Filter",
-      "last_update": "November 29, 2016",
+      "last_update": "June 28, 2017",
       "images": null,
       "versions": {
         "0.9.1": {
           "url": "0.9.1/graphfilter-1.0.0.nbm",
-          "last_update": "November 29, 2016"
+          "last_update": "June 28, 2017"
         }
       },
       "sourcecode": "https://github.com/ypanagis/gephi-plugins",
@@ -2493,7 +2493,7 @@
         }
       ],
       "category": "Tool",
-      "last_update": "November 29, 2016",
+      "last_update": "June 28, 2017",
       "images": [
         {
           "image": "imgs/givecolortonodes/1.illustration.png",
@@ -2511,7 +2511,7 @@
       "versions": {
         "0.9.1": {
           "url": "0.9.1/givecolortonodes-1.0.0.nbm",
-          "last_update": "November 29, 2016"
+          "last_update": "June 28, 2017"
         }
       },
       "sourcecode": "https://github.com/seinecle/gephi-plugins/tree/GiveColorsToNodes",
@@ -2532,7 +2532,7 @@
         }
       ],
       "category": "Tool",
-      "last_update": "November 29, 2016",
+      "last_update": "June 28, 2017",
       "images": [
         {
           "image": "imgs/givecolortoedges/colourwheel.png",
@@ -2542,7 +2542,7 @@
       "versions": {
         "0.9.1": {
           "url": "0.9.1/givecolortoedges-1.0.0.nbm",
-          "last_update": "November 29, 2016"
+          "last_update": "June 28, 2017"
         }
       },
       "sourcecode": "https://github.com/seinecle/gephi-plugins/tree/GiveColorsToEdges",
@@ -2563,7 +2563,7 @@
         }
       ],
       "category": "Layout",
-      "last_update": "November 29, 2016",
+      "last_update": "June 28, 2017",
       "images": [
         {
           "image": "imgs/gravity-plugin/FA2snake.png",
@@ -2581,7 +2581,7 @@
       "versions": {
         "0.9.1": {
           "url": "0.9.1/gravity-plugin-1.0.0.nbm",
-          "last_update": "November 29, 2016"
+          "last_update": "June 28, 2017"
         }
       },
       "sourcecode": "https://github.com/suryanash/gephi-plugins",
@@ -2602,7 +2602,7 @@
         }
       ],
       "category": "Metric",
-      "last_update": "November 29, 2016",
+      "last_update": "June 28, 2017",
       "images": [
         {
           "image": "imgs/mdsmetric/img.png",
@@ -2612,7 +2612,7 @@
       "versions": {
         "0.9.1": {
           "url": "0.9.1/mdsmetric-0.9.1.nbm",
-          "last_update": "November 29, 2016"
+          "last_update": "June 28, 2017"
         }
       },
       "sourcecode": "https://github.com/WouterSpekkink/gephi-plugins/tree/mds_metric",
@@ -2633,12 +2633,12 @@
         }
       ],
       "category": "Metric",
-      "last_update": "November 29, 2016",
+      "last_update": "June 28, 2017",
       "images": null,
       "versions": {
         "0.9.1": {
           "url": "0.9.1/vector-calculator-0.5.0.nbm",
-          "last_update": "November 29, 2016"
+          "last_update": "June 28, 2017"
         }
       },
       "sourcecode": "https://github.com/d99joper/gephi-plugins/tree/master/modules/VectorCalculator/",
@@ -2659,12 +2659,12 @@
         }
       ],
       "category": "Metric",
-      "last_update": "November 29, 2016",
+      "last_update": "June 28, 2017",
       "images": null,
       "versions": {
         "0.9.1": {
           "url": "0.9.1/prestige-plugin-1.0.0.nbm",
-          "last_update": "November 29, 2016"
+          "last_update": "June 28, 2017"
         }
       },
       "sourcecode": "https://github.com/michihenninger/prestige-gephi-plugin/tree/prestige-plugin",
@@ -2685,12 +2685,12 @@
         }
       ],
       "category": "Generator",
-      "last_update": "February 11, 2017",
+      "last_update": "June 28, 2017",
       "images": null,
       "versions": {
         "0.9.1": {
           "url": "0.9.1/httpgraph-1.0.8.nbm",
-          "last_update": "February 11, 2017"
+          "last_update": "June 28, 2017"
         }
       },
       "sourcecode": "http://github.com/phreakocious/gephi-plugins",
@@ -2711,25 +2711,25 @@
         }
       ],
       "category": "Other Category",
-      "last_update": "February 19, 2017",
+      "last_update": "June 28, 2017",
       "images": [
         {
-          "image": "imgs\\spanning-tree-plugin/after-running-minimum-spanning-tree.png",
-          "thumbnail": "imgs\\spanning-tree-plugin/after-running-minimum-spanning-tree-thumbnail.png"
+          "image": "imgs/spanning-tree-plugin/after-running-minimum-spanning-tree.png",
+          "thumbnail": "imgs/spanning-tree-plugin/after-running-minimum-spanning-tree-thumbnail.png"
         },
         {
-          "image": "imgs\\spanning-tree-plugin/before-running-minimum-spanning-tree.png",
-          "thumbnail": "imgs\\spanning-tree-plugin/before-running-minimum-spanning-tree-thumbnail.png"
+          "image": "imgs/spanning-tree-plugin/before-running-minimum-spanning-tree.png",
+          "thumbnail": "imgs/spanning-tree-plugin/before-running-minimum-spanning-tree-thumbnail.png"
         },
         {
-          "image": "imgs\\spanning-tree-plugin/minimum-spanning-tree-filter.png",
-          "thumbnail": "imgs\\spanning-tree-plugin/minimum-spanning-tree-filter-thumbnail.png"
+          "image": "imgs/spanning-tree-plugin/minimum-spanning-tree-filter.png",
+          "thumbnail": "imgs/spanning-tree-plugin/minimum-spanning-tree-filter-thumbnail.png"
         }
       ],
       "versions": {
         "0.9.1": {
           "url": "0.9.1/spanning-tree-plugin-1.0.0.nbm",
-          "last_update": "February 19, 2017"
+          "last_update": "June 28, 2017"
         }
       },
       "sourcecode": "https://github.com/carlschroedl/gephi-plugins",
@@ -2739,7 +2739,7 @@
       "id": "SimilarityComputer",
       "name": "Similarity Computer",
       "short_description": "Creates a network between entities, based on their similarities.",
-      "long_description": "\u003ch2\u003eCreate a network of entities based on their similarities\u003c/h2\u003e\n\nThis plugin helps you convert a list of entities and their features into a network of entities, based on how similar they are in terms of features\u003cbr\u003e\nPlease post issues and ask for feature request on \u003ca href\u003d\"https://github.com/seinecle/gephi-plugins/tree/similaritycomputer\"\u003eGithub\u003c/a\u003e.\u003cbr\u003e\n\u003cbr\u003e\nOr contact me (Clement Levallois) via Twitter @seinecle.\u003cbr\u003e\n\u003cbr\u003e\n\n\n\u003ch3\u003eRelease History:\u003c/h3\u003e\n\u003cb\u003eVersion 1.1 (Feb 2017)\u003c/b\u003e\u003cbr\u003e\n-\u003e Release for Gephi 0.9.1 with additional features.\u003cb\u003eVersion 1.0 (September 2014)\u003c/b\u003e\u003cbr\u003e\n-\u003e Initial release.\u003cbr\u003e",
+      "long_description": "\u003ch2\u003eCreate a network of entities based on their similarities\u003c/h2\u003e\n\nThis plugin helps you convert a list of entities and their features into a network of entities, based on how similar they are in terms of features\u003cbr\u003e\nPlease post issues and ask for feature request on \u003ca href\u003d\"https://github.com/seinecle/gephi-plugins/tree/similaritycomputer\"\u003eGithub\u003c/a\u003e.\u003cbr\u003e\n\u003cbr\u003e\nOr contact me (Clement Levallois) via Twitter @seinecle.\u003cbr\u003e\n\u003cbr\u003e\n\n\n\u003ch3\u003eRelease History:\u003c/h3\u003e\n\u003cb\u003eVersion 1.1.3 (Mar 2017)\u003c/b\u003e\u003cbr\u003e\n-\u003e Bug fixes, perf improvement, handling of null values.\u003cbr\u003e\u003cb\u003eVersion 1.1 (Feb 2017)\u003c/b\u003e\u003cbr\u003e\n-\u003e Release for Gephi 0.9.1 with additional features.\u003cbr\u003e\u003cb\u003eVersion 1.0 (September 2014)\u003c/b\u003e\u003cbr\u003e\n-\u003e Initial release.\u003cbr\u003e",
       "readme": null,
       "license": "Apache v2",
       "authors": [
@@ -2750,21 +2750,21 @@
         }
       ],
       "category": "Import",
-      "last_update": "February 23, 2017",
+      "last_update": "June 28, 2017",
       "images": [
         {
-          "image": "imgs\\SimilarityComputer/no-weights.png",
-          "thumbnail": "imgs\\SimilarityComputer/no-weights-thumbnail.png"
+          "image": "imgs/SimilarityComputer/no-weights.png",
+          "thumbnail": "imgs/SimilarityComputer/no-weights-thumbnail.png"
         },
         {
-          "image": "imgs\\SimilarityComputer/weights-ok.png",
-          "thumbnail": "imgs\\SimilarityComputer/weights-ok-thumbnail.png"
+          "image": "imgs/SimilarityComputer/weights-ok.png",
+          "thumbnail": "imgs/SimilarityComputer/weights-ok-thumbnail.png"
         }
       ],
       "versions": {
         "0.9.1": {
           "url": "0.9.1/SimilarityComputer-1.1.3.nbm",
-          "last_update": "March 8, 2017"
+          "last_update": "June 28, 2017"
         }
       },
       "sourcecode": "https://github.com/seinecle/gephi-plugins/tree/similaritycomputer",
@@ -2785,16 +2785,94 @@
         }
       ],
       "category": "Layout",
-      "last_update": "March 6, 2017",
+      "last_update": "June 28, 2017",
       "images": null,
       "versions": {
         "0.9.1": {
           "url": "0.9.1/mapofcountries-1.5.1.nbm",
-          "last_update": "March 6, 2017"
+          "last_update": "June 28, 2017"
         }
       },
       "sourcecode": "https://github.com/seinecle/gephi-plugins/tree/mapOfCountriesBranch",
       "homepage": "http://www.clementlevallois.net"
+    },
+    {
+      "id": "agensgraph-plugin",
+      "name": "AgensGraph Plugin",
+      "short_description": "Importer for AgensGraph",
+      "long_description": "Importer for AgensGraph",
+      "readme": "## AgensGraph Plugin\n\nThis README supports Markdown, see [syntax](https://help.github.com/articles/markdown-basics/)\n\n",
+      "license": "Apache 2.0",
+      "authors": [
+        {
+          "name": "Dehowe Feng",
+          "email": "",
+          "link": ""
+        }
+      ],
+      "category": "Import",
+      "last_update": "June 28, 2017",
+      "images": null,
+      "versions": {
+        "0.9.1": {
+          "url": "0.9.1/agensgraph-plugin-1.0.0.nbm",
+          "last_update": "June 28, 2017"
+        }
+      },
+      "sourcecode": "https://github.com/bitnine-oss/gephi-plugins/tree/agensgraph-plugin",
+      "homepage": null
+    },
+    {
+      "id": "polygon-shaped-nodes",
+      "name": "Polygon Shaped Nodes",
+      "short_description": "Allows node shapes to be changed to any polygon",
+      "long_description": "Extends default node renderer to support polygon shaped nodes with arbitrary number of sides. Add a column of Integers in the data table named \"Polygon\", the value corresponds to the number of sides. The renderer must be enabled in the \"Manage Renderers\" tab.",
+      "readme": "\u003ch1\u003ePolygon shaped nodes\u003c/h1\u003e\n\n\u003ch2\u003eDescription\u003c/h2\u003e\n\u003cul\u003e\n\u003cli\u003eExtends default node renderer to support polygon shaped nodes with arbitrary number of sides. Add a column of Integers in the data table named \"Polygon\", the value corresponds to the number of sides. The renderer must be enabled in the \"Manage Renderers\" tab.\n\u003c/ul\u003e\n\n\u003ch2\u003eHow to use\u003c/h2\u003e\n\u003cul\u003e\n\u003cli\u003eIn the \"Data Laboratory\" tab, add a column with the title \"Polygon\" and type \"Integer\".\n\u003cul\u003e\n\u003cli\u003e This number in the Polygon column corresponds to the desired number of sides the node will have in the preview.\n\u003cli\u003e NOTE: A null/invalid value (i.e. leaving the column blank or a value less than 3) will result in the node being rendered as a circle.\n\u003c/ul\u003e\n\u003cli\u003eIn the \"Preview\" tab, make sure \"Polygon shaped nodes\" is checked in the \"Manager renderers\" tab.\n\u003cli\u003eThen in the \"Settings\" tab make sure \"Enable polygon shaped nodes\" is checked.\n\u003cli\u003eWhen the preview is refreshed the nodes should be displayed as polygons with sides corresponding to the number in the \"Polygon\" column.\n\u003c/ul\u003e\n",
+      "license": "Apache 2.0",
+      "authors": [
+        {
+          "name": "Daniel Iachan",
+          "email": "Daniel.Iachan@merck.com",
+          "link": "https://github.com/iachan"
+        }
+      ],
+      "category": "Layout",
+      "last_update": "June 28, 2017",
+      "images": null,
+      "versions": {
+        "0.9.1": {
+          "url": "0.9.1/polygon-shaped-nodes-1.0.0.nbm",
+          "last_update": "June 28, 2017"
+        }
+      },
+      "sourcecode": "http://github.com/iachan/gephi-plugins",
+      "homepage": null
+    },
+    {
+      "id": "scale-plugin",
+      "name": "scale layout plugin",
+      "short_description": "expand or contract part of the graph",
+      "long_description": "Users can scale part of the graph by set scale factor and which part they want to scale. To denote the part, users need to set the node\u0027s attribute \"part\"(ensure the nodes have this attribute in Integer type!).",
+      "readme": "## scale layout plugin\n\nThis README supports Markdown, see [syntax](https://help.github.com/articles/markdown-basics/)\n\n",
+      "license": "GPL3.0",
+      "authors": [
+        {
+          "name": "Huangsong Wei",
+          "email": "weihs1993@qq.com",
+          "link": "https://github.com/weihs/gephi-plugins"
+        }
+      ],
+      "category": "Layout",
+      "last_update": "June 28, 2017",
+      "images": null,
+      "versions": {
+        "0.9.1": {
+          "url": "0.9.1/scale-plugin-1.0.0.nbm",
+          "last_update": "June 28, 2017"
+        }
+      },
+      "sourcecode": "https://github.com/weihs/gephi-plugins",
+      "homepage": null
     }
   ]
 }
