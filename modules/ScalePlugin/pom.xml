@@ -24,7 +24,7 @@
                     <author>Huangsong Wei</author>
                     <authorEmail>weihs1993@qq.com</authorEmail>
                     <authorUrl>https://github.com/weihs/gephi-plugins</authorUrl>
-                    <sourceCodeUrl>$sourcecode_url</sourceCodeUrl>
+                    <sourceCodeUrl>https://github.com/weihs/gephi-plugins</sourceCodeUrl>
                     <publicPackages>
                         <!-- Insert public packages -->
                     </publicPackages>
