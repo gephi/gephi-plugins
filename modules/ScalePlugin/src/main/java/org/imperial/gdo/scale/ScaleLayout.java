@@ -87,7 +87,7 @@ public class ScaleLayout extends AbstractLayout implements Layout {
         int partNodeCount=0;
         int missing=0;
         Logger.getLogger("").log(Level.INFO,"start1");
-        try {
+        
             for(Node n : graph.getNodes()) {
                                     
                 if (n.getAttribute("part").equals(getPart())) {
@@ -95,7 +95,7 @@ public class ScaleLayout extends AbstractLayout implements Layout {
                 }
                
             }
-                       
+            Logger.getLogger("").log(Level.INFO,"nodecount{0}",partNodeCount);           
             double xMean = 0, yMean = 0;
             for (Node n : graph.getNodes()) {
                 if (n.getAttribute("part").equals(getPart())) {
@@ -117,13 +117,11 @@ public class ScaleLayout extends AbstractLayout implements Layout {
             }
        
             setConverged(true);
-        } 
-        catch(Exception e){
-            Logger.getLogger("").log(Level.INFO, "algorithm did not run");
-        }
-        finally{        
+        
+       
+               
             graph.readUnlockAll();
-    }
+    
     }
 
     @Override
