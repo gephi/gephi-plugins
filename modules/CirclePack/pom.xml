@@ -42,8 +42,7 @@
                     <licenseName>Apache 2.0</licenseName>
                     <author>Patrick Murray, Ken Goulding</author>
                     <authorEmail>pmurray@sasaki.com</authorEmail>
-                    <authorUrl></authorUrl>
-                    <sourceCodeUrl>$sourcecode_url</sourceCodeUrl>
+                    <sourceCodeUrl>https://github.com/sasakiassociates/gephi-plugins/tree/circlePack</sourceCodeUrl>
                     <publicPackages>
                         <!-- Insert public packages -->
                     </publicPackages>
