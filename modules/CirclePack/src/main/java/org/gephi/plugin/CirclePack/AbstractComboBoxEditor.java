@@ -33,33 +33,28 @@ import java.util.Set;
  *
  * @author Matt
  */
-public abstract class AbstractComboBoxEditor extends PropertyEditorSupport
-{
-    public Map ComboValues;
+public abstract class AbstractComboBoxEditor extends PropertyEditorSupport {
+
+    public Map<String, String> comboValues;
 
     @Override
-    public String[] getTags()
-    {
-        return (String[])ComboValues.values().toArray(new String[0]);
+    public String[] getTags() {
+        return comboValues.values().toArray(new String[0]);
     }
 
     @Override
-    public String getAsText()
-    {
-        if(getValue() == null){
+    public String getAsText() {
+        if (getValue() == null) {
             return "No Selection";
         }
-        return (String)ComboValues.get(getValue());
+        return comboValues.get(getValue().toString());
     }
 
     @Override
-    public void setAsText(String s)
-    {
-        Set<Map.Entry<String, String> > Entries = ComboValues.entrySet();
-        for (Map.Entry<String, String> Entry: Entries)
-        {
-            if ((Entry.getValue() == null) ? (s == null) : Entry.getValue().equals(s))
-            {
+    public void setAsText(String s) {
+        Set<Map.Entry<String, String>> Entries = comboValues.entrySet();
+        for (Map.Entry<String, String> Entry : Entries) {
+            if ((Entry.getValue() == null) ? (s == null) : Entry.getValue().equals(s)) {
                 setValue(Entry.getKey());
             }
         }

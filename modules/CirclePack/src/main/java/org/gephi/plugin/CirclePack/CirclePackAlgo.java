@@ -43,9 +43,9 @@ public class CirclePackAlgo {
 
         StringBuilder extendBasisStr = new StringBuilder("ArrayList<CircleWrap> B = new ArrayList<>();\n");
         for (i = 0; i < B.size(); ++i) {
-            extendBasisStr.append("B.add(" + B.get(i).toConStr() + ");\n");
+            extendBasisStr.append("B.add(").append(B.get(i).toConStr()).append(");\n");
         }
-        extendBasisStr.append("extendBasis(B, " + p.toConStr() + ");\n");
+        extendBasisStr.append("extendBasis(B, ").append(p.toConStr()).append(");\n");
 
         if (enclosesWeakAll(p, B)) {
             return new ArrayList<>(Arrays.asList(p));

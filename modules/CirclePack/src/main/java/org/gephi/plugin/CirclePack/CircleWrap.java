@@ -1,6 +1,5 @@
 package org.gephi.plugin.CirclePack;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 
 public class CircleWrap {
