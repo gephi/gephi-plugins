@@ -12,38 +12,29 @@ import java.util.TreeMap;
  *
  * @author Matt
  */
-public class LayoutComboBoxEditor extends AbstractComboBoxEditor
-{
-    public LayoutComboBoxEditor()
-    {
-        Map options = getPlacementMap(false);
+public class LayoutComboBoxEditor extends AbstractComboBoxEditor {
 
-        super.ComboValues = options;
+    public LayoutComboBoxEditor() {
+        comboValues = getPlacementMap(false);
     }
 
-
-    public static Map getPlacementMap(boolean boolIncludeRandom)
-    {
+    public static Map<String, String> getPlacementMap(boolean boolIncludeRandom) {
         GraphController graphController = Lookup.getDefault().lookup(GraphController.class);
-        GraphModel objGraphModel   = graphController.getGraphModel();
+        GraphModel objGraphModel = graphController.getGraphModel();
 
-        Map<String, String> map = new TreeMap<String, String>();
-        if (boolIncludeRandom)
-        {
+        Map<String, String> map = new TreeMap<>();
+        if (boolIncludeRandom) {
             map.put("Random", "Random");
         }
+        map.put("No Selection", "No Selection");
         map.put("NodeID", "Node ID");
         map.put("Degree", "Degree");
-        map.put("No Selection", "No Selection");
-        if (objGraphModel != null)
-        {
-            if (objGraphModel.isDirected())
-            {
+        if (objGraphModel != null) {
+            if (objGraphModel.isDirected() || objGraphModel.isMixed()) {
                 map.put("InDegree", "In Degree");
                 map.put("OutDegree", "Out Degree");
             }
-            for (Column c : objGraphModel.getNodeTable())
-            {
+            for (Column c : objGraphModel.getNodeTable()) {
                 map.put(c.getId(), c.getTitle() + " (Attribute)");
             }
         }

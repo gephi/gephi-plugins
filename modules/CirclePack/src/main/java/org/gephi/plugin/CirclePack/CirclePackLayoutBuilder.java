@@ -29,7 +29,7 @@ public class CirclePackLayoutBuilder implements LayoutBuilder {
 
             @Override
             public String getDescription() {
-                return "";
+                return "Packs circles using Mike Bostock's circle packing algorithm";
             }
 
             @Override

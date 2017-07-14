@@ -1,21 +1,18 @@
 /**
  * Created by pmurray on 6/13/2017.
  */
-
 package org.gephi.plugin.CirclePack;
 
 import java.util.*;
 
-import javafx.scene.shape.Circle;
 import org.gephi.graph.api.*;
 import org.gephi.layout.spi.Layout;
 import org.gephi.layout.spi.LayoutBuilder;
 import org.gephi.layout.spi.LayoutProperty;
-
+import org.openide.util.Exceptions;
 
 public class CirclePackLayout implements Layout {
 
-    private static Object Bundle;
     //Architecture
     private final LayoutBuilder builder;
     private GraphModel graphModel;
@@ -23,11 +20,11 @@ public class CirclePackLayout implements Layout {
     private boolean executing = false;
     //Properties
     private int radiusSize;
-    private String  hierarchy1;
-    private String  hierarchy2;
-    private String  hierarchy3;
-    private String  hierarchy4;
-    private String  hierarchy5;
+    private String hierarchy1;
+    private String hierarchy2;
+    private String hierarchy3;
+    private String hierarchy4;
+    private String hierarchy5;
 
     public CirclePackLayout(CirclePackLayoutBuilder builder) {
         this.builder = builder;
@@ -43,58 +40,79 @@ public class CirclePackLayout implements Layout {
         executing = true;
     }
 
-
     @Override
     public void goAlgo() {
-        Graph graph = graphModel.getGraphVisible();
-        graph.readLock();
-        int nodeCount = graph.getNodeCount();
-        Node[] nodes = graph.getNodes().toArray();
+        ArrayList<String> attributesToUse = new ArrayList<>();
 
-        CircleWrap container = new CircleWrap();
-
-        for(int i = 0; i < nodeCount; i++){
-            Node node =  nodes[i];
-
-            ArrayList attributes = new ArrayList<String>();
-            if (this.hierarchy1 != null && this.hierarchy1 != "No Selection"){
-                attributes.add(String.valueOf(node.getAttribute(this.hierarchy1)));
+        for (String att : Arrays.asList(hierarchy1, hierarchy2, hierarchy3, hierarchy4, hierarchy5)) {
+            if (att != null && !att.equals("No Selection")) {
+                attributesToUse.add(att);
             }
-            if (this.hierarchy2 != null && this.hierarchy2 != "No Selection"){
-                attributes.add(String.valueOf(node.getAttribute(this.hierarchy2)));
-            }
-            if (this.hierarchy3 != null && this.hierarchy3 != "No Selection"){
-                attributes.add(String.valueOf(node.getAttribute(this.hierarchy3)));
-            }
-            if (this.hierarchy4 != null && this.hierarchy4 != "No Selection"){
-                attributes.add(String.valueOf(node.getAttribute(this.hierarchy4)));
-            }
-            if (this.hierarchy5 != null && this.hierarchy5 != "No Selection"){
-                attributes.add(String.valueOf(node.getAttribute(this.hierarchy5)));
-            }
-
-            CircleWrap newCircleWrap = new CircleWrap((String) node.getId());
-            newCircleWrap.r = node.size();
-
-            CircleWrap parentContainer = container;
-            for (Object attribute : attributes) {
-                parentContainer = parentContainer.getChild((String) attribute);
-            }
-            parentContainer.addChild((String) node.getId(), newCircleWrap);
         }
 
-        CirclePackAlgo PackAlgo = new CirclePackAlgo();
+        final Graph graph;
+        if (graphModel.isDirected() || graphModel.isMixed()) {
+            graph = graphModel.getDirectedGraphVisible();
+        } else {
+            graph = graphModel.getGraphVisible();
+        }
 
-        PackAlgo.packHierarchyAndShift(container);
-        setNode(graph, container);
+        graph.readLock();
+        try {
+            int nodeCount = graph.getNodeCount();
+            Node[] nodes = graph.getNodes().toArray();
 
-        graph.readUnlock();
+            CircleWrap container = new CircleWrap();
+
+            for (int i = 0; i < nodeCount; i++) {
+                Node node = nodes[i];
+
+                ArrayList<String> nodeAttributes = new ArrayList<>();
+
+                for (String att : attributesToUse) {
+                    switch (att) {
+                        case "NodeID":
+                            nodeAttributes.add(node.getId().toString());
+                            break;
+                        case "Degree":
+                            nodeAttributes.add(String.valueOf(graph.getDegree(node)));
+                            break;
+                        case "InDegree":
+                            nodeAttributes.add(String.valueOf(((DirectedGraph) graph).getInDegree(node)));
+                            break;
+                        case "OutDegree":
+                            nodeAttributes.add(String.valueOf(((DirectedGraph) graph).getOutDegree(node)));
+                            break;
+                        default:
+                            nodeAttributes.add(String.valueOf(node.getAttribute(att)));
+                            break;
+                    }
+                }
+
+                CircleWrap newCircleWrap = new CircleWrap(node.getId().toString());
+                newCircleWrap.r = node.size();
+
+                CircleWrap parentContainer = container;
+                for (String attribute : nodeAttributes) {
+                    parentContainer = parentContainer.getChild(attribute);
+                }
+                parentContainer.addChild(node.getId().toString(), newCircleWrap);
+            }
+
+            CirclePackAlgo PackAlgo = new CirclePackAlgo();
+
+            PackAlgo.packHierarchyAndShift(container);
+            setNode(graph, container);
+
+        } finally {
+            graph.readUnlockAll();
+        }
         endAlgo();
     }
 
-    public void setNode(Graph graph, CircleWrap parentCircle){
+    public void setNode(Graph graph, CircleWrap parentCircle) {
         for (CircleWrap circle : parentCircle.children.values()) {
-            if (circle.hasChildren()){
+            if (circle.hasChildren()) {
                 setNode(graph, circle);
             } else {
                 Node node = graph.getNode(circle.getId());
@@ -116,21 +134,20 @@ public class CirclePackLayout implements Layout {
 
     @Override
     public LayoutProperty[] getProperties() {
-        List<LayoutProperty> properties = new ArrayList<LayoutProperty>();
-        final String CIRCLELAYOUT = "Circle Pack Layout";
+        List<LayoutProperty> properties = new ArrayList<>();
 
         try {
             properties.add(LayoutProperty.createProperty(
                     this, String.class,
                     "Hierarchy1",
                     "Hierarchy",
-                     "Hierarchy1",
+                    "Hierarchy1",
                     "getHierarchy1", "setHierarchy1", LayoutComboBoxEditor.class));
             properties.add(LayoutProperty.createProperty(
                     this, String.class,
                     "Hierarchy2",
                     "Hierarchy",
-                     "Hierarchy2",
+                    "Hierarchy2",
                     "getHierarchy2", "setHierarchy2", LayoutComboBoxEditor.class));
             properties.add(LayoutProperty.createProperty(
                     this, String.class,
@@ -150,8 +167,8 @@ public class CirclePackLayout implements Layout {
                     "Hierarchy",
                     "Hierarchy5",
                     "getHierarchy5", "setHierarchy5", LayoutComboBoxEditor.class));
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (NoSuchMethodException e) {
+            Exceptions.printStackTrace(e);
         }
 
         return properties.toArray(new LayoutProperty[0]);
@@ -167,53 +184,43 @@ public class CirclePackLayout implements Layout {
         return builder;
     }
 
-    public String getHierarchy1()
-    {
+    public String getHierarchy1() {
         return this.hierarchy1;
     }
 
-    public void setHierarchy1(String attribute)
-    {
+    public void setHierarchy1(String attribute) {
         this.hierarchy1 = attribute;
     }
 
-    public String getHierarchy2()
-    {
+    public String getHierarchy2() {
         return this.hierarchy2;
     }
 
-    public void setHierarchy2(String attribute)
-    {
+    public void setHierarchy2(String attribute) {
         this.hierarchy2 = attribute;
     }
 
-    public void setHierarchy3(String attribute)
-    {
+    public void setHierarchy3(String attribute) {
         this.hierarchy3 = attribute;
     }
 
-    public String getHierarchy3()
-    {
+    public String getHierarchy3() {
         return this.hierarchy3;
     }
 
-    public void setHierarchy4(String attribute)
-    {
+    public void setHierarchy4(String attribute) {
         this.hierarchy4 = attribute;
     }
 
-    public String getHierarchy4()
-    {
+    public String getHierarchy4() {
         return this.hierarchy4;
     }
 
-    public void setHierarchy5(String attribute)
-    {
+    public void setHierarchy5(String attribute) {
         this.hierarchy5 = attribute;
     }
 
-    public String getHierarchy5()
-    {
+    public String getHierarchy5() {
         return this.hierarchy5;
     }
 
