@@ -1,0 +1,5 @@
+Manifest-Version: 1.0
+OpenIDE-Module-Name: scale layout plugin
+OpenIDE-Module-Short-Description: expand or contract part of the graph
+OpenIDE-Module-Long-Description: Users can scale part of the graph by set scale factor and which part they want to scale. To denote the part, users need to set the node's attribute "part"(ensure the nodes have this attribute in Integer type!).
+OpenIDE-Module-Display-Category: Layout
