@@ -53,6 +53,7 @@
         <module>modules/AgensGraphPlugin</module>
         <module>modules/PolygonShapedNodes</module>
         <module>modules/ScalePlugin</module>
+        <module>modules/CirclePack</module>
     </modules>
     
     <!-- Properties -->
