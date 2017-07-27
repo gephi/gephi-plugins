@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<actions>
+    <action>
+        <actionName>run</actionName>
+        <goals>
+            <goal>package</goal>
+            <goal>org.gephi:gephi-maven-plugin:run</goal>
+        </goals>
+    </action>
+    <action>
+        <actionName>debug</actionName>
+        <goals>
+            <goal>package</goal>
+            <goal>org.gephi:gephi-maven-plugin:run</goal>
+        </goals>
+        <properties>
+            <jpda.listen>true</jpda.listen>
+            <run.params.debug>-J-Xdebug -J-Xrunjdwp:transport=dt_socket,suspend=n,server=n,address=${jpda.address}</run.params.debug> 
+        </properties>
+    </action>
+</actions>

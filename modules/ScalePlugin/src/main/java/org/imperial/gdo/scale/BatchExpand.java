@@ -65,7 +65,7 @@ public class BatchExpand implements LayoutBuilder {
 
     @Override
     public ScaleLayout2 buildLayout() {
-        return new ScaleLayout2(this, 1.2, 1.2, 1, 50);
+        return new ScaleLayout2(this, 1.2, 1.2, 1, 1);
     }
 
     @Override

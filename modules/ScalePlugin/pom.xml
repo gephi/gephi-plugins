@@ -9,7 +9,7 @@
 
     <groupId>imperialcollegelondon</groupId>
     <artifactId>scale-plugin</artifactId>
-    <version>1.1.0</version>
+    <version>1.0.0</version>
     <packaging>nbm</packaging>
 
     <name>scale layout plugin</name>
@@ -21,7 +21,7 @@
                 <artifactId>nbm-maven-plugin</artifactId>
                 <configuration>
                     <licenseName>GPL3.0</licenseName>
-                    <author>Huangsong Wei, Imperial College London</author>
+                    <author>Huangsong Wei,Imperial College London</author>
                     <authorEmail>weihs1993@qq.com</authorEmail>
                     <authorUrl>https://github.com/weihs/gephi-plugins</authorUrl>
                     <sourceCodeUrl>https://github.com/weihs/gephi-plugins</sourceCodeUrl>
