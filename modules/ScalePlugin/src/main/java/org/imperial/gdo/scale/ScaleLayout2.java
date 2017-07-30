@@ -62,17 +62,18 @@ import org.openide.util.Exceptions;
 import org.openide.util.NbBundle;
 
 
-public class ScaleLayout extends AbstractLayout implements Layout {
+public class ScaleLayout2 extends AbstractLayout implements Layout {
 
     private double x_scale,y_scale;
-    private int part;
+    private int part_start, part_end;
     private Graph graph;
 
-    public ScaleLayout(LayoutBuilder layoutBuilder, double x_scale, double y_scale, int part) {
+    public ScaleLayout2(LayoutBuilder layoutBuilder, double x_scale, double y_scale, int part_start, int part_end) {
         super(layoutBuilder);
         this.x_scale = x_scale;
         this.y_scale = y_scale;
-        this.part=part;
+        this.part_start=part_start;
+        this.part_end=part_end;
     }
 
     @Override
@@ -84,44 +85,49 @@ public class ScaleLayout extends AbstractLayout implements Layout {
     public void goAlgo() {
         graph = graphModel.getGraphVisible();
         graph.readLock();
-        int partNodeCount=0;
-        int missing=0;
-        Logger.getLogger("").log(Level.INFO,"start1");
         
-            for(Node n : graph.getNodes()) {
-                                    
-                if (n.getAttribute("part").equals(getPart())) {
-                    partNodeCount += 1;
-                }
-               
-            }
-            Logger.getLogger("").log(Level.INFO,"nodecount{0}",partNodeCount);           
-            double xMean = 0, yMean = 0;
-            for (Node n : graph.getNodes()) {
-                if (n.getAttribute("part").equals(getPart())) {
-                    xMean += n.x();
-                    yMean += n.y();
-                }
-            }
-            xMean /= partNodeCount;
-            yMean /= partNodeCount;
-            
-            for (Node n : graph.getNodes()) {
-                if (n.getAttribute("part").equals(getPart())) {
-                    double dx = (n.x() - xMean) * getXScale();
-                    double dy = (n.y() - yMean) * getYScale();
+       
+        
+        try {
+            for (int currentPart = part_start; currentPart <= part_end; currentPart++) {
+                int partNodeCount=0;
+                for (Node n : graph.getNodes()) {
                     
-                    n.setX((float) (xMean + dx));
-                    n.setY((float) (yMean + dy));
+                    if (n.getAttribute("part").equals(currentPart)) {
+                        partNodeCount += 1;
+                    }
+                    
+                }
+                
+                double xMean = 0, yMean = 0;
+                for (Node n : graph.getNodes()) {
+                    if (n.getAttribute("part").equals(currentPart)) {
+                        xMean += n.x();
+                        yMean += n.y();
+                    }
+                }
+                xMean /= partNodeCount;
+                yMean /= partNodeCount;
+                
+                for (Node n : graph.getNodes()) {
+                    if (n.getAttribute("part").equals(currentPart)) {
+                        double dx = (n.x() - xMean) * getXScale();
+                        double dy = (n.y() - yMean) * getYScale();
+                        
+                        n.setX((float) (xMean + dx));
+                        n.setY((float) (yMean + dy));
+                    }
                 }
             }
        
             setConverged(true);
-        
-       
-               
+        } 
+        catch(Exception e){
+            Logger.getLogger("").log(Level.INFO, "algorithm did not run");
+        }
+        finally{        
             graph.readUnlockAll();
-    
+    }
     }
 
     @Override
@@ -148,11 +154,18 @@ public class ScaleLayout extends AbstractLayout implements Layout {
                    "getYScale", "setYScale"));
             properties.add(LayoutProperty.createProperty(
                     this, Integer.class,
-                    NbBundle.getMessage(getClass(), "ScaleLayout.scalePart.name"),
+                    NbBundle.getMessage(getClass(), "ScaleLayout.scalePart_start.name"),
                     null,
-                    "ScaleLayout.scalePart.name",
-                    NbBundle.getMessage(getClass(), "ScaleLayout.scalePart.desc"),
-                    "getPart", "setPart"));
+                    "ScaleLayout.scalePart_start.name",
+                    NbBundle.getMessage(getClass(), "ScaleLayout.scalePart_start.desc"),
+                    "getPart_start", "setPart_start"));
+            properties.add(LayoutProperty.createProperty(
+                    this, Integer.class,
+                    NbBundle.getMessage(getClass(), "ScaleLayout.scalePart_end.name"),
+                    null,
+                    "ScaleLayout.scalePart_end.name",
+                    NbBundle.getMessage(getClass(), "ScaleLayout.scalePart_end.desc"),
+                    "getPart_end", "setPart_end"));
         } catch (Exception e) {
             Exceptions.printStackTrace(e);
         }
@@ -196,15 +209,29 @@ public class ScaleLayout extends AbstractLayout implements Layout {
     /**
      * @return the part number
      */
-    public Integer getPart() {
-        return this.part;
+    public Integer getPart_start() {
+        return this.part_start;
     }
 
     /**
      * @param part the part to set
      */
-    public void setPart(Integer part) {
-        this.part = part;
+    public void setPart_start(Integer part_start) {
+        this.part_start = part_start;
+    }
+    
+    /**
+     * @return the part number
+     */
+    public Integer getPart_end() {
+        return this.part_end;
+    }
+
+    /**
+     * @param part the part to set
+     */
+    public void setPart_end(Integer part_end) {
+        this.part_end = part_end;
     }
     
     
