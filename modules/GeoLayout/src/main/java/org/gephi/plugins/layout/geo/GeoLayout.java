@@ -74,7 +74,8 @@ public class GeoLayout implements Layout {
     private Column longitude;
     private final boolean radian = false;
     private String projection = "Mercator";
-    public static String[] rows = {"Mercator",
+    public static String[] rows = {
+        "Mercator",
         "Transverse Mercator",
         "Miller cylindrical",
         "Gall–Peters",
@@ -91,16 +92,18 @@ public class GeoLayout implements Layout {
     public void resetPropertiesValues() {
         if (graphModel != null) {
             for (Column c : graphModel.getNodeTable()) {
-                if (c.getId().equalsIgnoreCase("latitude")
-                        || c.getId().equalsIgnoreCase("lat")
-                        || c.getTitle().equalsIgnoreCase("latitude")
-                        || c.getTitle().equalsIgnoreCase("lat")) {
-                    latitude = c;
-                } else if (c.getId().equalsIgnoreCase("longitude")
-                        || c.getId().equalsIgnoreCase("lon")
-                        || c.getTitle().equalsIgnoreCase("longitude")
-                        || c.getTitle().equalsIgnoreCase("lon")) {
-                    longitude = c;
+                if (c.isNumber() && !c.isArray() && !c.isDynamic()) {
+                    if (c.getId().equalsIgnoreCase("latitude")
+                            || c.getId().equalsIgnoreCase("lat")
+                            || c.getTitle().equalsIgnoreCase("latitude")
+                            || c.getTitle().equalsIgnoreCase("lat")) {
+                        latitude = c;
+                    } else if (c.getId().equalsIgnoreCase("longitude")
+                            || c.getId().equalsIgnoreCase("lon")
+                            || c.getTitle().equalsIgnoreCase("longitude")
+                            || c.getTitle().equalsIgnoreCase("lon")) {
+                        longitude = c;
+                    }
                 }
             }
         }
@@ -122,14 +125,14 @@ public class GeoLayout implements Layout {
         graph.readLock();
 
         List<Node> validNodes = new ArrayList<Node>();
-        List<Node> unvalidNodes = new ArrayList<Node>();
+        List<Node> invalidNodes = new ArrayList<Node>();
 
         // Set valid and non valid nodes:
         for (Node n : graph.getNodes()) {
             if (n.getAttribute(latitude) != null && n.getAttribute(longitude) != null) {
                 validNodes.add(n);
             } else {
-                unvalidNodes.add(n);
+                invalidNodes.add(n);
             }
         }
 
@@ -139,7 +142,7 @@ public class GeoLayout implements Layout {
 
             //determine lambda0:
             for (Node n : validNodes) {
-                lon = (Double) n.getAttribute(longitude, graph.getView());
+                lon = getNodeLongitude(graph, n);
                 lambda0 += lon;
             }
 
@@ -151,8 +154,8 @@ public class GeoLayout implements Layout {
                 if (n.getLayoutData() == null || !(n.getLayoutData() instanceof GeoLayoutData)) {
                     n.setLayoutData(new GeoLayoutData());
                 }
-                lat = (Double) n.getAttribute(latitude, graph.getView());
-                lon = (Double) n.getAttribute(longitude, graph.getView());
+                lat = getNodeLatitude(graph, n);
+                lon = getNodeLongitude(graph, n);
 
                 lat = Math.toRadians(lat);
                 lon = Math.toRadians(lon);
@@ -177,8 +180,8 @@ public class GeoLayout implements Layout {
                     n.setLayoutData(new GeoLayoutData());
                 }
 
-                lat = (Double) n.getAttribute(latitude, graph.getView());
-                lon = (Double) n.getAttribute(longitude, graph.getView());
+                lat = getNodeLatitude(graph, n);
+                lon = getNodeLongitude(graph, n);
 
                 lat = Math.toRadians(lat);
                 lon = Math.toRadians(lon);
@@ -203,8 +206,8 @@ public class GeoLayout implements Layout {
                     n.setLayoutData(new GeoLayoutData());
                 }
 
-                lat = (Double) n.getAttribute(latitude, graph.getView());
-                lon = (Double) n.getAttribute(longitude, graph.getView());
+                lat = getNodeLatitude(graph, n);
+                lon = getNodeLongitude(graph, n);
 
                 lat = Math.toRadians(lat);
                 lon = Math.toRadians(lon);
@@ -229,8 +232,8 @@ public class GeoLayout implements Layout {
                     n.setLayoutData(new GeoLayoutData());
                 }
 
-                lat = (Double) n.getAttribute(latitude, graph.getView());
-                lon = (Double) n.getAttribute(longitude, graph.getView());
+                lat = getNodeLatitude(graph, n);
+                lon = getNodeLongitude(graph, n);
 
                 lat = Math.toRadians(lat);
                 lon = Math.toRadians(lon);
@@ -253,7 +256,7 @@ public class GeoLayout implements Layout {
 
             //determine lambda0:
             for (Node n : validNodes) {
-                lon = (Double) n.getAttribute(longitude, graph.getView());
+                lon = getNodeLongitude(graph, n);
                 lambda0 += lon;
             }
 
@@ -266,8 +269,8 @@ public class GeoLayout implements Layout {
                     n.setLayoutData(new GeoLayoutData());
                 }
 
-                lat = (Double) n.getAttribute(latitude, graph.getView());
-                lon = (Double) n.getAttribute(longitude, graph.getView());
+                lat = getNodeLatitude(graph, n);
+                lon = getNodeLongitude(graph, n);
 
                 lat = Math.toRadians(lat);
                 lon = Math.toRadians(lon);
@@ -291,8 +294,8 @@ public class GeoLayout implements Layout {
 
             //determine lambda0:
             for (Node n : validNodes) {
-                lat = (Double) n.getAttribute(latitude, graph.getView());
-                lon = (Double) n.getAttribute(longitude, graph.getView());
+                lat = getNodeLatitude(graph, n);
+                lon = getNodeLongitude(graph, n);
                 lambda0 += lon;
                 phi0 += lat;
             }
@@ -309,8 +312,8 @@ public class GeoLayout implements Layout {
                     n.setLayoutData(new GeoLayoutData());
                 }
 
-                lat = (Double) n.getAttribute(latitude, graph.getView());
-                lon = (Double) n.getAttribute(longitude, graph.getView());
+                lat = getNodeLatitude(graph, n);
+                lon = getNodeLongitude(graph, n);
 
                 lat = Math.toRadians(lat);
                 lon = Math.toRadians(lon);
@@ -336,8 +339,8 @@ public class GeoLayout implements Layout {
                     n.setLayoutData(new GeoLayoutData());
                 }
 
-                lat = (Double) n.getAttribute(latitude, graph.getView());
-                lon = (Double) n.getAttribute(longitude, graph.getView());
+                lat = getNodeLatitude(graph, n);
+                lon = getNodeLongitude(graph, n);
 
                 lat = Math.toRadians(lat);
                 lon = Math.toRadians(lon);
@@ -364,8 +367,8 @@ public class GeoLayout implements Layout {
                     n.setLayoutData(new GeoLayoutData());
                 }
 
-                lat = (Double) n.getAttribute(latitude, graph.getView());
-                lon = (Double) n.getAttribute(longitude, graph.getView());
+                lat = getNodeLatitude(graph, n);
+                lon = getNodeLongitude(graph, n);
 
                 lat = Math.toRadians(lat);
                 lon = Math.toRadians(lon);
@@ -386,7 +389,7 @@ public class GeoLayout implements Layout {
             averageY = averageY / validNodes.size();
         }
 
-        if (validNodes.size() > 0 && unvalidNodes.size() > 0) {
+        if (validNodes.size() > 0 && invalidNodes.size() > 0) {
             Node tempNode = validNodes.get(0);
             double xMin = tempNode.x();
             double xMax = tempNode.x();
@@ -408,16 +411,16 @@ public class GeoLayout implements Layout {
                 }
             }
 
-            if (unvalidNodes.size() > 1) {
+            if (invalidNodes.size() > 1) {
                 double i = 0;
-                double step = (xMax - xMin) / (unvalidNodes.size() - 1);
-                for (Node n : unvalidNodes) {
+                double step = (xMax - xMin) / (invalidNodes.size() - 1);
+                for (Node n : invalidNodes) {
                     n.setX((float) (xMin + i * step));
                     n.setY((float) (yMin - step));
                     i++;
                 }
             } else {
-                tempNode = unvalidNodes.get(0);
+                tempNode = invalidNodes.get(0);
                 tempNode.setX(10000);
                 tempNode.setY(10000);
             }
@@ -446,6 +449,16 @@ public class GeoLayout implements Layout {
                 Exceptions.printStackTrace(ex);
             }
         }
+    }
+
+    private double getNodeLatitude(Graph graph, Node n) {
+        Number lat = (Number) n.getAttribute(latitude, graph.getView());
+        return lat.doubleValue();
+    }
+
+    private double getNodeLongitude(Graph graph, Node n) {
+        Number lat = (Number) n.getAttribute(longitude, graph.getView());
+        return lat.doubleValue();
     }
 
     @Override
