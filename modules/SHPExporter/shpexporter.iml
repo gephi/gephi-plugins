@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module org.jetbrains.idea.maven.project.MavenProjectsManager.isMavenModule="true" type="JAVA_MODULE" version="4">
+  <component name="NewModuleRootManager" LANGUAGE_LEVEL="JDK_1_6">
+    <output url="file://$MODULE_DIR$/target/classes" />
+    <output-test url="file://$MODULE_DIR$/target/test-classes" />
+    <content url="file://$MODULE_DIR$">
+      <sourceFolder url="file://$MODULE_DIR$/src/main/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/main/resources" type="java-resource" />
+      <sourceFolder url="file://$MODULE_DIR$/target/generated-sources/annotations" isTestSource="false" generated="true" />
+      <excludeFolder url="file://$MODULE_DIR$/target" />
+    </content>
+    <orderEntry type="inheritedJdk" />
+    <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="library" name="Maven: org.geotools:gt-api:17.2" level="project" />
+    <orderEntry type="library" name="Maven: org.geotools:gt-main:17.2" level="project" />
+    <orderEntry type="library" name="Maven: org.geotools:gt-metadata:17.2" level="project" />
+    <orderEntry type="library" name="Maven: org.geotools:gt-shapefile:17.2" level="project" />
+    <orderEntry type="library" name="Maven: org.geotools:gt-opengis:17.2" level="project" />
+    <orderEntry type="library" name="Maven: com.vividsolutions:jts:1.13" level="project" />
+    <orderEntry type="library" name="Maven: org.netbeans.api:org-openide-awt:RELEASE81" level="project" />
+    <orderEntry type="library" name="Maven: org.netbeans.api:org-netbeans-api-annotations-common:RELEASE81" level="project" />
+    <orderEntry type="library" name="Maven: org.netbeans.api:org-openide-filesystems:RELEASE81" level="project" />
+    <orderEntry type="library" name="Maven: org.netbeans.api:org-openide-util-ui:RELEASE81" level="project" />
+    <orderEntry type="library" name="Maven: org.gephi:preview-plugin:0.9.1" level="project" />
+    <orderEntry type="library" name="Maven: org.gephi:project-api:0.9.1" level="project" />
+    <orderEntry type="library" name="Maven: org.gephi:core-library-wrapper:0.9.1" level="project" />
+    <orderEntry type="library" name="Maven: net.java.dev:stax-utils:snapshot-20100402" level="project" />
+    <orderEntry type="library" name="Maven: commons-codec:commons-codec:1.6" level="project" />
+    <orderEntry type="library" name="Maven: org.apache.commons:commons-compress:1.1" level="project" />
+    <orderEntry type="library" name="Maven: jfree:jfreechart:1.0.13" level="project" />
+    <orderEntry type="library" name="Maven: jfree:jcommon:1.0.16" level="project" />
+    <orderEntry type="library" name="Maven: gnu.trove:trove:2.1.0" level="project" />
+    <orderEntry type="library" name="Maven: com.google.collections:google-collections:1.0" level="project" />
+    <orderEntry type="library" name="Maven: net.sourceforge.javacsv:javacsv:2.0" level="project" />
+    <orderEntry type="library" name="Maven: xml-apis:xml-apis-ext:1.3.04" level="project" />
+    <orderEntry type="library" name="Maven: com.itextpdf:itextpdf:5.2.0" level="project" />
+    <orderEntry type="library" name="Maven: org.apache.xmlgraphics:batik-transcoder:1.7" level="project" />
+    <orderEntry type="library" name="Maven: org.apache.xmlgraphics:batik-awt-util:1.7" level="project" />
+    <orderEntry type="library" name="Maven: org.apache.xmlgraphics:batik-bridge:1.7" level="project" />
+    <orderEntry type="library" name="Maven: org.apache.xmlgraphics:batik-anim:1.7" level="project" />
+    <orderEntry type="library" name="Maven: org.apache.xmlgraphics:batik-css:1.7" level="project" />
+    <orderEntry type="library" name="Maven: org.apache.xmlgraphics:batik-ext:1.7" level="project" />
+    <orderEntry type="library" name="Maven: org.apache.xmlgraphics:batik-parser:1.7" level="project" />
+    <orderEntry type="library" name="Maven: org.apache.xmlgraphics:batik-script:1.7" level="project" />
+    <orderEntry type="library" name="Maven: xalan:xalan:2.6.0" level="project" />
+    <orderEntry type="library" name="Maven: org.apache.xmlgraphics:batik-dom:1.7" level="project" />
+    <orderEntry type="library" name="Maven: org.apache.xmlgraphics:batik-gvt:1.7" level="project" />
+    <orderEntry type="library" name="Maven: org.apache.xmlgraphics:batik-svg-dom:1.7" level="project" />
+    <orderEntry type="library" name="Maven: org.apache.xmlgraphics:batik-util:1.7" level="project" />
+    <orderEntry type="library" name="Maven: org.apache.xmlgraphics:batik-xml:1.7" level="project" />
+    <orderEntry type="library" name="Maven: org.gephi:visualization-api:0.9.1" level="project" />
+    <orderEntry type="library" name="Maven: org.gephi:datalab-api:0.9.1" level="project" />
+    <orderEntry type="library" name="Maven: org.netbeans.api:org-openide-dialogs:RELEASE81" level="project" />
+    <orderEntry type="library" name="Maven: org.netbeans.api:org-netbeans-api-progress:RELEASE81" level="project" />
+    <orderEntry type="library" name="Maven: org.netbeans.api:org-openide-modules:RELEASE81" level="project" />
+    <orderEntry type="library" name="Maven: org.netbeans.api:org-netbeans-api-progress-nb:RELEASE81" level="project" />
+    <orderEntry type="library" name="Maven: org.netbeans.api:org-openide-util-lookup:RELEASE81" level="project" />
+    <orderEntry type="library" name="Maven: org.gephi:graph-api:0.9.1" level="project" />
+    <orderEntry type="library" name="Maven: org.gephi:graphstore:0.5.3" level="project" />
+    <orderEntry type="library" name="Maven: it.unimi.dsi:fastutil:6.6.4" level="project" />
+    <orderEntry type="library" name="Maven: colt:colt:1.2.0" level="project" />
+    <orderEntry type="library" name="Maven: concurrent:concurrent:1.3.4" level="project" />
+    <orderEntry type="library" name="Maven: joda-time:joda-time:2.8.2" level="project" />
+    <orderEntry type="library" name="Maven: org.gephi:preview-api:0.9.1" level="project" />
+    <orderEntry type="library" name="Maven: org.gephi:utils-longtask:0.9.1" level="project" />
+    <orderEntry type="library" name="Maven: org.gephi:utils:0.9.1" level="project" />
+    <orderEntry type="library" name="Maven: org.netbeans.api:org-openide-util:RELEASE81" level="project" />
+  </component>
+</module>

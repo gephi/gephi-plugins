@@ -1,0 +1,17 @@
+This Plugin exports two Shapefiles: one for the edges, and one for the nodes. The shapefiles (the respective DBF-Files) contain the columns of the edge and shape tables. It adds the current width/size and color in gephi to two additional columns.
+
+The geography is rather simple. The location info is either read from columns in the node table (I use parts of David Sheppard's ExportToEarth Exporter to do that) or from a fake geography - that is the current position of the nodes in the gephi layout.
+
+One can then easily import the two datasets into QGIS or any other mapping tool and add a symbology. The only drawback of this simple solution is that in such tools you won't be able to draw arrows or even more arrows that don't intersect when they go into both directions.
+
+
+Copyright (c) 2013 by Roman Seidl - romanAeTgranul.at
+
+This Program uses code copyright (c) 2012 by David Shepard
+
+
+This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License along with this program.  If not, see <http://www.gnu.org/licenses/>.
