@@ -5,7 +5,7 @@ The geography is rather simple. The location info is either read from columns in
 One can then easily import the two datasets into QGIS or any other mapping tool and add a symbology. The only drawback of this simple solution is that in such tools you won't be able to draw arrows or even more arrows that don't intersect when they go into both directions.
 
 
-Copyright (c) 2013 by Roman Seidl - romanAeTgranul.at
+Copyright (c) 2017 by Roman Seidl - romanAeTgranul.at
 
 This Program uses code copyright (c) 2012 by David Shepard
 
