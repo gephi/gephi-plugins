@@ -7,9 +7,6 @@ import java.util.logging.Logger;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
-import org.gephi.desktop.project.api.ProjectControllerUI;
-import org.gephi.graph.api.GraphController;
-import org.gephi.graph.api.GraphModel;
 import org.gephi.io.database.drivers.SQLDriver;
 import org.gephi.io.database.drivers.SQLUtils;
 import org.gephi.io.importer.api.Container;
@@ -496,7 +493,6 @@ public class AgensGraphImportPanel extends TopComponent /*javax.swing.JPanel*/ {
     }//GEN-LAST:event_executeButtonActionPerformed
 
     public Workspace workspace = null;
-    public ProjectControllerUI pcui = Lookup.getDefault().lookup(ProjectControllerUI.class);
     public ProjectController pc = Lookup.getDefault().lookup(ProjectController.class);
     
     AgensGraphDatabaseImpl db_temp = new AgensGraphDatabaseImpl();
@@ -504,7 +500,7 @@ public class AgensGraphImportPanel extends TopComponent /*javax.swing.JPanel*/ {
     public void executeAgensImport(){
         
         if (pc.getCurrentProject() == null) {
-            pcui.newProject();
+            pc.newProject();
             workspace = pc.getCurrentWorkspace();
         }
         

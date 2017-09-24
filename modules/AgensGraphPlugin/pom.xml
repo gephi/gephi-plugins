@@ -19,32 +19,18 @@
         <dependency>
             <groupId>org.gephi</groupId>
             <artifactId>db-drivers</artifactId>
-            <type>jar</type>
         </dependency>
         <dependency>
             <groupId>org.gephi</groupId>
             <artifactId>io-importer-api</artifactId>
-            <type>jar</type>
         </dependency>
         <dependency>
             <groupId>org.gephi</groupId>
             <artifactId>ui-utils</artifactId>
-            <type>jar</type>
-        </dependency>
-        <dependency>
-            <groupId>org.gephi</groupId>
-            <artifactId>io-importer-plugin</artifactId>
-            <type>jar</type>
-        </dependency>
-        <dependency>
-            <groupId>org.gephi</groupId>
-            <artifactId>import-plugin-ui</artifactId>
-            <type>jar</type>
         </dependency>
         <dependency>
             <groupId>org.netbeans.api</groupId>
             <artifactId>org-openide-windows</artifactId>
-            <type>jar</type>
         </dependency>
         <dependency>
             <groupId>org.netbeans.api</groupId>
@@ -87,10 +73,6 @@
             <artifactId>org-netbeans-api-annotations-common</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.gephi</groupId>
-            <artifactId>core-library-wrapper</artifactId>
-        </dependency>
-        <dependency>
             <groupId>org.netbeans.api</groupId>
             <artifactId>org-openide-nodes</artifactId>
         </dependency>
@@ -101,35 +83,23 @@
         <dependency>
             <groupId>net.bitnine</groupId>
             <artifactId>agensgraph-jdbc</artifactId>
-            <version>1.1.0</version>
+            <version>1.3.2</version>
         </dependency>
         <dependency>
             <groupId>org.netbeans.api</groupId>
             <artifactId>org-netbeans-modules-settings</artifactId>
-            <type>jar</type>
-        </dependency>
-        <dependency>
-            <groupId>org.gephi</groupId>
-            <artifactId>desktop-project</artifactId>
-            <type>jar</type>
         </dependency>
         <dependency>
             <groupId>org.gephi</groupId>
             <artifactId>io-processor-plugin</artifactId>
-            <type>jar</type>
         </dependency>
         <dependency>
             <groupId>org.gephi</groupId>
             <artifactId>graph-api</artifactId>
-            <type>jar</type>
         </dependency>
         <dependency>
             <groupId>org.gephi</groupId>
             <artifactId>project-api</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.gephi</groupId>
-            <artifactId>utils-longtask</artifactId>
         </dependency>
     </dependencies>
 
