@@ -29,7 +29,7 @@
 hs_err_pid*
 
 ### Maven ###
-target/
+#sjr below# target/
 pom.xml.tag
 pom.xml.releaseBackup
 pom.xml.versionsBackup
@@ -43,3 +43,7 @@ buildNumber.properties
 !/.mvn/wrapper/maven-wrapper.jar
 
 # End of https://www.gitignore.io/api/maven,java
+
+# sjr 26-Oct-17 but include built target plugin
+**/target/*
+!modules/polinodeExporter/target/polinodeexporter-0.9.2.nbm

@@ -16,11 +16,8 @@ import com.google.gson.Gson;
 import java.net.URL;
 import java.net.HttpURLConnection;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.BufferedReader;
-import java.io.OutputStream;
 
 import java.nio.charset.Charset;
 
@@ -30,6 +27,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.zip.GZIPOutputStream;
 
 import org.gephi.graph.api.Column;
 import org.gephi.graph.api.Edge;
@@ -60,7 +58,7 @@ public class PolinodeExporter implements Exporter, LongTask {
     private String polinodePublicKey;
     private String polinodePrivateKey;
 
-    private ProgressTicket progress;
+    private ProgressTicket progressTicket;
     private boolean cancel = false;
 
     final Charset utf8Charset = Charset.forName("UTF-8");
@@ -78,9 +76,17 @@ public class PolinodeExporter implements Exporter, LongTask {
                 graph = graphModel.getGraphVisible();
                 graph.readLock();
 
+                //  limit size
+                
+                if( graph.getNodeCount()>50000 || graph.getEdgeCount()>250000 ) {
+                    DisplayError("Polinode networks are limited to 50000 nodes (this network has "+graph.getNodeCount()+")\nand 250000 edges (this network has "+graph.getEdgeCount()+").");
+                    cancel = true;
+                    return false;
+                }
+
                 //  count the nodes + edges for progress bar
                 int tasks = graph.getNodeCount() + graph.getEdgeCount() + 1;
-                Progress.start(progress, tasks);
+                Progress.start(progressTicket, tasks);
 
                 //  nodes
                 Table nodeTable = graphModel.getNodeTable();
@@ -98,19 +104,18 @@ public class PolinodeExporter implements Exporter, LongTask {
                     for (Column col : nodeTable) {
                         String cid = col.getId();
                         if (!cid.equalsIgnoreCase("id") && !cid.equalsIgnoreCase("label")) {
-                            Object obj = gnode.getAttribute(col);
-                            if (obj != null) {
-                                pnode.attributes.put(col.getTitle(), obj.toString());
+                            Object attribute = gnode.getAttribute(col);
+                            if( attribute!=null ) {
+                                pnode.attributes.put(col.getTitle(), attribute.toString());
                             }
                         }
                     }
-
                     pnodes.add(pnode);
 
                     if (cancel) {
                         return false;
                     }
-                    Progress.progress(progress);
+                    Progress.progress(progressTicket);
                 }
 
                 ArrayList<EdgeElement> pedges = new ArrayList<EdgeElement>();
@@ -128,16 +133,18 @@ public class PolinodeExporter implements Exporter, LongTask {
                     while (gedgeAttribute.hasNext()) {
                         Column col = gedgeAttribute.next();
                         if (!col.isProperty()) {
-                            pedge.attributes.put(col.getTitle(), gedge.getAttribute(col).toString());
+                            Object attribute = gedge.getAttribute(col);
+                            if( attribute!=null ) {
+                                pedge.attributes.put(col.getTitle(), attribute.toString());
+                            }
                         }
                     }
-
                     pedges.add(pedge);
 
                     if (cancel) {
                         return false;
                     }
-                    Progress.progress(progress);
+                    Progress.progress(progressTicket);
                 }
 
                 HashMap<String, ArrayList> networkJSON = new HashMap<String, ArrayList>();
@@ -155,13 +162,16 @@ public class PolinodeExporter implements Exporter, LongTask {
                 URL url = new URL("https://www.polinode.com/api/v2/networks");
                 HttpURLConnection connection = (HttpURLConnection) url.openConnection();
                 connection.setDoOutput(true);
-                connection.setRequestProperty("Content-Type", "application/json");
+
                 String authorization = Base64.getEncoder().encodeToString((polinodePublicKey + ":" + polinodePrivateKey).getBytes(utf8Charset));
                 connection.setRequestProperty("Authorization", "Basic " + authorization);
 
                 Gson gson = new Gson();
-                OutputStream outputStream = connection.getOutputStream();
+                connection.setRequestProperty("Content-Type", "application/json; charset=UTF-8");
+                connection.setRequestProperty("Content-Encoding", "gzip");
+                GZIPOutputStream outputStream = new GZIPOutputStream(connection.getOutputStream());
                 outputStream.write(gson.toJson(postdata).getBytes(utf8Charset));
+                outputStream.close();
 
                 connection.connect();
 
@@ -177,8 +187,7 @@ public class PolinodeExporter implements Exporter, LongTask {
                     reader = new BufferedReader(new InputStreamReader(connection.getErrorStream()));
                 }
                 finally {
-                    
-                    reader.mark(32768);
+                    reader.mark(327680);
                     
                     //  try to interpret response as json
                     
@@ -220,7 +229,7 @@ public class PolinodeExporter implements Exporter, LongTask {
             Logger.getLogger(PolinodeExporter.class.getName()).log(Level.SEVERE, null, e);
         }
 
-        Progress.finish(progress);
+        Progress.finish(progressTicket);
         return !cancel;
     }
 
@@ -238,9 +247,9 @@ public class PolinodeExporter implements Exporter, LongTask {
     void DisplaySuccess(final String networkid) {
         SwingUtilities.invokeLater(new Runnable() {
             public void run() {
-                Object[] options = {"Open in Polinode", "Cancel"};
+                Object[] options = {"Open in Polinode", "Close"};
                 int selected = JOptionPane.showOptionDialog(null,
-                        "Successfully exported network id "+networkid,
+                        "Successfully uploaded your network to Polinode",
                         "Export to Polinode",
                         JOptionPane.YES_NO_OPTION,
                         JOptionPane.QUESTION_MESSAGE,
@@ -259,9 +268,8 @@ public class PolinodeExporter implements Exporter, LongTask {
     }
 
     @Override
-    public void setWorkspace(Workspace wrkspc
-    ) {
-        this.workspace = wrkspc;
+    public void setWorkspace(Workspace workspace) {
+        this.workspace = workspace;
     }
 
     @Override
@@ -276,9 +284,8 @@ public class PolinodeExporter implements Exporter, LongTask {
     }
 
     @Override
-    public void setProgressTicket(ProgressTicket pt
-    ) {
-        this.progress = pt;
+    public void setProgressTicket(ProgressTicket progressTicket) {
+        this.progressTicket = progressTicket;
     }
 
     public void setNetworkName(String networkName) {

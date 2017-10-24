@@ -5,6 +5,7 @@
  */
 package com.polinode.polinodeexporter;
 
+import java.awt.event.ActionListener;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.prefs.Preferences;
@@ -19,18 +20,35 @@ import org.gephi.project.api.ProjectMetaData;
  */
 public class PolinodeExporterSettingsPanel extends javax.swing.JPanel {
 
-    private PolinodeExporter exporter;
+    private ActionListener actionListener;
     private String realPrivateKey;
+
+    final public static String BUTTON_DETAILEDINSTRUCTIONS = "Detailed Instructions";
+    final public static String BUTTON_CREATEPOLINODEACCOUNT  = "Create Polinode Account";
+    final public static String BUTTON_CANCEL = "Cancel";
+    final public static String BUTTON_OK = "OK";
 
     /**
      * Creates new form PolinodeExporterSettingsPanel
      */
-    public PolinodeExporterSettingsPanel() {
+    public PolinodeExporterSettingsPanel(ActionListener actionListener) {
         initComponents();
+        this.actionListener = actionListener;
+
+        jbuttonDetailedInstructions.setText(BUTTON_DETAILEDINSTRUCTIONS);
+        jbuttonDetailedInstructions.addActionListener(actionListener);
+
+        jbuttonCreatePolinodeAccount.setText(BUTTON_CREATEPOLINODEACCOUNT);
+        jbuttonCreatePolinodeAccount.addActionListener(actionListener);
+
+        jbuttonCancel.setText(BUTTON_CANCEL);
+        jbuttonCancel.addActionListener(actionListener);
+
+        jbuttonOK.setText(BUTTON_OK);
+        jbuttonOK.addActionListener(actionListener);
     }
 
-    public void setup(PolinodeExporter exporter) {
-        this.exporter = exporter;
+    public void setup() {
         
         Preferences prefs = NbPreferences.forModule(PolinodeExporterSettingsPanel.class);
         polinodePublicKey.setText(prefs.get("polinodePublicKey", ""));
@@ -40,38 +58,16 @@ public class PolinodeExporterSettingsPanel extends javax.swing.JPanel {
         else
             polinodePrivateKey.setText("XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXX"+realPrivateKey.substring(realPrivateKey.length()-4, realPrivateKey.length()));
 
-        String title = null;
-        String description = null;
-        ProjectMetaData projectMetaData = exporter.getWorkspace().getLookup().lookup(ProjectMetaData.class);
-        if( projectMetaData!=null ) {
-            title = projectMetaData.getTitle();
-            description = projectMetaData.getDescription();
-        }
-        if( title==null ) {
-            ProjectInformation projectInformation = exporter.getWorkspace().getLookup().lookup(ProjectInformation.class);
-            if( projectInformation!=null ) {
-                title = projectInformation.getName();
-                if( title.length()==0 )
-                    title = projectInformation.getFileName();
-            }
-        }
-
-        networkName.setText(title==null ? "" : title);
-        networkDescription.setText(description==null ? "" : description);
-        
-        isNetworkPrivate.setSelected(prefs.get("isNetworkPrivate", "No").equals("Yes"));
+//        jradioPublic.setSelected(prefs.get("isNetworkPublic", "No").equals("Yes"));
     }
 
     public void unsetup(boolean update) {
         Preferences props = NbPreferences.forModule(PolinodeExporterSettingsPanel.class);
         if (update) {
             try {
-                props.put("polinodePublicKey", polinodePublicKey.getText());
-                if( !polinodePrivateKey.getText().substring(0, 8).equals("XXXXXXXX") ) {
-                    realPrivateKey = polinodePrivateKey.getText();
-                    props.put("polinodePrivateKey", polinodePrivateKey.getText());
-                }
-                props.put("isNetworkPrivate", isNetworkPrivate.isSelected() ? "Yes" : "No");
+                props.put("polinodePublicKey", this.getPolinodePublicKey());
+                props.put("polinodePrivateKey", this.getPolinodePrivateKey());
+                props.put("isNetworkPublic", jradioPublic.isSelected() ? "Yes" : "No");
             } catch (Exception e) {
                 Logger.getLogger(PolinodeExporter.class.getName()).log(Level.SEVERE, null, e);
             }
@@ -91,12 +87,22 @@ public class PolinodeExporterSettingsPanel extends javax.swing.JPanel {
     }
 
     public String getPolinodePrivateKey() {
-        return realPrivateKey;
+        if( polinodePrivateKey.getText().length()>=8 && !polinodePrivateKey.getText().substring(0, 8).equals("XXXXXXXX") ) {
+            return polinodePrivateKey.getText();
+        }
+        else {
+            return realPrivateKey;
+        }
     }
 
-    public boolean getIsNetworkPrivate()
+    public boolean getIsNetworkPublic()
     {
-        return isNetworkPrivate.isSelected();
+        return jradioPublic.isSelected();
+    }
+
+    public boolean getPublicPrivateSelected()
+    {
+        return jradioPublic.isSelected() || jradioPrivate.isSelected();
     }
     
     /**
@@ -108,127 +114,179 @@ public class PolinodeExporterSettingsPanel extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jLabel1 = new javax.swing.JLabel();
-        jPanel1 = new javax.swing.JPanel();
-        jLabel2 = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
+        groupPublicPrivate = new javax.swing.ButtonGroup();
+        jpanelMain = new javax.swing.JPanel();
+        jlabelExportToPolinode = new javax.swing.JLabel();
+        jlabelNetworkName = new javax.swing.JLabel();
         networkName = new javax.swing.JTextField();
-        networkDescription = new javax.swing.JTextField();
-        jPanel2 = new javax.swing.JPanel();
-        jLabel4 = new javax.swing.JLabel();
-        jLabel5 = new javax.swing.JLabel();
+        jlabelDescription = new javax.swing.JLabel();
+        jscrollDescription = new javax.swing.JScrollPane();
+        networkDescription = new javax.swing.JTextArea();
+        jlabelVisibility = new javax.swing.JLabel();
+        jradioPublic = new javax.swing.JRadioButton();
+        jradioPrivate = new javax.swing.JRadioButton();
+        jlabelPolinodeAPIKeys = new javax.swing.JLabel();
+        jlabelPublicKey = new javax.swing.JLabel();
         polinodePublicKey = new javax.swing.JTextField();
+        jlabelPrivateKey = new javax.swing.JLabel();
         polinodePrivateKey = new javax.swing.JTextField();
-        jLabel6 = new javax.swing.JLabel();
-        isNetworkPrivate = new javax.swing.JCheckBox();
+        jpanelLeftButtons = new javax.swing.JPanel();
+        jbuttonCreatePolinodeAccount = new javax.swing.JButton();
+        jbuttonDetailedInstructions = new javax.swing.JButton();
+        jpanelRightButtons = new javax.swing.JPanel();
+        jbuttonCancel = new javax.swing.JButton();
+        jbuttonOK = new javax.swing.JButton();
 
-        jLabel1.setFont(new java.awt.Font("Lucida Grande", 1, 18)); // NOI18N
-        org.openide.awt.Mnemonics.setLocalizedText(jLabel1, org.openide.util.NbBundle.getMessage(PolinodeExporterSettingsPanel.class, "PolinodeExporterSettingsPanel.jLabel1.text")); // NOI18N
+        jlabelExportToPolinode.setFont(new java.awt.Font("Lucida Grande", 1, 18)); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(jlabelExportToPolinode, org.openide.util.NbBundle.getMessage(PolinodeExporterSettingsPanel.class, "PolinodeExporterSettingsPanel.jlabelExportToPolinode.text")); // NOI18N
 
-        jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
-        org.openide.awt.Mnemonics.setLocalizedText(jLabel2, org.openide.util.NbBundle.getMessage(PolinodeExporterSettingsPanel.class, "PolinodeExporterSettingsPanel.jLabel2.text")); // NOI18N
-
-        jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
-        org.openide.awt.Mnemonics.setLocalizedText(jLabel3, org.openide.util.NbBundle.getMessage(PolinodeExporterSettingsPanel.class, "PolinodeExporterSettingsPanel.jLabel3.text")); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(jlabelNetworkName, org.openide.util.NbBundle.getMessage(PolinodeExporterSettingsPanel.class, "PolinodeExporterSettingsPanel.jlabelNetworkName.text")); // NOI18N
 
         networkName.setText(org.openide.util.NbBundle.getMessage(PolinodeExporterSettingsPanel.class, "PolinodeExporterSettingsPanel.networkName.text")); // NOI18N
 
-        networkDescription.setText(org.openide.util.NbBundle.getMessage(PolinodeExporterSettingsPanel.class, "PolinodeExporterSettingsPanel.networkDescription.text")); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(jlabelDescription, org.openide.util.NbBundle.getMessage(PolinodeExporterSettingsPanel.class, "PolinodeExporterSettingsPanel.jlabelDescription.text")); // NOI18N
 
-        jLabel4.setFont(new java.awt.Font("Lucida Grande", 1, 13)); // NOI18N
-        org.openide.awt.Mnemonics.setLocalizedText(jLabel4, org.openide.util.NbBundle.getMessage(PolinodeExporterSettingsPanel.class, "PolinodeExporterSettingsPanel.jLabel4.text")); // NOI18N
+        networkDescription.setColumns(20);
+        networkDescription.setRows(5);
+        jscrollDescription.setViewportView(networkDescription);
 
-        jLabel5.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
-        org.openide.awt.Mnemonics.setLocalizedText(jLabel5, org.openide.util.NbBundle.getMessage(PolinodeExporterSettingsPanel.class, "PolinodeExporterSettingsPanel.jLabel5.text")); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(jlabelVisibility, org.openide.util.NbBundle.getMessage(PolinodeExporterSettingsPanel.class, "PolinodeExporterSettingsPanel.jlabelVisibility.text")); // NOI18N
+
+        groupPublicPrivate.add(jradioPublic);
+        org.openide.awt.Mnemonics.setLocalizedText(jradioPublic, org.openide.util.NbBundle.getMessage(PolinodeExporterSettingsPanel.class, "PolinodeExporterSettingsPanel.jradioPublic.text")); // NOI18N
+
+        groupPublicPrivate.add(jradioPrivate);
+        org.openide.awt.Mnemonics.setLocalizedText(jradioPrivate, org.openide.util.NbBundle.getMessage(PolinodeExporterSettingsPanel.class, "PolinodeExporterSettingsPanel.jradioPrivate.text")); // NOI18N
+
+        jlabelPolinodeAPIKeys.setFont(new java.awt.Font("Lucida Grande", 1, 13)); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(jlabelPolinodeAPIKeys, org.openide.util.NbBundle.getMessage(PolinodeExporterSettingsPanel.class, "PolinodeExporterSettingsPanel.jlabelPolinodeAPIKeys.text")); // NOI18N
+
+        org.openide.awt.Mnemonics.setLocalizedText(jlabelPublicKey, org.openide.util.NbBundle.getMessage(PolinodeExporterSettingsPanel.class, "PolinodeExporterSettingsPanel.jlabelPublicKey.text")); // NOI18N
 
         polinodePublicKey.setFont(new java.awt.Font("Monospaced", 0, 13)); // NOI18N
         polinodePublicKey.setText(org.openide.util.NbBundle.getMessage(PolinodeExporterSettingsPanel.class, "PolinodeExporterSettingsPanel.polinodePublicKey.text")); // NOI18N
 
+        org.openide.awt.Mnemonics.setLocalizedText(jlabelPrivateKey, org.openide.util.NbBundle.getMessage(PolinodeExporterSettingsPanel.class, "PolinodeExporterSettingsPanel.jlabelPrivateKey.text")); // NOI18N
+
         polinodePrivateKey.setFont(new java.awt.Font("Monospaced", 0, 13)); // NOI18N
         polinodePrivateKey.setText(org.openide.util.NbBundle.getMessage(PolinodeExporterSettingsPanel.class, "PolinodeExporterSettingsPanel.polinodePrivateKey.text")); // NOI18N
 
-        jLabel6.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
-        org.openide.awt.Mnemonics.setLocalizedText(jLabel6, org.openide.util.NbBundle.getMessage(PolinodeExporterSettingsPanel.class, "PolinodeExporterSettingsPanel.jLabel6.text")); // NOI18N
-
-        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
-        jPanel2.setLayout(jPanel2Layout);
-        jPanel2Layout.setHorizontalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
+        javax.swing.GroupLayout jpanelMainLayout = new javax.swing.GroupLayout(jpanelMain);
+        jpanelMain.setLayout(jpanelMainLayout);
+        jpanelMainLayout.setHorizontalGroup(
+            jpanelMainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jpanelMainLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel4)
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 91, Short.MAX_VALUE))
+                .addGroup(jpanelMainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jpanelMainLayout.createSequentialGroup()
+                        .addGroup(jpanelMainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jlabelPublicKey, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jlabelPrivateKey, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(polinodePrivateKey, javax.swing.GroupLayout.DEFAULT_SIZE, 411, Short.MAX_VALUE)
-                            .addComponent(polinodePublicKey))))
+                        .addGroup(jpanelMainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(polinodePublicKey)
+                            .addComponent(polinodePrivateKey)))
+                    .addGroup(jpanelMainLayout.createSequentialGroup()
+                        .addGroup(jpanelMainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jlabelNetworkName, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jlabelDescription, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jlabelVisibility, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jpanelMainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jradioPrivate, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jradioPublic, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(networkName)
+                            .addComponent(jscrollDescription)))
+                    .addGroup(jpanelMainLayout.createSequentialGroup()
+                        .addGroup(jpanelMainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jlabelExportToPolinode)
+                            .addComponent(jlabelPolinodeAPIKeys))
+                        .addGap(407, 407, 407)))
                 .addContainerGap())
         );
-        jPanel2Layout.setVerticalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
+        jpanelMainLayout.setVerticalGroup(
+            jpanelMainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jpanelMainLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel4)
+                .addComponent(jlabelExportToPolinode)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel5)
-                    .addComponent(polinodePublicKey, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel6)
-                    .addComponent(polinodePrivateKey, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-
-        org.openide.awt.Mnemonics.setLocalizedText(isNetworkPrivate, org.openide.util.NbBundle.getMessage(PolinodeExporterSettingsPanel.class, "PolinodeExporterSettingsPanel.isNetworkPrivate.text")); // NOI18N
-        isNetworkPrivate.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
-        isNetworkPrivate.setHorizontalTextPosition(javax.swing.SwingConstants.LEADING);
-        isNetworkPrivate.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                isNetworkPrivateActionPerformed(evt);
-            }
-        });
-
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(isNetworkPrivate, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(networkDescription, javax.swing.GroupLayout.DEFAULT_SIZE, 411, Short.MAX_VALUE)
-                            .addComponent(networkName))))
-                .addContainerGap())
-        );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel2)
+                .addGroup(jpanelMainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jlabelNetworkName)
                     .addComponent(networkName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel3)
-                    .addComponent(networkDescription, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(jpanelMainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jpanelMainLayout.createSequentialGroup()
+                        .addComponent(jlabelDescription)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(jpanelMainLayout.createSequentialGroup()
+                        .addComponent(jscrollDescription, javax.swing.GroupLayout.DEFAULT_SIZE, 89, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jpanelMainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jradioPublic)
+                            .addComponent(jlabelVisibility))
+                        .addGap(3, 3, 3)
+                        .addComponent(jradioPrivate)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(isNetworkPrivate)
-                .addGap(18, 18, 18)
-                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(jlabelPolinodeAPIKeys)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jpanelMainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jlabelPublicKey)
+                    .addComponent(polinodePublicKey, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jpanelMainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jlabelPrivateKey)
+                    .addComponent(polinodePrivateKey, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap())
+        );
+
+        org.openide.awt.Mnemonics.setLocalizedText(jbuttonCreatePolinodeAccount, org.openide.util.NbBundle.getMessage(PolinodeExporterSettingsPanel.class, "PolinodeExporterSettingsPanel.jbuttonCreatePolinodeAccount.text")); // NOI18N
+
+        org.openide.awt.Mnemonics.setLocalizedText(jbuttonDetailedInstructions, org.openide.util.NbBundle.getMessage(PolinodeExporterSettingsPanel.class, "PolinodeExporterSettingsPanel.jbuttonDetailedInstructions.text")); // NOI18N
+
+        javax.swing.GroupLayout jpanelLeftButtonsLayout = new javax.swing.GroupLayout(jpanelLeftButtons);
+        jpanelLeftButtons.setLayout(jpanelLeftButtonsLayout);
+        jpanelLeftButtonsLayout.setHorizontalGroup(
+            jpanelLeftButtonsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jpanelLeftButtonsLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jbuttonDetailedInstructions)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jbuttonCreatePolinodeAccount)
+                .addContainerGap())
+        );
+        jpanelLeftButtonsLayout.setVerticalGroup(
+            jpanelLeftButtonsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jpanelLeftButtonsLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jpanelLeftButtonsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jbuttonDetailedInstructions)
+                    .addComponent(jbuttonCreatePolinodeAccount))
+                .addContainerGap())
+        );
+
+        org.openide.awt.Mnemonics.setLocalizedText(jbuttonCancel, org.openide.util.NbBundle.getMessage(PolinodeExporterSettingsPanel.class, "PolinodeExporterSettingsPanel.jbuttonCancel.text")); // NOI18N
+
+        org.openide.awt.Mnemonics.setLocalizedText(jbuttonOK, org.openide.util.NbBundle.getMessage(PolinodeExporterSettingsPanel.class, "PolinodeExporterSettingsPanel.jbuttonOK.text")); // NOI18N
+
+        javax.swing.GroupLayout jpanelRightButtonsLayout = new javax.swing.GroupLayout(jpanelRightButtons);
+        jpanelRightButtons.setLayout(jpanelRightButtonsLayout);
+        jpanelRightButtonsLayout.setHorizontalGroup(
+            jpanelRightButtonsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jpanelRightButtonsLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jbuttonCancel)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jbuttonOK)
+                .addContainerGap())
+        );
+        jpanelRightButtonsLayout.setVerticalGroup(
+            jpanelRightButtonsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jpanelRightButtonsLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jpanelRightButtonsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jbuttonCancel)
+                    .addComponent(jbuttonOK))
+                .addContainerGap())
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
@@ -236,42 +294,50 @@ public class PolinodeExporterSettingsPanel extends javax.swing.JPanel {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
+                .addGap(6, 6, 6)
+                .addComponent(jpanelLeftButtons, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jpanelRightButtons, javax.swing.GroupLayout.PREFERRED_SIZE, 167, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(15, 15, 15))
+            .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel1)
-                .addContainerGap(260, Short.MAX_VALUE))
-            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(jpanelMain, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel1)
-                .addContainerGap(221, Short.MAX_VALUE))
-            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(layout.createSequentialGroup()
-                    .addGap(38, 38, 38)
-                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                .addComponent(jpanelMain, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGap(12, 12, 12)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jpanelRightButtons, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jpanelLeftButtons, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
 
-    private void isNetworkPrivateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_isNetworkPrivateActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_isNetworkPrivateActionPerformed
-
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JCheckBox isNetworkPrivate;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel6;
-    private javax.swing.JPanel jPanel1;
-    private javax.swing.JPanel jPanel2;
-    private javax.swing.JTextField networkDescription;
+    private javax.swing.ButtonGroup groupPublicPrivate;
+    private javax.swing.JButton jbuttonCancel;
+    private javax.swing.JButton jbuttonCreatePolinodeAccount;
+    private javax.swing.JButton jbuttonDetailedInstructions;
+    private javax.swing.JButton jbuttonOK;
+    private javax.swing.JLabel jlabelDescription;
+    private javax.swing.JLabel jlabelExportToPolinode;
+    private javax.swing.JLabel jlabelNetworkName;
+    private javax.swing.JLabel jlabelPolinodeAPIKeys;
+    private javax.swing.JLabel jlabelPrivateKey;
+    private javax.swing.JLabel jlabelPublicKey;
+    private javax.swing.JLabel jlabelVisibility;
+    private javax.swing.JPanel jpanelLeftButtons;
+    private javax.swing.JPanel jpanelMain;
+    private javax.swing.JPanel jpanelRightButtons;
+    private javax.swing.JRadioButton jradioPrivate;
+    private javax.swing.JRadioButton jradioPublic;
+    private javax.swing.JScrollPane jscrollDescription;
+    private javax.swing.JTextArea networkDescription;
     private javax.swing.JTextField networkName;
     private javax.swing.JTextField polinodePrivateKey;
     private javax.swing.JTextField polinodePublicKey;

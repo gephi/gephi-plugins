@@ -11,6 +11,15 @@
  */
 package com.polinode.polinodeexporter;
 
+import java.awt.Desktop;
+import java.awt.Dialog;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.net.URL;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JOptionPane;
+import javax.swing.SwingUtilities;
 import org.gephi.desktop.io.export.spi.ExporterClassUI;
 import org.gephi.project.api.ProjectController;
 import org.gephi.project.api.Workspace;
@@ -20,14 +29,19 @@ import org.openide.DialogDescriptor;
 import org.openide.DialogDisplayer;
 import org.openide.NotifyDescriptor;
 import org.openide.awt.StatusDisplayer;
+import org.openide.util.HelpCtx;
 import org.openide.util.Lookup;
 import org.openide.util.lookup.ServiceProvider;
 
 @ServiceProvider(service = ExporterClassUI.class)
-public class PolinodeExporterUI implements ExporterClassUI {
+public class PolinodeExporterUI implements ExporterClassUI, ActionListener {
 
     private final LongTaskErrorHandler errorHandler;
     private boolean cancelled = true;
+
+    private PolinodeExporterSettingsPanel settingsPanel;
+    private DialogDescriptor dialogDescriptor;
+    private Dialog dialog;
 
     public PolinodeExporterUI() {
         //Create a generic error handler called if the task raises an exception
@@ -48,7 +62,7 @@ public class PolinodeExporterUI implements ExporterClassUI {
 
     @Override
     public String getName() {
-        return "Polinode Network...";
+        return "To Polinode...";
     }
 
     @Override
@@ -58,50 +72,123 @@ public class PolinodeExporterUI implements ExporterClassUI {
 
     @Override
     public void action() {
-        //Create exporter
-        final PolinodeExporter exporter = new PolinodeExporter();
-        final Workspace currentWorkspace = Lookup.getDefault().lookup(ProjectController.class).getCurrentWorkspace();
-        exporter.setWorkspace(currentWorkspace);
-
         //Create the settings panel
-        final PolinodeExporterSettingsPanel settingsPanel = new PolinodeExporterSettingsPanel();
-        settingsPanel.setup(exporter);
-        final DialogDescriptor dd = new DialogDescriptor(settingsPanel, "Polinode Export");
-        Object result = DialogDisplayer.getDefault().notify(dd);
-        if (result == NotifyDescriptor.OK_OPTION) {
-            settingsPanel.unsetup(true);
+        settingsPanel = new PolinodeExporterSettingsPanel(this);
+        settingsPanel.setup();
+        
+//        public DialogDescriptor(Object innerPane, String title, boolean modal, Object[] options, Object initialValue, int optionsAlign, HelpCtx helpCtx, ActionListener bl) {
+    
+        dialogDescriptor = new DialogDescriptor(settingsPanel, 
+                "Export to Polinode", 
+                true, 
+                new Object[]{},
+                null,
+                DialogDescriptor.DEFAULT_ALIGN,
+                null,
+                this);
+        dialog = DialogDisplayer.getDefault().createDialog(dialogDescriptor);
+        dialog.setVisible(true); 
+    }
 
-            //  Create a new executor and execute
+    public void actionPerformed(ActionEvent event) {
+        if( event.getActionCommand().equals(PolinodeExporterSettingsPanel.BUTTON_OK) ) {
+            
+            //  validate settings
 
-            LongTaskExecutor executor = new LongTaskExecutor(true, "Polinode export");
-            executor.setDefaultErrorHandler(errorHandler);
-            executor.execute(exporter, new Runnable() {
+            String errorMessage = "";
+            if( this.settingsPanel.getNetworkName().trim().length()==0 ) {
+                errorMessage += "Network name must not be blank\n";
+            }
+            if( !this.settingsPanel.getPublicPrivateSelected() ) {
+                errorMessage += "Please choose either Public or Private\n";
+            }
+            if( this.settingsPanel.getPolinodePublicKey().trim().length()==0 ) {
+                errorMessage += "API Public Key must not be blank\n";
+            }
+            if( this.settingsPanel.getPolinodePrivateKey().trim().length()==0 ) {
+                errorMessage += "API Private Key must not be blank\n";
+            }
+            
+            if( errorMessage.length()==0 ) {
 
-                @Override
-                public void run() {
-                    Workspace currentWorkspace = Lookup.getDefault().lookup(ProjectController.class).getCurrentWorkspace();
-                    exporter.setWorkspace(currentWorkspace);
-                    exporter.setNetworkName(settingsPanel.getNetworkName());
-                    exporter.setNetworkDescription(settingsPanel.getNetworkDescription());
-                    exporter.setPolinodePublicKey(settingsPanel.getPolinodePublicKey());
-                    exporter.setPolinodePrivateKey(settingsPanel.getPolinodePrivateKey());
-                    
-                    //Execute export
+                //  no problem - proceed with close
+                
+                closeDialog(true);
 
-                    cancelled = !exporter.execute();
-                    
-                    //If not cancelled, write a status line message
+                //  Create a new executor and execute
 
-                    if (cancelled) {
-                        StatusDisplayer.getDefault().setStatusText("Export to Polinode cancelled");
+                final PolinodeExporter exporter = new PolinodeExporter();
+                LongTaskExecutor executor = new LongTaskExecutor(true, "Polinode export");
+                executor.setDefaultErrorHandler(errorHandler);
+                executor.execute(exporter, new Runnable() {
+
+                    @Override
+                    public void run() {
+
+                        Workspace currentWorkspace = Lookup.getDefault().lookup(ProjectController.class).getCurrentWorkspace();
+                        exporter.setWorkspace(currentWorkspace);
+                        exporter.setNetworkName(settingsPanel.getNetworkName());
+                        exporter.setNetworkDescription(settingsPanel.getNetworkDescription());
+                        exporter.setIsNetworkPublic(settingsPanel.getIsNetworkPublic());
+                        exporter.setPolinodePublicKey(settingsPanel.getPolinodePublicKey());
+                        exporter.setPolinodePrivateKey(settingsPanel.getPolinodePrivateKey());
+
+                        //Execute export
+
+                        cancelled = !exporter.execute();
+
+                        //If not cancelled, write a status line message
+
+                        if (cancelled) {
+                            StatusDisplayer.getDefault().setStatusText("Export to Polinode cancelled");
+                        }
+                        else {
+                            StatusDisplayer.getDefault().setStatusText("Export to Polinode completed");
+                        }
                     }
-                    else {
-                        StatusDisplayer.getDefault().setStatusText("Export to Polinode completed");
-                    }
-                }
-            });
-        } else {
-            settingsPanel.unsetup(false);
+                });
+            }
+            else {
+                //  display error message
+                
+                final String innerErrorMessage = errorMessage;
+                SwingUtilities.invokeLater(new Runnable() {
+                    public void run() {
+                        JOptionPane.showMessageDialog(null,
+                            innerErrorMessage,
+                            "Export to Polinode",
+                            JOptionPane.ERROR_MESSAGE);
+                        }
+                    });
+            }
+        }
+        else if( event.getActionCommand().equals(PolinodeExporterSettingsPanel.BUTTON_CANCEL) ) {
+            closeDialog(false);
+        }
+        else if( event.getActionCommand().equals(PolinodeExporterSettingsPanel.BUTTON_DETAILEDINSTRUCTIONS) ) {
+            try {
+                Desktop.getDesktop().browse(new URL("https://searchvoat.co/").toURI());
+            } catch (Exception e) {
+                Logger.getLogger(PolinodeExporter.class.getName()).log(Level.SEVERE, null, e);
+            }
+        }
+        else if( event.getActionCommand().equals(PolinodeExporterSettingsPanel.BUTTON_CREATEPOLINODEACCOUNT) ) {
+            try {
+                Desktop.getDesktop().browse(new URL("https://www.polinode.com/free-trial").toURI());
+            } catch (Exception e) {
+                Logger.getLogger(PolinodeExporter.class.getName()).log(Level.SEVERE, null, e);
+            }
+        }
+    }
+    
+    void closeDialog(boolean save) {
+        if( dialog != null) {
+
+            settingsPanel.unsetup(save);
+
+            dialog.setVisible(false);
+            dialog.dispose();
+            dialog = null;
         }
     }
 }
