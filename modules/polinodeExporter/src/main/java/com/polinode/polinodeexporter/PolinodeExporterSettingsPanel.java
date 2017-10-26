@@ -9,6 +9,8 @@ import java.awt.event.ActionListener;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.prefs.Preferences;
+import javax.swing.JRootPane;
+import javax.swing.SwingUtilities;
 import org.openide.util.NbPreferences;
 
 import org.gephi.project.api.ProjectInformation;
@@ -267,6 +269,7 @@ public class PolinodeExporterSettingsPanel extends javax.swing.JPanel {
         org.openide.awt.Mnemonics.setLocalizedText(jbuttonCancel, org.openide.util.NbBundle.getMessage(PolinodeExporterSettingsPanel.class, "PolinodeExporterSettingsPanel.jbuttonCancel.text")); // NOI18N
 
         org.openide.awt.Mnemonics.setLocalizedText(jbuttonOK, org.openide.util.NbBundle.getMessage(PolinodeExporterSettingsPanel.class, "PolinodeExporterSettingsPanel.jbuttonOK.text")); // NOI18N
+        jbuttonOK.setSelected(true);
 
         javax.swing.GroupLayout jpanelRightButtonsLayout = new javax.swing.GroupLayout(jpanelRightButtons);
         jpanelRightButtons.setLayout(jpanelRightButtonsLayout);

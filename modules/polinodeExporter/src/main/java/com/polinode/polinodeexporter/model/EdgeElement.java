@@ -15,9 +15,9 @@ public class EdgeElement {
     public String id;
     public String source;
     public String target;
-    public HashMap<String,String> attributes;
+    public HashMap attributes;
     
     public EdgeElement() {
-	attributes = new HashMap<String,String>();
+	attributes = new HashMap();
     }
 }

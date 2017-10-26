@@ -167,7 +167,7 @@ public class PolinodeExporterUI implements ExporterClassUI, ActionListener {
         }
         else if( event.getActionCommand().equals(PolinodeExporterSettingsPanel.BUTTON_DETAILEDINSTRUCTIONS) ) {
             try {
-                Desktop.getDesktop().browse(new URL("https://searchvoat.co/").toURI());
+                Desktop.getDesktop().browse(new URL("https://support.polinode.com/hc/en-us/articles/115002415352").toURI());
             } catch (Exception e) {
                 Logger.getLogger(PolinodeExporter.class.getName()).log(Level.SEVERE, null, e);
             }

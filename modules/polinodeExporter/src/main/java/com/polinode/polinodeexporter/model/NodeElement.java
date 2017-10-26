@@ -7,7 +7,7 @@ import java.util.HashMap;
 
 public class NodeElement {
     public String id;
-    public HashMap<String,String> attributes;
+    public HashMap<String, Object> attributes;
     public double x;
     public double y;
     public String color;
@@ -17,7 +17,7 @@ public class NodeElement {
     public ElementIcon icon;
 
     public NodeElement() {
-	attributes = new HashMap<String,String>();
+	attributes = new HashMap<String, Object>();
     }
 }
 

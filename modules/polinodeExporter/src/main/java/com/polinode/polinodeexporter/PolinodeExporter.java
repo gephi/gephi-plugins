@@ -95,18 +95,20 @@ public class PolinodeExporter implements Exporter, LongTask {
                 for (Node gnode : gnodes) {
                     NodeElement pnode = new NodeElement();
                     pnode.id = gnode.getId().toString();
-                    pnode.attributes.put("name", gnode.getLabel());
+                    if( gnode.getLabel()!=null && gnode.getLabel().length()>0 )
+                        pnode.attributes.put("name", gnode.getLabel());
                     pnode.x = gnode.x();
-                    pnode.y = gnode.y();
+                    pnode.y = -gnode.y();
                     pnode.size = gnode.size();
-                    pnode.color = "rgba(" + (int) (gnode.r() * 255) + "," + (int) (gnode.g() * 255) + "," + (int) (gnode.b() * 255) + "," + (int) (gnode.alpha() * 255) + ")";
+                    if( gnode.getRGBA()!=0 )
+                        pnode.color = "rgba(" + (int) (gnode.r() * 255) + "," + (int) (gnode.g() * 255) + "," + (int) (gnode.b() * 255) + "," + gnode.alpha() + ")";
 
                     for (Column col : nodeTable) {
                         String cid = col.getId();
                         if (!cid.equalsIgnoreCase("id") && !cid.equalsIgnoreCase("label")) {
                             Object attribute = gnode.getAttribute(col);
                             if( attribute!=null ) {
-                                pnode.attributes.put(col.getTitle(), attribute.toString());
+                                pnode.attributes.put(col.getTitle(), attribute);
                             }
                         }
                     }
@@ -126,8 +128,14 @@ public class PolinodeExporter implements Exporter, LongTask {
                     pedge.source = gedge.getSource().getId().toString();
                     pedge.target = gedge.getTarget().getId().toString();
 
-                    pedge.attributes.put("Name", gedge.getLabel());
-                    pedge.attributes.put("Color", "rgba(" + (int) (gedge.r() * 255) + "," + (int) (gedge.g() * 255) + "," + (int) (gedge.b() * 255) + "," + (int) (gedge.alpha() * 255) + ")");
+                    if( gedge.getLabel()!=null && gedge.getLabel().length()>0 )
+                        pedge.attributes.put("Name", gedge.getLabel());
+
+                    if( gedge.getRGBA()!=0 )
+                        pedge.attributes.put("Color", "rgba(" + (int) (gedge.r() * 255) + "," + (int) (gedge.g() * 255) + "," + (int) (gedge.b() * 255) + "," + gedge.alpha() + ")");
+
+                    if( gedge.getWeight()!=0 )
+                        pedge.attributes.put("Weight", new Double(gedge.getWeight()));
 
                     Iterator<Column> gedgeAttribute = gedge.getAttributeColumns().iterator();
                     while (gedgeAttribute.hasNext()) {
@@ -135,7 +143,7 @@ public class PolinodeExporter implements Exporter, LongTask {
                         if (!col.isProperty()) {
                             Object attribute = gedge.getAttribute(col);
                             if( attribute!=null ) {
-                                pedge.attributes.put(col.getTitle(), attribute.toString());
+                                pedge.attributes.put(col.getTitle(), attribute);
                             }
                         }
                     }
