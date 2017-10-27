@@ -36,18 +36,6 @@ public class PolinodeExporterSettingsPanel extends javax.swing.JPanel {
     public PolinodeExporterSettingsPanel(ActionListener actionListener) {
         initComponents();
         this.actionListener = actionListener;
-
-        jbuttonDetailedInstructions.setText(BUTTON_DETAILEDINSTRUCTIONS);
-        jbuttonDetailedInstructions.addActionListener(actionListener);
-
-        jbuttonCreatePolinodeAccount.setText(BUTTON_CREATEPOLINODEACCOUNT);
-        jbuttonCreatePolinodeAccount.addActionListener(actionListener);
-
-        jbuttonCancel.setText(BUTTON_CANCEL);
-        jbuttonCancel.addActionListener(actionListener);
-
-        jbuttonOK.setText(BUTTON_OK);
-        jbuttonOK.addActionListener(actionListener);
     }
 
     public void setup() {
@@ -59,8 +47,6 @@ public class PolinodeExporterSettingsPanel extends javax.swing.JPanel {
             polinodePrivateKey.setText("");
         else
             polinodePrivateKey.setText("XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXX"+realPrivateKey.substring(realPrivateKey.length()-4, realPrivateKey.length()));
-
-//        jradioPublic.setSelected(prefs.get("isNetworkPublic", "No").equals("Yes"));
     }
 
     public void unsetup(boolean update) {
@@ -132,12 +118,6 @@ public class PolinodeExporterSettingsPanel extends javax.swing.JPanel {
         polinodePublicKey = new javax.swing.JTextField();
         jlabelPrivateKey = new javax.swing.JLabel();
         polinodePrivateKey = new javax.swing.JTextField();
-        jpanelLeftButtons = new javax.swing.JPanel();
-        jbuttonCreatePolinodeAccount = new javax.swing.JButton();
-        jbuttonDetailedInstructions = new javax.swing.JButton();
-        jpanelRightButtons = new javax.swing.JPanel();
-        jbuttonCancel = new javax.swing.JButton();
-        jbuttonOK = new javax.swing.JButton();
 
         jlabelExportToPolinode.setFont(new java.awt.Font("Lucida Grande", 1, 18)); // NOI18N
         org.openide.awt.Mnemonics.setLocalizedText(jlabelExportToPolinode, org.openide.util.NbBundle.getMessage(PolinodeExporterSettingsPanel.class, "PolinodeExporterSettingsPanel.jlabelExportToPolinode.text")); // NOI18N
@@ -241,67 +221,10 @@ public class PolinodeExporterSettingsPanel extends javax.swing.JPanel {
                 .addContainerGap())
         );
 
-        org.openide.awt.Mnemonics.setLocalizedText(jbuttonCreatePolinodeAccount, org.openide.util.NbBundle.getMessage(PolinodeExporterSettingsPanel.class, "PolinodeExporterSettingsPanel.jbuttonCreatePolinodeAccount.text")); // NOI18N
-
-        org.openide.awt.Mnemonics.setLocalizedText(jbuttonDetailedInstructions, org.openide.util.NbBundle.getMessage(PolinodeExporterSettingsPanel.class, "PolinodeExporterSettingsPanel.jbuttonDetailedInstructions.text")); // NOI18N
-
-        javax.swing.GroupLayout jpanelLeftButtonsLayout = new javax.swing.GroupLayout(jpanelLeftButtons);
-        jpanelLeftButtons.setLayout(jpanelLeftButtonsLayout);
-        jpanelLeftButtonsLayout.setHorizontalGroup(
-            jpanelLeftButtonsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jpanelLeftButtonsLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jbuttonDetailedInstructions)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jbuttonCreatePolinodeAccount)
-                .addContainerGap())
-        );
-        jpanelLeftButtonsLayout.setVerticalGroup(
-            jpanelLeftButtonsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jpanelLeftButtonsLayout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jpanelLeftButtonsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jbuttonDetailedInstructions)
-                    .addComponent(jbuttonCreatePolinodeAccount))
-                .addContainerGap())
-        );
-
-        org.openide.awt.Mnemonics.setLocalizedText(jbuttonCancel, org.openide.util.NbBundle.getMessage(PolinodeExporterSettingsPanel.class, "PolinodeExporterSettingsPanel.jbuttonCancel.text")); // NOI18N
-
-        org.openide.awt.Mnemonics.setLocalizedText(jbuttonOK, org.openide.util.NbBundle.getMessage(PolinodeExporterSettingsPanel.class, "PolinodeExporterSettingsPanel.jbuttonOK.text")); // NOI18N
-        jbuttonOK.setSelected(true);
-
-        javax.swing.GroupLayout jpanelRightButtonsLayout = new javax.swing.GroupLayout(jpanelRightButtons);
-        jpanelRightButtons.setLayout(jpanelRightButtonsLayout);
-        jpanelRightButtonsLayout.setHorizontalGroup(
-            jpanelRightButtonsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jpanelRightButtonsLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jbuttonCancel)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jbuttonOK)
-                .addContainerGap())
-        );
-        jpanelRightButtonsLayout.setVerticalGroup(
-            jpanelRightButtonsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jpanelRightButtonsLayout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jpanelRightButtonsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jbuttonCancel)
-                    .addComponent(jbuttonOK))
-                .addContainerGap())
-        );
-
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(6, 6, 6)
-                .addComponent(jpanelLeftButtons, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jpanelRightButtons, javax.swing.GroupLayout.PREFERRED_SIZE, 167, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(15, 15, 15))
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jpanelMain, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -312,10 +235,6 @@ public class PolinodeExporterSettingsPanel extends javax.swing.JPanel {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jpanelMain, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGap(12, 12, 12)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jpanelRightButtons, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jpanelLeftButtons, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
@@ -323,10 +242,6 @@ public class PolinodeExporterSettingsPanel extends javax.swing.JPanel {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.ButtonGroup groupPublicPrivate;
-    private javax.swing.JButton jbuttonCancel;
-    private javax.swing.JButton jbuttonCreatePolinodeAccount;
-    private javax.swing.JButton jbuttonDetailedInstructions;
-    private javax.swing.JButton jbuttonOK;
     private javax.swing.JLabel jlabelDescription;
     private javax.swing.JLabel jlabelExportToPolinode;
     private javax.swing.JLabel jlabelNetworkName;
@@ -334,9 +249,7 @@ public class PolinodeExporterSettingsPanel extends javax.swing.JPanel {
     private javax.swing.JLabel jlabelPrivateKey;
     private javax.swing.JLabel jlabelPublicKey;
     private javax.swing.JLabel jlabelVisibility;
-    private javax.swing.JPanel jpanelLeftButtons;
     private javax.swing.JPanel jpanelMain;
-    private javax.swing.JPanel jpanelRightButtons;
     private javax.swing.JRadioButton jradioPrivate;
     private javax.swing.JRadioButton jradioPublic;
     private javax.swing.JScrollPane jscrollDescription;

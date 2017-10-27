@@ -81,8 +81,12 @@ public class PolinodeExporterUI implements ExporterClassUI, ActionListener {
         dialogDescriptor = new DialogDescriptor(settingsPanel, 
                 "Export to Polinode", 
                 true, 
-                new Object[]{},
-                null,
+                new Object[]{
+                    PolinodeExporterSettingsPanel.BUTTON_DETAILEDINSTRUCTIONS,
+                    PolinodeExporterSettingsPanel.BUTTON_CREATEPOLINODEACCOUNT,
+                    PolinodeExporterSettingsPanel.BUTTON_CANCEL,
+                    PolinodeExporterSettingsPanel.BUTTON_OK},
+                PolinodeExporterSettingsPanel.BUTTON_OK,
                 DialogDescriptor.DEFAULT_ALIGN,
                 null,
                 this);
