@@ -9,13 +9,12 @@
 
     <groupId>cz.cvut.fit.gephi</groupId>
     <artifactId>multimode</artifactId>
-    <version>1.0.1</version>
+    <version>1.0.5</version>
     <packaging>nbm</packaging>
 
     <name>Multimode-Networks</name>
 
     <dependencies>
-        
     <dependency>
       <groupId>org.netbeans.api</groupId>
       <artifactId>org-openide-awt</artifactId>
@@ -27,6 +26,7 @@
     <dependency>
       <groupId>org.gephi</groupId>
       <artifactId>core-library-wrapper</artifactId>
+        <version>${gephi.version}</version>
     </dependency>
     <dependency>
       <groupId>org.netbeans.api</groupId>
@@ -38,6 +38,7 @@
     </dependency>
     <dependency>
       <groupId>org.gephi</groupId>
+        <version>${gephi.version}</version>
       <artifactId>graph-api</artifactId>
     </dependency>
     <dependency>
@@ -46,13 +47,15 @@
     </dependency>
     <dependency>
       <groupId>org.gephi</groupId>
+        <version>${gephi.version}</version>
       <artifactId>utils-longtask</artifactId>
     </dependency>
     <dependency>
       <groupId>org.gephi</groupId>
-      <artifactId>project-api</artifactId>
+         <version>${gephi.version}</version>
+     <artifactId>project-api</artifactId>
     </dependency>
-    </dependencies>
+     </dependencies>
 
     <build>
         <plugins>
@@ -63,6 +66,7 @@
                     <licenseName>license</licenseName>
                     <licenseFile>license.txt</licenseFile>
                     <author>Jaroslav Kuchar</author>
+                    <author>Joan Codina</author>
                     <sourceCodeUrl>https://github.com/totetmatt/gephi-plugins/tree/multimode-network</sourceCodeUrl>
                     <homePageUrl>https://github.com/jaroslav-kuchar/Multimode-Networks</homePageUrl>
                     <publicPackages>

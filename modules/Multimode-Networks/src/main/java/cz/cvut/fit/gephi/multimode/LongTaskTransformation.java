@@ -32,7 +32,7 @@ public class LongTaskTransformation implements LongTask, Runnable {
     private double threshold=0.0;
     
     
-    private static final int EDGE_TYPE = 1;
+    private int EDGE_TYPE = 1;
     
     public LongTaskTransformation(Column attributeColumn,
             String inDimension, 
@@ -119,7 +119,18 @@ public class LongTaskTransformation implements LongTask, Runnable {
         Matrix firstMatrix = new Matrix(firstVertical.size(), firstHorizontal.size());
         Matrix firstUnweightMatrix = new Matrix(firstVertical.size(), firstHorizontal.size());
         float [] firstWeights= new float[firstVertical.size()]; 
-        float [] firstUnweightWeights= new float[firstVertical.size()]; 
+        float [] firstUnweightWeights= new float[firstVertical.size()];
+        {
+        Edge[] edges = graph.getEdges().toArray();
+        
+        // get the type of edges... this is not robust
+         if (edges.length>0){
+             EDGE_TYPE= edges[0].getType();
+            logger.log(Level.SEVERE, null, "edge type"+  EDGE_TYPE);
+        } else {
+            logger.log(Level.SEVERE, null, "no edges in graph");
+        } 
+        }
         for (int i = 0; i < firstVertical.size(); i++) {
             Set<Node> intersection = new HashSet<Node>(Arrays.asList(graph.getNeighbors(firstVertical.get(i)).toArray()));
             if (intersection.size() > 0) {
@@ -128,7 +139,7 @@ public class LongTaskTransformation implements LongTask, Runnable {
                     for (Node neighbour : intersection) {
                      int j=firstHorizontal.indexOf(neighbour);
                         if (j > -1){
-                            Edge edge = graph.getEdge(firstVertical.get(i), firstHorizontal.get(j));
+                            Edge edge = graph.getEdge(firstVertical.get(i), firstHorizontal.get(j),EDGE_TYPE);
                             if (edge!= null) {
                                 double w=edge.getWeight();
                                 firstWeights[i]+=w*w;
@@ -157,7 +168,7 @@ public class LongTaskTransformation implements LongTask, Runnable {
                          for (Node neighbour : intersection) {
                             int j=secondHorizontal.indexOf(neighbour);
                             if (j>-1){                    
-                                Edge edge =graph.getEdge(secondVertical.get(i), secondHorizontal.get(j));
+                                Edge edge =graph.getEdge(secondVertical.get(i), secondHorizontal.get(j),EDGE_TYPE);
                                  if (edge!= null) {
                                     double w=edge.getWeight();
                                     secondWeights[j]+=w*w;
@@ -188,32 +199,37 @@ public class LongTaskTransformation implements LongTask, Runnable {
             return;
         }
         if (online) Progress.progress(progressTicket, "Removing nodes/edges",4);
-        
-        
+        float minDim=(float)secondVertical.size();
+          
         if (removeNodes) {
-            for (Node n : firstHorizontal) {
+            Node[] nodesToRemove= firstHorizontal.toArray(new Node[firstHorizontal.size()]);
+            firstHorizontal.clear();
+            secondVertical.clear();
+            for (Node n : nodesToRemove) {
                 graph.removeNode(n);
-            }
+             }
         } else {
             if (removeEdges) {
                 for (int i = 0; i < firstMatrix.getM(); i++) {
                     for (int j = 0; j < firstMatrix.getN(); j++) {
-                        if (graph.contains(firstVertical.get(i)) && graph.contains(firstHorizontal.get(j)) && graph.getEdge(firstVertical.get(i), firstHorizontal.get(j)) != null && firstMatrix.get(i, j) > 0) {
-                            graph.removeEdge(graph.getEdge(firstVertical.get(i), firstHorizontal.get(j)));
+                        if (graph.contains(firstVertical.get(i)) && graph.contains(firstHorizontal.get(j)) && graph.getEdge(firstVertical.get(i), firstHorizontal.get(j),EDGE_TYPE) != null && firstMatrix.get(i, j) > 0) {
+                            Edge edgeToRemove= graph.getEdge(firstVertical.get(i), firstHorizontal.get(j),EDGE_TYPE);
+                            graph.removeEdge(edgeToRemove);
                         }
                     }
                 }
                 
                 for (int i = 0; i < secondMatrix.getM(); i++) {
                     for (int j = 0; j < secondMatrix.getN(); j++) {
-                        if (graph.contains(secondVertical.get(i)) && graph.contains(secondHorizontal.get(j)) && graph.getEdge(secondVertical.get(i), secondHorizontal.get(j)) != null && secondMatrix.get(i, j) > 0) {
-                            graph.removeEdge(graph.getEdge(secondVertical.get(i), secondHorizontal.get(j)));
-                        }
+                        if (graph.contains(secondVertical.get(i)) && graph.contains(secondHorizontal.get(j)) && graph.getEdge(secondVertical.get(i), secondHorizontal.get(j),EDGE_TYPE) != null && secondMatrix.get(i, j) > 0) {
+                            Edge edgeToRemove= graph.getEdge(secondVertical.get(i), secondHorizontal.get(j),EDGE_TYPE);
+                            graph.removeEdge(edgeToRemove);
+                       }
                     }
                 }
             }
         }
-        
+          
         if (cancelled) {
             return;
         }
@@ -297,7 +313,6 @@ public class LongTaskTransformation implements LongTask, Runnable {
                 nodeVolCol = nodeTable.getColumn("MM-vol");
             } 
             
-            float minDim=(float)secondVertical.size();
             for (int i = 0; i < result.getM(); i++) {
                 // for each node include the number of connections it has
                 // and the accumulated quadratic weights of them
