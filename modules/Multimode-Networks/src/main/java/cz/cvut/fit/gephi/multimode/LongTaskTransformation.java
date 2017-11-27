@@ -120,16 +120,14 @@ public class LongTaskTransformation implements LongTask, Runnable {
         Matrix firstUnweightMatrix = new Matrix(firstVertical.size(), firstHorizontal.size());
         float [] firstWeights= new float[firstVertical.size()]; 
         float [] firstUnweightWeights= new float[firstVertical.size()];
-        {
-        Edge[] edges = graph.getEdges().toArray();
+        {//take the type of the first edge
+         EdgeIterable edgesL = graph.getEdges();
+         for (Edge e : edgesL){
+            EDGE_TYPE= e.getType();
+            break;
+          }
+         edgesL.doBreak();      
         
-        // get the type of edges... this is not robust
-         if (edges.length>0){
-             EDGE_TYPE= edges[0].getType();
-            logger.log(Level.SEVERE, null, "edge type"+  EDGE_TYPE);
-        } else {
-            logger.log(Level.SEVERE, null, "no edges in graph");
-        } 
         }
         for (int i = 0; i < firstVertical.size(); i++) {
             Set<Node> intersection = new HashSet<Node>(Arrays.asList(graph.getNeighbors(firstVertical.get(i)).toArray()));
