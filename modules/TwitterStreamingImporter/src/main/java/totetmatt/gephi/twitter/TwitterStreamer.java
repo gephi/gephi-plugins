@@ -12,11 +12,13 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.apache.commons.lang3.ArrayUtils;
+import org.openide.util.Exceptions;
 import org.openide.util.lookup.ServiceProvider;
 import totetmatt.gephi.twitter.networklogic.Networklogic;
 import twitter4j.FilterQuery;
 import twitter4j.JSONException;
 import twitter4j.JSONObject;
+import twitter4j.PagableResponseList;
 import twitter4j.ResponseList;
 import twitter4j.Twitter;
 import twitter4j.TwitterException;
@@ -41,7 +43,25 @@ public class TwitterStreamer {
     private final Map<String, Long> userTracking = new HashMap<>();
 
     private boolean running = false;
-
+    public void addFromList(String screenName,String listName){
+        twitter = new TwitterFactory().getInstance();
+        AccessToken accessToken = new AccessToken(credentialProperty.getToken(), credentialProperty.getTokenSecret());
+        twitter.setOAuthConsumer(credentialProperty.getConsumerKey(), credentialProperty.getConsumerSecret());
+        twitter.setOAuthAccessToken(accessToken);
+        long cursor = -1;
+            PagableResponseList<User> users;
+            try {
+                do {
+                    users = twitter.getUserListMembers(screenName,listName, cursor);
+                    for (User u : users) {
+                        Logger.getLogger(MainTwitterWindows.class.getName()).log(Level.INFO, u.getScreenName().toLowerCase());
+                        userTracking.put(u.getScreenName().toLowerCase(), u.getId());
+                    }
+                } while ((cursor = users.getNextCursor()) != 0);
+            } catch (TwitterException ex) {
+                Exceptions.printStackTrace(ex);
+            }
+    }
     public void addUser(String screenName) {
         twitter = new TwitterFactory().getInstance();
         AccessToken accessToken = new AccessToken(credentialProperty.getToken(), credentialProperty.getTokenSecret());

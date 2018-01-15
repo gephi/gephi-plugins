@@ -130,6 +130,11 @@ public final class MainTwitterWindows extends TopComponent {
         ut_add_button = new javax.swing.JButton();
         ut_add_textfield = new javax.swing.JTextField();
         ut_delete_button = new javax.swing.JButton();
+        ut_add_from_list_button = new javax.swing.JButton();
+        ut_add_from_list_user_textfield = new javax.swing.JTextField();
+        ut_add_from_list_listname_textfield = new javax.swing.JTextField();
+        jLabel3 = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
         network_logic_combo = new javax.swing.JComboBox<>();
         network_logic_label = new javax.swing.JLabel();
         load_tracking_button = new javax.swing.JButton();
@@ -190,7 +195,7 @@ public final class MainTwitterWindows extends TopComponent {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(wt_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(wt_add_textfield)
-                    .addComponent(wt_word_list_scrollpane, javax.swing.GroupLayout.DEFAULT_SIZE, 300, Short.MAX_VALUE))
+                    .addComponent(wt_word_list_scrollpane, javax.swing.GroupLayout.DEFAULT_SIZE, 316, Short.MAX_VALUE))
                 .addContainerGap())
         );
         wt_panelLayout.setVerticalGroup(
@@ -251,16 +256,40 @@ public final class MainTwitterWindows extends TopComponent {
             }
         });
 
+        org.openide.awt.Mnemonics.setLocalizedText(ut_add_from_list_button, org.openide.util.NbBundle.getMessage(MainTwitterWindows.class, "MainTwitterWindows.ut_add_from_list_button.text")); // NOI18N
+        ut_add_from_list_button.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ut_add_from_list_buttonActionPerformed(evt);
+            }
+        });
+
+        ut_add_from_list_user_textfield.setText(org.openide.util.NbBundle.getMessage(MainTwitterWindows.class, "MainTwitterWindows.ut_add_from_list_user_textfield.text")); // NOI18N
+
+        ut_add_from_list_listname_textfield.setText(org.openide.util.NbBundle.getMessage(MainTwitterWindows.class, "MainTwitterWindows.ut_add_from_list_listname_textfield.text")); // NOI18N
+
+        org.openide.awt.Mnemonics.setLocalizedText(jLabel3, org.openide.util.NbBundle.getMessage(MainTwitterWindows.class, "MainTwitterWindows.jLabel3.text")); // NOI18N
+
+        org.openide.awt.Mnemonics.setLocalizedText(jLabel4, org.openide.util.NbBundle.getMessage(MainTwitterWindows.class, "MainTwitterWindows.jLabel4.text")); // NOI18N
+
         javax.swing.GroupLayout ut_panelLayout = new javax.swing.GroupLayout(ut_panel);
         ut_panel.setLayout(ut_panelLayout);
         ut_panelLayout.setHorizontalGroup(
             ut_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, ut_panelLayout.createSequentialGroup()
                 .addGroup(ut_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(ut_delete_button, javax.swing.GroupLayout.DEFAULT_SIZE, 81, Short.MAX_VALUE)
-                    .addComponent(ut_add_button, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(ut_delete_button, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(ut_add_button, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(ut_add_from_list_button, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(ut_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(ut_panelLayout.createSequentialGroup()
+                        .addComponent(jLabel3)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(ut_add_from_list_user_textfield, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jLabel4)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(ut_add_from_list_listname_textfield))
                     .addComponent(ut_add_textfield)
                     .addComponent(ut_list_scrollpane, javax.swing.GroupLayout.DEFAULT_SIZE, 293, Short.MAX_VALUE))
                 .addContainerGap())
@@ -273,8 +302,17 @@ public final class MainTwitterWindows extends TopComponent {
                     .addComponent(ut_add_textfield, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(ut_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(ut_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(ut_add_from_list_button)
+                        .addComponent(jLabel3))
+                    .addGroup(ut_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(ut_add_from_list_user_textfield, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(ut_add_from_list_listname_textfield, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jLabel4)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(ut_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(ut_delete_button)
-                    .addComponent(ut_list_scrollpane, javax.swing.GroupLayout.PREFERRED_SIZE, 193, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(ut_list_scrollpane, javax.swing.GroupLayout.PREFERRED_SIZE, 164, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(23, Short.MAX_VALUE))
         );
 
@@ -315,7 +353,7 @@ public final class MainTwitterWindows extends TopComponent {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(connect_toggleButton, javax.swing.GroupLayout.DEFAULT_SIZE, 413, Short.MAX_VALUE)
+                .addComponent(connect_toggleButton, javax.swing.GroupLayout.DEFAULT_SIZE, 415, Short.MAX_VALUE)
                 .addContainerGap())
             .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(jPanel1Layout.createSequentialGroup()
@@ -476,7 +514,20 @@ public final class MainTwitterWindows extends TopComponent {
             addUser();
         }
     }//GEN-LAST:event_ut_add_textfieldKeyReleased
-    
+
+    private void ut_add_from_list_buttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ut_add_from_list_buttonActionPerformed
+       if ( !this.ut_add_from_list_user_textfield.getText().isEmpty() && !this.ut_add_from_list_listname_textfield.getText().isEmpty()) {
+            addFromList();
+       }
+    }//GEN-LAST:event_ut_add_from_list_buttonActionPerformed
+    private void addFromList(){
+        String username = this.ut_add_from_list_user_textfield.getText().trim().toLowerCase();
+        String listname =  this.ut_add_from_list_listname_textfield.getText().trim();
+        streamer.addFromList(username, listname);
+        this.ut_add_from_list_listname_textfield.setText("");
+        this.ut_add_from_list_user_textfield.setText("");
+        refreshUserList();
+    }
      private void refreshTracking() {
         refreshWordList();
         refreshUserList();
@@ -514,6 +565,8 @@ public final class MainTwitterWindows extends TopComponent {
     private javax.swing.JButton crendential_button;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPasswordField jPasswordField1;
     private javax.swing.JScrollPane jScrollPane1;
@@ -523,6 +576,9 @@ public final class MainTwitterWindows extends TopComponent {
     private javax.swing.JButton save_tracking_button;
     private javax.swing.JTabbedPane tracking_tab_panel;
     private javax.swing.JButton ut_add_button;
+    private javax.swing.JButton ut_add_from_list_button;
+    private javax.swing.JTextField ut_add_from_list_listname_textfield;
+    private javax.swing.JTextField ut_add_from_list_user_textfield;
     private javax.swing.JTextField ut_add_textfield;
     private javax.swing.JButton ut_delete_button;
     private javax.swing.JScrollPane ut_list_scrollpane;
