@@ -701,7 +701,7 @@ public final class MainTwitterWindows extends TopComponent {
         for (int row : lt_list_table.getSelectedRows()) {
             streamer.getLocationTracking().remove(locationsTrackingTableModel.getValueAt(row, 0));
         }
-        this.refreshLocationList();        // TODO add your handling code here:
+        this.refreshLocationList();
     }//GEN-LAST:event_lt_delete_buttonActionPerformed
 
     private void lt_add_name_textfieldKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_lt_add_name_textfieldKeyReleased
@@ -729,6 +729,12 @@ public final class MainTwitterWindows extends TopComponent {
     }//GEN-LAST:event_lt_add_buttonActionPerformed
     
     private void addLocation(){
+        if(!lt_add_sw_lat_textfield.getText().isEmpty() &&
+                !lt_add_sw_long_textfield.getText().isEmpty()  &&
+                !lt_add_ne_lat_textfield.getText().isEmpty()  && 
+                !lt_add_ne_long_textfield.getText().isEmpty()  &&
+                !lt_add_name_textfield.getText().isEmpty() 
+                ) {
         TrackLocation location = new TrackLocation(Double.parseDouble(lt_add_sw_lat_textfield.getText()),
                                                     Double.parseDouble(lt_add_sw_long_textfield.getText()),
                                                     Double.parseDouble(lt_add_ne_lat_textfield.getText()),
@@ -741,6 +747,9 @@ public final class MainTwitterWindows extends TopComponent {
         lt_add_name_textfield.setText("");
         streamer.addLocation(location);
         refreshLocationList();
+        } else {
+           throw new IllegalArgumentException("Longitude, Latitude and Title fields shouldn't be empty");
+        }
     }
     private void addFromList(){
         String username = ut_add_from_list_user_textfield.getText().trim().toLowerCase();
@@ -778,8 +787,8 @@ public final class MainTwitterWindows extends TopComponent {
         lt_list_table.clearSelection();
         lt_list_table.updateUI();
         locationsTrackingTableModel.getDataVector().removeAllElements();
-        for (TrackLocation s : streamer.getLocationTracking()) {
-            locationsTrackingTableModel.addRow(new Object[]{s.getName(),s.toString()});
+        for (Map.Entry<String, TrackLocation> s : streamer.getLocationTracking().entrySet()) {
+            locationsTrackingTableModel.addRow(new Object[]{s.getKey(),s.getValue().toString()});
         }
     }
     private void refreshUserList() {

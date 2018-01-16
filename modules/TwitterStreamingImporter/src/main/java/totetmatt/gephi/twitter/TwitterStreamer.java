@@ -44,16 +44,18 @@ public class TwitterStreamer {
     private CredentialProperty credentialProperty = new CredentialProperty();
     private final List<String> wordTracking = new ArrayList<>();
     private final Map<String, Long> userTracking = new HashMap<>();
-    private final List<TrackLocation> locationTracking = new ArrayList<>();
+    private final Map<String,TrackLocation> locationTracking = new HashMap<>();
 
     private boolean running = false;
 
-    public List<TrackLocation> getLocationTracking() {
+    public Map<String,TrackLocation> getLocationTracking() {
         return locationTracking;
     }
     
     public void addLocation(TrackLocation location) {
-        locationTracking.add(location);
+        if(!location.getName().isEmpty()) {
+            locationTracking.put(location.getName(),location);
+        }
     }
     
     public void addFromList(String screenName,String listName){
@@ -140,7 +142,7 @@ public class TwitterStreamer {
         
         if (!locationTracking.isEmpty()) {
             List<double[]> tmpLocationTrack = new ArrayList<>();
-            for(TrackLocation l : locationTracking) {
+            for(TrackLocation l : locationTracking.values()) {
                  tmpLocationTrack.add(new double[]{l.getSwLongitude(),l.getSwLatitude()});
                  tmpLocationTrack.add(new double[]{l.getNeLongitude(),l.getNeLatitude()});
             }
