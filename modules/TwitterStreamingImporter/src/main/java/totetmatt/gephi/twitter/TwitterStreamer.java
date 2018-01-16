@@ -194,6 +194,7 @@ public class TwitterStreamer {
 
         o.put("wordTracking", wordTracking);
         o.put("userTracking", userTracking);
+        o.put("locationsTracking", locationTracking);
         Files.write(saveFile.toPath(), o.toString().getBytes());
 
     }
@@ -207,6 +208,7 @@ public class TwitterStreamer {
 
         wordTracking.clear();
         userTracking.clear();
+        locationTracking.clear();
 
         for (int i = 0; i < o.getJSONArray("wordTracking").length(); i++) {
             wordTracking.add(o.getJSONArray("wordTracking").getString(i));
@@ -216,6 +218,20 @@ public class TwitterStreamer {
             String username = (String) userIt.next();
             long id = o.getJSONObject("userTracking").getLong(username);
             userTracking.put(username, id);
+        }
+        Iterator locationIt = o.getJSONObject("locationsTracking").keys();
+        while (locationIt.hasNext()) {
+            String locationKey = (String) locationIt.next();
+            JSONObject location = o.getJSONObject("locationsTracking").getJSONObject(locationKey);
+            //double swLatitude, double swLongitude, double neLatitude, double neLongitude, String name
+            locationTracking.put(locationKey,new TrackLocation(
+                        Double.parseDouble(location.getString("swLatitude") ),
+                        Double.parseDouble(location.getString("swLongitude") ),
+                        Double.parseDouble(location.getString("neLatitude") ),
+                        Double.parseDouble(location.getString("neLongitude") ),
+                        location.getString("name")
+                   
+            ));
         }
     }
 }
