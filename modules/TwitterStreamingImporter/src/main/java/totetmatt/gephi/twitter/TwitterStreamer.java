@@ -53,8 +53,10 @@ public class TwitterStreamer {
     }
     
     public void addLocation(TrackLocation location) {
-        if(!location.getName().isEmpty()) {
+        if(location.isValid()) {
             locationTracking.put(location.getName(),location);
+        } else {
+            throw new IllegalArgumentException("-90 <= Latitude <= 90 and -180 <= Longitude <= 180");
         }
     }
     

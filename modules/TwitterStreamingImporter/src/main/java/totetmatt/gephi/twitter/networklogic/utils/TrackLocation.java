@@ -73,7 +73,16 @@ public class TrackLocation {
     }
 
     public boolean isValid() {
-        return true ;// this.swLatitude <= this.neLatitude && this.swLongitude <=this.neLongitude;
+       return isValidBox() && isValidCoordinate();
+    }
+    private boolean isValidCoordinate(){
+        return this.swLatitude >=-90 && this.swLatitude <= 90 && 
+               this.neLatitude >=-90 && this.neLatitude <= 90 &&
+               this.swLongitude >=-180 && this.swLongitude <= 180 && 
+               this.neLongitude >=-180 && this.neLongitude <= 180;
+    }
+    private boolean isValidBox(){
+         return this.swLatitude <= this.neLatitude && this.swLongitude <=this.neLongitude;
     }
 
     @Override
