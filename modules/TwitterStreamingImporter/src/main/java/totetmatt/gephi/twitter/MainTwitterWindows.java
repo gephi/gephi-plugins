@@ -21,6 +21,7 @@ import org.openide.util.Lookup;
 import org.openide.util.NbBundle;
 import org.openide.windows.TopComponent;
 import totetmatt.gephi.twitter.networklogic.Networklogic;
+import totetmatt.gephi.twitter.networklogic.utils.TrackLocation;
 import twitter4j.JSONException;
 
 @ConvertAsProperties(dtd = "-//org.gephi.plugins.example.panel//Simple//EN",
@@ -39,6 +40,7 @@ public final class MainTwitterWindows extends TopComponent {
     private final DefaultListModel wordTrackingListModel = new DefaultListModel();
     private final DefaultTableModel userTrackingTableModel;
     private final ProjectController projectController;
+    private final DefaultTableModel locationsTrackingTableModel;
 
     private int idWorkspace = -1;
 
@@ -57,6 +59,7 @@ public final class MainTwitterWindows extends TopComponent {
         network_logic_combo.setModel(c);
 
         userTrackingTableModel = (DefaultTableModel) ut_list_table.getModel();
+        locationsTrackingTableModel = (DefaultTableModel) lt_list_table.getModel();
         projectController = Lookup.getDefault().lookup(ProjectController.class);
         checkPluginEnabling();
 
@@ -135,6 +138,23 @@ public final class MainTwitterWindows extends TopComponent {
         ut_add_from_list_listname_textfield = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
+        lt_panel = new javax.swing.JPanel();
+        lt_list_scrollpane = new javax.swing.JScrollPane();
+        lt_list_table = new javax.swing.JTable();
+        lt_add_button = new javax.swing.JButton();
+        lt_add_sw_lat_textfield = new javax.swing.JTextField();
+        lt_add_sw_long_textfield = new javax.swing.JTextField();
+        lt_add_ne_lat_textfield = new javax.swing.JTextField();
+        lt_add_ne_long_textfield = new javax.swing.JTextField();
+        lt_add_name_textfield = new javax.swing.JTextField();
+        lt_delete_button = new javax.swing.JButton();
+        jLabel7 = new javax.swing.JLabel();
+        jLabel8 = new javax.swing.JLabel();
+        jLabel9 = new javax.swing.JLabel();
+        jLabel10 = new javax.swing.JLabel();
+        jLabel11 = new javax.swing.JLabel();
+        jLabel12 = new javax.swing.JLabel();
+        jLabel13 = new javax.swing.JLabel();
         network_logic_combo = new javax.swing.JComboBox<>();
         network_logic_label = new javax.swing.JLabel();
         load_tracking_button = new javax.swing.JButton();
@@ -195,7 +215,7 @@ public final class MainTwitterWindows extends TopComponent {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(wt_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(wt_add_textfield)
-                    .addComponent(wt_word_list_scrollpane, javax.swing.GroupLayout.DEFAULT_SIZE, 316, Short.MAX_VALUE))
+                    .addComponent(wt_word_list_scrollpane, javax.swing.GroupLayout.DEFAULT_SIZE, 326, Short.MAX_VALUE))
                 .addContainerGap())
         );
         wt_panelLayout.setVerticalGroup(
@@ -291,7 +311,7 @@ public final class MainTwitterWindows extends TopComponent {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(ut_add_from_list_listname_textfield))
                     .addComponent(ut_add_textfield)
-                    .addComponent(ut_list_scrollpane, javax.swing.GroupLayout.DEFAULT_SIZE, 293, Short.MAX_VALUE))
+                    .addComponent(ut_list_scrollpane, javax.swing.GroupLayout.DEFAULT_SIZE, 303, Short.MAX_VALUE))
                 .addContainerGap())
         );
         ut_panelLayout.setVerticalGroup(
@@ -317,6 +337,162 @@ public final class MainTwitterWindows extends TopComponent {
         );
 
         tracking_tab_panel.addTab(org.openide.util.NbBundle.getMessage(MainTwitterWindows.class, "MainTwitterWindows.ut_panel.TabConstraints.tabTitle_1"), ut_panel); // NOI18N
+
+        lt_list_table.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "Location", "Coord"
+            }
+        ) {
+            Class[] types = new Class [] {
+                java.lang.String.class, java.lang.Long.class
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+        });
+        lt_list_table.setSelectionMode(javax.swing.ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
+        lt_list_scrollpane.setViewportView(lt_list_table);
+
+        org.openide.awt.Mnemonics.setLocalizedText(lt_add_button, org.openide.util.NbBundle.getMessage(MainTwitterWindows.class, "MainTwitterWindows.lt_add_button.text")); // NOI18N
+        lt_add_button.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                lt_add_buttonActionPerformed(evt);
+            }
+        });
+
+        lt_add_sw_lat_textfield.setText(org.openide.util.NbBundle.getMessage(MainTwitterWindows.class, "MainTwitterWindows.lt_add_sw_lat_textfield.text")); // NOI18N
+        lt_add_sw_lat_textfield.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                lt_add_sw_lat_textfieldKeyReleased(evt);
+            }
+        });
+
+        lt_add_sw_long_textfield.setText(org.openide.util.NbBundle.getMessage(MainTwitterWindows.class, "MainTwitterWindows.lt_add_sw_long_textfield.text")); // NOI18N
+        lt_add_sw_long_textfield.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                lt_add_sw_long_textfieldKeyReleased(evt);
+            }
+        });
+
+        lt_add_ne_lat_textfield.setText(org.openide.util.NbBundle.getMessage(MainTwitterWindows.class, "MainTwitterWindows.lt_add_ne_lat_textfield.text")); // NOI18N
+        lt_add_ne_lat_textfield.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                lt_add_ne_lat_textfieldKeyReleased(evt);
+            }
+        });
+
+        lt_add_ne_long_textfield.setText(org.openide.util.NbBundle.getMessage(MainTwitterWindows.class, "MainTwitterWindows.lt_add_ne_long_textfield.text")); // NOI18N
+        lt_add_ne_long_textfield.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                lt_add_ne_long_textfieldKeyReleased(evt);
+            }
+        });
+
+        lt_add_name_textfield.setText(org.openide.util.NbBundle.getMessage(MainTwitterWindows.class, "MainTwitterWindows.lt_add_name_textfield.text")); // NOI18N
+        lt_add_name_textfield.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                lt_add_name_textfieldKeyReleased(evt);
+            }
+        });
+
+        org.openide.awt.Mnemonics.setLocalizedText(lt_delete_button, org.openide.util.NbBundle.getMessage(MainTwitterWindows.class, "MainTwitterWindows.lt_delete_button.text")); // NOI18N
+        lt_delete_button.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                lt_delete_buttonActionPerformed(evt);
+            }
+        });
+
+        org.openide.awt.Mnemonics.setLocalizedText(jLabel7, org.openide.util.NbBundle.getMessage(MainTwitterWindows.class, "MainTwitterWindows.jLabel7.text")); // NOI18N
+
+        org.openide.awt.Mnemonics.setLocalizedText(jLabel8, org.openide.util.NbBundle.getMessage(MainTwitterWindows.class, "MainTwitterWindows.jLabel8.text")); // NOI18N
+
+        org.openide.awt.Mnemonics.setLocalizedText(jLabel9, org.openide.util.NbBundle.getMessage(MainTwitterWindows.class, "MainTwitterWindows.jLabel9.text")); // NOI18N
+
+        org.openide.awt.Mnemonics.setLocalizedText(jLabel10, org.openide.util.NbBundle.getMessage(MainTwitterWindows.class, "MainTwitterWindows.jLabel10.text")); // NOI18N
+
+        org.openide.awt.Mnemonics.setLocalizedText(jLabel11, org.openide.util.NbBundle.getMessage(MainTwitterWindows.class, "MainTwitterWindows.jLabel11.text")); // NOI18N
+
+        org.openide.awt.Mnemonics.setLocalizedText(jLabel12, org.openide.util.NbBundle.getMessage(MainTwitterWindows.class, "MainTwitterWindows.jLabel12.text")); // NOI18N
+
+        org.openide.awt.Mnemonics.setLocalizedText(jLabel13, org.openide.util.NbBundle.getMessage(MainTwitterWindows.class, "MainTwitterWindows.jLabel13.text")); // NOI18N
+
+        javax.swing.GroupLayout lt_panelLayout = new javax.swing.GroupLayout(lt_panel);
+        lt_panel.setLayout(lt_panelLayout);
+        lt_panelLayout.setHorizontalGroup(
+            lt_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(lt_panelLayout.createSequentialGroup()
+                .addGroup(lt_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(lt_delete_button, javax.swing.GroupLayout.DEFAULT_SIZE, 97, Short.MAX_VALUE)
+                    .addComponent(lt_add_button, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(lt_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(lt_list_scrollpane, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                    .addGroup(lt_panelLayout.createSequentialGroup()
+                        .addGroup(lt_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(lt_panelLayout.createSequentialGroup()
+                                .addComponent(jLabel7)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jLabel8)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(lt_add_sw_lat_textfield, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jLabel9)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(lt_add_sw_long_textfield, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(lt_panelLayout.createSequentialGroup()
+                                .addGroup(lt_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(lt_panelLayout.createSequentialGroup()
+                                        .addComponent(jLabel10, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addGap(1, 1, 1)
+                                        .addComponent(jLabel11))
+                                    .addComponent(jLabel13))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(lt_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addGroup(lt_panelLayout.createSequentialGroup()
+                                        .addComponent(lt_add_ne_lat_textfield, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(jLabel12)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(lt_add_ne_long_textfield, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addComponent(lt_add_name_textfield))))
+                        .addGap(18, 18, 18)))
+                .addContainerGap())
+        );
+        lt_panelLayout.setVerticalGroup(
+            lt_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(lt_panelLayout.createSequentialGroup()
+                .addGroup(lt_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(lt_panelLayout.createSequentialGroup()
+                        .addGroup(lt_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(lt_add_sw_lat_textfield, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel7)
+                            .addComponent(jLabel8)
+                            .addComponent(jLabel9)
+                            .addComponent(lt_add_sw_long_textfield, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(lt_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(lt_add_ne_lat_textfield, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel10)
+                            .addComponent(jLabel11)
+                            .addComponent(jLabel12)
+                            .addComponent(lt_add_ne_long_textfield, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(9, 9, 9)
+                        .addGroup(lt_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel13)
+                            .addComponent(lt_add_name_textfield, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(lt_add_button, javax.swing.GroupLayout.PREFERRED_SIZE, 84, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(9, 9, 9)
+                .addGroup(lt_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(lt_list_scrollpane, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lt_delete_button))
+                .addContainerGap(12, Short.MAX_VALUE))
+        );
+
+        tracking_tab_panel.addTab(org.openide.util.NbBundle.getMessage(MainTwitterWindows.class, "MainTwitterWindows.lt_panel.TabConstraints.tabTitle"), lt_panel); // NOI18N
 
         network_logic_combo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
@@ -353,7 +529,7 @@ public final class MainTwitterWindows extends TopComponent {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(connect_toggleButton, javax.swing.GroupLayout.DEFAULT_SIZE, 415, Short.MAX_VALUE)
+                .addComponent(connect_toggleButton, javax.swing.GroupLayout.DEFAULT_SIZE, 425, Short.MAX_VALUE)
                 .addContainerGap())
             .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(jPanel1Layout.createSequentialGroup()
@@ -520,17 +696,64 @@ public final class MainTwitterWindows extends TopComponent {
             addFromList();
        }
     }//GEN-LAST:event_ut_add_from_list_buttonActionPerformed
+
+    private void lt_delete_buttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_lt_delete_buttonActionPerformed
+        for (int row : lt_list_table.getSelectedRows()) {
+            streamer.getLocationTracking().remove(locationsTrackingTableModel.getValueAt(row, 0));
+        }
+        this.refreshLocationList();        // TODO add your handling code here:
+    }//GEN-LAST:event_lt_delete_buttonActionPerformed
+
+    private void lt_add_name_textfieldKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_lt_add_name_textfieldKeyReleased
+        // TODO add your handling code here:
+    }//GEN-LAST:event_lt_add_name_textfieldKeyReleased
+
+    private void lt_add_ne_long_textfieldKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_lt_add_ne_long_textfieldKeyReleased
+        // TODO add your handling code here:
+    }//GEN-LAST:event_lt_add_ne_long_textfieldKeyReleased
+
+    private void lt_add_ne_lat_textfieldKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_lt_add_ne_lat_textfieldKeyReleased
+        // TODO add your handling code here:
+    }//GEN-LAST:event_lt_add_ne_lat_textfieldKeyReleased
+
+    private void lt_add_sw_long_textfieldKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_lt_add_sw_long_textfieldKeyReleased
+        // TODO add your handling code here:
+    }//GEN-LAST:event_lt_add_sw_long_textfieldKeyReleased
+
+    private void lt_add_sw_lat_textfieldKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_lt_add_sw_lat_textfieldKeyReleased
+        // TODO add your handling code here:
+    }//GEN-LAST:event_lt_add_sw_lat_textfieldKeyReleased
+
+    private void lt_add_buttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_lt_add_buttonActionPerformed
+        addLocation();
+    }//GEN-LAST:event_lt_add_buttonActionPerformed
+    
+    private void addLocation(){
+        TrackLocation location = new TrackLocation(Double.parseDouble(lt_add_sw_lat_textfield.getText()),
+                                                    Double.parseDouble(lt_add_sw_long_textfield.getText()),
+                                                    Double.parseDouble(lt_add_ne_lat_textfield.getText()),
+                                                    Double.parseDouble(lt_add_ne_long_textfield.getText()),
+                                                    lt_add_name_textfield.getText());
+        lt_add_sw_lat_textfield.setText("");
+        lt_add_sw_long_textfield.setText("");
+        lt_add_ne_lat_textfield.setText("");
+        lt_add_ne_long_textfield.setText("");
+        lt_add_name_textfield.setText("");
+        streamer.addLocation(location);
+        refreshLocationList();
+    }
     private void addFromList(){
-        String username = this.ut_add_from_list_user_textfield.getText().trim().toLowerCase();
-        String listname =  this.ut_add_from_list_listname_textfield.getText().trim();
+        String username = ut_add_from_list_user_textfield.getText().trim().toLowerCase();
+        String listname =  ut_add_from_list_listname_textfield.getText().trim();
         streamer.addFromList(username, listname);
-        this.ut_add_from_list_listname_textfield.setText("");
-        this.ut_add_from_list_user_textfield.setText("");
+        ut_add_from_list_listname_textfield.setText("");
+        ut_add_from_list_user_textfield.setText("");
         refreshUserList();
     }
      private void refreshTracking() {
         refreshWordList();
         refreshUserList();
+        refreshLocationList();
     }
 
     private void addUser(){
@@ -551,7 +774,14 @@ public final class MainTwitterWindows extends TopComponent {
             wordTrackingListModel.add(0, s);
         }
     }
-
+    private void refreshLocationList(){
+        lt_list_table.clearSelection();
+        lt_list_table.updateUI();
+        locationsTrackingTableModel.getDataVector().removeAllElements();
+        for (TrackLocation s : streamer.getLocationTracking()) {
+            locationsTrackingTableModel.addRow(new Object[]{s.getName(),s.toString()});
+        }
+    }
     private void refreshUserList() {
         ut_list_table.clearSelection();
         ut_list_table.updateUI();
@@ -564,13 +794,30 @@ public final class MainTwitterWindows extends TopComponent {
     private javax.swing.JToggleButton connect_toggleButton;
     private javax.swing.JButton crendential_button;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel11;
+    private javax.swing.JLabel jLabel12;
+    private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPasswordField jPasswordField1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JButton load_tracking_button;
+    private javax.swing.JButton lt_add_button;
+    private javax.swing.JTextField lt_add_name_textfield;
+    private javax.swing.JTextField lt_add_ne_lat_textfield;
+    private javax.swing.JTextField lt_add_ne_long_textfield;
+    private javax.swing.JTextField lt_add_sw_lat_textfield;
+    private javax.swing.JTextField lt_add_sw_long_textfield;
+    private javax.swing.JButton lt_delete_button;
+    private javax.swing.JScrollPane lt_list_scrollpane;
+    private javax.swing.JTable lt_list_table;
+    private javax.swing.JPanel lt_panel;
     private javax.swing.JComboBox<String> network_logic_combo;
     private javax.swing.JLabel network_logic_label;
     private javax.swing.JButton save_tracking_button;

@@ -15,7 +15,10 @@ import org.apache.commons.lang3.ArrayUtils;
 import org.openide.util.Exceptions;
 import org.openide.util.lookup.ServiceProvider;
 import totetmatt.gephi.twitter.networklogic.Networklogic;
+import totetmatt.gephi.twitter.networklogic.utils.TrackLocation;
 import twitter4j.FilterQuery;
+import twitter4j.GeoLocation;
+import twitter4j.GeoQuery;
 import twitter4j.JSONException;
 import twitter4j.JSONObject;
 import twitter4j.PagableResponseList;
@@ -41,8 +44,18 @@ public class TwitterStreamer {
     private CredentialProperty credentialProperty = new CredentialProperty();
     private final List<String> wordTracking = new ArrayList<>();
     private final Map<String, Long> userTracking = new HashMap<>();
+    private final List<TrackLocation> locationTracking = new ArrayList<>();
 
     private boolean running = false;
+
+    public List<TrackLocation> getLocationTracking() {
+        return locationTracking;
+    }
+    
+    public void addLocation(TrackLocation location) {
+        locationTracking.add(location);
+    }
+    
     public void addFromList(String screenName,String listName){
         twitter = new TwitterFactory().getInstance();
         AccessToken accessToken = new AccessToken(credentialProperty.getToken(), credentialProperty.getTokenSecret());
@@ -123,6 +136,17 @@ public class TwitterStreamer {
             tmpUserTrack = userTracking.values();
             tmpUserTrack.remove(Long.parseLong("0"));
 
+        } 
+        
+        if (!locationTracking.isEmpty()) {
+            List<double[]> tmpLocationTrack = new ArrayList<>();
+            for(TrackLocation l : locationTracking) {
+                 tmpLocationTrack.add(new double[]{l.getSwLongitude(),l.getSwLatitude()});
+                 tmpLocationTrack.add(new double[]{l.getNeLongitude(),l.getNeLatitude()});
+            }
+            double[][] locationTrack = new double[tmpLocationTrack.size()][];
+            tmpLocationTrack.toArray(locationTrack);
+            fq.locations(locationTrack);
         }
 
         String[] track = new String[tmpWordTrack.size()];
