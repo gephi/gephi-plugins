@@ -1,8 +1,10 @@
 package totetmatt.gephi.twitter;
-
+import java.awt.Desktop;
 import java.awt.event.KeyEvent;
 import java.io.File;
 import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.Collection;
 import java.util.Map;
 import java.util.logging.Level;
@@ -17,6 +19,7 @@ import org.gephi.project.api.WorkspaceListener;
 import org.netbeans.api.settings.ConvertAsProperties;
 import org.openide.awt.ActionID;
 import org.openide.awt.ActionReference;
+import org.openide.util.Exceptions;
 import org.openide.util.Lookup;
 import org.openide.util.NbBundle;
 import org.openide.windows.TopComponent;
@@ -162,6 +165,7 @@ public final class MainTwitterWindows extends TopComponent {
         crendential_button = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
+        credential_goto_twitter_button = new javax.swing.JButton();
 
         jPasswordField1.setText(org.openide.util.NbBundle.getMessage(MainTwitterWindows.class, "MainTwitterWindows.jPasswordField1.text")); // NOI18N
 
@@ -215,7 +219,7 @@ public final class MainTwitterWindows extends TopComponent {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(wt_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(wt_add_textfield)
-                    .addComponent(wt_word_list_scrollpane, javax.swing.GroupLayout.DEFAULT_SIZE, 326, Short.MAX_VALUE))
+                    .addComponent(wt_word_list_scrollpane, javax.swing.GroupLayout.DEFAULT_SIZE, 340, Short.MAX_VALUE))
                 .addContainerGap())
         );
         wt_panelLayout.setVerticalGroup(
@@ -311,7 +315,7 @@ public final class MainTwitterWindows extends TopComponent {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(ut_add_from_list_listname_textfield))
                     .addComponent(ut_add_textfield)
-                    .addComponent(ut_list_scrollpane, javax.swing.GroupLayout.DEFAULT_SIZE, 303, Short.MAX_VALUE))
+                    .addComponent(ut_list_scrollpane, javax.swing.GroupLayout.DEFAULT_SIZE, 317, Short.MAX_VALUE))
                 .addContainerGap())
         );
         ut_panelLayout.setVerticalGroup(
@@ -406,12 +410,14 @@ public final class MainTwitterWindows extends TopComponent {
             }
         });
 
+        jLabel7.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         org.openide.awt.Mnemonics.setLocalizedText(jLabel7, org.openide.util.NbBundle.getMessage(MainTwitterWindows.class, "MainTwitterWindows.jLabel7.text")); // NOI18N
 
         org.openide.awt.Mnemonics.setLocalizedText(jLabel8, org.openide.util.NbBundle.getMessage(MainTwitterWindows.class, "MainTwitterWindows.jLabel8.text")); // NOI18N
 
         org.openide.awt.Mnemonics.setLocalizedText(jLabel9, org.openide.util.NbBundle.getMessage(MainTwitterWindows.class, "MainTwitterWindows.jLabel9.text")); // NOI18N
 
+        jLabel10.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         org.openide.awt.Mnemonics.setLocalizedText(jLabel10, org.openide.util.NbBundle.getMessage(MainTwitterWindows.class, "MainTwitterWindows.jLabel10.text")); // NOI18N
 
         org.openide.awt.Mnemonics.setLocalizedText(jLabel11, org.openide.util.NbBundle.getMessage(MainTwitterWindows.class, "MainTwitterWindows.jLabel11.text")); // NOI18N
@@ -523,13 +529,28 @@ public final class MainTwitterWindows extends TopComponent {
 
         org.openide.awt.Mnemonics.setLocalizedText(jLabel2, org.openide.util.NbBundle.getMessage(MainTwitterWindows.class, "MainTwitterWindows.jLabel2.text")); // NOI18N
 
+        org.openide.awt.Mnemonics.setLocalizedText(credential_goto_twitter_button, org.openide.util.NbBundle.getMessage(MainTwitterWindows.class, "MainTwitterWindows.credential_goto_twitter_button.text")); // NOI18N
+        credential_goto_twitter_button.setActionCommand(org.openide.util.NbBundle.getMessage(MainTwitterWindows.class, "MainTwitterWindows.credential_goto_twitter_button.actionCommand")); // NOI18N
+        credential_goto_twitter_button.setBorder(null);
+        credential_goto_twitter_button.setBorderPainted(false);
+        credential_goto_twitter_button.setContentAreaFilled(false);
+        credential_goto_twitter_button.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                credential_goto_documentation_buttonActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(connect_toggleButton, javax.swing.GroupLayout.DEFAULT_SIZE, 425, Short.MAX_VALUE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(connect_toggleButton, javax.swing.GroupLayout.DEFAULT_SIZE, 439, Short.MAX_VALUE)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(credential_goto_twitter_button, javax.swing.GroupLayout.PREFERRED_SIZE, 123, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
             .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(jPanel1Layout.createSequentialGroup()
@@ -554,7 +575,9 @@ public final class MainTwitterWindows extends TopComponent {
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap(458, Short.MAX_VALUE)
+                .addContainerGap(421, Short.MAX_VALUE)
+                .addComponent(credential_goto_twitter_button, javax.swing.GroupLayout.PREFERRED_SIZE, 19, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
                 .addComponent(connect_toggleButton)
                 .addContainerGap())
             .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -727,6 +750,20 @@ public final class MainTwitterWindows extends TopComponent {
     private void lt_add_buttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_lt_add_buttonActionPerformed
         addLocation();
     }//GEN-LAST:event_lt_add_buttonActionPerformed
+
+    private void credential_goto_documentation_buttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_credential_goto_documentation_buttonActionPerformed
+        if (Desktop.isDesktopSupported()) {
+            try {
+                Desktop.getDesktop().browse(new URI("https://seinecle.github.io/gephi-tutorials/generated-html/twitter-streaming-importer-en.html"));
+            } catch (IOException e) {
+                Logger.getLogger(MainTwitterWindows.class.getName()).log(Level.SEVERE, null, e);
+            } catch (URISyntaxException ex) {
+                Logger.getLogger(MainTwitterWindows.class.getName()).log(Level.SEVERE, null, ex);
+            } 
+        } else {
+            Logger.getLogger(MainTwitterWindows.class.getName()).log(Level.SEVERE, null, new Exception("Desktop method isn't supported"));
+        }
+    }//GEN-LAST:event_credential_goto_documentation_buttonActionPerformed
     
     private void addLocation(){
         if(!lt_add_sw_lat_textfield.getText().isEmpty() &&
@@ -801,6 +838,7 @@ public final class MainTwitterWindows extends TopComponent {
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JToggleButton connect_toggleButton;
+    private javax.swing.JButton credential_goto_twitter_button;
     private javax.swing.JButton crendential_button;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
