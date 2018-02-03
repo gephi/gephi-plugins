@@ -12,11 +12,16 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.apache.commons.lang3.ArrayUtils;
+import org.openide.util.Exceptions;
 import org.openide.util.lookup.ServiceProvider;
 import totetmatt.gephi.twitter.networklogic.Networklogic;
+import totetmatt.gephi.twitter.networklogic.utils.TrackLocation;
 import twitter4j.FilterQuery;
+import twitter4j.GeoLocation;
+import twitter4j.GeoQuery;
 import twitter4j.JSONException;
 import twitter4j.JSONObject;
+import twitter4j.PagableResponseList;
 import twitter4j.ResponseList;
 import twitter4j.Twitter;
 import twitter4j.TwitterException;
@@ -39,9 +44,41 @@ public class TwitterStreamer {
     private CredentialProperty credentialProperty = new CredentialProperty();
     private final List<String> wordTracking = new ArrayList<>();
     private final Map<String, Long> userTracking = new HashMap<>();
+    private final Map<String,TrackLocation> locationTracking = new HashMap<>();
 
     private boolean running = false;
 
+    public Map<String,TrackLocation> getLocationTracking() {
+        return locationTracking;
+    }
+    
+    public void addLocation(TrackLocation location) {
+        if(location.isValid()) {
+            locationTracking.put(location.getName(),location);
+        } else {
+            throw new IllegalArgumentException("-90 <= Latitude <= 90 and -180 <= Longitude <= 180");
+        }
+    }
+    
+    public void addFromList(String screenName,String listName){
+        twitter = new TwitterFactory().getInstance();
+        AccessToken accessToken = new AccessToken(credentialProperty.getToken(), credentialProperty.getTokenSecret());
+        twitter.setOAuthConsumer(credentialProperty.getConsumerKey(), credentialProperty.getConsumerSecret());
+        twitter.setOAuthAccessToken(accessToken);
+        long cursor = -1;
+            PagableResponseList<User> users;
+            try {
+                do {
+                    users = twitter.getUserListMembers(screenName,listName, cursor);
+                    for (User u : users) {
+                        Logger.getLogger(MainTwitterWindows.class.getName()).log(Level.INFO, u.getScreenName().toLowerCase());
+                        userTracking.put(u.getScreenName().toLowerCase(), u.getId());
+                    }
+                } while ((cursor = users.getNextCursor()) != 0);
+            } catch (TwitterException ex) {
+                Exceptions.printStackTrace(ex);
+            }
+    }
     public void addUser(String screenName) {
         twitter = new TwitterFactory().getInstance();
         AccessToken accessToken = new AccessToken(credentialProperty.getToken(), credentialProperty.getTokenSecret());
@@ -103,6 +140,17 @@ public class TwitterStreamer {
             tmpUserTrack = userTracking.values();
             tmpUserTrack.remove(Long.parseLong("0"));
 
+        } 
+        
+        if (!locationTracking.isEmpty()) {
+            List<double[]> tmpLocationTrack = new ArrayList<>();
+            for(TrackLocation l : locationTracking.values()) {
+                 tmpLocationTrack.add(new double[]{l.getSwLongitude(),l.getSwLatitude()});
+                 tmpLocationTrack.add(new double[]{l.getNeLongitude(),l.getNeLatitude()});
+            }
+            double[][] locationTrack = new double[tmpLocationTrack.size()][];
+            tmpLocationTrack.toArray(locationTrack);
+            fq.locations(locationTrack);
         }
 
         String[] track = new String[tmpWordTrack.size()];
@@ -148,6 +196,7 @@ public class TwitterStreamer {
 
         o.put("wordTracking", wordTracking);
         o.put("userTracking", userTracking);
+        o.put("locationsTracking", locationTracking);
         Files.write(saveFile.toPath(), o.toString().getBytes());
 
     }
@@ -161,6 +210,7 @@ public class TwitterStreamer {
 
         wordTracking.clear();
         userTracking.clear();
+        locationTracking.clear();
 
         for (int i = 0; i < o.getJSONArray("wordTracking").length(); i++) {
             wordTracking.add(o.getJSONArray("wordTracking").getString(i));
@@ -170,6 +220,20 @@ public class TwitterStreamer {
             String username = (String) userIt.next();
             long id = o.getJSONObject("userTracking").getLong(username);
             userTracking.put(username, id);
+        }
+        Iterator locationIt = o.getJSONObject("locationsTracking").keys();
+        while (locationIt.hasNext()) {
+            String locationKey = (String) locationIt.next();
+            JSONObject location = o.getJSONObject("locationsTracking").getJSONObject(locationKey);
+            //double swLatitude, double swLongitude, double neLatitude, double neLongitude, String name
+            locationTracking.put(locationKey,new TrackLocation(
+                        Double.parseDouble(location.getString("swLatitude") ),
+                        Double.parseDouble(location.getString("swLongitude") ),
+                        Double.parseDouble(location.getString("neLatitude") ),
+                        Double.parseDouble(location.getString("neLongitude") ),
+                        location.getString("name")
+                   
+            ));
         }
     }
 }
