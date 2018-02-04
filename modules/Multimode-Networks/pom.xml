@@ -61,8 +61,7 @@
                 <configuration>
                     <licenseName>license</licenseName>
                     <licenseFile>license.txt</licenseFile>
-                    <author>Jaroslav Kuchar</author>
-                    <author>Joan Codina</author>
+                    <author>Jaroslav Kuchar, Joan Codina</author>
                     <sourceCodeUrl>https://github.com/totetmatt/gephi-plugins/tree/multimode-network</sourceCodeUrl>
                     <homePageUrl>https://github.com/jaroslav-kuchar/Multimode-Networks</homePageUrl>
                     <publicPackages>
