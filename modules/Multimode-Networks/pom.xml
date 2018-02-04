@@ -9,53 +9,49 @@
 
     <groupId>cz.cvut.fit.gephi</groupId>
     <artifactId>multimode</artifactId>
-    <version>1.0.5</version>
+    <version>1.1.0</version>
     <packaging>nbm</packaging>
 
     <name>Multimode-Networks</name>
 
     <dependencies>
-    <dependency>
-      <groupId>org.netbeans.api</groupId>
-      <artifactId>org-openide-awt</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.netbeans.api</groupId>
-      <artifactId>org-openide-windows</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.gephi</groupId>
-      <artifactId>core-library-wrapper</artifactId>
-        <version>${gephi.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>org.netbeans.api</groupId>
-      <artifactId>org-netbeans-modules-settings</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.netbeans.api</groupId>
-      <artifactId>org-openide-util-lookup</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.gephi</groupId>
-        <version>${gephi.version}</version>
-      <artifactId>graph-api</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.netbeans.api</groupId>
-      <artifactId>org-openide-util</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.gephi</groupId>
-        <version>${gephi.version}</version>
-      <artifactId>utils-longtask</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.gephi</groupId>
-         <version>${gephi.version}</version>
-     <artifactId>project-api</artifactId>
-    </dependency>
-     </dependencies>
+        <dependency>
+            <groupId>org.netbeans.api</groupId>
+            <artifactId>org-openide-awt</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.netbeans.api</groupId>
+            <artifactId>org-openide-windows</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.gephi</groupId>
+            <artifactId>core-library-wrapper</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.netbeans.api</groupId>
+            <artifactId>org-netbeans-modules-settings</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.netbeans.api</groupId>
+            <artifactId>org-openide-util-lookup</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.gephi</groupId>
+            <artifactId>graph-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.netbeans.api</groupId>
+            <artifactId>org-openide-util</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.gephi</groupId>
+            <artifactId>utils-longtask</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.gephi</groupId>
+            <artifactId>project-api</artifactId>
+        </dependency>
+    </dependencies>
 
     <build>
         <plugins>
