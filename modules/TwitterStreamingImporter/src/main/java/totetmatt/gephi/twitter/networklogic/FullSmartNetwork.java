@@ -141,4 +141,9 @@ public class FullSmartNetwork extends Networklogic {
         return "Full Twitter Network";
     }
 
+    @Override
+    public int index() {
+        return 0;
+    }
+
 }

@@ -21,8 +21,13 @@ public enum TwitterNodeColumn {
     NODE_USER_FRIENDS_COUNT("friends_count",Integer.class),
     NODE_USER_FOLLOWERS_COUNT("followers_count",Integer.class),
     NODE_USER_REAL_NAME("real_name",String.class),
-    NODE_USER_LOCATION("location",String.class);
+    NODE_USER_LOCATION("location",String.class),
     
+    NODE_EMOJI_ALIAS("emoji_alias",String.class),
+    NODE_EMOJI_HTML_DECIMAL("emoji_html_decimal",String.class),
+    NODE_EMOJI_UTF8("emoji_utf8",String.class);
+    
+  
     final public String label;
     final public Class<?> classType;
 

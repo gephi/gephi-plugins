@@ -94,4 +94,9 @@ public class UserNetwork extends Networklogic {
         return "User Network";
     }
 
+    @Override
+    public int index() {
+        return 1;
+    }
+
 }
