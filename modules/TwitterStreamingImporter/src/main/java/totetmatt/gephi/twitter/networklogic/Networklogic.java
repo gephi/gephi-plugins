@@ -2,7 +2,6 @@ package totetmatt.gephi.twitter.networklogic;
 
 import com.vdurmont.emoji.EmojiParser;
 import java.awt.Color;
-import java.util.Comparator;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.gephi.graph.api.Configuration;
@@ -191,7 +190,7 @@ public abstract class Networklogic implements StatusListener, Comparable  {
         return user;
     }
     protected Node createEmoji(String emoji_utf8) {
-        Node emoji = createNode(emoji_utf8, emoji_utf8, NodeType.EMOJI);
+        Node emoji = createNode(EmojiParser.parseToHtmlDecimal(emoji_utf8), emoji_utf8, NodeType.EMOJI);
         emoji.setAttribute(TwitterNodeColumn.NODE_EMOJI_UTF8.label, emoji_utf8);
         emoji.setAttribute(TwitterNodeColumn.NODE_EMOJI_ALIAS.label, EmojiParser.parseToAliases(emoji_utf8));
         emoji.setAttribute(TwitterNodeColumn.NODE_EMOJI_HTML_DECIMAL.label, EmojiParser.parseToHtmlDecimal(emoji_utf8));
