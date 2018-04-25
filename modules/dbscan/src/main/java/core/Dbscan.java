@@ -53,10 +53,17 @@ public class Dbscan implements Statistics, LongTask {
         NodeIterable allNodes = graphModel.getGraph().getNodes();
         graphModel.getGraphVisible().readLock();
         Progress.start(progressTicket, graphModel.getGraph().getNodeCount());
-        allNodes.forEach(node -> {
+        clusterize(allNodes);
+        executionTime = System.currentTimeMillis() - startExecution;
+        createReport();
+        graphModel.getGraphVisible().readUnlockAll();
+    }
+
+    private void clusterize(NodeIterable nodes){
+        nodes.forEach(node -> {
             if (!visited.contains(node)) {
                 visited.add(node);
-                List<Node> neighbors = getNeighborsList(node, allNodes);
+                List<Node> neighbors = getNeighborsList(node, nodes);
                 if (neighbors.size() >= numberOfNeighbours) {
                     Set<Node> cluster = createCluster();
                     expandCluster(node, neighbors, cluster);
@@ -67,9 +74,6 @@ public class Dbscan implements Statistics, LongTask {
                 }
             }
         });
-        executionTime = System.currentTimeMillis() - startExecution;
-        createReport();
-        graphModel.getGraphVisible().readUnlockAll();
     }
 
     private void prepareGraphModel(GraphModel graphModel) {
