@@ -10,8 +10,16 @@ import org.openide.util.lookup.ServiceProvider;
 @ServiceProvider(service = Generator.class)
 public class KleinbergGenerator implements Generator {
 
+    public static final int DEFAULT_GRID_SIZE = 10;
+    public static final int DEFAULT_CLUSTERING_COEFFICIENT = 2;
+    public static final boolean DEFAULT_TORUS_MODE = false;
+
     private ProgressTicket progressTicket;
     private boolean cancelled = false;
+
+    private int clusteringCoefficient = DEFAULT_CLUSTERING_COEFFICIENT;
+    private int gridSize = DEFAULT_GRID_SIZE;
+    private boolean torusMode = DEFAULT_TORUS_MODE;
 
     @Override
     public boolean cancel() {
@@ -20,13 +28,23 @@ public class KleinbergGenerator implements Generator {
     }
 
     @Override
-    public void setProgressTicket(ProgressTicket progressTicket) {
-        this.progressTicket = progressTicket;
+    public void generate(ContainerLoader containerLoader) {
     }
 
-    @Override
-    public void generate(ContainerLoader containerLoader) {
-        //TODO
+    public int getClusteringCoefficient() {
+        return clusteringCoefficient;
+    }
+
+    public void setClusteringCoefficient(int clusteringCoefficient) {
+        this.clusteringCoefficient = clusteringCoefficient;
+    }
+
+    public int getGridSize() {
+        return gridSize;
+    }
+
+    public void setGridSize(int gridSize) {
+        this.gridSize = gridSize;
     }
 
     @Override
@@ -37,5 +55,18 @@ public class KleinbergGenerator implements Generator {
     @Override
     public GeneratorUI getUI() {
         return Lookup.getDefault().lookup(KleinbergGeneratorUI.class);
+    }
+
+    public boolean isTorusMode() {
+        return torusMode;
+    }
+
+    public void setTorusMode(boolean torusMode) {
+        this.torusMode = torusMode;
+    }
+
+    @Override
+    public void setProgressTicket(ProgressTicket progressTicket) {
+        this.progressTicket = progressTicket;
     }
 }
