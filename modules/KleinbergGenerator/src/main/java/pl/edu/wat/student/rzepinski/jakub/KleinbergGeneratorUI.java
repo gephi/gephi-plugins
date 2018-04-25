@@ -20,10 +20,10 @@ public class KleinbergGeneratorUI implements GeneratorUI {
     private JSpinner clusteringCoefficientSpinner;
     private JCheckBox torusModeCheckbox;
     private KleinbergGenerator generator;
+    private final JPanel panel;
 
-    @Override
-    public JPanel getPanel() {
-        JPanel panel = new JPanel();
+    public KleinbergGeneratorUI() {
+        panel = new JPanel();
         panel.setLayout(new GridLayout(0, 2));
         int padding = 5;
         panel.setBorder(BorderFactory.createEmptyBorder(padding, padding, padding, padding));
@@ -40,7 +40,10 @@ public class KleinbergGeneratorUI implements GeneratorUI {
         torusModeCheckbox = new JCheckBox();
         torusModeCheckbox.setSelected(KleinbergGenerator.DEFAULT_TORUS_MODE);
         panel.add(torusModeCheckbox);
+    }
 
+    @Override
+    public JPanel getPanel() {
         return panel;
     }
 
@@ -50,6 +53,7 @@ public class KleinbergGeneratorUI implements GeneratorUI {
             throw new IllegalArgumentException("Wrong generator type: " + generator.getClass());
         }
         this.generator = (KleinbergGenerator) generator;
+
         gridSizeSpinner.setValue(this.generator.getGridSize());
         clusteringCoefficientSpinner.setValue(this.generator.getClusteringCoefficient());
         torusModeCheckbox.setSelected(this.generator.isTorusMode());
