@@ -31,14 +31,16 @@ public class DbscanUI implements StatisticsUI {
         }
 
         if(settingsPanel != null){
-
+            settingsPanel.setNeighbors(dbscan.getNumberOfNeighbours());
+            settingsPanel.setRadius(dbscan.getRadius());
         }
     }
 
     @Override
     public void unsetup() {
         if(settingsPanel != null && dbscan != null){
-
+            dbscan.setNumberOfNeighbours(settingsPanel.getNeighbors());
+            dbscan.setRadius(settingsPanel.getRadius());
         }
         settingsPanel = null;
     }
@@ -60,7 +62,7 @@ public class DbscanUI implements StatisticsUI {
 
     @Override
     public String getShortDescription() {
-        return "Short desc";
+        return "Density-based spatial clustering of applications with noise";
     }
 
     @Override
