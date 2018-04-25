@@ -52,7 +52,7 @@ public class KleinbergGeneratorWorker implements Runnable {
 
     private double calculateNormalizationConstant(int x, int y) {
         return IntPairs.range(0, gridSize)
-                .map((u, v) -> distanceCalculator.distance(x, y, u, v))
+                .map((u, v) -> distanceCalculator.calculate(x, y, u, v))
                 .filter(Utils::isPositive)
                 .mapToDouble(t -> pow(t, -clusteringCoefficient))
                 .sum();
@@ -71,7 +71,7 @@ public class KleinbergGeneratorWorker implements Runnable {
     private void createLongRangeEdges(Integer x, Integer y) {
         double normalizationConstant = calculateNormalizationConstant(x, y);
         IntPairs.range(0, gridSize).forEach((u, v) -> {
-            int distance = distanceCalculator.distance(x, y, u, v);
+            int distance = distanceCalculator.calculate(x, y, u, v);
             if (distance > 1) {
                 double probability = pow(distance, -clusteringCoefficient) / normalizationConstant;
                 boolean addEdge = random() <= probability;

@@ -8,6 +8,7 @@ import org.gephi.utils.progress.ProgressTicket;
 import org.openide.util.Lookup;
 import org.openide.util.lookup.ServiceProvider;
 import pl.edu.wat.student.rzepinski.jakub.kleinberg.ui.KleinbergGeneratorUI;
+import pl.edu.wat.student.rzepinski.jakub.kleinberg.ui.Labels;
 
 @ServiceProvider(service = Generator.class)
 public class KleinbergGenerator implements Generator {
@@ -52,7 +53,7 @@ public class KleinbergGenerator implements Generator {
 
     @Override
     public String getName() {
-        return "Kleinberg model";
+        return Labels.KLEINBERG_GENERATOR_NAME;
     }
 
     public ProgressTicket getProgressTicket() {
