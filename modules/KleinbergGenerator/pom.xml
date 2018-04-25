@@ -15,7 +15,38 @@
     <name>Kleinberg Generator</name>
 
     <dependencies>
-        <!-- Insert dependencies here -->
+        <dependency>
+            <groupId>org.gephi</groupId>
+            <artifactId>desktop-project</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.netbeans.api</groupId>
+            <artifactId>org-openide-util-lookup</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.gephi</groupId>
+            <artifactId>graph-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.netbeans.api</groupId>
+            <artifactId>org-openide-util</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.gephi</groupId>
+            <artifactId>io-importer-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.gephi</groupId>
+            <artifactId>io-generator-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.gephi</groupId>
+            <artifactId>project-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.gephi</groupId>
+            <artifactId>utils-longtask</artifactId>
+        </dependency>
     </dependencies>
 
     <build>
@@ -32,6 +63,14 @@
                     <publicPackages>
                         <!-- Insert public packages -->
                     </publicPackages>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>8</source>
+                    <target>8</target>
                 </configuration>
             </plugin>
         </plugins>
