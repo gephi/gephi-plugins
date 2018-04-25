@@ -27,8 +27,7 @@ public class DbscanUI implements StatisticsUI {
         if (statistics instanceof Dbscan){
             dbscan = (Dbscan) statistics;
         } else {
-            Logger.getGlobal().log(Level.WARNING, "Statistics is not an instance of DbscanUI.");
-            return;
+            throw new RuntimeException("Statistics is not an instance of DbscanUI.");
         }
 
         if(settingsPanel != null){
