@@ -1,6 +1,7 @@
 package view;
 
 import core.Dbscan;
+import core.Labels;
 import org.gephi.statistics.spi.Statistics;
 import org.gephi.statistics.spi.StatisticsUI;
 import org.openide.util.lookup.ServiceProvider;
@@ -57,12 +58,12 @@ public class DbscanUI implements StatisticsUI {
 
     @Override
     public String getDisplayName() {
-        return "DBSCAN";
+        return Labels.NAME;
     }
 
     @Override
     public String getShortDescription() {
-        return "Density-based spatial clustering of applications with noise";
+        return Labels.SHORT_DESCRIPTION;
     }
 
     @Override

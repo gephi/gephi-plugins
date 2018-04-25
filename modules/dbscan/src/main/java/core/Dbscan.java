@@ -16,6 +16,7 @@ import java.util.function.Consumer;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
+import static core.Labels.*;
 import static java.lang.Math.pow;
 import static java.lang.Math.sqrt;
 import static util.HtmlUtils.*;
@@ -25,7 +26,7 @@ import static util.HtmlUtils.*;
  */
 public class Dbscan implements Statistics, LongTask {
 
-    private static final String ATTRIBUTE_CLUSTER = "cluster";
+    private static final String ATTRIBUTE_CLUSTER = "Cluster number";
 
     private String report = "";
     private boolean cancel = false;
@@ -147,19 +148,19 @@ public class Dbscan implements Statistics, LongTask {
     private void createReport() {
         report = START
                 + paragraphWidthWidthStart(2)
-                + putInTag(bold("DBSCAN result"), "h2")
+                + putInTag(bold(DBSCAN_RESULT), "h2")
                 + paragraphEnd()
                 + NEW_LINE
-                + bold("Execution time: ")
+                + bold(EXECUTION_TIME)
                 + new SimpleDateFormat("mm:ss.SSS").format(executionTime)
                 + NEW_LINE
-                + bold("Clusters: ")
+                + bold(CLUSTERS)
                 + clusters.size()
                 + NEW_LINE
-                + bold("Clustered nodes: ")
+                + bold(CLUSTERED_NODES)
                 + clustered.size()
                 + NEW_LINE
-                + bold("Noises: ")
+                + bold(NOISES)
                 + (visited.size() - clustered.size())
                 + END;
     }

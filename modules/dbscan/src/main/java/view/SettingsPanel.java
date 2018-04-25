@@ -4,6 +4,7 @@
 
 package view;
 
+import core.Labels;
 import net.miginfocom.swing.MigLayout;
 
 import javax.swing.*;
@@ -41,11 +42,11 @@ public class SettingsPanel extends JPanel {
                 "[]" +
                         "[]"));
 
-        radiusLabel.setText("Neighborhood radius");
+        radiusLabel.setText(Labels.NEIGHBORHOOD_RADIUS);
         add(radiusLabel, "cell 0 0,align left top,grow 0 0");
         add(radius, "cell 1 0");
 
-        numberOfNeighborsLabel.setText("Minimum number of neighbors");
+        numberOfNeighborsLabel.setText(Labels.MINIMAL_NEIGHBORS_NUMBER);
         add(numberOfNeighborsLabel, "cell 0 1,align left top,grow 0 0");
         add(neighbors, "cell 1 1");
     }

@@ -9,7 +9,7 @@ import org.openide.util.lookup.ServiceProvider;
 public class DbscanBuilder implements StatisticsBuilder {
     @Override
     public String getName() {
-        return "DBSCAN";
+        return Labels.NAME;
     }
 
     @Override
