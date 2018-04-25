@@ -36,21 +36,20 @@ public class KleinbergGenerator implements Generator {
         return true;
     }
 
-    private void createAdditionalEdges(ContainerLoader containerLoader, NodeDraft[][] nodes) {
+    private void createLongRangeEdges(ContainerLoader containerLoader, NodeDraft[][] nodes) {
         IntPairs.range(0, gridSize).forEach((x, y) -> {
             double normalizationConstant = calculateNormalizationConstant(nodes, x, y);
             IntPairs.range(0, gridSize).forEach((u, v) -> {
                 int distance = distance(x, y, u, v);
                 if (distance > 1) {
                     double probability = pow(distance, -clusteringCoefficient) / normalizationConstant;
-                    if (random() < probability) {
-                        if (!containerLoader.edgeExists(getNodeId(x, y), getNodeId(u, v))) {
-                            EdgeDraft edge = containerLoader.factory().newEdgeDraft();
-                            edge.setDirection(EdgeDirection.UNDIRECTED);
-                            edge.setSource(nodes[x][y]);
-                            edge.setTarget(nodes[u][v]);
-                            containerLoader.addEdge(edge);
-                        }
+                    boolean addEdge = random() <= probability && !containerLoader.edgeExists(getNodeId(x, y), getNodeId(u, v));
+                    if (addEdge) {
+                        EdgeDraft edge = containerLoader.factory().newEdgeDraft();
+                        edge.setDirection(EdgeDirection.UNDIRECTED);
+                        edge.setSource(nodes[x][y]);
+                        edge.setTarget(nodes[u][v]);
+                        containerLoader.addEdge(edge);
                     }
                 }
             });
@@ -61,7 +60,7 @@ public class KleinbergGenerator implements Generator {
         return IntPairs.range(0, gridSize)
                 .map((x, y) -> distance(sourceX, sourceY, x, y))
                 .filter(t -> t != 0)
-                .mapToDouble(x -> pow(x, -clusteringCoefficient))
+                .mapToDouble(t -> pow(t, -clusteringCoefficient))
                 .sum();
     }
 
@@ -104,7 +103,7 @@ public class KleinbergGenerator implements Generator {
     public void generate(ContainerLoader containerLoader) {
         NodeDraft[][] nodes = createNodes(containerLoader);
         createBasicEdges(containerLoader, nodes);
-        createAdditionalEdges(containerLoader, nodes);
+        createLongRangeEdges(containerLoader, nodes);
     }
 
     public int getClusteringCoefficient() {

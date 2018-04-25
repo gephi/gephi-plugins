@@ -13,30 +13,31 @@ import static pl.edu.wat.student.rzepinski.jakub.KleinbergGenerator.DEFAULT_GRID
 @ServiceProvider(service = KleinbergGeneratorUI.class)
 public class KleinbergGeneratorUI implements GeneratorUI {
 
-    private static final String GRID_SIZE_LABEL = "n - grid size: ";
-    private static final String CLUSTERING_COEFFICIENT_LABEL = "q - clustering coefficient: ";
-    private static final String TORUS_MODE_LABEL = "torus: ";
+    private static final String GRID_SIZE_LABEL = "Grid size: ";
+    private static final String CLUSTERING_COEFFICIENT_LABEL = "Clustering coefficient: ";
+    private static final String TORUS_MODE_LABEL = "Torus mode: ";
+
+    private final JPanel panel;
     private JSpinner gridSizeSpinner;
     private JSpinner clusteringCoefficientSpinner;
     private JCheckBox torusModeCheckbox;
     private KleinbergGenerator generator;
-    private final JPanel panel;
 
     public KleinbergGeneratorUI() {
         panel = new JPanel();
         panel.setLayout(new GridLayout(0, 2));
-        int padding = 5;
+        int padding = 15;
         panel.setBorder(BorderFactory.createEmptyBorder(padding, padding, padding, padding));
 
-        panel.add(new JLabel(GRID_SIZE_LABEL));
+        panel.add(new JLabel(GRID_SIZE_LABEL, SwingConstants.RIGHT));
         gridSizeSpinner = new JSpinner(new SpinnerNumberModel(DEFAULT_GRID_SIZE, 2, null, 1));
         panel.add(gridSizeSpinner);
 
-        panel.add(new JLabel(CLUSTERING_COEFFICIENT_LABEL));
+        panel.add(new JLabel(CLUSTERING_COEFFICIENT_LABEL, SwingConstants.RIGHT));
         clusteringCoefficientSpinner = new JSpinner(new SpinnerNumberModel(DEFAULT_CLUSTERING_COEFFICIENT, 0, null, 1));
         panel.add(clusteringCoefficientSpinner);
 
-        panel.add(new JLabel(TORUS_MODE_LABEL));
+        panel.add(new JLabel(TORUS_MODE_LABEL, SwingConstants.RIGHT));
         torusModeCheckbox = new JCheckBox();
         torusModeCheckbox.setSelected(KleinbergGenerator.DEFAULT_TORUS_MODE);
         panel.add(torusModeCheckbox);
@@ -50,7 +51,7 @@ public class KleinbergGeneratorUI implements GeneratorUI {
     @Override
     public void setup(Generator generator) {
         if (!(generator instanceof KleinbergGenerator)) {
-            throw new IllegalArgumentException("Wrong generator type: " + generator.getClass());
+            throw new IllegalArgumentException("Wrong generator's type: " + generator.getClass() + ", only KleinbergGenerator accepted");
         }
         this.generator = (KleinbergGenerator) generator;
 
