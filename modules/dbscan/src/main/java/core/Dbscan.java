@@ -20,6 +20,7 @@ import static core.Labels.*;
 import static java.lang.Math.pow;
 import static java.lang.Math.sqrt;
 import static util.HtmlUtils.*;
+import static util.Utils.spliteratorToSet;
 
 /**
  * http://wsinf.edu.pl/assets/img/pdf/Zeszyty%20naukowe/vol.13/art03%20(3).pdf
@@ -31,9 +32,8 @@ public class Dbscan implements Statistics, LongTask {
     private String report = "";
     private boolean cancel = false;
     private ProgressTicket progressTicket;
-    private DistanceMetric distanceMetric;
+    private Neighborhood neighborhood;
 
-    private int radius;
     private int numberOfNeighbours;
 
     private Set<Node> visited = new HashSet<>();
@@ -41,9 +41,9 @@ public class Dbscan implements Statistics, LongTask {
     private Set<Node> clustered = new HashSet<>();
     private long executionTime = 0;
 
-    public Dbscan(DistanceMetric distanceMetric){
+    public Dbscan(DistanceMetric distanceMetric) {
         super();
-        this.distanceMetric = distanceMetric;
+        this.neighborhood = new Neighborhood(distanceMetric);
     }
 
     @Override
@@ -59,11 +59,11 @@ public class Dbscan implements Statistics, LongTask {
         graphModel.getGraphVisible().readUnlockAll();
     }
 
-    private void clusterize(NodeIterable nodes){
+    private void clusterize(NodeIterable nodes) {
         nodes.forEach(node -> {
             if (!visited.contains(node)) {
                 visited.add(node);
-                List<Node> neighbors = getNeighborsList(node, nodes);
+                List<Node> neighbors = neighborhood.getNeighborsList(node, nodes);
                 if (neighbors.size() >= numberOfNeighbours) {
                     Set<Node> cluster = createCluster();
                     expandCluster(node, neighbors, cluster);
@@ -87,36 +87,6 @@ public class Dbscan implements Statistics, LongTask {
         clustered.clear();
     }
 
-    private List<Node> getNeighborsList(Node node, NodeIterable allNodes) {
-        return getNeighborsList(node, spliteratorToSet(allNodes.spliterator()));
-    }
-
-    private Set<Node> spliteratorToSet(Spliterator<Node> spliterator) {
-        return StreamSupport
-                .stream(spliterator, false)
-                .collect(Collectors.toSet());
-    }
-
-    private Set<Node> getNeighbors(Node node, Collection<Node> allNodes) {
-        Set<Node> nodes = new HashSet<>();
-        doForAllNeighbors(node, allNodes, nodes::add);
-        return nodes;
-    }
-
-    private List<Node> getNeighborsList(Node node, Set<Node> allNodes) {
-        List<Node> nodes = new ArrayList<>();
-        doForAllNeighbors(node, allNodes, nodes::add);
-        return nodes;
-    }
-
-    private void doForAllNeighbors(Node node, Collection<Node> allNodes, Consumer<Node> consumer) {
-        allNodes.stream().filter(n -> isNeighbor(node, n)).forEach(consumer);
-    }
-
-    private boolean isNeighbor(Node node, Node suspect) {
-        return (!node.equals(suspect)) && (calculateDistance(node, suspect) <= radius);
-    }
-
     private Set<Node> createCluster() {
         Set<Node> cluster = new HashSet<>();
         clusters.add(cluster);
@@ -129,7 +99,7 @@ public class Dbscan implements Statistics, LongTask {
         while (listIterator.hasNext()) {
             Node current = listIterator.next();
             visited.add(current);
-            Set<Node> nodeNeighbors = getNeighbors(current, neighbors);
+            Set<Node> nodeNeighbors = neighborhood.getNeighbors(current, neighbors);
             if (nodeNeighbors.size() >= numberOfNeighbours) {
                 nodeNeighbors.forEach(listIterator::add);
             }
@@ -143,10 +113,6 @@ public class Dbscan implements Statistics, LongTask {
         cluster.add(node);
         clustered.add(node);
         node.setAttribute(ATTRIBUTE_CLUSTER, clusters.indexOf(cluster));
-    }
-
-    protected double calculateDistance(Node first, Node second) {
-        return distanceMetric.getDistance(first, second);
     }
 
     private void createReport() {
@@ -186,7 +152,7 @@ public class Dbscan implements Statistics, LongTask {
     }
 
     public void setRadius(int radius) {
-        this.radius = radius;
+        neighborhood.setRadius(radius);
     }
 
     public void setNumberOfNeighbours(int numberOfNeighbours) {
@@ -194,7 +160,7 @@ public class Dbscan implements Statistics, LongTask {
     }
 
     public int getRadius() {
-        return radius;
+        return neighborhood.getRadius();
     }
 
     public int getNumberOfNeighbours() {
