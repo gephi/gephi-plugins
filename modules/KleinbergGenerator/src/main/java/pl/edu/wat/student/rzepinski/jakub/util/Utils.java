@@ -9,11 +9,11 @@ public class Utils {
         return number > 0;
     }
 
-    public static String getNodeId(Integer x, Integer y) {
+    public static String getNodeId(int x, int y) {
         return String.format("(%d, %d)", x, y);
     }
 
-    public static void setNodePosition(NodeDraft node, Integer x, Integer y) {
+    public static void setNodePosition(NodeDraft node, int x, int y) {
         node.setX(x * LAYOUT_SPACING);
         node.setY(y * LAYOUT_SPACING);
     }

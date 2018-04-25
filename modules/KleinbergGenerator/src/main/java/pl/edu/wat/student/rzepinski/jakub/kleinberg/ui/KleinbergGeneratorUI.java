@@ -15,9 +15,9 @@ import static pl.edu.wat.student.rzepinski.jakub.kleinberg.generator.KleinbergGe
 public class KleinbergGeneratorUI implements GeneratorUI {
 
     private final JPanel panel;
-    private JSpinner gridSizeSpinner;
-    private JSpinner clusteringCoefficientSpinner;
-    private JCheckBox torusModeCheckbox;
+    private final JSpinner gridSizeSpinner;
+    private final JSpinner clusteringCoefficientSpinner;
+    private final JCheckBox torusModeCheckbox;
     private KleinbergGenerator generator;
 
     public KleinbergGeneratorUI() {
