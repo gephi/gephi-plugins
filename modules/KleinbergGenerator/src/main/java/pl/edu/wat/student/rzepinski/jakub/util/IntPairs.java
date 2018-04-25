@@ -1,4 +1,4 @@
-package pl.edu.wat.student.rzepinski.jakub;
+package pl.edu.wat.student.rzepinski.jakub.util;
 
 import java.util.function.BiConsumer;
 import java.util.function.BiFunction;

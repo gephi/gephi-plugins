@@ -1,21 +1,18 @@
-package pl.edu.wat.student.rzepinski.jakub;
+package pl.edu.wat.student.rzepinski.jakub.kleinberg.ui;
 
 import org.gephi.io.generator.spi.Generator;
 import org.gephi.io.generator.spi.GeneratorUI;
 import org.openide.util.lookup.ServiceProvider;
+import pl.edu.wat.student.rzepinski.jakub.kleinberg.generator.KleinbergGenerator;
 
 import javax.swing.*;
 import java.awt.*;
 
-import static pl.edu.wat.student.rzepinski.jakub.KleinbergGenerator.DEFAULT_CLUSTERING_COEFFICIENT;
-import static pl.edu.wat.student.rzepinski.jakub.KleinbergGenerator.DEFAULT_GRID_SIZE;
+import static pl.edu.wat.student.rzepinski.jakub.kleinberg.generator.KleinbergGenerator.DEFAULT_CLUSTERING_COEFFICIENT;
+import static pl.edu.wat.student.rzepinski.jakub.kleinberg.generator.KleinbergGenerator.DEFAULT_GRID_SIZE;
 
 @ServiceProvider(service = KleinbergGeneratorUI.class)
 public class KleinbergGeneratorUI implements GeneratorUI {
-
-    private static final String GRID_SIZE_LABEL = "Grid size: ";
-    private static final String CLUSTERING_COEFFICIENT_LABEL = "Clustering coefficient: ";
-    private static final String TORUS_MODE_LABEL = "Torus mode: ";
 
     private final JPanel panel;
     private JSpinner gridSizeSpinner;
@@ -29,15 +26,15 @@ public class KleinbergGeneratorUI implements GeneratorUI {
         int padding = 15;
         panel.setBorder(BorderFactory.createEmptyBorder(padding, padding, padding, padding));
 
-        panel.add(new JLabel(GRID_SIZE_LABEL, SwingConstants.RIGHT));
+        panel.add(new JLabel(Labels.GRID_SIZE, SwingConstants.RIGHT));
         gridSizeSpinner = new JSpinner(new SpinnerNumberModel(DEFAULT_GRID_SIZE, 2, null, 1));
         panel.add(gridSizeSpinner);
 
-        panel.add(new JLabel(CLUSTERING_COEFFICIENT_LABEL, SwingConstants.RIGHT));
+        panel.add(new JLabel(Labels.CLUSTERING_COEFFICIENT, SwingConstants.RIGHT));
         clusteringCoefficientSpinner = new JSpinner(new SpinnerNumberModel(DEFAULT_CLUSTERING_COEFFICIENT, 0, null, 1));
         panel.add(clusteringCoefficientSpinner);
 
-        panel.add(new JLabel(TORUS_MODE_LABEL, SwingConstants.RIGHT));
+        panel.add(new JLabel(Labels.TORUS_MODE, SwingConstants.RIGHT));
         torusModeCheckbox = new JCheckBox();
         torusModeCheckbox.setSelected(KleinbergGenerator.DEFAULT_TORUS_MODE);
         panel.add(torusModeCheckbox);
