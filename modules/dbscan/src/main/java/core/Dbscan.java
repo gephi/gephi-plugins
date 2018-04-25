@@ -25,6 +25,8 @@ import static util.HtmlUtils.*;
  */
 public class Dbscan implements Statistics, LongTask {
 
+    private static final String ATTRIBUTE_CLUSTER = "cluster";
+
     private String report = "";
     private boolean cancel = false;
     private ProgressTicket progressTicket;
@@ -70,10 +72,10 @@ public class Dbscan implements Statistics, LongTask {
     }
 
     private void prepareGraphModel(GraphModel graphModel) {
-        if (graphModel.getNodeTable().hasColumn("cluster")) {
+        if (graphModel.getNodeTable().hasColumn(ATTRIBUTE_CLUSTER)) {
             graphModel.getGraphVisible().getNodes().forEach(Element::clearAttributes);
         } else {
-            graphModel.getNodeTable().addColumn("cluster", Integer.class);
+            graphModel.getNodeTable().addColumn(ATTRIBUTE_CLUSTER, Integer.class);
         }
         clusters.clear();
         visited.clear();
@@ -135,7 +137,7 @@ public class Dbscan implements Statistics, LongTask {
     private void addNodeToCluster(Node node, Set<Node> cluster) {
         cluster.add(node);
         clustered.add(node);
-        node.setAttribute("cluster", clusters.indexOf(cluster));
+        node.setAttribute(ATTRIBUTE_CLUSTER, clusters.indexOf(cluster));
     }
 
     protected double calculateDistance(Node first, Node second) {
