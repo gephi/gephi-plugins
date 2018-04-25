@@ -6,6 +6,7 @@ import org.gephi.io.importer.api.ContainerLoader;
 import org.gephi.io.importer.api.EdgeDirection;
 import org.gephi.io.importer.api.EdgeDraft;
 import org.gephi.io.importer.api.NodeDraft;
+import org.gephi.utils.progress.Progress;
 import org.gephi.utils.progress.ProgressTicket;
 import org.openide.util.Lookup;
 import org.openide.util.lookup.ServiceProvider;
@@ -38,6 +39,10 @@ public class KleinbergGenerator implements Generator {
 
     private void createLongRangeEdges(ContainerLoader containerLoader, NodeDraft[][] nodes) {
         IntPairs.range(0, gridSize).forEach((x, y) -> {
+            if (cancelled) {
+                return;
+            }
+            Progress.progress(progressTicket);
             double normalizationConstant = calculateNormalizationConstant(nodes, x, y);
             IntPairs.range(0, gridSize).forEach((u, v) -> {
                 int distance = distance(x, y, u, v);
@@ -101,6 +106,7 @@ public class KleinbergGenerator implements Generator {
 
     @Override
     public void generate(ContainerLoader containerLoader) {
+        Progress.start(progressTicket, gridSize * gridSize);
         NodeDraft[][] nodes = createNodes(containerLoader);
         createBasicEdges(containerLoader, nodes);
         createLongRangeEdges(containerLoader, nodes);
@@ -165,6 +171,7 @@ public class KleinbergGenerator implements Generator {
     @Override
     public void setProgressTicket(ProgressTicket progressTicket) {
         this.progressTicket = progressTicket;
+        this.cancelled = false;
     }
 
 }
