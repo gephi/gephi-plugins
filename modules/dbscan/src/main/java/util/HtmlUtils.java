@@ -13,12 +13,8 @@ public class HtmlUtils {
         return putInTag(text, "b");
     }
 
-    public static String paragraphWidthWidthStart(int width) {
-        return "<p width=\"" + width + "\">";
-    }
-
-    public static String paragraphEnd() {
-        return "</p>";
+    public static String putInParagraph(int width, String content){
+        return "<p width=\"" + width + "\">" + content + "</p>";
     }
 
 }

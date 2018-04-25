@@ -28,10 +28,10 @@ public class SettingsPanel extends JPanel {
 
         radiusLabel = new JLabel();
         radius = new JTextField(2);
-        ((PlainDocument)radius.getDocument()).setDocumentFilter(new IntegersDocumnetFilter());
+        ((PlainDocument)radius.getDocument()).setDocumentFilter(new IntegersDocumentFilter());
         numberOfNeighborsLabel = new JLabel();
         neighbors = new JTextField(2);
-        ((PlainDocument)neighbors.getDocument()).setDocumentFilter(new IntegersDocumnetFilter());
+        ((PlainDocument)neighbors.getDocument()).setDocumentFilter(new IntegersDocumentFilter());
 
         setLayout(new MigLayout(
                 "fillx,hidemode 3,align left top",

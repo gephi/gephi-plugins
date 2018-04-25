@@ -7,8 +7,6 @@ import org.gephi.statistics.spi.StatisticsUI;
 import org.openide.util.lookup.ServiceProvider;
 
 import javax.swing.*;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 @ServiceProvider(service = StatisticsUI.class)
 public class DbscanUI implements StatisticsUI {

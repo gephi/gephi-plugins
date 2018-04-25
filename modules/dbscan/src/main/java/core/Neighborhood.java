@@ -4,8 +4,11 @@ import core.metrics.DistanceMetric;
 import org.gephi.graph.api.Node;
 import org.gephi.graph.api.NodeIterable;
 
-import java.util.*;
-import java.util.function.Consumer;
+import java.util.Collection;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static util.Utils.spliteratorToSet;
 
@@ -22,20 +25,16 @@ public class Neighborhood {
         return getNeighborsList(node, spliteratorToSet(allNodes.spliterator()));
     }
 
-    public Set<Node> getNeighbors(Node node, Collection<Node> allNodes) {
-        Set<Node> nodes = new HashSet<>();
-        doForAllNeighbors(node, allNodes, nodes::add);
-        return nodes;
+    public Set<Node> getNeighborsSet(Node node, Collection<Node> allNodes) {
+        return getNeighbors(node, allNodes).collect(Collectors.toSet());
     }
 
     public List<Node> getNeighborsList(Node node, Collection<Node> allNodes) {
-        List<Node> nodes = new ArrayList<>();
-        doForAllNeighbors(node, allNodes, nodes::add);
-        return nodes;
+        return getNeighbors(node, allNodes).collect(Collectors.toList());
     }
 
-    public void doForAllNeighbors(Node node, Collection<Node> allNodes, Consumer<Node> consumer) {
-        allNodes.stream().filter(n -> isNeighbor(node, n)).forEach(consumer);
+    public Stream<Node> getNeighbors(Node node, Collection<Node> allNodes) {
+        return allNodes.stream().filter(n -> isNeighbor(node, n));
     }
 
     public boolean isNeighbor(Node node, Node suspect) {

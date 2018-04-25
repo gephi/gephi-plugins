@@ -12,15 +12,9 @@ import org.gephi.utils.progress.ProgressTicket;
 
 import java.text.SimpleDateFormat;
 import java.util.*;
-import java.util.function.Consumer;
-import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
 
 import static core.Labels.*;
-import static java.lang.Math.pow;
-import static java.lang.Math.sqrt;
 import static util.HtmlUtils.*;
-import static util.Utils.spliteratorToSet;
 
 /**
  * http://wsinf.edu.pl/assets/img/pdf/Zeszyty%20naukowe/vol.13/art03%20(3).pdf
@@ -99,7 +93,7 @@ public class Dbscan implements Statistics, LongTask {
         while (listIterator.hasNext()) {
             Node current = listIterator.next();
             visited.add(current);
-            Set<Node> nodeNeighbors = neighborhood.getNeighbors(current, neighbors);
+            Set<Node> nodeNeighbors = neighborhood.getNeighborsSet(current, neighbors);
             if (nodeNeighbors.size() >= numberOfNeighbours) {
                 nodeNeighbors.forEach(listIterator::add);
             }
@@ -117,9 +111,7 @@ public class Dbscan implements Statistics, LongTask {
 
     private void createReport() {
         report = START
-                + paragraphWidthWidthStart(2)
-                + putInTag(bold(DBSCAN_RESULT), "h2")
-                + paragraphEnd()
+                + putInParagraph(2, putInTag(bold(DBSCAN_RESULT), "h2"))
                 + NEW_LINE
                 + bold(EXECUTION_TIME)
                 + new SimpleDateFormat("mm:ss.SSS").format(executionTime)
