@@ -15,7 +15,26 @@
     <name>Clustering Coefficient</name>
 
     <dependencies>
-        <!-- Insert dependencies here -->
+        <dependency>
+            <groupId>org.gephi</groupId>
+            <artifactId>statistics-api</artifactId>
+            <version>${gephi.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.gephi</groupId>
+            <artifactId>graph-api</artifactId>
+            <version>${gephi.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.gephi</groupId>
+            <artifactId>utils-longtask</artifactId>
+            <version>${gephi.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.netbeans.api</groupId>
+            <artifactId>org-openide-util-lookup</artifactId>
+            <version>${netbeans.version}</version>
+        </dependency>
     </dependencies>
 
     <build>
@@ -32,6 +51,14 @@
                     <publicPackages>
                         <!-- Insert public packages -->
                     </publicPackages>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>8</source>
+                    <target>8</target>
                 </configuration>
             </plugin>
         </plugins>
