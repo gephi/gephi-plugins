@@ -9,12 +9,31 @@ import javax.swing.*;
 @ServiceProvider(service = StatisticsUI.class)
 public class ClusteringCoefficientUI implements StatisticsUI {
 
+    public static boolean triangleMethod = false;
+
+    private JRadioButton btn1,btn2;
+
     public JPanel getSettingsPanel() {
-        return new JPanel();
+        JPanel jPanel = new JPanel();
+        ButtonGroup group = new ButtonGroup();
+        btn1 = new JRadioButton("Basic method ");btn1.setSelected(true);
+        btn2 = new JRadioButton("Thriangle Method ");
+        group.add(btn1 );
+        group.add(btn2 );
+
+        jPanel.add(btn1);
+        jPanel.add(btn2);
+
+        return jPanel;
     }
 
     public void setup(Statistics statistics) {
 
+        if(btn2.isSelected()){
+            triangleMethod = true;
+        }if(btn1.isSelected()){
+            triangleMethod = false;
+        }
     }
 
     public void unsetup() {
@@ -22,7 +41,7 @@ public class ClusteringCoefficientUI implements StatisticsUI {
     }
 
     public Class<? extends Statistics> getStatisticsClass() {
-        return ClusteringCoefficient.class;
+        return ClusteringCoefficientStatistic.class;
     }
 
     public String getValue() {

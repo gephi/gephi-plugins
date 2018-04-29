@@ -1,44 +1,45 @@
 package Metric;
 
 import org.gephi.graph.api.*;
-import org.gephi.statistics.spi.Statistics;
-import org.gephi.utils.longtask.spi.LongTask;
-import org.gephi.utils.progress.ProgressTicket;
 
-import java.util.*;
+import java.util.List;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
-public class ClusteringCoefficient implements Statistics, LongTask {
+/**
+ * Created by Krystian on 28.04.2018.
+ */
+public class ClusteringCoefficientAlgorithm {
 
     private static final String COF_ATTR = "C";
-
-    private String report = "";
-    private boolean cancel = false;
-    private ProgressTicket progressTicket;
     private Graph graph;
+    private NodeIterable allNodes;
+    private String report = "";
 
-    public void execute(GraphModel graphModel) {
+    public ClusteringCoefficientAlgorithm(GraphModel graphModel) {
         if (graphModel.getNodeTable().hasColumn(COF_ATTR)) {
             graphModel.getGraphVisible().getNodes().forEach(Element::clearAttributes);
         } else {
             graphModel.getNodeTable().addColumn(COF_ATTR, Double.class);
         }
+        allNodes = graphModel.getGraph().getNodes();
+        this.graph = graphModel.getGraphVisible();
+    }
 
-        graph = graphModel.getGraphVisible();
-        NodeIterable allNodes = graphModel.getGraph().getNodes();
+    public String calculate(){
+
         allNodes.forEach(node -> {
-            if (cancel) {
+            if (ClusteringCoefficientStatistic.cancel) {
                 return;
             }
-            List<Node> neighbors = getNeighbors(node);
+            List<Node> neighbors = (List<Node>) graph.getNeighbors(node).toCollection();
             neighbors.remove(node);
             int neighborsCount = neighbors.size();
             long connectionsBetweenNeighbors = getConnectionCountBetweenNeighbors(neighbors);
             double c;
             if (neighborsCount == 1) {
-                c = 1f;
+                c = 0f;
             } else if (neighborsCount == 0) {
                 c = 0f;
             } else {
@@ -57,7 +58,9 @@ public class ClusteringCoefficient implements Statistics, LongTask {
         });
         report += "General C = " + String.valueOf(cSum[0] / size.get());
 
+        return report;
     }
+
 
     private long getConnectionCountBetweenNeighbors(List<Node> neighbours) {
         long counter = 0;
@@ -72,21 +75,4 @@ public class ClusteringCoefficient implements Statistics, LongTask {
         return counter;
     }
 
-    private List<Node> getNeighbors(Node node) {
-        return StreamSupport.stream(graph.getEdges(node).spliterator(), false)
-                .map(Edge::getTarget).distinct().collect(Collectors.toList());
-    }
-
-    public String getReport() {
-        return report;
-    }
-
-    public boolean cancel() {
-        cancel = true;
-        return true;
-    }
-
-    public void setProgressTicket(ProgressTicket progressTicket) {
-        this.progressTicket = progressTicket;
-    }
 }
