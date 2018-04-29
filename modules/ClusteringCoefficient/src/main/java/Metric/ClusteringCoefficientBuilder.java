@@ -11,10 +11,10 @@ public class ClusteringCoefficientBuilder implements StatisticsBuilder {
     }
 
     public Statistics getStatistics() {
-        return new ClusteringCoefficient();
+        return new ClusteringCoefficientStatistic();
     }
 
     public Class<? extends Statistics> getStatisticsClass() {
-        return ClusteringCoefficient.class;
+        return ClusteringCoefficientStatistic.class;
     }
 }
