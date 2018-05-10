@@ -17,7 +17,7 @@ public class ClusteringCoefficientUI implements StatisticsUI {
         JPanel jPanel = new JPanel();
         ButtonGroup group = new ButtonGroup();
         btn1 = new JRadioButton("Basic method ");btn1.setSelected(true);
-        btn2 = new JRadioButton("Thriangle Method ");
+        btn2 = new JRadioButton("Triangle Method ");
         group.add(btn1 );
         group.add(btn2 );
 

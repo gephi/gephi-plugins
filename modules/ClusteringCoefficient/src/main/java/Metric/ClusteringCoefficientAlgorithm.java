@@ -1,6 +1,7 @@
 package Metric;
 
 import org.gephi.graph.api.*;
+import sun.rmi.runtime.Log;
 
 import java.util.List;
 import java.util.concurrent.atomic.AtomicLong;
@@ -12,7 +13,7 @@ import java.util.stream.StreamSupport;
  */
 public class ClusteringCoefficientAlgorithm {
 
-    private static final String COF_ATTR = "C";
+    private static final String COF_ATTR = "Clustering Coefficient";
     private Graph graph;
     private NodeIterable allNodes;
     private String report = "";
@@ -74,5 +75,4 @@ public class ClusteringCoefficientAlgorithm {
         }
         return counter;
     }
-
 }
