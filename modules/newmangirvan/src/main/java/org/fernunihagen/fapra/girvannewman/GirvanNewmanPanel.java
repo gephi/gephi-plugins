@@ -3,13 +3,11 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.fapra.groupa.girvannewman;
-
-import org.openide.util.*;
+package org.fernunihagen.fapra.girvannewman;
 
 /**
  *
- * @author Polar Teddy
+ * @author Andrej Sibirski
  */
 public class GirvanNewmanPanel extends javax.swing.JPanel {
 

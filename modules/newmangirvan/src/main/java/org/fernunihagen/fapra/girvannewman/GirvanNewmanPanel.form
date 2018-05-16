@@ -19,7 +19,7 @@
           <Group type="102" attributes="0">
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="jPanel1" pref="203" max="32767" attributes="0"/>
+                  <Component id="jPanel1" max="32767" attributes="0"/>
                   <Component id="jPanel2" max="32767" attributes="0"/>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
@@ -44,7 +44,7 @@
         <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
           <Border info="org.netbeans.modules.form.compat2.border.TitledBorderInfo">
             <TitledBorder title="&lt;GirvanNewmanPanel.jPanel1.border.title&gt;">
-              <ResourceString PropertyName="titleX" bundle="org/fapra/groupa/girvannewman/Bundle.properties" key="GirvanNewmanPanel.jPanel1.border.title" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+              <ResourceString PropertyName="titleX" bundle="org/fernunihagen/fapra/girvannewman/Bundle.properties" key="GirvanNewmanPanel.jPanel1.border.title" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
             </TitledBorder>
           </Border>
         </Property>
@@ -63,7 +63,7 @@
         <Component class="javax.swing.JCheckBox" name="respETypeSPB">
           <Properties>
             <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-              <ResourceString bundle="org/fapra/groupa/girvannewman/Bundle.properties" key="GirvanNewmanPanel.respETypeSPB.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+              <ResourceString bundle="org/fernunihagen/fapra/girvannewman/Bundle.properties" key="GirvanNewmanPanel.respETypeSPB.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
             </Property>
           </Properties>
           <Events>
@@ -73,7 +73,7 @@
         <Component class="javax.swing.JCheckBox" name="respMultiESPB">
           <Properties>
             <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-              <ResourceString bundle="org/fapra/groupa/girvannewman/Bundle.properties" key="GirvanNewmanPanel.respMultiESPB.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+              <ResourceString bundle="org/fernunihagen/fapra/girvannewman/Bundle.properties" key="GirvanNewmanPanel.respMultiESPB.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
             </Property>
           </Properties>
         </Component>
@@ -84,7 +84,7 @@
         <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
           <Border info="org.netbeans.modules.form.compat2.border.TitledBorderInfo">
             <TitledBorder title="&lt;GirvanNewmanPanel.jPanel2.border.title&gt;">
-              <ResourceString PropertyName="titleX" bundle="org/fapra/groupa/girvannewman/Bundle.properties" key="GirvanNewmanPanel.jPanel2.border.title" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+              <ResourceString PropertyName="titleX" bundle="org/fernunihagen/fapra/girvannewman/Bundle.properties" key="GirvanNewmanPanel.jPanel2.border.title" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
             </TitledBorder>
           </Border>
         </Property>
@@ -97,14 +97,14 @@
         <Component class="javax.swing.JCheckBox" name="respETypeModul">
           <Properties>
             <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-              <ResourceString bundle="org/fapra/groupa/girvannewman/Bundle.properties" key="GirvanNewmanPanel.respETypeModul.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+              <ResourceString bundle="org/fernunihagen/fapra/girvannewman/Bundle.properties" key="GirvanNewmanPanel.respETypeModul.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
             </Property>
           </Properties>
         </Component>
         <Component class="javax.swing.JCheckBox" name="respMultiEModul">
           <Properties>
             <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-              <ResourceString bundle="org/fapra/groupa/girvannewman/Bundle.properties" key="GirvanNewmanPanel.respMultiEModul.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+              <ResourceString bundle="org/fernunihagen/fapra/girvannewman/Bundle.properties" key="GirvanNewmanPanel.respMultiEModul.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
             </Property>
           </Properties>
         </Component>

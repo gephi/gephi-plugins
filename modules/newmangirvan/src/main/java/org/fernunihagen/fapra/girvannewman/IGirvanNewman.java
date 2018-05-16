@@ -1,4 +1,4 @@
-package org.fapra.groupa.girvannewman;
+package org.fernunihagen.fapra.girvannewman;
 
 import java.util.List;
 import java.util.Map;
