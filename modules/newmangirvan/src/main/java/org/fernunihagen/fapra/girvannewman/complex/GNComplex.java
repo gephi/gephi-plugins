@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import org.fapra.groupa.girvannewman.IGirvanNewman;
+import org.fernunihagen.fapra.girvannewman.IGirvanNewman;
 import org.gephi.graph.api.Edge;
 import org.gephi.graph.api.Graph;
 import org.gephi.graph.api.Node;

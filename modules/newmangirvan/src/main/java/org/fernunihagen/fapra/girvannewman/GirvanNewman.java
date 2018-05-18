@@ -44,7 +44,7 @@ public class GirvanNewman implements Statistics, LongTask {
         Map<Node, Integer> commMap = proxy.getCommunities();
 
         Table nodeTable = gm.getNodeTable();
-        String colName = "modularity_class";
+        String colName = "Cluter-ID";
         Column column = nodeTable.getColumn(colName);
         if (column == null) {
             column = nodeTable.addColumn(colName, Integer.class);
@@ -72,7 +72,7 @@ public class GirvanNewman implements Statistics, LongTask {
         ChartUtils.decorateChart(chart);
         String imageFile = ChartUtils.renderChart(chart, "modrun.png");
         
-        String s = "<html> <body><h1>A-Girvan-Newman Report</h1>"
+        String s = "<html> <body><h1>Girvan-Newman Report</h1>"
                 + "<hr><h2>Parameters:</h2>"
                 + "<table><tr><td>Respect edge type for shortest path betweeness:</td>"
                 + "<td>" + (respETypeSPB ? "yes" : "no") + "</td></tr>"
@@ -95,6 +95,12 @@ public class GirvanNewman implements Statistics, LongTask {
                 + "<tr><td>Maximum found modularity:</td><td>" + (proxy.getProcessedEdgeCount() > 0 ? proxy.getMaxFoundModularity() : "--") + "</td></tr></table>"
                 + "<br /><br />"
                 + (proxy.getProcessedEdgeCount() > 0 ? imageFile : "")
+                + "<br /><br />"
+                + "<br /><br />"
+                + "<br /><br />"
+                + "<hr>"
+                + ""
+   
                 + "</body></html>";
 
         return s;

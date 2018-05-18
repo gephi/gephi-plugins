@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<actions>
+        <action>
+            <actionName>CUSTOM-Run in Gephi</actionName>
+            <displayName>Run in Gephi</displayName>
+            <goals>
+                <goal>org.gephi:gephi-maven-plugin:run</goal>
+            </goals>
+        </action>
+    </actions>

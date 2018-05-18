@@ -33,8 +33,6 @@ public class GirvanNewmanPanel extends javax.swing.JPanel {
         respMultiEModul = new javax.swing.JCheckBox();
 
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(org.openide.util.NbBundle.getMessage(GirvanNewmanPanel.class, "GirvanNewmanPanel.jPanel1.border.title"))); // NOI18N
-        jPanel1.setMaximumSize(new java.awt.Dimension(125, 46));
-        jPanel1.setMinimumSize(new java.awt.Dimension(125, 46));
         jPanel1.setLayout(new javax.swing.BoxLayout(jPanel1, javax.swing.BoxLayout.Y_AXIS));
 
         org.openide.awt.Mnemonics.setLocalizedText(respETypeSPB, org.openide.util.NbBundle.getMessage(GirvanNewmanPanel.class, "GirvanNewmanPanel.respETypeSPB.text")); // NOI18N
@@ -63,27 +61,37 @@ public class GirvanNewmanPanel extends javax.swing.JPanel {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 203, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 172, Short.MAX_VALUE)
                     .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap())
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(19, 19, 19)
+                .addContainerGap()
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
     private void respETypeSPBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_respETypeSPBActionPerformed
-
+        // TODO add your handling code here:
     }//GEN-LAST:event_respETypeSPBActionPerformed
 
-    
+
+    // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
+    private javax.swing.JCheckBox respETypeModul;
+    private javax.swing.JCheckBox respETypeSPB;
+    private javax.swing.JCheckBox respMultiEModul;
+    private javax.swing.JCheckBox respMultiESPB;
+    // End of variables declaration//GEN-END:variables
+
+
     boolean isRespETypeSPB(){
         return respETypeSPB.isSelected();
        
@@ -100,16 +108,6 @@ public class GirvanNewmanPanel extends javax.swing.JPanel {
     boolean isRespMultiEModularity(){
         return respMultiEModul.isSelected(); 
     }
-   
-    
-    
 
-    // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JPanel jPanel1;
-    private javax.swing.JPanel jPanel2;
-    private javax.swing.JCheckBox respETypeModul;
-    private javax.swing.JCheckBox respETypeSPB;
-    private javax.swing.JCheckBox respMultiEModul;
-    private javax.swing.JCheckBox respMultiESPB;
-    // End of variables declaration//GEN-END:variables
+
 }

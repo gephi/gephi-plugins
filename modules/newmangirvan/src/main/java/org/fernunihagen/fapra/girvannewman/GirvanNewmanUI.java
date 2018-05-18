@@ -12,7 +12,6 @@ import org.openide.util.lookup.ServiceProvider;
  */
 @ServiceProvider(service = StatisticsUI.class)
 public class GirvanNewmanUI implements StatisticsUI {
-    //private GirvanNewman girvanNewman; 
     private GirvanNewmanPanel girvanNewmanPanel; 
     
 
@@ -29,6 +28,7 @@ public class GirvanNewmanUI implements StatisticsUI {
         girvanNewman.setRespMultiESPB(girvanNewmanPanel.isRespMultiESPB());
         girvanNewman.setRespETypeModul(girvanNewmanPanel.isRespETypeModularity());
         girvanNewman.setRespMultiEModul(girvanNewmanPanel.isRespMultiEModularity());
+        
     }
 
     @Override
@@ -48,7 +48,7 @@ public class GirvanNewmanUI implements StatisticsUI {
 
     @Override
     public String getDisplayName() {
-        return "A-Girvan-Newman";
+        return "Girvan-Newman Clustering";
     }
 
     @Override

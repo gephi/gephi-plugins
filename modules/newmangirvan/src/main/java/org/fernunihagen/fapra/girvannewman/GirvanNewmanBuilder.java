@@ -14,8 +14,7 @@ public class GirvanNewmanBuilder implements StatisticsBuilder {
 
     @Override
     public String getName() {
-        throw new RuntimeException("Try to load");
-        //return "A-Girvan-Newman"; 
+        return "Girvan-Newman"; 
     }
 
     @Override
