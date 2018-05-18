@@ -96,9 +96,6 @@ public class GirvanNewman implements Statistics, LongTask {
                 + "<br /><br />"
                 + (proxy.getProcessedEdgeCount() > 0 ? imageFile : "")
                 + "<br /><br />"
-                + "<br /><br />"
-                + "<br /><br />"
-                + "<hr>"
                 + ""
    
                 + "</body></html>";
