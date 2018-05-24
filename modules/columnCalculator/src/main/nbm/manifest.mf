@@ -1,0 +1,5 @@
+Manifest-Version: 1.0
+OpenIDE-Module-Name: Column Calculator
+OpenIDE-Module-Short-Description: Maybe later
+OpenIDE-Module-Long-Description: Maybe much more later
+OpenIDE-Module-Display-Category: Data Laboratory
