@@ -27,6 +27,7 @@
     <dependency>
       <groupId>org.netbeans.api</groupId>
       <artifactId>org-openide-util-lookup</artifactId>
+        <version>${netbeans.version}</version>
     </dependency>
     <dependency>
       <groupId>org.gephi</groupId>
@@ -39,6 +40,7 @@
     <dependency>
       <groupId>org.netbeans.api</groupId>
       <artifactId>org-openide-util</artifactId>
+        <version>${netbeans.version}</version>
     </dependency>
     <!-- https://mvnrepository.com/artifact/org.processing/core -->
     <dependency>
@@ -46,7 +48,27 @@
         <artifactId>core</artifactId>
         <version>3.3.7</version>
     </dependency>
-  </dependencies>
+        <dependency>
+            <groupId>org.netbeans.api</groupId>
+            <artifactId>org-openide-windows</artifactId>
+            <version>${netbeans.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.netbeans.api</groupId>
+            <artifactId>org-openide-util-ui</artifactId>
+            <version>${netbeans.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.netbeans.api</groupId>
+            <artifactId>org-openide-awt</artifactId>
+            <version>${netbeans.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.netbeans.api</groupId>
+            <artifactId>org-netbeans-modules-settings</artifactId>
+            <version>${netbeans.version}</version>
+        </dependency>
+    </dependencies>
 
     <build>
         <plugins>

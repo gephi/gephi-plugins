@@ -18,7 +18,7 @@ If applicable, add the following below the License Header, with the fields
 enclosed by brackets [] replaced by your own identifying information:
 "Portions Copyrighted [year] [name of copyright owner]"
 
-Contributor(s):
+Contributor(s): Totetmatt (0.9.X Transition)
 
 This file is based on, and meant to be used with, Gephi. (http://gephi.org/)
 */
@@ -26,6 +26,8 @@ This file is based on, and meant to be used with, Gephi. (http://gephi.org/)
 package org.yale.cs.graphics.gephi.imagepreview;
 
 import java.awt.Color;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.gephi.graph.api.Column;
 import org.gephi.graph.api.Graph;
 import org.gephi.graph.api.Node;
@@ -41,28 +43,30 @@ import org.openide.util.lookup.ServiceProvider;
  */
 @ServiceProvider(service=ItemBuilder.class)
 public class NodeImageItemBuilder implements ItemBuilder{
-
+    private static final Logger logger = Logger.getLogger(NodeImageItemBuilder.class.getName());
     @Override
     public Item[] getItems(Graph graph) {
 
         Item[] items = new ImageItem[graph.getNodeCount()];
         
         int i = 0;
-        
-        for (Node n : graph.getNodes()) {
-            
-            //ImageItem imageItem = new ImageItem((String)n.getAttribute("image"));
-            ImageItem imageItem = new ImageItem("C:\\Users\\totetmatt\\Pictures\\max.png");
-            imageItem.setData(NodeItem.X, n.x());
-            imageItem.setData(NodeItem.Y, -n.y());
-            imageItem.setData(NodeItem.Z, n.z());
-            imageItem.setData(NodeItem.SIZE, n.size() * 2f);
-            imageItem.setData(NodeItem.COLOR, new Color((int) (n.r() * 255),
-                    (int) (n.g() * 255),
-                    (int) (n.b() * 255),
-                    (int) (n.alpha() * 255)));
-            items[i++] = imageItem;
-        }
+        try {
+            for (Node n : graph.getNodes()) {
+                ImageItem imageItem = new ImageItem((String)n.getAttribute("image"));
+                imageItem.setData(NodeItem.X, n.x());
+                imageItem.setData(NodeItem.Y, -n.y());
+                imageItem.setData(NodeItem.Z, n.z());
+                imageItem.setData(NodeItem.SIZE, n.size() * 2f);
+                imageItem.setData(NodeItem.COLOR, new Color((int) (n.r() * 255),
+                        (int) (n.g() * 255),
+                        (int) (n.b() * 255),
+                        (int) (n.alpha() * 255)));
+                items[i++] = imageItem;
+            }
+        } catch (Exception e){
+            items = new ImageItem[0];
+            logger.log(Level.SEVERE,null,e);
+        } 
         return items;
     }
 
