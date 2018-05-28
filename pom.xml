@@ -12,6 +12,7 @@
     <!-- List of modules -->
     <modules>
         <!-- Add here the paths of all modules (e.g. <module>modules/MyModule</module>) -->
+        <module>modules/gephi-plugin-image-preview</module>
     </modules>
     
     <!-- Properties -->
@@ -142,6 +143,11 @@
                 <artifactId>nbm-maven-plugin</artifactId>
                 <configuration>
                     <nbmBuildDir>${clusters.path}</nbmBuildDir>
+                    <licenseName>Apache 2.0</licenseName>
+                    <author>@totetmatt</author>
+                    <authorEmail>matthieu.totet@gmail.com</authorEmail>
+                    <authorUrl>http://matthieu-totet.fr/</authorUrl>
+                    <sourceCodeUrl>https://github.com/totetmatt/gephi-plugins/tree/twitter</sourceCodeUrl>
                 </configuration>
                 <executions>
                     <execution>
