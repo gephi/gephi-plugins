@@ -30,7 +30,7 @@
                     <authorUrl></authorUrl>
                     <sourceCodeUrl>$sourcecode_url</sourceCodeUrl>
                     <publicPackages>
-                        <!-- Insert public packages -->
+                            <publicPackage>org.column</publicPackage>
                     </publicPackages>
                 </configuration>
             </plugin>
