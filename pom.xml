@@ -144,10 +144,13 @@
                 <configuration>
                     <nbmBuildDir>${clusters.path}</nbmBuildDir>
                     <licenseName>Apache 2.0</licenseName>
-                    <author>@totetmatt</author>
-                    <authorEmail>matthieu.totet@gmail.com</authorEmail>
-                    <authorUrl>http://matthieu-totet.fr/</authorUrl>
-                    <sourceCodeUrl>https://github.com/totetmatt/gephi-plugins/tree/twitter</sourceCodeUrl>
+                    <author>Yitzchak Lockerman (Yale Computer Graphics Group)</author>
+                    <sourceCodeUrl>$sourcecode_url</sourceCodeUrl>
+                    <licenseName>Apache 2.0</licenseName>
+                    <publicPackages> 
+                        <publicPackage>org.yale.cs.graphics.gephi.imagepreview</publicPackage>
+                    </publicPackages>
+                    <sourceCodeUrl>https://github.com/totetmatt/gephi-plugins/tree/image-preview</sourceCodeUrl>
                 </configuration>
                 <executions>
                     <execution>
