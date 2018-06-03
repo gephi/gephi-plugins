@@ -16,6 +16,12 @@
 
     <dependencies>
         <!-- Insert dependencies here -->
+        <dependency>
+            <groupId>org.gephi</groupId>
+            <artifactId>datalab-api</artifactId>
+            <version>0.9.3-SNAPSHOT</version>
+            <type>jar</type>
+        </dependency>
     </dependencies>
 
     <build>
