@@ -29,14 +29,14 @@ public class TriangleClusteringCoefficientAlgorithm {
 
         long triangleCount = getTriangleCountFromGraph();
 
-        report += " Ilość trójkątów: " + triangleCount + "\n";
+        report += " Number of triangles: " + triangleCount + "\n";
 
         long quantityPathsOfLenght2 = countPaths();
-        report += "Ilość dróg o długości 2: " + quantityPathsOfLenght2 + "\n";
+        report += "Number of paths (Length 2): " + quantityPathsOfLenght2 + "\n";
 
         double tcc = 3f * triangleCount / quantityPathsOfLenght2;
 
-        report += "Wartość wsp klasteryzacji: " + tcc + "\n";
+        report += "Value of Clustering Coefficient: " + tcc + "\n";
 
         return report;
     }

@@ -54,7 +54,7 @@ public class ClusteringCoefficientAlgorithm {
         allNodes.forEach(node -> {
             double c = (Double) node.getAttribute(COF_ATTR);
             cSum[0] += c;
-            report += node.getId() + " C = " + String.valueOf(c) + "\n";
+            report += "Node " + node.getId() + ": C = " + String.valueOf(c) + "\n";
             size.getAndIncrement();
         });
         report += "General C = " + String.valueOf(cSum[0] / size.get());
