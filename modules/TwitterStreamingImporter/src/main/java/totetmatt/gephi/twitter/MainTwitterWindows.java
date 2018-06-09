@@ -5,7 +5,10 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -51,14 +54,16 @@ public final class MainTwitterWindows extends TopComponent {
         initComponents();
         setName(NbBundle.getMessage(MainTwitterWindows.class, "CTL_SimpleTopComponent"));
         setToolTipText(NbBundle.getMessage(MainTwitterWindows.class, "HINT_SimpleTopComponent"));
-        Collection<Networklogic> networks = (Collection<Networklogic>) Lookup.getDefault().lookupAll(Networklogic.class);
-
+        List<Networklogic> networks = new ArrayList((Collection<Networklogic>) Lookup.getDefault().lookupAll(Networklogic.class));
+        Collections.sort(networks) ;
+        
         streamer = Lookup.getDefault().lookup(TwitterStreamer.class);
 
         DefaultComboBoxModel c = new DefaultComboBoxModel();
         for (Networklogic nl : networks) {
             c.addElement(nl);
         }
+        
         network_logic_combo.setModel(c);
 
         userTrackingTableModel = (DefaultTableModel) ut_list_table.getModel();

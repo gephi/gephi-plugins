@@ -1,5 +1,6 @@
 package totetmatt.gephi.twitter.networklogic;
 
+import com.vdurmont.emoji.EmojiParser;
 import java.awt.Color;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -23,10 +24,24 @@ import twitter4j.UserMentionEntity;
  *
  * @author totetmatt
  */
-public abstract class Networklogic implements StatusListener {
+public abstract class Networklogic implements StatusListener, Comparable  {
 
     // Track word passed on the Stream FilterQuery
     protected String[] track;
+
+    @Override
+    public int compareTo(Object o) {
+       Integer p1 = this.index();
+       Integer p2 = ((Networklogic) o).index();
+
+       if (p1 > p2) {
+           return 1;
+       } else if (p1 < p2){
+           return -1;
+       } else {
+           return 0;
+       }
+    }
 
     public enum NodeType {
         USER("User", new Color(0.5f, 0, 0)),
@@ -34,8 +49,9 @@ public abstract class Networklogic implements StatusListener {
         HASHTAG("Hashtag", new Color(0, 0.5f, 0)),
         MEDIA("Media", new Color(0, 0.5f, 0.5f)),
         URL("Link", new Color(0, 0, 0.5f)),
-        SYMBOL("Symbol", new Color(0.5f, 0, 0.5f));
-
+        SYMBOL("Symbol", new Color(0.5f, 0, 0.5f)),
+        EMOJI("Emoji", new Color(1.0f, 1.0f, 1.0f));
+        
         private final String type;
         private final Color color;
 
@@ -173,7 +189,13 @@ public abstract class Networklogic implements StatusListener {
         user.setAttribute(TwitterNodeColumn.NODE_USER_LOCATION.label, u.getLocation());
         return user;
     }
-
+    protected Node createEmoji(String emoji_utf8) {
+        Node emoji = createNode(EmojiParser.parseToHtmlDecimal(emoji_utf8), emoji_utf8, NodeType.EMOJI);
+        emoji.setAttribute(TwitterNodeColumn.NODE_EMOJI_UTF8.label, emoji_utf8);
+        emoji.setAttribute(TwitterNodeColumn.NODE_EMOJI_ALIAS.label, EmojiParser.parseToAliases(emoji_utf8));
+        emoji.setAttribute(TwitterNodeColumn.NODE_EMOJI_HTML_DECIMAL.label, EmojiParser.parseToHtmlDecimal(emoji_utf8));
+        return emoji;
+    }
     protected Node createUser(UserMentionEntity u) {
         String screenName = "@" + u.getScreenName().toLowerCase();
         return createNode(screenName, screenName, NodeType.USER);
@@ -183,6 +205,9 @@ public abstract class Networklogic implements StatusListener {
 
     // This is mainly for the name in the UI.
     public abstract String getName();
+    
+    //  Index place in the networklogic list.
+    public abstract int index();
 
     // Other method can be overidden for dedicated usage.
     @Override
@@ -209,5 +234,5 @@ public abstract class Networklogic implements StatusListener {
     public String toString() {
         return this.getName();
     }
-
+   
 }

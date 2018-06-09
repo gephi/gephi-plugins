@@ -62,4 +62,9 @@ public class HashtagNetwork extends Networklogic {
         return "Hashtag Network";
     }
 
+    @Override
+    public int index() {
+        return 2;
+    }
+
 }

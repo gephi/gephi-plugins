@@ -2,8 +2,6 @@ package totetmatt.gephi.twitter.networklogic;
 
 import java.awt.Color;
 import java.util.Arrays;
-import java.util.Calendar;
-import org.gephi.graph.api.Column;
 import org.gephi.graph.api.Edge;
 import org.gephi.graph.api.Node;
 import org.joda.time.LocalTime;
@@ -139,6 +137,11 @@ public class FullSmartNetwork extends Networklogic {
     @Override
     public String getName() {
         return "Full Twitter Network";
+    }
+
+    @Override
+    public int index() {
+        return 0;
     }
 
 }
