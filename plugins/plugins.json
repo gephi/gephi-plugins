@@ -3099,6 +3099,32 @@
       },
       "sourcecode": "https://github.com/jSh4rk/gephi-plugins",
       "homepage": null
+    },
+    {
+      "id": "imagepreview",
+      "name": "Image Preview",
+      "short_description": "Image Preview",
+      "long_description": "Preview plugin that allows you to render images as nodes. \u003cbr/\u003e \u003cbr/\u003e Each node (that has a image) must have an attribute called \u0027image\u0027, which contains the filename of the image file. Images are loaded relative to a given \u003ci\u003eImage Path\u003c/i\u003e property in the Preview Property window. \u003cbr/\u003e \u003cbr/\u003ePlease reset Gephi after this plugin is installed, and remember to enable itwith the \u003ci\u003eRender Nodes As Images\u003c/i\u003e property in the Preview Property window.",
+      "readme": null,
+      "license": "Apache 2.0",
+      "authors": [
+        {
+          "name": "Yitzchak Lockerman (Yale Computer Graphics Group)",
+          "email": null,
+          "link": null
+        }
+      ],
+      "category": "Preview",
+      "last_update": "June 9, 2018",
+      "images": null,
+      "versions": {
+        "0.9.2": {
+          "url": "0.9.2/imagepreview-1.0.0.nbm",
+          "last_update": "June 9, 2018"
+        }
+      },
+      "sourcecode": "https://github.com/totetmatt/gephi-plugins/tree/image-preview",
+      "homepage": null
     }
   ]
 }
