@@ -56,6 +56,7 @@
         <module>modules/CirclePack</module>
         <module>modules/SHPExporter</module>
 		 <module>modules/newmangirvan</module>
+        <module>modules/image-preview</module>
     </modules>
     
     <!-- Properties -->
@@ -186,6 +187,14 @@
                 <artifactId>nbm-maven-plugin</artifactId>
                 <configuration>
                     <nbmBuildDir>${clusters.path}</nbmBuildDir>
+                    <licenseName>Apache 2.0</licenseName>
+                    <author>Yitzchak Lockerman (Yale Computer Graphics Group)</author>
+                    <sourceCodeUrl>$sourcecode_url</sourceCodeUrl>
+                    <licenseName>Apache 2.0</licenseName>
+                    <publicPackages> 
+                        <publicPackage>org.yale.cs.graphics.gephi.imagepreview</publicPackage>
+                    </publicPackages>
+                    <sourceCodeUrl>https://github.com/totetmatt/gephi-plugins/tree/image-preview</sourceCodeUrl>
                 </configuration>
                 <executions>
                     <execution>
