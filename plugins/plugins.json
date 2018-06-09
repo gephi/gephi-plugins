@@ -3073,6 +3073,32 @@
       },
       "sourcecode": "https://github.com/gephi/gephi-plugins/shpexporter",
       "homepage": "http://marketplace.gephi.org/plugin/export-to-shp/"
+    },
+    {
+      "id": "newman-girvan-plugin",
+      "name": "Newman-Girvan Clustering",
+      "short_description": "Girvan-Newman clustering algorithm",
+      "long_description": "This plugin clusters a given graph using the Girvan-Newman algorithm.",
+      "readme": null,
+      "license": "Apache 2.0",
+      "authors": [
+        {
+          "name": "Andrej Sibirski",
+          "email": "",
+          "link": ""
+        }
+      ],
+      "category": "Clustering",
+      "last_update": "June 9, 2018",
+      "images": null,
+      "versions": {
+        "0.9.2": {
+          "url": "0.9.2/newman-girvan-plugin-1.0.0.nbm",
+          "last_update": "June 9, 2018"
+        }
+      },
+      "sourcecode": "https://github.com/jSh4rk/gephi-plugins",
+      "homepage": null
     }
   ]
 }
