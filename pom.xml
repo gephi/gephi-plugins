@@ -54,6 +54,7 @@
         <module>modules/PolygonShapedNodes</module>
         <module>modules/ScalePlugin</module>
         <module>modules/CirclePack</module>
+        <module>modules/SHPExporter</module>
     </modules>
     
     <!-- Properties -->

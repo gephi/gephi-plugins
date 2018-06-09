@@ -415,6 +415,11 @@
             </dependency>
             <dependency>
                 <groupId>org.gephi</groupId>
+                <artifactId>batik-wrapper</artifactId>
+                <version>${gephi.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.gephi</groupId>
                 <artifactId>ui-library-wrapper</artifactId>
                 <version>${gephi.version}</version>
             </dependency>
