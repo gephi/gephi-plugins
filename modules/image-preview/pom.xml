@@ -16,57 +16,45 @@
 
     <dependencies>
         
-    <dependency>
-      <groupId>org.gephi</groupId>
-      <artifactId>preview-plugin</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.gephi</groupId>
-      <artifactId>core-library-wrapper</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.netbeans.api</groupId>
-      <artifactId>org-openide-util-lookup</artifactId>
-        <version>${netbeans.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>org.gephi</groupId>
-      <artifactId>graph-api</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.gephi</groupId>
-      <artifactId>preview-api</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.netbeans.api</groupId>
-      <artifactId>org-openide-util</artifactId>
-        <version>${netbeans.version}</version>
-    </dependency>
-    <!-- https://mvnrepository.com/artifact/org.processing/core -->
-    <dependency>
-        <groupId>org.processing</groupId>
-        <artifactId>core</artifactId>
-        <version>3.3.7</version>
-    </dependency>
+        <dependency>
+            <groupId>org.gephi</groupId>
+            <artifactId>preview-plugin</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.gephi</groupId>
+            <artifactId>core-library-wrapper</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.netbeans.api</groupId>
+            <artifactId>org-openide-util-lookup</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.gephi</groupId>
+            <artifactId>graph-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.gephi</groupId>
+            <artifactId>preview-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.netbeans.api</groupId>
+            <artifactId>org-openide-util</artifactId>
+        </dependency>
         <dependency>
             <groupId>org.netbeans.api</groupId>
             <artifactId>org-openide-windows</artifactId>
-            <version>${netbeans.version}</version>
         </dependency>
         <dependency>
             <groupId>org.netbeans.api</groupId>
             <artifactId>org-openide-util-ui</artifactId>
-            <version>${netbeans.version}</version>
         </dependency>
         <dependency>
             <groupId>org.netbeans.api</groupId>
             <artifactId>org-openide-awt</artifactId>
-            <version>${netbeans.version}</version>
         </dependency>
         <dependency>
             <groupId>org.netbeans.api</groupId>
             <artifactId>org-netbeans-modules-settings</artifactId>
-            <version>${netbeans.version}</version>
         </dependency>
     </dependencies>
 
@@ -77,11 +65,10 @@
                 <artifactId>nbm-maven-plugin</artifactId>
                 <configuration>
                     <author>Yitzchak Lockerman (Yale Computer Graphics Group)</author>
-                    <sourceCodeUrl>$sourcecode_url</sourceCodeUrl>
+                    <sourceCodeUrl>https://github.com/totetmatt/gephi-plugins/tree/image-preview</sourceCodeUrl>
                     <licenseName>Apache 2.0</licenseName>
                     <publicPackages>
-                        
-                    <publicPackage>org.yale.cs.graphics.gephi.imagepreview</publicPackage>
+                        <publicPackage>org.yale.cs.graphics.gephi.imagepreview</publicPackage>
                     </publicPackages>
                 </configuration>
             </plugin>
