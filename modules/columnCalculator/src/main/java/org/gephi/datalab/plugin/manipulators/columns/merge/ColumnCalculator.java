@@ -45,14 +45,15 @@ import org.openide.util.NbBundle;
 /**
  * @author Javier Gonzalez
  */
-public class ColumnCalculator implements AttributeColumnsMergeStrategy{
+public class ColumnCalculator implements AttributeColumnsMergeStrategy {
 
     private Table table;
     private Column[] columns;
     private String columnTitle;
     
     public void setup(Table table, Column[] columns) {
-        //TODO
+        this.table = table;
+        this.columns = columns;
     }
 
     public void execute() {
@@ -87,4 +88,11 @@ public class ColumnCalculator implements AttributeColumnsMergeStrategy{
         return null;
     }
     
+    public String getColumnTitle() {
+        return columnTitle;
+    }
+
+    public void setColumnTitle(String columnTitle) {
+        this.columnTitle = columnTitle;
+    }
 }
