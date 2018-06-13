@@ -30,22 +30,29 @@ import org.gephi.project.api.Workspace;
 id = "org.gephi.desktop.filters.TestAction")
 @ActionRegistration(displayName = "#CTL_TestAction")
 @ActionReferences({
-    @ActionReference(path = "Menu/Plugins", position = 3333)
+    @ActionReference(path = "Menu/Tools", position = 3333)
 })
-@Messages("CTL_TestAction=Testing...")
+@Messages("CTL_TestAction=Generate groups by partition")
 public final class MenuButtonController implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
         //Do something, display a message
-        NotifyDescriptor d = new NotifyDescriptor.Message("Reading nodes..", NotifyDescriptor.INFORMATION_MESSAGE);
-        DialogDisplayer.getDefault().notify(d);
+        NotifyDescriptor d = new NotifyDescriptor.Confirmation("DEBUG MESSAGE TO START\nHere will be parameter to select..", "Generate groups by partition",NotifyDescriptor.YES_NO_OPTION);
+        
+        if(DialogDisplayer.getDefault().notify(d) == NotifyDescriptor.YES_OPTION)
+        {
+            System.out.println("Said yes..");
+            //Should be fed some parameters..
+            PartitionController partition = new PartitionController();
+            partition.generatePartition();
+        } else System.out.println("Said no..");
 
         //Do something - for instance display a dialog
         //Dialogs API documentation: http://bits.netbeans.org/dev/javadoc/org-openide-dialogs/index.html?overview-summary.html
-        DialogDescriptor dd = new DialogDescriptor(new JPanel(), "Init", false, null);
-        DialogDisplayer.getDefault().notify(dd);
-        
+       /* DialogDescriptor dd = new DialogDescriptor(new JPanel(), "Init", false, null);
+        DialogDisplayer.getDefault().notify(dd);*/
+        /*
         ProjectController pc = Lookup.getDefault().lookup(ProjectController.class);
         Workspace workspace = pc.getCurrentWorkspace();
         GraphModel gmodel = workspace.getLookup().lookup(GraphModel.class);
@@ -53,8 +60,8 @@ public final class MenuButtonController implements ActionListener {
         Graph graph = gmodel.getGraph();
         Node[] cNodes = graph.getNodes().toArray();
         for (Node node : cNodes){
-            System.out.println(node.getLabel());
+            //System.out.println(node.getLabel());
            // node.getColor()
-        }
+        }*/
     }
 }

@@ -14,15 +14,12 @@ import org.gephi.graph.api.Graph;
 
 public class DirectedGraphPartition implements IPartitionGraph {
 
-    public void partition() {
+    DirectedGraphPartition(Graph graph) {
+        System.out.println("Directed");
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    public Graph getGraph() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    public void setGraph(Graph oldGraph) {
+    public Graph partition() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
