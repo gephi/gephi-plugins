@@ -33,7 +33,7 @@ id = "org.gephi.desktop.filters.TestAction")
     @ActionReference(path = "Menu/Plugins", position = 3333)
 })
 @Messages("CTL_TestAction=Testing...")
-public final class TestAction implements ActionListener {
+public final class MenuButtonController implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
@@ -54,6 +54,7 @@ public final class TestAction implements ActionListener {
         Node[] cNodes = graph.getNodes().toArray();
         for (Node node : cNodes){
             System.out.println(node.getLabel());
+           // node.getColor()
         }
     }
 }
