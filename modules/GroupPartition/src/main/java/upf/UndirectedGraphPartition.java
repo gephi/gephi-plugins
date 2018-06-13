@@ -7,8 +7,6 @@ package upf;
 
 import java.awt.Color;
 import java.util.HashMap;
-import java.util.Hashtable;
-import java.util.Iterator;
 import java.util.Map;
 import org.gephi.graph.api.Edge;
 import org.gephi.graph.api.Graph;
@@ -16,7 +14,7 @@ import org.gephi.graph.api.GraphFactory;
 import org.gephi.graph.api.GraphModel;
 import org.gephi.graph.api.Node;
 import org.gephi.graph.api.Table;
-import org.openide.util.Pair;
+
 
 /**
  *
