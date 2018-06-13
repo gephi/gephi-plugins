@@ -5,24 +5,36 @@
  */
 package upf;
 
+import java.util.ArrayList;
 import org.gephi.graph.api.Graph;
+import org.gephi.graph.api.Node;
 
 /**
  *
  * @author puig
  */
 
+
 public class DirectedGraphPartition implements IPartitionGraph {
-
-    public void partition() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    public Graph getGraph() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    public void setGraph(Graph oldGraph) {
+    
+    // Creates a new graph from old one, dividing into groups depending on color
+    public Graph partition(Graph oldGraph) {
+        ArrayList<NodeGroup> nodeGroups = null;
+        Node[] oldNodes = oldGraph.getNodes().toArray();
+        
+        // Iterate over every node
+        for (Node oldNode : oldNodes) {
+            // Check if node is in any nodeGroup by looking at its color
+            // IF -> Add to group (nodeContainer)
+            // IF NOT -> Create nodeGroup and add to it (nodeContainer)
+        }
+        
+        // Iterate over every node Group
+            // Iterate over every node 
+            // Check if node is connected to any other node, if so check its group and add (connected)
+            
+        // Iterate over every nodeGroup connected and count as ints
+        
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
