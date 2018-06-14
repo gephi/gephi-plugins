@@ -7,6 +7,7 @@ package upf;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import org.gephi.graph.api.Graph;
 import org.gephi.graph.api.GraphModel;
@@ -37,8 +38,24 @@ public final class MenuButtonController implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
+        String[] options = new String[] {"Create", "Overwrite", "Cancel"}; // {0, 1, 2}
+        int response = JOptionPane.showOptionDialog(null, "De you want to create a new workspace or overwrite the existing one?", "Select",
+            JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE,
+            null, options, options[0]);
+        System.out.println("response: " + response);
+        
+        if (response != 2) {
+            PartitionController partition = new PartitionController();
+            
+            boolean createNewWorkspace = false;
+            if (response == 0) { createNewWorkspace = true; }
+            
+            partition.generatePartition(createNewWorkspace);
+        }
+        
+        // Where response == 0 for Yes, 1 for No, 2 for Maybe and -1 or 3 for Escape/Cancel.
         //Do something, display a message
-        NotifyDescriptor d = new NotifyDescriptor.Confirmation("DEBUG MESSAGE TO START\nHere will be parameter to select..", "Generate groups by partition",NotifyDescriptor.YES_NO_OPTION);
+        /*NotifyDescriptor d = new NotifyDescriptor.Confirmation("DEBUG MESSAGE TO START\nHere will be parameter to select..", "Generate groups by partition",NotifyDescriptor.YES_NO_OPTION);
         
         if(DialogDisplayer.getDefault().notify(d) == NotifyDescriptor.YES_OPTION)
         {
@@ -46,7 +63,7 @@ public final class MenuButtonController implements ActionListener {
             //Should be fed some parameters..
             PartitionController partition = new PartitionController();
             partition.generatePartition();
-        } else System.out.println("Said no..");
+        } else System.out.println("Said no..");*/
 
         //Do something - for instance display a dialog
         //Dialogs API documentation: http://bits.netbeans.org/dev/javadoc/org-openide-dialogs/index.html?overview-summary.html

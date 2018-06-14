@@ -34,7 +34,7 @@ public class PartitionController {
         originWorkspace = pc.getCurrentWorkspace();
     }
     
-    void generatePartition(){
+    void generatePartition(boolean createNewWorkspace){
         
         GraphModel gmodel = originWorkspace.getLookup().lookup(GraphModel.class);
         Graph graph = gmodel.getGraph();
@@ -44,9 +44,14 @@ public class PartitionController {
         IPartitionGraph gAlgorithm = gp_factory.getGraphPartition();
         Graph graphAlgorithm = gAlgorithm.partition();
         graph.readUnlock();
-        //Should be a parameter if you want a new workspace or select an existing one.
-        Workspace newWorkspace = pc.newWorkspace(pc.getCurrentProject());
-        pc.openWorkspace(newWorkspace);
+        
+        if (createNewWorkspace) {
+            Workspace workspace = pc.newWorkspace(pc.getCurrentProject());
+            pc.openWorkspace(workspace);
+        }
+        else {
+            graph.clear();
+        }
         
         GraphController gc = Lookup.getDefault().lookup(GraphController.class);
         GraphModel model = gc.getGraphModel();
