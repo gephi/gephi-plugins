@@ -86,6 +86,7 @@ public class PartitionController {
            Node node2 = GhostToNew.get(edge.getTarget().getId().toString());
            Edge nEdge = fact.newEdge(node1, node2, graphAlgorithm.isDirected());
            nEdge.setAttribute("Size", Integer.valueOf(edge.getAttribute("Size").toString()));
+           nEdge.setWeight(Integer.valueOf(edge.getAttribute("Size").toString()));
            newGraph.addEdge(nEdge);
         }
                

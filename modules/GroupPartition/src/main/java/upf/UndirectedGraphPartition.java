@@ -44,6 +44,7 @@ public class UndirectedGraphPartition implements IPartitionGraph {
         edgeTable.addColumn("Size", int.class);
         
         Map<Integer, Node> color_Nodes = new HashMap<Integer,Node>(); //First one is RGBA Color, second is number of nodes with that color
+        Map<Integer, Node> maxOldNode = new HashMap<Integer, Node>(); //First one is color RGB, second is max Node to make a label.
         
         Edge[] oldEdges = _old.getEdges().toArray();
         Node[] oldNodes = _old.getNodes().toArray();
@@ -57,11 +58,18 @@ public class UndirectedGraphPartition implements IPartitionGraph {
             }
             else {
                 Node node = fact.newNode();
-                node.setLabel(String.valueOf(nodeColor));
+                node.setLabel("Group of " + cNode.getLabel());
                 node.setAttribute("Size", 1);
                 node.setColor(cNode.getColor());
                 color_Nodes.put(nodeColor, node);
+                maxOldNode.put(nodeColor, cNode);
                 newGraph.addNode(node);
+            }
+            Integer NodeMax = (int) maxOldNode.get(nodeColor).size();
+            if(NodeMax < (int) cNode.size()){
+                maxOldNode.put(nodeColor, cNode);
+                //if(cNode)
+                nNode.setLabel("Group of " + cNode.getLabel());
             }
         }
         
@@ -71,7 +79,7 @@ public class UndirectedGraphPartition implements IPartitionGraph {
             Color sourceColor = source.getColor();
             Color targetColor = target.getColor();
             
-            if(sourceColor.getRGB()!= targetColor.getRGB()){
+            //if(sourceColor.getRGB()!= targetColor.getRGB()){
                 Node n1 = color_Nodes.get(sourceColor.getRGB());
                 Node n2 = color_Nodes.get(targetColor.getRGB());
                 Edge edge = newGraph.getEdge(n1, n2);
@@ -81,14 +89,16 @@ public class UndirectedGraphPartition implements IPartitionGraph {
                     edge = newGraph.getEdge(n2, n1);
                     if (edge != null){
                          edge.setAttribute("Size", (Integer.valueOf(edge.getAttribute("Size").toString())+1));
+                         edge.setWeight(Integer.valueOf(edge.getAttribute("Size").toString()+1));
                     }
                     else {
                         edge = fact.newEdge(n1, n2, false);
                         edge.setAttribute("Size", 1);
+                        edge.setWeight(1);
                         newGraph.addEdge(edge);
                     }
                 }
-            }
+            //}
         }
         
         /*
