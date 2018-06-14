@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <artifactId>gephi-plugin-parent</artifactId>
+        <groupId>org.gephi</groupId>
+        <version>0.9.2</version>
+    </parent>
+
+    <groupId>upf</groupId>
+    <artifactId>column-formula</artifactId>
+    <version>0.1.0</version>
+    <packaging>nbm</packaging>
+
+    <name>Column Formula</name>
+
+    <dependencies>
+        <!-- Insert dependencies here -->
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>nbm-maven-plugin</artifactId>
+                <configuration>
+                    <licenseName>Apache 2.0</licenseName>
+                    <author>Team2</author>
+                    <authorEmail>oscar.font01@estudiant.upf.edu</authorEmail>
+                    <authorUrl>google.com</authorUrl>
+                    <sourceCodeUrl>$sourcecode_url</sourceCodeUrl>
+                    <publicPackages>
+                        <!-- Insert public packages -->
+                    </publicPackages>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+</project>
+
+
