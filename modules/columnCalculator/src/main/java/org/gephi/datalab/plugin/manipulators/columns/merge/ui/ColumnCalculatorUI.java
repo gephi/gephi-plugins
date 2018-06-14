@@ -35,6 +35,8 @@ Portions Copyrighted 2011 Gephi Consortium.
 package org.gephi.datalab.plugin.manipulators.columns.merge.ui;
 
 import javax.swing.JPanel;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import org.gephi.datalab.plugin.manipulators.columns.merge.ColumnCalculator;
 import org.gephi.datalab.spi.DialogControls;
 import org.gephi.datalab.spi.Manipulator;
@@ -49,40 +51,64 @@ public class ColumnCalculatorUI extends javax.swing.JPanel implements Manipulato
 
     private ColumnCalculator manipulator;
     private DialogControls dialogControls;
-//    private Table table;
+    private Table table;
     
     /**
      * Creates new form ColumnCalculatorUI
      */
     public ColumnCalculatorUI() {
         initComponents();
+        titleTextField.getDocument().addDocumentListener(new DocumentListener() {
+
+            public void insertUpdate(DocumentEvent e) {
+                refreshOkButton();
+            }
+
+            public void removeUpdate(DocumentEvent e) {
+                refreshOkButton();
+            }
+
+            public void changedUpdate(DocumentEvent e) {
+                refreshOkButton();
+            }
+        });
     }
     
+    private void refreshOkButton() {
+        String text = titleTextField.getText();
+        dialogControls.setOkButtonEnabled(text != null && !text.isEmpty() && table != null && !table.hasColumn(text));//Title not empty and not repeated.
+    }
+    
+    @Override
     public void setup(Manipulator m, DialogControls dialogControls) {
         //Receive our manipulator instance:
-        manipulator = (ColumnCalculator) m; //We know the type of manipulator we are going to receive so cast is safe
+        this.manipulator = (ColumnCalculator) m; //We know the type of manipulator we are going to receive so cast is safe
         //And an object to control the dialog if necessary 
         //(for now it only is able to enable/disable the Ok button of the dialog for validation purposes)
         this.dialogControls = dialogControls;
     }
 
+    @Override
     public void unSetup() {
         //Called when the dialog is closed, canceled or accepted. Pass necessary data to the manipulator:
         //manipulator.setSomeOption(someValue);
         //TODO..
     }
 
+    @Override
     public String getDisplayName() {
         //Provide title for the dialog:
         return manipulator.getName();//For example, the manipulator name
     }
-
+    
+    @Override
     public JPanel getSettingsPanel() {
         //Provide the JPanel to create the UI dialog
         //A good practice is to extend JPanel and just return this object
         return this;
     }
-
+    
+    @Override
     public boolean isModal() {
         return true;
     }
@@ -96,21 +122,41 @@ public class ColumnCalculatorUI extends javax.swing.JPanel implements Manipulato
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        titleTextField = new javax.swing.JTextField();
+
+        titleTextField.setText(org.openide.util.NbBundle.getMessage(ColumnCalculatorUI.class, "ColumnCalculatorUI.titleTextField.text")); // NOI18N
+        titleTextField.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                titleTextFieldActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(223, Short.MAX_VALUE)
+                .addComponent(titleTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(109, 109, 109))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(196, Short.MAX_VALUE)
+                .addComponent(titleTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(84, 84, 84))
         );
     }// </editor-fold>//GEN-END:initComponents
+
+    private void titleTextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_titleTextFieldActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_titleTextFieldActionPerformed
 
     
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JTextField titleTextField;
     // End of variables declaration//GEN-END:variables
 }

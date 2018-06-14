@@ -35,11 +35,14 @@ Portions Copyrighted 2011 Gephi Consortium.
 package org.gephi.datalab.plugin.manipulators.columns.merge;
 
 import javax.swing.Icon;
+import org.gephi.datalab.api.AttributeColumnsController;
+import org.gephi.datalab.api.AttributeColumnsMergeStrategiesController;
 import org.gephi.datalab.plugin.manipulators.columns.merge.ui.ColumnCalculatorUI;
 import org.gephi.datalab.spi.ManipulatorUI;
 import org.gephi.datalab.spi.columns.merge.AttributeColumnsMergeStrategy;
 import org.gephi.graph.api.Column;
 import org.gephi.graph.api.Table;
+import org.openide.util.Lookup;
 import org.openide.util.NbBundle;
 
 /**
@@ -51,39 +54,50 @@ public class ColumnCalculator implements AttributeColumnsMergeStrategy {
     private Column[] columns;
     private String columnTitle;
     
+    @Override
     public void setup(Table table, Column[] columns) {
         this.table = table;
         this.columns = columns;
     }
 
+    @Override
     public void execute() {
         //TODO call parser
+        AttributeColumnsController ac = Lookup.getDefault().lookup(AttributeColumnsController.class);
+        
     }
 
+    @Override
     public String getName() {
         return NbBundle.getMessage(ColumnCalculator.class, "ColumnCalculator.name");
     }
 
+    @Override
     public String getDescription() {
         return NbBundle.getMessage(ColumnCalculator.class, "ColumnCalculator.description");
     }
 
+    @Override
     public boolean canExecute() {
         return true;
     }
 
+    @Override
     public ManipulatorUI getUI() {
         return new ColumnCalculatorUI();
     }
 
+    @Override
     public int getType() {
-        return 100;
+        return 200;
     }
 
+    @Override
     public int getPosition() {
-        return 400;
+        return 0;
     }
 
+    @Override
     public Icon getIcon() {
         return null;
     }
