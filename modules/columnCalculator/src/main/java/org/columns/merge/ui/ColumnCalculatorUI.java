@@ -82,8 +82,6 @@ public class ColumnCalculatorUI extends javax.swing.JPanel implements Manipulato
         });
     }
     
-    
-    
     @Override
     public void setup(Manipulator m, DialogControls dialogControls) {
         //Receive our manipulator instance:

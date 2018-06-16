@@ -46,40 +46,7 @@ import org.openide.util.Lookup;
  * @author Ivan Andrada
  */
 public class ColumnCalculatorParser {
-    
-    /**
-     * MergeStrategy Custom Formula. (Fill description)
-     *
-     *
-     * @param table 
-     * @param columnsToMerge
-     * @param newColumnTitle
-     * @return Column with result of the formula
-     */
-    public static Column applyCustomFormula(Table table, Column[] columnsToMerge, String newColumnTitle, String customFormula) {
-        if (table == null || columnsToMerge == null) {
-            throw new IllegalArgumentException("table, columns or operations can't be null and operations length must be columns length -1");
-        }
-
-        AttributeColumnsController ac = Lookup.getDefault().lookup(AttributeColumnsController.class);
-
-        Column newColumn;
-        newColumn = ac.addAttributeColumn(table, newColumnTitle, BigDecimal.class);//Create as BIGDECIMAL column by default. Then it can be duplicated to other type.
-        if (newColumn == null) {
-            return null;
-        }
-
-        Number[] rowNumbers;
-
-        for (Element row : ac.getTableAttributeRows(table)) {
-                rowNumbers = ac.getRowNumbers(row, columnsToMerge);
-                BigDecimal formulaResult = getFormulaResult(rowNumbers, customFormula);
-                row.setAttribute(newColumn, formulaResult);
-        }
-
-        return newColumn;
-    }
-    
+        
     /**
      * Se calcula la fórmula para una array de valores y una formula. 
      * La formula se parsea con ex4j
@@ -88,7 +55,7 @@ public class ColumnCalculatorParser {
      * @param formula Formula sin parsear, facilitada por el usuario en la interfaz
      * @return BigDecimal con el resultado de aplicar a formula 
      */
-    private static BigDecimal getFormulaResult(Number[] valuesOfColumns, String formula){
+    public static BigDecimal getFormulaResult(Number[] valuesOfColumns, String formula){
         BigDecimal formulaResult = new BigDecimal(3); //valor por defecto hasta que se desarrolle el método
         
         //TODO @IvanAndrada CALCULAR FORMULA
