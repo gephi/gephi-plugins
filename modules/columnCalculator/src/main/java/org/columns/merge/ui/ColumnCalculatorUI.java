@@ -41,7 +41,6 @@ import org.columns.merge.ColumnCalculator;
 import org.gephi.datalab.spi.DialogControls;
 import org.gephi.datalab.spi.Manipulator;
 import org.gephi.datalab.spi.ManipulatorUI;
-import org.gephi.graph.api.Column;
 import org.gephi.graph.api.Table;
 
 /**
@@ -95,6 +94,10 @@ public class ColumnCalculatorUI extends javax.swing.JPanel implements Manipulato
         //Called when the dialog is closed, canceled or accepted. Pass necessary data to the manipulator:
         //manipulator.setSomeOption(someValue);
         //TODO..
+        
+        //TODO @OscarFont añadir formula del campo del JPanel
+        this.manipulator.setCustomFormula("FORMULA_DE_PRUEBA");
+        storeSavedParameter();
     }
 
     @Override
@@ -115,6 +118,11 @@ public class ColumnCalculatorUI extends javax.swing.JPanel implements Manipulato
         return true;
     }
 
+    private void storeSavedParameter() {
+        //TODO @OscarFont imitar guardado de CreateTimeIntervalUI.java-> storeSavedParameter();
+        
+    }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -158,4 +166,6 @@ public class ColumnCalculatorUI extends javax.swing.JPanel implements Manipulato
     private javax.swing.JTextField FormulaTextField;
     private javax.swing.JLabel jLabel1;
     // End of variables declaration//GEN-END:variables
+
+
 }

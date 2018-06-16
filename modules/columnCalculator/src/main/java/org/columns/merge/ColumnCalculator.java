@@ -35,6 +35,7 @@ Portions Copyrighted 2011 Gephi Consortium.
 package org.columns.merge;
 
 import javax.swing.Icon;
+import org.columns.merge.parser.ColumnCalculatorParser;
 import org.gephi.datalab.api.AttributeColumnsController;
 import org.gephi.datalab.api.AttributeColumnsMergeStrategiesController;
 import org.columns.merge.ui.ColumnCalculatorUI;
@@ -53,7 +54,8 @@ public class ColumnCalculator implements AttributeColumnsMergeStrategy {
     private Table table;
     private Column[] columns;
     private String columnTitle;
-    
+    private String customFormula;
+
     @Override
     public void setup(Table table, Column[] columns) {
         this.table = table;
@@ -63,8 +65,7 @@ public class ColumnCalculator implements AttributeColumnsMergeStrategy {
     @Override
     public void execute() {
         //TODO call parser
-        AttributeColumnsController ac = Lookup.getDefault().lookup(AttributeColumnsController.class);
-        
+        ColumnCalculatorParser.applyCustomFormula(table, columns, columnTitle, customFormula);
     }
 
     @Override
@@ -109,4 +110,14 @@ public class ColumnCalculator implements AttributeColumnsMergeStrategy {
     public void setColumnTitle(String columnTitle) {
         this.columnTitle = columnTitle;
     }
+    
+    
+    public String getCustomFormula() {
+        return customFormula;
+    }
+
+    public void setCustomFormula(String customFormula) {
+        this.customFormula = customFormula;
+    }
+    
 }
