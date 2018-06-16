@@ -34,14 +34,16 @@ Portions Copyrighted 2011 Gephi Consortium.
  */
 package org.columns.merge;
 
+import java.math.BigDecimal;
 import javax.swing.Icon;
 import org.columns.merge.parser.ColumnCalculatorParser;
+import static org.columns.merge.parser.ColumnCalculatorParser.getFormulaResult;
 import org.gephi.datalab.api.AttributeColumnsController;
-import org.gephi.datalab.api.AttributeColumnsMergeStrategiesController;
 import org.columns.merge.ui.ColumnCalculatorUI;
 import org.gephi.datalab.spi.ManipulatorUI;
 import org.gephi.datalab.spi.columns.merge.AttributeColumnsMergeStrategy;
 import org.gephi.graph.api.Column;
+import org.gephi.graph.api.Element;
 import org.gephi.graph.api.Table;
 import org.openide.util.Lookup;
 import org.openide.util.NbBundle;
@@ -53,7 +55,7 @@ public class ColumnCalculator implements AttributeColumnsMergeStrategy {
 
     private Table table;
     private Column[] columns;
-    private String columnTitle;
+    private String columnTitle = "new";     //TODO @OscarFont eliminar este "new" cuando esté implementado en la UI
     private String customFormula;
 
     @Override
@@ -65,7 +67,23 @@ public class ColumnCalculator implements AttributeColumnsMergeStrategy {
     @Override
     public void execute() {
         //TODO call parser
-        ColumnCalculatorParser.applyCustomFormula(table, columns, columnTitle, customFormula);
+        //ColumnCalculatorParser.applyCustomFormula(table, columns, columnTitle, customFormula);
+        if (table == null || columns == null) {
+            throw new IllegalArgumentException("table, columns or operations can't be null and operations length must be columns length -1");
+        }
+
+        AttributeColumnsController ac = Lookup.getDefault().lookup(AttributeColumnsController.class);
+
+        Column newColumn = ac.addAttributeColumn(table, columnTitle, BigDecimal.class);//Create as BIGDECIMAL column by default. Then it can be duplicated to other type.
+
+        Number[] rowNumbers;
+        Element[] rows = ac.getTableAttributeRows(table);
+        for (int i=0; i< rows.length;++i) {
+            rowNumbers = ac.getRowNumbers(rows[i], columns);
+            BigDecimal formulaResult = ColumnCalculatorParser.getFormulaResult(rowNumbers, customFormula);
+            rows[i].setAttribute(newColumn, formulaResult);
+        }
+
     }
 
     @Override

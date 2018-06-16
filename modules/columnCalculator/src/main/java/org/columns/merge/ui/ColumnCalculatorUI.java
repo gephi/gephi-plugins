@@ -77,7 +77,7 @@ public class ColumnCalculatorUI extends javax.swing.JPanel implements Manipulato
     
     private void refreshOkButton() {
         String text = FormulaTextField.getText();
-        dialogControls.setOkButtonEnabled(text != null && !text.isEmpty() && table != null && !table.hasColumn(text));//Title not empty and not repeated.
+        dialogControls.setOkButtonEnabled(text != null && !text.isEmpty() && table != null);//Title not empty and not repeated.
     }
     
     @Override
