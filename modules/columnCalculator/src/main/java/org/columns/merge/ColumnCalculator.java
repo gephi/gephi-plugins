@@ -152,4 +152,7 @@ public class ColumnCalculator implements AttributeColumnsMergeStrategy {
         return this.table;
     }
     
+    public Column[] getColumns(){
+        return this.columns;
+    }
 }

@@ -43,6 +43,7 @@ import org.gephi.datalab.spi.Manipulator;
 import org.gephi.datalab.spi.ManipulatorUI;
 import org.gephi.graph.api.Table;
 import org.openide.util.NbPreferences;
+import org.gephi.graph.api.Column;
 
 /**
  *
@@ -82,6 +83,22 @@ public class ColumnCalculatorUI extends javax.swing.JPanel implements Manipulato
         });
     }
     
+    public String generateSelectedColumnsLabel(ColumnCalculator mani){
+        
+        String outputLabel = "<html><table><tr><td style='width:150px'>Column Name</td><td style='width:150px'>Column Variable</td></tr>";
+        
+        Column[] columnas = manipulator.getColumns();
+        for (Column columna : columnas){
+            String columnTitle = columna.getTitle();
+            String columnIndex = columna.getId();
+            outputLabel += "<tr><td style='width:150px'>" + columnTitle + "</td><td style='width:150px'>" + columnIndex + "</td></tr>"; 
+        }
+        
+        outputLabel += "</table></html>";
+                
+        return outputLabel;
+    }
+    
     @Override
     public void setup(Manipulator m, DialogControls dialogControls) {
         //Receive our manipulator instance:
@@ -90,6 +107,9 @@ public class ColumnCalculatorUI extends javax.swing.JPanel implements Manipulato
         this.table = this.manipulator.getTable();
         //(for now it only is able to enable/disable the Ok button of the dialog for validation purposes)
         this.dialogControls = dialogControls;
+        
+        String tableDescription = generateSelectedColumnsLabel(this.manipulator);
+        selectedColumns.setText(tableDescription);
     }
 
     @Override
@@ -138,6 +158,7 @@ public class ColumnCalculatorUI extends javax.swing.JPanel implements Manipulato
         selectedColumnsLabel = new javax.swing.JLabel();
         titleLabel = new javax.swing.JLabel();
         titleTextField = new javax.swing.JTextField();
+        selectedColumns = new javax.swing.JLabel();
 
         org.openide.awt.Mnemonics.setLocalizedText(formulaLabel, org.openide.util.NbBundle.getMessage(ColumnCalculatorUI.class, "ColumnCalculatorUI.formulaLabel.text")); // NOI18N
 
@@ -151,6 +172,8 @@ public class ColumnCalculatorUI extends javax.swing.JPanel implements Manipulato
 
         titleTextField.setText(org.openide.util.NbBundle.getMessage(ColumnCalculatorUI.class, "ColumnCalculatorUI.titleTextField.text")); // NOI18N
 
+        org.openide.awt.Mnemonics.setLocalizedText(selectedColumns, org.openide.util.NbBundle.getMessage(ColumnCalculatorUI.class, "ColumnCalculatorUI.selectedColumns.text")); // NOI18N
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -158,6 +181,7 @@ public class ColumnCalculatorUI extends javax.swing.JPanel implements Manipulato
             .addGroup(layout.createSequentialGroup()
                 .addGap(35, 35, 35)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(selectedColumns)
                     .addComponent(selectedColumnsLabel)
                     .addComponent(titleDescriptionLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
@@ -182,7 +206,9 @@ public class ColumnCalculatorUI extends javax.swing.JPanel implements Manipulato
                     .addComponent(titleTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addComponent(selectedColumnsLabel)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 121, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(selectedColumns)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 110, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(formulaLabel)
                     .addComponent(formulaTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -194,6 +220,7 @@ public class ColumnCalculatorUI extends javax.swing.JPanel implements Manipulato
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel formulaLabel;
     private javax.swing.JTextField formulaTextField;
+    private javax.swing.JLabel selectedColumns;
     private javax.swing.JLabel selectedColumnsLabel;
     private javax.swing.JLabel titleDescriptionLabel;
     private javax.swing.JLabel titleLabel;
