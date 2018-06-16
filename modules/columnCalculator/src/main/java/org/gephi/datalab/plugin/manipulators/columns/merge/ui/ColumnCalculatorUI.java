@@ -41,6 +41,7 @@ import org.gephi.datalab.plugin.manipulators.columns.merge.ColumnCalculator;
 import org.gephi.datalab.spi.DialogControls;
 import org.gephi.datalab.spi.Manipulator;
 import org.gephi.datalab.spi.ManipulatorUI;
+import org.gephi.graph.api.Column;
 import org.gephi.graph.api.Table;
 
 /**
@@ -54,12 +55,14 @@ public class ColumnCalculatorUI extends javax.swing.JPanel implements Manipulato
     private DialogControls dialogControls;
     private Table table;
     private boolean correctFormula;
+    private Column[] columns;
     
     /**
      * Creates new form ColumnCalculatorUI
      */
-    public ColumnCalculatorUI() {
+    public ColumnCalculatorUI(Column[] columns) {
         initComponents();
+        this.columns = columns;
         FormulaTextField.getDocument().addDocumentListener(new DocumentListener() {
 
             public void insertUpdate(DocumentEvent e) {

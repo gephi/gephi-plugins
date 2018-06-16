@@ -84,7 +84,7 @@ public class ColumnCalculator implements AttributeColumnsMergeStrategy {
 
     @Override
     public ManipulatorUI getUI() {
-        return new ColumnCalculatorUI();
+        return new ColumnCalculatorUI(columns);
     }
 
     @Override
