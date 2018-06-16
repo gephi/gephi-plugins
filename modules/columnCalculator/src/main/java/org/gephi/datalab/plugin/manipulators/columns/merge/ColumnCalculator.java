@@ -69,12 +69,12 @@ public class ColumnCalculator implements AttributeColumnsMergeStrategy {
 
     @Override
     public String getName() {
-        return NbBundle.getMessage(ColumnCalculator.class, "ColumnCalculator.name");
+        return "Aplicar Formula";//NbBundle.getMessage(ColumnCalculator.class, "ColumnCalculator.name");
     }
 
     @Override
     public String getDescription() {
-        return NbBundle.getMessage(ColumnCalculator.class, "ColumnCalculator.description");
+        return "aplicar formula segun columnas"; //NbBundle.getMessage(ColumnCalculator.class, "ColumnCalculator.description");
     }
 
     @Override
