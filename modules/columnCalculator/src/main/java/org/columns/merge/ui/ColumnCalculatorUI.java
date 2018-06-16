@@ -54,7 +54,6 @@ public class ColumnCalculatorUI extends javax.swing.JPanel implements Manipulato
     private ColumnCalculator manipulator;
     private DialogControls dialogControls;
     private Table table;
-    private boolean correctFormula;
     private Column[] columns;
     
     /**
@@ -81,10 +80,7 @@ public class ColumnCalculatorUI extends javax.swing.JPanel implements Manipulato
     
     private void refreshOkButton() {
         String text = FormulaTextField.getText();
-        //Here the formula should be parsed and checked if it is correct
-        //The parser should update the boolean value correctFormula dependig on if the formula is correct or not
-        correctFormula = true;
-        dialogControls.setOkButtonEnabled(text != null && !text.isEmpty() && table != null && !table.hasColumn(text) && correctFormula);//Title not empty and not repeated.
+        dialogControls.setOkButtonEnabled(text != null && !text.isEmpty() && table != null && !table.hasColumn(text));//Title not empty and not repeated.
     }
     
     @Override
@@ -100,7 +96,7 @@ public class ColumnCalculatorUI extends javax.swing.JPanel implements Manipulato
     public void unSetup() {
         //Called when the dialog is closed, canceled or accepted. Pass necessary data to the manipulator:
         //manipulator.setSomeOption(someValue);
-        //TODO..
+        //TO DO..
     }
 
     @Override
