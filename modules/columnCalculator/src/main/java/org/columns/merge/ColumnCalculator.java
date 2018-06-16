@@ -47,6 +47,7 @@ import org.gephi.graph.api.Element;
 import org.gephi.graph.api.Table;
 import org.openide.util.Lookup;
 import org.openide.util.NbBundle;
+import org.openide.util.NbPreferences;
 
 /**
  * @author Javier Gonzalez
@@ -57,19 +58,26 @@ public class ColumnCalculator implements AttributeColumnsMergeStrategy {
     public static final String CUSTOM_FORMULA_SAVED_PREFERENCES = "";
     private Table table;
     private Column[] columns;
-    private String columnTitle = "new";     //TODO @OscarFont eliminar este "new" cuando esté implementado en la UI
+    private String columnTitle;     //TODO @OscarFont eliminar este "new" cuando esté implementado en la UI
     private String customFormula;
 
     @Override
     public void setup(Table table, Column[] columns) {
         this.table = table;
         this.columns = columns;
+        columnTitle = NbPreferences.forModule(ColumnCalculator.class).get(COLUMN_TITLE_SAVED_PREFERENCES, "");
+        customFormula = NbPreferences.forModule(ColumnCalculator.class).get(COLUMN_TITLE_SAVED_PREFERENCES, "");
     }
 
     @Override
     public void execute() {
         //TODO call parser
         //ColumnCalculatorParser.applyCustomFormula(table, columns, columnTitle, customFormula);
+        
+        // Pasamos las variables obtenidas en el UI
+        NbPreferences.forModule(ColumnCalculator.class).put(COLUMN_TITLE_SAVED_PREFERENCES, columnTitle);
+        NbPreferences.forModule(ColumnCalculator.class).put(CUSTOM_FORMULA_SAVED_PREFERENCES, customFormula);
+        
         if (table == null || columns == null) {
             throw new IllegalArgumentException("table, columns or operations can't be null and operations length must be columns length -1");
         }
