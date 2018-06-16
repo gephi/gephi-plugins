@@ -32,12 +32,12 @@ made subject to such option by the copyright holder.
 Contributor(s):
 Portions Copyrighted 2011 Gephi Consortium.
  */
-package org.gephi.datalab.plugin.manipulators.columns.merge;
+package org.columns.merge;
 
 import javax.swing.Icon;
 import org.gephi.datalab.api.AttributeColumnsController;
 import org.gephi.datalab.api.AttributeColumnsMergeStrategiesController;
-import org.gephi.datalab.plugin.manipulators.columns.merge.ui.ColumnCalculatorUI;
+import org.columns.merge.ui.ColumnCalculatorUI;
 import org.gephi.datalab.spi.ManipulatorUI;
 import org.gephi.datalab.spi.columns.merge.AttributeColumnsMergeStrategy;
 import org.gephi.graph.api.Column;
@@ -69,12 +69,12 @@ public class ColumnCalculator implements AttributeColumnsMergeStrategy {
 
     @Override
     public String getName() {
-        return "Aplicar Formula";//NbBundle.getMessage(ColumnCalculator.class, "ColumnCalculator.name");
+        return NbBundle.getMessage(ColumnCalculator.class, "ColumnCalculator.name");
     }
 
     @Override
     public String getDescription() {
-        return "aplicar formula segun columnas"; //NbBundle.getMessage(ColumnCalculator.class, "ColumnCalculator.description");
+        return NbBundle.getMessage(ColumnCalculator.class, "ColumnCalculator.description");
     }
 
     @Override

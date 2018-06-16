@@ -32,7 +32,7 @@
  Contributor(s):
  Portions Copyrighted 2011 Gephi Consortium.
  */
-package org.gephi.datalab.plugin.manipulators.columns.merge;
+package org.columns.merge;
 
 import org.gephi.datalab.spi.columns.merge.AttributeColumnsMergeStrategy;
 import org.gephi.datalab.spi.columns.merge.AttributeColumnsMergeStrategyBuilder;

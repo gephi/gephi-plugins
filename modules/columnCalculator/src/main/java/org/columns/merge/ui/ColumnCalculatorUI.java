@@ -32,12 +32,12 @@ made subject to such option by the copyright holder.
 Contributor(s):
 Portions Copyrighted 2011 Gephi Consortium.
  */
-package org.gephi.datalab.plugin.manipulators.columns.merge.ui;
+package org.columns.merge.ui;
 
 import javax.swing.JPanel;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
-import org.gephi.datalab.plugin.manipulators.columns.merge.ColumnCalculator;
+import org.columns.merge.ColumnCalculator;
 import org.gephi.datalab.spi.DialogControls;
 import org.gephi.datalab.spi.Manipulator;
 import org.gephi.datalab.spi.ManipulatorUI;

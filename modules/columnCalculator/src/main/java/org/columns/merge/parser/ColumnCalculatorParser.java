@@ -32,7 +32,7 @@ made subject to such option by the copyright holder.
 Contributor(s):
 Portions Copyrighted 2011 Gephi Consortium.
  */
-package org.gephi.datalab.plugin.manipulators.columns.merge.parser;
+package org.columns.merge.parser;
 
 import org.gephi.graph.api.Column;
 import org.gephi.graph.api.Table;
