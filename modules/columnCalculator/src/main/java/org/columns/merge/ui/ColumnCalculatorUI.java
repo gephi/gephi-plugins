@@ -54,14 +54,12 @@ public class ColumnCalculatorUI extends javax.swing.JPanel implements Manipulato
     private ColumnCalculator manipulator;
     private DialogControls dialogControls;
     private Table table;
-    private Column[] columns;
     
     /**
      * Creates new form ColumnCalculatorUI
      */
-    public ColumnCalculatorUI(Column[] columns) {
+    public ColumnCalculatorUI() {
         initComponents();
-        this.columns = columns;
         FormulaTextField.getDocument().addDocumentListener(new DocumentListener() {
 
             public void insertUpdate(DocumentEvent e) {
@@ -96,7 +94,7 @@ public class ColumnCalculatorUI extends javax.swing.JPanel implements Manipulato
     public void unSetup() {
         //Called when the dialog is closed, canceled or accepted. Pass necessary data to the manipulator:
         //manipulator.setSomeOption(someValue);
-        //TO DO..
+        //TODO..
     }
 
     @Override
