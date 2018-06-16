@@ -51,6 +51,8 @@ import org.openide.util.NbBundle;
  */
 public class ColumnCalculator implements AttributeColumnsMergeStrategy {
 
+    public static final String COLUMN_TITLE_SAVED_PREFERENCES = "";
+    public static final String CUSTOM_FORMULA_SAVED_PREFERENCES = "";
     private Table table;
     private Column[] columns;
     private String columnTitle;
@@ -118,6 +120,10 @@ public class ColumnCalculator implements AttributeColumnsMergeStrategy {
 
     public void setCustomFormula(String customFormula) {
         this.customFormula = customFormula;
+    }
+    
+    public Table getTable(){
+        return this.table;
     }
     
 }

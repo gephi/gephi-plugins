@@ -42,6 +42,7 @@ import org.gephi.datalab.spi.DialogControls;
 import org.gephi.datalab.spi.Manipulator;
 import org.gephi.datalab.spi.ManipulatorUI;
 import org.gephi.graph.api.Table;
+import org.openide.util.NbPreferences;
 
 /**
  *
@@ -59,7 +60,7 @@ public class ColumnCalculatorUI extends javax.swing.JPanel implements Manipulato
      */
     public ColumnCalculatorUI() {
         initComponents();
-        FormulaTextField.getDocument().addDocumentListener(new DocumentListener() {
+        formulaTextField.getDocument().addDocumentListener(new DocumentListener() {
 
             public void insertUpdate(DocumentEvent e) {
                 refreshOkButton();
@@ -72,19 +73,23 @@ public class ColumnCalculatorUI extends javax.swing.JPanel implements Manipulato
             public void changedUpdate(DocumentEvent e) {
                 refreshOkButton();
             }
+            
+            private void refreshOkButton() {
+                String formulaText = formulaTextField.getText();
+                String columnText = titleTextField.getText();
+                dialogControls.setOkButtonEnabled((formulaText != null && columnText != null) && (!formulaText.isEmpty() && !columnText.isEmpty()) && table != null && !table.hasColumn(columnText));//Title not empty and not repeated.
+            }
         });
     }
     
-    private void refreshOkButton() {
-        String text = FormulaTextField.getText();
-        dialogControls.setOkButtonEnabled(text != null && !text.isEmpty() && table != null && !table.hasColumn(text));//Title not empty and not repeated.
-    }
+    
     
     @Override
     public void setup(Manipulator m, DialogControls dialogControls) {
         //Receive our manipulator instance:
         this.manipulator = (ColumnCalculator) m; //We know the type of manipulator we are going to receive so cast is safe
         //And an object to control the dialog if necessary 
+        this.table = this.manipulator.getTable();
         //(for now it only is able to enable/disable the Ok button of the dialog for validation purposes)
         this.dialogControls = dialogControls;
     }
@@ -94,10 +99,12 @@ public class ColumnCalculatorUI extends javax.swing.JPanel implements Manipulato
         //Called when the dialog is closed, canceled or accepted. Pass necessary data to the manipulator:
         //manipulator.setSomeOption(someValue);
         //TODO..
-        
-        //TODO @OscarFont añadir formula del campo del JPanel
-        this.manipulator.setCustomFormula("FORMULA_DE_PRUEBA");
-        storeSavedParameter();
+        //Añadimos titulo de la nueva columna y formula al manipulator
+        manipulator.setColumnTitle(titleTextField.getText());
+        manipulator.setCustomFormula(formulaTextField.getText());
+        //Enviamos a la calse ColumnCalculator el titulo de la columna y la formula introducida
+        NbPreferences.forModule(ColumnCalculator.class).put(ColumnCalculator.COLUMN_TITLE_SAVED_PREFERENCES, manipulator.getColumnTitle());
+        NbPreferences.forModule(ColumnCalculator.class).put(ColumnCalculator.CUSTOM_FORMULA_SAVED_PREFERENCES, manipulator.getCustomFormula());
     }
 
     @Override
@@ -117,11 +124,6 @@ public class ColumnCalculatorUI extends javax.swing.JPanel implements Manipulato
     public boolean isModal() {
         return true;
     }
-
-    private void storeSavedParameter() {
-        //TODO @OscarFont imitar guardado de CreateTimeIntervalUI.java-> storeSavedParameter();
-        
-    }
     
     /**
      * This method is called from within the constructor to initialize the form.
@@ -132,12 +134,24 @@ public class ColumnCalculatorUI extends javax.swing.JPanel implements Manipulato
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jLabel1 = new javax.swing.JLabel();
-        FormulaTextField = new javax.swing.JTextField();
+        formulaLabel = new javax.swing.JLabel();
+        formulaTextField = new javax.swing.JTextField();
+        titleDescriptionLabel = new javax.swing.JLabel();
+        selectedColumnsLabel = new javax.swing.JLabel();
+        titleLabel = new javax.swing.JLabel();
+        titleTextField = new javax.swing.JTextField();
 
-        org.openide.awt.Mnemonics.setLocalizedText(jLabel1, org.openide.util.NbBundle.getMessage(ColumnCalculatorUI.class, "ColumnCalculatorUI.jLabel1.text")); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(formulaLabel, org.openide.util.NbBundle.getMessage(ColumnCalculatorUI.class, "ColumnCalculatorUI.formulaLabel.text")); // NOI18N
 
-        FormulaTextField.setText(org.openide.util.NbBundle.getMessage(ColumnCalculatorUI.class, "ColumnCalculatorUI.FormulaTextField.text")); // NOI18N
+        formulaTextField.setText(org.openide.util.NbBundle.getMessage(ColumnCalculatorUI.class, "ColumnCalculatorUI.formulaTextField.text")); // NOI18N
+
+        org.openide.awt.Mnemonics.setLocalizedText(titleDescriptionLabel, org.openide.util.NbBundle.getMessage(ColumnCalculatorUI.class, "ColumnCalculatorUI.titleDescriptionLabel.text")); // NOI18N
+
+        org.openide.awt.Mnemonics.setLocalizedText(selectedColumnsLabel, org.openide.util.NbBundle.getMessage(ColumnCalculatorUI.class, "ColumnCalculatorUI.selectedColumnsLabel.text")); // NOI18N
+
+        org.openide.awt.Mnemonics.setLocalizedText(titleLabel, org.openide.util.NbBundle.getMessage(ColumnCalculatorUI.class, "ColumnCalculatorUI.titleLabel.text")); // NOI18N
+
+        titleTextField.setText(org.openide.util.NbBundle.getMessage(ColumnCalculatorUI.class, "ColumnCalculatorUI.titleTextField.text")); // NOI18N
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -145,26 +159,47 @@ public class ColumnCalculatorUI extends javax.swing.JPanel implements Manipulato
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(35, 35, 35)
-                .addComponent(jLabel1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(FormulaTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 236, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(selectedColumnsLabel)
+                    .addComponent(titleDescriptionLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                        .addGroup(layout.createSequentialGroup()
+                            .addComponent(titleLabel)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(titleTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 236, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(layout.createSequentialGroup()
+                            .addComponent(formulaLabel)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(formulaTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 236, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addContainerGap(54, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(195, Short.MAX_VALUE)
+                .addContainerGap()
+                .addComponent(titleDescriptionLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel1)
-                    .addComponent(FormulaTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(titleLabel)
+                    .addComponent(titleTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addComponent(selectedColumnsLabel)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 121, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(formulaLabel)
+                    .addComponent(formulaTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(76, 76, 76))
         );
     }// </editor-fold>//GEN-END:initComponents
 
    
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JTextField FormulaTextField;
-    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel formulaLabel;
+    private javax.swing.JTextField formulaTextField;
+    private javax.swing.JLabel selectedColumnsLabel;
+    private javax.swing.JLabel titleDescriptionLabel;
+    private javax.swing.JLabel titleLabel;
+    private javax.swing.JTextField titleTextField;
     // End of variables declaration//GEN-END:variables
 
 
