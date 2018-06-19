@@ -6,6 +6,7 @@ import org.openide.util.Lookup;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
 
 public class KatzCentralityPanel extends JPanel {
 
@@ -20,9 +21,34 @@ public class KatzCentralityPanel extends JPanel {
         initComponents();
         //Disable directed if the graph is undirecteds
         GraphController graphController = Lookup.getDefault().lookup(GraphController.class);
-        if(graphController.getGraphModel().isUndirected()){
-//            directedRadioButton.setEnabled(false);
+        if (graphController.getGraphModel().isUndirected()) {
+            directedRadioButton.setEnabled(false);
         }
+    }
+
+    public boolean isDirected() {
+        return this.directedRadioButton.isSelected();
+    }
+
+    public void setDirected(boolean pDirected) {
+        this.directedRadioButton.setSelected(pDirected);
+        this.undirectedRadioButton.setSelected(!pDirected);
+        if (!pDirected) {
+            directedRadioButton.setEnabled(false);
+        }
+    }
+
+    public int getNumRuns() {
+        int runs = Integer.parseInt(iterationTextField.getText());
+        return runs;
+    }
+
+    public void setNumRuns(int mRuns) {
+        iterationTextField.setText(mRuns + "");
+    }
+
+    private void undirectedRadioButtonActionPerformed(ActionEvent evt) {//GEN-FIRST:event_undirectedRadioButtonActionPerformed
+        // TODO add your handling code here:
     }
 
     private void initComponents() {

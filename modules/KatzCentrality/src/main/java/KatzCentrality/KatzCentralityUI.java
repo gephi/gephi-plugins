@@ -8,8 +8,10 @@ import javax.swing.*;
 @ServiceProvider(service = StatisticsUI.class)
 public class KatzCentralityUI implements StatisticsUI{
 
+    private final StatSettings settings = new StatSettings();
     private KatzCentralityPanel panel;
-    private KatzCentrality statistic;
+    private KatzCentrality katz;
+
 
     @Override
     public JPanel getSettingsPanel() {
@@ -19,24 +21,23 @@ public class KatzCentralityUI implements StatisticsUI{
 
     @Override
     public void setup(Statistics statistics) {
-        this.statistic = (KatzCentrality) statistics;
-//        if (panel != null) {
-//            settings.load(statistic);
-//            panel.setNumRuns(statistic.getNumRuns());
-//            panel.setDirected(statistic.isDirected());
-//        }
+        this.katz = (KatzCentrality) statistics;
+        if (panel != null) {
+            settings.load(katz);
+            panel.setNumRuns(katz.getNumRuns());
+            panel.setDirected(katz.isDirected());
+        }
     }
 
     @Override
     public void unsetup() {
-        this.statistic = null;
-//        if (panel != null) {
-//            statistic.setNumRuns(panel.getNumRuns());
-//            statistic.setDirected(panel.isDirected());
-//            settings.save(statistic);
-//        }
-//        panel = null;
-//        statistic = null;
+        if (panel != null) {
+            katz.setNumRuns(panel.getNumRuns());
+            katz.setDirected(panel.isDirected());
+            settings.save(katz);
+        }
+        panel = null;
+        katz = null;
     }
 
     @Override
@@ -67,5 +68,19 @@ public class KatzCentralityUI implements StatisticsUI{
     @Override
     public int getPosition() {
         return 1;
+    }
+
+
+    private static class StatSettings {
+
+        private int mNumRuns = 100;
+
+        private void save(KatzCentrality stat) {
+            this.mNumRuns = stat.getNumRuns();
+        }
+
+        private void load(KatzCentrality stat) {
+            stat.setNumRuns(mNumRuns);
+        }
     }
 }
