@@ -46,6 +46,11 @@
             <artifactId>org-openide-awt</artifactId>
             <type>jar</type>
         </dependency>
+        <dependency>
+            <groupId>net.objecthunter</groupId>
+            <artifactId>exp4j</artifactId>
+            <version>0.4.8</version>
+        </dependency>
     </dependencies>
 
     <build>

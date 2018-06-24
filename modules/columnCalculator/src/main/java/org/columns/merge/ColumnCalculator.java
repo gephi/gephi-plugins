@@ -84,13 +84,13 @@ public class ColumnCalculator implements AttributeColumnsMergeStrategy {
 
         AttributeColumnsController ac = Lookup.getDefault().lookup(AttributeColumnsController.class);
 
-        Column newColumn = ac.addAttributeColumn(table, columnTitle, BigDecimal.class);//Create as BIGDECIMAL column by default. Then it can be duplicated to other type.
-
+        Column newColumn = ac.addAttributeColumn(table, columnTitle, Double.class);
+        
         Number[] rowNumbers;
         Element[] rows = ac.getTableAttributeRows(table);
         for (int i=0; i< rows.length;++i) {
             rowNumbers = ac.getRowNumbers(rows[i], columns);
-            BigDecimal formulaResult = ColumnCalculatorParser.getFormulaResult(rowNumbers, customFormula);
+            Double formulaResult = ColumnCalculatorParser.getFormulaResult(rowNumbers, customFormula);
             rows[i].setAttribute(newColumn, formulaResult);
         }
 
