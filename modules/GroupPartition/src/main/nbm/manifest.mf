@@ -1,0 +1,5 @@
+Manifest-Version: 1.0
+OpenIDE-Module-Name: Groups by partition
+OpenIDE-Module-Short-Description: It creates a new workspace where each node is the aggregation of a group of nodes (of the previous workspace).
+OpenIDE-Module-Long-Description: It creates a new workspace where each node is the aggregation of a group of nodes (of the previous workspace).
+OpenIDE-Module-Display-Category: Tool
