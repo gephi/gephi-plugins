@@ -38,6 +38,7 @@ import java.awt.List;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import net.objecthunter.exp4j.*;
 import org.gephi.datalab.api.AttributeColumnsController;
 import org.gephi.graph.api.Column;
@@ -63,9 +64,11 @@ public class ColumnCalculatorParser {
     public static Double getFormulaResult(Number[] valuesOfColumns, String formula) {
         Double formulaResult = 0.0; //valor por defecto hasta que se desarrolle el método
         ArrayList<Integer> columnIndexes = new ArrayList<Integer>();
+        ArrayList<Integer> vals = new ArrayList<Integer>();
         String[] splitted = formula.split("(?=[-+*/()])|(?<=[^-+*/][-+*/])|(?<=[()])");
         ArrayList<String> operators = new ArrayList<String>();
         operators.add(""); // Si no lo ponemos, hay NullPointerException
+        String formattedFormula = "";
         //TODO @IvanAndrada CALCULAR FORMULA
         for (int i = 0; i < splitted.length; i++) {
             
@@ -80,79 +83,23 @@ public class ColumnCalculatorParser {
             }
         }
         
+        operators.add(""); //Por motivos de debugging, para que no haya NullPointerException
         int sizeQry = columnIndexes.size();
-        switch (sizeQry){
-            
-        case 2:    
-            /*
-            Expression e = new ExpressionBuilder(formula)
-            .variables("$0", "$1")
-            .build()
-            .setVariable("$0", valuesOfColumns[0].doubleValue())
-            .setVariable("$1", valuesOfColumns[1].doubleValue());
-            Double result = e.evaluate();
-            */
-            for (int i = 1; i < operators.size(); i++)
-            {
-                String op = operators.get(i);
-                if (op.equals("+"))
-                {
-                    formulaResult = valuesOfColumns[0].doubleValue() + valuesOfColumns[1].doubleValue();
-                }
-                if (op.equals("-"))
-                {
-                    formulaResult = valuesOfColumns[0].doubleValue() - valuesOfColumns[1].doubleValue();
-                }
-                if (op.equals("*"))
-                {
-                    formulaResult = valuesOfColumns[0].doubleValue() * valuesOfColumns[1].doubleValue();
-                }
-                if(op.equals("/"))
-                {
-                    formulaResult = valuesOfColumns[0].doubleValue() / valuesOfColumns[1].doubleValue();
-                }
-                if(op.equals("%"))
-                {
-                    formulaResult = valuesOfColumns[0].doubleValue() % valuesOfColumns[1].doubleValue();
-                }
-                
-            }
+        int max = Collections.max(columnIndexes);
         
-        case 3:
-            /*
-            Expression e = new ExpressionBuilder(formula)
-            .variables("$0", "$1")
-            .build()
-            .setVariable("$0", valuesOfColumns[0].doubleValue())
-            .setVariable("$1", valuesOfColumns[1].doubleValue());
-            Double result = e.evaluate();
-            */
-            for (int i = 1; i < operators.size(); i++)
-            {
-                String op = operators.get(i);
-                if (op.equals("+"))
-                {
-                    formulaResult = valuesOfColumns[0].doubleValue() + valuesOfColumns[1].doubleValue();
-                }
-                if (op.equals("-"))
-                {
-                    formulaResult = valuesOfColumns[0].doubleValue() - valuesOfColumns[1].doubleValue();
-                }
-                if (op.equals("*"))
-                {
-                    formulaResult = valuesOfColumns[0].doubleValue() * valuesOfColumns[1].doubleValue();
-                }
-                if(op.equals("/"))
-                {
-                    formulaResult = valuesOfColumns[0].doubleValue() / valuesOfColumns[1].doubleValue();
-                }
-                if(op.equals("%"))
-                {
-                    formulaResult = valuesOfColumns[0].doubleValue() % valuesOfColumns[1].doubleValue();
-                }
-                
-            }
-        }        
+        if (max > valuesOfColumns.length-1)
+        {
+            throw new IllegalArgumentException("The formula " + formula + " is not correct. The number argument $" + max +" is illegal.");
+        }
+        
+        for (int i = 0; i < sizeQry; i++)
+        {
+            vals.add(valuesOfColumns[columnIndexes.get(i)].intValue());
+            formattedFormula += vals.get(i).toString() + operators.get(i+1); 
+        }
+        
+        Expression e = new ExpressionBuilder(formattedFormula).build(); //Usar libreria exp4j para parsear formula
+        formulaResult = e.evaluate(); //Evaluar formula
 
         return formulaResult;
     
