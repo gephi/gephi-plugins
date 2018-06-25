@@ -88,10 +88,11 @@ public class ColumnCalculatorUI extends javax.swing.JPanel implements Manipulato
         String outputLabel = "<html><table><tr><td style='width:150px'>Column Name</td><td style='width:150px'>Column Variable</td></tr>";
         
         Column[] columnas = manipulator.getColumns();
-        for (Column columna : columnas){
-            String columnTitle = columna.getTitle();
-            String columnIndex = columna.getId();
-            outputLabel += "<tr><td style='width:150px'>" + columnTitle + "</td><td style='width:150px'>" + columnIndex + "</td></tr>"; 
+        Integer columnasLength = columnas.length;
+        for( int i = 0; i < columnasLength; ++i ){
+            String columnTitle = columnas[i].getTitle();
+            String columnIndex = String.valueOf(i);
+            outputLabel += "<tr><td style='width:150px'>" + columnTitle + "</td><td style='width:150px'>$" + columnIndex + "</td></tr>"; 
         }
         
         outputLabel += "</table></html>";
