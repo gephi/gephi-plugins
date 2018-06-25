@@ -64,7 +64,7 @@ public class ColumnCalculatorParser {
     public static Double getFormulaResult(Number[] valuesOfColumns, String formula) {
         Double formulaResult = 0.0; //valor por defecto hasta que se desarrolle el método
         ArrayList<Integer> columnIndexes = new ArrayList<Integer>();
-        ArrayList<Integer> vals = new ArrayList<Integer>();
+        ArrayList<Double> vals = new ArrayList<Double>();
         String[] splitted = formula.split("(?=[-+*/()])|(?<=[^-+*/][-+*/])|(?<=[()])");
         ArrayList<String> operators = new ArrayList<String>();
         operators.add(""); // Si no lo ponemos, hay NullPointerException
@@ -74,7 +74,8 @@ public class ColumnCalculatorParser {
             
             splitted[i] = splitted[i].replace("$", "");
             //System.out.println(splitted[i]);
-            if (!splitted[i].contains("+") && !splitted[i].contains("-") && !splitted[i].contains("*") && !splitted[i].contains("/") && !splitted[i].contains("%")) {
+            if (!splitted[i].contains("+") && !splitted[i].contains("-") && !splitted[i].contains("*") && !splitted[i].contains("/") && !splitted[i].contains("%") && !splitted[i].contains("(")
+                    && !splitted[i].contains(")") && !splitted[i].contains("[") && !splitted[i].contains("]")) {
                 columnIndexes.add(Integer.parseInt(splitted[i]));
             }
             else
@@ -94,7 +95,7 @@ public class ColumnCalculatorParser {
         
         for (int i = 0; i < sizeQry; i++)
         {
-            vals.add(valuesOfColumns[columnIndexes.get(i)].intValue());
+            vals.add(valuesOfColumns[columnIndexes.get(i)].doubleValue());
             formattedFormula += vals.get(i).toString() + operators.get(i+1); 
         }
         
