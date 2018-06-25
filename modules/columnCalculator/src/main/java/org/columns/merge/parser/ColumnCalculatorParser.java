@@ -34,17 +34,10 @@
  */
 package org.columns.merge.parser;
 
-import java.awt.List;
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import net.objecthunter.exp4j.*;
-import org.gephi.datalab.api.AttributeColumnsController;
-import org.gephi.graph.api.Column;
-import org.gephi.graph.api.Element;
-import org.gephi.graph.api.Table;
-import org.openide.util.Lookup;
+
 
 /**
  *
@@ -52,6 +45,8 @@ import org.openide.util.Lookup;
  */
 public class ColumnCalculatorParser {
 
+    private static final String SYMBOL = "$";
+    
     /**
      * Se calcula la fórmula para una array de valores y una formula. La formula
      * se parsea con ex4j
@@ -62,47 +57,40 @@ public class ColumnCalculatorParser {
      * @return BigDecimal con el resultado de aplicar a formula
      */
     public static Double getFormulaResult(Number[] valuesOfColumns, String formula) {
-        Double formulaResult = 0.0; //valor por defecto hasta que se desarrolle el método
-        ArrayList<Integer> columnIndexes = new ArrayList<Integer>();
-        ArrayList<Double> vals = new ArrayList<Double>();
-        String[] splitted = formula.split("(?=[-+*/()])|(?<=[^-+*/][-+*/])|(?<=[()])");
-        ArrayList<String> operators = new ArrayList<String>();
-        operators.add(""); // Si no lo ponemos, hay NullPointerException
-        String formattedFormula = "";
-        //TODO @IvanAndrada CALCULAR FORMULA
-        for (int i = 0; i < splitted.length; i++) {
-            
-            splitted[i] = splitted[i].replace("$", "");
-            //System.out.println(splitted[i]);
-            if (!splitted[i].contains("+") && !splitted[i].contains("-") && !splitted[i].contains("*") && !splitted[i].contains("/") && !splitted[i].contains("%") && !splitted[i].contains("(")
-                    && !splitted[i].contains(")") && !splitted[i].contains("[") && !splitted[i].contains("]")) {
-                columnIndexes.add(Integer.parseInt(splitted[i]));
-            }
-            else
-            {
-                operators.add(splitted[i]);
-            }
+        Double formulaResult = null;
+	String var = "";
+        Integer valuesOfColumnsLength = valuesOfColumns.length;
+	for ( int i = 0; i < valuesOfColumnsLength; ++i ){
+            var = getVariable(i);
+            formula = formula.replace( var, valuesOfColumns[i].toString() );
+	}
+        
+        //Comprobacion de variables incorrectas
+        if ( existIncorrectVariable( formula, valuesOfColumnsLength) ){
+            return null;
         }
-        
-        operators.add(""); //Por motivos de debugging, para que no haya NullPointerException
-        int sizeQry = columnIndexes.size();
-        int max = Collections.max(columnIndexes);
-        
-        if (max > valuesOfColumns.length-1)
-        {
-            throw new IllegalArgumentException("The formula " + formula + " is not correct. The number argument $" + max +" is illegal.");
-        }
-        
-        for (int i = 0; i < sizeQry; i++)
-        {
-            vals.add(valuesOfColumns[columnIndexes.get(i)].doubleValue());
-            formattedFormula += vals.get(i).toString() + operators.get(i+1); 
-        }
-        
-        Expression e = new ExpressionBuilder(formattedFormula).build(); //Usar libreria exp4j para parsear formula
-        formulaResult = e.evaluate(); //Evaluar formula
 
+	try{
+            Expression e = new ExpressionBuilder(formula).build();
+            formulaResult = e.evaluate();
+	} catch(Exception e){
+            Logger.getLogger("").log( Level.WARNING, null, e );
+	} finally {
+            //Aqui se hacen las gestiones finales si procede
+	}
         return formulaResult;
     
+    }
+    
+    private static Boolean existIncorrectVariable(String formula, Integer maxNumForVariables){
+        for ( int i = 0; i< maxNumForVariables; ++i ){
+            formula = formula.replace( getVariable(i), "" );
+        }
+        
+        return formula.contains(SYMBOL);
+    }
+    
+    private static String getVariable(Integer variable){
+        return SYMBOL + variable.toString();
     }
 }
