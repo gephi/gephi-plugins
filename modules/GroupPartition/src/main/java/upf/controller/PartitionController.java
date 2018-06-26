@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package upf;
+package upf.controller;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -18,6 +18,8 @@ import org.gephi.graph.api.Table;
 import org.gephi.project.api.ProjectController;
 import org.gephi.project.api.Workspace;
 import org.openide.util.Lookup;
+import upf.algorithm.GraphPartitionAlgorithmFactory;
+import upf.algorithm.IGraphPartitionAlgorithm;
 
 /**
  *
@@ -36,13 +38,16 @@ public class PartitionController {
     
     void generatePartition(boolean createNewWorkspace){
         
+        //Reads graph from actual workspace model. TODO Choose different workspace to load from.
         GraphModel gmodel = originWorkspace.getLookup().lookup(GraphModel.class);
         Graph graph = gmodel.getGraph();
         graph.readLock();
-        GraphPartitionFactory gp_factory = new GraphPartitionFactory(graph);
-        //Should be a parameter to choose a algorithm manually or auto.
-        IPartitionGraph gAlgorithm = gp_factory.getGraphPartition();
-        Graph graphAlgorithm = gAlgorithm.partition();
+        //Factory decides which algorithm to load.
+        //TODO Should be a parameter to choose a algorithm manually or auto.
+        //TODO More parameters like a comparison class (to not only be able to do partitions on colors alone)
+        GraphPartitionAlgorithmFactory gp_factory = new GraphPartitionAlgorithmFactory(graph);
+        IGraphPartitionAlgorithm gAlgorithm = gp_factory.getGraphPartition();
+        Graph graphAlgorithm = gAlgorithm.doPartition();
         graph.readUnlock();
         
         if (createNewWorkspace) {
@@ -64,10 +69,13 @@ public class PartitionController {
         Table edgeTable = model.getEdgeTable();
         edgeTable.addColumn("Size", int.class);
         
+        //We recreate the graph in a workspace because we could not found a way to add the graph directly to the worksapce
+        //Mapping of old id node and new node
         Map<String, Node> GhostToNew = new HashMap<String,Node>();
         
-        Random random = new Random(232323);
-        
+        //TODO Use a position algorithm
+        Random random = new Random(232323); //Just to position the nodes
+       
         for(Node node : graphAlgorithm.getNodes().toArray()){
            Node nNode = fact.newNode();
            nNode.setLabel(node.getLabel());
@@ -86,50 +94,8 @@ public class PartitionController {
            Node node2 = GhostToNew.get(edge.getTarget().getId().toString());
            Edge nEdge = fact.newEdge(node1, node2, graphAlgorithm.isDirected());
            nEdge.setAttribute("Size", Integer.valueOf(edge.getAttribute("Size").toString()));
-           nEdge.setWeight(Integer.valueOf(edge.getAttribute("Size").toString()));
+           nEdge.setWeight(edge.getWeight());
            newGraph.addEdge(nEdge);
         }
-               
-        //Phantom Graph example
-        /*
-        GraphModel model = GraphModel.Factory.newInstance();  
-        Graph g = model.getDirectedGraph();
-        GraphFactory fact = model.factory();
-        Node node = fact.newNode("x0");
-        node.setLabel("X 0 First");
-        Random random = new Random(232323);
-        node.setX(random.nextInt(2000) - 1000);
-        node.setY(random.nextInt(2000) - 1000);
-        node.setSize(10.0f);
-        g.addNode(node);
-        
-        for (Node a : g.getNodes().toArray()){
-            System.out.println(node.toString());
-            System.out.println(node.getLabel());
-        }
-        */
-        //End Phantom Graph
-        //How to create a node in current workspace
-        /*
-        GraphController gc = Lookup.getDefault().lookup(GraphController.class);
-        GraphModel model = gc.getGraphModel();
-        Graph g = model.getDirectedGraph();
-        GraphFactory fact = model.factory();
-        Node node = fact.newNode("x0");
-        node.setLabel("X 0 First");
-        Random random = new Random(232323);
-        node.setX(random.nextInt(2000) - 1000);
-        node.setY(random.nextInt(2000) - 1000);
-        node.setSize(10.0f);
-        g.addNode(node);
-        */
-        //End create node
-        
-        
-        
-        //newWorkspace.
-        //newWorkspace.add(model);
-        //newWorkspace.add(g);
-        //End delete
     }
 }

@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package upf;
+package upf.algorithm;
 
 import java.awt.Color;
 import java.util.HashMap;
@@ -20,21 +20,16 @@ import org.gephi.graph.api.Table;
  *
  * @author puig
  */
-public class UndirectedGraphPartition implements IPartitionGraph {
+public class UndirectedGraphPartitionAlgorithm implements IGraphPartitionAlgorithm {
     Graph _old;
-    //Graph _new;
     
-    UndirectedGraphPartition(Graph graph) {
-        System.out.println("DEBUG Undirected");
+    UndirectedGraphPartitionAlgorithm(Graph graph) {
         this._old = graph;
     }
 
-    public Graph partition() {
-        //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-       
+    public Graph doPartition() {
         GraphModel model = GraphModel.Factory.newInstance();  
         Graph newGraph = model.getUndirectedGraph();
-        //newGraph.
         GraphFactory fact = model.factory();
         
         Table nodeTable = model.getNodeTable();
@@ -66,9 +61,8 @@ public class UndirectedGraphPartition implements IPartitionGraph {
                 newGraph.addNode(node);
             }
             Integer NodeMax = (int) maxOldNode.get(nodeColor).size();
-            if(NodeMax < (int) cNode.size()){
+            if(NodeMax < (int) cNode.size()){   //Choose biggest node of group to label it in our nodes
                 maxOldNode.put(nodeColor, cNode);
-                //if(cNode)
                 nNode.setLabel("Group of " + cNode.getLabel());
             }
         }
@@ -79,47 +73,27 @@ public class UndirectedGraphPartition implements IPartitionGraph {
             Color sourceColor = source.getColor();
             Color targetColor = target.getColor();
             
-            //if(sourceColor.getRGB()!= targetColor.getRGB()){
                 Node n1 = color_Nodes.get(sourceColor.getRGB());
                 Node n2 = color_Nodes.get(targetColor.getRGB());
                 Edge edge = newGraph.getEdge(n1, n2);
-                if(edge != null){                
+                if(edge != null){            //Edge exists    
                     edge.setAttribute("Size", (Integer.valueOf(edge.getAttribute("Size").toString())+1));
-                }else{
+                    edge.setWeight(edge.getWeight()+cEdge.getWeight());
+                }else{                      //Edge does not exist so try same edge with changed direction
                     edge = newGraph.getEdge(n2, n1);
                     if (edge != null){
                          edge.setAttribute("Size", (Integer.valueOf(edge.getAttribute("Size").toString())+1));
-                         edge.setWeight(Integer.valueOf(edge.getAttribute("Size").toString()+1));
+                         edge.setWeight((edge.getWeight()+cEdge.getWeight()));
                     }
-                    else {
+                    else {                  //If edge changed direction does not exist either, create a new edge
                         edge = fact.newEdge(n1, n2, false);
                         edge.setAttribute("Size", 1);
-                        edge.setWeight(1);
+                        edge.setWeight(cEdge.getWeight());
                         newGraph.addEdge(edge);
                     }
                 }
-            //}
         }
-        
-        /*
-        Iterator it = color_Nodes.entrySet().iterator();
-        while(it.hasNext()){
-            Map.Entry pair = (Map.Entry) it.next();
-            Node node = (Node) pair.getValue();
-            newGraph.addNode(node);
-        }
-        System.out.println(Edge_Qty.size());
-        it = Edge_Qty.entrySet().iterator();
-        while(it.hasNext()){
-            Map.Entry pair = (Map.Entry) it.next();
-            Edge edge = (Edge) pair.getKey();
-            Integer qty = (Integer) pair.getValue();
-            edge.setAttribute("Size", qty);
-            newGraph.addEdge(edge);
-        }
-        
-        */
-        
+             
         return newGraph;
     }
     
