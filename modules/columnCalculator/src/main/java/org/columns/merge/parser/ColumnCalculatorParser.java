@@ -60,7 +60,7 @@ public class ColumnCalculatorParser {
         Double formulaResult = null;
 	String var = "";
         Integer valuesOfColumnsLength = valuesOfColumns.length;
-	for ( int i = 0; i < valuesOfColumnsLength; ++i ){
+	for ( int i = valuesOfColumnsLength -1; i >= 0; --i ){
             var = getVariable(i);
             formula = formula.replace( var, valuesOfColumns[i].toString() );
 	}
@@ -83,7 +83,7 @@ public class ColumnCalculatorParser {
     }
     
     private static Boolean existIncorrectVariable(String formula, Integer maxNumForVariables){
-        for ( int i = 0; i< maxNumForVariables; ++i ){
+        for ( int i = maxNumForVariables - 1; i >= 0; --i ){
             formula = formula.replace( getVariable(i), "" );
         }
         
