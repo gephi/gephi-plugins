@@ -78,14 +78,15 @@ public class ColumnCalculatorUI extends javax.swing.JPanel implements Manipulato
             private void refreshOkButton() {
                 String formulaText = formulaTextField.getText();
                 String columnText = titleTextField.getText();
-                dialogControls.setOkButtonEnabled((formulaText != null && columnText != null) && (!formulaText.isEmpty() && !columnText.isEmpty()) && table != null && !table.hasColumn(columnText));//Title not empty and not repeated.
+                // Formula not empty, title not empty, table not empty and table does not have a column with the new title titleTextField
+                dialogControls.setOkButtonEnabled((formulaText != null && columnText != null) && (!formulaText.isEmpty() && !columnText.isEmpty()) && table != null && !table.hasColumn(columnText));
             }
         });
     }
     
     public String generateSelectedColumnsLabel(ColumnCalculator mani){
         
-        String outputLabel = "<html><table><tr><td style='width:150px'>Column Name</td><td style='width:150px'>Column Variable</td></tr>";
+        String outputLabel = selectedColumns.getText();
         
         Column[] columnas = manipulator.getColumns();
         Integer columnasLength = columnas.length;
@@ -104,13 +105,13 @@ public class ColumnCalculatorUI extends javax.swing.JPanel implements Manipulato
     public void setup(Manipulator m, DialogControls dialogControls) {
         //Receive our manipulator instance:
         this.manipulator = (ColumnCalculator) m; //We know the type of manipulator we are going to receive so cast is safe
-        //And an object to control the dialog if necessary 
+        //An object to control the dialog if necessary 
         this.table = this.manipulator.getTable();
-        //(for now it only is able to enable/disable the Ok button of the dialog for validation purposes)
+        //Enable/disable the Ok button of the dialog for validation purposes
         this.dialogControls = dialogControls;
         
-        String tableDescription = generateSelectedColumnsLabel(this.manipulator);
-        selectedColumns.setText(tableDescription);
+        String columnsTable = generateSelectedColumnsLabel(this.manipulator);
+        selectedColumns.setText(columnsTable);
     }
 
     @Override
@@ -118,10 +119,10 @@ public class ColumnCalculatorUI extends javax.swing.JPanel implements Manipulato
         //Called when the dialog is closed, canceled or accepted. Pass necessary data to the manipulator:
         //manipulator.setSomeOption(someValue);
         //TODO..
-        //Añadimos titulo de la nueva columna y formula al manipulator
+        //Add a title to the new Columns and a formula to the manipulator
         manipulator.setColumnTitle(titleTextField.getText());
         manipulator.setCustomFormula(formulaTextField.getText());
-        //Enviamos a la calse ColumnCalculator el titulo de la columna y la formula introducida
+        //Send to class ColumnCalculator column's title and the input formula
         NbPreferences.forModule(ColumnCalculator.class).put(ColumnCalculator.COLUMN_TITLE_SAVED_PREFERENCES, manipulator.getColumnTitle());
         NbPreferences.forModule(ColumnCalculator.class).put(ColumnCalculator.CUSTOM_FORMULA_SAVED_PREFERENCES, manipulator.getCustomFormula());
     }
@@ -182,19 +183,23 @@ public class ColumnCalculatorUI extends javax.swing.JPanel implements Manipulato
             .addGroup(layout.createSequentialGroup()
                 .addGap(35, 35, 35)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(selectedColumns)
-                    .addComponent(selectedColumnsLabel)
-                    .addComponent(titleDescriptionLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                        .addGroup(layout.createSequentialGroup()
-                            .addComponent(titleLabel)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(titleTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 236, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGroup(layout.createSequentialGroup()
-                            .addComponent(formulaLabel)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                            .addComponent(formulaTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 236, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addContainerGap(54, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(selectedColumnsLabel)
+                            .addComponent(titleDescriptionLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                .addGroup(layout.createSequentialGroup()
+                                    .addComponent(titleLabel)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(titleTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 236, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGroup(layout.createSequentialGroup()
+                                    .addComponent(formulaLabel)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                    .addComponent(formulaTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 236, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                        .addContainerGap(35, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(selectedColumns)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -207,9 +212,9 @@ public class ColumnCalculatorUI extends javax.swing.JPanel implements Manipulato
                     .addComponent(titleTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addComponent(selectedColumnsLabel)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(selectedColumns)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 110, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 125, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(formulaLabel)
                     .addComponent(formulaTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
