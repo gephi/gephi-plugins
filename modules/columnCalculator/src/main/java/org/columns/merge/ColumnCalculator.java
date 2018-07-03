@@ -48,6 +48,7 @@ import org.gephi.graph.api.Table;
 import org.openide.util.Lookup;
 import org.openide.util.NbBundle;
 import org.openide.util.NbPreferences;
+import org.gephi.graph.api.AttributeUtils;
 
 /**
  * @author Javier Gonzalez
@@ -108,6 +109,12 @@ public class ColumnCalculator implements AttributeColumnsMergeStrategy {
 
     @Override
     public boolean canExecute() {
+         // Check if the input column is a NumberType column
+        for(Column column : columns){
+            if(!AttributeUtils.isNumberType(column.getTypeClass())){
+               return false; 
+            }
+        }
         return true;
     }
 
