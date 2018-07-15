@@ -167,7 +167,7 @@ public class PolinodeExporter implements Exporter, LongTask {
                 postdata.put("status", isNetworkPublic ? "Public" : "Private");
 
                 //  POST to polinode API
-                URL url = new URL("https://www.polinode.com/api/v2/networks");
+                URL url = new URL("https://app.polinode.com/api/v2/networks");
                 HttpURLConnection connection = (HttpURLConnection) url.openConnection();
                 connection.setDoOutput(true);
 

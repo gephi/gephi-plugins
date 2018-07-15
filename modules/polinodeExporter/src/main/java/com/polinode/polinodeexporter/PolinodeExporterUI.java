@@ -178,7 +178,7 @@ public class PolinodeExporterUI implements ExporterClassUI, ActionListener {
         }
         else if( event.getActionCommand().equals(PolinodeExporterSettingsPanel.BUTTON_CREATEPOLINODEACCOUNT) ) {
             try {
-                Desktop.getDesktop().browse(new URL("https://www.polinode.com/free-trial").toURI());
+                Desktop.getDesktop().browse(new URL("https://app.polinode.com/free-trial").toURI());
             } catch (Exception e) {
                 Logger.getLogger(PolinodeExporter.class.getName()).log(Level.SEVERE, null, e);
             }
