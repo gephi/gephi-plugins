@@ -266,7 +266,7 @@ public class PolinodeExporter implements Exporter, LongTask {
                         options[0]);
                 if( selected==0 ) {
                     try {
-                        Desktop.getDesktop().browse(new URL("https://www.polinode.com/networks/explore/"+networkid).toURI());
+                        Desktop.getDesktop().browse(new URL("https://app.polinode.com/networks/explore/"+networkid).toURI());
                     } catch (Exception e) {
                         Logger.getLogger(PolinodeExporter.class.getName()).log(Level.SEVERE, null, e);
                     }
