@@ -10,22 +10,27 @@ public class DiameterMetricPanel extends javax.swing.JPanel {
      */
     public DiameterMetricPanel() {
         initComponents();
-        
-        // Disable directed option (and select undirected) if graph is directed
-        GraphController gc = Lookup.getDefault().lookup(GraphController.class);
-        if (gc.getGraphModel().isUndirected()) {
-            directedRadioBtn.setEnabled(false);
-            undirectedRadioBtn.setSelected(true);
-        }
     }
     
-    
-    public void setDirected(boolean b) {
-        directedRadioBtn.setSelected(b);
+    public void setEccentricitiesFlag(boolean b) {
+        eccentricitiesCheckbox.setSelected(b);
+    }
+    public boolean getEccentricitiesFlag() {
+        return eccentricitiesCheckbox.isSelected();
     }
     
-    public boolean isDirected() {
-        return directedRadioBtn.isSelected();
+    public void setPeripheryFlag(boolean b) {
+        peripheryCheckbox.setSelected(b);
+    }
+    public boolean getPeripheryFlag() {
+        return peripheryCheckbox.isSelected();
+    }
+    
+    public void setCenterFlag(boolean b) {
+        centerCheckbox.setSelected(b);
+    }
+    public boolean getCenterFlag() {
+        return centerCheckbox.isSelected();
     }
 
     /**
@@ -37,59 +42,72 @@ public class DiameterMetricPanel extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        directedBtnGroup = new javax.swing.ButtonGroup();
         header = new org.jdesktop.swingx.JXHeader();
-        directedRadioBtn = new javax.swing.JRadioButton();
-        undirectedRadioBtn = new javax.swing.JRadioButton();
+        eccentricitiesCheckbox = new javax.swing.JCheckBox();
+        peripheryCheckbox = new javax.swing.JCheckBox();
+        centerCheckbox = new javax.swing.JCheckBox();
 
         header.setDescription(org.openide.util.NbBundle.getMessage(DiameterMetricPanel.class, "DiameterMetricPanel.header.description")); // NOI18N
+        header.setDoubleBuffered(false);
         header.setTitle(org.openide.util.NbBundle.getMessage(DiameterMetricPanel.class, "DiameterMetricPanel.header.title")); // NOI18N
 
-        directedBtnGroup.add(directedRadioBtn);
-        directedRadioBtn.setSelected(true);
-        org.openide.awt.Mnemonics.setLocalizedText(directedRadioBtn, org.openide.util.NbBundle.getMessage(DiameterMetricPanel.class, "DiameterMetricPanel.directedRadioBtn.text")); // NOI18N
-        directedRadioBtn.addActionListener(new java.awt.event.ActionListener() {
+        org.openide.awt.Mnemonics.setLocalizedText(eccentricitiesCheckbox, org.openide.util.NbBundle.getMessage(DiameterMetricPanel.class, "DiameterMetricPanel.eccentricitiesCheckbox.text")); // NOI18N
+        eccentricitiesCheckbox.setToolTipText(org.openide.util.NbBundle.getMessage(DiameterMetricPanel.class, "DiameterMetricPanel.eccentricitiesCheckbox.toolTipText")); // NOI18N
+        eccentricitiesCheckbox.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                directedRadioBtnActionPerformed(evt);
+                eccentricitiesCheckboxActionPerformed(evt);
             }
         });
 
-        directedBtnGroup.add(undirectedRadioBtn);
-        org.openide.awt.Mnemonics.setLocalizedText(undirectedRadioBtn, org.openide.util.NbBundle.getMessage(DiameterMetricPanel.class, "DiameterMetricPanel.undirectedRadioBtn.text")); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(peripheryCheckbox, org.openide.util.NbBundle.getMessage(DiameterMetricPanel.class, "DiameterMetricPanel.peripheryCheckbox.text")); // NOI18N
+        peripheryCheckbox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                peripheryCheckboxActionPerformed(evt);
+            }
+        });
+
+        org.openide.awt.Mnemonics.setLocalizedText(centerCheckbox, org.openide.util.NbBundle.getMessage(DiameterMetricPanel.class, "DiameterMetricPanel.centerCheckbox.text")); // NOI18N
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(header, javax.swing.GroupLayout.DEFAULT_SIZE, 662, Short.MAX_VALUE)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(directedRadioBtn)
-                    .addComponent(undirectedRadioBtn))
-                .addContainerGap(579, Short.MAX_VALUE))
-            .addComponent(header, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                    .addComponent(eccentricitiesCheckbox)
+                    .addComponent(peripheryCheckbox)
+                    .addComponent(centerCheckbox))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(header, javax.swing.GroupLayout.PREFERRED_SIZE, 63, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(directedRadioBtn)
+                .addComponent(eccentricitiesCheckbox)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(undirectedRadioBtn)
-                .addContainerGap(51, Short.MAX_VALUE))
+                .addComponent(peripheryCheckbox)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(centerCheckbox)
+                .addContainerGap(44, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
-    private void directedRadioBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_directedRadioBtnActionPerformed
+    private void eccentricitiesCheckboxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_eccentricitiesCheckboxActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_directedRadioBtnActionPerformed
+    }//GEN-LAST:event_eccentricitiesCheckboxActionPerformed
+
+    private void peripheryCheckboxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_peripheryCheckboxActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_peripheryCheckboxActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.ButtonGroup directedBtnGroup;
-    private javax.swing.JRadioButton directedRadioBtn;
+    private javax.swing.JCheckBox centerCheckbox;
+    private javax.swing.JCheckBox eccentricitiesCheckbox;
     private org.jdesktop.swingx.JXHeader header;
-    private javax.swing.JRadioButton undirectedRadioBtn;
+    private javax.swing.JCheckBox peripheryCheckbox;
     // End of variables declaration//GEN-END:variables
 }

@@ -9,7 +9,7 @@ public class DiameterMetricBuider implements StatisticsBuilder {
 
     @Override
     public String getName() {
-        return "Diameter & Radius";
+        return "BoundingDiameter";
     }
 
     @Override

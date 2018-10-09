@@ -20,14 +20,18 @@ public class DiameterMetricUI implements StatisticsUI {
     public void setup(Statistics statistics) {
         this.metric = (DiameterMetric) statistics;
         if (panel != null) {
-            panel.setDirected(metric.isDirected());
+            panel.setEccentricitiesFlag(metric.getEccentricitiesFlag());
+            panel.setPeripheryFlag(metric.getPeripheryFlag());
+            panel.setCenterFlag(metric.getCenterFlag());
         }
     }
 
     @Override
     public void unsetup() {
-        if (panel != null) {
-            metric.setDirected(panel.isDirected());
+        if (panel != null && metric != null) {
+            metric.setEccentricitiesFlag(panel.getEccentricitiesFlag());
+            metric.setPeripheryFlag(panel.getPeripheryFlag());
+            metric.setCenterFlag(panel.getCenterFlag());
         }
         panel = null;
         metric = null;
@@ -45,12 +49,12 @@ public class DiameterMetricUI implements StatisticsUI {
 
     @Override
     public String getDisplayName() {
-        return "Diameter & Radius";
+        return "BoundingDiameter";
     }
 
     @Override
     public String getShortDescription() {
-        return "Compute diameter and radius, using Frank Takes` algorithm";
+        return "Compute diameter and radius, using the BoundingDiameter algorithm";
     }
 
     @Override
