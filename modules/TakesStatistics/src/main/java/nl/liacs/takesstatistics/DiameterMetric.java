@@ -6,6 +6,7 @@ package nl.liacs.takesstatistics;
  * and open the template in the editor.
  */
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Queue;
@@ -93,8 +94,8 @@ public class DiameterMetric implements Statistics, LongTask{
         Node current; 
         int ecc = 0;
         Queue<Node> q = new LinkedList();
-        for (Node s : graph.getNodes())
-            distance[indices.get(s)] = -1;
+
+        Arrays.fill(distance, -1);
 
         distance[indices.get(u)] = 0;
         q.add(u);
@@ -124,12 +125,12 @@ public class DiameterMetric implements Statistics, LongTask{
                 minLower = -4;
 
         int d_lower = 0, d_upper = LWCC;
-        for (Node s : LWCCNodes){
-            eccLower[indices.get(s)] = 0;
-            eccUpper[indices.get(s)] = LWCC;
-            distance[indices.get(s)] = 0;
-            pruned[indices.get(s)] = -1;
-        }
+
+        // Array initial values
+        Arrays.fill(eccLower, 0);
+        Arrays.fill(eccUpper, LWCC);
+        Arrays.fill(distance, 0);
+        Arrays.fill(pruned, -1);
 
         //candidateTotal -= pruning(graph, indices);
 
