@@ -78,41 +78,39 @@ public class DiameterMetric implements Statistics, LongTask{
         cc.execute(graphModel);
         
         Graph graph = graphModel.getUndirectedGraph();
+
         
-        HashMap<Node, Integer> indices = createIndicesMap(graph);
+        initializeStartValues(graph);
         
-        initializeStartValues(graph, indices);
-        
-        boundingDiameters(graph, indices);
+        boundingDiameters(graph);
 
     }
     
-    //Calculates the eccentricity of a Node u given
-    //its graph and indices HashMap.
+    //Calculates the eccentricity of a Node u given its graph.
     //return: eccentricity of Node u.
-    public int eccentricity (Graph graph, HashMap<Node, Integer> indices, Node u) {
+    private int eccentricity (Graph graph, Node u) {
         Node current; 
         int ecc = 0;
         Queue<Node> q = new LinkedList();
 
         Arrays.fill(distance, -1);
 
-        distance[indices.get(u)] = 0;
+        distance[u.getStoreId()] = 0;
         q.add(u);
         while(!q.isEmpty()) {
             current = q.poll();
             for (Node s : graph.getNeighbors(current)) {
-                if (distance[indices.get(s)] == -1) { //and not pruned
-                    distance[indices.get(s)] = distance[indices.get(current)] + 1;
+                if (distance[s.getStoreId()] == -1) { //and not pruned
+                    distance[s.getStoreId()] = distance[current.getStoreId()] + 1;
                     q.add(s);
-                    ecc = Math.max(ecc, distance[indices.get(s)]);
+                    ecc = Math.max(ecc, distance[s.getStoreId()]);
                 }
             }
         }
         return ecc;
     } // eccentricity
     
-    public void boundingDiameters (Graph graph, HashMap<Node, Integer> indices) {
+    private void boundingDiameters (Graph graph) {
         
         Node currentNode = null, maxUpperNode = null,
                 minLowerNode = null;
@@ -126,13 +124,7 @@ public class DiameterMetric implements Statistics, LongTask{
 
         int d_lower = 0, d_upper = LWCC;
 
-        // Array initial values
-        Arrays.fill(eccLower, 0);
-        Arrays.fill(eccUpper, LWCC);
-        Arrays.fill(distance, 0);
-        Arrays.fill(pruned, -1);
-
-        //candidateTotal -= pruning(graph, indices);
+        //candidateTotal -= pruning(graph);
 
         boolean high = true;
         
@@ -145,7 +137,7 @@ public class DiameterMetric implements Statistics, LongTask{
             if (currentNode == null) {
                 currentNode = LWCCNodes.getFirst();
                 for (Node s : LWCCNodes) {
-                    if (distance[indices.get(s)] == -1 || pruned[indices.get(s)] >= 0)
+                    if (distance[s.getStoreId()] == -1 || pruned[s.getStoreId()] >= 0)
                         continue;
                     if (graph.getDegree(s) > graph.getDegree(currentNode))
                         currentNode = s;
@@ -156,7 +148,7 @@ public class DiameterMetric implements Statistics, LongTask{
             else
                 currentNode = minLowerNode;
             
-            current_ecc = eccentricity(graph, indices, currentNode);
+            current_ecc = eccentricity(graph, currentNode);
             //eccentricity should fill distance array
             
             maxUpperNode = null;
@@ -169,29 +161,29 @@ public class DiameterMetric implements Statistics, LongTask{
             
             //Update Bounds
             for (Node s : LWCCNodes) {
-                if (distance[indices.get(s)] == -1 || pruned[indices.get(s)] >= 0)
+                if (distance[s.getStoreId()] == -1 || pruned[s.getStoreId()] >= 0)
                         continue;
                 
                 //update eccentricity bounds
-                eccLower[indices.get(s)] = Math.max(eccLower[indices.get(s)], Math.max(distance[indices.get(s)], current_ecc - distance[indices.get(s)]));
-                eccUpper[indices.get(s)] = Math.min(eccUpper[indices.get(s)], current_ecc + distance[indices.get(s)]);
+                eccLower[s.getStoreId()] = Math.max(eccLower[s.getStoreId()], Math.max(distance[s.getStoreId()], current_ecc - distance[s.getStoreId()]));
+                eccUpper[s.getStoreId()] = Math.min(eccUpper[s.getStoreId()], current_ecc + distance[s.getStoreId()]);
                 
                 //update max values of lower and upper bounds
-                maxLower = Math.max(eccLower[indices.get(s)], maxLower);
-                maxUpper = Math.max(eccUpper[indices.get(s)], maxUpper);
-                minLower = Math.min(eccLower[indices.get(s)], minLower);
-                minUpper = Math.min(eccUpper[indices.get(s)], minUpper);
+                maxLower = Math.max(eccLower[s.getStoreId()], maxLower);
+                maxUpper = Math.max(eccUpper[s.getStoreId()], maxUpper);
+                minLower = Math.min(eccLower[s.getStoreId()], minLower);
+                minUpper = Math.min(eccUpper[s.getStoreId()], minUpper);
             }
             
             // update candidate set
             // No smart for-loop to avoid exception
             for (int i = 0; i < LWCCNodes.size(); i++) {
                 Node s = LWCCNodes.get(i);
-                if (!candidates.contains(s) || distance[indices.get(s)] == -1 || pruned[indices.get(s)] >= 0)
+                if (!candidates.contains(s) || distance[s.getStoreId()] == -1 || pruned[s.getStoreId()] >= 0)
                         continue;
                 if (candidates.contains(s) && ( //if s is in candidate set
-                        (eccLower[indices.get(s)] == eccUpper[indices.get(s)]) ||
-                        (eccUpper[indices.get(s)] <= maxLower && eccLower[indices.get(s)]*2 >= maxUpper)) &&
+                        (eccLower[s.getStoreId()] == eccUpper[s.getStoreId()]) ||
+                        (eccUpper[s.getStoreId()] <= maxLower && eccLower[s.getStoreId()]*2 >= maxUpper)) &&
                         (eccLower[i] >= minUpper && (eccUpper[i] + 1) / 2 <= minLower)) {
                     candidates.remove(s);
                     candidateTotal--;
@@ -202,15 +194,15 @@ public class DiameterMetric implements Statistics, LongTask{
                 if (candidates.contains(s)) { //if s is in candidate set
                     if (minLowerNode == null) 
                         minLowerNode = s;
-                    else if (eccLower[indices.get(s)] == eccLower[indices.get(minLowerNode)] && graph.getDegree(s) > graph.getDegree(minLowerNode))
+                    else if (eccLower[s.getStoreId()] == eccLower[minLowerNode.getStoreId()] && graph.getDegree(s) > graph.getDegree(minLowerNode))
                         minLowerNode = s;
-                    else if (eccLower[indices.get(s)] < eccLower[indices.get(minLowerNode)])
+                    else if (eccLower[s.getStoreId()] < eccLower[minLowerNode.getStoreId()])
                         minLowerNode = s;
                     if (maxUpperNode == null) 
                         maxUpperNode = s;
-                    else if (eccUpper[indices.get(s)] == eccUpper[indices.get(maxUpperNode)] && graph.getDegree(s) > graph.getDegree(maxUpperNode))
+                    else if (eccUpper[s.getStoreId()] == eccUpper[maxUpperNode.getStoreId()] && graph.getDegree(s) > graph.getDegree(maxUpperNode))
                         maxUpperNode = s;
-                    else if (eccUpper[indices.get(s)] < eccUpper[indices.get(maxUpperNode)])
+                    else if (eccUpper[s.getStoreId()] < eccUpper[maxUpperNode.getStoreId()])
                         maxUpperNode = s;
                 }
             }
@@ -225,35 +217,25 @@ public class DiameterMetric implements Statistics, LongTask{
             Progress.progress(progress, LWCC);
         
         for (Node s : LWCCNodes) {
-            test = test + eccLower[indices.get(s)] + "-" + eccUpper[indices.get(s)] + "\n";
+            test = test + eccLower[s.getStoreId()] + "-" + eccUpper[s.getStoreId()] + "\n";
         }
         
         for (Node s : graph.getNodes()) {
-            if(pruned[indices.get(s)] >= 0)
-                eccLower[indices.get(s)] = eccLower[(int) pruned[indices.get(s)]];
+            if(pruned[s.getStoreId()] >= 0)
+                eccLower[s.getStoreId()] = eccLower[(int) pruned[s.getStoreId()]];
         }
         
         diameter = maxLower;
         radius = minUpper;
     }
     
-    public HashMap<Node, Integer> createIndicesMap(Graph graph) {
-        HashMap<Node, Integer> indices = new HashMap();
-        int index = 0;
-        for (Node s : graph.getNodes()) {
-            indices.put(s, index);
-            index++;
-        }
-        return indices;
-    }
-    
     // pruning strategy
     // TODO: fix pruning, it decreases the resulting diameter
-    public int pruning(Graph graph, HashMap<Node, Integer> indices) {
+    private int pruning(Graph graph) {
         Node prunee;
         int count = 0;
         for (Node s : graph.getNodes())
-            pruned[indices.get(s)] = -1;
+            pruned[s.getStoreId()] = -1;
 
         // pruned[i] is going to contain the node number that i has identical ecc to
         for (Node s : graph.getNodes()) {
@@ -262,14 +244,14 @@ public class DiameterMetric implements Statistics, LongTask{
             prunee = null;
             
             for (Node u : graph.getNeighbors(s)) {
-                if (graph.getDegree(u) == 1 && pruned[indices.get(u)] == -1){
+                if (graph.getDegree(u) == 1 && pruned[u.getStoreId()] == -1){
                     if (prunee == null) { // prune all but this one
                         prunee = u;
                     }
                     else {
-                        pruned[indices.get(u)] = indices.get(prunee); // [0...n-1] indicates that the node was pruned as it is identical to prunee
+                        pruned[u.getStoreId()] = prunee.getStoreId(); // [0...n-1] indicates that the node was pruned as it is identical to prunee
                         count++;
-                        pruned[indices.get(u)] = -2; // -2 indicates that its neighbors have been pruned
+                        pruned[u.getStoreId()] = -2; // -2 indicates that its neighbors have been pruned
                     }
                 }
             }
@@ -296,11 +278,16 @@ public class DiameterMetric implements Statistics, LongTask{
         }*/
     } // pruning
     
-    public void initializeStartValues(Graph graph, HashMap<Node, Integer> indices) {
+    private void initializeStartValues(Graph graph) {
+        // Initialize arrays, zeroes all entries by default
         eccLower = new int[graph.getNodeCount()];
         eccUpper = new int[graph.getNodeCount()];
         distance = new int[graph.getNodeCount()];
         pruned = new int[graph.getNodeCount()];
+
+        // Non-zero default values
+        Arrays.fill(eccUpper, LWCC);
+        Arrays.fill(pruned, -1);
         
         LWCCNodes = new LinkedList<Node>();
 
