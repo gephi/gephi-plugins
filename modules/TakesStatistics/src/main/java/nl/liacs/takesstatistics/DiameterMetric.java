@@ -7,7 +7,6 @@ package nl.liacs.takesstatistics;
  */
 
 import java.util.*;
-
 import org.gephi.graph.api.*;
 import org.gephi.statistics.spi.Statistics;
 import org.gephi.utils.longtask.spi.LongTask;
@@ -285,16 +284,18 @@ public class DiameterMetric implements Statistics, LongTask{
         distance = new int[numNodes];
         pruned = new int[numNodes];
 
+        
+        int giantComponentIndex = cc.getGiantComponent();
+        
+        int[] componentsSizes = cc.getComponentsSize();
+        LWCC = componentsSizes[giantComponentIndex];
+
         // Non-zero default values
         Arrays.fill(eccUpper, LWCC);
         Arrays.fill(pruned, -1);
         
         LWCCNodes = new LinkedList<Node>();
 
-        int giantComponentIndex = cc.getGiantComponent();
-        
-        int[] componentsSizes = cc.getComponentsSize();
-        LWCC = componentsSizes[giantComponentIndex];
         
         for (Node s : graph.getNodes()) {
             if (s != null)
