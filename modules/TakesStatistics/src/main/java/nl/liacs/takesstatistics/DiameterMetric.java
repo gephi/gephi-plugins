@@ -6,10 +6,8 @@ package nl.liacs.takesstatistics;
  * and open the template in the editor.
  */
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.Queue;
+import java.util.*;
+
 import org.gephi.graph.api.*;
 import org.gephi.statistics.spi.Statistics;
 import org.gephi.utils.longtask.spi.LongTask;
@@ -55,9 +53,9 @@ public class DiameterMetric implements Statistics, LongTask{
     private String test = "";
     
     // Make sure the graph contain relevant attributes, as defined by the flags
-    private void initAttributeCollumns(Table nodeTable) {
+    private void initAttributeColumns(Table nodeTable) {
         if (this.eccentricitiesFlag && !nodeTable.hasColumn(ECCENTRICITY)) {
-            nodeTable.addColumn(ECCENTRICITY, "Eccentricity", Double.class, new Double(-1));
+            nodeTable.addColumn(ECCENTRICITY, "Eccentricity", Double.class, -1);
         }
         if (this.peripheryFlag && !nodeTable.hasColumn(IS_PERIPHERY)) {
             nodeTable.addColumn(IS_PERIPHERY, "Part of periphery", Boolean.class, false);
@@ -72,7 +70,7 @@ public class DiameterMetric implements Statistics, LongTask{
     public void execute(GraphModel graphModel) {
         isCanceled = false;
         
-        initAttributeCollumns(graphModel.getNodeTable());
+        initAttributeColumns(graphModel.getNodeTable());
         
         cc = new ConnectedComponents();
         cc.execute(graphModel);
@@ -91,7 +89,7 @@ public class DiameterMetric implements Statistics, LongTask{
     private int eccentricity (Graph graph, Node u) {
         Node current; 
         int ecc = 0;
-        Queue<Node> q = new LinkedList();
+        Queue<Node> q = new ArrayDeque<Node>();
 
         Arrays.fill(distance, -1);
 
@@ -280,10 +278,12 @@ public class DiameterMetric implements Statistics, LongTask{
     
     private void initializeStartValues(Graph graph) {
         // Initialize arrays, zeroes all entries by default
-        eccLower = new int[graph.getNodeCount()];
-        eccUpper = new int[graph.getNodeCount()];
-        distance = new int[graph.getNodeCount()];
-        pruned = new int[graph.getNodeCount()];
+        final int numNodes = graph.getModel().getMaxNodeStoreId();
+        
+        eccLower = new int[numNodes];
+        eccUpper = new int[numNodes];
+        distance = new int[numNodes];
+        pruned = new int[numNodes];
 
         // Non-zero default values
         Arrays.fill(eccUpper, LWCC);
