@@ -32,11 +32,13 @@ public class DiameterMetric implements Statistics, LongTask{
     private boolean centerFlag;
     private ProgressTicket progress;
     
-    private LinkedList<Node> candidates;
     private int[] eccLower;
     private int[] eccUpper;
     private int[] distance;
     private int[] pruned;
+    
+    // Array mapping Node.getStoreId() -> whether that node is a candidate
+    private boolean[] isCandidate;
     
     private int LWCC;
     
@@ -111,9 +113,6 @@ public class DiameterMetric implements Statistics, LongTask{
         
         Node currentNode = null, maxUpperNode = null,
                 minLowerNode = null;
-        
-        candidates = new LinkedList<Node>();
-        candidates.addAll(LWCCNodes);
 
         int candidateTotal = LWCC, current_ecc = 0,
                 maxUpper = -1, maxLower = -2, minUpper = -3,
@@ -174,40 +173,52 @@ public class DiameterMetric implements Statistics, LongTask{
             
             // update candidate set
             // No smart for-loop to avoid exception
-            for (int i = 0; i < LWCCNodes.size(); i++) {
-                Node s = LWCCNodes.get(i);
-                if (!candidates.contains(s) || distance[s.getStoreId()] == -1 || pruned[s.getStoreId()] >= 0)
+            for (Node s : LWCCNodes) {
+                if (!isCandidate[s.getStoreId()] || distance[s.getStoreId()] == -1 || pruned[s.getStoreId()] >= 0)
                         continue;
-                if (candidates.contains(s) && ( //if s is in candidate set
-                        (eccLower[s.getStoreId()] == eccUpper[s.getStoreId()]) || ( //general check
-                        (eccUpper[s.getStoreId()] <= maxLower && eccLower[s.getStoreId()]*2 >= maxUpper) && //diameter check
-                        (eccLower[s.getStoreId()] >= minUpper && (eccUpper[s.getStoreId()] + 1) / 2 <= minLower) && //radius check
-                        ((this.peripheryFlag && eccUpper[s.getStoreId()] < maxLower && ((maxLower == maxUpper) ||
-                        (eccLower[s.getStoreId()]*2 > maxUpper))) || !this.peripheryFlag) && //periphery check
-                        ((this.centerFlag && eccLower[s.getStoreId()] > minUpper && ((minLower == minUpper) ||
-                        ((eccUpper[s.getStoreId()] + 1) / 2 < minLower))) || !this.centerFlag) &&
-                        ((this.eccentricitiesFlag && (eccLower[s.getStoreId()] == eccUpper[s.getStoreId()])) ||
-                        !this.eccentricitiesFlag)))) { //center check
-                    candidates.remove(s);
+                
+                if (eccLower[s.getStoreId()] == eccUpper[s.getStoreId()]
+                    || ( //general check
+                        (eccUpper[s.getStoreId()] <= maxLower && eccLower[s.getStoreId()]*2 >= maxUpper) //diameter check
+                        && (eccLower[s.getStoreId()] >= minUpper && (eccUpper[s.getStoreId()] + 1) / 2 <= minLower) //radius check
+                        && ((
+                                this.peripheryFlag 
+                                && eccUpper[s.getStoreId()] < maxLower 
+                                && (
+                                    (maxLower == maxUpper) 
+                                    || (eccLower[s.getStoreId()]*2 > maxUpper)
+                                )
+                            ) 
+                            || !this.peripheryFlag
+                        ) //periphery check
+                        && (
+                            !this.centerFlag || (
+                                eccLower[s.getStoreId()] > minUpper 
+                                && ((minLower == minUpper) || ((eccUpper[s.getStoreId()] + 1) / 2 < minLower))
+                            ) 
+                        )
+                        && !this.eccentricitiesFlag 
+                    )) {//center check
+                    
+                    isCandidate[s.getStoreId()] = false;
                     candidateTotal--;
                     count++;
                 }
                 
                 // updating maxuppernode and minlowernode for selection in next round
-                if (candidates.contains(s)) { //if s is in candidate set
-                    if (minLowerNode == null) 
-                        minLowerNode = s;
-                    else if (eccLower[s.getStoreId()] == eccLower[minLowerNode.getStoreId()] && graph.getDegree(s) > graph.getDegree(minLowerNode))
-                        minLowerNode = s;
-                    else if (eccLower[s.getStoreId()] < eccLower[minLowerNode.getStoreId()])
-                        minLowerNode = s;
-                    if (maxUpperNode == null) 
-                        maxUpperNode = s;
-                    else if (eccUpper[s.getStoreId()] == eccUpper[maxUpperNode.getStoreId()] && graph.getDegree(s) > graph.getDegree(maxUpperNode))
-                        maxUpperNode = s;
-                    else if (eccUpper[s.getStoreId()] < eccUpper[maxUpperNode.getStoreId()])
-                        maxUpperNode = s;
-                }
+                if (minLowerNode == null) 
+                    minLowerNode = s;
+                else if (eccLower[s.getStoreId()] == eccLower[minLowerNode.getStoreId()] && graph.getDegree(s) > graph.getDegree(minLowerNode))
+                    minLowerNode = s;
+                else if (eccLower[s.getStoreId()] < eccLower[minLowerNode.getStoreId()])
+                    minLowerNode = s;
+                if (maxUpperNode == null) 
+                    maxUpperNode = s;
+                else if (eccUpper[s.getStoreId()] == eccUpper[maxUpperNode.getStoreId()] && graph.getDegree(s) > graph.getDegree(maxUpperNode))
+                    maxUpperNode = s;
+                else if (eccUpper[s.getStoreId()] < eccUpper[maxUpperNode.getStoreId()])
+                    maxUpperNode = s;
+                
             }
             if (isCanceled) {
                 diameter = maxLower;
@@ -303,6 +314,7 @@ public class DiameterMetric implements Statistics, LongTask{
         eccUpper = new int[numNodes];
         distance = new int[numNodes];
         pruned = new int[numNodes];
+        isCandidate = new boolean[numNodes];
 
         
         int giantComponentIndex = cc.getGiantComponent();
@@ -313,6 +325,7 @@ public class DiameterMetric implements Statistics, LongTask{
         // Non-zero default values
         Arrays.fill(eccUpper, LWCC);
         Arrays.fill(pruned, -1);
+        Arrays.fill(isCandidate, false);
         
         LWCCNodes = new LinkedList<Node>();
 
