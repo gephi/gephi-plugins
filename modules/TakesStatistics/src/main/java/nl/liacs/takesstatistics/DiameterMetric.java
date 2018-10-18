@@ -54,7 +54,7 @@ public class DiameterMetric implements Statistics, LongTask{
     // Make sure the graph contain relevant attributes, as defined by the flags
     private void initAttributeColumns(Table nodeTable) {
         if (this.eccentricitiesFlag && !nodeTable.hasColumn(ECCENTRICITY)) {
-            nodeTable.addColumn(ECCENTRICITY, "Eccentricity", Double.class, -1);
+            nodeTable.addColumn(ECCENTRICITY, "Eccentricity", Integer.class, -1);
         }
         if (this.peripheryFlag && !nodeTable.hasColumn(IS_PERIPHERY)) {
             nodeTable.addColumn(IS_PERIPHERY, "Part of periphery", Boolean.class, false);
@@ -121,7 +121,7 @@ public class DiameterMetric implements Statistics, LongTask{
 
         int d_lower = 0, d_upper = LWCC;
 
-        //candidateTotal -= pruning(graph);
+        candidateTotal -= pruning(graph);
 
         boolean high = true;
         
@@ -179,9 +179,15 @@ public class DiameterMetric implements Statistics, LongTask{
                 if (!candidates.contains(s) || distance[s.getStoreId()] == -1 || pruned[s.getStoreId()] >= 0)
                         continue;
                 if (candidates.contains(s) && ( //if s is in candidate set
-                        (eccLower[s.getStoreId()] == eccUpper[s.getStoreId()]) ||
-                        (eccUpper[s.getStoreId()] <= maxLower && eccLower[s.getStoreId()]*2 >= maxUpper)) &&
-                        (eccLower[i] >= minUpper && (eccUpper[i] + 1) / 2 <= minLower)) {
+                        (eccLower[s.getStoreId()] == eccUpper[s.getStoreId()]) || ( //general check
+                        (eccUpper[s.getStoreId()] <= maxLower && eccLower[s.getStoreId()]*2 >= maxUpper) && //diameter check
+                        (eccLower[s.getStoreId()] >= minUpper && (eccUpper[s.getStoreId()] + 1) / 2 <= minLower) && //radius check
+                        ((this.peripheryFlag && eccUpper[s.getStoreId()] < maxLower && ((maxLower == maxUpper) ||
+                        (eccLower[s.getStoreId()]*2 > maxUpper))) || !this.peripheryFlag) && //periphery check
+                        ((this.centerFlag && eccLower[s.getStoreId()] > minUpper && ((minLower == minUpper) ||
+                        ((eccUpper[s.getStoreId()] + 1) / 2 < minLower))) || !this.centerFlag) &&
+                        ((this.eccentricitiesFlag && (eccLower[s.getStoreId()] == eccUpper[s.getStoreId()])) ||
+                        !this.eccentricitiesFlag)))) { //center check
                     candidates.remove(s);
                     candidateTotal--;
                     count++;
@@ -224,6 +230,20 @@ public class DiameterMetric implements Statistics, LongTask{
         
         diameter = maxLower;
         radius = minUpper;
+        for (Node s : graph.getNodes()) {
+            if (this.peripheryFlag && eccLower[s.getStoreId()] == maxLower) {
+                peripherySize++;
+                s.setAttribute(IS_PERIPHERY, true);
+            }
+            if (this.centerFlag && eccUpper[s.getStoreId()] == minUpper) {
+                centerSize++;
+                s.setAttribute(IS_CENTER, true);
+            }
+            if (this.eccentricitiesFlag) {
+                s.setAttribute(ECCENTRICITY, eccLower[s.getStoreId()]);
+            }
+        }
+            
     }
     
     // pruning strategy
@@ -248,7 +268,7 @@ public class DiameterMetric implements Statistics, LongTask{
                     else {
                         pruned[u.getStoreId()] = prunee.getStoreId(); // [0...n-1] indicates that the node was pruned as it is identical to prunee
                         count++;
-                        pruned[u.getStoreId()] = -2; // -2 indicates that its neighbors have been pruned
+                        pruned[s.getStoreId()] = -2; // -2 indicates that its neighbors have been pruned
                     }
                 }
             }
