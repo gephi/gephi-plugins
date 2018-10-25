@@ -25,13 +25,16 @@ public class DiameterMetric implements Statistics, LongTask{
     private final String IS_PERIPHERY = "isperiphery";
     private final String IS_CENTER = "iscenter";
 
-    
+    // Option Flags
     private boolean isCanceled;
     private boolean eccentricitiesFlag;
     private boolean peripheryFlag;
     private boolean centerFlag;
+    
+    // Progress
     private ProgressTicket progress;
     
+    // Internal usage
     private int[] eccLower;
     private int[] eccUpper;
     private int[] distance;
@@ -40,16 +43,15 @@ public class DiameterMetric implements Statistics, LongTask{
     // Array mapping Node.getStoreId() -> whether that node is a candidate
     private boolean[] isCandidate;
     
-    private int LWCC;
+    private int giantComponentSize;
     
+    // Results
     private int diameter;
     private int radius;
     private int peripherySize;
-    private int centerSize;
+    private int centerSize; 
     
-    private ConnectedComponents cc; 
-    
-    private LinkedList<Node> LWCCNodes;
+    private LinkedList<Node> giantComponentNodes;
     
     private String test = "";
     
@@ -73,8 +75,7 @@ public class DiameterMetric implements Statistics, LongTask{
         
         initAttributeColumns(graphModel.getNodeTable());
         
-        cc = new ConnectedComponents();
-        cc.execute(graphModel);
+        
         
         Graph graph = graphModel.getUndirectedGraph();
 
@@ -114,11 +115,11 @@ public class DiameterMetric implements Statistics, LongTask{
         Node currentNode = null, maxUpperNode = null,
                 minLowerNode = null;
 
-        int candidateTotal = LWCC, current_ecc = 0,
+        int candidateTotal = giantComponentSize, current_ecc = 0,
                 maxUpper = -1, maxLower = -2, minUpper = -3,
                 minLower = -4;
 
-        int d_lower = 0, d_upper = LWCC;
+        int d_lower = 0, d_upper = giantComponentSize;
 
         candidateTotal -= pruning(graph);
 
@@ -127,9 +128,9 @@ public class DiameterMetric implements Statistics, LongTask{
         Progress.start(progress, candidateTotal);
         int count = 0;
         
-        currentNode = LWCCNodes.getFirst();
+        currentNode = giantComponentNodes.getFirst();
         int currentNodeDegree = graph.getDegree(currentNode);
-        for (Node s : LWCCNodes) {
+        for (Node s : giantComponentNodes) {
             if (distance[s.getStoreId()] != -1 
                 && pruned[s.getStoreId()] < 0
                 && graph.getDegree(s) > currentNodeDegree
@@ -150,11 +151,11 @@ public class DiameterMetric implements Statistics, LongTask{
             
             maxLower = 0;
             maxUpper = 0;
-            minLower = LWCC;
-            minUpper = LWCC;
+            minLower = giantComponentSize;
+            minUpper = giantComponentSize;
             
             //Update Bounds
-            for (Node s : LWCCNodes) {
+            for (Node s : giantComponentNodes) {
                 if (distance[s.getStoreId()] == -1 || pruned[s.getStoreId()] >= 0)
                         continue;
                 
@@ -171,7 +172,7 @@ public class DiameterMetric implements Statistics, LongTask{
             
             // update candidate set
             // No smart for-loop to avoid exception
-            for (Node s : LWCCNodes) {
+            for (Node s : giantComponentNodes) {
                 if (!isCandidate[s.getStoreId()] || distance[s.getStoreId()] == -1 || pruned[s.getStoreId()] >= 0)
                         continue;
                 
@@ -235,9 +236,9 @@ public class DiameterMetric implements Statistics, LongTask{
         }//while
         
         if (d_upper == d_lower)
-            Progress.progress(progress, LWCC);
+            Progress.progress(progress, giantComponentSize);
         
-        for (Node s : LWCCNodes) {
+        for (Node s : giantComponentNodes) {
             test = test + eccLower[s.getStoreId()] + "-" + eccUpper[s.getStoreId()] + "\n";
         }
         
@@ -274,7 +275,7 @@ public class DiameterMetric implements Statistics, LongTask{
 
         // pruned[i] is going to contain the node number that i has identical ecc to
         for (Node s : graph.getNodes()) {
-            if (!LWCCNodes.contains(s))
+            if (!giantComponentNodes.contains(s))
                 continue;
             prunee = null;
             
@@ -292,25 +293,6 @@ public class DiameterMetric implements Statistics, LongTask{
             }
         }
         return count;
-        /*
-        for(int i = 0; i < nodes(FULL); i++) {
-            if(!inScope(i, LWCC))
-                continue;
-
-            z = neighbors(i).size();
-            prunee = -1;
-
-            for(int j = 0; j < z; j++) {
-                if(neighbors(neighbors(i)[j]).size() == 1 && pruned[neighbors(i)[j]] == -1) {
-                    if(prunee == -1) { // prune all but this one
-                        prunee = neighbors(i)[j];
-                    } else {
-                        pruned[neighbors(i)[j]] = prunee; // [0...n-1] indicates that the node was pruned as it is identical to prunee
-                        pruned[prunee] = -2; // -2 indicates that its neighbors have been pruned			
-                    }
-                }
-            }
-        }*/
     } // pruning
     
     private void initializeStartValues(Graph graph) {
@@ -323,23 +305,24 @@ public class DiameterMetric implements Statistics, LongTask{
         pruned = new int[numNodes];
         isCandidate = new boolean[numNodes];
 
-        
+        ConnectedComponents cc = new ConnectedComponents();
+        cc.execute(graph.getModel());
         int giantComponentIndex = cc.getGiantComponent();
         
         int[] componentsSizes = cc.getComponentsSize();
-        LWCC = componentsSizes[giantComponentIndex];
+        giantComponentSize = componentsSizes[giantComponentIndex];
 
         // Non-zero default values
-        Arrays.fill(eccUpper, LWCC);
+        Arrays.fill(eccUpper, giantComponentSize);
         Arrays.fill(pruned, -1);
         Arrays.fill(isCandidate, true);
         
-        LWCCNodes = new LinkedList<Node>();
+        giantComponentNodes = new LinkedList<Node>();
 
         
         for (Node s : graph.getNodes()) {
             if (s != null)
-                LWCCNodes.add(s);
+                giantComponentNodes.add(s);
         }
     }
     
