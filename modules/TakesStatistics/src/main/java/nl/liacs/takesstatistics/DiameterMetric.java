@@ -127,22 +127,20 @@ public class DiameterMetric implements Statistics, LongTask{
         Progress.start(progress, candidateTotal);
         int count = 0;
         
-        while (d_lower != d_upper && candidateTotal > 0) {
-            
-            high = !high;
-            if (currentNode == null) {
-                currentNode = LWCCNodes.getFirst();
-                for (Node s : LWCCNodes) {
-                    if (distance[s.getStoreId()] == -1 || pruned[s.getStoreId()] >= 0)
-                        continue;
-                    if (graph.getDegree(s) > graph.getDegree(currentNode))
-                        currentNode = s;
-                }
+        currentNode = LWCCNodes.getFirst();
+        int currentNodeDegree = graph.getDegree(currentNode);
+        for (Node s : LWCCNodes) {
+            if (distance[s.getStoreId()] != -1 
+                && pruned[s.getStoreId()] < 0
+                && graph.getDegree(s) > currentNodeDegree
+                    ) {
+                currentNode = s;
+                currentNodeDegree = graph.getDegree(currentNode);
             }
-            else if (high)
-                currentNode = maxUpperNode;
-            else
-                currentNode = minLowerNode;
+        }
+        
+        while (d_lower != d_upper && candidateTotal > 0) {
+          
             
             current_ecc = eccentricity(graph, currentNode);
             //eccentricity should fill distance array
@@ -181,15 +179,14 @@ public class DiameterMetric implements Statistics, LongTask{
                     || ( //general check
                         (eccUpper[s.getStoreId()] <= maxLower && eccLower[s.getStoreId()]*2 >= maxUpper) //diameter check
                         && (eccLower[s.getStoreId()] >= minUpper && (eccUpper[s.getStoreId()] + 1) / 2 <= minLower) //radius check
-                        && ((
-                                this.peripheryFlag 
-                                && eccUpper[s.getStoreId()] < maxLower 
+                        && (
+                            !this.peripheryFlag || (
+                                eccUpper[s.getStoreId()] < maxLower 
                                 && (
                                     (maxLower == maxUpper) 
                                     || (eccLower[s.getStoreId()]*2 > maxUpper)
                                 )
                             ) 
-                            || !this.peripheryFlag
                         ) //periphery check
                         && (
                             !this.centerFlag || (
@@ -197,7 +194,6 @@ public class DiameterMetric implements Statistics, LongTask{
                                 && ((minLower == minUpper) || ((eccUpper[s.getStoreId()] + 1) / 2 < minLower))
                             ) 
                         )
-                        && !this.eccentricitiesFlag 
                     )) {//center check
                     
                     isCandidate[s.getStoreId()] = false;
@@ -212,11 +208,12 @@ public class DiameterMetric implements Statistics, LongTask{
                     minLowerNode = s;
                 else if (eccLower[s.getStoreId()] < eccLower[minLowerNode.getStoreId()])
                     minLowerNode = s;
+                
                 if (maxUpperNode == null) 
                     maxUpperNode = s;
                 else if (eccUpper[s.getStoreId()] == eccUpper[maxUpperNode.getStoreId()] && graph.getDegree(s) > graph.getDegree(maxUpperNode))
                     maxUpperNode = s;
-                else if (eccUpper[s.getStoreId()] < eccUpper[maxUpperNode.getStoreId()])
+                else if (eccUpper[s.getStoreId()] > eccUpper[maxUpperNode.getStoreId()])
                     maxUpperNode = s;
                 
             }
@@ -225,8 +222,18 @@ public class DiameterMetric implements Statistics, LongTask{
                 radius = minUpper;
                 return;
             }
+            
+            
+            high = !high;
+            //Set currentnode for next iteration
+            if (high)
+                currentNode = maxUpperNode;
+            else
+                currentNode = minLowerNode;
+            
             Progress.progress(progress, count);
         }//while
+        
         if (d_upper == d_lower)
             Progress.progress(progress, LWCC);
         
@@ -240,7 +247,7 @@ public class DiameterMetric implements Statistics, LongTask{
         }
         
         diameter = maxLower;
-        radius = minUpper;
+        radius   = minUpper;
         for (Node s : graph.getNodes()) {
             if (this.peripheryFlag && eccLower[s.getStoreId()] == maxLower) {
                 peripherySize++;
@@ -325,7 +332,7 @@ public class DiameterMetric implements Statistics, LongTask{
         // Non-zero default values
         Arrays.fill(eccUpper, LWCC);
         Arrays.fill(pruned, -1);
-        Arrays.fill(isCandidate, false);
+        Arrays.fill(isCandidate, true);
         
         LWCCNodes = new LinkedList<Node>();
 
