@@ -1,7 +1,5 @@
 package cwts.networkanalysis;
 
-import org.gephi.graph.api.Graph;
-
 /**
  * Interface for clustering algorithms.
  *
@@ -12,11 +10,11 @@ import org.gephi.graph.api.Graph;
 public interface ClusteringAlgorithm
 {
     /**
-     * Finds a clustering of the nodes in a graph.
+     * Finds a clustering of the nodes in a network.
      *
-     * @param graph Graph
+     * @param network Network
      *
      * @return Clustering
      */
-    public Clustering findClustering(NodeWeightGraph nodeWeightGraph);
+    public Clustering findClustering(Network network);
 }

@@ -1,7 +1,5 @@
 package cwts.networkanalysis;
 
-import org.gephi.graph.api.Graph;
-
 /**
  * Interface for clustering algorithms that are able to improve an existing
  * clustering.
@@ -13,12 +11,12 @@ import org.gephi.graph.api.Graph;
 public interface IncrementalClusteringAlgorithm extends ClusteringAlgorithm
 {
     /**
-     * Improves a clustering of the nodes in a graph.
+     * Improves a clustering of the nodes in a network.
      *
-     * @param graph    Graph
+     * @param network    Network
      * @param clustering Clustering
      *
      * @return Boolean indicating whether the clustering has been improved
      */
-    public boolean improveClustering(NodeWeightGraph nodeWeightGraph, Clustering clustering);
+    public boolean improveClustering(Network network, Clustering clustering);
 }

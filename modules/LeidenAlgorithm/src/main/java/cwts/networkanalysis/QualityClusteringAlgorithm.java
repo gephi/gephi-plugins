@@ -1,7 +1,5 @@
 package cwts.networkanalysis;
 
-import org.gephi.graph.api.Graph;
-
 /**
  * Interface for clustering algorithms that use a quality function.
  *
@@ -12,12 +10,12 @@ import org.gephi.graph.api.Graph;
 public interface QualityClusteringAlgorithm extends ClusteringAlgorithm
 {
     /**
-     * Calculates the quality of a clustering of the nodes in a graph.
+     * Calculates the quality of a clustering of the nodes in a network.
      *
-     * @param graph    Graph
+     * @param network    Network
      * @param clustering Clustering
      *
      * @return Quality of the clustering
      */
-    public double calcQuality(NodeWeightGraph graph, Clustering clustering);
+    public double calcQuality(Network network, Clustering clustering);
 }

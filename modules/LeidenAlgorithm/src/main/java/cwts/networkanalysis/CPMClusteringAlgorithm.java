@@ -1,9 +1,5 @@
 package cwts.networkanalysis;
 
-import org.gephi.graph.api.Edge;
-import org.gephi.graph.api.Graph;
-import org.gephi.graph.api.Node;
-
 /**
  * Abstract base class for clustering algorithms that use the CPM quality
  * function.
@@ -107,40 +103,35 @@ public abstract class CPMClusteringAlgorithm implements Cloneable, QualityCluste
      * neighbors and by rescaling the resolution parameter by {@code 2 * m}.
      * </p>
      *
-     * @param nodeWeightGraph    Graph
+     * @param network    Network
      * @param clustering Clustering
      *
      * @return Quality of the clustering
      */
-    public double calcQuality(NodeWeightGraph nodeWeightGraph, Clustering clustering)
+    public double calcQuality(Network network, Clustering clustering)
     {
         double quality;
-        double totalEdgeWeight;
         double[] clusterWeights;
-
-        Graph graph = nodeWeightGraph.getGraph();
+        int i, j, k;
 
         quality = 0;
-        totalEdgeWeight = 0;
 
-        for (Edge edge : graph.getEdges())
+        for (i = 0; i < network.nNodes; i++)
         {
-            if (clustering.clusters[edge.getSource().getStoreId()] == clustering.clusters[edge.getTarget().getStoreId()])
-                quality += edge.getWeight();
-            totalEdgeWeight += edge.getWeight();
+            j = clustering.clusters[i];
+            for (k = network.firstNeighborIndices[i]; k < network.firstNeighborIndices[i + 1]; k++)
+                if (clustering.clusters[network.neighbors[k]] == j)
+                    quality += network.edgeWeights[k];
         }
+        quality += network.totalEdgeWeightSelfLinks;
 
         clusterWeights = new double[clustering.nClusters];
-
-        for (Node node : graph.getNodes())
-        {
-            clusterWeights[clustering.clusters[node.getStoreId()]] += nodeWeightGraph.getNodeWeight(node);
-        }
-
-        for (int i = 0; i < clustering.nClusters; i++)
+        for (i = 0; i < network.nNodes; i++)
+            clusterWeights[clustering.clusters[i]] += network.nodeWeights[i];
+        for (i = 0; i < clustering.nClusters; i++)
             quality -= clusterWeights[i] * clusterWeights[i] * resolution;
 
-        quality /= (graph.isDirected() ? 1 : 2) * totalEdgeWeight;
+        quality /= 2 * network.getTotalEdgeWeight() + network.totalEdgeWeightSelfLinks;
 
         return quality;
     }

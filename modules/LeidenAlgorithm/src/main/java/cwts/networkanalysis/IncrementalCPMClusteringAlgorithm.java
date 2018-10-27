@@ -1,7 +1,5 @@
 package cwts.networkanalysis;
 
-import org.gephi.graph.api.Graph;
-
 /**
  * Abstract base class for incremental clustering algorithms that use the CPM
  * quality function.
@@ -32,24 +30,24 @@ public abstract class IncrementalCPMClusteringAlgorithm extends CPMClusteringAlg
     }
 
     /**
-     * Finds a clustering of the nodes in a graph.
+     * Finds a clustering of the nodes in a network.
      *
      * <p>
-     * The clustering is obtained by calling {@link #improveClustering(Graph
-     * graph, Clustering clustering)} and by providing a singleton clustering
+     * The clustering is obtained by calling {@link #improveClustering(Network
+     * network, Clustering clustering)} and by providing a singleton clustering
      * as input to this method.
      * </p>
      *
-     * @param graph Graph
+     * @param network Network
      *
      * @return Clustering
      */
-    public Clustering findClustering(NodeWeightGraph nodeWeightGraph)
+    public Clustering findClustering(Network network)
     {
         Clustering clustering;
 
-        clustering = new Clustering(nodeWeightGraph.getGraph().getNodeCount());
-        improveClustering(nodeWeightGraph, clustering);
+        clustering = new Clustering(network.getNNodes());
+        improveClustering(network, clustering);
         return clustering;
     }
 }

@@ -12,7 +12,7 @@ import java.util.Iterator;
 import java.util.Map;
 
 /**
- * Clustering of the nodes in a graph.
+ * Clustering of the nodes in a network.
  *
  * <p>
  * Each node belongs to exactly one cluster.

@@ -1,7 +1,6 @@
 package cwts.networkanalysis;
 
 import java.util.Random;
-import org.gephi.graph.api.Graph;
 
 /**
  * Louvain algorithm.
@@ -12,7 +11,7 @@ import org.gephi.graph.api.Graph;
  *
  * <ol>
  * <li>local moving of nodes between clusters,</li>
- * <li>aggregation of the graph based on the clusters.</li>
+ * <li>aggregation of the network based on the clusters.</li>
  * </ol>
  *
  * <p>
@@ -123,53 +122,51 @@ public class LouvainAlgorithm extends IterativeCPMClusteringAlgorithm
      *
      * <ol>
      * <li>local moving of nodes between clusters,</li>
-     * <li>aggregation of the graph based on the clusters.</li>
+     * <li>aggregation of the network based on the clusters.</li>
      * </ol>
      *
      * <p>
      * These phases are repeated until no further improvements can be made.
      * </p>
      *
-     * @param graph    Graph
+     * @param network    Network
      * @param clustering Clustering
      *
      * @return Boolean indicating whether the clustering has been improved
      */
-    protected boolean improveClusteringOneIteration(NodeWeightGraph nodeWeightGraph, Clustering clustering)
+    protected boolean improveClusteringOneIteration(Network network, Clustering clustering)
     {
         boolean update;
         Clustering reducedClustering;
-        NodeWeightGraph reducedGraph;
-
-        Graph graph = nodeWeightGraph.getGraph();
+        Network reducedNetwork;
 
         // Update the clustering by moving individual nodes between clusters.
-        update = localMovingAlgorithm.improveClustering(nodeWeightGraph, clustering);
+        update = localMovingAlgorithm.improveClustering(network, clustering);
 
         /*
          * Terminate the algorithm if each node is assigned to its own cluster.
-         * Otherwise create an aggregate graph and recursively apply the
-         * algorithm to this graph.
+         * Otherwise create an aggregate network and recursively apply the
+         * algorithm to this network.
          */
-        if (clustering.nClusters < graph.getNodeCount())
+        if (clustering.nClusters < network.nNodes)
         {
             /*
-             * Create an aggregate graph based on the clustering of the
-             * non-aggregate graph.
+             * Create an aggregate network based on the clustering of the
+             * non-aggregate network.
              */
-            reducedGraph = nodeWeightGraph.createReducedGraph(clustering);
+            reducedNetwork = network.createReducedNetwork(clustering);
 
             /*
-             * Recursively apply the algorithm to the aggregate graph,
+             * Recursively apply the algorithm to the aggregate network,
              * starting from a singleton clustering.
              */
-            reducedClustering = new Clustering(reducedGraph.getGraph().getNodeCount());
-            update |= improveClusteringOneIteration(reducedGraph, reducedClustering);
+            reducedClustering = new Clustering(reducedNetwork.getNNodes());
+            update |= improveClusteringOneIteration(reducedNetwork, reducedClustering);
 
             /*
-             * Update the clustering of the non-aggregate graph so that it
+             * Update the clustering of the non-aggregate network so that it
              * coincides with the final clustering obtained for the aggregate
-             * graph.
+             * network.
              */
             clustering.mergeClusters(reducedClustering);
         }
