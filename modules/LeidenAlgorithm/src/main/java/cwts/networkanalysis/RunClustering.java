@@ -11,14 +11,12 @@ import org.gephi.graph.api.Graph;
 import org.gephi.graph.api.GraphModel;
 import org.gephi.graph.api.Node;
 import org.gephi.graph.api.Table;
-import org.gephi.utils.longtask.spi.LongTask;
-import org.gephi.utils.progress.ProgressTicket;
 import org.gephi.statistics.spi.Statistics;
 
-public class RunClustering implements Statistics, LongTask
+public class RunClustering implements Statistics
 {
-
     private Clustering clustering;
+    private CPMClusteringAlgorithm algorithm;
     private double quality;
 
     public double getQuality()
@@ -26,20 +24,11 @@ public class RunClustering implements Statistics, LongTask
         return quality;
     }
 
-    public boolean cancel()
-    {
-        //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-        return false;
-    }
-
-    public void setProgressTicket(ProgressTicket pt)
-    {
-        //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
     public String getReport()
     {
-        return "Ran Leiden algorithm.";
+        return "Resolution:\t" + algorithm.getResolution() + "\n"
+               + "Number of clusters:\t" + clustering.getNClusters() + "\n"
+               + "Quality:\t" + quality;
     }
 
     public void execute(GraphModel gm)
@@ -51,12 +40,13 @@ public class RunClustering implements Statistics, LongTask
         for (Edge edge : graph.getEdges())
         {
             edges[0][e] = edge.getSource().getStoreId();
-            edges[0][e] = edge.getTarget().getStoreId();
+            edges[1][e] = edge.getTarget().getStoreId();
             edgeWeights[e] = edge.getWeight();
+            e += 1;
         }
         Network network = new Network(graph.getNodeCount(), false, edges, edgeWeights, false, true);
-        double resolution = graph.getEdgeCount()/(graph.getNodeCount()*(graph.getNodeCount() - 1));
-        CPMClusteringAlgorithm algorithm = new LeidenAlgorithm();
+        double resolution = (double)graph.getEdgeCount()/(graph.getNodeCount()*(graph.getNodeCount() - 1));
+        algorithm = new LeidenAlgorithm();
         algorithm.setResolution(resolution);
         clustering = algorithm.findClustering(network);
         quality = algorithm.calcQuality(network, clustering);
