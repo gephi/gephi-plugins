@@ -26,6 +26,11 @@
             <artifactId>graph-api</artifactId>
             <version>0.9.2</version>
         </dependency>
+        <dependency>
+            <groupId>org.gephi</groupId>
+            <artifactId>statistics-api</artifactId>
+            <version>0.9.2</version>
+        </dependency>
     </dependencies>
 
     <build>
