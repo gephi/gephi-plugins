@@ -1,9 +1,11 @@
-package nl.liacs.takesstatistics;
+package nl.liacs.takesstatisticsui;
 
 import javax.swing.JPanel;
 import org.gephi.statistics.spi.Statistics;
 import org.gephi.statistics.spi.StatisticsUI;
 import org.openide.util.lookup.ServiceProvider;
+
+import nl.liacs.takesstatistics.*;
 
 @ServiceProvider(service = StatisticsUI.class)
 public class DiameterMetricUI implements StatisticsUI {

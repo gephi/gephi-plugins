@@ -5,7 +5,7 @@ import org.gephi.statistics.spi.StatisticsBuilder;
 import org.openide.util.lookup.ServiceProvider;
 
 @ServiceProvider(service = StatisticsBuilder.class)
-public class DiameterMetricBuider implements StatisticsBuilder {
+public class DiameterMetricBuilder implements StatisticsBuilder {
 
     @Override
     public String getName() {

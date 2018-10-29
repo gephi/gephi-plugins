@@ -1,4 +1,4 @@
-package nl.liacs.takesstatistics;
+package nl.liacs.takesstatisticsui;
 
 import org.gephi.graph.api.GraphController;
 import org.openide.util.Lookup;
