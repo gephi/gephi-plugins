@@ -112,6 +112,22 @@ public class LouvainAlgorithm extends IterativeCPMClusteringAlgorithm
         this.localMovingAlgorithm.resolution = resolution;
     }
 
+
+    /**
+     * Sets the resolution parameter.
+     *
+     * Also ensures the resolution parameter for the local moving algorithm
+     * is updated.
+     *
+     * @param resolution Resolution parameter
+     */
+    @Override
+    public void setResolution(double resolution)
+    {
+        super.setResolution(resolution);
+        this.localMovingAlgorithm.resolution = resolution;
+    }
+
     /**
      * Improves a clustering by performing one iteration of the Louvain
      * algorithm.
