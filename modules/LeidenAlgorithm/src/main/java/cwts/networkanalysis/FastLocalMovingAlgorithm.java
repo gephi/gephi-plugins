@@ -2,14 +2,12 @@ package cwts.networkanalysis;
 
 import cwts.util.Arrays;
 import java.util.Random;
-import org.gephi.graph.api.Graph;
-import org.gephi.graph.api.Node;
 
 /**
  * Fast local moving algorithm.
  *
  * <p>
- * The fast local moving algorithm first adds all nodes in a graph to a
+ * The fast local moving algorithm first adds all nodes in a network to a
  * queue. It then removes a node from the queue. The node is moved to the
  * cluster that results in the largest increase in the quality function. If the
  * current cluster assignment of the node is already optimal, the node is not
@@ -73,7 +71,7 @@ public class FastLocalMovingAlgorithm extends IterativeCPMClusteringAlgorithm
      * moving algorithm.
      *
      * <p>
-     * The fast local moving algorithm first adds all nodes in a graph to a
+     * The fast local moving algorithm first adds all nodes in a network to a
      * queue. It then removes a node from the queue. The node is moved to the
      * cluster that results in the largest increase in the quality function. If
      * the current cluster assignment of the node is already optimal, the node
@@ -83,45 +81,43 @@ public class FastLocalMovingAlgorithm extends IterativeCPMClusteringAlgorithm
      * removing nodes from the queue until the queue is empty.
      * </p>
      *
-     * @param graph    Graph
+     * @param network    Network
      * @param clustering Clustering
      *
      * @return Boolean indicating whether the clustering has been improved
      */
-    protected boolean improveClusteringOneIteration(NodeWeightGraph nodeWeightGraph, Clustering clustering)
+    protected boolean improveClusteringOneIteration(Network network, Clustering clustering)
     {
         boolean update;
         boolean[] stableNodes;
         double maxQualityValueIncrement, qualityValueIncrement;
         double[] clusterWeights, edgeWeightPerCluster;
-        int bestCluster, currentCluster, i, nodeId, k, l, nNeighboringClusters, nUnstableNodes, nUnusedClusters;
+        int bestCluster, currentCluster, i, j, k, l, nNeighboringClusters, nUnstableNodes, nUnusedClusters;
         int[] neighboringClusters, nNodesPerCluster, nodeOrder, unusedClusters;
 
-        Graph graph = nodeWeightGraph.getGraph();
-
-        if (graph.getNodeCount() == 1)
+        if (network.nNodes == 1)
             return false;
 
         update = false;
 
-        clusterWeights = new double[graph.getNodeCount()];
-        nNodesPerCluster = new int[graph.getNodeCount()];
-        for (Node node : graph.getNodes())
+        clusterWeights = new double[network.nNodes];
+        nNodesPerCluster = new int[network.nNodes];
+        for (i = 0; i < network.nNodes; i++)
         {
-            clusterWeights[clustering.clusters[node.getStoreId()]] += nodeWeightGraph.getNodeWeight(node);
-            nNodesPerCluster[clustering.clusters[node.getStoreId()]]++;
+            clusterWeights[clustering.clusters[i]] += network.nodeWeights[i];
+            nNodesPerCluster[clustering.clusters[i]]++;
         }
 
         nUnusedClusters = 0;
-        unusedClusters = new int[graph.getNodeCount() - 1];
-        for (i = graph.getNodeCount() - 1; i >= 0; i--)
+        unusedClusters = new int[network.nNodes - 1];
+        for (i = network.nNodes - 1; i >= 0; i--)
             if (nNodesPerCluster[i] == 0)
             {
                 unusedClusters[nUnusedClusters] = i;
                 nUnusedClusters++;
             }
 
-        nodeOrder = Arrays.generateRandomPermutation(graph.getNodeCount(), random);
+        nodeOrder = Arrays.generateRandomPermutation(network.nNodes, random);
 
         /*
          * Iterate over the nodeOrder array in a cyclical manner. When the end
@@ -130,21 +126,19 @@ public class FastLocalMovingAlgorithm extends IterativeCPMClusteringAlgorithm
          * nodeOrder[i], ..., nodeOrder[i + nUnstableNodes - 1]. Continue
          * iterating until the queue is empty.
          */
-        edgeWeightPerCluster = new double[graph.getNodeCount()];
-        neighboringClusters = new int[graph.getNodeCount()];
-        stableNodes = new boolean[graph.getNodeCount()];
-        nUnstableNodes = graph.getNodeCount();
+        edgeWeightPerCluster = new double[network.nNodes];
+        neighboringClusters = new int[network.nNodes];
+        stableNodes = new boolean[network.nNodes];
+        nUnstableNodes = network.nNodes;
         i = 0;
         do
         {
-            nodeId = nodeOrder[i];
+            j = nodeOrder[i];
 
-            Node node = graph.getNode(nodeId);
-
-            currentCluster = clustering.clusters[nodeId];
+            currentCluster = clustering.clusters[j];
 
             // Remove the currently selected node from its current cluster.
-            clusterWeights[currentCluster] -= nodeWeightGraph.getNodeWeight(nodeId);
+            clusterWeights[currentCluster] -= network.nodeWeights[j];
             nNodesPerCluster[currentCluster]--;
             if (nNodesPerCluster[currentCluster] == 0)
             {
@@ -161,16 +155,15 @@ public class FastLocalMovingAlgorithm extends IterativeCPMClusteringAlgorithm
              */
             neighboringClusters[0] = unusedClusters[nUnusedClusters - 1];
             nNeighboringClusters = 1;
-
-            for (Node neighbor : graph.getNeighbors(node))
+            for (k = network.firstNeighborIndices[j]; k < network.firstNeighborIndices[j + 1]; k++)
             {
-                l = clustering.clusters[neighbor.getStoreId()];
+                l = clustering.clusters[network.neighbors[k]];
                 if (edgeWeightPerCluster[l] == 0)
                 {
                     neighboringClusters[nNeighboringClusters] = l;
                     nNeighboringClusters++;
                 }
-                edgeWeightPerCluster[l] += graph.getEdge(node, neighbor).getWeight();
+                edgeWeightPerCluster[l] += network.edgeWeights[k];
             }
 
             /*
@@ -185,12 +178,12 @@ public class FastLocalMovingAlgorithm extends IterativeCPMClusteringAlgorithm
              * currently selected node will be moved back to its old cluster.
              */
             bestCluster = currentCluster;
-            maxQualityValueIncrement = edgeWeightPerCluster[currentCluster] - nodeWeightGraph.getNodeWeight(nodeId) * clusterWeights[currentCluster] * resolution;
+            maxQualityValueIncrement = edgeWeightPerCluster[currentCluster] - network.nodeWeights[j] * clusterWeights[currentCluster] * resolution;
             for (k = 0; k < nNeighboringClusters; k++)
             {
                 l = neighboringClusters[k];
 
-                qualityValueIncrement = edgeWeightPerCluster[l] - nodeWeightGraph.getNodeWeight(nodeId) * clusterWeights[l] * resolution;
+                qualityValueIncrement = edgeWeightPerCluster[l] - network.nodeWeights[j] * clusterWeights[l] * resolution;
                 if (qualityValueIncrement > maxQualityValueIncrement)
                 {
                     bestCluster = l;
@@ -204,7 +197,7 @@ public class FastLocalMovingAlgorithm extends IterativeCPMClusteringAlgorithm
              * Move the currently selected node to its new cluster. Update the
              * clustering statistics.
              */
-            clusterWeights[bestCluster] += nodeWeightGraph.getNodeWeight(nodeId);
+            clusterWeights[bestCluster] += network.nodeWeights[j];
             nNodesPerCluster[bestCluster]++;
             if (bestCluster == unusedClusters[nUnusedClusters - 1])
                 nUnusedClusters--;
@@ -213,7 +206,7 @@ public class FastLocalMovingAlgorithm extends IterativeCPMClusteringAlgorithm
              * Mark the currently selected node as stable and remove it from
              * the queue.
              */
-            stableNodes[nodeId] = true;
+            stableNodes[j] = true;
             nUnstableNodes--;
 
             /*
@@ -225,23 +218,22 @@ public class FastLocalMovingAlgorithm extends IterativeCPMClusteringAlgorithm
              */
             if (bestCluster != currentCluster)
             {
-                clustering.clusters[nodeId] = bestCluster;
+                clustering.clusters[j] = bestCluster;
                 if (bestCluster >= clustering.nClusters)
                     clustering.nClusters = bestCluster + 1;
 
-                for (Node neighbor : graph.getNeighbors(node))
-                {
-                    if (stableNodes[neighbor.getStoreId()] && (clustering.clusters[neighbor.getStoreId()] != bestCluster))
+                for (k = network.firstNeighborIndices[j]; k < network.firstNeighborIndices[j + 1]; k++)
+                    if (stableNodes[network.neighbors[k]] && (clustering.clusters[network.neighbors[k]] != bestCluster))
                     {
-                        stableNodes[neighbor.getStoreId()] = false;
+                        stableNodes[network.neighbors[k]] = false;
                         nUnstableNodes++;
-                        nodeOrder[(i + nUnstableNodes < graph.getNodeCount()) ? (i + nUnstableNodes) : (i + nUnstableNodes - graph.getNodeCount())] = neighbor.getStoreId();
+                        nodeOrder[(i + nUnstableNodes < network.nNodes) ? (i + nUnstableNodes) : (i + nUnstableNodes - network.nNodes)] = network.neighbors[k];
                     }
-                }
+
                 update = true;
             }
 
-            i = (i < graph.getNodeCount() - 1) ? (i + 1) : 0;
+            i = (i < network.nNodes - 1) ? (i + 1) : 0;
         } while (nUnstableNodes > 0);
 
         if (update)

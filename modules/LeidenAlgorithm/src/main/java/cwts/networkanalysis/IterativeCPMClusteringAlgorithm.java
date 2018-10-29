@@ -1,7 +1,5 @@
 package cwts.networkanalysis;
 
-import org.gephi.graph.api.Graph;
-
 /**
  * Abstract base class for iterative clustering algorithms that use the CPM
  * quality function.
@@ -65,24 +63,24 @@ public abstract class IterativeCPMClusteringAlgorithm extends IncrementalCPMClus
     }
 
     /**
-     * Improves a clustering of the nodes in a graph.
+     * Improves a clustering of the nodes in a network.
      *
      * <p>
      * If the number of iterations {@code nIterations} is positive, the
      * clustering is improved by making {@code nIterations} calls to {@link
-     * #improveClusteringOneIteration(Graph graph, Clustering clustering)}.
+     * #improveClusteringOneIteration(Network network, Clustering clustering)}.
      * If {@code nIterations} equals 0, calls to {@link
-     * #improveClusteringOneIteration(Graph graph, Clustering clustering)}
+     * #improveClusteringOneIteration(Network network, Clustering clustering)}
      * continue to be made until there has been a call that did not result in
      * an improvement of the clustering.
      * </p>
      *
-     * @param graph    Graph
+     * @param network    Network
      * @param clustering Clustering
      *
      * @return Boolean indicating whether the clustering has been improved
      */
-    public boolean improveClustering(NodeWeightGraph nodeWeightGraph, Clustering clustering)
+    public boolean improveClustering(Network network, Clustering clustering)
     {
         boolean update;
         int i;
@@ -90,9 +88,9 @@ public abstract class IterativeCPMClusteringAlgorithm extends IncrementalCPMClus
         update = false;
         if (nIterations > 0)
             for (i = 0; i < nIterations; i++)
-                update |= improveClusteringOneIteration(nodeWeightGraph, clustering);
+                update |= improveClusteringOneIteration(network, clustering);
         else
-            while (improveClusteringOneIteration(nodeWeightGraph, clustering))
+            while (improveClusteringOneIteration(network, clustering))
                 update = true;
         return update;
     }
@@ -101,10 +99,10 @@ public abstract class IterativeCPMClusteringAlgorithm extends IncrementalCPMClus
      * Improves a clustering by performing one iteration of an iterative
      * clustering algorithm.
      *
-     * @param graph    Graph
+     * @param network    Network
      * @param clustering Clustering
      *
      * @return Boolean indicating whether the clustering has been improved
      */
-    protected abstract boolean improveClusteringOneIteration(NodeWeightGraph nodeWeightGraph, Clustering clustering);
+    protected abstract boolean improveClusteringOneIteration(Network network, Clustering clustering);
 }

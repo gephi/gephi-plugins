@@ -3,15 +3,13 @@ package cwts.networkanalysis;
 import cwts.util.Arrays;
 import cwts.util.FastMath;
 import java.util.Random;
-import org.gephi.graph.api.Graph;
-import org.gephi.graph.api.Node;
 
 /**
  * Local merging algorithm.
  *
  * <p>
  * The local merging algorithm starts from a singleton partition. It performs a
- * single iteration over the nodes in a graph. Each node belonging to a
+ * single iteration over the nodes in a network. Each node belonging to a
  * singleton cluster is considered for merging with another cluster. This
  * cluster is chosen randomly from all clusters that do not result in a
  * decrease in the quality function. The larger the increase in the quality
@@ -21,7 +19,7 @@ import org.gephi.graph.api.Node;
  * cluster. The lower the value of the randomness parameter, the more likely
  * the cluster resulting in the largest increase in the quality function is to
  * be chosen. A node is merged with a cluster only if both are sufficiently
- * well connected to the rest of the graph.
+ * well connected to the rest of the network.
  * </p>
  *
  * <p>
@@ -104,12 +102,12 @@ public class LocalMergingAlgorithm extends CPMClusteringAlgorithm
     }
 
     /**
-     * Finds a clustering of the nodes in a graph using the local merging
+     * Finds a clustering of the nodes in a network using the local merging
      * algorithm.
      *
      * <p>
      * The local merging algorithm starts from a singleton partition. It
-     * performs a single iteration over the nodes in a graph. Each node
+     * performs a single iteration over the nodes in a network. Each node
      * belonging to a singleton cluster is considered for merging with another
      * cluster. This cluster is chosen randomly from all clusters that do not
      * result in a decrease in the quality function. The larger the increase in
@@ -120,64 +118,57 @@ public class LocalMergingAlgorithm extends CPMClusteringAlgorithm
      * randomness parameter, the more likely the cluster resulting in the
      * largest increase in the quality function is to be chosen. A node is
      * merged with a cluster only if both are sufficiently well connected to
-     * the rest of the graph.
+     * the rest of the network.
      * </p>
      *
-     * @param graph Graph
+     * @param network Network
      *
      * @return Clustering
      */
-    public Clustering findClustering(NodeWeightGraph nodeWeightGraph)
+    public Clustering findClustering(Network network)
     {
         boolean update;
         boolean[] nonSingletonClusters;
         double maxQualityValueIncrement, qualityValueIncrement, r, totalNodeWeight, totalTransformedQualityValueIncrement;
         double[] clusterWeights, cumTransformedQualityValueIncrementPerCluster, edgeWeightPerCluster, externalEdgeWeightPerCluster;
-        int bestCluster, chosenCluster, i, nodeId, k, l, max_idx, mid_idx, min_idx, nNeighboringClusters;
+        int bestCluster, chosenCluster, i, j, k, l, max_idx, mid_idx, min_idx, nNeighboringClusters;
         int[] neighboringClusters, nodeOrder;
 
-        Graph graph = nodeWeightGraph.getGraph();
+        Clustering clustering = new Clustering(network.nNodes);
 
-        Clustering clustering = new Clustering(graph.getNodeCount());
-
-        if (graph.getNodeCount() == 1)
+        if (network.nNodes == 1)
             return clustering;
 
         update = false;
 
-        totalNodeWeight = nodeWeightGraph.getTotalNodeWeight();
-        clusterWeights = nodeWeightGraph.getNodeWeights();
-        nonSingletonClusters = new boolean[graph.getNodeCount()];
-        externalEdgeWeightPerCluster = new double[graph.getNodeCount()];
-        for (Node node : graph.getNodes())
-            for (Node neighbor : graph.getNeighbors(node))
-                externalEdgeWeightPerCluster[node.getStoreId()] += graph.getEdge(node, neighbor).getWeight();
+        totalNodeWeight = network.getTotalNodeWeight();
+        clusterWeights = network.getNodeWeights();
+        nonSingletonClusters = new boolean[network.nNodes];
+        externalEdgeWeightPerCluster = network.getTotalEdgeWeightPerNode();
 
-        nodeOrder = Arrays.generateRandomPermutation(graph.getNodeCount(), random);
+        nodeOrder = Arrays.generateRandomPermutation(network.nNodes, random);
 
-        edgeWeightPerCluster = new double[graph.getNodeCount()];
-        neighboringClusters = new int[graph.getNodeCount()];
-        cumTransformedQualityValueIncrementPerCluster = new double[graph.getNodeCount()];
-        for (i = 0; i < graph.getNodeCount(); i++)
+        edgeWeightPerCluster = new double[network.nNodes];
+        neighboringClusters = new int[network.nNodes];
+        cumTransformedQualityValueIncrementPerCluster = new double[network.nNodes];
+        for (i = 0; i < network.nNodes; i++)
         {
-            nodeId = nodeOrder[i];
-
-            Node node = graph.getNode(nodeId);
+            j = nodeOrder[i];
 
             /*
              * Only nodes belonging to singleton clusters can be moved to a
              * different cluster. This guarantees that clusters will never be
              * split up. Additionally, only nodes that are well connected with
-             * the rest of the graph are considered for moving.
+             * the rest of the network are considered for moving.
              */
-            if (!nonSingletonClusters[nodeId] && (externalEdgeWeightPerCluster[nodeId] >= clusterWeights[nodeId] * (totalNodeWeight - clusterWeights[nodeId]) * resolution))
+            if (!nonSingletonClusters[j] && (externalEdgeWeightPerCluster[j] >= clusterWeights[j] * (totalNodeWeight - clusterWeights[j]) * resolution))
             {
                 /*
                  * Remove the currently selected node from its current cluster.
                  * This causes the cluster to be empty.
                  */
-                clusterWeights[nodeId] = 0;
-                externalEdgeWeightPerCluster[nodeId] = 0;
+                clusterWeights[j] = 0;
+                externalEdgeWeightPerCluster[j] = 0;
 
                 /*
                  * Identify the neighboring clusters of the currently selected
@@ -188,23 +179,23 @@ public class LocalMergingAlgorithm extends CPMClusteringAlgorithm
                  * currently selected node will be moved back to its old
                  * cluster.
                  */
-                neighboringClusters[0] = nodeId;
+                neighboringClusters[0] = j;
                 nNeighboringClusters = 1;
-                for (Node neighbor : graph.getNeighbors(node))
+                for (k = network.firstNeighborIndices[j]; k < network.firstNeighborIndices[j + 1]; k++)
                 {
-                    l = clustering.clusters[neighbor.getStoreId()];
+                    l = clustering.clusters[network.neighbors[k]];
                     if (edgeWeightPerCluster[l] == 0)
                     {
                         neighboringClusters[nNeighboringClusters] = l;
                         nNeighboringClusters++;
                     }
-                    edgeWeightPerCluster[l] += graph.getEdge(node, neighbor).getWeight();
+                    edgeWeightPerCluster[l] += network.edgeWeights[k];
                 }
 
                 /*
                  * For each neighboring cluster of the currently selected node,
                  * determine whether the neighboring cluster is well connected
-                 * with the rest of the graph. For each neighboring cluster
+                 * with the rest of the network. For each neighboring cluster
                  * that is well connected, calculate the increment of the
                  * quality function obtained by moving the currently selected
                  * node to the neighboring cluster. For each neighboring
@@ -213,7 +204,7 @@ public class LocalMergingAlgorithm extends CPMClusteringAlgorithm
                  * with which the currently selected node is moved to the
                  * neighboring cluster.
                  */
-                bestCluster = nodeId;
+                bestCluster = j;
                 maxQualityValueIncrement = 0;
                 totalTransformedQualityValueIncrement = 0;
                 for (k = 0; k < nNeighboringClusters; k++)
@@ -222,7 +213,7 @@ public class LocalMergingAlgorithm extends CPMClusteringAlgorithm
 
                     if (externalEdgeWeightPerCluster[l] >= clusterWeights[l] * (totalNodeWeight - clusterWeights[l]) * resolution)
                     {
-                        qualityValueIncrement = edgeWeightPerCluster[l] - nodeWeightGraph.getNodeWeight(nodeId) * clusterWeights[l] * resolution;
+                        qualityValueIncrement = edgeWeightPerCluster[l] - network.nodeWeights[j] * clusterWeights[l] * resolution;
 
                         if (qualityValueIncrement > maxQualityValueIncrement)
                         {
@@ -265,17 +256,17 @@ public class LocalMergingAlgorithm extends CPMClusteringAlgorithm
                  * Move the currently selected node to its new cluster and
                  * update the clustering statistics.
                  */
-                clusterWeights[chosenCluster] += nodeWeightGraph.getNodeWeight(nodeId);
+                clusterWeights[chosenCluster] += network.nodeWeights[j];
 
-                for (Node neighbor : graph.getNeighbors(node))
-                    if (clustering.clusters[neighbor.getStoreId()] == chosenCluster)
-                        externalEdgeWeightPerCluster[chosenCluster] -= graph.getEdge(node, neighbor).getWeight();
+                for (k = network.firstNeighborIndices[j]; k < network.firstNeighborIndices[j + 1]; k++)
+                    if (clustering.clusters[network.neighbors[k]] == chosenCluster)
+                        externalEdgeWeightPerCluster[chosenCluster] -= network.edgeWeights[k];
                     else
-                        externalEdgeWeightPerCluster[chosenCluster] += graph.getEdge(node, neighbor).getWeight();
+                        externalEdgeWeightPerCluster[chosenCluster] += network.edgeWeights[k];
 
-                if (chosenCluster != nodeId)
+                if (chosenCluster != j)
                 {
-                    clustering.clusters[nodeId] = chosenCluster;
+                    clustering.clusters[j] = chosenCluster;
 
                     nonSingletonClusters[chosenCluster] = true;
                     update = true;

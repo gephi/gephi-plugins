@@ -2,7 +2,6 @@ package cwts.networkanalysis;
 
 import java.util.Arrays;
 import java.util.Random;
-import org.gephi.graph.api.Graph;
 
 /**
  * Leiden algorithm.
@@ -14,9 +13,9 @@ import org.gephi.graph.api.Graph;
  * <ol>
  * <li>local moving of nodes between clusters,</li>
  * <li>refinement of the clusters,</li>
- * <li>aggregation of the graph based on the refined clusters, using the
+ * <li>aggregation of the network based on the refined clusters, using the
  * non-refined clusters to create an initial clustering for the aggregate
- * graph.</li>
+ * network.</li>
  * </ol>
  *
  * <p>
@@ -168,21 +167,21 @@ public class LeidenAlgorithm extends IterativeCPMClusteringAlgorithm
      * <ol>
      * <li>local moving of nodes between clusters,</li>
      * <li>refinement of the clusters,</li>
-     * <li>aggregation of the graph based on the refined clusters, using the
+     * <li>aggregation of the network based on the refined clusters, using the
      * non-refined clusters to create an initial clustering for the aggregate
-     * graph.</li>
+     * network.</li>
      * </ol>
      *
      * <p>
      * These phases are repeated until no further improvements can be made.
      * </p>
      *
-     * @param graph    Graph
+     * @param network    Network
      * @param clustering Clustering
      *
      * @return Boolean indicating whether the clustering has been improved
      */
-    protected boolean improveClusteringOneIteration(NodeWeightGraph nodeWeightGraph, Clustering clustering)
+    protected boolean improveClusteringOneIteration(Network network, Clustering clustering)
     {
         boolean update;
         Clustering clusteringReducedNetwork, clusteringSubnetwork;
@@ -190,49 +189,47 @@ public class LeidenAlgorithm extends IterativeCPMClusteringAlgorithm
         int[] clustersReducedNetwork, nNodesPerClusterReducedNetwork;
         int[][] nodesPerCluster;
         LocalMergingAlgorithm localMergingAlgorithm;
-        NodeWeightGraph reducedGraph;
-        NodeWeightGraph[] subgraphs;
-
-        Graph graph = nodeWeightGraph.getGraph();
+        Network reducedNetwork;
+        Network[] subnetworks;
 
         // Update the clustering by moving individual nodes between clusters.
-        update = localMovingAlgorithm.improveClustering(nodeWeightGraph, clustering);
+        update = localMovingAlgorithm.improveClustering(network, clustering);
 
         /*
          * Terminate the algorithm if each node is assigned to its own cluster.
-         * Otherwise create an aggregate graph and recursively apply the
-         * algorithm to this graph.
+         * Otherwise create an aggregate network and recursively apply the
+         * algorithm to this network.
          */
-        if (clustering.nClusters < graph.getNodeCount())
+        if (clustering.nClusters < network.nNodes)
         {
             /*
              * Refine the clustering by iterating over the clusters and by
              * trying to split up each cluster into multiple clusters.
              */
             localMergingAlgorithm = new LocalMergingAlgorithm(resolution, randomness, random);
-            subgraphs = nodeWeightGraph.createSubgraphs(clustering);
+            subnetworks = network.createSubnetworks(clustering);
             nodesPerCluster = clustering.getNodesPerCluster();
             clustering.nClusters = 0;
-            nNodesPerClusterReducedNetwork = new int[subgraphs.length];
-            for (i = 0; i < subgraphs.length; i++)
+            nNodesPerClusterReducedNetwork = new int[subnetworks.length];
+            for (i = 0; i < subnetworks.length; i++)
             {
-                clusteringSubnetwork = localMergingAlgorithm.findClustering(subgraphs[i]);
+                clusteringSubnetwork = localMergingAlgorithm.findClustering(subnetworks[i]);
 
-                for (j = 0; j < subgraphs[i].getGraph().getNodeCount(); j++)
+                for (j = 0; j < subnetworks[i].nNodes; j++)
                     clustering.clusters[nodesPerCluster[i][j]] = clustering.nClusters + clusteringSubnetwork.clusters[j];
                 clustering.nClusters += clusteringSubnetwork.nClusters;
                 nNodesPerClusterReducedNetwork[i] = clusteringSubnetwork.nClusters;
             }
 
             /*
-             * Create an aggregate graph based on the refined clustering of
-             * the non-aggregate graph.
+             * Create an aggregate network based on the refined clustering of
+             * the non-aggregate network.
              */
-            reducedGraph = nodeWeightGraph.createReducedGraph(clustering);
+            reducedNetwork = network.createReducedNetwork(clustering);
 
             /*
-             * Create an initial clustering for the aggregate graph based on
-             * the non-refined clustering of the non-aggregate graph.
+             * Create an initial clustering for the aggregate network based on
+             * the non-refined clustering of the non-aggregate network.
              */
             clustersReducedNetwork = new int[clustering.nClusters];
             i = 0;
@@ -244,15 +241,15 @@ public class LeidenAlgorithm extends IterativeCPMClusteringAlgorithm
             clusteringReducedNetwork = new Clustering(clustersReducedNetwork);
 
             /*
-             * Recursively apply the algorithm to the aggregate graph,
-             * starting from the initial clustering created for this graph.
+             * Recursively apply the algorithm to the aggregate network,
+             * starting from the initial clustering created for this network.
              */
-            update |= improveClusteringOneIteration(reducedGraph, clusteringReducedNetwork);
+            update |= improveClusteringOneIteration(reducedNetwork, clusteringReducedNetwork);
 
             /*
-             * Update the clustering of the non-aggregate graph so that it
+             * Update the clustering of the non-aggregate network so that it
              * coincides with the final clustering obtained for the aggregate
-             * graph.
+             * network.
              */
             clustering.mergeClusters(clusteringReducedNetwork);
         }

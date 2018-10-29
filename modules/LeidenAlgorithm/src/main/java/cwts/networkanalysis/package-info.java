@@ -1,5 +1,5 @@
 /**
- * Provides data structures and algorithms for graph analysis.
+ * Provides data structures and algorithms for network analysis.
  *
  * <p>
  * Currently, the focus of this package is restricted to clustering algorithms
@@ -8,7 +8,7 @@
  * </p>
  *
  * <p>
- * The classes {@link cwts.networkanalysis.Graph} and {@link
+ * The classes {@link cwts.networkanalysis.Network} and {@link
  * cwts.networkanalysis.Clustering} represent the core data structures. The
  * classes {@link cwts.networkanalysis.LeidenAlgorithm} and {@link
  * cwts.networkanalysis.LouvainAlgorithm} represent the core clustering
