@@ -49,7 +49,8 @@ public class DiameterMetric implements Statistics, LongTask{
     private int diameter;
     private int radius;
     private int peripherySize;
-    private int centerSize; 
+    private int centerSize;
+    private int iterations;
     
     private LinkedList<Node> giantComponentNodes;
     
@@ -142,6 +143,7 @@ public class DiameterMetric implements Statistics, LongTask{
         
         while (d_lower != d_upper && candidateTotal > 0) {
           
+            iterations++;
             
             current_ecc = eccentricity(graph, currentNode);
             //eccentricity should fill distance array
@@ -238,6 +240,7 @@ public class DiameterMetric implements Statistics, LongTask{
         if (d_upper == d_lower)
             Progress.progress(progress, giantComponentSize);
         
+        test = test + iterations + "\n";
         for (Node s : giantComponentNodes) {
             test = test + eccLower[s.getStoreId()] + "-" + eccUpper[s.getStoreId()] + "\n";
         }
@@ -266,7 +269,6 @@ public class DiameterMetric implements Statistics, LongTask{
     }
     
     // pruning strategy
-    // TODO: fix pruning, it decreases the resulting diameter
     private int pruning(Graph graph) {
         Node prunee;
         int count = 0;
@@ -305,6 +307,8 @@ public class DiameterMetric implements Statistics, LongTask{
         pruned = new int[numNodes];
         isCandidate = new boolean[numNodes];
 
+        iterations = 0;
+        
         ConnectedComponents cc = new ConnectedComponents();
         cc.execute(graph.getModel());
         int giantComponentIndex = cc.getGiantComponent();
@@ -321,7 +325,7 @@ public class DiameterMetric implements Statistics, LongTask{
 
         
         for (Node s : graph.getNodes()) {
-            if (s != null)
+            if (s.getAttribute("componentnumber").equals(giantComponentIndex))
                 giantComponentNodes.add(s);
         }
     }
