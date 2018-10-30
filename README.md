@@ -133,22 +133,21 @@ Gephi can be extended in many ways but the major categories are `Layout`, `Expor
 
 Plugins can use any JVM languages (e.g. Scala, Python, Groovy) but the default option is Java. 
 
-#### Can native librairies be used?
+#### Can native libraries be used?
 
-Yes, native librairies can be used in modules.
+Yes, native libraries can be used in modules.
 
 #### How is this repository structured?
 
-The `modules` folder is where plugin modules go. Each plugin is defined in a in single folder in this directory. A plugin can be composed of multiple modules (it's called a suite then) but usually one is enough to do what you want.
+The `modules` folder is where plugin modules go. Each plugin is defined in a single folder in this directory. A plugin can be composed of multiple modules (it's called a suite then) but usually one is enough to do what you want.
 
 The `pom.xml` file in `modules` is the parent pom for plugins. A Maven pom can inherit configurations from a parent and that is something we use to keep each plugin's pom very simple. Notice that each plugin's pom (i.e. the `pom.xml` file in the plugin folder) has a `<parent>` defined.
 
-The `pom.xml` file at the root folder makes eveything fit together and notably lists the modules.
+The `pom.xml` file at the root folder makes everything fit together and notably lists the modules.
 
 #### How are the manifest settings defined?
 
-There are two options. The first option is what the `generate` task does: it puts entries `OpenIDE-Module-Short-Description`, `OpenIDE-Module-Long-Description`, `OpenIDE-Module-Display-Category` and `OpenIDE-Module-Name` into the `src/main/nbm/manifest.mf` file. The second option sets a `
-OpenIDE-Module-Localizing-Bundle` entry into the `manifest.mf` so values are defined elsewhere in `Bundle.properties` file. The value is then simply the path to the file (e.g. `OpenIDE-Module-Localizing-Bundle: org/project/Bundle.properties`).
+There are two options. The first option is what the `generate` task does: it puts entries `OpenIDE-Module-Short-Description`, `OpenIDE-Module-Long-Description`, `OpenIDE-Module-Display-Category` and `OpenIDE-Module-Name` into the `src/main/nbm/manifest.mf` file. The second option sets a `OpenIDE-Module-Localizing-Bundle` entry into the `manifest.mf` so values are defined elsewhere in `Bundle.properties` file. The value is then simply the path to the file (e.g. `OpenIDE-Module-Localizing-Bundle: org/project/Bundle.properties`).
 
 The second option is preferable when the short or long description have too many characters as the manifest format is pretty restrictive.  
 
@@ -185,7 +184,7 @@ The list of Gephi and Netbeans dependencies one can use can be found in the `mod
 
 #### What are public packages for?
 
-This applies for suite plugins with multiple modules. A module should declare the packages it wants to nake accessible to other modules. For instance, if a module `B` depends on the class `my.org.project.ExampleController` defined in a module `A`, the `A` module should declare `my.org.project` as public package.
+This applies for suite plugins with multiple modules. A module should declare the packages it wants to make accessible to other modules. For instance, if a module `B` depends on the class `my.org.project.ExampleController` defined in a module `A`, the `A` module should declare `my.org.project` as public package.
 
 Public packages are configured in the module's `pom.xml` file. Edit the `<publicPackages>` entry. Example:
 
