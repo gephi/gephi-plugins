@@ -27,6 +27,7 @@ public class RunClustering implements Statistics, LongTask
 
     private ProgressTicket progress;
 
+    protected boolean useEdgeWeights;
     protected boolean useRandomSeed;
     protected int randomSeed;
     protected int nIterations;
@@ -89,9 +90,12 @@ public class RunClustering implements Statistics, LongTask
             {
                 if (node.getStoreId() < neighbor.getStoreId())
                 {
-                    double w = 0;
+                    double w = 0.0;
+
+                    // When not taking into account edge weights we do consider
+                    // the possible multiplicity of edges.
                     for (Edge edge : graph.getEdges(node, neighbor))
-                        w += edge.getWeight();
+                        w += useEdgeWeights ? edge.getWeight() : 1.0;
 
                     edges[0].append(node.getStoreId());
                     edges[1].append(neighbor.getStoreId());

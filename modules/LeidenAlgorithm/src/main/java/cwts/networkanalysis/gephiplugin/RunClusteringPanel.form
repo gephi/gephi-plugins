@@ -16,7 +16,7 @@
   <Layout>
     <DimensionLayout dim="0">
       <Group type="103" groupAlignment="0" attributes="0">
-          <Group type="102" alignment="0" attributes="0">
+          <Group type="102" attributes="0">
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" max="-2" attributes="0">
                   <Group type="102" alignment="0" attributes="0">
@@ -24,12 +24,7 @@
                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
                       <Component id="comboBoxAlgorithm" max="32767" attributes="0"/>
                   </Group>
-                  <Group type="103" groupAlignment="1" max="-2" attributes="0">
-                      <Group type="102" alignment="0" attributes="0">
-                          <Component id="jLabel1" linkSize="1" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                          <Component id="textFieldResolution" max="32767" attributes="0"/>
-                      </Group>
+                  <Group type="103" alignment="0" groupAlignment="1" max="-2" attributes="0">
                       <Group type="102" alignment="0" attributes="0">
                           <Component id="jLabel2" linkSize="1" min="-2" max="-2" attributes="0"/>
                           <EmptySpace type="unrelated" max="-2" attributes="0"/>
@@ -47,11 +42,19 @@
                           <EmptySpace type="unrelated" max="-2" attributes="0"/>
                           <Component id="checkBoxRandomSeed" min="-2" max="-2" attributes="0"/>
                       </Group>
+                      <Group type="102" alignment="0" attributes="0">
+                          <Component id="jLabel1" linkSize="1" min="-2" max="-2" attributes="0"/>
+                          <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                          <Component id="textFieldResolution" max="32767" attributes="0"/>
+                      </Group>
                   </Group>
                   <Group type="102" alignment="0" attributes="0">
                       <Component id="jLabel6" linkSize="1" min="-2" max="-2" attributes="0"/>
                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                      <Component id="comboBoxQualityFunction" min="-2" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Component id="checkBoxUseEdgeWeights" min="-2" max="-2" attributes="0"/>
+                          <Component id="comboBoxQualityFunction" min="-2" max="-2" attributes="0"/>
+                      </Group>
                   </Group>
               </Group>
               <EmptySpace min="0" pref="10" max="32767" attributes="0"/>
@@ -71,7 +74,9 @@
                   <Component id="jLabel6" linkSize="2" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="comboBoxQualityFunction" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace min="-2" max="-2" attributes="0"/>
+              <EmptySpace type="unrelated" max="-2" attributes="0"/>
+              <Component id="checkBoxUseEdgeWeights" min="-2" max="-2" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="jLabel1" linkSize="2" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="textFieldResolution" alignment="3" min="-2" max="-2" attributes="0"/>
@@ -221,6 +226,17 @@
       </Properties>
       <Events>
         <EventHandler event="stateChanged" listener="javax.swing.event.ChangeListener" parameters="javax.swing.event.ChangeEvent" handler="checkBoxRandomSeedStateChanged"/>
+      </Events>
+    </Component>
+    <Component class="javax.swing.JCheckBox" name="checkBoxUseEdgeWeights">
+      <Properties>
+        <Property name="selected" type="boolean" value="true"/>
+        <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
+          <ResourceString bundle="cwts/networkanalysis/gephiplugin/Bundle.properties" key="RunClusteringPanel.checkBoxUseEdgeWeights.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+        </Property>
+      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="checkBoxUseEdgeWeightsActionPerformed"/>
       </Events>
     </Component>
   </SubComponents>

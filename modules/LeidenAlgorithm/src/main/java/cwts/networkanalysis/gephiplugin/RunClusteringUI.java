@@ -30,6 +30,7 @@ public class RunClusteringUI implements StatisticsUI
         {
             settings.load(statistic);
 
+            panel.setUseEdgeWeights(statistic.useEdgeWeights);
             panel.setUseRandomSeed(statistic.useRandomSeed);
             panel.setRandomSeed(statistic.randomSeed);
             panel.setNIterations(statistic.nIterations);
@@ -44,6 +45,7 @@ public class RunClusteringUI implements StatisticsUI
     public void unsetup() {
         if (panel != null)
         {
+            statistic.useEdgeWeights = panel.getUseEdgeWeights();
             statistic.useRandomSeed = panel.getUseRandomSeed();
             statistic.randomSeed = panel.getRandomSeed();
             statistic.nIterations = panel.getNIterations();
@@ -93,6 +95,7 @@ public class RunClusteringUI implements StatisticsUI
 
     private static class StatSettings {
 
+        protected boolean useEdgeWeights = true;
         protected boolean useRandomSeed = false;
         protected int randomSeed = 0;
         protected int nIterations = 10;
@@ -103,6 +106,7 @@ public class RunClusteringUI implements StatisticsUI
 
         private void save(RunClustering stat)
         {
+            useEdgeWeights = stat.useEdgeWeights;
             useRandomSeed = stat.useRandomSeed;
             randomSeed = stat.randomSeed;
             nIterations = stat.nIterations;
@@ -114,6 +118,7 @@ public class RunClusteringUI implements StatisticsUI
 
         private void load(RunClustering stat)
         {
+            stat.useEdgeWeights = useEdgeWeights;
             stat.useRandomSeed = useRandomSeed;
             stat.randomSeed = randomSeed;
             stat.nIterations = nIterations;

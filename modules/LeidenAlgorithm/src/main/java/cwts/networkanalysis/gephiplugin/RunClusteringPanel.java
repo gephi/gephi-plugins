@@ -28,6 +28,11 @@ public class RunClusteringPanel extends javax.swing.JPanel
         }
     }
 
+    public boolean getUseEdgeWeights()
+    {
+        return checkBoxUseEdgeWeights.isSelected();
+    }
+
     public double getResolution()
     {
         return Double.valueOf(textFieldResolution.getText());
@@ -77,6 +82,11 @@ public class RunClusteringPanel extends javax.swing.JPanel
             case MODULARITY: comboBoxQualityFunction.setSelectedIndex(1); break;
             default: comboBoxQualityFunction.setSelectedIndex(0);
         }
+    }
+
+    public void setUseEdgeWeights(boolean useEdgeWeights)
+    {
+        checkBoxUseEdgeWeights.setSelected(useEdgeWeights);
     }
 
     public void setResolution(double resolution)
@@ -167,6 +177,7 @@ public class RunClusteringPanel extends javax.swing.JPanel
         textFieldNRestarts = new javax.swing.JTextField();
         textFieldSeed = new javax.swing.JTextField();
         checkBoxRandomSeed = new javax.swing.JCheckBox();
+        checkBoxUseEdgeWeights = new javax.swing.JCheckBox();
 
         jLabel1.setText(org.openide.util.NbBundle.getMessage(RunClusteringPanel.class, "RunClusteringPanel.jLabel1.text")); // NOI18N
 
@@ -250,6 +261,16 @@ public class RunClusteringPanel extends javax.swing.JPanel
             }
         });
 
+        checkBoxUseEdgeWeights.setSelected(true);
+        checkBoxUseEdgeWeights.setText(org.openide.util.NbBundle.getMessage(RunClusteringPanel.class, "RunClusteringPanel.checkBoxUseEdgeWeights.text")); // NOI18N
+        checkBoxUseEdgeWeights.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
+                checkBoxUseEdgeWeightsActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -263,10 +284,6 @@ public class RunClusteringPanel extends javax.swing.JPanel
                         .addComponent(comboBoxAlgorithm, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                         .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                            .addComponent(jLabel1)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                            .addComponent(textFieldResolution))
-                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
                             .addComponent(jLabel2)
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                             .addComponent(textFieldNIterations))
@@ -279,11 +296,17 @@ public class RunClusteringPanel extends javax.swing.JPanel
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                             .addComponent(textFieldSeed, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                            .addComponent(checkBoxRandomSeed)))
+                            .addComponent(checkBoxRandomSeed))
+                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                            .addComponent(jLabel1)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                            .addComponent(textFieldResolution)))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel6)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(comboBoxQualityFunction, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(checkBoxUseEdgeWeights)
+                            .addComponent(comboBoxQualityFunction, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addGap(0, 10, Short.MAX_VALUE))
         );
 
@@ -300,6 +323,8 @@ public class RunClusteringPanel extends javax.swing.JPanel
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel6)
                     .addComponent(comboBoxQualityFunction, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(checkBoxUseEdgeWeights)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
@@ -393,6 +418,11 @@ public class RunClusteringPanel extends javax.swing.JPanel
         }
     }//GEN-LAST:event_textFieldSeedFocusLost
 
+    private void checkBoxUseEdgeWeightsActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_checkBoxUseEdgeWeightsActionPerformed
+    {//GEN-HEADEREND:event_checkBoxUseEdgeWeightsActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_checkBoxUseEdgeWeightsActionPerformed
+
     private void textFieldFocusGained(java.awt.event.FocusEvent evt)
     {
         previous = ((javax.swing.JTextField)evt.getComponent()).getText();
@@ -400,6 +430,7 @@ public class RunClusteringPanel extends javax.swing.JPanel
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JCheckBox checkBoxRandomSeed;
+    private javax.swing.JCheckBox checkBoxUseEdgeWeights;
     private javax.swing.JComboBox<String> comboBoxAlgorithm;
     private javax.swing.JComboBox<String> comboBoxQualityFunction;
     private javax.swing.JLabel jLabel1;
