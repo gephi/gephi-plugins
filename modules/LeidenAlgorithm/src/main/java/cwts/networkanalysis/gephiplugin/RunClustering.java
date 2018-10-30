@@ -5,6 +5,9 @@ import cwts.networkanalysis.IterativeCPMClusteringAlgorithm;
 import cwts.networkanalysis.LeidenAlgorithm;
 import cwts.networkanalysis.LouvainAlgorithm;
 import cwts.networkanalysis.Network;
+import cwts.util.DynamicDoubleArray;
+import cwts.util.DynamicIntArray;
+import java.util.HashSet;
 import java.util.Random;
 import org.gephi.graph.api.Column;
 import org.gephi.graph.api.Edge;
@@ -44,17 +47,16 @@ public class RunClustering implements Statistics, LongTask
 
     public String getReport()
     {
-        return    "<b>Configuration</b>"
-                + "<table>"
+        return    "<table>"
+                + "<tr><td colspan=\"2\"><b>Configuration</b></td></tr>"
                 + "<tr><td>Algorithm</td><td>" + (algorithm == Algorithm.LEIDEN ? "Leiden" : "Louvain") + "</td></tr>"
                 + "<tr><td>Quality Function</td><td>" + (qualityFunction == QualityFunction.CPM ? "Constant Potts Model (CPM)" : "Modularity") + "</td></tr>"
                 + "<tr><td>Resolution</td><td>" + resolution + "</td></tr>"
                 + "<tr><td>Number of iterations</td><td>" + nIterations + "</td></tr>"
                 + "<tr><td>Number of restarts</td><td>" + nRestarts + "</td></tr>"
                 + "<tr><td>Random seed</td><td>" + (useRandomSeed ? "random" : randomSeed) + "</td></tr>"
-                + "</table>"
-                + "<b>Results</b>"
-                + "<table>"
+                + "<tr></tr>"
+                + "<tr><td colspan=\"2\"><b>Results</b></td></tr>"
                 + "<tr><td>Quality</td><td>" + quality + "</td></tr>"
                 + "<tr><td>Number of clusters</td><td>" + clustering.getNClusters() + "</td></tr>"
                 + "</table>";
@@ -77,19 +79,32 @@ public class RunClustering implements Statistics, LongTask
     {
         Graph graph = gm.getUndirectedGraphVisible();
         graph.readLock();
-        int[][] edges = new int[2][graph.getEdgeCount()];
-        double[] edgeWeights = new double[graph.getEdgeCount()];
-        int e = 0;
-        for (Edge edge : graph.getEdges())
+        DynamicIntArray[] edges = new DynamicIntArray[2];
+        edges[0] = new DynamicIntArray(graph.getEdgeCount());
+        edges[1] = new DynamicIntArray(graph.getEdgeCount());
+        DynamicDoubleArray edgeWeights = new DynamicDoubleArray(graph.getEdgeCount());
+        for (Node node : graph.getNodes())
         {
-            edges[0][e] = edge.getSource().getStoreId();
-            edges[1][e] = edge.getTarget().getStoreId();
-            edgeWeights[e] = edge.getWeight();
-            e += 1;
+            for (Node neighbor : new HashSet<>(graph.getNeighbors(node).toCollection()))
+            {
+                if (node.getStoreId() < neighbor.getStoreId())
+                {
+                    double w = 0;
+                    for (Edge edge : graph.getEdges(node, neighbor))
+                        w += edge.getWeight();
+
+                    edges[0].append(node.getStoreId());
+                    edges[1].append(neighbor.getStoreId());
+                    edgeWeights.append(w);
+                }
+            }
         }
 
-        Network network = new Network(graph.getNodeCount(), (qualityFunction == QualityFunction.MODULARITY),
-                                      edges, edgeWeights, false, true);
+        Network network = new Network(graph.getNodeCount(),
+                                      (qualityFunction == QualityFunction.MODULARITY),
+                                      new int[][] {edges[0].toArray(), edges[1].toArray()},
+                                      edgeWeights.toArray(),
+                                      false, true);
         graph.readUnlock();
         
         Random random = null;
