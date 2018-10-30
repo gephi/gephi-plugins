@@ -2,11 +2,14 @@ package cwts.networkanalysis.gephiplugin;
 
 import cwts.networkanalysis.gephiplugin.RunClustering.Algorithm;
 import cwts.networkanalysis.gephiplugin.RunClustering.QualityFunction;
+import javax.swing.ToolTipManager;
 
 public class RunClusteringPanel extends javax.swing.JPanel
 {
 
     private String previous;
+
+    private int previousDismissDelay;
 
     public Algorithm getAlgorithm()
     {
@@ -121,6 +124,10 @@ public class RunClusteringPanel extends javax.swing.JPanel
     {
         initComponents();
 
+        // Show the tooltip (approximately) indefinitely, but remember previous setting.
+        previousDismissDelay = ToolTipManager.sharedInstance().getDismissDelay();
+        ToolTipManager.sharedInstance().setDismissDelay(Integer.MAX_VALUE);
+
         textFieldResolution.addFocusListener(new java.awt.event.FocusAdapter()
         {
             public void focusGained(java.awt.event.FocusEvent evt)
@@ -179,6 +186,14 @@ public class RunClusteringPanel extends javax.swing.JPanel
         checkBoxRandomSeed = new javax.swing.JCheckBox();
         checkBoxUseEdgeWeights = new javax.swing.JCheckBox();
 
+        addContainerListener(new java.awt.event.ContainerAdapter()
+        {
+            public void componentRemoved(java.awt.event.ContainerEvent evt)
+            {
+                formComponentRemoved(evt);
+            }
+        });
+
         jLabel1.setText(org.openide.util.NbBundle.getMessage(RunClusteringPanel.class, "RunClusteringPanel.jLabel1.text")); // NOI18N
 
         jLabel2.setText(org.openide.util.NbBundle.getMessage(RunClusteringPanel.class, "RunClusteringPanel.jLabel2.text")); // NOI18N
@@ -192,6 +207,7 @@ public class RunClusteringPanel extends javax.swing.JPanel
         jLabel6.setText(org.openide.util.NbBundle.getMessage(RunClusteringPanel.class, "RunClusteringPanel.jLabel6.text")); // NOI18N
 
         comboBoxAlgorithm.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Leiden algorithm", "Louvain algorithm" }));
+        comboBoxAlgorithm.setToolTipText(org.openide.util.NbBundle.getMessage(RunClusteringPanel.class, "RunClusteringPanel.comboBoxAlgorithm.toolTipText")); // NOI18N
         comboBoxAlgorithm.addActionListener(new java.awt.event.ActionListener()
         {
             public void actionPerformed(java.awt.event.ActionEvent evt)
@@ -201,6 +217,7 @@ public class RunClusteringPanel extends javax.swing.JPanel
         });
 
         comboBoxQualityFunction.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Constant Potts Model (CPM)", "Modularity" }));
+        comboBoxQualityFunction.setToolTipText(org.openide.util.NbBundle.getMessage(RunClusteringPanel.class, "RunClusteringPanel.comboBoxQualityFunction.toolTipText")); // NOI18N
         comboBoxQualityFunction.addActionListener(new java.awt.event.ActionListener()
         {
             public void actionPerformed(java.awt.event.ActionEvent evt)
@@ -210,6 +227,7 @@ public class RunClusteringPanel extends javax.swing.JPanel
         });
 
         textFieldResolution.setText(org.openide.util.NbBundle.getMessage(RunClusteringPanel.class, "RunClusteringPanel.textFieldResolution.text")); // NOI18N
+        textFieldResolution.setToolTipText(org.openide.util.NbBundle.getMessage(RunClusteringPanel.class, "RunClusteringPanel.textFieldResolution.toolTipText")); // NOI18N
         textFieldResolution.addFocusListener(new java.awt.event.FocusAdapter()
         {
             public void focusLost(java.awt.event.FocusEvent evt)
@@ -226,6 +244,7 @@ public class RunClusteringPanel extends javax.swing.JPanel
         });
 
         textFieldNIterations.setText(org.openide.util.NbBundle.getMessage(RunClusteringPanel.class, "RunClusteringPanel.textFieldNIterations.text")); // NOI18N
+        textFieldNIterations.setToolTipText(org.openide.util.NbBundle.getMessage(RunClusteringPanel.class, "RunClusteringPanel.textFieldNIterations.toolTipText")); // NOI18N
         textFieldNIterations.addFocusListener(new java.awt.event.FocusAdapter()
         {
             public void focusLost(java.awt.event.FocusEvent evt)
@@ -235,6 +254,7 @@ public class RunClusteringPanel extends javax.swing.JPanel
         });
 
         textFieldNRestarts.setText(org.openide.util.NbBundle.getMessage(RunClusteringPanel.class, "RunClusteringPanel.textFieldNRestarts.text")); // NOI18N
+        textFieldNRestarts.setToolTipText(org.openide.util.NbBundle.getMessage(RunClusteringPanel.class, "RunClusteringPanel.textFieldNRestarts.toolTipText")); // NOI18N
         textFieldNRestarts.addFocusListener(new java.awt.event.FocusAdapter()
         {
             public void focusLost(java.awt.event.FocusEvent evt)
@@ -244,6 +264,7 @@ public class RunClusteringPanel extends javax.swing.JPanel
         });
 
         textFieldSeed.setText(org.openide.util.NbBundle.getMessage(RunClusteringPanel.class, "RunClusteringPanel.textFieldSeed.text")); // NOI18N
+        textFieldSeed.setToolTipText(org.openide.util.NbBundle.getMessage(RunClusteringPanel.class, "RunClusteringPanel.textFieldSeed.toolTipText")); // NOI18N
         textFieldSeed.addFocusListener(new java.awt.event.FocusAdapter()
         {
             public void focusLost(java.awt.event.FocusEvent evt)
@@ -251,8 +272,16 @@ public class RunClusteringPanel extends javax.swing.JPanel
                 textFieldSeedFocusLost(evt);
             }
         });
+        textFieldSeed.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
+                textFieldSeedActionPerformed(evt);
+            }
+        });
 
         checkBoxRandomSeed.setText(org.openide.util.NbBundle.getMessage(RunClusteringPanel.class, "RunClusteringPanel.checkBoxRandomSeed.text")); // NOI18N
+        checkBoxRandomSeed.setToolTipText(org.openide.util.NbBundle.getMessage(RunClusteringPanel.class, "RunClusteringPanel.checkBoxRandomSeed.toolTipText")); // NOI18N
         checkBoxRandomSeed.addChangeListener(new javax.swing.event.ChangeListener()
         {
             public void stateChanged(javax.swing.event.ChangeEvent evt)
@@ -263,6 +292,7 @@ public class RunClusteringPanel extends javax.swing.JPanel
 
         checkBoxUseEdgeWeights.setSelected(true);
         checkBoxUseEdgeWeights.setText(org.openide.util.NbBundle.getMessage(RunClusteringPanel.class, "RunClusteringPanel.checkBoxUseEdgeWeights.text")); // NOI18N
+        checkBoxUseEdgeWeights.setToolTipText(org.openide.util.NbBundle.getMessage(RunClusteringPanel.class, "RunClusteringPanel.checkBoxUseEdgeWeights.toolTipText")); // NOI18N
         checkBoxUseEdgeWeights.addActionListener(new java.awt.event.ActionListener()
         {
             public void actionPerformed(java.awt.event.ActionEvent evt)
@@ -277,37 +307,39 @@ public class RunClusteringPanel extends javax.swing.JPanel
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel5)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(comboBoxAlgorithm, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addGroup(layout.createSequentialGroup()
+                            .addComponent(jLabel5)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                            .addComponent(comboBoxAlgorithm, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGroup(layout.createSequentialGroup()
+                            .addComponent(jLabel6)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                            .addComponent(comboBoxQualityFunction, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addGroup(layout.createSequentialGroup()
                             .addComponent(jLabel2)
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                             .addComponent(textFieldNIterations))
-                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                        .addGroup(layout.createSequentialGroup()
                             .addComponent(jLabel3)
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                             .addComponent(textFieldNRestarts))
-                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                        .addGroup(layout.createSequentialGroup()
                             .addComponent(jLabel4)
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                             .addComponent(textFieldSeed, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                             .addComponent(checkBoxRandomSeed))
-                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                        .addGroup(layout.createSequentialGroup()
                             .addComponent(jLabel1)
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                            .addComponent(textFieldResolution)))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel6)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(checkBoxUseEdgeWeights)
-                            .addComponent(comboBoxQualityFunction, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addGap(0, 10, Short.MAX_VALUE))
+                            .addComponent(textFieldResolution))
+                        .addGroup(layout.createSequentialGroup()
+                            .addGap(108, 108, 108)
+                            .addComponent(checkBoxUseEdgeWeights))))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {jLabel1, jLabel2, jLabel3, jLabel4, jLabel5, jLabel6});
@@ -324,8 +356,8 @@ public class RunClusteringPanel extends javax.swing.JPanel
                     .addComponent(jLabel6)
                     .addComponent(comboBoxQualityFunction, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(checkBoxUseEdgeWeights)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(checkBoxUseEdgeWeights, javax.swing.GroupLayout.PREFERRED_SIZE, 18, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
                     .addComponent(textFieldResolution, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -422,6 +454,16 @@ public class RunClusteringPanel extends javax.swing.JPanel
     {//GEN-HEADEREND:event_checkBoxUseEdgeWeightsActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_checkBoxUseEdgeWeightsActionPerformed
+
+    private void textFieldSeedActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_textFieldSeedActionPerformed
+    {//GEN-HEADEREND:event_textFieldSeedActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_textFieldSeedActionPerformed
+
+    private void formComponentRemoved(java.awt.event.ContainerEvent evt)//GEN-FIRST:event_formComponentRemoved
+    {//GEN-HEADEREND:event_formComponentRemoved
+        ToolTipManager.sharedInstance().setDismissDelay(previousDismissDelay);
+    }//GEN-LAST:event_formComponentRemoved
 
     private void textFieldFocusGained(java.awt.event.FocusEvent evt)
     {
