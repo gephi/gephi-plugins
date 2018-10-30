@@ -1,19 +1,12 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-package cwts.networkanalysis;
+package cwts.networkanalysis.gephiplugin;
 
-import cwts.networkanalysis.RunClustering.Algorithm;
-import cwts.networkanalysis.RunClustering.QualityFunction;
+import cwts.networkanalysis.gephiplugin.RunClustering.Algorithm;
+import cwts.networkanalysis.gephiplugin.RunClustering.QualityFunction;
 
-/**
- *
- * @author traagva1
- */
 public class RunClusteringPanel extends javax.swing.JPanel
 {
+
+    private String previous;
 
     public Algorithm getAlgorithm()
     {
@@ -42,12 +35,18 @@ public class RunClusteringPanel extends javax.swing.JPanel
 
     public int getNIterations()
     {
-       return Integer.valueOf(textFieldNIterations.getText());
+       int nIterations = Integer.valueOf(textFieldNIterations.getText());
+       if (nIterations <= 0)
+           throw new NumberFormatException("Expecting positive number of iterations.");
+       return nIterations;
     }
 
     public int getNRestarts()
     {
-       return Integer.valueOf(textFieldNRestarts.getText());
+       int nRestarts = Integer.valueOf(textFieldNRestarts.getText());
+       if (nRestarts <= 0)
+           throw new NumberFormatException("Expecting positive number of restarts.");
+       return nRestarts;
     }
 
     public int getRandomSeed()
@@ -59,7 +58,6 @@ public class RunClusteringPanel extends javax.swing.JPanel
     {
         return checkBoxRandomSeed.isSelected();
     }
-
 
     public void setAlgorithm(Algorithm algorithm)
     {
@@ -112,6 +110,38 @@ public class RunClusteringPanel extends javax.swing.JPanel
     public RunClusteringPanel()
     {
         initComponents();
+
+        textFieldResolution.addFocusListener(new java.awt.event.FocusAdapter()
+        {
+            public void focusGained(java.awt.event.FocusEvent evt)
+            {
+                textFieldFocusGained(evt);
+            }
+        });
+
+        textFieldNIterations.addFocusListener(new java.awt.event.FocusAdapter()
+        {
+            public void focusGained(java.awt.event.FocusEvent evt)
+            {
+                textFieldFocusGained(evt);
+            }
+        });
+
+        textFieldNRestarts.addFocusListener(new java.awt.event.FocusAdapter()
+        {
+            public void focusGained(java.awt.event.FocusEvent evt)
+            {
+                textFieldFocusGained(evt);
+            }
+        });
+
+        textFieldSeed.addFocusListener(new java.awt.event.FocusAdapter()
+        {
+            public void focusGained(java.awt.event.FocusEvent evt)
+            {
+                textFieldFocusGained(evt);
+            }
+        });
     }
 
     /**
@@ -169,6 +199,13 @@ public class RunClusteringPanel extends javax.swing.JPanel
         });
 
         textFieldResolution.setText(org.openide.util.NbBundle.getMessage(RunClusteringPanel.class, "RunClusteringPanel.textFieldResolution.text")); // NOI18N
+        textFieldResolution.addFocusListener(new java.awt.event.FocusAdapter()
+        {
+            public void focusLost(java.awt.event.FocusEvent evt)
+            {
+                textFieldResolutionFocusLost(evt);
+            }
+        });
         textFieldResolution.addActionListener(new java.awt.event.ActionListener()
         {
             public void actionPerformed(java.awt.event.ActionEvent evt)
@@ -178,10 +215,31 @@ public class RunClusteringPanel extends javax.swing.JPanel
         });
 
         textFieldNIterations.setText(org.openide.util.NbBundle.getMessage(RunClusteringPanel.class, "RunClusteringPanel.textFieldNIterations.text")); // NOI18N
+        textFieldNIterations.addFocusListener(new java.awt.event.FocusAdapter()
+        {
+            public void focusLost(java.awt.event.FocusEvent evt)
+            {
+                textFieldNIterationsFocusLost(evt);
+            }
+        });
 
         textFieldNRestarts.setText(org.openide.util.NbBundle.getMessage(RunClusteringPanel.class, "RunClusteringPanel.textFieldNRestarts.text")); // NOI18N
+        textFieldNRestarts.addFocusListener(new java.awt.event.FocusAdapter()
+        {
+            public void focusLost(java.awt.event.FocusEvent evt)
+            {
+                textFieldNRestartsFocusLost(evt);
+            }
+        });
 
         textFieldSeed.setText(org.openide.util.NbBundle.getMessage(RunClusteringPanel.class, "RunClusteringPanel.textFieldSeed.text")); // NOI18N
+        textFieldSeed.addFocusListener(new java.awt.event.FocusAdapter()
+        {
+            public void focusLost(java.awt.event.FocusEvent evt)
+            {
+                textFieldSeedFocusLost(evt);
+            }
+        });
 
         checkBoxRandomSeed.setText(org.openide.util.NbBundle.getMessage(RunClusteringPanel.class, "RunClusteringPanel.checkBoxRandomSeed.text")); // NOI18N
         checkBoxRandomSeed.addChangeListener(new javax.swing.event.ChangeListener()
@@ -198,37 +256,35 @@ public class RunClusteringPanel extends javax.swing.JPanel
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel5)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(comboBoxAlgorithm, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                            .addComponent(jLabel1)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                            .addComponent(textFieldResolution))
+                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                            .addComponent(jLabel2)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                            .addComponent(textFieldNIterations))
+                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                            .addComponent(jLabel3)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                            .addComponent(textFieldNRestarts))
+                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                            .addComponent(jLabel4)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                            .addComponent(textFieldSeed, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                            .addComponent(checkBoxRandomSeed)))
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel6)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(comboBoxQualityFunction, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                                    .addComponent(jLabel1)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                    .addComponent(textFieldResolution))
-                                .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                                    .addComponent(jLabel2)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                    .addComponent(textFieldNIterations))
-                                .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                                    .addComponent(jLabel3)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                    .addComponent(textFieldNRestarts))
-                                .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                                    .addComponent(jLabel4)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                    .addComponent(textFieldSeed, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                    .addComponent(checkBoxRandomSeed))))
-                        .addGap(0, 0, Short.MAX_VALUE))))
+                        .addComponent(jLabel6)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(comboBoxQualityFunction, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(0, 10, Short.MAX_VALUE))
         );
 
         layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {jLabel1, jLabel2, jLabel3, jLabel4, jLabel5, jLabel6});
@@ -288,6 +344,59 @@ public class RunClusteringPanel extends javax.swing.JPanel
         this.textFieldSeed.setEnabled(!this.checkBoxRandomSeed.isSelected());
     }//GEN-LAST:event_checkBoxRandomSeedStateChanged
 
+    private void textFieldResolutionFocusLost(java.awt.event.FocusEvent evt)//GEN-FIRST:event_textFieldResolutionFocusLost
+    {//GEN-HEADEREND:event_textFieldResolutionFocusLost
+        // TODO add your handling code here:
+        try
+        {
+            getResolution();
+        }
+        catch (NumberFormatException ex)
+        {
+            textFieldResolution.setText(previous);
+        }
+    }//GEN-LAST:event_textFieldResolutionFocusLost
+
+    private void textFieldNIterationsFocusLost(java.awt.event.FocusEvent evt)//GEN-FIRST:event_textFieldNIterationsFocusLost
+    {//GEN-HEADEREND:event_textFieldNIterationsFocusLost
+        try
+        {
+            getNIterations();
+        }
+        catch (NumberFormatException ex)
+        {
+            textFieldNIterations.setText(previous);
+        }
+    }//GEN-LAST:event_textFieldNIterationsFocusLost
+
+    private void textFieldNRestartsFocusLost(java.awt.event.FocusEvent evt)//GEN-FIRST:event_textFieldNRestartsFocusLost
+    {//GEN-HEADEREND:event_textFieldNRestartsFocusLost
+        try
+        {
+            getNRestarts();
+        }
+        catch (NumberFormatException ex)
+        {
+            textFieldNRestarts.setText(previous);
+        }
+    }//GEN-LAST:event_textFieldNRestartsFocusLost
+
+    private void textFieldSeedFocusLost(java.awt.event.FocusEvent evt)//GEN-FIRST:event_textFieldSeedFocusLost
+    {//GEN-HEADEREND:event_textFieldSeedFocusLost
+        try
+        {
+            getRandomSeed();
+        }
+        catch (NumberFormatException ex)
+        {
+            textFieldSeed.setText(previous);
+        }
+    }//GEN-LAST:event_textFieldSeedFocusLost
+
+    private void textFieldFocusGained(java.awt.event.FocusEvent evt)
+    {
+        previous = ((javax.swing.JTextField)evt.getComponent()).getText();
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JCheckBox checkBoxRandomSeed;

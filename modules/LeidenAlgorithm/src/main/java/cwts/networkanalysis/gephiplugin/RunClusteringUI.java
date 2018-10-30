@@ -1,4 +1,4 @@
-package cwts.networkanalysis;
+package cwts.networkanalysis.gephiplugin;
 
 import java.text.DecimalFormat;
 import javax.swing.JPanel;

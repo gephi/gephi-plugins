@@ -1,10 +1,10 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-package cwts.networkanalysis;
+package cwts.networkanalysis.gephiplugin;
 
+import cwts.networkanalysis.Clustering;
+import cwts.networkanalysis.IterativeCPMClusteringAlgorithm;
+import cwts.networkanalysis.LeidenAlgorithm;
+import cwts.networkanalysis.LouvainAlgorithm;
+import cwts.networkanalysis.Network;
 import java.util.Random;
 import org.gephi.graph.api.Column;
 import org.gephi.graph.api.Edge;
@@ -60,7 +60,6 @@ public class RunClustering implements Statistics, LongTask
                 + "</table>";
     }
 
-
     @Override
     public boolean cancel()
     {
@@ -76,7 +75,8 @@ public class RunClustering implements Statistics, LongTask
 
     public void execute(GraphModel gm)
     {
-        Graph graph = gm.getUndirectedGraph();
+        Graph graph = gm.getUndirectedGraphVisible();
+        graph.readLock();
         int[][] edges = new int[2][graph.getEdgeCount()];
         double[] edgeWeights = new double[graph.getEdgeCount()];
         int e = 0;
@@ -90,7 +90,8 @@ public class RunClustering implements Statistics, LongTask
 
         Network network = new Network(graph.getNodeCount(), (qualityFunction == QualityFunction.MODULARITY),
                                       edges, edgeWeights, false, true);
-
+        graph.readUnlock();
+        
         Random random = null;
         if (!useRandomSeed)
             random = new Random(randomSeed);
@@ -100,8 +101,8 @@ public class RunClustering implements Statistics, LongTask
         IterativeCPMClusteringAlgorithm clusteringAlgorithm = null;
         switch (algorithm)
         {
-            case LEIDEN:    clusteringAlgorithm = new LeidenAlgorithm();  break;
-            case LOUVAIN:   clusteringAlgorithm = new LouvainAlgorithm(); break;
+            case LEIDEN:  clusteringAlgorithm = new LeidenAlgorithm(random);  break;
+            case LOUVAIN: clusteringAlgorithm = new LouvainAlgorithm(random); break;
         }
 
         switch (qualityFunction)
@@ -113,6 +114,7 @@ public class RunClustering implements Statistics, LongTask
                 clusteringAlgorithm.setResolution(resolution/(2 * network.getTotalEdgeWeight() + network.getTotalEdgeWeightSelfLinks()));
                 break;
         }
+        clusteringAlgorithm.setNIterations(1);
 
         Clustering initialClustering = new Clustering(network.getNNodes());
         Clustering maxClustering = initialClustering.clone();
@@ -124,10 +126,10 @@ public class RunClustering implements Statistics, LongTask
             clustering = initialClustering.clone();
             for (int itr = 0; itr < nIterations; itr++)
             {
-                clusteringAlgorithm.improveClusteringOneIteration(network, clustering);
+                clusteringAlgorithm.improveClustering(network, clustering);
                 progress.progress(restart*nIterations + itr);
                 if (isCanceled)
-                    return;
+                    break;
             }
 
             double quality = clusteringAlgorithm.calcQuality(network, clustering);
@@ -136,6 +138,9 @@ public class RunClustering implements Statistics, LongTask
                 maxQuality = quality;
                 maxClustering = clustering;
             }
+
+            if (isCanceled)
+                break;
         }
         progress.finish();
 
@@ -143,11 +148,13 @@ public class RunClustering implements Statistics, LongTask
         clustering.orderClustersByNNodes();
 
         quality = clusteringAlgorithm.calcQuality(network, clustering);
+
         saveClustering(graph);
     }
 
     private void saveClustering(Graph graph)
     {
+        graph.readLock();
         Table nodeTable = graph.getModel().getNodeTable();
         Column modCol = nodeTable.getColumn("Cluster");
         if (modCol == null)
@@ -159,5 +166,6 @@ public class RunClustering implements Statistics, LongTask
         {
             n.setAttribute(modCol, clustering.getCluster(n.getStoreId()));
         }
+        graph.readUnlock();
     }
 }
