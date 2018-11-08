@@ -1,4 +1,4 @@
-# Gephi Plugins
+# Social Network Analysis Visualization Plugin
 
 This repository is an out-of-the-box development environment for Gephi plugins. Gephi plugins are implemented in Java and can extend [Gephi](https://gephi.org) in many different ways, adding or improving features. Getting started is easy with this repository but also checkout the [Bootcamp](https://github.com/gephi/gephi-plugins-bootcamp) for examples of plugins you can create. 
 
