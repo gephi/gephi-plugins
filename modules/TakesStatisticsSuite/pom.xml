@@ -20,7 +20,7 @@
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>nbm-maven-plugin</artifactId>
                 <configuration>
-                    <licenseName>MIT</licenseName>
+                    <licenseName>GPLv3</licenseName>
                     <author>C. Deve, B. Honig, A. Keizer, S. Lin, D. Nieuwenhuizen, T. Oosterhoorn</author>
                     <authorEmail></authorEmail>
                     <authorUrl></authorUrl>
@@ -50,6 +50,11 @@
         <dependency>
             <groupId>nl.liacs</groupId>
             <artifactId>takesstatisticsui</artifactId>
+            <version>0.0.1</version>
+        </dependency>
+        <dependency>
+            <groupId>nl.liacs</groupId>
+            <artifactId>takesstatisticstools</artifactId>
             <version>0.0.1</version>
         </dependency>
     </dependencies>

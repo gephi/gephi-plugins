@@ -14,6 +14,7 @@
         <module>modules/TakesStatisticsSuite</module>
         <module>modules/TakesStatistics</module>
         <module>modules/TakesStatisticsUI</module>
+        <module>modules/TakesStatisticsTools</module>
     </modules>
     
     <!-- Properties -->
