@@ -6,6 +6,7 @@ This plugin is an implementation of an algorithm of which an implementation alre
 
 ## Abouts
 
+This plugin is able to do the things below: 
 - Designed to handle millions of nodes and billions of edges.
 
 ## Get started
