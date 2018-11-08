@@ -436,6 +436,10 @@ public class DiameterMetric implements Statistics, LongTask{
     public int getRadius() {
         return this.radius;
     }
+    
+    public int getIterations() {
+        return this.iterations;
+    }
 
     
 }
