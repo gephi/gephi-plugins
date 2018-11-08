@@ -1,6 +1,7 @@
 # Social Network Analysis Visualization Plugin
 
-This repository is an out-of-the-box development environment for Gephi plugins. Gephi plugins are implemented in Java and can extend [Gephi](https://gephi.org) in many different ways, adding or improving features. Getting started is easy with this repository but also checkout the [Bootcamp](https://github.com/gephi/gephi-plugins-bootcamp) for examples of plugins you can create. 
+This plugin is written as assignment for the course Software Engineering where teams of students realize software solutions at the Leiden Institute of Advanced Computer Science (LIACS). This plugin is an implementation of an algorithm of which an implementation already exists in C++. This algorithm was written by  Frank W. Takes and Walter A. Kosters (https://doi.org/10.1145/2063576.2063748). 
+
 
 ## Migrate Gephi 0.8 plugins
 
