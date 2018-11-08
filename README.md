@@ -8,6 +8,7 @@ This plugin is an implementation of an algorithm of which an implementation alre
 
 This plugin is able to do the things below: 
 - Designed to handle millions of nodes and billions of edges.
+- Focus is on the analysis of the topology/structure of huge undirected graphs, read from a file.
 
 ## Get started
 
