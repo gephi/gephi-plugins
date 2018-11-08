@@ -16,6 +16,6 @@ This plugin is able to do the things below:
 ## Features
 
 - Fast computation of the diameter of real-world networks, implementing the BoundingDiameters algorithm presented in:
-    F.W. Takes and W.A. Kosters, Determining the Diameter of Small World Networks, in Proceedings of the 20th ACM International Conference on Information and Knowledge Management (CIKM 2011), pp. 1191-1196, 2011. doi: 10.1145/2063576.2063748
+  >  F.W. Takes and W.A. Kosters, Determining the Diameter of Small World Networks, in Proceedings of the 20th ACM International Conference on Information and Knowledge Management (CIKM 2011), pp. 1191-1196, 2011. doi: 10.1145/2063576.2063748
 
 
