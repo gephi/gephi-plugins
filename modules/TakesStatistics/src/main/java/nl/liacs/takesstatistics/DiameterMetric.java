@@ -8,11 +8,17 @@ package nl.liacs.takesstatistics;
 
 import java.util.*;
 import org.gephi.graph.api.*;
+import org.gephi.statistics.plugin.ChartUtils;
 import org.gephi.statistics.spi.Statistics;
 import org.gephi.utils.longtask.spi.LongTask;
 import org.gephi.utils.progress.ProgressTicket;
 import org.gephi.statistics.plugin.ConnectedComponents;
 import org.gephi.utils.progress.Progress;
+import org.jfree.chart.ChartFactory;
+import org.jfree.chart.JFreeChart;
+import org.jfree.chart.plot.PlotOrientation;
+import org.jfree.data.xy.XYSeries;
+import org.jfree.data.xy.XYSeriesCollection;
 
 /**
  *
@@ -146,7 +152,7 @@ public class DiameterMetric implements Statistics, LongTask{
             iterations++;
             
             current_ecc = eccentricity(graph, currentNode);
-            //eccentricity should fill distance array
+            //eccentricity fills distance array
             
             maxUpperNode = null;
             minLowerNode = null;
@@ -173,7 +179,6 @@ public class DiameterMetric implements Statistics, LongTask{
             }
             
             // update candidate set
-            // No smart for-loop to avoid exception
             for (Node s : giantComponentNodes) {
                 if (!isCandidate[s.getStoreId()] || distance[s.getStoreId()] == -1 || pruned[s.getStoreId()] >= 0)
                         continue;
@@ -332,6 +337,33 @@ public class DiameterMetric implements Statistics, LongTask{
     
     @Override
     public String getReport() {
+        Map<Integer, Integer> eccDist = new HashMap();
+        for (int v : eccLower) {
+            if (!eccDist.containsKey(v)) {
+                eccDist.put(v, 0);
+            }
+            eccDist.put(v, eccDist.get(v) + 1);
+        }
+
+        //Distribution series
+        XYSeries dSeries = ChartUtils.createXYSeries(eccDist, "Eccentricity Distribution");
+
+        XYSeriesCollection dataset1 = new XYSeriesCollection();
+        dataset1.addSeries(dSeries);
+
+        JFreeChart chart = ChartFactory.createXYLineChart(
+                "Eccentricity Distribution",
+                "Eccentricity (number of nodes)",
+                "Count",
+                dataset1,
+                PlotOrientation.VERTICAL,
+                true,
+                false,
+                false);
+        chart.removeLegend();
+        ChartUtils.decorateChart(chart);
+        ChartUtils.scaleChart(chart, dSeries, false);
+        String imageFile = ChartUtils.renderChart(chart, "bd-eccentricity-distribution.png");
         return 
                 "<html><body>"
                 + "<h1>Diameter and Radius Report</hi>"
@@ -353,6 +385,9 @@ public class DiameterMetric implements Statistics, LongTask{
                     : "")
                 + (this.centerFlag 
                     ? ("Center: " + this.centerSize + " nodes<br>") 
+                    : "")
+                + (this.eccentricitiesFlag
+                    ? ("<br /><br />" + imageFile)
                     : "")
                 + "<br>"
                 + "<br>"
