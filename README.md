@@ -12,7 +12,7 @@ This plugin is able to do the things below:
 - Focus is on the analysis of the topology/structure of huge undirected graphs, read from a file.
 - Particular focus on distance-related functions for computing the exact and approximate distance distribution and the following distance-based network metrics the diameter, center size, radius, periphery size and eccentricity. 
 - No support for graph models/generators, node/edge attributes, node/edge weights, multi-partite networks, community detection algorithms or visualization (there are other tools that can do that).
-- Users are able to color network image based on the calculated results
+- Users are able to color network image based on the calculated results.
 
 ## Features
 
