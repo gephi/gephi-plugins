@@ -3,33 +3,9 @@
 This plugin is written as assignment for the course Software Engineering where teams of students realize software solutions at the Leiden Institute of Advanced Computer Science (LIACS). This plugin is an implementation of an algorithm of which an implementation already exists in C++. This algorithm was written by  Frank W. Takes and Walter A. Kosters (https://doi.org/10.1145/2063576.2063748). 
 
 
-## Migrate Gephi 0.8 plugins
+## Abouts
 
-The process in which plugins are developed and submitted had an overhaul when Gephi 0.9 was released. Details can be read on this article: [Plugin development gets new tools and opens-up to the community](https://gephi.wordpress.com/2015/12/16/plugin-development-gets-new-tools-and-opens-up-to-the-community/).
-
-This section is a step-by-step guide to migrate 0.8 plugins. Before going through the code and configuration, let's summerize the key differences between the two environements.
-
-- The 0.8 base is built using Ant, whereas the 0.9 uses Maven. These two are significantly different. If you aren't familiar with Maven, you can start with [Maven in 5 Minutes]( https://maven.apache.org/guides/getting-started/maven-in-five-minutes.html). Maven configurations are defined in the `pom.xml` files.
-- The 0.8 base finds the Gephi modules into the `platform` folder checked in the repository, whereas the 0.9 base downloads everything from the central Maven repository, where all Gephi modules are available.
-- Maven requires to separate source files (e.g. .java) and resources files (e.g. .properties) into distinct folders. Sources are located in `src/main/java` and resources in `src/main/resources`.
-
-A custom `migrate` goal is available in the [Gephi Maven Plugin](https://github.com/gephi/gephi-maven-plugin) to facilitate the migration from 0.8 to 0.9. This automated process migrates ant-based plugins to maven and takes care of copying the configuration and code. Follow these steps to migrate your plugin:
-
-- Fork and checkout this repository:
-
-        git clone git@github.com:username/gephi-plugins.git
-
-If you've already had a forked repository based on 0.8 we suggest to save your code somewhere, delete it and fork again as the history was cleared.
-
-- Copy your plugin folder at the root of this directory.
-
-- Run this command:
-
-        mvn org.gephi:gephi-maven-plugin:migrate
-
-This command will detect the ant-based plugin and migrate it. The resulting folder is then located into the `modules` folder.
-
-The plugin code can then be inspected in Netbeans or built via command line with `mvn clean package`.
+- Designed to handle millions of nodes and billions of edges.
 
 ## Get started
 
