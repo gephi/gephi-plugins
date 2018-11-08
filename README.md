@@ -13,7 +13,7 @@ This plugin is able to do the things below:
 - No support for graph models/generators, node/edge attributes, node/edge weights, multi-partite networks, community detection algorithms or visualization (there are other tools that can do that).
 - Users are able to color network image based on the calculated results
 
-## Get started
+# Features
 
 ### Requirements
 
