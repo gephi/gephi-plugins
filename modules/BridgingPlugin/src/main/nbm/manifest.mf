@@ -1,0 +1,5 @@
+Manifest-Version: 1.0
+OpenIDE-Module-Name: Bridging Centrality Plugin
+OpenIDE-Module-Short-Description: Bridging Centrality
+OpenIDE-Module-Long-Description: Bridging Centrality for undirected networks
+OpenIDE-Module-Display-Category: Metric
