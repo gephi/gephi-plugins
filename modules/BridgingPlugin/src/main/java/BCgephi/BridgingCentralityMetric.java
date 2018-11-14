@@ -29,6 +29,7 @@ import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
 import org.openide.util.NbBundle;
+import java.math.BigDecimal;
 
 /**
  *
@@ -147,15 +148,15 @@ public class BridgingCentralityMetric extends GraphDistance implements Statistic
         Table nodeTable = graphModel.getNodeTable();
         
         if ( ! nodeTable.hasColumn(BETWEENNESS) ){
-            nodeTable.addColumn(BETWEENNESS, "Betweenness Centrality", Double.class, (double) 0);
+            nodeTable.addColumn(BETWEENNESS, "Betweenness Centrality", BigDecimal.class, new BigDecimal("0"));
         }
         
         if ( ! nodeTable.hasColumn(BRIDGING_COEFFICIENT) ){
-            nodeTable.addColumn(BRIDGING_COEFFICIENT, "Bridging Coefficient", Double.class, (double) 0);
+            nodeTable.addColumn(BRIDGING_COEFFICIENT, "Bridging Coefficient", BigDecimal.class, new BigDecimal("0"));
         }
         
         if ( ! nodeTable.hasColumn(BRIDGING_CENTRALITY) ){
-            nodeTable.addColumn(BRIDGING_CENTRALITY, "Bridging Centrality", Double.class, (double) 0);
+            nodeTable.addColumn(BRIDGING_CENTRALITY, "Bridging Centrality", BigDecimal.class, new BigDecimal("0"));
         }
     }
     
@@ -313,9 +314,9 @@ public class BridgingCentralityMetric extends GraphDistance implements Statistic
 	    //The bridging centrality is just a multiplication of two other metrics
             bridging_cent[s_index] = bridging_coef * mybetweenness[s_index];
 
-            s.setAttribute(BETWEENNESS, nodeBetweenness[s_index]);
-            s.setAttribute(BRIDGING_COEFFICIENT, bridging_coef);
-            s.setAttribute(BRIDGING_CENTRALITY, bridging_cent[s_index]);
+            s.setAttribute(BETWEENNESS, new BigDecimal (nodeBetweenness[s_index]));
+            s.setAttribute(BRIDGING_COEFFICIENT, new BigDecimal (bridging_coef));
+            s.setAttribute(BRIDGING_CENTRALITY, new BigDecimal (bridging_cent[s_index]));
         }
     }
 
