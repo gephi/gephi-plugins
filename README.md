@@ -36,4 +36,4 @@ For any other questions about the plugin you can contact f.w.takes@liacs.leidenu
 ## Disclaimer
 
 This code was written for open-source usage, and is mainly written as part of the course Software Engineering with the attempt to write a good piece of code with respect to programming- or software-engineering standards as good as possible. However there is a change that are still some bugs in the code.
-It comes without any warranty of merchantability or suitability for a particular purpose. The plugin has exclusively been tested under the Windows 10.
+It comes without any warranty of merchantability or suitability for a particular purpose. The plugin has exclusively been tested under Windows.
