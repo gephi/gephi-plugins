@@ -30,5 +30,10 @@ Of course, all credit goes to the original authors of these algorithms.
 
 ## Support 
 
-If you want to add some new features to the plugin you can use the documentation in the link below:
+If you have a problem or want to add some new features to the plugin you can use the documentation in the link below:
 https://github.com/gephi/gephi-plugins/blob/master/README.md
+
+For any other questions about the plugin you can contact f.w.takes@liacs.leidenuniv.nl
+
+
+
