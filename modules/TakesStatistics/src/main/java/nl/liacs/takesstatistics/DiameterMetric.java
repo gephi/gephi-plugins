@@ -22,7 +22,12 @@ import org.jfree.data.xy.XYSeriesCollection;
 
 /**
  *
- * @author
+ * @author C. Deve
+ * @author B. Honig
+ * @author A. Keizer
+ * @author S. Lin
+ * @author D. Nieuwenhuizen
+ * @author T. Oosterhoorn
  */
 public class DiameterMetric implements Statistics, LongTask{
     
@@ -60,12 +65,10 @@ public class DiameterMetric implements Statistics, LongTask{
     
     private LinkedList<Node> giantComponentNodes;
     
-    private String test = "";
-    
     // Make sure the graph contain relevant attributes, as defined by the flags
     private void initAttributeColumns(Table nodeTable) {
         if (this.eccentricitiesFlag && !nodeTable.hasColumn(ECCENTRICITY)) {
-            nodeTable.addColumn(ECCENTRICITY, "Eccentricity", Integer.class, -1);
+            nodeTable.addColumn(ECCENTRICITY, "Eccentricity", Double.class, -1.0);
         }
         if (this.peripheryFlag && !nodeTable.hasColumn(IS_PERIPHERY)) {
             nodeTable.addColumn(IS_PERIPHERY, "Part of periphery", Boolean.class, false);
@@ -245,11 +248,6 @@ public class DiameterMetric implements Statistics, LongTask{
         if (d_upper == d_lower)
             Progress.progress(progress, giantComponentSize);
         
-        test = test + iterations + "\n";
-        for (Node s : giantComponentNodes) {
-            test = test + eccLower[s.getStoreId()] + "-" + eccUpper[s.getStoreId()] + "\n";
-        }
-        
         for (Node s : graph.getNodes()) {
             if(pruned[s.getStoreId()] >= 0)
                 eccLower[s.getStoreId()] = eccLower[(int) pruned[s.getStoreId()]];
@@ -267,7 +265,7 @@ public class DiameterMetric implements Statistics, LongTask{
                 s.setAttribute(IS_CENTER, true);
             }
             if (this.eccentricitiesFlag) {
-                s.setAttribute(ECCENTRICITY, eccLower[s.getStoreId()]);
+                s.setAttribute(ECCENTRICITY, (double) eccLower[s.getStoreId()]);
             }
         }
             
@@ -392,7 +390,7 @@ public class DiameterMetric implements Statistics, LongTask{
                 + "<br>"
                 + "<br>"
                 + "<h2>Algorithm</h2>"
-                + test
+                + "Frank W. Takes, <i>Algorithms for Analyzing and Mining Real-World Graphs</i>, p. 20-29 (2014)<br />"
                 + "</body></html>";
 
     }
