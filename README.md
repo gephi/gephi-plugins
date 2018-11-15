@@ -1,6 +1,6 @@
 # Social Network Analysis Visualization Plugin
 
-This plugin is written as assignment for the course Software Engineering at the Leiden Institute of Advanced Computer Science (LIACS). In this course teams of students realize software solutions.
+This plugin is written as assignment for the course Software Engineering at the Leiden Institute of Advanced Computer Science (LIACS).
 This Gephi plugin is an implementation of an algorithm of which an implementation already exists in C++. The algorithm was written by  Frank W. Takes and Walter A. Kosters (https://doi.org/10.1145/2063576.2063748). 
 This algorithm is believed to be much more efficient than the already implemented algorithm in Gephi.
 
