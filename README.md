@@ -24,12 +24,4 @@ This plugin is able to do the things below:
  
   > F.W. Takes and W.A. Kosters, Computing the Eccentricity Distribution of Large Graphs, Algorithms 6(1): 100-118, 2013. doi: [10.3390/a6010100](http://dx.doi.org/10.3390/a6010100)
 
-* Computation of closeness centrality in parallel, exact or approximated using the method discussed in:
-
-  > D. Eppstein and J. Wang, Fast Approximation of Centrality, Journal of Graph Algorithms and Applications 8(1): 39--45, 2004. doi: [10.7155/jgaa.00081](http://dx.doi.org/10.7155/jgaa.00081)
-
-* Computation of betweenness centrality in parallel, exact or an adapted approximate version of the method introduced in:
-
-  > U. Brandes, A Faster Algorithm for Betweenness Centrality, Journal of Mathematical Sociology 25(2): 163-177, 2001.
-
 Of course, all credit goes to the original authors of these algorithms. 
