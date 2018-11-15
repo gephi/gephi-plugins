@@ -33,5 +33,8 @@ Of course, all credit goes to the original authors of these algorithms.
 If you have a problem, want to add some new features to the plugin or you want to know more about Gephi you can use the documentation in the following link https://github.com/gephi/gephi-plugins/blob/master/README.md.
 For any other questions about the plugin you can contact f.w.takes@liacs.leidenuniv.nl.
 
+## Disclaimer
 
+This code was written for open-source usage, and is mainly written for the course Software Engineering with the attempt to write a good piece of code ith respect to any programming- or software-engineering standards as good as possible. However there is a change that are still some bugs in the code.
+It comes without any warranty of merchantability or suitability for a particular purpose. The plugin has exclusively been tested under the Windows 10.
 
