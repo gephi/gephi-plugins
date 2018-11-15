@@ -620,7 +620,4 @@
             </build>
         </profile>
     </profiles>
-    <modules>
-        <module>TakesStatisticsSuite</module>
-    </modules>
 </project>

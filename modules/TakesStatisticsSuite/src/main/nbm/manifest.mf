@@ -1,8 +1,0 @@
-Manifest-Version: 1.0
-OpenIDE-Module-Name: Takes Statistics
-OpenIDE-Module-Requires: org.openide.windows.WindowManager
-OpenIDE-Module-Short-Description: Plugin for network statistics as described in Frank Takes' paper "Algorithms for Analyzing and Real-World Graphs"
-OpenIDE-Module-Long-Description: Plugin for network statistics as described in Frank Takes' paper "Algorithms for Analyzing and Real-World Graphs"
-OpenIDE-Module-Display-Category: Metric
-OpenIDE-Module-Localizing-Bundle: nl/liacs/takesstatisticssuite/Bundle.properties
-AutoUpdate-Show-In-Client: false

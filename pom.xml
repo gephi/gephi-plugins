@@ -11,10 +11,10 @@
     
     <!-- List of modules -->
     <modules>
-        <module>modules/TakesStatisticsSuite</module>
-        <module>modules/TakesStatistics</module>
-        <module>modules/TakesStatisticsUI</module>
-        <module>modules/TakesStatisticsTools</module>
+        <module>modules/BoundingDiametersSuite</module>
+        <module>modules/BoundingDiameters</module>
+        <module>modules/BoundingDiametersUI</module>
+        <module>modules/BoundingDiametersTools</module>
     </modules>
     
     <!-- Properties -->
