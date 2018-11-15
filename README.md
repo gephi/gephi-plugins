@@ -7,11 +7,13 @@ This algorithm is believed to be much more efficient than the already implemente
 ## Abouts
 
 This plugin is able to do the things below: 
-- Designed to handle millions of nodes and billions of edges.
+- Designed to handle significantlty large of nodes and edges. 
+- Works on the largest weakly component of nodes. 
 - Focus is on the analysis of the topology/structure of huge undirected graphs, read from a file.
 - Particular focus on distance-related functions for computing the exact and approximate distance distribution graph and the following distance-based network metrics the diameter, center size, radius, periphery size and eccentricity. 
 - No support for graph models/generators, node/edge attributes, node/edge weights, multi-partite networks, community detection algorithms or visualization (there are other tools that can do that).
 - Users are able to color network image based on the calculated results.
+
 
 ## Features
 
@@ -24,3 +26,9 @@ This plugin is able to do the things below:
   > F.W. Takes and W.A. Kosters, Computing the Eccentricity Distribution of Large Graphs, Algorithms 6(1): 100-118, 2013. doi: [10.3390/a6010100](http://dx.doi.org/10.3390/a6010100)
 
 Of course, all credit goes to the original authors of these algorithms. 
+
+
+## Support 
+
+If you want to add some new features to the plugin you can use the documentation in the link below:
+https://github.com/gephi/gephi-plugins/blob/master/README.md
