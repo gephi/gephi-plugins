@@ -10,6 +10,16 @@ public class DiameterMetricPanel extends javax.swing.JPanel {
      */
     public DiameterMetricPanel() {
         initComponents();
+        
+        //Hide warning if network is undirected
+        GraphController graphController = Lookup.getDefault().lookup(GraphController.class);
+        if(graphController.getGraphModel().isUndirected()){
+            jLabelUndirected.setVisible(false);
+        }
+    }
+    
+    public void setUndirectedWarningVisible(boolean visible) {
+        ;
     }
     
     public void setEccentricitiesFlag(boolean b) {
@@ -46,6 +56,7 @@ public class DiameterMetricPanel extends javax.swing.JPanel {
         eccentricitiesCheckbox = new javax.swing.JCheckBox();
         peripheryCheckbox = new javax.swing.JCheckBox();
         centerCheckbox = new javax.swing.JCheckBox();
+        jLabelUndirected = new javax.swing.JLabel();
 
         header.setDescription(org.openide.util.NbBundle.getMessage(DiameterMetricPanel.class, "DiameterMetricPanel.header.description")); // NOI18N
         header.setDoubleBuffered(false);
@@ -68,14 +79,18 @@ public class DiameterMetricPanel extends javax.swing.JPanel {
 
         org.openide.awt.Mnemonics.setLocalizedText(centerCheckbox, org.openide.util.NbBundle.getMessage(DiameterMetricPanel.class, "DiameterMetricPanel.centerCheckbox.text")); // NOI18N
 
+        jLabelUndirected.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(jLabelUndirected, org.openide.util.NbBundle.getMessage(DiameterMetricPanel.class, "DiameterMetricPanel.jLabelUndirected.text")); // NOI18N
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(header, javax.swing.GroupLayout.DEFAULT_SIZE, 662, Short.MAX_VALUE)
+            .addComponent(header, javax.swing.GroupLayout.DEFAULT_SIZE, 691, Short.MAX_VALUE)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabelUndirected)
                     .addComponent(eccentricitiesCheckbox)
                     .addComponent(peripheryCheckbox)
                     .addComponent(centerCheckbox))
@@ -91,16 +106,20 @@ public class DiameterMetricPanel extends javax.swing.JPanel {
                 .addComponent(peripheryCheckbox)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(centerCheckbox)
-                .addContainerGap(44, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
+                .addComponent(jLabelUndirected, javax.swing.GroupLayout.DEFAULT_SIZE, 25, Short.MAX_VALUE)
+                .addContainerGap())
         );
+
+        jLabelUndirected.getAccessibleContext().setAccessibleDescription(org.openide.util.NbBundle.getMessage(DiameterMetricPanel.class, "DiameterMetricPanel.jLabelUndirected.AccessibleContext.accessibleDescription")); // NOI18N
     }// </editor-fold>//GEN-END:initComponents
 
     private void eccentricitiesCheckboxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_eccentricitiesCheckboxActionPerformed
-        // TODO add your handling code here:
+        
     }//GEN-LAST:event_eccentricitiesCheckboxActionPerformed
 
     private void peripheryCheckboxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_peripheryCheckboxActionPerformed
-        // TODO add your handling code here:
+        
     }//GEN-LAST:event_peripheryCheckboxActionPerformed
 
 
@@ -108,6 +127,7 @@ public class DiameterMetricPanel extends javax.swing.JPanel {
     private javax.swing.JCheckBox centerCheckbox;
     private javax.swing.JCheckBox eccentricitiesCheckbox;
     private org.jdesktop.swingx.JXHeader header;
+    private javax.swing.JLabel jLabelUndirected;
     private javax.swing.JCheckBox peripheryCheckbox;
     // End of variables declaration//GEN-END:variables
 }

@@ -333,16 +333,15 @@ public class DiameterMetric implements Statistics, LongTask{
         }
     }
     
-    @Override
-    public String getReport() {
-        Map<Integer, Integer> eccDist = new HashMap();
+    private String getEccentricityGraph() {
+        Map<Integer, Integer> eccDist = new HashMap<Integer, Integer>();
         for (int v : eccLower) {
             if (!eccDist.containsKey(v)) {
                 eccDist.put(v, 0);
             }
             eccDist.put(v, eccDist.get(v) + 1);
         }
-
+        
         //Distribution series
         XYSeries dSeries = ChartUtils.createXYSeries(eccDist, "Eccentricity Distribution");
 
@@ -351,8 +350,8 @@ public class DiameterMetric implements Statistics, LongTask{
 
         JFreeChart chart = ChartFactory.createXYLineChart(
                 "Eccentricity Distribution",
-                "Eccentricity (number of nodes)",
-                "Count",
+                "Eccentricity",
+                "Count (number of nodes)",
                 dataset1,
                 PlotOrientation.VERTICAL,
                 true,
@@ -361,7 +360,13 @@ public class DiameterMetric implements Statistics, LongTask{
         chart.removeLegend();
         ChartUtils.decorateChart(chart);
         ChartUtils.scaleChart(chart, dSeries, false);
-        String imageFile = ChartUtils.renderChart(chart, "bd-eccentricity-distribution.png");
+        return ChartUtils.renderChart(chart, "bd-eccentricity-distribution.png");
+    }
+    
+    @Override
+    public String getReport() {
+        String imageFile = getEccentricityGraph();
+        
         return 
                 "<html><body>"
                 + "<h1>Diameter and Radius Report</hi>"

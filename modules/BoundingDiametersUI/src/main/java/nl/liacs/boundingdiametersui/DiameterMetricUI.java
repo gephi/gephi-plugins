@@ -51,12 +51,12 @@ public class DiameterMetricUI implements StatisticsUI {
 
     @Override
     public String getDisplayName() {
-        return "BoundingDiameter";
+        return "BoundingDiameters";
     }
 
     @Override
     public String getShortDescription() {
-        return "Compute diameter and radius, using the BoundingDiameter algorithm";
+        return "Compute diameter and radius, using the BoundingDiameters algorithm";
     }
 
     @Override
