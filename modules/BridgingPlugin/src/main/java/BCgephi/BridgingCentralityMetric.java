@@ -30,6 +30,9 @@ import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
 import org.openide.util.NbBundle;
 import java.math.BigDecimal;
+import org.jfree.chart.plot.XYPlot;
+import org.jfree.chart.axis.NumberAxis;
+import org.jfree.chart.axis.NumberTickUnit;
 
 /**
  *
@@ -39,6 +42,7 @@ public class BridgingCentralityMetric extends GraphDistance implements Statistic
     
     private static final Logger logger = Logger.getLogger(BridgingCentralityMetric.class.getName());
     
+    public static final String BETWEENNESS_CENTRALITY = "betweennesscentrality2";
     public static final String BRIDGING_CENTRALITY = "bridgingcentrality";
     public static final String BRIDGING_COEFFICIENT = "bridgingcoefficient";
     
@@ -147,8 +151,8 @@ public class BridgingCentralityMetric extends GraphDistance implements Statistic
         
         Table nodeTable = graphModel.getNodeTable();
         
-        if ( ! nodeTable.hasColumn(BETWEENNESS) ){
-            nodeTable.addColumn(BETWEENNESS, "Betweenness Centrality", BigDecimal.class, new BigDecimal("0"));
+        if ( ! nodeTable.hasColumn(BETWEENNESS_CENTRALITY) ){
+            nodeTable.addColumn(BETWEENNESS_CENTRALITY, "Betweenness Centrality", BigDecimal.class, new BigDecimal("0"));
         }
         
         if ( ! nodeTable.hasColumn(BRIDGING_COEFFICIENT) ){
@@ -314,7 +318,7 @@ public class BridgingCentralityMetric extends GraphDistance implements Statistic
 	    //The bridging centrality is just a multiplication of two other metrics
             bridging_cent[s_index] = bridging_coef * mybetweenness[s_index];
 
-            s.setAttribute(BETWEENNESS, new BigDecimal (nodeBetweenness[s_index]));
+            s.setAttribute(BETWEENNESS_CENTRALITY, new BigDecimal (nodeBetweenness[s_index]));
             s.setAttribute(BRIDGING_COEFFICIENT, new BigDecimal (bridging_coef));
             s.setAttribute(BRIDGING_CENTRALITY, new BigDecimal (bridging_cent[s_index]));
         }
@@ -471,20 +475,26 @@ public class BridgingCentralityMetric extends GraphDistance implements Statistic
 
         XYSeriesCollection dataset = new XYSeriesCollection();
         dataset.addSeries(dSeries);
+        dataset.setAutoWidth(true);
 
         JFreeChart chart = ChartFactory.createXYLineChart(
                 pName,
                 pX,
                 pY,
                 dataset,
-                PlotOrientation.HORIZONTAL,
+                PlotOrientation.VERTICAL,
                 true,
                 false,
                 false);
         
+	XYPlot xyPlot = (XYPlot) chart.getPlot();
+	NumberAxis domain = (NumberAxis) xyPlot.getDomainAxis();
+        domain.setRange(0.00, domain.getUpperBound());
+        domain.setTickUnit(new NumberTickUnit(domain.getUpperBound()/10));
+        
         chart.removeLegend();
         ChartUtils.decorateChart(chart);
-        ChartUtils.scaleChart(chart, dSeries, normalized);
+       // ChartUtils.scaleChart(chart, dSeries, normalized);
         
         return ChartUtils.renderChart(chart, pName + ".png");
     }
