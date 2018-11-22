@@ -14,7 +14,6 @@
         <module>modules/BoundingDiametersSuite</module>
         <module>modules/BoundingDiameters</module>
         <module>modules/BoundingDiametersUI</module>
-        <module>modules/BoundingDiametersTools</module>
     </modules>
     
     <!-- Properties -->
