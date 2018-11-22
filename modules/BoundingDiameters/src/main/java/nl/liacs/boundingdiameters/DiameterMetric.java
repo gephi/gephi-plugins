@@ -183,33 +183,37 @@ public class DiameterMetric implements Statistics, LongTask{
             
             // update candidate set
             for (Node s : giantComponentNodes) {
-                if (!isCandidate[s.getStoreId()] || distance[s.getStoreId()] == -1 || pruned[s.getStoreId()] >= 0)
+                int sId = s.getStoreId();
+                
+                if (!isCandidate[sId] || distance[sId] == -1 || pruned[sId] >= 0)
                         continue;
                 
-                if (eccLower[s.getStoreId()] == eccUpper[s.getStoreId()]
+                if (eccLower[sId] == eccUpper[sId]
                     || ( //general check
-                        (eccUpper[s.getStoreId()] <= maxLower && eccLower[s.getStoreId()]*2 >= maxUpper) //diameter check
-                        && (eccLower[s.getStoreId()] >= minUpper && (eccUpper[s.getStoreId()] + 1) / 2 <= minLower) //radius check
-                        && (
-                            !this.peripheryFlag || (
-                                eccUpper[s.getStoreId()] < maxLower 
-                                && (
-                                    (maxLower == maxUpper) 
-                                    || (eccLower[s.getStoreId()]*2 > maxUpper)
+                        (eccUpper[sId] <= maxLower && eccLower[sId]*2 >= maxUpper) //diameter check
+                        && (eccLower[sId] >= minUpper && (eccUpper[sId] + 1) / 2 <= minLower) //radius check
+                        && (!this.peripheryFlag || (
+                                eccUpper[sId] < maxLower 
+                                && ((maxLower == maxUpper) 
+                                    || (eccLower[sId]*2 > maxUpper)
                                 )
                             ) 
                         ) //periphery check
-                        && (
-                            !this.centerFlag || (
-                                eccLower[s.getStoreId()] > minUpper 
-                                && ((minLower == minUpper) || ((eccUpper[s.getStoreId()] + 1) / 2 < minLower))
+                        && (!this.centerFlag || (
+                                eccLower[sId] > minUpper 
+                                && ((minLower == minUpper) 
+                                    || ((eccUpper[sId] + 1) / 2 < minLower)
+                                )
                             ) 
-                        )
-                    )) {//center check
+                        ) //center check
+                        && !this.eccentricitiesFlag
+                    )) {
                     
-                    isCandidate[s.getStoreId()] = false;
+                    isCandidate[sId] = false;
                     candidateTotal--;
                     count++;
+                    
+                    continue;
                 }
                 
                 // updating maxuppernode and minlowernode for selection in next round
@@ -320,6 +324,7 @@ public class DiameterMetric implements Statistics, LongTask{
         giantComponentSize = componentsSizes[giantComponentIndex];
 
         // Non-zero default values
+        Arrays.fill(eccLower, -1);
         Arrays.fill(eccUpper, giantComponentSize);
         Arrays.fill(pruned, -1);
         Arrays.fill(isCandidate, true);
@@ -336,20 +341,25 @@ public class DiameterMetric implements Statistics, LongTask{
     private String getEccentricityGraph() {
         Map<Integer, Integer> eccDist = new HashMap<Integer, Integer>();
         for (int v : eccLower) {
-            if (!eccDist.containsKey(v)) {
-                eccDist.put(v, 0);
+            if (v >= 0) {
+                if (!eccDist.containsKey(v)) {
+                    eccDist.put(v, 0);
+                }
+                eccDist.put(v, eccDist.get(v) + 1);
             }
-            eccDist.put(v, eccDist.get(v) + 1);
         }
         
         //Distribution series
-        XYSeries dSeries = ChartUtils.createXYSeries(eccDist, "Eccentricity Distribution");
+        XYSeries dSeries = ChartUtils.createXYSeries(
+                eccDist, 
+                "Eccentricity Distribution of Largest Weakly Connected Component"
+        );
 
         XYSeriesCollection dataset1 = new XYSeriesCollection();
         dataset1.addSeries(dSeries);
 
         JFreeChart chart = ChartFactory.createXYLineChart(
-                "Eccentricity Distribution",
+                "Eccentricity Distribution of Largest Weakly Connected Component",
                 "Eccentricity",
                 "Count (number of nodes)",
                 dataset1,
@@ -395,7 +405,8 @@ public class DiameterMetric implements Statistics, LongTask{
                 + "<br>"
                 + "<br>"
                 + "<h2>Algorithm</h2>"
-                + "Frank W. Takes, <i>Algorithms for Analyzing and Mining Real-World Graphs</i>, p. 20-29 (2014)<br />"
+                + "F.W. Takes and W.A. Kosters, <i>Determining the Diameter of Small World Networks</i>, in Proceedings of the 20th ACM International Conference on Information and Knowledge Management (CIKM 2011), pp. 1191-1196, 2011. doi: <a href='http://dx.doi.org/10.1145/2063576.2063748'>10.1145/2063576.2063748</a> <br>"
+                + "F.W. Takes and W.A. Kosters, <i>Computing the Eccentricity Distribution of Large Graphs</i>, Algorithms 6(1): 100-118, 2013. doi: <a href='http://dx.doi.org/10.3390/a6010100'>10.3390/a6010100</a> <br>"
                 + "</body></html>";
 
     }
