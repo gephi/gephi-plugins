@@ -28,6 +28,9 @@ This plugin is able to do the things below:
 Of course, all credit goes to the original authors of these algorithms. 
 
 
+## Installation
+We're working on getting the plugin included in the gephi marketplace. In the meantime, you can download the compiled modules under [releases](https://github.com/alexiooo/BoundingDiameters/releases). A different README explaining how manual plugin installation worked is included.
+
 ## Support
 
 If you have a problem, want to add some new features to the plugin or you want to know more about Gephi you can use the documentation in the following link https://github.com/gephi/gephi-plugins/blob/master/README.md.
