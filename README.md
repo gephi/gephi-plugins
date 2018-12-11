@@ -29,7 +29,7 @@ Of course, all credit goes to the original authors of these algorithms.
 
 
 ## Installation
-We're working on getting the plugin included in the gephi marketplace. In the meantime, you can download the compiled modules under [releases](https://github.com/alexiooo/BoundingDiameters/releases). A different README explaining how manual plugin installation worked is included.
+We're working on getting the plugin included in the gephi marketplace. In the meantime, you can download the compiled modules under [releases](https://github.com/alexiooo/BoundingDiameters/releases). A different README explaining how manual plugin installation works is included.
 
 ## Support
 
