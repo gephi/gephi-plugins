@@ -2,9 +2,9 @@
  * Created by JFormDesigner on Sun Apr 22 16:40:35 CEST 2018
  */
 
-package jaknowakowski.gephi.plugin.dbscan.view;
+package pl.edu.wat.wcy.gephi.plugin.dbscan.view;
 
-import jaknowakowski.gephi.plugin.dbscan.core.Labels;
+import pl.edu.wat.wcy.gephi.plugin.dbscan.core.Labels;
 import net.miginfocom.swing.MigLayout;
 
 import javax.swing.*;

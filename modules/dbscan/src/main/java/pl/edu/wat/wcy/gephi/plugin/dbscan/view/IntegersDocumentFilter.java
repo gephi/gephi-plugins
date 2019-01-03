@@ -1,4 +1,4 @@
-package jaknowakowski.gephi.plugin.dbscan.view;
+package pl.edu.wat.wcy.gephi.plugin.dbscan.view;
 
 import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
