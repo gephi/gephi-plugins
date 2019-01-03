@@ -1,5 +1,0 @@
-Manifest-Version: 1.0
-OpenIDE-Module-Name: Column Formula
-OpenIDE-Module-Short-Description: column formula description
-OpenIDE-Module-Long-Description: column formula long description
-OpenIDE-Module-Display-Category: Data Laboratory
