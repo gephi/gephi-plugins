@@ -8,32 +8,33 @@
     </parent>
 
     <groupId>pl.edu.wat.wcy.student</groupId>
-    <artifactId>clustering-coefficient-plugin</artifactId>
+    <artifactId>clustering-coefficient-gephi-plugin</artifactId>
     <version>1.0.0</version>
     <packaging>nbm</packaging>
 
     <name>Clustering Coefficient</name>
+    
+    <properties>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
+    </properties>
 
     <dependencies>
         <dependency>
             <groupId>org.gephi</groupId>
             <artifactId>statistics-api</artifactId>
-            <version>${gephi.version}</version>
         </dependency>
         <dependency>
             <groupId>org.gephi</groupId>
             <artifactId>graph-api</artifactId>
-            <version>${gephi.version}</version>
         </dependency>
         <dependency>
             <groupId>org.gephi</groupId>
             <artifactId>utils-longtask</artifactId>
-            <version>${gephi.version}</version>
         </dependency>
         <dependency>
             <groupId>org.netbeans.api</groupId>
             <artifactId>org-openide-util-lookup</artifactId>
-            <version>${netbeans.version}</version>
         </dependency>
     </dependencies>
 
@@ -45,20 +46,11 @@
                 <configuration>
                     <licenseName>Apache 2.0</licenseName>
                     <author>Kucharski Kisicki</author>
-                    <authorEmail></authorEmail>
-                    <authorUrl></authorUrl>
-                    <sourceCodeUrl>$sourcecode_url</sourceCodeUrl>
+                    <authorUrl>https://github.com/kuchara02</authorUrl>
+                    <sourceCodeUrl>https://github.com/kuchara02/gephi-plugins</sourceCodeUrl>
                     <publicPackages>
                         <!-- Insert public packages -->
                     </publicPackages>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <configuration>
-                    <source>1.8</source>
-                    <target>1.8</target>
                 </configuration>
             </plugin>
         </plugins>

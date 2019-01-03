@@ -1,4 +1,4 @@
-package Metric;
+package pl.edu.wat.wcy.gephi.plugin.clusteringcoefficient;
 
 import org.gephi.graph.api.*;
 import org.gephi.statistics.spi.Statistics;
@@ -11,6 +11,7 @@ public class ClusteringCoefficientStatistic implements Statistics, LongTask {
     public static boolean cancel = false;
     private ProgressTicket progressTicket;
 
+    @Override
     public void execute(GraphModel graphModel) {
         if (ClusteringCoefficientUI.triangleMethod) {
             TriangleClusteringCoefficientAlgorithm tcc = new TriangleClusteringCoefficientAlgorithm(graphModel);
@@ -21,15 +22,18 @@ public class ClusteringCoefficientStatistic implements Statistics, LongTask {
         }
     }
 
+    @Override
     public String getReport() {
         return report;
     }
 
+    @Override
     public boolean cancel() {
         cancel = true;
         return true;
     }
 
+    @Override
     public void setProgressTicket(ProgressTicket progressTicket) {
         this.progressTicket = progressTicket;
     }

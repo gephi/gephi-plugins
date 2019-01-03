@@ -1,9 +1,9 @@
-package Metric;
+package pl.edu.wat.wcy.gephi.plugin.clusteringcoefficient;
 
+import java.util.ArrayList;
 import org.gephi.graph.api.*;
 
 import java.util.Arrays;
-import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -12,39 +12,31 @@ import java.util.List;
 public class TriangleClusteringCoefficientAlgorithm {
 
     private String report = "";
-    private Graph graph;
-    private NodeIterable allNodes;
-    private EdgeIterable allEdges;
-    private List<Triangle> triangles;
-
+    private final Graph graph;
+    private final List<Triangle> triangles;
 
     public TriangleClusteringCoefficientAlgorithm(GraphModel graphModel) {
-        this.allNodes = graphModel.getGraph().getNodes();
-        this.allEdges = graphModel.getGraph().getEdges();
         this.graph = graphModel.getGraphVisible();
-        triangles = new LinkedList<>();
+        triangles = new ArrayList<>();
     }
 
     public String calculate() {
-
-        long triangleCount = getTriangleCountFromGraph();
+        final long triangleCount = getTriangleCountFromGraph();
 
         report += " Number of triangles: " + triangleCount + "\n";
 
-        long quantityPathsOfLenght2 = countPaths();
+        final long quantityPathsOfLenght2 = countPaths();
         report += "Number of paths (Length 2): " + quantityPathsOfLenght2 + "\n";
 
-        double tcc = 3f * triangleCount / quantityPathsOfLenght2;
+        final double tcc = 3f * triangleCount / quantityPathsOfLenght2;
 
         report += "Value of Clustering Coefficient: " + tcc + "\n";
 
         return report;
     }
 
-
     public long getTriangleCountFromGraph() {
-
-        allNodes.forEach(node -> {
+        graph.getNodes().forEach(node -> {
             if (ClusteringCoefficientStatistic.cancel) {
                 return;
             }
@@ -56,9 +48,8 @@ public class TriangleClusteringCoefficientAlgorithm {
         return triangles.size() / 3;
     }
 
-
     private List<Triangle> addTrianglesFromNode(List<Node> neighbours, Node baseNode) {
-        List<Triangle> triangleList = new LinkedList<>();
+        final List<Triangle> triangleList = new ArrayList<>();
 
         for (int i = 0; i < neighbours.size(); i++) {
             for (int j = i + 1; j < neighbours.size(); j++) {
@@ -71,11 +62,9 @@ public class TriangleClusteringCoefficientAlgorithm {
         return triangleList;
     }
 
-
     private long countPaths() {
-
         final long[] pathQuantity = {0};
-        allNodes.forEach(node -> {
+        graph.getNodes().forEach(node -> {
             List<Node> neighbors = (List<Node>) graph.getNeighbors(node).toCollection();
             neighbors.remove(node);
             pathQuantity[0] += countPathsBetweenNeighbors(neighbors);

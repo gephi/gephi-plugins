@@ -1,4 +1,4 @@
-package Metric;
+package pl.edu.wat.wcy.gephi.plugin.clusteringcoefficient;
 
 import org.gephi.statistics.spi.Statistics;
 import org.gephi.statistics.spi.StatisticsUI;
