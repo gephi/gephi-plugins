@@ -1,9 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-package upf.controller;
+package upf.edu.gephi.plugin.grouppartition.controller;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -32,7 +27,6 @@ public final class MenuButtonController implements ActionListener {
         int response = JOptionPane.showOptionDialog(null, "De you want to create a new workspace or overwrite the existing one?", "Select",
             JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE,
             null, options, options[0]);
-        System.out.println("response: " + response);
         
         if (response != 2) {
             PartitionController partition = new PartitionController();

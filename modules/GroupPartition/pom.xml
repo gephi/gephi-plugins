@@ -8,7 +8,7 @@
     </parent>
 
     <groupId>upf</groupId>
-    <artifactId>group-partition</artifactId>
+    <artifactId>group-partition-gephi-plugin</artifactId>
     <version>1.0.0</version>
     <packaging>nbm</packaging>
 
@@ -53,10 +53,10 @@
                 <artifactId>nbm-maven-plugin</artifactId>
                 <configuration>
                     <licenseName>Apache 2.0</licenseName>
-                    <author>Marc Torrelles, Sergi Puig</author>
-                    <authorEmail></authorEmail>
-                    <authorUrl></authorUrl>
-                    <sourceCodeUrl>$sourcecode_url</sourceCodeUrl>
+                    <author>Marc Torrelles</author>
+                    <author>Sergi Puig</author>
+                    <authorUrl>https://github.com/sergipuig</authorUrl>
+                    <sourceCodeUrl>https://github.com/sergipuig/gephi-plugins</sourceCodeUrl>
                     <publicPackages>
                         <!-- Insert public packages -->
                     </publicPackages>

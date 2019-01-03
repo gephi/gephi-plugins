@@ -1,9 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-package upf.controller;
+package upf.edu.gephi.plugin.grouppartition.controller;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -18,8 +13,8 @@ import org.gephi.graph.api.Table;
 import org.gephi.project.api.ProjectController;
 import org.gephi.project.api.Workspace;
 import org.openide.util.Lookup;
-import upf.algorithm.GraphPartitionAlgorithmFactory;
-import upf.algorithm.IGraphPartitionAlgorithm;
+import upf.edu.gephi.plugin.grouppartition.algorithm.GraphPartitionAlgorithmFactory;
+import upf.edu.gephi.plugin.grouppartition.algorithm.IGraphPartitionAlgorithm;
 
 /**
  *
