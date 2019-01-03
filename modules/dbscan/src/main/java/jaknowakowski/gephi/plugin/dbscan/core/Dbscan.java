@@ -1,6 +1,6 @@
-package core;
+package jaknowakowski.gephi.plugin.dbscan.core;
 
-import core.metrics.DistanceMetric;
+import jaknowakowski.gephi.plugin.dbscan.core.metrics.DistanceMetric;
 import org.gephi.graph.api.Element;
 import org.gephi.graph.api.GraphModel;
 import org.gephi.graph.api.Node;
@@ -13,8 +13,8 @@ import org.gephi.utils.progress.ProgressTicket;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
-import static core.Labels.*;
-import static util.HtmlUtils.*;
+import static jaknowakowski.gephi.plugin.dbscan.core.Labels.*;
+import static jaknowakowski.gephi.plugin.dbscan.util.HtmlUtils.*;
 
 /**
  * http://wsinf.edu.pl/assets/img/pdf/Zeszyty%20naukowe/vol.13/art03%20(3).pdf

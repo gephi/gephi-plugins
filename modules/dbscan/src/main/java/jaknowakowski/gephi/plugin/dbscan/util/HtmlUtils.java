@@ -1,4 +1,4 @@
-package util;
+package jaknowakowski.gephi.plugin.dbscan.util;
 
 public class HtmlUtils {
     public static final String NEW_LINE = "<br />";

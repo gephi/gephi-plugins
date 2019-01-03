@@ -1,7 +1,7 @@
-package view;
+package jaknowakowski.gephi.plugin.dbscan.view;
 
-import core.Dbscan;
-import core.Labels;
+import jaknowakowski.gephi.plugin.dbscan.core.Dbscan;
+import jaknowakowski.gephi.plugin.dbscan.core.Labels;
 import org.gephi.statistics.spi.Statistics;
 import org.gephi.statistics.spi.StatisticsUI;
 import org.openide.util.lookup.ServiceProvider;

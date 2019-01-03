@@ -1,4 +1,4 @@
-package util;
+package jaknowakowski.gephi.plugin.dbscan.util;
 
 import org.gephi.graph.api.Node;
 

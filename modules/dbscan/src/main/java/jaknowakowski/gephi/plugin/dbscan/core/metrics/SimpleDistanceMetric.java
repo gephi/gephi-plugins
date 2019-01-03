@@ -1,4 +1,4 @@
-package core.metrics;
+package jaknowakowski.gephi.plugin.dbscan.core.metrics;
 
 import org.gephi.graph.api.Node;
 

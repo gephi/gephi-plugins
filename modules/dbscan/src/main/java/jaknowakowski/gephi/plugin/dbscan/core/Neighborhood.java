@@ -1,6 +1,6 @@
-package core;
+package jaknowakowski.gephi.plugin.dbscan.core;
 
-import core.metrics.DistanceMetric;
+import jaknowakowski.gephi.plugin.dbscan.core.metrics.DistanceMetric;
 import org.gephi.graph.api.Node;
 import org.gephi.graph.api.NodeIterable;
 
@@ -10,7 +10,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static util.Utils.spliteratorToSet;
+import static jaknowakowski.gephi.plugin.dbscan.util.Utils.spliteratorToSet;
 
 public class Neighborhood {
 

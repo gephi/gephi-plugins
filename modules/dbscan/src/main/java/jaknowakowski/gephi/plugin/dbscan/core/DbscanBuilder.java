@@ -1,6 +1,6 @@
-package core;
+package jaknowakowski.gephi.plugin.dbscan.core;
 
-import core.metrics.SimpleDistanceMetric;
+import jaknowakowski.gephi.plugin.dbscan.core.metrics.SimpleDistanceMetric;
 import org.gephi.statistics.spi.Statistics;
 import org.gephi.statistics.spi.StatisticsBuilder;
 import org.openide.util.lookup.ServiceProvider;
