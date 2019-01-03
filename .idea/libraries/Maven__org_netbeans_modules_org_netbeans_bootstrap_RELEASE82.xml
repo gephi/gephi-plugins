@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Maven: org.netbeans.modules:org-netbeans-bootstrap:RELEASE82">
+    <CLASSES>
+      <root url="jar://$MAVEN_REPOSITORY$/org/netbeans/modules/org-netbeans-bootstrap/RELEASE82/org-netbeans-bootstrap-RELEASE82.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$MAVEN_REPOSITORY$/org/netbeans/modules/org-netbeans-bootstrap/RELEASE82/org-netbeans-bootstrap-RELEASE82-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$MAVEN_REPOSITORY$/org/netbeans/modules/org-netbeans-bootstrap/RELEASE82/org-netbeans-bootstrap-RELEASE82-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

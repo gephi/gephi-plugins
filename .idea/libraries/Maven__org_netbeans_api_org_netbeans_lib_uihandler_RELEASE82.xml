@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Maven: org.netbeans.api:org-netbeans-lib-uihandler:RELEASE82">
+    <CLASSES>
+      <root url="jar://$MAVEN_REPOSITORY$/org/netbeans/api/org-netbeans-lib-uihandler/RELEASE82/org-netbeans-lib-uihandler-RELEASE82.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$MAVEN_REPOSITORY$/org/netbeans/api/org-netbeans-lib-uihandler/RELEASE82/org-netbeans-lib-uihandler-RELEASE82-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$MAVEN_REPOSITORY$/org/netbeans/api/org-netbeans-lib-uihandler/RELEASE82/org-netbeans-lib-uihandler-RELEASE82-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

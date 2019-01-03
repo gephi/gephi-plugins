@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Maven: org.netbeans.api:org-openide-util-lookup:RELEASE82">
+    <CLASSES>
+      <root url="jar://$MAVEN_REPOSITORY$/org/netbeans/api/org-openide-util-lookup/RELEASE82/org-openide-util-lookup-RELEASE82.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$MAVEN_REPOSITORY$/org/netbeans/api/org-openide-util-lookup/RELEASE82/org-openide-util-lookup-RELEASE82-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$MAVEN_REPOSITORY$/org/netbeans/api/org-openide-util-lookup/RELEASE82/org-openide-util-lookup-RELEASE82-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>
