@@ -12,6 +12,7 @@ import org.gephi.utils.progress.ProgressTicket;
 
 import java.text.SimpleDateFormat;
 import java.util.*;
+import org.gephi.graph.api.Column;
 
 import static pl.edu.wat.wcy.gephi.plugin.dbscan.core.Labels.*;
 import static pl.edu.wat.wcy.gephi.plugin.dbscan.util.HtmlUtils.*;
@@ -72,7 +73,10 @@ public class Dbscan implements Statistics, LongTask {
 
     private void prepareGraphModel(GraphModel graphModel) {
         if (graphModel.getNodeTable().hasColumn(ATTRIBUTE_CLUSTER)) {
-            graphModel.getGraphVisible().getNodes().forEach(Element::clearAttributes);
+            final Column column = graphModel.getNodeTable().getColumn(ATTRIBUTE_CLUSTER);
+            for (Node node : graphModel.getGraphVisible().getNodes()) {
+                node.setAttribute(column, null);
+            }
         } else {
             graphModel.getNodeTable().addColumn(ATTRIBUTE_CLUSTER, Integer.class);
         }
