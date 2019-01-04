@@ -1,4 +1,4 @@
-package BCgephi;
+package ia.ppgco.facom.ufu.br.gephi.plugin.bridgingcoefficient;
 
 import javax.swing.JPanel;
 import org.gephi.graph.api.Graph;

@@ -1,5 +1,5 @@
 Manifest-Version: 1.0
 OpenIDE-Module-Name: Bridging Centrality Plugin
 OpenIDE-Module-Short-Description: Bridging Centrality Plugin
-OpenIDE-Module-Long-Description: Bridging Centrality (BC) depicts nodes connected to immediate neighbors that, by turn, are connecting clusters of nodes. BC is the result of Betweenness Centrality multiplied by Bridging Node Centrality. BC can be useful to identify links for groups of nodes. This plugin appends the new data columns to the Gephi data laboratory tab:  Betweenness, Bridging Node and Bridging Centrality.
+OpenIDE-Module-Long-Description: Bridging Centrality (BC) depicts nodes connected to immediate neighbors that, by turn, are connecting clusters of nodes. BC is the result of Betweenness Centrality multiplied by Bridging Node Centrality. BC can be useful to identify links for groups of nodes. This plugin appends the new data columns to the Gephi data laboratory tab: Betweenness, Bridging Node and Bridging Centrality.
 OpenIDE-Module-Display-Category: Metric
