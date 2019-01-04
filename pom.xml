@@ -58,6 +58,7 @@
         <module>modules/newmangirvan</module>
         <module>modules/image-preview</module>
         <module>modules/polinodeExporter</module>
+        <module>modules/LeidenAlgorithm</module>
     </modules>
     
     <!-- Properties -->

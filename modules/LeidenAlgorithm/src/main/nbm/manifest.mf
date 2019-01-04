@@ -1,0 +1,5 @@
+Manifest-Version: 1.0
+OpenIDE-Module-Name: Leiden Algorithm
+OpenIDE-Module-Short-Description: The Leiden algorithm finds well-connected communities in large scale networks.
+OpenIDE-Module-Long-Description: The Leiden algorithm finds well-connected communities and is very fast. It provides several guarantees about the connectivity of commmunities. This implementation can optimize both CPM and Modularity.
+OpenIDE-Module-Display-Category: Clustering
