@@ -8,6 +8,51 @@
     <packaging>pom</packaging>
 
     <name>gephi-plugins</name>
+    <description>Bridging Centrality Gephi plugin.</description>
+    <inceptionYear>2018</inceptionYear>
+    
+    <!-- Licenses -->
+    <licenses>
+        <license>
+            <name>CDDL 1.0</name>
+            <url>http://www.opensource.org/licenses/CDDL-1.0</url>
+            <comments>CDDL License 1.0</comments>
+        </license>
+        <license>
+            <name>GPL v3</name>
+            <url>http://www.opensource.org/licenses/GPL-3.0</url>
+            <comments>GPL v3 License</comments>
+        </license>
+    </licenses>
+    
+    <!-- SCM -->
+    <scm>
+        <connection>scm:git:git://github.com/santosardr/gephi-plugins.git</connection>
+        <developerConnection>scm:git:git@github.com:santosardr/gephi-plugins.git</developerConnection>
+        <url>https://github.com/santosardr/gephi-plugins</url>
+    </scm>
+    
+    <!-- Developers -->
+    <developers>
+        <developer>
+            <id>getulio</id>
+            <name>Getúlio de Morais Pereira</name>
+            <email>getulio@iftm.edu.br</email>
+            <url>https://www.researchgate.net/profile/Getulio_De_Morais_Pereira</url>
+            <organization>IFTM Campus Ituiutaba</organization>
+            <organizationUrl>http://www.iftm.edu.br</organizationUrl>
+            <timezone>-3</timezone>
+        </developer>
+        <developer>
+            <id>santosardr</id>
+            <name>Anderson Rodrigues dos Santos</name>
+            <email>santosardr@ufu.br</email>
+            <url>https://www.researchgate.net/profile/Anderson_Santos_3</url>
+            <organization>Universidade Federal de Uberlândia</organization>
+            <organizationUrl>http://www.ufu.br</organizationUrl>
+            <timezone>-3</timezone>
+        </developer>
+    </developers>
     
     <!-- List of modules -->
     <modules>
@@ -59,6 +104,7 @@
         <module>modules/image-preview</module>
         <module>modules/polinodeExporter</module>
         <module>modules/LeidenAlgorithm</module>
+        <module>modules/BridgingPlugin</module>
     </modules>
     
     <!-- Properties -->
@@ -67,15 +113,10 @@
         <gephi.version>0.9.2</gephi.version>
         <clusters.path>${project.build.directory}/plugins_clusters</clusters.path>
         <github.global.server>github</github.global.server>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
     </properties>
     
-    <!-- SCM -->
-    <scm>
-        <connection>scm:git:git://github.com/gephi/gephi-plugins.git</connection>
-        <developerConnection>scm:git:git@github.com:gephi/gephi-plugins.git</developerConnection>
-        <url>https://github.com/gephi/gephi-plugins</url>
-    </scm>
-
     <!-- Repositories -->
     <repositories>
         <repository>
