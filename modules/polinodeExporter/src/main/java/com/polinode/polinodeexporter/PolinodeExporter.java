@@ -135,7 +135,7 @@ public class PolinodeExporter implements Exporter, LongTask {
                         pedge.attributes.put("Color", "rgba(" + (int) (gedge.r() * 255) + "," + (int) (gedge.g() * 255) + "," + (int) (gedge.b() * 255) + "," + gedge.alpha() + ")");
 
                     if( gedge.getWeight()!=0 )
-                        pedge.attributes.put("Weight", new Double(gedge.getWeight()));
+                        pedge.attributes.put("Weight", gedge.getWeight());
 
                     Iterator<Column> gedgeAttribute = gedge.getAttributeColumns().iterator();
                     while (gedgeAttribute.hasNext()) {

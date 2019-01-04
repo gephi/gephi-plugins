@@ -1,20 +1,11 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.polinode.polinodeexporter;
 
 import java.awt.event.ActionListener;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.prefs.Preferences;
-import javax.swing.JRootPane;
-import javax.swing.SwingUtilities;
 import org.openide.util.NbPreferences;
 
-import org.gephi.project.api.ProjectInformation;
-import org.gephi.project.api.ProjectMetaData;
 
 /**
  *
