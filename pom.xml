@@ -108,6 +108,7 @@
         <module>modules/BoundingDiametersSuite</module>
         <module>modules/BoundingDiameters</module>
         <module>modules/BoundingDiametersUI</module>
+        <module>modules/dbscan</module>
     </modules>
     
     <!-- Properties -->
