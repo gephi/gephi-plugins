@@ -17,7 +17,6 @@ import org.gephi.graph.api.Node;
 import org.gephi.graph.api.Table;
 import org.gephi.statistics.spi.Statistics;
 import org.gephi.utils.longtask.spi.LongTask;
-import org.gephi.utils.progress.Progress;
 import org.gephi.utils.progress.ProgressTicket;
 
 public class RunClustering implements Statistics, LongTask
@@ -46,6 +45,7 @@ public class RunClustering implements Statistics, LongTask
         return quality;
     }
 
+    @Override
     public String getReport()
     {
         return    "<table>"
@@ -76,6 +76,7 @@ public class RunClustering implements Statistics, LongTask
         this.progress = pt;
     }
 
+    @Override
     public void execute(GraphModel gm)
     {
         Graph graph = gm.getUndirectedGraphVisible();
@@ -111,7 +112,7 @@ public class RunClustering implements Statistics, LongTask
                                       false, true);
         graph.readUnlock();
         
-        Random random = null;
+        final Random random;
         if (!useRandomSeed)
             random = new Random(randomSeed);
         else

@@ -8,7 +8,7 @@
     </parent>
 
     <groupId>org.cwts</groupId>
-    <artifactId>leiden-algorithm</artifactId>
+    <artifactId>leiden-algorithm-gephi-plugin</artifactId>
     <version>1.0.0</version>
     <packaging>nbm</packaging>
 
@@ -19,27 +19,22 @@
         <dependency>
             <groupId>org.gephi</groupId>
             <artifactId>core-library-wrapper</artifactId>
-            <version>0.9.2</version>
         </dependency>
         <dependency>
             <groupId>org.gephi</groupId>
             <artifactId>graph-api</artifactId>
-            <version>0.9.2</version>
         </dependency>
         <dependency>
             <groupId>org.gephi</groupId>
             <artifactId>statistics-api</artifactId>
-            <version>0.9.2</version>
         </dependency>
         <dependency>
             <groupId>org.netbeans.api</groupId>
             <artifactId>org-openide-util</artifactId>
-            <version>RELEASE82</version>
         </dependency>
         <dependency>
             <groupId>org.gephi</groupId>
             <artifactId>utils-longtask</artifactId>
-            <version>0.9.2</version>
         </dependency>
     </dependencies>
 

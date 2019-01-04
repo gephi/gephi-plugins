@@ -9,7 +9,7 @@ public class RunClusteringPanel extends javax.swing.JPanel
 
     private String previous;
 
-    private int previousDismissDelay;
+    private final int previousDismissDelay;
 
     public Algorithm getAlgorithm()
     {
@@ -130,6 +130,7 @@ public class RunClusteringPanel extends javax.swing.JPanel
 
         textFieldResolution.addFocusListener(new java.awt.event.FocusAdapter()
         {
+            @Override
             public void focusGained(java.awt.event.FocusEvent evt)
             {
                 textFieldFocusGained(evt);
@@ -138,6 +139,7 @@ public class RunClusteringPanel extends javax.swing.JPanel
 
         textFieldNIterations.addFocusListener(new java.awt.event.FocusAdapter()
         {
+            @Override
             public void focusGained(java.awt.event.FocusEvent evt)
             {
                 textFieldFocusGained(evt);
@@ -146,6 +148,7 @@ public class RunClusteringPanel extends javax.swing.JPanel
 
         textFieldNRestarts.addFocusListener(new java.awt.event.FocusAdapter()
         {
+            @Override
             public void focusGained(java.awt.event.FocusEvent evt)
             {
                 textFieldFocusGained(evt);
@@ -154,6 +157,7 @@ public class RunClusteringPanel extends javax.swing.JPanel
 
         textFieldSeed.addFocusListener(new java.awt.event.FocusAdapter()
         {
+            @Override
             public void focusGained(java.awt.event.FocusEvent evt)
             {
                 textFieldFocusGained(evt);
