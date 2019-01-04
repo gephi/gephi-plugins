@@ -4,4 +4,3 @@ OpenIDE-Module-Requires: org.openide.windows.WindowManager
 OpenIDE-Module-Short-Description: Plugin implementing the a fast algorithm for the diameter and radius of a network
 OpenIDE-Module-Long-Description: Plugin implementing the BoundingDiameters algorithm described in the papers "Determining the Diameter of Small World Networks" and "Computing the Eccentricity Distribution of Large Graphs"
 OpenIDE-Module-Display-Category: Metric
-AutoUpdate-Show-In-Client: false

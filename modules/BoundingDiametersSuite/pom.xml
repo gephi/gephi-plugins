@@ -21,25 +21,19 @@
                 <artifactId>nbm-maven-plugin</artifactId>
                 <configuration>
                     <licenseName>GPLv3</licenseName>
-                    <author>C. Deve, B. Honig, A. Keizer, S. Lin, D. Nieuwenhuizen, T. Oosterhoorn</author>
-                    <authorEmail></authorEmail>
-                    <authorUrl></authorUrl>
+                    <author>C. Deve</author>
+                    <author>B. Honig</author>
+                    <author>A. Keizer</author>
+                    <author>S. Lin</author>
+                    <author>D. Nieuwenhuizen</author>
+                    <author>T. Oosterhoorn</author>
                     <sourceCodeUrl>http://github.com/alexiooo/gephi-plugins</sourceCodeUrl>
                     <publicPackages>
                     </publicPackages>
                 </configuration>
             </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <configuration>
-                    <source>6</source>
-                    <target>6</target>
-                </configuration>
-            </plugin>
         </plugins>
     </build>
-    
     
     <dependencies>
         <dependency>
