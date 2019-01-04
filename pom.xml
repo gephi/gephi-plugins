@@ -110,6 +110,7 @@
         <module>modules/BoundingDiametersUI</module>
         <module>modules/dbscan</module>
         <module>modules/ClusteringCoefficient</module>
+        <module>modules/KleinbergGenerator</module>
     </modules>
     
     <!-- Properties -->
