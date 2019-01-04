@@ -109,6 +109,7 @@
         <module>modules/BoundingDiameters</module>
         <module>modules/BoundingDiametersUI</module>
         <module>modules/dbscan</module>
+        <module>modules/ClusteringCoefficient</module>
     </modules>
     
     <!-- Properties -->
