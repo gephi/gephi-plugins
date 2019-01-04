@@ -112,6 +112,7 @@
         <module>modules/ClusteringCoefficient</module>
         <module>modules/KleinbergGenerator</module>
         <module>modules/columnCalculator</module>
+        <module>modules/GroupPartition</module>
     </modules>
     
     <!-- Properties -->
