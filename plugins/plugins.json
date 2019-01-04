@@ -3151,6 +3151,32 @@
       },
       "sourcecode": "http://github.com/Polinode/gephi-plugins",
       "homepage": null
+    },
+    {
+      "id": "leiden-algorithm-gephi-plugin",
+      "name": "Leiden Algorithm",
+      "short_description": "The Leiden algorithm finds well-connected communities in large scale networks.",
+      "long_description": "The Leiden algorithm finds well-connected communities and is very fast. It provides several guarantees about the connectivity of commmunities. This implementation can optimize both CPM and Modularity.",
+      "readme": "## Leiden Algorithm\n\nThis README supports Markdown, see [syntax](https://help.github.com/articles/markdown-basics/)\n\n",
+      "license": "MIT",
+      "authors": [
+        {
+          "name": "Vincent Traag",
+          "email": "v.a.traag@cwts.leidenuniv.nl",
+          "link": "www.traag.net"
+        }
+      ],
+      "category": "Clustering",
+      "last_update": "January 4, 2019",
+      "images": null,
+      "versions": {
+        "0.9.2": {
+          "url": "0.9.2/leiden-algorithm-gephi-plugin-1.0.0.nbm",
+          "last_update": "January 4, 2019"
+        }
+      },
+      "sourcecode": "http://github.com/vtraag/gephi-leiden-plugin",
+      "homepage": null
     }
   ]
 }
