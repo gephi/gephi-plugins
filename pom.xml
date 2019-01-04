@@ -55,8 +55,9 @@
         <module>modules/ScalePlugin</module>
         <module>modules/CirclePack</module>
         <module>modules/SHPExporter</module>
-		 <module>modules/newmangirvan</module>
+        <module>modules/newmangirvan</module>
         <module>modules/image-preview</module>
+        <module>modules/polinodeExporter</module>
     </modules>
     
     <!-- Properties -->
