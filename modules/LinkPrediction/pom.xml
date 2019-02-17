@@ -25,10 +25,12 @@
                 <artifactId>nbm-maven-plugin</artifactId>
                 <configuration>
                     <licenseName>GPL v3</licenseName>
-                    <author>[5~[5~Marco Romanutti, Saskia Schueler</author>
-                    <authorEmail></authorEmail>
+                    <author>Marco Romanutti, Saskia Schueler</author>
+                    <!-- Optional
+                    <authorEmail>test</authorEmail>
                     <authorUrl></authorUrl>
                     <sourceCodeUrl>$sourcecode_url</sourceCodeUrl>
+                    -->
                     <publicPackages>
                         <!-- Insert public packages -->
                     </publicPackages>
