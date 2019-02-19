@@ -28,4 +28,4 @@ run:
   stage: run
   script:
     - mvn $MAVEN_CLI_OPTS package
-    - mvn $MAVEN_CLI_OPTS exec:java -Dexec.mainClass="ch.fhnw.i4Ds.App"
+    - mvn $MAVEN_CLI_OPTS exec:java -Dexec.mainClass="org.gephi.plugins.linkprediction.App"
