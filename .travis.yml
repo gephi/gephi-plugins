@@ -9,5 +9,4 @@ addons:
 
 script:
 # the following command line builds the project, runs the tests with coverage and then execute the SonarCloud analysis
-#- mvn clean org.jacoco:jacoco-maven-plugin:prepare-agent install sonar:sonar
-- mvn sonar:sonar -Dsonar.projectKey=romanutti_gephi-plugins -Dsonar.organization=romanutti-github -Dsonar.host.url=https://sonarcloud.io -Dsonar.login=6f880cf7119c8135d79ed1eeb24a8164656bbfbd
+- mvn clean org.jacoco:jacoco-maven-plugin:prepare-agent install sonar:sonar
