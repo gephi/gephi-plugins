@@ -1,5 +1,0 @@
-Manifest-Version: 1.0
-OpenIDE-Module-Name: Ultimate Graph Viewer Importer
-OpenIDE-Module-Short-Description: Importar archivos para la generaci¢n del grafo inicial
-OpenIDE-Module-Long-Description: Plugin para realizar la creaci¢n del grafo a trav‚s de 3 archivos procesados que contengan: relaciones entre nodos, comunidades a las que pertenecen los nodos, tags de los nodos.
-OpenIDE-Module-Display-Category: Import
