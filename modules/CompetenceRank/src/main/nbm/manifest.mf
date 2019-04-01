@@ -1,0 +1,5 @@
+Manifest-Version: 1.0
+OpenIDE-Module-Name: Competence Rank
+OpenIDE-Module-Short-Description: Plugin
+OpenIDE-Module-Long-Description: Plugin
+OpenIDE-Module-Display-Category: Metric
