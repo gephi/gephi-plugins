@@ -48,25 +48,28 @@ public class UGVPanel extends TopComponent {
         comMetodosVisualizacion = new javax.swing.JComboBox<>();
         pnlFiltros = new javax.swing.JTabbedPane();
         pnlComunidades = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
-        jLabel2 = new javax.swing.JLabel();
-        jTextField2 = new javax.swing.JTextField();
+        lblMasNodos = new javax.swing.JLabel();
+        txtMasNodos = new javax.swing.JTextField();
+        lblMenosNodos = new javax.swing.JLabel();
+        txtMenosNodos = new javax.swing.JTextField();
         pnlNodos = new javax.swing.JPanel();
-        jLabel3 = new javax.swing.JLabel();
-        jTextField3 = new javax.swing.JTextField();
-        jLabel4 = new javax.swing.JLabel();
-        jTextField4 = new javax.swing.JTextField();
-        jLabel7 = new javax.swing.JLabel();
-        jLabel8 = new javax.swing.JLabel();
+        lblConTags = new javax.swing.JLabel();
+        txtConTags = new javax.swing.JTextField();
+        lblSinTags = new javax.swing.JLabel();
+        txtSinTags = new javax.swing.JTextField();
+        lblMasComunidades = new javax.swing.JLabel();
+        lblMenosComunidades = new javax.swing.JLabel();
+        txtMasComunidades = new javax.swing.JTextField();
+        txtMenosComunidades = new javax.swing.JTextField();
         pnlAristas = new javax.swing.JPanel();
-        jLabel5 = new javax.swing.JLabel();
-        jLabel6 = new javax.swing.JLabel();
-        jTextField5 = new javax.swing.JTextField();
-        jTextField6 = new javax.swing.JTextField();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
+        lblMasPeso = new javax.swing.JLabel();
+        lblMenosPeso = new javax.swing.JLabel();
+        txtMasPeso = new javax.swing.JTextField();
+        txtMenosPeso = new javax.swing.JTextField();
+        btnLimpiarFiltros = new javax.swing.JButton();
+        btnAplicarFiltros = new javax.swing.JButton();
 
+        lblCrearGrafo.setFont(new java.awt.Font("Times New Roman", 3, 14)); // NOI18N
         org.openide.awt.Mnemonics.setLocalizedText(lblCrearGrafo, org.openide.util.NbBundle.getMessage(UGVPanel.class, "UGVPanel.lblCrearGrafo.text")); // NOI18N
 
         org.openide.awt.Mnemonics.setLocalizedText(btnCrearGrafo, org.openide.util.NbBundle.getMessage(UGVPanel.class, "UGVPanel.btnCrearGrafo.text")); // NOI18N
@@ -89,13 +92,13 @@ public class UGVPanel extends TopComponent {
 
         comMetodosVisualizacion.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Sombreado", "Nodos", "Aristas" }));
 
-        org.openide.awt.Mnemonics.setLocalizedText(jLabel1, org.openide.util.NbBundle.getMessage(UGVPanel.class, "UGVPanel.jLabel1.text")); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(lblMasNodos, org.openide.util.NbBundle.getMessage(UGVPanel.class, "UGVPanel.lblMasNodos.text")); // NOI18N
 
-        jTextField1.setText(org.openide.util.NbBundle.getMessage(UGVPanel.class, "UGVPanel.jTextField1.text")); // NOI18N
+        txtMasNodos.setText(org.openide.util.NbBundle.getMessage(UGVPanel.class, "UGVPanel.txtMasNodos.text")); // NOI18N
 
-        org.openide.awt.Mnemonics.setLocalizedText(jLabel2, org.openide.util.NbBundle.getMessage(UGVPanel.class, "UGVPanel.jLabel2.text")); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(lblMenosNodos, org.openide.util.NbBundle.getMessage(UGVPanel.class, "UGVPanel.lblMenosNodos.text")); // NOI18N
 
-        jTextField2.setText(org.openide.util.NbBundle.getMessage(UGVPanel.class, "UGVPanel.jTextField2.text")); // NOI18N
+        txtMenosNodos.setText(org.openide.util.NbBundle.getMessage(UGVPanel.class, "UGVPanel.txtMenosNodos.text")); // NOI18N
 
         javax.swing.GroupLayout pnlComunidadesLayout = new javax.swing.GroupLayout(pnlComunidades);
         pnlComunidades.setLayout(pnlComunidadesLayout);
@@ -104,41 +107,45 @@ public class UGVPanel extends TopComponent {
             .addGroup(pnlComunidadesLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(pnlComunidadesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel1)
-                    .addComponent(jLabel2))
-                .addGap(56, 56, 56)
+                    .addComponent(lblMasNodos)
+                    .addComponent(lblMenosNodos))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 43, Short.MAX_VALUE)
                 .addGroup(pnlComunidadesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jTextField1)
-                    .addComponent(jTextField2, javax.swing.GroupLayout.DEFAULT_SIZE, 121, Short.MAX_VALUE))
-                .addContainerGap(28, Short.MAX_VALUE))
+                    .addComponent(txtMasNodos, javax.swing.GroupLayout.DEFAULT_SIZE, 150, Short.MAX_VALUE)
+                    .addComponent(txtMenosNodos))
+                .addContainerGap())
         );
         pnlComunidadesLayout.setVerticalGroup(
             pnlComunidadesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnlComunidadesLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(pnlComunidadesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel1)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtMasNodos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblMasNodos))
                 .addGap(18, 18, 18)
-                .addGroup(pnlComunidadesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel2)
-                    .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(130, Short.MAX_VALUE))
+                .addGroup(pnlComunidadesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txtMenosNodos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblMenosNodos))
+                .addContainerGap(95, Short.MAX_VALUE))
         );
 
         pnlFiltros.addTab(org.openide.util.NbBundle.getMessage(UGVPanel.class, "UGVPanel.pnlComunidades.TabConstraints.tabTitle"), pnlComunidades); // NOI18N
 
-        org.openide.awt.Mnemonics.setLocalizedText(jLabel3, org.openide.util.NbBundle.getMessage(UGVPanel.class, "UGVPanel.jLabel3.text")); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(lblConTags, org.openide.util.NbBundle.getMessage(UGVPanel.class, "UGVPanel.lblConTags.text")); // NOI18N
 
-        jTextField3.setText(org.openide.util.NbBundle.getMessage(UGVPanel.class, "UGVPanel.jTextField3.text")); // NOI18N
+        txtConTags.setText(org.openide.util.NbBundle.getMessage(UGVPanel.class, "UGVPanel.txtConTags.text")); // NOI18N
 
-        org.openide.awt.Mnemonics.setLocalizedText(jLabel4, org.openide.util.NbBundle.getMessage(UGVPanel.class, "UGVPanel.jLabel4.text")); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(lblSinTags, org.openide.util.NbBundle.getMessage(UGVPanel.class, "UGVPanel.lblSinTags.text")); // NOI18N
 
-        jTextField4.setText(org.openide.util.NbBundle.getMessage(UGVPanel.class, "UGVPanel.jTextField4.text")); // NOI18N
+        txtSinTags.setText(org.openide.util.NbBundle.getMessage(UGVPanel.class, "UGVPanel.txtSinTags.text")); // NOI18N
 
-        org.openide.awt.Mnemonics.setLocalizedText(jLabel7, org.openide.util.NbBundle.getMessage(UGVPanel.class, "UGVPanel.jLabel7.text")); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(lblMasComunidades, org.openide.util.NbBundle.getMessage(UGVPanel.class, "UGVPanel.lblMasComunidades.text")); // NOI18N
 
-        org.openide.awt.Mnemonics.setLocalizedText(jLabel8, org.openide.util.NbBundle.getMessage(UGVPanel.class, "UGVPanel.jLabel8.text")); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(lblMenosComunidades, org.openide.util.NbBundle.getMessage(UGVPanel.class, "UGVPanel.lblMenosComunidades.text")); // NOI18N
+
+        txtMasComunidades.setText(org.openide.util.NbBundle.getMessage(UGVPanel.class, "UGVPanel.txtMasComunidades.text")); // NOI18N
+
+        txtMenosComunidades.setText(org.openide.util.NbBundle.getMessage(UGVPanel.class, "UGVPanel.txtMenosComunidades.text")); // NOI18N
 
         javax.swing.GroupLayout pnlNodosLayout = new javax.swing.GroupLayout(pnlNodos);
         pnlNodos.setLayout(pnlNodosLayout);
@@ -147,49 +154,49 @@ public class UGVPanel extends TopComponent {
             .addGroup(pnlNodosLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(pnlNodosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(pnlNodosLayout.createSequentialGroup()
-                        .addGroup(pnlNodosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel3)
-                            .addComponent(jLabel4))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 57, Short.MAX_VALUE)
-                        .addGroup(pnlNodosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jTextField3)
-                            .addComponent(jTextField4, javax.swing.GroupLayout.DEFAULT_SIZE, 119, Short.MAX_VALUE))
-                        .addGap(29, 29, 29))
-                    .addGroup(pnlNodosLayout.createSequentialGroup()
-                        .addComponent(jLabel7)
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(pnlNodosLayout.createSequentialGroup()
-                        .addComponent(jLabel8)
-                        .addGap(0, 0, Short.MAX_VALUE))))
+                    .addComponent(lblConTags)
+                    .addComponent(lblSinTags)
+                    .addComponent(lblMasComunidades)
+                    .addComponent(lblMenosComunidades))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 8, Short.MAX_VALUE)
+                .addGroup(pnlNodosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(txtMenosComunidades, javax.swing.GroupLayout.DEFAULT_SIZE, 150, Short.MAX_VALUE)
+                    .addComponent(txtMasComunidades)
+                    .addComponent(txtConTags)
+                    .addComponent(txtSinTags))
+                .addContainerGap())
         );
         pnlNodosLayout.setVerticalGroup(
             pnlNodosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnlNodosLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(pnlNodosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel3))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(pnlNodosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel4)
-                    .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jLabel7)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jLabel8)
-                .addContainerGap(77, Short.MAX_VALUE))
+                .addGroup(pnlNodosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txtConTags, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblConTags))
+                .addGap(18, 18, 18)
+                .addGroup(pnlNodosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txtSinTags, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblSinTags))
+                .addGap(18, 18, 18)
+                .addGroup(pnlNodosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txtMasComunidades, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblMasComunidades))
+                .addGap(18, 18, 18)
+                .addGroup(pnlNodosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txtMenosComunidades, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblMenosComunidades))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pnlFiltros.addTab(org.openide.util.NbBundle.getMessage(UGVPanel.class, "UGVPanel.pnlNodos.TabConstraints.tabTitle"), pnlNodos); // NOI18N
 
-        org.openide.awt.Mnemonics.setLocalizedText(jLabel5, org.openide.util.NbBundle.getMessage(UGVPanel.class, "UGVPanel.jLabel5.text")); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(lblMasPeso, org.openide.util.NbBundle.getMessage(UGVPanel.class, "UGVPanel.lblMasPeso.text")); // NOI18N
 
-        org.openide.awt.Mnemonics.setLocalizedText(jLabel6, org.openide.util.NbBundle.getMessage(UGVPanel.class, "UGVPanel.jLabel6.text")); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(lblMenosPeso, org.openide.util.NbBundle.getMessage(UGVPanel.class, "UGVPanel.lblMenosPeso.text")); // NOI18N
 
-        jTextField5.setText(org.openide.util.NbBundle.getMessage(UGVPanel.class, "UGVPanel.jTextField5.text")); // NOI18N
+        txtMasPeso.setText(org.openide.util.NbBundle.getMessage(UGVPanel.class, "UGVPanel.txtMasPeso.text")); // NOI18N
 
-        jTextField6.setText(org.openide.util.NbBundle.getMessage(UGVPanel.class, "UGVPanel.jTextField6.text")); // NOI18N
+        txtMenosPeso.setText(org.openide.util.NbBundle.getMessage(UGVPanel.class, "UGVPanel.txtMenosPeso.text")); // NOI18N
 
         javax.swing.GroupLayout pnlAristasLayout = new javax.swing.GroupLayout(pnlAristas);
         pnlAristas.setLayout(pnlAristasLayout);
@@ -198,33 +205,35 @@ public class UGVPanel extends TopComponent {
             .addGroup(pnlAristasLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(pnlAristasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel5)
-                    .addComponent(jLabel6))
-                .addGap(35, 35, 35)
-                .addGroup(pnlAristasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jTextField5)
-                    .addComponent(jTextField6, javax.swing.GroupLayout.DEFAULT_SIZE, 119, Short.MAX_VALUE))
-                .addContainerGap(24, Short.MAX_VALUE))
+                    .addGroup(pnlAristasLayout.createSequentialGroup()
+                        .addComponent(lblMenosPeso)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 58, Short.MAX_VALUE)
+                        .addComponent(txtMenosPeso, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(pnlAristasLayout.createSequentialGroup()
+                        .addComponent(lblMasPeso)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(txtMasPeso, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap())
         );
         pnlAristasLayout.setVerticalGroup(
             pnlAristasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnlAristasLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(pnlAristasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel5)
-                    .addComponent(jTextField5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtMasPeso, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblMasPeso))
                 .addGap(18, 18, 18)
                 .addGroup(pnlAristasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel6)
-                    .addComponent(jTextField6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(130, Short.MAX_VALUE))
+                    .addComponent(txtMenosPeso, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblMenosPeso))
+                .addContainerGap(95, Short.MAX_VALUE))
         );
 
         pnlFiltros.addTab(org.openide.util.NbBundle.getMessage(UGVPanel.class, "UGVPanel.pnlAristas.TabConstraints.tabTitle"), pnlAristas); // NOI18N
 
-        org.openide.awt.Mnemonics.setLocalizedText(jButton1, org.openide.util.NbBundle.getMessage(UGVPanel.class, "UGVPanel.jButton1.text")); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(btnLimpiarFiltros, org.openide.util.NbBundle.getMessage(UGVPanel.class, "UGVPanel.btnLimpiarFiltros.text")); // NOI18N
 
-        org.openide.awt.Mnemonics.setLocalizedText(jButton2, org.openide.util.NbBundle.getMessage(UGVPanel.class, "UGVPanel.jButton2.text")); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(btnAplicarFiltros, org.openide.util.NbBundle.getMessage(UGVPanel.class, "UGVPanel.btnAplicarFiltros.text")); // NOI18N
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -236,9 +245,9 @@ public class UGVPanel extends TopComponent {
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 149, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(btnLimpiarFiltros, javax.swing.GroupLayout.PREFERRED_SIZE, 149, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(28, 28, 28)
-                                .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 149, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(btnAplicarFiltros, javax.swing.GroupLayout.PREFERRED_SIZE, 149, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addComponent(lblMetodoVisualizacion))
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
@@ -263,20 +272,20 @@ public class UGVPanel extends TopComponent {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblCrearGrafo)
                     .addComponent(btnCrearGrafo))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGap(18, 18, 18)
                 .addComponent(lblMetodoVisualizacion, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(34, 34, 34)
+                .addGap(29, 29, 29)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(comMetodosVisualizacion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnAplicarVisualizacion))
-                .addGap(21, 21, 21)
+                .addGap(18, 18, 18)
                 .addComponent(lblFiltros)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(pnlFiltros, javax.swing.GroupLayout.PREFERRED_SIZE, 235, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 16, Short.MAX_VALUE)
+                .addGap(16, 16, 16)
+                .addComponent(pnlFiltros, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton1)
-                    .addComponent(jButton2))
+                    .addComponent(btnLimpiarFiltros)
+                    .addComponent(btnAplicarFiltros))
                 .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
@@ -312,31 +321,33 @@ public class UGVPanel extends TopComponent {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnAplicarFiltros;
     private javax.swing.JButton btnAplicarVisualizacion;
     private javax.swing.JButton btnCrearGrafo;
+    private javax.swing.JButton btnLimpiarFiltros;
     private javax.swing.JComboBox<String> comMetodosVisualizacion;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel6;
-    private javax.swing.JLabel jLabel7;
-    private javax.swing.JLabel jLabel8;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField2;
-    private javax.swing.JTextField jTextField3;
-    private javax.swing.JTextField jTextField4;
-    private javax.swing.JTextField jTextField5;
-    private javax.swing.JTextField jTextField6;
+    private javax.swing.JLabel lblConTags;
     private javax.swing.JLabel lblCrearGrafo;
     private javax.swing.JLabel lblFiltros;
+    private javax.swing.JLabel lblMasComunidades;
+    private javax.swing.JLabel lblMasNodos;
+    private javax.swing.JLabel lblMasPeso;
+    private javax.swing.JLabel lblMenosComunidades;
+    private javax.swing.JLabel lblMenosNodos;
+    private javax.swing.JLabel lblMenosPeso;
     private javax.swing.JLabel lblMetodoVisualizacion;
+    private javax.swing.JLabel lblSinTags;
     private javax.swing.JPanel pnlAristas;
     private javax.swing.JPanel pnlComunidades;
     private javax.swing.JTabbedPane pnlFiltros;
     private javax.swing.JPanel pnlNodos;
+    private javax.swing.JTextField txtConTags;
+    private javax.swing.JTextField txtMasComunidades;
+    private javax.swing.JTextField txtMasNodos;
+    private javax.swing.JTextField txtMasPeso;
+    private javax.swing.JTextField txtMenosComunidades;
+    private javax.swing.JTextField txtMenosNodos;
+    private javax.swing.JTextField txtMenosPeso;
+    private javax.swing.JTextField txtSinTags;
     // End of variables declaration//GEN-END:variables
 }
