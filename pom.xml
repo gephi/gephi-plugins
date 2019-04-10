@@ -12,6 +12,7 @@
     <!-- List of modules -->
     <modules>
         <!-- Add here the paths of all modules (e.g. <module>modules/MyModule</module>) -->
+        <module>modules/UltimateGraphViewer</module>
     </modules>
     
     <!-- Properties -->
@@ -20,6 +21,8 @@
         <gephi.version>0.9.2</gephi.version>
         <clusters.path>${project.build.directory}/plugins_clusters</clusters.path>
         <github.global.server>github</github.global.server>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
     </properties>
     
     <!-- SCM -->
@@ -99,20 +102,7 @@
         
         <!-- Plugins -->
         <plugins>
-            <!-- Configure gephi-maven-plugin -->
-            <plugin>
-                <groupId>org.gephi</groupId>
-                <artifactId>gephi-maven-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <id>validate-plugin</id>
-                        <goals>
-                            <goal>validate</goal>
-                        </goals>
-                        <phase>validate</phase>
-                    </execution>
-                </executions>
-            </plugin>
+            
             
             <!-- Unpack the localization dependency -->
             <plugin>
@@ -182,13 +172,6 @@
                                 <configuration>
                                     <metadataUrl>https://gephi.org/gephi-plugins/plugins/</metadataUrl>
                                 </configuration>
-                            </execution>
-                            <execution>
-                                <id>validate-plugin</id>
-                                <goals>
-                                    <goal>validate</goal>
-                                </goals>
-                                <phase>none</phase>
                             </execution>
                         </executions>
                         <configuration>
