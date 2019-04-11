@@ -24,7 +24,7 @@ public abstract class LinkPredictionFilter implements ComplexFilter {
     protected int edgesLimit = EDGES_LIMIT_DEFAULT;
 
     /**
-     * Get or creates singleton instance of properties.
+     * Gets or creates singleton instance of properties.
      *
      * @return Filter properties
      */

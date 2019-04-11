@@ -18,7 +18,6 @@ import javax.swing.*;
  * @author Marco Romanutti
  * @see LinkPredictionFilter
  */
-@ServiceProvider(service = FilterBuilder.class)
 public abstract class LinkPredictionFilterBuilder implements FilterBuilder {
 
     public Category getCategory() {

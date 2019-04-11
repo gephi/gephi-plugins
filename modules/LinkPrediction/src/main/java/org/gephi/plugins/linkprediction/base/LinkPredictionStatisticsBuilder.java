@@ -13,6 +13,5 @@ import org.openide.util.lookup.ServiceProvider;
  * @author Saskia Schueler
  * @see LinkPredictionStatistics
  */
-@ServiceProvider(service = StatisticsBuilder.class)
 public abstract class LinkPredictionStatisticsBuilder implements StatisticsBuilder {
 }
