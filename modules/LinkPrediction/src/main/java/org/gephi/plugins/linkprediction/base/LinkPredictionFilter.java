@@ -21,7 +21,7 @@ public abstract class LinkPredictionFilter implements ComplexFilter {
     // Properties used in filter
     protected static FilterProperty[] filterProperties;
     // Number of displayed predicted edges
-    protected int edgesLimit = EDGES_LIMIT_DEFAULT;
+    protected Integer edgesLimit = EDGES_LIMIT_DEFAULT;
 
     /**
      * Gets or creates singleton instance of properties.
@@ -47,11 +47,11 @@ public abstract class LinkPredictionFilter implements ComplexFilter {
         LinkPredictionFilter.filterProperties = filterProperties;
     }
 
-    public int getEdgesLimit() {
+    public Integer getEdgesLimit() {
         return edgesLimit;
     }
 
-    public void setEdgesLimit(int edgesLimit) {
+    public void setEdgesLimit(Integer edgesLimit) {
         this.edgesLimit = edgesLimit;
     }
 }

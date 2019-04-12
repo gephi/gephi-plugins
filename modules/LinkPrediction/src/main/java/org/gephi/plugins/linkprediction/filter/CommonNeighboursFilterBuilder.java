@@ -1,0 +1,31 @@
+package org.gephi.plugins.linkprediction.filter;
+
+import org.gephi.filters.spi.Filter;
+import org.gephi.filters.spi.FilterBuilder;
+import org.gephi.plugins.linkprediction.base.LinkPredictionFilterBuilder;
+import org.gephi.project.api.Workspace;
+import org.openide.util.lookup.ServiceProvider;
+
+/**
+ * Filter builder for the {@link CommonNeighboursFilter} filter.
+ *
+ * @author Marco Romanutti
+ * @see CommonNeighboursFilter
+ */
+@ServiceProvider(service = FilterBuilder.class)
+public class CommonNeighboursFilterBuilder extends LinkPredictionFilterBuilder {
+    /** Name of the common neighbour filter category **/
+    public static final String COMMON_NEIGHBOURS_NAME = "Common neighbours";
+
+    @Override public String getName() {
+        return COMMON_NEIGHBOURS_NAME;
+    }
+
+    @Override public String getDescription() {
+        return "Predict n next link using common neighbours algorithm";
+    }
+
+    @Override public Filter getFilter(Workspace workspace) {
+        return new CommonNeighboursFilter();
+    }
+}
