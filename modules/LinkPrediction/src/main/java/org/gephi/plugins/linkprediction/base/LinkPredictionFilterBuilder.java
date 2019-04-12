@@ -1,10 +1,8 @@
 package org.gephi.plugins.linkprediction.base;
 
-import org.gephi.filters.api.FilterLibrary;
 import org.gephi.filters.spi.Category;
 import org.gephi.filters.spi.Filter;
 import org.gephi.filters.spi.FilterBuilder;
-import org.openide.util.lookup.ServiceProvider;
 
 import javax.swing.*;
 
@@ -19,10 +17,11 @@ import javax.swing.*;
  * @see LinkPredictionFilter
  */
 public abstract class LinkPredictionFilterBuilder implements FilterBuilder {
+    /** Name of the newly added filter category **/
+    public static final String LINK_PREDICTION_CATEGORY = "Link prediction";
 
     public Category getCategory() {
-        // TODO Create own category
-        return FilterLibrary.EDGE;
+        return new Category(LINK_PREDICTION_CATEGORY);
     }
 
     public Icon getIcon() {
