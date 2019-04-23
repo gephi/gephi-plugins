@@ -2,9 +2,11 @@ package org.gephi.plugins.linkprediction.base;
 
 import org.gephi.statistics.spi.Statistics;
 import org.gephi.statistics.spi.StatisticsUI;
+import org.openide.util.lookup.ServiceProvider;
 
 import javax.swing.*;
 
+@ServiceProvider(service = StatisticsUI.class)
 public class LinkPredictionStatisticsUI implements StatisticsUI {
 
     private LinkPredictionStatistics statistic;

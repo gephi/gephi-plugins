@@ -86,8 +86,12 @@ class CommonNeighboursStatisticsTest {
     }
 
     @org.junit.jupiter.api.Test
-    void testExecuteInitializeColumns_Successfully() {
+    void testExecute_Successfully() {
 
+        LinkPredictionStatistics statistic = new CommonNeighboursStatistics();
 
+        statistic.execute(graphModel);
+        System.out.println("");
+        Table test = graphModel.getEdgeTable();
     }
 }

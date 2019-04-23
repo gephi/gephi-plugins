@@ -78,7 +78,7 @@ public abstract class LinkPredictionStatistics implements Statistics {
     public static void initializeColumns(Table edgeTable) {
         colLP = edgeTable.getColumn(LP_ALGORITHM);
         if (colLP == null) {
-            colLP = edgeTable.addColumn(LP_ALGORITHM, "Chosen Link Prediction Alogirthm", Integer.class, 0);
+            colLP = edgeTable.addColumn(LP_ALGORITHM, "Chosen Link Prediction Alogirthm", String.class, "");
         }
 
         colAddinRun = edgeTable.getColumn(ADDED_IN_RUN);

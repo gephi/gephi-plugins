@@ -8,10 +8,12 @@ import org.openide.util.Lookup;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class CommonNeighboursStatistics extends LinkPredictionStatistics {
 
-    private static final String ALGORITHM = "Preferential Attachment";
+    private static final String ALGORITHM = "Common Neighbours";
 
     // Console logger
     private static Logger consoleLogger = LogManager.getLogger(CommonNeighboursStatistics.class);
@@ -20,8 +22,7 @@ public class CommonNeighboursStatistics extends LinkPredictionStatistics {
     private Node neighbourA;
     private Node neighbourB;
 
-    @Override
-    public void execute(GraphModel graphModel) {
+    @Override public void execute(GraphModel graphModel) {
         consoleLogger.debug("Execution of link prediction started");
 
         highestValue = 0;
@@ -39,23 +40,24 @@ public class CommonNeighboursStatistics extends LinkPredictionStatistics {
         graph.writeLock();
 
         //Iterate on all nodes
-        Node[] nodesA = graph.getNodes().toArray();
-        ArrayList<Node> nodesB = new ArrayList<Node>( Arrays.asList(graph.getNodes().toArray()));
-
+        List<Node> nodesA = new ArrayList<>(Arrays.asList(graph.getNodes().toArray()));
+        //ArrayList<Node> nodesB = new ArrayList<Node>(Arrays.asList(graph.getNodes().toArray()));
 
         for (Node a : nodesA) {
+
+            // Remove self from neighbours
+            List<Node> nodesB = new ArrayList<>(nodesA);
             nodesB.remove(a);
 
-            Node[] aNeighbours = graph.getNeighbors(a).toArray();
-            aNeighbours = getRelevantNeighbours(aNeighbours);
+            List<Node> aNeighbours = new ArrayList<>(Arrays.asList(graph.getNeighbors(a).toArray()));
             //Calculate distance with neighbors
+
             for (Node b : nodesB) {
-                int paValue = 0;
+                int cnValue = 0;
 
-                Node[] bNeighbours = graph.getNeighbors(b).toArray();
-                bNeighbours = getRelevantNeighbours(bNeighbours);
+                List<Node> bNeighbours = new ArrayList<>(Arrays.asList(graph.getNeighbors(b).toArray()));
 
-                paValue = aNeighbours.length * bNeighbours.length;
+                cnValue = aNeighbours.stream().filter(bNeighbours::contains).collect(Collectors.toList()).size();
 
                 EdgeIterable e = graph.getEdges(a, b);
                 Edge newEdge;
@@ -66,17 +68,19 @@ public class CommonNeighboursStatistics extends LinkPredictionStatistics {
                     newEdge = factory.newEdge(a, b, false);
                     graph.addEdge(newEdge);
                     newEdge.setAttribute(colAddinRun, 0);
-                    newEdge.setAttribute(colLastValue, paValue);
+                    newEdge.setAttribute(colLastValue, cnValue);
                     newEdge.setAttribute(colLP, ALGORITHM);
                 } else {
 
                     boolean upd = false;
-                    for(int i = 0; i < eArr.length; i++) {
+                    for (int i = 0; i < eArr.length; i++) {
 
-                        if (eArr[i].getAttribute(colLP).equals(ALGORITHM) && (Integer) eArr[0].getAttribute(colAddinRun) == 0) {
-                            eArr[i].setAttribute((colLastValue), paValue);
+                        if (eArr[i].getAttribute(colLP).equals(ALGORITHM)
+                                && (Integer) eArr[0].getAttribute(colAddinRun) == 0) {
+                            eArr[i].setAttribute((colLastValue), cnValue);
                             upd = true;
-                        } else if (eArr[i].getAttribute(colLP).equals(ALGORITHM) && (Integer) eArr[0].getAttribute(colAddinRun) > 0) {
+                        } else if (eArr[i].getAttribute(colLP).equals(ALGORITHM)
+                                && (Integer) eArr[0].getAttribute(colAddinRun) > 0) {
                             upd = true;
                             lpEdgeExists = true;
                         }
@@ -87,16 +91,16 @@ public class CommonNeighboursStatistics extends LinkPredictionStatistics {
                         newEdge = factory.newEdge(a, b, false);
                         graph.addEdge(newEdge);
                         newEdge.setAttribute(colAddinRun, 0);
-                        newEdge.setAttribute(colLastValue, paValue);
+                        newEdge.setAttribute(colLastValue, cnValue);
                         newEdge.setAttribute(colLP, ALGORITHM);
                     }
 
                 }
 
-                if (!lpEdgeExists && paValue > highestValue) {
+                if (!lpEdgeExists && cnValue > highestValue) {
                     neighbourA = a;
                     neighbourB = b;
-                    highestValue = paValue;
+                    highestValue = cnValue;
                 }
 
             }
