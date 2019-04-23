@@ -45,18 +45,18 @@ class CommonNeighboursStatisticsTest {
         i.setLabel("Node I");
 
         //Create edges
-        Edge e1 = factory.newEdge("E1", a, b, 1,1, false);
-        Edge e2 = factory.newEdge("E2", a, d, 1,1, false);
-        Edge e3 = factory.newEdge("E3", a, e, 1,1, false);
-        Edge e4 = factory.newEdge("E4", b, d, 1,1, false);
-        Edge e5 = factory.newEdge("E5", b, c, 1,1, false);
-        Edge e6 = factory.newEdge("E6", c, d, 1,1, false);
-        Edge e7 = factory.newEdge("E7", c, f, 1,1, false);
-        Edge e8 = factory.newEdge("E8", e, f, 1,1, false);
-        Edge e9 = factory.newEdge("E9", b, a, 1,1, false);
-        Edge e10 = factory.newEdge("E10", f, g, 1,1, false);
-        Edge e11 = factory.newEdge("E11", g, h, 1,1, false);
-        Edge e12 = factory.newEdge("E12", g, i, 1,1, false);
+        Edge e1 = factory.newEdge("E1", a, b, 1, 1, false);
+        Edge e2 = factory.newEdge("E2", a, d, 1, 1, false);
+        Edge e3 = factory.newEdge("E3", a, e, 1, 1, false);
+        Edge e4 = factory.newEdge("E4", b, d, 1, 1, false);
+        Edge e5 = factory.newEdge("E5", b, c, 1, 1, false);
+        Edge e6 = factory.newEdge("E6", c, d, 1, 1, false);
+        Edge e7 = factory.newEdge("E7", c, f, 1, 1, false);
+        Edge e8 = factory.newEdge("E8", e, f, 1, 1, false);
+        Edge e9 = factory.newEdge("E9", b, a, 1, 1, false);
+        Edge e10 = factory.newEdge("E10", f, g, 1, 1, false);
+        Edge e11 = factory.newEdge("E11", g, h, 1, 1, false);
+        Edge e12 = factory.newEdge("E12", g, i, 1, 1, false);
 
         // Add nodes
         UndirectedGraph undirectedGraph = graphModel.getUndirectedGraph();
@@ -83,8 +83,7 @@ class CommonNeighboursStatisticsTest {
         undirectedGraph.addEdge(e12);
     }
 
-    @org.junit.jupiter.api.Test
-    void testExecute_EdgeCount() {
+    @org.junit.jupiter.api.Test void testExecute_EdgeCount() {
 
         LinkPredictionStatistics statistic = new CommonNeighboursStatistics();
         int edgesCountOriginal = graphModel.getGraph().getEdges().toArray().length;
@@ -92,11 +91,10 @@ class CommonNeighboursStatisticsTest {
         statistic.execute(graphModel);
         int edgesCountNew = graphModel.getGraph().getEdges().toArray().length;
 
-        assertEquals(edgesCountOriginal + 1,edgesCountNew);
+        assertEquals(edgesCountOriginal + 1, edgesCountNew);
     }
 
-    @org.junit.jupiter.api.Test
-    void testGetHighestPrediction_Successfully() {
+    @org.junit.jupiter.api.Test void testGetHighestPrediction_Successfully() {
 
         LinkPredictionStatistics statistic = new CommonNeighboursStatistics();
         statistic.execute(graphModel);
@@ -108,5 +106,15 @@ class CommonNeighboursStatisticsTest {
         assertTrue(max.getAttribute(colLP).equals(CommonNeighboursStatisticsBuilder.COMMON_NEIGHBOURS_NAME));
         assertTrue((int) max.getAttribute(colAddinRun) == 1);
         assertTrue((int) max.getAttribute(colLastValue) == 2);
+    }
+
+    @org.junit.jupiter.api.Test void testExecute_Successfully() {
+
+        LinkPredictionStatistics statistic = new CommonNeighboursStatistics();
+        statistic.execute(graphModel);
+
+        Edge max = statistic.getHighestPrediction();
+
+        assertTrue(graphModel.getGraph().contains(max));
     }
 }
