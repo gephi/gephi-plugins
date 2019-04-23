@@ -9,16 +9,9 @@ import org.openide.util.Lookup;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-public class LinkPredictionPreferentialAttachment extends LinkPredictionStatistics {
+public class PreferentialAttachmentStatistics extends LinkPredictionStatistics {
 
-    private static final String ADDED_IN_RUN = "added_in_run";
-    private static final String LAST_VALUE = "last_link_prediction_value";
-    private static final String LP_ALGORITHM = "link_prediction_algorithm";
     private static final String ALGORITHM = "Preferential Attachment";
-
-    private Column colLP;
-    private Column colAddinRun;
-    private Column colLastValue;
 
     private int highestValue;
     private Node neighbourA;
@@ -33,21 +26,7 @@ public class LinkPredictionPreferentialAttachment extends LinkPredictionStatisti
 
         //Look if the result column already exist and create it if needed
         Table edgeTable = graphModel.getEdgeTable();
-
-        colLP = edgeTable.getColumn(LP_ALGORITHM);
-        if (colLP == null) {
-            colLP = edgeTable.addColumn(LP_ALGORITHM, "Chosen Link Prediction Alogirthm", Integer.class, 0);
-        }
-
-        colAddinRun = edgeTable.getColumn(ADDED_IN_RUN);
-        if (colAddinRun == null) {
-            colAddinRun = edgeTable.addColumn(ADDED_IN_RUN, "Added in Run", Integer.class, 0);
-        }
-
-        colLastValue = edgeTable.getColumn(LAST_VALUE);
-        if (colLastValue == null) {
-            colLastValue = edgeTable.addColumn(LAST_VALUE, "Last Link Prediction Value", Integer.class, 0);
-        }
+        initializeColumns(edgeTable);
 
         GraphController gc = Lookup.getDefault().lookup(GraphController.class);
         Graph graph = gc.getGraphModel().getGraph();

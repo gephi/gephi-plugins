@@ -17,8 +17,8 @@ public class LinkPredictionStatisticsUI implements StatisticsUI {
     }
 
     @Override
-    public void setup(Statistics ststcs) {
-        this.statistic = (LinkPredictionStatistics) ststcs;
+    public void setup(Statistics statistic) {
+        this.statistic = (LinkPredictionStatistics) statistic;
     }
 
     @Override

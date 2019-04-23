@@ -1,5 +1,7 @@
 package org.gephi.plugins.linkprediction.base;
 
+import org.gephi.graph.api.Column;
+import org.gephi.graph.api.Table;
 import org.gephi.plugins.linkprediction.util.Complexity;
 import org.gephi.statistics.spi.Statistics;
 
@@ -19,6 +21,16 @@ import org.gephi.statistics.spi.Statistics;
 public abstract class LinkPredictionStatistics implements Statistics {
     /** Default number of iteration used to predict next edges **/
     public static final int ITERATION_LIMIT_DEFAULT = 1;
+
+    /* Column names for data labour */
+    public static final String ADDED_IN_RUN = "added_in_run";
+    public static final String LAST_VALUE = "last_link_prediction_value";
+    public static final String LP_ALGORITHM = "link_prediction_algorithm";
+
+    /* Columns for data labour */
+    protected static Column colLP;
+    protected static Column colAddinRun;
+    protected static Column colLastValue;
 
     // Number of edge prediction iterations
     protected int iterationLimit = ITERATION_LIMIT_DEFAULT;
@@ -61,5 +73,22 @@ public abstract class LinkPredictionStatistics implements Statistics {
 
     public void setComplexity(Complexity complexity) {
         this.complexity = complexity;
+    }
+
+    protected static void initializeColumns(Table edgeTable) {
+        colLP = edgeTable.getColumn(LP_ALGORITHM);
+        if (colLP == null) {
+            colLP = edgeTable.addColumn(LP_ALGORITHM, "Chosen Link Prediction Alogirthm", Integer.class, 0);
+        }
+
+        colAddinRun = edgeTable.getColumn(ADDED_IN_RUN);
+        if (colAddinRun == null) {
+            colAddinRun = edgeTable.addColumn(ADDED_IN_RUN, "Added in Run", Integer.class, 0);
+        }
+
+        colLastValue = edgeTable.getColumn(LAST_VALUE);
+        if (colLastValue == null) {
+            colLastValue = edgeTable.addColumn(LAST_VALUE, "Last Link Prediction Value", Integer.class, 0);
+        }
     }
 }
