@@ -1,6 +1,5 @@
 package org.gephi.plugins.linkprediction.statistics;
 
-import org.gephi.filters.spi.FilterBuilder;
 import org.gephi.plugins.linkprediction.base.LinkPredictionStatistics;
 import org.gephi.plugins.linkprediction.base.LinkPredictionStatisticsBuilder;
 import org.gephi.statistics.spi.Statistics;

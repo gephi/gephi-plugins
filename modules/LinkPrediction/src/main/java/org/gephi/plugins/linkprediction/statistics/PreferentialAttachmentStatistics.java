@@ -9,9 +9,9 @@ import org.openide.util.Lookup;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-public class PreferentialAttachmentStatistics extends LinkPredictionStatistics {
+import static org.gephi.plugins.linkprediction.statistics.PreferentialAttachmentStatisticsBuilder.PREFERENTIAL_ATTACHMENT_NAME;
 
-    private static final String ALGORITHM = "Preferential Attachment";
+public class PreferentialAttachmentStatistics extends LinkPredictionStatistics {
 
     private int highestValue;
     private Node neighbourA;
@@ -63,16 +63,16 @@ public class PreferentialAttachmentStatistics extends LinkPredictionStatistics {
                     graph.addEdge(newEdge);
                     newEdge.setAttribute(colAddinRun, 0);
                     newEdge.setAttribute(colLastValue, paValue);
-                    newEdge.setAttribute(colLP, ALGORITHM);
+                    newEdge.setAttribute(colLP, PREFERENTIAL_ATTACHMENT_NAME);
                 } else {
 
                     boolean upd = false;
                     for(int i = 0; i < eArr.length; i++) {
 
-                        if (eArr[i].getAttribute(colLP).equals(ALGORITHM) && (Integer) eArr[0].getAttribute(colAddinRun) == 0) {
+                        if (eArr[i].getAttribute(colLP).equals(PREFERENTIAL_ATTACHMENT_NAME) && (Integer) eArr[0].getAttribute(colAddinRun) == 0) {
                             eArr[i].setAttribute((colLastValue), paValue);
                             upd = true;
-                        } else if (eArr[i].getAttribute(colLP).equals(ALGORITHM) && (Integer) eArr[0].getAttribute(colAddinRun) > 0) {
+                        } else if (eArr[i].getAttribute(colLP).equals(PREFERENTIAL_ATTACHMENT_NAME) && (Integer) eArr[0].getAttribute(colAddinRun) > 0) {
                             upd = true;
                             lpEdgeExists = true;
                         }
@@ -84,7 +84,7 @@ public class PreferentialAttachmentStatistics extends LinkPredictionStatistics {
                         graph.addEdge(newEdge);
                         newEdge.setAttribute(colAddinRun, 0);
                         newEdge.setAttribute(colLastValue, paValue);
-                        newEdge.setAttribute(colLP, ALGORITHM);
+                        newEdge.setAttribute(colLP, PREFERENTIAL_ATTACHMENT_NAME);
                     }
 
                 }
@@ -102,7 +102,7 @@ public class PreferentialAttachmentStatistics extends LinkPredictionStatistics {
         if (neighbourA != null) {
             Edge[] eI = graph.getEdges(neighbourA, neighbourB).toArray();
             for (Edge e : eI) {
-                if (e.getAttribute(colLP).equals(ALGORITHM)) {
+                if (e.getAttribute(colLP).equals(PREFERENTIAL_ATTACHMENT_NAME)) {
                     e.setAttribute(colLastValue, highestValue);
                     e.setAttribute(colAddinRun, 1);
                 }
@@ -119,7 +119,7 @@ public class PreferentialAttachmentStatistics extends LinkPredictionStatistics {
         ArrayList<Node> relevantNeighbours = new ArrayList<Node>();
 
         for (Node iN : initNeighbours) {
-            if (iN.getAttribute(colLP).equals(ALGORITHM) || iN.getAttribute(colLP) == null) {
+            if (iN.getAttribute(colLP).equals(PREFERENTIAL_ATTACHMENT_NAME) || iN.getAttribute(colLP) == null) {
                 relevantNeighbours.add(iN);
             }
         }

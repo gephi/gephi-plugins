@@ -56,7 +56,7 @@ public class LinkPredictionStatisticsUI implements StatisticsUI {
 
     @Override
     public String getShortDescription() {
-        return null;
+        return "Predicts next links in network";
     }
 
 

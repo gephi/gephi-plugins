@@ -1,19 +1,15 @@
 package org.gephi.plugins.linkprediction.statistics;
 
 import org.gephi.graph.api.*;
-import org.gephi.plugins.linkprediction.base.LinkPredictionFilter;
 import org.gephi.plugins.linkprediction.base.LinkPredictionStatistics;
 import org.gephi.project.api.ProjectController;
 import org.gephi.project.api.Workspace;
 import org.junit.jupiter.api.BeforeEach;
 import org.openide.util.Lookup;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
 import static org.gephi.plugins.linkprediction.base.LinkPredictionStatistics.*;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class CommonNeighboursStatisticsTest {
     GraphModel graphModel;
@@ -97,14 +93,6 @@ class CommonNeighboursStatisticsTest {
         int edgesCountNew = graphModel.getGraph().getEdges().toArray().length;
 
         assertEquals(edgesCountOriginal + 1,edgesCountNew);
-
-        List<Edge> edges = new ArrayList<>(Arrays.asList(graphModel.getGraph().getEdges().toArray()));
-        edges.stream().forEach(edge -> System.out.println(
-                "Source: " + edge.getSource().getLabel() +
-                        " Target: " + edge.getTarget().getLabel() +
-                        " colKP: " + edge.getAttribute(LinkPredictionStatistics.colLP) +
-                        " colAddinRun: " + edge.getAttribute(LinkPredictionStatistics.colAddinRun) +
-                        " colLastValue: " + edge.getAttribute(LinkPredictionStatistics.colLastValue)));
     }
 
     @org.junit.jupiter.api.Test

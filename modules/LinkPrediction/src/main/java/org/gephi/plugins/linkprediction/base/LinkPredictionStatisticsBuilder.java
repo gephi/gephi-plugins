@@ -1,8 +1,7 @@
 package org.gephi.plugins.linkprediction.base;
 
-import org.gephi.plugins.linkprediction.statistics.PreferentialAttachmentStatistics;
-import org.gephi.statistics.spi.StatisticsBuilder;
 import org.gephi.statistics.spi.Statistics;
+import org.gephi.statistics.spi.StatisticsBuilder;
 
 /**
  * Statistic builder for the {@link LinkPredictionStatistics} statistic.

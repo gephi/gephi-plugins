@@ -3,11 +3,12 @@ package org.gephi.plugins.linkprediction.statistics;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.gephi.graph.api.*;
-import org.gephi.graph.impl.EdgeTypeStore;
 import org.gephi.plugins.linkprediction.base.LinkPredictionStatistics;
 import org.openide.util.Lookup;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.stream.Collectors;
 
 public class CommonNeighboursStatistics extends LinkPredictionStatistics {
