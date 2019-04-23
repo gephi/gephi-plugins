@@ -1,9 +1,11 @@
 package org.gephi.plugins.linkprediction.statistics;
 
+import org.gephi.filters.spi.FilterBuilder;
 import org.gephi.plugins.linkprediction.base.LinkPredictionStatistics;
 import org.gephi.plugins.linkprediction.base.LinkPredictionStatisticsBuilder;
 import org.gephi.statistics.spi.Statistics;
 import org.gephi.statistics.spi.StatisticsBuilder;
+import org.openide.util.lookup.ServiceProvider;
 
 /**
  * Statistic builder for the {@link LinkPredictionStatistics} statistic.
@@ -15,6 +17,7 @@ import org.gephi.statistics.spi.StatisticsBuilder;
  * @author Saskia Schueler
  * @see LinkPredictionStatistics
  */
+@ServiceProvider(service = StatisticsBuilder.class)
 public class PreferentialAttachmentStatisticsBuilder extends LinkPredictionStatisticsBuilder {
     /** Name of the common neighbour filter category **/
     public static final String PREFERENTIAL_ATTACHMENT_NAME = "Preferential Attachment";
