@@ -2,11 +2,15 @@ package org.gephi.plugins.linkprediction.statistics;
 
 import org.gephi.graph.api.*;
 import org.gephi.plugins.linkprediction.base.LinkPredictionFilter;
+import org.gephi.plugins.linkprediction.base.LinkPredictionStatistics;
 import org.gephi.project.api.ProjectController;
 import org.gephi.project.api.Workspace;
 import org.junit.jupiter.api.BeforeEach;
 import org.openide.util.Lookup;
 
+import static org.gephi.plugins.linkprediction.base.LinkPredictionStatistics.ADDED_IN_RUN;
+import static org.gephi.plugins.linkprediction.base.LinkPredictionStatistics.LAST_VALUE;
+import static org.gephi.plugins.linkprediction.base.LinkPredictionStatistics.LP_ALGORITHM;
 import static org.junit.jupiter.api.Assertions.*;
 
 class CommonNeighboursStatisticsTest {
@@ -82,7 +86,8 @@ class CommonNeighboursStatisticsTest {
     }
 
     @org.junit.jupiter.api.Test
-    void testExecute() {
+    void testExecuteInitializeColumns_Successfully() {
+
 
     }
 }
