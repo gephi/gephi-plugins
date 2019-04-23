@@ -113,6 +113,6 @@ public abstract class LinkPredictionStatistics implements Statistics {
         return predictions.entrySet().stream()
                 .sorted(Collections.reverseOrder(Map.Entry.comparingByValue()))
                 .map(Map.Entry::getKey)
-                .findFirst().get();
+                .findFirst().orElse(null);
     }
 }
