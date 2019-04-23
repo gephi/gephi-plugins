@@ -1,6 +1,9 @@
 package org.gephi.plugins.linkprediction.base;
 
+import org.gephi.graph.api.GraphModel;
+import org.gephi.plugins.linkprediction.statistics.LinkPredictionPreferentialAttachment;
 import org.gephi.statistics.spi.StatisticsBuilder;
+import org.gephi.statistics.spi.Statistics;
 import org.openide.util.lookup.ServiceProvider;
 
 /**
@@ -14,4 +17,23 @@ import org.openide.util.lookup.ServiceProvider;
  * @see LinkPredictionStatistics
  */
 public abstract class LinkPredictionStatisticsBuilder implements StatisticsBuilder {
+
+    public LinkPredictionStatisticsBuilder() {
+    }
+
+    @Override
+    public String getName() {
+        return "Link Prediction";
+    }
+
+    @Override
+    public Statistics getStatistics() {
+        return new LinkPredictionPreferentialAttachment();
+    }
+
+    @Override
+    public Class<? extends Statistics> getStatisticsClass() {
+        return LinkPredictionStatistics.class;
+    }
+
 }

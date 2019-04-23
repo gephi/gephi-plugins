@@ -8,6 +8,7 @@ import java.util.List;
 /**
  * Macro class that triggers the calculations for all selected algorithms.
  */
+
 public class LinkPredictionMacro extends LinkPredictionStatistics {
     List<LinkPredictionStatistics> statistics;
 
