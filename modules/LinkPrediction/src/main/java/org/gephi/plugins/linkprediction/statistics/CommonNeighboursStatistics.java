@@ -12,8 +12,6 @@ import java.util.stream.Collectors;
 
 public class CommonNeighboursStatistics extends LinkPredictionStatistics {
 
-    private static final String ALGORITHM = "Common Neighbours";
-
     // Console logger
     private static Logger consoleLogger = LogManager.getLogger(CommonNeighboursStatistics.class);
 
@@ -72,7 +70,7 @@ public class CommonNeighboursStatistics extends LinkPredictionStatistics {
         // Add edge to graph
         if (max != null) {
             max.setAttribute(colAddinRun, 1);
-            max.setAttribute(colLP, ALGORITHM);
+            max.setAttribute(colLP, CommonNeighboursStatisticsBuilder.COMMON_NEIGHBOURS_NAME);
             graph.addEdge(max);
         }
 

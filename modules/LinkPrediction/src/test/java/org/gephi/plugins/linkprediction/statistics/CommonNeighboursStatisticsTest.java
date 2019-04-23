@@ -12,9 +12,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import static org.gephi.plugins.linkprediction.base.LinkPredictionStatistics.ADDED_IN_RUN;
-import static org.gephi.plugins.linkprediction.base.LinkPredictionStatistics.LAST_VALUE;
-import static org.gephi.plugins.linkprediction.base.LinkPredictionStatistics.LP_ALGORITHM;
+import static org.gephi.plugins.linkprediction.base.LinkPredictionStatistics.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 class CommonNeighboursStatisticsTest {
@@ -90,12 +88,16 @@ class CommonNeighboursStatisticsTest {
     }
 
     @org.junit.jupiter.api.Test
-    void testExecute_Successfully() {
+    void testExecute_EdgeCount() {
 
         LinkPredictionStatistics statistic = new CommonNeighboursStatistics();
+        int edgesCountOriginal = graphModel.getGraph().getEdges().toArray().length;
 
         statistic.execute(graphModel);
-        System.out.println("");
+        int edgesCountNew = graphModel.getGraph().getEdges().toArray().length;
+
+        assertEquals(edgesCountOriginal + 1,edgesCountNew);
+
         List<Edge> edges = new ArrayList<>(Arrays.asList(graphModel.getGraph().getEdges().toArray()));
         edges.stream().forEach(edge -> System.out.println(
                 "Source: " + edge.getSource().getLabel() +
@@ -103,5 +105,20 @@ class CommonNeighboursStatisticsTest {
                         " colKP: " + edge.getAttribute(LinkPredictionStatistics.colLP) +
                         " colAddinRun: " + edge.getAttribute(LinkPredictionStatistics.colAddinRun) +
                         " colLastValue: " + edge.getAttribute(LinkPredictionStatistics.colLastValue)));
+    }
+
+    @org.junit.jupiter.api.Test
+    void testGetHighestPrediction_Successfully() {
+
+        LinkPredictionStatistics statistic = new CommonNeighboursStatistics();
+        statistic.execute(graphModel);
+
+        Edge max = statistic.getHighestPrediction();
+
+        assertTrue(max.getSource().getLabel().equals("Node D"));
+        assertTrue(max.getTarget().getLabel().equals("Node B"));
+        assertTrue(max.getAttribute(colLP).equals(CommonNeighboursStatisticsBuilder.COMMON_NEIGHBOURS_NAME));
+        assertTrue((int) max.getAttribute(colAddinRun) == 1);
+        assertTrue((int) max.getAttribute(colLastValue) == 2);
     }
 }

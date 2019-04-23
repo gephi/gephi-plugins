@@ -109,7 +109,7 @@ public abstract class LinkPredictionStatistics implements Statistics {
      *
      * @return Edge to add to the network
      */
-    protected Edge getHighestPrediction() {
+    public Edge getHighestPrediction() {
         return predictions.entrySet().stream()
                 .sorted(Collections.reverseOrder(Map.Entry.comparingByValue()))
                 .map(Map.Entry::getKey)
