@@ -1,9 +1,14 @@
 package org.gephi.plugins.linkprediction.base;
 
 import org.gephi.graph.api.Column;
+import org.gephi.graph.api.Edge;
 import org.gephi.graph.api.Table;
 import org.gephi.plugins.linkprediction.util.Complexity;
 import org.gephi.statistics.spi.Statistics;
+
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Statistic that predicts the next edge based on different link-prediction
@@ -28,14 +33,38 @@ public abstract class LinkPredictionStatistics implements Statistics {
     public static final String LP_ALGORITHM = "link_prediction_algorithm";
 
     /* Columns for data labour */
-    protected static Column colLP;
-    protected static Column colAddinRun;
-    protected static Column colLastValue;
+    public static Column colLP;
+    public static Column colAddinRun;
+    public static Column colLastValue;
 
     // Number of edge prediction iterations
     protected int iterationLimit = ITERATION_LIMIT_DEFAULT;
     // Big o complexity of algorithm
     protected Complexity complexity;
+    // Holds the calculated prediction values
+    protected Map<Edge, Integer> predictions = new HashMap<>();
+
+    /**
+     * Initializes the columns used in link prediction.
+     *
+     * @param edgeTable Table on which columns will be added
+     */
+    public static void initializeColumns(Table edgeTable) {
+        colLP = edgeTable.getColumn(LP_ALGORITHM);
+        if (colLP == null) {
+            colLP = edgeTable.addColumn(LP_ALGORITHM, "Chosen Link Prediction Algorithm", String.class, "");
+        }
+
+        colAddinRun = edgeTable.getColumn(ADDED_IN_RUN);
+        if (colAddinRun == null) {
+            colAddinRun = edgeTable.addColumn(ADDED_IN_RUN, "Added in Run", Integer.class, 0);
+        }
+
+        colLastValue = edgeTable.getColumn(LAST_VALUE);
+        if (colLastValue == null) {
+            colLastValue = edgeTable.addColumn(LAST_VALUE, "Last Link Prediction Value", Integer.class, 0);
+        }
+    }
 
     /**
      * Generates a report after link prediction calculation has finished.
@@ -75,20 +104,15 @@ public abstract class LinkPredictionStatistics implements Statistics {
         this.complexity = complexity;
     }
 
-    public static void initializeColumns(Table edgeTable) {
-        colLP = edgeTable.getColumn(LP_ALGORITHM);
-        if (colLP == null) {
-            colLP = edgeTable.addColumn(LP_ALGORITHM, "Chosen Link Prediction Alogirthm", String.class, "");
-        }
-
-        colAddinRun = edgeTable.getColumn(ADDED_IN_RUN);
-        if (colAddinRun == null) {
-            colAddinRun = edgeTable.addColumn(ADDED_IN_RUN, "Added in Run", Integer.class, 0);
-        }
-
-        colLastValue = edgeTable.getColumn(LAST_VALUE);
-        if (colLastValue == null) {
-            colLastValue = edgeTable.addColumn(LAST_VALUE, "Last Link Prediction Value", Integer.class, 0);
-        }
+    /**
+     * Gets the edge to add, with the highest calculated prediction.
+     *
+     * @return Edge to add to the network
+     */
+    protected Edge getHighestPrediction() {
+        return predictions.entrySet().stream()
+                .sorted(Collections.reverseOrder(Map.Entry.comparingByValue()))
+                .map(Map.Entry::getKey)
+                .findFirst().get();
     }
 }

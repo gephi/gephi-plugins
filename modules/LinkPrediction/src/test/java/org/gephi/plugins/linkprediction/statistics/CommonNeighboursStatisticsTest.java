@@ -8,6 +8,10 @@ import org.gephi.project.api.Workspace;
 import org.junit.jupiter.api.BeforeEach;
 import org.openide.util.Lookup;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 import static org.gephi.plugins.linkprediction.base.LinkPredictionStatistics.ADDED_IN_RUN;
 import static org.gephi.plugins.linkprediction.base.LinkPredictionStatistics.LAST_VALUE;
 import static org.gephi.plugins.linkprediction.base.LinkPredictionStatistics.LP_ALGORITHM;
@@ -92,6 +96,12 @@ class CommonNeighboursStatisticsTest {
 
         statistic.execute(graphModel);
         System.out.println("");
-        Table test = graphModel.getEdgeTable();
+        List<Edge> edges = new ArrayList<>(Arrays.asList(graphModel.getGraph().getEdges().toArray()));
+        edges.stream().forEach(edge -> System.out.println(
+                "Source: " + edge.getSource().getLabel() +
+                        " Target: " + edge.getTarget().getLabel() +
+                        " colKP: " + edge.getAttribute(LinkPredictionStatistics.colLP) +
+                        " colAddinRun: " + edge.getAttribute(LinkPredictionStatistics.colAddinRun) +
+                        " colLastValue: " + edge.getAttribute(LinkPredictionStatistics.colLastValue)));
     }
 }
