@@ -116,14 +116,14 @@ public class PreferentialAttachmentStatistics extends LinkPredictionStatistics {
 
     private Node[] getRelevantNeighbours(Node[] initNeighbours) {
 
-        ArrayList<Node> relevantNeighbours = new ArrayList<Node>();
+        ArrayList<Node> relevantNeighbours = new ArrayList<>();
 
         for (Node iN : initNeighbours) {
             if (iN.getAttribute(colLP).equals(PREFERENTIAL_ATTACHMENT_NAME) || iN.getAttribute(colLP) == null) {
                 relevantNeighbours.add(iN);
             }
         }
-
-        return (Node[]) relevantNeighbours.toArray();
+        
+        return  relevantNeighbours.toArray(new Node[0]);
     }
 }
