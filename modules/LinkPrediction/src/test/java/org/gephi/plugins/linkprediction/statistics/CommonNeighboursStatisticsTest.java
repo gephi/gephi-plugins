@@ -103,9 +103,9 @@ class CommonNeighboursStatisticsTest {
 
         assertTrue(max.getSource().getLabel().equals("Node D"));
         assertTrue(max.getTarget().getLabel().equals("Node B"));
-        assertTrue(max.getAttribute(colLP).equals(CommonNeighboursStatisticsBuilder.COMMON_NEIGHBOURS_NAME));
-        assertTrue((int) max.getAttribute(colAddinRun) == 1);
-        assertTrue((int) max.getAttribute(colLastValue) == 2);
+        assertTrue(max.getAttribute(getColLP()).equals(CommonNeighboursStatisticsBuilder.COMMON_NEIGHBOURS_NAME));
+        assertTrue((int) max.getAttribute(getColAddinRun()) == 1);
+        assertTrue((int) max.getAttribute(getColLastValue()) == 2);
     }
 
     @org.junit.jupiter.api.Test void testExecute_Successfully() {

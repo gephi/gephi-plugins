@@ -37,9 +37,9 @@ public abstract class LinkPredictionStatistics implements Statistics {
     public static final String LP_ALGORITHM = "link_prediction_algorithm";
 
     /* Columns for data labour */
-    public static Column colLP;
-    public static Column colAddinRun;
-    public static Column colLastValue;
+    protected static Column colLP;
+    protected static Column colAddinRun;
+    protected static Column colLastValue;
 
     // Number of edge prediction iterations
     protected int iterationLimit = ITERATION_LIMIT_DEFAULT;
@@ -92,6 +92,30 @@ public abstract class LinkPredictionStatistics implements Statistics {
         return false;
     }
 
+    public static Column getColLP() {
+        return colLP;
+    }
+
+    public static void setColLP(Column colLP) {
+        LinkPredictionStatistics.colLP = colLP;
+    }
+
+    public static Column getColAddinRun() {
+        return colAddinRun;
+    }
+
+    public static void setColAddinRun(Column colAddinRun) {
+        LinkPredictionStatistics.colAddinRun = colAddinRun;
+    }
+
+    public static Column getColLastValue() {
+        return colLastValue;
+    }
+
+    public static void setColLastValue(Column colLastValue) {
+        LinkPredictionStatistics.colLastValue = colLastValue;
+    }
+
     public int getIterationLimit() {
         return iterationLimit;
     }
@@ -128,8 +152,7 @@ public abstract class LinkPredictionStatistics implements Statistics {
     public int getNextIteration(Graph graph, String algorithm) {
         int lastIteration = Arrays.asList(graph.getEdges().toArray()).stream()
                 .filter(edge -> edge.getAttribute(colLP).toString().equals(algorithm))
-                .map(edge -> (int) edge.getAttribute(colAddinRun))
-                .sorted().findFirst().orElse(0);
+                .map(edge -> (int) edge.getAttribute(colAddinRun)).sorted().findFirst().orElse(0);
         return lastIteration + 1;
     }
 }
