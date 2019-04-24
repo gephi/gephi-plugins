@@ -70,6 +70,7 @@ public class CommonNeighboursStatistics extends LinkPredictionStatistics {
 
         // Add edge to graph
         if (max != null) {
+            int iteration = getNextIteration(graph, CommonNeighboursStatisticsBuilder.COMMON_NEIGHBOURS_NAME);
             max.setAttribute(colAddinRun, 1);
             max.setAttribute(colLP, CommonNeighboursStatisticsBuilder.COMMON_NEIGHBOURS_NAME);
             graph.addEdge(max);

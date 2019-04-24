@@ -117,4 +117,21 @@ class CommonNeighboursStatisticsTest {
 
         assertTrue(graphModel.getGraph().contains(max));
     }
+
+
+    @org.junit.jupiter.api.Test void testGetNextIteration_Successfully() {
+        LinkPredictionStatistics statistic = new CommonNeighboursStatistics();
+
+        Table edgeTable = graphModel.getEdgeTable();
+        statistic.initializeColumns(edgeTable);
+
+        int firstNext = statistic.getNextIteration(graphModel.getGraph(), CommonNeighboursStatisticsBuilder.COMMON_NEIGHBOURS_NAME);
+        assertEquals(1, firstNext);
+
+        statistic.execute(graphModel);
+
+        int secondNext = statistic.getNextIteration(graphModel.getGraph(), CommonNeighboursStatisticsBuilder.COMMON_NEIGHBOURS_NAME);
+        assertEquals(2, secondNext);
+    }
+
 }

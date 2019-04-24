@@ -2,10 +2,12 @@ package org.gephi.plugins.linkprediction.base;
 
 import org.gephi.graph.api.Column;
 import org.gephi.graph.api.Edge;
+import org.gephi.graph.api.Graph;
 import org.gephi.graph.api.Table;
 import org.gephi.plugins.linkprediction.util.Complexity;
 import org.gephi.statistics.spi.Statistics;
 
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -24,7 +26,9 @@ import java.util.Map;
  * @see LinkPredictionStatisticsBuilder
  */
 public abstract class LinkPredictionStatistics implements Statistics {
-    /** Default number of iteration used to predict next edges **/
+    /**
+     * Default number of iteration used to predict next edges
+     **/
     public static final int ITERATION_LIMIT_DEFAULT = 1;
 
     /* Column names for data labour */
@@ -83,7 +87,7 @@ public abstract class LinkPredictionStatistics implements Statistics {
      *
      * @return If the calculation will takes a long time
      */
-    public boolean longRuntimeExpected(){
+    public boolean longRuntimeExpected() {
         // TODO Implement
         return false;
     }
@@ -110,9 +114,22 @@ public abstract class LinkPredictionStatistics implements Statistics {
      * @return Edge to add to the network
      */
     public Edge getHighestPrediction() {
-        return predictions.entrySet().stream()
-                .sorted(Collections.reverseOrder(Map.Entry.comparingByValue()))
-                .map(Map.Entry::getKey)
-                .findFirst().orElse(null);
+        return predictions.entrySet().stream().sorted(Collections.reverseOrder(Map.Entry.comparingByValue()))
+                .map(Map.Entry::getKey).findFirst().orElse(null);
+    }
+
+    /**
+     * Gets the number of the next iteration per algorithm.
+     *
+     * @param graph     Graph currently working on
+     * @param algorithm Used algorithm
+     * @return Number of next iteration
+     */
+    public int getNextIteration(Graph graph, String algorithm) {
+        int lastIteration = Arrays.asList(graph.getEdges().toArray()).stream()
+                .filter(edge -> edge.getAttribute(colLP).toString().equals(algorithm))
+                .map(edge -> (int) edge.getAttribute(colAddinRun))
+                .sorted().findFirst().orElse(0);
+        return lastIteration + 1;
     }
 }
