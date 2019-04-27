@@ -16,7 +16,6 @@ import org.openide.util.lookup.ServiceProvider;
  * @author Saskia Schueler
  * @see LinkPredictionStatistics
  */
-@ServiceProvider(service = StatisticsBuilder.class)
 public class PreferentialAttachmentStatisticsBuilder extends LinkPredictionStatisticsBuilder {
     /** Name of the common neighbour filter category **/
     public static final String PREFERENTIAL_ATTACHMENT_NAME = "Preferential Attachment";
@@ -24,6 +23,11 @@ public class PreferentialAttachmentStatisticsBuilder extends LinkPredictionStati
     @Override
     public String getName() {
         return PREFERENTIAL_ATTACHMENT_NAME;
+    }
+
+    @Override
+    public Class<? extends Statistics> getStatisticsClass() {
+        return PreferentialAttachmentStatistics.class;
     }
 
     @Override

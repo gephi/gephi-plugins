@@ -1,6 +1,5 @@
 package org.gephi.plugins.linkprediction.base;
 
-import org.gephi.statistics.spi.Statistics;
 import org.gephi.statistics.spi.StatisticsBuilder;
 
 /**
@@ -14,10 +13,5 @@ import org.gephi.statistics.spi.StatisticsBuilder;
  * @see LinkPredictionStatistics
  */
 public abstract class LinkPredictionStatisticsBuilder implements StatisticsBuilder {
-
-    @Override
-    public Class<? extends Statistics> getStatisticsClass() {
-        return LinkPredictionStatistics.class;
-    }
 
 }

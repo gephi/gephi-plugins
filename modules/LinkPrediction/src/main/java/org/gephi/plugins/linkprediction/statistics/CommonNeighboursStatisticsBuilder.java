@@ -17,6 +17,7 @@ import org.openide.util.lookup.ServiceProvider;
  * @see LinkPredictionStatistics
  */
 @ServiceProvider(service = StatisticsBuilder.class)
+//public class CommonNeighboursStatisticsBuilder implements StatisticsBuilder  {
 public class CommonNeighboursStatisticsBuilder extends LinkPredictionStatisticsBuilder {
     /** Name of the common neighbour filter category **/
     public static final String COMMON_NEIGHBOURS_NAME = "Common Neighbours";
@@ -24,6 +25,11 @@ public class CommonNeighboursStatisticsBuilder extends LinkPredictionStatisticsB
     @Override
     public String getName() {
         return COMMON_NEIGHBOURS_NAME;
+    }
+
+    @Override
+    public Class<? extends Statistics> getStatisticsClass() {
+        return CommonNeighboursStatistics.class;
     }
 
     @Override
