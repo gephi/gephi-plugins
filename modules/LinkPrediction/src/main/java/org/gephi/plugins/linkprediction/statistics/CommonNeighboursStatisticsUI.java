@@ -14,4 +14,8 @@ public class CommonNeighboursStatisticsUI extends LinkPredictionStatisticsUI {
        return CommonNeighboursStatistics.class;
     }
 
+    @Override
+    public String getDisplayName() {
+        return "Common Neighbours Link Prediction";
+    }
  }

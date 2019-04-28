@@ -1,5 +1,7 @@
 package org.gephi.plugins.linkprediction.statistics;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.gephi.graph.api.GraphModel;
 import org.gephi.plugins.linkprediction.base.LinkPredictionStatistics;
 
@@ -17,8 +19,13 @@ public class PreferentialAttachmentStatistics extends LinkPredictionStatistics {
     private Node neighbourA;
     private Node neighbourB;
 
+    // Console logger
+    private static Logger consoleLogger = LogManager.getLogger(CommonNeighboursStatistics.class);
+
     @Override
     public void execute(GraphModel graphModel) {
+
+        consoleLogger.debug("Execution of link prediction started");
 
         highestValue = 0;
 
@@ -26,6 +33,7 @@ public class PreferentialAttachmentStatistics extends LinkPredictionStatistics {
 
         //Look if the result column already exist and create it if needed
         Table edgeTable = graphModel.getEdgeTable();
+        consoleLogger.debug("Initialize columns");
         initializeColumns(edgeTable);
 
         GraphController gc = Lookup.getDefault().lookup(GraphController.class);
@@ -116,6 +124,8 @@ public class PreferentialAttachmentStatistics extends LinkPredictionStatistics {
 
     private Node[] getRelevantNeighbours(Node[] initNeighbours) {
 
+
+        //TODO Korrektur: Algorithmus auf Edge, nicht auf Node!!
         ArrayList<Node> relevantNeighbours = new ArrayList<>();
 
         for (Node iN : initNeighbours) {

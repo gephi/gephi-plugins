@@ -14,4 +14,9 @@ public class PreferentialAttachmentStatisticsUI extends LinkPredictionStatistics
         return PreferentialAttachmentStatistics.class;
     }
 
+    @Override
+    public String getDisplayName() {
+        return "Preferential Attachment Link Prediction";
+    }
+
 }
