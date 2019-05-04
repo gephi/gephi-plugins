@@ -7,10 +7,7 @@ import org.gephi.graph.api.Table;
 import org.gephi.plugins.linkprediction.util.Complexity;
 import org.gephi.statistics.spi.Statistics;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Statistic that predicts the next edge based on different link-prediction
@@ -152,7 +149,7 @@ public abstract class LinkPredictionStatistics implements Statistics {
     public int getNextIteration(Graph graph, String algorithm) {
         int lastIteration = Arrays.asList(graph.getEdges().toArray()).stream()
                 .filter(edge -> edge.getAttribute(colLP).toString().equals(algorithm))
-                .map(edge -> (int) edge.getAttribute(colAddinRun)).sorted().findFirst().orElse(0);
+                .map(edge -> (int) edge.getAttribute(colAddinRun)).max(Comparator.comparing(Integer::valueOf)).orElse(0);
         return lastIteration + 1;
     }
 }
