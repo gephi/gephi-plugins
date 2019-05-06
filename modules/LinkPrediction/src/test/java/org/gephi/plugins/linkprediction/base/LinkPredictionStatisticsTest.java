@@ -1,10 +1,11 @@
-package org.gephi.plugins.linkprediction.statistics;
+package org.gephi.plugins.linkprediction.base;
 
 import org.gephi.graph.api.Column;
 import org.gephi.graph.api.GraphController;
 import org.gephi.graph.api.GraphModel;
 import org.gephi.graph.api.Table;
 import org.gephi.plugins.linkprediction.base.LinkPredictionStatistics;
+import org.gephi.plugins.linkprediction.statistics.CommonNeighboursStatistics;
 import org.gephi.project.api.ProjectController;
 import org.gephi.project.api.Workspace;
 import org.junit.jupiter.api.BeforeEach;

@@ -12,18 +12,23 @@ import org.openide.util.lookup.ServiceProvider;
  * @author Marco Romanutti
  * @see CommonNeighboursFilter
  */
-@ServiceProvider(service = FilterBuilder.class)
-public class CommonNeighboursFilterBuilder extends LinkPredictionFilterBuilder {
-    /** Name of the common neighbour filter category **/
+@ServiceProvider(service = FilterBuilder.class) public class CommonNeighboursFilterBuilder
+        extends LinkPredictionFilterBuilder {
+    /**
+     * Name of the common neighbours filter category
+     **/
     public static final String COMMON_NEIGHBOURS_NAME = "Common neighbours";
+
+    /**
+     * Description of the common neighbours filter
+     **/
+    public static final String COMMON_NEIGHBOURS_DESC = "Predict n next link using common neighbours algorithm";
 
     @Override public String getName() {
         return COMMON_NEIGHBOURS_NAME;
     }
 
-    @Override public String getDescription() {
-        return "Predict n next link using common neighbours algorithm";
-    }
+    @Override public String getDescription() { return COMMON_NEIGHBOURS_DESC; }
 
     @Override public Filter getFilter(Workspace workspace) {
         return new CommonNeighboursFilter();
