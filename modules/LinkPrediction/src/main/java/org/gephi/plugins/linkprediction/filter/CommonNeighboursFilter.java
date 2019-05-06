@@ -12,6 +12,7 @@ import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 import static org.gephi.plugins.linkprediction.base.LinkPredictionStatistics.*;
 
@@ -53,8 +54,23 @@ public class CommonNeighboursFilter extends LinkPredictionFilter {
                         .limit(edgesLimit);
 
         if (edges.size() > 0 ){
-            graph.clearEdges();
-            graph.addAllEdges(edges);
+            //graph.clearEdges();
+            //graph.addAllEdges(edges);
+            // Get nodes
+            List<Node> sourceNodes = edges.stream().map(edge -> edge.getSource()).collect(Collectors.toList());
+            List<Node> targetNodes = edges.stream().map(edge -> edge.getTarget()).collect(Collectors.toList());
+
+            // Union nodes
+            sourceNodes.addAll(targetNodes);
+            List<Node> remainingNodes = sourceNodes;
+
+            // Nodes to remove
+            // Get nodes
+            List<Node> nodesToRemove = new ArrayList<Node>(Arrays.asList(graph.getNodes().toArray()));
+            // Remove all nodes, which are not referenced
+            Predicate<Node> containsNotNodePredicate = node -> remainingNodes.contains(node);
+            nodesToRemove.removeIf(containsNotNodePredicate);
+            graph.removeAllNodes(nodesToRemove);
         } else {
             // TODO Throw Exception
         }

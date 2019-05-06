@@ -99,8 +99,11 @@ class CommonNeighboursFilterTest {
 
         Graph graph = filter.filter(graphModel.getGraph());
         List<Edge> edges = Arrays.asList(graph.getEdges().toArray());
+        List<Node> nodes = Arrays.asList(graph.getNodes().toArray());
 
         assertTrue(edges.size() == 1);
+        assertTrue(nodes.size() == 2);
+        // FIXME: Results in false
         //assertTrue(edges.stream().allMatch(
         //        edge -> edge.getAttribute(colLP).equals(CommonNeighboursFilterBuilder.COMMON_NEIGHBOURS_NAME)));
     }
@@ -109,9 +112,6 @@ class CommonNeighboursFilterTest {
     }
 
     @Test void getProperties() {
-    }
-
-    @Test void filter1() {
     }
 
 }

@@ -101,8 +101,8 @@ class CommonNeighboursStatisticsTest {
 
         Edge max = statistic.getHighestPrediction();
 
-        assertTrue(max.getSource().getLabel().equals("Node D"));
-        assertTrue(max.getTarget().getLabel().equals("Node B"));
+        assertTrue(max.getSource().getLabel().equals("Node C"));
+        assertTrue(max.getTarget().getLabel().equals("Node A"));
         assertTrue(max.getAttribute(getColLP()).equals(CommonNeighboursStatisticsBuilder.COMMON_NEIGHBOURS_NAME));
         assertTrue((int) max.getAttribute(getColAddinRun()) == 1);
         assertTrue((int) max.getAttribute(getColLastValue()) == 2);
