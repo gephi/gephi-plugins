@@ -9,6 +9,7 @@ import org.openide.util.Lookup;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 public class CommonNeighboursStatistics extends LinkPredictionStatistics {
@@ -55,8 +56,15 @@ public class CommonNeighboursStatistics extends LinkPredictionStatistics {
                 cnValue = getCommonNeighboursCount(aNeighbours, bNeighbours);
 
                 // Check if edge exists already
-                List<Edge> existingEdges = new ArrayList<>(Arrays.asList(graph.getEdges(a, b).toArray()));
-                if (existingEdges.size() == 0) {
+                // FIXME graph.getEdges returns always null
+                //List<Edge> existingEdges = Arrays.asList(graph.getEdges(a, b).toArray());
+                Predicate<Edge> containsEdgePredicate = edge ->
+                        (edge.getTarget().equals(a) && edge.getSource().equals(b)) || (edge.getTarget().equals(b)
+                                && edge.getSource().equals(a));
+                long numberOfExistingEdges = Arrays.asList(graph.getEdges().toArray()).stream()
+                        .filter(containsEdgePredicate).count();
+
+                if (numberOfExistingEdges == 0) {
                     // Add new edge to calculation map
                     Edge newEdge = factory.newEdge(a, b, false);
                     newEdge.setAttribute(colLastValue, cnValue);
@@ -71,7 +79,7 @@ public class CommonNeighboursStatistics extends LinkPredictionStatistics {
         // Add edge to graph
         if (max != null) {
             int iteration = getNextIteration(graph, CommonNeighboursStatisticsBuilder.COMMON_NEIGHBOURS_NAME);
-            max.setAttribute(colAddinRun, 1);
+            max.setAttribute(colAddinRun, iteration);
             max.setAttribute(colLP, CommonNeighboursStatisticsBuilder.COMMON_NEIGHBOURS_NAME);
             graph.addEdge(max);
         }

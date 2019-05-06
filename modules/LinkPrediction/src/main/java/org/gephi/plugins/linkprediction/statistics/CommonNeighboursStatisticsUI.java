@@ -9,13 +9,11 @@ import org.openide.util.lookup.ServiceProvider;
 // TODO: Use LinkPredictionMacro to make sure only one Statistics UI exists
 public class CommonNeighboursStatisticsUI extends LinkPredictionStatisticsUI {
 
-    @Override
-    public Class<? extends Statistics> getStatisticsClass() {
-       return CommonNeighboursStatistics.class;
+    @Override public Class<? extends Statistics> getStatisticsClass() {
+        return CommonNeighboursStatistics.class;
     }
 
-    @Override
-    public String getDisplayName() {
+    @Override public String getDisplayName() {
         return "Common Neighbours Link Prediction";
     }
- }
+}

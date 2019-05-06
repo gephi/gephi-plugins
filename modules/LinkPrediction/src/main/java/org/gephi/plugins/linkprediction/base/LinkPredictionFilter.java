@@ -1,5 +1,7 @@
 package org.gephi.plugins.linkprediction.base;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.gephi.filters.spi.ComplexFilter;
 import org.gephi.filters.spi.FilterProperty;
 import org.openide.util.Exceptions;

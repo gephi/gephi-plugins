@@ -1,5 +1,6 @@
 package org.gephi.plugins.linkprediction.base;
 
+
 import org.gephi.filters.spi.Category;
 import org.gephi.filters.spi.Filter;
 import org.gephi.filters.spi.FilterBuilder;
@@ -29,8 +30,7 @@ public abstract class LinkPredictionFilterBuilder implements FilterBuilder {
     }
 
     public JPanel getPanel(Filter filter) {
-        // TODO Implement UI
-        return null;
+        return new LinkPredictionFilterPanel(filter);
     }
 
     public void destroy(Filter filter) {
