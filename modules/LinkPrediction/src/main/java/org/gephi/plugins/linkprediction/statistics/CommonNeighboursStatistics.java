@@ -4,12 +4,12 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.gephi.graph.api.*;
 import org.gephi.plugins.linkprediction.base.LinkPredictionStatistics;
+import org.gephi.plugins.linkprediction.util.GraphUtils;
 import org.openide.util.Lookup;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 public class CommonNeighboursStatistics extends LinkPredictionStatistics {
@@ -58,11 +58,8 @@ public class CommonNeighboursStatistics extends LinkPredictionStatistics {
                 // Check if edge exists already
                 // FIXME graph.getEdges returns always null
                 //List<Edge> existingEdges = Arrays.asList(graph.getEdges(a, b).toArray());
-                Predicate<Edge> containsEdgePredicate = edge ->
-                        (edge.getTarget().equals(a) && edge.getSource().equals(b)) || (edge.getTarget().equals(b)
-                                && edge.getSource().equals(a));
-                long numberOfExistingEdges = Arrays.asList(graph.getEdges().toArray()).stream()
-                        .filter(containsEdgePredicate).count();
+                List<Edge> existingEdges = GraphUtils.getEdges(graph, a, b);
+                long numberOfExistingEdges = existingEdges.size();
 
                 if (numberOfExistingEdges == 0) {
                     // Add new edge to calculation map

@@ -6,10 +6,12 @@ import org.gephi.graph.api.GraphModel;
 import org.gephi.plugins.linkprediction.base.LinkPredictionStatistics;
 
 import org.gephi.graph.api.*;
+import org.gephi.plugins.linkprediction.util.GraphUtils;
 import org.openide.util.Lookup;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import static org.gephi.plugins.linkprediction.statistics.PreferentialAttachmentStatisticsBuilder.PREFERENTIAL_ATTACHMENT_NAME;
 
@@ -58,8 +60,9 @@ public class PreferentialAttachmentStatistics extends LinkPredictionStatistics {
                 // Get prediction value
                 paValue = aNeighbours.size() * bNeighbours.size();
 
-                EdgeIterable e = graph.getEdges(a, b);
-                Edge[] eArr = e.toArray();
+                List<Edge> e = GraphUtils.getEdges(graph, a, b);
+                Edge[] eArr = new Edge[e.size()];
+                eArr = e.toArray(eArr);
 
                 boolean lpEdgeExists = false;
                 for(int i = 0; i < eArr.length; i++) {
@@ -100,7 +103,10 @@ public class PreferentialAttachmentStatistics extends LinkPredictionStatistics {
         Node[] neighboursX = graph.getNeighbors(x).toArray();
 
         for (Node iN : neighboursX) {
-            Edge[] eList = graph.getEdges(x, iN).toArray();
+            List<Edge> edges = GraphUtils.getEdges(graph, x, iN);
+            Edge[] eList = new Edge[edges.size()];
+            eList = edges.toArray(eList);
+
             boolean addedEdge = false;
             for (Edge e : eList) {
                  if ((e.getAttribute(colLP).equals(PREFERENTIAL_ATTACHMENT_NAME) || e.getAttribute(colLP).equals("")) && !addedEdge) {
