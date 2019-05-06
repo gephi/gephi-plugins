@@ -41,4 +41,5 @@ class LinkPredictionStatisticsTest {
         Column colLastValue = edgeTable.getColumn(LAST_VALUE);
         assertTrue(colLastValue != null);
     }
+
 }

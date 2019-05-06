@@ -75,7 +75,7 @@ public abstract class LinkPredictionStatistics implements Statistics {
     public String getReport() {
         //This is the HTML report shown when execution ends.
         //One could add a distribution histogram for instance
-        return "<HTML> <BODY> <h1>Count Common Neighbours</h1> " + "<hr>"
+        return "<HTML> <BODY> <h1>Link Prediction</h1> " + "<hr>"
                 + "<br> No global results to show. Check Data Laboratory for results" + "<br />" + "</BODY></HTML>";
     }
 

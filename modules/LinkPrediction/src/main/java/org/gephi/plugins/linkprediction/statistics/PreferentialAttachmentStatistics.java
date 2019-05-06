@@ -8,7 +8,6 @@ import org.gephi.plugins.linkprediction.base.LinkPredictionStatistics;
 import org.gephi.graph.api.*;
 import org.openide.util.Lookup;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -30,17 +29,15 @@ public class PreferentialAttachmentStatistics extends LinkPredictionStatistics {
 
         highestValue = 0;
 
-        //Graph graph = graphModel.getGraphVisible();
-
-        //Look if the result column already exist and create it if needed
         Table edgeTable = graphModel.getEdgeTable();
 
+        //Look if the result column already exist and create it if needed
         consoleLogger.debug("Initialize columns");
         initializeColumns(edgeTable);
 
-        GraphController gc = Lookup.getDefault().lookup(GraphController.class);
-        graph = gc.getGraphModel().getGraph();
-        GraphFactory factory = gc.getGraphModel().factory();
+        //GraphController gc = Lookup.getDefault().lookup(GraphController.class);
+        graph = graphModel.getGraph();
+        GraphFactory factory = graphModel.factory();
 
         graph.writeLock();
 
@@ -89,6 +86,7 @@ public class PreferentialAttachmentStatistics extends LinkPredictionStatistics {
             newEdge.setAttribute(colLP, PREFERENTIAL_ATTACHMENT_NAME);
             newEdge.setAttribute(colAddinRun, getNextIteration(graph, PREFERENTIAL_ATTACHMENT_NAME));
             newEdge.setAttribute(colLastValue, highestValue);
+            predictions.put(newEdge, highestValue);
         }
 
         graph.writeUnlock();
