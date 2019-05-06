@@ -34,9 +34,9 @@ public abstract class LinkPredictionStatistics implements Statistics {
     public static final String LP_ALGORITHM = "link_prediction_algorithm";
 
     /* Columns for data labour */
-    protected static Column colLP;
-    protected static Column colAddinRun;
-    protected static Column colLastValue;
+    public static Column colLP;
+    public static Column colAddinRun;
+    public static Column colLastValue;
 
     // Number of edge prediction iterations
     protected int iterationLimit = ITERATION_LIMIT_DEFAULT;
