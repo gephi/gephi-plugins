@@ -3,6 +3,7 @@ package org.gephi.plugins.linkprediction.filter;
 import org.gephi.filters.spi.Filter;
 import org.gephi.filters.spi.FilterBuilder;
 import org.gephi.plugins.linkprediction.base.LinkPredictionFilterBuilder;
+import org.gephi.plugins.linkprediction.statistics.CommonNeighboursStatisticsBuilder;
 import org.gephi.project.api.Workspace;
 import org.openide.util.lookup.ServiceProvider;
 
@@ -14,18 +15,14 @@ import org.openide.util.lookup.ServiceProvider;
  */
 @ServiceProvider(service = FilterBuilder.class) public class CommonNeighboursFilterBuilder
         extends LinkPredictionFilterBuilder {
-    /**
-     * Name of the common neighbours filter category
-     **/
-    public static final String COMMON_NEIGHBOURS_NAME = "Common neighbours";
 
-    /**
+     /**
      * Description of the common neighbours filter
      **/
     public static final String COMMON_NEIGHBOURS_DESC = "Predict n next link using common neighbours algorithm";
 
     @Override public String getName() {
-        return COMMON_NEIGHBOURS_NAME;
+        return CommonNeighboursStatisticsBuilder.COMMON_NEIGHBOURS_NAME;
     }
 
     @Override public String getDescription() { return COMMON_NEIGHBOURS_DESC; }

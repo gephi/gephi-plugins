@@ -2,6 +2,7 @@ package org.gephi.plugins.linkprediction.filter;
 
 import org.gephi.filters.spi.Category;
 import org.gephi.plugins.linkprediction.base.LinkPredictionFilterPanel;
+import org.gephi.plugins.linkprediction.statistics.CommonNeighboursStatisticsBuilder;
 import org.gephi.project.api.ProjectController;
 import org.gephi.project.api.Workspace;
 import org.junit.Ignore;
@@ -15,7 +16,7 @@ class CommonNeighboursFilterBuilderTest {
 
     @Test void getName() {
         CommonNeighboursFilterBuilder builder = new CommonNeighboursFilterBuilder();
-        assertEquals(CommonNeighboursFilterBuilder.COMMON_NEIGHBOURS_NAME, builder.getName());
+        assertEquals(CommonNeighboursStatisticsBuilder.COMMON_NEIGHBOURS_NAME, builder.getName());
     }
 
     @Test void getDescription() {

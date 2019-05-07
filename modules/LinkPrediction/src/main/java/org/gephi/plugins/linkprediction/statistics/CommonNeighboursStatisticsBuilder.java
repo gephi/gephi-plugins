@@ -19,7 +19,7 @@ import org.openide.util.lookup.ServiceProvider;
 @ServiceProvider(service = StatisticsBuilder.class)
 //public class CommonNeighboursStatisticsBuilder implements StatisticsBuilder  {
 public class CommonNeighboursStatisticsBuilder extends LinkPredictionStatisticsBuilder {
-    /** Name of the common neighbour filter category **/
+    /** Name of the algorithm**/
     public static final String COMMON_NEIGHBOURS_NAME = "Common Neighbours";
 
     @Override

@@ -46,30 +46,10 @@ public class CommonNeighboursFilter extends LinkPredictionFilter {
         // Get edges
         List<Edge> edges = new ArrayList<Edge>(Arrays.asList(graph.getEdges().toArray()));
         // Remove edges from other algorithms
-        Predicate<Edge> algorithmPredicate = edge -> !edge.getAttribute(colLP)
-                .equals(CommonNeighboursStatisticsBuilder.COMMON_NEIGHBOURS_NAME);
-        edges.removeIf(algorithmPredicate);
-        // Limit edges to filter criteria
-        edges.stream().sorted(Comparator.comparingLong(e -> (long) e.getAttribute(colAddinRun)))
-                        .limit(edgesLimit);
+        removeOtherEdges(edges);
 
         if (edges.size() > 0 ){
-            //graph.clearEdges();
-            //graph.addAllEdges(edges);
-            // Get nodes
-            List<Node> sourceNodes = edges.stream().map(edge -> edge.getSource()).collect(Collectors.toList());
-            List<Node> targetNodes = edges.stream().map(edge -> edge.getTarget()).collect(Collectors.toList());
-
-            // Union nodes
-            sourceNodes.addAll(targetNodes);
-            List<Node> remainingNodes = sourceNodes;
-
-            // Nodes to remove
-            // Get nodes
-            List<Node> nodesToRemove = new ArrayList<Node>(Arrays.asList(graph.getNodes().toArray()));
-            // Remove all nodes, which are not referenced
-            Predicate<Node> containsNotNodePredicate = node -> remainingNodes.contains(node);
-            nodesToRemove.removeIf(containsNotNodePredicate);
+            List<Node> nodesToRemove = getNodesToRemove(graph, edges);
             graph.removeAllNodes(nodesToRemove);
         } else {
             // TODO Throw Exception
@@ -82,7 +62,7 @@ public class CommonNeighboursFilter extends LinkPredictionFilter {
     }
 
     @Override public String getName() {
-        return CommonNeighboursFilterBuilder.COMMON_NEIGHBOURS_NAME;
+        return CommonNeighboursStatisticsBuilder.COMMON_NEIGHBOURS_NAME;
     }
 
 }
