@@ -70,7 +70,7 @@ public abstract class LinkPredictionFilter implements ComplexFilter {
 
     /**
      * Removes edges, that were added using another algorithm.
-     * 
+     *
      * @param edges Edges list to check
      */
     public void removeOtherEdges(List<Edge> edges) {
