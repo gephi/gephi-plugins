@@ -2,10 +2,12 @@ package org.gephi.plugins.linkprediction.filter;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.gephi.graph.api.*;
+import org.gephi.graph.api.Edge;
+import org.gephi.graph.api.Graph;
+import org.gephi.graph.api.Node;
+import org.gephi.graph.api.Table;
 import org.gephi.plugins.linkprediction.base.LinkPredictionFilter;
 import org.gephi.plugins.linkprediction.statistics.PreferentialAttachmentStatisticsBuilder;
-import org.openide.util.Lookup;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -31,11 +33,7 @@ public class PreferentialAttachmentFilter extends LinkPredictionFilter {
         consoleLogger.debug("Initialize columns");
         Table edgeTable = graph.getModel().getEdgeTable();
         initializeColumns(edgeTable);
-
-        // Get graph factory
-        GraphController gc = Lookup.getDefault().lookup(GraphController.class);
-        GraphFactory factory = gc.getGraphModel().factory();
-
+        
         // Lock graph for writes
         graph.writeLock();
 
@@ -44,7 +42,7 @@ public class PreferentialAttachmentFilter extends LinkPredictionFilter {
         // Remove edges from other algorithms
         removeOtherEdges(edges);
 
-        if (edges.size() > 0 ){
+        if (!edges.isEmpty() && edges.size() > 0 ){
             List<Node> nodesToRemove = getNodesToRemove(graph, edges);
             graph.removeAllNodes(nodesToRemove);
         } else {
