@@ -104,7 +104,7 @@ class PreferentialAttachmentFilterTest {
         assertTrue(nodes.size() == 2);
         // FIXME: Results in false
         //assertTrue(edges.stream().allMatch(
-        //        edge -> edge.getAttribute(colLP).equals(CommonNeighboursFilterBuilder.COMMON_NEIGHBOURS_NAME)));
+        //        edge -> edge.getAttribute(ColLastPrediction).equals(CommonNeighboursFilterBuilder.COMMON_NEIGHBOURS_NAME)));
     }
 
     @Test void getName() {

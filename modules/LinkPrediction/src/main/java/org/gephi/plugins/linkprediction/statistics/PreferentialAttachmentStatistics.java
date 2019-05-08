@@ -7,7 +7,6 @@ import org.gephi.plugins.linkprediction.base.LinkPredictionStatistics;
 
 import org.gephi.graph.api.*;
 import org.gephi.plugins.linkprediction.util.GraphUtils;
-import org.openide.util.Lookup;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -66,8 +65,9 @@ public class PreferentialAttachmentStatistics extends LinkPredictionStatistics {
 
                 boolean lpEdgeExists = false;
                 for(int i = 0; i < eArr.length; i++) {
-                    if ((eArr[i].getAttribute(colLP).equals(PREFERENTIAL_ATTACHMENT_NAME) && (Integer) eArr[0].getAttribute(colAddinRun) > 0) ||
-                    (eArr[i].getAttribute(colLP).equals("")))
+                    if ((eArr[i].getAttribute(ColLastPrediction).equals(PREFERENTIAL_ATTACHMENT_NAME) && (Integer) eArr[0].getAttribute(
+                            ColAddedInRun) > 0) ||
+                    (eArr[i].getAttribute(ColLastPrediction).equals("")))
                     {
                             lpEdgeExists = true;
                     }
@@ -86,9 +86,9 @@ public class PreferentialAttachmentStatistics extends LinkPredictionStatistics {
         if (neighbourA != null) {
             Edge newEdge = factory.newEdge(neighbourA, neighbourB, false);
             graph.addEdge(newEdge);
-            newEdge.setAttribute(colLP, PREFERENTIAL_ATTACHMENT_NAME);
-            newEdge.setAttribute(colAddinRun, getNextIteration(graph, PREFERENTIAL_ATTACHMENT_NAME));
-            newEdge.setAttribute(colLastValue, highestValue);
+            newEdge.setAttribute(ColLastPrediction, PREFERENTIAL_ATTACHMENT_NAME);
+            newEdge.setAttribute(ColAddedInRun, getNextIteration(graph, PREFERENTIAL_ATTACHMENT_NAME));
+            newEdge.setAttribute(ColLastCalculatedValue, highestValue);
             predictions.put(newEdge, highestValue);
         }
 
@@ -109,7 +109,8 @@ public class PreferentialAttachmentStatistics extends LinkPredictionStatistics {
 
             boolean addedEdge = false;
             for (Edge e : eList) {
-                 if ((e.getAttribute(colLP).equals(PREFERENTIAL_ATTACHMENT_NAME) || e.getAttribute(colLP).equals("")) && !addedEdge) {
+                 if ((e.getAttribute(ColLastPrediction).equals(PREFERENTIAL_ATTACHMENT_NAME) || e.getAttribute(
+                         ColLastPrediction).equals("")) && !addedEdge) {
                      relevantNeighbours.add(iN);
                      addedEdge = true;
                  }

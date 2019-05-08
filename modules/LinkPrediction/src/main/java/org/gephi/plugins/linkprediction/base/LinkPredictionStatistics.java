@@ -34,9 +34,9 @@ public abstract class LinkPredictionStatistics implements Statistics {
     public static final String LP_ALGORITHM = "link_prediction_algorithm";
 
     /* Columns for data labour */
-    public static Column colLP;
-    public static Column colAddinRun;
-    public static Column colLastValue;
+    protected static Column ColLastPrediction;
+    protected static Column ColAddedInRun;
+    protected static Column ColLastCalculatedValue;
 
     // Number of edge prediction iterations
     protected int iterationLimit = ITERATION_LIMIT_DEFAULT;
@@ -51,19 +51,19 @@ public abstract class LinkPredictionStatistics implements Statistics {
      * @param edgeTable Table on which columns will be added
      */
     public static void initializeColumns(Table edgeTable) {
-        colLP = edgeTable.getColumn(LP_ALGORITHM);
-        if (colLP == null) {
-            colLP = edgeTable.addColumn(LP_ALGORITHM, "Chosen Link Prediction Algorithm", String.class, "");
+        ColLastPrediction = edgeTable.getColumn(LP_ALGORITHM);
+        if (ColLastPrediction == null) {
+            ColLastPrediction = edgeTable.addColumn(LP_ALGORITHM, "Chosen Link Prediction Algorithm", String.class, "");
         }
 
-        colAddinRun = edgeTable.getColumn(ADDED_IN_RUN);
-        if (colAddinRun == null) {
-            colAddinRun = edgeTable.addColumn(ADDED_IN_RUN, "Added in Run", Integer.class, 0);
+        ColAddedInRun = edgeTable.getColumn(ADDED_IN_RUN);
+        if (ColAddedInRun == null) {
+            ColAddedInRun = edgeTable.addColumn(ADDED_IN_RUN, "Added in Run", Integer.class, 0);
         }
 
-        colLastValue = edgeTable.getColumn(LAST_VALUE);
-        if (colLastValue == null) {
-            colLastValue = edgeTable.addColumn(LAST_VALUE, "Last Link Prediction Value", Integer.class, 0);
+        ColLastCalculatedValue = edgeTable.getColumn(LAST_VALUE);
+        if (ColLastCalculatedValue == null) {
+            ColLastCalculatedValue = edgeTable.addColumn(LAST_VALUE, "Last Link Prediction Value", Integer.class, 0);
         }
     }
 
@@ -76,8 +76,8 @@ public abstract class LinkPredictionStatistics implements Statistics {
      */
     public static int getMaxIteration(Graph graph, String algorithm) {
         int lastIteration = Arrays.asList(graph.getEdges().toArray()).stream()
-                .filter(edge -> edge.getAttribute(colLP).toString().equals(algorithm))
-                .map(edge -> (int) edge.getAttribute(colAddinRun)).max(Comparator.comparing(Integer::valueOf)).orElse(0);
+                .filter(edge -> edge.getAttribute(ColLastPrediction).toString().equals(algorithm))
+                .map(edge -> (int) edge.getAttribute(ColAddedInRun)).max(Comparator.comparing(Integer::valueOf)).orElse(0);
         return lastIteration;
     }
 
@@ -103,28 +103,28 @@ public abstract class LinkPredictionStatistics implements Statistics {
         return false;
     }
 
-    public static Column getColLP() {
-        return colLP;
+    public static Column getColLastPrediction() {
+        return ColLastPrediction;
     }
 
-    public static void setColLP(Column colLP) {
-        LinkPredictionStatistics.colLP = colLP;
+    public static void setColLastPrediction(Column colLastPrediction) {
+        LinkPredictionStatistics.ColLastPrediction = colLastPrediction;
     }
 
-    public static Column getColAddinRun() {
-        return colAddinRun;
+    public static Column getColAddedInRun() {
+        return ColAddedInRun;
     }
 
-    public static void setColAddinRun(Column colAddinRun) {
-        LinkPredictionStatistics.colAddinRun = colAddinRun;
+    public static void setColAddedInRun(Column colAddedInRun) {
+        LinkPredictionStatistics.ColAddedInRun = colAddedInRun;
     }
 
-    public static Column getColLastValue() {
-        return colLastValue;
+    public static Column getColLastCalculatedValue() {
+        return ColLastCalculatedValue;
     }
 
-    public static void setColLastValue(Column colLastValue) {
-        LinkPredictionStatistics.colLastValue = colLastValue;
+    public static void setColLastCalculatedValue(Column colLastCalculatedValue) {
+        LinkPredictionStatistics.ColLastCalculatedValue = colLastCalculatedValue;
     }
 
     public int getIterationLimit() {
@@ -162,8 +162,8 @@ public abstract class LinkPredictionStatistics implements Statistics {
      */
     public int getNextIteration(Graph graph, String algorithm) {
         int lastIteration = Arrays.asList(graph.getEdges().toArray()).stream()
-                .filter(edge -> edge.getAttribute(colLP).toString().equals(algorithm))
-                .map(edge -> (int) edge.getAttribute(colAddinRun)).max(Comparator.comparing(Integer::valueOf)).orElse(0);
+                .filter(edge -> edge.getAttribute(ColLastPrediction).toString().equals(algorithm))
+                .map(edge -> (int) edge.getAttribute(ColAddedInRun)).max(Comparator.comparing(Integer::valueOf)).orElse(0);
         return lastIteration + 1;
     }
 

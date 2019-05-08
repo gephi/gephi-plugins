@@ -14,8 +14,8 @@ import java.util.List;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
-import static org.gephi.plugins.linkprediction.base.LinkPredictionStatistics.colAddinRun;
-import static org.gephi.plugins.linkprediction.base.LinkPredictionStatistics.colLP;
+import static org.gephi.plugins.linkprediction.base.LinkPredictionStatistics.ColAddedInRun;
+import static org.gephi.plugins.linkprediction.base.LinkPredictionStatistics.ColLastPrediction;
 
 /**
  * Filter that removes all predicted edges that do not originate from the
@@ -74,11 +74,11 @@ public abstract class LinkPredictionFilter implements ComplexFilter {
      * @param edges Edges list to check
      */
     public void removeOtherEdges(List<Edge> edges) {
-        Predicate<Edge> algorithmPredicate = edge -> !edge.getAttribute(colLP)
+        Predicate<Edge> algorithmPredicate = edge -> !edge.getAttribute(ColLastPrediction)
                 .equals(getName());
         edges.removeIf(algorithmPredicate);
         // Limit edges to filter criteria
-        edges = edges.stream().sorted(Comparator.comparingLong(e -> (long) e.getAttribute(colAddinRun)))
+        edges = edges.stream().sorted(Comparator.comparingLong(e -> (long) e.getAttribute(ColAddedInRun)))
                 .limit(edgesLimit).collect(Collectors.toList());
     }
 

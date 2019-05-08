@@ -13,7 +13,6 @@ import org.openide.util.Lookup;
 import java.util.Arrays;
 import java.util.List;
 
-import static org.gephi.plugins.linkprediction.base.LinkPredictionStatistics.colLP;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class CommonNeighboursFilterTest {
@@ -105,7 +104,7 @@ class CommonNeighboursFilterTest {
         assertTrue(nodes.size() == 2);
         // FIXME: Results in false
         //assertTrue(edges.stream().allMatch(
-        //        edge -> edge.getAttribute(colLP).equals(CommonNeighboursFilterBuilder.COMMON_NEIGHBOURS_NAME)));
+        //        edge -> edge.getAttribute(ColLastPrediction).equals(CommonNeighboursFilterBuilder.COMMON_NEIGHBOURS_NAME)));
     }
 
     @Test void getName() {

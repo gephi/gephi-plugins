@@ -104,9 +104,9 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
         assertTrue(max.getSource().getLabel().equals("Node A"));
         assertTrue(max.getTarget().getLabel().equals("Node G"));
-        assertTrue(max.getAttribute(getColLP()).equals(PreferentialAttachmentStatisticsBuilder.PREFERENTIAL_ATTACHMENT_NAME));
-        assertTrue((int) max.getAttribute(getColAddinRun()) == 1);
-        assertTrue((int) max.getAttribute(getColLastValue()) == 12);
+        assertTrue(max.getAttribute(getColLastPrediction()).equals(PreferentialAttachmentStatisticsBuilder.PREFERENTIAL_ATTACHMENT_NAME));
+        assertTrue((int) max.getAttribute(getColAddedInRun()) == 1);
+        assertTrue((int) max.getAttribute(getColLastCalculatedValue()) == 12);
     }
 
     @Ignore @org.junit.jupiter.api.Test void testExecute_Successfully() {
