@@ -68,6 +68,20 @@ public abstract class LinkPredictionStatistics implements Statistics {
     }
 
     /**
+     * Gets the number of the highest added iteration per algorithm.
+     *
+     * @param graph     Graph currently working on
+     * @param algorithm Used algorithm
+     * @return Number of highest iteration
+     */
+    public static int getMaxIteration(Graph graph, String algorithm) {
+        int lastIteration = Arrays.asList(graph.getEdges().toArray()).stream()
+                .filter(edge -> edge.getAttribute(colLP).toString().equals(algorithm))
+                .map(edge -> (int) edge.getAttribute(colAddinRun)).max(Comparator.comparing(Integer::valueOf)).orElse(0);
+        return lastIteration;
+    }
+
+    /**
      * Generates a report after link prediction calculation has finished.
      *
      * @return HTML report
@@ -152,4 +166,6 @@ public abstract class LinkPredictionStatistics implements Statistics {
                 .map(edge -> (int) edge.getAttribute(colAddinRun)).max(Comparator.comparing(Integer::valueOf)).orElse(0);
         return lastIteration + 1;
     }
+
+
 }
