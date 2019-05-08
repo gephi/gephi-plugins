@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Configuration>
+  <Appenders>
+    <Console name="console" target="SYSTEM_OUT">
+      <PatternLayout pattern="%d{HH:mm:ss} %-5p %L [%C] - %m%n"/>
+    </Console>
+
+    <File name="file" fileName="link-prediction.log" bufferedIO="false" >
+      <PatternLayout pattern="%d{dd MMM yy}, %d{HH:mm:ss}, %-5p %m%n"/>
+    </File>
+  </Appenders>
+
+  <Loggers>
+    <Logger name = "org.gephi.plugins.linkprediction.statistics.PreferentialAttachmentStatistics" level="TRACE" additivity="false">
+      <AppenderRef ref="console" />
+    </Logger>
+
+    <Logger name = "org.gephi.plugins.linkprediction.statistics.CommonNeighboursStatistics" level="TRACE" additivity="false">
+      <AppenderRef ref="console" />
+    </Logger>
+
+    <Logger name = "org.gephi.plugins.linkprediction.filter.CommonNeighboursFilter" level="TRACE" additivity="false">
+      <AppenderRef ref="console" />
+    </Logger>
+
+    <Logger name = "org.gephi.plugins.linkprediction.filter.PreferentialAttachmentFilter" level="TRACE" additivity="false">
+      <AppenderRef ref="console" />
+    </Logger>
+
+    <Logger name = "org.gephi.plugins.linkprediction.base.LinkPredictionStatisticsPanel" level="TRACE" additivity="false">
+      <AppenderRef ref="console" />
+    </Logger>
+
+    <Logger name = "Filelogger" level="TRACE" additivity="false">
+      <AppenderRef ref="file" />
+    </Logger>
+
+    <Root level="off" additivity="false">
+      <AppenderRef ref="file" />
+    </Root>
+  </Loggers>
+
+</Configuration>
