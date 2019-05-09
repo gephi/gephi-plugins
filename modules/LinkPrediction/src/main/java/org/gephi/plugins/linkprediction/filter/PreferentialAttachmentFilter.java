@@ -4,7 +4,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.gephi.graph.api.Edge;
 import org.gephi.graph.api.Graph;
-import org.gephi.graph.api.Node;
 import org.gephi.graph.api.Table;
 import org.gephi.plugins.linkprediction.base.LinkPredictionFilter;
 import org.gephi.plugins.linkprediction.statistics.PreferentialAttachmentStatisticsBuilder;
@@ -42,12 +41,8 @@ public class PreferentialAttachmentFilter extends LinkPredictionFilter {
         // Remove edges from other algorithms
         removeOtherEdges(edges);
 
-        if (!edges.isEmpty() && edges.size() > 0 ){
-            List<Node> nodesToRemove = getNodesToRemove(graph, edges);
-            graph.removeAllNodes(nodesToRemove);
-        } else {
-            // TODO Throw Exception
-        }
+        // Remove other nodes and edges
+        retainEdges(graph, edges);
 
         // Unlock graph
         graph.writeUnlock();

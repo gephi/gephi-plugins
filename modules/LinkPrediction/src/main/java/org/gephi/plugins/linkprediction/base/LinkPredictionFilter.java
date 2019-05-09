@@ -106,4 +106,24 @@ public abstract class LinkPredictionFilter implements ComplexFilter {
         nodesToRemove.removeIf(containsNotNodePredicate);
         return nodesToRemove;
     }
+
+    /**
+     * Removes all nodes and edges from graph other than those in edges list.
+     *
+     * @param graph Graph on which removal will be applied
+     * @param edges Retaining edges
+     */
+    public void retainEdges(Graph graph, List<Edge> edges) {
+        if (!edges.isEmpty() && edges.size() > 0 ){
+            // Remove nodes
+            List<Node> nodesToRemove = getNodesToRemove(graph, edges);
+            graph.removeAllNodes(nodesToRemove);
+
+            // Remove edges
+            List<Edge> remainingEdges = new ArrayList<Edge>(Arrays.asList(graph.getEdges().toArray()));
+            remainingEdges.stream().filter(edge -> !edges.contains(edge)).forEach(edge -> graph.removeEdge(edge));
+        } else {
+            // TODO Throw Exception
+        }
+    }
 }
