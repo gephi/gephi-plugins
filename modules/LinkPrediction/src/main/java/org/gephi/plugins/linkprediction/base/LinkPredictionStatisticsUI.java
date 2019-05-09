@@ -1,11 +1,14 @@
 package org.gephi.plugins.linkprediction.base;
 
+import org.gephi.plugins.linkprediction.statistics.LinkPredictionMacro;
 import org.gephi.statistics.spi.Statistics;
 import org.gephi.statistics.spi.StatisticsUI;
+import org.openide.util.lookup.ServiceProvider;
 
 import javax.swing.*;
 
-public abstract class LinkPredictionStatisticsUI implements StatisticsUI {
+@ServiceProvider(service = StatisticsUI.class)
+public class LinkPredictionStatisticsUI implements StatisticsUI {
 
     protected LinkPredictionStatistics statistic;
     protected LinkPredictionStatisticsPanel panel;
@@ -19,12 +22,20 @@ public abstract class LinkPredictionStatisticsUI implements StatisticsUI {
     @Override
     public void setup(Statistics statistic) {
         this.statistic = (LinkPredictionStatistics) statistic;
+        if (panel == null){
+            panel = new LinkPredictionStatisticsPanel();;
+        }
+        panel.setStatistic((LinkPredictionMacro) statistic);
     }
 
     @Override
     public void unsetup() {
         this.panel = null;
         this.statistic = null;
+    }
+
+    @Override public Class<? extends Statistics> getStatisticsClass() {
+        return LinkPredictionMacro.class;
     }
 
     @Override
@@ -49,7 +60,7 @@ public abstract class LinkPredictionStatisticsUI implements StatisticsUI {
 
     @Override
     public String getShortDescription() {
-        return "Predicts next links in network";
+        return "Link Prediction Algorithm Selection";
     }
 
 

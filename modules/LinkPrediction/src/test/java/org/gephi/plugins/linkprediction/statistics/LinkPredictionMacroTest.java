@@ -12,6 +12,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class LinkPredictionMacroTest {
     GraphModel graphModel;
@@ -179,11 +180,36 @@ class LinkPredictionMacroTest {
         assertEquals(2, panCount);
     }
 
-    @Test void addStatistic() {
-        // TODO
+    @Test void addStatistic_Successfully() {
+        LinkPredictionStatistics cn = new CommonNeighboursStatistics();
+        LinkPredictionStatistics pa = new PreferentialAttachmentStatistics();
+        LinkPredictionMacro macro = new LinkPredictionMacro();
+        macro.addStatistic(cn);
+        macro.addStatistic(pa);
+
+        List<LinkPredictionStatistics> statistics = macro.getStatistics();
+        assertEquals(2, statistics.size());
+        assertTrue(statistics.contains(cn));
+        assertTrue(statistics.contains(pa));
     }
 
-    @Test void removeStatistic() {
-        // TODO
+    @Test void removeStatistic_Successfully() {
+        LinkPredictionStatistics cn = new CommonNeighboursStatistics();
+        LinkPredictionStatistics pa = new PreferentialAttachmentStatistics();
+        LinkPredictionMacro macro = new LinkPredictionMacro();
+        macro.addStatistic(cn);
+        macro.addStatistic(pa);
+
+        List<LinkPredictionStatistics> statistics = macro.getStatistics();
+        assertEquals(2, statistics.size());
+        assertTrue(statistics.contains(cn));
+        assertTrue(statistics.contains(pa));
+
+        macro.removeStatistic(cn);
+        assertEquals(1, statistics.size());
+        assertTrue(statistics.contains(pa));
+
+        macro.removeStatistic(pa);
+        assertEquals(0, statistics.size());
     }
 }
