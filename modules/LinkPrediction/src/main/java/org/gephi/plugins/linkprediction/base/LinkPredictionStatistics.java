@@ -38,8 +38,6 @@ public abstract class LinkPredictionStatistics implements Statistics {
     protected static Column ColAddedInRun;
     protected static Column ColLastCalculatedValue;
 
-    // Number of edge prediction iterations
-    protected int iterationLimit = ITERATION_LIMIT_DEFAULT;
     // Big o complexity of algorithm
     protected Complexity complexity;
     // Holds the calculated prediction values
@@ -127,14 +125,6 @@ public abstract class LinkPredictionStatistics implements Statistics {
         LinkPredictionStatistics.ColLastCalculatedValue = colLastCalculatedValue;
     }
 
-    public int getIterationLimit() {
-        return iterationLimit;
-    }
-
-    public void setIterationLimit(int iterationLimit) {
-        this.iterationLimit = iterationLimit;
-    }
-
     public Complexity getComplexity() {
         return complexity;
     }
@@ -165,6 +155,11 @@ public abstract class LinkPredictionStatistics implements Statistics {
                 .filter(edge -> edge.getAttribute(ColLastPrediction).toString().equals(algorithm))
                 .map(edge -> (int) edge.getAttribute(ColAddedInRun)).max(Comparator.comparing(Integer::valueOf)).orElse(0);
         return lastIteration + 1;
+    }
+
+    @Override
+    public boolean equals(Object o){
+        return o.getClass() == this.getClass();
     }
 
 
