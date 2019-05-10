@@ -819,13 +819,17 @@ public final class MainTwitterWindows extends TopComponent {
     }
 
     private void addUser(){
-        streamer.addUser(ut_add_textfield.getText().trim().toLowerCase());
+        for(String user: ut_add_textfield.getText().toLowerCase().split(",")){
+            streamer.addUser(user.trim());
+        }
         ut_add_textfield.setText("");
         refreshUserList();
     }
     
     private void addWord() {
-        streamer.addWordTracking(wt_add_textfield.getText().trim().toLowerCase());
+        for(String word : wt_add_textfield.getText().toLowerCase().split(",")){
+            streamer.addWordTracking(word.trim());
+        }
         wt_add_textfield.setText("");
         refreshWordList();
     }
