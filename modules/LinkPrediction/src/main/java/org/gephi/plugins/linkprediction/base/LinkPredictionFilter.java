@@ -78,7 +78,7 @@ public abstract class LinkPredictionFilter implements ComplexFilter {
                 .equals(getName());
         edges.removeIf(algorithmPredicate);
         // Limit edges to filter criteria
-        edges = edges.stream().sorted(Comparator.comparingLong(e -> (long) e.getAttribute(ColAddedInRun)))
+        edges = edges.stream().sorted(Comparator.comparingLong(e -> (int) e.getAttribute(ColAddedInRun)))
                 .limit(edgesLimit).collect(Collectors.toList());
     }
 
