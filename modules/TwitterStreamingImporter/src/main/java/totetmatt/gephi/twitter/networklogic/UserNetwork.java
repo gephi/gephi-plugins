@@ -32,46 +32,48 @@ public class UserNetwork extends Networklogic {
         RETWEET = graphModel.addEdgeType("Retweet");
         QUOTE   = graphModel.addEdgeType("Quote");
     }
+    
     @Override
     public void processStatus(Status status) {
-        long currentMillis = LocalTime.now().toDateTimeToday().getMillis();
-        // get the original user from the tweet
-        String originScreenName = status.getUser().getScreenName().toLowerCase();
 
-        // For each mention
-        for (UserMentionEntity mention : status.getUserMentionEntities()) {
+        // Mentions
+        if(status.getUserMentionEntities().length > 0) { 
+            Node origin = createUser(status.getUser());
+            for (UserMentionEntity mention : status.getUserMentionEntities()) {
 
-            String targetScreenName = mention.getScreenName().toLowerCase();
-            // Avoid self-loop
-            if (!originScreenName.equals(targetScreenName)) {
+                // Avoid self-loop
+                if (!status.getUser().getScreenName().equals(mention.getScreenName())) {
+                    Node target = createUser(mention);
 
-                // Create or get the nodes
-                Node origin = createUser(status.getUser());
-                Node target = createUser(mention);
-                origin.addTimestamp(currentMillis);
-                target.addTimestamp(currentMillis);
-                
-                int typeEdge;
-                if (status.isRetweet()) {
-                    typeEdge = RETWEET;
-                } else {
-                    typeEdge = MENTION;
+                    origin.addTimestamp(System.currentTimeMillis());
+                    target.addTimestamp(System.currentTimeMillis());
+                    // Check if there is already an edge for the nodes
+                    createLink(origin, target, MENTION, System.currentTimeMillis());   
                 }
-                // Check if there is already an edge for the nodes
-                createLink(origin, target, typeEdge,currentMillis);
-                
-                if (status.getRetweetedStatus() != null) {
-                    onStatus(status.getRetweetedStatus());
-                }
-                
-                if(status.getQuotedStatus() != null) {
-                    target = createUser(status.getQuotedStatus().getUser());
-                    createLink(origin, target, QUOTE,currentMillis);
-                }
-                   
             }
-
         }
+        
+        // Manage Quoted Status
+        if(status.getQuotedStatus() != null && 
+           // Avoid self-loop
+           !status.getUser().getScreenName().equals(status.getQuotedStatus().getUser().getScreenName()) ) {
+            
+            Node origin = createUser(status.getUser());
+            Node target = createUser(status.getQuotedStatus().getUser());
+            createLink(origin, target, QUOTE, System.currentTimeMillis());
+            onStatus(status.getQuotedStatus());
+        }
+        
+        //Manage Retweeted
+        if (status.getRetweetedStatus() != null && 
+            // Avoid self-loop
+            !status.getUser().getScreenName().equals(status.getRetweetedStatus().getUser().getScreenName()) ) {
+            
+            Node origin = createUser(status.getUser());
+            Node target = createUser(status.getRetweetedStatus().getUser());
+            createLink(origin, target, RETWEET, System.currentTimeMillis());
+            onStatus(status.getRetweetedStatus());
+        } 
 
     }
     
