@@ -56,7 +56,7 @@ public class FullSmartNetwork extends Networklogic {
     }
 
     public void processStatus(Status status, Node retweetUser,int link_kind) {
-        long currentMillis = LocalTime.now().toDateTimeToday().getMillis();
+        long currentMillis = System.currentTimeMillis();
         
         Node tweet = createTweet(status);
         tweet.addTimestamp(currentMillis);

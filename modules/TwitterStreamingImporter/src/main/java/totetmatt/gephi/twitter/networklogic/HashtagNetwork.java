@@ -30,7 +30,7 @@ public class HashtagNetwork extends Networklogic {
 
     @Override
     public void processStatus(Status status) {
-        long currentMillis = LocalTime.now().toDateTimeToday().getMillis();
+        long currentMillis = System.currentTimeMillis();
         for(HashtagEntity h1:status.getHashtagEntities()){
             if(!Arrays.asList(this.track).contains(h1.getText().toLowerCase())) {
                 for(HashtagEntity h2:status.getHashtagEntities()){

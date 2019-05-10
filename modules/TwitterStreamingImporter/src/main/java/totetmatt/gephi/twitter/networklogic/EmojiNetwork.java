@@ -32,7 +32,7 @@ public class EmojiNetwork extends Networklogic {
     }
     @Override
     public void processStatus(Status status) {
-        long currentMillis = LocalTime.now().toDateTimeToday().getMillis();
+        long currentMillis = System.currentTimeMillis();
         // get the original user from the tweet
         List<String> emojis = EmojiParser.extractEmojis(status.getText());
         for(String s : emojis) {

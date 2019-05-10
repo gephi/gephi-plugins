@@ -35,7 +35,7 @@ public class UserNetwork extends Networklogic {
     
     @Override
     public void processStatus(Status status) {
-
+        long currentMillis = System.currentTimeMillis();
         // Mentions
         if(status.getUserMentionEntities().length > 0) { 
             Node origin = createUser(status.getUser());
@@ -45,10 +45,10 @@ public class UserNetwork extends Networklogic {
                 if (!status.getUser().getScreenName().equals(mention.getScreenName())) {
                     Node target = createUser(mention);
 
-                    origin.addTimestamp(System.currentTimeMillis());
-                    target.addTimestamp(System.currentTimeMillis());
+                    origin.addTimestamp(currentMillis);
+                    target.addTimestamp(currentMillis);
                     // Check if there is already an edge for the nodes
-                    createLink(origin, target, MENTION, System.currentTimeMillis());   
+                    createLink(origin, target, MENTION, currentMillis);   
                 }
             }
         }
