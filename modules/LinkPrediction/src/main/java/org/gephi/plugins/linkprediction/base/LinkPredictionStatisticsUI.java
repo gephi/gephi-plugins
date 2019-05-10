@@ -15,7 +15,9 @@ public class LinkPredictionStatisticsUI implements StatisticsUI {
 
     @Override
     public JPanel getSettingsPanel() {
-        panel = new LinkPredictionStatisticsPanel();
+        if(panel == null) {
+            panel = new LinkPredictionStatisticsPanel();
+        }
         return panel;
     }
 
