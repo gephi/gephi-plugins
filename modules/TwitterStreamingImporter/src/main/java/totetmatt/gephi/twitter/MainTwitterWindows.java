@@ -112,8 +112,10 @@ public final class MainTwitterWindows extends TopComponent {
     private void checkPluginEnabling() {
         if (isProjectWorkspaceOk()) {
             connect_toggleButton.setEnabled(true);
+            warning_new_project_label.setVisible(false);                 
         } else {
             connect_toggleButton.setEnabled(false);
+            warning_new_project_label.setVisible(true);
         }
     }
 
@@ -171,6 +173,7 @@ public final class MainTwitterWindows extends TopComponent {
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         credential_goto_twitter_button = new javax.swing.JButton();
+        warning_new_project_label = new javax.swing.JLabel();
 
         jPasswordField1.setText(org.openide.util.NbBundle.getMessage(MainTwitterWindows.class, "MainTwitterWindows.jPasswordField1.text")); // NOI18N
 
@@ -545,6 +548,11 @@ public final class MainTwitterWindows extends TopComponent {
             }
         });
 
+        warning_new_project_label.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        warning_new_project_label.setForeground(new java.awt.Color(102, 0, 0));
+        warning_new_project_label.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        org.openide.awt.Mnemonics.setLocalizedText(warning_new_project_label, org.openide.util.NbBundle.getMessage(MainTwitterWindows.class, "MainTwitterWindows.warning_new_project_label.text")); // NOI18N
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -552,10 +560,11 @@ public final class MainTwitterWindows extends TopComponent {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(connect_toggleButton, javax.swing.GroupLayout.DEFAULT_SIZE, 439, Short.MAX_VALUE)
+                    .addComponent(connect_toggleButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(credential_goto_twitter_button, javax.swing.GroupLayout.PREFERRED_SIZE, 82, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addComponent(warning_new_project_label, javax.swing.GroupLayout.DEFAULT_SIZE, 477, Short.MAX_VALUE))
                 .addContainerGap())
             .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(jPanel1Layout.createSequentialGroup()
@@ -580,9 +589,11 @@ public final class MainTwitterWindows extends TopComponent {
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap(421, Short.MAX_VALUE)
+                .addContainerGap(438, Short.MAX_VALUE)
                 .addComponent(credential_goto_twitter_button, javax.swing.GroupLayout.PREFERRED_SIZE, 19, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(warning_new_project_label)
+                .addGap(7, 7, 7)
                 .addComponent(connect_toggleButton)
                 .addContainerGap())
             .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -603,7 +614,7 @@ public final class MainTwitterWindows extends TopComponent {
                     .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(network_logic_label)
                         .addComponent(network_logic_combo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addContainerGap(104, Short.MAX_VALUE)))
+                    .addContainerGap(133, Short.MAX_VALUE)))
         );
 
         tracking_tab_panel.getAccessibleContext().setAccessibleName(org.openide.util.NbBundle.getMessage(MainTwitterWindows.class, "MainTwitterWindows.tracking_tab_panel.AccessibleContext.accessibleName")); // NOI18N
@@ -883,6 +894,7 @@ public final class MainTwitterWindows extends TopComponent {
     private javax.swing.JScrollPane ut_list_scrollpane;
     private javax.swing.JTable ut_list_table;
     private javax.swing.JPanel ut_panel;
+    private javax.swing.JLabel warning_new_project_label;
     private javax.swing.JButton wt_add_button;
     private javax.swing.JTextField wt_add_textfield;
     private javax.swing.JButton wt_delete_button;
