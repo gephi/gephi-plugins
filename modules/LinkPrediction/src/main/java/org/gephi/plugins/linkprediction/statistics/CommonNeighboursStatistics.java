@@ -34,6 +34,9 @@ public class CommonNeighboursStatistics extends LinkPredictionStatistics {
         // Lock graph for writes
         graph.writeLock();
 
+        // Clear predictions
+        predictions.clear();
+
         //Iterate on all nodes
         List<Node> nodesA = new ArrayList<>(Arrays.asList(graph.getNodes().toArray()));
 

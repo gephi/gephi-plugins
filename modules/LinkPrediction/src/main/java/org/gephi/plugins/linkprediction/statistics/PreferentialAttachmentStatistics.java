@@ -40,7 +40,11 @@ public class PreferentialAttachmentStatistics extends LinkPredictionStatistics {
         graph = graphModel.getGraph();
         GraphFactory factory = graphModel.factory();
 
+        // Lock graph for writes
         graph.writeLock();
+
+        // Clear predictions
+        predictions.clear();
 
         //Iterate on all nodes
         ArrayList<Node> nodesA = new ArrayList<Node>( Arrays.asList(graph.getNodes().toArray()));
