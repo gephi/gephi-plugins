@@ -2,7 +2,7 @@ package org.gephi.plugins.linkprediction.exceptions;
 
 import javax.swing.*;
 
-public abstract class LinkPredictionException extends Exception {
+public abstract class LinkPredictionException {
     protected JFrame f;
 
     LinkPredictionException(String message) {

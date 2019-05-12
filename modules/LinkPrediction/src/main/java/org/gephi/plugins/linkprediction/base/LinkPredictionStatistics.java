@@ -159,7 +159,15 @@ public abstract class LinkPredictionStatistics implements Statistics {
 
     @Override
     public boolean equals(Object o){
-        return o.getClass() == this.getClass();
+        if (o != null) {
+            return o.getClass() == this.getClass();
+        } else
+            return false;
+    }
+
+    @Override
+    public int hashCode() {
+        return this.getClass().hashCode();
     }
 
 
