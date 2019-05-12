@@ -6,6 +6,7 @@ import org.gephi.filters.spi.Filter;
 import org.gephi.graph.api.Graph;
 import org.gephi.graph.api.GraphController;
 import org.gephi.graph.api.Table;
+import org.gephi.plugins.linkprediction.exceptions.IllegalIterationLimitException;
 import org.gephi.project.api.ProjectController;
 import org.gephi.project.api.Workspace;
 import org.openide.util.Lookup;
@@ -41,7 +42,7 @@ public class LinkPredictionFilterPanel extends javax.swing.JPanel {
         int maxIteration = LinkPredictionStatistics.getMaxIteration(graph, filter.getName());
         // Stats have to be executed first
         if (maxIteration == 0) {
-            // TODO Throw exception
+            new IllegalIterationLimitException();
         }
 
         // Set layout
