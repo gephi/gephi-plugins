@@ -64,9 +64,9 @@ public class FullSmartNetwork extends Networklogic {
         Node user = createUser(status.getUser());
         user.addTimestamp(currentMillis);
         createLink(user, tweet, TWEETS,currentMillis);
-      
+   
         // Retweet are handled later
-        if (!status.isRetweet() && status.getQuotedStatus() != null) {
+        if (!status.isRetweet()) {
             for (UserMentionEntity mention : status.getUserMentionEntities()) {
                 Node mentionNode = createUser(mention);
                 mentionNode.addTimestamp(currentMillis);
@@ -95,7 +95,7 @@ public class FullSmartNetwork extends Networklogic {
             symbolNode.addTimestamp(currentMillis);
             createLink(tweet, symbolNode, HAS_SYMBOL,currentMillis);
         }
-        
+    
         for (MediaEntity media : status.getMediaEntities()) {
             Node mediaNode = createMedia(media.getMediaURL());
             mediaNode.addTimestamp(currentMillis);
@@ -110,7 +110,7 @@ public class FullSmartNetwork extends Networklogic {
             processStatus(status.getQuotedStatus(), user,QUOTES);
         }
         
-        // We link to the original content to give more "weight"
+        // The idea here is to bring the retweet / quote link to the original content
         if (retweetUser != null) {
             if(link_kind == RETWEETS) {
                 createLink(retweetUser, user, RETWEETS_FROM,currentMillis);

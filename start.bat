@@ -1,0 +1,1 @@
+"c:\Program Files\apache-maven-3.5.2\bin\mvn"  package org.gephi:gephi-maven-plugin:run
