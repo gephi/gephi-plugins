@@ -5,7 +5,6 @@ import java.awt.Color;
 import java.util.List;
 import org.gephi.graph.api.Edge;
 import org.gephi.graph.api.Node;
-import org.joda.time.LocalTime;
 import org.openide.util.lookup.ServiceProvider;
 import twitter4j.Status;
 
