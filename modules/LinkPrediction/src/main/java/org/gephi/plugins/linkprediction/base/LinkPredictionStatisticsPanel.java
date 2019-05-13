@@ -99,9 +99,9 @@ public class LinkPredictionStatisticsPanel extends javax.swing.JPanel implements
 
     private void getRuntime(int noOfIterations) {
         // O(N^2)
-        runtimeCommonNeighbours =  noOfIterations * noOfNodes * noOfNodes;
+        runtimeCommonNeighbours = (double) noOfIterations * noOfNodes * noOfNodes;
         // O(N^2)
-        runtimePreferentialAttachment = noOfIterations * noOfNodes * noOfNodes;
+        runtimePreferentialAttachment = (double) noOfIterations * noOfNodes * noOfNodes;
     }
 
     private void setLabels() {
