@@ -22,7 +22,6 @@ class PreferentialAttachmentFilterBuilderTest {
         //Init project - and therefore a workspace
         ProjectController pc = Lookup.getDefault().lookup(ProjectController.class);
         pc.newProject();
-        Workspace workspace = pc.getCurrentWorkspace();
 
         //Get the default graph model
         graphModel = Lookup.getDefault().lookup(GraphController.class).getGraphModel();

@@ -3,12 +3,11 @@ package org.gephi.plugins.linkprediction.statistics;
 import org.gephi.graph.api.*;
 import org.gephi.plugins.linkprediction.base.LinkPredictionStatistics;
 import org.gephi.project.api.ProjectController;
-import org.gephi.project.api.Workspace;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openide.util.Lookup;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class CommonNeighboursStatisticsBuilderTest {
     GraphModel graphModel;
@@ -17,7 +16,6 @@ class CommonNeighboursStatisticsBuilderTest {
         //Init project - and therefore a workspace
         ProjectController pc = Lookup.getDefault().lookup(ProjectController.class);
         pc.newProject();
-        Workspace workspace = pc.getCurrentWorkspace();
 
         //Get the default graph model
         graphModel = Lookup.getDefault().lookup(GraphController.class).getGraphModel();

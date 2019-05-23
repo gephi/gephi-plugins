@@ -6,7 +6,6 @@ import org.gephi.plugins.linkprediction.base.LinkPredictionStatistics;
 import org.gephi.plugins.linkprediction.statistics.PreferentialAttachmentStatistics;
 import org.gephi.plugins.linkprediction.statistics.PreferentialAttachmentStatisticsBuilder;
 import org.gephi.project.api.ProjectController;
-import org.gephi.project.api.Workspace;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openide.util.Lookup;
@@ -25,7 +24,6 @@ class PreferentialAttachmentFilterTest {
         //Init project - and therefore a workspace
         ProjectController pc = Lookup.getDefault().lookup(ProjectController.class);
         pc.newProject();
-        Workspace workspace = pc.getCurrentWorkspace();
 
         //Get the default graph model
         graphModel = Lookup.getDefault().lookup(GraphController.class).getGraphModel();
