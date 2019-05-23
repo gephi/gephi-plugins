@@ -1,0 +1,13 @@
+Manifest-Version: 1.0
+OpenIDE-Module-Name: TwitterBrowserImporter
+OpenIDE-Module-Short-Description: twitter search importer
+OpenIDE-Module-Long-Description: it will search into the internet and 
+ look for tweets
+OpenIDE-Module-Display-Category: Import
+OpenIDE-Module-Specification-Version: 1.0.0
+OpenIDE-Module-Implementation-Version: 1.0.0
+OpenIDE-Module-Build-Version: 201905231521
+OpenIDE-Module: team2slliure.twitterbrowserimporter
+OpenIDE-Module-Public-Packages: -
+OpenIDE-Module-Requires: org.openide.modules.ModuleFormat1
+
