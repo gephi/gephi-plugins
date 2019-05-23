@@ -101,34 +101,72 @@ public abstract class LinkPredictionStatistics implements Statistics {
         return false;
     }
 
+    /**
+     * Gets the column "last prediction".
+     *
+     * @return Column "last prediction"
+     */
     public static Column getColLastPrediction() {
         return ColLastPrediction;
     }
 
+    /**
+     * Sets the columns "last prediction".
+     *
+     * @param colLastPrediction Column "last prediction"
+     */
     public static void setColLastPrediction(Column colLastPrediction) {
         LinkPredictionStatistics.ColLastPrediction = colLastPrediction;
     }
 
+    /**
+     * Gets the columns "added in run".
+     *
+     * @return Column "added in run"
+     */
     public static Column getColAddedInRun() {
         return ColAddedInRun;
     }
 
+    /** Sets the column "added in run".
+     *
+     * @param colAddedInRun Column "added in run"
+     */
     public static void setColAddedInRun(Column colAddedInRun) {
         LinkPredictionStatistics.ColAddedInRun = colAddedInRun;
     }
 
+    /**
+     * Gets the column "last calculated value".
+     *
+     * @return Column "last calculated value"
+     */
     public static Column getColLastCalculatedValue() {
         return ColLastCalculatedValue;
     }
 
+    /**
+     * Sets the column "last calculated value".
+     *
+     * @param colLastCalculatedValue Column "last calculated value"
+     */
     public static void setColLastCalculatedValue(Column colLastCalculatedValue) {
         LinkPredictionStatistics.ColLastCalculatedValue = colLastCalculatedValue;
     }
 
+    /**
+     * Gets the complexity of the algorithm.
+     *
+     * @return Algorithms complexity
+     */
     public Complexity getComplexity() {
         return complexity;
     }
 
+    /** Sets the complexity of the algorithm.
+     *
+     * @param complexity Algorithms complexity
+     */
     public void setComplexity(Complexity complexity) {
         this.complexity = complexity;
     }
@@ -157,6 +195,12 @@ public abstract class LinkPredictionStatistics implements Statistics {
         return lastIteration + 1;
     }
 
+    /**
+     * Verifies if two statistics are equal.
+     *
+     * @param o Other statistic
+     * @return Evaluation result
+     */
     @Override
     public boolean equals(Object o){
         if (o != null) {
@@ -165,6 +209,11 @@ public abstract class LinkPredictionStatistics implements Statistics {
             return false;
     }
 
+    /**
+     * Generates hash code out of class.
+     *
+     * @return Hash code
+     */
     @Override
     public int hashCode() {
         return this.getClass().hashCode();

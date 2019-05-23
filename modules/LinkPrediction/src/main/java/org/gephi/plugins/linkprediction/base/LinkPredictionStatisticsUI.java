@@ -7,6 +7,13 @@ import org.openide.util.lookup.ServiceProvider;
 
 import javax.swing.*;
 
+/**
+ * UI used for {@link LinkPredictionStatistics} statistics.
+ * <p>
+ *
+ * @author Marco Romanutti
+ * @see LinkPredictionStatistics
+ */
 @ServiceProvider(service = StatisticsUI.class)
 public class LinkPredictionStatisticsUI implements StatisticsUI {
 

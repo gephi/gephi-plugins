@@ -18,11 +18,22 @@ import java.awt.*;
 
 import static org.gephi.plugins.linkprediction.base.LinkPredictionStatistics.initializeColumns;
 
+/**
+ * Filter panel which will be used with {@link LinkPredictionFilter} filter.
+ * <p>
+ * This base factory class will be used in all specific link prediction filter
+ * implementations.
+ *
+ * @author Marco Romanutti
+ * @see LinkPredictionFilter
+ */
 public class LinkPredictionFilterPanel extends javax.swing.JPanel {
 
+    /** Filter on which panel will set its values */
     private LinkPredictionFilter filter;
-
+    /** Slider to adapt number uf shown edges */
     private javax.swing.JSlider slider;
+    /** Label which shows current chosen value of shown edges */
     private javax.swing.JLabel current;
 
     private static Logger consoleLogger = LogManager.getLogger(LinkPredictionFilterPanel.class);

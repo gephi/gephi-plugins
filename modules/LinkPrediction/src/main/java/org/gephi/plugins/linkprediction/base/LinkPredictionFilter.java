@@ -29,12 +29,12 @@ import static org.gephi.plugins.linkprediction.base.LinkPredictionStatistics.Col
  * @see LinkPredictionFilterBuilder
  */
 public abstract class LinkPredictionFilter implements ComplexFilter {
-    /** Default number of displayed predicted edges **/
+    /** Default number of displayed predicted edges */
     public static final int EDGES_LIMIT_DEFAULT = 1;
 
-    // Properties used in filter
+    /** Properties used in filter */
     protected static FilterProperty[] filterProperties;
-    // Number of displayed predicted edges
+    /** Number of displayed predicted edges */
     protected Integer edgesLimit = EDGES_LIMIT_DEFAULT;
 
     /**
@@ -51,22 +51,6 @@ public abstract class LinkPredictionFilter implements ComplexFilter {
             }
         }
         return filterProperties;
-    }
-
-    public static FilterProperty[] getFilterProperties() {
-        return filterProperties;
-    }
-
-    public static void setFilterProperties(FilterProperty[] filterProperties) {
-        LinkPredictionFilter.filterProperties = filterProperties;
-    }
-
-    public Integer getEdgesLimit() {
-        return edgesLimit;
-    }
-
-    public void setEdgesLimit(Integer edgesLimit) {
-        this.edgesLimit = edgesLimit;
     }
 
     /**
@@ -126,5 +110,42 @@ public abstract class LinkPredictionFilter implements ComplexFilter {
         } else {
             new IllegalEdgeNumberException();
         }
+    }
+
+
+    /**
+     * Gets properties.
+     *
+     * @return Filter properties
+     */
+    public static FilterProperty[] getFilterProperties() {
+        return filterProperties;
+    }
+
+    /**
+     * Sets filter properties.
+     *
+     * @param filterProperties Filter properties to set
+     */
+    public static void setFilterProperties(FilterProperty[] filterProperties) {
+        LinkPredictionFilter.filterProperties = filterProperties;
+    }
+
+    /**
+     * Gets edges limit.
+     *
+     * @return Edges limit
+     */
+    public Integer getEdgesLimit() {
+        return edgesLimit;
+    }
+
+    /**
+     * Sets edges limit.
+     *
+     * @param edgesLimit Number of displayed predicted edges
+     */
+    public void setEdgesLimit(Integer edgesLimit) {
+        this.edgesLimit = edgesLimit;
     }
 }

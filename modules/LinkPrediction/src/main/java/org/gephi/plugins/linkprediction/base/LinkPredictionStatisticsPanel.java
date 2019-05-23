@@ -9,10 +9,19 @@ import org.openide.util.Lookup;
 import javax.swing.*;
 import java.awt.event.*;
 
+/**
+ * Statistics panel which will be used with {@link LinkPredictionStatistics} statistics.
+ * <p>
+ * This panel will be use to specify link prediction algorithm and number of iterations.
+ *
+ * @author Marco Romanutti
+ * @see LinkPredictionStatistics
+ */
 public class LinkPredictionStatisticsPanel extends javax.swing.JPanel implements ItemListener, KeyListener {
 
     private static Logger consoleLogger = LogManager.getLogger(LinkPredictionStatisticsPanel.class);
 
+    /* UI elements */
     private LinkPredictionMacro statistic;
     private javax.swing.JCheckBox commonNeighbourCheckbox;
     private javax.swing.JCheckBox preferentialAttachmentCheckbox;
@@ -21,12 +30,11 @@ public class LinkPredictionStatisticsPanel extends javax.swing.JPanel implements
     private javax.swing.JLabel preferentialAttachmentWarning;
     private javax.swing.JLabel iterationLabel;
 
+    /* Long runtime verification */
     private int noOfNodes;
     private double runtimeCommonNeighbours;
     private double runtimePreferentialAttachment;
-
     private final double THRESHOLD_N2 = 1000000;
-
     private final String HIGH_RUNTIME = "High runtime value";
 
     public LinkPredictionStatisticsPanel() {
@@ -53,6 +61,11 @@ public class LinkPredictionStatisticsPanel extends javax.swing.JPanel implements
         numberOfIterationsTextField.addKeyListener(this);
     }
 
+    /**
+     * Actualizes lists with link predictions algorithms which shall be calculated.
+     *
+     * @param e Event
+     */
     public void itemStateChanged(ItemEvent e) {
         if (commonNeighbourCheckbox.isSelected()){
             this.statistic.addStatistic(new CommonNeighboursStatistics());
@@ -82,6 +95,9 @@ public class LinkPredictionStatisticsPanel extends javax.swing.JPanel implements
         updateIterationLimit();
     }
 
+    /**
+     * Updates number of iterations in which prediction will be applied.
+     */
     private void updateIterationLimit() {
         int numberOfIterations = 1;
         try {
@@ -97,6 +113,11 @@ public class LinkPredictionStatisticsPanel extends javax.swing.JPanel implements
         setLabels();
     }
 
+    /**
+     * Calculates runtime based on number of iterations.
+     *
+     * @param noOfIterations Number of iterations
+     */
     private void getRuntime(int noOfIterations) {
         // O(N^2)
         runtimeCommonNeighbours = (double) noOfIterations * noOfNodes * noOfNodes;
@@ -104,6 +125,9 @@ public class LinkPredictionStatisticsPanel extends javax.swing.JPanel implements
         runtimePreferentialAttachment = (double) noOfIterations * noOfNodes * noOfNodes;
     }
 
+    /**
+     * Sets warning labels in case of high runtime.
+     */
     private void setLabels() {
         if (runtimePreferentialAttachment > THRESHOLD_N2) {
             preferentialAttachmentWarning.setText(HIGH_RUNTIME);
