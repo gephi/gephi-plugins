@@ -66,16 +66,7 @@ public class PreferentialAttachmentStatistics extends LinkPredictionStatistics {
                 Edge[] eArr = new Edge[e.size()];
                 eArr = e.toArray(eArr);
 
-                boolean lpEdgeExists = false;
-                for(int i = 0; i < eArr.length; i++) {
-                    if ((eArr[i].getAttribute(ColLastPrediction).equals(PREFERENTIAL_ATTACHMENT_NAME) && (Integer) eArr[0].getAttribute(
-                            ColAddedInRun) > 0) ||
-                    (eArr[i].getAttribute(ColLastPrediction).equals("")))
-                    {
-                            lpEdgeExists = true;
-                    }
-
-                }
+                boolean lpEdgeExists = lpEdgeExists(eArr);
 
                 if (!lpEdgeExists && paValue > highestValue) {
                     neighbourA = a;
@@ -97,6 +88,19 @@ public class PreferentialAttachmentStatistics extends LinkPredictionStatistics {
 
         graph.writeUnlock();
 
+    }
+
+    private boolean lpEdgeExists(Edge[] eArr) {
+        for(int i = 0; i < eArr.length; i++) {
+            if ((eArr[i].getAttribute(ColLastPrediction).equals(PREFERENTIAL_ATTACHMENT_NAME) && (Integer) eArr[0].getAttribute(
+                    ColAddedInRun) > 0) ||
+            (eArr[i].getAttribute(ColLastPrediction).equals("")))
+            {
+                    return true;
+            }
+
+        }
+        return false;
     }
 
     private ArrayList<Node> getRelevantNeighbours(Node x) {
