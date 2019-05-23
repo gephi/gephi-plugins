@@ -8,13 +8,12 @@ import org.gephi.plugins.linkprediction.statistics.CommonNeighboursStatistics;
 import org.gephi.plugins.linkprediction.statistics.CommonNeighboursStatisticsBuilder;
 import org.gephi.project.api.ProjectController;
 import org.gephi.project.api.Workspace;
-import org.junit.Ignore;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openide.util.Lookup;
 
 import static org.gephi.plugins.linkprediction.base.LinkPredictionFilterBuilder.LINK_PREDICTION_CATEGORY;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class CommonNeighboursFilterBuilderTest {
     GraphModel graphModel;
@@ -114,10 +113,6 @@ class CommonNeighboursFilterBuilderTest {
         assertEquals(LINK_PREDICTION_CATEGORY, category.getName());
     }
 
-    @Ignore
-    @Test void getIcon() {
-    }
-
     @Test void getPanel() {
         LinkPredictionStatistics statistic = new CommonNeighboursStatistics();
         statistic.execute(graphModel);
@@ -125,9 +120,5 @@ class CommonNeighboursFilterBuilderTest {
         CommonNeighboursFilterBuilder builder = new CommonNeighboursFilterBuilder();
         CommonNeighboursFilter filter = new CommonNeighboursFilter();
         assertEquals(LinkPredictionFilterPanel.class, builder.getPanel(filter).getClass());
-    }
-
-    @Ignore
-    @Test void destroy() {
     }
 }

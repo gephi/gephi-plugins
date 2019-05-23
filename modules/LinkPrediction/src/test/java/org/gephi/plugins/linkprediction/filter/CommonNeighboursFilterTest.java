@@ -4,6 +4,7 @@ import org.gephi.graph.api.*;
 import org.gephi.plugins.linkprediction.base.LinkPredictionFilter;
 import org.gephi.plugins.linkprediction.base.LinkPredictionStatistics;
 import org.gephi.plugins.linkprediction.statistics.CommonNeighboursStatistics;
+import org.gephi.plugins.linkprediction.statistics.CommonNeighboursStatisticsBuilder;
 import org.gephi.project.api.ProjectController;
 import org.gephi.project.api.Workspace;
 import org.junit.jupiter.api.BeforeEach;
@@ -13,6 +14,7 @@ import org.openide.util.Lookup;
 import java.util.Arrays;
 import java.util.List;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class CommonNeighboursFilterTest {
@@ -108,9 +110,8 @@ class CommonNeighboursFilterTest {
     }
 
     @Test void getName() {
-    }
-
-    @Test void getProperties() {
+        LinkPredictionFilter filter = new CommonNeighboursFilter();
+        assertEquals(filter.getName(),CommonNeighboursStatisticsBuilder.COMMON_NEIGHBOURS_NAME);
     }
 
 }

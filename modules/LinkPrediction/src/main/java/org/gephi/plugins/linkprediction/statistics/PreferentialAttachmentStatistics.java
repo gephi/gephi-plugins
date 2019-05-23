@@ -36,7 +36,6 @@ public class PreferentialAttachmentStatistics extends LinkPredictionStatistics {
         consoleLogger.debug("Initialize columns");
         initializeColumns(edgeTable);
 
-        //GraphController gc = Lookup.getDefault().lookup(GraphController.class);
         graph = graphModel.getGraph();
         GraphFactory factory = graphModel.factory();
 

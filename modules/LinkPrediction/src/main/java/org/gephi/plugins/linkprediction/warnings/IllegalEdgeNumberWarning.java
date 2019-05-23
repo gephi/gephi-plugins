@@ -1,10 +1,10 @@
-package org.gephi.plugins.linkprediction.exceptions;
+package org.gephi.plugins.linkprediction.warnings;
 
-public class IllegalEdgeNumberException extends LinkPredictionException {
+public class IllegalEdgeNumberWarning extends LinkPredictionWarning {
     /** Illegal iteration limit exception message **/
     public static final String EXCEPTION_MESSAGE = "No edges left! No edges will be removed from graph.";
 
-    public IllegalEdgeNumberException() {
+    public IllegalEdgeNumberWarning() {
         super(EXCEPTION_MESSAGE);
     }
 }

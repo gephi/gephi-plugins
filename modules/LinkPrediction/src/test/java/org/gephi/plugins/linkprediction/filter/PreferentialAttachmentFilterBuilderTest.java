@@ -8,7 +8,6 @@ import org.gephi.plugins.linkprediction.statistics.PreferentialAttachmentStatist
 import org.gephi.plugins.linkprediction.statistics.PreferentialAttachmentStatisticsBuilder;
 import org.gephi.project.api.ProjectController;
 import org.gephi.project.api.Workspace;
-import org.junit.Ignore;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openide.util.Lookup;
@@ -114,10 +113,6 @@ class PreferentialAttachmentFilterBuilderTest {
         assertEquals(LINK_PREDICTION_CATEGORY, category.getName());
     }
 
-    @Ignore
-    @Test void getIcon() {
-    }
-
     @Test void getPanel() {
         LinkPredictionStatistics statistic = new PreferentialAttachmentStatistics();
         statistic.execute(graphModel);
@@ -125,9 +120,5 @@ class PreferentialAttachmentFilterBuilderTest {
         PreferentialAttachmentFilterBuilder builder = new PreferentialAttachmentFilterBuilder();
         PreferentialAttachmentFilter filter = new PreferentialAttachmentFilter();
         assertEquals(LinkPredictionFilterPanel.class, builder.getPanel(filter).getClass());
-    }
-
-    @Ignore
-    @Test void destroy() {
     }
 }

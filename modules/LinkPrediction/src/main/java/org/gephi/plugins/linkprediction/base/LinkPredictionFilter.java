@@ -5,7 +5,7 @@ import org.gephi.filters.spi.FilterProperty;
 import org.gephi.graph.api.Edge;
 import org.gephi.graph.api.Graph;
 import org.gephi.graph.api.Node;
-import org.gephi.plugins.linkprediction.exceptions.IllegalEdgeNumberException;
+import org.gephi.plugins.linkprediction.warnings.IllegalEdgeNumberWarning;
 import org.openide.util.Exceptions;
 
 import java.util.ArrayList;
@@ -108,7 +108,7 @@ public abstract class LinkPredictionFilter implements ComplexFilter {
             List<Edge> remainingEdges = new ArrayList<Edge>(Arrays.asList(graph.getEdges().toArray()));
             remainingEdges.stream().filter(edge -> !edges.contains(edge)).forEach(edge -> graph.removeEdge(edge));
         } else {
-            new IllegalEdgeNumberException();
+            new IllegalEdgeNumberWarning();
         }
     }
 

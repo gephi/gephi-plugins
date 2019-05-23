@@ -1,11 +1,11 @@
-package org.gephi.plugins.linkprediction.exceptions;
+package org.gephi.plugins.linkprediction.warnings;
 
 import javax.swing.*;
 
-public abstract class LinkPredictionException {
+public abstract class LinkPredictionWarning {
     protected JFrame f;
 
-    LinkPredictionException(String message) {
+    LinkPredictionWarning(String message) {
         f = new JFrame();
         JOptionPane.showMessageDialog(f, message, "Exception", JOptionPane.WARNING_MESSAGE);
     }

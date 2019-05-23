@@ -20,7 +20,6 @@ public class CommonNeighboursStatistics extends LinkPredictionStatistics {
     @Override public void execute(GraphModel graphModel) {
         consoleLogger.debug("Execution of link prediction started");
 
-        //Graph graph = graphModel.getGraphVisible();
         //Look if the result column already exist and create it if needed
         consoleLogger.debug("Initialize columns");
         Table edgeTable = graphModel.getEdgeTable();

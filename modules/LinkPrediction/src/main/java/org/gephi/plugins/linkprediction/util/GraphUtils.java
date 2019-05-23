@@ -9,7 +9,14 @@ import java.util.List;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
+/**
+ * Various utilities used for graph traversals.
+ */
 public class GraphUtils {
+
+    private GraphUtils() {
+        throw new IllegalStateException("Utility class");
+    }
 
     /**
      * Get the edges adjacent to node1 and node2.
@@ -19,14 +26,13 @@ public class GraphUtils {
      * @param graph Graph to apply the function
      * @param node1 First node
      * @param node2 Second node
-     *
      * @return Adjacent edges
      */
     public static List<Edge> getEdges(Graph graph, Node node1, Node node2) {
         Predicate<Edge> containsEdgePredicate = edge ->
                 (edge.getTarget().equals(node1) && edge.getSource().equals(node2)) || (edge.getTarget().equals(node2)
                         && edge.getSource().equals(node1));
-        return Arrays.asList(graph.getEdges().toArray()).stream()
-                .filter(containsEdgePredicate).collect(Collectors.toList());
+        return Arrays.asList(graph.getEdges().toArray()).stream().filter(containsEdgePredicate)
+                .collect(Collectors.toList());
     }
 }

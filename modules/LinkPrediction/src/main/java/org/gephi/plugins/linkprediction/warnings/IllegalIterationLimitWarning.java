@@ -1,10 +1,10 @@
-package org.gephi.plugins.linkprediction.exceptions;
+package org.gephi.plugins.linkprediction.warnings;
 
-public class IllegalIterationLimitException extends LinkPredictionException {
+public class IllegalIterationLimitWarning extends LinkPredictionWarning {
     /** Illegal iteration limit exception message **/
     public static final String EXCEPTION_MESSAGE = "No prediction found! Calculate prediction first using respective statistics.";
 
-    public IllegalIterationLimitException() {
+    public IllegalIterationLimitWarning() {
         super(EXCEPTION_MESSAGE);
     }
 }

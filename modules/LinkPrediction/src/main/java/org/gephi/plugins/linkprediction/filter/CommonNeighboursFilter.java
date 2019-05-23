@@ -28,7 +28,6 @@ public class CommonNeighboursFilter extends LinkPredictionFilter {
     @Override public Graph filter(Graph graph) {
         consoleLogger.debug("Apply new Common Neighbours Filter");
 
-        //Graph graph = graphModel.getGraphVisible();
         //Look if the result column already exist and create it if needed
         consoleLogger.debug("Initialize columns");
         Table edgeTable = graph.getModel().getEdgeTable();
