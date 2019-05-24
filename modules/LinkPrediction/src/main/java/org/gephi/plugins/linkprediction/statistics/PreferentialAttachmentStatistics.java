@@ -18,7 +18,6 @@ public class PreferentialAttachmentStatistics extends LinkPredictionStatistics {
 
     // Console logger
     private static Logger consoleLogger = LogManager.getLogger(CommonNeighboursStatistics.class);
-    private int highestValue;
     private Node neighbourA;
     private Node neighbourB;
     private Graph graph;
@@ -27,8 +26,6 @@ public class PreferentialAttachmentStatistics extends LinkPredictionStatistics {
     public void execute(GraphModel graphModel) {
 
         consoleLogger.debug("Execution of link prediction started");
-
-        highestValue = 0;
 
         Table edgeTable = graphModel.getEdgeTable();
 
@@ -49,6 +46,8 @@ public class PreferentialAttachmentStatistics extends LinkPredictionStatistics {
         ArrayList<Node> nodesA = new ArrayList<Node>( Arrays.asList(graph.getNodes().toArray()));
         ArrayList<Node> nodesB = new ArrayList<Node>( Arrays.asList(graph.getNodes().toArray()));
 
+        // Initialize highest value
+        int highestValue = Integer.MIN_VALUE;
 
         for (Node a : nodesA) {
             nodesB.remove(a);

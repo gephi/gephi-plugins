@@ -109,7 +109,7 @@ class PreferentialAttachmentFilterTest {
 
     @Test void getName() {
         LinkPredictionFilter filter = new PreferentialAttachmentFilter();
-        assertEquals(filter.getName(), PreferentialAttachmentStatisticsBuilder.PREFERENTIAL_ATTACHMENT_NAME);
+        assertEquals(PreferentialAttachmentStatisticsBuilder.PREFERENTIAL_ATTACHMENT_NAME, filter.getName());
     }
 
 }

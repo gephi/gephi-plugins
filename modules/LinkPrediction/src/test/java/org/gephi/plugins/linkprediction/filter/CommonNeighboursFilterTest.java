@@ -6,7 +6,6 @@ import org.gephi.plugins.linkprediction.base.LinkPredictionStatistics;
 import org.gephi.plugins.linkprediction.statistics.CommonNeighboursStatistics;
 import org.gephi.plugins.linkprediction.statistics.CommonNeighboursStatisticsBuilder;
 import org.gephi.project.api.ProjectController;
-import org.gephi.project.api.Workspace;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openide.util.Lookup;
@@ -110,7 +109,7 @@ class CommonNeighboursFilterTest {
 
     @Test void getName() {
         LinkPredictionFilter filter = new CommonNeighboursFilter();
-        assertEquals(filter.getName(),CommonNeighboursStatisticsBuilder.COMMON_NEIGHBOURS_NAME);
+        assertEquals(CommonNeighboursStatisticsBuilder.COMMON_NEIGHBOURS_NAME, filter.getName());
     }
 
 }
