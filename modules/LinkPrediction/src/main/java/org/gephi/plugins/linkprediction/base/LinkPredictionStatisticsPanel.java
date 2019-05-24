@@ -31,11 +31,11 @@ public class LinkPredictionStatisticsPanel extends javax.swing.JPanel implements
     private javax.swing.JLabel iterationLabel;
 
     /* Long runtime verification */
+    public static final double THRESHOLD_N2 = 1000000;
+    public static final String HIGH_RUNTIME = "High runtime value";
     private int noOfNodes;
     private double runtimeCommonNeighbours;
     private double runtimePreferentialAttachment;
-    private final double THRESHOLD_N2 = 1000000;
-    private final String HIGH_RUNTIME = "High runtime value";
 
     public LinkPredictionStatisticsPanel() {
         noOfNodes = Lookup.getDefault().lookup(GraphController.class).getGraphModel().getGraph().getNodeCount();

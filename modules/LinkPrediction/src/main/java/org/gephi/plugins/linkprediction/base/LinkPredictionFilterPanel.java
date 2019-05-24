@@ -7,7 +7,6 @@ import org.gephi.graph.api.Graph;
 import org.gephi.graph.api.GraphController;
 import org.gephi.graph.api.Table;
 import org.gephi.plugins.linkprediction.warnings.IllegalIterationLimitWarning;
-import org.gephi.project.api.ProjectController;
 import org.openide.util.Lookup;
 
 import javax.swing.*;
@@ -39,8 +38,6 @@ public class LinkPredictionFilterPanel extends javax.swing.JPanel {
 
     public LinkPredictionFilterPanel(Filter filter) {
         this.filter = (LinkPredictionFilter) filter;
-        //Init project - and therefore a workspace
-        ProjectController pc = Lookup.getDefault().lookup(ProjectController.class);
 
         // Get max value from edges table
         Graph graph = Lookup.getDefault().lookup(GraphController.class).getGraphModel().getGraph();

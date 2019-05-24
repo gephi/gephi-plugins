@@ -32,7 +32,7 @@ public class LinkPredictionStatisticsUI implements StatisticsUI {
     public void setup(Statistics statistic) {
         this.statistic = (LinkPredictionStatistics) statistic;
         if (panel == null){
-            panel = new LinkPredictionStatisticsPanel();;
+            panel = new LinkPredictionStatisticsPanel();
         }
         panel.setStatistic((LinkPredictionMacro) statistic);
     }

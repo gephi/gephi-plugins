@@ -39,7 +39,7 @@ public class PreferentialAttachmentFilter extends LinkPredictionFilter {
         // Get edges
         List<Edge> edges = new ArrayList<Edge>(Arrays.asList(graph.getEdges().toArray()));
         // Remove edges from other algorithms
-        removeOtherEdges(edges);
+        edges = removeOtherEdges(edges);
 
         // Remove other nodes and edges
         retainEdges(graph, edges);

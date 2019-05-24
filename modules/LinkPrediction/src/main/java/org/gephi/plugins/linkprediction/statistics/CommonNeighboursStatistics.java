@@ -66,7 +66,7 @@ public class CommonNeighboursStatistics extends LinkPredictionStatistics {
                 if (numberOfExistingEdges == 0) {
                     // Add new edge to calculation map
                     Edge newEdge = factory.newEdge(a, b, false);
-                    newEdge.setAttribute(ColLastCalculatedValue, cnValue);
+                    newEdge.setAttribute(colLastCalculatedValue, cnValue);
                     predictions.put(newEdge, cnValue);
                 }
             }
@@ -78,8 +78,8 @@ public class CommonNeighboursStatistics extends LinkPredictionStatistics {
         // Add edge to graph
         if (max != null) {
             int iteration = getNextIteration(graph, CommonNeighboursStatisticsBuilder.COMMON_NEIGHBOURS_NAME);
-            max.setAttribute(ColAddedInRun, iteration);
-            max.setAttribute(ColLastPrediction, CommonNeighboursStatisticsBuilder.COMMON_NEIGHBOURS_NAME);
+            max.setAttribute(colAddedInRun, iteration);
+            max.setAttribute(colLastPrediction, CommonNeighboursStatisticsBuilder.COMMON_NEIGHBOURS_NAME);
             graph.addEdge(max);
         }
 

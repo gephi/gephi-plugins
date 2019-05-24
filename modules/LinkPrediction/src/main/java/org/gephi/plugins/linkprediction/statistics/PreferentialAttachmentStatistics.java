@@ -80,9 +80,9 @@ public class PreferentialAttachmentStatistics extends LinkPredictionStatistics {
         if (neighbourA != null) {
             Edge newEdge = factory.newEdge(neighbourA, neighbourB, false);
             graph.addEdge(newEdge);
-            newEdge.setAttribute(ColLastPrediction, PREFERENTIAL_ATTACHMENT_NAME);
-            newEdge.setAttribute(ColAddedInRun, getNextIteration(graph, PREFERENTIAL_ATTACHMENT_NAME));
-            newEdge.setAttribute(ColLastCalculatedValue, highestValue);
+            newEdge.setAttribute(colLastPrediction, PREFERENTIAL_ATTACHMENT_NAME);
+            newEdge.setAttribute(colAddedInRun, getNextIteration(graph, PREFERENTIAL_ATTACHMENT_NAME));
+            newEdge.setAttribute(colLastCalculatedValue, highestValue);
             predictions.put(newEdge, highestValue);
         }
 
@@ -92,9 +92,9 @@ public class PreferentialAttachmentStatistics extends LinkPredictionStatistics {
 
     private boolean lpEdgeExists(Edge[] eArr) {
         for(int i = 0; i < eArr.length; i++) {
-            if ((eArr[i].getAttribute(ColLastPrediction).equals(PREFERENTIAL_ATTACHMENT_NAME) && (Integer) eArr[0].getAttribute(
-                    ColAddedInRun) > 0) ||
-            (eArr[i].getAttribute(ColLastPrediction).equals("")))
+            if ((eArr[i].getAttribute(colLastPrediction).equals(PREFERENTIAL_ATTACHMENT_NAME) && (Integer) eArr[0].getAttribute(
+                    colAddedInRun) > 0) ||
+            (eArr[i].getAttribute(colLastPrediction).equals("")))
             {
                     return true;
             }
@@ -116,8 +116,8 @@ public class PreferentialAttachmentStatistics extends LinkPredictionStatistics {
 
             boolean addedEdge = false;
             for (Edge e : eList) {
-                 if ((e.getAttribute(ColLastPrediction).equals(PREFERENTIAL_ATTACHMENT_NAME) || e.getAttribute(
-                         ColLastPrediction).equals("")) && !addedEdge) {
+                 if ((e.getAttribute(colLastPrediction).equals(PREFERENTIAL_ATTACHMENT_NAME) || e.getAttribute(
+                         colLastPrediction).equals("")) && !addedEdge) {
                      relevantNeighbours.add(iN);
                      addedEdge = true;
                  }

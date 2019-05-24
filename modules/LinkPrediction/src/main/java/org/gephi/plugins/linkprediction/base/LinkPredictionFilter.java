@@ -1,10 +1,13 @@
 package org.gephi.plugins.linkprediction.base;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.gephi.filters.spi.ComplexFilter;
 import org.gephi.filters.spi.FilterProperty;
 import org.gephi.graph.api.Edge;
 import org.gephi.graph.api.Graph;
 import org.gephi.graph.api.Node;
+import org.gephi.graph.api.Table;
 import org.gephi.plugins.linkprediction.warnings.IllegalEdgeNumberWarning;
 import org.openide.util.Exceptions;
 
@@ -15,8 +18,7 @@ import java.util.List;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
-import static org.gephi.plugins.linkprediction.base.LinkPredictionStatistics.ColAddedInRun;
-import static org.gephi.plugins.linkprediction.base.LinkPredictionStatistics.ColLastPrediction;
+import static org.gephi.plugins.linkprediction.base.LinkPredictionStatistics.*;
 
 /**
  * Filter that removes all predicted edges that do not originate from the
@@ -36,6 +38,39 @@ public abstract class LinkPredictionFilter implements ComplexFilter {
     protected static FilterProperty[] filterProperties;
     /** Number of displayed predicted edges */
     protected Integer edgesLimit = EDGES_LIMIT_DEFAULT;
+
+    private static Logger consoleLogger = LogManager.getLogger(LinkPredictionFilter.class);
+
+    /**
+     * Applies filter and reduces edges to edges from chosen algorithm.
+     *
+     * @param graph Graph to apply filter on
+     * @return Filtered graph
+     */
+    @Override public Graph filter(Graph graph) {
+        consoleLogger.debug("Apply new " + getName() + " Filter");
+
+        //Look if the result column already exist and create it if needed
+        consoleLogger.debug("Initialize columns");
+        Table edgeTable = graph.getModel().getEdgeTable();
+        initializeColumns(edgeTable);
+
+        // Lock graph for writes
+        graph.writeLock();
+
+        // Get edges
+        List<Edge> edges = new ArrayList<Edge>(Arrays.asList(graph.getEdges().toArray()));
+        // Remove edges from other algorithms
+        edges = removeOtherEdges(edges);
+
+        // Remove other nodes and edges
+        retainEdges(graph, edges);
+
+        // Unlock graph
+        graph.writeUnlock();
+
+        return graph;
+    }
 
     /**
      * Gets or creates singleton instance of properties.
@@ -58,13 +93,15 @@ public abstract class LinkPredictionFilter implements ComplexFilter {
      *
      * @param edges Edges list to check
      */
-    public void removeOtherEdges(List<Edge> edges) {
-        Predicate<Edge> algorithmPredicate = edge -> !edge.getAttribute(ColLastPrediction)
+    public List<Edge> removeOtherEdges(List<Edge> edges) {
+        Predicate<Edge> algorithmPredicate = edge -> !edge.getAttribute(colLastPrediction)
                 .equals(getName());
         edges.removeIf(algorithmPredicate);
         // Limit edges to filter criteria
-        edges = edges.stream().sorted(Comparator.comparingLong(e -> (int) e.getAttribute(ColAddedInRun)))
+        edges = edges.stream().sorted(Comparator.comparingLong(e -> (int) e.getAttribute(colAddedInRun)))
                 .limit(edgesLimit).collect(Collectors.toList());
+
+        return edges;
     }
 
     /**
@@ -99,7 +136,7 @@ public abstract class LinkPredictionFilter implements ComplexFilter {
      * @param edges Retaining edges
      */
     public void retainEdges(Graph graph, List<Edge> edges) {
-        if (!edges.isEmpty() && edges.size() > 0 ){
+        if (!edges.isEmpty()){
             // Remove nodes
             List<Node> nodesToRemove = getNodesToRemove(graph, edges);
             graph.removeAllNodes(nodesToRemove);
