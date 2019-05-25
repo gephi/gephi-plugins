@@ -88,7 +88,7 @@ class CommonNeighboursFilterTest {
         undirectedGraph.addEdge(e12);
     }
 
-    @Test void testFilter_EdgesLimit_Susccessfully() {
+    @Test void testFilter_EdgesLimit_Successfully() {
         LinkPredictionStatistics statistic = new CommonNeighboursStatistics();
 
         statistic.execute(graphModel);

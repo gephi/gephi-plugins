@@ -50,7 +50,9 @@ public abstract class LinkPredictionFilter implements ComplexFilter {
      * @return Filtered graph
      */
     @Override public Graph filter(Graph graph) {
-        consoleLogger.debug("Apply new " + getName() + " Filter");
+        if (consoleLogger.isDebugEnabled()) {
+            consoleLogger.debug("Apply new " + getName() + " Filter");
+        }
 
         //Look if the result column already exist and create it if needed
         consoleLogger.debug("Initialize columns");
@@ -65,7 +67,9 @@ public abstract class LinkPredictionFilter implements ComplexFilter {
         List<Edge> edges = new ArrayList<Edge>(Arrays.asList(graph.getEdges().toArray()));
         // Remove edges from other algorithms
         edges = removeOtherEdges(edges);
-        consoleLogger.debug("Retaining edges count: " + edges.size());
+        if (consoleLogger.isDebugEnabled()) {
+            consoleLogger.debug("Retaining edges count: " + edges.size());
+        }
 
         // Remove other nodes and edges
         retainEdges(graph, edges);
@@ -85,7 +89,9 @@ public abstract class LinkPredictionFilter implements ComplexFilter {
     public FilterProperty[] getProperties() {
         if (filterProperties == null) {
             try {
-                filterProperties = new FilterProperty[] { FilterProperty.createProperty(this, Integer.class, "edgesLimit") };
+                filterProperties = new FilterProperty[] {
+                        FilterProperty.createProperty(this, Integer.class, "edgesLimit")
+                };
             } catch (Exception ex) {
                 Exceptions.printStackTrace(ex);
             }
@@ -97,33 +103,46 @@ public abstract class LinkPredictionFilter implements ComplexFilter {
      * Removes edges, that were added using another algorithm.
      *
      * @param edges Edges list to check
+     * @return Purged edges list
      */
     public List<Edge> removeOtherEdges(List<Edge> edges) {
+        consoleLogger.debug("Remove other edges");
         Predicate<Edge> algorithmPredicate = edge -> !edge.getAttribute(colLastPrediction)
                 .equals(getName());
         edges.removeIf(algorithmPredicate);
         // Limit edges to filter criteria
         edges = edges.stream().sorted(Comparator.comparingLong(e -> (int) e.getAttribute(colAddedInRun)))
                 .limit(edgesLimit).collect(Collectors.toList());
-
+        if (consoleLogger.isDebugEnabled()){
+            consoleLogger.debug("Remaining edges: " + edges.size());
+        }
         return edges;
     }
 
     /**
      * Extracts nodes from graph, that are not in edges list.
      *
-     * @param graph Originial graph
+     * @param graph Original graph
      * @param edges Edges list for new graph
      * @return Edges to remove from graph
      */
     public List<Node> getNodesToRemove(Graph graph, List<Edge> edges) {
         // Get nodes
         List<Node> sourceNodes = edges.stream().map(edge -> edge.getSource()).collect(Collectors.toList());
+        if (consoleLogger.isDebugEnabled()){
+            consoleLogger.debug("Number of sources: " + sourceNodes.size());
+        }
         List<Node> targetNodes = edges.stream().map(edge -> edge.getTarget()).collect(Collectors.toList());
+        if (consoleLogger.isDebugEnabled()){
+            consoleLogger.debug("Number of targets: " + targetNodes.size());
+        }
 
         // Union nodes
         sourceNodes.addAll(targetNodes);
         List<Node> remainingNodes = sourceNodes;
+        if (consoleLogger.isDebugEnabled()){
+            consoleLogger.debug("Total remaining nodes: " + remainingNodes.size());
+        }
 
         // Nodes to remove
         // Get nodes
@@ -131,6 +150,8 @@ public abstract class LinkPredictionFilter implements ComplexFilter {
         // Remove all nodes, which are not referenced
         Predicate<Node> containsNotNodePredicate = node -> remainingNodes.contains(node);
         nodesToRemove.removeIf(containsNotNodePredicate);
+        consoleLogger.debug("Unused nodes removed");
+
         return nodesToRemove;
     }
 
@@ -141,15 +162,21 @@ public abstract class LinkPredictionFilter implements ComplexFilter {
      * @param edges Retaining edges
      */
     public void retainEdges(Graph graph, List<Edge> edges) {
-        if (!edges.isEmpty()){
+        if (!edges.isEmpty()) {
+            consoleLogger.debug("Remove not used elements from from graph");
+
             // Remove nodes
             List<Node> nodesToRemove = getNodesToRemove(graph, edges);
             graph.removeAllNodes(nodesToRemove);
+            if (consoleLogger.isDebugEnabled()) {
+                consoleLogger.debug("Remove " + nodesToRemove.size() + " Nodes");
+            }
 
             // Remove edges
             List<Edge> remainingEdges = new ArrayList<Edge>(Arrays.asList(graph.getEdges().toArray()));
             remainingEdges.stream().filter(edge -> !edges.contains(edge)).forEach(edge -> graph.removeEdge(edge));
         } else {
+            consoleLogger.debug("Illegal number of edges!");
             new IllegalEdgeNumberWarning();
         }
     }
