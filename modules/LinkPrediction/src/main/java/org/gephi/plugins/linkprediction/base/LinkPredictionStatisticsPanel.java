@@ -30,11 +30,8 @@ public class LinkPredictionStatisticsPanel extends javax.swing.JPanel implements
     private javax.swing.JLabel iterationLabel;
 
     // Long runtime verification
-    public static final double THRESHOLD_N2 = 1000000;
     public static final String HIGH_RUNTIME = "High runtime value";
     private int noOfNodes;
-    private double runtimeCommonNeighbours;
-    private double runtimePreferentialAttachment;
 
     // Console logger
     private static Logger consoleLogger = LogManager.getLogger(LinkPredictionStatisticsPanel.class);
@@ -120,33 +117,23 @@ public class LinkPredictionStatisticsPanel extends javax.swing.JPanel implements
         }
 
         statistic.setIterationLimit(numberOfIterations);
-        getRuntime(numberOfIterations);
-        setLabels();
-    }
-
-    /**
-     * Calculates runtime based on number of iterations.
-     *
-     * @param noOfIterations Number of iterations
-     */
-    private void getRuntime(int noOfIterations) {
-        // O(N^2)
-        runtimeCommonNeighbours = (double) noOfIterations * noOfNodes * noOfNodes;
-        // O(N^2)
-        runtimePreferentialAttachment = (double) noOfIterations * noOfNodes * noOfNodes;
+        setWarnings(numberOfIterations);
     }
 
     /**
      * Sets warning labels in case of high runtime.
      */
-    private void setLabels() {
-        if (runtimePreferentialAttachment > THRESHOLD_N2) {
+    private void setWarnings(int numberOfIterations) {
+        LinkPredictionStatistics preferentialAttachment = statistic.getStatistic(PreferentialAttachmentStatistics.class);
+
+        if (preferentialAttachment != null && preferentialAttachment.longRuntimeExpected(numberOfIterations, noOfNodes)) {
             preferentialAttachmentWarning.setText(HIGH_RUNTIME);
         } else {
             preferentialAttachmentWarning.setText("");
         }
 
-        if (runtimeCommonNeighbours > THRESHOLD_N2) {
+        LinkPredictionStatistics commonNeighbour = statistic.getStatistic(PreferentialAttachmentStatistics.class);
+        if (commonNeighbour != null && commonNeighbour.longRuntimeExpected(numberOfIterations, noOfNodes)) {
             commonNeighbourWarning.setText(HIGH_RUNTIME);
         } else {
             commonNeighbourWarning.setText("");

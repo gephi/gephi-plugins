@@ -6,6 +6,7 @@ import org.gephi.graph.api.GraphModel;
 import org.gephi.plugins.linkprediction.base.LinkPredictionStatistics;
 
 import org.gephi.graph.api.*;
+import org.gephi.plugins.linkprediction.util.Complexity;
 import org.gephi.plugins.linkprediction.util.GraphUtils;
 
 import java.util.ArrayList;
@@ -22,6 +23,10 @@ public class PreferentialAttachmentStatistics extends LinkPredictionStatistics {
     private Node neighbourA;
     private Node neighbourB;
     private Graph graph;
+
+    static {
+        complexity = Complexity.EXPONENTIAL;
+    }
 
     @Override
     public void execute(GraphModel graphModel) {

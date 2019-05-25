@@ -27,8 +27,12 @@ import java.util.*;
 public abstract class LinkPredictionStatistics implements Statistics {
     /**
      * Default number of iteration used to predict next edges
-     **/
+     */
     public static final int ITERATION_LIMIT_DEFAULT = 1;
+    /**
+     * Long runtime threshold, warning if value is reached
+     */
+    public static final double RUNTIME_THRESHOLD = 1000000;
 
     /* Column containing info when edge got added */
     public static final String ADDED_IN_RUN = "added_in_run";
@@ -43,7 +47,7 @@ public abstract class LinkPredictionStatistics implements Statistics {
     protected static Column colLastCalculatedValue;
 
     // Big o complexity of algorithm
-    protected Complexity complexity;
+    protected static Complexity complexity;
     // Holds the calculated prediction values
     protected Map<Edge, Integer> predictions = new HashMap<>();
 
@@ -107,9 +111,14 @@ public abstract class LinkPredictionStatistics implements Statistics {
      *
      * @return If the calculation will takes a long time
      */
-    public boolean longRuntimeExpected() {
-        // TODO Implement
-        return false;
+    public boolean longRuntimeExpected(int iterationLimit, int nodeCount) {
+        switch (complexity) {
+        case EXPONENTIAL:
+            return iterationLimit * nodeCount * nodeCount > RUNTIME_THRESHOLD;
+        default:
+            // TODO Implement other complexities
+            return false;
+        }
     }
 
     /**

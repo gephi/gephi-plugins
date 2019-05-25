@@ -46,6 +46,15 @@ public class LinkPredictionMacro extends LinkPredictionStatistics {
         return statistics;
     }
 
+    /**
+     * Get specific link prediction algorithm from statistics list
+     * @param statistic Class of searched statistic
+     * @return LinkPredictionStatistic
+     */
+    public LinkPredictionStatistics getStatistic(Class statistic){
+        return statistics.stream().filter(s -> s.getClass().equals(statistic.getClass())).findFirst().orElse(null);
+    }
+
     public void setStatistics(List<LinkPredictionStatistics> statistics) {
         this.statistics = statistics;
     }
