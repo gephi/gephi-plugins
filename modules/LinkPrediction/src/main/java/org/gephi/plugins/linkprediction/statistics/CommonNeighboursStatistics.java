@@ -4,6 +4,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.gephi.graph.api.*;
 import org.gephi.plugins.linkprediction.base.LinkPredictionStatistics;
+import org.gephi.plugins.linkprediction.util.Complexity;
 import org.gephi.plugins.linkprediction.util.GraphUtils;
 import org.openide.util.Lookup;
 
@@ -16,6 +17,11 @@ public class CommonNeighboursStatistics extends LinkPredictionStatistics {
 
     // Console logger
     private static Logger consoleLogger = LogManager.getLogger(CommonNeighboursStatistics.class);
+
+    static {
+        complexity = Complexity.EXPONENTIAL;
+    }
+
 
     @Override public void execute(GraphModel graphModel) {
         consoleLogger.debug("Execution of link prediction started");

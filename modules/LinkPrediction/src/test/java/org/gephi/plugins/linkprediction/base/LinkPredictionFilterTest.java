@@ -18,7 +18,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class LinkPredictionFilterTest {
     GraphModel graphModel;
-    Edge e;
 
     @BeforeEach void setUp() {
         //Init project - and therefore a workspace
@@ -62,9 +61,6 @@ class LinkPredictionFilterTest {
         Edge e10 = factory.newEdge("E10", f, g, 1, 1, false);
         Edge e11 = factory.newEdge("E11", g, h, 1, 1, false);
         Edge e12 = factory.newEdge("E12", g, i, 1, 1, false);
-
-        // Add edge for further testing
-        this.e = e12;
 
         // Add nodes
         UndirectedGraph undirectedGraph = graphModel.getUndirectedGraph();

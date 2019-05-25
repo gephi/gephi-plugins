@@ -36,11 +36,16 @@ public class LinkPredictionStatisticsPanel extends javax.swing.JPanel implements
     // Console logger
     private static Logger consoleLogger = LogManager.getLogger(LinkPredictionStatisticsPanel.class);
 
+    /**
+     * Creates new link prediction statistic panel.
+     */
     public LinkPredictionStatisticsPanel() {
         consoleLogger.debug("Initialize panel");
 
         noOfNodes = Lookup.getDefault().lookup(GraphController.class).getGraphModel().getGraph().getNodeCount();
-        consoleLogger.debug("Graph contains " + noOfNodes + "nodes");
+        if (consoleLogger.isDebugEnabled()) {
+            consoleLogger.debug("Graph contains " + noOfNodes + "nodes");
+        }
 
         commonNeighbourCheckbox = new javax.swing.JCheckBox(CommonNeighboursStatisticsBuilder.COMMON_NEIGHBOURS_NAME);
         preferentialAttachmentCheckbox = new javax.swing.JCheckBox(PreferentialAttachmentStatisticsBuilder.PREFERENTIAL_ATTACHMENT_NAME);
@@ -69,7 +74,7 @@ public class LinkPredictionStatisticsPanel extends javax.swing.JPanel implements
      * @param e Event
      */
     public void itemStateChanged(ItemEvent e) {
-        if (commonNeighbourCheckbox.isSelected()){
+        if (commonNeighbourCheckbox.isSelected()) {
             consoleLogger.debug("Add common neighbour to macro");
             this.statistic.addStatistic(new CommonNeighboursStatistics());
         } else if (!commonNeighbourCheckbox.isSelected()) {
@@ -77,7 +82,7 @@ public class LinkPredictionStatisticsPanel extends javax.swing.JPanel implements
             this.statistic.removeStatistic(new CommonNeighboursStatistics());
         }
 
-        if (preferentialAttachmentCheckbox.isSelected()){
+        if (preferentialAttachmentCheckbox.isSelected()) {
             consoleLogger.debug("Add preferential attachment to macro");
             this.statistic.addStatistic(new PreferentialAttachmentStatistics());
         } else if (!preferentialAttachmentCheckbox.isSelected()) {
@@ -109,9 +114,8 @@ public class LinkPredictionStatisticsPanel extends javax.swing.JPanel implements
         try {
             numberOfIterations = Integer.valueOf(numberOfIterationsTextField.getText());
             consoleLogger.debug("Number of iteration changed to " + numberOfIterations);
-
         }
-        catch(NumberFormatException e) {
+        catch (NumberFormatException e) {
             consoleLogger.debug("Wrong number format entered!");
             new IllegalIterationNumberFormatWarning();
         }
@@ -124,19 +128,24 @@ public class LinkPredictionStatisticsPanel extends javax.swing.JPanel implements
      * Sets warning labels in case of high runtime.
      */
     private void setWarnings(int numberOfIterations) {
+        consoleLogger.debug("Set warning labels");
         LinkPredictionStatistics preferentialAttachment = statistic.getStatistic(PreferentialAttachmentStatistics.class);
 
         if (preferentialAttachment != null && preferentialAttachment.longRuntimeExpected(numberOfIterations, noOfNodes)) {
+            consoleLogger.debug("Enable high runtime warning for preferential attachment");
             preferentialAttachmentWarning.setText(HIGH_RUNTIME);
         } else {
+            consoleLogger.debug("Disable high runtime warning for preferential attachment");
             preferentialAttachmentWarning.setText("");
         }
 
         LinkPredictionStatistics commonNeighbour = statistic.getStatistic(PreferentialAttachmentStatistics.class);
         if (commonNeighbour != null && commonNeighbour.longRuntimeExpected(numberOfIterations, noOfNodes)) {
+            consoleLogger.debug("Enable high runtime warning for common neighbours");
             commonNeighbourWarning.setText(HIGH_RUNTIME);
         } else {
             commonNeighbourWarning.setText("");
+            consoleLogger.debug("Disable high runtime warning for common neighbours");
         }
     }
 

@@ -22,7 +22,7 @@ public class LinkPredictionStatisticsUI implements StatisticsUI {
 
     @Override
     public JPanel getSettingsPanel() {
-        if(panel == null) {
+        if (panel == null) {
             panel = new LinkPredictionStatisticsPanel();
         }
         return panel;
@@ -31,7 +31,7 @@ public class LinkPredictionStatisticsUI implements StatisticsUI {
     @Override
     public void setup(Statistics statistic) {
         this.statistic = (LinkPredictionStatistics) statistic;
-        if (panel == null){
+        if (panel == null) {
             panel = new LinkPredictionStatisticsPanel();
         }
         panel.setStatistic((LinkPredictionMacro) statistic);

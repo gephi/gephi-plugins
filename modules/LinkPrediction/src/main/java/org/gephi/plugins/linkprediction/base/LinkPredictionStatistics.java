@@ -32,7 +32,7 @@ public abstract class LinkPredictionStatistics implements Statistics {
     /**
      * Long runtime threshold, warning if value is reached
      */
-    public static final double RUNTIME_THRESHOLD = 1000000;
+    public static final long RUNTIME_THRESHOLD = 1000000;
 
     /* Column containing info when edge got added */
     public static final String ADDED_IN_RUN = "added_in_run";
@@ -109,12 +109,15 @@ public abstract class LinkPredictionStatistics implements Statistics {
     /**
      * Gives an estimate of the assumed duration.
      *
+     * @param iterationLimit Number of iterations
+     * @param nodeCount      Number of nodes
      * @return If the calculation will takes a long time
      */
-    public boolean longRuntimeExpected(int iterationLimit, int nodeCount) {
+    public boolean longRuntimeExpected(long iterationLimit, long nodeCount) {
         switch (complexity) {
         case EXPONENTIAL:
-            return iterationLimit * nodeCount * nodeCount > RUNTIME_THRESHOLD;
+            consoleLogger.debug("Verify runtime for exponential complexity");
+            return (iterationLimit * nodeCount * nodeCount) > RUNTIME_THRESHOLD;
         default:
             // TODO Implement other complexities
             return false;
@@ -229,8 +232,9 @@ public abstract class LinkPredictionStatistics implements Statistics {
     @Override public boolean equals(Object o) {
         if (o != null) {
             return o.getClass() == this.getClass();
-        } else
+        } else {
             return false;
+        }
     }
 
     /**

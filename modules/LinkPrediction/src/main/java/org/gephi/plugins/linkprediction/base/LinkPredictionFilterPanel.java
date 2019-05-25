@@ -27,17 +27,27 @@ import static org.gephi.plugins.linkprediction.base.LinkPredictionStatistics.ini
  */
 public class LinkPredictionFilterPanel extends javax.swing.JPanel {
 
-    /** Filter on which panel will set its values */
+    /**
+     * Filter on which panel will set its values
+     */
     private LinkPredictionFilter filter;
-    /** Slider to adapt number uf shown edges */
+    /**
+     * Slider to adapt number uf shown edges
+     */
     private javax.swing.JSlider slider;
-    /** Label which shows current chosen value of shown edges */
+    /**
+     * Label which shows current chosen value of shown edges
+     */
     private javax.swing.JLabel current;
 
     // Console logger
     private static Logger consoleLogger = LogManager.getLogger(LinkPredictionFilterPanel.class);
 
-
+    /**
+     * Creates a new link prediction filter panel.
+     *
+     * @param filter Algorithm used to limit edges
+     */
     public LinkPredictionFilterPanel(Filter filter) {
         this.filter = (LinkPredictionFilter) filter;
 
@@ -48,7 +58,9 @@ public class LinkPredictionFilterPanel extends javax.swing.JPanel {
         initializeColumns(edgeTable);
 
         int maxIteration = LinkPredictionStatistics.getMaxIteration(graph, filter.getName());
-        consoleLogger.debug("Max iteration found: " + maxIteration);
+        if (consoleLogger.isDebugEnabled()) {
+            consoleLogger.debug("Max iteration found: " + maxIteration);
+        }
         // Stats have to be executed first
         if (maxIteration == 0) {
             consoleLogger.debug("Display warning - stats have to be executed first");
@@ -63,7 +75,9 @@ public class LinkPredictionFilterPanel extends javax.swing.JPanel {
         JPanel topPanel = new JPanel(new BorderLayout());
         // Set init value
         int initValue = maxIteration / 2;
-        consoleLogger.debug("Set slider initially to " + initValue);
+        if (consoleLogger.isDebugEnabled()) {
+            consoleLogger.debug("Set slider initially to " + initValue);
+        }
         this.slider = new JSlider(JSlider.HORIZONTAL, 0, maxIteration, initValue);
         topPanel.add(slider);
 
@@ -82,7 +96,9 @@ public class LinkPredictionFilterPanel extends javax.swing.JPanel {
         slider.addChangeListener(new ChangeListener() {
             public void stateChanged(ChangeEvent e) {
                 int edgesLimit = ((JSlider) e.getSource()).getValue();
-                consoleLogger.debug("Filter changed to new limit " + edgesLimit);
+                if (consoleLogger.isDebugEnabled()) {
+                    consoleLogger.debug("Filter changed to new limit " + edgesLimit);
+                }
 
                 // Set current displayed value
                 current.setText(String.valueOf(edgesLimit));
