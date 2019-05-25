@@ -4,6 +4,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.gephi.graph.api.GraphController;
 import org.gephi.plugins.linkprediction.statistics.*;
+import org.gephi.plugins.linkprediction.warnings.IllegalIterationNumberFormatWarning;
 import org.openide.util.Lookup;
 
 import javax.swing.*;
@@ -19,9 +20,7 @@ import java.awt.event.*;
  */
 public class LinkPredictionStatisticsPanel extends javax.swing.JPanel implements ItemListener, KeyListener {
 
-    private static Logger consoleLogger = LogManager.getLogger(LinkPredictionStatisticsPanel.class);
-
-    /* UI elements */
+    // UI elements
     private LinkPredictionMacro statistic;
     private javax.swing.JCheckBox commonNeighbourCheckbox;
     private javax.swing.JCheckBox preferentialAttachmentCheckbox;
@@ -30,15 +29,21 @@ public class LinkPredictionStatisticsPanel extends javax.swing.JPanel implements
     private javax.swing.JLabel preferentialAttachmentWarning;
     private javax.swing.JLabel iterationLabel;
 
-    /* Long runtime verification */
+    // Long runtime verification
     public static final double THRESHOLD_N2 = 1000000;
     public static final String HIGH_RUNTIME = "High runtime value";
     private int noOfNodes;
     private double runtimeCommonNeighbours;
     private double runtimePreferentialAttachment;
 
+    // Console logger
+    private static Logger consoleLogger = LogManager.getLogger(LinkPredictionStatisticsPanel.class);
+
     public LinkPredictionStatisticsPanel() {
+        consoleLogger.debug("Initialize panel");
+
         noOfNodes = Lookup.getDefault().lookup(GraphController.class).getGraphModel().getGraph().getNodeCount();
+        consoleLogger.debug("Graph contains " + noOfNodes + "nodes");
 
         commonNeighbourCheckbox = new javax.swing.JCheckBox(CommonNeighboursStatisticsBuilder.COMMON_NEIGHBOURS_NAME);
         preferentialAttachmentCheckbox = new javax.swing.JCheckBox(PreferentialAttachmentStatisticsBuilder.PREFERENTIAL_ATTACHMENT_NAME);
@@ -68,14 +73,18 @@ public class LinkPredictionStatisticsPanel extends javax.swing.JPanel implements
      */
     public void itemStateChanged(ItemEvent e) {
         if (commonNeighbourCheckbox.isSelected()){
+            consoleLogger.debug("Add common neighbour to macro");
             this.statistic.addStatistic(new CommonNeighboursStatistics());
         } else if (!commonNeighbourCheckbox.isSelected()) {
+            consoleLogger.debug("Remove common neighbour from macro");
             this.statistic.removeStatistic(new CommonNeighboursStatistics());
         }
 
         if (preferentialAttachmentCheckbox.isSelected()){
+            consoleLogger.debug("Add preferential attachment to macro");
             this.statistic.addStatistic(new PreferentialAttachmentStatistics());
         } else if (!preferentialAttachmentCheckbox.isSelected()) {
+            consoleLogger.debug("Add preferential attachment from macro");
             this.statistic.removeStatistic(new PreferentialAttachmentStatistics());
         }
     }
@@ -102,10 +111,12 @@ public class LinkPredictionStatisticsPanel extends javax.swing.JPanel implements
         int numberOfIterations = 1;
         try {
             numberOfIterations = Integer.valueOf(numberOfIterationsTextField.getText());
+            consoleLogger.debug("Number of iteration changed to " + numberOfIterations);
+
         }
         catch(NumberFormatException e) {
-            numberOfIterationsTextField.setText("1");
-            numberOfIterations = Integer.valueOf(numberOfIterationsTextField.getText());
+            consoleLogger.debug("Wrong number format entered!");
+            new IllegalIterationNumberFormatWarning();
         }
 
         statistic.setIterationLimit(numberOfIterations);

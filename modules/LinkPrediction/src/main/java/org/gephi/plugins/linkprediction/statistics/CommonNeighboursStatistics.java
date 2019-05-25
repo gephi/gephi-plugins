@@ -26,20 +26,24 @@ public class CommonNeighboursStatistics extends LinkPredictionStatistics {
         initializeColumns(edgeTable);
 
         // Get graph factory
+        consoleLogger.debug("Get factory");
         GraphController gc = Lookup.getDefault().lookup(GraphController.class);
         Graph graph = gc.getGraphModel().getGraph();
         GraphFactory factory = gc.getGraphModel().factory();
 
         // Lock graph for writes
+        consoleLogger.debug("Lock graph");
         graph.writeLock();
 
         // Clear predictions
+        consoleLogger.debug("Clear predictions");
         predictions.clear();
 
         //Iterate on all nodes
         List<Node> nodesA = new ArrayList<>(Arrays.asList(graph.getNodes().toArray()));
 
         for (Node a : nodesA) {
+            consoleLogger.debug("Calculation for node " + a.getId());
             // Remove self from neighbours
             List<Node> nodesB = new ArrayList<>(nodesA);
             nodesB.remove(a);
@@ -49,6 +53,7 @@ public class CommonNeighboursStatistics extends LinkPredictionStatistics {
 
             //Calculate common neighbors
             for (Node b : nodesB) {
+                consoleLogger.debug("Calculation for node " + b.getId());
                 int cnValue = 0;
 
                 // Get neighbours of b
@@ -62,8 +67,10 @@ public class CommonNeighboursStatistics extends LinkPredictionStatistics {
                 //List<Edge> existingEdges = Arrays.asList(graph.getEdges(a, b).toArray());
                 List<Edge> existingEdges = GraphUtils.getEdges(graph, a, b);
                 long numberOfExistingEdges = existingEdges.size();
+                consoleLogger.debug("Size of existing edges: " + numberOfExistingEdges);
 
                 if (numberOfExistingEdges == 0) {
+                    consoleLogger.debug("Edges does not exist and will be added");
                     // Add new edge to calculation map
                     Edge newEdge = factory.newEdge(a, b, false);
                     newEdge.setAttribute(colLastCalculatedValue, cnValue);
@@ -77,6 +84,7 @@ public class CommonNeighboursStatistics extends LinkPredictionStatistics {
 
         // Add edge to graph
         if (max != null) {
+            consoleLogger.debug("Add highest edge to graph");
             int iteration = getNextIteration(graph, CommonNeighboursStatisticsBuilder.COMMON_NEIGHBOURS_NAME);
             max.setAttribute(colAddedInRun, iteration);
             max.setAttribute(colLastPrediction, CommonNeighboursStatisticsBuilder.COMMON_NEIGHBOURS_NAME);
@@ -84,17 +92,32 @@ public class CommonNeighboursStatistics extends LinkPredictionStatistics {
         }
 
         // Unlock graph
+        consoleLogger.debug("Unlock graph");
         graph.writeUnlock();
 
     }
 
-    private int getCommonNeighboursCount(List<Node> firstPeerNeighbours, List<Node> bNeighbours) {
-        return firstPeerNeighbours.stream().filter(bNeighbours::contains).collect(Collectors.toList()).size();
+    /**
+     * Counts number of common neighbours of two nodes
+     * @param aNeighbours Neighbours of a
+     * @param bNeighbours Neighbours of b
+     * @return Number of common neighbours
+     */
+    private int getCommonNeighboursCount(List<Node> aNeighbours, List<Node> bNeighbours) {
+        consoleLogger.debug("Get common neighbours count");
+        return aNeighbours.stream().filter(bNeighbours::contains).collect(Collectors.toList()).size();
     }
 
-    private ArrayList<Node> getNeighbours(Graph graph, Node a) {
+    /**
+     * Retrieve neighbours for node ad from graph
+     * @param graph Graph in which neighours will be searched
+     * @param n Node for which neighbours will be searched
+     * @return Neighbours of n
+     */
+    private ArrayList<Node> getNeighbours(Graph graph, Node n) {
+        consoleLogger.debug("Get neighbours");
         return new ArrayList<>(
-                Arrays.asList(graph.getNeighbors(a).toArray()).stream().distinct().collect(Collectors.toList()));
+                Arrays.asList(graph.getNeighbors(n).toArray()).stream().distinct().collect(Collectors.toList()));
     }
 
 }

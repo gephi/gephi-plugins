@@ -18,6 +18,7 @@ public class PreferentialAttachmentStatistics extends LinkPredictionStatistics {
 
     // Console logger
     private static Logger consoleLogger = LogManager.getLogger(CommonNeighboursStatistics.class);
+
     private Node neighbourA;
     private Node neighbourB;
     private Graph graph;
@@ -33,13 +34,17 @@ public class PreferentialAttachmentStatistics extends LinkPredictionStatistics {
         consoleLogger.debug("Initialize columns");
         initializeColumns(edgeTable);
 
+        // Get graph factory
+        consoleLogger.debug("Get factory");
         graph = graphModel.getGraph();
         GraphFactory factory = graphModel.factory();
 
         // Lock graph for writes
+        consoleLogger.debug("Lock graph");
         graph.writeLock();
 
         // Clear predictions
+        consoleLogger.debug("Clear predictions");
         predictions.clear();
 
         //Iterate on all nodes
@@ -50,10 +55,12 @@ public class PreferentialAttachmentStatistics extends LinkPredictionStatistics {
         int highestValue = Integer.MIN_VALUE;
 
         for (Node a : nodesA) {
+            consoleLogger.debug("Calculation for node " + a.getId());
             nodesB.remove(a);
 
             ArrayList<Node> aNeighbours = getRelevantNeighbours(a);
             for (Node b : nodesB) {
+                consoleLogger.debug("Calculation for node " + b.getId());
                 int paValue = 0;
 
                 ArrayList<Node> bNeighbours = getRelevantNeighbours(b);
@@ -68,15 +75,16 @@ public class PreferentialAttachmentStatistics extends LinkPredictionStatistics {
                 boolean lpEdgeExists = lpEdgeExists(eArr);
 
                 if (!lpEdgeExists && paValue > highestValue) {
+                    consoleLogger.debug("Edges does not exist and will be added");
                     neighbourA = a;
                     neighbourB = b;
                     highestValue = paValue;
                 }
             }
-
         }
 
         if (neighbourA != null) {
+            consoleLogger.debug("Add highest edge to graph");
             Edge newEdge = factory.newEdge(neighbourA, neighbourB, false);
             graph.addEdge(newEdge);
             newEdge.setAttribute(colLastPrediction, PREFERENTIAL_ATTACHMENT_NAME);
@@ -85,6 +93,7 @@ public class PreferentialAttachmentStatistics extends LinkPredictionStatistics {
             predictions.put(newEdge, highestValue);
         }
 
+        consoleLogger.debug("Unlock graph");
         graph.writeUnlock();
 
     }

@@ -34,7 +34,9 @@ public class LinkPredictionFilterPanel extends javax.swing.JPanel {
     /** Label which shows current chosen value of shown edges */
     private javax.swing.JLabel current;
 
+    // Console logger
     private static Logger consoleLogger = LogManager.getLogger(LinkPredictionFilterPanel.class);
+
 
     public LinkPredictionFilterPanel(Filter filter) {
         this.filter = (LinkPredictionFilter) filter;
@@ -46,18 +48,22 @@ public class LinkPredictionFilterPanel extends javax.swing.JPanel {
         initializeColumns(edgeTable);
 
         int maxIteration = LinkPredictionStatistics.getMaxIteration(graph, filter.getName());
+        consoleLogger.debug("Max iteration found: " + maxIteration);
         // Stats have to be executed first
         if (maxIteration == 0) {
+            consoleLogger.debug("Display warning - stats have to be executed first");
             new IllegalIterationLimitWarning();
         }
 
         // Set layout
+        consoleLogger.debug("Apply panel layout");
         setLayout(new GridLayout(2, 1));
 
         // Add slider
         JPanel topPanel = new JPanel(new BorderLayout());
         // Set init value
         int initValue = maxIteration / 2;
+        consoleLogger.debug("Set slider initially to " + initValue);
         this.slider = new JSlider(JSlider.HORIZONTAL, 0, maxIteration, initValue);
         topPanel.add(slider);
 
@@ -72,6 +78,7 @@ public class LinkPredictionFilterPanel extends javax.swing.JPanel {
         add(bottomPanel);
 
         // Add listener
+        consoleLogger.debug("Add listener to slider");
         slider.addChangeListener(new ChangeListener() {
             public void stateChanged(ChangeEvent e) {
                 int edgesLimit = ((JSlider) e.getSource()).getValue();

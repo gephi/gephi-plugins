@@ -1,5 +1,7 @@
 package org.gephi.plugins.linkprediction.base;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.gephi.graph.api.Column;
 import org.gephi.graph.api.Edge;
 import org.gephi.graph.api.Graph;
@@ -28,12 +30,14 @@ public abstract class LinkPredictionStatistics implements Statistics {
      **/
     public static final int ITERATION_LIMIT_DEFAULT = 1;
 
-    /* Column names for data labour */
+    /* Column containing info when edge got added */
     public static final String ADDED_IN_RUN = "added_in_run";
+    /* Column containing info which value the prediction algorithm calculated */
     public static final String LAST_VALUE = "last_link_prediction_value";
+    /* Column containing info which prediction algorithm was used */
     public static final String LP_ALGORITHM = "link_prediction_algorithm";
 
-    /* Columns for data labour */
+    // Columns for data labour
     protected static Column colLastPrediction;
     protected static Column colAddedInRun;
     protected static Column colLastCalculatedValue;
@@ -43,6 +47,9 @@ public abstract class LinkPredictionStatistics implements Statistics {
     // Holds the calculated prediction values
     protected Map<Edge, Integer> predictions = new HashMap<>();
 
+    // Console Logger
+    private static Logger consoleLogger = LogManager.getLogger(LinkPredictionStatistics.class);
+
     /**
      * Initializes the columns used in link prediction.
      *
@@ -50,16 +57,19 @@ public abstract class LinkPredictionStatistics implements Statistics {
      */
     public static void initializeColumns(Table edgeTable) {
         colLastPrediction = edgeTable.getColumn(LP_ALGORITHM);
+        consoleLogger.debug("Intialize column " + LP_ALGORITHM);
         if (colLastPrediction == null) {
             colLastPrediction = edgeTable.addColumn(LP_ALGORITHM, "Chosen Link Prediction Algorithm", String.class, "");
         }
 
         colAddedInRun = edgeTable.getColumn(ADDED_IN_RUN);
+        consoleLogger.debug("Intialize column " + ADDED_IN_RUN);
         if (colAddedInRun == null) {
             colAddedInRun = edgeTable.addColumn(ADDED_IN_RUN, "Added in Run", Integer.class, 0);
         }
 
         colLastCalculatedValue = edgeTable.getColumn(LAST_VALUE);
+        consoleLogger.debug("Intialize column " + LAST_VALUE);
         if (colLastCalculatedValue == null) {
             colLastCalculatedValue = edgeTable.addColumn(LAST_VALUE, "Last Link Prediction Value", Integer.class, 0);
         }
@@ -73,9 +83,11 @@ public abstract class LinkPredictionStatistics implements Statistics {
      * @return Number of highest iteration
      */
     public static int getMaxIteration(Graph graph, String algorithm) {
+        consoleLogger.debug("Get current max iteration");
         return Arrays.asList(graph.getEdges().toArray()).stream()
                 .filter(edge -> edge.getAttribute(colLastPrediction).toString().equals(algorithm))
-                .map(edge -> (int) edge.getAttribute(colAddedInRun)).max(Comparator.comparing(Integer::valueOf)).orElse(0);
+                .map(edge -> (int) edge.getAttribute(colAddedInRun)).max(Comparator.comparing(Integer::valueOf))
+                .orElse(0);
     }
 
     /**
@@ -127,7 +139,8 @@ public abstract class LinkPredictionStatistics implements Statistics {
         return colAddedInRun;
     }
 
-    /** Sets the column "added in run".
+    /**
+     * Sets the column "added in run".
      *
      * @param colAddedInRun Column "added in run"
      */
@@ -162,7 +175,8 @@ public abstract class LinkPredictionStatistics implements Statistics {
         return complexity;
     }
 
-    /** Sets the complexity of the algorithm.
+    /**
+     * Sets the complexity of the algorithm.
      *
      * @param complexity Algorithms complexity
      */
@@ -190,7 +204,10 @@ public abstract class LinkPredictionStatistics implements Statistics {
     public int getNextIteration(Graph graph, String algorithm) {
         int lastIteration = Arrays.asList(graph.getEdges().toArray()).stream()
                 .filter(edge -> edge.getAttribute(colLastPrediction).toString().equals(algorithm))
-                .map(edge -> (int) edge.getAttribute(colAddedInRun)).max(Comparator.comparing(Integer::valueOf)).orElse(0);
+                .map(edge -> (int) edge.getAttribute(colAddedInRun)).max(Comparator.comparing(Integer::valueOf))
+                .orElse(0);
+        consoleLogger.debug("Number of last iteration: " + lastIteration);
+
         return lastIteration + 1;
     }
 
@@ -200,8 +217,7 @@ public abstract class LinkPredictionStatistics implements Statistics {
      * @param o Other statistic
      * @return Evaluation result
      */
-    @Override
-    public boolean equals(Object o){
+    @Override public boolean equals(Object o) {
         if (o != null) {
             return o.getClass() == this.getClass();
         } else
@@ -213,10 +229,8 @@ public abstract class LinkPredictionStatistics implements Statistics {
      *
      * @return Hash code
      */
-    @Override
-    public int hashCode() {
+    @Override public int hashCode() {
         return this.getClass().hashCode();
     }
-
 
 }

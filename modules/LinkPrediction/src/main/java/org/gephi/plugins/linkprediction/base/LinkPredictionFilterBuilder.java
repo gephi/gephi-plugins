@@ -1,6 +1,5 @@
 package org.gephi.plugins.linkprediction.base;
 
-
 import org.gephi.filters.spi.Category;
 import org.gephi.filters.spi.Filter;
 import org.gephi.filters.spi.FilterBuilder;
@@ -21,7 +20,12 @@ public abstract class LinkPredictionFilterBuilder implements FilterBuilder {
     /** Name of the newly added filter category */
     public static final String LINK_PREDICTION_CATEGORY = "Link prediction";
 
-    /** Category in which filter will be shown in UI */
+
+    /**
+     * Category in which filter will be shown in UI.
+     *
+     * @return Filter category
+     */
     public Category getCategory() {
         return new Category(LINK_PREDICTION_CATEGORY);
     }

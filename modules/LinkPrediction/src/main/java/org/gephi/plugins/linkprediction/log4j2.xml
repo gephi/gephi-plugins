@@ -27,6 +27,22 @@
       <AppenderRef ref="console" />
     </Logger>
 
+    <Logger name = "org.gephi.plugins.linkprediction.base.LinkPredictionFilter" level="TRACE" additivity="false">
+      <AppenderRef ref="console" />
+    </Logger>
+
+    <Logger name = "org.gephi.plugins.linkprediction.base.LinkPredictionFilterBuilder" level="TRACE" additivity="false">
+      <AppenderRef ref="console" />
+    </Logger>
+
+    <Logger name = "org.gephi.plugins.linkprediction.base.LinkPredictionFilterPanel" level="TRACE" additivity="false">
+      <AppenderRef ref="console" />
+    </Logger>
+
+    <Logger name = "org.gephi.plugins.linkprediction.base.LinkPredictionStatistics" level="TRACE" additivity="false">
+      <AppenderRef ref="console" />
+    </Logger>
+
     <Logger name = "org.gephi.plugins.linkprediction.base.LinkPredictionStatisticsPanel" level="TRACE" additivity="false">
       <AppenderRef ref="console" />
     </Logger>

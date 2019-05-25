@@ -39,7 +39,9 @@ public abstract class LinkPredictionFilter implements ComplexFilter {
     /** Number of displayed predicted edges */
     protected Integer edgesLimit = EDGES_LIMIT_DEFAULT;
 
+    // Console Logger
     private static Logger consoleLogger = LogManager.getLogger(LinkPredictionFilter.class);
+
 
     /**
      * Applies filter and reduces edges to edges from chosen algorithm.
@@ -56,17 +58,20 @@ public abstract class LinkPredictionFilter implements ComplexFilter {
         initializeColumns(edgeTable);
 
         // Lock graph for writes
+        consoleLogger.debug("Lock graph");
         graph.writeLock();
 
         // Get edges
         List<Edge> edges = new ArrayList<Edge>(Arrays.asList(graph.getEdges().toArray()));
         // Remove edges from other algorithms
         edges = removeOtherEdges(edges);
+        consoleLogger.debug("Retaining edges count: " + edges.size());
 
         // Remove other nodes and edges
         retainEdges(graph, edges);
 
         // Unlock graph
+        consoleLogger.debug("Unlock graph");
         graph.writeUnlock();
 
         return graph;
@@ -148,7 +153,6 @@ public abstract class LinkPredictionFilter implements ComplexFilter {
             new IllegalEdgeNumberWarning();
         }
     }
-
 
     /**
      * Gets properties.
