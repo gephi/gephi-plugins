@@ -13,7 +13,7 @@ public enum Complexity {
     // Landau symbol
     private String order;
 
-    private Complexity(String order) {
+    Complexity(String order) {
         this.order = "O( " + order + ")";
     }
 

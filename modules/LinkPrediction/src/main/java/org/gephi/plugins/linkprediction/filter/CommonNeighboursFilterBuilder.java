@@ -16,7 +16,7 @@ import org.openide.util.lookup.ServiceProvider;
 @ServiceProvider(service = FilterBuilder.class) public class CommonNeighboursFilterBuilder
         extends LinkPredictionFilterBuilder {
 
-     /**
+    /**
      * Description of the common neighbours filter
      **/
     public static final String COMMON_NEIGHBOURS_DESC = "Predict n next link using common neighbours algorithm";
@@ -25,7 +25,9 @@ import org.openide.util.lookup.ServiceProvider;
         return CommonNeighboursStatisticsBuilder.COMMON_NEIGHBOURS_NAME;
     }
 
-    @Override public String getDescription() { return COMMON_NEIGHBOURS_DESC; }
+    @Override public String getDescription() {
+        return COMMON_NEIGHBOURS_DESC;
+    }
 
     @Override public Filter getFilter(Workspace workspace) {
         return new CommonNeighboursFilter();

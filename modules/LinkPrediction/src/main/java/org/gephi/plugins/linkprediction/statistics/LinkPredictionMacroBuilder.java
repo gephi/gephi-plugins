@@ -16,23 +16,22 @@ import org.openide.util.lookup.ServiceProvider;
  * @author Marco Romanutti
  * @see LinkPredictionMacro
  */
-@ServiceProvider(service = StatisticsBuilder.class)
-public class LinkPredictionMacroBuilder extends LinkPredictionStatisticsBuilder {
-    /** Name of the algorithm**/
+@ServiceProvider(service = StatisticsBuilder.class) public class LinkPredictionMacroBuilder
+        extends LinkPredictionStatisticsBuilder {
+    /**
+     * Name of the algorithm
+     **/
     public static final String LINK_PREDICTION_NAME = "Link Prediction Algorithms";
 
-    @Override
-    public String getName() {
+    @Override public String getName() {
         return LINK_PREDICTION_NAME;
     }
 
-    @Override
-    public Class<? extends Statistics> getStatisticsClass() {
+    @Override public Class<? extends Statistics> getStatisticsClass() {
         return LinkPredictionMacro.class;
     }
 
-    @Override
-    public Statistics getStatistics() {
+    @Override public Statistics getStatistics() {
         return new LinkPredictionMacro();
     }
 }

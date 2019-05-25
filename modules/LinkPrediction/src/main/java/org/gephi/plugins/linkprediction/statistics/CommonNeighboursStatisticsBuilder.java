@@ -16,23 +16,22 @@ import org.openide.util.lookup.ServiceProvider;
  * @author Marco Romanutti
  * @see LinkPredictionStatistics
  */
-@ServiceProvider(service = StatisticsBuilder.class)
-public class CommonNeighboursStatisticsBuilder extends LinkPredictionStatisticsBuilder {
-    /** Name of the algorithm**/
+@ServiceProvider(service = StatisticsBuilder.class) public class CommonNeighboursStatisticsBuilder
+        extends LinkPredictionStatisticsBuilder {
+    /**
+     * Name of the algorithm
+     **/
     public static final String COMMON_NEIGHBOURS_NAME = "Common Neighbours";
 
-    @Override
-    public String getName() {
+    @Override public String getName() {
         return COMMON_NEIGHBOURS_NAME;
     }
 
-    @Override
-    public Class<? extends Statistics> getStatisticsClass() {
+    @Override public Class<? extends Statistics> getStatisticsClass() {
         return CommonNeighboursStatistics.class;
     }
 
-    @Override
-    public Statistics getStatistics() {
+    @Override public Statistics getStatistics() {
         return new CommonNeighboursStatistics();
     }
 }

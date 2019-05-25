@@ -22,7 +22,6 @@ public class CommonNeighboursStatistics extends LinkPredictionStatistics {
         complexity = Complexity.EXPONENTIAL;
     }
 
-
     @Override public void execute(GraphModel graphModel) {
         consoleLogger.debug("Execution of link prediction started");
 
@@ -59,7 +58,9 @@ public class CommonNeighboursStatistics extends LinkPredictionStatistics {
 
             //Calculate common neighbors
             for (Node b : nodesB) {
-                consoleLogger.debug("Calculation for node " + b.getId());
+                if (consoleLogger.isDebugEnabled()) {
+                    consoleLogger.debug("Calculation for node " + b.getId());
+                }
                 int cnValue = 0;
 
                 // Get neighbours of b
@@ -67,19 +68,26 @@ public class CommonNeighboursStatistics extends LinkPredictionStatistics {
 
                 // Count number of neighbours
                 cnValue = getCommonNeighboursCount(aNeighbours, bNeighbours);
+                if (consoleLogger.isDebugEnabled()) {
+                    consoleLogger.debug("Number of neighbours for node " + b.getId() + ": " + cnValue);
+                }
 
                 // Check if edge exists already
                 // FIXME graph.getEdges returns always null
                 //List<Edge> existingEdges = Arrays.asList(graph.getEdges(a, b).toArray());
                 List<Edge> existingEdges = GraphUtils.getEdges(graph, a, b);
                 long numberOfExistingEdges = existingEdges.size();
-                consoleLogger.debug("Size of existing edges: " + numberOfExistingEdges);
+                if (consoleLogger.isDebugEnabled()) {
+                    consoleLogger.debug("Size of existing edges: " + numberOfExistingEdges);
+                }
 
                 if (numberOfExistingEdges == 0) {
-                    consoleLogger.debug("Edges does not exist and will be added");
                     // Add new edge to calculation map
                     Edge newEdge = factory.newEdge(a, b, false);
                     newEdge.setAttribute(colLastCalculatedValue, cnValue);
+                    if (consoleLogger.isDebugEnabled()) {
+                        consoleLogger.debug("Add new edge: " + a.getLabel() + ", " + b.getLabel() + ", " + cnValue);
+                    }
                     predictions.put(newEdge, cnValue);
                 }
             }
@@ -90,21 +98,23 @@ public class CommonNeighboursStatistics extends LinkPredictionStatistics {
 
         // Add edge to graph
         if (max != null) {
-            consoleLogger.debug("Add highest edge to graph");
             int iteration = getNextIteration(graph, CommonNeighboursStatisticsBuilder.COMMON_NEIGHBOURS_NAME);
             max.setAttribute(colAddedInRun, iteration);
             max.setAttribute(colLastPrediction, CommonNeighboursStatisticsBuilder.COMMON_NEIGHBOURS_NAME);
+            if (consoleLogger.isDebugEnabled()) {
+                consoleLogger.debug("Add highest predicted edge: " + max);
+            }
             graph.addEdge(max);
         }
 
         // Unlock graph
         consoleLogger.debug("Unlock graph");
         graph.writeUnlock();
-
     }
 
     /**
      * Counts number of common neighbours of two nodes
+     *
      * @param aNeighbours Neighbours of a
      * @param bNeighbours Neighbours of b
      * @return Number of common neighbours
@@ -116,8 +126,9 @@ public class CommonNeighboursStatistics extends LinkPredictionStatistics {
 
     /**
      * Retrieve neighbours for node ad from graph
+     *
      * @param graph Graph in which neighours will be searched
-     * @param n Node for which neighbours will be searched
+     * @param n     Node for which neighbours will be searched
      * @return Neighbours of n
      */
     private ArrayList<Node> getNeighbours(Graph graph, Node n) {

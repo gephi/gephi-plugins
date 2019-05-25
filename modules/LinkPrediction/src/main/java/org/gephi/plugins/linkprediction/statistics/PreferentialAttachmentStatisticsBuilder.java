@@ -16,23 +16,22 @@ import org.openide.util.lookup.ServiceProvider;
  * @author Saskia Schueler
  * @see LinkPredictionStatistics
  */
-@ServiceProvider(service = StatisticsBuilder.class)
-public class PreferentialAttachmentStatisticsBuilder extends LinkPredictionStatisticsBuilder {
-    /** Name of the algorithm **/
+@ServiceProvider(service = StatisticsBuilder.class) public class PreferentialAttachmentStatisticsBuilder
+        extends LinkPredictionStatisticsBuilder {
+    /**
+     * Name of the algorithm
+     **/
     public static final String PREFERENTIAL_ATTACHMENT_NAME = "Preferential Attachment";
 
-    @Override
-    public String getName() {
+    @Override public String getName() {
         return PREFERENTIAL_ATTACHMENT_NAME;
     }
 
-    @Override
-    public Class<? extends Statistics> getStatisticsClass() {
+    @Override public Class<? extends Statistics> getStatisticsClass() {
         return PreferentialAttachmentStatistics.class;
     }
 
-    @Override
-    public Statistics getStatistics() {
+    @Override public Statistics getStatistics() {
         return new PreferentialAttachmentStatistics();
     }
 }

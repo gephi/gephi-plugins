@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
 /**
  * Various utilities used for graph traversals.
  */
-public class GraphUtils {
+public final class GraphUtils {
 
     private GraphUtils() {
         throw new IllegalStateException("Utility class");

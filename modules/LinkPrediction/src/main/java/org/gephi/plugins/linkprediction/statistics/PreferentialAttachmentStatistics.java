@@ -2,10 +2,8 @@ package org.gephi.plugins.linkprediction.statistics;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.gephi.graph.api.GraphModel;
-import org.gephi.plugins.linkprediction.base.LinkPredictionStatistics;
-
 import org.gephi.graph.api.*;
+import org.gephi.plugins.linkprediction.base.LinkPredictionStatistics;
 import org.gephi.plugins.linkprediction.util.Complexity;
 import org.gephi.plugins.linkprediction.util.GraphUtils;
 
@@ -18,8 +16,9 @@ import static org.gephi.plugins.linkprediction.statistics.PreferentialAttachment
 public class PreferentialAttachmentStatistics extends LinkPredictionStatistics {
 
     // Console logger
-    private static Logger consoleLogger = LogManager.getLogger(CommonNeighboursStatistics.class);
+    private static Logger consoleLogger = LogManager.getLogger(PreferentialAttachmentStatistics.class);
 
+    // Calculation internas
     private Node neighbourA;
     private Node neighbourB;
     private Graph graph;
@@ -28,11 +27,9 @@ public class PreferentialAttachmentStatistics extends LinkPredictionStatistics {
         complexity = Complexity.EXPONENTIAL;
     }
 
-    @Override
-    public void execute(GraphModel graphModel) {
+    @Override public void execute(GraphModel graphModel) {
 
         consoleLogger.debug("Execution of link prediction started");
-
         Table edgeTable = graphModel.getEdgeTable();
 
         //Look if the result column already exist and create it if needed
@@ -53,21 +50,26 @@ public class PreferentialAttachmentStatistics extends LinkPredictionStatistics {
         predictions.clear();
 
         //Iterate on all nodes
-        ArrayList<Node> nodesA = new ArrayList<Node>( Arrays.asList(graph.getNodes().toArray()));
-        ArrayList<Node> nodesB = new ArrayList<Node>( Arrays.asList(graph.getNodes().toArray()));
+        ArrayList<Node> nodesA = new ArrayList<Node>(Arrays.asList(graph.getNodes().toArray()));
+        ArrayList<Node> nodesB = new ArrayList<Node>(Arrays.asList(graph.getNodes().toArray()));
 
         // Initialize highest value
         int highestValue = Integer.MIN_VALUE;
 
         for (Node a : nodesA) {
-            consoleLogger.debug("Calculation for node " + a.getId());
+            if (consoleLogger.isDebugEnabled()) {
+                consoleLogger.debug("Calculation for node " + a.getId());
+            }
+            // Add only non existing edges
             nodesB.remove(a);
 
             ArrayList<Node> aNeighbours = getRelevantNeighbours(a);
             for (Node b : nodesB) {
-                consoleLogger.debug("Calculation for node " + b.getId());
-                int paValue = 0;
+                if (consoleLogger.isDebugEnabled()) {
+                    consoleLogger.debug("Calculation for node " + b.getId());
+                }
 
+                int paValue = 0;
                 ArrayList<Node> bNeighbours = getRelevantNeighbours(b);
 
                 // Get prediction value
@@ -77,13 +79,19 @@ public class PreferentialAttachmentStatistics extends LinkPredictionStatistics {
                 Edge[] eArr = new Edge[e.size()];
                 eArr = e.toArray(eArr);
 
-                boolean lpEdgeExists = lpEdgeExists(eArr);
+                boolean lpEdgeExists = lastPredictedEdgeExists(eArr);
+                if (consoleLogger.isDebugEnabled()) {
+                    consoleLogger.debug("Last predicted edge exists? " + lpEdgeExists);
+                }
 
                 if (!lpEdgeExists && paValue > highestValue) {
-                    consoleLogger.debug("Edges does not exist and will be added");
                     neighbourA = a;
                     neighbourB = b;
                     highestValue = paValue;
+                    if (consoleLogger.isDebugEnabled()) {
+                        consoleLogger.debug("New edge will be added: " + a.getLabel() + ", " + b.getLabel() + ", "
+                                + highestValue);
+                    }
                 }
             }
         }
@@ -103,40 +111,51 @@ public class PreferentialAttachmentStatistics extends LinkPredictionStatistics {
 
     }
 
-    private boolean lpEdgeExists(Edge[] eArr) {
-        for(int i = 0; i < eArr.length; i++) {
-            if ((eArr[i].getAttribute(colLastPrediction).equals(PREFERENTIAL_ATTACHMENT_NAME) && (Integer) eArr[0].getAttribute(
-                    colAddedInRun) > 0) ||
-            (eArr[i].getAttribute(colLastPrediction).equals("")))
-            {
-                    return true;
+    /**
+     * Verify if last predicted edge exsits.
+     *
+     * @param edges Edges to apply verification on
+     * @return Flag
+     */
+    private boolean lastPredictedEdgeExists(Edge[] edges) {
+        for (int i = 0; i < edges.length; i++) {
+            if ((edges[i].getAttribute(colLastPrediction).equals(PREFERENTIAL_ATTACHMENT_NAME)
+                    && (Integer) edges[0].getAttribute(colAddedInRun) > 0) || (edges[i].getAttribute(colLastPrediction)
+                    .equals(""))) {
+                return true;
             }
 
         }
         return false;
     }
 
-    private ArrayList<Node> getRelevantNeighbours(Node x) {
+    /**
+     * Finds relevant neighbours for node n.
+     *
+     * @param node Node for that neighbours will be searched
+     * @return Neighbours, that were added by preferential attachment or have already been there before
+     */
+    private ArrayList<Node> getRelevantNeighbours(Node node) {
 
         ArrayList<Node> relevantNeighbours = new ArrayList<>();
 
-        Node[] neighboursX = graph.getNeighbors(x).toArray();
+        Node[] neighboursX = graph.getNeighbors(node).toArray();
 
         for (Node iN : neighboursX) {
-            List<Edge> edges = GraphUtils.getEdges(graph, x, iN);
+            List<Edge> edges = GraphUtils.getEdges(graph, node, iN);
             Edge[] eList = new Edge[edges.size()];
             eList = edges.toArray(eList);
 
             boolean addedEdge = false;
             for (Edge e : eList) {
-                 if ((e.getAttribute(colLastPrediction).equals(PREFERENTIAL_ATTACHMENT_NAME) || e.getAttribute(
-                         colLastPrediction).equals("")) && !addedEdge) {
-                     relevantNeighbours.add(iN);
-                     addedEdge = true;
-                 }
-             }
+                if ((e.getAttribute(colLastPrediction).equals(PREFERENTIAL_ATTACHMENT_NAME) || e
+                        .getAttribute(colLastPrediction).equals("")) && !addedEdge) {
+                    relevantNeighbours.add(iN);
+                    addedEdge = true;
+                }
+            }
         }
-        
+
         return relevantNeighbours;
     }
 }

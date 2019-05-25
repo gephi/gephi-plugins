@@ -12,8 +12,14 @@ import java.util.List;
 public class LinkPredictionMacro extends LinkPredictionStatistics {
     // Number of edge prediction iterations
     private int iterationLimit = ITERATION_LIMIT_DEFAULT;
+    // List of link prediction statistics
     private List<LinkPredictionStatistics> statistics = new ArrayList<>();
 
+    /**
+     * Calcualtes link predictions on all statistics.
+     *
+     * @param graphModel Model to add statistics
+     */
     public void execute(final GraphModel graphModel) {
         int i = 0;
         while (i < iterationLimit) {
@@ -22,12 +28,22 @@ public class LinkPredictionMacro extends LinkPredictionStatistics {
         }
     }
 
+    /**
+     * Add link prediction statistic class if no already exists in list.
+     *
+     * @param statistic Statistic to add
+     */
     public void addStatistic(LinkPredictionStatistics statistic) {
         if (!statistics.contains(statistic)) {
             statistics.add(statistic);
         }
     }
 
+    /**
+     * Removes statistic from list.
+     *
+     * @param statistic Statistic to remove
+     */
     public void removeStatistic(LinkPredictionStatistics statistic) {
         if (statistics.contains(statistic)) {
             statistics.remove(statistic);
@@ -51,7 +67,7 @@ public class LinkPredictionMacro extends LinkPredictionStatistics {
      * @param statistic Class of searched statistic
      * @return LinkPredictionStatistic
      */
-    public LinkPredictionStatistics getStatistic(Class statistic){
+    public LinkPredictionStatistics getStatistic(Class statistic) {
         return statistics.stream().filter(s -> s.getClass().equals(statistic.getClass())).findFirst().orElse(null);
     }
 
