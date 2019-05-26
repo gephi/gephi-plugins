@@ -8,7 +8,9 @@ import org.gephi.plugins.linkprediction.warnings.IllegalIterationNumberFormatWar
 import org.openide.util.Lookup;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.*;
+import java.util.List;
 
 /**
  * Statistics panel which will be used with {@link LinkPredictionStatistics} statistics.
@@ -53,6 +55,9 @@ public class LinkPredictionStatisticsPanel extends javax.swing.JPanel implements
         commonNeighbourWarning = new javax.swing.JLabel(" ");
         preferentialAttachmentWarning = new javax.swing.JLabel(" ");
         iterationLabel = new javax.swing.JLabel("Iterations: ");
+
+        commonNeighbourWarning.setForeground(Color.red);
+        preferentialAttachmentWarning.setForeground(Color.red);
 
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
@@ -139,7 +144,7 @@ public class LinkPredictionStatisticsPanel extends javax.swing.JPanel implements
             preferentialAttachmentWarning.setText("");
         }
 
-        LinkPredictionStatistics commonNeighbour = statistic.getStatistic(PreferentialAttachmentStatistics.class);
+        LinkPredictionStatistics commonNeighbour = statistic.getStatistic(CommonNeighboursStatistics.class);
         if (commonNeighbour != null && commonNeighbour.longRuntimeExpected(numberOfIterations, noOfNodes)) {
             consoleLogger.debug("Enable high runtime warning for common neighbours");
             commonNeighbourWarning.setText(HIGH_RUNTIME);

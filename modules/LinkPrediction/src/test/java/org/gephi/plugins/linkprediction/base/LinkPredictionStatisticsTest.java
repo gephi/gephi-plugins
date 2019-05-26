@@ -132,13 +132,13 @@ class LinkPredictionStatisticsTest {
     @org.junit.jupiter.api.Test void testlongRuntimeExpected() {
         CommonNeighboursStatistics cs = new CommonNeighboursStatistics();
 
-        int itertationLimit = 1;
+        int iterationLimit = 1;
         long nodeCount = (long) Math.ceil(Math.sqrt(LinkPredictionStatistics.RUNTIME_THRESHOLD));
-        assertFalse(cs.longRuntimeExpected(itertationLimit, nodeCount));
+        assertFalse(cs.longRuntimeExpected(iterationLimit, nodeCount));
 
-        itertationLimit = 2;
+        iterationLimit = 2;
         nodeCount = LinkPredictionStatistics.RUNTIME_THRESHOLD;
-        assertTrue(cs.longRuntimeExpected(itertationLimit, nodeCount));
+        assertTrue(cs.longRuntimeExpected(iterationLimit, nodeCount));
     }
 
 }
