@@ -30,6 +30,7 @@ public class LinkPredictionStatisticsPanel extends javax.swing.JPanel implements
     private javax.swing.JLabel commonNeighbourWarning;
     private javax.swing.JLabel preferentialAttachmentWarning;
     private javax.swing.JLabel iterationLabel;
+    private javax.swing.JLabel undirectedGraphAlogirthms;
 
     // Long runtime verification
     public static final String HIGH_RUNTIME = "High runtime value";
@@ -56,11 +57,17 @@ public class LinkPredictionStatisticsPanel extends javax.swing.JPanel implements
         preferentialAttachmentWarning = new javax.swing.JLabel(" ");
         iterationLabel = new javax.swing.JLabel("Iterations: ");
 
+        undirectedGraphAlogirthms = new javax.swing.JLabel("Undirected Graphs:");
+        Font f = undirectedGraphAlogirthms.getFont();
+        undirectedGraphAlogirthms.setFont(f.deriveFont(f.getStyle() ^ Font.BOLD));
+        undirectedGraphAlogirthms.setToolTipText("These Algorithms treat all graphs as undirected Graphs.");
+
         commonNeighbourWarning.setForeground(Color.red);
         preferentialAttachmentWarning.setForeground(Color.red);
 
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
+        add(undirectedGraphAlogirthms);
         add(commonNeighbourCheckbox);
         add(commonNeighbourWarning);
         add(preferentialAttachmentCheckbox);
