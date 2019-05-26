@@ -13,6 +13,9 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * Class to calculate link predictions based on common neighbour algorithm.
+ */
 public class CommonNeighboursStatistics extends LinkPredictionStatistics {
 
     // Console logger

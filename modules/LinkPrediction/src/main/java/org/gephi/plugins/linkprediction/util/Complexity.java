@@ -4,7 +4,6 @@ package org.gephi.plugins.linkprediction.util;
  * Big o complexitiy used to calculate runtime.
  *
  * @author Marco Romanutti
- * @see ..\base\LinkPredictionStatistics
  */
 public enum Complexity {
 

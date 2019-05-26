@@ -13,6 +13,9 @@ import java.util.List;
 
 import static org.gephi.plugins.linkprediction.statistics.PreferentialAttachmentStatisticsBuilder.PREFERENTIAL_ATTACHMENT_NAME;
 
+/**
+ * Class to calculate link predictions based on preferential attachment algorithm.
+ */
 public class PreferentialAttachmentStatistics extends LinkPredictionStatistics {
 
     // Console logger
