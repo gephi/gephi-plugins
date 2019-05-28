@@ -110,7 +110,7 @@ public class FullSmartNetwork extends Networklogic {
         }
         
         // The idea here is to bring the retweet / quote link to the original content
-        if (retweetUser != null) {
+        if (retweetUser != null && retweetUser != user) {
             if(link_kind == RETWEETS) {
                 createLink(retweetUser, user, RETWEETS_FROM,currentMillis);
                 createLink(retweetUser, tweet, RETWEETS,currentMillis);
@@ -118,7 +118,6 @@ public class FullSmartNetwork extends Networklogic {
                 createLink(retweetUser, user, QUOTES_FROM,currentMillis);
                 createLink(retweetUser, tweet, QUOTES,currentMillis);
             }
-            
         }
     }
     
