@@ -5,7 +5,6 @@ import java.awt.Color;
 import java.util.List;
 import org.gephi.graph.api.Edge;
 import org.gephi.graph.api.Node;
-import org.joda.time.LocalTime;
 import org.openide.util.lookup.ServiceProvider;
 import twitter4j.Status;
 
@@ -32,7 +31,7 @@ public class EmojiNetwork extends Networklogic {
     }
     @Override
     public void processStatus(Status status) {
-        long currentMillis = LocalTime.now().toDateTimeToday().getMillis();
+        long currentMillis = System.currentTimeMillis();
         // get the original user from the tweet
         List<String> emojis = EmojiParser.extractEmojis(status.getText());
         for(String s : emojis) {

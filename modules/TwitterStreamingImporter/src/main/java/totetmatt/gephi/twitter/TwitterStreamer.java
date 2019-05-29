@@ -17,8 +17,6 @@ import org.openide.util.lookup.ServiceProvider;
 import totetmatt.gephi.twitter.networklogic.Networklogic;
 import totetmatt.gephi.twitter.networklogic.utils.TrackLocation;
 import twitter4j.FilterQuery;
-import twitter4j.GeoLocation;
-import twitter4j.GeoQuery;
 import twitter4j.JSONException;
 import twitter4j.JSONObject;
 import twitter4j.PagableResponseList;

@@ -14,7 +14,10 @@ public enum TwitterNodeColumn {
     NODE_TWEET_PLACE_NAME("place_name",String.class),
     NODE_CREATED_AT("created_at",String.class),
     NODE_LANG("lang",String.class),
-
+    
+    NODE_POSSIBLY_SENSITIVE("possibly_sensitive",Boolean.class),
+    NODE_QUOTED_STATUS_PERMALINK("quoted_status_permalink",String.class),
+    
     NODE_USER_DESCRIPTION("description",String.class),
     NODE_USER_EMAIL("email",String.class),
     NODE_USER_PROFILE_IMAGE("profile_image",String.class),

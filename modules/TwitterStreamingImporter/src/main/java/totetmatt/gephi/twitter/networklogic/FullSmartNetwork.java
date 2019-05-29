@@ -4,7 +4,6 @@ import java.awt.Color;
 import java.util.Arrays;
 import org.gephi.graph.api.Edge;
 import org.gephi.graph.api.Node;
-import org.joda.time.LocalTime;
 import org.openide.util.lookup.ServiceProvider;
 import twitter4j.HashtagEntity;
 import twitter4j.MediaEntity;
@@ -56,7 +55,7 @@ public class FullSmartNetwork extends Networklogic {
     }
 
     public void processStatus(Status status, Node retweetUser,int link_kind) {
-        long currentMillis = LocalTime.now().toDateTimeToday().getMillis();
+        long currentMillis = System.currentTimeMillis();
         
         Node tweet = createTweet(status);
         tweet.addTimestamp(currentMillis);
@@ -64,9 +63,9 @@ public class FullSmartNetwork extends Networklogic {
         Node user = createUser(status.getUser());
         user.addTimestamp(currentMillis);
         createLink(user, tweet, TWEETS,currentMillis);
-      
+   
         // Retweet are handled later
-        if (!status.isRetweet() && status.getQuotedStatus() != null) {
+        if (!status.isRetweet()) {
             for (UserMentionEntity mention : status.getUserMentionEntities()) {
                 Node mentionNode = createUser(mention);
                 mentionNode.addTimestamp(currentMillis);
@@ -95,7 +94,7 @@ public class FullSmartNetwork extends Networklogic {
             symbolNode.addTimestamp(currentMillis);
             createLink(tweet, symbolNode, HAS_SYMBOL,currentMillis);
         }
-        
+    
         for (MediaEntity media : status.getMediaEntities()) {
             Node mediaNode = createMedia(media.getMediaURL());
             mediaNode.addTimestamp(currentMillis);
@@ -110,8 +109,8 @@ public class FullSmartNetwork extends Networklogic {
             processStatus(status.getQuotedStatus(), user,QUOTES);
         }
         
-        // We link to the original content to give more "weight"
-        if (retweetUser != null) {
+        // The idea here is to bring the retweet / quote link to the original content
+        if (retweetUser != null && retweetUser != user) {
             if(link_kind == RETWEETS) {
                 createLink(retweetUser, user, RETWEETS_FROM,currentMillis);
                 createLink(retweetUser, tweet, RETWEETS,currentMillis);
@@ -119,7 +118,6 @@ public class FullSmartNetwork extends Networklogic {
                 createLink(retweetUser, user, QUOTES_FROM,currentMillis);
                 createLink(retweetUser, tweet, QUOTES,currentMillis);
             }
-            
         }
     }
     
