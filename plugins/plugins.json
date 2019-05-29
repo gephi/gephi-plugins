@@ -15,7 +15,7 @@
         }
       ],
       "category": "Layout",
-      "last_update": "January 5, 2019",
+      "last_update": "May 29, 2019",
       "images": [
         {
           "image": "imgs/geolayout-plugin/geolayout_example.png",
@@ -41,7 +41,7 @@
         },
         "0.9.2": {
           "url": "0.9.2/geolayout-plugin-0.9.2.2.nbm",
-          "last_update": "January 5, 2019"
+          "last_update": "May 29, 2019"
         }
       },
       "sourcecode": "https://github.com/gephi/gephi-plugins/geolayout-plugin",
@@ -62,7 +62,7 @@
         }
       ],
       "category": "Tool",
-      "last_update": "January 5, 2019",
+      "last_update": "May 29, 2019",
       "images": [
         {
           "image": "imgs/linkfluence-plugin/img.png",
@@ -80,7 +80,7 @@
         },
         "0.9.2": {
           "url": "0.9.2/linkfluence-plugin-0.9.0.nbm",
-          "last_update": "January 5, 2019"
+          "last_update": "May 29, 2019"
         }
       },
       "sourcecode": "https://github.com/eduramiba/gephi-plugins/tree/linkfluence-plugin",
@@ -495,7 +495,7 @@
         }
       ],
       "category": "Export",
-      "last_update": "January 5, 2019",
+      "last_update": "May 29, 2019",
       "images": null,
       "versions": {
         "0.8.2": {
@@ -508,7 +508,7 @@
         },
         "0.9.2": {
           "url": "0.9.2/exporttoearth-1.0.0.nbm",
-          "last_update": "January 5, 2019"
+          "last_update": "May 29, 2019"
         }
       },
       "sourcecode": "http://github.com/shepdl/gephi-plugins/tree/export-to-earth",
@@ -555,7 +555,7 @@
         }
       ],
       "category": "Filter",
-      "last_update": "January 5, 2019",
+      "last_update": "May 29, 2019",
       "images": [
         {
           "image": "imgs/kbrace-filter/kbrace-img.png",
@@ -577,7 +577,7 @@
         },
         "0.9.2": {
           "url": "0.9.2/kbrace-filter-1.0.0.nbm",
-          "last_update": "January 5, 2019"
+          "last_update": "May 29, 2019"
         }
       },
       "sourcecode": "https://github.com/mbastian/gephi-plugins/tree/kbrace-filter",
@@ -1016,7 +1016,7 @@
         }
       ],
       "category": "Layout",
-      "last_update": "January 5, 2019",
+      "last_update": "May 29, 2019",
       "images": [
         {
           "image": "imgs/network-splitter-3d/example-0-networksplitter3d-layout.png",
@@ -1034,7 +1034,7 @@
         },
         "0.9.2": {
           "url": "0.9.2/network-splitter-3d-1.0.0.nbm",
-          "last_update": "January 5, 2019"
+          "last_update": "May 29, 2019"
         }
       },
       "sourcecode": "https://github.com/alexandrebarao",
@@ -1403,7 +1403,7 @@
         }
       ],
       "category": "Metric",
-      "last_update": "January 5, 2019",
+      "last_update": "May 29, 2019",
       "images": null,
       "versions": {
         "0.8.2": {
@@ -1416,7 +1416,7 @@
         },
         "0.9.2": {
           "url": "0.9.2/lineage-0.9.2.nbm",
-          "last_update": "January 5, 2019"
+          "last_update": "May 29, 2019"
         }
       },
       "sourcecode": "$sourcecode_url",
@@ -1955,7 +1955,7 @@
         }
       ],
       "category": "Tool",
-      "last_update": "January 5, 2019",
+      "last_update": "May 29, 2019",
       "images": null,
       "versions": {
         "0.8.2": {
@@ -1972,7 +1972,7 @@
         },
         "0.9.2": {
           "url": "0.9.2/multimode-1.1.0.nbm",
-          "last_update": "January 5, 2019"
+          "last_update": "May 29, 2019"
         }
       },
       "sourcecode": "https://github.com/totetmatt/gephi-plugins/tree/multimode-network",
@@ -1993,7 +1993,7 @@
         }
       ],
       "category": "Export",
-      "last_update": "January 5, 2019",
+      "last_update": "May 29, 2019",
       "images": null,
       "versions": {
         "0.8.2": {
@@ -2010,7 +2010,7 @@
         },
         "0.9.2": {
           "url": "0.9.2/jsonexporter-plugin-2.0.0.nbm",
-          "last_update": "January 5, 2019"
+          "last_update": "May 29, 2019"
         }
       },
       "sourcecode": "http://github.com/oxfordinternetinstitute/gephi-plugins",
@@ -2031,7 +2031,7 @@
         }
       ],
       "category": "Export",
-      "last_update": "January 5, 2019",
+      "last_update": "May 29, 2019",
       "images": null,
       "versions": {
         "0.8.2": {
@@ -2048,7 +2048,7 @@
         },
         "0.9.2": {
           "url": "0.9.2/sigmaexporter-0.9.0.nbm",
-          "last_update": "January 5, 2019"
+          "last_update": "May 29, 2019"
         }
       },
       "sourcecode": "http://github.com/oxfordinternetinstitute/gephi-plugins",
@@ -2069,7 +2069,7 @@
         }
       ],
       "category": "Tool",
-      "last_update": "January 5, 2019",
+      "last_update": "May 29, 2019",
       "images": null,
       "versions": {
         "0.9.0": {
@@ -2082,7 +2082,7 @@
         },
         "0.9.2": {
           "url": "0.9.2/gephi-plugin-node-color-manager-1.0.0.nbm",
-          "last_update": "January 5, 2019"
+          "last_update": "May 29, 2019"
         }
       },
       "sourcecode": "https://github.com/gephi/gephi-plugins/gephi-plugin-node-color-manager",
@@ -2103,7 +2103,7 @@
         }
       ],
       "category": "Layout",
-      "last_update": "January 5, 2019",
+      "last_update": "May 29, 2019",
       "images": [
         {
           "image": "imgs/gephigraphviz/GraphVizLayout_example.png",
@@ -2129,7 +2129,7 @@
         },
         "0.9.2": {
           "url": "0.9.2/gephigraphviz-1.0.0.nbm",
-          "last_update": "January 5, 2019"
+          "last_update": "May 29, 2019"
         }
       },
       "sourcecode": "https://github.com/chunky/gephi-plugins",
@@ -2150,7 +2150,7 @@
         }
       ],
       "category": "Import",
-      "last_update": "January 5, 2019",
+      "last_update": "May 29, 2019",
       "images": null,
       "versions": {
         "0.9.1": {
@@ -2159,7 +2159,7 @@
         },
         "0.9.2": {
           "url": "0.9.2/graphstreaming-1.0.3.zip",
-          "last_update": "January 5, 2019"
+          "last_update": "May 29, 2019"
         }
       },
       "sourcecode": "https://github.com/panisson/gephi-plugins/tree/graph-streaming",
@@ -2180,7 +2180,7 @@
         }
       ],
       "category": "Layout",
-      "last_update": "January 5, 2019",
+      "last_update": "May 29, 2019",
       "images": null,
       "versions": {
         "0.9.1": {
@@ -2189,7 +2189,7 @@
         },
         "0.9.2": {
           "url": "0.9.2/circularlayout-0.9.2.nbm",
-          "last_update": "January 5, 2019"
+          "last_update": "May 29, 2019"
         }
       },
       "sourcecode": "https://github.com/mgroeninger/gephi-plugins",
@@ -2210,7 +2210,7 @@
         }
       ],
       "category": "Import",
-      "last_update": "January 5, 2019",
+      "last_update": "May 29, 2019",
       "images": [
         {
           "image": "imgs/semantic/icon.png",
@@ -2232,7 +2232,7 @@
         },
         "0.9.2": {
           "url": "0.9.2/semantic-1.0.0.nbm",
-          "last_update": "January 5, 2019"
+          "last_update": "May 29, 2019"
         }
       },
       "sourcecode": "https://github.com/Wimmics/gephi-semantic-web-import",
@@ -2253,7 +2253,7 @@
         }
       ],
       "category": "Export",
-      "last_update": "January 5, 2019",
+      "last_update": "May 29, 2019",
       "images": [
         {
           "image": "imgs/loxawebsiteexport/logo_final.png",
@@ -2267,7 +2267,7 @@
         },
         "0.9.2": {
           "url": "0.9.2/loxawebsiteexport-0.3.2.nbm",
-          "last_update": "January 5, 2019"
+          "last_update": "May 29, 2019"
         }
       },
       "sourcecode": "https://github.com/jorgaf/gephi-plugins",
@@ -2288,7 +2288,7 @@
         }
       ],
       "category": "Tool",
-      "last_update": "January 5, 2019",
+      "last_update": "May 29, 2019",
       "images": [
         {
           "image": "imgs/scripting.plugin/img1.png",
@@ -2302,7 +2302,7 @@
         },
         "0.9.2": {
           "url": "0.9.2/scripting.plugin-0.9.2.nbm",
-          "last_update": "January 5, 2019"
+          "last_update": "May 29, 2019"
         }
       },
       "sourcecode": "https://github.com/gephi/gephi-plugins/tree/python-scripting-plugin",
@@ -2323,7 +2323,7 @@
         }
       ],
       "category": "Import",
-      "last_update": "January 5, 2019",
+      "last_update": "May 29, 2019",
       "images": [
         {
           "image": "imgs/twitter-streaming-importer/A_Screenshot.png",
@@ -2352,8 +2352,8 @@
           "last_update": "August 10, 2017"
         },
         "0.9.2": {
-          "url": "0.9.2/twitter-streaming-importer-1.3.0.nbm",
-          "last_update": "January 5, 2019"
+          "url": "0.9.2/twitter-streaming-importer-1.4.0.nbm",
+          "last_update": "May 29, 2019"
         }
       },
       "sourcecode": "https://github.com/totetmatt/gephi-plugins/tree/twitter",
@@ -2374,7 +2374,7 @@
         }
       ],
       "category": "Layout",
-      "last_update": "January 5, 2019",
+      "last_update": "May 29, 2019",
       "images": [
         {
           "image": "imgs/isometric-layout/example-0-isometric-layout.png",
@@ -2388,7 +2388,7 @@
         },
         "0.9.2": {
           "url": "0.9.2/isometric-layout-1.0.0.nbm",
-          "last_update": "January 5, 2019"
+          "last_update": "May 29, 2019"
         }
       },
       "sourcecode": "https://github.com/alexandrebarao",
@@ -2409,7 +2409,7 @@
         }
       ],
       "category": "Import",
-      "last_update": "January 5, 2019",
+      "last_update": "May 29, 2019",
       "images": [
         {
           "image": "imgs/ExcelCsvImporter/1.png",
@@ -2439,7 +2439,7 @@
         },
         "0.9.2": {
           "url": "0.9.2/ExcelCsvImporter-1.0.0.nbm",
-          "last_update": "January 5, 2019"
+          "last_update": "May 29, 2019"
         }
       },
       "sourcecode": "https://github.com/seinecle/gephi-plugins/tree/ExcelCsvImporter",
@@ -2460,7 +2460,7 @@
         }
       ],
       "category": "Import",
-      "last_update": "January 5, 2019",
+      "last_update": "May 29, 2019",
       "images": null,
       "versions": {
         "0.9.1": {
@@ -2469,7 +2469,7 @@
         },
         "0.9.2": {
           "url": "0.9.2/oracle-driver-0.0.1.nbm",
-          "last_update": "January 5, 2019"
+          "last_update": "May 29, 2019"
         }
       },
       "sourcecode": "https://github.com/sturton/gephi-plugins",
@@ -2490,7 +2490,7 @@
         }
       ],
       "category": "Layout",
-      "last_update": "January 5, 2019",
+      "last_update": "May 29, 2019",
       "images": [
         {
           "image": "imgs/eventgraphlayout/img.png",
@@ -2504,7 +2504,7 @@
         },
         "0.9.2": {
           "url": "0.9.2/eventgraphlayout-1.0.0.nbm",
-          "last_update": "January 5, 2019"
+          "last_update": "May 29, 2019"
         }
       },
       "sourcecode": "https://github.com/WouterSpekkink/gephi-plugins/tree/eventgraphlayout",
@@ -2525,7 +2525,7 @@
         }
       ],
       "category": "Layout",
-      "last_update": "January 5, 2019",
+      "last_update": "May 29, 2019",
       "images": null,
       "versions": {
         "0.9.1": {
@@ -2534,7 +2534,7 @@
         },
         "0.9.2": {
           "url": "0.9.2/mdslayout-0.9.2.nbm",
-          "last_update": "January 5, 2019"
+          "last_update": "May 29, 2019"
         }
       },
       "sourcecode": "https://github.com/WouterSpekkink/gephi-plugins/tree/mdslayout",
@@ -2555,7 +2555,7 @@
         }
       ],
       "category": "Filter",
-      "last_update": "January 5, 2019",
+      "last_update": "May 29, 2019",
       "images": null,
       "versions": {
         "0.9.1": {
@@ -2564,7 +2564,7 @@
         },
         "0.9.2": {
           "url": "0.9.2/graphfilter-1.0.0.nbm",
-          "last_update": "January 5, 2019"
+          "last_update": "May 29, 2019"
         }
       },
       "sourcecode": "https://github.com/ypanagis/gephi-plugins",
@@ -2585,7 +2585,7 @@
         }
       ],
       "category": "Tool",
-      "last_update": "January 5, 2019",
+      "last_update": "May 29, 2019",
       "images": [
         {
           "image": "imgs/givecolortonodes/1.illustration.png",
@@ -2607,7 +2607,7 @@
         },
         "0.9.2": {
           "url": "0.9.2/givecolortonodes-1.0.0.nbm",
-          "last_update": "January 5, 2019"
+          "last_update": "May 29, 2019"
         }
       },
       "sourcecode": "https://github.com/seinecle/gephi-plugins/tree/GiveColorsToNodes",
@@ -2628,7 +2628,7 @@
         }
       ],
       "category": "Tool",
-      "last_update": "January 5, 2019",
+      "last_update": "May 29, 2019",
       "images": [
         {
           "image": "imgs/givecolortoedges/colourwheel.png",
@@ -2642,7 +2642,7 @@
         },
         "0.9.2": {
           "url": "0.9.2/givecolortoedges-1.0.0.nbm",
-          "last_update": "January 5, 2019"
+          "last_update": "May 29, 2019"
         }
       },
       "sourcecode": "https://github.com/seinecle/gephi-plugins/tree/GiveColorsToEdges",
@@ -2663,7 +2663,7 @@
         }
       ],
       "category": "Layout",
-      "last_update": "January 5, 2019",
+      "last_update": "May 29, 2019",
       "images": [
         {
           "image": "imgs/gravity-plugin/FA2snake.png",
@@ -2685,7 +2685,7 @@
         },
         "0.9.2": {
           "url": "0.9.2/gravity-plugin-1.0.0.nbm",
-          "last_update": "January 5, 2019"
+          "last_update": "May 29, 2019"
         }
       },
       "sourcecode": "https://github.com/suryanash/gephi-plugins",
@@ -2706,7 +2706,7 @@
         }
       ],
       "category": "Metric",
-      "last_update": "January 5, 2019",
+      "last_update": "May 29, 2019",
       "images": [
         {
           "image": "imgs/mdsmetric/img.png",
@@ -2720,7 +2720,7 @@
         },
         "0.9.2": {
           "url": "0.9.2/mdsmetric-0.9.2.nbm",
-          "last_update": "January 5, 2019"
+          "last_update": "May 29, 2019"
         }
       },
       "sourcecode": "https://github.com/WouterSpekkink/gephi-plugins/tree/mds_metric",
@@ -2741,7 +2741,7 @@
         }
       ],
       "category": "Metric",
-      "last_update": "January 5, 2019",
+      "last_update": "May 29, 2019",
       "images": null,
       "versions": {
         "0.9.1": {
@@ -2750,7 +2750,7 @@
         },
         "0.9.2": {
           "url": "0.9.2/vector-calculator-0.5.0.nbm",
-          "last_update": "January 5, 2019"
+          "last_update": "May 29, 2019"
         }
       },
       "sourcecode": "https://github.com/d99joper/gephi-plugins/tree/master/modules/VectorCalculator/",
@@ -2771,7 +2771,7 @@
         }
       ],
       "category": "Metric",
-      "last_update": "January 5, 2019",
+      "last_update": "May 29, 2019",
       "images": null,
       "versions": {
         "0.9.1": {
@@ -2780,7 +2780,7 @@
         },
         "0.9.2": {
           "url": "0.9.2/prestige-plugin-1.0.0.nbm",
-          "last_update": "January 5, 2019"
+          "last_update": "May 29, 2019"
         }
       },
       "sourcecode": "https://github.com/michihenninger/prestige-gephi-plugin/tree/prestige-plugin",
@@ -2801,7 +2801,7 @@
         }
       ],
       "category": "Generator",
-      "last_update": "January 5, 2019",
+      "last_update": "May 29, 2019",
       "images": null,
       "versions": {
         "0.9.1": {
@@ -2810,7 +2810,7 @@
         },
         "0.9.2": {
           "url": "0.9.2/httpgraph-1.0.8.nbm",
-          "last_update": "January 5, 2019"
+          "last_update": "May 29, 2019"
         }
       },
       "sourcecode": "http://github.com/phreakocious/gephi-plugins",
@@ -2831,7 +2831,7 @@
         }
       ],
       "category": "Other Category",
-      "last_update": "January 5, 2019",
+      "last_update": "May 29, 2019",
       "images": [
         {
           "image": "imgs/spanning-tree-plugin/after-running-minimum-spanning-tree.png",
@@ -2853,7 +2853,7 @@
         },
         "0.9.2": {
           "url": "0.9.2/spanning-tree-plugin-1.0.0.nbm",
-          "last_update": "January 5, 2019"
+          "last_update": "May 29, 2019"
         }
       },
       "sourcecode": "https://github.com/carlschroedl/gephi-plugins",
@@ -2874,7 +2874,7 @@
         }
       ],
       "category": "Import",
-      "last_update": "January 5, 2019",
+      "last_update": "May 29, 2019",
       "images": [
         {
           "image": "imgs/SimilarityComputer/no-weights.png",
@@ -2892,7 +2892,7 @@
         },
         "0.9.2": {
           "url": "0.9.2/SimilarityComputer-1.1.3.nbm",
-          "last_update": "January 5, 2019"
+          "last_update": "May 29, 2019"
         }
       },
       "sourcecode": "https://github.com/seinecle/gephi-plugins/tree/similaritycomputer",
@@ -2913,7 +2913,7 @@
         }
       ],
       "category": "Layout",
-      "last_update": "January 5, 2019",
+      "last_update": "May 29, 2019",
       "images": null,
       "versions": {
         "0.9.1": {
@@ -2922,7 +2922,7 @@
         },
         "0.9.2": {
           "url": "0.9.2/mapofcountries-1.5.1.nbm",
-          "last_update": "January 5, 2019"
+          "last_update": "May 29, 2019"
         }
       },
       "sourcecode": "https://github.com/seinecle/gephi-plugins/tree/mapOfCountriesBranch",
@@ -2943,7 +2943,7 @@
         }
       ],
       "category": "Import",
-      "last_update": "January 5, 2019",
+      "last_update": "May 29, 2019",
       "images": null,
       "versions": {
         "0.9.1": {
@@ -2952,7 +2952,7 @@
         },
         "0.9.2": {
           "url": "0.9.2/agensgraph-plugin-1.0.0.nbm",
-          "last_update": "January 5, 2019"
+          "last_update": "May 29, 2019"
         }
       },
       "sourcecode": "https://github.com/bitnine-oss/gephi-plugins/tree/agensgraph-plugin",
@@ -2973,7 +2973,7 @@
         }
       ],
       "category": "Layout",
-      "last_update": "January 5, 2019",
+      "last_update": "May 29, 2019",
       "images": null,
       "versions": {
         "0.9.1": {
@@ -2982,7 +2982,7 @@
         },
         "0.9.2": {
           "url": "0.9.2/polygon-shaped-nodes-1.0.0.nbm",
-          "last_update": "January 5, 2019"
+          "last_update": "May 29, 2019"
         }
       },
       "sourcecode": "http://github.com/iachan/gephi-plugins",
@@ -3003,7 +3003,7 @@
         }
       ],
       "category": "Layout",
-      "last_update": "January 5, 2019",
+      "last_update": "May 29, 2019",
       "images": null,
       "versions": {
         "0.9.1": {
@@ -3012,7 +3012,7 @@
         },
         "0.9.2": {
           "url": "0.9.2/scale-plugin-1.1.0.nbm",
-          "last_update": "January 5, 2019"
+          "last_update": "May 29, 2019"
         }
       },
       "sourcecode": "https://github.com/weihs/gephi-plugins",
@@ -3033,7 +3033,7 @@
         }
       ],
       "category": "Layout",
-      "last_update": "January 5, 2019",
+      "last_update": "May 29, 2019",
       "images": null,
       "versions": {
         "0.9.1": {
@@ -3042,7 +3042,7 @@
         },
         "0.9.2": {
           "url": "0.9.2/circle-pack-1.0.0.nbm",
-          "last_update": "January 5, 2019"
+          "last_update": "May 29, 2019"
         }
       },
       "sourcecode": "https://github.com/sasakiassociates/gephi-plugins/tree/circlePack",
@@ -3063,12 +3063,12 @@
         }
       ],
       "category": "Export",
-      "last_update": "January 5, 2019",
+      "last_update": "May 29, 2019",
       "images": null,
       "versions": {
         "0.9.2": {
           "url": "0.9.2/shpexporter-1.1.0.nbm",
-          "last_update": "January 5, 2019"
+          "last_update": "May 29, 2019"
         }
       },
       "sourcecode": "https://github.com/gephi/gephi-plugins/shpexporter",
@@ -3089,12 +3089,12 @@
         }
       ],
       "category": "Clustering",
-      "last_update": "January 5, 2019",
+      "last_update": "May 29, 2019",
       "images": null,
       "versions": {
         "0.9.2": {
           "url": "0.9.2/newman-girvan-plugin-1.0.0.nbm",
-          "last_update": "January 5, 2019"
+          "last_update": "May 29, 2019"
         }
       },
       "sourcecode": "https://github.com/jSh4rk/gephi-plugins",
@@ -3115,12 +3115,12 @@
         }
       ],
       "category": "Preview",
-      "last_update": "January 5, 2019",
+      "last_update": "May 29, 2019",
       "images": null,
       "versions": {
         "0.9.2": {
           "url": "0.9.2/imagepreview-1.0.0.nbm",
-          "last_update": "January 5, 2019"
+          "last_update": "May 29, 2019"
         }
       },
       "sourcecode": "https://github.com/totetmatt/gephi-plugins/tree/image-preview",
@@ -3141,12 +3141,12 @@
         }
       ],
       "category": "Export",
-      "last_update": "January 5, 2019",
+      "last_update": "May 29, 2019",
       "images": null,
       "versions": {
         "0.9.2": {
           "url": "0.9.2/polinodeexporter-0.9.2.nbm",
-          "last_update": "January 5, 2019"
+          "last_update": "May 29, 2019"
         }
       },
       "sourcecode": "http://github.com/Polinode/gephi-plugins",
@@ -3167,12 +3167,12 @@
         }
       ],
       "category": "Clustering",
-      "last_update": "January 5, 2019",
+      "last_update": "May 29, 2019",
       "images": null,
       "versions": {
         "0.9.2": {
           "url": "0.9.2/leiden-algorithm-gephi-plugin-1.0.0.nbm",
-          "last_update": "January 5, 2019"
+          "last_update": "May 29, 2019"
         }
       },
       "sourcecode": "http://github.com/vtraag/gephi-leiden-plugin",
@@ -3193,12 +3193,12 @@
         }
       ],
       "category": "Metric",
-      "last_update": "January 5, 2019",
+      "last_update": "May 29, 2019",
       "images": null,
       "versions": {
         "0.9.2": {
           "url": "0.9.2/bridge-gephi-plugin-1.0.1.nbm",
-          "last_update": "January 5, 2019"
+          "last_update": "May 29, 2019"
         }
       },
       "sourcecode": "https://github.com/santosardr/gephi-plugins",
@@ -3219,12 +3219,12 @@
         }
       ],
       "category": "Metric",
-      "last_update": "January 5, 2019",
+      "last_update": "May 29, 2019",
       "images": null,
       "versions": {
         "0.9.2": {
           "url": "0.9.2/boundingdiametersssuite-0.0.1.zip",
-          "last_update": "January 5, 2019"
+          "last_update": "May 29, 2019"
         }
       },
       "sourcecode": "http://github.com/alexiooo/gephi-plugins",
@@ -3245,12 +3245,12 @@
         }
       ],
       "category": "Tool",
-      "last_update": "January 5, 2019",
+      "last_update": "May 29, 2019",
       "images": null,
       "versions": {
         "0.9.2": {
           "url": "0.9.2/dbscan-gephi-plugin-1.0.0.nbm",
-          "last_update": "January 5, 2019"
+          "last_update": "May 29, 2019"
         }
       },
       "sourcecode": "https://github.com/jaknowakowski/gephi-plugins",
@@ -3271,12 +3271,12 @@
         }
       ],
       "category": "Metric",
-      "last_update": "January 5, 2019",
+      "last_update": "May 29, 2019",
       "images": null,
       "versions": {
         "0.9.2": {
           "url": "0.9.2/clustering-coefficient-gephi-plugin-1.0.0.nbm",
-          "last_update": "January 5, 2019"
+          "last_update": "May 29, 2019"
         }
       },
       "sourcecode": "https://github.com/kuchara02/gephi-plugins",
@@ -3297,12 +3297,12 @@
         }
       ],
       "category": "Generator",
-      "last_update": "January 5, 2019",
+      "last_update": "May 29, 2019",
       "images": null,
       "versions": {
         "0.9.2": {
           "url": "0.9.2/kleinberg-generator-1.0.0.nbm",
-          "last_update": "January 5, 2019"
+          "last_update": "May 29, 2019"
         }
       },
       "sourcecode": "https://github.com/Rzepin/gephi-plugins",
@@ -3323,12 +3323,12 @@
         }
       ],
       "category": "Data Laboratory",
-      "last_update": "January 5, 2019",
+      "last_update": "May 29, 2019",
       "images": null,
       "versions": {
         "0.9.2": {
           "url": "0.9.2/column-calculator-1.0.1.nbm",
-          "last_update": "January 5, 2019"
+          "last_update": "May 29, 2019"
         }
       },
       "sourcecode": "https://github.com/oscarfont/gephi-plugins/tree/gh-column-calculator-plugin",
@@ -3349,12 +3349,12 @@
         }
       ],
       "category": "Tool",
-      "last_update": "January 5, 2019",
+      "last_update": "May 29, 2019",
       "images": null,
       "versions": {
         "0.9.2": {
           "url": "0.9.2/group-partition-gephi-plugin-1.0.0.nbm",
-          "last_update": "January 5, 2019"
+          "last_update": "May 29, 2019"
         }
       },
       "sourcecode": "https://github.com/sergipuig/gephi-plugins",
