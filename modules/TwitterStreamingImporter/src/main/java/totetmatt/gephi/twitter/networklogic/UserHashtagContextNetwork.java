@@ -30,7 +30,9 @@ public class UserHashtagContextNetwork extends Networklogic {
     @Override
     public void refreshGraphModel(){
         super.refreshGraphModel();
-        graphModel.getEdgeTable().addColumn(EDGE_HASHTAG.label, EDGE_HASHTAG.classType, Origin.DATA);
+        if(graphModel.getEdgeTable().getColumn(EDGE_HASHTAG.label) == null) {
+            graphModel.getEdgeTable().addColumn(EDGE_HASHTAG.label, EDGE_HASHTAG.classType, Origin.DATA);
+        }
         
     }
     private int getOrCreateType(String hashtag) {
