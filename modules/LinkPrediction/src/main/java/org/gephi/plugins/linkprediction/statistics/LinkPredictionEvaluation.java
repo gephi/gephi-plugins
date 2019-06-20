@@ -39,6 +39,7 @@ public class LinkPredictionEvaluation extends LinkPredictionStatistics {
         Graph train = graphModel.getUndirectedGraph();
         Graph test = loadTestGraph(file);
         int i = 0;
+        // TODO Verify if statistics should also be calculated over this UI or if link prediction have to be run via link prediction macro in advance
         while (i < iterationLimit) {
             evaluations.keySet().stream().forEach(statistic -> {
                 statistic.execute(graphModel);
