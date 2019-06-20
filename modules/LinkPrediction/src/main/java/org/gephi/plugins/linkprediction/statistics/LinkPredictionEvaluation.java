@@ -1,9 +1,19 @@
 package org.gephi.plugins.linkprediction.statistics;
 
+import org.gephi.graph.api.Graph;
+import org.gephi.graph.api.GraphController;
 import org.gephi.graph.api.GraphModel;
+import org.gephi.io.importer.api.Container;
+import org.gephi.io.importer.api.EdgeDirectionDefault;
+import org.gephi.io.importer.api.ImportController;
+import org.gephi.io.processor.plugin.DefaultProcessor;
 import org.gephi.plugins.linkprediction.base.EvaluationMetric;
 import org.gephi.plugins.linkprediction.base.LinkPredictionStatistics;
+import org.gephi.project.api.ProjectController;
+import org.gephi.project.api.Workspace;
+import org.openide.util.Lookup;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -13,6 +23,9 @@ import java.util.Map;
 public class LinkPredictionEvaluation extends LinkPredictionStatistics {
     // Number of edge prediction iterations
     private int iterationLimit = ITERATION_LIMIT_DEFAULT;
+    // Test graph
+    // TODO Add UI element to set path to file
+    private String file = "sna_test.gexf";
     // List of link prediction evaluations
     private Map<LinkPredictionStatistics, EvaluationMetric> evaluations = new HashMap<>();
 
@@ -22,11 +35,14 @@ public class LinkPredictionEvaluation extends LinkPredictionStatistics {
      * @param graphModel Model to add evaluations
      */
     public void execute(final GraphModel graphModel) {
+
+        Graph train = graphModel.getUndirectedGraph();
+        Graph test = loadTestGraph(file);
         int i = 0;
         while (i < iterationLimit) {
             evaluations.keySet().stream().forEach(statistic -> {
                 statistic.execute(graphModel);
-                evaluations.get(statistic).calculate(graphModel, statistic);});
+                evaluations.get(statistic).run(train, test, statistic);});
             i++;
         }
     }
@@ -38,12 +54,7 @@ public class LinkPredictionEvaluation extends LinkPredictionStatistics {
      */
     public void addStatistic(LinkPredictionStatistics statistic) {
         if (!evaluations.keySet().contains(statistic)) {
-            evaluations.put(statistic, new EvaluationMetric() {
-                @Override public double calculate(GraphModel graphModel, LinkPredictionStatistics statistics) {
-                    return 0;
-                }
-            });
-            // TODO: Create implementation for accuarcy and use object of it instead
+            evaluations.put(statistic, new LinkPredictionAccuracy());
         }
     }
 
@@ -81,5 +92,43 @@ public class LinkPredictionEvaluation extends LinkPredictionStatistics {
 
     public void setEvaluation(Map<LinkPredictionStatistics, EvaluationMetric> evaluations) {
         this.evaluations.putAll(evaluations);
+    }
+
+    /**
+     * Loads test graph from file into new workspace
+     *
+     * @param filename Relative path and filename
+     * @return graph
+     */
+    public Graph loadTestGraph(String filename) {
+        // Create new workspace
+        ProjectController pc = Lookup.getDefault().lookup(ProjectController.class);
+        pc.newProject();
+        Workspace workspace = pc.newWorkspace(pc.getCurrentProject());
+
+        //Get controllers and models
+        ImportController importController = Lookup.getDefault().lookup(ImportController.class);
+
+        //Import file
+        Container container;
+        try {
+            File file = new File(getClass().getResource(filename).toURI());
+            container = importController.importFile(file);
+            container.getLoader().setEdgeDefault(EdgeDirectionDefault.UNDIRECTED);   //Force UNDIRECTED
+            container.getLoader().setAllowAutoNode(false);  //Don't create missing nodes
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            // TODO Warning popup instead
+            return Lookup.getDefault().lookup(Graph.class);
+        }
+
+        //Append imported data to GraphAPI
+        importController.process(container, new DefaultProcessor(), workspace);
+
+        // Get graph
+        Graph test = Lookup.getDefault().lookup(GraphController.class).getGraphModel(workspace).getUndirectedGraph();
+
+        return test;
+
     }
 }
