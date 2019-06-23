@@ -10,6 +10,10 @@ import org.gephi.plugins.linkprediction.base.LinkPredictionStatistics;
 // TODO Add link
 public class LinkPredictionAccuracy extends EvaluationMetric {
 
+    public LinkPredictionAccuracy(LinkPredictionStatistics statistic, Graph train, Graph test) {
+        super(statistic, train, test);
+    }
+
     @Override public double calculate(Graph train, Graph test, LinkPredictionStatistics statistics) {
         return 0;
     }

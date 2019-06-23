@@ -1,17 +1,14 @@
-package org.gephi.plugins.linkprediction.workspacetest;
+package org.gephi.plugins.linkprediction.evaluation;
 
 import org.gephi.project.api.ProjectController;
 import org.gephi.project.api.Workspace;
 import org.gephi.project.api.WorkspaceInformation;
 import org.gephi.project.api.WorkspaceProvider;
-import org.gephi.workspace.impl.WorkspaceImpl;
 import org.openide.util.Lookup;
 
 import javax.swing.*;
-import java.awt.*;
 
-
-public class WorkspacePanel extends javax.swing.JPanel {
+public class LinkPredictionEvaluationPanel extends javax.swing.JPanel {
 
     // UI elements
     private javax.swing.JComboBox workspaces;
@@ -19,7 +16,7 @@ public class WorkspacePanel extends javax.swing.JPanel {
     private Workspace[] allWS;
 
 
-    public WorkspacePanel() {
+    public LinkPredictionEvaluationPanel() {
 
         allWS = Lookup.getDefault().lookup(ProjectController.class).getCurrentProject()
                 .getLookup().lookup(WorkspaceProvider.class).getWorkspaces();

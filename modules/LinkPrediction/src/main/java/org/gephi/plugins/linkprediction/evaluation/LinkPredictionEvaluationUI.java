@@ -1,4 +1,4 @@
-package org.gephi.plugins.linkprediction.workspacetest;
+package org.gephi.plugins.linkprediction.evaluation;
 
 import org.gephi.statistics.spi.Statistics;
 import org.gephi.statistics.spi.StatisticsUI;
@@ -6,32 +6,39 @@ import org.openide.util.lookup.ServiceProvider;
 
 import javax.swing.*;
 
+/**
+ * UI used for {@link LinkPredictionEvaluation} evaluation.
+ * <p>
+ *
+ * @author Marco Romanutti
+ * @see LinkPredictionEvaluation
+ */
 @ServiceProvider(service = StatisticsUI.class)
-public class WorkspaceUI implements StatisticsUI {
+public class LinkPredictionEvaluationUI implements StatisticsUI {
 
-    private WorkspaceStatistics statistic;
-    private WorkspacePanel panel;
+    private LinkPredictionEvaluation evaluation;
+    private LinkPredictionEvaluationPanel panel;
 
     @Override
     public JPanel getSettingsPanel() {
-        panel = new WorkspacePanel();
+        panel = new LinkPredictionEvaluationPanel();
         return panel;
     }
 
     @Override
-    public void setup(Statistics ststcs) {
-        this.statistic = (WorkspaceStatistics) ststcs;
+    public void setup(Statistics evaluation) {
+        this.evaluation = (LinkPredictionEvaluation) evaluation;
     }
 
     @Override
     public void unsetup() {
         this.panel = null;
-        this.statistic = null;
+        this.evaluation = null;
     }
 
     @Override
     public Class<? extends Statistics> getStatisticsClass() {
-        return WorkspaceStatistics.class;
+        return LinkPredictionEvaluation.class;
     }
 
     @Override
@@ -41,7 +48,7 @@ public class WorkspaceUI implements StatisticsUI {
 
     @Override
     public String getDisplayName() {
-        return "Workspace Overview";
+        return "Link Prediction Evaluation";
     }
 
     @Override
@@ -60,3 +67,4 @@ public class WorkspaceUI implements StatisticsUI {
     }
 
 }
+

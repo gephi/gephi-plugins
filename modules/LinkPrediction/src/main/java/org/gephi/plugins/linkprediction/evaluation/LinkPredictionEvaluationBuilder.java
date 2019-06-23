@@ -1,4 +1,4 @@
-package org.gephi.plugins.linkprediction.statistics;
+package org.gephi.plugins.linkprediction.evaluation;
 
 import org.gephi.plugins.linkprediction.base.LinkPredictionStatistics;
 import org.gephi.plugins.linkprediction.base.LinkPredictionStatisticsBuilder;
@@ -32,6 +32,6 @@ import org.openide.util.lookup.ServiceProvider;
     }
 
     @Override public Statistics getStatistics() {
-        return new LinkPredictionMacro();
+        return new LinkPredictionEvaluation();
     }
 }
