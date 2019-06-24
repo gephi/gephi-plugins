@@ -26,7 +26,16 @@ public class LinkPredictionEvaluation implements Statistics {
     }
 
     @Override public String getReport() {
-        return null;
+        //This is the HTML report shown when execution ends.
+        //One could add a distribution histogram for instance
+        String html = "<HTML> <BODY> <h1>Evaluation of different prediction algorithms</h1> " + "<hr>";
+
+        for(EvaluationMetric e : evaluations) {
+            html += "<br> Accuracy: " + String.valueOf(e.getResult()) + "<br />";
+        }
+
+         html += "</BODY></HTML>";
+        return html ;
     }
 
     public List<EvaluationMetric> getEvaluations() {
