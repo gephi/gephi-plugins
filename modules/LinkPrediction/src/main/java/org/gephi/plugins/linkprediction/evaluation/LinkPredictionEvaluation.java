@@ -45,4 +45,8 @@ public class LinkPredictionEvaluation implements Statistics {
     public void addEvaluation(EvaluationMetric evaluation) {
         if (!evaluations.contains(evaluation)) evaluations.add(evaluation);
     }
+
+    public void removeEvaluation(EvaluationMetric evaluation) {
+        if (evaluations.contains(evaluation)) evaluations.remove(evaluation);
+    }
 }

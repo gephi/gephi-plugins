@@ -15,6 +15,7 @@ public class LinkPredictionAccuracy extends EvaluationMetric {
     }
 
     @Override public double calculate(Graph train, Graph test, LinkPredictionStatistics statistics) {
+        // TODO Calculate accuracy of train and test graphs
         return 0;
     }
 }

@@ -28,6 +28,10 @@ public class LinkPredictionEvaluationUI implements StatisticsUI {
     @Override
     public void setup(Statistics evaluation) {
         this.evaluation = (LinkPredictionEvaluation) evaluation;
+        if (panel == null) {
+            panel = new LinkPredictionEvaluationPanel();
+        }
+        panel.setEvaluation((LinkPredictionEvaluation) evaluation);
     }
 
     @Override
