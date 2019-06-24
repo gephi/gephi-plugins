@@ -1,0 +1,5 @@
+Manifest-Version: 1.0
+OpenIDE-Module-Name: dbscan
+OpenIDE-Module-Short-Description: Density-based spatial clustering of applications with noise.
+OpenIDE-Module-Long-Description: DBSCAN clustering algorithm that groups points that are closely packed together.
+OpenIDE-Module-Display-Category: Tool
