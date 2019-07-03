@@ -44,8 +44,8 @@ public class LinkPredictionEvaluationPanel extends javax.swing.JPanel implements
 
 
     public LinkPredictionEvaluationPanel() {
-        trainLabel = new javax.swing.JLabel("Trained Workspace: ");
-        testLabel = new javax.swing.JLabel("Verification Workspace: ");
+        trainLabel = new javax.swing.JLabel("Initial Workspace: ");
+        testLabel = new javax.swing.JLabel("Extended Workspace: ");
         statisticsLabel = new javax.swing.JLabel("Algorithms to evaluate: ");
 
         Workspace[] allWorkspaces = Lookup.getDefault().lookup(ProjectController.class).getCurrentProject()
@@ -85,10 +85,13 @@ public class LinkPredictionEvaluationPanel extends javax.swing.JPanel implements
         String trainItem = trainWorkspace.getSelectedItem().toString();
         String testItem = testWorkspace.getSelectedItem().toString();
 
+        Workspace trainWS = workspaces.get(trainWorkspace.getSelectedItem().toString());
+        Workspace testWS = workspaces.get(testWorkspace.getSelectedItem().toString());
+
         Graph train = Lookup.getDefault().lookup(GraphController.class).getGraphModel(workspaces.get(trainItem)).getUndirectedGraph();
         Graph test = Lookup.getDefault().lookup(GraphController.class).getGraphModel(workspaces.get(testItem)).getUndirectedGraph();
 
-        LinkPredictionAccuracy cnAccuracy = new LinkPredictionAccuracy(new CommonNeighboursStatistics(), train, test);
+        LinkPredictionAccuracy cnAccuracy = new LinkPredictionAccuracy(new CommonNeighboursStatistics(), train, test, trainWS, testWS);
         if (commonNeighbourCheckbox.isSelected()) {
             consoleLogger.debug("Add common neighbour to evaluations");
             this.evaluation.addEvaluation(cnAccuracy);
@@ -97,7 +100,7 @@ public class LinkPredictionEvaluationPanel extends javax.swing.JPanel implements
             this.evaluation.removeEvaluation(cnAccuracy);
         }
 
-        LinkPredictionAccuracy paAccuracy = new LinkPredictionAccuracy(new CommonNeighboursStatistics(), train, test);
+        LinkPredictionAccuracy paAccuracy = new LinkPredictionAccuracy(new CommonNeighboursStatistics(), train, test, trainWS, testWS);
         if (preferentialAttachmentCheckbox.isSelected()) {
             consoleLogger.debug("Add preferential attachment to evaluations");
             this.evaluation.addEvaluation(paAccuracy);

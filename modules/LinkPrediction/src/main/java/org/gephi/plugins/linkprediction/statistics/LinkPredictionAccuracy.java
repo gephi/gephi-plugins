@@ -5,6 +5,7 @@ import org.gephi.graph.api.Edge;
 import org.gephi.graph.api.Graph;
 import org.gephi.plugins.linkprediction.base.EvaluationMetric;
 import org.gephi.plugins.linkprediction.base.LinkPredictionStatistics;
+import org.gephi.project.api.Workspace;
 
 import java.util.Arrays;
 import java.util.HashSet;
@@ -16,8 +17,10 @@ import java.util.Set;
 // TODO Add link
 public class LinkPredictionAccuracy extends EvaluationMetric {
 
-    public LinkPredictionAccuracy(LinkPredictionStatistics statistic, Graph train, Graph test) {
-        super(statistic, train, test);
+
+
+    public LinkPredictionAccuracy(LinkPredictionStatistics statistic, Graph train, Graph test, Workspace trainWS, Workspace testWS) {
+        super(statistic, train, test, trainWS, testWS);
     }
 
     @Override public double calculate(Graph train, Graph test, LinkPredictionStatistics statistics) {
@@ -34,8 +37,8 @@ public class LinkPredictionAccuracy extends EvaluationMetric {
         double diffCount = diff.size();
         double testCount = testEdges.size();
 
-        double accuray = diffCount / testCount;
+        double accuracy = testCount / diffCount;
 
-        return accuray;
+        return accuracy;
     }
 }
