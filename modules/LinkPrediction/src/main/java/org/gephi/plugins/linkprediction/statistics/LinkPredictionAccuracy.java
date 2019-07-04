@@ -17,28 +17,33 @@ import java.util.Set;
 // TODO Add link
 public class LinkPredictionAccuracy extends EvaluationMetric {
 
-
-
     public LinkPredictionAccuracy(LinkPredictionStatistics statistic, Graph train, Graph test, Workspace trainWS, Workspace testWS) {
         super(statistic, train, test, trainWS, testWS);
     }
 
-    @Override public double calculate(Graph train, Graph test, LinkPredictionStatistics statistics) {
-        // FIXME Sets.difference seems not to work correctly
-        // TODO Calcualte for specific algorithm (statistic instance common neigbhour/preferential attachment)
+    @Override public double calculate(Graph train, Graph test, LinkPredictionStatistics statistics, Graph newGraph, String alg) {
         // TODO Other calcucations for accuracy
         // TODO Report
+
+
         Set<Edge> trainEdges = new HashSet<>(Arrays.asList(train.getEdges().toArray()));
         Set<Edge> testEdges = new HashSet<>(Arrays.asList(test.getEdges().toArray()));
+        Set<Edge> lpEdges = new HashSet<>(Arrays.asList(newGraph.getEdges().toArray()));
+
+        lpEdges.removeIf(e -> !e.getAttribute("link_prediction_algorithm").equals(alg));
 
         // Get edges that are only in train set
-        Set<Edge> diff = Sets.difference(trainEdges, testEdges);
+        //Set<Edge> diff = Sets.difference(trainEdges, testEdges);
+        Set<Edge> diff = Sets.symmetricDifference(trainEdges, testEdges);
 
-        double diffCount = diff.size();
-        double testCount = testEdges.size();
+        double diffCountAll = diff.size();
+        lpEdges.removeIf(e -> !diff.contains(e));
 
-        double accuracy = testCount / diffCount;
+        double diffCountAccurate = lpEdges.size();
+
+        double accuracy = diffCountAccurate / diffCountAll;
 
         return accuracy;
+
     }
 }

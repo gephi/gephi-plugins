@@ -5,12 +5,17 @@ import org.gephi.plugins.linkprediction.base.EvaluationMetric;
 import org.gephi.statistics.spi.Statistics;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.*;
 
 /**
  * Macro class that triggers the evaluation calculation for all selected algorithms.
  */
 public class LinkPredictionEvaluation implements Statistics {
+
+    private HashMap<String, Double> allAccuracies = new HashMap<String, Double>();
+
     // List of link prediction evaluations
     private List<EvaluationMetric> evaluations = new ArrayList<>();
 
@@ -29,12 +34,23 @@ public class LinkPredictionEvaluation implements Statistics {
         //This is the HTML report shown when execution ends.
         //One could add a distribution histogram for instance
         String html = "<HTML> <BODY> <h1>Evaluation of different prediction algorithms</h1> " + "<hr>";
+        html += "<h2>Accuracy:</h2>";
 
         for(EvaluationMetric e : evaluations) {
-            html += "<br> Accuracy: " + String.valueOf(e.getResult()) + "<br />";
+            //html += "<br> Accuracy: " + String.valueOf(e.getResult()) + "<br />";
+            allAccuracies.put(e.getAlgorithmName(), e.getResult());
         }
 
-         html += "</BODY></HTML>";
+        HashMap<String, Double> sortedValues = sortByValue(allAccuracies);
+
+        int counter = 1;
+
+        for (Map.Entry<String, Double> elem : sortedValues.entrySet()) {
+            html += "<br>" + counter + ". " + elem.getKey() + ": " + String.valueOf(elem.getValue()) + "<br />";
+            counter++;
+        }
+
+        html += "</BODY></HTML>";
         return html ;
     }
 
@@ -57,5 +73,17 @@ public class LinkPredictionEvaluation implements Statistics {
 
     public void removeEvaluation(EvaluationMetric evaluation) {
         if (evaluations.contains(evaluation)) evaluations.remove(evaluation);
+    }
+
+    public static HashMap<String, Double> sortByValue(HashMap<String, Double> allValues)
+    {
+
+        LinkedHashMap<String, Double> allValuesSorted = new LinkedHashMap<>();
+
+        allValues.entrySet().stream()
+                .sorted(Map.Entry.comparingByValue(Comparator.reverseOrder()))
+                .forEachOrdered(x -> allValuesSorted.put(x.getKey(), x.getValue()));
+
+        return allValuesSorted;
     }
 }

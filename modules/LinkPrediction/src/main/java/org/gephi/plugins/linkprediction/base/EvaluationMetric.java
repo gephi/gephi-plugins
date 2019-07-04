@@ -9,10 +9,7 @@ import org.gephi.graph.api.GraphModel;
 import org.gephi.project.api.Project;
 import org.gephi.project.api.Workspace;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 
 import org.gephi.project.api.WorkspaceInformation;
 import org.gephi.project.spi.WorkspaceDuplicateProvider;
@@ -52,6 +49,7 @@ public abstract class EvaluationMetric {
      * Calculated result
      */
     protected double result;
+    protected String algorithmName;
 
     public EvaluationMetric(LinkPredictionStatistics statistic, Graph train, Graph test, Workspace trainWS, Workspace testWS){
         this.statistic = statistic;
@@ -71,46 +69,70 @@ public abstract class EvaluationMetric {
         Project pr = pc.getCurrentProject();
         GraphController gc = Lookup.getDefault().lookup(GraphController.class);
 
-        final Workspace ws = pc.duplicateWorkspace(trainWS);
-        pc.openWorkspace(ws);
-
-        GraphModel currentGraphModel = gc.getGraphModel(trainWS);
-        Graph graph = currentGraphModel.getGraph();
-
-        GraphModel newGraphModel = gc.getGraphModel(ws);
-        newGraphModel.bridge().copyNodes(graph.getNodes().toArray());
-
         String statName = statistic.toString();
         String wsName = null;
+        String wsNameTable = null;
+
         if (statName.contains("CommonNeighbours")) {
             wsName = "CommonNeighbours";
+            wsNameTable = "Common Neighbours";
+
         }
         else if (statName.contains("PreferentialAttachment")) {
             wsName = "PreferentialAttachment";
+            wsNameTable = "PreferentialAttachment";
         }
         else {
             wsName = "Default";
         }
-
-        pc.renameWorkspace(ws, wsName);
 
         /**
          * Determines how many edges have to be calculated and then uses the chosen algorithm
          */
         Set<Edge> trainEdges = new HashSet<>(Arrays.asList(train.getEdges().toArray()));
         Set<Edge> testEdges = new HashSet<>(Arrays.asList(test.getEdges().toArray()));
+        Workspace ws = pc.newWorkspace(pr);
 
-        Set<Edge> diff = Sets.difference(trainEdges, testEdges);
-        int diffEdgeCount = diff.size();
+        int diffEdgeCount = 0;
+
+        GraphModel currentGraphModel = gc.getGraphModel(trainWS);
+
+        if (trainEdges.size() > testEdges.size()) {
+            diffEdgeCount = trainEdges.size() - testEdges.size();
+            currentGraphModel = gc.getGraphModel(testWS);
+
+        }
+        else if (trainEdges.size() < testEdges.size()) {
+            diffEdgeCount = testEdges.size() - trainEdges.size();
+            currentGraphModel = gc.getGraphModel(trainWS);
+        }
+
+        Graph graph = currentGraphModel.getGraph();
+        GraphModel newGraphModel = gc.getGraphModel(ws);
+        newGraphModel.bridge().copyNodes(graph.getNodes().toArray());
+        pc.renameWorkspace(ws, wsName);
+        pc.openWorkspace(ws);
 
         for (int i = 0; i < diffEdgeCount; i++) {
-            statistic.execute(currentGraphModel);
+            statistic.execute(newGraphModel);
         }
+
 
         /**
          * Calculate accuracy of algorithm
          */
-        //result = calculate(newGraph, test, statistic);
+        Graph newGraph = newGraphModel.getGraph();
+        if (trainEdges.size() > testEdges.size()) {
+            result = calculate(test, train, statistic, newGraph, wsNameTable);
+
+        }
+        else if (trainEdges.size() < testEdges.size()) {
+            result = calculate(train, test, statistic, newGraph, wsNameTable);
+        }
+        else {
+            result = calculate (train, test, statistic, newGraph, wsNameTable);
+        }
+
     }
 
     /**
@@ -118,7 +140,7 @@ public abstract class EvaluationMetric {
      *
      * @return Metric value
      */
-    public abstract double calculate(Graph train, Graph test, LinkPredictionStatistics statistics);
+    public abstract double calculate(Graph train, Graph test, LinkPredictionStatistics statistics, Graph newGraph, String alg);
 
     /**
      * Get caluclated evaluation result.
@@ -127,6 +149,10 @@ public abstract class EvaluationMetric {
      */
     public double getResult() {
         return result;
+    }
+
+    public String getAlgorithmName() {
+        return algorithmName;
     }
 
     /**
