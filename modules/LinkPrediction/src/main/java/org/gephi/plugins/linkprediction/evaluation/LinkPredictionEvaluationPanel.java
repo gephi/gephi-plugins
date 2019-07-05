@@ -4,10 +4,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.gephi.graph.api.Graph;
 import org.gephi.graph.api.GraphController;
-import org.gephi.plugins.linkprediction.statistics.CommonNeighboursStatistics;
-import org.gephi.plugins.linkprediction.statistics.CommonNeighboursStatisticsBuilder;
-import org.gephi.plugins.linkprediction.statistics.LinkPredictionAccuracy;
-import org.gephi.plugins.linkprediction.statistics.PreferentialAttachmentStatisticsBuilder;
+import org.gephi.plugins.linkprediction.statistics.*;
 import org.gephi.project.api.ProjectController;
 import org.gephi.project.api.Workspace;
 import org.gephi.project.api.WorkspaceInformation;
@@ -91,6 +88,8 @@ public class LinkPredictionEvaluationPanel extends javax.swing.JPanel implements
         Graph train = Lookup.getDefault().lookup(GraphController.class).getGraphModel(workspaces.get(trainItem)).getUndirectedGraph();
         Graph test = Lookup.getDefault().lookup(GraphController.class).getGraphModel(workspaces.get(testItem)).getUndirectedGraph();
 
+        this.evaluation.resetEvaluation();
+
         LinkPredictionAccuracy cnAccuracy = new LinkPredictionAccuracy(new CommonNeighboursStatistics(), train, test, trainWS, testWS);
         if (commonNeighbourCheckbox.isSelected()) {
             consoleLogger.debug("Add common neighbour to evaluations");
@@ -100,7 +99,7 @@ public class LinkPredictionEvaluationPanel extends javax.swing.JPanel implements
             this.evaluation.removeEvaluation(cnAccuracy);
         }
 
-        LinkPredictionAccuracy paAccuracy = new LinkPredictionAccuracy(new CommonNeighboursStatistics(), train, test, trainWS, testWS);
+        LinkPredictionAccuracy paAccuracy = new LinkPredictionAccuracy(new PreferentialAttachmentStatistics(), train, test, trainWS, testWS);
         if (preferentialAttachmentCheckbox.isSelected()) {
             consoleLogger.debug("Add preferential attachment to evaluations");
             this.evaluation.addEvaluation(paAccuracy);

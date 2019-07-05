@@ -1,7 +1,5 @@
 package org.gephi.plugins.linkprediction.base;
 
-import com.google.common.collect.Sets;
-import com.sun.corba.se.spi.orbutil.threadpool.Work;
 import org.gephi.graph.api.Edge;
 import org.gephi.graph.api.Graph;
 import org.gephi.graph.api.GraphController;
@@ -10,13 +8,8 @@ import org.gephi.project.api.Project;
 import org.gephi.project.api.Workspace;
 
 import java.util.*;
-
-import org.gephi.project.api.WorkspaceInformation;
-import org.gephi.project.spi.WorkspaceDuplicateProvider;
-import org.gephi.workspace.impl.WorkspaceImpl;
 import org.openide.util.Lookup;
 import org.gephi.project.api.ProjectController;
-import org.gephi.graph.*;
 
 /**
  * Calculates the metric to evaluate the quality of a link prediction algorithm.
@@ -80,7 +73,7 @@ public abstract class EvaluationMetric {
         }
         else if (statName.contains("PreferentialAttachment")) {
             wsName = "PreferentialAttachment";
-            wsNameTable = "PreferentialAttachment";
+            wsNameTable = "Preferential Attachment";
         }
         else {
             wsName = "Default";
@@ -123,15 +116,16 @@ public abstract class EvaluationMetric {
          */
         Graph newGraph = newGraphModel.getGraph();
         if (trainEdges.size() > testEdges.size()) {
-            result = calculate(test, train, statistic, newGraph, wsNameTable);
+            result = calculate(test, train, statistic, newGraph, wsNameTable) * 100;
 
         }
         else if (trainEdges.size() < testEdges.size()) {
-            result = calculate(train, test, statistic, newGraph, wsNameTable);
+            result = calculate(train, test, statistic, newGraph, wsNameTable) * 100;
         }
         else {
-            result = calculate (train, test, statistic, newGraph, wsNameTable);
+            result = calculate (train, test, statistic, newGraph, wsNameTable) * 100;
         }
+        algorithmName = wsNameTable;
 
     }
 
@@ -155,6 +149,9 @@ public abstract class EvaluationMetric {
         return algorithmName;
     }
 
+    public LinkPredictionStatistics getStatistic() {
+        return statistic;
+    }
     /**
      * Evlauates if evaluation metric has the same underlying statistic algorithm.
      *

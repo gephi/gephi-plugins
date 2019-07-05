@@ -2,6 +2,7 @@ package org.gephi.plugins.linkprediction.evaluation;
 
 import org.gephi.graph.api.GraphModel;
 import org.gephi.plugins.linkprediction.base.EvaluationMetric;
+import org.gephi.plugins.linkprediction.base.LinkPredictionStatistics;
 import org.gephi.statistics.spi.Statistics;
 
 import java.util.ArrayList;
@@ -46,7 +47,7 @@ public class LinkPredictionEvaluation implements Statistics {
         int counter = 1;
 
         for (Map.Entry<String, Double> elem : sortedValues.entrySet()) {
-            html += "<br>" + counter + ". " + elem.getKey() + ": " + String.valueOf(elem.getValue()) + "<br />";
+            html += "<br>" + counter + ". " + elem.getKey() + ": " + String.valueOf(elem.getValue()) + " %<br />";
             counter++;
         }
 
@@ -73,6 +74,10 @@ public class LinkPredictionEvaluation implements Statistics {
 
     public void removeEvaluation(EvaluationMetric evaluation) {
         if (evaluations.contains(evaluation)) evaluations.remove(evaluation);
+    }
+
+    public void resetEvaluation() {
+        evaluations.clear();
     }
 
     public static HashMap<String, Double> sortByValue(HashMap<String, Double> allValues)
