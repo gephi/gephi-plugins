@@ -1,7 +1,6 @@
 # Link Prediction
-[![Build Status](https://travis-ci.com/romanutti/gephi-plugins.svg?branch=master)](https://travis-ci.com/romanutti/gephi-plugins)
-![GitHub Pre-Releases](https://img.shields.io/github/downloads-pre/romanutti/gephi-plugins/latest/total.svg)
-![GitHub](https://img.shields.io/github/license/romanutti/gephi-plugins.svg)
+![Travis (.com)](https://img.shields.io/travis/com/romanutti/gephi-plugins.svg?label=Build)
+[![license](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 
 Link-prediction plugin for Gephi, which allows to predict the next edges to be formed using different prediction algorithms. Edges that are added to the network based on the prediction are marked accordingly. Users can limit the number of edges predicted. The plugin contains an evaluation component, which allows to compare the quality of the different algorithms.
 
@@ -11,13 +10,39 @@ The plugin is released under the Apache 2.0 license.
 
 In Release 1.0.0 the plugin contains the following functionality:
 
-* __Statistics__: New edges can be added to an undirected graph using selected implemented prediction algorithms in the statistics tab. The number of new edges can be specified. In doing so, _n_ new edges are added to the graph iteratively. The calculation of the next predicted edge is always based on the graph of the preceding iteration step.
+* __Statistics__: New edges can be added to an undirected graph using selected [link prediction algorithms](#algorithms) in the statistics tab. The number of new edges can be specified. In doing so, _n_ new edges are added to the graph iteratively. The calculation of the next predicted edge is always based on the graph of the preceding iteration step.
 * __Filter__: The added edges can be displayed by means of filters. On the one hand, the corresponding algorithm is specified as the filter criterion. On the other hand, the number of added edges can also be restricted.
+
+## Get started
+
+### Run Gephi with installed plugin
+
+If you checked out the sources via Maven you can run Gephi with your plugin pre-installed using the following command. Make sure to run `mvn package` beforehand to rebuild.
+
+       mvn org.gephi:gephi-maven-plugin:run
+
+If you downloaded the plugin distribution files (*.nbm) you can just navigate to `Tools` > `Plugins` > `Downloaded` and add the Plugin there.
+
+### Predict new edges
+
+To predict new edges, run a new link prediction using `Statistics` > `Edge Overview` > `Link Predictions`.
+The number of new edges can be specified. In doing so, n new edges are added to the graph iteratively. The calculation of the next predicted edge is always based on the graph of the preceding iteration step.
+Information to the newly added edges are visible in the following columns under `Data Laboratory` > `Edges` :
+
+* __Chosen link prediction algorithm__: Algorithm that was used to predict the edge.
+* __Added in run__: Iteration, in which the edge was added.
+* __Last link prediction value__: Calculated link prediction value.
+
+### Filter predictions
+
+The filters under `Filters` > `Link Prediction` then allow you to narrow down the corresponding edges. 
+Edges can be filtered according to the algorithms with which they were added.
+Furthermore, the number of added edges can also be restricted to the first *n* added edges.
 
 ## Algorithms
 
 Link prediction is based on an existing network and attempts to predict new edges. The most popular application is the suggestion of new friends on social networking platforms.
-To predict a new edge, different algorithms exist. The plugin allows to easily add new algorithms. Currently the algorithms *common neighbours* and *preferential attachment* are implemented. To show the functionality of the algorithms, the following example graph is used:
+To predict a new edge, different algorithms exist. The plugin allows to easily add new algorithms. Currently the algorithms [common neighbours](#common-neighbours) and [preferential attachment](#preferential-attachment) are implemented. To show the functionality of the algorithms, the following example graph is used:
 ![Example graph](src/main/resources/example_graph.jpg?raw=true "Example graph") 
 
 ### Common neighbours
@@ -50,14 +75,6 @@ Applied to the above example graph, preferential attachment would predict an edg
 
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="https://www.codecogs.com/eqnedit.php?latex=pa(A,C)&space;=&space;3&space;*&space;3&space;=&space;9" target="_blank"><img src="https://latex.codecogs.com/gif.latex?pa(A,C)&space;=&space;3&space;*&space;3&space;=&space;9" title="pa(A,C) = 3 * 3 = 9" /></a>
 
-## Get started
+## Limitations
 
-The statistics serve as a starting point with which new edges can be added to the graph.
-
-The filters then allow you to narrow down the corresponding edges.
-
-### Predict new edges
-
-
-
-### Filter predictions
+Currently only undirected, unweighted graphs are supported. 
