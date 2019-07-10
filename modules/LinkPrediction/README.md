@@ -1,4 +1,7 @@
-## Link Prediction
+# Link Prediction
+[![Build Status](https://travis-ci.com/romanutti/gephi-plugins.svg?branch=master)](https://travis-ci.com/romanutti/gephi-plugins)
+![GitHub Pre-Releases](https://img.shields.io/github/downloads-pre/romanutti/gephi-plugins/latest/total.svg)
+![GitHub](https://img.shields.io/github/license/romanutti/gephi-plugins.svg)
 
 Link-prediction plugin for Gephi, which allows to predict the next edges to be formed using different prediction algorithms. Edges that are added to the network based on the prediction are marked accordingly. Users can limit the number of edges predicted. The plugin contains an evaluation component, which allows to compare the quality of the different algorithms.
 
@@ -23,15 +26,15 @@ Common neighbours calculates for two unconnected nodes how many common neighbour
 
 The following formula represents, how the number of common neighbours of two nodes *X* and *Y* can be calculated. The call to the function *N(Node n)* returns all neighbours of a node in a set, e.g. N(A) returns all neighbour nodes of node A. 
 
-<a href="https://www.codecogs.com/eqnedit.php?latex=cn&space;(X,&space;Y)&space;=&space;|N(X)&space;\cap&space;N(Y)|" target="_blank"><img src="https://latex.codecogs.com/gif.latex?cn&space;(X,&space;Y)&space;=&space;|N(X)&space;\cap&space;N(Y)|" title="cn (X, Y) = |N(X) \cap N(Y)|" /></a>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="https://www.codecogs.com/eqnedit.php?latex=cn&space;(X,&space;Y)&space;=&space;|N(X)&space;\cap&space;N(Y)|" target="_blank"><img src="https://latex.codecogs.com/gif.latex?cn&space;(X,&space;Y)&space;=&space;|N(X)&space;\cap&space;N(Y)|" title="cn (X, Y) = |N(X) \cap N(Y)|" /></a>
 
-Applied to the above example graph, common neighbour would predict a new edge between nodes *A* and *C* and provides e.g. the following values :
+Applied to the above example graph, common neighbour would predict a new edge between nodes *A* and *C*. The following examples show some of the calculated values:
 
-<a href="https://www.codecogs.com/eqnedit.php?latex=cn(A,C)&space;=&space;|{B,&space;D}|&space;=&space;2" target="_blank"><img src="https://latex.codecogs.com/gif.latex?cn(A,C)&space;=&space;|{B,&space;D}|&space;=&space;2" title="cn(A,C) = |{B, D}| = 2" /></a>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="https://www.codecogs.com/eqnedit.php?latex=cn(A,C)&space;=&space;|{B,&space;D}|&space;=&space;2" target="_blank"><img src="https://latex.codecogs.com/gif.latex?cn(A,C)&space;=&space;|{B,&space;D}|&space;=&space;2" title="cn(A,C) = |{B, D}| = 2" /></a>
 
-<a href="https://www.codecogs.com/eqnedit.php?latex=cn(A,F)&space;=&space;|{E}|&space;=&space;1" target="_blank"><img src="https://latex.codecogs.com/gif.latex?cn(A,F)&space;=&space;|{E}|&space;=&space;1" title="cn(A,F) = |{E}| = 1" /></a>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="https://www.codecogs.com/eqnedit.php?latex=cn(A,F)&space;=&space;|{E}|&space;=&space;1" target="_blank"><img src="https://latex.codecogs.com/gif.latex?cn(A,F)&space;=&space;|{E}|&space;=&space;1" title="cn(A,F) = |{E}| = 1" /></a>
 
-<a href="https://www.codecogs.com/eqnedit.php?latex=cn(A,I)&space;=&space;|{\left&space;\{&space;\right&space;\}}|&space;=&space;0" target="_blank"><img src="https://latex.codecogs.com/gif.latex?cn(A,I)&space;=&space;|{\left&space;\{&space;\right&space;\}}|&space;=&space;0" title="cn(A,I) = |{\left \{ \right \}}| = 0" /></a>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="https://www.codecogs.com/eqnedit.php?latex=cn(A,I)&space;=&space;|{\left&space;\{&space;\right&space;\}}|&space;=&space;0" target="_blank"><img src="https://latex.codecogs.com/gif.latex?cn(A,I)&space;=&space;|{\left&space;\{&space;\right&space;\}}|&space;=&space;0" title="cn(A,I) = |{\left \{ \right \}}| = 0" /></a>
 
 ### Preferential attachment
 
@@ -39,16 +42,22 @@ The basic assumption with Preferential Attachment is that the probability that a
 
 To calculate preferential attachment the number of neighbours of both nodes are multiplied by each other. The call to the function *N(Node n)* returns again all neighbours of a node in a set, e.g. N(A) returns all neighbour nodes of node A. 
 
-<a href="https://www.codecogs.com/eqnedit.php?latex=pa&space;(X,&space;Y)&space;=&space;|N(X)|&space;*&space;|N(Y)|" target="_blank"><img src="https://latex.codecogs.com/gif.latex?pa&space;(X,&space;Y)&space;=&space;|N(X)|&space;*&space;|N(Y)|" title="pa (X, Y) = |N(X)| * |N(Y)|" /></a>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="https://www.codecogs.com/eqnedit.php?latex=pa&space;(X,&space;Y)&space;=&space;|N(X)|&space;*&space;|N(Y)|" target="_blank"><img src="https://latex.codecogs.com/gif.latex?pa&space;(X,&space;Y)&space;=&space;|N(X)|&space;*&space;|N(Y)|" title="pa (X, Y) = |N(X)| * |N(Y)|" /></a>
 
-Applied to the above example graph, preferential attachment would e.g. predict an edge between node *A* and *G*:
+Applied to the above example graph, preferential attachment would predict an edge between node *A* and *G* and calculate the following values:
 
-<a href="https://www.codecogs.com/eqnedit.php?latex=pa(A,G)&space;=&space;3&space;*&space;4&space;=&space;12" target="_blank"><img src="https://latex.codecogs.com/gif.latex?pa(A,G)&space;=&space;3&space;*&space;4&space;=&space;12" title="pa(A,G) = 3 * 4 = 12" /></a>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="https://www.codecogs.com/eqnedit.php?latex=pa(A,G)&space;=&space;3&space;*&space;4&space;=&space;12" target="_blank"><img src="https://latex.codecogs.com/gif.latex?pa(A,G)&space;=&space;3&space;*&space;4&space;=&space;12" title="pa(A,G) = 3 * 4 = 12" /></a>
 
-<a href="https://www.codecogs.com/eqnedit.php?latex=pa(A,C)&space;=&space;3&space;*&space;3&space;=&space;9" target="_blank"><img src="https://latex.codecogs.com/gif.latex?pa(A,C)&space;=&space;3&space;*&space;3&space;=&space;9" title="pa(A,C) = 3 * 3 = 9" /></a>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="https://www.codecogs.com/eqnedit.php?latex=pa(A,C)&space;=&space;3&space;*&space;3&space;=&space;9" target="_blank"><img src="https://latex.codecogs.com/gif.latex?pa(A,C)&space;=&space;3&space;*&space;3&space;=&space;9" title="pa(A,C) = 3 * 3 = 9" /></a>
 
 ## Get started
 
 The statistics serve as a starting point with which new edges can be added to the graph.
 
 The filters then allow you to narrow down the corresponding edges.
+
+### Predict new edges
+
+
+
+### Filter predictions
