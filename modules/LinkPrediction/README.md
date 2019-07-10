@@ -6,31 +6,47 @@ The plugin is released under the Apache 2.0 license.
 
 ## Features
 
-The plugin contains the following functionality:
+In Release 1.0.0 the plugin contains the following functionality:
 
-* __Statistics__ : New edges can be added to an undirected graph using selected implemented prediction algorithms in the statistics tab. The number of new edges can be specified. In doing so, _n_ new edges are added to the graph iteratively. The calculation of the next predicted edge is always based on the graph of the preceding iteration step.
-* __Filter__ : The added edges can be displayed by means of filters. On the one hand, the corresponding algorithm is specified as the filter criterion. On the other hand, the number of added edges can also be restricted.
+* __Statistics__: New edges can be added to an undirected graph using selected implemented prediction algorithms in the statistics tab. The number of new edges can be specified. In doing so, _n_ new edges are added to the graph iteratively. The calculation of the next predicted edge is always based on the graph of the preceding iteration step.
+* __Filter__: The added edges can be displayed by means of filters. On the one hand, the corresponding algorithm is specified as the filter criterion. On the other hand, the number of added edges can also be restricted.
 
 ## Algorithms
 
-
 Link prediction is based on an existing network and attempts to predict new edges. The most popular application is the suggestion of new friends on social networking platforms.
-To predict a new edge, different algorithms exist. The plugin allows to easily add new algorithms. Currently the following algorithms are implemented:
+To predict a new edge, different algorithms exist. The plugin allows to easily add new algorithms. Currently the algorithms *common neighbours* and *preferential attachment* are implemented. To show the functionality of the algorithms, the following example graph is used:
+![Example graph](src/main/resources/example_graph.jpg?raw=true "Example graph") 
 
 ### Common neighbours
 
 Common neighbours calculates for two unconnected nodes how many common neighbours exist. The higher the calculated value, the more likely a new edge will be added between the two nodes.
 
-The following formula represents, how the number of common neighbors of two nodes X and Y can be calculated
+The following formula represents, how the number of common neighbours of two nodes *X* and *Y* can be calculated. The call to the function *N(Node n)* returns all neighbours of a node in a set, e.g. N(A) returns all neighbour nodes of node A. 
 
 <a href="https://www.codecogs.com/eqnedit.php?latex=cn&space;(X,&space;Y)&space;=&space;|N(X)&space;\cap&space;N(Y)|" target="_blank"><img src="https://latex.codecogs.com/gif.latex?cn&space;(X,&space;Y)&space;=&space;|N(X)&space;\cap&space;N(Y)|" title="cn (X, Y) = |N(X) \cap N(Y)|" /></a>
+
+Applied to the above example graph, common neighbour would predict a new edge between nodes *A* and *C* and provides e.g. the following values :
+
+<a href="https://www.codecogs.com/eqnedit.php?latex=cn(A,C)&space;=&space;|{B,&space;D}|&space;=&space;2" target="_blank"><img src="https://latex.codecogs.com/gif.latex?cn(A,C)&space;=&space;|{B,&space;D}|&space;=&space;2" title="cn(A,C) = |{B, D}| = 2" /></a>
+
+<a href="https://www.codecogs.com/eqnedit.php?latex=cn(A,F)&space;=&space;|{E}|&space;=&space;1" target="_blank"><img src="https://latex.codecogs.com/gif.latex?cn(A,F)&space;=&space;|{E}|&space;=&space;1" title="cn(A,F) = |{E}| = 1" /></a>
+
+<a href="https://www.codecogs.com/eqnedit.php?latex=cn(A,I)&space;=&space;|{\left&space;\{&space;\right&space;\}}|&space;=&space;0" target="_blank"><img src="https://latex.codecogs.com/gif.latex?cn(A,I)&space;=&space;|{\left&space;\{&space;\right&space;\}}|&space;=&space;0" title="cn(A,I) = |{\left \{ \right \}}| = 0" /></a>
+
 ### Preferential attachment
 
-The basic assumption with Preferential Attachment is that the probability that a node is affected by a newly added edge, is just proportional to the number of neighbors. The more neighbours a node has, the larger the likelihood that it will be affected.
+The basic assumption with Preferential Attachment is that the probability that a node is affected by a newly added edge, is just proportional to the number of neighbours. The more neighbours a node has, the larger the likelihood that it will be affected.
 
-To calculate preferential attachment the number of neighbours of both nodes are multiplied by each other:
+To calculate preferential attachment the number of neighbours of both nodes are multiplied by each other. The call to the function *N(Node n)* returns again all neighbours of a node in a set, e.g. N(A) returns all neighbour nodes of node A. 
 
 <a href="https://www.codecogs.com/eqnedit.php?latex=pa&space;(X,&space;Y)&space;=&space;|N(X)|&space;*&space;|N(Y)|" target="_blank"><img src="https://latex.codecogs.com/gif.latex?pa&space;(X,&space;Y)&space;=&space;|N(X)|&space;*&space;|N(Y)|" title="pa (X, Y) = |N(X)| * |N(Y)|" /></a>
+
+Applied to the above example graph, preferential attachment would e.g. predict an edge between node *A* and *G*:
+
+<a href="https://www.codecogs.com/eqnedit.php?latex=pa(A,G)&space;=&space;3&space;*&space;4&space;=&space;12" target="_blank"><img src="https://latex.codecogs.com/gif.latex?pa(A,G)&space;=&space;3&space;*&space;4&space;=&space;12" title="pa(A,G) = 3 * 4 = 12" /></a>
+
+<a href="https://www.codecogs.com/eqnedit.php?latex=pa(A,C)&space;=&space;3&space;*&space;3&space;=&space;9" target="_blank"><img src="https://latex.codecogs.com/gif.latex?pa(A,C)&space;=&space;3&space;*&space;3&space;=&space;9" title="pa(A,C) = 3 * 3 = 9" /></a>
+
 ## Get started
 
 The statistics serve as a starting point with which new edges can be added to the graph.
