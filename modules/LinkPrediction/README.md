@@ -21,7 +21,7 @@ If you checked out the sources via Maven you can run Gephi with your plugin pre-
 
        mvn org.gephi:gephi-maven-plugin:run
 
-If you downloaded the plugin distribution files (*.nbm) you can just navigate to `Tools` > `Plugins` > `Downloaded` and add the Plugin there.
+If you downloaded the plugin distribution files _(*.nbm)_ you can just navigate to `Tools` > `Plugins` > `Downloaded` and add the Plugin there.
 
 ### Predict new edges
 
@@ -43,17 +43,23 @@ Furthermore, the number of added edges can also be restricted to the first *n* a
 
 Link prediction is based on an existing network and attempts to predict new edges. The most popular application is the suggestion of new friends on social networking platforms.
 To predict a new edge, different algorithms exist. The plugin allows to easily add new algorithms. Currently the algorithms [common neighbours](#common-neighbours) and [preferential attachment](#preferential-attachment) are implemented. To show the functionality of the algorithms, the following example graph is used:
-![Example graph](src/main/resources/example_graph.jpg?raw=true "Example graph") 
+![Example graph](src/main/resources/graph_example.jpg?raw=true "Example graph") 
 
 ### Common neighbours
 
 Common neighbours calculates for two unconnected nodes how many common neighbours exist. The higher the calculated value, the more likely a new edge will be added between the two nodes.
 
-The following formula represents, how the number of common neighbours of two nodes *X* and *Y* can be calculated. The call to the function *N(Node n)* returns all neighbours of a node in a set, e.g. N(A) returns all neighbour nodes of node A. 
+The following formula represents, how the number of common neighbours of two nodes <a href="https://www.codecogs.com/eqnedit.php?latex=X" target="_blank"><img src="https://latex.codecogs.com/gif.latex?X" title="X" /></a>
+and <a href="https://www.codecogs.com/eqnedit.php?latex=Y" target="_blank"><img src="https://latex.codecogs.com/gif.latex?Y" title="Y" /></a>
+can be calculated. The call to the function <a href="https://www.codecogs.com/eqnedit.php?latex=\inline&space;N(::)" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\inline&space;N(::)" title="N(::)" /></a>
+returns all neighbours of a node in a set, e.g. <a href="https://www.codecogs.com/eqnedit.php?latex=\inline&space;N(A)" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\inline&space;N(A)" title="N(A)" /></a>
+returns all neighbour nodes of node <a href="https://www.codecogs.com/eqnedit.php?latex=\inline&space;A" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\inline&space;A" title="A" /></a>. 
 
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="https://www.codecogs.com/eqnedit.php?latex=cn&space;(X,&space;Y)&space;=&space;|N(X)&space;\cap&space;N(Y)|" target="_blank"><img src="https://latex.codecogs.com/gif.latex?cn&space;(X,&space;Y)&space;=&space;|N(X)&space;\cap&space;N(Y)|" title="cn (X, Y) = |N(X) \cap N(Y)|" /></a>
 
-Applied to the above example graph, common neighbour would predict a new edge between nodes *A* and *C*. The following examples show some of the calculated values:
+Applied to the above example graph, common neighbour would predict a new edge between nodes <a href="https://www.codecogs.com/eqnedit.php?latex=\inline&space;A" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\inline&space;A" title="A" /></a>
+and <a href="https://www.codecogs.com/eqnedit.php?latex=\inline&space;C" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\inline&space;C" title="C" /></a>.
+ The following examples show some of the calculated values:
 
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="https://www.codecogs.com/eqnedit.php?latex=cn(A,C)&space;=&space;|{B,&space;D}|&space;=&space;2" target="_blank"><img src="https://latex.codecogs.com/gif.latex?cn(A,C)&space;=&space;|{B,&space;D}|&space;=&space;2" title="cn(A,C) = |{B, D}| = 2" /></a>
 
@@ -65,11 +71,15 @@ Applied to the above example graph, common neighbour would predict a new edge be
 
 The basic assumption with Preferential Attachment is that the probability that a node is affected by a newly added edge, is just proportional to the number of neighbours. The more neighbours a node has, the larger the likelihood that it will be affected.
 
-To calculate preferential attachment the number of neighbours of both nodes are multiplied by each other. The call to the function *N(Node n)* returns again all neighbours of a node in a set, e.g. N(A) returns all neighbour nodes of node A. 
+To calculate preferential attachment the number of neighbours of both nodes are multiplied by each other. The call to the function <a href="https://www.codecogs.com/eqnedit.php?latex=\inline&space;N(::)" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\inline&space;N(::)" title="N(::)" /></a>
+returns again all neighbours of a node in a set, e.g. <a href="https://www.codecogs.com/eqnedit.php?latex=\inline&space;N(A)" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\inline&space;N(A)" title="N(A)" /></a>
+returns all neighbours of node <a href="https://www.codecogs.com/eqnedit.php?latex=\inline&space;A" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\inline&space;A" title="A" /></a>. 
 
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="https://www.codecogs.com/eqnedit.php?latex=pa&space;(X,&space;Y)&space;=&space;|N(X)|&space;*&space;|N(Y)|" target="_blank"><img src="https://latex.codecogs.com/gif.latex?pa&space;(X,&space;Y)&space;=&space;|N(X)|&space;*&space;|N(Y)|" title="pa (X, Y) = |N(X)| * |N(Y)|" /></a>
 
-Applied to the above example graph, preferential attachment would predict an edge between node *A* and *G* and calculate the following values:
+Applied to the above example graph, preferential attachment would predict an edge between node <a href="https://www.codecogs.com/eqnedit.php?latex=\inline&space;A" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\inline&space;A" title="A" /></a>
+ and <a href="https://www.codecogs.com/eqnedit.php?latex=\inline&space;G" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\inline&space;G" title="G" /></a>
+  and calculate the following values:
 
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="https://www.codecogs.com/eqnedit.php?latex=pa(A,G)&space;=&space;3&space;*&space;4&space;=&space;12" target="_blank"><img src="https://latex.codecogs.com/gif.latex?pa(A,G)&space;=&space;3&space;*&space;4&space;=&space;12" title="pa(A,G) = 3 * 4 = 12" /></a>
 
