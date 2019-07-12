@@ -42,7 +42,7 @@ public class LinkPredictionEvaluationPanel extends javax.swing.JPanel implements
 
     public LinkPredictionEvaluationPanel() {
         initialLabel = new javax.swing.JLabel("Initial Workspace: ");
-        validationLabel = new javax.swing.JLabel("Extended Workspace: ");
+        validationLabel = new javax.swing.JLabel("Validation Workspace: ");
         statisticsLabel = new javax.swing.JLabel("Algorithms to evaluate: ");
 
         Workspace[] allWorkspaces = Lookup.getDefault().lookup(ProjectController.class).getCurrentProject()
