@@ -47,11 +47,15 @@
       <AppenderRef ref="console" />
     </Logger>
 
+    <Logger name = "org.gephi.plugins.linkprediction.base.EvaluationMetric" level="TRACE" additivity="false">
+      <AppenderRef ref="console" />
+    </Logger>
+
     <Logger name = "Filelogger" level="TRACE" additivity="false">
       <AppenderRef ref="file" />
     </Logger>
 
-    <Root level="off" additivity="false">
+    <Root level="DEBUG" additivity="false">
       <AppenderRef ref="file" />
     </Root>
   </Loggers>

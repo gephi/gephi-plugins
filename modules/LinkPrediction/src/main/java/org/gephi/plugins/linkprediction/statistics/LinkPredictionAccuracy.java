@@ -1,6 +1,5 @@
 package org.gephi.plugins.linkprediction.statistics;
 
-import com.google.common.collect.Sets;
 import org.gephi.graph.api.Edge;
 import org.gephi.graph.api.Graph;
 import org.gephi.plugins.linkprediction.base.EvaluationMetric;
@@ -21,7 +20,7 @@ public class LinkPredictionAccuracy extends EvaluationMetric {
         super(statistic, initial, validation, initialWS, validationWS);
     }
 
-    @Override public double calculate(Graph initial, Graph trained, Graph validation, LinkPredictionStatistics statistics) {
+    @Override public double calculate(int addedEdges, Graph trained, Graph validation, LinkPredictionStatistics statistics) {
         Set<Edge> trainedEdges = new HashSet<>(Arrays.asList(trained.getEdges().toArray()));
         Set<Edge> validationEdges = new HashSet<>(Arrays.asList(validation.getEdges().toArray()));
 
@@ -30,10 +29,8 @@ public class LinkPredictionAccuracy extends EvaluationMetric {
         trainedEdges.removeIf(e -> !e.getAttribute("link_prediction_algorithm").equals(statistics.getAlgorithmName()));
 
         // Get edges that are only in trained set
-        Set<Edge> diff = Sets.difference(trainedEdges, validationEdges);
-
-        // Get number of added edges, compared to initial graph
-        int addedEdges = validationEdges.size() - initial.getEdgeCount();
+        Set<Edge> diff = trainedEdges;
+        diff.removeIf(e -> !validation.isAdjacent(validation.getNode(e.getSource().getId()), validation.getNode(e.getTarget().getId())));
 
         double accuracy = ((double) diff.size() / (double) addedEdges) * 100;
 

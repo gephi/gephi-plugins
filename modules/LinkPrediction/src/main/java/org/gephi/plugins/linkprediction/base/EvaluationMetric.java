@@ -1,5 +1,7 @@
 package org.gephi.plugins.linkprediction.base;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.gephi.graph.api.Edge;
 import org.gephi.graph.api.Graph;
 import org.gephi.graph.api.GraphController;
@@ -53,6 +55,9 @@ public abstract class EvaluationMetric {
      */
     protected double finalResult;
 
+    // Console Logger
+    private static Logger consoleLogger = LogManager.getLogger(EvaluationMetric.class);
+
     public EvaluationMetric(LinkPredictionStatistics statistic, Graph initial, Graph validation, Workspace initialWS, Workspace validationWS){
         this.statistic = statistic;
         this.initial = initial;
@@ -66,6 +71,9 @@ public abstract class EvaluationMetric {
         /**
          * Duplicate Graph for calculation of chosen algorithm
          */
+        if (consoleLogger.isDebugEnabled()) {
+            consoleLogger.debug("Duplicate graph for link prediction");
+        }
         ProjectController pc = Lookup.getDefault().lookup(ProjectController.class);
         Project pr = pc.getCurrentProject();
         GraphController gc = Lookup.getDefault().lookup(GraphController.class);
@@ -76,6 +84,10 @@ public abstract class EvaluationMetric {
         Set<Edge> initialEdges = new HashSet<>(Arrays.asList(initial.getEdges().toArray()));
         Set<Edge> validationEdges = new HashSet<>(Arrays.asList(validation.getEdges().toArray()));
         Workspace ws = pc.newWorkspace(pr);
+        if (consoleLogger.isDebugEnabled()) {
+            consoleLogger.debug("Initial edges count: " + initialEdges.size());
+            consoleLogger.debug("Validation edges count: " + validationEdges.size());
+        }
 
         int diffEdgeCount = 0;
         GraphModel currentGraphModel = gc.getGraphModel(initialWS);
@@ -97,16 +109,29 @@ public abstract class EvaluationMetric {
 
         trained = trainedModel.getGraph();
         Set<Edge> trainedEdges = new HashSet<>(Arrays.asList(trained.getEdges().toArray()));
+        if (consoleLogger.isDebugEnabled()) {
+            consoleLogger.debug("Trained edges count: " + trainedEdges.size());
+        }
         for (int i = 0; i < diffEdgeCount; i++) {
             statistic.execute(trainedModel);
+            if (consoleLogger.isDebugEnabled()) {
+                consoleLogger.debug("Trained edges in iteration " + i + ": " + trainedEdges.size());
+                consoleLogger.debug("Validation edges in iteration " + i + ": " + validationEdges.size());
+            }
 
             // Calculate current accuracy of algorithm
             double currentResult = calculateCurrentResult(trainedEdges.size(), validationEdges.size());
             iterationResults.put(i, currentResult);
+            if (consoleLogger.isDebugEnabled()) {
+                consoleLogger.debug("Current result in iteration " + i + ": " + currentResult);
+            }
         }
 
         // Calculate final accuracy of algorithm
-        finalResult = calculateCurrentResult(trainedEdges.size(), validationEdges.size());;
+        finalResult = calculateCurrentResult(trainedEdges.size(), validationEdges.size());
+        if (consoleLogger.isDebugEnabled()) {
+            consoleLogger.debug("Final result :" + finalResult);
+        }
     }
 
     /**
@@ -118,12 +143,13 @@ public abstract class EvaluationMetric {
      */
     private double calculateCurrentResult(int trainedEdgesSize, int validationEdgesSize) {
         double currentResult;
+        int addedEdges = validationEdgesSize - trainedEdgesSize;
         if (trainedEdgesSize > validationEdgesSize) {
-            currentResult = calculate(initial, validation, trained, statistic);
+            currentResult = calculate(addedEdges, validation, trained, statistic);
         } else if (trainedEdgesSize < validationEdgesSize) {
-            currentResult = calculate(initial, trained, validation, statistic);
+            currentResult = calculate(addedEdges, trained, validation, statistic);
         } else {
-            currentResult = calculate(initial, trained, validation, statistic);
+            currentResult = calculate(addedEdges, trained, validation, statistic);
         }
         return currentResult;
     }
@@ -133,7 +159,7 @@ public abstract class EvaluationMetric {
      *
      * @return Metric value
      */
-    public abstract double calculate(Graph initial, Graph trained, Graph validation, LinkPredictionStatistics statistics);
+    public abstract double calculate(int addedEdges, Graph trained, Graph validation, LinkPredictionStatistics statistics);
 
     /**
      * Get caluclated evaluation results per iteration.
