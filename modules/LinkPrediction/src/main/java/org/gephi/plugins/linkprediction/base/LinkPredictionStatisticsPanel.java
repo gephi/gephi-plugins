@@ -32,7 +32,7 @@ public class LinkPredictionStatisticsPanel extends javax.swing.JPanel implements
     private javax.swing.JLabel iterationLabel;
     private javax.swing.JLabel undirectedGraphAlogirthms;
 
-    // Long runtime verification
+    // Long runtime validation
     public static final String HIGH_RUNTIME = "High runtime value";
     private int noOfNodes;
 

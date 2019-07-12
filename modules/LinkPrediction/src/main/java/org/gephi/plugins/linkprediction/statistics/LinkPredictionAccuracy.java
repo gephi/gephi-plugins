@@ -17,31 +17,22 @@ import java.util.Set;
 // TODO Add link
 public class LinkPredictionAccuracy extends EvaluationMetric {
 
-    public LinkPredictionAccuracy(LinkPredictionStatistics statistic, Graph train, Graph test, Workspace trainWS, Workspace testWS) {
-        super(statistic, train, test, trainWS, testWS);
+    public LinkPredictionAccuracy(LinkPredictionStatistics statistic, Graph initial, Graph validation, Workspace initialWS, Workspace validationWS) {
+        super(statistic, initial, validation, initialWS, validationWS);
     }
 
-    @Override public double calculate(Graph train, Graph test, LinkPredictionStatistics statistics, Graph newGraph, String alg) {
-        // TODO Other calcucations for accuracy
-        // TODO Report
+    @Override public double calculate(Graph trained, Graph validation, LinkPredictionStatistics statistics) {
+        Set<Edge> trainedEdges = new HashSet<>(Arrays.asList(trained.getEdges().toArray()));
+        Set<Edge> validationEdges = new HashSet<>(Arrays.asList(validation.getEdges().toArray()));
 
+        // Remove edges from other algorithms and
+        // edges that initially existed
+        trainedEdges.removeIf(e -> !e.getAttribute("link_prediction_algorithm").equals(statistics.getAlgorithmName()));
 
-        Set<Edge> trainEdges = new HashSet<>(Arrays.asList(train.getEdges().toArray()));
-        Set<Edge> testEdges = new HashSet<>(Arrays.asList(test.getEdges().toArray()));
-        Set<Edge> lpEdges = new HashSet<>(Arrays.asList(newGraph.getEdges().toArray()));
+        // Get edges that are only in trained set
+        Set<Edge> diff = Sets.symmetricDifference(trainedEdges, validationEdges);
 
-        lpEdges.removeIf(e -> !e.getAttribute("link_prediction_algorithm").equals(alg));
-
-        // Get edges that are only in train set
-        //Set<Edge> diff = Sets.difference(trainEdges, testEdges);
-        Set<Edge> diff = Sets.symmetricDifference(trainEdges, testEdges);
-
-        double diffCountAll = diff.size();
-        lpEdges.removeIf(e -> !diff.contains(e));
-
-        double diffCountAccurate = lpEdges.size();
-
-        double accuracy = diffCountAccurate / diffCountAll;
+        double accuracy = ((double) diff.size() / (double) validationEdges.size()) * 100;
 
         return accuracy;
 

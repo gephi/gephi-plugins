@@ -5,11 +5,11 @@ import org.gephi.graph.api.Graph;
 import org.gephi.graph.api.GraphController;
 import org.gephi.graph.api.GraphModel;
 import org.gephi.project.api.Project;
+import org.gephi.project.api.ProjectController;
 import org.gephi.project.api.Workspace;
+import org.openide.util.Lookup;
 
 import java.util.*;
-import org.openide.util.Lookup;
-import org.gephi.project.api.ProjectController;
 
 /**
  * Calculates the metric to evaluate the quality of a link prediction algorithm.
@@ -18,38 +18,47 @@ import org.gephi.project.api.ProjectController;
  */
 public abstract class EvaluationMetric {
     /**
-     * Train graph
+     * Initial graph
      */
-    protected final Graph train;
+    protected final Graph initial;
     /**
-     * Test graph
+     * Trained graph
+     *
      */
-    protected final Graph test;
+    protected Graph trained;
     /**
-     * Test Workspace
+     * Validation graph
+     *
      */
-    protected final Workspace testWS;
+    protected final Graph validation;
     /**
-     * Train Workspace
+     * Validation Workspace
      */
-    protected final Workspace trainWS;
+    protected final Workspace validationWS;
+    /**
+     * Initial Workspace
+     */
+    protected final Workspace initialWS;
 
     /**
      * Algorithm to evaluate
      */
     protected final LinkPredictionStatistics statistic;
     /**
-     * Calculated result
+     * Calculated results per iteration
      */
-    protected double result;
-    protected String algorithmName;
+    protected Map<Integer, Double> iterationResults = new HashMap<>();
+    /**
+     * Final results after all iterations
+     */
+    protected double finalResult;
 
-    public EvaluationMetric(LinkPredictionStatistics statistic, Graph train, Graph test, Workspace trainWS, Workspace testWS){
+    public EvaluationMetric(LinkPredictionStatistics statistic, Graph initial, Graph validation, Workspace initialWS, Workspace validationWS){
         this.statistic = statistic;
-        this.train = train;
-        this.test = test;
-        this.trainWS = trainWS;
-        this.testWS = testWS;
+        this.initial = initial;
+        this.validation = validation;
+        this.initialWS = initialWS;
+        this.validationWS = validationWS;
     }
 
     public void run() {
@@ -57,76 +66,66 @@ public abstract class EvaluationMetric {
         /**
          * Duplicate Graph for calculation of chosen algorithm
          */
-
         ProjectController pc = Lookup.getDefault().lookup(ProjectController.class);
         Project pr = pc.getCurrentProject();
         GraphController gc = Lookup.getDefault().lookup(GraphController.class);
 
-        String statName = statistic.toString();
-        String wsName = null;
-        String wsNameTable = null;
-
-        if (statName.contains("CommonNeighbours")) {
-            wsName = "CommonNeighbours";
-            wsNameTable = "Common Neighbours";
-
-        }
-        else if (statName.contains("PreferentialAttachment")) {
-            wsName = "PreferentialAttachment";
-            wsNameTable = "Preferential Attachment";
-        }
-        else {
-            wsName = "Default";
-        }
-
         /**
          * Determines how many edges have to be calculated and then uses the chosen algorithm
          */
-        Set<Edge> trainEdges = new HashSet<>(Arrays.asList(train.getEdges().toArray()));
-        Set<Edge> testEdges = new HashSet<>(Arrays.asList(test.getEdges().toArray()));
+        Set<Edge> initialEdges = new HashSet<>(Arrays.asList(initial.getEdges().toArray()));
+        Set<Edge> validationEdges = new HashSet<>(Arrays.asList(validation.getEdges().toArray()));
         Workspace ws = pc.newWorkspace(pr);
 
         int diffEdgeCount = 0;
-
-        GraphModel currentGraphModel = gc.getGraphModel(trainWS);
-
-        if (trainEdges.size() > testEdges.size()) {
-            diffEdgeCount = trainEdges.size() - testEdges.size();
-            currentGraphModel = gc.getGraphModel(testWS);
+        GraphModel currentGraphModel = gc.getGraphModel(initialWS);
+        if (initialEdges.size() > validationEdges.size()) {
+            diffEdgeCount = initialEdges.size() - validationEdges.size();
+            currentGraphModel = gc.getGraphModel(validationWS);
 
         }
-        else if (trainEdges.size() < testEdges.size()) {
-            diffEdgeCount = testEdges.size() - trainEdges.size();
-            currentGraphModel = gc.getGraphModel(trainWS);
+        else if (initialEdges.size() < validationEdges.size()) {
+            diffEdgeCount = validationEdges.size() - initialEdges.size();
+            currentGraphModel = gc.getGraphModel(initialWS);
         }
 
-        Graph graph = currentGraphModel.getGraph();
-        GraphModel newGraphModel = gc.getGraphModel(ws);
-        newGraphModel.bridge().copyNodes(graph.getNodes().toArray());
-        pc.renameWorkspace(ws, wsName);
+        Graph current = currentGraphModel.getGraph();
+        GraphModel trainedModel = gc.getGraphModel(ws);
+        trainedModel.bridge().copyNodes(current.getNodes().toArray());
+        pc.renameWorkspace(ws, getAlgorithmName());
         pc.openWorkspace(ws);
 
+        trained = trainedModel.getGraph();
+        Set<Edge> trainedEdges = new HashSet<>(Arrays.asList(trained.getEdges().toArray()));
         for (int i = 0; i < diffEdgeCount; i++) {
-            statistic.execute(newGraphModel);
+            statistic.execute(trainedModel);
+
+            // Calculate current accuracy of algorithm
+            double currentResult = calculateCurrentResult(trainedEdges.size(), validationEdges.size());
+            iterationResults.put(i, currentResult);
         }
 
+        // Calculate final accuracy of algorithm
+        finalResult = calculateCurrentResult(trainedEdges.size(), validationEdges.size());;
+    }
 
-        /**
-         * Calculate accuracy of algorithm
-         */
-        Graph newGraph = newGraphModel.getGraph();
-        if (trainEdges.size() > testEdges.size()) {
-            result = calculate(test, train, statistic, newGraph, wsNameTable) * 100;
-
+    /**
+     * Calculates the metric at current situation.
+     *
+     * @param trainedEdgesSize Number of edges of trained graph
+     * @param validationEdgesSize Number of edges of validation graph
+     * @return Metric result
+     */
+    private double calculateCurrentResult(int trainedEdgesSize, int validationEdgesSize) {
+        double currentResult;
+        if (trainedEdgesSize > validationEdgesSize) {
+            currentResult = calculate(validation, trained, statistic);
+        } else if (trainedEdgesSize < validationEdgesSize) {
+            currentResult = calculate(trained, validation, statistic);
+        } else {
+            currentResult = calculate(trained, validation, statistic);
         }
-        else if (trainEdges.size() < testEdges.size()) {
-            result = calculate(train, test, statistic, newGraph, wsNameTable) * 100;
-        }
-        else {
-            result = calculate (train, test, statistic, newGraph, wsNameTable) * 100;
-        }
-        algorithmName = wsNameTable;
-
+        return currentResult;
     }
 
     /**
@@ -134,19 +133,28 @@ public abstract class EvaluationMetric {
      *
      * @return Metric value
      */
-    public abstract double calculate(Graph train, Graph test, LinkPredictionStatistics statistics, Graph newGraph, String alg);
+    public abstract double calculate(Graph trained, Graph validation, LinkPredictionStatistics statistics);
 
     /**
-     * Get caluclated evaluation result.
+     * Get caluclated evaluation results per iteration.
      *
-     * @return Calculated metric value.
+     * @return Calculated metric values per iteration.
      */
-    public double getResult() {
-        return result;
+    public Map<Integer, Double> getIterationResults() {
+        return iterationResults;
+    }
+
+    /**
+     * Get caluclated final evaluation result.
+     *
+     * @return Calculated final metric value.
+     */
+    public double getFinalResult() {
+        return finalResult;
     }
 
     public String getAlgorithmName() {
-        return algorithmName;
+        return statistic.getAlgorithmName();
     }
 
     public LinkPredictionStatistics getStatistic() {

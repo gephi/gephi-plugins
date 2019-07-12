@@ -95,6 +95,13 @@ public abstract class LinkPredictionStatistics implements Statistics {
     }
 
     /**
+     * Gets the name of the respective algorithm.
+     *
+     * @return Algorithm name
+     */
+    public abstract String getAlgorithmName();
+
+    /**
      * Generates a report after link prediction calculation has finished.
      *
      * @return HTML report

@@ -24,11 +24,11 @@ public class LinkPredictionEvaluationPanel extends javax.swing.JPanel implements
     private LinkPredictionEvaluation evaluation;
 
     // UI elements
-    private javax.swing.JComboBox trainWorkspace;
-    private javax.swing.JComboBox testWorkspace;
+    private javax.swing.JComboBox initialWorkspace;
+    private javax.swing.JComboBox validationWorkspace;
 
-    private javax.swing.JLabel trainLabel;
-    private javax.swing.JLabel testLabel;
+    private javax.swing.JLabel initialLabel;
+    private javax.swing.JLabel validationLabel;
     private javax.swing.JLabel statisticsLabel;
 
     private javax.swing.JCheckBox commonNeighbourCheckbox;
@@ -41,20 +41,20 @@ public class LinkPredictionEvaluationPanel extends javax.swing.JPanel implements
 
 
     public LinkPredictionEvaluationPanel() {
-        trainLabel = new javax.swing.JLabel("Initial Workspace: ");
-        testLabel = new javax.swing.JLabel("Extended Workspace: ");
+        initialLabel = new javax.swing.JLabel("Initial Workspace: ");
+        validationLabel = new javax.swing.JLabel("Extended Workspace: ");
         statisticsLabel = new javax.swing.JLabel("Algorithms to evaluate: ");
 
         Workspace[] allWorkspaces = Lookup.getDefault().lookup(ProjectController.class).getCurrentProject()
                 .getLookup().lookup(WorkspaceProvider.class).getWorkspaces();
 
-        trainWorkspace = new JComboBox();
-        testWorkspace = new JComboBox();
+        initialWorkspace = new JComboBox();
+        validationWorkspace = new JComboBox();
 
         for (Workspace w : allWorkspaces) {
             String name = w.getLookup().lookup(WorkspaceInformation.class).getName();
-            trainWorkspace.addItem(name);
-            testWorkspace.addItem(name);
+            initialWorkspace.addItem(name);
+            validationWorkspace.addItem(name);
 
             workspaces.put(name, w);
         }
@@ -64,10 +64,10 @@ public class LinkPredictionEvaluationPanel extends javax.swing.JPanel implements
 
         setLayout(new GridLayout(5, 2));
 
-        add(trainLabel);
-        add(trainWorkspace);
-        add(testLabel);
-        add(testWorkspace);
+        add(initialLabel);
+        add(initialWorkspace);
+        add(validationLabel);
+        add(validationWorkspace);
         add(statisticsLabel);
         add(new JLabel()); // Empty placeholder
         add(commonNeighbourCheckbox);
@@ -79,18 +79,18 @@ public class LinkPredictionEvaluationPanel extends javax.swing.JPanel implements
     }
 
     @Override public void itemStateChanged(ItemEvent e) {
-        String trainItem = trainWorkspace.getSelectedItem().toString();
-        String testItem = testWorkspace.getSelectedItem().toString();
+        String initialItem = initialWorkspace.getSelectedItem().toString();
+        String validationItem = validationWorkspace.getSelectedItem().toString();
 
-        Workspace trainWS = workspaces.get(trainWorkspace.getSelectedItem().toString());
-        Workspace testWS = workspaces.get(testWorkspace.getSelectedItem().toString());
+        Workspace initialWS = workspaces.get(initialWorkspace.getSelectedItem().toString());
+        Workspace validationWS = workspaces.get(validationWorkspace.getSelectedItem().toString());
 
-        Graph train = Lookup.getDefault().lookup(GraphController.class).getGraphModel(workspaces.get(trainItem)).getUndirectedGraph();
-        Graph test = Lookup.getDefault().lookup(GraphController.class).getGraphModel(workspaces.get(testItem)).getUndirectedGraph();
+        Graph initial = Lookup.getDefault().lookup(GraphController.class).getGraphModel(workspaces.get(initialItem)).getUndirectedGraph();
+        Graph validation = Lookup.getDefault().lookup(GraphController.class).getGraphModel(workspaces.get(validationItem)).getUndirectedGraph();
 
         this.evaluation.resetEvaluation();
 
-        LinkPredictionAccuracy cnAccuracy = new LinkPredictionAccuracy(new CommonNeighboursStatistics(), train, test, trainWS, testWS);
+        LinkPredictionAccuracy cnAccuracy = new LinkPredictionAccuracy(new CommonNeighboursStatistics(), initial, validation, initialWS, validationWS);
         if (commonNeighbourCheckbox.isSelected()) {
             consoleLogger.debug("Add common neighbour to evaluations");
             this.evaluation.addEvaluation(cnAccuracy);
@@ -99,7 +99,7 @@ public class LinkPredictionEvaluationPanel extends javax.swing.JPanel implements
             this.evaluation.removeEvaluation(cnAccuracy);
         }
 
-        LinkPredictionAccuracy paAccuracy = new LinkPredictionAccuracy(new PreferentialAttachmentStatistics(), train, test, trainWS, testWS);
+        LinkPredictionAccuracy paAccuracy = new LinkPredictionAccuracy(new PreferentialAttachmentStatistics(), initial, validation, initialWS, validationWS);
         if (preferentialAttachmentCheckbox.isSelected()) {
             consoleLogger.debug("Add preferential attachment to evaluations");
             this.evaluation.addEvaluation(paAccuracy);
