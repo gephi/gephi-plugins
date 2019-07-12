@@ -21,7 +21,7 @@ public class LinkPredictionAccuracy extends EvaluationMetric {
         super(statistic, initial, validation, initialWS, validationWS);
     }
 
-    @Override public double calculate(Graph trained, Graph validation, LinkPredictionStatistics statistics) {
+    @Override public double calculate(Graph initial, Graph trained, Graph validation, LinkPredictionStatistics statistics) {
         Set<Edge> trainedEdges = new HashSet<>(Arrays.asList(trained.getEdges().toArray()));
         Set<Edge> validationEdges = new HashSet<>(Arrays.asList(validation.getEdges().toArray()));
 
@@ -30,9 +30,12 @@ public class LinkPredictionAccuracy extends EvaluationMetric {
         trainedEdges.removeIf(e -> !e.getAttribute("link_prediction_algorithm").equals(statistics.getAlgorithmName()));
 
         // Get edges that are only in trained set
-        Set<Edge> diff = Sets.symmetricDifference(trainedEdges, validationEdges);
+        Set<Edge> diff = Sets.difference(trainedEdges, validationEdges);
 
-        double accuracy = ((double) diff.size() / (double) validationEdges.size()) * 100;
+        // Get number of added edges, compared to initial graph
+        int addedEdges = validationEdges.size() - initial.getEdgeCount();
+
+        double accuracy = ((double) diff.size() / (double) addedEdges) * 100;
 
         return accuracy;
 

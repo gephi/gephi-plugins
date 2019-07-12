@@ -10,7 +10,6 @@ import org.jfree.chart.StandardChartTheme;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.chart.plot.XYPlot;
 import org.jfree.chart.renderer.xy.XYLineAndShapeRenderer;
-import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
 
 import java.awt.*;
@@ -71,25 +70,23 @@ public class LinkPredictionEvaluation implements Statistics {
         testmap2.put(3, 46.2);
         testmap2.put(4, 47.3);
 
-        XYSeries dSeries = ChartUtils.createXYSeries(testmap, "Algorithm 1");
-        XYSeries cSeries = ChartUtils.createXYSeries(testmap2, "Algorithm 2");
-
-        XYSeriesCollection dataset1 = new XYSeriesCollection();
-        dataset1.addSeries(dSeries);
-        dataset1.addSeries(cSeries);
+        XYSeriesCollection dataset = new XYSeriesCollection();
+        for(EvaluationMetric e : evaluations) {
+            dataset.addSeries(ChartUtils.createXYSeries(e.getIterationResults(), e.getAlgorithmName()));
+        }
 
 
         JFreeChart chart = ChartFactory.createXYLineChart(
                 "Development of Accuracy",
                 "Iteration",
                 "Accuracy in %",
-                dataset1,
+                dataset,
                 PlotOrientation.VERTICAL,
                 true,
                 false,
                 false);
         formatChart(chart);
-        ChartUtils.scaleChart(chart, dSeries, false);
+        //ChartUtils.scaleChart(chart, dSeries, false);
         String imageFile = ChartUtils.renderChart(chart, "iteration-results.png");
 
         html += "<h2>Iteration Results:</h2>";

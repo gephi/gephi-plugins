@@ -119,11 +119,11 @@ public abstract class EvaluationMetric {
     private double calculateCurrentResult(int trainedEdgesSize, int validationEdgesSize) {
         double currentResult;
         if (trainedEdgesSize > validationEdgesSize) {
-            currentResult = calculate(validation, trained, statistic);
+            currentResult = calculate(initial, validation, trained, statistic);
         } else if (trainedEdgesSize < validationEdgesSize) {
-            currentResult = calculate(trained, validation, statistic);
+            currentResult = calculate(initial, trained, validation, statistic);
         } else {
-            currentResult = calculate(trained, validation, statistic);
+            currentResult = calculate(initial, trained, validation, statistic);
         }
         return currentResult;
     }
@@ -133,7 +133,7 @@ public abstract class EvaluationMetric {
      *
      * @return Metric value
      */
-    public abstract double calculate(Graph trained, Graph validation, LinkPredictionStatistics statistics);
+    public abstract double calculate(Graph initial, Graph trained, Graph validation, LinkPredictionStatistics statistics);
 
     /**
      * Get caluclated evaluation results per iteration.
