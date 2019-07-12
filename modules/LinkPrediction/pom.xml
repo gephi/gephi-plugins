@@ -83,21 +83,21 @@
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-engine</artifactId>
             <version>5.1.0</version>
-            <scope>validation</scope>
+            <scope>test</scope>
         </dependency>
 
         <dependency>
             <groupId>org.junit.vintage</groupId>
             <artifactId>junit-vintage-engine</artifactId>
             <version>5.1.0</version>
-            <scope>validation</scope>
+            <scope>test</scope>
         </dependency>
 
         <dependency>
             <groupId>org.mockito</groupId>
             <artifactId>mockito-all</artifactId>
             <version>1.9.5</version>
-            <scope>validation</scope>
+            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.gephi</groupId>
