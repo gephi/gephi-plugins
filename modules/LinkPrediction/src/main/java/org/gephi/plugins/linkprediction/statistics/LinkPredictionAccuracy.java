@@ -20,13 +20,22 @@ public class LinkPredictionAccuracy extends EvaluationMetric {
         super(statistic, initial, validation, initialWS, validationWS);
     }
 
+    /**
+     * Calculates accuracy as percentage of correct predicted edges compared to total predicted edges.
+     *
+     * @param addedEdges Number of edges to add
+     * @param trained Graph on that links predictions are added
+     * @param validation Validation graph
+     * @param statistics Algorithm used
+     * @return Accuracy in percent
+     */
     @Override public double calculate(int addedEdges, Graph trained, Graph validation, LinkPredictionStatistics statistics) {
         Set<Edge> trainedEdges = new HashSet<>(Arrays.asList(trained.getEdges().toArray()));
         Set<Edge> validationEdges = new HashSet<>(Arrays.asList(validation.getEdges().toArray()));
 
         // Remove edges from other algorithms and
         // edges that initially existed
-        trainedEdges.removeIf(e -> !e.getAttribute("link_prediction_algorithm").equals(statistics.getAlgorithmName()));
+        trainedEdges.removeIf(e -> !e.getAttribute(LinkPredictionStatistics.LP_ALGORITHM).equals(statistics.getAlgorithmName()));
 
         // Get edges that are only in trained set
         Set<Edge> diff = trainedEdges;

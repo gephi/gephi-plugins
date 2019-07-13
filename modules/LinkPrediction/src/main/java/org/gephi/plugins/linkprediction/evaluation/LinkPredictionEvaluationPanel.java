@@ -88,6 +88,7 @@ public class LinkPredictionEvaluationPanel extends javax.swing.JPanel implements
         Graph initial = Lookup.getDefault().lookup(GraphController.class).getGraphModel(workspaces.get(initialItem)).getUndirectedGraph();
         Graph validation = Lookup.getDefault().lookup(GraphController.class).getGraphModel(workspaces.get(validationItem)).getUndirectedGraph();
 
+
         this.evaluation.resetEvaluation();
 
         LinkPredictionAccuracy cnAccuracy = new LinkPredictionAccuracy(new CommonNeighboursStatistics(), initial, validation, initialWS, validationWS);

@@ -52,7 +52,7 @@ public class LinkPredictionEvaluationUI implements StatisticsUI {
 
     @Override
     public String getDisplayName() {
-        return "Link Prediction Evaluation";
+        return "Eval. Link Prediction Algorithms";
     }
 
     @Override

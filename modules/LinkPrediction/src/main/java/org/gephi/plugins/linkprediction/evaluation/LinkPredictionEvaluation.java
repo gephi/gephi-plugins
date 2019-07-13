@@ -62,7 +62,7 @@ public class LinkPredictionEvaluation implements Statistics {
         html = appendAlgorithms(html);
 
         html += "</BODY></HTML>";
-        return html ;
+        return html;
     }
 
     // TODO: Static methoden nach oben
