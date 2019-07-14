@@ -38,6 +38,9 @@ public class LinkPredictionStatisticsPanel extends javax.swing.JPanel implements
     public static final String HIGH_RUNTIME = "Possibly high runtime";
     private int noOfNodes;
 
+    // Input validation
+    private boolean warningDisplayed = false;
+
     // Console logger
     private static Logger consoleLogger = LogManager.getLogger(LinkPredictionStatisticsPanel.class);
 
@@ -129,10 +132,14 @@ public class LinkPredictionStatisticsPanel extends javax.swing.JPanel implements
         int numberOfIterations = 1;
         try {
             numberOfIterations = Integer.valueOf(numberOfIterationsTextField.getText());
+            warningDisplayed = false;
             consoleLogger.debug("Number of iteration changed to " + numberOfIterations);
         } catch (NumberFormatException e) {
-            consoleLogger.debug("Wrong number format entered!");
-            new IllegalIterationNumberFormatWarning();
+            if (!warningDisplayed) {
+                warningDisplayed = true;
+                consoleLogger.debug("Wrong number format entered!");
+                new IllegalIterationNumberFormatWarning();
+            }
         }
 
         statistic.setIterationLimit(numberOfIterations);
