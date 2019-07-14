@@ -94,8 +94,9 @@ public abstract class EvaluationMetric {
         Set<Edge> validationEdges = new HashSet<>(Arrays.asList(validation.getEdges().toArray()));
         consoleLogger.debug("Validation edges count: " + validationEdges.size());
 
-        // Duplicate workspace in order to add edges
+        // Create workspace to add predicted edges
         Workspace ws = pc.newWorkspace(pr);
+        pc.renameWorkspace(ws, getAlgorithmName());
 
         // Determines current graph model and number of edges to predict
         GraphModel currentGraphModel = determineCurrentGraphModel(gc, initialEdges, validationEdges);
@@ -104,7 +105,6 @@ public abstract class EvaluationMetric {
         Graph current = currentGraphModel.getGraph();
         GraphModel trainedModel = gc.getGraphModel(ws);
         trainedModel.bridge().copyNodes(current.getNodes().toArray());
-        pc.renameWorkspace(ws, getAlgorithmName());
         pc.openWorkspace(ws);
 
         // Predict links and save metric per iteration
