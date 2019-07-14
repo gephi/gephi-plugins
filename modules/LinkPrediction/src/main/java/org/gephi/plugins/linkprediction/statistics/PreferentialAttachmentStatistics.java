@@ -27,7 +27,7 @@ public class PreferentialAttachmentStatistics extends LinkPredictionStatistics {
     private Graph graph;
 
     static {
-        complexity = Complexity.EXPONENTIAL;
+        complexity = Complexity.QUADRATIC;
     }
 
     /**

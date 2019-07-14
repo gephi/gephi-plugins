@@ -22,7 +22,7 @@ public class CommonNeighboursStatistics extends LinkPredictionStatistics {
     private static Logger consoleLogger = LogManager.getLogger(CommonNeighboursStatistics.class);
 
     static {
-        complexity = Complexity.EXPONENTIAL;
+        complexity = Complexity.QUADRATIC;
     }
 
     /**

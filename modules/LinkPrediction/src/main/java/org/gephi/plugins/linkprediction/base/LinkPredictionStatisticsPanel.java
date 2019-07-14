@@ -9,8 +9,10 @@ import org.openide.util.Lookup;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.*;
-import java.util.List;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 
 /**
  * Statistics panel which will be used with {@link LinkPredictionStatistics} statistics.
@@ -30,11 +32,14 @@ public class LinkPredictionStatisticsPanel extends javax.swing.JPanel implements
     private javax.swing.JLabel commonNeighbourWarning;
     private javax.swing.JLabel preferentialAttachmentWarning;
     private javax.swing.JLabel iterationLabel;
-    private javax.swing.JLabel undirectedGraphAlogirthms;
+    private javax.swing.JLabel algorithms;
 
     // Long runtime validation
-    public static final String HIGH_RUNTIME = "High runtime value";
+    public static final String HIGH_RUNTIME = "Possibly high runtime";
     private int noOfNodes;
+
+    // Input validation
+    private boolean warningDisplayed = false;
 
     // Console logger
     private static Logger consoleLogger = LogManager.getLogger(LinkPredictionStatisticsPanel.class);
@@ -51,23 +56,29 @@ public class LinkPredictionStatisticsPanel extends javax.swing.JPanel implements
         }
 
         commonNeighbourCheckbox = new javax.swing.JCheckBox(CommonNeighboursStatisticsBuilder.COMMON_NEIGHBOURS_NAME);
-        preferentialAttachmentCheckbox = new javax.swing.JCheckBox(PreferentialAttachmentStatisticsBuilder.PREFERENTIAL_ATTACHMENT_NAME);
+        preferentialAttachmentCheckbox = new javax.swing.JCheckBox(
+                PreferentialAttachmentStatisticsBuilder.PREFERENTIAL_ATTACHMENT_NAME);
+        iterationLabel = new javax.swing.JLabel("Iterations: ");
+
         numberOfIterationsTextField = new javax.swing.JTextField("1");
         commonNeighbourWarning = new javax.swing.JLabel(" ");
         preferentialAttachmentWarning = new javax.swing.JLabel(" ");
-        iterationLabel = new javax.swing.JLabel("Iterations: ");
 
-        undirectedGraphAlogirthms = new javax.swing.JLabel("Undirected Graphs:");
-        Font f = undirectedGraphAlogirthms.getFont();
-        undirectedGraphAlogirthms.setFont(f.deriveFont(f.getStyle() ^ Font.BOLD));
-        undirectedGraphAlogirthms.setToolTipText("These Algorithms treat all graphs as undirected Graphs.");
+        algorithms = new javax.swing.JLabel("Algorithms:");
+        algorithms.setToolTipText("Currently only undirected, unweighted graphs are supported");
+        Font f = algorithms.getFont();
+        algorithms.setFont(f.deriveFont(f.getStyle() ^ Font.BOLD));
 
         commonNeighbourWarning.setForeground(Color.red);
         preferentialAttachmentWarning.setForeground(Color.red);
 
+        // Prevent textfield from expanding
+        numberOfIterationsTextField.setMaximumSize(
+                new Dimension(Integer.MAX_VALUE, numberOfIterationsTextField.getPreferredSize().height));
+
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
-        add(undirectedGraphAlogirthms);
+        add(algorithms);
         add(commonNeighbourCheckbox);
         add(commonNeighbourWarning);
         add(preferentialAttachmentCheckbox);
@@ -103,18 +114,15 @@ public class LinkPredictionStatisticsPanel extends javax.swing.JPanel implements
         }
     }
 
-    @Override
-    public void keyTyped(KeyEvent e) {
+    @Override public void keyTyped(KeyEvent e) {
         updateIterationLimit();
     }
 
-    @Override
-    public void keyPressed(KeyEvent e) {
+    @Override public void keyPressed(KeyEvent e) {
         updateIterationLimit();
     }
 
-    @Override
-    public void keyReleased(KeyEvent e) {
+    @Override public void keyReleased(KeyEvent e) {
         updateIterationLimit();
     }
 
@@ -125,11 +133,14 @@ public class LinkPredictionStatisticsPanel extends javax.swing.JPanel implements
         int numberOfIterations = 1;
         try {
             numberOfIterations = Integer.valueOf(numberOfIterationsTextField.getText());
+            warningDisplayed = false;
             consoleLogger.debug("Number of iteration changed to " + numberOfIterations);
-        }
-        catch (NumberFormatException e) {
-            consoleLogger.debug("Wrong number format entered!");
-            new IllegalIterationNumberFormatWarning();
+        } catch (NumberFormatException e) {
+            if (!warningDisplayed) {
+                warningDisplayed = true;
+                consoleLogger.debug("Wrong number format entered!");
+                new IllegalIterationNumberFormatWarning();
+            }
         }
 
         statistic.setIterationLimit(numberOfIterations);
@@ -141,14 +152,16 @@ public class LinkPredictionStatisticsPanel extends javax.swing.JPanel implements
      */
     private void setWarnings(int numberOfIterations) {
         consoleLogger.debug("Set warning labels");
-        LinkPredictionStatistics preferentialAttachment = statistic.getStatistic(PreferentialAttachmentStatistics.class);
+        LinkPredictionStatistics preferentialAttachment = statistic
+                .getStatistic(PreferentialAttachmentStatistics.class);
 
-        if (preferentialAttachment != null && preferentialAttachment.longRuntimeExpected(numberOfIterations, noOfNodes)) {
+        if (preferentialAttachment != null && preferentialAttachment
+                .longRuntimeExpected(numberOfIterations, noOfNodes)) {
             consoleLogger.debug("Enable high runtime warning for preferential attachment");
             preferentialAttachmentWarning.setText(HIGH_RUNTIME);
         } else {
             consoleLogger.debug("Disable high runtime warning for preferential attachment");
-            preferentialAttachmentWarning.setText("");
+            preferentialAttachmentWarning.setText(" ");
         }
 
         LinkPredictionStatistics commonNeighbour = statistic.getStatistic(CommonNeighboursStatistics.class);

@@ -122,7 +122,7 @@ public abstract class LinkPredictionStatistics implements Statistics {
      */
     public boolean longRuntimeExpected(long iterationLimit, long nodeCount) {
         switch (complexity) {
-        case EXPONENTIAL:
+        case QUADRATIC:
             consoleLogger.debug("Verify runtime for exponential complexity");
             return (iterationLimit * nodeCount * nodeCount) > RUNTIME_THRESHOLD;
         default:
@@ -190,7 +190,7 @@ public abstract class LinkPredictionStatistics implements Statistics {
      *
      * @return Algorithms complexity
      */
-    public Complexity getComplexity() {
+    public static Complexity getComplexity() {
         return complexity;
     }
 
