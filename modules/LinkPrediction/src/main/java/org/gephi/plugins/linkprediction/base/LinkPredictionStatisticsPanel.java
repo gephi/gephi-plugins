@@ -32,7 +32,7 @@ public class LinkPredictionStatisticsPanel extends javax.swing.JPanel implements
     private javax.swing.JLabel commonNeighbourWarning;
     private javax.swing.JLabel preferentialAttachmentWarning;
     private javax.swing.JLabel iterationLabel;
-    private javax.swing.JLabel undirectedGraphAlogirthms;
+    private javax.swing.JLabel algorithms;
 
     // Long runtime verification
     public static final String HIGH_RUNTIME = "Possibly high runtime";
@@ -58,15 +58,16 @@ public class LinkPredictionStatisticsPanel extends javax.swing.JPanel implements
         commonNeighbourCheckbox = new javax.swing.JCheckBox(CommonNeighboursStatisticsBuilder.COMMON_NEIGHBOURS_NAME);
         preferentialAttachmentCheckbox = new javax.swing.JCheckBox(
                 PreferentialAttachmentStatisticsBuilder.PREFERENTIAL_ATTACHMENT_NAME);
+        iterationLabel = new javax.swing.JLabel("Iterations: ");
+
         numberOfIterationsTextField = new javax.swing.JTextField("1");
         commonNeighbourWarning = new javax.swing.JLabel(" ");
         preferentialAttachmentWarning = new javax.swing.JLabel(" ");
-        iterationLabel = new javax.swing.JLabel("Iterations: ");
 
-        undirectedGraphAlogirthms = new javax.swing.JLabel("Undirected Graphs:");
-        Font f = undirectedGraphAlogirthms.getFont();
-        undirectedGraphAlogirthms.setFont(f.deriveFont(f.getStyle() ^ Font.BOLD));
-        undirectedGraphAlogirthms.setToolTipText("These Algorithms treat all graphs as undirected Graphs.");
+        algorithms = new javax.swing.JLabel("Algorithms:");
+        algorithms.setToolTipText("Currently only undirected, unweighted graphs are supported");
+        Font f = algorithms.getFont();
+        algorithms.setFont(f.deriveFont(f.getStyle() ^ Font.BOLD));
 
         commonNeighbourWarning.setForeground(Color.red);
         preferentialAttachmentWarning.setForeground(Color.red);
@@ -77,7 +78,7 @@ public class LinkPredictionStatisticsPanel extends javax.swing.JPanel implements
 
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
-        add(undirectedGraphAlogirthms);
+        add(algorithms);
         add(commonNeighbourCheckbox);
         add(commonNeighbourWarning);
         add(preferentialAttachmentCheckbox);
@@ -160,7 +161,7 @@ public class LinkPredictionStatisticsPanel extends javax.swing.JPanel implements
             preferentialAttachmentWarning.setText(HIGH_RUNTIME);
         } else {
             consoleLogger.debug("Disable high runtime warning for preferential attachment");
-            preferentialAttachmentWarning.setText("");
+            preferentialAttachmentWarning.setText(" ");
         }
 
         LinkPredictionStatistics commonNeighbour = statistic.getStatistic(CommonNeighboursStatistics.class);
