@@ -10,8 +10,9 @@ The plugin is released under the Apache 2.0 license.
 
 In Release 1.0.0 the plugin contains the following functionality:
 
-* __Statistics__: New edges can be added to an undirected graph using selected [link prediction algorithms](#algorithms) in the statistics tab. The number of new edges can be specified. In doing so, _n_ new edges are added to the graph iteratively. The calculation of the next predicted edge is always based on the graph of the preceding iteration step.
+* __Statistics__: New edges can be added to an undirected graph using selected [link prediction algorithms](#algorithms) in the `statistics` tab. The number of new edges can be specified. In doing so, _n_ new edges are added to the graph iteratively. The calculation of the next predicted edge is always based on the graph of the preceding iteration step.
 * __Filter__: The added edges can be displayed by means of filters. On the one hand, the corresponding algorithm is specified as the filter criterion. On the other hand, the number of added edges can also be restricted.
+* __Evaluation__: Based on an initial graph and a validation graph the accuracy of the link predictions using different algorithms are evaluated. Besides the final accuracy, the generated report also shows the accuracy after each iteration step.  
 
 ## Get started
 
@@ -38,6 +39,29 @@ Information to the newly added edges are visible in the following columns under 
 The filters under `Filters` > `Link Prediction` then allow you to narrow down the corresponding edges. 
 Edges can be filtered according to the algorithms with which they were added.
 Furthermore, the number of added edges can also be restricted to the first *n* added edges.
+
+### Evaluate prediction algorithms
+
+The evaluation can be run using `Statistics` > `Edge Overview` > `Eval. Link Predictions Algorithms`. 
+Starting with an initial graph <a href="https://www.codecogs.com/eqnedit.php?latex=G_i_,_t" target="_blank"><img src="https://latex.codecogs.com/gif.latex?G_i_,_t" title="G_i_,_t" /></a> 
+at time *t* we predict *n* edges <a href="https://www.codecogs.com/eqnedit.php?latex=E_i" target="_blank"><img src="https://latex.codecogs.com/gif.latex?E_i" title="E_i" /></a>
+which results in a Graph <a href="https://www.codecogs.com/eqnedit.php?latex=G_i_,_t_&plus;_n" target="_blank"><img src="https://latex.codecogs.com/gif.latex?G_i_,_t_&plus;_n" title="G_i_,_t_+_n" /></a> at time *t + n*.
+For each algorithm a new workspace is created which is used to apply the predictions. The initial and validation graph are therefore not changed.
+The following figure shows the graphs <a href="https://www.codecogs.com/eqnedit.php?latex=G_i_,_t" target="_blank"><img src="https://latex.codecogs.com/gif.latex?G_i_,_t" title="G_i_,_t" /></a> 
+(on the left) and <a href="https://www.codecogs.com/eqnedit.php?latex=G_i_,_t_&plus;_n" target="_blank"><img src="https://latex.codecogs.com/gif.latex?G_i_,_t_&plus;_n" title="G_i_,_t_+_n" /></a> (on the right):
+
+![Initial graph](src/main/resources/graph_init.jpg?raw=true "Initial graph") 
+
+To evaluate their accuracy using a validation graph <a href="https://www.codecogs.com/eqnedit.php?latex=G_v_,_t_&plus;_n" target="_blank"><img src="https://latex.codecogs.com/gif.latex?G_v_,_t_&plus;_n" title="G_v_,_t_+_n" /></a>
+and its additional edges <a href="https://www.codecogs.com/eqnedit.php?latex=E_v" target="_blank"><img src="https://latex.codecogs.com/gif.latex?E_v" title="E_v" /></a>
+at time *t+n* are used:
+
+![Validation graph](src/main/resources/graph_validation.jpg?raw=true "Validation graph") 
+
+ 
+The accuracy then is calculated as percentage of the correct predicted edges:
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="https://www.codecogs.com/eqnedit.php?latex=Acc&space;=&space;|&space;E_i&space;\&space;\cap&space;\&space;E_v|&space;\&space;/&space;\&space;|E_v|&space;*&space;100" target="_blank"><img src="https://latex.codecogs.com/gif.latex?Acc&space;=&space;|&space;E_i&space;\&space;\cap&space;\&space;E_v|&space;\&space;/&space;\&space;|E_v|&space;*&space;100" title="Acc = | E_i \ \cap \ E_v| \ / \ |E_v| * 100" /></a>
 
 ## Algorithms
 
