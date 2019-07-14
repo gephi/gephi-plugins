@@ -9,8 +9,10 @@ import org.openide.util.Lookup;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.*;
-import java.util.List;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 
 /**
  * Statistics panel which will be used with {@link LinkPredictionStatistics} statistics.
@@ -33,7 +35,7 @@ public class LinkPredictionStatisticsPanel extends javax.swing.JPanel implements
     private javax.swing.JLabel undirectedGraphAlogirthms;
 
     // Long runtime verification
-    public static final String HIGH_RUNTIME = "High runtime value";
+    public static final String HIGH_RUNTIME = "Possibly high runtime";
     private int noOfNodes;
 
     // Console logger
@@ -51,7 +53,8 @@ public class LinkPredictionStatisticsPanel extends javax.swing.JPanel implements
         }
 
         commonNeighbourCheckbox = new javax.swing.JCheckBox(CommonNeighboursStatisticsBuilder.COMMON_NEIGHBOURS_NAME);
-        preferentialAttachmentCheckbox = new javax.swing.JCheckBox(PreferentialAttachmentStatisticsBuilder.PREFERENTIAL_ATTACHMENT_NAME);
+        preferentialAttachmentCheckbox = new javax.swing.JCheckBox(
+                PreferentialAttachmentStatisticsBuilder.PREFERENTIAL_ATTACHMENT_NAME);
         numberOfIterationsTextField = new javax.swing.JTextField("1");
         commonNeighbourWarning = new javax.swing.JLabel(" ");
         preferentialAttachmentWarning = new javax.swing.JLabel(" ");
@@ -64,6 +67,10 @@ public class LinkPredictionStatisticsPanel extends javax.swing.JPanel implements
 
         commonNeighbourWarning.setForeground(Color.red);
         preferentialAttachmentWarning.setForeground(Color.red);
+
+        // Prevent textfield from expanding
+        numberOfIterationsTextField.setMaximumSize(
+                new Dimension(Integer.MAX_VALUE, numberOfIterationsTextField.getPreferredSize().height));
 
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
@@ -103,18 +110,15 @@ public class LinkPredictionStatisticsPanel extends javax.swing.JPanel implements
         }
     }
 
-    @Override
-    public void keyTyped(KeyEvent e) {
+    @Override public void keyTyped(KeyEvent e) {
         updateIterationLimit();
     }
 
-    @Override
-    public void keyPressed(KeyEvent e) {
+    @Override public void keyPressed(KeyEvent e) {
         updateIterationLimit();
     }
 
-    @Override
-    public void keyReleased(KeyEvent e) {
+    @Override public void keyReleased(KeyEvent e) {
         updateIterationLimit();
     }
 
@@ -126,8 +130,7 @@ public class LinkPredictionStatisticsPanel extends javax.swing.JPanel implements
         try {
             numberOfIterations = Integer.valueOf(numberOfIterationsTextField.getText());
             consoleLogger.debug("Number of iteration changed to " + numberOfIterations);
-        }
-        catch (NumberFormatException e) {
+        } catch (NumberFormatException e) {
             consoleLogger.debug("Wrong number format entered!");
             new IllegalIterationNumberFormatWarning();
         }
@@ -141,9 +144,11 @@ public class LinkPredictionStatisticsPanel extends javax.swing.JPanel implements
      */
     private void setWarnings(int numberOfIterations) {
         consoleLogger.debug("Set warning labels");
-        LinkPredictionStatistics preferentialAttachment = statistic.getStatistic(PreferentialAttachmentStatistics.class);
+        LinkPredictionStatistics preferentialAttachment = statistic
+                .getStatistic(PreferentialAttachmentStatistics.class);
 
-        if (preferentialAttachment != null && preferentialAttachment.longRuntimeExpected(numberOfIterations, noOfNodes)) {
+        if (preferentialAttachment != null && preferentialAttachment
+                .longRuntimeExpected(numberOfIterations, noOfNodes)) {
             consoleLogger.debug("Enable high runtime warning for preferential attachment");
             preferentialAttachmentWarning.setText(HIGH_RUNTIME);
         } else {
