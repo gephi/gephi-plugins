@@ -67,6 +67,8 @@ and <a href="https://www.codecogs.com/eqnedit.php?latex=\inline&space;C" target=
 
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="https://www.codecogs.com/eqnedit.php?latex=cn(A,I)&space;=&space;|{\left&space;\{&space;\right&space;\}}|&space;=&space;0" target="_blank"><img src="https://latex.codecogs.com/gif.latex?cn(A,I)&space;=&space;|{\left&space;\{&space;\right&space;\}}|&space;=&space;0" title="cn(A,I) = |{\left \{ \right \}}| = 0" /></a>
 
+The current implementation of the algorithm has a complexity class of  <a href="https://www.codecogs.com/eqnedit.php?latex=O(n^2)" target="_blank"><img src="https://latex.codecogs.com/gif.latex?O(n^2)" title="O(n^2)" /></a>.
+
 ### Preferential attachment
 
 The basic assumption with Preferential Attachment is that the probability that a node is affected by a newly added edge, is just proportional to the number of neighbours. The more neighbours a node has, the larger the likelihood that it will be affected.
@@ -84,6 +86,8 @@ Applied to the above example graph, preferential attachment would predict an edg
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="https://www.codecogs.com/eqnedit.php?latex=pa(A,G)&space;=&space;3&space;*&space;4&space;=&space;12" target="_blank"><img src="https://latex.codecogs.com/gif.latex?pa(A,G)&space;=&space;3&space;*&space;4&space;=&space;12" title="pa(A,G) = 3 * 4 = 12" /></a>
 
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="https://www.codecogs.com/eqnedit.php?latex=pa(A,C)&space;=&space;3&space;*&space;3&space;=&space;9" target="_blank"><img src="https://latex.codecogs.com/gif.latex?pa(A,C)&space;=&space;3&space;*&space;3&space;=&space;9" title="pa(A,C) = 3 * 3 = 9" /></a>
+
+The implementation of the preferential attachment algorithm is of complexity class <a href="https://www.codecogs.com/eqnedit.php?latex=O(n^2)" target="_blank"><img src="https://latex.codecogs.com/gif.latex?O(n^2)" title="O(n^2)" /></a>.
 
 ## Limitations
 
