@@ -94,17 +94,18 @@ public abstract class EvaluationMetric {
         consoleLogger.debug("Validation edges count: " + validationEdges.size());
 
         // Create workspace to add predicted edges
-        Workspace ws = pc.newWorkspace(pr);
-        pc.renameWorkspace(ws, getAlgorithmName());
+        Workspace initWorkspace = pc.getCurrentWorkspace();
+        Workspace newWorkspace = pc.newWorkspace(pr);
+        pc.renameWorkspace(newWorkspace, getAlgorithmName());
 
         // Determines current graph model and number of edges to predict
         GraphModel currentGraphModel = determineCurrentGraphModel(gc, initialEdges, validationEdges);
 
         // Duplicate nodes from current to new workspace
         Graph current = currentGraphModel.getGraph();
-        GraphModel trainedModel = gc.getGraphModel(ws);
+        GraphModel trainedModel = gc.getGraphModel(newWorkspace);
         trainedModel.bridge().copyNodes(current.getNodes().toArray());
-        pc.openWorkspace(ws);
+        pc.openWorkspace(newWorkspace);
 
         // Predict links and save metric per iteration
         trained = trainedModel.getGraph();
@@ -115,6 +116,10 @@ public abstract class EvaluationMetric {
         // Calculate final accuracy of algorithm
         finalResult = calculateCurrentResult(trainedEdges.size(), validationEdges.size());
         consoleLogger.debug("Final result :" + finalResult);
+
+        // Get back to init workspace
+        pc.openWorkspace(initWorkspace);
+
     }
 
     /**
