@@ -27,7 +27,7 @@ public class LinkPredictionAccuracy extends EvaluationMetric {
      * @param trained Graph on that links predictions are added
      * @param validation Validation graph
      * @param statistics Algorithm used
-     * @return Accuracy in percent
+     * @return Accuracy in percent, rounded to two decimal places
      */
     @Override public double calculate(int addedEdges, Graph trained, Graph validation, LinkPredictionStatistics statistics) {
         Set<Edge> trainedEdges = new HashSet<>(Arrays.asList(trained.getEdges().toArray()));
@@ -41,9 +41,13 @@ public class LinkPredictionAccuracy extends EvaluationMetric {
         Set<Edge> diff = trainedEdges;
         diff.removeIf(e -> !validation.isAdjacent(validation.getNode(e.getSource().getId()), validation.getNode(e.getTarget().getId())));
 
+        // Get original accuracy
         double accuracy = ((double) diff.size() / (double) addedEdges) * 100;
 
-        return accuracy;
+        // Round to two decimals
+        double rounded = Math.round(accuracy * 100.0) / 100.0;
+
+        return rounded;
 
     }
 }
