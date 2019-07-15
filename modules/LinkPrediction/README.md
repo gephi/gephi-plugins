@@ -54,15 +54,28 @@ The following figure shows the graphs <a href="https://www.codecogs.com/eqnedit.
 
 To evaluate their accuracy using a validation graph <a href="https://www.codecogs.com/eqnedit.php?latex=G_v_,_t_&plus;_n" target="_blank"><img src="https://latex.codecogs.com/gif.latex?G_v_,_t_&plus;_n" title="G_v_,_t_+_n" /></a>
 and its additional edges <a href="https://www.codecogs.com/eqnedit.php?latex=E_v" target="_blank"><img src="https://latex.codecogs.com/gif.latex?E_v" title="E_v" /></a>
-at time *t+n* are used:
+at time *t+n* are used. In comparison to the Graph <a href="https://www.codecogs.com/eqnedit.php?latex=G_i_,_t" target="_blank"><img src="https://latex.codecogs.com/gif.latex?G_i_,_t" title="G_i_,_t" /></a>
+this graph additionally contains the edges <a href="https://www.codecogs.com/eqnedit.php?latex=(A,C)" target="_blank"><img src="https://latex.codecogs.com/gif.latex?(A,C)" title="(A,C)" /></a>,
+<a href="https://www.codecogs.com/eqnedit.php?latex=(E,H)" target="_blank"><img src="https://latex.codecogs.com/gif.latex?(E,H)" title="(E,H)" /></a> and
+<a href="https://www.codecogs.com/eqnedit.php?latex=(H,I)" target="_blank"><img src="https://latex.codecogs.com/gif.latex?(H,I)" title="(H,I)" /></a>:
 
 ![Validation graph](src/main/resources/graph_validation.jpg?raw=true "Validation graph") 
 
- 
-The accuracy then is calculated as percentage of the correct predicted edges:
+The accuracy then is calculated as percentage of the correct predicted edges. In the current implementation, the results are rounded to two places.
 
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="https://www.codecogs.com/eqnedit.php?latex=Acc&space;=&space;|&space;E_i&space;\&space;\cap&space;\&space;E_v|&space;\&space;/&space;\&space;|E_v|&space;*&space;100" target="_blank"><img src="https://latex.codecogs.com/gif.latex?Acc&space;=&space;|&space;E_i&space;\&space;\cap&space;\&space;E_v|&space;\&space;/&space;\&space;|E_v|&space;*&space;100" title="Acc = | E_i \ \cap \ E_v| \ / \ |E_v| * 100" /></a>
 
+In the above example of three additional edges the edges <a href="https://www.codecogs.com/eqnedit.php?latex=(A,C)" target="_blank"><img src="https://latex.codecogs.com/gif.latex?(A,C)" title="(A,C)" /></a> 
+and <a href="https://www.codecogs.com/eqnedit.php?latex=(H,I)" target="_blank"><img src="https://latex.codecogs.com/gif.latex?(H,I)" title="(H,I)" /></a>
+were predicted correctly. Therefore an accuracy of 66.67% is achieved:
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="https://www.codecogs.com/eqnedit.php?latex=E_i&space;=&space;\{(A,C),&space;(A,F),&space;(H,I)\}" target="_blank"><img src="https://latex.codecogs.com/gif.latex?E_i&space;=&space;\{(A,C),&space;(A,F),&space;(H,I)\}" title="E_i = \{(A,C), (A,F), (H,I)\}" /></a>
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="https://www.codecogs.com/eqnedit.php?latex=E_v&space;=&space;\{(A,C),&space;(E,H),&space;(H,I)\}" target="_blank"><img src="https://latex.codecogs.com/gif.latex?E_v&space;=&space;\{(A,C),&space;(E,H),&space;(H,I)\}" title="E_v = \{(A,C), (E,H), (H,I)\}" /></a>
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="https://www.codecogs.com/eqnedit.php?latex=|&space;E_i&space;\&space;\cap&space;\&space;E_v|&space;=&space;|\{(A,C),&space;(H,I)\}|&space;=&space;2" target="_blank"><img src="https://latex.codecogs.com/gif.latex?|&space;E_i&space;\&space;\cap&space;\&space;E_v|&space;=&space;|\{(A,C),&space;(H,I)\}|&space;=&space;2" title="| E_i \ \cap \ E_v| = |\{(A,C), (H,I)\}| = 2" /></a>
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="https://www.codecogs.com/eqnedit.php?latex=Acc&space;=&space;|&space;E_i&space;\&space;\cap&space;\&space;E_v|&space;\&space;/&space;\&space;|E_v|&space;*&space;100&space;=&space;2&space;\&space;/&space;\&space;3&space;*&space;100&space;=&space;\doteq&space;66.67" target="_blank"><img src="https://latex.codecogs.com/gif.latex?Acc&space;=&space;|&space;E_i&space;\&space;\cap&space;\&space;E_v|&space;\&space;/&space;\&space;|E_v|&space;*&space;100&space;=&space;2&space;\&space;/&space;\&space;3&space;*&space;100&space;=&space;&space;66.67" title="Acc = | E_i \ \cap \ E_v| \ / \ |E_v| * 100 = 2 \ / \ 3 * 100 = 66.67" /></a>
 ## Algorithms
 
 Link prediction is based on an existing network and attempts to predict new edges. The most popular application is the suggestion of new friends on social networking platforms.
