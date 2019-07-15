@@ -65,7 +65,49 @@ public class LinkPredictionEvaluation implements Statistics {
         return html;
     }
 
-    // TODO: Static methoden nach oben
+    /**
+     * Gets all evaluations.
+     *
+     * @return All evaluations
+     */
+    public List<EvaluationMetric> getEvaluations(){
+        return evaluations;
+    }
+
+    /**
+     * Get specific link prediction algorithm from evaluations list.
+     *
+     * @param evaluation Class of searched evaluation
+     * @return LinkPredictionStatistic
+     */
+    public EvaluationMetric getEvaluation(EvaluationMetric evaluation) {
+        return evaluations.get(evaluations.indexOf(evaluation));
+    }
+
+    /**
+     * Adds evaluation to list.
+     *
+     * @param evaluation Metric to evaluate.
+     */
+    public void addEvaluation(EvaluationMetric evaluation) {
+        if (!evaluations.contains(evaluation)) evaluations.add(evaluation);
+    }
+
+    /**
+     * Removes evaluation from list.
+     *
+     * @param evaluation Metric to evaluate.
+     */
+    public void removeEvaluation(EvaluationMetric evaluation) {
+        if (evaluations.contains(evaluation)) evaluations.remove(evaluation);
+    }
+
+    /**
+     * Sort metrics by highest calculated values.
+     *
+     * @param allValues Unsorted map of calculated values
+     * @return Sorted map, highest first
+     */
     private static Map<String, Double> sortByValue(Map<String, Double> allValues)
     {
 
@@ -176,30 +218,5 @@ public class LinkPredictionEvaluation implements Statistics {
         int iterationCount = evaluations.isEmpty() ? 0 : evaluations.get(0).getDiffEdgeCount();
         html += "Number of Iterations: " + iterationCount;
         return html;
-    }
-
-    public List<EvaluationMetric> getEvaluations() {
-        return evaluations;
-    }
-
-    /**
-     * Get specific link prediction algorithm from evaluations list
-     * @param evaluation Class of searched evaluation
-     * @return LinkPredictionStatistic
-     */
-    public EvaluationMetric getEvaluation(EvaluationMetric evaluation) {
-        return evaluations.get(evaluations.indexOf(evaluation));
-    }
-
-    public void addEvaluation(EvaluationMetric evaluation) {
-        if (!evaluations.contains(evaluation)) evaluations.add(evaluation);
-    }
-
-    public void removeEvaluation(EvaluationMetric evaluation) {
-        if (evaluations.contains(evaluation)) evaluations.remove(evaluation);
-    }
-
-    public void resetEvaluation() {
-        evaluations.clear();
     }
 }

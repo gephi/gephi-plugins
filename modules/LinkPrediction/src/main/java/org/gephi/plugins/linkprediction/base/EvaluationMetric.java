@@ -22,12 +22,10 @@ public abstract class EvaluationMetric {
     protected final Graph initial;
     /**
      * Trained graph
-     *
      */
     protected Graph trained;
     /**
      * Validation graph
-     *
      */
     protected final Graph validation;
     /**
@@ -59,7 +57,8 @@ public abstract class EvaluationMetric {
     // Console Logger
     private static Logger consoleLogger = LogManager.getLogger(EvaluationMetric.class);
 
-    public EvaluationMetric(LinkPredictionStatistics statistic, Graph initial, Graph validation, Workspace initialWS, Workspace validationWS){
+    public EvaluationMetric(LinkPredictionStatistics statistic, Graph initial, Graph validation, Workspace initialWS,
+            Workspace validationWS) {
         this.statistic = statistic;
         this.initial = initial;
         this.validation = validation;
@@ -119,76 +118,6 @@ public abstract class EvaluationMetric {
     }
 
     /**
-     * Processes link prediction and calculation of current metric iteratively.
-     *
-     * @param validationEdges Edges of validation graph
-     * @param trainedModel Models to predict links on
-     * @param trainedEdges Edges of trained graph
-     */
-    private void predictLinks(Set<Edge> validationEdges, GraphModel trainedModel, Set<Edge> trainedEdges) {
-        consoleLogger.debug("Predict links");
-        for (int i = 0; i < diffEdgeCount; i++) {
-            statistic.execute(trainedModel);
-            consoleLogger.debug("Trained edges in iteration " + i + ": " + trainedEdges.size());
-            consoleLogger.debug("Validation edges in iteration " + i + ": " + validationEdges.size());
-
-            // Calculate current accuracy of algorithm
-            double currentResult = calculateCurrentResult(trainedEdges.size(), validationEdges.size());
-            iterationResults.put(i, currentResult);
-            consoleLogger.debug("Current result in iteration " + i + ": " + currentResult);
-        }
-    }
-
-    /**
-     * Determines number of edges to predict and current graph model.
-     *
-     * @param gc Current graph controller
-     * @param initialEdges Set of edges of initial graph
-     * @param validationEdges Set of edges from validation graph
-     * @return Current graph model
-     */
-    private GraphModel determineCurrentGraphModel(GraphController gc, Set<Edge> initialEdges,
-            Set<Edge> validationEdges) {
-        consoleLogger.debug("Determine current graph model");
-        GraphModel currentGraphModel;
-
-        if (initialEdges.size() > validationEdges.size()) {
-            diffEdgeCount = initialEdges.size() - validationEdges.size();
-            currentGraphModel = gc.getGraphModel(validationWS);
-            consoleLogger.debug("Initial graph is bigger than validation graph");
-        }
-        else {
-            diffEdgeCount = validationEdges.size() - initialEdges.size();
-            currentGraphModel = gc.getGraphModel(initialWS);
-            consoleLogger.debug("Validation graph is bigger than initial graph");
-        }
-        return currentGraphModel;
-    }
-
-    /**
-     * Calculates the metric at current situation.
-     *
-     * @param trainedEdgesSize Number of edges of trained graph
-     * @param validationEdgesSize Number of edges of validation graph
-     * @return Metric result
-     */
-    private double calculateCurrentResult(int trainedEdgesSize, int validationEdgesSize) {
-        consoleLogger.debug("Calculate current result");
-        double currentResult;
-        int addedEdges = validationEdgesSize - trainedEdgesSize;
-
-        if (trainedEdgesSize > validationEdgesSize) {
-            currentResult = calculate(addedEdges, validation, trained, statistic);
-        } else if (trainedEdgesSize < validationEdgesSize) {
-            currentResult = calculate(addedEdges, trained, validation, statistic);
-        } else {
-            currentResult = calculate(addedEdges, trained, validation, statistic);
-        }
-
-        return currentResult;
-    }
-
-    /**
      * Get caluclated evaluation results per iteration.
      *
      * @return Calculated metric values per iteration.
@@ -215,13 +144,24 @@ public abstract class EvaluationMetric {
         return diffEdgeCount;
     }
 
+    /**
+     * Gets the name of the algorithm.
+     *
+     * @return Algorithm name
+     */
     public String getAlgorithmName() {
         return statistic.getAlgorithmName();
     }
 
+    /**
+     * Gets the algorithm used.
+     *
+     * @return Used algorithm
+     */
     public LinkPredictionStatistics getStatistic() {
         return statistic;
     }
+
     /**
      * Evlauates if evaluation metric has the same underlying statistic algorithm.
      *
@@ -231,7 +171,7 @@ public abstract class EvaluationMetric {
     @Override public boolean equals(Object o) {
         if (!(o instanceof EvaluationMetric))
             return false;
-        if (((EvaluationMetric) o).statistic.getClass().equals(this.getClass()))
+        if (((EvaluationMetric) o).statistic.getClass().equals(this.statistic.getClass()))
             return true;
         else
             return false;
@@ -245,5 +185,74 @@ public abstract class EvaluationMetric {
     @Override
     public int hashCode() {
         return Objects.hash(statistic.getClass());
+    }
+
+    /**
+     * Processes link prediction and calculation of current metric iteratively.
+     *
+     * @param validationEdges Edges of validation graph
+     * @param trainedModel    Models to predict links on
+     * @param trainedEdges    Edges of trained graph
+     */
+    private void predictLinks(Set<Edge> validationEdges, GraphModel trainedModel, Set<Edge> trainedEdges) {
+        consoleLogger.debug("Predict links");
+        for (int i = 0; i < diffEdgeCount; i++) {
+            statistic.execute(trainedModel);
+            consoleLogger.debug("Trained edges in iteration " + i + ": " + trainedEdges.size());
+            consoleLogger.debug("Validation edges in iteration " + i + ": " + validationEdges.size());
+
+            // Calculate current accuracy of algorithm
+            double currentResult = calculateCurrentResult(trainedEdges.size(), validationEdges.size());
+            iterationResults.put(i, currentResult);
+            consoleLogger.debug("Current result in iteration " + i + ": " + currentResult);
+        }
+    }
+
+    /**
+     * Determines number of edges to predict and current graph model.
+     *
+     * @param gc              Current graph controller
+     * @param initialEdges    Set of edges of initial graph
+     * @param validationEdges Set of edges from validation graph
+     * @return Current graph model
+     */
+    private GraphModel determineCurrentGraphModel(GraphController gc, Set<Edge> initialEdges,
+            Set<Edge> validationEdges) {
+        consoleLogger.debug("Determine current graph model");
+        GraphModel currentGraphModel;
+
+        if (initialEdges.size() > validationEdges.size()) {
+            diffEdgeCount = initialEdges.size() - validationEdges.size();
+            currentGraphModel = gc.getGraphModel(validationWS);
+            consoleLogger.debug("Initial graph is bigger than validation graph");
+        } else {
+            diffEdgeCount = validationEdges.size() - initialEdges.size();
+            currentGraphModel = gc.getGraphModel(initialWS);
+            consoleLogger.debug("Validation graph is bigger than initial graph");
+        }
+        return currentGraphModel;
+    }
+
+    /**
+     * Calculates the metric at current situation.
+     *
+     * @param trainedEdgesSize    Number of edges of trained graph
+     * @param validationEdgesSize Number of edges of validation graph
+     * @return Metric result
+     */
+    private double calculateCurrentResult(int trainedEdgesSize, int validationEdgesSize) {
+        consoleLogger.debug("Calculate current result");
+        double currentResult;
+        int addedEdges = validationEdgesSize - trainedEdgesSize;
+
+        if (trainedEdgesSize > validationEdgesSize) {
+            currentResult = calculate(addedEdges, validation, trained, statistic);
+        } else if (trainedEdgesSize < validationEdgesSize) {
+            currentResult = calculate(addedEdges, trained, validation, statistic);
+        } else {
+            currentResult = calculate(addedEdges, trained, validation, statistic);
+        }
+
+        return currentResult;
     }
 }
