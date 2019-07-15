@@ -4,7 +4,6 @@ import org.gephi.graph.api.*;
 import org.gephi.plugins.linkprediction.base.EvaluationMetric;
 import org.gephi.plugins.linkprediction.base.LinkPredictionStatistics;
 import org.gephi.plugins.linkprediction.statistics.CommonNeighboursStatistics;
-import org.gephi.plugins.linkprediction.statistics.LinkPredictionAccuracy;
 import org.gephi.plugins.linkprediction.statistics.PreferentialAttachmentStatistics;
 import org.gephi.project.api.Project;
 import org.gephi.project.api.ProjectController;

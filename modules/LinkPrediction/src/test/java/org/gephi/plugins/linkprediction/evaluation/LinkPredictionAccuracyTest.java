@@ -1,8 +1,12 @@
-package org.gephi.plugins.linkprediction.statistics;
+package org.gephi.plugins.linkprediction.evaluation;
 
 import org.gephi.graph.api.*;
 import org.gephi.plugins.linkprediction.base.LinkPredictionStatistics;
+import org.gephi.plugins.linkprediction.evaluation.LinkPredictionAccuracy;
 import org.gephi.plugins.linkprediction.evaluation.LinkPredictionEvaluation;
+import org.gephi.plugins.linkprediction.statistics.CommonNeighboursStatistics;
+import org.gephi.plugins.linkprediction.statistics.CommonNeighboursStatisticsBuilder;
+import org.gephi.plugins.linkprediction.statistics.PreferentialAttachmentStatisticsBuilder;
 import org.gephi.project.api.Project;
 import org.gephi.project.api.ProjectController;
 import org.gephi.project.api.Workspace;

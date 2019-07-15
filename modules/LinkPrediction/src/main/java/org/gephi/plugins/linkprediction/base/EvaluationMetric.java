@@ -12,6 +12,9 @@ import java.util.*;
 
 /**
  * Calculates the metric to evaluate the quality of a link prediction algorithm.
+ * <p>
+ * This base class contains all metric-independent implementations. The
+ * base class is extended by the implementations of the respective quality metrics.
  *
  * @author Marco Romanutti
  */
@@ -28,6 +31,7 @@ public abstract class EvaluationMetric {
      * Validation graph
      */
     protected final Graph validation;
+
     /**
      * Validation Workspace
      */
@@ -36,10 +40,12 @@ public abstract class EvaluationMetric {
      * Initial Workspace
      */
     protected final Workspace initialWS;
+
     /**
      * Algorithm to evaluate
      */
     protected final LinkPredictionStatistics statistic;
+
     /**
      * Calculated results per iteration
      */
@@ -55,7 +61,7 @@ public abstract class EvaluationMetric {
     protected int diffEdgeCount;
 
     // Console Logger
-    private static Logger consoleLogger = LogManager.getLogger(EvaluationMetric.class);
+    protected static Logger consoleLogger = LogManager.getLogger(EvaluationMetric.class);
 
     public EvaluationMetric(LinkPredictionStatistics statistic, Graph initial, Graph validation, Workspace initialWS,
             Workspace validationWS) {
@@ -71,7 +77,8 @@ public abstract class EvaluationMetric {
      *
      * @return Metric value
      */
-    public abstract double calculate(int addedEdges, Graph trained, Graph validation, LinkPredictionStatistics statistics);
+    public abstract double calculate(int addedEdges, Graph trained, Graph validation,
+            LinkPredictionStatistics statistics);
 
     /**
      * Runs the calculation of prediction and evaluates initial and validation graph.
@@ -94,20 +101,24 @@ public abstract class EvaluationMetric {
         consoleLogger.debug("Validation edges count: " + validationEdges.size());
 
         // Create workspace to add predicted edges
+        consoleLogger.debug("Create new workspace");
         Workspace initWorkspace = pc.getCurrentWorkspace();
         Workspace newWorkspace = pc.newWorkspace(pr);
         pc.renameWorkspace(newWorkspace, getAlgorithmName());
 
         // Determines current graph model and number of edges to predict
+        consoleLogger.debug("Determine current graph model");
         GraphModel currentGraphModel = determineCurrentGraphModel(gc, initialEdges, validationEdges);
 
         // Duplicate nodes from current to new workspace
         Graph current = currentGraphModel.getGraph();
         GraphModel trainedModel = gc.getGraphModel(newWorkspace);
+        consoleLogger.debug("Duplicate nodes");
         trainedModel.bridge().copyNodes(current.getNodes().toArray());
         pc.openWorkspace(newWorkspace);
 
         // Predict links and save metric per iteration
+        consoleLogger.debug("Predict links");
         trained = trainedModel.getGraph();
         Set<Edge> trainedEdges = new HashSet<>(Arrays.asList(trained.getEdges().toArray()));
         consoleLogger.debug("Trained edges count: " + trainedEdges.size());
@@ -123,7 +134,7 @@ public abstract class EvaluationMetric {
     }
 
     /**
-     * Get caluclated evaluation results per iteration.
+     * Gets calculated evaluation results per iteration.
      *
      * @return Calculated metric values per iteration.
      */
@@ -132,7 +143,7 @@ public abstract class EvaluationMetric {
     }
 
     /**
-     * Get caluclated final evaluation result.
+     * Gets calculated final evaluation result.
      *
      * @return Calculated final metric value.
      */
@@ -168,7 +179,7 @@ public abstract class EvaluationMetric {
     }
 
     /**
-     * Evlauates if evaluation metric has the same underlying statistic algorithm.
+     * Evaluates if evaluation metric has the same underlying statistic algorithm.
      *
      * @param o Object to compare
      * @return Equality of two evaluation metrics
@@ -187,8 +198,7 @@ public abstract class EvaluationMetric {
      *
      * @return Hashed statistic class
      */
-    @Override
-    public int hashCode() {
+    @Override public int hashCode() {
         return Objects.hash(statistic.getClass());
     }
 
@@ -251,10 +261,13 @@ public abstract class EvaluationMetric {
         int addedEdges = validationEdgesSize - trainedEdgesSize;
 
         if (trainedEdgesSize > validationEdgesSize) {
+            consoleLogger.debug("More trained edges than validation edges");
             currentResult = calculate(addedEdges, validation, trained, statistic);
         } else if (trainedEdgesSize < validationEdgesSize) {
+            consoleLogger.debug("Less trained edges than validation edges");
             currentResult = calculate(addedEdges, trained, validation, statistic);
         } else {
+            consoleLogger.debug("Same number of trained edges and validation edges");
             currentResult = calculate(addedEdges, trained, validation, statistic);
         }
 

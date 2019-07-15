@@ -1,5 +1,7 @@
 package org.gephi.plugins.linkprediction.evaluation;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.gephi.graph.api.GraphModel;
 import org.gephi.plugins.linkprediction.base.EvaluationMetric;
 import org.gephi.statistics.plugin.ChartUtils;
@@ -18,11 +20,16 @@ import java.util.List;
 
 /**
  * Macro class that triggers the evaluation calculation for all selected algorithms.
+ *
+ * @author Marco Romanutti
  */
 public class LinkPredictionEvaluation implements Statistics {
 
     // List of link prediction evaluations
     private List<EvaluationMetric> evaluations = new ArrayList<>();
+
+    // Console Logger
+    private static Logger consoleLogger = LogManager.getLogger(LinkPredictionEvaluation.class);
 
     /**
      * Calculates evaluation metrics for all evaluations.
@@ -30,11 +37,12 @@ public class LinkPredictionEvaluation implements Statistics {
     public void execute(GraphModel graphModel) {
 
         evaluations.stream().forEach(evaluation -> {
-                evaluation.run();
+            evaluation.run();
         });
     }
 
     @Override public String getReport() {
+        consoleLogger.debug("Create report");
         //This is the HTML report shown when execution ends.
         //One could add a distribution histogram for instance
         String html = "<HTML> <BODY> <h1>Evaluation of different prediction algorithms</h1> " + "<hr>";
@@ -42,7 +50,7 @@ public class LinkPredictionEvaluation implements Statistics {
         html = appendParameters(html);
 
         Map<String, Double> finalResults = new HashMap<>();
-        for(EvaluationMetric e : evaluations) {
+        for (EvaluationMetric e : evaluations) {
             finalResults.put(e.getAlgorithmName(), e.getFinalResult());
         }
 
@@ -70,17 +78,18 @@ public class LinkPredictionEvaluation implements Statistics {
      *
      * @return All evaluations
      */
-    public List<EvaluationMetric> getEvaluations(){
+    public List<EvaluationMetric> getEvaluations() {
         return evaluations;
     }
 
     /**
-     * Get specific link prediction algorithm from evaluations list.
+     * Get specific link prediction algorithm from evaluation list.
      *
      * @param evaluation Class of searched evaluation
      * @return LinkPredictionStatistic
      */
     public EvaluationMetric getEvaluation(EvaluationMetric evaluation) {
+        consoleLogger.debug("Attempt to get metric for " + evaluation.getAlgorithmName());
         return evaluations.get(evaluations.indexOf(evaluation));
     }
 
@@ -90,7 +99,9 @@ public class LinkPredictionEvaluation implements Statistics {
      * @param evaluation Metric to evaluate.
      */
     public void addEvaluation(EvaluationMetric evaluation) {
-        if (!evaluations.contains(evaluation)) evaluations.add(evaluation);
+        consoleLogger.debug("Attempt to add metric for " + evaluation.getAlgorithmName());
+        if (!evaluations.contains(evaluation))
+            evaluations.add(evaluation);
     }
 
     /**
@@ -99,7 +110,9 @@ public class LinkPredictionEvaluation implements Statistics {
      * @param evaluation Metric to evaluate.
      */
     public void removeEvaluation(EvaluationMetric evaluation) {
-        if (evaluations.contains(evaluation)) evaluations.remove(evaluation);
+        consoleLogger.debug("Attempt to remove metric for " + evaluation.getAlgorithmName());
+        if (evaluations.contains(evaluation))
+            evaluations.remove(evaluation);
     }
 
     /**
@@ -108,13 +121,12 @@ public class LinkPredictionEvaluation implements Statistics {
      * @param allValues Unsorted map of calculated values
      * @return Sorted map, highest first
      */
-    private static Map<String, Double> sortByValue(Map<String, Double> allValues)
-    {
+    private static Map<String, Double> sortByValue(Map<String, Double> allValues) {
+        consoleLogger.debug("Sort metrics by value");
 
         LinkedHashMap<String, Double> allValuesSorted = new LinkedHashMap<>();
 
-        allValues.entrySet().stream()
-                .sorted(Map.Entry.comparingByValue(Comparator.reverseOrder()))
+        allValues.entrySet().stream().sorted(Map.Entry.comparingByValue(Comparator.reverseOrder()))
                 .forEachOrdered(x -> allValuesSorted.put(x.getKey(), x.getValue()));
 
         return allValuesSorted;
@@ -126,7 +138,9 @@ public class LinkPredictionEvaluation implements Statistics {
      * @param chart Chart to format
      */
     private static void formatChart(JFreeChart chart) {
-        XYPlot plot = (XYPlot)chart.getPlot();
+        consoleLogger.debug("Format chart");
+
+        XYPlot plot = (XYPlot) chart.getPlot();
         XYLineAndShapeRenderer renderer = new XYLineAndShapeRenderer();
         Font legendFont = new Font("SansSerif", Font.PLAIN, 16);
         renderer.setLegendTextFont(0, legendFont);
@@ -146,6 +160,8 @@ public class LinkPredictionEvaluation implements Statistics {
      * @return Completed html
      */
     private String appendAlgorithms(String html) {
+        consoleLogger.debug("Append algorithms section to report");
+
         html += "<h2>Algorithms:</h2>";
         html += "Michael Henninger,<i> Link Prediction</i>, in Soziale Netzwerkanalyse 2018 (p. 96)";
         return html;
@@ -154,11 +170,13 @@ public class LinkPredictionEvaluation implements Statistics {
     /**
      * Appends iteration results section.
      *
-     * @param html Existing html
+     * @param html      Existing html
      * @param imageFile XY chart
      * @return Completed html
      */
     private String appendIterationResults(String html, String imageFile) {
+        consoleLogger.debug("Append iteration results section to report");
+
         html += "<h2>Iteration Results:</h2>";
         html += "<br /><br />" + imageFile + "<br /><br />";
         return html;
@@ -170,33 +188,35 @@ public class LinkPredictionEvaluation implements Statistics {
      * @return Rendered diagram
      */
     private String renderDiagram() {
+        consoleLogger.debug("Render diagram");
+
         XYSeriesCollection dataset = new XYSeriesCollection();
-        for(EvaluationMetric e : evaluations) {
+        for (EvaluationMetric e : evaluations) {
+            consoleLogger.debug("Add metric for " + e.getAlgorithmName() + " to dataset");
             dataset.addSeries(ChartUtils.createXYSeries(e.getIterationResults(), e.getAlgorithmName()));
         }
 
-        JFreeChart chart = ChartFactory.createXYLineChart(
-                "Development of Accuracy",
-                "Iteration",
-                "Accuracy in %",
-                dataset,
-                PlotOrientation.VERTICAL,
-                true,
-                false,
-                false);
+        // Create chart
+        JFreeChart chart = ChartFactory
+                .createXYLineChart("Development of Accuracy", "Iteration", "Accuracy in %", dataset,
+                        PlotOrientation.VERTICAL, true, false, false);
+
+        // Format chart
         formatChart(chart);
-        //ChartUtils.scaleChart(chart, dSeries, false);
+
         return ChartUtils.renderChart(chart, "iteration-results.png");
     }
 
     /**
      * Appends results to html report.
      *
-     * @param html Existing html
+     * @param html         Existing html
      * @param sortedValues Map of final results
      * @return Completed html
      */
     private String appendResults(String html, Map<String, Double> sortedValues) {
+        consoleLogger.debug("Append result section to report");
+
         html += "<h2>Results:</h2>";
         int counter = 1;
         for (Map.Entry<String, Double> elem : sortedValues.entrySet()) {
@@ -214,6 +234,8 @@ public class LinkPredictionEvaluation implements Statistics {
      * @return Completed html
      */
     private String appendParameters(String html) {
+        consoleLogger.debug("Append parameter section to report");
+
         html += "<h2>Parameters:</h2>";
         int iterationCount = evaluations.isEmpty() ? 0 : evaluations.get(0).getDiffEdgeCount();
         html += "Number of Iterations: " + iterationCount;

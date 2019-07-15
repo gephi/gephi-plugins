@@ -18,9 +18,17 @@ import java.awt.event.ItemListener;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Evaluation panel which will be used with {@link LinkPredictionEvaluation} evaluations.
+ * <p>
+ * This panel will be use to specify link prediction algorithm validation workspace.
+ *
+ * @author Marco Romanutti
+ * @see LinkPredictionEvaluation
+ */
 public class LinkPredictionEvaluationPanel extends javax.swing.JPanel implements ItemListener {
 
-    //
+    // List of metrics to calculate
     private LinkPredictionEvaluation evaluation;
 
     // UI elements
@@ -34,6 +42,7 @@ public class LinkPredictionEvaluationPanel extends javax.swing.JPanel implements
     private javax.swing.JCheckBox commonNeighbourCheckbox;
     private javax.swing.JCheckBox preferentialAttachmentCheckbox;
 
+    // Workspaces for selection via checkboxes
     private Map<String, Workspace> workspaces = new HashMap<>();
 
     // Console logger
@@ -41,6 +50,9 @@ public class LinkPredictionEvaluationPanel extends javax.swing.JPanel implements
 
 
     public LinkPredictionEvaluationPanel() {
+        consoleLogger.debug("Setup evaluation panel");
+
+        // Initialize labels
         initialLabel = new javax.swing.JLabel("Initial Workspace: ");
         validationLabel = new javax.swing.JLabel("Validation Workspace: ");
         statisticsLabel = new javax.swing.JLabel("Algorithms to evaluate: ");
@@ -48,11 +60,15 @@ public class LinkPredictionEvaluationPanel extends javax.swing.JPanel implements
         Workspace[] allWorkspaces = Lookup.getDefault().lookup(ProjectController.class).getCurrentProject()
                 .getLookup().lookup(WorkspaceProvider.class).getWorkspaces();
 
+        // Initialize checkboxes
         initialWorkspace = new JComboBox();
         validationWorkspace = new JComboBox();
 
         for (Workspace w : allWorkspaces) {
+            // Add workspace to selection list
             String name = w.getLookup().lookup(WorkspaceInformation.class).getName();
+            consoleLogger.debug("Add workspace " + name);
+
             initialWorkspace.addItem(name);
             validationWorkspace.addItem(name);
 
@@ -64,6 +80,7 @@ public class LinkPredictionEvaluationPanel extends javax.swing.JPanel implements
 
         setLayout(new GridLayout(5, 2));
 
+        // Add components to layout
         add(initialLabel);
         add(initialWorkspace);
         add(validationLabel);
@@ -79,6 +96,8 @@ public class LinkPredictionEvaluationPanel extends javax.swing.JPanel implements
     }
 
     @Override public void itemStateChanged(ItemEvent e) {
+        consoleLogger.debug("Item change detected");
+
         String initialItem = initialWorkspace.getSelectedItem().toString();
         String validationItem = validationWorkspace.getSelectedItem().toString();
 
