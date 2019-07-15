@@ -201,7 +201,7 @@ public abstract class EvaluationMetric {
      */
     private void predictLinks(Set<Edge> validationEdges, GraphModel trainedModel, Set<Edge> trainedEdges) {
         consoleLogger.debug("Predict links");
-        for (int i = 0; i < diffEdgeCount; i++) {
+        for (int i = 1; i <= diffEdgeCount; i++) {
             statistic.execute(trainedModel);
             consoleLogger.debug("Trained edges in iteration " + i + ": " + trainedEdges.size());
             consoleLogger.debug("Validation edges in iteration " + i + ": " + validationEdges.size());
