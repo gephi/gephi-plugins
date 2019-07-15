@@ -2,10 +2,7 @@ package org.gephi.plugins.linkprediction.base;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.gephi.graph.api.Column;
-import org.gephi.graph.api.Edge;
-import org.gephi.graph.api.Graph;
-import org.gephi.graph.api.Table;
+import org.gephi.graph.api.*;
 import org.gephi.plugins.linkprediction.util.Complexity;
 import org.gephi.statistics.spi.Statistics;
 
@@ -53,6 +50,12 @@ public abstract class LinkPredictionStatistics implements Statistics {
 
     // Console Logger
     private static Logger consoleLogger = LogManager.getLogger(LinkPredictionStatistics.class);
+
+    // Get highest Prediction + save the Edge that was changed last to save processing time during re-calculation
+    protected PriorityQueue<LinkPredictionProbability> pQ = new PriorityQueue<>(Collections.reverseOrder());
+    protected List<LinkPredictionProbability> lpProb = new ArrayList<>();
+    protected Edge changedInLastRun;
+    protected LinkPredictionProbability highestValueObject;
 
     /**
      * Initializes the columns used in link prediction.

@@ -3,6 +3,7 @@ package org.gephi.plugins.linkprediction.statistics;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.gephi.graph.api.*;
+import org.gephi.plugins.linkprediction.base.LinkPredictionProbability;
 import org.gephi.plugins.linkprediction.base.LinkPredictionStatistics;
 import org.gephi.plugins.linkprediction.util.Complexity;
 import org.gephi.plugins.linkprediction.util.GraphUtils;
@@ -47,57 +48,69 @@ public class CommonNeighboursStatistics extends LinkPredictionStatistics {
         consoleLogger.debug("Clear predictions");
         predictions.clear();
 
-        //Iterate on all nodes
-        List<Node> nodesA = new ArrayList<>(Arrays.asList(graph.getNodes().toArray()));
+        if (pQ.size() == 0 && changedInLastRun == null) {
+            //Iterate on all nodes
+            List<Node> nodesA = new ArrayList<>(Arrays.asList(graph.getNodes().toArray()));
 
-        for (Node a : nodesA) {
-            consoleLogger.debug("Calculation for node " + a.getId());
-            // Remove self from neighbours
-            List<Node> nodesB = new ArrayList<>(nodesA);
-            nodesB.remove(a);
+            for (Node a : nodesA) {
+                consoleLogger.debug("Calculation for node " + a.getId());
+                // Remove self from neighbours
+                List<Node> nodesB = new ArrayList<>(nodesA);
+                nodesB.remove(a);
 
-            // Get neighbours of a
-            List<Node> aNeighbours = getNeighbours(graph, a);
+                // Get neighbours of a
+                List<Node> aNeighbours = getNeighbours(graph, a);
 
-            //Calculate common neighbors
-            for (Node b : nodesB) {
-                if (consoleLogger.isDebugEnabled()) {
-                    consoleLogger.debug("Calculation for node " + b.getId());
-                }
-                int cnValue = 0;
-
-                // Get neighbours of b
-                List<Node> bNeighbours = getNeighbours(graph, b);
-
-                // Count number of neighbours
-                cnValue = getCommonNeighboursCount(aNeighbours, bNeighbours);
-                if (consoleLogger.isDebugEnabled()) {
-                    consoleLogger.debug("Number of neighbours for node " + b.getId() + ": " + cnValue);
-                }
-
-                // Check if edge exists already
-                // FIXME graph.getEdges returns always null
-                //List<Edge> existingEdges = Arrays.asList(graph.getEdges(a, b).toArray());
-                List<Edge> existingEdges = GraphUtils.getEdges(graph, a, b);
-                long numberOfExistingEdges = existingEdges.size();
-                if (consoleLogger.isDebugEnabled()) {
-                    consoleLogger.debug("Size of existing edges: " + numberOfExistingEdges);
-                }
-
-                if (numberOfExistingEdges == 0) {
-                    // Add new edge to calculation map
-                    Edge newEdge = factory.newEdge(a, b, false);
-                    newEdge.setAttribute(colLastCalculatedValue, cnValue);
+                //Calculate common neighbors
+                for (Node b : nodesB) {
                     if (consoleLogger.isDebugEnabled()) {
-                        consoleLogger.debug("Add new edge: " + a.getLabel() + ", " + b.getLabel() + ", " + cnValue);
+                        consoleLogger.debug("Calculation for node " + b.getId());
                     }
-                    predictions.put(newEdge, cnValue);
+                    int cnValue = 0;
+
+                    // Get neighbours of b
+                    List<Node> bNeighbours = getNeighbours(graph, b);
+
+                    // Count number of neighbours
+                    cnValue = getCommonNeighboursCount(aNeighbours, bNeighbours);
+                    if (consoleLogger.isDebugEnabled()) {
+                        consoleLogger.debug("Number of neighbours for node " + b.getId() + ": " + cnValue);
+                    }
+
+                    // Check if edge exists already
+                    // FIXME graph.getEdges returns always null
+                    //List<Edge> existingEdges = Arrays.asList(graph.getEdges(a, b).toArray());
+                    List<Edge> existingEdges = GraphUtils.getEdges(graph, a, b);
+                    long numberOfExistingEdges = existingEdges.size();
+                    if (consoleLogger.isDebugEnabled()) {
+                        consoleLogger.debug("Size of existing edges: " + numberOfExistingEdges);
+                    }
+
+                    if (numberOfExistingEdges == 0) {
+                        // Add new edge to calculation map
+                        Edge newEdge = factory.newEdge(a, b, false);
+                        newEdge.setAttribute(colLastCalculatedValue, cnValue);
+                        if (consoleLogger.isDebugEnabled()) {
+                            consoleLogger.debug("Add new edge: " + a.getLabel() + ", " + b.getLabel() + ", " + cnValue);
+                        }
+                        predictions.put(newEdge, cnValue);
+                        LinkPredictionProbability lp = new LinkPredictionProbability(newEdge.getSource(), newEdge.getTarget(), cnValue);
+                        pQ.add(lp);
+                        lpProb.add(lp);
+                    }
                 }
             }
+
+        } else {
+            Node a = changedInLastRun.getSource();
+            Node b = changedInLastRun.getTarget();
+            recalculateProbability(factory, graph, a);
+            recalculateProbability(factory, graph, b);
         }
 
         // Get highest predicted edge
         Edge max = getHighestPrediction();
+        highestValueObject = pQ.peek();
 
         // Add edge to graph
         if (max != null) {
@@ -108,6 +121,7 @@ public class CommonNeighboursStatistics extends LinkPredictionStatistics {
                 consoleLogger.debug("Add highest predicted edge: " + max);
             }
             graph.addEdge(max);
+            changedInLastRun = max;
         }
 
         // Unlock graph
@@ -138,6 +152,61 @@ public class CommonNeighboursStatistics extends LinkPredictionStatistics {
         consoleLogger.debug("Get neighbours");
         return new ArrayList<>(
                 Arrays.asList(graph.getNeighbors(n).toArray()).stream().distinct().collect(Collectors.toList()));
+    }
+
+    private void recalculateProbability(GraphFactory factory, Graph graph, Node a) {
+
+        List<Node> aNeighbours = getNeighbours(graph, a);
+        List<Node> nodesB = new ArrayList<>(Arrays.asList(graph.getNodes().toArray()));
+        nodesB.remove(a);
+        int cnValue = 0;
+
+        // Loop through all Neighbours aN of A
+        // Edges that change value are between a and aN
+        for (Node b : nodesB) {
+            LinkPredictionProbability lpObject = null;
+
+            for (LinkPredictionProbability lpp : lpProb) {
+                if (lpp.getNodeSource().equals(a) && lpp.getNodeTarget().equals(b) ||
+                        lpp.getNodeSource().equals(b) && lpp.getNodeTarget().equals(a)) {
+                    lpObject = lpp;
+                }
+            }
+
+            // Get existing Edges if available
+            List<Edge> existingEdges = GraphUtils.getEdges(graph, a, b);
+            long numberOfExistingEdges = existingEdges.size();
+            if (consoleLogger.isDebugEnabled()) {
+                consoleLogger.debug("Size of existing edges: " + numberOfExistingEdges);
+            }
+
+            if (numberOfExistingEdges == 0) {
+                List<Node> bNeighbours = getNeighbours(graph, b);
+                cnValue = getCommonNeighboursCount(aNeighbours, bNeighbours);
+
+                // Add new edge to calculation map
+                Edge newEdge = factory.newEdge(a, b, false);
+                newEdge.setAttribute(colLastCalculatedValue, cnValue);
+
+                if (consoleLogger.isDebugEnabled()) {
+                    consoleLogger.debug("Add new edge: " + a.getLabel() + ", " + b.getLabel() + ", " + cnValue);
+                }
+
+                if (lpObject != null) {
+                    // Set new Values
+                    predictions.put(newEdge, cnValue);
+                    pQ.remove(lpObject);
+                    lpObject.setPredictionValue(cnValue);
+                    pQ.add(lpObject);
+                } else {
+                    predictions.put(newEdge, cnValue);
+                    LinkPredictionProbability lpE = new LinkPredictionProbability(newEdge.getSource(), newEdge.getTarget(), cnValue);
+                    lpProb.add(lpE);
+                    pQ.add(lpE);
+                }
+            }
+
+        }
     }
 
 }
