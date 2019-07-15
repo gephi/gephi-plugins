@@ -54,8 +54,11 @@ public class LinkPredictionEvaluationPanel extends javax.swing.JPanel implements
 
         // Initialize labels
         initialLabel = new javax.swing.JLabel("Initial Workspace: ");
+        initialLabel.setToolTipText("Initial graph at time t to which the predictions are applied");
         validationLabel = new javax.swing.JLabel("Validation Workspace: ");
+        validationLabel.setToolTipText("Validation graph at time t + n which is used to check the correctness of the link predictions");
         statisticsLabel = new javax.swing.JLabel("Algorithms to evaluate: ");
+        statisticsLabel.setToolTipText("Currently only undirected, unweighted graphs are supported");
 
         Workspace[] allWorkspaces = Lookup.getDefault().lookup(ProjectController.class).getCurrentProject()
                 .getLookup().lookup(WorkspaceProvider.class).getWorkspaces();
