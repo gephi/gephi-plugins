@@ -2,7 +2,7 @@
 ![Travis (.com)](https://img.shields.io/travis/com/romanutti/gephi-plugins.svg?label=Build)
 [![license](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 
-Link-prediction plugin for Gephi, which allows to predict the next edges to be formed using different prediction algorithms. Edges that are added to the network based on the prediction are marked accordingly. Users can limit the number of edges predicted. The plugin contains an evaluation component, which allows to compare the quality of the different algorithms.
+Link-prediction plugin for Gephi, which allows to predict the next edges to be formed using different prediction algorithms. Edges that are added to the network based on the prediction are marked accordingly. Users can limit the number of edges predicted. The plugin contains an evaluation component, which allows to compare the quality of the different algorithms regarding the graph on hand.
 
 The plugin is released under the Apache 2.0 license.
 
@@ -17,7 +17,7 @@ In Release 1.0.0 the plugin contains the following functionality:
 
 ### Run Gephi with installed plugin
 
-If you checked out the sources via Maven you can run Gephi with your plugin pre-installed using the following command. Make sure to run `mvn package` beforehand to rebuild.
+If you checked out the sources via Maven, you can run Gephi with your plugin pre-installed using the following command. Make sure to run `mvn package` beforehand to rebuild.
 
        mvn org.gephi:gephi-maven-plugin:run
 
@@ -31,7 +31,7 @@ Information to the newly added edges are visible in the following columns under 
 
 * __Chosen link prediction algorithm__: Algorithm that was used to predict the edge.
 * __Added in run__: Iteration, in which the edge was added.
-* __Last link prediction value__: Calculated link prediction value.
+* __Last link prediction value__: Calculated link prediction value according to the used algorithm. The values are not normalized.
 
 ### Filter predictions
 
@@ -42,7 +42,7 @@ Furthermore, the number of added edges can also be restricted to the first *n* a
 ## Algorithms
 
 Link prediction is based on an existing network and attempts to predict new edges. The most popular application is the suggestion of new friends on social networking platforms.
-To predict a new edge, different algorithms exist. The plugin allows to easily add new algorithms. Currently the algorithms [common neighbours](#common-neighbours) and [preferential attachment](#preferential-attachment) are implemented. To show the functionality of the algorithms, the following example graph is used:
+To predict a new edge, different algorithms exist. The plugin allows to easily add new algorithms. Currently, the algorithms [common neighbours](#common-neighbours) and [preferential attachment](#preferential-attachment) are implemented. To show the functionality of the algorithms, the following example graph is used:
 ![Example graph](src/main/resources/graph_example.jpg?raw=true "Example graph") 
 
 ### Common neighbours
@@ -57,7 +57,7 @@ returns all neighbour nodes of node <a href="https://www.codecogs.com/eqnedit.ph
 
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="https://www.codecogs.com/eqnedit.php?latex=cn&space;(X,&space;Y)&space;=&space;|N(X)&space;\cap&space;N(Y)|" target="_blank"><img src="https://latex.codecogs.com/gif.latex?cn&space;(X,&space;Y)&space;=&space;|N(X)&space;\cap&space;N(Y)|" title="cn (X, Y) = |N(X) \cap N(Y)|" /></a>
 
-Applied to the above example graph, common neighbour would predict a new edge between nodes <a href="https://www.codecogs.com/eqnedit.php?latex=\inline&space;A" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\inline&space;A" title="A" /></a>
+Applied to the above example graph, the common neighbour algorithm would predict a new edge between nodes <a href="https://www.codecogs.com/eqnedit.php?latex=\inline&space;A" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\inline&space;A" title="A" /></a>
 and <a href="https://www.codecogs.com/eqnedit.php?latex=\inline&space;C" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\inline&space;C" title="C" /></a>.
  The following examples show some of the calculated values:
 
@@ -73,7 +73,7 @@ The current implementation of the algorithm has a complexity class of  <a href="
 
 The basic assumption with Preferential Attachment is that the probability that a node is affected by a newly added edge, is just proportional to the number of neighbours. The more neighbours a node has, the larger the likelihood that it will be affected.
 
-To calculate preferential attachment the number of neighbours of both nodes are multiplied by each other. The call to the function <a href="https://www.codecogs.com/eqnedit.php?latex=\inline&space;N(::)" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\inline&space;N(::)" title="N(::)" /></a>
+To calculate preferential attachment, the number of neighbours of both nodes are multiplied by each other. The call to the function <a href="https://www.codecogs.com/eqnedit.php?latex=\inline&space;N(::)" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\inline&space;N(::)" title="N(::)" /></a>
 returns again all neighbours of a node in a set, e.g. <a href="https://www.codecogs.com/eqnedit.php?latex=\inline&space;N(A)" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\inline&space;N(A)" title="N(A)" /></a>
 returns all neighbours of node <a href="https://www.codecogs.com/eqnedit.php?latex=\inline&space;A" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\inline&space;A" title="A" /></a>. 
 
@@ -91,4 +91,4 @@ The implementation of the preferential attachment algorithm is of complexity cla
 
 ## Limitations
 
-Currently only undirected, unweighted graphs are supported. 
+With the limitations of the implemented algorithms, only undirected, unweighted graphs are supported currently. 
