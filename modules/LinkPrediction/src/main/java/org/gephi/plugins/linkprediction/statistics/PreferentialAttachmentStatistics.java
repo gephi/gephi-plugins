@@ -30,6 +30,16 @@ public class PreferentialAttachmentStatistics extends LinkPredictionStatistics {
         complexity = Complexity.QUADRATIC;
     }
 
+    /**
+     * Gets the name of the respective algorithm.
+     *
+     * @return Algorithm name
+     */
+    @Override
+    public String getAlgorithmName(){
+        return PreferentialAttachmentStatisticsBuilder.PREFERENTIAL_ATTACHMENT_NAME;
+    }
+
     @Override public void execute(GraphModel graphModel) {
 
         consoleLogger.debug("Execution of link prediction started");
@@ -117,7 +127,7 @@ public class PreferentialAttachmentStatistics extends LinkPredictionStatistics {
     /**
      * Verify if last predicted edge exsits.
      *
-     * @param edges Edges to apply verification on
+     * @param edges Edges to apply validation on
      * @return Flag
      */
     private boolean lastPredictedEdgeExists(Edge[] edges) {

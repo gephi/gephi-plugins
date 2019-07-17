@@ -34,7 +34,7 @@ public class LinkPredictionStatisticsPanel extends javax.swing.JPanel implements
     private javax.swing.JLabel iterationLabel;
     private javax.swing.JLabel algorithms;
 
-    // Long runtime verification
+    // Long runtime validation
     public static final String HIGH_RUNTIME = "Possibly high runtime";
     private int noOfNodes;
 

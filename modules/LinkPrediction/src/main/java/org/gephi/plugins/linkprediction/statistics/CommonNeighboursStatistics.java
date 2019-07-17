@@ -25,6 +25,16 @@ public class CommonNeighboursStatistics extends LinkPredictionStatistics {
         complexity = Complexity.QUADRATIC;
     }
 
+    /**
+     * Gets the name of the respective algorithm.
+     *
+     * @return Algorithm name
+     */
+    @Override
+    public String getAlgorithmName(){
+        return CommonNeighboursStatisticsBuilder.COMMON_NEIGHBOURS_NAME;
+    }
+
     @Override public void execute(GraphModel graphModel) {
         consoleLogger.debug("Execution of link prediction started");
 
