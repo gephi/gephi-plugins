@@ -97,5 +97,13 @@ class LinkPredictionEvaluationBuilderTest {
         Class statisticClass = builder.getStatistics().getClass();
 
         assertEquals(LinkPredictionEvaluation.class, statisticClass);
+
+    }
+
+    @Test void getStatisticsClass() {
+        LinkPredictionEvaluationBuilder builder = new LinkPredictionEvaluationBuilder();
+        Class statisticClass = builder.getStatisticsClass();
+
+        assertEquals(LinkPredictionEvaluation.class, statisticClass);
     }
 }

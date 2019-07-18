@@ -237,4 +237,30 @@ class LinkPredictionEvaluationTest {
         assertTrue(evaluations.contains(accuracyPa));
     }
 
+    @org.junit.jupiter.api.Test void testGetReport() {
+
+        LinkPredictionEvaluation evaluation = new LinkPredictionEvaluation();
+
+        // Create metrics
+        Graph init = initModel.getUndirectedGraph();
+        Graph validation = validationModel.getUndirectedGraph();
+
+        LinkPredictionStatistics cn = new CommonNeighboursStatistics();
+        LinkPredictionStatistics pa = new PreferentialAttachmentStatistics();
+
+        LinkPredictionAccuracy accuracyCn = new LinkPredictionAccuracy(cn, init, validation, initialWs, validationWs);
+        LinkPredictionAccuracy accuracyPa = new LinkPredictionAccuracy(pa, init, validation, initialWs, validationWs);
+
+        // Add metrics
+        evaluation.addEvaluation(accuracyCn);
+        evaluation.addEvaluation(accuracyPa);
+
+        // Get report
+        String report = evaluation.getReport();
+
+        assertTrue(report.contains("<HTML> <BODY> <h1>Evaluation of different prediction algorithms</h1>"));
+        assertTrue(report.contains("<h2>Results:</h2>"));
+        assertTrue(report.contains("<h2>Parameters:</h2>"));
+        assertTrue(report.contains("<h2>Algorithms:</h2>"));
+    }
 }
