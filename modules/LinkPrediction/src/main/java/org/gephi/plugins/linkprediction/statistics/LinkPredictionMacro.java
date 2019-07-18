@@ -16,6 +16,15 @@ public class LinkPredictionMacro extends LinkPredictionStatistics {
     private List<LinkPredictionStatistics> statistics = new ArrayList<>();
 
     /**
+     * Gets the name of the respective algorithm.
+     *
+     * @return Algorithm name
+     */
+    @Override public String getAlgorithmName() {
+        return LinkPredictionMacroBuilder.LINK_PREDICTION_NAME;
+    }
+
+    /**
      * Calcualtes link predictions on all statistics.
      *
      * @param graphModel Model to add statistics
@@ -64,6 +73,7 @@ public class LinkPredictionMacro extends LinkPredictionStatistics {
 
     /**
      * Get specific link prediction algorithm from statistics list
+     *
      * @param statistic Class of searched statistic
      * @return LinkPredictionStatistic
      */

@@ -113,7 +113,7 @@ public abstract class LinkPredictionFilter implements ComplexFilter {
         // Limit edges to filter criteria
         edges = edges.stream().sorted(Comparator.comparingLong(e -> (int) e.getAttribute(colAddedInRun)))
                 .limit(edgesLimit).collect(Collectors.toList());
-        if (consoleLogger.isDebugEnabled()){
+        if (consoleLogger.isDebugEnabled()) {
             consoleLogger.debug("Remaining edges: " + edges.size());
         }
         return edges;
@@ -129,18 +129,18 @@ public abstract class LinkPredictionFilter implements ComplexFilter {
     public List<Node> getNodesToRemove(Graph graph, List<Edge> edges) {
         // Get nodes
         List<Node> sourceNodes = edges.stream().map(edge -> edge.getSource()).collect(Collectors.toList());
-        if (consoleLogger.isDebugEnabled()){
+        if (consoleLogger.isDebugEnabled()) {
             consoleLogger.debug("Number of sources: " + sourceNodes.size());
         }
         List<Node> targetNodes = edges.stream().map(edge -> edge.getTarget()).collect(Collectors.toList());
-        if (consoleLogger.isDebugEnabled()){
+        if (consoleLogger.isDebugEnabled()) {
             consoleLogger.debug("Number of targets: " + targetNodes.size());
         }
 
         // Union nodes
         sourceNodes.addAll(targetNodes);
         List<Node> remainingNodes = sourceNodes;
-        if (consoleLogger.isDebugEnabled()){
+        if (consoleLogger.isDebugEnabled()) {
             consoleLogger.debug("Total remaining nodes: " + remainingNodes.size());
         }
 
