@@ -36,7 +36,7 @@ public class PreferentialAttachmentStatistics extends LinkPredictionStatistics {
      * @return Algorithm name
      */
     @Override
-    public String getAlgorithmName(){
+    public String getAlgorithmName() {
         return PreferentialAttachmentStatisticsBuilder.PREFERENTIAL_ATTACHMENT_NAME;
     }
 

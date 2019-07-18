@@ -9,6 +9,7 @@ import org.gephi.project.api.ProjectController;
 import org.gephi.project.api.Workspace;
 import org.openide.util.Lookup;
 
+import java.io.Serializable;
 import java.util.*;
 
 /**
@@ -19,7 +20,7 @@ import java.util.*;
  *
  * @author Marco Romanutti
  */
-public abstract class EvaluationMetric {
+public abstract class EvaluationMetric implements Serializable {
     /**
      * Initial graph
      */
@@ -61,6 +62,9 @@ public abstract class EvaluationMetric {
      */
     protected int diffEdgeCount;
 
+    // Serial uid
+    private static final long serialVersionUID = 3505122041350261811L;
+
     // Console Logger
     protected static Logger consoleLogger = LogManager.getLogger(EvaluationMetric.class);
 
@@ -76,6 +80,10 @@ public abstract class EvaluationMetric {
     /**
      * Calculates respective metric for link prediction algorithm.
      *
+     * @param addedEdges Number of edges added
+     * @param trained    Graph on which edges will be added
+     * @param validation Graph used for validation
+     * @param statistics Algorithm to use for prediction
      * @return Metric value
      */
     public abstract double calculate(int addedEdges, Graph trained, Graph validation,
@@ -187,8 +195,9 @@ public abstract class EvaluationMetric {
      */
     @Override
     public boolean equals(Object o) {
-        if (!(o instanceof EvaluationMetric))
+        if (!(o instanceof EvaluationMetric)) {
             return false;
+        }
         return (((EvaluationMetric) o).statistic.getClass().equals(this.statistic.getClass()));
     }
 

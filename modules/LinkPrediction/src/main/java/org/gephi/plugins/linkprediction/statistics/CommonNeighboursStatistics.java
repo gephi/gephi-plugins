@@ -31,7 +31,7 @@ public class CommonNeighboursStatistics extends LinkPredictionStatistics {
      * @return Algorithm name
      */
     @Override
-    public String getAlgorithmName(){
+    public String getAlgorithmName() {
         return CommonNeighboursStatisticsBuilder.COMMON_NEIGHBOURS_NAME;
     }
 

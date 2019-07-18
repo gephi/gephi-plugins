@@ -27,12 +27,13 @@ public class LinkPredictionAccuracy extends EvaluationMetric {
      * Calculates accuracy as percentage of correct predicted edges compared to total predicted edges.
      *
      * @param addedEdges Number of edges to add
-     * @param trained Graph on that links predictions are added
+     * @param trained    Graph on that links predictions are added
      * @param validation Validation graph
      * @param statistics Algorithm used
      * @return Accuracy in percent, rounded to two decimal places
      */
-    @Override public double calculate(int addedEdges, Graph trained, Graph validation, LinkPredictionStatistics statistics) {
+    @Override
+    public double calculate(int addedEdges, Graph trained, Graph validation, LinkPredictionStatistics statistics) {
         consoleLogger.debug("Calculate accuracy");
 
         Set<Edge> trainedEdges = new HashSet<>(Arrays.asList(trained.getEdges().toArray()));

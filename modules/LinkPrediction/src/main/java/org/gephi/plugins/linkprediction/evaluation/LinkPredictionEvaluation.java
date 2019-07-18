@@ -33,13 +33,15 @@ public class LinkPredictionEvaluation implements Statistics, Serializable {
     private List<EvaluationMetric> evaluations = new ArrayList<>();
 
     // HTML Constants
-    private String LINE_BREAK = "<br /><br />";
+    private static final String LINEBREAK = "<br /><br />";
 
     // Console Logger
     private static Logger consoleLogger = LogManager.getLogger(LinkPredictionEvaluation.class);
 
     /**
      * Calculates evaluation metrics for all evaluations.
+     *
+     * @param graphModel Model to evaluate metrics on
      */
     public void execute(GraphModel graphModel) {
 
@@ -48,7 +50,8 @@ public class LinkPredictionEvaluation implements Statistics, Serializable {
         });
     }
 
-    @Override public String getReport() {
+    @Override
+    public String getReport() {
         consoleLogger.debug("Create report");
         //This is the HTML report shown when execution ends.
         //One could add a distribution histogram for instance
@@ -107,8 +110,9 @@ public class LinkPredictionEvaluation implements Statistics, Serializable {
      */
     public void addEvaluation(EvaluationMetric evaluation) {
         consoleLogger.debug("Attempt to add metric for " + evaluation.getAlgorithmName());
-        if (!evaluations.contains(evaluation))
+        if (!evaluations.contains(evaluation)) {
             evaluations.add(evaluation);
+        }
     }
 
     /**
@@ -118,8 +122,9 @@ public class LinkPredictionEvaluation implements Statistics, Serializable {
      */
     public void removeEvaluation(EvaluationMetric evaluation) {
         consoleLogger.debug("Attempt to remove metric for " + evaluation.getAlgorithmName());
-        if (evaluations.contains(evaluation))
+        if (evaluations.contains(evaluation)) {
             evaluations.remove(evaluation);
+        }
     }
 
     /**
@@ -185,7 +190,7 @@ public class LinkPredictionEvaluation implements Statistics, Serializable {
         consoleLogger.debug("Append iteration results section to report");
 
         html += "<h2>Iteration Results:</h2>";
-        html += LINE_BREAK + imageFile + LINE_BREAK;
+        html += LINEBREAK + imageFile + LINEBREAK;
         return html;
     }
 
@@ -228,7 +233,7 @@ public class LinkPredictionEvaluation implements Statistics, Serializable {
         int counter = 1;
         for (Map.Entry<String, Double> elem : sortedValues.entrySet()) {
             html += counter + ". " + elem.getKey() + ": " + String.valueOf(elem.getValue());
-            html += LINE_BREAK;
+            html += LINEBREAK;
             counter++;
         }
         return html;
