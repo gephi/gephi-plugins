@@ -64,6 +64,7 @@ public abstract class EvaluationMetric implements Serializable {
     // Console Logger
     protected static Logger consoleLogger = LogManager.getLogger(EvaluationMetric.class);
 
+
     public EvaluationMetric(LinkPredictionStatistics statistic, Graph initial, Graph validation, Workspace initialWS,
                             Workspace validationWS) {
         this.statistic = statistic;
@@ -184,6 +185,24 @@ public abstract class EvaluationMetric implements Serializable {
     }
 
     /**
+     * Sets the trained graph.
+     *
+     * @param trained Graph to predict links
+     */
+    public void setTrained(Graph trained) {
+        this.trained = trained;
+    }
+
+    /**
+     * Sets the number of edges to predict.
+     *
+     * @param diffEdgeCount Number of edges to predict
+     */
+    public void setDiffEdgeCount(int diffEdgeCount) {
+        this.diffEdgeCount = diffEdgeCount;
+    }
+
+    /**
      * Evaluates if evaluation metric has the same underlying statistic algorithm.
      *
      * @param o Object to compare
@@ -214,7 +233,7 @@ public abstract class EvaluationMetric implements Serializable {
      * @param trainedModel    Models to predict links on
      * @param trainedEdges    Edges of trained graph
      */
-    private void predictLinks(Set<Edge> validationEdges, GraphModel trainedModel, Set<Edge> trainedEdges) {
+    void predictLinks(Set<Edge> validationEdges, GraphModel trainedModel, Set<Edge> trainedEdges) {
         consoleLogger.debug("Predict links");
         // Predict i new edges
         for (int i = 1; i <= diffEdgeCount; i++) {
@@ -243,7 +262,7 @@ public abstract class EvaluationMetric implements Serializable {
      * @param validationEdges Set of edges from validation graph
      * @return Current graph model
      */
-    private GraphModel determineCurrentGraphModel(GraphController gc, Set<Edge> initialEdges,
+    GraphModel determineCurrentGraphModel(GraphController gc, Set<Edge> initialEdges,
                                                   Set<Edge> validationEdges) {
         consoleLogger.debug("Determine current graph model");
         GraphModel currentGraphModel;
