@@ -21,7 +21,7 @@ import org.openide.util.lookup.ServiceProvider;
     /**
      * Name of the algorithm
      **/
-    public static final String LINK_PREDICTION_NAME = "Link Prediction Evaluation";
+    public static final String LINK_PREDICTION_NAME = "Eval. Link Prediction Algorithms";
 
     @Override public String getName() {
         return LINK_PREDICTION_NAME;

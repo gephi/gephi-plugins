@@ -1,170 +1,219 @@
 package org.gephi.plugins.linkprediction.base;
 
-import org.gephi.graph.api.Edge;
-import org.gephi.graph.api.Graph;
-import org.gephi.graph.api.GraphController;
-import org.gephi.graph.api.GraphModel;
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.gephi.graph.api.*;
 import org.gephi.project.api.Project;
-import org.gephi.project.api.Workspace;
-
-import java.util.*;
-import org.openide.util.Lookup;
 import org.gephi.project.api.ProjectController;
+import org.gephi.project.api.Workspace;
+import org.openide.util.Lookup;
+
+import java.io.Serializable;
+import java.util.*;
 
 /**
  * Calculates the metric to evaluate the quality of a link prediction algorithm.
+ * <p>
+ * This base class contains all metric-independent implementations. The
+ * base class is extended by the implementations of the respective quality metrics.
  *
  * @author Marco Romanutti
  */
-public abstract class EvaluationMetric {
+public abstract class EvaluationMetric implements Serializable {
     /**
-     * Train graph
+     * Initial graph
      */
-    protected final Graph train;
+    protected final Graph initial;
     /**
-     * Test graph
+     * Trained graph
      */
-    protected final Graph test;
+    protected Graph trained;
     /**
-     * Test Workspace
+     * Validation graph
      */
-    protected final Workspace testWS;
+    protected final Graph validation;
     /**
-     * Train Workspace
+     * Validation Workspace
      */
-    protected final Workspace trainWS;
-
+    protected final Workspace validationWS;
+    /**
+     * Initial Workspace
+     */
+    protected final Workspace initialWS;
     /**
      * Algorithm to evaluate
      */
     protected final LinkPredictionStatistics statistic;
     /**
-     * Calculated result
+     * Calculated results per iteration
      */
-    protected double result;
-    protected String algorithmName;
+    protected Map<Integer, Double> iterationResults = new HashMap<>();
+    /**
+     * Final results after all iterations
+     */
+    protected double finalResult;
+    /**
+     * Number of edges to predict
+     */
+    protected int diffEdgeCount;
 
-    public EvaluationMetric(LinkPredictionStatistics statistic, Graph train, Graph test, Workspace trainWS, Workspace testWS){
+    // Serial uid
+    private static final long serialVersionUID = 3505122041350261811L;
+
+    // Console Logger
+    protected static Logger consoleLogger = LogManager.getLogger(EvaluationMetric.class);
+
+
+    public EvaluationMetric(LinkPredictionStatistics statistic, Graph initial, Graph validation, Workspace initialWS,
+                            Workspace validationWS) {
         this.statistic = statistic;
-        this.train = train;
-        this.test = test;
-        this.trainWS = trainWS;
-        this.testWS = testWS;
-    }
-
-    public void run() {
-
-        /**
-         * Duplicate Graph for calculation of chosen algorithm
-         */
-
-        ProjectController pc = Lookup.getDefault().lookup(ProjectController.class);
-        Project pr = pc.getCurrentProject();
-        GraphController gc = Lookup.getDefault().lookup(GraphController.class);
-
-        String statName = statistic.toString();
-        String wsName = null;
-        String wsNameTable = null;
-
-        if (statName.contains("CommonNeighbours")) {
-            wsName = "CommonNeighbours";
-            wsNameTable = "Common Neighbours";
-
-        }
-        else if (statName.contains("PreferentialAttachment")) {
-            wsName = "PreferentialAttachment";
-            wsNameTable = "Preferential Attachment";
-        }
-        else {
-            wsName = "Default";
-        }
-
-        /**
-         * Determines how many edges have to be calculated and then uses the chosen algorithm
-         */
-        Set<Edge> trainEdges = new HashSet<>(Arrays.asList(train.getEdges().toArray()));
-        Set<Edge> testEdges = new HashSet<>(Arrays.asList(test.getEdges().toArray()));
-        Workspace ws = pc.newWorkspace(pr);
-
-        int diffEdgeCount = 0;
-
-        GraphModel currentGraphModel = gc.getGraphModel(trainWS);
-
-        if (trainEdges.size() > testEdges.size()) {
-            diffEdgeCount = trainEdges.size() - testEdges.size();
-            currentGraphModel = gc.getGraphModel(testWS);
-
-        }
-        else if (trainEdges.size() < testEdges.size()) {
-            diffEdgeCount = testEdges.size() - trainEdges.size();
-            currentGraphModel = gc.getGraphModel(trainWS);
-        }
-
-        Graph graph = currentGraphModel.getGraph();
-        GraphModel newGraphModel = gc.getGraphModel(ws);
-        newGraphModel.bridge().copyNodes(graph.getNodes().toArray());
-        pc.renameWorkspace(ws, wsName);
-        pc.openWorkspace(ws);
-
-        for (int i = 0; i < diffEdgeCount; i++) {
-            statistic.execute(newGraphModel);
-        }
-
-
-        /**
-         * Calculate accuracy of algorithm
-         */
-        Graph newGraph = newGraphModel.getGraph();
-        if (trainEdges.size() > testEdges.size()) {
-            result = calculate(test, train, statistic, newGraph, wsNameTable) * 100;
-
-        }
-        else if (trainEdges.size() < testEdges.size()) {
-            result = calculate(train, test, statistic, newGraph, wsNameTable) * 100;
-        }
-        else {
-            result = calculate (train, test, statistic, newGraph, wsNameTable) * 100;
-        }
-        algorithmName = wsNameTable;
-
+        this.initial = initial;
+        this.validation = validation;
+        this.initialWS = initialWS;
+        this.validationWS = validationWS;
     }
 
     /**
      * Calculates respective metric for link prediction algorithm.
      *
+     * @param addedEdges Number of edges added
+     * @param trained    Graph on which edges will be added
+     * @param validation Graph used for validation
+     * @param statistics Algorithm to use for prediction
      * @return Metric value
      */
-    public abstract double calculate(Graph train, Graph test, LinkPredictionStatistics statistics, Graph newGraph, String alg);
+    public abstract double calculate(int addedEdges, Graph trained, Graph validation,
+                                     LinkPredictionStatistics statistics);
 
     /**
-     * Get caluclated evaluation result.
-     *
-     * @return Calculated metric value.
+     * Runs the calculation of prediction and evaluates initial and validation graph.
      */
-    public double getResult() {
-        return result;
+    public void run() {
+        consoleLogger.debug("Calcualte evaluation metric");
+
+        //Look if the result column already exist and create it if needed
+        consoleLogger.debug("Initialize columns");
+        ProjectController pc = Lookup.getDefault().lookup(ProjectController.class);
+        Project pr = pc.getCurrentProject();
+        GraphController gc = Lookup.getDefault().lookup(GraphController.class);
+        Table edgeTable = gc.getGraphModel().getEdgeTable();
+        LinkPredictionStatistics.initializeColumns(edgeTable);
+
+        // Determine how many edges have to be calculated and then uses the chosen algorithm
+        Set<Edge> initialEdges = new HashSet<>(Arrays.asList(initial.getEdges().toArray()));
+        consoleLogger.log(Level.DEBUG, () -> "Initial edges count: " + initialEdges.size());
+        Set<Edge> validationEdges = new HashSet<>(Arrays.asList(validation.getEdges().toArray()));
+        consoleLogger.log(Level.DEBUG, () -> "Validation edges count: " + validationEdges.size());
+
+        // Create workspace to add predicted edges
+        consoleLogger.debug("Create new workspace");
+        Workspace initWorkspace = pc.getCurrentWorkspace();
+        Workspace newWorkspace = pc.newWorkspace(pr);
+        pc.renameWorkspace(newWorkspace, getAlgorithmName());
+
+        // Determines current graph model and number of edges to predict
+        consoleLogger.debug("Determine current graph model");
+        GraphModel currentGraphModel = determineCurrentGraphModel(gc, initialEdges, validationEdges);
+
+        // Duplicate nodes from current to new workspace
+        Graph current = currentGraphModel.getGraph();
+        GraphModel trainedModel = gc.getGraphModel(newWorkspace);
+        consoleLogger.debug("Duplicate nodes");
+        trainedModel.bridge().copyNodes(current.getNodes().toArray());
+        pc.openWorkspace(newWorkspace);
+
+        // Predict links and save metric per iteration
+        consoleLogger.debug("Predict links");
+        trained = trainedModel.getGraph();
+        Set<Edge> trainedEdges = new HashSet<>(Arrays.asList(trained.getEdges().toArray()));
+        consoleLogger.log(Level.DEBUG, () -> "Trained edges count: " + trainedEdges.size());
+        predictLinks(validationEdges, trainedModel, trainedEdges);
+
+        // Calculate final accuracy of algorithm
+        finalResult = calculateCurrentResult(trainedEdges.size(), validationEdges.size());
+        consoleLogger.log(Level.DEBUG, () -> "Final result :" + finalResult);
+
+        // Get back to init workspace
+        pc.openWorkspace(initWorkspace);
+
     }
 
+    /**
+     * Gets calculated evaluation results per iteration.
+     *
+     * @return Calculated metric values per iteration.
+     */
+    public Map<Integer, Double> getIterationResults() {
+        return iterationResults;
+    }
+
+    /**
+     * Gets calculated final evaluation result.
+     *
+     * @return Calculated final metric value.
+     */
+    public double getFinalResult() {
+        return finalResult;
+    }
+
+    /**
+     * Gets number of edges to predict.
+     *
+     * @return Number of edges to predict
+     */
+    public int getDiffEdgeCount() {
+        return diffEdgeCount;
+    }
+
+    /**
+     * Gets the name of the algorithm.
+     *
+     * @return Algorithm name
+     */
     public String getAlgorithmName() {
-        return algorithmName;
+        return statistic.getAlgorithmName();
     }
 
+    /**
+     * Gets the algorithm used.
+     *
+     * @return Used algorithm
+     */
     public LinkPredictionStatistics getStatistic() {
         return statistic;
     }
+
     /**
-     * Evlauates if evaluation metric has the same underlying statistic algorithm.
+     * Sets the trained graph.
+     *
+     * @param trained Graph to predict links
+     */
+    public void setTrained(Graph trained) {
+        this.trained = trained;
+    }
+
+    /**
+     * Sets the number of edges to predict.
+     *
+     * @param diffEdgeCount Number of edges to predict
+     */
+    public void setDiffEdgeCount(int diffEdgeCount) {
+        this.diffEdgeCount = diffEdgeCount;
+    }
+
+    /**
+     * Evaluates if evaluation metric has the same underlying statistic algorithm.
      *
      * @param o Object to compare
      * @return Equality of two evaluation metrics
      */
-    @Override public boolean equals(Object o) {
-        if (!(o instanceof EvaluationMetric))
+    @Override
+    public boolean equals(Object o) {
+        if (!(o instanceof EvaluationMetric)) {
             return false;
-        if (((EvaluationMetric) o).statistic.getClass().equals(this.getClass()))
-            return true;
-        else
-            return false;
+        }
+        return (((EvaluationMetric) o).statistic.getClass().equals(this.statistic.getClass()));
     }
 
     /**
@@ -175,5 +224,83 @@ public abstract class EvaluationMetric {
     @Override
     public int hashCode() {
         return Objects.hash(statistic.getClass());
+    }
+
+    /**
+     * Processes link prediction and calculation of current metric iteratively.
+     *
+     * @param validationEdges Edges of validation graph
+     * @param trainedModel    Models to predict links on
+     * @param trainedEdges    Edges of trained graph
+     */
+    void predictLinks(Set<Edge> validationEdges, GraphModel trainedModel, Set<Edge> trainedEdges) {
+        consoleLogger.debug("Predict links");
+        // Predict i new edges
+        for (int i = 1; i <= diffEdgeCount; i++) {
+            // Set prediction number to use in lambda log expression
+            final int predictionNumber = i;
+
+            statistic.execute(trainedModel);
+
+            // Get number of edges per iteration
+            consoleLogger.log(Level.DEBUG, () -> "Trained edges in iteration " + predictionNumber + ": " + trainedEdges.size());
+            consoleLogger.log(Level.DEBUG, () -> "Validation edges in iteration " + predictionNumber + ": " + validationEdges.size());
+
+            // Calculate current accuracy of algorithm
+            double currentResult = calculateCurrentResult(trainedEdges.size(), validationEdges.size());
+            iterationResults.put(i, currentResult);
+            consoleLogger.log(Level.DEBUG, () -> "Current result in iteration " + predictionNumber + ": " + currentResult);
+        }
+    }
+
+    /**
+     * Determines number of edges to predict and current graph model.
+     *
+     * @param gc              Current graph controller
+     * @param initialEdges    Set of edges of initial graph
+     * @param validationEdges Set of edges from validation graph
+     * @return Current graph model
+     */
+    GraphModel determineCurrentGraphModel(GraphController gc, Set<Edge> initialEdges,
+                                                  Set<Edge> validationEdges) {
+        consoleLogger.debug("Determine current graph model");
+        GraphModel currentGraphModel;
+
+        // Determine which graph model to use for validation
+        if (initialEdges.size() > validationEdges.size()) {
+            diffEdgeCount = initialEdges.size() - validationEdges.size();
+            currentGraphModel = gc.getGraphModel(validationWS);
+            consoleLogger.debug("Initial graph is bigger than validation graph");
+        } else {
+            diffEdgeCount = validationEdges.size() - initialEdges.size();
+            currentGraphModel = gc.getGraphModel(initialWS);
+            consoleLogger.debug("Validation graph is bigger than initial graph");
+        }
+
+        return currentGraphModel;
+    }
+
+    /**
+     * Calculates the metric at current situation.
+     *
+     * @param trainedEdgesSize    Number of edges of trained graph
+     * @param validationEdgesSize Number of edges of validation graph
+     * @return Metric result
+     */
+    double calculateCurrentResult(int trainedEdgesSize, int validationEdgesSize) {
+        consoleLogger.debug("Calculate current result");
+        double currentResult;
+        int addedEdges = Math.abs(validationEdgesSize - trainedEdgesSize);
+
+        // Calculate metric
+        if (trainedEdgesSize > validationEdgesSize) {
+            consoleLogger.debug("More trained edges than validation edges");
+            currentResult = calculate(addedEdges, validation, trained, statistic);
+        } else {
+            consoleLogger.debug("Less or equal number of trained edges compared to validation edges");
+            currentResult = calculate(addedEdges, trained, validation, statistic);
+        }
+
+        return currentResult;
     }
 }
