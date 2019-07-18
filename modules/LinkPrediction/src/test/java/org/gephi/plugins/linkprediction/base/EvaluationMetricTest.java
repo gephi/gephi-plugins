@@ -19,6 +19,7 @@ import java.util.Map;
 import java.util.Objects;
 
 import static junit.framework.TestCase.assertTrue;
+import static org.junit.Assert.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class EvaluationMetricTest {
@@ -163,6 +164,7 @@ class EvaluationMetricTest {
 
     @org.junit.jupiter.api.Test
     void testEquals() {
+
         Graph init = initModel.getUndirectedGraph();
         Graph validation = validationModel.getUndirectedGraph();
 
@@ -189,10 +191,14 @@ class EvaluationMetricTest {
         EvaluationMetric metricCn2 = (EvaluationMetric) new LinkPredictionAccuracy(cn, newInit, validation, initialWs, validationWs);
 
         assertEquals(metricCn1, metricCn2);
+
+        // Check completely different object
+        assertFalse(metricCn1.equals(new Object()));
     }
 
     @org.junit.jupiter.api.Test
     void testHashCode() {
+
         Graph init = initModel.getUndirectedGraph();
         Graph validation = validationModel.getUndirectedGraph();
 
@@ -204,6 +210,7 @@ class EvaluationMetricTest {
 
     @org.junit.jupiter.api.Test
     void testPredictLinks() {
+
         // Create objects used for metric
         CommonNeighboursStatistics cn = new CommonNeighboursStatistics();
         Graph init = initModel.getUndirectedGraph();
@@ -236,6 +243,7 @@ class EvaluationMetricTest {
 
     @org.junit.jupiter.api.Test
     void testDeterminCurrentGrapModel() {
+
         // Create objects used for metric
         CommonNeighboursStatistics cn = new CommonNeighboursStatistics();
         Graph init = initModel.getUndirectedGraph();
@@ -269,5 +277,66 @@ class EvaluationMetricTest {
         current = metric.determineCurrentGraphModel(gc, initEdges, validationEdges);
 
         assertEquals(init.getModel(), current);
+    }
+
+    @org.junit.jupiter.api.Test
+    void testCalculateCurrentResult_Successful() {
+
+        // Create objects used for metric
+        CommonNeighboursStatistics cn = new CommonNeighboursStatistics();
+        Graph init = initModel.getUndirectedGraph();
+        Graph validation = validationModel.getUndirectedGraph();
+        Graph trained = initModel.getUndirectedGraph();
+
+        // Save initial size of init graph
+        int initSize = init.getEdgeCount();
+
+        // Add correct prediction to validation and trained graph
+        Edge e13validation = validationModel.factory().newEdge("E13", a, c, 1, 1, false);
+        validation.addEdge(e13validation);
+        Edge e13train = initModel.factory().newEdge("E13", a, c, 1, 1, false);
+        e13train.setAttribute(LinkPredictionStatistics.getColLastPrediction(), CommonNeighboursStatisticsBuilder.COMMON_NEIGHBOURS_NAME);
+        trained.addEdge(e13train);
+
+        // Prepare calculation of final result
+        EvaluationMetric metric = (EvaluationMetric) new LinkPredictionAccuracy(cn, init, validation, initialWs, validationWs);
+        HashSet<Edge> initEdges = new HashSet<>(Arrays.asList(init.getEdges().toArray()));
+        HashSet<Edge> validationEdges = new HashSet<>(Arrays.asList(validation.getEdges().toArray()));
+        metric.setTrained(trained);
+
+        // Get final result
+        double finalResult = metric.calculateCurrentResult(initSize, validationEdges.size());
+
+        assertEquals(100, finalResult, 0.001);
+    }
+
+    @org.junit.jupiter.api.Test
+    void testCalculateCurrentResult_Failure() {
+
+        // Create objects used for metric
+        CommonNeighboursStatistics cn = new CommonNeighboursStatistics();
+        Graph init = initModel.getUndirectedGraph();
+        Graph validation = validationModel.getUndirectedGraph();
+        Graph trained = initModel.getUndirectedGraph();
+
+        // Save initial size of init graph
+        int initSize = init.getEdgeCount();
+
+        // Add prediction to trained graph
+        // to simulate wrong worksheet selection
+        Edge e13train = initModel.factory().newEdge("E13", a, c, 1, 1, false);
+        e13train.setAttribute(LinkPredictionStatistics.getColLastPrediction(), CommonNeighboursStatisticsBuilder.COMMON_NEIGHBOURS_NAME);
+        trained.addEdge(e13train);
+
+        // Prepare calculation of final result
+        EvaluationMetric metric = (EvaluationMetric) new LinkPredictionAccuracy(cn, init, validation, initialWs, validationWs);
+        HashSet<Edge> initEdges = new HashSet<>(Arrays.asList(init.getEdges().toArray()));
+        HashSet<Edge> validationEdges = new HashSet<>(Arrays.asList(validation.getEdges().toArray()));
+        metric.setTrained(trained);
+
+        // Get final result
+        double finalResult = metric.calculateCurrentResult(trained.getEdgeCount(), validationEdges.size());
+
+        assertEquals(0, finalResult, 0.001);
     }
 }

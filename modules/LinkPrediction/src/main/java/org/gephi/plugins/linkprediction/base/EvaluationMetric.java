@@ -237,20 +237,19 @@ public abstract class EvaluationMetric implements Serializable {
         consoleLogger.debug("Predict links");
         // Predict i new edges
         for (int i = 1; i <= diffEdgeCount; i++) {
+            // Set prediction number to use in lambda log expression
+            final int predictionNumber = i;
+
             statistic.execute(trainedModel);
 
             // Get number of edges per iteration
-            if (consoleLogger.isDebugEnabled()) {
-                consoleLogger.debug("Trained edges in iteration " + i + ": " + trainedEdges.size());
-                consoleLogger.debug("Validation edges in iteration " + i + ": " + validationEdges.size());
-            }
+            consoleLogger.log(Level.DEBUG, () -> "Trained edges in iteration " + predictionNumber + ": " + trainedEdges.size());
+            consoleLogger.log(Level.DEBUG, () -> "Validation edges in iteration " + predictionNumber + ": " + validationEdges.size());
 
             // Calculate current accuracy of algorithm
             double currentResult = calculateCurrentResult(trainedEdges.size(), validationEdges.size());
             iterationResults.put(i, currentResult);
-            if (consoleLogger.isDebugEnabled()) {
-                consoleLogger.debug("Current result in iteration " + i + ": " + currentResult);
-            }
+            consoleLogger.log(Level.DEBUG, () -> "Current result in iteration " + predictionNumber + ": " + currentResult);
         }
     }
 
@@ -288,20 +287,17 @@ public abstract class EvaluationMetric implements Serializable {
      * @param validationEdgesSize Number of edges of validation graph
      * @return Metric result
      */
-    private double calculateCurrentResult(int trainedEdgesSize, int validationEdgesSize) {
+    double calculateCurrentResult(int trainedEdgesSize, int validationEdgesSize) {
         consoleLogger.debug("Calculate current result");
         double currentResult;
-        int addedEdges = validationEdgesSize - trainedEdgesSize;
+        int addedEdges = Math.abs(validationEdgesSize - trainedEdgesSize);
 
         // Calculate metric
         if (trainedEdgesSize > validationEdgesSize) {
             consoleLogger.debug("More trained edges than validation edges");
             currentResult = calculate(addedEdges, validation, trained, statistic);
-        } else if (trainedEdgesSize < validationEdgesSize) {
-            consoleLogger.debug("Less trained edges than validation edges");
-            currentResult = calculate(addedEdges, trained, validation, statistic);
         } else {
-            consoleLogger.debug("Same number of trained edges and validation edges");
+            consoleLogger.debug("Less or equal number of trained edges compared to validation edges");
             currentResult = calculate(addedEdges, trained, validation, statistic);
         }
 
