@@ -61,6 +61,7 @@ public class LinkPredictionEvaluationPanel extends javax.swing.JPanel implements
         statisticsLabel = new javax.swing.JLabel("Algorithms to evaluate: ");
         statisticsLabel.setToolTipText("Currently only undirected, unweighted graphs are supported");
 
+        // Prepare workspaces for checkbox
         Workspace[] allWorkspaces = Lookup.getDefault().lookup(ProjectController.class).getCurrentProject()
                 .getLookup().lookup(WorkspaceProvider.class).getWorkspaces();
 
@@ -68,6 +69,7 @@ public class LinkPredictionEvaluationPanel extends javax.swing.JPanel implements
         initialWorkspace = new JComboBox();
         validationWorkspace = new JComboBox();
 
+        // Add workspaces to checkboxes
         for (Workspace w : allWorkspaces) {
             // Add workspace to selection list
             String name = w.getLookup().lookup(WorkspaceInformation.class).getName();
@@ -79,9 +81,11 @@ public class LinkPredictionEvaluationPanel extends javax.swing.JPanel implements
             workspaces.put(name, w);
         }
 
+        // Create checkboxes
         commonNeighbourCheckbox = new javax.swing.JCheckBox(CommonNeighboursStatisticsBuilder.COMMON_NEIGHBOURS_NAME);
         preferentialAttachmentCheckbox = new javax.swing.JCheckBox(PreferentialAttachmentStatisticsBuilder.PREFERENTIAL_ATTACHMENT_NAME);
 
+        // Set overall layout
         setLayout(new GridLayout(5, 2));
 
         // Add components to layout
@@ -94,6 +98,7 @@ public class LinkPredictionEvaluationPanel extends javax.swing.JPanel implements
         add(commonNeighbourCheckbox);
         add(preferentialAttachmentCheckbox);
 
+        // Add listener to detect changes on checkboxes
         commonNeighbourCheckbox.addItemListener(this);
         preferentialAttachmentCheckbox.addItemListener(this);
 
@@ -111,6 +116,7 @@ public class LinkPredictionEvaluationPanel extends javax.swing.JPanel implements
         Graph initial = Lookup.getDefault().lookup(GraphController.class).getGraphModel(workspaces.get(initialItem)).getUndirectedGraph();
         Graph validation = Lookup.getDefault().lookup(GraphController.class).getGraphModel(workspaces.get(validationItem)).getUndirectedGraph();
 
+        // Common neighbour accuracy
         LinkPredictionAccuracy cnAccuracy = new LinkPredictionAccuracy(new CommonNeighboursStatistics(), initial, validation, initialWS, validationWS);
         if (commonNeighbourCheckbox.isSelected()) {
             consoleLogger.debug("Add common neighbour to evaluations");
@@ -120,6 +126,7 @@ public class LinkPredictionEvaluationPanel extends javax.swing.JPanel implements
             this.evaluation.removeEvaluation(cnAccuracy);
         }
 
+        // Preferential attachment accuracy
         LinkPredictionAccuracy paAccuracy = new LinkPredictionAccuracy(new PreferentialAttachmentStatistics(), initial, validation, initialWS, validationWS);
         if (preferentialAttachmentCheckbox.isSelected()) {
             consoleLogger.debug("Add preferential attachment to evaluations");

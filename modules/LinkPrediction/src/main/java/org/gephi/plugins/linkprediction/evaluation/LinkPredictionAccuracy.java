@@ -35,7 +35,6 @@ public class LinkPredictionAccuracy extends EvaluationMetric {
     @Override
     public double calculate(int addedEdges, Graph trained, Graph validation, LinkPredictionStatistics statistics) {
         consoleLogger.debug("Calculate accuracy");
-
         Set<Edge> trainedEdges = new HashSet<>(Arrays.asList(trained.getEdges().toArray()));
 
         // Remove edges from other algorithms and

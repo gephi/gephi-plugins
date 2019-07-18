@@ -33,7 +33,6 @@ public abstract class EvaluationMetric implements Serializable {
      * Validation graph
      */
     protected final Graph validation;
-
     /**
      * Validation Workspace
      */
@@ -42,12 +41,10 @@ public abstract class EvaluationMetric implements Serializable {
      * Initial Workspace
      */
     protected final Workspace initialWS;
-
     /**
      * Algorithm to evaluate
      */
     protected final LinkPredictionStatistics statistic;
-
     /**
      * Calculated results per iteration
      */
@@ -56,7 +53,6 @@ public abstract class EvaluationMetric implements Serializable {
      * Final results after all iterations
      */
     protected double finalResult;
-
     /**
      * Number of edges to predict
      */
@@ -220,9 +216,11 @@ public abstract class EvaluationMetric implements Serializable {
      */
     private void predictLinks(Set<Edge> validationEdges, GraphModel trainedModel, Set<Edge> trainedEdges) {
         consoleLogger.debug("Predict links");
+        // Predict i new edges
         for (int i = 1; i <= diffEdgeCount; i++) {
             statistic.execute(trainedModel);
 
+            // Get number of edges per iteration
             if (consoleLogger.isDebugEnabled()) {
                 consoleLogger.debug("Trained edges in iteration " + i + ": " + trainedEdges.size());
                 consoleLogger.debug("Validation edges in iteration " + i + ": " + validationEdges.size());
@@ -250,6 +248,7 @@ public abstract class EvaluationMetric implements Serializable {
         consoleLogger.debug("Determine current graph model");
         GraphModel currentGraphModel;
 
+        // Determine which graph model to use for validation
         if (initialEdges.size() > validationEdges.size()) {
             diffEdgeCount = initialEdges.size() - validationEdges.size();
             currentGraphModel = gc.getGraphModel(validationWS);
@@ -259,6 +258,7 @@ public abstract class EvaluationMetric implements Serializable {
             currentGraphModel = gc.getGraphModel(initialWS);
             consoleLogger.debug("Validation graph is bigger than initial graph");
         }
+
         return currentGraphModel;
     }
 
@@ -274,6 +274,7 @@ public abstract class EvaluationMetric implements Serializable {
         double currentResult;
         int addedEdges = validationEdgesSize - trainedEdgesSize;
 
+        // Calculate metric
         if (trainedEdgesSize > validationEdgesSize) {
             consoleLogger.debug("More trained edges than validation edges");
             currentResult = calculate(addedEdges, validation, trained, statistic);

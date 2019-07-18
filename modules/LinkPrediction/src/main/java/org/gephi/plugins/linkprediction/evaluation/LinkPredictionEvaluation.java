@@ -59,6 +59,7 @@ public class LinkPredictionEvaluation implements Statistics, Serializable {
         // Append parameters section
         html = appendParameters(html);
 
+        // Add final results to map
         Map<String, Double> finalResults = new HashMap<>();
         for (EvaluationMetric e : evaluations) {
             finalResults.put(e.getAlgorithmName(), e.getFinalResult());
@@ -135,9 +136,9 @@ public class LinkPredictionEvaluation implements Statistics, Serializable {
      */
     private static Map<String, Double> sortByValue(Map<String, Double> allValues) {
         consoleLogger.debug("Sort metrics by value");
-
         LinkedHashMap<String, Double> allValuesSorted = new LinkedHashMap<>();
 
+        // Sort entries by value
         allValues.entrySet().stream().sorted(Map.Entry.comparingByValue(Comparator.reverseOrder()))
                 .forEachOrdered(x -> allValuesSorted.put(x.getKey(), x.getValue()));
 
@@ -152,6 +153,7 @@ public class LinkPredictionEvaluation implements Statistics, Serializable {
     private static void formatChart(JFreeChart chart) {
         consoleLogger.debug("Format chart");
 
+        // Format chart
         XYPlot plot = (XYPlot) chart.getPlot();
         XYLineAndShapeRenderer renderer = new XYLineAndShapeRenderer();
         Font legendFont = new Font("SansSerif", Font.PLAIN, 16);
@@ -176,6 +178,7 @@ public class LinkPredictionEvaluation implements Statistics, Serializable {
 
         html += "<h2>Algorithms:</h2>";
         html += "Michael Henninger,<i> Link Prediction</i>, in Soziale Netzwerkanalyse 2018 (p. 96)";
+
         return html;
     }
 
@@ -191,6 +194,7 @@ public class LinkPredictionEvaluation implements Statistics, Serializable {
 
         html += "<h2>Iteration Results:</h2>";
         html += LINEBREAK + imageFile + LINEBREAK;
+
         return html;
     }
 
@@ -202,6 +206,7 @@ public class LinkPredictionEvaluation implements Statistics, Serializable {
     private String renderDiagram() {
         consoleLogger.debug("Render diagram");
 
+        // Create dataset
         XYSeriesCollection dataset = new XYSeriesCollection();
         for (EvaluationMetric e : evaluations) {
             consoleLogger.debug("Add metric for " + e.getAlgorithmName() + " to dataset");
@@ -228,14 +233,16 @@ public class LinkPredictionEvaluation implements Statistics, Serializable {
      */
     private String appendResults(String html, Map<String, Double> sortedValues) {
         consoleLogger.debug("Append result section to report");
-
         html += "<h2>Results:</h2>";
+
+        // Create ranking
         int counter = 1;
         for (Map.Entry<String, Double> elem : sortedValues.entrySet()) {
             html += counter + ". " + elem.getKey() + ": " + String.valueOf(elem.getValue());
             html += LINEBREAK;
             counter++;
         }
+
         return html;
     }
 
@@ -251,6 +258,7 @@ public class LinkPredictionEvaluation implements Statistics, Serializable {
         html += "<h2>Parameters:</h2>";
         int iterationCount = evaluations.isEmpty() ? 0 : evaluations.get(0).getDiffEdgeCount();
         html += "Number of Iterations: " + iterationCount;
+
         return html;
     }
 }
