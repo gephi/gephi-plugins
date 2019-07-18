@@ -1,5 +1,6 @@
 package org.gephi.plugins.linkprediction.evaluation;
 
+import org.apache.logging.log4j.Level;
 import org.gephi.graph.api.Edge;
 import org.gephi.graph.api.Graph;
 import org.gephi.plugins.linkprediction.base.EvaluationMetric;
@@ -35,7 +36,6 @@ public class LinkPredictionAccuracy extends EvaluationMetric {
         consoleLogger.debug("Calculate accuracy");
 
         Set<Edge> trainedEdges = new HashSet<>(Arrays.asList(trained.getEdges().toArray()));
-        Set<Edge> validationEdges = new HashSet<>(Arrays.asList(validation.getEdges().toArray()));
 
         // Remove edges from other algorithms and
         // edges that initially existed
@@ -52,7 +52,7 @@ public class LinkPredictionAccuracy extends EvaluationMetric {
 
         // Round to two decimals
         double rounded = Math.round(accuracy * 100.0) / 100.0;
-        consoleLogger.debug("Accuracy for " + statistic.getAlgorithmName() + " is " + rounded);
+        consoleLogger.log(Level.DEBUG, () -> "Accuracy for " + statistic.getAlgorithmName() + " is " + rounded);
 
         return rounded;
     }

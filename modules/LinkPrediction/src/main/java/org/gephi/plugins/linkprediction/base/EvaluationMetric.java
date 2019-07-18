@@ -1,5 +1,6 @@
 package org.gephi.plugins.linkprediction.base;
 
+import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.gephi.graph.api.*;
@@ -64,7 +65,7 @@ public abstract class EvaluationMetric {
     protected static Logger consoleLogger = LogManager.getLogger(EvaluationMetric.class);
 
     public EvaluationMetric(LinkPredictionStatistics statistic, Graph initial, Graph validation, Workspace initialWS,
-            Workspace validationWS) {
+                            Workspace validationWS) {
         this.statistic = statistic;
         this.initial = initial;
         this.validation = validation;
@@ -78,7 +79,7 @@ public abstract class EvaluationMetric {
      * @return Metric value
      */
     public abstract double calculate(int addedEdges, Graph trained, Graph validation,
-            LinkPredictionStatistics statistics);
+                                     LinkPredictionStatistics statistics);
 
     /**
      * Runs the calculation of prediction and evaluates initial and validation graph.
@@ -96,9 +97,9 @@ public abstract class EvaluationMetric {
 
         // Determine how many edges have to be calculated and then uses the chosen algorithm
         Set<Edge> initialEdges = new HashSet<>(Arrays.asList(initial.getEdges().toArray()));
-        consoleLogger.debug("Initial edges count: " + initialEdges.size());
+        consoleLogger.log(Level.DEBUG, () -> "Initial edges count: " + initialEdges.size());
         Set<Edge> validationEdges = new HashSet<>(Arrays.asList(validation.getEdges().toArray()));
-        consoleLogger.debug("Validation edges count: " + validationEdges.size());
+        consoleLogger.log(Level.DEBUG, () -> "Validation edges count: " + validationEdges.size());
 
         // Create workspace to add predicted edges
         consoleLogger.debug("Create new workspace");
@@ -121,12 +122,12 @@ public abstract class EvaluationMetric {
         consoleLogger.debug("Predict links");
         trained = trainedModel.getGraph();
         Set<Edge> trainedEdges = new HashSet<>(Arrays.asList(trained.getEdges().toArray()));
-        consoleLogger.debug("Trained edges count: " + trainedEdges.size());
+        consoleLogger.log(Level.DEBUG, () -> "Trained edges count: " + trainedEdges.size());
         predictLinks(validationEdges, trainedModel, trainedEdges);
 
         // Calculate final accuracy of algorithm
         finalResult = calculateCurrentResult(trainedEdges.size(), validationEdges.size());
-        consoleLogger.debug("Final result :" + finalResult);
+        consoleLogger.log(Level.DEBUG, () -> "Final result :" + finalResult);
 
         // Get back to init workspace
         pc.openWorkspace(initWorkspace);
@@ -184,13 +185,11 @@ public abstract class EvaluationMetric {
      * @param o Object to compare
      * @return Equality of two evaluation metrics
      */
-    @Override public boolean equals(Object o) {
+    @Override
+    public boolean equals(Object o) {
         if (!(o instanceof EvaluationMetric))
             return false;
-        if (((EvaluationMetric) o).statistic.getClass().equals(this.statistic.getClass()))
-            return true;
-        else
-            return false;
+        return (((EvaluationMetric) o).statistic.getClass().equals(this.statistic.getClass()));
     }
 
     /**
@@ -198,7 +197,8 @@ public abstract class EvaluationMetric {
      *
      * @return Hashed statistic class
      */
-    @Override public int hashCode() {
+    @Override
+    public int hashCode() {
         return Objects.hash(statistic.getClass());
     }
 
@@ -213,13 +213,18 @@ public abstract class EvaluationMetric {
         consoleLogger.debug("Predict links");
         for (int i = 1; i <= diffEdgeCount; i++) {
             statistic.execute(trainedModel);
-            consoleLogger.debug("Trained edges in iteration " + i + ": " + trainedEdges.size());
-            consoleLogger.debug("Validation edges in iteration " + i + ": " + validationEdges.size());
+
+            if (consoleLogger.isDebugEnabled()) {
+                consoleLogger.debug("Trained edges in iteration " + i + ": " + trainedEdges.size());
+                consoleLogger.debug("Validation edges in iteration " + i + ": " + validationEdges.size());
+            }
 
             // Calculate current accuracy of algorithm
             double currentResult = calculateCurrentResult(trainedEdges.size(), validationEdges.size());
             iterationResults.put(i, currentResult);
-            consoleLogger.debug("Current result in iteration " + i + ": " + currentResult);
+            if (consoleLogger.isDebugEnabled()) {
+                consoleLogger.debug("Current result in iteration " + i + ": " + currentResult);
+            }
         }
     }
 
@@ -232,7 +237,7 @@ public abstract class EvaluationMetric {
      * @return Current graph model
      */
     private GraphModel determineCurrentGraphModel(GraphController gc, Set<Edge> initialEdges,
-            Set<Edge> validationEdges) {
+                                                  Set<Edge> validationEdges) {
         consoleLogger.debug("Determine current graph model");
         GraphModel currentGraphModel;
 

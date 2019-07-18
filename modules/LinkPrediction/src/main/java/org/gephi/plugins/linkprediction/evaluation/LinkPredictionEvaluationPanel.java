@@ -1,5 +1,6 @@
 package org.gephi.plugins.linkprediction.evaluation;
 
+import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.gephi.graph.api.Graph;
@@ -70,7 +71,7 @@ public class LinkPredictionEvaluationPanel extends javax.swing.JPanel implements
         for (Workspace w : allWorkspaces) {
             // Add workspace to selection list
             String name = w.getLookup().lookup(WorkspaceInformation.class).getName();
-            consoleLogger.debug("Add workspace " + name);
+            consoleLogger.log(Level.DEBUG, () -> "Add workspace " + name);
 
             initialWorkspace.addItem(name);
             validationWorkspace.addItem(name);

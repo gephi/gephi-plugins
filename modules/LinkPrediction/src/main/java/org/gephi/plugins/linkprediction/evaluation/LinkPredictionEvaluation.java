@@ -15,6 +15,7 @@ import org.jfree.data.xy.XYSeriesCollection;
 
 import java.awt.*;
 import java.awt.geom.Ellipse2D;
+import java.io.Serializable;
 import java.util.*;
 import java.util.List;
 
@@ -23,10 +24,16 @@ import java.util.List;
  *
  * @author Marco Romanutti
  */
-public class LinkPredictionEvaluation implements Statistics {
+public class LinkPredictionEvaluation implements Statistics, Serializable {
+
+    // Serial uid
+    private static final long serialVersionUID = 2405172041950251807L;
 
     // List of link prediction evaluations
     private List<EvaluationMetric> evaluations = new ArrayList<>();
+
+    // HTML Constants
+    private String LINE_BREAK = "<br /><br />";
 
     // Console Logger
     private static Logger consoleLogger = LogManager.getLogger(LinkPredictionEvaluation.class);
@@ -178,7 +185,7 @@ public class LinkPredictionEvaluation implements Statistics {
         consoleLogger.debug("Append iteration results section to report");
 
         html += "<h2>Iteration Results:</h2>";
-        html += "<br /><br />" + imageFile + "<br /><br />";
+        html += LINE_BREAK + imageFile + LINE_BREAK;
         return html;
     }
 
@@ -221,7 +228,7 @@ public class LinkPredictionEvaluation implements Statistics {
         int counter = 1;
         for (Map.Entry<String, Double> elem : sortedValues.entrySet()) {
             html += counter + ". " + elem.getKey() + ": " + String.valueOf(elem.getValue());
-            html += "<br /><br />";
+            html += LINE_BREAK;
             counter++;
         }
         return html;
