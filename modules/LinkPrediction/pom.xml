@@ -9,7 +9,7 @@
 
     <groupId>org.gephi.plugins</groupId>
     <artifactId>link-prediction</artifactId>
-    <version>1.0.0</version>
+    <version>1.1.0</version>
     <packaging>nbm</packaging>
 
     <name>Link Prediction</name>
