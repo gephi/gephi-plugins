@@ -23,7 +23,17 @@ public class CommonNeighboursStatistics extends LinkPredictionStatistics {
     private static Logger consoleLogger = LogManager.getLogger(CommonNeighboursStatistics.class);
 
     static {
-        complexity = Complexity.EXPONENTIAL;
+        complexity = Complexity.QUADRATIC;
+    }
+
+    /**
+     * Gets the name of the respective algorithm.
+     *
+     * @return Algorithm name
+     */
+    @Override
+    public String getAlgorithmName() {
+        return CommonNeighboursStatisticsBuilder.COMMON_NEIGHBOURS_NAME;
     }
 
     @Override public void execute(GraphModel graphModel) {

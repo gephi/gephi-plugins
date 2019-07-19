@@ -9,7 +9,7 @@
 
     <groupId>org.gephi.plugins</groupId>
     <artifactId>link-prediction</artifactId>
-    <version>1.0.0</version>
+    <version>1.1.0</version>
     <packaging>nbm</packaging>
 
     <name>Link Prediction</name>
@@ -102,6 +102,10 @@
         <dependency>
             <groupId>org.gephi</groupId>
             <artifactId>statistics-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.gephi</groupId>
+            <artifactId>statistics-plugin</artifactId>
         </dependency>
         <dependency>
             <groupId>org.gephi</groupId>

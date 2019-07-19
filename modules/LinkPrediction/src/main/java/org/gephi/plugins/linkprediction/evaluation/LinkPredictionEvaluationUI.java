@@ -13,20 +13,20 @@ import javax.swing.*;
  * @author Marco Romanutti
  * @see LinkPredictionEvaluation
  */
-@ServiceProvider(service = StatisticsUI.class)
-public class LinkPredictionEvaluationUI implements StatisticsUI {
+@ServiceProvider(service = StatisticsUI.class) public class LinkPredictionEvaluationUI implements StatisticsUI {
 
+    // Metrics to calculate
     private LinkPredictionEvaluation evaluation;
+
+    // Panel to configure evaluation
     private LinkPredictionEvaluationPanel panel;
 
-    @Override
-    public JPanel getSettingsPanel() {
+    @Override public JPanel getSettingsPanel() {
         panel = new LinkPredictionEvaluationPanel();
         return panel;
     }
 
-    @Override
-    public void setup(Statistics evaluation) {
+    @Override public void setup(Statistics evaluation) {
         this.evaluation = (LinkPredictionEvaluation) evaluation;
         if (panel == null) {
             panel = new LinkPredictionEvaluationPanel();
@@ -34,39 +34,32 @@ public class LinkPredictionEvaluationUI implements StatisticsUI {
         panel.setEvaluation((LinkPredictionEvaluation) evaluation);
     }
 
-    @Override
-    public void unsetup() {
+    @Override public void unsetup() {
         this.panel = null;
         this.evaluation = null;
     }
 
-    @Override
-    public Class<? extends Statistics> getStatisticsClass() {
+    @Override public Class<? extends Statistics> getStatisticsClass() {
         return LinkPredictionEvaluation.class;
     }
 
-    @Override
-    public String getValue() {
+    @Override public String getValue() {
         return "";
     }
 
-    @Override
-    public String getDisplayName() {
-        return "Link Prediction Evaluation";
+    @Override public String getDisplayName() {
+        return "Eval. Link Prediction Algorithms";
     }
 
-    @Override
-    public String getCategory() {
+    @Override public String getCategory() {
         return StatisticsUI.CATEGORY_EDGE_OVERVIEW;
     }
 
-    @Override
-    public int getPosition() {
+    @Override public int getPosition() {
         return 11000;
     }
 
-    @Override
-    public String getShortDescription() {
+    @Override public String getShortDescription() {
         return null;
     }
 
