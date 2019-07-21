@@ -125,12 +125,12 @@ public abstract class LinkPredictionStatistics implements Statistics {
      */
     public boolean longRuntimeExpected(long iterationLimit, long nodeCount) {
         switch (complexity) {
-        case QUADRATIC:
-            consoleLogger.debug("Verify runtime for exponential complexity");
-            return (iterationLimit * nodeCount * nodeCount) > RUNTIME_THRESHOLD;
-        default:
-            // TODO Implement other complexities
-            return false;
+            case QUADRATIC:
+                consoleLogger.debug("Verify runtime for exponential complexity");
+                return (iterationLimit * nodeCount * nodeCount) > RUNTIME_THRESHOLD;
+            default:
+                // TODO Implement other complexities
+                return false;
         }
     }
 
@@ -211,9 +211,13 @@ public abstract class LinkPredictionStatistics implements Statistics {
      *
      * @return Edge to add to the network
      */
-    public Edge getHighestPrediction() {
+    /*public Edge getHighestPrediction() {
         return predictions.entrySet().stream().sorted(Collections.reverseOrder(Map.Entry.comparingByValue()))
                 .map(Map.Entry::getKey).findFirst().orElse(null);
+    }*/
+
+    public LinkPredictionProbability getHighestPrediction() {
+        return pQ.peek();
     }
 
     /**
@@ -256,4 +260,47 @@ public abstract class LinkPredictionStatistics implements Statistics {
         return this.getClass().hashCode();
     }
 
+
+    /**
+     * Add egde
+     */
+    public void addNewEdge(GraphFactory factory, LinkPredictionProbability lpObject, Node a, Node b, int highestValue) {
+        // Add new edge to calculation map
+        Edge newEdge = factory.newEdge(a, b, false);
+        newEdge.setAttribute(colLastCalculatedValue, highestValue);
+
+        if (consoleLogger.isDebugEnabled()) {
+            consoleLogger.debug("Add new edge: " + a.getLabel() + ", " + b.getLabel() + ", " + highestValue);
+        }
+
+        if (lpObject != null) {
+            // Set new Values
+            predictions.put(newEdge, highestValue);
+            pQ.remove(lpObject);
+            lpObject.setPredictionValue(highestValue);
+            pQ.add(lpObject);
+        } else {
+            predictions.put(newEdge, highestValue);
+            LinkPredictionProbability lpE = new LinkPredictionProbability(newEdge.getSource(), newEdge.getTarget(), highestValue);
+            lpProb.add(lpE);
+            pQ.add(lpE);
+        }
+    }
+
+    public LinkPredictionProbability getLPObject(Node a, Node b) {
+
+        LinkPredictionProbability lpObject = null;
+        for (LinkPredictionProbability lpp : lpProb) {
+            if ((lpp.getNodeSource().equals(a) && lpp.getNodeTarget().equals(b)) ||
+                    (lpp.getNodeSource().equals(b) && lpp.getNodeTarget().equals(a))) {
+                lpObject = lpp;
+            }
+        }
+
+        if (lpObject != null) {
+            lpProb.remove(lpObject);
+        }
+
+        return lpObject;
+    }
 }
