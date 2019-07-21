@@ -1,6 +1,7 @@
 package org.gephi.plugins.linkprediction.statistics;
 
 import org.gephi.graph.api.*;
+import org.gephi.plugins.linkprediction.base.LinkPredictionProbability;
 import org.gephi.plugins.linkprediction.base.LinkPredictionStatistics;
 import org.gephi.project.api.ProjectController;
 import org.junit.Ignore;
@@ -98,13 +99,23 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
         LinkPredictionStatistics statistic = new PreferentialAttachmentStatistics();
         statistic.execute(graphModel);
 
-        Edge max = statistic.getHighestPrediction();
+        /*Edge max = statistic.getHighestPrediction();
 
         assertTrue(max.getSource().getLabel().equals("Node A"));
         assertTrue(max.getTarget().getLabel().equals("Node G"));
         assertTrue(max.getAttribute(getColLastPrediction()).equals(PreferentialAttachmentStatisticsBuilder.PREFERENTIAL_ATTACHMENT_NAME));
         assertTrue((int) max.getAttribute(getColAddedInRun()) == 1);
-        assertTrue((int) max.getAttribute(getColLastCalculatedValue()) == 12);
+        assertTrue((int) max.getAttribute(getColLastCalculatedValue()) == 12);*/
+
+        LinkPredictionProbability max = statistic.getHighestPrediction();
+        Edge maxEdge = graphModel.getGraph().getEdge(max.getNodeSource(), max.getNodeTarget());
+
+
+        assertTrue(maxEdge.getSource().getLabel().equals("Node A"));
+        assertTrue(maxEdge.getTarget().getLabel().equals("Node G"));
+        assertTrue(maxEdge.getAttribute(getColLastPrediction()).equals(PreferentialAttachmentStatisticsBuilder.PREFERENTIAL_ATTACHMENT_NAME));
+        assertTrue((int) maxEdge.getAttribute(getColAddedInRun()) == 1);
+        assertTrue((int) maxEdge.getAttribute(getColLastCalculatedValue()) == 12);
     }
 
     @org.junit.jupiter.api.Test void testExecute_Successfully() {
@@ -112,9 +123,14 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
         LinkPredictionStatistics statistic = new PreferentialAttachmentStatistics();
         statistic.execute(graphModel);
 
-        Edge max = statistic.getHighestPrediction();
+        /*Edge max = statistic.getHighestPrediction();
 
-        assertTrue(graphModel.getGraph().contains(max));
+        assertTrue(graphModel.getGraph().contains(max));*/
+
+        LinkPredictionProbability max = statistic.getHighestPrediction();
+        Edge maxEdge = graphModel.getGraph().getEdge(max.getNodeSource(), max.getNodeTarget());
+
+        assertTrue(graphModel.getGraph().contains(maxEdge));
     }
 
     @org.junit.jupiter.api.Test void testGetNextIteration_Successfully() {
