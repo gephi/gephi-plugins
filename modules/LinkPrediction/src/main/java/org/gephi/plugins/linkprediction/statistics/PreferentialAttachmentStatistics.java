@@ -239,9 +239,7 @@ public class PreferentialAttachmentStatistics extends LinkPredictionStatistics {
                 List<Node> bNeighbours = getRelevantNeighbours(b);
                 highestValue = aNeighbours.size() * bNeighbours.size();
                 addNewEdge(factory, lpObject, a, b, highestValue);
-
             }
-
         }
     }
 }
