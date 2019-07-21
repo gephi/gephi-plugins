@@ -1,13 +1,11 @@
 package org.gephi.plugins.linkprediction.statistics;
 
 import org.gephi.graph.api.*;
-import org.gephi.plugins.linkprediction.base.LinkPredictionProbability;
 import org.gephi.plugins.linkprediction.base.LinkPredictionStatistics;
 import org.gephi.project.api.ProjectController;
 import org.gephi.project.api.Workspace;
 import org.junit.jupiter.api.BeforeEach;
 import org.openide.util.Lookup;
-import sun.awt.image.ImageWatched;
 
 import static org.gephi.plugins.linkprediction.base.LinkPredictionStatistics.getColAddedInRun;
 import static org.gephi.plugins.linkprediction.base.LinkPredictionStatistics.getColLastCalculatedValue;
@@ -102,22 +100,13 @@ class CommonNeighboursStatisticsTest {
         LinkPredictionStatistics statistic = new CommonNeighboursStatistics();
         statistic.execute(graphModel);
 
-        //Edge max = statistic.getHighestPrediction();
+        Edge max = statistic.getHighestPrediction();
 
-        LinkPredictionProbability max = statistic.getHighestPrediction();
-        Edge maxEdge = graphModel.getGraph().getEdge(max.getNodeSource(), max.getNodeTarget());
-
-        /*assertTrue(max.getSource().getLabel().equals("Node C"));
+        assertTrue(max.getSource().getLabel().equals("Node C"));
         assertTrue(max.getTarget().getLabel().equals("Node A"));
         assertTrue(max.getAttribute(getColLastPrediction()).equals(CommonNeighboursStatisticsBuilder.COMMON_NEIGHBOURS_NAME));
         assertTrue((int) max.getAttribute(getColAddedInRun()) == 1);
-        assertTrue((int) max.getAttribute(getColLastCalculatedValue()) == 2);*/
-
-        assertTrue(maxEdge.getSource().getLabel().equals("Node A"));
-        assertTrue(maxEdge.getTarget().getLabel().equals("Node C"));
-        assertTrue(maxEdge.getAttribute(getColLastPrediction()).equals(CommonNeighboursStatisticsBuilder.COMMON_NEIGHBOURS_NAME));
-        assertTrue((int) maxEdge.getAttribute(getColAddedInRun()) == 1);
-        assertTrue((int) maxEdge.getAttribute(getColLastCalculatedValue()) == 2);
+        assertTrue((int) max.getAttribute(getColLastCalculatedValue()) == 2);
     }
 
     @org.junit.jupiter.api.Test void testExecute_Successfully() {
@@ -125,13 +114,9 @@ class CommonNeighboursStatisticsTest {
         LinkPredictionStatistics statistic = new CommonNeighboursStatistics();
         statistic.execute(graphModel);
 
-        //Edge max = statistic.getHighestPrediction();
+        Edge max = statistic.getHighestPrediction();
 
-        //assertTrue(graphModel.getGraph().contains(max));
-
-        LinkPredictionProbability max = statistic.getHighestPrediction();
-        Edge maxEdge = graphModel.getGraph().getEdge(max.getNodeSource(), max.getNodeTarget());
-        assertTrue (graphModel.getGraph().contains(maxEdge));
+        assertTrue(graphModel.getGraph().contains(max));
     }
 
 

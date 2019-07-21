@@ -61,11 +61,11 @@ public class CommonNeighboursStatistics extends LinkPredictionStatistics {
         if (pQ.size() == 0 && changedInLastRun == null) {
             //Iterate on all nodes
             List<Node> nodesA = new ArrayList<>(Arrays.asList(graph.getNodes().toArray()));
-            List<Node> nodesB = new ArrayList<>(nodesA);
 
             for (Node a : nodesA) {
                 consoleLogger.debug("Calculation for node " + a.getId());
                 // Remove self from neighbours
+                List<Node> nodesB = new ArrayList<>(nodesA);
                 nodesB.remove(a);
 
                 // Get neighbours of a
@@ -97,25 +97,21 @@ public class CommonNeighboursStatistics extends LinkPredictionStatistics {
                     }
 
                     if (numberOfExistingEdges == 0) {
-
-                            // Add new edge to calculation map
-                            Edge newEdge = factory.newEdge(a, b, false);
-                            newEdge.setAttribute(colLastCalculatedValue, cnValue);
-                            if (consoleLogger.isDebugEnabled()) {
-                                consoleLogger.debug("Add new edge: " + a.getLabel() + ", " + b.getLabel() + ", " + cnValue);
-                            }
-                            predictions.put(newEdge, cnValue);
-                            LinkPredictionProbability lp = new LinkPredictionProbability(newEdge.getSource(), newEdge.getTarget(), cnValue);
-                            pQ.add(lp);
-                            lpProb.add(lp);
-
+                        // Add new edge to calculation map
+                        Edge newEdge = factory.newEdge(a, b, false);
+                        newEdge.setAttribute(colLastCalculatedValue, cnValue);
+                        if (consoleLogger.isDebugEnabled()) {
+                            consoleLogger.debug("Add new edge: " + a.getLabel() + ", " + b.getLabel() + ", " + cnValue);
+                        }
+                        predictions.put(newEdge, cnValue);
+                        LinkPredictionProbability lp = new LinkPredictionProbability(newEdge.getSource(), newEdge.getTarget(), cnValue);
+                        pQ.add(lp);
+                        lpProb.add(lp);
                     }
                 }
             }
 
         } else {
-            highestValueObject = getHighestPrediction();
-            pQ.remove(highestValueObject);
             Node a = changedInLastRun.getSource();
             Node b = changedInLastRun.getTarget();
             recalculateProbability(factory, graph, a);
@@ -123,19 +119,14 @@ public class CommonNeighboursStatistics extends LinkPredictionStatistics {
         }
 
         // Get highest predicted edge
-        //Edge max = getHighestPrediction();
-        highestValueObject = getHighestPrediction();
-        Edge max = null;
-        if (highestValueObject != null) {
-            max = factory.newEdge(highestValueObject.getNodeSource(), highestValueObject.getNodeTarget(), false);
-        }
+        Edge max = getHighestPrediction();
+        highestValueObject = pQ.peek();
 
         // Add edge to graph
         if (max != null) {
             int iteration = getNextIteration(graph, CommonNeighboursStatisticsBuilder.COMMON_NEIGHBOURS_NAME);
             max.setAttribute(colAddedInRun, iteration);
             max.setAttribute(colLastPrediction, CommonNeighboursStatisticsBuilder.COMMON_NEIGHBOURS_NAME);
-            max.setAttribute(colLastCalculatedValue, highestValueObject.getPredictionValue());
             if (consoleLogger.isDebugEnabled()) {
                 consoleLogger.debug("Add highest predicted edge: " + max);
             }
@@ -183,7 +174,14 @@ public class CommonNeighboursStatistics extends LinkPredictionStatistics {
         // Loop through all Neighbours aN of A
         // Edges that change value are between a and aN
         for (Node b : nodesB) {
-            LinkPredictionProbability lpObject = getLPObject(a, b);
+            LinkPredictionProbability lpObject = null;
+
+            for (LinkPredictionProbability lpp : lpProb) {
+                if (lpp.getNodeSource().equals(a) && lpp.getNodeTarget().equals(b) ||
+                        lpp.getNodeSource().equals(b) && lpp.getNodeTarget().equals(a)) {
+                    lpObject = lpp;
+                }
+            }
 
             // Get existing Edges if available
             List<Edge> existingEdges = GraphUtils.getEdges(graph, a, b);
@@ -197,13 +195,28 @@ public class CommonNeighboursStatistics extends LinkPredictionStatistics {
                 cnValue = getCommonNeighboursCount(aNeighbours, bNeighbours);
 
                 // Add new edge to calculation map
-                addNewEdge(factory, lpObject, a, b, cnValue);
+                Edge newEdge = factory.newEdge(a, b, false);
+                newEdge.setAttribute(colLastCalculatedValue, cnValue);
 
+                if (consoleLogger.isDebugEnabled()) {
+                    consoleLogger.debug("Add new edge: " + a.getLabel() + ", " + b.getLabel() + ", " + cnValue);
+                }
+
+                if (lpObject != null) {
+                    // Set new Values
+                    predictions.put(newEdge, cnValue);
+                    pQ.remove(lpObject);
+                    lpObject.setPredictionValue(cnValue);
+                    pQ.add(lpObject);
+                } else {
+                    predictions.put(newEdge, cnValue);
+                    LinkPredictionProbability lpE = new LinkPredictionProbability(newEdge.getSource(), newEdge.getTarget(), cnValue);
+                    lpProb.add(lpE);
+                    pQ.add(lpE);
+                }
             }
 
         }
     }
-
-
 
 }

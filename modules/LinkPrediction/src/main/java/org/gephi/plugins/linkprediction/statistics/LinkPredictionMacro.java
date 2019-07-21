@@ -31,9 +31,6 @@ public class LinkPredictionMacro extends LinkPredictionStatistics {
      */
     public void execute(final GraphModel graphModel) {
         int i = 0;
-        pQ = null;
-        lpProb = null;
-        changedInLastRun = null;
         while (i < iterationLimit) {
             statistics.stream().forEach(statistic -> statistic.execute(graphModel));
             i++;
