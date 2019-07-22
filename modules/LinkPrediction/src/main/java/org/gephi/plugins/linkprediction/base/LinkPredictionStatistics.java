@@ -297,9 +297,9 @@ public abstract class LinkPredictionStatistics implements Statistics {
             }
         }
 
-        if (lpObject != null) {
+        /*if (lpObject != null) {
             lpProb.remove(lpObject);
-        }
+        }*/
 
         return lpObject;
     }
