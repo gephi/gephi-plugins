@@ -1,5 +1,6 @@
 package org.gephi.plugins.linkprediction.base;
 
+import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.gephi.graph.api.*;
@@ -31,11 +32,17 @@ public abstract class LinkPredictionStatistics implements Statistics {
      */
     public static final long RUNTIME_THRESHOLD = 1000000;
 
-    /* Column containing info when edge got added */
+    /**
+     * Column containing info when edge got added
+     */
     public static final String ADDED_IN_RUN = "added_in_run";
-    /* Column containing info which value the prediction algorithm calculated */
+    /**
+     * Column containing info which value the prediction algorithm calculated
+     */
     public static final String LAST_VALUE = "last_link_prediction_value";
-    /* Column containing info which prediction algorithm was used */
+    /**
+     * Column containing info which prediction algorithm was used
+     */
     public static final String LP_ALGORITHM = "link_prediction_algorithm";
 
     // Columns for data labour
@@ -45,19 +52,17 @@ public abstract class LinkPredictionStatistics implements Statistics {
 
     // Big o complexity of algorithm
     protected static Complexity complexity;
-    // Get highest Prediction + save the Edge that was changed last to save processing time during re-calculation
-    protected PriorityQueue<LinkPredictionProbability> pQ = new PriorityQueue<>(Collections.reverseOrder());
-    // Predicted value
-    protected List<LinkPredictionProbability> lpProb = new ArrayList<>();
+    // Queue of predictions, highest first
+    protected PriorityQueue<LinkPredictionProbability> queue = new PriorityQueue<>(Collections.reverseOrder());
+    // Prediction probabilities
+    protected List<LinkPredictionProbability> probabilities = new ArrayList<>();
     // Last predicted edge
-    protected Edge changedInLastRun;
+    protected Edge lastPrediction;
     // Highest prediction
-    protected LinkPredictionProbability highestValueObject;
+    protected LinkPredictionProbability highestPrediction;
 
     // Console Logger
     private static Logger consoleLogger = LogManager.getLogger(LinkPredictionStatistics.class);
-
-
 
     /**
      * Initializes the columns used in link prediction.
@@ -66,13 +71,13 @@ public abstract class LinkPredictionStatistics implements Statistics {
      */
     public static void initializeColumns(Table edgeTable) {
         colLastPrediction = edgeTable.getColumn(LP_ALGORITHM);
-        consoleLogger.debug("Intialize column " + LP_ALGORITHM);
+        consoleLogger.debug("Initialize column " + LP_ALGORITHM);
         if (colLastPrediction == null) {
             colLastPrediction = edgeTable.addColumn(LP_ALGORITHM, "Chosen Link Prediction Algorithm", String.class, "");
         }
 
         colAddedInRun = edgeTable.getColumn(ADDED_IN_RUN);
-        consoleLogger.debug("Intialize column " + ADDED_IN_RUN);
+        consoleLogger.debug("Initialize column " + ADDED_IN_RUN);
         if (colAddedInRun == null) {
             colAddedInRun = edgeTable.addColumn(ADDED_IN_RUN, "Added in Run", Integer.class, 0);
         }
@@ -100,13 +105,6 @@ public abstract class LinkPredictionStatistics implements Statistics {
     }
 
     /**
-     * Gets the name of the respective algorithm.
-     *
-     * @return Algorithm name
-     */
-    public abstract String getAlgorithmName();
-
-    /**
      * Generates a report after link prediction calculation has finished.
      *
      * @return HTML report
@@ -127,14 +125,21 @@ public abstract class LinkPredictionStatistics implements Statistics {
      */
     public boolean longRuntimeExpected(long iterationLimit, long nodeCount) {
         switch (complexity) {
-            case QUADRATIC:
-                consoleLogger.debug("Verify runtime for exponential complexity");
-                return (iterationLimit * nodeCount * nodeCount) > RUNTIME_THRESHOLD;
-            default:
-                // TODO Implement other complexities
-                return false;
+        case QUADRATIC:
+            consoleLogger.debug("Verify runtime for exponential complexity");
+            return (iterationLimit * nodeCount * nodeCount) > RUNTIME_THRESHOLD;
+        default:
+            // TODO Implement other complexities
+            return false;
         }
     }
+
+    /**
+     * Gets the name of the respective algorithm.
+     *
+     * @return Algorithm name
+     */
+    public abstract String getAlgorithmName();
 
     /**
      * Gets the column "last prediction".
@@ -213,13 +218,8 @@ public abstract class LinkPredictionStatistics implements Statistics {
      *
      * @return Edge to add to the network
      */
-    /*public Edge getHighestPrediction() {
-        return predictions.entrySet().stream().sorted(Collections.reverseOrder(Map.Entry.comparingByValue()))
-                .map(Map.Entry::getKey).findFirst().orElse(null);
-    }*/
-
     public LinkPredictionProbability getHighestPrediction() {
-        return pQ.peek();
+        return queue.peek();
     }
 
     /**
@@ -262,45 +262,118 @@ public abstract class LinkPredictionStatistics implements Statistics {
         return this.getClass().hashCode();
     }
 
+    /**
+     * Saves calculated values in temporary data structures for further iterations.
+     *
+     * @param factory Factory to create new edge
+     * @param a Node a
+     * @param b Node b
+     * @param value Calculated prediction value
+     */
+    protected void saveCalculatedValue(GraphFactory factory, Node a, Node b, int value) {
+        // Create new edge
+        Edge newEdge = factory.newEdge(a, b, false);
+        newEdge.setAttribute(colLastCalculatedValue, value);
+        consoleLogger.log(Level.DEBUG, () -> "Save edge: " + a.getLabel() + ", " + b.getLabel() + ", " + value);
+
+        // Add edge to temporary helper data structures
+        LinkPredictionProbability predictionProbability = new LinkPredictionProbability(newEdge.getSource(), newEdge.getTarget(), value);
+        queue.add(predictionProbability);
+        probabilities.add(predictionProbability);
+    }
 
     /**
-     * Add egde
+     * Updates calculated values in temporary data structures for further iterations.
+     *
+     * @param factory Factory to create new edge
+     * @param a Node a
+     * @param b Node b
+     * @param value Calculated prediction value
      */
-    public void addNewEdge(GraphFactory factory, LinkPredictionProbability lpObject, Node a, Node b, int highestValue) {
-        // Add new edge to calculation map
+    // TODO: Comment
+    public void updateCalculatedValue(GraphFactory factory , Node a, Node b, int value) {
+        // Get calculated prediction probability
+        LinkPredictionProbability predictionProbability = getAndRemovePredictionProbability(a, b);
+
+        // Create edge with new calculated value
         Edge newEdge = factory.newEdge(a, b, false);
-        newEdge.setAttribute(colLastCalculatedValue, highestValue);
+        newEdge.setAttribute(colLastCalculatedValue, value);
+        consoleLogger.log(Level.DEBUG, () -> "Temporaily add new edge: " + a.getLabel() + ", " + b.getLabel() + ", " + value);
 
-        if (consoleLogger.isDebugEnabled()) {
-            consoleLogger.debug("Add new edge: " + a.getLabel() + ", " + b.getLabel() + ", " + highestValue);
-        }
-
-        if (lpObject != null) {
-            // Set new Values
-            pQ.remove(lpObject);
-            lpObject.setPredictionValue(highestValue);
-            pQ.add(lpObject);
+        if (predictionProbability != null) {
+            // Update values
+            queue.remove(predictionProbability);
+            predictionProbability.setPredictionValue(value);
+            queue.add(predictionProbability);
         } else {
-            LinkPredictionProbability lpE = new LinkPredictionProbability(newEdge.getSource(), newEdge.getTarget(), highestValue);
-            lpProb.add(lpE);
-            pQ.add(lpE);
+            // Create probability object
+            LinkPredictionProbability newProbability = new LinkPredictionProbability(newEdge.getSource(), newEdge.getTarget(),
+                    value);
+            probabilities.add(newProbability);
+            queue.add(newProbability);
         }
     }
 
-    public LinkPredictionProbability getLPObject(Node a, Node b) {
+    // TODO: Add commend
+    protected LinkPredictionProbability getAndRemovePredictionProbability(Node a, Node b) {
 
-        LinkPredictionProbability lpObject = null;
-        for (LinkPredictionProbability lpp : lpProb) {
-            if ((lpp.getNodeSource().equals(a) && lpp.getNodeTarget().equals(b)) ||
-                    (lpp.getNodeSource().equals(b) && lpp.getNodeTarget().equals(a))) {
-                lpObject = lpp;
+        LinkPredictionProbability predictionProbability = null;
+        for (LinkPredictionProbability lpp : probabilities) {
+            if ((lpp.getNodeSource().equals(a) && lpp.getNodeTarget().equals(b)) || (lpp.getNodeSource().equals(b)
+                    && lpp.getNodeTarget().equals(a))) {
+                predictionProbability = lpp;
             }
         }
 
-        if (lpObject != null) {
-            lpProb.remove(lpObject);
+        if (predictionProbability != null) {
+            probabilities.remove(predictionProbability);
         }
 
-        return lpObject;
+        return predictionProbability;
+    }
+
+    /**
+     * Checks if execute is executed the first time.
+     *
+     * @return If initial execution
+     */
+    protected boolean isInitialExecution() {
+        return queue.size() == 0 && lastPrediction == null;
+    }
+
+    /**
+     * Statistic class used to store link prediction information for handling priority queue.
+     */
+    public static class LinkPredictionProbability implements Comparable<LinkPredictionProbability> {
+
+        private Node nodeSource;
+        private Node nodeTarget;
+        private Integer predictionValue;
+
+        public LinkPredictionProbability(Node nodeSource, Node nodeTarget, int predictionValue) {
+            this.nodeSource = nodeSource;
+            this.nodeTarget = nodeTarget;
+            this.predictionValue = predictionValue;
+        }
+
+        @Override public int compareTo(LinkPredictionProbability o) {
+            return this.getPredictionValue().compareTo(o.getPredictionValue());
+        }
+
+        public Integer getPredictionValue() {
+            return predictionValue;
+        }
+
+        public void setPredictionValue(int predictionValue) {
+            this.predictionValue = predictionValue;
+        }
+
+        public Node getNodeSource() {
+            return nodeSource;
+        }
+
+        public Node getNodeTarget() {
+            return nodeTarget;
+        }
     }
 }

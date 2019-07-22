@@ -31,9 +31,13 @@ public class LinkPredictionMacro extends LinkPredictionStatistics {
      */
     public void execute(final GraphModel graphModel) {
         int i = 0;
-        pQ = null;
-        lpProb = null;
-        changedInLastRun = null;
+
+        // Clear predictions
+        //consoleLogger.debug("Clear predictions"); // TODO Ad logger
+        queue = null;
+        probabilities = null;
+        lastPrediction = null;
+
         while (i < iterationLimit) {
             statistics.stream().forEach(statistic -> statistic.execute(graphModel));
             i++;
