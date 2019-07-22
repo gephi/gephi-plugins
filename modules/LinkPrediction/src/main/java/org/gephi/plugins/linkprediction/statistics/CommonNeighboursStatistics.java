@@ -56,7 +56,9 @@ public class CommonNeighboursStatistics extends LinkPredictionStatistics {
 
         // Clear predictions
         consoleLogger.debug("Clear predictions");
-        predictions.clear();
+        //predictions.clear();
+        // TODO for PQ also?
+
 
         if (pQ.size() == 0 && changedInLastRun == null) {
             //Iterate on all nodes
@@ -104,7 +106,6 @@ public class CommonNeighboursStatistics extends LinkPredictionStatistics {
                         if (consoleLogger.isDebugEnabled()) {
                             consoleLogger.debug("Add new edge: " + a.getLabel() + ", " + b.getLabel() + ", " + cnValue);
                         }
-                        predictions.put(newEdge, cnValue);
                         LinkPredictionProbability lp = new LinkPredictionProbability(newEdge.getSource(), newEdge.getTarget(), cnValue);
                         pQ.add(lp);
                         lpProb.add(lp);

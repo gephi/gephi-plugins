@@ -4,14 +4,10 @@ import org.gephi.graph.api.*;
 import org.gephi.plugins.linkprediction.base.LinkPredictionProbability;
 import org.gephi.plugins.linkprediction.base.LinkPredictionStatistics;
 import org.gephi.project.api.ProjectController;
-import org.gephi.project.api.Workspace;
 import org.junit.jupiter.api.BeforeEach;
 import org.openide.util.Lookup;
-import sun.awt.image.ImageWatched;
 
-import static org.gephi.plugins.linkprediction.base.LinkPredictionStatistics.getColAddedInRun;
-import static org.gephi.plugins.linkprediction.base.LinkPredictionStatistics.getColLastCalculatedValue;
-import static org.gephi.plugins.linkprediction.base.LinkPredictionStatistics.getColLastPrediction;
+import static org.gephi.plugins.linkprediction.base.LinkPredictionStatistics.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 

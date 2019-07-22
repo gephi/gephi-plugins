@@ -61,7 +61,8 @@ public class PreferentialAttachmentStatistics extends LinkPredictionStatistics {
 
         // Clear predictions
         consoleLogger.debug("Clear predictions");
-        predictions.clear();
+        //predictions.clear();
+        // TODO for PQ also?
 
         if (pQ.size() == 0 && changedInLastRun == null) {
             //Iterate on all nodes
@@ -128,7 +129,6 @@ public class PreferentialAttachmentStatistics extends LinkPredictionStatistics {
                 newEdge.setAttribute(colLastPrediction, PREFERENTIAL_ATTACHMENT_NAME);
                 newEdge.setAttribute(colAddedInRun, getNextIteration(graph, PREFERENTIAL_ATTACHMENT_NAME));
                 newEdge.setAttribute(colLastCalculatedValue, highestValue);
-                predictions.put(newEdge, highestValue);
                 changedInLastRun = newEdge;
                 /*LinkPredictionProbability lp = new LinkPredictionProbability(newEdge.getSource(), newEdge.getTarget(), highestValue);
                 pQ.add(lp);

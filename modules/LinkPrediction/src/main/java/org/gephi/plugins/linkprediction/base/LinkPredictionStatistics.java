@@ -45,17 +45,19 @@ public abstract class LinkPredictionStatistics implements Statistics {
 
     // Big o complexity of algorithm
     protected static Complexity complexity;
-    // Holds the calculated prediction values
-    protected Map<Edge, Integer> predictions = new HashMap<>();
+    // Get highest Prediction + save the Edge that was changed last to save processing time during re-calculation
+    protected PriorityQueue<LinkPredictionProbability> pQ = new PriorityQueue<>(Collections.reverseOrder());
+    // Predicted value
+    protected List<LinkPredictionProbability> lpProb = new ArrayList<>();
+    // Last predicted edge
+    protected Edge changedInLastRun;
+    // Highest prediction
+    protected LinkPredictionProbability highestValueObject;
 
     // Console Logger
     private static Logger consoleLogger = LogManager.getLogger(LinkPredictionStatistics.class);
 
-    // Get highest Prediction + save the Edge that was changed last to save processing time during re-calculation
-    protected PriorityQueue<LinkPredictionProbability> pQ = new PriorityQueue<>(Collections.reverseOrder());
-    protected List<LinkPredictionProbability> lpProb = new ArrayList<>();
-    protected Edge changedInLastRun;
-    protected LinkPredictionProbability highestValueObject;
+
 
     /**
      * Initializes the columns used in link prediction.
@@ -275,12 +277,10 @@ public abstract class LinkPredictionStatistics implements Statistics {
 
         if (lpObject != null) {
             // Set new Values
-            predictions.put(newEdge, highestValue);
             pQ.remove(lpObject);
             lpObject.setPredictionValue(highestValue);
             pQ.add(lpObject);
         } else {
-            predictions.put(newEdge, highestValue);
             LinkPredictionProbability lpE = new LinkPredictionProbability(newEdge.getSource(), newEdge.getTarget(), highestValue);
             lpProb.add(lpE);
             pQ.add(lpE);
