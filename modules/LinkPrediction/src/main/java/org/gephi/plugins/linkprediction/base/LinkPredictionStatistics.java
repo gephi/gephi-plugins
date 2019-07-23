@@ -24,27 +24,10 @@ import java.util.*;
  * @see LinkPredictionStatisticsBuilder
  */
 public abstract class LinkPredictionStatistics implements Statistics {
-    /**
-     * Default number of iteration used to predict next edges
-     */
+    /** Default number of iteration used to predict next edges */
     public static final int ITERATION_LIMIT_DEFAULT = 1;
-    /**
-     * Long runtime threshold, warning if value is reached
-     */
-    public static final long RUNTIME_THRESHOLD = 1000000;
-
-    /**
-     * Column containing info when edge got added
-     */
-    public static final String ADDED_IN_RUN = "added_in_run";
-    /**
-     * Column containing info which value the prediction algorithm calculated
-     */
-    public static final String LAST_VALUE = "last_link_prediction_value";
-    /**
-     * Column containing info which prediction algorithm was used
-     */
-    public static final String LP_ALGORITHM = "link_prediction_algorithm";
+    /** Long runtime threshold, warning if value is reached */
+    public static final long RUNTIME_THRESHOLD = 1000000; // TODO: Use complexity class instead
 
     // Columns for data labour
     protected static Column colLastPrediction;
@@ -65,28 +48,39 @@ public abstract class LinkPredictionStatistics implements Statistics {
     // Console Logger
     private static Logger consoleLogger = LogManager.getLogger(LinkPredictionStatistics.class);
 
+
+    /**
+     * Gets the name of the respective algorithm.
+     *
+     * @return Algorithm name
+     */
+    public abstract String getAlgorithmName();
+
     /**
      * Initializes the columns used in link prediction.
      *
      * @param edgeTable Table on which columns will be added
      */
     public static void initializeColumns(Table edgeTable) {
-        colLastPrediction = edgeTable.getColumn(LP_ALGORITHM);
-        consoleLogger.debug("Initialize column " + LP_ALGORITHM);
+        // Column containing info about last prediction algorithm
+        colLastPrediction = edgeTable.getColumn(LinkPredictionColumn.LP_ALGORITHM.getValue());
+        consoleLogger.debug("Initialize column " + LinkPredictionColumn.LP_ALGORITHM.getValue());
         if (colLastPrediction == null) {
-            colLastPrediction = edgeTable.addColumn(LP_ALGORITHM, "Chosen Link Prediction Algorithm", String.class, "");
+            colLastPrediction = edgeTable.addColumn(LinkPredictionColumn.LP_ALGORITHM.getValue(), "Chosen Link Prediction Algorithm", String.class, "");
         }
 
-        colAddedInRun = edgeTable.getColumn(ADDED_IN_RUN);
-        consoleLogger.debug("Initialize column " + ADDED_IN_RUN);
+        // Column containing info about iteration in which edge was added
+        colAddedInRun = edgeTable.getColumn(LinkPredictionColumn.ADDED_IN_RUN.getValue());
+        consoleLogger.debug("Initialize column " + LinkPredictionColumn.ADDED_IN_RUN.getValue());
         if (colAddedInRun == null) {
-            colAddedInRun = edgeTable.addColumn(ADDED_IN_RUN, "Added in Run", Integer.class, 0);
+            colAddedInRun = edgeTable.addColumn(LinkPredictionColumn.ADDED_IN_RUN.getValue(), "Added in Run", Integer.class, 0);
         }
 
-        colLastCalculatedValue = edgeTable.getColumn(LAST_VALUE);
-        consoleLogger.debug("Intialize column " + LAST_VALUE);
+        // Column containing info about the calculated value
+        colLastCalculatedValue = edgeTable.getColumn(LinkPredictionColumn.LAST_VALUE.getValue());
+        consoleLogger.debug("Intialize column " + LinkPredictionColumn.LAST_VALUE.getValue());
         if (colLastCalculatedValue == null) {
-            colLastCalculatedValue = edgeTable.addColumn(LAST_VALUE, "Last Link Prediction Value", Integer.class, 0);
+            colLastCalculatedValue = edgeTable.addColumn(LinkPredictionColumn.LAST_VALUE.getValue(), "Last Link Prediction Value", Integer.class, 0);
         }
     }
 
@@ -127,29 +121,13 @@ public abstract class LinkPredictionStatistics implements Statistics {
     public boolean longRuntimeExpected(long iterationLimit, long nodeCount) {
         switch (complexity) {
         case QUADRATIC:
-            consoleLogger.debug("Verify runtime for exponential complexity");
+            consoleLogger.debug("Verify runtime for quadratic complexity");
             return (iterationLimit * nodeCount * nodeCount) > RUNTIME_THRESHOLD;
         default:
             // TODO Implement other complexities
             return false;
         }
     }
-
-    /**
-     * Gets the name of the respective algorithm.
-     *
-     * @return Algorithm name
-     */
-    public abstract String getAlgorithmName();
-
-    /**
-     * Recalculates the link prediction probability for neighbours of affected nodes.
-     *
-     * @param factory Factory to create new edges
-     * @param graph Graph to add predictions on
-     * @param a Center node
-     */
-    protected abstract void recalculateProbability(GraphFactory factory, Graph graph, Node a);
 
     /**
      * Gets the column "last prediction".
@@ -273,6 +251,15 @@ public abstract class LinkPredictionStatistics implements Statistics {
     }
 
     /**
+     * Recalculates the link prediction probability for neighbours of affected nodes.
+     *
+     * @param factory Factory to create new edges
+     * @param graph   Graph to add predictions on
+     * @param a       Center node
+     */
+    protected abstract void recalculateProbability(GraphFactory factory, Graph graph, Node a);
+
+    /**
      * Checks if undirected edge between node a and b exists.
      *
      * @param graph Graph used for lookup
@@ -327,10 +314,9 @@ public abstract class LinkPredictionStatistics implements Statistics {
      * @param b       Node b
      * @param value   Calculated prediction value
      */
-    // TODO: Comment
-    public void updateCalculatedValue(GraphFactory factory, Node a, Node b, int value) {
+    protected void updateCalculatedValue(GraphFactory factory, Node a, Node b, int value) {
         // Get calculated prediction probability
-        LinkPredictionProbability predictionProbability = getAndRemovePredictionProbability(a, b);
+        LinkPredictionProbability predictionProbability = getPredictionProbability(a, b);
 
         // Create edge with new calculated value
         Edge newEdge = factory.newEdge(a, b, false);
@@ -352,16 +338,26 @@ public abstract class LinkPredictionStatistics implements Statistics {
         }
     }
 
-    // TODO: Add commend
-    protected LinkPredictionProbability getAndRemovePredictionProbability(Node a, Node b) {
+    /**
+     * Gets already calculated prediction probability.
+     *
+     * @param a Node a
+     * @param b Node b
+     * @return Probability of edge between node a and b
+     */
+    protected LinkPredictionProbability getPredictionProbability(Node a, Node b) {
+        consoleLogger.debug("Get prediction probability");
 
+        // Loop through calculated values
         LinkPredictionProbability predictionProbability = null;
-        for (LinkPredictionProbability lpp : probabilities) {
-            if ((lpp.getNodeSource().equals(a) && lpp.getNodeTarget().equals(b)) || (lpp.getNodeSource().equals(b)
-                    && lpp.getNodeTarget().equals(a))) {
-                predictionProbability = lpp;
+        for (LinkPredictionProbability p : probabilities) {
+            if ((p.getNodeSource().equals(a) && p.getNodeTarget().equals(b)) || (p.getNodeSource().equals(b)
+                    && p.getNodeTarget().equals(a))) {
+                consoleLogger.log(Level.DEBUG, () -> "Probability is " + p);
+                predictionProbability = p;
             }
         }
+
         return predictionProbability;
     }
 

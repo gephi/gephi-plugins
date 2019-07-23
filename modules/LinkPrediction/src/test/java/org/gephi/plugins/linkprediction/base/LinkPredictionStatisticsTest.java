@@ -7,7 +7,6 @@ import org.gephi.project.api.ProjectController;
 import org.junit.jupiter.api.BeforeEach;
 import org.openide.util.Lookup;
 
-import static org.gephi.plugins.linkprediction.base.LinkPredictionStatistics.*;
 import static org.junit.Assert.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -89,13 +88,13 @@ class LinkPredictionStatisticsTest {
         Table edgeTable = graphModel.getEdgeTable();
         statistic.initializeColumns(edgeTable);
 
-        Column colLP = edgeTable.getColumn(LP_ALGORITHM);
+        Column colLP = edgeTable.getColumn(LinkPredictionColumn.LP_ALGORITHM.getValue());
         assertTrue(colLP != null);
 
-        Column colAddinRun = edgeTable.getColumn(ADDED_IN_RUN);
+        Column colAddinRun = edgeTable.getColumn(LinkPredictionColumn.ADDED_IN_RUN.getValue());
         assertTrue(colAddinRun != null);
 
-        Column colLastValue = edgeTable.getColumn(LAST_VALUE);
+        Column colLastValue = edgeTable.getColumn(LinkPredictionColumn.LAST_VALUE.getValue());
         assertTrue(colLastValue != null);
     }
 

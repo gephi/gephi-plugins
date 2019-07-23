@@ -4,6 +4,7 @@ import org.apache.logging.log4j.Level;
 import org.gephi.graph.api.Edge;
 import org.gephi.graph.api.Graph;
 import org.gephi.plugins.linkprediction.base.EvaluationMetric;
+import org.gephi.plugins.linkprediction.base.LinkPredictionColumn;
 import org.gephi.plugins.linkprediction.base.LinkPredictionStatistics;
 import org.gephi.project.api.Workspace;
 
@@ -40,7 +41,7 @@ public class LinkPredictionAccuracy extends EvaluationMetric {
         // Remove edges from other algorithms and
         // edges that initially existed
         consoleLogger.debug("Remove irrelevant edges");
-        trainedEdges.removeIf(e -> !e.getAttribute(LinkPredictionStatistics.LP_ALGORITHM).equals(statistics.getAlgorithmName()));
+        trainedEdges.removeIf(e -> !e.getAttribute(LinkPredictionColumn.LP_ALGORITHM.getValue()).equals(statistics.getAlgorithmName()));
 
         // Get edges that are in both sets
         consoleLogger.debug("Get congruent edges");
