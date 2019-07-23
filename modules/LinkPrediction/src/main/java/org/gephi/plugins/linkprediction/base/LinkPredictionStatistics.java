@@ -324,11 +324,6 @@ public abstract class LinkPredictionStatistics implements Statistics {
                 predictionProbability = lpp;
             }
         }
-
-        if (predictionProbability != null) {
-            probabilities.remove(predictionProbability);
-        }
-
         return predictionProbability;
     }
 
