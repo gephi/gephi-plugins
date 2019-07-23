@@ -1,6 +1,9 @@
 package org.gephi.plugins.linkprediction.statistics;
 
+import org.gephi.graph.api.Graph;
+import org.gephi.graph.api.GraphFactory;
 import org.gephi.graph.api.GraphModel;
+import org.gephi.graph.api.Node;
 import org.gephi.plugins.linkprediction.base.LinkPredictionStatistics;
 
 import java.util.ArrayList;
@@ -24,6 +27,11 @@ public class LinkPredictionMacro extends LinkPredictionStatistics {
         return LinkPredictionMacroBuilder.LINK_PREDICTION_NAME;
     }
 
+    // TODO: Really?
+    @Override protected void recalculateProbability(GraphFactory factory, Graph graph, Node a) {
+        throw new UnsupportedOperationException();
+    }
+
     /**
      * Calcualtes link predictions on all statistics.
      *
@@ -43,6 +51,7 @@ public class LinkPredictionMacro extends LinkPredictionStatistics {
             i++;
         }
     }
+
 
     /**
      * Add link prediction statistic class if no already exists in list.

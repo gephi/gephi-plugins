@@ -1,7 +1,6 @@
 package org.gephi.plugins.linkprediction.statistics;
 
 import org.gephi.graph.api.*;
-import org.gephi.plugins.linkprediction.base.LinkPredictionProbability;
 import org.gephi.plugins.linkprediction.base.LinkPredictionStatistics;
 import org.gephi.project.api.ProjectController;
 import org.junit.jupiter.api.BeforeEach;
@@ -100,7 +99,7 @@ class CommonNeighboursStatisticsTest {
 
         //Edge max = statistic.getHighestPrediction();
 
-        LinkPredictionProbability max = statistic.getHighestPrediction();
+        LinkPredictionStatistics.LinkPredictionProbability max = statistic.getHighestPrediction();
         Edge maxEdge = graphModel.getGraph().getEdge(max.getNodeSource(), max.getNodeTarget());
 
         /*assertTrue(max.getSource().getLabel().equals("Node C"));
@@ -125,7 +124,7 @@ class CommonNeighboursStatisticsTest {
 
         //assertTrue(graphModel.getGraph().contains(max));
 
-        LinkPredictionProbability max = statistic.getHighestPrediction();
+        LinkPredictionStatistics.LinkPredictionProbability max = statistic.getHighestPrediction();
         Edge maxEdge = graphModel.getGraph().getEdge(max.getNodeSource(), max.getNodeTarget());
         assertTrue (graphModel.getGraph().contains(maxEdge));
     }

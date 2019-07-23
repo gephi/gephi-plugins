@@ -1,5 +1,6 @@
 package org.gephi.plugins.linkprediction.statistics;
 
+import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.gephi.graph.api.*;
@@ -35,8 +36,7 @@ public class PreferentialAttachmentStatistics extends LinkPredictionStatistics {
      *
      * @return Algorithm name
      */
-    @Override
-    public String getAlgorithmName() {
+    @Override public String getAlgorithmName() {
         return PreferentialAttachmentStatisticsBuilder.PREFERENTIAL_ATTACHMENT_NAME;
     }
 
@@ -46,12 +46,11 @@ public class PreferentialAttachmentStatistics extends LinkPredictionStatistics {
      * @param graphModel Graph on which edge will be added
      */
     @Override public void execute(GraphModel graphModel) {
-
         consoleLogger.debug("Execution of link prediction started");
-        Table edgeTable = graphModel.getEdgeTable();
 
         // Look if the result column already exist and create it if needed
         consoleLogger.debug("Initialize columns");
+        Table edgeTable = graphModel.getEdgeTable();
         initializeColumns(edgeTable);
 
         // Get graph factory
@@ -69,104 +68,39 @@ public class PreferentialAttachmentStatistics extends LinkPredictionStatistics {
             ArrayList<Node> nodesA = new ArrayList<Node>(Arrays.asList(graph.getNodes().toArray()));
             ArrayList<Node> nodesB = new ArrayList<Node>(Arrays.asList(graph.getNodes().toArray()));
 
-            // Initialize highest value
-            int highestValue = Integer.MIN_VALUE;
-
             for (Node a : nodesA) {
-                if (consoleLogger.isDebugEnabled()) {
-                    consoleLogger.debug("Calculation for node " + a.getId());
-                }
+                consoleLogger.log(Level.DEBUG, () -> "Calculation for node " + a.getId());
+
                 // Add only non existing edges
                 nodesB.remove(a);
 
+                // Get neighbours of a
                 ArrayList<Node> aNeighbours = getRelevantNeighbours(a);
-                for (Node b : nodesB) {
-                    if (consoleLogger.isDebugEnabled()) {
-                        consoleLogger.debug("Calculation for node " + b.getId());
-                    }
 
-                    int paValue = 0;
+                // Calculate preferential attachment
+                for (Node b : nodesB) {
+                    // Get neighbours of b
+                    consoleLogger.log(Level.DEBUG, () -> "Calculation for node " + b.getId());
                     ArrayList<Node> bNeighbours = getRelevantNeighbours(b);
 
-                    // Get prediction value
-                    paValue = aNeighbours.size() * bNeighbours.size();
+                    // Calculate prediction value
+                    int totalNeighboursCount = aNeighbours.size() * bNeighbours.size();
+                    consoleLogger.log(Level.DEBUG, () -> "Total neighbours product: " + totalNeighboursCount);
 
-                    List<Edge> e = GraphUtils.getEdges(graph, a, b);
-                    Edge[] eArr = new Edge[e.size()];
-                    eArr = e.toArray(eArr);
-
-
-                    boolean lpEdgeExists = lastPredictedEdgeExists(eArr);
-                    if (consoleLogger.isDebugEnabled()) {
-                        consoleLogger.debug("Last predicted edge exists? " + lpEdgeExists);
+                    // Temporary save calculated
+                    // value if edge does not exist
+                    if (isNewEdge(graph, a, b, PreferentialAttachmentStatisticsBuilder.PREFERENTIAL_ATTACHMENT_NAME)) {
+                        saveCalculatedValue(factory, a, b, totalNeighboursCount);
                     }
-
-                    if (!lpEdgeExists) {
-                        LinkPredictionProbability lp = new LinkPredictionProbability(a, b, paValue);
-                        queue.add(lp);
-                        probabilities.add(lp);
-                    }
-
-                    if (!lpEdgeExists && paValue > highestValue) {
-                        neighbourA = a;
-                        neighbourB = b;
-                        highestValue = paValue;
-                        if (consoleLogger.isDebugEnabled()) {
-                            consoleLogger.debug("New edge will be added: " + a.getLabel() + ", " + b.getLabel() + ", "
-                                    + highestValue);
-                        }
-                    }
-
-
                 }
             }
 
-            if (neighbourA != null) {
-
-                consoleLogger.debug("Add highest edge to graph");
-                Edge newEdge = factory.newEdge(neighbourA, neighbourB, false);
-                graph.addEdge(newEdge);
-                newEdge.setAttribute(colLastPrediction, PREFERENTIAL_ATTACHMENT_NAME);
-                newEdge.setAttribute(colAddedInRun, getNextIteration(graph, PREFERENTIAL_ATTACHMENT_NAME));
-                newEdge.setAttribute(colLastCalculatedValue, highestValue);
-                lastPrediction = newEdge;
-                /*LinkPredictionProbability lp = new LinkPredictionProbability(newEdge.getSource(), newEdge.getTarget(), highestValue);
-                queue.add(lp);
-                probabilities.add(lp);*/
-            }
-
-        }  else {
-            // Recalculate only affected nodes
-            consoleLogger.debug("Subsequent calculation");
-            // Get highest element from queue
-            highestPrediction = getHighestPrediction();
-            queue.remove(highestPrediction);
-
-            // Recalculate for affected nodes
-            Node a = lastPrediction.getSource();
-            Node b = lastPrediction.getTarget();
-            recalculateProbability(factory, graph, a);
-            recalculateProbability(factory, graph, b);
-
-            highestPrediction = getHighestPrediction();
-            Edge max = null;
-            if (highestPrediction != null) {
-                max = factory.newEdge(highestPrediction.getNodeSource(), highestPrediction.getNodeTarget(), false);
-            }
-
-            // Add edge to graph
-            if (max != null) {
-                max.setAttribute(colAddedInRun, getNextIteration(graph, PREFERENTIAL_ATTACHMENT_NAME));
-                max.setAttribute(colLastPrediction, PREFERENTIAL_ATTACHMENT_NAME);
-                max.setAttribute(colLastCalculatedValue, highestPrediction.getPredictionValue());
-                if (consoleLogger.isDebugEnabled()) {
-                    consoleLogger.debug("Add highest predicted edge: " + max);
-                }
-                graph.addEdge(max);
-                lastPrediction = max;
-                //queue.remove(highestPrediction);
-            }
+        } else {
+            recalculateAffectedNodes(graph, factory);
         }
+
+        // Add highest predicted edge to graph
+        addHighestPredictedEdgeToGraph(graph, factory, PreferentialAttachmentStatisticsBuilder.PREFERENTIAL_ATTACHMENT_NAME);
 
         consoleLogger.debug("Unlock graph");
         graph.writeUnlock();
@@ -179,6 +113,7 @@ public class PreferentialAttachmentStatistics extends LinkPredictionStatistics {
      * @param edges Edges to apply validation on
      * @return Flag
      */
+    // TODO: Remove
     private boolean lastPredictedEdgeExists(Edge[] edges) {
         for (int i = 0; i < edges.length; i++) {
             if ((edges[i].getAttribute(colLastPrediction).equals(PREFERENTIAL_ATTACHMENT_NAME)
@@ -221,28 +156,36 @@ public class PreferentialAttachmentStatistics extends LinkPredictionStatistics {
         return relevantNeighbours;
     }
 
-    private void recalculateProbability(GraphFactory factory, Graph graph, Node a) {
+    /**
+     * Recalculates the link prediction probability for neighbours of affected nodes.
+     *
+     * @param factory Factory to create new edges
+     * @param graph Graph to add predictions on
+     * @param a Center node
+     */
+    @Override
+    protected void recalculateProbability(GraphFactory factory, Graph graph, Node a) {
 
+        // Get neighbours of a
         List<Node> aNeighbours = getRelevantNeighbours(a);
+
+        // Get edges and remove
+        // self from potential neighbours
         List<Node> nodesB = new ArrayList<>(Arrays.asList(graph.getNodes().toArray()));
         nodesB.remove(a);
-        int highestValue = 0;
 
-        // Loop through all Neighbours aN of A
-        // Edges that change value are between a and aN
+        // Iterate over other nodes
+        // that could become new neighbours
         for (Node b : nodesB) {
 
-            // Get existing Edges if available
-            List<Edge> existingEdges = GraphUtils.getEdges(graph, a, b);
-            long numberOfExistingEdges = existingEdges.size();
-            if (consoleLogger.isDebugEnabled()) {
-                consoleLogger.debug("Size of existing edges: " + numberOfExistingEdges);
-            }
-
-            if (numberOfExistingEdges == 0) {
+            // Update temporary saved values
+            // if edge does not exist
+            if (isNewEdge(graph, a, b, PreferentialAttachmentStatisticsBuilder.PREFERENTIAL_ATTACHMENT_NAME)) {
                 List<Node> bNeighbours = getRelevantNeighbours(b);
-                highestValue = aNeighbours.size() * bNeighbours.size();
-                updateCalculatedValue(factory, a, b, highestValue);
+                int totalNeighboursCount = aNeighbours.size() * bNeighbours.size(); // TODO: Only this line differs from common neighbours
+
+                // Update saved and calculated values
+                updateCalculatedValue(factory, a, b, totalNeighboursCount);
             }
         }
     }

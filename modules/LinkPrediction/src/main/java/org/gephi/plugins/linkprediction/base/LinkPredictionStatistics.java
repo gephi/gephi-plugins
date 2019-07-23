@@ -5,6 +5,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.gephi.graph.api.*;
 import org.gephi.plugins.linkprediction.util.Complexity;
+import org.gephi.plugins.linkprediction.util.GraphUtils;
 import org.gephi.statistics.spi.Statistics;
 
 import java.util.*;
@@ -142,6 +143,15 @@ public abstract class LinkPredictionStatistics implements Statistics {
     public abstract String getAlgorithmName();
 
     /**
+     * Recalculates the link prediction probability for neighbours of affected nodes.
+     *
+     * @param factory Factory to create new edges
+     * @param graph Graph to add predictions on
+     * @param a Center node
+     */
+    protected abstract void recalculateProbability(GraphFactory factory, Graph graph, Node a);
+
+    /**
      * Gets the column "last prediction".
      *
      * @return Column "last prediction"
@@ -263,12 +273,38 @@ public abstract class LinkPredictionStatistics implements Statistics {
     }
 
     /**
+     * Checks if undirected edge between node a and b exists.
+     *
+     * @param graph Graph used for lookup
+     * @param a     Source/target node
+     * @param b     Source/target node
+     * @return Whether edge already does not exist already
+     */
+    protected boolean isNewEdge(Graph graph, Node a, Node b, String algorithm) {
+        // Get edges between a and b
+        consoleLogger.log(Level.DEBUG, () -> "Check if edge exists already");
+        // FIXME graph.getEdges returns always null
+        List<Edge> existingEdges = GraphUtils.getEdges(graph, a, b);
+
+        // Retain only edges with respective algorithm
+        existingEdges.removeIf(
+                edge -> !edge.getAttribute(colLastPrediction).equals(algorithm) && !edge.getAttribute(colLastPrediction)
+                        .equals(""));
+
+        // Count number of edges
+        long numberOfExistingEdges = existingEdges.size();
+        consoleLogger.log(Level.DEBUG, () -> "Size of existing edges: " + numberOfExistingEdges);
+
+        return numberOfExistingEdges == 0;
+    }
+
+    /**
      * Saves calculated values in temporary data structures for further iterations.
      *
      * @param factory Factory to create new edge
-     * @param a Node a
-     * @param b Node b
-     * @param value Calculated prediction value
+     * @param a       Node a
+     * @param b       Node b
+     * @param value   Calculated prediction value
      */
     protected void saveCalculatedValue(GraphFactory factory, Node a, Node b, int value) {
         // Create new edge
@@ -277,7 +313,8 @@ public abstract class LinkPredictionStatistics implements Statistics {
         consoleLogger.log(Level.DEBUG, () -> "Save edge: " + a.getLabel() + ", " + b.getLabel() + ", " + value);
 
         // Add edge to temporary helper data structures
-        LinkPredictionProbability predictionProbability = new LinkPredictionProbability(newEdge.getSource(), newEdge.getTarget(), value);
+        LinkPredictionProbability predictionProbability = new LinkPredictionProbability(newEdge.getSource(),
+                newEdge.getTarget(), value);
         queue.add(predictionProbability);
         probabilities.add(predictionProbability);
     }
@@ -286,19 +323,20 @@ public abstract class LinkPredictionStatistics implements Statistics {
      * Updates calculated values in temporary data structures for further iterations.
      *
      * @param factory Factory to create new edge
-     * @param a Node a
-     * @param b Node b
-     * @param value Calculated prediction value
+     * @param a       Node a
+     * @param b       Node b
+     * @param value   Calculated prediction value
      */
     // TODO: Comment
-    public void updateCalculatedValue(GraphFactory factory , Node a, Node b, int value) {
+    public void updateCalculatedValue(GraphFactory factory, Node a, Node b, int value) {
         // Get calculated prediction probability
         LinkPredictionProbability predictionProbability = getAndRemovePredictionProbability(a, b);
 
         // Create edge with new calculated value
         Edge newEdge = factory.newEdge(a, b, false);
         newEdge.setAttribute(colLastCalculatedValue, value);
-        consoleLogger.log(Level.DEBUG, () -> "Temporaily add new edge: " + a.getLabel() + ", " + b.getLabel() + ", " + value);
+        consoleLogger.log(Level.DEBUG,
+                () -> "Temporaily add new edge: " + a.getLabel() + ", " + b.getLabel() + ", " + value);
 
         if (predictionProbability != null) {
             // Update values
@@ -307,8 +345,8 @@ public abstract class LinkPredictionStatistics implements Statistics {
             queue.add(predictionProbability);
         } else {
             // Create probability object
-            LinkPredictionProbability newProbability = new LinkPredictionProbability(newEdge.getSource(), newEdge.getTarget(),
-                    value);
+            LinkPredictionProbability newProbability = new LinkPredictionProbability(newEdge.getSource(),
+                    newEdge.getTarget(), value);
             probabilities.add(newProbability);
             queue.add(newProbability);
         }
@@ -325,6 +363,54 @@ public abstract class LinkPredictionStatistics implements Statistics {
             }
         }
         return predictionProbability;
+    }
+
+    /**
+     * Recalculates link prediction probability for nodes, affected by last prediction.
+     *
+     * @param graph   Graph on which calculation is based on
+     * @param factory Factory to create new edge
+     */
+    protected void recalculateAffectedNodes(Graph graph, GraphFactory factory) {
+        // Recalculate only affected nodes
+        consoleLogger.debug("Subsequent calculation");
+        // Remove last added element from queue
+        highestPrediction = getHighestPrediction();
+        queue.remove(highestPrediction);
+
+        // Recalculate for affected nodes
+        Node a = lastPrediction.getSource();
+        Node b = lastPrediction.getTarget();
+        recalculateProbability(factory, graph, a);
+        recalculateProbability(factory, graph, b);
+    }
+
+    /**
+     * Adds highest predicted edge to graph.
+     *
+     * @param graph   Graph to add edge
+     * @param factory Factory to create edge
+     */
+    protected void addHighestPredictedEdgeToGraph(Graph graph, GraphFactory factory, String algorithm) {
+        // Get highest predicted value
+        highestPrediction = getHighestPrediction();
+        consoleLogger.log(Level.DEBUG, () -> "Highest predicted value is " + highestPrediction);
+
+        final Edge max;
+        if (highestPrediction != null) {
+            // Create corresponding edge
+            max = factory.newEdge(highestPrediction.getNodeSource(), highestPrediction.getNodeTarget(), false);
+
+            // Add edge to graph
+            int iteration = getNextIteration(graph, algorithm);
+            max.setAttribute(colAddedInRun, iteration);
+            max.setAttribute(colLastPrediction, algorithm);
+            max.setAttribute(colLastCalculatedValue, highestPrediction.getPredictionValue());
+            consoleLogger.log(Level.DEBUG, () -> "Add highest predicted edge: " + max);
+
+            graph.addEdge(max);
+            lastPrediction = max;
+        }
     }
 
     /**
