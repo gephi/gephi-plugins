@@ -21,13 +21,13 @@ import static org.gephi.plugins.linkprediction.statistics.CommonNeighboursStatis
  * @see LinkPredictionStatistics
  */
 public class CommonNeighboursStatistics extends LinkPredictionStatistics {
-
     // Console logger
     private static Logger consoleLogger = LogManager.getLogger(CommonNeighboursStatistics.class);
 
     static {
         complexity = Complexity.QUADRATIC;
     }
+
 
     /**
      * Gets the name of the respective algorithm.

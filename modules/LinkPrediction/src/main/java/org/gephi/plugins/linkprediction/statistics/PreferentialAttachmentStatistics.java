@@ -21,13 +21,13 @@ import static org.gephi.plugins.linkprediction.statistics.PreferentialAttachment
  *  @see LinkPredictionStatistics
  */
 public class PreferentialAttachmentStatistics extends LinkPredictionStatistics {
-
     // Console logger
     private static Logger consoleLogger = LogManager.getLogger(PreferentialAttachmentStatistics.class);
 
     static {
         complexity = Complexity.QUADRATIC;
     }
+
 
     /**
      * Gets the name of the respective algorithm.
