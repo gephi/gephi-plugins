@@ -162,7 +162,6 @@
                     <configLocation>src/main/config/swc_checks.xml</configLocation>
                     <encoding>UTF-8</encoding>
                     <consoleOutput>true</consoleOutput>
-                    <!--<violationSeverity>warning</violationSeverity>-->
                     <failsOnError>true</failsOnError>
                     <linkXRef>false</linkXRef>
                 </configuration>

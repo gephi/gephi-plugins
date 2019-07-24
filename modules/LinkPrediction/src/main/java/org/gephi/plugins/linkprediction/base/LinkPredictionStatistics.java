@@ -81,7 +81,7 @@ public abstract class LinkPredictionStatistics implements Statistics {
 
         // Column containing info about the calculated value
         colLastCalculatedValue = edgeTable.getColumn(LinkPredictionColumn.LAST_VALUE.getName());
-        consoleLogger.debug("Intialize column " + LinkPredictionColumn.LAST_VALUE.getName());
+        consoleLogger.debug("Initialize column " + LinkPredictionColumn.LAST_VALUE.getName());
         if (colLastCalculatedValue == null) {
             colLastCalculatedValue = edgeTable.addColumn(LinkPredictionColumn.LAST_VALUE.getName(), "Last Link Prediction Value", Integer.class, 0);
         }
@@ -171,7 +171,7 @@ public abstract class LinkPredictionStatistics implements Statistics {
                 .filter(edge -> edge.getAttribute(colLastPrediction).toString().equals(algorithm))
                 .map(edge -> (int) edge.getAttribute(colAddedInRun)).max(Comparator.comparing(Integer::valueOf))
                 .orElse(0);
-        consoleLogger.debug("Number of last iteration: " + lastIteration);
+        consoleLogger.log(Level.DEBUG, () -> "Number of last iteration: " + lastIteration);
 
         return lastIteration + 1;
     }
@@ -360,7 +360,7 @@ public abstract class LinkPredictionStatistics implements Statistics {
      * @return If initial execution
      */
     protected boolean isInitialExecution() {
-        return queue.size() == 0 && lastPrediction == null;
+        return queue.isEmpty() && lastPrediction == null;
     }
 
     /**
@@ -378,22 +378,68 @@ public abstract class LinkPredictionStatistics implements Statistics {
             this.predictionValue = predictionValue;
         }
 
+        /**
+         * Compares two probability objects.
+         *
+         * @param o Compared instances
+         * @return Comparison value based on prediction value
+         */
         @Override public int compareTo(LinkPredictionProbability o) {
             return this.getPredictionValue().compareTo(o.getPredictionValue());
         }
 
+        /**
+         * Verifies if two prediction probabilities are equal.
+         *
+         * @param o Other statistic
+         * @return Evaluation result
+         */
+        @Override public boolean equals(Object o) {
+            if (o instanceof LinkPredictionProbability) {
+                // Object is from same class
+                LinkPredictionProbability probability = (LinkPredictionProbability) o;
+                // Object has same source node and target node
+                return (this.getNodeSource().equals(probability.getNodeSource()) && this.getNodeTarget()
+                        .equals(probability.getNodeTarget())) || (
+                        this.getNodeTarget().equals(probability.getNodeSource()) && this.getNodeSource()
+                                .equals(probability.getNodeTarget()));
+            } else {
+                return false;
+            }
+        }
+
+        /**
+         * Gets predicted probability.
+         *
+         * @return Link prediction value
+         */
         public Integer getPredictionValue() {
             return predictionValue;
         }
 
+        /**
+         * Sets predicted probability.
+         *
+         * @param predictionValue Link prediction value
+         */
         public void setPredictionValue(int predictionValue) {
             this.predictionValue = predictionValue;
         }
 
+        /**
+         * Gets source node.
+         *
+         * @return Source node
+         */
         public Node getNodeSource() {
             return nodeSource;
         }
 
+        /**
+         * Gets target node.
+         *
+         * @return target node
+         */
         public Node getNodeTarget() {
             return nodeTarget;
         }

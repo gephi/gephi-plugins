@@ -1,5 +1,6 @@
 package org.gephi.plugins.linkprediction.base;
 
+import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.gephi.graph.api.GraphController;
@@ -36,7 +37,7 @@ public class LinkPredictionStatisticsPanel extends javax.swing.JPanel implements
 
     // Long runtime validation
     public static final String HIGH_RUNTIME = "Possibly high runtime";
-    private int noOfNodes;
+    private int nodeCount;
 
     // Input validation
     private boolean warningDisplayed = false;
@@ -50,25 +51,30 @@ public class LinkPredictionStatisticsPanel extends javax.swing.JPanel implements
     public LinkPredictionStatisticsPanel() {
         consoleLogger.debug("Initialize panel");
 
-        noOfNodes = Lookup.getDefault().lookup(GraphController.class).getGraphModel().getGraph().getNodeCount();
+        // Get number of nodes
+        nodeCount = Lookup.getDefault().lookup(GraphController.class).getGraphModel().getGraph().getNodeCount();
         if (consoleLogger.isDebugEnabled()) {
-            consoleLogger.debug("Graph contains " + noOfNodes + "nodes");
+            consoleLogger.debug("Graph contains " + nodeCount + "nodes");
         }
 
+        // Initialize checkboxes
         commonNeighbourCheckbox = new javax.swing.JCheckBox(CommonNeighboursStatisticsBuilder.COMMON_NEIGHBOURS_NAME);
         preferentialAttachmentCheckbox = new javax.swing.JCheckBox(
                 PreferentialAttachmentStatisticsBuilder.PREFERENTIAL_ATTACHMENT_NAME);
         iterationLabel = new javax.swing.JLabel("Iterations: ");
 
+        // Initialize iteration number sections
         numberOfIterationsTextField = new javax.swing.JTextField("1");
         commonNeighbourWarning = new javax.swing.JLabel(" ");
         preferentialAttachmentWarning = new javax.swing.JLabel(" ");
 
+        // Initialize algorithm section
         algorithms = new javax.swing.JLabel("Algorithms:");
         algorithms.setToolTipText("Currently only undirected, unweighted graphs are supported");
         Font f = algorithms.getFont();
         algorithms.setFont(f.deriveFont(f.getStyle() ^ Font.BOLD));
 
+        // Set warning colour
         commonNeighbourWarning.setForeground(Color.red);
         preferentialAttachmentWarning.setForeground(Color.red);
 
@@ -76,8 +82,10 @@ public class LinkPredictionStatisticsPanel extends javax.swing.JPanel implements
         numberOfIterationsTextField.setMaximumSize(
                 new Dimension(Integer.MAX_VALUE, numberOfIterationsTextField.getPreferredSize().height));
 
+        // Set layout
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
+        // Add components
         add(algorithms);
         add(commonNeighbourCheckbox);
         add(commonNeighbourWarning);
@@ -86,6 +94,7 @@ public class LinkPredictionStatisticsPanel extends javax.swing.JPanel implements
         add(iterationLabel);
         add(numberOfIterationsTextField);
 
+        // Ad listeners
         commonNeighbourCheckbox.addItemListener(this);
         preferentialAttachmentCheckbox.addItemListener(this);
         numberOfIterationsTextField.addKeyListener(this);
@@ -134,7 +143,7 @@ public class LinkPredictionStatisticsPanel extends javax.swing.JPanel implements
         try {
             numberOfIterations = Integer.valueOf(numberOfIterationsTextField.getText());
             warningDisplayed = false;
-            consoleLogger.debug("Number of iteration changed to " + numberOfIterations);
+            consoleLogger.log(Level.DEBUG, () -> "Number of iteration changed to " + Integer.valueOf(numberOfIterationsTextField.getText()));
         } catch (NumberFormatException e) {
             if (!warningDisplayed) {
                 warningDisplayed = true;
@@ -155,8 +164,8 @@ public class LinkPredictionStatisticsPanel extends javax.swing.JPanel implements
         LinkPredictionStatistics preferentialAttachment = statistic
                 .getStatistic(PreferentialAttachmentStatistics.class);
 
-        if (preferentialAttachment != null && preferentialAttachment.complexity
-                .longRuntimeExpected(numberOfIterations, noOfNodes)) {
+        if (preferentialAttachment != null && PreferentialAttachmentStatistics.complexity
+                .longRuntimeExpected(numberOfIterations, nodeCount)) {
             consoleLogger.debug("Enable high runtime warning for preferential attachment");
             preferentialAttachmentWarning.setText(HIGH_RUNTIME);
         } else {
@@ -165,7 +174,7 @@ public class LinkPredictionStatisticsPanel extends javax.swing.JPanel implements
         }
 
         LinkPredictionStatistics commonNeighbour = statistic.getStatistic(CommonNeighboursStatistics.class);
-        if (commonNeighbour != null && commonNeighbour.complexity.longRuntimeExpected(numberOfIterations, noOfNodes)) {
+        if (commonNeighbour != null && CommonNeighboursStatistics.complexity.longRuntimeExpected(numberOfIterations, nodeCount)) {
             consoleLogger.debug("Enable high runtime warning for common neighbours");
             commonNeighbourWarning.setText(HIGH_RUNTIME);
         } else {

@@ -25,6 +25,10 @@ public class LinkPredictionMacro extends LinkPredictionStatistics {
     // Console logger
     private static Logger consoleLogger = LogManager.getLogger(CommonNeighboursStatistics.class);
 
+    // Serial uid
+    private static final long serialVersionUID = 6605122051350231817L;
+
+
     /**
      * Gets the name of the respective algorithm.
      *
