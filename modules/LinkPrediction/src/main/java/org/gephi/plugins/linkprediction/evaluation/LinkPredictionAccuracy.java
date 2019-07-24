@@ -20,6 +20,15 @@ import java.util.Set;
  */
 public class LinkPredictionAccuracy extends EvaluationMetric {
 
+    /**
+     * Initializes new accuracy metric instance.
+     *
+     * @param statistic Algorithm used for link prediction
+     * @param initial Initial graph at time n
+     * @param validation Validation graph at time n+1
+     * @param initialWS Workspace containing initial graph
+     * @param validationWS Workspace containing validation graph
+     */
     public LinkPredictionAccuracy(LinkPredictionStatistics statistic, Graph initial, Graph validation, Workspace initialWS, Workspace validationWS) {
         super(statistic, initial, validation, initialWS, validationWS);
     }

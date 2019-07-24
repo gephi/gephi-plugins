@@ -83,8 +83,7 @@ public class CommonNeighboursStatistics extends LinkPredictionStatistics {
 
                     // Count number of neighbours
                     int commonNeighboursCount = getCommonNeighboursCount(aNeighbours, bNeighbours);
-                    consoleLogger.log(Level.DEBUG,
-                            () -> "Number of neighbours for node " + b.getId() + ": " + commonNeighboursCount);
+                    consoleLogger.log(Level.DEBUG, () -> "Number of neighbours for node " + b.getId() + ": " + commonNeighboursCount);
 
                     // Temporary save calculated
                     // value if edge does not exist

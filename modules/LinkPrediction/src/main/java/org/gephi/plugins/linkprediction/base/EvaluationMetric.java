@@ -48,7 +48,15 @@ public abstract class EvaluationMetric implements Serializable {
     // Console Logger
     protected static Logger consoleLogger = LogManager.getLogger(EvaluationMetric.class);
 
-
+    /**
+     * Initializes new evaluation metric instance.
+     *
+     * @param statistic Algorithm used for link prediction
+     * @param initial Initial graph at time n
+     * @param validation Validation graph at time n+1
+     * @param initialWS Workspace containing initial graph
+     * @param validationWS Workspace containing validation graph
+     */
     public EvaluationMetric(LinkPredictionStatistics statistic, Graph initial, Graph validation, Workspace initialWS,
             Workspace validationWS) {
         this.statistic = statistic;
@@ -227,10 +235,8 @@ public abstract class EvaluationMetric implements Serializable {
             statistic.execute(trainedModel);
 
             // Get number of edges per iteration
-            consoleLogger.log(Level.DEBUG,
-                    () -> "Trained edges in iteration " + predictionNumber + ": " + trainedEdges.size());
-            consoleLogger.log(Level.DEBUG,
-                    () -> "Validation edges in iteration " + predictionNumber + ": " + validationEdges.size());
+            consoleLogger.log(Level.DEBUG, () -> "Trained edges in iteration " + predictionNumber + ": " + trainedEdges.size());
+            consoleLogger.log(Level.DEBUG, () -> "Validation edges in iteration " + predictionNumber + ": " + validationEdges.size());
 
             // Calculate current accuracy of algorithm
             double currentResult = calculateCurrentResult(trainedEdges.size(), validationEdges.size());

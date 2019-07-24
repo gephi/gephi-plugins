@@ -10,6 +10,11 @@ public enum LinkPredictionColumn {
     // Column name
     private String name;
 
+    /**
+     * Returns name of the column.
+     *
+     * @return Column name
+     */
     public String getName() {
         return name;
     }
