@@ -155,7 +155,7 @@ public class LinkPredictionStatisticsPanel extends javax.swing.JPanel implements
         LinkPredictionStatistics preferentialAttachment = statistic
                 .getStatistic(PreferentialAttachmentStatistics.class);
 
-        if (preferentialAttachment != null && preferentialAttachment
+        if (preferentialAttachment != null && preferentialAttachment.complexity
                 .longRuntimeExpected(numberOfIterations, noOfNodes)) {
             consoleLogger.debug("Enable high runtime warning for preferential attachment");
             preferentialAttachmentWarning.setText(HIGH_RUNTIME);
@@ -165,7 +165,7 @@ public class LinkPredictionStatisticsPanel extends javax.swing.JPanel implements
         }
 
         LinkPredictionStatistics commonNeighbour = statistic.getStatistic(CommonNeighboursStatistics.class);
-        if (commonNeighbour != null && commonNeighbour.longRuntimeExpected(numberOfIterations, noOfNodes)) {
+        if (commonNeighbour != null && commonNeighbour.complexity.longRuntimeExpected(numberOfIterations, noOfNodes)) {
             consoleLogger.debug("Enable high runtime warning for common neighbours");
             commonNeighbourWarning.setText(HIGH_RUNTIME);
         } else {

@@ -1,4 +1,4 @@
-package org.gephi.plugins.linkprediction.base;
+package org.gephi.plugins.linkprediction.statistics;
 
 public enum LinkPredictionColumn {
 

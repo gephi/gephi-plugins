@@ -4,7 +4,7 @@ import org.apache.logging.log4j.Level;
 import org.gephi.graph.api.Edge;
 import org.gephi.graph.api.Graph;
 import org.gephi.plugins.linkprediction.base.EvaluationMetric;
-import org.gephi.plugins.linkprediction.base.LinkPredictionColumn;
+import org.gephi.plugins.linkprediction.statistics.LinkPredictionColumn;
 import org.gephi.plugins.linkprediction.base.LinkPredictionStatistics;
 import org.gephi.project.api.Workspace;
 

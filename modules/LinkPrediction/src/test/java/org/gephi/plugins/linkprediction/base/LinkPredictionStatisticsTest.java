@@ -3,6 +3,7 @@ package org.gephi.plugins.linkprediction.base;
 import org.gephi.graph.api.*;
 import org.gephi.plugins.linkprediction.statistics.CommonNeighboursStatistics;
 import org.gephi.plugins.linkprediction.statistics.CommonNeighboursStatisticsBuilder;
+import org.gephi.plugins.linkprediction.statistics.LinkPredictionColumn;
 import org.gephi.project.api.ProjectController;
 import org.junit.jupiter.api.BeforeEach;
 import org.openide.util.Lookup;
@@ -133,11 +134,11 @@ class LinkPredictionStatisticsTest {
 
         int iterationLimit = 1;
         long nodeCount = (long) Math.ceil(Math.sqrt(LinkPredictionStatistics.RUNTIME_THRESHOLD));
-        assertFalse(cs.longRuntimeExpected(iterationLimit, nodeCount));
+        assertFalse(CommonNeighboursStatistics.getComplexity().longRuntimeExpected(iterationLimit, nodeCount));
 
         iterationLimit = 2;
         nodeCount = LinkPredictionStatistics.RUNTIME_THRESHOLD;
-        assertTrue(cs.longRuntimeExpected(iterationLimit, nodeCount));
+        assertTrue(CommonNeighboursStatistics.getComplexity().longRuntimeExpected(iterationLimit, nodeCount));
     }
 
 }

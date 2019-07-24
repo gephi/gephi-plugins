@@ -4,6 +4,7 @@ import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.gephi.graph.api.*;
+import org.gephi.plugins.linkprediction.statistics.LinkPredictionColumn;
 import org.gephi.plugins.linkprediction.util.Complexity;
 import org.gephi.plugins.linkprediction.util.GraphUtils;
 import org.gephi.statistics.spi.Statistics;
@@ -27,7 +28,7 @@ public abstract class LinkPredictionStatistics implements Statistics {
     /** Default number of iteration used to predict next edges */
     public static final int ITERATION_LIMIT_DEFAULT = 1;
     /** Long runtime threshold, warning if value is reached */
-    public static final long RUNTIME_THRESHOLD = 1000000; // TODO: Use complexity class instead
+    public static final long RUNTIME_THRESHOLD = 1000000;
 
     // Columns for data labour
     protected static Column colLastPrediction;
@@ -112,39 +113,12 @@ public abstract class LinkPredictionStatistics implements Statistics {
     }
 
     /**
-     * Gives an estimate of the assumed duration.
-     *
-     * @param iterationLimit Number of iterations
-     * @param nodeCount      Number of nodes
-     * @return If the calculation will takes a long time
-     */
-    public boolean longRuntimeExpected(long iterationLimit, long nodeCount) {
-        switch (complexity) {
-        case QUADRATIC:
-            consoleLogger.debug("Verify runtime for quadratic complexity");
-            return (iterationLimit * nodeCount * nodeCount) > RUNTIME_THRESHOLD;
-        default:
-            // TODO Implement other complexities
-            return false;
-        }
-    }
-
-    /**
      * Gets the column "last prediction".
      *
      * @return Column "last prediction"
      */
     public static Column getColLastPrediction() {
         return colLastPrediction;
-    }
-
-    /**
-     * Sets the columns "last prediction".
-     *
-     * @param colLastPrediction Column "last prediction"
-     */
-    public static void setColLastPrediction(Column colLastPrediction) {
-        LinkPredictionStatistics.colLastPrediction = colLastPrediction;
     }
 
     /**
@@ -157,15 +131,6 @@ public abstract class LinkPredictionStatistics implements Statistics {
     }
 
     /**
-     * Sets the column "added in run".
-     *
-     * @param colAddedInRun Column "added in run"
-     */
-    public static void setColAddedInRun(Column colAddedInRun) {
-        LinkPredictionStatistics.colAddedInRun = colAddedInRun;
-    }
-
-    /**
      * Gets the column "last calculated value".
      *
      * @return Column "last calculated value"
@@ -175,30 +140,12 @@ public abstract class LinkPredictionStatistics implements Statistics {
     }
 
     /**
-     * Sets the column "last calculated value".
-     *
-     * @param colLastCalculatedValue Column "last calculated value"
-     */
-    public static void setColLastCalculatedValue(Column colLastCalculatedValue) {
-        LinkPredictionStatistics.colLastCalculatedValue = colLastCalculatedValue;
-    }
-
-    /**
      * Gets the complexity of the algorithm.
      *
      * @return Algorithms complexity
      */
     public static Complexity getComplexity() {
         return complexity;
-    }
-
-    /**
-     * Sets the complexity of the algorithm.
-     *
-     * @param complexity Algorithms complexity
-     */
-    public void setComplexity(Complexity complexity) {
-        this.complexity = complexity;
     }
 
     /**
@@ -322,7 +269,7 @@ public abstract class LinkPredictionStatistics implements Statistics {
         Edge newEdge = factory.newEdge(a, b, false);
         newEdge.setAttribute(colLastCalculatedValue, value);
         consoleLogger.log(Level.DEBUG,
-                () -> "Temporaily add new edge: " + a.getLabel() + ", " + b.getLabel() + ", " + value);
+                () -> "Temporarily add new edge: " + a.getLabel() + ", " + b.getLabel() + ", " + value);
 
         if (predictionProbability != null) {
             // Update values
