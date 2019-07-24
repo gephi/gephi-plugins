@@ -35,6 +35,8 @@ public abstract class LinkPredictionStatistics implements Statistics {
     protected static Column colAddedInRun;
     protected static Column colLastCalculatedValue;
 
+    // Graph to calculate predictions on
+    protected Graph graph;
     // Big o complexity of algorithm
     protected static Complexity complexity;
     // Queue of predictions, highest first
@@ -201,20 +203,18 @@ public abstract class LinkPredictionStatistics implements Statistics {
      * Recalculates the link prediction probability for neighbours of affected nodes.
      *
      * @param factory Factory to create new edges
-     * @param graph   Graph to add predictions on
      * @param a       Center node
      */
-    protected abstract void recalculateProbability(GraphFactory factory, Graph graph, Node a);
+    protected abstract void recalculateProbability(GraphFactory factory, Node a);
 
     /**
      * Checks if undirected edge between node a and b exists.
      *
-     * @param graph Graph used for lookup
      * @param a     Source/target node
      * @param b     Source/target node
      * @return Whether edge already does not exist already
      */
-    protected boolean isNewEdge(Graph graph, Node a, Node b, String algorithm) {
+    protected boolean isNewEdge(Node a, Node b, String algorithm) {
         // Get edges between a and b
         consoleLogger.log(Level.DEBUG, () -> "Check if edge exists already");
         // FIXME graph.getEdges returns always null
@@ -311,10 +311,9 @@ public abstract class LinkPredictionStatistics implements Statistics {
     /**
      * Recalculates link prediction probability for nodes, affected by last prediction.
      *
-     * @param graph   Graph on which calculation is based on
      * @param factory Factory to create new edge
      */
-    protected void recalculateAffectedNodes(Graph graph, GraphFactory factory) {
+    protected void recalculateAffectedNodes(GraphFactory factory) {
         // Recalculate only affected nodes
         consoleLogger.debug("Subsequent calculation");
         // Remove last added element from queue
@@ -324,17 +323,16 @@ public abstract class LinkPredictionStatistics implements Statistics {
         // Recalculate for affected nodes
         Node a = lastPrediction.getSource();
         Node b = lastPrediction.getTarget();
-        recalculateProbability(factory, graph, a);
-        recalculateProbability(factory, graph, b);
+        recalculateProbability(factory, a);
+        recalculateProbability(factory, b);
     }
 
     /**
      * Adds highest predicted edge to graph.
      *
-     * @param graph   Graph to add edge
      * @param factory Factory to create edge
      */
-    protected void addHighestPredictedEdgeToGraph(Graph graph, GraphFactory factory, String algorithm) {
+    protected void addHighestPredictedEdgeToGraph(GraphFactory factory, String algorithm) {
         // Get highest predicted value
         highestPrediction = getHighestPrediction();
         consoleLogger.log(Level.DEBUG, () -> "Highest predicted value is " + highestPrediction);

@@ -16,16 +16,14 @@ import static org.gephi.plugins.linkprediction.statistics.PreferentialAttachment
 
 /**
  * Class to calculate link predictions based on preferential attachment algorithm.
+ *
+ *  @author Saskia Schueler
+ *  @see LinkPredictionStatistics
  */
 public class PreferentialAttachmentStatistics extends LinkPredictionStatistics {
 
     // Console logger
     private static Logger consoleLogger = LogManager.getLogger(PreferentialAttachmentStatistics.class);
-
-    // Calculation internas
-    private Node neighbourA;
-    private Node neighbourB;
-    private Graph graph;
 
     static {
         complexity = Complexity.QUADRATIC;
@@ -37,7 +35,7 @@ public class PreferentialAttachmentStatistics extends LinkPredictionStatistics {
      * @return Algorithm name
      */
     @Override public String getAlgorithmName() {
-        return PreferentialAttachmentStatisticsBuilder.PREFERENTIAL_ATTACHMENT_NAME;
+        return PREFERENTIAL_ATTACHMENT_NAME;
     }
 
     /**
@@ -71,7 +69,7 @@ public class PreferentialAttachmentStatistics extends LinkPredictionStatistics {
             for (Node a : nodesA) {
                 consoleLogger.log(Level.DEBUG, () -> "Calculation for node " + a.getId());
 
-                // Add only non existing edges
+                // Remove self from neighbours
                 nodesB.remove(a);
 
                 // Get neighbours of a
@@ -89,41 +87,23 @@ public class PreferentialAttachmentStatistics extends LinkPredictionStatistics {
 
                     // Temporary save calculated
                     // value if edge does not exist
-                    if (isNewEdge(graph, a, b, PreferentialAttachmentStatisticsBuilder.PREFERENTIAL_ATTACHMENT_NAME)) {
+                    if (isNewEdge(a, b, PREFERENTIAL_ATTACHMENT_NAME)) {
                         saveCalculatedValue(factory, a, b, totalNeighboursCount);
                     }
                 }
             }
 
         } else {
-            recalculateAffectedNodes(graph, factory);
+            // Only change affected node for subsequent iterations
+            recalculateAffectedNodes(factory);
         }
 
         // Add highest predicted edge to graph
-        addHighestPredictedEdgeToGraph(graph, factory, PreferentialAttachmentStatisticsBuilder.PREFERENTIAL_ATTACHMENT_NAME);
+        addHighestPredictedEdgeToGraph(factory, PREFERENTIAL_ATTACHMENT_NAME);
 
+        // Unlock graph
         consoleLogger.debug("Unlock graph");
         graph.writeUnlock();
-
-    }
-
-    /**
-     * Verify if last predicted edge exists.
-     *
-     * @param edges Edges to apply validation on
-     * @return Flag
-     */
-    // TODO: Remove
-    private boolean lastPredictedEdgeExists(Edge[] edges) {
-        for (int i = 0; i < edges.length; i++) {
-            if ((edges[i].getAttribute(colLastPrediction).equals(PREFERENTIAL_ATTACHMENT_NAME)
-                    && (Integer) edges[0].getAttribute(colAddedInRun) > 0) || (edges[i].getAttribute(colLastPrediction)
-                    .equals(""))) {
-                return true;
-            }
-
-        }
-        return false;
     }
 
     /**
@@ -133,13 +113,14 @@ public class PreferentialAttachmentStatistics extends LinkPredictionStatistics {
      * @return Neighbours, that were added by preferential attachment or have already been there before
      */
     private ArrayList<Node> getRelevantNeighbours(Node node) {
-
+        consoleLogger.debug("Get relevant neighbours");
         ArrayList<Node> relevantNeighbours = new ArrayList<>();
 
-        Node[] neighboursX = graph.getNeighbors(node).toArray();
-
-        for (Node iN : neighboursX) {
-            List<Edge> edges = GraphUtils.getEdges(graph, node, iN);
+        // Get all neighbours
+        Node[] neighbours = graph.getNeighbors(node).toArray();
+        // Verify if neighbour  from other algorithm
+        for (Node neighbour : neighbours) {
+            List<Edge> edges = GraphUtils.getEdges(graph, node, neighbour);
             Edge[] eList = new Edge[edges.size()];
             eList = edges.toArray(eList);
 
@@ -147,7 +128,8 @@ public class PreferentialAttachmentStatistics extends LinkPredictionStatistics {
             for (Edge e : eList) {
                 if ((e.getAttribute(colLastPrediction).equals(PREFERENTIAL_ATTACHMENT_NAME) || e
                         .getAttribute(colLastPrediction).equals("")) && !addedEdge) {
-                    relevantNeighbours.add(iN);
+                    relevantNeighbours.add(neighbour);
+                    consoleLogger.debug("Edge added");
                     addedEdge = true;
                 }
             }
@@ -160,12 +142,11 @@ public class PreferentialAttachmentStatistics extends LinkPredictionStatistics {
      * Recalculates the link prediction probability for neighbours of affected nodes.
      *
      * @param factory Factory to create new edges
-     * @param graph Graph to add predictions on
      * @param a Center node
      */
     @Override
-    protected void recalculateProbability(GraphFactory factory, Graph graph, Node a) {
-
+    protected void recalculateProbability(GraphFactory factory, Node a) {
+        consoleLogger.debug("Recalculate probability for affected nodes");
         // Get neighbours of a
         List<Node> aNeighbours = getRelevantNeighbours(a);
 
@@ -180,11 +161,13 @@ public class PreferentialAttachmentStatistics extends LinkPredictionStatistics {
 
             // Update temporary saved values
             // if edge does not exist
-            if (isNewEdge(graph, a, b, PreferentialAttachmentStatisticsBuilder.PREFERENTIAL_ATTACHMENT_NAME)) {
+            if (isNewEdge(a, b, PREFERENTIAL_ATTACHMENT_NAME)) {
+                consoleLogger.log(Level.DEBUG, () -> "Calculation for edge new between " + a.getId() + " and " + b.getId());
                 List<Node> bNeighbours = getRelevantNeighbours(b);
-                int totalNeighboursCount = aNeighbours.size() * bNeighbours.size(); // TODO: Only this line differs from common neighbours
+                int totalNeighboursCount = aNeighbours.size() * bNeighbours.size();
 
                 // Update saved and calculated values
+                consoleLogger.log(Level.DEBUG, () -> "Update value to " + totalNeighboursCount);
                 updateCalculatedValue(factory, a, b, totalNeighboursCount);
             }
         }

@@ -6,15 +6,19 @@ import org.apache.logging.log4j.Logger;
 import org.gephi.graph.api.*;
 import org.gephi.plugins.linkprediction.base.LinkPredictionStatistics;
 import org.gephi.plugins.linkprediction.util.Complexity;
-import org.openide.util.Lookup;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static org.gephi.plugins.linkprediction.statistics.CommonNeighboursStatisticsBuilder.COMMON_NEIGHBOURS_NAME;
+
 /**
  * Class to calculate link predictions based on common neighbour algorithm.
+ *
+ * @author Marco Romanutti
+ * @see LinkPredictionStatistics
  */
 public class CommonNeighboursStatistics extends LinkPredictionStatistics {
 
@@ -31,7 +35,7 @@ public class CommonNeighboursStatistics extends LinkPredictionStatistics {
      * @return Algorithm name
      */
     @Override public String getAlgorithmName() {
-        return CommonNeighboursStatisticsBuilder.COMMON_NEIGHBOURS_NAME;
+        return COMMON_NEIGHBOURS_NAME;
     }
 
     /**
@@ -49,9 +53,8 @@ public class CommonNeighboursStatistics extends LinkPredictionStatistics {
 
         // Get graph factory
         consoleLogger.debug("Get factory");
-        GraphController gc = Lookup.getDefault().lookup(GraphController.class);
-        Graph graph = gc.getGraphModel().getGraph();
-        GraphFactory factory = gc.getGraphModel().factory();
+        graph = graphModel.getGraph();
+        GraphFactory factory = graphModel.factory();
 
         // Lock graph for writes
         consoleLogger.debug("Lock graph");
@@ -70,13 +73,13 @@ public class CommonNeighboursStatistics extends LinkPredictionStatistics {
                 nodesB.remove(a);
 
                 // Get neighbours of a
-                List<Node> aNeighbours = getNeighbours(graph, a);
+                List<Node> aNeighbours = getNeighbours(a);
 
                 // Calculate common neighbors
                 for (Node b : nodesB) {
                     // Get neighbours of b
                     consoleLogger.log(Level.DEBUG, () -> "Calculation for node " + b.getId());
-                    List<Node> bNeighbours = getNeighbours(graph, b);
+                    List<Node> bNeighbours = getNeighbours(b);
 
                     // Count number of neighbours
                     int commonNeighboursCount = getCommonNeighboursCount(aNeighbours, bNeighbours);
@@ -85,18 +88,19 @@ public class CommonNeighboursStatistics extends LinkPredictionStatistics {
 
                     // Temporary save calculated
                     // value if edge does not exist
-                    if (isNewEdge(graph, a, b, CommonNeighboursStatisticsBuilder.COMMON_NEIGHBOURS_NAME)) {
+                    if (isNewEdge(a, b, COMMON_NEIGHBOURS_NAME)) {
                         saveCalculatedValue(factory, a, b, commonNeighboursCount);
                     }
                 }
             }
 
         } else {
-            recalculateAffectedNodes(graph, factory);
+            // Only change affected node for subsequent iterations
+            recalculateAffectedNodes(factory);
         }
 
         // Add highest predicted edge to graph
-        addHighestPredictedEdgeToGraph(graph, factory, CommonNeighboursStatisticsBuilder.COMMON_NEIGHBOURS_NAME);
+        addHighestPredictedEdgeToGraph(factory, COMMON_NEIGHBOURS_NAME);
 
         // Unlock graph
         consoleLogger.debug("Unlock graph");
@@ -118,11 +122,10 @@ public class CommonNeighboursStatistics extends LinkPredictionStatistics {
     /**
      * Retrieve neighbours for node a from graph
      *
-     * @param graph Graph in which neighours will be searched
      * @param n     Node for which neighbours will be searched
      * @return Neighbours of n
      */
-    private ArrayList<Node> getNeighbours(Graph graph, Node n) {
+    private ArrayList<Node> getNeighbours(Node n) {
         consoleLogger.debug("Get neighbours");
         return new ArrayList<>(
                 Arrays.asList(graph.getNeighbors(n).toArray()).stream().distinct().collect(Collectors.toList()));
@@ -132,13 +135,12 @@ public class CommonNeighboursStatistics extends LinkPredictionStatistics {
      * Recalculates the link prediction probability for neighbours of affected nodes.
      *
      * @param factory Factory to create new edges
-     * @param graph   Graph to add predictions on
      * @param a       Center node
      */
-    @Override protected void recalculateProbability(GraphFactory factory, Graph graph, Node a) {
-
+    @Override protected void recalculateProbability(GraphFactory factory, Node a) {
+        consoleLogger.debug("Recalculate probability for affected nodes");
         // Get neighbours of a
-        List<Node> aNeighbours = getNeighbours(graph, a);
+        List<Node> aNeighbours = getNeighbours(a);
 
         // Get edges and remove
         // self from potential neighbours
@@ -148,13 +150,16 @@ public class CommonNeighboursStatistics extends LinkPredictionStatistics {
         // Iterate over other nodes
         // that could become new neighbours
         for (Node b : nodesB) {
+
             // Update temporary saved values
             // if edge does not exist
-            if (isNewEdge(graph, a, b, CommonNeighboursStatisticsBuilder.COMMON_NEIGHBOURS_NAME)) {
-                List<Node> bNeighbours = getNeighbours(graph, b);
+            if (isNewEdge(a, b, COMMON_NEIGHBOURS_NAME)) {
+                consoleLogger.log(Level.DEBUG, () -> "Calculation for edge new between " + a.getId() + " and " + b.getId());
+                List<Node> bNeighbours = getNeighbours(b);
                 int commonNeighboursCount = getCommonNeighboursCount(aNeighbours, bNeighbours);
 
                 // Update saved and calculated values
+                consoleLogger.log(Level.DEBUG, () -> "Update value to " + commonNeighboursCount);
                 updateCalculatedValue(factory, a, b, commonNeighboursCount);
             }
         }
