@@ -23,7 +23,7 @@ public class LinkPredictionMacro extends LinkPredictionStatistics {
     private List<LinkPredictionStatistics> statistics = new ArrayList<>();
 
     // Console logger
-    private static Logger consoleLogger = LogManager.getLogger(CommonNeighboursStatistics.class);
+    private static Logger consoleLogger = LogManager.getLogger(LinkPredictionMacro.class);
 
     // Serial uid
     private static final long serialVersionUID = 6605122051350231817L;

@@ -409,6 +409,15 @@ public abstract class LinkPredictionStatistics implements Statistics {
         }
 
         /**
+         * Generates hash code out of prediction value.
+         *
+         * @return Hash code
+         */
+        @Override public int hashCode() {
+            return this.getPredictionValue().hashCode();
+        }
+
+        /**
          * Gets predicted probability.
          *
          * @return Link prediction value
