@@ -18,19 +18,32 @@ import org.openide.util.lookup.ServiceProvider;
  */
 @ServiceProvider(service = StatisticsBuilder.class) public class LinkPredictionEvaluationBuilder
         extends LinkPredictionStatisticsBuilder {
-    /**
-     * Name of the algorithm
-     **/
+    /** Name of the gui component **/
     public static final String LINK_PREDICTION_NAME = "Eval. Link Prediction Algorithms";
 
+    /**
+     * Gets the name of the component.
+     *
+     * @return Name of component
+     */
     @Override public String getName() {
         return LINK_PREDICTION_NAME;
     }
 
+    /**
+     * Gets the class of the used statistic.
+     *
+     * @return Class of object
+     */
     @Override public Class<? extends Statistics> getStatisticsClass() {
         return LinkPredictionEvaluation.class;
     }
 
+    /**
+     * Create new statistics object.
+     *
+     * @return Statistic evaluation
+     */
     @Override public Statistics getStatistics() {
         return new LinkPredictionEvaluation();
     }

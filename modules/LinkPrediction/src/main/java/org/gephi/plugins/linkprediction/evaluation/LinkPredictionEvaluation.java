@@ -25,7 +25,6 @@ import java.util.List;
  * @author Marco Romanutti
  */
 public class LinkPredictionEvaluation implements Statistics, Serializable {
-
     // Serial uid
     private static final long serialVersionUID = 2405172041950251807L;
 
@@ -37,6 +36,7 @@ public class LinkPredictionEvaluation implements Statistics, Serializable {
 
     // Console Logger
     private static Logger consoleLogger = LogManager.getLogger(LinkPredictionEvaluation.class);
+
 
     /**
      * Calculates evaluation metrics for all evaluations.

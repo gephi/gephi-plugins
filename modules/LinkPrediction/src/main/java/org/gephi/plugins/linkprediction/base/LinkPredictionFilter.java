@@ -1,5 +1,6 @@
 package org.gephi.plugins.linkprediction.base;
 
+import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.gephi.filters.spi.ComplexFilter;
@@ -50,9 +51,7 @@ public abstract class LinkPredictionFilter implements ComplexFilter {
      * @return Filtered graph
      */
     @Override public Graph filter(Graph graph) {
-        if (consoleLogger.isDebugEnabled()) {
-            consoleLogger.debug("Apply new " + getName() + " Filter");
-        }
+        consoleLogger.log(Level.DEBUG, () -> "Apply new " + getName() + " Filter");
 
         //Look if the result column already exist and create it if needed
         consoleLogger.debug("Initialize columns");
@@ -67,9 +66,8 @@ public abstract class LinkPredictionFilter implements ComplexFilter {
         List<Edge> edges = new ArrayList<Edge>(Arrays.asList(graph.getEdges().toArray()));
         // Remove edges from other algorithms
         edges = removeOtherEdges(edges);
-        if (consoleLogger.isDebugEnabled()) {
-            consoleLogger.debug("Retaining edges count: " + edges.size());
-        }
+        int edgesCount = edges.size();
+        consoleLogger.log(Level.DEBUG, () -> "Retaining edges count: " + edgesCount);
 
         // Remove other nodes and edges
         retainEdges(graph, edges);
@@ -87,7 +85,11 @@ public abstract class LinkPredictionFilter implements ComplexFilter {
      * @return Filter properties
      */
     public FilterProperty[] getProperties() {
+        consoleLogger.debug("Get properties");
+
+        // Use properties as singleton
         if (filterProperties == null) {
+            consoleLogger.debug("Create properties");
             try {
                 filterProperties = new FilterProperty[] {
                         FilterProperty.createProperty(this, Integer.class, "edgesLimit")
@@ -96,6 +98,7 @@ public abstract class LinkPredictionFilter implements ComplexFilter {
                 Exceptions.printStackTrace(ex);
             }
         }
+
         return filterProperties;
     }
 
@@ -110,12 +113,13 @@ public abstract class LinkPredictionFilter implements ComplexFilter {
         Predicate<Edge> algorithmPredicate = edge -> !edge.getAttribute(colLastPrediction)
                 .equals(getName());
         edges.removeIf(algorithmPredicate);
+
         // Limit edges to filter criteria
         edges = edges.stream().sorted(Comparator.comparingLong(e -> (int) e.getAttribute(colAddedInRun)))
                 .limit(edgesLimit).collect(Collectors.toList());
-        if (consoleLogger.isDebugEnabled()) {
-            consoleLogger.debug("Remaining edges: " + edges.size());
-        }
+        int edgesCount = edges.size();
+        consoleLogger.log(Level.DEBUG, () -> "Remaining edges: " + edgesCount);
+
         return edges;
     }
 
@@ -129,23 +133,17 @@ public abstract class LinkPredictionFilter implements ComplexFilter {
     public List<Node> getNodesToRemove(Graph graph, List<Edge> edges) {
         // Get nodes
         List<Node> sourceNodes = edges.stream().map(edge -> edge.getSource()).collect(Collectors.toList());
-        if (consoleLogger.isDebugEnabled()) {
-            consoleLogger.debug("Number of sources: " + sourceNodes.size());
-        }
+        consoleLogger.log(Level.DEBUG, () -> "Number of sources: " + sourceNodes.size());
+
         List<Node> targetNodes = edges.stream().map(edge -> edge.getTarget()).collect(Collectors.toList());
-        if (consoleLogger.isDebugEnabled()) {
-            consoleLogger.debug("Number of targets: " + targetNodes.size());
-        }
+        consoleLogger.log(Level.DEBUG, () -> "Number of sources: " + targetNodes.size());
 
         // Union nodes
         sourceNodes.addAll(targetNodes);
         List<Node> remainingNodes = sourceNodes;
-        if (consoleLogger.isDebugEnabled()) {
-            consoleLogger.debug("Total remaining nodes: " + remainingNodes.size());
-        }
+        consoleLogger.log(Level.DEBUG, () -> "Total remaining nodes: " + remainingNodes.size());
 
         // Nodes to remove
-        // Get nodes
         List<Node> nodesToRemove = new ArrayList<Node>(Arrays.asList(graph.getNodes().toArray()));
         // Remove all nodes, which are not referenced
         Predicate<Node> containsNotNodePredicate = node -> remainingNodes.contains(node);
@@ -168,9 +166,7 @@ public abstract class LinkPredictionFilter implements ComplexFilter {
             // Remove nodes
             List<Node> nodesToRemove = getNodesToRemove(graph, edges);
             graph.removeAllNodes(nodesToRemove);
-            if (consoleLogger.isDebugEnabled()) {
-                consoleLogger.debug("Remove " + nodesToRemove.size() + " Nodes");
-            }
+            consoleLogger.log(Level.DEBUG, () -> "Remove " + nodesToRemove.size() + " Nodes");
 
             // Remove edges
             List<Edge> remainingEdges = new ArrayList<Edge>(Arrays.asList(graph.getEdges().toArray()));

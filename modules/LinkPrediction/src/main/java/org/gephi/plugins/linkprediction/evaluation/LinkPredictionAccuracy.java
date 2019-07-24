@@ -41,7 +41,7 @@ public class LinkPredictionAccuracy extends EvaluationMetric {
         // Remove edges from other algorithms and
         // edges that initially existed
         consoleLogger.debug("Remove irrelevant edges");
-        trainedEdges.removeIf(e -> !e.getAttribute(LinkPredictionColumn.LP_ALGORITHM.getValue()).equals(statistics.getAlgorithmName()));
+        trainedEdges.removeIf(e -> !e.getAttribute(LinkPredictionColumn.LP_ALGORITHM.getName()).equals(statistics.getAlgorithmName()));
 
         // Get edges that are in both sets
         consoleLogger.debug("Get congruent edges");

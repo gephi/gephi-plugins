@@ -14,7 +14,6 @@ import javax.swing.*;
  * @see LinkPredictionEvaluation
  */
 @ServiceProvider(service = StatisticsUI.class) public class LinkPredictionEvaluationUI implements StatisticsUI {
-
     // Metrics to calculate
     private LinkPredictionEvaluation evaluation;
 

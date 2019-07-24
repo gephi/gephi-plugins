@@ -147,7 +147,7 @@ The `pom.xml` file at the root folder makes everything fit together and notably 
 
 #### How are the manifest settings defined?
 
-There are two options. The first option is what the `generate` task does: it puts entries `OpenIDE-Module-Short-Description`, `OpenIDE-Module-Long-Description`, `OpenIDE-Module-Display-Category` and `OpenIDE-Module-Name` into the `src/main/nbm/manifest.mf` file. The second option sets a `OpenIDE-Module-Localizing-Bundle` entry into the `manifest.mf` so values are defined elsewhere in `Bundle.properties` file. The value is then simply the path to the file (e.g. `OpenIDE-Module-Localizing-Bundle: org/project/Bundle.properties`).
+There are two options. The first option is what the `generate` task does: it puts entries `OpenIDE-Module-Short-Description`, `OpenIDE-Module-Long-Description`, `OpenIDE-Module-Display-Category` and `OpenIDE-Module-Name` into the `src/main/nbm/manifest.mf` file. The second option sets a `OpenIDE-Module-Localizing-Bundle` entry into the `manifest.mf` so values are defined elsewhere in `Bundle.properties` file. The name is then simply the path to the file (e.g. `OpenIDE-Module-Localizing-Bundle: org/project/Bundle.properties`).
 
 The second option is preferable when the short or long description have too many characters as the manifest format is pretty restrictive.  
 

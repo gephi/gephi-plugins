@@ -28,7 +28,6 @@ import java.util.Map;
  * @see LinkPredictionEvaluation
  */
 public class LinkPredictionEvaluationPanel extends javax.swing.JPanel implements ItemListener {
-
     // List of metrics to calculate
     private LinkPredictionEvaluation evaluation;
 
@@ -104,9 +103,15 @@ public class LinkPredictionEvaluationPanel extends javax.swing.JPanel implements
 
     }
 
+    /**
+     * Refreshes selected algorithms to evaluate.
+     *
+     * @param e Event that caused refresh
+     */
     @Override public void itemStateChanged(ItemEvent e) {
         consoleLogger.debug("Item change detected");
 
+        // Determine initial and validation workspaces
         String initialItem = initialWorkspace.getSelectedItem().toString();
         String validationItem = validationWorkspace.getSelectedItem().toString();
 
@@ -116,6 +121,7 @@ public class LinkPredictionEvaluationPanel extends javax.swing.JPanel implements
         Graph initial = Lookup.getDefault().lookup(GraphController.class).getGraphModel(workspaces.get(initialItem)).getUndirectedGraph();
         Graph validation = Lookup.getDefault().lookup(GraphController.class).getGraphModel(workspaces.get(validationItem)).getUndirectedGraph();
 
+        // Refresh evaluations to calculate
         // Common neighbour accuracy
         LinkPredictionAccuracy cnAccuracy = new LinkPredictionAccuracy(new CommonNeighboursStatistics(), initial, validation, initialWS, validationWS);
         if (commonNeighbourCheckbox.isSelected()) {
@@ -137,6 +143,11 @@ public class LinkPredictionEvaluationPanel extends javax.swing.JPanel implements
         }
     }
 
+    /**
+     * Sets the evaluation to be used to determine quality of algorithms.
+     *
+     * @param evaluation Evaluation to be used.
+     */
     public void setEvaluation(LinkPredictionEvaluation evaluation) {
         this.evaluation = evaluation;
     }

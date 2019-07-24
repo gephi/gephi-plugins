@@ -89,13 +89,13 @@ class LinkPredictionStatisticsTest {
         Table edgeTable = graphModel.getEdgeTable();
         statistic.initializeColumns(edgeTable);
 
-        Column colLP = edgeTable.getColumn(LinkPredictionColumn.LP_ALGORITHM.getValue());
+        Column colLP = edgeTable.getColumn(LinkPredictionColumn.LP_ALGORITHM.getName());
         assertTrue(colLP != null);
 
-        Column colAddinRun = edgeTable.getColumn(LinkPredictionColumn.ADDED_IN_RUN.getValue());
+        Column colAddinRun = edgeTable.getColumn(LinkPredictionColumn.ADDED_IN_RUN.getName());
         assertTrue(colAddinRun != null);
 
-        Column colLastValue = edgeTable.getColumn(LinkPredictionColumn.LAST_VALUE.getValue());
+        Column colLastValue = edgeTable.getColumn(LinkPredictionColumn.LAST_VALUE.getName());
         assertTrue(colLastValue != null);
     }
 

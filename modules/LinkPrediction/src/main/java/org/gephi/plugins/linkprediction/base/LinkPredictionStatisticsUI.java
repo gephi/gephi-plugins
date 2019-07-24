@@ -16,8 +16,9 @@ import javax.swing.*;
  */
 @ServiceProvider(service = StatisticsUI.class)
 public class LinkPredictionStatisticsUI implements StatisticsUI {
-
+    // Algorithm used
     protected LinkPredictionStatistics statistic;
+    // UI Panel
     protected LinkPredictionStatisticsPanel panel;
 
     @Override

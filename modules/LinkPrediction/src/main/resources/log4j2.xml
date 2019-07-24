@@ -51,6 +51,10 @@
       <AppenderRef ref="console" />
     </Logger>
 
+    <Logger name = "org.gephi.plugins.linkprediction.statistics.LinkPredictionMacro" additivity="false">
+      <AppenderRef ref="console" />
+    </Logger>
+
     <Logger name = "org.gephi.plugins.linkprediction.evaluation.LinkPredictionEvaluation" additivity="false">
         <AppenderRef ref="console" />
     </Logger>

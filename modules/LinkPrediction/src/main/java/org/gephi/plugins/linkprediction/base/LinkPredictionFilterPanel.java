@@ -26,22 +26,16 @@ import static org.gephi.plugins.linkprediction.base.LinkPredictionStatistics.ini
  * @see LinkPredictionFilter
  */
 public class LinkPredictionFilterPanel extends javax.swing.JPanel {
-
-    /**
-     * Filter on which panel will set its values
-     */
+    /** Filter on which panel will set its values */
     private LinkPredictionFilter filter;
-    /**
-     * Slider to adapt number uf shown edges
-     */
+    /** Slider to adapt number uf shown edges */
     private javax.swing.JSlider slider;
-    /**
-     * Label which shows current chosen value of shown edges
-     */
+    /** Label which shows current chosen value of shown edges */
     private javax.swing.JLabel current;
 
     // Console logger
     private static Logger consoleLogger = LogManager.getLogger(LinkPredictionFilterPanel.class);
+
 
     /**
      * Creates a new link prediction filter panel.

@@ -66,24 +66,24 @@ public abstract class LinkPredictionStatistics implements Statistics {
      */
     public static void initializeColumns(Table edgeTable) {
         // Column containing info about last prediction algorithm
-        colLastPrediction = edgeTable.getColumn(LinkPredictionColumn.LP_ALGORITHM.getValue());
-        consoleLogger.debug("Initialize column " + LinkPredictionColumn.LP_ALGORITHM.getValue());
+        colLastPrediction = edgeTable.getColumn(LinkPredictionColumn.LP_ALGORITHM.getName());
+        consoleLogger.debug("Initialize column " + LinkPredictionColumn.LP_ALGORITHM.getName());
         if (colLastPrediction == null) {
-            colLastPrediction = edgeTable.addColumn(LinkPredictionColumn.LP_ALGORITHM.getValue(), "Chosen Link Prediction Algorithm", String.class, "");
+            colLastPrediction = edgeTable.addColumn(LinkPredictionColumn.LP_ALGORITHM.getName(), "Chosen Link Prediction Algorithm", String.class, "");
         }
 
         // Column containing info about iteration in which edge was added
-        colAddedInRun = edgeTable.getColumn(LinkPredictionColumn.ADDED_IN_RUN.getValue());
-        consoleLogger.debug("Initialize column " + LinkPredictionColumn.ADDED_IN_RUN.getValue());
+        colAddedInRun = edgeTable.getColumn(LinkPredictionColumn.ADDED_IN_RUN.getName());
+        consoleLogger.debug("Initialize column " + LinkPredictionColumn.ADDED_IN_RUN.getName());
         if (colAddedInRun == null) {
-            colAddedInRun = edgeTable.addColumn(LinkPredictionColumn.ADDED_IN_RUN.getValue(), "Added in Run", Integer.class, 0);
+            colAddedInRun = edgeTable.addColumn(LinkPredictionColumn.ADDED_IN_RUN.getName(), "Added in Run", Integer.class, 0);
         }
 
         // Column containing info about the calculated value
-        colLastCalculatedValue = edgeTable.getColumn(LinkPredictionColumn.LAST_VALUE.getValue());
-        consoleLogger.debug("Intialize column " + LinkPredictionColumn.LAST_VALUE.getValue());
+        colLastCalculatedValue = edgeTable.getColumn(LinkPredictionColumn.LAST_VALUE.getName());
+        consoleLogger.debug("Intialize column " + LinkPredictionColumn.LAST_VALUE.getName());
         if (colLastCalculatedValue == null) {
-            colLastCalculatedValue = edgeTable.addColumn(LinkPredictionColumn.LAST_VALUE.getValue(), "Last Link Prediction Value", Integer.class, 0);
+            colLastCalculatedValue = edgeTable.addColumn(LinkPredictionColumn.LAST_VALUE.getName(), "Last Link Prediction Value", Integer.class, 0);
         }
     }
 

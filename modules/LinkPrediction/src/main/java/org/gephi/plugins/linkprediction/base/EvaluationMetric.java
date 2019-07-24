@@ -21,42 +21,26 @@ import java.util.*;
  * @author Marco Romanutti
  */
 public abstract class EvaluationMetric implements Serializable {
-    /**
-     * Initial graph
-     */
+    /** Initial graph */
     protected final Graph initial;
-    /**
-     * Trained graph
-     */
+    /** Trained graph */
     protected Graph trained;
-    /**
-     * Validation graph
-     */
+    /** Validation graph */
     protected final Graph validation;
-    /**
-     * Validation Workspace
-     */
+
+    /** Validation Workspace */
     protected final Workspace validationWS;
-    /**
-     * Initial Workspace
-     */
+    /** Initial Workspace */
     protected final Workspace initialWS;
-    /**
-     * Algorithm to evaluate
-     */
+
+    /** Algorithm to evaluate */
     protected final LinkPredictionStatistics statistic;
-    /**
-     * Calculated results per iteration
-     */
-    protected Map<Integer, Double> iterationResults = new HashMap<>();
-    /**
-     * Final results after all iterations
-     */
-    protected double finalResult;
-    /**
-     * Number of edges to predict
-     */
+    /** Number of edges to predict */
     protected int diffEdgeCount;
+    /** Calculated results per iteration */
+    protected Map<Integer, Double> iterationResults = new HashMap<>();
+    /** Final results after all iterations */
+    protected double finalResult;
 
     // Serial uid
     private static final long serialVersionUID = 3505122041350261811L;
@@ -66,13 +50,14 @@ public abstract class EvaluationMetric implements Serializable {
 
 
     public EvaluationMetric(LinkPredictionStatistics statistic, Graph initial, Graph validation, Workspace initialWS,
-                            Workspace validationWS) {
+            Workspace validationWS) {
         this.statistic = statistic;
         this.initial = initial;
         this.validation = validation;
         this.initialWS = initialWS;
         this.validationWS = validationWS;
     }
+
 
     /**
      * Calculates respective metric for link prediction algorithm.
@@ -84,7 +69,7 @@ public abstract class EvaluationMetric implements Serializable {
      * @return Metric value
      */
     public abstract double calculate(int addedEdges, Graph trained, Graph validation,
-                                     LinkPredictionStatistics statistics);
+            LinkPredictionStatistics statistics);
 
     /**
      * Runs the calculation of prediction and evaluates initial and validation graph.
@@ -208,8 +193,7 @@ public abstract class EvaluationMetric implements Serializable {
      * @param o Object to compare
      * @return Equality of two evaluation metrics
      */
-    @Override
-    public boolean equals(Object o) {
+    @Override public boolean equals(Object o) {
         if (!(o instanceof EvaluationMetric)) {
             return false;
         }
@@ -221,8 +205,7 @@ public abstract class EvaluationMetric implements Serializable {
      *
      * @return Hashed statistic class
      */
-    @Override
-    public int hashCode() {
+    @Override public int hashCode() {
         return Objects.hash(statistic.getClass());
     }
 
@@ -240,16 +223,20 @@ public abstract class EvaluationMetric implements Serializable {
             // Set prediction number to use in lambda log expression
             final int predictionNumber = i;
 
+            // Execute prediction
             statistic.execute(trainedModel);
 
             // Get number of edges per iteration
-            consoleLogger.log(Level.DEBUG, () -> "Trained edges in iteration " + predictionNumber + ": " + trainedEdges.size());
-            consoleLogger.log(Level.DEBUG, () -> "Validation edges in iteration " + predictionNumber + ": " + validationEdges.size());
+            consoleLogger.log(Level.DEBUG,
+                    () -> "Trained edges in iteration " + predictionNumber + ": " + trainedEdges.size());
+            consoleLogger.log(Level.DEBUG,
+                    () -> "Validation edges in iteration " + predictionNumber + ": " + validationEdges.size());
 
             // Calculate current accuracy of algorithm
             double currentResult = calculateCurrentResult(trainedEdges.size(), validationEdges.size());
             iterationResults.put(i, currentResult);
-            consoleLogger.log(Level.DEBUG, () -> "Current result in iteration " + predictionNumber + ": " + currentResult);
+            consoleLogger
+                    .log(Level.DEBUG, () -> "Current result in iteration " + predictionNumber + ": " + currentResult);
         }
     }
 
@@ -261,8 +248,7 @@ public abstract class EvaluationMetric implements Serializable {
      * @param validationEdges Set of edges from validation graph
      * @return Current graph model
      */
-    GraphModel determineCurrentGraphModel(GraphController gc, Set<Edge> initialEdges,
-                                                  Set<Edge> validationEdges) {
+    GraphModel determineCurrentGraphModel(GraphController gc, Set<Edge> initialEdges, Set<Edge> validationEdges) {
         consoleLogger.debug("Determine current graph model");
         GraphModel currentGraphModel;
 
