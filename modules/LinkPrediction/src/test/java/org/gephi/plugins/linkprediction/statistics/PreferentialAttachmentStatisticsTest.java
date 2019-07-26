@@ -98,14 +98,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
         LinkPredictionStatistics statistic = new PreferentialAttachmentStatistics();
         statistic.execute(graphModel);
 
-        /*Edge max = statistic.getHighestPrediction();
-
-        assertTrue(max.getSource().getLabel().equals("Node A"));
-        assertTrue(max.getTarget().getLabel().equals("Node G"));
-        assertTrue(max.getAttribute(getColLastPrediction()).equals(PreferentialAttachmentStatisticsBuilder.PREFERENTIAL_ATTACHMENT_NAME));
-        assertTrue((int) max.getAttribute(getColAddedInRun()) == 1);
-        assertTrue((int) max.getAttribute(getColLastCalculatedValue()) == 12);*/
-
         LinkPredictionStatistics.LinkPredictionProbability max = statistic.getHighestPrediction();
         Edge maxEdge = graphModel.getGraph().getEdge(max.getNodeSource(), max.getNodeTarget());
 

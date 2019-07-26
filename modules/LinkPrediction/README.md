@@ -129,3 +129,5 @@ The implementation of the preferential attachment algorithm is of complexity cla
 ## Limitations
 
 With the limitations of the implemented algorithms, only undirected, unweighted graphs are supported currently. 
+
+The plugin was tested using graphs with less than a thousand nodes. Link predictions in larger networks can lead to long runtimes.

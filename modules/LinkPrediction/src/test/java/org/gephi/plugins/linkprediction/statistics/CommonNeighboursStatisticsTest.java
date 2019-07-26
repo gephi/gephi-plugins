@@ -102,12 +102,6 @@ class CommonNeighboursStatisticsTest {
         LinkPredictionStatistics.LinkPredictionProbability max = statistic.getHighestPrediction();
         Edge maxEdge = graphModel.getGraph().getEdge(max.getNodeSource(), max.getNodeTarget());
 
-        /*assertTrue(max.getSource().getLabel().equals("Node C"));
-        assertTrue(max.getTarget().getLabel().equals("Node A"));
-        assertTrue(max.getAttribute(getColLastPrediction()).equals(CommonNeighboursStatisticsBuilder.COMMON_NEIGHBOURS_NAME));
-        assertTrue((int) max.getAttribute(getColAddedInRun()) == 1);
-        assertTrue((int) max.getAttribute(getColLastCalculatedValue()) == 2);*/
-
         assertTrue(maxEdge.getSource().getLabel().equals("Node A"));
         assertTrue(maxEdge.getTarget().getLabel().equals("Node C"));
         assertTrue(maxEdge.getAttribute(getColLastPrediction()).equals(CommonNeighboursStatisticsBuilder.COMMON_NEIGHBOURS_NAME));
