@@ -139,6 +139,7 @@ public class LinkPredictionStatisticsPanel extends javax.swing.JPanel implements
      * Updates number of iterations in which prediction will be applied.
      */
     private void updateIterationLimit() {
+        // Default number of iteration
         int numberOfIterations = 1;
         try {
             numberOfIterations = Integer.valueOf(numberOfIterationsTextField.getText());
@@ -146,6 +147,7 @@ public class LinkPredictionStatisticsPanel extends javax.swing.JPanel implements
             consoleLogger.log(Level.DEBUG, () -> "Number of iteration changed to " + Integer.valueOf(numberOfIterationsTextField.getText()));
         } catch (NumberFormatException e) {
             if (!warningDisplayed) {
+                // Display warning only once
                 warningDisplayed = true;
                 consoleLogger.debug("Wrong number format entered!");
                 new IllegalIterationNumberFormatWarning();
@@ -161,9 +163,10 @@ public class LinkPredictionStatisticsPanel extends javax.swing.JPanel implements
      */
     private void setWarnings(int numberOfIterations) {
         consoleLogger.debug("Set warning labels");
+
+        // Preferential attachment
         LinkPredictionStatistics preferentialAttachment = statistic
                 .getStatistic(PreferentialAttachmentStatistics.class);
-
         if (preferentialAttachment != null && PreferentialAttachmentStatistics.complexity
                 .longRuntimeExpected(numberOfIterations, nodeCount)) {
             consoleLogger.debug("Enable high runtime warning for preferential attachment");
@@ -173,6 +176,7 @@ public class LinkPredictionStatisticsPanel extends javax.swing.JPanel implements
             preferentialAttachmentWarning.setText(" ");
         }
 
+        // Common neighbour
         LinkPredictionStatistics commonNeighbour = statistic.getStatistic(CommonNeighboursStatistics.class);
         if (commonNeighbour != null && CommonNeighboursStatistics.complexity.longRuntimeExpected(numberOfIterations, nodeCount)) {
             consoleLogger.debug("Enable high runtime warning for common neighbours");
