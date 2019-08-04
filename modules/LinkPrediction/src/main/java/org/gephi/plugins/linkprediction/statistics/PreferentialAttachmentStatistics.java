@@ -3,10 +3,10 @@ package org.gephi.plugins.linkprediction.statistics;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.gephi.graph.api.*;
+import org.gephi.graph.api.GraphFactory;
+import org.gephi.graph.api.Node;
 import org.gephi.plugins.linkprediction.base.LinkPredictionStatistics;
 import org.gephi.plugins.linkprediction.util.Complexity;
-import org.gephi.plugins.linkprediction.util.GraphUtils;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -56,13 +56,13 @@ public class PreferentialAttachmentStatistics extends LinkPredictionStatistics {
             nodesB.remove(a);
 
             // Get neighbours of a
-            ArrayList<Node> aNeighbours = getRelevantNeighbours(a);
+            ArrayList<Node> aNeighbours = getNeighbours(a);
 
             // Calculate preferential attachment
             for (Node b : nodesB) {
                 // Get neighbours of b
                 consoleLogger.log(Level.DEBUG, () -> "Calculation for node " + b.getId());
-                ArrayList<Node> bNeighbours = getRelevantNeighbours(b);
+                ArrayList<Node> bNeighbours = getNeighbours(b);
 
                 // Calculate prediction value
                 int totalNeighboursCount = aNeighbours.size() * bNeighbours.size();
@@ -87,7 +87,7 @@ public class PreferentialAttachmentStatistics extends LinkPredictionStatistics {
     protected void recalculateProbability(GraphFactory factory, Node a) {
         consoleLogger.debug("Recalculate probability for affected nodes");
         // Get neighbours of a
-        List<Node> aNeighbours = getRelevantNeighbours(a);
+        List<Node> aNeighbours = getNeighbours(a);
 
         // Get edges and remove
         // self from potential neighbours
@@ -102,7 +102,7 @@ public class PreferentialAttachmentStatistics extends LinkPredictionStatistics {
             // if edge does not exist
             if (isNewEdge(a, b, PREFERENTIAL_ATTACHMENT_NAME)) {
                 consoleLogger.log(Level.DEBUG, () -> "Calculation for edge new between " + a.getId() + " and " + b.getId());
-                List<Node> bNeighbours = getRelevantNeighbours(b);
+                List<Node> bNeighbours = getNeighbours(b);
                 int totalNeighboursCount = aNeighbours.size() * bNeighbours.size();
 
                 // Update saved and calculated values
@@ -110,37 +110,5 @@ public class PreferentialAttachmentStatistics extends LinkPredictionStatistics {
                 updateCalculatedValue(factory, a, b, totalNeighboursCount);
             }
         }
-    }
-
-    /**
-     * Finds relevant neighbours for node n.
-     *
-     * @param node Node for that neighbours will be searched
-     * @return Neighbours, that were added by preferential attachment or have already been there before
-     */
-    private ArrayList<Node> getRelevantNeighbours(Node node) {
-        consoleLogger.debug("Get relevant neighbours");
-        ArrayList<Node> relevantNeighbours = new ArrayList<>();
-
-        // Get all neighbours
-        Node[] neighbours = graph.getNeighbors(node).toArray();
-        // Verify if neighbour  from other algorithm
-        for (Node neighbour : neighbours) {
-            List<Edge> edges = GraphUtils.getEdges(graph, node, neighbour);
-            Edge[] eList = new Edge[edges.size()];
-            eList = edges.toArray(eList);
-
-            boolean addedEdge = false;
-            for (Edge e : eList) {
-                if ((e.getAttribute(colLastPrediction).equals(PREFERENTIAL_ATTACHMENT_NAME) || e
-                        .getAttribute(colLastPrediction).equals("")) && !addedEdge) {
-                    relevantNeighbours.add(neighbour);
-                    consoleLogger.debug("Edge added");
-                    addedEdge = true;
-                }
-            }
-        }
-
-        return relevantNeighbours;
     }
 }

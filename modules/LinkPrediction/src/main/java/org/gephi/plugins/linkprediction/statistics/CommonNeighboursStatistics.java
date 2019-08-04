@@ -3,7 +3,8 @@ package org.gephi.plugins.linkprediction.statistics;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.gephi.graph.api.*;
+import org.gephi.graph.api.GraphFactory;
+import org.gephi.graph.api.Node;
 import org.gephi.plugins.linkprediction.base.LinkPredictionStatistics;
 import org.gephi.plugins.linkprediction.util.Complexity;
 
@@ -123,15 +124,4 @@ public class CommonNeighboursStatistics extends LinkPredictionStatistics {
         return aNeighbours.stream().filter(bNeighbours::contains).collect(Collectors.toList()).size();
     }
 
-    /**
-     * Retrieve neighbours for node a from graph
-     *
-     * @param n     Node for which neighbours will be searched
-     * @return Neighbours of n
-     */
-    private ArrayList<Node> getNeighbours(Node n) {
-        consoleLogger.debug("Get neighbours");
-        return new ArrayList<>(
-                Arrays.asList(graph.getNeighbors(n).toArray()).stream().distinct().collect(Collectors.toList()));
-    }
 }

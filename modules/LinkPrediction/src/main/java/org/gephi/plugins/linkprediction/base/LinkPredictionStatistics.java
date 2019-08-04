@@ -10,6 +10,7 @@ import org.gephi.plugins.linkprediction.util.GraphUtils;
 import org.gephi.statistics.spi.Statistics;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Statistic that predicts the next edge based on different link-prediction
@@ -407,6 +408,32 @@ public abstract class LinkPredictionStatistics implements Statistics {
      */
     protected boolean isInitialExecution() {
         return queue.isEmpty() && lastPrediction == null;
+    }
+
+    /**
+     * Retrieve neighbours for node a from graph
+     *
+     * @param n Node for which neighbours will be searched
+     * @return Neighbours, that were added by algorithm or already have been there initially
+     */
+    protected ArrayList<Node> getNeighbours(Node n) {
+        consoleLogger.debug("Get relevant neighbours");
+
+        // Get all neighbours
+        ArrayList<Node> neighbours = new ArrayList<>(
+                Arrays.asList(graph.getNeighbors(n).toArray()).stream()
+                        .distinct()
+                        .collect(Collectors.toList()));
+
+        // Filter neighbours with edges from
+        // same algorithm or that initially existed
+        ArrayList<Node> relevantNeighbours = new ArrayList<>(neighbours.stream()
+                .filter(r -> GraphUtils.getEdges(graph, n, r).stream().filter(e -> e.getAttribute(colLastPrediction).equals(getAlgorithmName()) || e
+                        .getAttribute(colLastPrediction).equals("")).count() > 0)
+                .distinct()
+                .collect(Collectors.toList()));
+
+        return relevantNeighbours;
     }
 
     /**
