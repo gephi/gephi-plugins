@@ -43,7 +43,7 @@ public class LinkPredictionMacro extends LinkPredictionStatistics {
      *
      * @param graphModel Model to add statistics
      */
-    public void execute(final GraphModel graphModel) {
+    @Override public void execute(final GraphModel graphModel) {
         // Clear predictions
         clearPredictions();
 

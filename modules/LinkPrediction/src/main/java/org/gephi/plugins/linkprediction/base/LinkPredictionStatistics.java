@@ -427,13 +427,11 @@ public abstract class LinkPredictionStatistics implements Statistics {
 
         // Filter neighbours with edges from
         // same algorithm or that initially existed
-        ArrayList<Node> relevantNeighbours = new ArrayList<>(neighbours.stream()
+        return new ArrayList<>(neighbours.stream()
                 .filter(r -> GraphUtils.getEdges(graph, n, r).stream().filter(e -> e.getAttribute(colLastPrediction).equals(getAlgorithmName()) || e
                         .getAttribute(colLastPrediction).equals("")).count() > 0)
                 .distinct()
                 .collect(Collectors.toList()));
-
-        return relevantNeighbours;
     }
 
     /**
