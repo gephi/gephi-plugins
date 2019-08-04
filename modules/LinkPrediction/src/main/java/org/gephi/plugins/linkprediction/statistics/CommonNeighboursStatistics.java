@@ -39,95 +39,42 @@ public class CommonNeighboursStatistics extends LinkPredictionStatistics {
     }
 
     /**
-     * Executes link prediction and adds edge with highest possibility.
+     * Iterates over all nodes twice to initially calculate prediction values.
      *
-     * @param graphModel Graph on which edge will be added
+     * @param factory Factory to create new edges
      */
-    @Override public void execute(GraphModel graphModel) {
-        consoleLogger.debug("Execution of link prediction started");
+    protected void calculateAll(GraphFactory factory) {
+        // Iterate on all nodes for first execution
+        consoleLogger.debug("Initial calculation");
+        List<Node> nodesA = new ArrayList<>(Arrays.asList(graph.getNodes().toArray()));
+        List<Node> nodesB = new ArrayList<>(nodesA);
 
-        // Look if the result column already exist and create it if needed
-        consoleLogger.debug("Initialize columns");
-        Table edgeTable = graphModel.getEdgeTable();
-        initializeColumns(edgeTable);
+        for (Node a : nodesA) {
+            consoleLogger.log(Level.DEBUG, () -> "Calculation for node " + a.getId());
 
-        // Get graph factory
-        consoleLogger.debug("Get factory");
-        graph = graphModel.getGraph();
-        GraphFactory factory = graphModel.factory();
+            // Remove self from neighbours
+            nodesB.remove(a);
 
-        // Lock graph for writes
-        consoleLogger.debug("Lock graph");
-        graph.writeLock();
+            // Get neighbours of a
+            List<Node> aNeighbours = getNeighbours(a);
 
-        if (isInitialExecution()) {
-            // Iterate on all nodes for first execution
-            consoleLogger.debug("Initial calculation");
-            List<Node> nodesA = new ArrayList<>(Arrays.asList(graph.getNodes().toArray()));
-            List<Node> nodesB = new ArrayList<>(nodesA);
+            // Calculate common neighbors
+            for (Node b : nodesB) {
+                // Get neighbours of b
+                consoleLogger.log(Level.DEBUG, () -> "Calculation for node " + b.getId());
+                List<Node> bNeighbours = getNeighbours(b);
 
-            for (Node a : nodesA) {
-                consoleLogger.log(Level.DEBUG, () -> "Calculation for node " + a.getId());
+                // Count number of neighbours
+                int commonNeighboursCount = getCommonNeighboursCount(aNeighbours, bNeighbours);
+                consoleLogger.log(Level.DEBUG, () -> "Number of neighbours for node " + b.getId() + ": " + commonNeighboursCount);
 
-                // Remove self from neighbours
-                nodesB.remove(a);
-
-                // Get neighbours of a
-                List<Node> aNeighbours = getNeighbours(a);
-
-                // Calculate common neighbors
-                for (Node b : nodesB) {
-                    // Get neighbours of b
-                    consoleLogger.log(Level.DEBUG, () -> "Calculation for node " + b.getId());
-                    List<Node> bNeighbours = getNeighbours(b);
-
-                    // Count number of neighbours
-                    int commonNeighboursCount = getCommonNeighboursCount(aNeighbours, bNeighbours);
-                    consoleLogger.log(Level.DEBUG, () -> "Number of neighbours for node " + b.getId() + ": " + commonNeighboursCount);
-
-                    // Temporary save calculated
-                    // value if edge does not exist
-                    if (isNewEdge(a, b, COMMON_NEIGHBOURS_NAME)) {
-                        saveCalculatedValue(factory, a, b, commonNeighboursCount);
-                    }
+                // Temporary save calculated
+                // value if edge does not exist
+                if (isNewEdge(a, b, COMMON_NEIGHBOURS_NAME)) {
+                    saveCalculatedValue(factory, a, b, commonNeighboursCount);
                 }
             }
-
-        } else {
-            // Only change affected node for subsequent iterations
-            recalculateAffectedNodes(factory);
         }
-
-        // Add highest predicted edge to graph
-        addHighestPredictedEdgeToGraph(factory, COMMON_NEIGHBOURS_NAME);
-
-        // Unlock graph
-        consoleLogger.debug("Unlock graph");
-        graph.writeUnlock();
-    }
-
-    /**
-     * Counts number of common neighbours of two nodes
-     *
-     * @param aNeighbours Neighbours of a
-     * @param bNeighbours Neighbours of b
-     * @return Number of common neighbours
-     */
-    private int getCommonNeighboursCount(List<Node> aNeighbours, List<Node> bNeighbours) {
-        consoleLogger.debug("Get common neighbours count");
-        return aNeighbours.stream().filter(bNeighbours::contains).collect(Collectors.toList()).size();
-    }
-
-    /**
-     * Retrieve neighbours for node a from graph
-     *
-     * @param n     Node for which neighbours will be searched
-     * @return Neighbours of n
-     */
-    private ArrayList<Node> getNeighbours(Node n) {
-        consoleLogger.debug("Get neighbours");
-        return new ArrayList<>(
-                Arrays.asList(graph.getNeighbors(n).toArray()).stream().distinct().collect(Collectors.toList()));
     }
 
     /**
@@ -162,5 +109,29 @@ public class CommonNeighboursStatistics extends LinkPredictionStatistics {
                 updateCalculatedValue(factory, a, b, commonNeighboursCount);
             }
         }
+    }
+
+    /**
+     * Counts number of common neighbours of two nodes
+     *
+     * @param aNeighbours Neighbours of a
+     * @param bNeighbours Neighbours of b
+     * @return Number of common neighbours
+     */
+    private int getCommonNeighboursCount(List<Node> aNeighbours, List<Node> bNeighbours) {
+        consoleLogger.debug("Get common neighbours count");
+        return aNeighbours.stream().filter(bNeighbours::contains).collect(Collectors.toList()).size();
+    }
+
+    /**
+     * Retrieve neighbours for node a from graph
+     *
+     * @param n     Node for which neighbours will be searched
+     * @return Neighbours of n
+     */
+    private ArrayList<Node> getNeighbours(Node n) {
+        consoleLogger.debug("Get neighbours");
+        return new ArrayList<>(
+                Arrays.asList(graph.getNeighbors(n).toArray()).stream().distinct().collect(Collectors.toList()));
     }
 }

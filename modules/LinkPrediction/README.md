@@ -8,7 +8,7 @@ The plugin is released under the Apache 2.0 license.
 
 ## Features
 
-In release 1.2.0 the plugin contains the following functionality:
+In release 1.3.0 the plugin contains the following functionality:
 
 * __Statistics__: New edges can be added to an undirected graph using selected [link prediction algorithms](#algorithms) in the `statistics` tab. The number of new edges can be specified. In doing so, _n_ new edges are added to the graph iteratively. The calculation of the next predicted edge is always based on the graph of the preceding iteration step.
 * __Filter__: The added edges can be displayed by means of filters. On the one hand, the corresponding algorithm is specified as the filter criterion. On the other hand, the number of added edges can also be restricted.

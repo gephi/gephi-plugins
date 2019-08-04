@@ -39,103 +39,42 @@ public class PreferentialAttachmentStatistics extends LinkPredictionStatistics {
     }
 
     /**
-     * Executes link prediction and adds edge with highest possibility.
+     * Iterates over all nodes twice to initially calculate prediction values.
      *
-     * @param graphModel Graph on which edge will be added
+     * @param factory Factory to create new edges
      */
-    @Override public void execute(GraphModel graphModel) {
-        consoleLogger.debug("Execution of link prediction started");
+    protected void calculateAll(GraphFactory factory) {
+        // Iterate on all nodes for first execution
+        consoleLogger.debug("Initial calculation");
+        ArrayList<Node> nodesA = new ArrayList<Node>(Arrays.asList(graph.getNodes().toArray()));
+        ArrayList<Node> nodesB = new ArrayList<Node>(Arrays.asList(graph.getNodes().toArray()));
 
-        // Look if the result column already exist and create it if needed
-        consoleLogger.debug("Initialize columns");
-        Table edgeTable = graphModel.getEdgeTable();
-        initializeColumns(edgeTable);
+        for (Node a : nodesA) {
+            consoleLogger.log(Level.DEBUG, () -> "Calculation for node " + a.getId());
 
-        // Get graph factory
-        consoleLogger.debug("Get factory");
-        graph = graphModel.getGraph();
-        GraphFactory factory = graphModel.factory();
+            // Remove self from neighbours
+            nodesB.remove(a);
 
-        // Lock graph for writes
-        consoleLogger.debug("Lock graph");
-        graph.writeLock();
+            // Get neighbours of a
+            ArrayList<Node> aNeighbours = getRelevantNeighbours(a);
 
-        if (isInitialExecution()) {
-            // Iterate on all nodes for first execution
-            consoleLogger.debug("Initial calculation");
-            ArrayList<Node> nodesA = new ArrayList<Node>(Arrays.asList(graph.getNodes().toArray()));
-            ArrayList<Node> nodesB = new ArrayList<Node>(Arrays.asList(graph.getNodes().toArray()));
+            // Calculate preferential attachment
+            for (Node b : nodesB) {
+                // Get neighbours of b
+                consoleLogger.log(Level.DEBUG, () -> "Calculation for node " + b.getId());
+                ArrayList<Node> bNeighbours = getRelevantNeighbours(b);
 
-            for (Node a : nodesA) {
-                consoleLogger.log(Level.DEBUG, () -> "Calculation for node " + a.getId());
+                // Calculate prediction value
+                int totalNeighboursCount = aNeighbours.size() * bNeighbours.size();
+                consoleLogger.log(Level.DEBUG, () -> "Total neighbours product: " + totalNeighboursCount);
 
-                // Remove self from neighbours
-                nodesB.remove(a);
-
-                // Get neighbours of a
-                ArrayList<Node> aNeighbours = getRelevantNeighbours(a);
-
-                // Calculate preferential attachment
-                for (Node b : nodesB) {
-                    // Get neighbours of b
-                    consoleLogger.log(Level.DEBUG, () -> "Calculation for node " + b.getId());
-                    ArrayList<Node> bNeighbours = getRelevantNeighbours(b);
-
-                    // Calculate prediction value
-                    int totalNeighboursCount = aNeighbours.size() * bNeighbours.size();
-                    consoleLogger.log(Level.DEBUG, () -> "Total neighbours product: " + totalNeighboursCount);
-
-                    // Temporary save calculated
-                    // value if edge does not exist
-                    if (isNewEdge(a, b, PREFERENTIAL_ATTACHMENT_NAME)) {
-                        saveCalculatedValue(factory, a, b, totalNeighboursCount);
-                    }
-                }
-            }
-
-        } else {
-            // Only change affected node for subsequent iterations
-            recalculateAffectedNodes(factory);
-        }
-
-        // Add highest predicted edge to graph
-        addHighestPredictedEdgeToGraph(factory, PREFERENTIAL_ATTACHMENT_NAME);
-
-        // Unlock graph
-        consoleLogger.debug("Unlock graph");
-        graph.writeUnlock();
-    }
-
-    /**
-     * Finds relevant neighbours for node n.
-     *
-     * @param node Node for that neighbours will be searched
-     * @return Neighbours, that were added by preferential attachment or have already been there before
-     */
-    private ArrayList<Node> getRelevantNeighbours(Node node) {
-        consoleLogger.debug("Get relevant neighbours");
-        ArrayList<Node> relevantNeighbours = new ArrayList<>();
-
-        // Get all neighbours
-        Node[] neighbours = graph.getNeighbors(node).toArray();
-        // Verify if neighbour  from other algorithm
-        for (Node neighbour : neighbours) {
-            List<Edge> edges = GraphUtils.getEdges(graph, node, neighbour);
-            Edge[] eList = new Edge[edges.size()];
-            eList = edges.toArray(eList);
-
-            boolean addedEdge = false;
-            for (Edge e : eList) {
-                if ((e.getAttribute(colLastPrediction).equals(PREFERENTIAL_ATTACHMENT_NAME) || e
-                        .getAttribute(colLastPrediction).equals("")) && !addedEdge) {
-                    relevantNeighbours.add(neighbour);
-                    consoleLogger.debug("Edge added");
-                    addedEdge = true;
+                // Temporary save calculated
+                // value if edge does not exist
+                if (isNewEdge(a, b, PREFERENTIAL_ATTACHMENT_NAME)) {
+                    saveCalculatedValue(factory, a, b, totalNeighboursCount);
                 }
             }
         }
-
-        return relevantNeighbours;
     }
 
     /**
@@ -171,5 +110,37 @@ public class PreferentialAttachmentStatistics extends LinkPredictionStatistics {
                 updateCalculatedValue(factory, a, b, totalNeighboursCount);
             }
         }
+    }
+
+    /**
+     * Finds relevant neighbours for node n.
+     *
+     * @param node Node for that neighbours will be searched
+     * @return Neighbours, that were added by preferential attachment or have already been there before
+     */
+    private ArrayList<Node> getRelevantNeighbours(Node node) {
+        consoleLogger.debug("Get relevant neighbours");
+        ArrayList<Node> relevantNeighbours = new ArrayList<>();
+
+        // Get all neighbours
+        Node[] neighbours = graph.getNeighbors(node).toArray();
+        // Verify if neighbour  from other algorithm
+        for (Node neighbour : neighbours) {
+            List<Edge> edges = GraphUtils.getEdges(graph, node, neighbour);
+            Edge[] eList = new Edge[edges.size()];
+            eList = edges.toArray(eList);
+
+            boolean addedEdge = false;
+            for (Edge e : eList) {
+                if ((e.getAttribute(colLastPrediction).equals(PREFERENTIAL_ATTACHMENT_NAME) || e
+                        .getAttribute(colLastPrediction).equals("")) && !addedEdge) {
+                    relevantNeighbours.add(neighbour);
+                    consoleLogger.debug("Edge added");
+                    addedEdge = true;
+                }
+            }
+        }
+
+        return relevantNeighbours;
     }
 }

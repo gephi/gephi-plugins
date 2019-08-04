@@ -117,6 +117,16 @@ public class LinkPredictionMacro extends LinkPredictionStatistics {
     }
 
     /**
+     Iterates over all nodes twice to initially calculate prediction values.
+
+     * @param factory Factory to create new edge
+     * @throws UnsupportedOperationException as not possible in macro execution
+     */
+    @Override protected void calculateAll(GraphFactory factory) {
+        throw new UnsupportedOperationException();
+    }
+
+    /**
      * Recalculates link prediction probability for nodes, affected by last prediction.
      *
      * @param factory Factory to create new edge

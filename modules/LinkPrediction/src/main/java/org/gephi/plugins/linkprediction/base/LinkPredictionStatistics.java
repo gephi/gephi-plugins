@@ -53,6 +53,45 @@ public abstract class LinkPredictionStatistics implements Statistics {
 
 
     /**
+     * Executes link prediction and adds edge with highest possibility.
+     *
+     * @param graphModel Graph on which edge will be added
+     */
+    @Override public void execute(GraphModel graphModel) {
+        consoleLogger.debug("Execution of link prediction started");
+
+        // Look if the result column already exist and create it if needed
+        consoleLogger.debug("Initialize columns");
+        Table edgeTable = graphModel.getEdgeTable();
+        initializeColumns(edgeTable);
+
+        // Get graph factory
+        consoleLogger.debug("Get factory");
+        graph = graphModel.getGraph();
+        GraphFactory factory = graphModel.factory();
+
+        // Lock graph for writes
+        consoleLogger.debug("Lock graph");
+        graph.writeLock();
+
+        if (isInitialExecution()) {
+            // Iterate on all nodes for first execution
+            calculateAll(factory);
+
+        } else {
+            // Only change affected node for subsequent iterations
+            recalculateAffected(factory);
+        }
+
+        // Add highest predicted edge to graph
+        addHighestPredictedEdgeToGraph(factory, getAlgorithmName());
+
+        // Unlock graph
+        consoleLogger.debug("Unlock graph");
+        graph.writeUnlock();
+    }
+
+    /**
      * Gets the name of the respective algorithm.
      *
      * @return Algorithm name
@@ -309,11 +348,18 @@ public abstract class LinkPredictionStatistics implements Statistics {
     }
 
     /**
+     * Iterates over all nodes twice to initially calculate prediction values.
+     *
+     * @param factory Factory to create new edges
+     */
+    protected abstract void calculateAll(GraphFactory factory);
+
+    /**
      * Recalculates link prediction probability for nodes, affected by last prediction.
      *
      * @param factory Factory to create new edge
      */
-    protected void recalculateAffectedNodes(GraphFactory factory) {
+    protected void recalculateAffected(GraphFactory factory) {
         // Recalculate only affected nodes
         consoleLogger.debug("Subsequent calculation");
         // Remove last added element from queue
