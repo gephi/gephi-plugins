@@ -1,0 +1,5 @@
+Manifest-Version: 1.0
+OpenIDE-Module-Name: Activist Network Visualization
+OpenIDE-Module-Short-Description: Activist Network Visualization
+OpenIDE-Module-Long-Description: A network visualization tool that can gather information from published texts to create connections between key organizations.
+OpenIDE-Module-Display-Category: Filter
