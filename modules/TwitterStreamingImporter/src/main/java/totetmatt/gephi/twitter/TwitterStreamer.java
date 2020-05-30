@@ -15,6 +15,7 @@ import org.apache.commons.lang3.ArrayUtils;
 import org.openide.util.Exceptions;
 import org.openide.util.lookup.ServiceProvider;
 import totetmatt.gephi.twitter.networklogic.Networklogic;
+import totetmatt.gephi.twitter.networklogic.utils.Language;
 import totetmatt.gephi.twitter.networklogic.utils.TrackLocation;
 import twitter4j.FilterQuery;
 import twitter4j.JSONException;
@@ -43,6 +44,7 @@ public class TwitterStreamer {
     private final List<String> wordTracking = new ArrayList<>();
     private final Map<String, Long> userTracking = new HashMap<>();
     private final Map<String,TrackLocation> locationTracking = new HashMap<>();
+    private final List<Language> languageFilter = new ArrayList<>();
 
     private boolean running = false;
 
@@ -98,6 +100,11 @@ public class TwitterStreamer {
         }
     }
 
+    public void addLanguage(Language l){
+        if(!languageFilter.contains(l)) {
+            languageFilter.add(l);
+        }
+    }
     public Map<String, Long> getUserTracking() {
         return userTracking;
     }
@@ -106,6 +113,9 @@ public class TwitterStreamer {
         return wordTracking;
     }
 
+    public List<Language> getLanguageFilter(){
+        return languageFilter;
+    }
     public CredentialProperty getCredentialProperty() {
         return credentialProperty;
     }
@@ -160,6 +170,15 @@ public class TwitterStreamer {
             fq.follow(ArrayUtils.toPrimitive(userTrack));
         }
 
+        if(!languageFilter.isEmpty()) {
+            ArrayList<String> lang = new ArrayList<>();
+            // Could do map / functional
+            for(Language l : languageFilter) {
+                lang.add(l.getCode());
+            }
+            fq.language(String.join(",",lang));
+        }
+        
         fq.track(track);
 
         networkLogic.setTrack(track);

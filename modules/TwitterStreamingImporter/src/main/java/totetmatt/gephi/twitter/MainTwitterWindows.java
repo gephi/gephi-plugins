@@ -12,8 +12,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.ComboBoxModel;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListModel;
+import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableModel;
@@ -26,6 +28,7 @@ import org.openide.util.Lookup;
 import org.openide.util.NbBundle;
 import org.openide.windows.TopComponent;
 import totetmatt.gephi.twitter.networklogic.Networklogic;
+import totetmatt.gephi.twitter.networklogic.utils.Language;
 import totetmatt.gephi.twitter.networklogic.utils.TrackLocation;
 import twitter4j.JSONException;
 
@@ -46,7 +49,8 @@ public final class MainTwitterWindows extends TopComponent {
     private final DefaultTableModel userTrackingTableModel;
     private final ProjectController projectController;
     private final DefaultTableModel locationsTrackingTableModel;
-
+    private final DefaultComboBoxModel languageComboBoxModel = new DefaultComboBoxModel();
+    private final DefaultListModel languageTrackingListModel = new DefaultListModel();
     private int idWorkspace = -1;
 
     public MainTwitterWindows() {
@@ -61,6 +65,10 @@ public final class MainTwitterWindows extends TopComponent {
         DefaultComboBoxModel c = new DefaultComboBoxModel();
         for (Networklogic nl : networks) {
             c.addElement(nl);
+        }
+        
+        for (Language l : Language.ALL) {
+            languageComboBoxModel.addElement(l);
         }
         
         network_logic_combo.setModel(c);
@@ -164,6 +172,13 @@ public final class MainTwitterWindows extends TopComponent {
         jLabel11 = new javax.swing.JLabel();
         jLabel12 = new javax.swing.JLabel();
         jLabel13 = new javax.swing.JLabel();
+        jPanel2 = new javax.swing.JPanel();
+        language_combo_box = new javax.swing.JComboBox<>();
+        language_add_button = new javax.swing.JButton();
+        language_delete_button = new javax.swing.JButton();
+        wt_word_list_scrollpane1 = new javax.swing.JScrollPane();
+        wt_lang_list = new javax.swing.JList<>();
+        wt_lang_list.setModel(languageTrackingListModel);
         network_logic_combo = new javax.swing.JComboBox<>();
         network_logic_label = new javax.swing.JLabel();
         load_tracking_button = new javax.swing.JButton();
@@ -226,7 +241,7 @@ public final class MainTwitterWindows extends TopComponent {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(wt_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(wt_add_textfield)
-                    .addComponent(wt_word_list_scrollpane, javax.swing.GroupLayout.DEFAULT_SIZE, 340, Short.MAX_VALUE))
+                    .addComponent(wt_word_list_scrollpane, javax.swing.GroupLayout.DEFAULT_SIZE, 568, Short.MAX_VALUE))
                 .addContainerGap())
         );
         wt_panelLayout.setVerticalGroup(
@@ -238,7 +253,7 @@ public final class MainTwitterWindows extends TopComponent {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(wt_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(wt_panelLayout.createSequentialGroup()
-                        .addComponent(wt_word_list_scrollpane, javax.swing.GroupLayout.DEFAULT_SIZE, 205, Short.MAX_VALUE)
+                        .addComponent(wt_word_list_scrollpane, javax.swing.GroupLayout.DEFAULT_SIZE, 248, Short.MAX_VALUE)
                         .addGap(11, 11, 11))
                     .addGroup(wt_panelLayout.createSequentialGroup()
                         .addComponent(wt_delete_button)
@@ -322,7 +337,7 @@ public final class MainTwitterWindows extends TopComponent {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(ut_add_from_list_listname_textfield))
                     .addComponent(ut_add_textfield)
-                    .addComponent(ut_list_scrollpane, javax.swing.GroupLayout.DEFAULT_SIZE, 317, Short.MAX_VALUE))
+                    .addComponent(ut_list_scrollpane, javax.swing.GroupLayout.DEFAULT_SIZE, 545, Short.MAX_VALUE))
                 .addContainerGap())
         );
         ut_panelLayout.setVerticalGroup(
@@ -344,7 +359,7 @@ public final class MainTwitterWindows extends TopComponent {
                 .addGroup(ut_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(ut_delete_button)
                     .addComponent(ut_list_scrollpane, javax.swing.GroupLayout.PREFERRED_SIZE, 164, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(23, Short.MAX_VALUE))
+                .addContainerGap(66, Short.MAX_VALUE))
         );
 
         tracking_tab_panel.addTab(org.openide.util.NbBundle.getMessage(MainTwitterWindows.class, "MainTwitterWindows.ut_panel.TabConstraints.tabTitle_1"), ut_panel); // NOI18N
@@ -502,10 +517,58 @@ public final class MainTwitterWindows extends TopComponent {
                 .addGroup(lt_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(lt_list_scrollpane, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(lt_delete_button))
-                .addContainerGap(12, Short.MAX_VALUE))
+                .addContainerGap(55, Short.MAX_VALUE))
         );
 
         tracking_tab_panel.addTab(org.openide.util.NbBundle.getMessage(MainTwitterWindows.class, "MainTwitterWindows.lt_panel.TabConstraints.tabTitle"), lt_panel); // NOI18N
+
+        language_combo_box.setModel(languageComboBoxModel);
+
+        org.openide.awt.Mnemonics.setLocalizedText(language_add_button, org.openide.util.NbBundle.getMessage(MainTwitterWindows.class, "MainTwitterWindows.language_add_button.text")); // NOI18N
+        language_add_button.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                language_add_buttonMouseClicked(evt);
+            }
+        });
+
+        org.openide.awt.Mnemonics.setLocalizedText(language_delete_button, org.openide.util.NbBundle.getMessage(MainTwitterWindows.class, "MainTwitterWindows.language_delete_button.text")); // NOI18N
+        language_delete_button.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                language_delete_buttonMouseClicked(evt);
+            }
+        });
+
+        wt_lang_list.setToolTipText(org.openide.util.NbBundle.getMessage(MainTwitterWindows.class, "MainTwitterWindows.wt_lang_list.toolTipText")); // NOI18N
+        wt_word_list_scrollpane1.setViewportView(wt_lang_list);
+
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(language_add_button, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(language_delete_button, javax.swing.GroupLayout.DEFAULT_SIZE, 78, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(language_combo_box, 0, 568, Short.MAX_VALUE)
+                    .addComponent(wt_word_list_scrollpane1))
+                .addContainerGap())
+        );
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(language_add_button)
+                    .addComponent(language_combo_box, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(language_delete_button)
+                    .addComponent(wt_word_list_scrollpane1, javax.swing.GroupLayout.PREFERRED_SIZE, 199, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(49, 49, 49))
+        );
+
+        tracking_tab_panel.addTab(org.openide.util.NbBundle.getMessage(MainTwitterWindows.class, "MainTwitterWindows.jPanel2.TabConstraints.tabTitle"), jPanel2); // NOI18N
 
         network_logic_combo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
@@ -563,7 +626,7 @@ public final class MainTwitterWindows extends TopComponent {
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(credential_goto_twitter_button, javax.swing.GroupLayout.PREFERRED_SIZE, 82, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(0, 0, Short.MAX_VALUE))
-                    .addComponent(warning_new_project_label, javax.swing.GroupLayout.DEFAULT_SIZE, 477, Short.MAX_VALUE))
+                    .addComponent(warning_new_project_label, javax.swing.GroupLayout.DEFAULT_SIZE, 803, Short.MAX_VALUE))
                 .addContainerGap())
             .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(jPanel1Layout.createSequentialGroup()
@@ -624,7 +687,7 @@ public final class MainTwitterWindows extends TopComponent {
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1)
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 453, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -779,6 +842,17 @@ public final class MainTwitterWindows extends TopComponent {
             Logger.getLogger(MainTwitterWindows.class.getName()).log(Level.SEVERE, null, new Exception("Desktop method isn't supported"));
         }
     }//GEN-LAST:event_credential_goto_documentation_buttonActionPerformed
+
+    private void language_add_buttonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_language_add_buttonMouseClicked
+        Language selected = (Language)language_combo_box.getSelectedItem();
+        streamer.addLanguage(selected);    
+        refreshLanguageList();
+    }//GEN-LAST:event_language_add_buttonMouseClicked
+
+    private void language_delete_buttonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_language_delete_buttonMouseClicked
+                 streamer.getLanguageFilter().removeAll(wt_lang_list.getSelectedValuesList());
+                 refreshLanguageList();
+    }//GEN-LAST:event_language_delete_buttonMouseClicked
     
     private void addLocation(){
         if(!lt_add_sw_lat_textfield.getText().isEmpty() &&
@@ -815,6 +889,7 @@ public final class MainTwitterWindows extends TopComponent {
         refreshWordList();
         refreshUserList();
         refreshLocationList();
+        refreshLanguageList();
     }
 
     private void addUser(){
@@ -838,6 +913,12 @@ public final class MainTwitterWindows extends TopComponent {
         for (String s : streamer.getWordTracking()) {
             wordTrackingListModel.add(0, s);
         }
+    }
+    private void refreshLanguageList(){
+       languageTrackingListModel.clear();
+       for(Language l: streamer.getLanguageFilter()) {
+            languageTrackingListModel.addElement(l);
+        }  
     }
     private void refreshLocationList(){
         lt_list_table.clearSelection();
@@ -871,8 +952,12 @@ public final class MainTwitterWindows extends TopComponent {
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
     private javax.swing.JPasswordField jPasswordField1;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JButton language_add_button;
+    private javax.swing.JComboBox<String> language_combo_box;
+    private javax.swing.JButton language_delete_button;
     private javax.swing.JButton load_tracking_button;
     private javax.swing.JButton lt_add_button;
     private javax.swing.JTextField lt_add_name_textfield;
@@ -901,9 +986,11 @@ public final class MainTwitterWindows extends TopComponent {
     private javax.swing.JButton wt_add_button;
     private javax.swing.JTextField wt_add_textfield;
     private javax.swing.JButton wt_delete_button;
+    private javax.swing.JList<String> wt_lang_list;
     private javax.swing.JPanel wt_panel;
     private javax.swing.JList<String> wt_word_list;
     private javax.swing.JScrollPane wt_word_list_scrollpane;
+    private javax.swing.JScrollPane wt_word_list_scrollpane1;
     // End of variables declaration//GEN-END:variables
     @Override
     public void componentOpened() {
