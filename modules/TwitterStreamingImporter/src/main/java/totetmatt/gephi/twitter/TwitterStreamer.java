@@ -48,6 +48,16 @@ public class TwitterStreamer {
 
     private boolean running = false;
 
+    private boolean randomSample = false;
+    
+    public void setRandomSample(boolean randomSample) {
+        this.randomSample = randomSample;
+    }
+    
+    public boolean getRandomSample() {
+        return this.randomSample;
+    }
+    
     public Map<String,TrackLocation> getLocationTracking() {
         return locationTracking;
     }
@@ -170,30 +180,43 @@ public class TwitterStreamer {
             fq.follow(ArrayUtils.toPrimitive(userTrack));
         }
 
+        String langStringFilter = "";
         if(!languageFilter.isEmpty()) {
             ArrayList<String> lang = new ArrayList<>();
-            // Could do map / functional
+       
             for(Language l : languageFilter) {
                 lang.add(l.getCode());
             }
-            fq.language(String.join(",",lang));
+            langStringFilter = String.join(",",lang);
+            
         }
-        
-        fq.track(track);
-
+       // Initalize the networklogic 
         networkLogic.setTrack(track);
-
         networkLogic.refreshGraphModel();
+        
+        // Error handling for the twitter streamer
         twitterStream.addListener(networkLogic);
-        running = true;
-        twitterStream.onException(new Consumer<Exception> (){
+            twitterStream.onException(new Consumer<Exception> (){
             @Override
             public void accept(Exception t)  {
                 stop();
                 throw new UnsupportedOperationException(t);
             }
         });
-        twitterStream.filter(fq);
+            
+        // If sample stream api has been selected
+        if(this.randomSample) {
+            if("".equals(langStringFilter)){
+                twitterStream.sample();
+            } else {
+                twitterStream.sample(langStringFilter);
+            }
+        } else {  // if track streaming api has been selected
+            fq.language(langStringFilter);
+            fq.track(track);
+            twitterStream.filter(fq);
+        }
+        running = true;
     }
 
     /* Stop the running stream*/
