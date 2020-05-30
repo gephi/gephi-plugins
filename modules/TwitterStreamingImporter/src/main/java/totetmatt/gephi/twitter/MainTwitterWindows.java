@@ -195,6 +195,7 @@ public final class MainTwitterWindows extends TopComponent {
 
         setAutoscrolls(true);
 
+        jScrollPane1.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
         jScrollPane1.setAutoscrolls(true);
 
         jPanel1.setAutoscrolls(true);
@@ -239,11 +240,11 @@ public final class MainTwitterWindows extends TopComponent {
             .addGroup(wt_panelLayout.createSequentialGroup()
                 .addGroup(wt_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(wt_add_button, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(wt_delete_button, javax.swing.GroupLayout.DEFAULT_SIZE, 78, Short.MAX_VALUE))
+                    .addComponent(wt_delete_button, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(wt_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(wt_add_textfield)
-                    .addComponent(wt_word_list_scrollpane, javax.swing.GroupLayout.DEFAULT_SIZE, 568, Short.MAX_VALUE))
+                    .addComponent(wt_word_list_scrollpane))
                 .addContainerGap())
         );
         wt_panelLayout.setVerticalGroup(
@@ -255,7 +256,7 @@ public final class MainTwitterWindows extends TopComponent {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(wt_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(wt_panelLayout.createSequentialGroup()
-                        .addComponent(wt_word_list_scrollpane, javax.swing.GroupLayout.DEFAULT_SIZE, 205, Short.MAX_VALUE)
+                        .addComponent(wt_word_list_scrollpane)
                         .addGap(11, 11, 11))
                     .addGroup(wt_panelLayout.createSequentialGroup()
                         .addComponent(wt_delete_button)
@@ -337,9 +338,9 @@ public final class MainTwitterWindows extends TopComponent {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jLabel4)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(ut_add_from_list_listname_textfield))
+                        .addComponent(ut_add_from_list_listname_textfield, javax.swing.GroupLayout.DEFAULT_SIZE, 122, Short.MAX_VALUE))
                     .addComponent(ut_add_textfield)
-                    .addComponent(ut_list_scrollpane, javax.swing.GroupLayout.DEFAULT_SIZE, 545, Short.MAX_VALUE))
+                    .addComponent(ut_list_scrollpane, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
                 .addContainerGap())
         );
         ut_panelLayout.setVerticalGroup(
@@ -361,7 +362,7 @@ public final class MainTwitterWindows extends TopComponent {
                 .addGroup(ut_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(ut_delete_button)
                     .addComponent(ut_list_scrollpane, javax.swing.GroupLayout.PREFERRED_SIZE, 164, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(23, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         tracking_tab_panel.addTab(org.openide.util.NbBundle.getMessage(MainTwitterWindows.class, "MainTwitterWindows.ut_panel.TabConstraints.tabTitle_1"), ut_panel); // NOI18N
@@ -456,7 +457,7 @@ public final class MainTwitterWindows extends TopComponent {
             lt_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(lt_panelLayout.createSequentialGroup()
                 .addGroup(lt_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(lt_delete_button, javax.swing.GroupLayout.DEFAULT_SIZE, 97, Short.MAX_VALUE)
+                    .addComponent(lt_delete_button, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(lt_add_button, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(lt_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -476,7 +477,7 @@ public final class MainTwitterWindows extends TopComponent {
                             .addGroup(lt_panelLayout.createSequentialGroup()
                                 .addGroup(lt_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(lt_panelLayout.createSequentialGroup()
-                                        .addComponent(jLabel10, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(jLabel10, javax.swing.GroupLayout.DEFAULT_SIZE, 126, Short.MAX_VALUE)
                                         .addGap(1, 1, 1)
                                         .addComponent(jLabel11))
                                     .addComponent(jLabel13))
@@ -519,7 +520,7 @@ public final class MainTwitterWindows extends TopComponent {
                 .addGroup(lt_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(lt_list_scrollpane, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(lt_delete_button))
-                .addContainerGap(12, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         tracking_tab_panel.addTab(org.openide.util.NbBundle.getMessage(MainTwitterWindows.class, "MainTwitterWindows.lt_panel.TabConstraints.tabTitle"), lt_panel); // NOI18N
@@ -550,10 +551,10 @@ public final class MainTwitterWindows extends TopComponent {
             .addGroup(lang_panelLayout.createSequentialGroup()
                 .addGroup(lang_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(language_add_button, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(language_delete_button, javax.swing.GroupLayout.DEFAULT_SIZE, 78, Short.MAX_VALUE))
+                    .addComponent(language_delete_button, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(lang_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(language_combo_box, 0, 568, Short.MAX_VALUE)
+                    .addComponent(language_combo_box, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(wt_word_list_scrollpane1))
                 .addContainerGap())
         );
@@ -617,6 +618,7 @@ public final class MainTwitterWindows extends TopComponent {
         warning_new_project_label.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         org.openide.awt.Mnemonics.setLocalizedText(warning_new_project_label, org.openide.util.NbBundle.getMessage(MainTwitterWindows.class, "MainTwitterWindows.warning_new_project_label.text")); // NOI18N
 
+        random_sample_chk.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         org.openide.awt.Mnemonics.setLocalizedText(random_sample_chk, org.openide.util.NbBundle.getMessage(MainTwitterWindows.class, "MainTwitterWindows.random_sample_chk.text")); // NOI18N
         random_sample_chk.addItemListener(new java.awt.event.ItemListener() {
             public void itemStateChanged(java.awt.event.ItemEvent evt) {
@@ -629,22 +631,22 @@ public final class MainTwitterWindows extends TopComponent {
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(connect_toggleButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(credential_goto_twitter_button, javax.swing.GroupLayout.PREFERRED_SIZE, 82, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addComponent(warning_new_project_label, javax.swing.GroupLayout.DEFAULT_SIZE, 803, Short.MAX_VALUE)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(network_logic_label)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addContainerGap()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(random_sample_chk)
-                                .addGap(0, 0, Short.MAX_VALUE))
-                            .addComponent(network_logic_combo, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
-                .addContainerGap())
+                            .addComponent(random_sample_chk)
+                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addGroup(jPanel1Layout.createSequentialGroup()
+                                    .addComponent(network_logic_label)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                    .addComponent(network_logic_combo, javax.swing.GroupLayout.PREFERRED_SIZE, 236, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(connect_toggleButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(warning_new_project_label, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(359, 359, 359)
+                        .addComponent(credential_goto_twitter_button, javax.swing.GroupLayout.PREFERRED_SIZE, 82, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(jPanel1Layout.createSequentialGroup()
                     .addContainerGap()
@@ -658,25 +660,25 @@ public final class MainTwitterWindows extends TopComponent {
                             .addComponent(load_tracking_button)
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                             .addComponent(save_tracking_button))
-                        .addComponent(tracking_tab_panel))
+                        .addComponent(tracking_tab_panel, javax.swing.GroupLayout.PREFERRED_SIZE, 429, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addGap(382, 382, 382)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(37, 37, 37)
+                .addComponent(credential_goto_twitter_button, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(323, 323, 323)
                 .addComponent(random_sample_chk)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(network_logic_label)
                     .addComponent(network_logic_combo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(credential_goto_twitter_button, javax.swing.GroupLayout.PREFERRED_SIZE, 19, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(warning_new_project_label)
-                .addGap(7, 7, 7)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(connect_toggleButton)
-                .addContainerGap())
+                .addGap(0, 0, Short.MAX_VALUE))
             .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(jPanel1Layout.createSequentialGroup()
                     .addContainerGap()
@@ -691,7 +693,7 @@ public final class MainTwitterWindows extends TopComponent {
                         .addComponent(load_tracking_button))
                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                     .addComponent(tracking_tab_panel, javax.swing.GroupLayout.PREFERRED_SIZE, 273, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addContainerGap(159, Short.MAX_VALUE)))
+                    .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
         );
 
         tracking_tab_panel.getAccessibleContext().setAccessibleName(org.openide.util.NbBundle.getMessage(MainTwitterWindows.class, "MainTwitterWindows.tracking_tab_panel.AccessibleContext.accessibleName")); // NOI18N
@@ -702,50 +704,69 @@ public final class MainTwitterWindows extends TopComponent {
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 453, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(jScrollPane1)
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(jScrollPane1)
+                .addGap(0, 0, 0))
         );
     }// </editor-fold>//GEN-END:initComponents
 
-    private void connect_toggleButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_connect_toggleButtonActionPerformed
-        if (connect_toggleButton.isSelected()) {
-            startStreamer();
+    private void random_sample_chkItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_random_sample_chkItemStateChanged
+        // TODO add your handling code here:
+
+        if(random_sample_chk.isSelected()){
+
+            streamer.setRandomSample(true);
+            for(Component c : wt_panel.getComponents()){
+                c.setEnabled(false);
+            }
+            for(Component c : ut_panel.getComponents()){
+                c.setEnabled(false);
+            }
+            for(Component c : lt_panel.getComponents()){
+                c.setEnabled(false);
+            }
         } else {
-            stopStreamer();
+            streamer.setRandomSample(false);
+            for(Component c : wt_panel.getComponents()){
+                c.setEnabled(true);
+            }
+            for(Component c : ut_panel.getComponents()){
+                c.setEnabled(true);
+            }
+            for(Component c : lt_panel.getComponents()){
+                c.setEnabled(true);
+            }
+
         }
-    }//GEN-LAST:event_connect_toggleButtonActionPerformed
-    private void startStreamer() {
-        idWorkspace = projectController.getCurrentWorkspace().getId();
-        streamer.start((Networklogic) network_logic_combo.getSelectedItem());
-        connect_toggleButton.setText("Disconnect");
-    }
+    }//GEN-LAST:event_random_sample_chkItemStateChanged
 
-    private void stopStreamer() {
-        streamer.stop();
-        connect_toggleButton.setText("Connect");
-        connect_toggleButton.setSelected(false);
-    }
-    private void load_tracking_buttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_load_tracking_buttonActionPerformed
-        final JFileChooser fc = new JFileChooser();
-
-        FileNameExtensionFilter filter = new FileNameExtensionFilter(org.openide.util.NbBundle.getMessage(MainTwitterWindows.class, "MainTwitterWindows.file_chooser.format"), "json", "application/json");
-        fc.setFileFilter(filter);
-        int returnVal = fc.showOpenDialog(this);
-        if (returnVal == JFileChooser.APPROVE_OPTION) {
-            File file = fc.getSelectedFile();
+    private void credential_goto_documentation_buttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_credential_goto_documentation_buttonActionPerformed
+        if (Desktop.isDesktopSupported()) {
             try {
-                streamer.loadTracking(file);
-            } catch (IOException ex) {
-                Logger.getLogger(MainTwitterWindows.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (JSONException ex) {
+                Desktop.getDesktop().browse(new URI("https://seinecle.github.io/gephi-tutorials/generated-html/twitter-streaming-importer-en.html"));
+            } catch (IOException e) {
+                Logger.getLogger(MainTwitterWindows.class.getName()).log(Level.SEVERE, null, e);
+            } catch (URISyntaxException ex) {
                 Logger.getLogger(MainTwitterWindows.class.getName()).log(Level.SEVERE, null, ex);
             }
-            refreshTracking();
+        } else {
+            Logger.getLogger(MainTwitterWindows.class.getName()).log(Level.SEVERE, null, new Exception("Desktop method isn't supported"));
         }
-    }//GEN-LAST:event_load_tracking_buttonActionPerformed
+    }//GEN-LAST:event_credential_goto_documentation_buttonActionPerformed
+
+    private void crendential_buttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_crendential_buttonActionPerformed
+        TwitterCredentialDialog dg = new TwitterCredentialDialog(null, true);
+        dg.setCredentialProperty(streamer.getCredentialProperty());
+        dg.setVisible(true);// TODO add your handling code here:
+        streamer.setCredentialProperty(dg.getCredentialProperty());
+        streamer.getCredentialProperty().save();
+    }//GEN-LAST:event_crendential_buttonActionPerformed
 
     private void save_tracking_buttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_save_tracking_buttonActionPerformed
         final JFileChooser fc = new JFileChooser();
@@ -766,52 +787,35 @@ public final class MainTwitterWindows extends TopComponent {
         }
     }//GEN-LAST:event_save_tracking_buttonActionPerformed
 
-    private void crendential_buttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_crendential_buttonActionPerformed
-        TwitterCredentialDialog dg = new TwitterCredentialDialog(null, true);
-        dg.setCredentialProperty(streamer.getCredentialProperty());
-        dg.setVisible(true);// TODO add your handling code here:
-        streamer.setCredentialProperty(dg.getCredentialProperty());
-        streamer.getCredentialProperty().save();
+    private void load_tracking_buttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_load_tracking_buttonActionPerformed
+        final JFileChooser fc = new JFileChooser();
 
-    }//GEN-LAST:event_crendential_buttonActionPerformed
-
-    private void ut_delete_buttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ut_delete_buttonActionPerformed
-        for (int row : ut_list_table.getSelectedRows()) {
-            streamer.getUserTracking().remove(userTrackingTableModel.getValueAt(row, 0));
+        FileNameExtensionFilter filter = new FileNameExtensionFilter(org.openide.util.NbBundle.getMessage(MainTwitterWindows.class, "MainTwitterWindows.file_chooser.format"), "json", "application/json");
+        fc.setFileFilter(filter);
+        int returnVal = fc.showOpenDialog(this);
+        if (returnVal == JFileChooser.APPROVE_OPTION) {
+            File file = fc.getSelectedFile();
+            try {
+                streamer.loadTracking(file);
+            } catch (IOException ex) {
+                Logger.getLogger(MainTwitterWindows.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (JSONException ex) {
+                Logger.getLogger(MainTwitterWindows.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            refreshTracking();
         }
-        refreshUserList();
-    }//GEN-LAST:event_ut_delete_buttonActionPerformed
+    }//GEN-LAST:event_load_tracking_buttonActionPerformed
 
-    private void ut_add_buttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ut_add_buttonActionPerformed
-        addUser();
-    }//GEN-LAST:event_ut_add_buttonActionPerformed
+    private void language_delete_buttonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_language_delete_buttonMouseClicked
+        streamer.getLanguageFilter().removeAll(wt_lang_list.getSelectedValuesList());
+        refreshLanguageList();
+    }//GEN-LAST:event_language_delete_buttonMouseClicked
 
-    private void wt_delete_buttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_wt_delete_buttonActionPerformed
-        streamer.getWordTracking().removeAll(wt_word_list.getSelectedValuesList());
-        refreshWordList();
-    }//GEN-LAST:event_wt_delete_buttonActionPerformed
-
-    private void wt_add_buttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_wt_add_buttonActionPerformed
-        addWord();
-    }//GEN-LAST:event_wt_add_buttonActionPerformed
-
-    private void wt_add_textfieldKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_wt_add_textfieldKeyReleased
-        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
-            addWord();
-        }
-    }//GEN-LAST:event_wt_add_textfieldKeyReleased
-
-    private void ut_add_textfieldKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_ut_add_textfieldKeyReleased
-        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
-            addUser();
-        }
-    }//GEN-LAST:event_ut_add_textfieldKeyReleased
-
-    private void ut_add_from_list_buttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ut_add_from_list_buttonActionPerformed
-       if ( !this.ut_add_from_list_user_textfield.getText().isEmpty() && !this.ut_add_from_list_listname_textfield.getText().isEmpty()) {
-            addFromList();
-       }
-    }//GEN-LAST:event_ut_add_from_list_buttonActionPerformed
+    private void language_add_buttonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_language_add_buttonMouseClicked
+        Language selected = (Language)language_combo_box.getSelectedItem();
+        streamer.addLanguage(selected);
+        refreshLanguageList();
+    }//GEN-LAST:event_language_add_buttonMouseClicked
 
     private void lt_delete_buttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_lt_delete_buttonActionPerformed
         for (int row : lt_list_table.getSelectedRows()) {
@@ -844,61 +848,62 @@ public final class MainTwitterWindows extends TopComponent {
         addLocation();
     }//GEN-LAST:event_lt_add_buttonActionPerformed
 
-    private void credential_goto_documentation_buttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_credential_goto_documentation_buttonActionPerformed
-        if (Desktop.isDesktopSupported()) {
-            try {
-                Desktop.getDesktop().browse(new URI("https://seinecle.github.io/gephi-tutorials/generated-html/twitter-streaming-importer-en.html"));
-            } catch (IOException e) {
-                Logger.getLogger(MainTwitterWindows.class.getName()).log(Level.SEVERE, null, e);
-            } catch (URISyntaxException ex) {
-                Logger.getLogger(MainTwitterWindows.class.getName()).log(Level.SEVERE, null, ex);
-            } 
-        } else {
-            Logger.getLogger(MainTwitterWindows.class.getName()).log(Level.SEVERE, null, new Exception("Desktop method isn't supported"));
+    private void ut_add_from_list_buttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ut_add_from_list_buttonActionPerformed
+        if ( !this.ut_add_from_list_user_textfield.getText().isEmpty() && !this.ut_add_from_list_listname_textfield.getText().isEmpty()) {
+            addFromList();
         }
-    }//GEN-LAST:event_credential_goto_documentation_buttonActionPerformed
+    }//GEN-LAST:event_ut_add_from_list_buttonActionPerformed
 
-    private void language_add_buttonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_language_add_buttonMouseClicked
-        Language selected = (Language)language_combo_box.getSelectedItem();
-        streamer.addLanguage(selected);    
-        refreshLanguageList();
-    }//GEN-LAST:event_language_add_buttonMouseClicked
-
-    private void language_delete_buttonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_language_delete_buttonMouseClicked
-                 streamer.getLanguageFilter().removeAll(wt_lang_list.getSelectedValuesList());
-                 refreshLanguageList();
-    }//GEN-LAST:event_language_delete_buttonMouseClicked
-
-    private void random_sample_chkItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_random_sample_chkItemStateChanged
-        // TODO add your handling code here:
-         
-        if(random_sample_chk.isSelected()){
-            
-            streamer.setRandomSample(true);
-            for(Component c : wt_panel.getComponents()){
-                c.setEnabled(false);
-            }
-            for(Component c : ut_panel.getComponents()){
-                c.setEnabled(false);
-            }
-            for(Component c : lt_panel.getComponents()){
-                c.setEnabled(false);
-            }
-        } else {
-            streamer.setRandomSample(false);
-            for(Component c : wt_panel.getComponents()){
-                c.setEnabled(true);
-            }
-            for(Component c : ut_panel.getComponents()){
-                c.setEnabled(true);
-            }
-            for(Component c : lt_panel.getComponents()){
-                c.setEnabled(true);
-            }
-        
+    private void ut_delete_buttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ut_delete_buttonActionPerformed
+        for (int row : ut_list_table.getSelectedRows()) {
+            streamer.getUserTracking().remove(userTrackingTableModel.getValueAt(row, 0));
         }
-    }//GEN-LAST:event_random_sample_chkItemStateChanged
-    
+        refreshUserList();
+    }//GEN-LAST:event_ut_delete_buttonActionPerformed
+
+    private void ut_add_textfieldKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_ut_add_textfieldKeyReleased
+        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
+            addUser();
+        }
+    }//GEN-LAST:event_ut_add_textfieldKeyReleased
+
+    private void ut_add_buttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ut_add_buttonActionPerformed
+        addUser();
+    }//GEN-LAST:event_ut_add_buttonActionPerformed
+
+    private void wt_delete_buttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_wt_delete_buttonActionPerformed
+        streamer.getWordTracking().removeAll(wt_word_list.getSelectedValuesList());
+        refreshWordList();
+    }//GEN-LAST:event_wt_delete_buttonActionPerformed
+
+    private void wt_add_buttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_wt_add_buttonActionPerformed
+        addWord();
+    }//GEN-LAST:event_wt_add_buttonActionPerformed
+
+    private void wt_add_textfieldKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_wt_add_textfieldKeyReleased
+        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
+            addWord();
+        }
+    }//GEN-LAST:event_wt_add_textfieldKeyReleased
+
+    private void connect_toggleButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_connect_toggleButtonActionPerformed
+        if (connect_toggleButton.isSelected()) {
+            startStreamer();
+        } else {
+            stopStreamer();
+        }
+    }//GEN-LAST:event_connect_toggleButtonActionPerformed
+    private void startStreamer() {
+        idWorkspace = projectController.getCurrentWorkspace().getId();
+        streamer.start((Networklogic) network_logic_combo.getSelectedItem());
+        connect_toggleButton.setText("Disconnect");
+    }
+
+    private void stopStreamer() {
+        streamer.stop();
+        connect_toggleButton.setText("Connect");
+        connect_toggleButton.setSelected(false);
+    }    
     private void addLocation(){
         if(!lt_add_sw_lat_textfield.getText().isEmpty() &&
                 !lt_add_sw_long_textfield.getText().isEmpty()  &&
