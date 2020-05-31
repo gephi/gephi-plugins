@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.apache.commons.lang3.ArrayUtils;
@@ -18,6 +19,7 @@ import totetmatt.gephi.twitter.networklogic.Networklogic;
 import totetmatt.gephi.twitter.networklogic.utils.Language;
 import totetmatt.gephi.twitter.networklogic.utils.TrackLocation;
 import twitter4j.FilterQuery;
+import twitter4j.JSONArray;
 import twitter4j.JSONException;
 import twitter4j.JSONObject;
 import twitter4j.PagableResponseList;
@@ -233,10 +235,34 @@ public class TwitterStreamer {
         // + Avoid to load another library
         // - Very limited
         JSONObject o = new JSONObject();
-
-        o.put("wordTracking", wordTracking);
-        o.put("userTracking", userTracking);
-        o.put("locationsTracking", locationTracking);
+        JSONArray words = new JSONArray(wordTracking);
+        o.put("wordTracking", words);
+        
+        JSONObject users = new JSONObject(userTracking);
+        o.put("userTracking", users);
+        
+        JSONArray locations = new JSONArray();
+        for(Entry<String,TrackLocation> l: locationTracking.entrySet()) {
+            JSONObject jsonLocation = new JSONObject();
+            jsonLocation.put("id", l.getKey());
+            jsonLocation.put("name", l.getValue().getName());
+            jsonLocation.put("neLat", l.getValue().getNeLatitude());
+            jsonLocation.put("neLong", l.getValue().getNeLongitude());
+            jsonLocation.put("swLat", l.getValue().getSwLatitude());
+            jsonLocation.put("swLong", l.getValue().getSwLongitude());
+   
+            locations.put(jsonLocation);
+        }
+        o.put("locationsTracking", locations);
+        
+        JSONArray languages = new JSONArray();
+        for(Language l: languageFilter) {
+            JSONObject jsonLang = new JSONObject();
+            jsonLang.put("code", l.getCode());
+            jsonLang.put("label", l.getLabel());
+            languages.put(jsonLang);
+        }
+        o.put("languageFilter",languages);
         Files.write(saveFile.toPath(), o.toString().getBytes());
 
     }
@@ -261,19 +287,27 @@ public class TwitterStreamer {
             long id = o.getJSONObject("userTracking").getLong(username);
             userTracking.put(username, id);
         }
-        Iterator locationIt = o.getJSONObject("locationsTracking").keys();
-        while (locationIt.hasNext()) {
-            String locationKey = (String) locationIt.next();
-            JSONObject location = o.getJSONObject("locationsTracking").getJSONObject(locationKey);
-            //double swLatitude, double swLongitude, double neLatitude, double neLongitude, String name
-            locationTracking.put(locationKey,new TrackLocation(
-                        Double.parseDouble(location.getString("swLatitude") ),
-                        Double.parseDouble(location.getString("swLongitude") ),
-                        Double.parseDouble(location.getString("neLatitude") ),
-                        Double.parseDouble(location.getString("neLongitude") ),
-                        location.getString("name")
+        
+         for (int i = 0; i < o.getJSONArray("locationsTracking").length(); i++) {
+            JSONObject jsonLocation = o.getJSONArray("locationsTracking").getJSONObject(i);
+            locationTracking.put(jsonLocation.getString("id"),new TrackLocation(
+                        Double.parseDouble(jsonLocation.getString("swLat") ),
+                        Double.parseDouble(jsonLocation.getString("swLong") ),
+                        Double.parseDouble(jsonLocation.getString("neLat") ),
+                        Double.parseDouble(jsonLocation.getString("neLong") ),
+                        jsonLocation.getString("name")
                    
             ));
         }
+         
+        for (int i = 0; i < o.getJSONArray("languageFilter").length(); i++) {
+            JSONObject jsonLanguage = o.getJSONArray("languageFilter").getJSONObject(i);
+            languageFilter.add(
+                    new Language(jsonLanguage.getString("code")
+                            ,jsonLanguage.getString("label")
+                    )
+            );
+        }
+    
     }
 }

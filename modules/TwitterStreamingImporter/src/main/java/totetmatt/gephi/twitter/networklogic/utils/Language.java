@@ -62,7 +62,7 @@ public class Language {
     private final String label;
     private final String code;
     
-    Language(String code, String label) {
+    public Language(String code, String label) {
         this.label = label;
         this.code = code;
     }
