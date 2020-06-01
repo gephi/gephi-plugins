@@ -54,7 +54,7 @@
         <module>modules/PolygonShapedNodes</module>
         <module>modules/ScalePlugin</module>
         <module>modules/CirclePack</module>
-        <module>modules/SHPExporter</module>
+        <!--<module>modules/SHPExporter</module> Dependency fails: Could not find artifact org.geotools:gt-api:jar:17.2 in osgeo (http://download.osgeo.org/webdav/geotools/)-->
         <module>modules/newmangirvan</module>
         <module>modules/image-preview</module>
         <module>modules/polinodeExporter</module>
