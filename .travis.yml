@@ -4,7 +4,7 @@ branches:
   only:
     - master-forge
 jdk:
-  - oraclejdk8
+  - openjdk8
 before_install:
   - curl -o keystore.ks https://raw.githubusercontent.com/gephi/gephi/master/src/keystore/keystore.ks
 install:
