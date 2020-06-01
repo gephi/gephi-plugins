@@ -9,14 +9,17 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.apache.commons.lang3.ArrayUtils;
 import org.openide.util.Exceptions;
 import org.openide.util.lookup.ServiceProvider;
 import totetmatt.gephi.twitter.networklogic.Networklogic;
+import totetmatt.gephi.twitter.networklogic.utils.Language;
 import totetmatt.gephi.twitter.networklogic.utils.TrackLocation;
 import twitter4j.FilterQuery;
+import twitter4j.JSONArray;
 import twitter4j.JSONException;
 import twitter4j.JSONObject;
 import twitter4j.PagableResponseList;
@@ -43,9 +46,20 @@ public class TwitterStreamer {
     private final List<String> wordTracking = new ArrayList<>();
     private final Map<String, Long> userTracking = new HashMap<>();
     private final Map<String,TrackLocation> locationTracking = new HashMap<>();
+    private final List<Language> languageFilter = new ArrayList<>();
 
     private boolean running = false;
 
+    private boolean randomSample = false;
+    
+    public void setRandomSample(boolean randomSample) {
+        this.randomSample = randomSample;
+    }
+    
+    public boolean getRandomSample() {
+        return this.randomSample;
+    }
+    
     public Map<String,TrackLocation> getLocationTracking() {
         return locationTracking;
     }
@@ -98,6 +112,11 @@ public class TwitterStreamer {
         }
     }
 
+    public void addLanguage(Language l){
+        if(!languageFilter.contains(l)) {
+            languageFilter.add(l);
+        }
+    }
     public Map<String, Long> getUserTracking() {
         return userTracking;
     }
@@ -106,6 +125,9 @@ public class TwitterStreamer {
         return wordTracking;
     }
 
+    public List<Language> getLanguageFilter(){
+        return languageFilter;
+    }
     public CredentialProperty getCredentialProperty() {
         return credentialProperty;
     }
@@ -160,21 +182,43 @@ public class TwitterStreamer {
             fq.follow(ArrayUtils.toPrimitive(userTrack));
         }
 
-        fq.track(track);
-
+        String langStringFilter = "";
+        if(!languageFilter.isEmpty()) {
+            ArrayList<String> lang = new ArrayList<>();
+       
+            for(Language l : languageFilter) {
+                lang.add(l.getCode());
+            }
+            langStringFilter = String.join(",",lang);
+            
+        }
+       // Initalize the networklogic 
         networkLogic.setTrack(track);
-
         networkLogic.refreshGraphModel();
+        
+        // Error handling for the twitter streamer
         twitterStream.addListener(networkLogic);
-        running = true;
-        twitterStream.onException(new Consumer<Exception> (){
+            twitterStream.onException(new Consumer<Exception> (){
             @Override
             public void accept(Exception t)  {
                 stop();
                 throw new UnsupportedOperationException(t);
             }
         });
-        twitterStream.filter(fq);
+            
+        // If sample stream api has been selected
+        if(this.randomSample) {
+            if("".equals(langStringFilter)){
+                twitterStream.sample();
+            } else {
+                twitterStream.sample(langStringFilter);
+            }
+        } else {  // if track streaming api has been selected
+            fq.language(langStringFilter);
+            fq.track(track);
+            twitterStream.filter(fq);
+        }
+        running = true;
     }
 
     /* Stop the running stream*/
@@ -191,10 +235,34 @@ public class TwitterStreamer {
         // + Avoid to load another library
         // - Very limited
         JSONObject o = new JSONObject();
-
-        o.put("wordTracking", wordTracking);
-        o.put("userTracking", userTracking);
-        o.put("locationsTracking", locationTracking);
+        JSONArray words = new JSONArray(wordTracking);
+        o.put("wordTracking", words);
+        
+        JSONObject users = new JSONObject(userTracking);
+        o.put("userTracking", users);
+        
+        JSONArray locations = new JSONArray();
+        for(Entry<String,TrackLocation> l: locationTracking.entrySet()) {
+            JSONObject jsonLocation = new JSONObject();
+            jsonLocation.put("id", l.getKey());
+            jsonLocation.put("name", l.getValue().getName());
+            jsonLocation.put("neLat", l.getValue().getNeLatitude());
+            jsonLocation.put("neLong", l.getValue().getNeLongitude());
+            jsonLocation.put("swLat", l.getValue().getSwLatitude());
+            jsonLocation.put("swLong", l.getValue().getSwLongitude());
+   
+            locations.put(jsonLocation);
+        }
+        o.put("locationsTracking", locations);
+        
+        JSONArray languages = new JSONArray();
+        for(Language l: languageFilter) {
+            JSONObject jsonLang = new JSONObject();
+            jsonLang.put("code", l.getCode());
+            jsonLang.put("label", l.getLabel());
+            languages.put(jsonLang);
+        }
+        o.put("languageFilter",languages);
         Files.write(saveFile.toPath(), o.toString().getBytes());
 
     }
@@ -219,19 +287,27 @@ public class TwitterStreamer {
             long id = o.getJSONObject("userTracking").getLong(username);
             userTracking.put(username, id);
         }
-        Iterator locationIt = o.getJSONObject("locationsTracking").keys();
-        while (locationIt.hasNext()) {
-            String locationKey = (String) locationIt.next();
-            JSONObject location = o.getJSONObject("locationsTracking").getJSONObject(locationKey);
-            //double swLatitude, double swLongitude, double neLatitude, double neLongitude, String name
-            locationTracking.put(locationKey,new TrackLocation(
-                        Double.parseDouble(location.getString("swLatitude") ),
-                        Double.parseDouble(location.getString("swLongitude") ),
-                        Double.parseDouble(location.getString("neLatitude") ),
-                        Double.parseDouble(location.getString("neLongitude") ),
-                        location.getString("name")
+        
+         for (int i = 0; i < o.getJSONArray("locationsTracking").length(); i++) {
+            JSONObject jsonLocation = o.getJSONArray("locationsTracking").getJSONObject(i);
+            locationTracking.put(jsonLocation.getString("id"),new TrackLocation(
+                        Double.parseDouble(jsonLocation.getString("swLat") ),
+                        Double.parseDouble(jsonLocation.getString("swLong") ),
+                        Double.parseDouble(jsonLocation.getString("neLat") ),
+                        Double.parseDouble(jsonLocation.getString("neLong") ),
+                        jsonLocation.getString("name")
                    
             ));
         }
+         
+        for (int i = 0; i < o.getJSONArray("languageFilter").length(); i++) {
+            JSONObject jsonLanguage = o.getJSONArray("languageFilter").getJSONObject(i);
+            languageFilter.add(
+                    new Language(jsonLanguage.getString("code")
+                            ,jsonLanguage.getString("label")
+                    )
+            );
+        }
+    
     }
 }
