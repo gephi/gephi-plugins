@@ -69,6 +69,7 @@ import org.gephi.streaming.api.event.GraphEvent;
 import org.gephi.streaming.impl.json.parser.JSONConstants;
 import org.gephi.streaming.impl.json.parser.JSONException;
 import org.gephi.streaming.impl.json.parser.JSONObject;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.openide.util.Exceptions;
 import org.openide.util.Lookup;
@@ -79,6 +80,7 @@ import org.openide.util.Lookup;
  * @author panisson
  *
  */
+@Ignore
 public class JSONStreamWriterTest {
 
     protected String resource = "amazon.json";
