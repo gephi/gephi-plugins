@@ -203,8 +203,8 @@ public final class InspectorAction extends BooleanStateAction {
             // containing the column name and the nodes value (or "null" if none).
             for(String key : keys) {
                 Object attr = node.getAttribute(key);
-                JLabel keyLabel = new JLabel(key + " : ");
-                JLabel dataLabel = new JLabel(attr != null ? attr.toString() : "null");
+                JLabel keyLabel = new JLabel();
+                JLabel dataLabel = new JLabel();
                 
                 keyLabel.setForeground(Color.WHITE);
                 keyLabel.setFont(new Font("Arial", Font.BOLD, 13));
@@ -212,6 +212,22 @@ public final class InspectorAction extends BooleanStateAction {
                 dataLabel.setForeground(Color.WHITE);
                 dataLabel.setFont(new Font("Arial", Font.PLAIN, 13));
                 
+                // Making use of HTML to force the JLabel to use multiple lines
+                // if the text is particularly long and exceeds the maximum
+                // label width of 200.
+                String keyText = key + " : ";
+                int keyTextLength = keyLabel.getFontMetrics(keyLabel.getFont()).stringWidth(keyText);
+                keyLabel.setText("<html><body style='width: " +
+                        (keyTextLength > 200 ? 200 : keyTextLength) +
+                        "px'>" + keyText + "</body></html>");
+
+                String dataText = attr != null ? attr.toString() : "null";
+                int dataTextLength = dataLabel.getFontMetrics(dataLabel.getFont()).stringWidth(dataText);
+                dataLabel.setText("<html><body style='width: " +
+                        (dataTextLength > 200 ? 200 : dataTextLength) +
+                        "px'>" + dataText + "</body></html>");
+
+
                 this.contentPanel.add(keyLabel);
                 this.contentPanel.add(dataLabel);
             }
