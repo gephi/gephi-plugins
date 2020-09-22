@@ -167,7 +167,8 @@ public final class InspectorAction extends BooleanStateAction {
             super();
             this.setType(Type.UTILITY);
             this.setUndecorated(true);
-            this.setAlwaysOnTop(true);
+            this.setAlwaysOnTop(false);
+            this.setFocusableWindowState(false);
             this.getRootPane().putClientProperty("apple.awt.draggableWindowBackground", false);
             this.setOpacity(0.75f);
             this.setVisible(false);
