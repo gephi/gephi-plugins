@@ -13,6 +13,62 @@
     <modules>
         <!-- Add here the paths of all modules (e.g. <module>modules/MyModule</module>) -->
         <module>modules/HairballBuster</module>
+        <module>modules/GeoLayout</module>
+        <module>modules/LinkfluencePlugin</module>
+        <module>modules/KBraceFilter</module>
+        <module>modules/Multimode-Networks</module>
+        <module>modules/JsonExporter</module>
+        <module>modules/SigmaExporter</module>
+        <module>modules/NodeColorManager</module>
+        <module>modules/GraphvizLayout</module>
+        <module>modules/GraphStreaming</module>
+        <module>modules/DesktopStreaming</module>
+        <module>modules/StreamingAPI</module>
+        <module>modules/StreamingImpl</module>
+        <module>modules/JettyWrapper</module>
+        <module>modules/StreamingServer</module>
+        <module>modules/CircularLayout</module>
+        <module>modules/SemanticWebImport</module>
+        <module>modules/loxawebsiteexport</module>
+        <module>modules/Export-To-Earth</module>
+        <module>modules/MapOfCountries</module>
+        <module>modules/ScriptingPlugin</module>
+        <module>modules/TwitterStreamingImporter</module>
+        <module>modules/IsometricLayout</module>
+        <module>modules/NetworkSplitter3D</module>
+        <module>modules/ExcelCsvImporter</module>
+        <module>modules/OracleDriver</module>
+        <module>modules/EventGraphLayout</module>
+        <module>modules/Lineage</module>
+        <module>modules/MdsLayout</module>
+        <module>modules/filterfromfile</module>
+        <module>modules/GiveColorToNodes</module>
+        <module>modules/GiveColorToEdges</module>
+        <module>modules/GravityPlugin</module>
+        <module>modules/MdsMetric</module>
+        <module>modules/VectorCalculator</module>
+        <module>modules/PrestigePlugin</module>
+        <module>modules/HttpGraph</module>
+        <module>modules/MinimumSpanningTree</module>
+        <module>modules/SimilarityComputer</module>
+        <module>modules/AgensGraphPlugin</module>
+        <module>modules/PolygonShapedNodes</module>
+        <module>modules/ScalePlugin</module>
+        <module>modules/CirclePack</module>
+        <!--<module>modules/SHPExporter</module> Dependency fails: Could not find artifact org.geotools:gt-api:jar:17.2 in osgeo (http://download.osgeo.org/webdav/geotools/)-->
+        <module>modules/newmangirvan</module>
+        <module>modules/image-preview</module>
+        <module>modules/polinodeExporter</module>
+        <module>modules/LeidenAlgorithm</module>
+        <module>modules/BridgingPlugin</module>
+        <module>modules/BoundingDiametersSuite</module>
+        <module>modules/BoundingDiameters</module>
+        <module>modules/BoundingDiametersUI</module>
+        <module>modules/dbscan</module>
+        <module>modules/ClusteringCoefficient</module>
+        <module>modules/KleinbergGenerator</module>
+        <module>modules/columnCalculator</module>
+        <module>modules/GroupPartition</module>
     </modules>
     
     <!-- Properties -->
@@ -143,6 +199,14 @@
                 <artifactId>nbm-maven-plugin</artifactId>
                 <configuration>
                     <nbmBuildDir>${clusters.path}</nbmBuildDir>
+                    <licenseName>Apache 2.0</licenseName>
+                    <author>Yitzchak Lockerman (Yale Computer Graphics Group)</author>
+                    <sourceCodeUrl>$sourcecode_url</sourceCodeUrl>
+                    <licenseName>Apache 2.0</licenseName>
+                    <publicPackages> 
+                        <publicPackage>org.yale.cs.graphics.gephi.imagepreview</publicPackage>
+                    </publicPackages>
+                    <sourceCodeUrl>https://github.com/totetmatt/gephi-plugins/tree/image-preview</sourceCodeUrl>
                 </configuration>
                 <executions>
                     <execution>

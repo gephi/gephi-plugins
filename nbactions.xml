@@ -18,4 +18,11 @@
             <run.params.debug>-J-Xdebug -J-Xrunjdwp:transport=dt_socket,suspend=n,server=n,address=${jpda.address}</run.params.debug> 
         </properties>
     </action>
+    <action>
+            <actionName>CUSTOM-migrate</actionName>
+            <displayName>migrate</displayName>
+            <goals>
+                <goal>org.gephi:gephi-maven-plugin:migrate</goal>
+            </goals>
+        </action>
 </actions>
