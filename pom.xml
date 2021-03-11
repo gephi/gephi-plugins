@@ -12,6 +12,7 @@
     <!-- List of modules -->
     <modules>
         <!-- Add here the paths of all modules (e.g. <module>modules/MyModule</module>) -->
+        <module>modules/TrophicLevels</module>
     </modules>
     
     <!-- Properties -->
@@ -61,6 +62,24 @@
             <version>${gephi.version}</version>
             <classifier>linux</classifier>
             <type>tar.gz</type>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>project-api</artifactId>
+            <version>${project.version}</version>
+            <type>nbm</type>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>graph-api</artifactId>
+            <version>${project.version}</version>
+            <type>nbm</type>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>graph-api</artifactId>
+            <version>${project.version}</version>
+            <type>pom</type>
         </dependency>
     </dependencies>
     
