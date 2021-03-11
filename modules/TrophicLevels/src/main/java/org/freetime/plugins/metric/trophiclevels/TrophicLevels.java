@@ -147,7 +147,7 @@ public class TrophicLevels implements Statistics {
                     diag.set(i, i, w.get(i));
                 }
 
-                // Let us now create sparse matrices from our results.
+                // Let us now create matrices from our results.
                 Matrix adj = new Basic2DMatrix(adj_mat);
                 Matrix sum = adj.add(adj.transpose());
 
