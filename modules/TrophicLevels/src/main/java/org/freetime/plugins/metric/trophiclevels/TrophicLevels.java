@@ -183,7 +183,7 @@ public class TrophicLevels implements Statistics {
             + "<br> <br />"
             + "</BODY></HTML>";
         }
-        // Unlock the graph after we're finished.
+        // Unlock the graph after we're finished.q
         hgraph.readUnlock();
     }
     
