@@ -1,4 +1,4 @@
-## EventGraphLayout
+## Ordered Layout
 
 Author: Wouter Spekkink (wouterspekkink(at)gmail.com)
 

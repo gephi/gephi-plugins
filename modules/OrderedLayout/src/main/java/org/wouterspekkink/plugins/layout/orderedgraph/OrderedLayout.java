@@ -230,11 +230,11 @@ public class OrderedLayout implements Layout {
 
                 if (vertical)
                 {
-                  n.setY(ordFloat);
+                  n.setY(-ordFloat);
                   if (force) {
-                      n.setX((float) y);
+                      n.setX((float) x);
                   } else {
-                      n.setX(n.y());
+                      n.setX(n.x());
                   }
                 } else {
                     n.setX(ordFloat);

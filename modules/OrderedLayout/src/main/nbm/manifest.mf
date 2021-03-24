@@ -1,5 +1,5 @@
 Manifest-Version: 1.0
-OpenIDE-Module-Name: EventGraphLayout
-OpenIDE-Module-Short-Description: Layout algorithm for event graphs
+OpenIDE-Module-Name: OrderedLayout
+OpenIDE-Module-Short-Description: Layout algorithm for ordered graphs
 OpenIDE-Module-Display-Category: Layout
-OpenIDE-Module-Localizing-Bundle: org/wouterspekkink/plugins/layout/eventgraph/Bundle.properties
+OpenIDE-Module-Localizing-Bundle: org/wouterspekkink/plugins/layout/orderedlayout/Bundle.properties

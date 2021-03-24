@@ -8,7 +8,7 @@
     </parent>
 
     <groupId>wouterspekkink</groupId>
-    <artifactId>eventgraphlayout</artifactId>
+    <artifactId>orderedlayout</artifactId>
     <version>1.0.0</version>
     <packaging>nbm</packaging>
 
@@ -49,7 +49,6 @@
                     <author>Wouter Spekkink</author>
                     <authorEmail>wouterspekkink@gmail.com</authorEmail>
                     <authorUrl>www.wouterspekkink.org</authorUrl>
-                    <sourceCodeUrl>https://github.com/WouterSpekkink/gephi-plugins/tree/eventgraphlayout</sourceCodeUrl>
                     <publicPackages>
                         <!-- Insert public packages -->
                         <publicPackage></publicPackage>
