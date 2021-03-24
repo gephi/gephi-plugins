@@ -39,30 +39,64 @@ Contributor(s):
 
 Portions Copyrighted 2011 Gephi Consortium.
  */
+package org.wouterspekkink.plugins.layout.orderedgraph;
 
-package org.wouterspekkink.plugins.layout.eventgraph;
-
-import org.gephi.graph.api.Node;
-import org.wouterspekkink.plugins.layout.eventgraph.ForceFactory.RepulsionForce;
+import javax.swing.Icon;
+import javax.swing.JPanel;
+import org.gephi.layout.spi.Layout;
+import org.gephi.layout.spi.LayoutBuilder;
+import org.gephi.layout.spi.LayoutUI;
+import org.openide.util.lookup.ServiceProvider;
 
 /**
  *
  * @author Mathieu Jacomy
  */
-public class OperationNodeRepulse extends Operation {
-    private Node n;
-    private RepulsionForce f;
-    private double coefficient;
+@ServiceProvider(service = LayoutBuilder.class)
+public class OrderedLayoutBuilder implements LayoutBuilder {
+    private TimeForceUI ui = new TimeForceUI();
 
-    public OperationNodeRepulse(Node n, RepulsionForce f, double coefficient) {
-        this.n = n;
-        this.f = f;
-        this.coefficient = coefficient;
+    @Override
+    public String getName() {
+        return "Ordered Graph Layout";
     }
 
     @Override
-    public void execute() {
-        f.apply(n, coefficient);
+    public LayoutUI getUI() {
+        return ui;
     }
-    
+
+    @Override
+    public OrderedLayout buildLayout() {
+        OrderedLayout layout = new OrderedLayout(this);
+        return layout;
+    }
+
+    private class TimeForceUI implements LayoutUI {
+
+        @Override
+        public String getDescription() {
+            return "A layout plugin for ordered graphs.";
+        }
+
+        @Override
+        public Icon getIcon() {
+            return null;
+        }
+
+        @Override
+        public JPanel getSimplePanel(Layout layout) {
+            return null;
+        }
+
+        @Override
+        public int getQualityRank() {
+            return 4;
+        }
+
+        @Override
+        public int getSpeedRank() {
+            return 4;
+        }
+    }
 }

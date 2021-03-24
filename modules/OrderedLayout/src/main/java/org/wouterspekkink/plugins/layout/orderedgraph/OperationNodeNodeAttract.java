@@ -40,7 +40,7 @@
  Portions Copyrighted 2011 Gephi Consortium.
  */
 
-package org.wouterspekkink.plugins.layout.eventgraph;
+package org.wouterspekkink.plugins.layout.orderedgraph;
 
 /**
  *

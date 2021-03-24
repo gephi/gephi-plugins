@@ -39,64 +39,15 @@ Contributor(s):
 
 Portions Copyrighted 2011 Gephi Consortium.
  */
-package org.wouterspekkink.plugins.layout.eventgraph;
 
-import javax.swing.Icon;
-import javax.swing.JPanel;
-import org.gephi.layout.spi.Layout;
-import org.gephi.layout.spi.LayoutBuilder;
-import org.gephi.layout.spi.LayoutUI;
-import org.openide.util.lookup.ServiceProvider;
+package org.wouterspekkink.plugins.layout.orderedgraph;
 
 /**
  *
  * @author Mathieu Jacomy
  */
-@ServiceProvider(service = LayoutBuilder.class)
-public class TimeForceBuilder implements LayoutBuilder {
-    private TimeForceUI ui = new TimeForceUI();
-
-    @Override
-    public String getName() {
-        return "Event Graph Layout";
-    }
-
-    @Override
-    public LayoutUI getUI() {
-        return ui;
-    }
-
-    @Override
-    public TimeForce buildLayout() {
-        TimeForce layout = new TimeForce(this);
-        return layout;
-    }
-
-    private class TimeForceUI implements LayoutUI {
-
-        @Override
-        public String getDescription() {
-            return "A layout plugin for event graphs.";
-        }
-
-        @Override
-        public Icon getIcon() {
-            return null;
-        }
-
-        @Override
-        public JPanel getSimplePanel(Layout layout) {
-            return null;
-        }
-
-        @Override
-        public int getQualityRank() {
-            return 4;
-        }
-
-        @Override
-        public int getSpeedRank() {
-            return 4;
-        }
-    }
+public abstract class Operation {
+    
+    public abstract void execute();
+    
 }

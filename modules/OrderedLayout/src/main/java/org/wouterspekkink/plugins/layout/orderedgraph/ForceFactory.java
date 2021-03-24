@@ -42,7 +42,7 @@
 
  Portions Copyrighted 2011 Gephi Consortium.
  */
-package org.wouterspekkink.plugins.layout.eventgraph;
+package org.wouterspekkink.plugins.layout.orderedgraph;
 
 import org.gephi.graph.api.Node;
 
@@ -92,8 +92,8 @@ public class ForceFactory {
 
         @Override
         public void apply(Node n1, Node n2) {
-            TimeForceLayoutData n1Layout = n1.getLayoutData();
-            TimeForceLayoutData n2Layout = n2.getLayoutData();
+            OrderedLayoutData n1Layout = n1.getLayoutData();
+            OrderedLayoutData n2Layout = n2.getLayoutData();
 
             // Get the distance
             double xDist = n1.x() - n2.x();
@@ -114,7 +114,7 @@ public class ForceFactory {
 
         @Override
         public void apply(Node n, double g) {
-            TimeForceLayoutData nLayout = n.getLayoutData();
+            OrderedLayoutData nLayout = n.getLayoutData();
 
             // Get the distance
             double xDist = n.x();
@@ -147,7 +147,7 @@ public class ForceFactory {
 
         @Override
         public void apply(Node n, double g) {
-            TimeForceLayoutData nLayout = n.getLayoutData();
+            OrderedLayoutData nLayout = n.getLayoutData();
 
             // Get the distance
             double xDist = n.x();
@@ -175,8 +175,8 @@ public class ForceFactory {
 
         @Override
         public void apply(Node n1, Node n2, double e) {
-            TimeForceLayoutData n1Layout = n1.getLayoutData();
-            TimeForceLayoutData n2Layout = n2.getLayoutData();
+            OrderedLayoutData n1Layout = n1.getLayoutData();
+            OrderedLayoutData n2Layout = n2.getLayoutData();
 
             // Get the distance
             double xDist = n1.x() - n2.x();

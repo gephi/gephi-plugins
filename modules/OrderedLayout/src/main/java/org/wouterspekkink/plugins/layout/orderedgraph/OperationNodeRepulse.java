@@ -40,18 +40,29 @@ Contributor(s):
 Portions Copyrighted 2011 Gephi Consortium.
  */
 
-package org.wouterspekkink.plugins.layout.eventgraph;
+package org.wouterspekkink.plugins.layout.orderedgraph;
 
-import org.gephi.graph.spi.LayoutData;
+import org.gephi.graph.api.Node;
+import org.wouterspekkink.plugins.layout.orderedgraph.ForceFactory.RepulsionForce;
 
 /**
  *
  * @author Mathieu Jacomy
  */
-public class TimeForceLayoutData implements LayoutData {
-    public double dx = 0;
-    public double dy = 0;
-    public double old_dx = 0;
-    public double old_dy = 0;
-    public double mass = 1;
+public class OperationNodeRepulse extends Operation {
+    private Node n;
+    private RepulsionForce f;
+    private double coefficient;
+
+    public OperationNodeRepulse(Node n, RepulsionForce f, double coefficient) {
+        this.n = n;
+        this.f = f;
+        this.coefficient = coefficient;
+    }
+
+    @Override
+    public void execute() {
+        f.apply(n, coefficient);
+    }
+    
 }

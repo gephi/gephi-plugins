@@ -39,15 +39,50 @@ Contributor(s):
 
 Portions Copyrighted 2011 Gephi Consortium.
  */
+package org.wouterspekkink.plugins.layout.orderedgraph;
 
-package org.wouterspekkink.plugins.layout.eventgraph;
+import org.gephi.graph.api.Node;
+import org.wouterspekkink.plugins.layout.orderedgraph.ForceFactory.RepulsionForce;
 
 /**
  *
  * @author Mathieu Jacomy
  */
-public abstract class Operation {
-    
-    public abstract void execute();
-    
+public class NodesThread implements Runnable {
+
+    private Node[] nodes;
+    private int from;
+    private int to;
+    private RepulsionForce Repulsion;
+    private double gravity;
+    private RepulsionForce GravityForce;
+    private double scaling;
+
+    public NodesThread(Node[] nodes, int from, int to, double gravity, RepulsionForce GravityForce, double scaling, RepulsionForce Repulsion) {
+        this.nodes = nodes;
+        this.from = from;
+        this.to = to;
+        this.Repulsion = Repulsion;
+        this.gravity = gravity;
+        this.GravityForce = GravityForce;
+        this.scaling = scaling;
+    }
+
+    @Override
+    public void run() {
+        // Repulsion
+        for (int n1Index = from; n1Index < to; n1Index++) {
+            Node n1 = nodes[n1Index];
+            for (int n2Index = 0; n2Index < n1Index; n2Index++) {
+                Node n2 = nodes[n2Index];
+                Repulsion.apply(n1, n2);
+            }
+        }
+
+        // Gravity
+        for (int nIndex = from; nIndex < to; nIndex++) {
+            Node n = nodes[nIndex];
+            GravityForce.apply(n, gravity / scaling);
+        }
+    }
 }
