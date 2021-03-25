@@ -109,10 +109,10 @@ public class TrophicLevels implements Statistics {
                     nodes[i] = component.get(i);
                 }
                 
-                // We can already get the indegree and outdegree while we 
+                // We can already get the inweight and outweight while we 
                 // make the adjacency matrix
-                double[] indegree = new double[component.size()];
-                double[] outdegree = new double[component.size()];
+                double[] inweight = new double[component.size()];
+                double[] outweight = new double[component.size()];
 
                 // Now we iterate through all nodes
                 for (int i = 0; i < component.size(); i++) {
@@ -123,8 +123,8 @@ public class TrophicLevels implements Statistics {
                         if (hgraph.getEdge(nodes[i], nodes[j]) != null) {
                             // Let's get the weight of the edge between these nodes
                             double weight = hgraph.getEdge(nodes[i], nodes[j]).getWeight();
-                            outdegree[i] += weight;
-                            indegree[j] += weight;
+                            outweight[i] += weight;
+                            inweight[j] += weight;
                             // And then fill the corresponding cell of the matrix
                             adj_mat[i][j] = weight;
                         }
@@ -135,8 +135,8 @@ public class TrophicLevels implements Statistics {
                 double[] vA = new double[component.size()];
                 double[] wA = new double[component.size()];
                 for (int i = 0; i < component.size(); i++) {
-                    vA[i] = indegree[i] - outdegree[i];
-                    wA[i] = indegree[i] + outdegree[i];
+                    vA[i] = inweight[i] - outweight[i];
+                    wA[i] = inweight[i] + outweight[i];
                 }
                 Vector v = new BasicVector(vA);
                 Vector w = new BasicVector(wA);
