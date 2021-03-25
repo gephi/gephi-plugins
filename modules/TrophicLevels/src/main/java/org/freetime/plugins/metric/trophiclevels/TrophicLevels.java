@@ -167,6 +167,35 @@ public class TrophicLevels implements Statistics {
                 for (int i = 0; i < component.size(); i++) {
                    nodes[i].setAttribute(col, results[i]);
                 }
+                
+                // An attempt to also calculate the trophic incoherence
+                
+                // First initialize the numinator and denominator
+                double numerator = 0.0;
+                double denominator = 0.0;
+                for (int i = 0; i < component.size(); i++) {
+                    for (int j = 0; j < component.size(); j++) {
+                        // It only makes sense to do this if there is an edge 
+                        if (hgraph.getEdge(nodes[i], nodes[j]) != null) {
+                            // Get the weight of the edge between the two nodes
+                            double weight = hgraph.getEdge(nodes[i], nodes[j]).getWeight();                
+                            // Let's immediately add this to the sum of weights (denominator)
+                            denominator += weight;
+                            // Get the trophic level of the nodes
+                            double hi = results[i];
+                            double hj = results[j];
+                            // Then we can add to the numerator
+                            numerator += weight * ((hj - hi - 1) * (hj -hi - 1));
+                        }
+                    }
+                }
+                double F_0 = numerator / denominator;
+                
+                for (int i = 0; i < component.size(); i++) {
+                
+                    
+                    
+                
                 // What the report is upon success.
                 report = "<HTML? <BODY> <h1>Trophic levels</h1> "
                 + "<hr>"
