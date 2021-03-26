@@ -5,6 +5,7 @@
  */
 package org.freetime.plugins.metric.trophiclevels;
 
+import java.text.DecimalFormat;
 import javax.swing.JPanel;
 import org.gephi.statistics.spi.Statistics;
 import org.gephi.statistics.spi.StatisticsUI;

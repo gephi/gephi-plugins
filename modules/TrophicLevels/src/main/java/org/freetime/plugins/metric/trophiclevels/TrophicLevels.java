@@ -8,6 +8,8 @@ package org.freetime.plugins.metric.trophiclevels;
 
 import java.util.LinkedList;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 
 import org.gephi.graph.api.Graph;
 import org.gephi.graph.api.GraphModel;
@@ -39,8 +41,10 @@ import org.la4j.linear.GaussianSolver;
 
 public class TrophicLevels implements Statistics {
     
-    public static final String TROPHICLEVELS = "TrophicLevels";
+    public static final String TROPHICLEVEL = "TrophicLevel";
+    public static final String COMPONENT = "Component";
     private boolean isDirected;
+    private Map<Integer, Double> incoherenceMap = new HashMap();
     public String report;
     
     public TrophicLevels() {
@@ -49,8 +53,6 @@ public class TrophicLevels implements Statistics {
             isDirected = graphController.getGraphModel().isDirected();
         }       
     }
-    
-    
     
     @Override
     public void execute(GraphModel graphModel) {
@@ -67,7 +69,7 @@ public class TrophicLevels implements Statistics {
     // This is where the actual work is done.
     public void execute(Graph hgraph, GraphModel graphModel) {
         // Let's make a default report in case something went wrong:
-        report = "<HTML? <BODY> <h1>Trophic levels</h1> "
+        report = "<HTML? <BODY> <h1>Trophic level</h1> "
             + "<hr>"
             + "<br> Something went wrong and the function did not fully execute. <br />"
             + "<br> <br />"
@@ -76,9 +78,10 @@ public class TrophicLevels implements Statistics {
         if (graphModel.isDirected()) {
             // Add column for trophic levels if not already there
             Table nodeTable = graphModel.getNodeTable();
-            Column col = nodeTable.getColumn(TROPHICLEVELS);
-            if (col == null) {
-             col = nodeTable.addColumn(TROPHICLEVELS, "TrophicLevels", Double.class, 0.0);
+            Column trophcol = nodeTable.getColumn(TROPHICLEVEL);
+            Column compcol = nodeTable.getColumn(COMPONENT);
+            if (trophcol == null) {
+             trophcol = nodeTable.addColumn(TROPHICLEVEL, "TrophicLevel", Double.class, 0.0);
             } 
             // Lock the graph while we are working with it.
             hgraph.readLock();
@@ -90,9 +93,25 @@ public class TrophicLevels implements Statistics {
             HashMap<Node, Integer> indices = componentsModule.createIndicesMap(undirectedGraph);
             LinkedList<LinkedList<Node>> components = componentsModule.computeWeaklyConnectedComponents(undirectedGraph, indices);
 
-            // Now we treat each component as a separate network.
-            for (LinkedList<Node> component : components) {
+            // Add component variable if we have multiple components.
+            if (components.size() > 1)
+            {
+                if (compcol == null) {
+                    compcol = nodeTable.addColumn(COMPONENT, "Component", Integer.class, 0);
+                }   
+                int c = 1;
+                for (LinkedList<Node> component : components) {
+                    for (Node currentNode : component) {
+                        currentNode.setAttribute(compcol, c);
+                    }
+                    c++;
+                }
+            }
 
+            // Now we treat each component as a separate network.
+            // Let's keep track of component numbers, starting with 1.
+            int c = 1;
+            for (LinkedList<Node> component : components) {
                 // Now we reconstruct our adjacency matrix
                 // We make an empty matrix first.
                 double[][] adj_mat = new double[component.size()][component.size()];
@@ -117,7 +136,7 @@ public class TrophicLevels implements Statistics {
                 // Now we iterate through all nodes
                 for (int i = 0; i < component.size(); i++) {
                     // First initialize the attribute
-                    nodes[i].setAttribute(col, 0.0);
+                    nodes[i].setAttribute(trophcol, 0.0);
                     // Now let us find all targets of this node and iterate through them
                     for (int j = 0; j < component.size(); j++) {
                         if (hgraph.getEdge(nodes[i], nodes[j]) != null) {
@@ -165,7 +184,7 @@ public class TrophicLevels implements Statistics {
                 DenseVector hD = h.toDenseVector();
                 double[] results = hD.toArray();
                 for (int i = 0; i < component.size(); i++) {
-                   nodes[i].setAttribute(col, results[i]);
+                   nodes[i].setAttribute(trophcol, results[i]);
                 }
                 
                 // An attempt to also calculate the trophic incoherence
@@ -189,21 +208,27 @@ public class TrophicLevels implements Statistics {
                         }
                     }
                 }
-                double F_0 = numerator / denominator;
+                double incoherence= numerator / denominator;
+
+                // Keep track of trophic incoherence for this component
+                incoherenceMap.put(c, incoherence);
                 
-                for (int i = 0; i < component.size(); i++) {
-                
-                    
-                    
-                
-                // What the report is upon success.
-                report = "<HTML? <BODY> <h1>Trophic levels</h1> "
-                + "<hr>"
-                + "<br> The results are reported in the TrophicLevels column (see data laboratory). <br />"
-                + "<br> <br />"
-                + "</BODY></HTML>";
-                }
-            }
+                // Increment component number; Last thing we do in this loop. 
+                c++;
+            }            
+        // What the report is upon success.
+        report = "<HTML? <BODY> <h1>Trophic levels</h1> "
+        + "<hr>"
+        + "<br> The trophic levels of each node are reported in the TrophicLevels column (see data laboratory). <br />";
+        // We need to add the trophic incoherence for each component separately.
+        Iterator<Map.Entry<Integer, Double>> entrySet = incoherenceMap.entrySet().iterator();
+        while (entrySet.hasNext()) {
+            Map.Entry<Integer, Double> entry = entrySet.next();
+                report += "<br>" + "Trophic Incoherence of component " + entry.getKey() + ":  " + entry.getValue() + "</br>";
+        }
+        report += "<br> <br />"
+        + "</BODY></HTML>";
+        }   
         else {
             // Report if graph is undirected.
             report = "<HTML? <BODY> <h1>Trophic levels</h1> "

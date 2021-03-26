@@ -27,30 +27,66 @@ public class TrophicLevelsPanel extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jLabel1 = new javax.swing.JLabel();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        jTextPane1 = new javax.swing.JTextPane();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jTextArea1 = new javax.swing.JTextArea();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        jTextArea2 = new javax.swing.JTextArea();
+        jXFindBar1 = new org.jdesktop.swingx.JXFindBar();
+        org.jdesktop.swingx.JXHeader Header = new org.jdesktop.swingx.JXHeader();
 
-        jLabel1.setText(org.openide.util.NbBundle.getMessage(TrophicLevelsPanel.class, "TrophicLevelsPanel.jLabel1.text_1")); // NOI18N
+        jScrollPane2.setViewportView(jTextPane1);
+
+        jTextArea1.setColumns(20);
+        jTextArea1.setRows(5);
+        jScrollPane1.setViewportView(jTextArea1);
+
+        jTextArea2.setColumns(20);
+        jTextArea2.setRows(5);
+        jScrollPane3.setViewportView(jTextArea2);
+
+        javax.swing.GroupLayout jXFindBar1Layout = new javax.swing.GroupLayout(jXFindBar1);
+        jXFindBar1.setLayout(jXFindBar1Layout);
+        jXFindBar1Layout.setHorizontalGroup(
+            jXFindBar1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 100, Short.MAX_VALUE)
+        );
+        jXFindBar1Layout.setVerticalGroup(
+            jXFindBar1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 100, Short.MAX_VALUE)
+        );
+
+        setName(""); // NOI18N
+
+        Header.setToolTipText(org.openide.util.NbBundle.getMessage(TrophicLevelsPanel.class, "TrophicLevelsPanel.Header.toolTipText")); // NOI18N
+        Header.setDescription(org.openide.util.NbBundle.getMessage(TrophicLevelsPanel.class, "TrophicLevelsPanel.Header.description")); // NOI18N
+        Header.setDescriptionFont(new java.awt.Font("Dialog", 0, 12)); // NOI18N
+        Header.setDoubleBuffered(false);
+        Header.setTitle(org.openide.util.NbBundle.getMessage(TrophicLevelsPanel.class, "TrophicLevelsPanel.Header.title")); // NOI18N
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(34, 34, 34)
-                .addComponent(jLabel1)
-                .addContainerGap(335, Short.MAX_VALUE))
+            .addComponent(Header, javax.swing.GroupLayout.PREFERRED_SIZE, 578, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(40, 40, 40)
-                .addComponent(jLabel1)
-                .addContainerGap(245, Short.MAX_VALUE))
+                .addComponent(Header, javax.swing.GroupLayout.PREFERRED_SIZE, 197, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 111, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel jLabel1;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JTextArea jTextArea1;
+    private javax.swing.JTextArea jTextArea2;
+    private javax.swing.JTextPane jTextPane1;
+    private org.jdesktop.swingx.JXFindBar jXFindBar1;
     // End of variables declaration//GEN-END:variables
 }
