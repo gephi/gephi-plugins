@@ -44,6 +44,7 @@ public class TrophicLevels implements Statistics {
     public static final String TROPHICLEVEL = "TrophicLevel";
     public static final String COMPONENT = "Component";
     private boolean isDirected;
+    private boolean singularWarning = false;
     private Map<Integer, Double> incoherenceMap = new HashMap();
     public String report;
     
@@ -81,7 +82,7 @@ public class TrophicLevels implements Statistics {
             Column trophcol = nodeTable.getColumn(TROPHICLEVEL);
             Column compcol = nodeTable.getColumn(COMPONENT);
             if (trophcol == null) {
-             trophcol = nodeTable.addColumn(TROPHICLEVEL, "TrophicLevel", Double.class, 0.0);
+             trophcol = nodeTable.addColumn(TROPHICLEVEL, "TrophicLevel", Double.class, null);
             } 
             // Lock the graph while we are working with it.
             hgraph.readLock();
@@ -112,107 +113,113 @@ public class TrophicLevels implements Statistics {
             // Let's keep track of component numbers, starting with 1.
             int c = 1;
             for (LinkedList<Node> component : components) {
-                // Now we reconstruct our adjacency matrix
-                // We make an empty matrix first.
-                double[][] adj_mat = new double[component.size()][component.size()];
-                // And let's initialize it to be sure
-                for (int x = 0; x < component.size(); x++) {
-                    for (int y = 0; y < component.size(); y++) {
-                        adj_mat[x][y] = 0.0;
-                     }
-                }
-                
-                // We will create an array of nodes of the current component.
-                Node[] nodes = new Node[component.size()];
-                for (int i =0; i < component.size(); i++) {
-                    nodes[i] = component.get(i);
-                }
-                
-                // We can already get the inweight and outweight while we 
-                // make the adjacency matrix
-                double[] inweight = new double[component.size()];
-                double[] outweight = new double[component.size()];
+                // Ignore components that are singular systems
+                if (component.size() > 1 )
+                {
+                    // Now we reconstruct our adjacency matrix
+                    // We make an empty matrix first.
+                    double[][] adj_mat = new double[component.size()][component.size()];
+                    // And let's initialize it to be sure
+                    for (int x = 0; x < component.size(); x++) {
+                        for (int y = 0; y < component.size(); y++) {
+                            adj_mat[x][y] = 0.0;
+                         }
+                    }
 
-                // Now we iterate through all nodes
-                for (int i = 0; i < component.size(); i++) {
-                    // First initialize the attribute
-                    nodes[i].setAttribute(trophcol, 0.0);
-                    // Now let us find all targets of this node and iterate through them
-                    for (int j = 0; j < component.size(); j++) {
-                        if (hgraph.getEdge(nodes[i], nodes[j]) != null) {
-                            // Let's get the weight of the edge between these nodes
-                            double weight = hgraph.getEdge(nodes[i], nodes[j]).getWeight();
-                            outweight[i] += weight;
-                            inweight[j] += weight;
-                            // And then fill the corresponding cell of the matrix
-                            adj_mat[i][j] = weight;
+                    // We will create an array of nodes of the current component.
+                    Node[] nodes = new Node[component.size()];
+                    for (int i =0; i < component.size(); i++) {
+                        nodes[i] = component.get(i);
+                    }
+
+                    // We can already get the inweight and outweight while we 
+                    // make the adjacency matrix
+                    double[] inweight = new double[component.size()];
+                    double[] outweight = new double[component.size()];
+
+                    // Now we iterate through all nodes
+                    for (int i = 0; i < component.size(); i++) {
+                        // First initialize the attribute
+                        nodes[i].setAttribute(trophcol, 0.0);
+                        // Now let us find all targets of this node and iterate through them
+                        for (int j = 0; j < component.size(); j++) {
+                            if (hgraph.getEdge(nodes[i], nodes[j]) != null) {
+                                // Let's get the weight of the edge between these nodes
+                                double weight = hgraph.getEdge(nodes[i], nodes[j]).getWeight();
+                                outweight[i] += weight;
+                                inweight[j] += weight;
+                                // And then fill the corresponding cell of the matrix
+                                adj_mat[i][j] = weight;
+                            }
                         }
                     }
-                }
 
-                // Let us create the v and w variables
-                double[] vA = new double[component.size()];
-                double[] wA = new double[component.size()];
-                for (int i = 0; i < component.size(); i++) {
-                    vA[i] = inweight[i] - outweight[i];
-                    wA[i] = inweight[i] + outweight[i];
-                }
-                Vector v = new BasicVector(vA);
-                Vector w = new BasicVector(wA);
+                    // Let us create the v and w variables
+                    double[] vA = new double[component.size()];
+                    double[] wA = new double[component.size()];
+                    for (int i = 0; i < component.size(); i++) {
+                        vA[i] = inweight[i] - outweight[i];
+                        wA[i] = inweight[i] + outweight[i];
+                    }
+                    Vector v = new BasicVector(vA);
+                    Vector w = new BasicVector(wA);
 
-                // Let's create the diagonal matrix from w.
-                Matrix diag = new Basic2DMatrix(component.size(),component.size());
-                for (int i = 0; i < component.size(); i++) {
-                    diag.set(i, i, w.get(i));
-                }
+                    // Let's create the diagonal matrix from w.
+                    Matrix diag = new Basic2DMatrix(component.size(),component.size());
+                    for (int i = 0; i < component.size(); i++) {
+                        diag.set(i, i, w.get(i));
+                    }
 
-                // Let us now create matrices from our results.
-                Matrix adj = new Basic2DMatrix(adj_mat);
-                Matrix sum = adj.add(adj.transpose());
+                    // Let us now create matrices from our results.
+                    Matrix adj = new Basic2DMatrix(adj_mat);
+                    Matrix sum = adj.add(adj.transpose());
 
-                // And now we prepare our matrix for the linear solver.
-                Matrix L = diag.subtract(sum);
-                L.set(0, 0, 0.0);
+                    // And now we prepare our matrix for the linear solver.
+                    Matrix L = diag.subtract(sum);
+                    L.set(0, 0, 0.0);
 
-                // The vector for results
-                Vector h;
+                    // The vector for results
+                    Vector h;
 
-                // The actual solver from the la4j library
-                GaussianSolver solver = new GaussianSolver(L);
-                h = solver.solve(v);
-                h = h.subtract(h.min());
-                DenseVector hD = h.toDenseVector();
-                double[] results = hD.toArray();
-                for (int i = 0; i < component.size(); i++) {
-                   nodes[i].setAttribute(trophcol, results[i]);
-                }
-                
-                // An attempt to also calculate the trophic incoherence
-                
-                // First initialize the numinator and denominator
-                double numerator = 0.0;
-                double denominator = 0.0;
-                for (int i = 0; i < component.size(); i++) {
-                    for (int j = 0; j < component.size(); j++) {
-                        // It only makes sense to do this if there is an edge 
-                        if (hgraph.getEdge(nodes[i], nodes[j]) != null) {
-                            // Get the weight of the edge between the two nodes
-                            double weight = hgraph.getEdge(nodes[i], nodes[j]).getWeight();                
-                            // Let's immediately add this to the sum of weights (denominator)
-                            denominator += weight;
-                            // Get the trophic level of the nodes
-                            double hi = results[i];
-                            double hj = results[j];
-                            // Then we can add to the numerator
-                            numerator += weight * ((hj - hi - 1) * (hj -hi - 1));
+                    // The actual solver from the la4j library
+                    GaussianSolver solver = new GaussianSolver(L);
+                    h = solver.solve(v);
+                    h = h.subtract(h.min());
+                    DenseVector hD = h.toDenseVector();
+                    double[] results = hD.toArray();
+                    for (int i = 0; i < component.size(); i++) {
+                       nodes[i].setAttribute(trophcol, results[i]);
+                    }
+
+                    // An attempt to also calculate the trophic incoherence
+
+                    // First initialize the numinator and denominator
+                    double numerator = 0.0;
+                    double denominator = 0.0;
+                    for (int i = 0; i < component.size(); i++) {
+                        for (int j = 0; j < component.size(); j++) {
+                            // It only makes sense to do this if there is an edge 
+                            if (hgraph.getEdge(nodes[i], nodes[j]) != null) {
+                                // Get the weight of the edge between the two nodes
+                                double weight = hgraph.getEdge(nodes[i], nodes[j]).getWeight();                
+                                // Let's immediately add this to the sum of weights (denominator)
+                                denominator += weight;
+                                // Get the trophic level of the nodes
+                                double hi = results[i];
+                                double hj = results[j];
+                                // Then we can add to the numerator
+                                numerator += weight * ((hj - hi - 1) * (hj -hi - 1));
+                            }
                         }
                     }
-                }
-                double incoherence= numerator / denominator;
+                    double incoherence= numerator / denominator;
 
-                // Keep track of trophic incoherence for this component
-                incoherenceMap.put(c, incoherence);
-                
+                    // Keep track of trophic incoherence for this component
+                    incoherenceMap.put(c, incoherence);
+                }
+                else {
+                    singularWarning = true;
+                }
                 // Increment component number; Last thing we do in this loop. 
                 c++;
             }            
@@ -224,18 +231,24 @@ public class TrophicLevels implements Statistics {
         Iterator<Map.Entry<Integer, Double>> entrySet = incoherenceMap.entrySet().iterator();
         while (entrySet.hasNext()) {
             Map.Entry<Integer, Double> entry = entrySet.next();
-                report += "<br>" + "Trophic Incoherence of component " + entry.getKey() + ":  " + entry.getValue() + "</br>";
+                report += "<br>" + "Trophic Incoherence of component " + entry.getKey() + ":  " + entry.getValue() + "<br />";
         }
-        report += "<br> <br />"
-        + "</BODY></HTML>";
+        report += "<br> </br>";
+        if (singularWarning) { 
+            report += "<br> Components with single nodes were found."
+            + "These components are skipped in the calculation of trophic levels and trophic incoherence.<br />"
+            + "<br> <br />";
+        }
+
+        report += "</BODY></HTML>";
         }   
         else {
             // Report if graph is undirected.
             report = "<HTML? <BODY> <h1>Trophic levels</h1> "
             + "<hr>"
             + "<br> The Trophic Levels metric only applies to directed graphs. <br />"
-            + "<br> <br />"
-            + "</BODY></HTML>";
+            + "<br> <br />";
+            report += "</BODY></HTML>";
         }
         // Unlock the graph after we're finished.q
         hgraph.readUnlock();
