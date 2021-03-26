@@ -100,7 +100,7 @@ public class TrophicLevels implements Statistics {
                 if (compcol == null) {
                     compcol = nodeTable.addColumn(COMPONENT, "Component", Integer.class, 0);
                 }   
-                int c = 1;
+                int c = 0;
                 for (LinkedList<Node> component : components) {
                     for (Node currentNode : component) {
                         currentNode.setAttribute(compcol, c);
@@ -111,7 +111,7 @@ public class TrophicLevels implements Statistics {
 
             // Now we treat each component as a separate network.
             // Let's keep track of component numbers, starting with 1.
-            int c = 1;
+            int c = 0;
             for (LinkedList<Node> component : components) {
                 // Ignore components that are singular systems
                 if (component.size() > 1 )
