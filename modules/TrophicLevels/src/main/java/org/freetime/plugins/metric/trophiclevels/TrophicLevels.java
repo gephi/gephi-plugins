@@ -1,8 +1,8 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+* To change this license header, choose License Headers in Project Properties.
+* To change this template file, choose Tools | Templates
+* and open the template in the editor.
+*/
 
 package org.freetime.plugins.metric.trophiclevels;
 
@@ -44,6 +44,7 @@ public class TrophicLevels implements Statistics {
     public static final String TROPHICLEVEL = "TrophicLevel";
     public static final String COMPONENT = "Component";
     private boolean isDirected;
+    private boolean negativeWeights = false;
     private boolean singularWarning = false;
     private Map<Integer, Double> incoherenceMap = new HashMap();
     public String report;
@@ -52,7 +53,7 @@ public class TrophicLevels implements Statistics {
         GraphController graphController = Lookup.getDefault().lookup(GraphController.class);
         if (graphController != null && graphController.getGraphModel() != null) {
             isDirected = graphController.getGraphModel().isDirected();
-        }       
+        }
     }
     
     @Override
@@ -71,10 +72,10 @@ public class TrophicLevels implements Statistics {
     public void execute(Graph hgraph, GraphModel graphModel) {
         // Let's make a default report in case something went wrong:
         report = "<HTML? <BODY> <h1>Trophic level</h1> "
-            + "<hr>"
-            + "<br> Something went wrong and the function did not fully execute. <br />"
-            + "<br> <br />"
-            + "</BODY></HTML>";
+                + "<hr>"
+                + "<br> Something went wrong and the function did not fully execute. <br />"
+                + "<br> <br />"
+                + "</BODY></HTML>";
         // We check if the graph is directed. If not, we report this to the user and return.
         if (graphModel.isDirected()) {
             // Add column for trophic levels if not already there
@@ -82,8 +83,8 @@ public class TrophicLevels implements Statistics {
             Column trophcol = nodeTable.getColumn(TROPHICLEVEL);
             Column compcol = nodeTable.getColumn(COMPONENT);
             if (trophcol == null) {
-             trophcol = nodeTable.addColumn(TROPHICLEVEL, "TrophicLevel", Double.class, null);
-            } 
+                trophcol = nodeTable.addColumn(TROPHICLEVEL, "TrophicLevel", Double.class, null);
+            }
             // Lock the graph while we are working with it.
             hgraph.readLock();
             // We want to check if there are weakly connected components.
@@ -93,13 +94,13 @@ public class TrophicLevels implements Statistics {
             ConnectedComponents componentsModule = new ConnectedComponents();
             HashMap<Node, Integer> indices = componentsModule.createIndicesMap(undirectedGraph);
             LinkedList<LinkedList<Node>> components = componentsModule.computeWeaklyConnectedComponents(undirectedGraph, indices);
-
+            
             // Add component variable if we have multiple components.
             if (components.size() > 1)
             {
                 if (compcol == null) {
                     compcol = nodeTable.addColumn(COMPONENT, "Component", Integer.class, 0);
-                }   
+                }
                 int c = 0;
                 for (LinkedList<Node> component : components) {
                     for (Node currentNode : component) {
@@ -108,7 +109,7 @@ public class TrophicLevels implements Statistics {
                     c++;
                 }
             }
-
+            
             // Now we treat each component as a separate network.
             // Let's keep track of component numbers, starting with 1.
             int c = 0;
@@ -123,20 +124,20 @@ public class TrophicLevels implements Statistics {
                     for (int x = 0; x < component.size(); x++) {
                         for (int y = 0; y < component.size(); y++) {
                             adj_mat[x][y] = 0.0;
-                         }
+                        }
                     }
-
+                    
                     // We will create an array of nodes of the current component.
                     Node[] nodes = new Node[component.size()];
                     for (int i =0; i < component.size(); i++) {
                         nodes[i] = component.get(i);
                     }
-
-                    // We can already get the inweight and outweight while we 
+                    
+                    // We can already get the inweight and outweight while we
                     // make the adjacency matrix
                     double[] inweight = new double[component.size()];
                     double[] outweight = new double[component.size()];
-
+                    
                     // Now we iterate through all nodes
                     for (int i = 0; i < component.size(); i++) {
                         // First initialize the attribute
@@ -146,6 +147,13 @@ public class TrophicLevels implements Statistics {
                             if (hgraph.getEdge(nodes[i], nodes[j]) != null) {
                                 // Let's get the weight of the edge between these nodes
                                 double weight = hgraph.getEdge(nodes[i], nodes[j]).getWeight();
+                                if (weight < 0)
+                                {
+                                    // If we find a negative weight, set the corresponding boolean to true
+                                    negativeWeights = true;
+                                    // ... and turn it into a positive weight.
+                                    weight *= -1;
+                                }
                                 outweight[i] += weight;
                                 inweight[j] += weight;
                                 // And then fill the corresponding cell of the matrix
@@ -153,7 +161,7 @@ public class TrophicLevels implements Statistics {
                             }
                         }
                     }
-
+                    
                     // Let us create the v and w variables
                     double[] vA = new double[component.size()];
                     double[] wA = new double[component.size()];
@@ -163,24 +171,24 @@ public class TrophicLevels implements Statistics {
                     }
                     Vector v = new BasicVector(vA);
                     Vector w = new BasicVector(wA);
-
+                    
                     // Let's create the diagonal matrix from w.
                     Matrix diag = new Basic2DMatrix(component.size(),component.size());
                     for (int i = 0; i < component.size(); i++) {
                         diag.set(i, i, w.get(i));
                     }
-
+                    
                     // Let us now create matrices from our results.
                     Matrix adj = new Basic2DMatrix(adj_mat);
                     Matrix sum = adj.add(adj.transpose());
-
+                    
                     // And now we prepare our matrix for the linear solver.
                     Matrix L = diag.subtract(sum);
                     L.set(0, 0, 0.0);
-
+                    
                     // The vector for results
                     Vector h;
-
+                    
                     // The actual solver from the la4j library
                     GaussianSolver solver = new GaussianSolver(L);
                     h = solver.solve(v);
@@ -188,20 +196,24 @@ public class TrophicLevels implements Statistics {
                     DenseVector hD = h.toDenseVector();
                     double[] results = hD.toArray();
                     for (int i = 0; i < component.size(); i++) {
-                       nodes[i].setAttribute(trophcol, results[i]);
+                        nodes[i].setAttribute(trophcol, results[i]);
                     }
-
+                    
                     // An attempt to also calculate the trophic incoherence
-
+                    
                     // First initialize the numinator and denominator
                     double numerator = 0.0;
                     double denominator = 0.0;
                     for (int i = 0; i < component.size(); i++) {
                         for (int j = 0; j < component.size(); j++) {
-                            // It only makes sense to do this if there is an edge 
+                            // It only makes sense to do this if there is an edge
                             if (hgraph.getEdge(nodes[i], nodes[j]) != null) {
                                 // Get the weight of the edge between the two nodes
-                                double weight = hgraph.getEdge(nodes[i], nodes[j]).getWeight();                
+                                double weight = hgraph.getEdge(nodes[i], nodes[j]).getWeight();
+                                // Convert negative weights to positive weights.
+                                if (weight < 0) {
+                                    weight *= -1;
+                                }
                                 // Let's immediately add this to the sum of weights (denominator)
                                 denominator += weight;
                                 // Get the trophic level of the nodes
@@ -213,45 +225,51 @@ public class TrophicLevels implements Statistics {
                         }
                     }
                     double incoherence= numerator / denominator;
-
+                    
                     // Keep track of trophic incoherence for this component
                     incoherenceMap.put(c, incoherence);
                 }
                 else {
                     singularWarning = true;
                 }
-                // Increment component number; Last thing we do in this loop. 
+                // Increment component number; Last thing we do in this loop.
                 c++;
-            }            
-        // What the report is upon success.
-        report = "<HTML? <BODY> <h1>Trophic levels</h1> "
-        + "<hr>"
-        + "<br> The trophic levels of each node are reported in the TrophicLevels column (see data laboratory). <br />";
-        // We need to add the trophic incoherence for each component separately.
-        Iterator<Map.Entry<Integer, Double>> entrySet = incoherenceMap.entrySet().iterator();
-        while (entrySet.hasNext()) {
-            Map.Entry<Integer, Double> entry = entrySet.next();
+            }
+            // Unlock the graph, since we're finished.
+            hgraph.readUnlock();
+            // What the report is upon success.
+            report = "<HTML? <BODY> <h1>Trophic levels</h1> "
+                    + "<hr>"
+                    + "<br> The trophic levels of each node are reported in the TrophicLevels column (see data laboratory). <br />";
+            // We need to add the trophic incoherence for each component separately.
+            Iterator<Map.Entry<Integer, Double>> entrySet = incoherenceMap.entrySet().iterator();
+            while (entrySet.hasNext()) {
+                Map.Entry<Integer, Double> entry = entrySet.next();
                 report += "<br>" + "Trophic Incoherence of component " + entry.getKey() + ":  " + entry.getValue() + "<br />";
-        }
-        report += "<br> </br>";
-        if (singularWarning) { 
-            report += "<br> Components with single nodes were found."
-            + "These components are skipped in the calculation of trophic levels and trophic incoherence.<br />"
-            + "<br> <br />";
-        }
-
-        report += "</BODY></HTML>";
-        }   
-        else {
+            }
+            report += "<br> </br>";
+            if (singularWarning) {
+                report += "<br> Components with single nodes were found. "
+                        + "These components are skipped in the calculation of trophic levels and trophic incoherence.<br />"
+                        + "<br> <br />";
+            }
+            if (negativeWeights) {
+                report += "<br> Please note that negative edge weights are treated as positive edge weights by this plugin. "
+                        + "This means that positive and negative edge weights contribute in the same way to determining the overall "
+                        + "direction of flows in the network.<br />"
+                        + "<br><br />";
+            }
+            report += "</BODY></HTML>";
+        } else {
             // Report if graph is undirected.
             report = "<HTML? <BODY> <h1>Trophic levels</h1> "
-            + "<hr>"
-            + "<br> The Trophic Levels metric only applies to directed graphs. <br />"
-            + "<br> <br />";
+                    + "<hr>"
+                    + "<br> The Trophic Levels metric only applies to directed graphs. <br />"
+                    + "<br> <br />";
             report += "</BODY></HTML>";
         }
         // Unlock the graph after we're finished.q
-        hgraph.readUnlock();
+        
     }
     
     public void setDirected(boolean isDirected) {
