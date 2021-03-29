@@ -86,6 +86,7 @@ public class OrderedLayout implements Layout {
     private ExecutorService pool;
     private boolean force;
     private boolean vertical;
+    private boolean inverted;
     private boolean center;
 
     public OrderedLayout(OrderedLayoutBuilder layoutBuilder) {
@@ -230,14 +231,22 @@ public class OrderedLayout implements Layout {
 
                 if (vertical)
                 {
-                  n.setY(-ordFloat);
-                  if (force) {
-                      n.setX((float) x);
-                  } else {
-                      n.setX(n.x());
-                  }
+                    if (inverted) {
+                        n.setY(ordFloat);
+                    } else {
+                        n.setY(-ordFloat);
+                    }
+                    if (force) {
+                        n.setX((float) x);
+                    } else {
+                        n.setX(n.x());
+                    }
                 } else {
-                    n.setX(ordFloat);
+                    if (inverted) {
+                        n.setX(-ordFloat);
+                    } else {
+                        n.setX(ordFloat);
+                    }
                     if (force) {
                         n.setY((float) y);
                     } else {
@@ -292,6 +301,12 @@ public class OrderedLayout implements Layout {
                     ORDEREDLAYOUT,
                     "Sets the layout to a vertical orientation",
                     "isVertical", "setVertical"));
+            properties.add(LayoutProperty.createProperty(
+                    this, Boolean.class,
+                    "Inverted layout",
+                    ORDEREDLAYOUT,
+                    "Inverts the layout",
+                    "isInverted", "setInverted"));
             properties.add(LayoutProperty.createProperty(
                     this, Double.class,
                     "Scale of Order",
@@ -375,6 +390,7 @@ public class OrderedLayout implements Layout {
         }
 
         setVertical(false);
+        setInverted(false);
         
         setOrderScale(10.0);
 
@@ -448,6 +464,14 @@ public class OrderedLayout implements Layout {
 
     public void setVertical(Boolean vertical) {
         this.vertical = vertical;
+    }
+    
+    public Boolean isInverted() {
+        return inverted;
+    }
+    
+    public void setInverted (Boolean inverted) {
+        this.inverted = inverted;
     }
     
     public Boolean isCenter() {
