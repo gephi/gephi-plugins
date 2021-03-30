@@ -44,17 +44,23 @@ public class TrophicLevelsUI implements StatisticsUI {
 
     @Override
     public String getValue() {
-        return "";
+        DecimalFormat df = new DecimalFormat("###.###");
+        double value = statistic.getIncoherence();
+        if (value != -1.0) {
+            return "" + df.format(value);
+        } else {
+            return "";
+        }
     }
 
     @Override
     public String getDisplayName() {
-        return "Trophic Levels";
+        return "Trophic Incoherence";
     }
 
     @Override
     public String getCategory() {
-        return StatisticsUI.CATEGORY_NODE_OVERVIEW;
+        return StatisticsUI.CATEGORY_NETWORK_OVERVIEW;
     }
 
     @Override

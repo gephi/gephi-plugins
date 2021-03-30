@@ -48,6 +48,7 @@ public class TrophicLevels implements Statistics {
     private boolean singularWarning = false;
     private Map<Integer, Double> incoherenceMap = new HashMap();
     public String report;
+    private double incoherenceStatistic;
     
     public TrophicLevels() {
         GraphController graphController = Lookup.getDefault().lookup(GraphController.class);
@@ -274,6 +275,16 @@ public class TrophicLevels implements Statistics {
     
     public void setDirected(boolean isDirected) {
         this.isDirected = isDirected;
+    }
+    
+    public double getIncoherence()
+    {
+        if (incoherenceMap.size() == 1) {
+            Map.Entry<Integer, Double> entry = incoherenceMap.entrySet().iterator().next();
+            return entry.getValue();
+        } else {
+            return -1.0;
+        }
     }
     
     @Override
