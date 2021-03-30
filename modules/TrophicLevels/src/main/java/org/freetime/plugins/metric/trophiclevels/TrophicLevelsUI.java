@@ -49,7 +49,7 @@ public class TrophicLevelsUI implements StatisticsUI {
 
     @Override
     public String getDisplayName() {
-        return "TrophicLevels";
+        return "Trophic Levels";
     }
 
     @Override
