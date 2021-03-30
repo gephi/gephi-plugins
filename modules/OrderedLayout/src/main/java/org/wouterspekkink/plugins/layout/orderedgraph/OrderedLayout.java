@@ -407,13 +407,15 @@ public class OrderedLayout implements Layout {
                         }
                     } 
                 }
-                double span = max - min;
-                if (span < 10.0) {
+                double range = max - min;
+                if (range < 10.0) {
                     setOrderScale(1000.0);
-                } else if (span < 100.0) {
+                } else if (range < 100.0) {
                     setOrderScale(100.0);
-                } else if (span < 1000) {
+                } else if (range < 1000) {
                     setOrderScale(10.0);
+                } else if (range < 10000) {
+                    setOrderScale(1.0);
                 }
             }
         }
