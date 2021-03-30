@@ -308,17 +308,17 @@ public class OrderedLayout implements Layout {
                     "Inverts the layout",
                     "isInverted", "setInverted"));
             properties.add(LayoutProperty.createProperty(
-                    this, Double.class,
-                    "Scale of Order",
-                    ORDEREDLAYOUT,
-                    "Determines the separation of the nodes on the axis that is fixed",
-                    "getOrderScale", "setOrderScale"));
-            properties.add(LayoutProperty.createProperty(
                     this, Column.class,
                     "Order",
                     ORDEREDLAYOUT,
                     "Selects the attribute that indicates the ordering of nodes",
                     "getOrder", "setOrder", NodeColumnNumbersEditor.class));
+            properties.add(LayoutProperty.createProperty(
+                    this, Double.class,
+                    "Scale of Order",
+                    ORDEREDLAYOUT,
+                    "Determines the separation of the nodes on the axis that is fixed",
+                    "getOrderScale", "setOrderScale"));
             properties.add(LayoutProperty.createProperty(
                     this, Boolean.class,
                     "Set Force on free axis",
@@ -371,31 +371,58 @@ public class OrderedLayout implements Layout {
 
     @Override
     public void resetPropertiesValues() {
+        order = null;
         if (graphModel != null) {
             for (Column c : graphModel.getNodeTable()) {
                 if (c.getId().equalsIgnoreCase("order")
                         || c.getId().equalsIgnoreCase("ord")
-                        || c.getTitle().equalsIgnoreCase("order")
-                        || c.getTitle().equalsIgnoreCase("ord")) {
+                        || c.getId().equalsIgnoreCase("order")
+                        || c.getId().equalsIgnoreCase("trophic_level")) {
                     order = c;
-                } else {
-                    order = null;
                 }
             }
         }
         int nodesCount = 0;
-
+        setOrderScale(10.0);
         if (graphModel != null) {
             nodesCount = graphModel.getGraphVisible().getNodeCount();
+            if (order != null) {
+                double min = 0.0;
+                double max = 0.0;
+                Node[] nodes = graphModel.getGraphVisible().getNodes().toArray();
+                boolean initialized = false;
+                for (int i = 0; i !=  nodes.length; i++) {
+                    if (nodes[i].getAttribute(order) != null) {
+                        if (!initialized) {
+                            min = ((Number) nodes[i].getAttribute(order)).doubleValue();
+                            max = ((Number) nodes[i].getAttribute(order)).doubleValue();
+                            initialized = true;
+                        } else {
+                            if (((Number) nodes[i].getAttribute(order)).doubleValue() < min) {
+                                min = ((Number) nodes[i].getAttribute(order)).doubleValue();
+                            }
+                            if (((Number) nodes[i].getAttribute(order)).doubleValue() > max) {
+                                max = ((Number) nodes[i].getAttribute(order)).doubleValue();
+                            }
+                        }
+                    } 
+                }
+                double span = max - min;
+                if (span < 10.0) {
+                    setOrderScale(1000.0);
+                } else if (span < 100.0) {
+                    setOrderScale(100.0);
+                } else if (span < 1000) {
+                    setOrderScale(10.0);
+                }
+            }
         }
 
         setVertical(false);
         setInverted(false);
         
-        setOrderScale(10.0);
-
         // Tuning
-        setScalingRatio(1.0);
+        setScalingRatio(4.0);
 
         setStrongGravityMode(false);
         setGravity(1.);
