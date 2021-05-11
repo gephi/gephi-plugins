@@ -35,7 +35,7 @@ public class Language {
                 new Language("he" ,"Hebrew"),
                 new Language("hi" ,"Hindi"),
                 new Language("hu" ,"Hungarian"),
-                new Language("id" ,"Indonesian"),
+                new Language("in" ,"Indonesian"),
                 new Language("it" ,"Italian"),
                 new Language("ja" ,"Japanese"),
                 new Language("kn" ,"Kannada"),
