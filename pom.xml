@@ -39,6 +39,14 @@
                 <enabled>true</enabled>
             </snapshots>
         </repository>
+        <repository>
+            <id>netbeans</id>
+            <name>NetBeans</name>
+            <url>https://netbeans.apidesign.org/maven2/</url>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
     </repositories>
     
     <!-- Plugin Repositories -->
