@@ -68,6 +68,7 @@
         <module>modules/KleinbergGenerator</module>
         <module>modules/columnCalculator</module>
         <module>modules/GroupPartition</module>
+        <module>modules/HairballBuster</module>
     </modules>
     
     <!-- Properties -->
