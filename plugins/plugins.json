@@ -2352,8 +2352,8 @@
           "last_update": "August 10, 2017"
         },
         "0.9.2": {
-          "url": "0.9.2/twitter-streaming-importer-1.4.2.nbm",
-          "last_update": "June 3, 2020"
+          "url": "0.9.2/twitter-streaming-importer-1.4.3.nbm",
+          "last_update": "October 5, 2021"
         }
       },
       "sourcecode": "https://github.com/totetmatt/gephi-plugins/tree/twitter",
@@ -3358,6 +3358,32 @@
         }
       },
       "sourcecode": "https://github.com/sergipuig/gephi-plugins",
+      "homepage": null
+    },
+    {
+      "id": "hairball-buster",
+      "name": "Hairball Buster",
+      "short_description": "Implementation of Hairball Buster Graph Analytic Triage Approach for Gephi.",
+      "long_description": "Hairball Buster (HB) (also called node-neighbor centrality or NNC) is an approach to graph analytic triage that uses simple calculations and visualization to quickly understand and compare graphs. Rather than displaying highly interconnected graphs as `hairballs\u0027 that are difficult to understand, HB provides a simple standard visual representation of a graph and its metrics.",
+      "readme": null,
+      "license": "BSD-3-Clause",
+      "authors": [
+        {
+          "name": "Carter Matties, Mark Matties, Elisha Peterson, Patrick Allen",
+          "email": "",
+          "link": ""
+        }
+      ],
+      "category": "Layout",
+      "last_update": "octubre 5, 2021",
+      "images": null,
+      "versions": {
+        "0.9.2": {
+          "url": "0.9.2/hairball-buster-0.9.2.nbm",
+          "last_update": "octubre 5, 2021"
+        }
+      },
+      "sourcecode": "https://github.com/gephi/gephi-plugins/tree/hairball-buster-plugin",
       "homepage": null
     }
   ]
