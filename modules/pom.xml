@@ -63,7 +63,7 @@
         <repository>
             <id>netbeans</id>
             <name>NetBeans</name>
-            <url>http://bits.netbeans.org/nexus/content/groups/netbeans/</url>
+            <url>https://netbeans.apidesign.org/maven2/</url><!-- https://netbeans.apache.org/about/oracle-transition.html -->
             <snapshots>
                 <enabled>false</enabled>
             </snapshots>
