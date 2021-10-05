@@ -1,0 +1,9 @@
+Manifest-Version: 1.0
+OpenIDE-Module-Name: JSON Exporter
+OpenIDE-Module-Short-Description: Export a graph from Gephi to a JSON file for use with Sigma.js
+OpenIDE-Module-Long-Description: Exports the network to a JSON file with an array of nodes and an array of edges. <br/>
+    This file is suitable to be used with the parseJSON plugin to Sigma.js. <br/>
+    Using JSON with Sigma.js improves load time and browser compatibility. <br/>
+    GPLv3 License.<br/>
+    Code at <a href="https://github.com/oxfordinternetinstitute/gephi-plugins/tree/jsonexporter-plugin">https://github.com/oxfordinternetinstitute/gephi-plugins/tree/jsonexporter-plugin</a>.
+OpenIDE-Module-Display-Category: Export

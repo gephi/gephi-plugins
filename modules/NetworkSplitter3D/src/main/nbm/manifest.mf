@@ -1,0 +1,5 @@
+Manifest-Version: 1.0
+OpenIDE-Module-Name: Network Splitter 3D
+OpenIDE-Module-Short-Description: This layout can be used to split a network layout into distinct Z-Layers. E.g. after using layouts such as: Yifan Hu, Fruchterman Reingold, Force Atlas, Circular, Layered, OpenOrd, etc.
+OpenIDE-Module-Long-Description: Network Splitter 3D Z-Layers are user-defined clusters and can be used in Gephi ranking and/or partition procedures. You can also use this plugin to rotate your graph over the X-Axis. 
+OpenIDE-Module-Display-Category: Layout
