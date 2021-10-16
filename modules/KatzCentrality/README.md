@@ -1,5 +1,7 @@
 ## Katz Centrality
 
+The plugin was developed under the initiative of the [Open University Of Israel](https://www.openu.ac.il/en/pages/default.aspx).
+
 ### The Algorithm Description
 
 For a network with `n` nodes, the `n x n` adjacency matrix `A` is the matrix
