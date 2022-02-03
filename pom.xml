@@ -4,7 +4,7 @@
 
     <groupId>org.gephi</groupId>
     <artifactId>gephi-plugins</artifactId>
-    <version>0.9.2</version>
+    <version>0.9.3-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <name>gephi-plugins</name>
@@ -17,7 +17,7 @@
     <!-- Properties -->
     <properties>
         <!-- Version of Gephi building plugins against. Plugins with anterior versions will be ignored -->
-        <gephi.version>0.9.2</gephi.version>
+        <gephi.version>0.9.3-SNAPSHOT</gephi.version>
         <clusters.path>${project.build.directory}/plugins_clusters</clusters.path>
         <github.global.server>github</github.global.server>
     </properties>
@@ -71,17 +71,18 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-dependency-plugin</artifactId>
-                    <version>2.10</version>
+                    <version>3.2.0</version>
                 </plugin>
                 <plugin>
-                    <groupId>org.codehaus.mojo</groupId>
+                    <groupId>org.apache.netbeans.utilities</groupId>
                     <artifactId>nbm-maven-plugin</artifactId>
-                    <version>3.14</version>
+                    <version>4.6</version>
+                    <extensions>true</extensions>
                 </plugin>
                 <plugin>
                     <groupId>org.gephi</groupId>
                     <artifactId>gephi-maven-plugin</artifactId>
-                    <version>1.2.3</version>
+                    <version>1.2.5-SNAPSHOT</version>
                     <configuration>
                         <gephiDirectory>${project.build.directory}/gephi-${gephi.version}</gephiDirectory>
                         <clusters>
@@ -138,7 +139,7 @@
             
             <!-- NBM Plugin -->
             <plugin>
-                <groupId>org.codehaus.mojo</groupId>
+                <groupId>org.apache.netbeans.utilities</groupId>
                 <artifactId>nbm-maven-plugin</artifactId>
                 <configuration>
                     <nbmBuildDir>${clusters.path}</nbmBuildDir>
