@@ -504,7 +504,7 @@
                 <groupId>org.apache.netbeans.utilities</groupId>
                 <artifactId>nbm-maven-plugin</artifactId>
                 <extensions>true</extensions>
-                <version>4.6</version>
+                <version>4.5</version>
                 <configuration>
                     <cluster>plugins</cluster>
                     <!-- This can be overridden in child POMs but is needed in most cases -->
