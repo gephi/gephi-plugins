@@ -190,7 +190,7 @@
                             </execution>
                         </executions>
                         <configuration>
-                            <metadataUrl>https://gephi.org/plugins/</metadataUrl>
+                            <metadataUrl>https://gephi.org/gephi-plugins/plugins/</metadataUrl>
                             <outputDirectory>${project.build.directory}/site/plugins/</outputDirectory>
                         </configuration>
                     </plugin>
