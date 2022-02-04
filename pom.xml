@@ -77,19 +77,13 @@
                 <plugin>
                     <groupId>org.apache.netbeans.utilities</groupId>
                     <artifactId>nbm-maven-plugin</artifactId>
-                    <version>4.6</version>
+                    <version>4.5</version>
                     <extensions>true</extensions>
                 </plugin>
                 <plugin>
                     <groupId>org.gephi</groupId>
                     <artifactId>gephi-maven-plugin</artifactId>
                     <version>1.2.5-SNAPSHOT</version>
-                    <configuration>
-                        <gephiDirectory>${project.build.directory}/gephi-${gephi.version}</gephiDirectory>
-                        <clusters>
-                            <cluster>${clusters.path}/plugins</cluster>
-                        </clusters>
-                    </configuration>
                 </plugin>
                 <plugin>
                     <groupId>com.github.github</groupId>
@@ -105,6 +99,12 @@
             <plugin>
                 <groupId>org.gephi</groupId>
                 <artifactId>gephi-maven-plugin</artifactId>
+                <configuration>
+                    <gephiDirectory>${project.build.directory}/gephi-${gephi.version}</gephiDirectory>
+                    <clusters>
+                        <cluster>${clusters.path}/plugins</cluster>
+                    </clusters>
+                </configuration>
                 <executions>
                     <execution>
                         <id>validate-plugin</id>
@@ -181,9 +181,6 @@
                                     <goal>build-metadata</goal>
                                 </goals>
                                 <phase>package</phase>
-                                <configuration>
-                                    <metadataUrl>https://gephi.org/gephi-plugins/plugins/</metadataUrl>
-                                </configuration>
                             </execution>
                             <execution>
                                 <id>validate-plugin</id>
@@ -194,6 +191,7 @@
                             </execution>
                         </executions>
                         <configuration>
+                            <metadataUrl>https://gephi.org/plugins/</metadataUrl>
                             <outputDirectory>${project.build.directory}/site/plugins/</outputDirectory>
                         </configuration>
                     </plugin>
