@@ -4,12 +4,13 @@
     <parent>
         <artifactId>gephi-plugin-parent</artifactId>
         <groupId>org.gephi</groupId>
-        <version>0.9.1</version>
+        <version>0.9.3-SNAPSHOT</version>
+        <relativePath>..</relativePath>
     </parent>
 
     <groupId>org.gephi</groupId>
     <artifactId>geolayout-plugin</artifactId>
-    <version>0.9.1.2</version>
+    <version>0.9.3-SNAPSHOT</version>
     <packaging>nbm</packaging>
 
     <name>GeoLayoutPlugin</name>
@@ -25,7 +26,7 @@
         </dependency>
         <dependency>
             <groupId>org.gephi</groupId>
-            <artifactId>ui-propertyeditor</artifactId>
+            <artifactId>ui-utils</artifactId>
         </dependency>
         <dependency>
             <groupId>org.netbeans.api</groupId>
@@ -40,7 +41,7 @@
     <build>
         <plugins>
             <plugin>
-                <groupId>org.codehaus.mojo</groupId>
+                <groupId>org.apache.netbeans.utilities</groupId>
                 <artifactId>nbm-maven-plugin</artifactId>
                 <configuration>
                     <licenseName>GPL v3</licenseName>
