@@ -1,0 +1,19 @@
+name: PR
+
+on:
+  pull_request:
+    branches:
+      - master-forge
+
+jobs:
+  build_and_test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up JDK 11
+        uses: actions/setup-java@v2
+        with:
+          java-version: '11'
+          distribution: 'temurin'
+      - name: Build project with Maven
+        run: mvn -B package --file pom.xml
