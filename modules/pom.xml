@@ -48,6 +48,9 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <gephi.version>0.9.3-SNAPSHOT</gephi.version>
         <netbeans.version>RELEASE130</netbeans.version>
+
+        <!-- Only needed for release profile -->
+        <keystore.password/>
     </properties>
 
     <!-- Repositories -->
