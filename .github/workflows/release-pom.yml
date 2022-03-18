@@ -17,6 +17,11 @@ jobs:
         with:
           java-version: '11'
           distribution: 'temurin'
+          server-id: ossrh
+          server-username: OSSRH_USER
+          server-password: OSSRH_PASS
+          gpg-private-key: ${{ secrets.GPG_PRIVATE_KEY }}
+          gpg-passphrase: GPG_PASSPHRASE
       - name: Build and validate project
         run: mvn -B deploy -P release-pom --file pom.xml
         env:
