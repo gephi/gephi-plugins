@@ -47,7 +47,7 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <gephi.version>0.9.3-SNAPSHOT</gephi.version>
-        <netbeans.version>RELEASE126</netbeans.version>
+        <netbeans.version>RELEASE130</netbeans.version>
     </properties>
 
     <!-- Repositories -->
@@ -498,6 +498,7 @@
             </dependency>
         </dependencies>
     </dependencyManagement>
+
     <build>
         <plugins>
             <plugin>
@@ -528,33 +529,6 @@
     </build>
     
     <profiles>
-        <!-- Custom profile only used to build and package all modules at once -->
-        <profile>
-            <id>release</id>
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>org.apache.netbeans.utilities</groupId>
-                        <artifactId>nbm-maven-plugin</artifactId>
-                        <extensions>true</extensions>
-                        <configuration>
-                            <!-- Keystore location. Run Maven with '-Dkeystorepassword=' to specify the passphrase -->
-                            <keystore>keystore.ks</keystore>
-                            <keystorealias>gephi</keystorealias>
-                            <keystorepassword>${keystore.password}</keystorepassword>
-                        </configuration>
-                        <executions>
-                            <!-- Disable default-branding as it's only needed for the branding module -->
-                            <execution>
-                                <id>default-branding</id>
-                                <phase>none</phase>
-                            </execution>
-                        </executions>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
-
         <!-- Custom profile only used to release this pom to sonatype-->
         <profile>
             <id>release-pom</id>
@@ -574,6 +548,12 @@
                                 </goals>
                             </execution>
                         </executions>
+                        <configuration>
+                            <gpgArguments>
+                                <arg>--pinentry-mode</arg>
+                                <arg>loopback</arg>
+                            </gpgArguments>
+                        </configuration>
                     </plugin>
                     
                     <!-- Nexus staging, https://oss.sonatype.org/ -->
