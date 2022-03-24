@@ -2,7 +2,7 @@ name: release-pom
 
 on:
   push:
-    branches: [ master ]
+    branches: [ parent-pom ]
 
 jobs:
   build_and_test:
