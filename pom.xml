@@ -20,6 +20,9 @@
         <gephi.version>0.9.3-SNAPSHOT</gephi.version>
         <clusters.path>${project.build.directory}/plugins_clusters</clusters.path>
         <github.global.server>github</github.global.server>
+
+        <!-- Only needed for release profile -->
+        <keystore.password/>
     </properties>
     
     <!-- SCM -->
@@ -99,7 +102,9 @@
                 <groupId>org.gephi</groupId>
                 <artifactId>gephi-maven-plugin</artifactId>
                 <configuration>
+                    <metadataUrl>https://gephi.org/gephi-plugins/plugins/</metadataUrl>
                     <gephiDirectory>${project.build.directory}/gephi-${gephi.version}</gephiDirectory>
+                    <outputDirectory>${project.build.directory}/site/plugins/</outputDirectory>
                     <clusters>
                         <cluster>${clusters.path}/plugins</cluster>
                     </clusters>
@@ -143,6 +148,11 @@
                 <artifactId>nbm-maven-plugin</artifactId>
                 <configuration>
                     <nbmBuildDir>${clusters.path}</nbmBuildDir>
+
+                    <!-- Keystore location. Run Maven with '-Dkeystorepassword=' to specify the passphrase -->
+                    <keystore>keystore.ks</keystore>
+                    <keystorealias>gephi</keystorealias>
+                    <keystorepassword>${keystore.password}</keystorepassword>
                 </configuration>
                 <executions>
                     <execution>
@@ -150,6 +160,11 @@
                         <goals>
                             <goal>cluster</goal>
                         </goals>
+                    </execution>
+                    <!-- Disable default-branding as it's only needed for the branding module -->
+                    <execution>
+                        <id>default-branding</id>
+                        <phase>none</phase>
                     </execution>
                 </executions>
             </plugin>
@@ -189,10 +204,6 @@
                                 <phase>none</phase>
                             </execution>
                         </executions>
-                        <configuration>
-                            <metadataUrl>https://gephi.org/gephi-plugins/plugins/</metadataUrl>
-                            <outputDirectory>${project.build.directory}/site/plugins/</outputDirectory>
-                        </configuration>
                     </plugin>
 
                     <!-- Publish site folder to GitHub's gh-pages branch -->
