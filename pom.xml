@@ -138,6 +138,7 @@
                             <outputDirectory>
                                 ${project.build.directory}
                             </outputDirectory>
+                            <excludes>**/jre/**</excludes>
                         </configuration>
                     </execution>
                 </executions>
