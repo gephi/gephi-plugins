@@ -20,9 +20,6 @@
         <gephi.version>0.9.3-SNAPSHOT</gephi.version>
         <clusters.path>${project.build.directory}/plugins_clusters</clusters.path>
         <github.global.server>github</github.global.server>
-
-        <!-- Only needed for release profile -->
-        <keystore.password/>
     </properties>
     
     <!-- SCM -->
@@ -149,11 +146,6 @@
                 <artifactId>nbm-maven-plugin</artifactId>
                 <configuration>
                     <nbmBuildDir>${clusters.path}</nbmBuildDir>
-
-                    <!-- Keystore location. Run Maven with '-Dkeystorepassword=' to specify the passphrase -->
-                    <keystore>keystore.ks</keystore>
-                    <keystorealias>gephi</keystorealias>
-                    <keystorepassword>${keystore.password}</keystorepassword>
                 </configuration>
                 <executions>
                     <execution>
