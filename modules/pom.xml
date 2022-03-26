@@ -48,6 +48,9 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <gephi.version>0.9.3-SNAPSHOT</gephi.version>
         <netbeans.version>RELEASE130</netbeans.version>
+
+        <!-- Only needed for release profile -->
+        <keystore.password/>
     </properties>
 
     <!-- Repositories -->
@@ -529,6 +532,32 @@
     </build>
     
     <profiles>
+        <!-- Custom profile only used to build and package all modules at once -->
+        <profile>
+            <id>release</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.netbeans.utilities</groupId>
+                        <artifactId>nbm-maven-plugin</artifactId>
+                        <configuration>
+                            <!-- Keystore location. Run Maven with '-Dkeystorepassword=' to specify the passphrase -->
+                            <keystore>keystore.ks</keystore>
+                            <keystorealias>gephi</keystorealias>
+                            <keystorepassword>${keystore.password}</keystorepassword>
+                        </configuration>
+                        <executions>
+                            <!-- Disable default-branding as it's only needed for the branding module -->
+                            <execution>
+                                <id>default-branding</id>
+                                <phase>none</phase>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+
         <!-- Custom profile only used to release this pom to sonatype-->
         <profile>
             <id>release-pom</id>
