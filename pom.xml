@@ -20,6 +20,9 @@
         <gephi.version>0.9.3-SNAPSHOT</gephi.version>
         <clusters.path>${project.build.directory}/plugins_clusters</clusters.path>
         <github.global.server>github</github.global.server>
+
+        <!-- Gephi's minor version, used for auto update -->
+        <gephi.minor.version>${parsedVersion.majorVersion}.${parsedVersion.minorVersion}${parsedVersion.qualifier?}</gephi.minor.version>
     </properties>
     
     <!-- SCM -->
@@ -53,6 +56,14 @@
         </pluginRepository>
     </pluginRepositories>
 
+    <!-- For site only -->
+    <distributionManagement>
+        <site>
+            <id>github</id>
+            <url>scm:git:https://github.com/gephi/gephi-plugins.git</url>
+        </site>
+    </distributionManagement>
+
     <!-- Dependencies -->
     <dependencies>
         <dependency>
@@ -82,12 +93,17 @@
                 <plugin>
                     <groupId>org.gephi</groupId>
                     <artifactId>gephi-maven-plugin</artifactId>
-                    <version>1.2.6</version>
+                    <version>1.2.7-SNAPSHOT</version>
                 </plugin>
                 <plugin>
-                    <groupId>com.github.github</groupId>
-                    <artifactId>site-maven-plugin</artifactId>
-                    <version>0.12</version>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-scm-publish-plugin</artifactId>
+                    <version>3.1.0</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>build-helper-maven-plugin</artifactId>
+                    <version>3.3.0</version>
                 </plugin>
             </plugins>
         </pluginManagement>
@@ -161,6 +177,20 @@
                     </execution>
                 </executions>
             </plugin>
+
+            <!-- Extracts detailed version properties -->
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>build-helper-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>parse-version</id>
+                        <goals>
+                            <goal>parse-version</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
         </plugins>
     </build>
     
@@ -201,20 +231,14 @@
 
                     <!-- Publish site folder to GitHub's gh-pages branch -->
                     <plugin>
-                        <groupId>com.github.github</groupId>
-                        <artifactId>site-maven-plugin</artifactId>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-scm-publish-plugin</artifactId>
                         <configuration>
-                            <message>Creating site for gephi-plugins version=${project.version} and gephiVersion=${gephi.version}</message>
-                            <merge>true</merge>
+                            <content>${project.build.directory}/site</content>
+                            <scmBranch>gh-pages</scmBranch>
+                            <checkinComment>Autoupdate update for ${project.version} and gephiVersion=${gephi.version}</checkinComment>
+                            <serverId>github</serverId>
                         </configuration>
-                        <executions>
-                            <execution>
-                                <goals>
-                                    <goal>site</goal>
-                                </goals>
-                                <phase>package</phase>
-                            </execution>
-                        </executions>
                     </plugin>
                 </plugins>
             </build>
