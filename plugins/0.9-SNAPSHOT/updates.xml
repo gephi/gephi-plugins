@@ -1,24 +1,24 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
 <!DOCTYPE module_updates PUBLIC "-//NetBeans//DTD Autoupdate Catalog 2.8//EN" "https://netbeans.apache.org/dtds/autoupdate-catalog-2_8.dtd">
-<module_updates timestamp="45/24/08/27/03/2022">
+<module_updates timestamp="05/02/09/27/03/2022">
 
 
 
-<module codenamebase="org.gephi.geolayout.plugin" distribution="geolayout-plugin-0.9.3-SNAPSHOT.nbm" downloadsize="27261" homepage="http://github.com/gephi/gephi-plugins/geolayout-plugin" license="671322F0" moduleauthor="Alexis Jacomy" needsrestart="true" releasedate="2022/03/27" targetcluster="plugins">
+<module codenamebase="org.gephi.geolayout.plugin" distribution="geolayout-plugin-0.9.3-SNAPSHOT.nbm" downloadsize="27334" homepage="https://gephi.org/plugins/#/plugin/geolayout-plugin" license="671322F0" moduleauthor="Alexis Jacomy" needsrestart="true" releasedate="2022/03/27" targetcluster="plugins">
         
     <manifest OpenIDE-Module="org.gephi.geolayout.plugin" OpenIDE-Module-Display-Category="Layout" OpenIDE-Module-Implementation-Version="0.9.3-20220327" OpenIDE-Module-Long-Description="This plugin contains the &quot;GeoLayout&quot;, which displays your graph based on geocoded attributes (i.e. latitude and longitude) and standard projections." OpenIDE-Module-Module-Dependencies="org.gephi.layout.api &gt; 0.9.3, org.gephi.graph.api &gt; 0.9.3, org.gephi.ui.utils &gt; 0.9.3, org.openide.util.lookup &gt; 8.49, org.openide.util &gt; 9.23" OpenIDE-Module-Name="GeoLayout" OpenIDE-Module-Requires="org.openide.modules.ModuleFormat1" OpenIDE-Module-Short-Description="A layout to display geocoded data" OpenIDE-Module-Specification-Version="0.9.3"/>
         
 
-    <message_digest algorithm="SHA-512" value="4a0d6069cdc4b8def2a5423129c8ad76b6852cfabc7eacae574661a048610e11afbf6c75535025b3eb4485eddc2e2709a07872cffe4f912733b40e03c5e4cdaf"/>
+    <message_digest algorithm="SHA-512" value="716d6123d95a1667ad85924fc957d1446d034292ee77aba32dd57f307f9758be6167482c79fb05e6d72ef14b0b98dc0077ea1d42e3d5a1540bf042b28e1f31c4"/>
 </module>
 
-<module codenamebase="org.gephi.kbrace.filter" distribution="kbrace-filter-1.1.0.nbm" downloadsize="16247" homepage="http://github.com/gephi/gephi-plugins/kbrace-filter" license="E9F38623" moduleauthor="Mathieu Bastian" needsrestart="true" releasedate="2022/03/27" targetcluster="plugins">
+<module codenamebase="org.gephi.kbrace.filter" distribution="kbrace-filter-1.1.0.nbm" downloadsize="16264" homepage="https://gephi.org/plugins/#/plugin/kbrace-filter" license="E9F38623" moduleauthor="Mathieu Bastian" needsrestart="true" releasedate="2022/03/27" targetcluster="plugins">
         
     <manifest OpenIDE-Module="org.gephi.kbrace.filter" OpenIDE-Module-Display-Category="Filter" OpenIDE-Module-Implementation-Version="1.1.0" OpenIDE-Module-Long-Description="&lt;h3&gt;Introduction&lt;/h3&gt;&#10;&lt;p&gt;The k-brace filter is a variant of the k-core. Instead of the degree it uses the edge’s embededness (number of common neighbors). It is useful to highlight dense connected components in social networks. The filter works only on undirected graphs. As defined in the paper “the k-brace of a graph is the subgraph formed by repeatedly deleting all edges of embeddedness less than k and then deleting all single-node connected components”&lt;/p&gt;&#10;&lt;h3&gt;Plugin Owner’s Notes&lt;/h3&gt;&#10;&lt;p&gt;Reference: Structural diversity in social contagion Johan Ugander, Lars Backstrom, Cameron Marlow, and Jon Kleinberg PNAS (2012)&lt;br&gt;&#10;&lt;a title=&quot;http://www.pnas.org/content/early/2012/03/27/1116502109.full.pdf&quot; href=&quot;http://www.pnas.org/content/early/2012/03/27/1116502109.full.pdf&quot;&gt;http://www.pnas.org/content/early/2012/03/27/1116502109.full.pdf&lt;/a&gt;&lt;/p&gt;" OpenIDE-Module-Module-Dependencies="org.gephi.filters.api &gt; 0.9.3, org.openide.util.lookup &gt; 8.49, org.gephi.graph.api &gt; 0.9.3, org.gephi.project.api &gt; 0.9.3, org.openide.util &gt; 9.23, org.gephi.filters.plugin &gt; 0.9.3" OpenIDE-Module-Name="KBrace Filter" OpenIDE-Module-Requires="org.openide.modules.ModuleFormat1" OpenIDE-Module-Short-Description="K-brace filter which removes less embedded edges" OpenIDE-Module-Specification-Version="1.1.0"/>
         
 
-    <message_digest algorithm="SHA-512" value="15d100486d3bfcee617ab1194dd77d9a1cc9aa9c81ddfc6b61e56423e66673ab972bafd2d423f303ea0c5e6d132c70946917469338e59a0796d2559d48c9feea"/>
+    <message_digest algorithm="SHA-512" value="16dc018d8fd6445ce5615c4399cbc92ecf02307ba272646d7a2a5ebfcdbd513ccc8aa7d7010f0c600ab62cf8789ede76c071299bee7818c7e1d097daacbb3c96"/>
 </module>
 
 <license name="E9F38623">
