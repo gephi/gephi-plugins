@@ -51,7 +51,8 @@
                     <authorLink>https://github.com/mbastian</authorLink>
                     <licenseName>Apache 2.0</licenseName>
                     <licenseFile>LICENSE.txt</licenseFile>
-                    <sourceCodeUrl>https://github.com/mbastian/gephi-plugins/tree/kbrace-filter</sourceCodeUrl>
+                    <sourceCodeUrl>https://github.com/mbastian/gephi-plugins/tree/kbrace-filter-plugin</sourceCodeUrl>
+                    <homePageUrl>https://gephi.org/plugins/#/plugin/kbrace-filter</homePageUrl>
                     <publicPackages>
                         <publicPackage>org.gephi.plugins.filter.kbrace</publicPackage>
                     </publicPackages>
