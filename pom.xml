@@ -217,7 +217,6 @@
                             <scmBranch>gh-pages</scmBranch>
                             <checkinComment>Autoupdate update for ${project.version} and gephiVersion=${gephi.version}</checkinComment>
                             <serverId>github</serverId>
-                            <dryRun>true</dryRun>
                             <skipDeletedFiles>true</skipDeletedFiles>
                         </configuration>
                     </plugin>
