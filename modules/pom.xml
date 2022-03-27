@@ -49,6 +49,13 @@
         <gephi.version>0.9.3-SNAPSHOT</gephi.version>
         <netbeans.version>RELEASE130</netbeans.version>
 
+        <!-- Java compilation settings -->
+        <javac.release>11</javac.release>
+        <javac.xlint>-Xlint:all</javac.xlint>
+        <javac.showDeprecation>true</javac.showDeprecation>
+        <javac.showWarnings>true</javac.showWarnings>
+        <javac.fork>true</javac.fork>
+
         <!-- Only needed for release profile -->
         <keystore.password/>
     </properties>
@@ -504,6 +511,23 @@
 
     <build>
         <plugins>
+            <!-- Compiler -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.10.0</version>
+                <configuration>
+                    <release>${javac.release}</release>
+                    <showDeprecation>${javac.showDeprecation}</showDeprecation>
+                    <showWarnings>${javac.showWarnings}</showWarnings>
+                    <fork>${javac.fork}</fork>
+                    <compilerArgument>
+                        ${javac.xlint}
+                    </compilerArgument>
+                </configuration>
+            </plugin>
+
+            <!-- NBM plugin -->
             <plugin>
                 <groupId>org.apache.netbeans.utilities</groupId>
                 <artifactId>nbm-maven-plugin</artifactId>
@@ -535,13 +559,22 @@
         <!-- Custom profile only used to build and package all modules at once -->
         <profile>
             <id>release</id>
+
+            <!-- Override compile properties to be less verbose -->
+            <properties>
+                <javac.showDeprecation>false</javac.showDeprecation>
+                <javac.showWarnings>false</javac.showWarnings>
+                <javac.xlint>-Xlint:none</javac.xlint>
+            </properties>
+
             <build>
                 <plugins>
+                    <!-- NBM plugin -->
                     <plugin>
                         <groupId>org.apache.netbeans.utilities</groupId>
                         <artifactId>nbm-maven-plugin</artifactId>
                         <configuration>
-                            <!-- Keystore location. Run Maven with '-Dkeystorepassword=' to specify the passphrase -->
+                            <!-- Keystore location. Run Maven with '-Dkeystore.password=' to specify the passphrase -->
                             <keystore>keystore.ks</keystore>
                             <keystorealias>gephi</keystorealias>
                             <keystorepassword>${keystore.password}</keystorepassword>
