@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
 <!DOCTYPE module_updates PUBLIC "-//NetBeans//DTD Autoupdate Catalog 2.8//EN" "https://netbeans.apache.org/dtds/autoupdate-catalog-2_8.dtd">
-<module_updates timestamp="13/03/20/26/03/2022">
+<module_updates timestamp="34/57/07/27/03/2022">
 
 
 
-<module codenamebase="org.gephi.geolayout.plugin" distribution="geolayout-plugin-0.9.3-SNAPSHOT.nbm" downloadsize="27301" homepage="http://github.com/gephi/gephi-plugins/geolayout-plugin" license="671322F0" moduleauthor="Alexis Jacomy" needsrestart="true" releasedate="2022/03/26" targetcluster="plugins">
+<module codenamebase="org.gephi.geolayout.plugin" distribution="geolayout-plugin-0.9.3-SNAPSHOT.nbm" downloadsize="27261" homepage="http://github.com/gephi/gephi-plugins/geolayout-plugin" license="671322F0" moduleauthor="Alexis Jacomy" needsrestart="true" releasedate="2022/03/27" targetcluster="plugins">
         
-    <manifest OpenIDE-Module="org.gephi.geolayout.plugin" OpenIDE-Module-Display-Category="Layout" OpenIDE-Module-Implementation-Version="0.9.3-20220326" OpenIDE-Module-Long-Description="This plugin contains the &quot;GeoLayout&quot;, which displays your graph based on geocoded attributes (i.e. latitude and longitude) and standard projections." OpenIDE-Module-Module-Dependencies="org.gephi.layout.api &gt; 0.9.3, org.gephi.graph.api &gt; 0.9.3, org.gephi.ui.utils &gt; 0.9.3, org.openide.util.lookup &gt; 8.49, org.openide.util &gt; 9.23" OpenIDE-Module-Name="GeoLayout" OpenIDE-Module-Requires="org.openide.modules.ModuleFormat1" OpenIDE-Module-Short-Description="A layout to display geocoded data" OpenIDE-Module-Specification-Version="0.9.3"/>
+    <manifest OpenIDE-Module="org.gephi.geolayout.plugin" OpenIDE-Module-Display-Category="Layout" OpenIDE-Module-Implementation-Version="0.9.3-20220327" OpenIDE-Module-Long-Description="This plugin contains the &quot;GeoLayout&quot;, which displays your graph based on geocoded attributes (i.e. latitude and longitude) and standard projections." OpenIDE-Module-Module-Dependencies="org.gephi.layout.api &gt; 0.9.3, org.gephi.graph.api &gt; 0.9.3, org.gephi.ui.utils &gt; 0.9.3, org.openide.util.lookup &gt; 8.49, org.openide.util &gt; 9.23" OpenIDE-Module-Name="GeoLayout" OpenIDE-Module-Requires="org.openide.modules.ModuleFormat1" OpenIDE-Module-Short-Description="A layout to display geocoded data" OpenIDE-Module-Specification-Version="0.9.3"/>
         
 
-    <message_digest algorithm="SHA-512" value="78b5403a5bb5bd4a2e5de7940274ad010f41483468ad3e0558652d800e5d2b92a3681666746ab2a06ab4ed80e7395532defc1c7f880d535afa3aae826df85873"/>
+    <message_digest algorithm="SHA-512" value="657251c393b723080b38ffbe12199aa93468985a2c5d89d2042e2b661ec76d8b2227bddcd1108a99f82143acca48c53d171341200bd4208c45722cb223077c51"/>
 </module>
 
 <license name="671322F0">                    GNU GENERAL PUBLIC LICENSE
