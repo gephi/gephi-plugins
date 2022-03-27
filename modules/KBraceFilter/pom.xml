@@ -50,6 +50,7 @@
                     <author>Mathieu Bastian</author>
                     <authorLink>https://github.com/mbastian</authorLink>
                     <licenseName>Apache 2.0</licenseName>
+                    <licenseFile>LICENSE.txt</licenseFile>
                     <sourceCodeUrl>https://github.com/mbastian/gephi-plugins/tree/kbrace-filter</sourceCodeUrl>
                     <publicPackages>
                         <publicPackage>org.gephi.plugins.filter.kbrace</publicPackage>
