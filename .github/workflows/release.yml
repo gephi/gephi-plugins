@@ -17,6 +17,11 @@ jobs:
           gpg-private-key: ${{ secrets.GPG_PRIVATE_KEY }}
           gpg-passphrase: GPG_PASSPHRASE
 
+      - name: Get NBM Keystore
+        run: |
+          echo "${{ secrets.NBM_KEYSTORE }}" > keystore.ks.asc
+          gpg -d --passphrase "${{ secrets.NBM_KEYSTORE_ENC_PASSPHRASE }}" --batch keystore.ks.asc > keystore.ks
+
       - name: Build and publish package Linux
         run: mvn --batch-mode -Djava.awt.headless=true -Dkeystore.password=${{ secrets.KEYSTORE_PASSWD }} package -P release
         env:
