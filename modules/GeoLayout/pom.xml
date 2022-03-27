@@ -46,6 +46,8 @@
                     <licenseName>GPL v3</licenseName>
                     <licenseFile>gpl-3.0.txt</licenseFile>
                     <author>Alexis Jacomy</author>
+                    <homePageUrl>https://gephi.org/plugins/#/plugin/geolayout-plugin</homePageUrl>
+                    <sourceCodeUrl>https://github.com/gephi/gephi-plugins/tree/geolayout-plugin</sourceCodeUrl>
                     <publicPackages>
                     </publicPackages>
                 </configuration>
