@@ -67,7 +67,7 @@
             <groupId>${project.groupId}</groupId>
             <artifactId>gephi</artifactId>
             <version>${gephi.version}</version>
-            <classifier>linux</classifier>
+            <classifier>linux-x64</classifier>
             <type>tar.gz</type>
         </dependency>
     </dependencies>
