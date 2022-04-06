@@ -4,7 +4,7 @@
 
     <groupId>org.gephi</groupId>
     <artifactId>gephi-plugins</artifactId>
-    <version>0.9.3-SNAPSHOT</version>
+    <version>0.9.3</version>
     <packaging>pom</packaging>
 
     <name>gephi-plugins</name>
@@ -74,7 +74,7 @@
     <!-- Properties -->
     <properties>
         <!-- Version of Gephi building plugins against. Plugins with anterior versions will be ignored -->
-        <gephi.version>0.9.3-SNAPSHOT</gephi.version>
+        <gephi.version>0.9.3</gephi.version>
         <clusters.path>${project.build.directory}/plugins_clusters</clusters.path>
         <github.global.server>github</github.global.server>
     </properties>
@@ -124,7 +124,7 @@
             <groupId>${project.groupId}</groupId>
             <artifactId>gephi</artifactId>
             <version>${gephi.version}</version>
-            <classifier>linux</classifier>
+            <classifier>linux-x64</classifier>
             <type>tar.gz</type>
         </dependency>
     </dependencies>
@@ -200,6 +200,7 @@
                                 ${project.build.directory}
                             </outputDirectory>
                             <excludes>**/jre/**</excludes>
+                            <excludes>**/jre-x64/**</excludes>
                         </configuration>
                     </execution>
                 </executions>
