@@ -4,7 +4,7 @@
     <parent>
         <artifactId>gephi-plugin-parent</artifactId>
         <groupId>org.gephi</groupId>
-        <version>0.9.2</version>
+        <version>0.9.3-SNAPSHOT</version>
     </parent>
 
     <groupId>proj.sr3213</groupId>
@@ -22,7 +22,7 @@
         </dependency>
         <dependency>
             <groupId>org.gephi</groupId>
-            <artifactId>ui-propertyeditor</artifactId>
+            <artifactId>ui-utils</artifactId>
             <type>jar</type>
         </dependency>
         <dependency>
@@ -38,7 +38,7 @@
     <build>
         <plugins>
             <plugin>
-                <groupId>org.codehaus.mojo</groupId>
+                <groupId>org.apache.netbeans.utilities</groupId>
                 <artifactId>nbm-maven-plugin</artifactId>
                 <configuration>
                     <licenseName>Apache 2.0</licenseName>

@@ -4,7 +4,7 @@
     <parent>
         <artifactId>gephi-plugin-parent</artifactId>
         <groupId>org.gephi</groupId>
-        <version>0.9.2</version>
+        <version>0.9.3-SNAPSHOT</version>
     </parent>
 
     <groupId>net.phreakocious</groupId>
@@ -38,7 +38,7 @@
     </dependency>
     <dependency>
       <groupId>org.gephi</groupId>
-      <artifactId>io-processor-plugin</artifactId>
+      <artifactId>io-importer-plugin</artifactId>
     </dependency>
     <dependency>
       <groupId>org.netbeans.api</groupId>
@@ -68,7 +68,7 @@
         </dependency>
         <dependency>
             <groupId>org.gephi</groupId>
-            <artifactId>lib.validation</artifactId>
+            <artifactId>ui-utils</artifactId>
         </dependency>
         <dependency>
             <groupId>org.json</groupId>
@@ -85,7 +85,7 @@
     <build>
         <plugins>
             <plugin>
-                <groupId>org.codehaus.mojo</groupId>
+                <groupId>org.apache.netbeans.utilities</groupId>
                 <artifactId>nbm-maven-plugin</artifactId>
                 <configuration>
                     <licenseName>license</licenseName>
