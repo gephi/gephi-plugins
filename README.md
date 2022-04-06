@@ -6,7 +6,7 @@ This repository is an out-of-the-box development environment for Gephi plugins. 
 
 ### Requirements
 
-Developing Gephi plugins requires JDK 8 or later and [Maven](http://maven.apache.org/). Although any IDE/Editor can be used, [Netbeans IDE](https://netbeans.org/) is recommended as Gephi itself is based on [Netbeans Platform](https://netbeans.org/features/platform/index.html).
+Developing Gephi plugins requires JDK 11 or later and [Maven](http://maven.apache.org/).
 
 ### Create a plugin
 
@@ -77,6 +77,8 @@ Submitting a Gephi plugin for approval is a simple process based on GitHub's [pu
 Updating a Gephi plugin has the same process as submitting it for the first time. Don't forget to merge from upstream's master branch.
 
 ## IDE Support
+
+Although any IDE/Editor can be used, [Netbeans IDE](https://netbeans.org/) is recommended as Gephi itself is based on [Netbeans Platform](https://netbeans.org/features/platform/index.html).
 
 ### Netbeans IDE
 
@@ -168,7 +170,7 @@ Public packages are configured in the module's `pom.xml` file. Edit the `<public
 
 #### What is the difference between plugin and module?
 
-It's the same thing. We say module because Gephi is a modular application and is composed of many independent modules. Plugins also are modules but we call them plugin because they aren't in the _core_ Gephi.
+It's the same thing. We say module because Gephi is a modular application and is composed of many independent modules. Plugins also are modules, but we call them plugin because they aren't in the _core_ Gephi.
 
 #### When running the plugin in Netbeans I get an error "Running standalone modules or suites requires..."
 
