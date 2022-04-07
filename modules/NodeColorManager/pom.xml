@@ -4,7 +4,7 @@
     <parent>
         <groupId>org.gephi</groupId>
         <artifactId>gephi-plugin-parent</artifactId>
-        <version>0.9.3-SNAPSHOT</version>
+        <version>0.9.3</version>
     </parent>
 
     <groupId>edu.buaa.act</groupId>
