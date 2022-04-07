@@ -5,7 +5,7 @@
       "name": "GeoLayout",
       "short_description": "A layout to display geocoded data",
       "long_description": "This plugin contains the \"GeoLayout\", which displays your graph based on geocoded attributes (i.e. latitude and longitude) and standard projections.",
-      "readme": "## Introduction\n\nA Gephi plugin to display your geocoded graphs.\n\n## Plugin Owner’s Notes\n\nThis plugin contains only a layout (“GeoLayout”) to display your graph according to geocoded attributes. To use it:\n\n1. Select the two attributes which contain the geocoded coordinates of your nodes (latitude and longitude). The attributes must have a numeric type.\n2. Select the projection you want to use\n3. Set the other parameters according to the selected projection\n4. Launch the algorithm\n\nThe available projections are:\n\n* [Mercator](http://bit.ly/JQuvw)\n* [Tranverse Mercator](http://bit.ly/btWRTI)\n* [Miller cylindrical](http://bit.ly/agJOxd)\n* [Gall-Peters](http://bit.ly/Nj5cW)\n* [Sinusoidal](http://bit.ly/a8SsNg)\n* [Lambert cylindrical](http://bit.ly/cnuxqr)\n* [Winkel Tripel](http://en.wikipedia.org/wiki/Winkel_tripel_projection)\n* [Equirectangular](http://bit.ly/vxEmy)\n\nFor any questions or June 3, 2020st more information, you can check the related [thread](http://bit.ly/2vISDFd) on the Gephi forum.\n\nAnd if, for any reason, some of your nodes do not have valid values on the selected attributes (for latitude and longitude), they will be displayed on a line on the bottom of your graph (then, you can delete them or do what you want). Also make sure your latitude and longitude columns are of a numeric type, not \u0027string\u0027.\n",
+      "readme": "## Introduction\n\nA Gephi plugin to display your geocoded graphs.\n\n## Plugin Owner’s Notes\n\nThis plugin contains only a layout (“GeoLayout”) to display your graph according to geocoded attributes. To use it:\n\n1. Select the two attributes which contain the geocoded coordinates of your nodes (latitude and longitude). The attributes must have a numeric type.\n2. Select the projection you want to use\n3. Set the other parameters according to the selected projection\n4. Launch the algorithm\n\nThe available projections are:\n\n* [Mercator](http://bit.ly/JQuvw)\n* [Tranverse Mercator](http://bit.ly/btWRTI)\n* [Miller cylindrical](http://bit.ly/agJOxd)\n* [Gall-Peters](http://bit.ly/Nj5cW)\n* [Sinusoidal](http://bit.ly/a8SsNg)\n* [Lambert cylindrical](http://bit.ly/cnuxqr)\n* [Winkel Tripel](http://en.wikipedia.org/wiki/Winkel_tripel_projection)\n* [Equirectangular](http://bit.ly/vxEmy)\n\nFor any questions or just more information, you can check the related [thread](http://bit.ly/2vISDFd) on the Gephi forum.\n\nAnd if, for any reason, some of your nodes do not have valid values on the selected attributes (for latitude and longitude), they will be displayed on a line on the bottom of your graph (then, you can delete them or do what you want). Also make sure your latitude and longitude columns are of a numeric type, not \u0027string\u0027.\n",
       "license": "GPL v3",
       "authors": [
         {
@@ -15,7 +15,7 @@
         }
       ],
       "category": "Layout",
-      "last_update": "June 3, 2020",
+      "last_update": "April 7, 2022",
       "images": [
         {
           "image": "imgs/geolayout-plugin/geolayout_example.png",
@@ -29,23 +29,32 @@
       "versions": {
         "0.8.2": {
           "url": "0.8.2/org-gephi-plugins-layout-geo.nbm",
-          "last_update": "January 4, 2013"
+          "last_update": "January 4, 2013",
+          "plugin_version": null
         },
         "0.9.0": {
           "url": "0.9.0/geolayout-plugin-0.9.0.nbm",
-          "last_update": "February 11, 2016"
+          "last_update": "February 11, 2016",
+          "plugin_version": null
         },
         "0.9.1": {
           "url": "0.9.1/geolayout-plugin-0.9.1.2.nbm",
-          "last_update": "August 10, 2017"
+          "last_update": "August 10, 2017",
+          "plugin_version": null
         },
         "0.9.2": {
           "url": "0.9.2/geolayout-plugin-0.9.2.2.nbm",
-          "last_update": "June 3, 2020"
+          "last_update": "June 3, 2020",
+          "plugin_version": null
+        },
+        "0.9.3": {
+          "url": "0.9/geolayout-plugin-0.9.3.nbm",
+          "last_update": "April 7, 2022",
+          "plugin_version": "0.9.3"
         }
       },
-      "sourcecode": "https://github.com/gephi/gephi-plugins/geolayout-plugin",
-      "homepage": null
+      "sourcecode": "https://github.com/gephi/gephi-plugins/tree/geolayout-plugin",
+      "homepage": "https://gephi.org/plugins/#/plugin/geolayout-plugin"
     },
     {
       "id": "linkfluence-plugin",
@@ -62,7 +71,7 @@
         }
       ],
       "category": "Tool",
-      "last_update": "June 3, 2020",
+      "last_update": "April 7, 2022",
       "images": [
         {
           "image": "imgs/linkfluence-plugin/img.png",
@@ -72,15 +81,23 @@
       "versions": {
         "0.9.0": {
           "url": "0.9.0/linkfluence-plugin-0.9.0.nbm",
-          "last_update": "February 11, 2016"
+          "last_update": "February 11, 2016",
+          "plugin_version": null
         },
         "0.9.1": {
           "url": "0.9.1/linkfluence-plugin-0.9.0.nbm",
-          "last_update": "August 10, 2017"
+          "last_update": "August 10, 2017",
+          "plugin_version": null
         },
         "0.9.2": {
           "url": "0.9.2/linkfluence-plugin-0.9.0.nbm",
-          "last_update": "June 3, 2020"
+          "last_update": "June 3, 2020",
+          "plugin_version": null
+        },
+        "0.9.3": {
+          "url": "0.9/linkfluence-plugin-0.9.0.nbm",
+          "last_update": "April 7, 2022",
+          "plugin_version": "0.9.0"
         }
       },
       "sourcecode": "https://github.com/eduramiba/gephi-plugins/tree/linkfluence-plugin",
@@ -111,7 +128,8 @@
       "versions": {
         "0.8.2": {
           "url": "0.8.2/labelpropagationclustering1.1.nbm",
-          "last_update": "June 23, 2014"
+          "last_update": "June 23, 2014",
+          "plugin_version": null
         }
       },
       "sourcecode": "https://github.com/BoutemineOualid/gephi-plugins-label_propagation",
@@ -142,7 +160,8 @@
       "versions": {
         "0.8.2": {
           "url": "0.8.2/cz-cvut-fit-krizeji1-girvan_newman.nbm",
-          "last_update": "May 30, 2014"
+          "last_update": "May 30, 2014",
+          "plugin_version": null
         }
       },
       "sourcecode": "https://github.com/jaroslav-kuchar/GirmanNewmanClustering",
@@ -177,7 +196,8 @@
       "versions": {
         "0.8.2": {
           "url": "0.8.2/cz-cvut-fit-krizeji1-markov_cluster.nbm",
-          "last_update": "May 30, 2014"
+          "last_update": "May 30, 2014",
+          "plugin_version": null
         }
       },
       "sourcecode": "https://github.com/jaroslav-kuchar/MarkovClustering",
@@ -208,7 +228,8 @@
       "versions": {
         "0.8.2": {
           "url": "0.8.2/cz-cvut-fit-krizeji1-mcode.nbm",
-          "last_update": "May 29, 2014"
+          "last_update": "May 29, 2014",
+          "plugin_version": null
         }
       },
       "sourcecode": "https://github.com/jaroslav-kuchar/MCodeClustering",
@@ -234,7 +255,8 @@
       "versions": {
         "0.8.2": {
           "url": "0.8.2/org-i9-GCViz1.nbm",
-          "last_update": "November 7, 2013"
+          "last_update": "November 7, 2013",
+          "plugin_version": null
         }
       },
       "sourcecode": "https://github.com/bboden/gephi-plugins/",
@@ -265,7 +287,8 @@
       "versions": {
         "0.8.2": {
           "url": "0.8.2/de-uni_leipzig-informatik-asv-gephi-chinesewhispers4.nbm",
-          "last_update": "June 21, 2015"
+          "last_update": "June 21, 2015",
+          "plugin_version": null
         }
       },
       "sourcecode": "https://github.com/efi/gephi-cw",
@@ -296,7 +319,8 @@
       "versions": {
         "0.8.2": {
           "url": "0.8.2/org-gephi-recast_manipulator-1.nbm",
-          "last_update": "February 19, 2013"
+          "last_update": "February 19, 2013",
+          "plugin_version": null
         }
       },
       "sourcecode": "https://github.com/megaterik/gephi/commits/change-type-of-column",
@@ -339,7 +363,8 @@
       "versions": {
         "0.8.2": {
           "url": "0.8.2/",
-          "last_update": "December 14, 2015"
+          "last_update": "December 14, 2015",
+          "plugin_version": null
         }
       },
       "sourcecode": "https://github.com/pegep/GoogleMapsExporter",
@@ -365,7 +390,8 @@
       "versions": {
         "0.8.2": {
           "url": "0.8.2/at-granul-gephi-shpexporter.nbm",
-          "last_update": "April 16, 2013"
+          "last_update": "April 16, 2013",
+          "plugin_version": null
         }
       },
       "sourcecode": "https://github.com/romanseidl/SHPExporter",
@@ -404,7 +430,8 @@
       "versions": {
         "0.8.2": {
           "url": "0.8.2/seadragon-web-export.zip",
-          "last_update": "January 4, 2013"
+          "last_update": "January 4, 2013",
+          "plugin_version": null
         }
       },
       "sourcecode": "https://github.com/mbastian/gephi-plugins/tree/seadragon-plugin",
@@ -443,7 +470,8 @@
       "versions": {
         "0.8.2": {
           "url": "0.8.2/ec-loxa-sna-gephi-031.nbm",
-          "last_update": "June 22, 2013"
+          "last_update": "June 22, 2013",
+          "plugin_version": null
         }
       },
       "sourcecode": "https://github.com/jorgaf/LoxaWebSiteExport",
@@ -474,7 +502,8 @@
       "versions": {
         "0.8.2": {
           "url": "0.8.2/org-gephi-graphstreaming.nbm",
-          "last_update": "April 18, 2013"
+          "last_update": "April 18, 2013",
+          "plugin_version": null
         }
       },
       "sourcecode": "https://github.com/gephi/gephi-plugins/tree/graph-streaming",
@@ -495,20 +524,28 @@
         }
       ],
       "category": "Export",
-      "last_update": "June 3, 2020",
+      "last_update": "April 7, 2022",
       "images": null,
       "versions": {
         "0.8.2": {
           "url": "0.8.2/com-hypercities-exporttoearth1.nbm",
-          "last_update": "May 26, 2013"
+          "last_update": "May 26, 2013",
+          "plugin_version": null
         },
         "0.9.1": {
           "url": "0.9.1/exporttoearth-1.0.0.nbm",
-          "last_update": "August 10, 2017"
+          "last_update": "August 10, 2017",
+          "plugin_version": null
         },
         "0.9.2": {
           "url": "0.9.2/exporttoearth-1.0.0.nbm",
-          "last_update": "June 3, 2020"
+          "last_update": "June 3, 2020",
+          "plugin_version": null
+        },
+        "0.9.3": {
+          "url": "0.9/exporttoearth-1.0.0.nbm",
+          "last_update": "April 7, 2022",
+          "plugin_version": "1.0.0"
         }
       },
       "sourcecode": "http://github.com/shepdl/gephi-plugins/tree/export-to-earth",
@@ -534,7 +571,8 @@
       "versions": {
         "0.8.2": {
           "url": "0.8.2/cs-arizona-edu-topedgeweightfilter.nbm",
-          "last_update": "May 11, 2015"
+          "last_update": "May 11, 2015",
+          "plugin_version": null
         }
       },
       "sourcecode": "https://github.com/iychoi/gephi-plugins/tree/master/TopEdgeWeight",
@@ -555,7 +593,7 @@
         }
       ],
       "category": "Filter",
-      "last_update": "June 3, 2020",
+      "last_update": "April 7, 2022",
       "images": [
         {
           "image": "imgs/kbrace-filter/kbrace-img.png",
@@ -565,23 +603,32 @@
       "versions": {
         "0.8.2": {
           "url": "0.8.2/org-gephi-plugins-filter-kbrace.nbm",
-          "last_update": "January 4, 2013"
+          "last_update": "January 4, 2013",
+          "plugin_version": null
         },
         "0.9.0": {
           "url": "0.9.0/kbrace-filter-1.0.0.nbm",
-          "last_update": "February 11, 2016"
+          "last_update": "February 11, 2016",
+          "plugin_version": null
         },
         "0.9.1": {
           "url": "0.9.1/kbrace-filter-1.0.0.nbm",
-          "last_update": "August 10, 2017"
+          "last_update": "August 10, 2017",
+          "plugin_version": null
         },
         "0.9.2": {
           "url": "0.9.2/kbrace-filter-1.0.0.nbm",
-          "last_update": "June 3, 2020"
+          "last_update": "June 3, 2020",
+          "plugin_version": null
+        },
+        "0.9.3": {
+          "url": "0.9/kbrace-filter-1.1.0.nbm",
+          "last_update": "April 7, 2022",
+          "plugin_version": "1.1.0"
         }
       },
-      "sourcecode": "https://github.com/mbastian/gephi-plugins/tree/kbrace-filter",
-      "homepage": null
+      "sourcecode": "https://github.com/mbastian/gephi-plugins/tree/kbrace-filter-plugin",
+      "homepage": "https://gephi.org/plugins/#/plugin/kbrace-filter"
     },
     {
       "id": "generalized-ba-model-with-getting-old-nodes",
@@ -603,7 +650,8 @@
       "versions": {
         "0.8.2": {
           "url": "0.8.2/org-daniel-generator-bamodel-ageing.nbm",
-          "last_update": "December 31, 2014"
+          "last_update": "December 31, 2014",
+          "plugin_version": null
         }
       },
       "sourcecode": "https://github.com/danello02/gephi-plugins/tree/master/FirstPlugin",
@@ -638,7 +686,8 @@
       "versions": {
         "0.8.2": {
           "url": "0.8.2/net.tum_.graphml-layout17.nbm",
-          "last_update": "November 13, 2014"
+          "last_update": "November 13, 2014",
+          "plugin_version": null
         }
       },
       "sourcecode": "https://github.com/KSD-research-group/plugin4gephi",
@@ -685,7 +734,8 @@
       "versions": {
         "0.8.2": {
           "url": "0.8.2/ExcelCsvImporter-1.43.nbm",
-          "last_update": "November 25, 2014"
+          "last_update": "November 25, 2014",
+          "plugin_version": null
         }
       },
       "sourcecode": "https://github.com/seinecle/My-Plugins-for-Gephi",
@@ -711,7 +761,8 @@
       "versions": {
         "0.8.2": {
           "url": "0.8.2/umberto-G_RandomWaypointMobilityModel.nbm",
-          "last_update": "April 14, 2013"
+          "last_update": "April 14, 2013",
+          "plugin_version": null
         }
       },
       "sourcecode": "https://github.com/umbertogriffo/MobilityModels",
@@ -737,7 +788,8 @@
       "versions": {
         "0.8.2": {
           "url": "0.8.2/complex-generators.zip",
-          "last_update": "February 13, 2013"
+          "last_update": "February 13, 2013",
+          "plugin_version": null
         }
       },
       "sourcecode": "https://github.com/cbartosiak/gephi-plugins/tree/complex-generators",
@@ -763,7 +815,8 @@
       "versions": {
         "0.8.2": {
           "url": "0.8.2/net-phreakocious-httpgraph.nbm",
-          "last_update": "February 27, 2013"
+          "last_update": "February 27, 2013",
+          "plugin_version": null
         }
       },
       "sourcecode": "https://github.com/phreakocious/gephi-plugins",
@@ -798,7 +851,8 @@
       "versions": {
         "0.8.2": {
           "url": "0.8.2/GephiSimilarityComputer1.0.2.nbm",
-          "last_update": "September 12, 2015"
+          "last_update": "September 12, 2015",
+          "plugin_version": null
         }
       },
       "sourcecode": "https://github.com/seinecle/My-Plugins-for-Gephi/tree/master/GephiSimilarityComputer",
@@ -829,7 +883,8 @@
       "versions": {
         "0.8.2": {
           "url": "0.8.2/org-ualberta-virtuosoimporter.nbm",
-          "last_update": "May 30, 2013"
+          "last_update": "May 30, 2013",
+          "plugin_version": null
         }
       },
       "sourcecode": "https://github.com/avens19/virtuosoimporter",
@@ -876,7 +931,8 @@
       "versions": {
         "0.8.2": {
           "url": "0.8.2/fr-inria-edelweiss-semantic3.nbm",
-          "last_update": "July 3, 2013"
+          "last_update": "July 3, 2013",
+          "plugin_version": null
         }
       },
       "sourcecode": "git://scm.gforge.inria.fr/segviz-public/gephi-plugins.git",
@@ -907,7 +963,8 @@
       "versions": {
         "0.8.2": {
           "url": "0.8.2/neo4j-plugin-2.1.3.zip",
-          "last_update": "August 7, 2014"
+          "last_update": "August 7, 2014",
+          "plugin_version": null
         }
       },
       "sourcecode": "https://github.com/gephi/gephi-plugins/tree/neo4j-plugin",
@@ -933,7 +990,8 @@
       "versions": {
         "0.8.2": {
           "url": "0.8.2/org-wouterspekkink-mdslayout1.nbm",
-          "last_update": "March 18, 2015"
+          "last_update": "March 18, 2015",
+          "plugin_version": null
         }
       },
       "sourcecode": "https://github.com/WouterSpekkink/MDSLayout.git",
@@ -964,7 +1022,8 @@
       "versions": {
         "0.8.2": {
           "url": "0.8.2/org-wouterspekkink-eventgraphlayout.nbm",
-          "last_update": "September 21, 2014"
+          "last_update": "September 21, 2014",
+          "plugin_version": null
         }
       },
       "sourcecode": "https://github.com/WouterSpekkink/EventGraphLayout",
@@ -995,7 +1054,8 @@
       "versions": {
         "0.8.2": {
           "url": "0.8.2/com-ngrain-Random3DLayout6.nbm",
-          "last_update": "May 14, 2014"
+          "last_update": "May 14, 2014",
+          "plugin_version": null
         }
       },
       "sourcecode": "https://github.com/alekseynp/gephi-plugin-Random3DLayout",
@@ -1005,7 +1065,7 @@
       "id": "network-splitter-3d",
       "name": "Network Splitter 3D",
       "short_description": "This layout can be used to split a network layout into distinct Z-Layers. E.g. after using layouts such as: Yifan Hu, Fruchterman Reingold, Force Atlas, Circular, Layered, OpenOrd, etc.",
-      "long_description": "Network Splitter 3D Z-Layers are user-defined clusters and can be used in Gephi ranking and/or partition procedures. You can also use this plugin to rotate your graph over the X-Axis.",
+      "long_description": "Network Splitter 3D Z-Layers are user-defined clusters and can be used in Gephi ranking and/or partition procedures. You can also use this plugin to rotate your graph over the X-Axis. ",
       "readme": "## Network Splitter 3D\n\n\nThis layout can be used to split a network layout into distinct Z-Layers  \n(Network Splitter 3D Z-Layers are user-defined clusters).  \n\nE.g. after using layouts such as: Yifan Hu, Fruchterman Reingold, Force Atlas, Circular, Layered, OpenOrd, etc.  \n\nComputed Z-Layers can be used in Gephi ranking and/or partition procedures.  \n\nTo use this plugin it is quite simple: network nodes should have an attribute containing “[z]” in its name.  \nE.g. something like “Degree [z]” or “YourNodeColumn[z]“.  \n\nThe Network Splitter 3D will compute and segment z-Levels regarding your “[z]” column values (with any ranges).  \n  \nIf your network don’t have a “[z]” column, no problem, all nodes will be placed in Z-Layer 0 (Zero).  \n  \n  \nAnother usefull feature:  \nYou can use this plugin to rotate your graph over the X-Axis.  \n  \n##Examples:  \n  \n![Network Splitter 3D](http://www.relationalcapitalvalue.com/myresources/example-0-networksplitter3d-layout.png)  \n  \n\n##Learning trail with a quick tutorial at:  \nhttp://www.relationalcapitalvalue.com/gephiplugins.html  \n\n\n",
       "license": "GPL v3",
       "authors": [
@@ -1016,7 +1076,7 @@
         }
       ],
       "category": "Layout",
-      "last_update": "June 3, 2020",
+      "last_update": "April 7, 2022",
       "images": [
         {
           "image": "imgs/network-splitter-3d/example-0-networksplitter3d-layout.png",
@@ -1026,15 +1086,23 @@
       "versions": {
         "0.8.2": {
           "url": "0.8.2/org-alexandrebarao-networksplitter3d.nbm",
-          "last_update": "May 7, 2014"
+          "last_update": "May 7, 2014",
+          "plugin_version": null
         },
         "0.9.1": {
           "url": "0.9.1/network-splitter-3d-1.0.0.nbm",
-          "last_update": "August 10, 2017"
+          "last_update": "August 10, 2017",
+          "plugin_version": null
         },
         "0.9.2": {
           "url": "0.9.2/network-splitter-3d-1.0.0.nbm",
-          "last_update": "June 3, 2020"
+          "last_update": "June 3, 2020",
+          "plugin_version": null
+        },
+        "0.9.3": {
+          "url": "0.9/network-splitter-3d-1.0.0.nbm",
+          "last_update": "April 7, 2022",
+          "plugin_version": "1.0.0"
         }
       },
       "sourcecode": "https://github.com/alexandrebarao",
@@ -1065,7 +1133,8 @@
       "versions": {
         "0.8.2": {
           "url": "0.8.2/org-alexandrebarao-isometriclayout.nbm",
-          "last_update": "April 9, 2014"
+          "last_update": "April 9, 2014",
+          "plugin_version": null
         }
       },
       "sourcecode": "http://www.relationalcapitalvalue.com/gephi/plugins/isometric/IsometricLayout.zip",
@@ -1096,7 +1165,8 @@
       "versions": {
         "0.8.2": {
           "url": "0.8.2/net-clementlevallois-1.4.1.nbm",
-          "last_update": "August 5, 2015"
+          "last_update": "August 5, 2015",
+          "plugin_version": null
         }
       },
       "sourcecode": "https://github.com/seinecle/My-Plugins-for-Gephi/tree/master/MapOfCountries",
@@ -1127,7 +1197,8 @@
       "versions": {
         "0.8.2": {
           "url": "0.8.2/net-clementlevallois-ForceAtlas3D_1.11.nbm",
-          "last_update": "October 19, 2014"
+          "last_update": "October 19, 2014",
+          "plugin_version": null
         }
       },
       "sourcecode": "https://github.com/seinecle/ForceAtlas3D",
@@ -1153,7 +1224,8 @@
       "versions": {
         "0.8.2": {
           "url": "0.8.2/com-cna-multipartiteLayout.nbm",
-          "last_update": "June 1, 2013"
+          "last_update": "June 1, 2013",
+          "plugin_version": null
         }
       },
       "sourcecode": "https://github.com/kemalceng/gephi-plugins/",
@@ -1184,7 +1256,8 @@
       "versions": {
         "0.8.2": {
           "url": "0.8.2/org-maktas-hiveplot.nbm",
-          "last_update": "May 21, 2013"
+          "last_update": "May 21, 2013",
+          "plugin_version": null
         }
       },
       "sourcecode": "https://github.com/maktas/GephiTest/tree/master/HiveplotModule",
@@ -1215,7 +1288,8 @@
       "versions": {
         "0.8.2": {
           "url": "0.8.2/org-vijesh-concentric5.nbm",
-          "last_update": "March 18, 2013"
+          "last_update": "March 18, 2013",
+          "plugin_version": null
         }
       },
       "sourcecode": "https://github.com/vijeshm/my-gephi-plugins/tree/master/ConcentricLayout",
@@ -1254,7 +1328,8 @@
       "versions": {
         "0.8.2": {
           "url": "0.8.2/net-clementlevallois-alphabeticalsorter_1.1.nbm",
-          "last_update": "October 19, 2014"
+          "last_update": "October 19, 2014",
+          "plugin_version": null
         }
       },
       "sourcecode": "https://github.com/seinecle/gephi-plugins",
@@ -1285,7 +1360,8 @@
       "versions": {
         "0.8.2": {
           "url": "0.8.2/org-gephi-plugins-layout-noverlap1.nbm",
-          "last_update": "January 4, 2013"
+          "last_update": "January 4, 2013",
+          "plugin_version": null
         }
       },
       "sourcecode": "https://github.com/gephi/gephi-plugins/tree/noverlap",
@@ -1316,7 +1392,8 @@
       "versions": {
         "0.8.2": {
           "url": "0.8.2/org-gephi-layout-plugin-openord1.nbm",
-          "last_update": "January 4, 2013"
+          "last_update": "January 4, 2013",
+          "plugin_version": null
         }
       },
       "sourcecode": "https://github.com/gephi/gephi-plugins/tree/openord-layout",
@@ -1351,7 +1428,8 @@
       "versions": {
         "0.8.2": {
           "url": "0.8.2/org-gephi-layout-plugin-circularlayout2.nbm",
-          "last_update": "March 2, 2013"
+          "last_update": "March 2, 2013",
+          "plugin_version": null
         }
       },
       "sourcecode": "https://github.com/mgroeninger/gephi-plugins/tree/circularlayout",
@@ -1382,7 +1460,8 @@
       "versions": {
         "0.8.2": {
           "url": "0.8.2/cz-cvut-fit-gephi-layeredlayout1.nbm",
-          "last_update": "January 31, 2013"
+          "last_update": "January 31, 2013",
+          "plugin_version": null
         }
       },
       "sourcecode": "http://github.com/jaroslav-kuchar/Layered-Layout",
@@ -1403,20 +1482,28 @@
         }
       ],
       "category": "Metric",
-      "last_update": "June 3, 2020",
+      "last_update": "April 7, 2022",
       "images": null,
       "versions": {
         "0.8.2": {
           "url": "0.8.2/org-wouterspekkink-lineage2.nbm",
-          "last_update": "December 15, 2015"
+          "last_update": "December 15, 2015",
+          "plugin_version": null
         },
         "0.9.1": {
           "url": "0.9.1/lineage-0.9.1.nbm",
-          "last_update": "August 10, 2017"
+          "last_update": "August 10, 2017",
+          "plugin_version": null
         },
         "0.9.2": {
           "url": "0.9.2/lineage-0.9.2.nbm",
-          "last_update": "June 3, 2020"
+          "last_update": "June 3, 2020",
+          "plugin_version": null
+        },
+        "0.9.3": {
+          "url": "0.9/lineage-0.9.3-SNAPSHOT.nbm",
+          "last_update": "April 7, 2022",
+          "plugin_version": "0.9.3-SNAPSHOT"
         }
       },
       "sourcecode": "$sourcecode_url",
@@ -1447,7 +1534,8 @@
       "versions": {
         "0.8.2": {
           "url": "0.8.2/org-wouterspekkink-mdsstatistics5.nbm",
-          "last_update": "September 29, 2015"
+          "last_update": "September 29, 2015",
+          "plugin_version": null
         }
       },
       "sourcecode": "https://github.com/WouterSpekkink/MDSStatistics.git",
@@ -1478,7 +1566,8 @@
       "versions": {
         "0.8.2": {
           "url": "0.8.2/com-carlschroedl-gephi-spanningtree.nbm",
-          "last_update": "February 21, 2015"
+          "last_update": "February 21, 2015",
+          "plugin_version": null
         }
       },
       "sourcecode": "https://github.com/carlschroedl/gephi-plugins",
@@ -1504,7 +1593,8 @@
       "versions": {
         "0.8.2": {
           "url": "0.8.2/org-urmiauniversity-it-mst-cliquedetector.nbm",
-          "last_update": "February 14, 2015"
+          "last_update": "February 14, 2015",
+          "plugin_version": null
         }
       },
       "sourcecode": "https://github.com/mirsamantajbakhsh/CliqueDetector",
@@ -1535,7 +1625,8 @@
       "versions": {
         "0.8.2": {
           "url": "0.8.2/cz-cvut-fit-krizeji1-edge_betweenness.nbm",
-          "last_update": "May 6, 2014"
+          "last_update": "May 6, 2014",
+          "plugin_version": null
         }
       },
       "sourcecode": "https://github.com/jaroslav-kuchar/EdgeBetweennessMetric",
@@ -1566,7 +1657,8 @@
       "versions": {
         "0.8.2": {
           "url": "0.8.2/org-gephi-LinkCommunities-plugin.nbm",
-          "last_update": "July 3, 2013"
+          "last_update": "July 3, 2013",
+          "plugin_version": null
         }
       },
       "sourcecode": "https://github.com/danimax/LinkCommunities/tree/master/src/org/gephi/LinkCommunities/plugin",
@@ -1592,7 +1684,8 @@
       "versions": {
         "0.8.2": {
           "url": "0.8.2/org-liborm-CCDisjoint1.nbm",
-          "last_update": "April 3, 2013"
+          "last_update": "April 3, 2013",
+          "plugin_version": null
         }
       },
       "sourcecode": "https://github.com/libor-m/gephi-plugins/tree/cc-disjoint",
@@ -1623,7 +1716,8 @@
       "versions": {
         "0.8.2": {
           "url": "0.8.2/umberto-WeightedClusterCoefficient1.nbm",
-          "last_update": "April 14, 2013"
+          "last_update": "April 14, 2013",
+          "plugin_version": null
         }
       },
       "sourcecode": "https://github.com/umbertogriffo/WeightedClusterCoefficient",
@@ -1654,7 +1748,8 @@
       "versions": {
         "0.8.2": {
           "url": "0.8.2/cz-cvut-fit-gephi-snametrics3.nbm",
-          "last_update": "July 3, 2013"
+          "last_update": "July 3, 2013",
+          "plugin_version": null
         }
       },
       "sourcecode": "http://github.com/jaroslav-kuchar/Social-Network-Analysis",
@@ -1685,7 +1780,8 @@
       "versions": {
         "0.8.2": {
           "url": "0.8.2/org-zeager-polygonnodes.nbm",
-          "last_update": "June 9, 2015"
+          "last_update": "June 9, 2015",
+          "plugin_version": null
         }
       },
       "sourcecode": "https://github.com/zeager/gephi-polygonnodes",
@@ -1720,7 +1816,8 @@
       "versions": {
         "0.8.2": {
           "url": "0.8.2/cz-cvut-fit-krizeji1-MultiColourRenderer.nbm",
-          "last_update": "May 7, 2014"
+          "last_update": "May 7, 2014",
+          "plugin_version": null
         }
       },
       "sourcecode": "https://github.com/jaroslav-kuchar/MultiColourRenderer",
@@ -1751,7 +1848,8 @@
       "versions": {
         "0.8.2": {
           "url": "0.8.2/org-yale-cs-graphics-gephi-imagepreview.nbm",
-          "last_update": "July 19, 2014"
+          "last_update": "July 19, 2014",
+          "plugin_version": null
         }
       },
       "sourcecode": "https://github.com/chrisxue815/gephi-plugin-image-preview",
@@ -1782,7 +1880,8 @@
       "versions": {
         "0.8.2": {
           "url": "0.8.2/org-gephi-plugins-spatialranking1.nbm",
-          "last_update": "January 4, 2013"
+          "last_update": "January 4, 2013",
+          "plugin_version": null
         }
       },
       "sourcecode": "https://github.com/gephi/gephi-plugins/tree/spatial-ranking",
@@ -1813,7 +1912,8 @@
       "versions": {
         "0.8.2": {
           "url": "0.8.2/net-clementlevallois-givecolortoedges-1.0.nbm",
-          "last_update": "May 11, 2015"
+          "last_update": "May 11, 2015",
+          "plugin_version": null
         }
       },
       "sourcecode": "https://github.com/seinecle/Plugins-for-Gephi/tree/master/GiveColorToEdges",
@@ -1844,7 +1944,8 @@
       "versions": {
         "0.8.2": {
           "url": "0.8.2/org-ilis-cliquepercolation.nbm",
-          "last_update": "October 16, 2015"
+          "last_update": "October 16, 2015",
+          "plugin_version": null
         }
       },
       "sourcecode": "https://github.com/kabab/gephi-plugin-clique-percolation",
@@ -1875,7 +1976,8 @@
       "versions": {
         "0.8.2": {
           "url": "0.8.2/org-urmiauniversity-it-mst-cpm3.nbm",
-          "last_update": "November 6, 2015"
+          "last_update": "November 6, 2015",
+          "plugin_version": null
         }
       },
       "sourcecode": "https://github.com/mirsamantajbakhsh/CliquePercolationMethod",
@@ -1914,7 +2016,8 @@
       "versions": {
         "0.8.2": {
           "url": "0.8.2/net-clementlevallois-givecolortonodes_1.1.nbm",
-          "last_update": "May 7, 2015"
+          "last_update": "May 7, 2015",
+          "plugin_version": null
         }
       },
       "sourcecode": "https://github.com/seinecle/My-Plugins-for-Gephi",
@@ -1934,7 +2037,8 @@
       "versions": {
         "0.8.2": {
           "url": "0.8.2/scripting-plugin-0.1.0-2.zip",
-          "last_update": "February 12, 2013"
+          "last_update": "February 12, 2013",
+          "plugin_version": null
         }
       },
       "sourcecode": "https://github.com/gephi/gephi-plugins/tree/python-scripting-plugin",
@@ -1955,24 +2059,33 @@
         }
       ],
       "category": "Tool",
-      "last_update": "June 3, 2020",
+      "last_update": "April 7, 2022",
       "images": null,
       "versions": {
         "0.8.2": {
           "url": "0.8.2/cz-cvut-fit-gephi-multimode1.nbm",
-          "last_update": "January 31, 2013"
+          "last_update": "January 31, 2013",
+          "plugin_version": null
         },
         "0.9.0": {
           "url": "0.9.0/multimode-1.0.0.nbm",
-          "last_update": "February 11, 2016"
+          "last_update": "February 11, 2016",
+          "plugin_version": null
         },
         "0.9.1": {
           "url": "0.9.1/multimode-1.0.1.nbm",
-          "last_update": "August 10, 2017"
+          "last_update": "August 10, 2017",
+          "plugin_version": null
         },
         "0.9.2": {
           "url": "0.9.2/multimode-1.1.0.nbm",
-          "last_update": "June 3, 2020"
+          "last_update": "June 3, 2020",
+          "plugin_version": null
+        },
+        "0.9.3": {
+          "url": "0.9/multimode-1.1.0.nbm",
+          "last_update": "April 7, 2022",
+          "plugin_version": "1.1.0"
         }
       },
       "sourcecode": "https://github.com/totetmatt/gephi-plugins/tree/multimode-network",
@@ -1993,24 +2106,33 @@
         }
       ],
       "category": "Export",
-      "last_update": "June 3, 2020",
+      "last_update": "April 7, 2022",
       "images": null,
       "versions": {
         "0.8.2": {
           "url": "0.8.2/uk-ac-ox-oii-jsonexporter9.nbm",
-          "last_update": "August 9, 2013"
+          "last_update": "August 9, 2013",
+          "plugin_version": null
         },
         "0.9.0": {
           "url": "0.9.0/jsonexporter-plugin-2.0.0.nbm",
-          "last_update": "February 11, 2016"
+          "last_update": "February 11, 2016",
+          "plugin_version": null
         },
         "0.9.1": {
           "url": "0.9.1/jsonexporter-plugin-2.0.0.nbm",
-          "last_update": "August 10, 2017"
+          "last_update": "August 10, 2017",
+          "plugin_version": null
         },
         "0.9.2": {
           "url": "0.9.2/jsonexporter-plugin-2.0.0.nbm",
-          "last_update": "June 3, 2020"
+          "last_update": "June 3, 2020",
+          "plugin_version": null
+        },
+        "0.9.3": {
+          "url": "0.9/jsonexporter-plugin-2.0.0.nbm",
+          "last_update": "April 7, 2022",
+          "plugin_version": "2.0.0"
         }
       },
       "sourcecode": "http://github.com/oxfordinternetinstitute/gephi-plugins",
@@ -2031,24 +2153,33 @@
         }
       ],
       "category": "Export",
-      "last_update": "June 3, 2020",
+      "last_update": "April 7, 2022",
       "images": null,
       "versions": {
         "0.8.2": {
           "url": "0.8.2/uk-ac-ox-oii-sigmaexporter2.nbm",
-          "last_update": "August 9, 2013"
+          "last_update": "August 9, 2013",
+          "plugin_version": null
         },
         "0.9.0": {
           "url": "0.9.0/sigmaexporter-0.9.0.nbm",
-          "last_update": "February 11, 2016"
+          "last_update": "February 11, 2016",
+          "plugin_version": null
         },
         "0.9.1": {
           "url": "0.9.1/sigmaexporter-0.9.0.nbm",
-          "last_update": "August 10, 2017"
+          "last_update": "August 10, 2017",
+          "plugin_version": null
         },
         "0.9.2": {
           "url": "0.9.2/sigmaexporter-0.9.0.nbm",
-          "last_update": "June 3, 2020"
+          "last_update": "June 3, 2020",
+          "plugin_version": null
+        },
+        "0.9.3": {
+          "url": "0.9/sigmaexporter-0.9.0.nbm",
+          "last_update": "April 7, 2022",
+          "plugin_version": "0.9.0"
         }
       },
       "sourcecode": "http://github.com/oxfordinternetinstitute/gephi-plugins",
@@ -2069,20 +2200,28 @@
         }
       ],
       "category": "Tool",
-      "last_update": "June 3, 2020",
+      "last_update": "April 7, 2022",
       "images": null,
       "versions": {
         "0.9.0": {
           "url": "0.9.0/gephi-plugin-node-color-manager-1.0.0.nbm",
-          "last_update": "February 11, 2016"
+          "last_update": "February 11, 2016",
+          "plugin_version": null
         },
         "0.9.1": {
           "url": "0.9.1/gephi-plugin-node-color-manager-1.0.0.nbm",
-          "last_update": "August 10, 2017"
+          "last_update": "August 10, 2017",
+          "plugin_version": null
         },
         "0.9.2": {
           "url": "0.9.2/gephi-plugin-node-color-manager-1.0.0.nbm",
-          "last_update": "June 3, 2020"
+          "last_update": "June 3, 2020",
+          "plugin_version": null
+        },
+        "0.9.3": {
+          "url": "0.9/gephi-plugin-node-color-manager-1.0.0.nbm",
+          "last_update": "April 7, 2022",
+          "plugin_version": "1.0.0"
         }
       },
       "sourcecode": "https://github.com/gephi/gephi-plugins/gephi-plugin-node-color-manager",
@@ -2103,7 +2242,7 @@
         }
       ],
       "category": "Layout",
-      "last_update": "June 3, 2020",
+      "last_update": "April 7, 2022",
       "images": [
         {
           "image": "imgs/gephigraphviz/GraphVizLayout_example.png",
@@ -2117,19 +2256,28 @@
       "versions": {
         "0.8.2": {
           "url": "0.8.2/org-icculus-chunky-gephigraphviz3.nbm",
-          "last_update": "April 25, 2015"
+          "last_update": "April 25, 2015",
+          "plugin_version": null
         },
         "0.9.0": {
           "url": "0.9.0/gephigraphviz-1.0.0.nbm",
-          "last_update": "February 11, 2016"
+          "last_update": "February 11, 2016",
+          "plugin_version": null
         },
         "0.9.1": {
           "url": "0.9.1/gephigraphviz-1.0.0.nbm",
-          "last_update": "August 10, 2017"
+          "last_update": "August 10, 2017",
+          "plugin_version": null
         },
         "0.9.2": {
           "url": "0.9.2/gephigraphviz-1.0.0.nbm",
-          "last_update": "June 3, 2020"
+          "last_update": "June 3, 2020",
+          "plugin_version": null
+        },
+        "0.9.3": {
+          "url": "0.9/gephigraphviz-1.0.0.nbm",
+          "last_update": "April 7, 2022",
+          "plugin_version": "1.0.0"
         }
       },
       "sourcecode": "https://github.com/chunky/gephi-plugins",
@@ -2150,16 +2298,23 @@
         }
       ],
       "category": "Import",
-      "last_update": "June 3, 2020",
+      "last_update": "April 7, 2022",
       "images": null,
       "versions": {
         "0.9.1": {
           "url": "0.9.1/graphstreaming-1.0.3.zip",
-          "last_update": "August 10, 2017"
+          "last_update": "August 10, 2017",
+          "plugin_version": null
         },
         "0.9.2": {
           "url": "0.9.2/graphstreaming-1.0.3.zip",
-          "last_update": "June 3, 2020"
+          "last_update": "June 3, 2020",
+          "plugin_version": null
+        },
+        "0.9.3": {
+          "url": "0.9/graphstreaming-1.0.3.zip",
+          "last_update": "April 7, 2022",
+          "plugin_version": "1.0.3"
         }
       },
       "sourcecode": "https://github.com/panisson/gephi-plugins/tree/graph-streaming",
@@ -2180,16 +2335,23 @@
         }
       ],
       "category": "Layout",
-      "last_update": "June 3, 2020",
+      "last_update": "April 7, 2022",
       "images": null,
       "versions": {
         "0.9.1": {
           "url": "0.9.1/circularlayout-0.9.1.nbm",
-          "last_update": "August 10, 2017"
+          "last_update": "August 10, 2017",
+          "plugin_version": null
         },
         "0.9.2": {
           "url": "0.9.2/circularlayout-0.9.2.nbm",
-          "last_update": "June 3, 2020"
+          "last_update": "June 3, 2020",
+          "plugin_version": null
+        },
+        "0.9.3": {
+          "url": "0.9/circularlayout-0.9.3.nbm",
+          "last_update": "April 7, 2022",
+          "plugin_version": "0.9.3"
         }
       },
       "sourcecode": "https://github.com/mgroeninger/gephi-plugins",
@@ -2228,11 +2390,13 @@
       "versions": {
         "0.9.1": {
           "url": "0.9.1/semantic-1.0.0.nbm",
-          "last_update": "August 10, 2017"
+          "last_update": "August 10, 2017",
+          "plugin_version": null
         },
         "0.9.2": {
           "url": "0.9.2/semantic-1.0.0.nbm",
-          "last_update": "June 3, 2020"
+          "last_update": "June 3, 2020",
+          "plugin_version": null
         }
       },
       "sourcecode": "https://github.com/Wimmics/gephi-semantic-web-import",
@@ -2253,7 +2417,7 @@
         }
       ],
       "category": "Export",
-      "last_update": "June 3, 2020",
+      "last_update": "April 7, 2022",
       "images": [
         {
           "image": "imgs/loxawebsiteexport/logo_final.png",
@@ -2263,11 +2427,18 @@
       "versions": {
         "0.9.1": {
           "url": "0.9.1/loxawebsiteexport-0.3.2.nbm",
-          "last_update": "August 10, 2017"
+          "last_update": "August 10, 2017",
+          "plugin_version": null
         },
         "0.9.2": {
           "url": "0.9.2/loxawebsiteexport-0.3.2.nbm",
-          "last_update": "June 3, 2020"
+          "last_update": "June 3, 2020",
+          "plugin_version": null
+        },
+        "0.9.3": {
+          "url": "0.9/loxawebsiteexport-0.3.2.nbm",
+          "last_update": "April 7, 2022",
+          "plugin_version": "0.3.2"
         }
       },
       "sourcecode": "https://github.com/jorgaf/gephi-plugins",
@@ -2288,7 +2459,7 @@
         }
       ],
       "category": "Tool",
-      "last_update": "June 3, 2020",
+      "last_update": "April 7, 2022",
       "images": [
         {
           "image": "imgs/scripting.plugin/img1.png",
@@ -2298,11 +2469,18 @@
       "versions": {
         "0.9.1": {
           "url": "0.9.1/scripting.plugin-0.9.1.2.nbm",
-          "last_update": "August 10, 2017"
+          "last_update": "August 10, 2017",
+          "plugin_version": null
         },
         "0.9.2": {
           "url": "0.9.2/scripting.plugin-0.9.2.nbm",
-          "last_update": "June 3, 2020"
+          "last_update": "June 3, 2020",
+          "plugin_version": null
+        },
+        "0.9.3": {
+          "url": "0.9/scripting.plugin-0.9.3-SNAPSHOT.nbm",
+          "last_update": "April 7, 2022",
+          "plugin_version": "0.9.3-SNAPSHOT"
         }
       },
       "sourcecode": "https://github.com/gephi/gephi-plugins/tree/python-scripting-plugin",
@@ -2323,7 +2501,7 @@
         }
       ],
       "category": "Import",
-      "last_update": "June 3, 2020",
+      "last_update": "April 7, 2022",
       "images": [
         {
           "image": "imgs/twitter-streaming-importer/A_Screenshot.png",
@@ -2349,11 +2527,18 @@
       "versions": {
         "0.9.1": {
           "url": "0.9.1/twitter-streaming-importer-1.1.1.nbm",
-          "last_update": "August 10, 2017"
+          "last_update": "August 10, 2017",
+          "plugin_version": null
         },
         "0.9.2": {
           "url": "0.9.2/twitter-streaming-importer-1.4.3.nbm",
-          "last_update": "October 5, 2021"
+          "last_update": "October 5, 2021",
+          "plugin_version": null
+        },
+        "0.9.3": {
+          "url": "0.9/twitter-streaming-importer-1.4.3.nbm",
+          "last_update": "April 7, 2022",
+          "plugin_version": "1.4.3"
         }
       },
       "sourcecode": "https://github.com/totetmatt/gephi-plugins/tree/twitter",
@@ -2374,7 +2559,7 @@
         }
       ],
       "category": "Layout",
-      "last_update": "June 3, 2020",
+      "last_update": "April 7, 2022",
       "images": [
         {
           "image": "imgs/isometric-layout/example-0-isometric-layout.png",
@@ -2384,11 +2569,18 @@
       "versions": {
         "0.9.1": {
           "url": "0.9.1/isometric-layout-1.0.0.nbm",
-          "last_update": "August 10, 2017"
+          "last_update": "August 10, 2017",
+          "plugin_version": null
         },
         "0.9.2": {
           "url": "0.9.2/isometric-layout-1.0.0.nbm",
-          "last_update": "June 3, 2020"
+          "last_update": "June 3, 2020",
+          "plugin_version": null
+        },
+        "0.9.3": {
+          "url": "0.9/isometric-layout-1.0.0.nbm",
+          "last_update": "April 7, 2022",
+          "plugin_version": "1.0.0"
         }
       },
       "sourcecode": "https://github.com/alexandrebarao",
@@ -2409,7 +2601,7 @@
         }
       ],
       "category": "Import",
-      "last_update": "June 3, 2020",
+      "last_update": "April 7, 2022",
       "images": [
         {
           "image": "imgs/ExcelCsvImporter/1.png",
@@ -2435,11 +2627,18 @@
       "versions": {
         "0.9.1": {
           "url": "0.9.1/ExcelCsvImporter-1.0.0.nbm",
-          "last_update": "August 10, 2017"
+          "last_update": "August 10, 2017",
+          "plugin_version": null
         },
         "0.9.2": {
           "url": "0.9.2/ExcelCsvImporter-1.0.0.nbm",
-          "last_update": "June 3, 2020"
+          "last_update": "June 3, 2020",
+          "plugin_version": null
+        },
+        "0.9.3": {
+          "url": "0.9/ExcelCsvImporter-1.0.0.nbm",
+          "last_update": "April 7, 2022",
+          "plugin_version": "1.0.0"
         }
       },
       "sourcecode": "https://github.com/seinecle/gephi-plugins/tree/ExcelCsvImporter",
@@ -2460,16 +2659,23 @@
         }
       ],
       "category": "Import",
-      "last_update": "June 3, 2020",
+      "last_update": "April 7, 2022",
       "images": null,
       "versions": {
         "0.9.1": {
           "url": "0.9.1/oracle-driver-0.0.1.nbm",
-          "last_update": "August 10, 2017"
+          "last_update": "August 10, 2017",
+          "plugin_version": null
         },
         "0.9.2": {
           "url": "0.9.2/oracle-driver-0.0.1.nbm",
-          "last_update": "June 3, 2020"
+          "last_update": "June 3, 2020",
+          "plugin_version": null
+        },
+        "0.9.3": {
+          "url": "0.9/oracle-driver-0.0.1.nbm",
+          "last_update": "April 7, 2022",
+          "plugin_version": "0.0.1"
         }
       },
       "sourcecode": "https://github.com/sturton/gephi-plugins",
@@ -2490,7 +2696,7 @@
         }
       ],
       "category": "Layout",
-      "last_update": "June 3, 2020",
+      "last_update": "April 7, 2022",
       "images": [
         {
           "image": "imgs/eventgraphlayout/img.png",
@@ -2500,11 +2706,18 @@
       "versions": {
         "0.9.1": {
           "url": "0.9.1/eventgraphlayout-1.0.0.nbm",
-          "last_update": "August 10, 2017"
+          "last_update": "August 10, 2017",
+          "plugin_version": null
         },
         "0.9.2": {
           "url": "0.9.2/eventgraphlayout-1.0.0.nbm",
-          "last_update": "June 3, 2020"
+          "last_update": "June 3, 2020",
+          "plugin_version": null
+        },
+        "0.9.3": {
+          "url": "0.9/eventgraphlayout-1.0.0.nbm",
+          "last_update": "April 7, 2022",
+          "plugin_version": "1.0.0"
         }
       },
       "sourcecode": "https://github.com/WouterSpekkink/gephi-plugins/tree/eventgraphlayout",
@@ -2525,16 +2738,23 @@
         }
       ],
       "category": "Layout",
-      "last_update": "June 3, 2020",
+      "last_update": "April 7, 2022",
       "images": null,
       "versions": {
         "0.9.1": {
           "url": "0.9.1/mdslayout-0.9.1.nbm",
-          "last_update": "August 10, 2017"
+          "last_update": "August 10, 2017",
+          "plugin_version": null
         },
         "0.9.2": {
           "url": "0.9.2/mdslayout-0.9.2.nbm",
-          "last_update": "June 3, 2020"
+          "last_update": "June 3, 2020",
+          "plugin_version": null
+        },
+        "0.9.3": {
+          "url": "0.9/mdslayout-0.9.3-SNAPSHOT.nbm",
+          "last_update": "April 7, 2022",
+          "plugin_version": "0.9.3-SNAPSHOT"
         }
       },
       "sourcecode": "https://github.com/WouterSpekkink/gephi-plugins/tree/mdslayout",
@@ -2555,16 +2775,23 @@
         }
       ],
       "category": "Filter",
-      "last_update": "June 3, 2020",
+      "last_update": "April 7, 2022",
       "images": null,
       "versions": {
         "0.9.1": {
           "url": "0.9.1/graphfilter-1.0.0.nbm",
-          "last_update": "August 10, 2017"
+          "last_update": "August 10, 2017",
+          "plugin_version": null
         },
         "0.9.2": {
           "url": "0.9.2/graphfilter-1.0.0.nbm",
-          "last_update": "June 3, 2020"
+          "last_update": "June 3, 2020",
+          "plugin_version": null
+        },
+        "0.9.3": {
+          "url": "0.9/graphfilter-1.0.0.nbm",
+          "last_update": "April 7, 2022",
+          "plugin_version": "1.0.0"
         }
       },
       "sourcecode": "https://github.com/ypanagis/gephi-plugins",
@@ -2585,7 +2812,7 @@
         }
       ],
       "category": "Tool",
-      "last_update": "June 3, 2020",
+      "last_update": "April 7, 2022",
       "images": [
         {
           "image": "imgs/givecolortonodes/1.illustration.png",
@@ -2603,11 +2830,18 @@
       "versions": {
         "0.9.1": {
           "url": "0.9.1/givecolortonodes-1.0.0.nbm",
-          "last_update": "August 10, 2017"
+          "last_update": "August 10, 2017",
+          "plugin_version": null
         },
         "0.9.2": {
           "url": "0.9.2/givecolortonodes-1.0.0.nbm",
-          "last_update": "June 3, 2020"
+          "last_update": "June 3, 2020",
+          "plugin_version": null
+        },
+        "0.9.3": {
+          "url": "0.9/givecolortonodes-1.0.0.nbm",
+          "last_update": "April 7, 2022",
+          "plugin_version": "1.0.0"
         }
       },
       "sourcecode": "https://github.com/seinecle/gephi-plugins/tree/GiveColorsToNodes",
@@ -2628,7 +2862,7 @@
         }
       ],
       "category": "Tool",
-      "last_update": "June 3, 2020",
+      "last_update": "April 7, 2022",
       "images": [
         {
           "image": "imgs/givecolortoedges/colourwheel.png",
@@ -2638,11 +2872,18 @@
       "versions": {
         "0.9.1": {
           "url": "0.9.1/givecolortoedges-1.0.0.nbm",
-          "last_update": "August 10, 2017"
+          "last_update": "August 10, 2017",
+          "plugin_version": null
         },
         "0.9.2": {
           "url": "0.9.2/givecolortoedges-1.0.0.nbm",
-          "last_update": "June 3, 2020"
+          "last_update": "June 3, 2020",
+          "plugin_version": null
+        },
+        "0.9.3": {
+          "url": "0.9/givecolortoedges-1.0.0.nbm",
+          "last_update": "April 7, 2022",
+          "plugin_version": "1.0.0"
         }
       },
       "sourcecode": "https://github.com/seinecle/gephi-plugins/tree/GiveColorsToEdges",
@@ -2663,7 +2904,7 @@
         }
       ],
       "category": "Layout",
-      "last_update": "June 3, 2020",
+      "last_update": "April 7, 2022",
       "images": [
         {
           "image": "imgs/gravity-plugin/FA2snake.png",
@@ -2681,11 +2922,18 @@
       "versions": {
         "0.9.1": {
           "url": "0.9.1/gravity-plugin-1.0.0.nbm",
-          "last_update": "August 10, 2017"
+          "last_update": "August 10, 2017",
+          "plugin_version": null
         },
         "0.9.2": {
           "url": "0.9.2/gravity-plugin-1.0.0.nbm",
-          "last_update": "June 3, 2020"
+          "last_update": "June 3, 2020",
+          "plugin_version": null
+        },
+        "0.9.3": {
+          "url": "0.9/gravity-plugin-1.0.0.nbm",
+          "last_update": "April 7, 2022",
+          "plugin_version": "1.0.0"
         }
       },
       "sourcecode": "https://github.com/suryanash/gephi-plugins",
@@ -2706,7 +2954,7 @@
         }
       ],
       "category": "Metric",
-      "last_update": "June 3, 2020",
+      "last_update": "April 7, 2022",
       "images": [
         {
           "image": "imgs/mdsmetric/img.png",
@@ -2716,11 +2964,18 @@
       "versions": {
         "0.9.1": {
           "url": "0.9.1/mdsmetric-0.9.1.nbm",
-          "last_update": "August 10, 2017"
+          "last_update": "August 10, 2017",
+          "plugin_version": null
         },
         "0.9.2": {
           "url": "0.9.2/mdsmetric-0.9.2.nbm",
-          "last_update": "June 3, 2020"
+          "last_update": "June 3, 2020",
+          "plugin_version": null
+        },
+        "0.9.3": {
+          "url": "0.9/mdsmetric-0.9.3-SNAPSHOT.nbm",
+          "last_update": "April 7, 2022",
+          "plugin_version": "0.9.3-SNAPSHOT"
         }
       },
       "sourcecode": "https://github.com/WouterSpekkink/gephi-plugins/tree/mds_metric",
@@ -2741,16 +2996,23 @@
         }
       ],
       "category": "Metric",
-      "last_update": "June 3, 2020",
+      "last_update": "April 7, 2022",
       "images": null,
       "versions": {
         "0.9.1": {
           "url": "0.9.1/vector-calculator-0.5.0.nbm",
-          "last_update": "August 10, 2017"
+          "last_update": "August 10, 2017",
+          "plugin_version": null
         },
         "0.9.2": {
           "url": "0.9.2/vector-calculator-0.5.0.nbm",
-          "last_update": "June 3, 2020"
+          "last_update": "June 3, 2020",
+          "plugin_version": null
+        },
+        "0.9.3": {
+          "url": "0.9/vector-calculator-0.5.0.nbm",
+          "last_update": "April 7, 2022",
+          "plugin_version": "0.5.0"
         }
       },
       "sourcecode": "https://github.com/d99joper/gephi-plugins/tree/master/modules/VectorCalculator/",
@@ -2771,16 +3033,23 @@
         }
       ],
       "category": "Metric",
-      "last_update": "June 3, 2020",
+      "last_update": "April 7, 2022",
       "images": null,
       "versions": {
         "0.9.1": {
           "url": "0.9.1/prestige-plugin-1.0.0.nbm",
-          "last_update": "August 10, 2017"
+          "last_update": "August 10, 2017",
+          "plugin_version": null
         },
         "0.9.2": {
           "url": "0.9.2/prestige-plugin-1.0.0.nbm",
-          "last_update": "June 3, 2020"
+          "last_update": "June 3, 2020",
+          "plugin_version": null
+        },
+        "0.9.3": {
+          "url": "0.9/prestige-plugin-1.0.0.nbm",
+          "last_update": "April 7, 2022",
+          "plugin_version": "1.0.0"
         }
       },
       "sourcecode": "https://github.com/michihenninger/prestige-gephi-plugin/tree/prestige-plugin",
@@ -2806,11 +3075,13 @@
       "versions": {
         "0.9.1": {
           "url": "0.9.1/httpgraph-1.0.8.nbm",
-          "last_update": "August 10, 2017"
+          "last_update": "August 10, 2017",
+          "plugin_version": null
         },
         "0.9.2": {
           "url": "0.9.2/httpgraph-1.0.8.nbm",
-          "last_update": "June 3, 2020"
+          "last_update": "June 3, 2020",
+          "plugin_version": null
         }
       },
       "sourcecode": "http://github.com/phreakocious/gephi-plugins",
@@ -2831,7 +3102,7 @@
         }
       ],
       "category": "Other Category",
-      "last_update": "June 3, 2020",
+      "last_update": "April 7, 2022",
       "images": [
         {
           "image": "imgs/spanning-tree-plugin/after-running-minimum-spanning-tree.png",
@@ -2849,11 +3120,18 @@
       "versions": {
         "0.9.1": {
           "url": "0.9.1/spanning-tree-plugin-1.0.0.nbm",
-          "last_update": "August 10, 2017"
+          "last_update": "August 10, 2017",
+          "plugin_version": null
         },
         "0.9.2": {
           "url": "0.9.2/spanning-tree-plugin-1.0.0.nbm",
-          "last_update": "June 3, 2020"
+          "last_update": "June 3, 2020",
+          "plugin_version": null
+        },
+        "0.9.3": {
+          "url": "0.9/spanning-tree-plugin-1.0.0.nbm",
+          "last_update": "April 7, 2022",
+          "plugin_version": "1.0.0"
         }
       },
       "sourcecode": "https://github.com/carlschroedl/gephi-plugins",
@@ -2874,7 +3152,7 @@
         }
       ],
       "category": "Import",
-      "last_update": "June 3, 2020",
+      "last_update": "April 7, 2022",
       "images": [
         {
           "image": "imgs/SimilarityComputer/no-weights.png",
@@ -2888,11 +3166,18 @@
       "versions": {
         "0.9.1": {
           "url": "0.9.1/SimilarityComputer-1.1.3.nbm",
-          "last_update": "August 10, 2017"
+          "last_update": "August 10, 2017",
+          "plugin_version": null
         },
         "0.9.2": {
           "url": "0.9.2/SimilarityComputer-1.1.3.nbm",
-          "last_update": "June 3, 2020"
+          "last_update": "June 3, 2020",
+          "plugin_version": null
+        },
+        "0.9.3": {
+          "url": "0.9/SimilarityComputer-1.1.3.nbm",
+          "last_update": "April 7, 2022",
+          "plugin_version": "1.1.3"
         }
       },
       "sourcecode": "https://github.com/seinecle/gephi-plugins/tree/similaritycomputer",
@@ -2904,7 +3189,7 @@
       "short_description": "A layout to display maps in the backgrounds of networks",
       "long_description": "\u003ch1\u003eMap of Countries\u003c/h1\u003e\nThis plugin allows you to displays maps of countries, world regions, and regions within countries that you choose from a list. This can be useful if you want to plot geolocalized networks on it.\u003cbr\u003e\n\u003cbr\u003e\n\n\u003ch3\u003eRelease history\u003c/h3\u003e\nSept. 24, 2013: 1.0, first release\u003cbr\u003e\nOct 19, 2014: 1.1, removed labels from background nodes because they were just an inconvenience.\nJan 1, 2015: 1.2, fixed a null pointer exception.\u003cbr\u003e\nMay 13, 2015: 1.3, added a new feature: districts and regions from countries. Australian states / territories are the first addition.\u003cbr\u003e\nAug 05, 2015: 1.4, added a new feature: \"Weight\" allows to control the thickness of the lines of the borders\u003cbr\u003e\n\u003cbr\u003e\n\n\u003cbr\u003eFeb 23,2017: 1.5, added a \"background-map\" attribute to the edges of the map so that they can be filtered independently from the network.\u003cbr\u003e\u003ch3\u003eComments and feedbacks\u003ch3\u003e\n\u003ca href\u003d\"http://www.clementlevallois.net\"\u003ewww.clementlevallois.net\u003c/a\u003e.\u003cbr\u003e\n\u003cbr\u003e\n\n\u003ch3\u003eAcknowledgements\u003c/h3\u003e\nThanks to Alexis Jacomy who built \"GeoLayout\", on which this plugin is very largely based.\n\u003cbr\u003e\n\u003cbr\u003e\nThe maps are provided by Bjorn Sandvik, thematicmapping.org. The note attached to the dataset says:\u003cbr\u003e\n\u003cbr\u003e\n\"Use this dataset with care, as several of the borders are disputed.\u003cbr\u003e\n\u003cbr\u003e\nThe original shapefile (world_borders.zip, 3.2 MB) was downloaded from the Mapping Hacks website:\u003cbr\u003e\nhttp://www.mappinghacks.com/data \u003cbr\u003e\n\u003cbr\u003e\nThe dataset was derived by Schuyler Erle from public domain sources.\u003cbr\u003e\nSean Gilles did some clean up and made some enhancements.\"\u003cbr\u003e\n\u003cbr\u003e\n\u003cbr\u003e\nDataset for Australian states from: \u003ca href\u003d\"http://www.abs.gov.au/ausstats/abs@.nsf/mf/1259.0.30.001?OpenDocument\"\u003eAustralian Bureau of Statistics.",
       "readme": null,
-      "license": "Apache v2",
+      "license": "Apache 2.0",
       "authors": [
         {
           "name": "Clement Levallois",
@@ -2913,16 +3198,23 @@
         }
       ],
       "category": "Layout",
-      "last_update": "June 3, 2020",
+      "last_update": "April 7, 2022",
       "images": null,
       "versions": {
         "0.9.1": {
           "url": "0.9.1/mapofcountries-1.5.1.nbm",
-          "last_update": "August 10, 2017"
+          "last_update": "August 10, 2017",
+          "plugin_version": null
         },
         "0.9.2": {
           "url": "0.9.2/mapofcountries-1.5.1.nbm",
-          "last_update": "June 3, 2020"
+          "last_update": "June 3, 2020",
+          "plugin_version": null
+        },
+        "0.9.3": {
+          "url": "0.9/mapofcountries-1.5.1.nbm",
+          "last_update": "April 7, 2022",
+          "plugin_version": "1.5.1"
         }
       },
       "sourcecode": "https://github.com/seinecle/gephi-plugins/tree/mapOfCountriesBranch",
@@ -2948,11 +3240,13 @@
       "versions": {
         "0.9.1": {
           "url": "0.9.1/agensgraph-plugin-1.0.0.nbm",
-          "last_update": "August 10, 2017"
+          "last_update": "August 10, 2017",
+          "plugin_version": null
         },
         "0.9.2": {
           "url": "0.9.2/agensgraph-plugin-1.0.0.nbm",
-          "last_update": "June 3, 2020"
+          "last_update": "June 3, 2020",
+          "plugin_version": null
         }
       },
       "sourcecode": "https://github.com/bitnine-oss/gephi-plugins/tree/agensgraph-plugin",
@@ -2973,16 +3267,23 @@
         }
       ],
       "category": "Layout",
-      "last_update": "June 3, 2020",
+      "last_update": "April 7, 2022",
       "images": null,
       "versions": {
         "0.9.1": {
           "url": "0.9.1/polygon-shaped-nodes-1.0.0.nbm",
-          "last_update": "August 10, 2017"
+          "last_update": "August 10, 2017",
+          "plugin_version": null
         },
         "0.9.2": {
           "url": "0.9.2/polygon-shaped-nodes-1.0.0.nbm",
-          "last_update": "June 3, 2020"
+          "last_update": "June 3, 2020",
+          "plugin_version": null
+        },
+        "0.9.3": {
+          "url": "0.9/polygon-shaped-nodes-1.0.0.nbm",
+          "last_update": "April 7, 2022",
+          "plugin_version": "1.0.0"
         }
       },
       "sourcecode": "http://github.com/iachan/gephi-plugins",
@@ -3003,16 +3304,23 @@
         }
       ],
       "category": "Layout",
-      "last_update": "June 3, 2020",
+      "last_update": "April 7, 2022",
       "images": null,
       "versions": {
         "0.9.1": {
           "url": "0.9.1/scale-plugin-1.1.0.nbm",
-          "last_update": "August 10, 2017"
+          "last_update": "August 10, 2017",
+          "plugin_version": null
         },
         "0.9.2": {
           "url": "0.9.2/scale-plugin-1.1.0.nbm",
-          "last_update": "June 3, 2020"
+          "last_update": "June 3, 2020",
+          "plugin_version": null
+        },
+        "0.9.3": {
+          "url": "0.9/scale-plugin-1.1.0.nbm",
+          "last_update": "April 7, 2022",
+          "plugin_version": "1.1.0"
         }
       },
       "sourcecode": "https://github.com/weihs/gephi-plugins",
@@ -3022,7 +3330,7 @@
       "id": "circle-pack",
       "name": "Circle Pack",
       "short_description": "Packs circles based on hierarchical data",
-      "long_description": "Packs circles using Mike Bostock\u0027s circle packing algorithm",
+      "long_description": "Packs circles using Mike Bostock\u0027s circle packing algorithm ",
       "readme": "## Circle Pack\n\nThis layout is based on Mike Bostock\u0027s packing algorithm using in [d3-hierarchy](https://github.com/d3/d3-hierarchy). \nMultiple levels of hierarchy can be used to generate circle packs within circle packs.\n\n",
       "license": "Apache 2.0",
       "authors": [
@@ -3033,16 +3341,23 @@
         }
       ],
       "category": "Layout",
-      "last_update": "June 3, 2020",
+      "last_update": "April 7, 2022",
       "images": null,
       "versions": {
         "0.9.1": {
           "url": "0.9.1/circle-pack-1.0.0.nbm",
-          "last_update": "August 10, 2017"
+          "last_update": "August 10, 2017",
+          "plugin_version": null
         },
         "0.9.2": {
           "url": "0.9.2/circle-pack-1.0.0.nbm",
-          "last_update": "June 3, 2020"
+          "last_update": "June 3, 2020",
+          "plugin_version": null
+        },
+        "0.9.3": {
+          "url": "0.9/circle-pack-1.0.0.nbm",
+          "last_update": "April 7, 2022",
+          "plugin_version": "1.0.0"
         }
       },
       "sourcecode": "https://github.com/sasakiassociates/gephi-plugins/tree/circlePack",
@@ -3068,7 +3383,8 @@
       "versions": {
         "0.9.2": {
           "url": "0.9.2/shpexporter-1.1.0.nbm",
-          "last_update": "June 3, 2019"
+          "last_update": "June 3, 2019",
+          "plugin_version": null
         }
       },
       "sourcecode": "https://github.com/gephi/gephi-plugins/shpexporter",
@@ -3078,7 +3394,7 @@
       "id": "newman-girvan-plugin",
       "name": "Newman-Girvan Clustering",
       "short_description": "Girvan-Newman clustering algorithm",
-      "long_description": "This plugin clusters a given graph using the Girvan-Newman algorithm.",
+      "long_description": "This plugin clusters a given graph using the Girvan-Newman algorithm. ",
       "readme": null,
       "license": "Apache 2.0",
       "authors": [
@@ -3089,12 +3405,18 @@
         }
       ],
       "category": "Clustering",
-      "last_update": "June 3, 2020",
+      "last_update": "April 7, 2022",
       "images": null,
       "versions": {
         "0.9.2": {
           "url": "0.9.2/newman-girvan-plugin-1.0.0.nbm",
-          "last_update": "June 3, 2020"
+          "last_update": "June 3, 2020",
+          "plugin_version": null
+        },
+        "0.9.3": {
+          "url": "0.9/newman-girvan-plugin-1.0.0.nbm",
+          "last_update": "April 7, 2022",
+          "plugin_version": "1.0.0"
         }
       },
       "sourcecode": "https://github.com/jSh4rk/gephi-plugins",
@@ -3115,12 +3437,18 @@
         }
       ],
       "category": "Preview",
-      "last_update": "June 3, 2020",
+      "last_update": "April 7, 2022",
       "images": null,
       "versions": {
         "0.9.2": {
           "url": "0.9.2/imagepreview-1.0.0.nbm",
-          "last_update": "June 3, 2020"
+          "last_update": "June 3, 2020",
+          "plugin_version": null
+        },
+        "0.9.3": {
+          "url": "0.9/imagepreview-1.0.0.nbm",
+          "last_update": "April 7, 2022",
+          "plugin_version": "1.0.0"
         }
       },
       "sourcecode": "https://github.com/totetmatt/gephi-plugins/tree/image-preview",
@@ -3141,12 +3469,18 @@
         }
       ],
       "category": "Export",
-      "last_update": "June 3, 2020",
+      "last_update": "April 7, 2022",
       "images": null,
       "versions": {
         "0.9.2": {
           "url": "0.9.2/polinodeexporter-0.9.2.nbm",
-          "last_update": "June 3, 2020"
+          "last_update": "June 3, 2020",
+          "plugin_version": null
+        },
+        "0.9.3": {
+          "url": "0.9/polinodeexporter-0.9.3-SNAPSHOT.nbm",
+          "last_update": "April 7, 2022",
+          "plugin_version": "0.9.3-SNAPSHOT"
         }
       },
       "sourcecode": "http://github.com/Polinode/gephi-plugins",
@@ -3167,12 +3501,18 @@
         }
       ],
       "category": "Clustering",
-      "last_update": "June 3, 2020",
+      "last_update": "April 7, 2022",
       "images": null,
       "versions": {
         "0.9.2": {
           "url": "0.9.2/leiden-algorithm-gephi-plugin-1.0.0.nbm",
-          "last_update": "June 3, 2020"
+          "last_update": "June 3, 2020",
+          "plugin_version": null
+        },
+        "0.9.3": {
+          "url": "0.9/leiden-algorithm-gephi-plugin-1.0.0.nbm",
+          "last_update": "April 7, 2022",
+          "plugin_version": "1.0.0"
         }
       },
       "sourcecode": "http://github.com/vtraag/gephi-leiden-plugin",
@@ -3193,12 +3533,18 @@
         }
       ],
       "category": "Metric",
-      "last_update": "June 3, 2020",
+      "last_update": "April 7, 2022",
       "images": null,
       "versions": {
         "0.9.2": {
           "url": "0.9.2/bridge-gephi-plugin-1.0.1.nbm",
-          "last_update": "June 3, 2020"
+          "last_update": "June 3, 2020",
+          "plugin_version": null
+        },
+        "0.9.3": {
+          "url": "0.9/bridge-gephi-plugin-1.0.1.nbm",
+          "last_update": "April 7, 2022",
+          "plugin_version": "1.0.1"
         }
       },
       "sourcecode": "https://github.com/santosardr/gephi-plugins",
@@ -3219,12 +3565,18 @@
         }
       ],
       "category": "Metric",
-      "last_update": "June 3, 2020",
+      "last_update": "April 7, 2022",
       "images": null,
       "versions": {
         "0.9.2": {
           "url": "0.9.2/boundingdiametersssuite-0.0.1.zip",
-          "last_update": "June 3, 2020"
+          "last_update": "June 3, 2020",
+          "plugin_version": null
+        },
+        "0.9.3": {
+          "url": "0.9/boundingdiametersssuite-0.0.1.zip",
+          "last_update": "April 7, 2022",
+          "plugin_version": "0.0.1"
         }
       },
       "sourcecode": "http://github.com/alexiooo/gephi-plugins",
@@ -3245,12 +3597,18 @@
         }
       ],
       "category": "Tool",
-      "last_update": "June 3, 2020",
+      "last_update": "April 7, 2022",
       "images": null,
       "versions": {
         "0.9.2": {
           "url": "0.9.2/dbscan-gephi-plugin-1.0.0.nbm",
-          "last_update": "June 3, 2020"
+          "last_update": "June 3, 2020",
+          "plugin_version": null
+        },
+        "0.9.3": {
+          "url": "0.9/dbscan-gephi-plugin-1.0.0.nbm",
+          "last_update": "April 7, 2022",
+          "plugin_version": "1.0.0"
         }
       },
       "sourcecode": "https://github.com/jaknowakowski/gephi-plugins",
@@ -3271,12 +3629,18 @@
         }
       ],
       "category": "Metric",
-      "last_update": "June 3, 2020",
+      "last_update": "April 7, 2022",
       "images": null,
       "versions": {
         "0.9.2": {
           "url": "0.9.2/clustering-coefficient-gephi-plugin-1.0.0.nbm",
-          "last_update": "June 3, 2020"
+          "last_update": "June 3, 2020",
+          "plugin_version": null
+        },
+        "0.9.3": {
+          "url": "0.9/clustering-coefficient-gephi-plugin-1.0.0.nbm",
+          "last_update": "April 7, 2022",
+          "plugin_version": "1.0.0"
         }
       },
       "sourcecode": "https://github.com/kuchara02/gephi-plugins",
@@ -3297,12 +3661,18 @@
         }
       ],
       "category": "Generator",
-      "last_update": "June 3, 2020",
+      "last_update": "April 7, 2022",
       "images": null,
       "versions": {
         "0.9.2": {
           "url": "0.9.2/kleinberg-generator-1.0.0.nbm",
-          "last_update": "June 3, 2020"
+          "last_update": "June 3, 2020",
+          "plugin_version": null
+        },
+        "0.9.3": {
+          "url": "0.9/kleinberg-generator-1.0.0.nbm",
+          "last_update": "April 7, 2022",
+          "plugin_version": "1.0.0"
         }
       },
       "sourcecode": "https://github.com/Rzepin/gephi-plugins",
@@ -3323,12 +3693,18 @@
         }
       ],
       "category": "Data Laboratory",
-      "last_update": "June 3, 2020",
+      "last_update": "April 7, 2022",
       "images": null,
       "versions": {
         "0.9.2": {
           "url": "0.9.2/column-calculator-1.0.1.nbm",
-          "last_update": "June 3, 2020"
+          "last_update": "June 3, 2020",
+          "plugin_version": null
+        },
+        "0.9.3": {
+          "url": "0.9/column-calculator-1.0.1.nbm",
+          "last_update": "April 7, 2022",
+          "plugin_version": "1.0.1"
         }
       },
       "sourcecode": "https://github.com/oscarfont/gephi-plugins/tree/gh-column-calculator-plugin",
@@ -3349,12 +3725,18 @@
         }
       ],
       "category": "Tool",
-      "last_update": "June 3, 2020",
+      "last_update": "April 7, 2022",
       "images": null,
       "versions": {
         "0.9.2": {
           "url": "0.9.2/group-partition-gephi-plugin-1.0.0.nbm",
-          "last_update": "June 3, 2020"
+          "last_update": "June 3, 2020",
+          "plugin_version": null
+        },
+        "0.9.3": {
+          "url": "0.9/group-partition-gephi-plugin-1.0.0.nbm",
+          "last_update": "April 7, 2022",
+          "plugin_version": "1.0.0"
         }
       },
       "sourcecode": "https://github.com/sergipuig/gephi-plugins",
@@ -3375,12 +3757,18 @@
         }
       ],
       "category": "Layout",
-      "last_update": "octubre 5, 2021",
+      "last_update": "April 7, 2022",
       "images": null,
       "versions": {
         "0.9.2": {
           "url": "0.9.2/hairball-buster-0.9.2.nbm",
-          "last_update": "octubre 5, 2021"
+          "last_update": "octubre 5, 2021",
+          "plugin_version": null
+        },
+        "0.9.3": {
+          "url": "0.9/hairball-buster-0.9.3.nbm",
+          "last_update": "April 7, 2022",
+          "plugin_version": "0.9.3"
         }
       },
       "sourcecode": "https://github.com/gephi/gephi-plugins/tree/hairball-buster-plugin",
