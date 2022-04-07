@@ -9,7 +9,7 @@
 
     <groupId>johns-hopkins-university.applied-phyics-laboratory</groupId>
     <artifactId>hairball-buster</artifactId>
-    <version>0.9.3-SNAPSHOT</version>
+    <version>0.9.3</version>
     <packaging>nbm</packaging>
 
     <name>Hairball Buster</name>

@@ -213,6 +213,11 @@ public class ImageNodes implements Renderer {
                 .put("ImageNodes.imageDirectory", (String) previewModel.getProperties().getValue(IMAGE_DIRECTORY));
     }
 
+    @Override
+    public void postProcess(PreviewModel previewModel, RenderTarget renderTarget,
+                            PreviewProperties previewProperties) {
+    }
+
     private String getImageDirectory() {
         return NbPreferences.forModule(NodeImageItemBuilder.class)
                 .get("ImageNodes.imageDirectory", FileSystemView.getFileSystemView().getDefaultDirectory().getAbsolutePath());
