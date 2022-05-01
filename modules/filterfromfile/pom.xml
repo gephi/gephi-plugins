@@ -4,13 +4,13 @@
     <parent>
         <artifactId>gephi-plugin-parent</artifactId>
         <groupId>org.gephi</groupId>
-        <version>0.9.3-SNAPSHOT</version>
+        <version>0.9.3</version>
     </parent>
 
     <groupId>dk.icourts</groupId>
     <artifactId>graphfilter</artifactId>
     <version>1.0.0</version>
-    <packaging>pom</packaging>
+    <packaging>nbm</packaging>
 
     <name>filterfromfile</name>
 
@@ -40,14 +40,13 @@
     <build>
         <plugins>
             <plugin>
-                <groupId>org.codehaus.mojo</groupId>
+                <groupId>org.apache.netbeans.utilities</groupId>
                 <artifactId>nbm-maven-plugin</artifactId>
                 <configuration>
-                    <author>Ioannis Panagis</author>
+                    <author>Ioannis (Yannis) Panagis</author>
                     <sourceCodeUrl>https://github.com/ypanagis/gephi-plugins</sourceCodeUrl>
-                    <licenseName>Apache 2 GPL</licenseName>
-                    <licenseFile>apachegpl2.txt</licenseFile>
-                    <homePageUrl>http://jura.ku.dk/icourts/staff</homePageUrl>
+                    <licenseName>Apache 2.0</licenseName>
+                    <homePageUrl>https://jura.ku.dk/english/staff/research/?pure=en/persons/455258</homePageUrl>
                 </configuration>
             </plugin>
         </plugins>
