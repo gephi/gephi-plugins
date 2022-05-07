@@ -72,7 +72,6 @@
     </modules>
     
     <!-- Properties -->
-<!-- Properties -->
     <properties>
         <!-- Version of Gephi building plugins against. Plugins with anterior versions will be ignored -->
         <gephi.version>0.9.3</gephi.version>
