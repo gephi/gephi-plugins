@@ -147,7 +147,7 @@
                 <plugin>
                     <groupId>org.gephi</groupId>
                     <artifactId>gephi-maven-plugin</artifactId>
-                    <version>1.3.0</version>
+                    <version>1.3.1</version>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
@@ -254,13 +254,6 @@
                                     <goal>build-metadata</goal>
                                 </goals>
                                 <phase>package</phase>
-                            </execution>
-                            <execution>
-                                <id>validate-plugin</id>
-                                <goals>
-                                    <goal>validate</goal>
-                                </goals>
-                                <phase>none</phase>
                             </execution>
                         </executions>
                     </plugin>
