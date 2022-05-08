@@ -500,11 +500,33 @@
                 <artifactId>org-netbeans-modules-masterfs</artifactId>
                 <version>${netbeans.version}</version>
             </dependency>
+            <!-- Test -->
             <dependency>
                 <groupId>org.netbeans.api</groupId>
                 <artifactId>org-netbeans-modules-nbjunit</artifactId>
                 <version>${netbeans.version}</version>
                 <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>${project.groupId}</groupId>
+                <artifactId>graph-api</artifactId>
+                <version>${gephi.version}</version>
+                <scope>test</scope>
+                <type>test-jar</type>
+            </dependency>
+            <dependency>
+                <groupId>${project.groupId}</groupId>
+                <artifactId>project-api</artifactId>
+                <version>${gephi.version}</version>
+                <type>test-jar</type>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.gephi</groupId>
+                <artifactId>io-importer-api</artifactId>
+                <version>${gephi.version}</version>
+                <scope>test</scope>
+                <type>test-jar</type>
             </dependency>
         </dependencies>
     </dependencyManagement>
