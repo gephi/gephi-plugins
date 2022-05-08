@@ -70,7 +70,7 @@ Submitting a Gephi plugin for approval is a simple process based on GitHub's [pu
 
 - Navigate to your fork's URL and create a pull request. Select `master-forge` instead of `master` as base branch.
 
-- Submit your pull request.
+- Submit your pull request. If possible, before you submit make sure to [enable edits from maintainers](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/working-with-forks/allowing-changes-to-a-pull-request-branch-created-from-a-fork) so that we can help you tweak the code and configuration when needed.
 
 ## Update a plugin
 
