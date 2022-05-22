@@ -1,0 +1,5 @@
+Manifest-Version: 1.0
+OpenIDE-Module-Name: Twitter Streaming Importer V2
+OpenIDE-Module-Short-Description: Realtime Twitter Graph Importer
+OpenIDE-Module-Long-Description: <p>This plugin connects to the Twitter Streaming API and represents tweets as graph in realtime.</p>
+OpenIDE-Module-Display-Category: Import
