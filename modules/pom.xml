@@ -4,7 +4,7 @@
 
     <groupId>org.gephi</groupId>
     <artifactId>gephi-plugin-parent</artifactId>
-    <version>0.9.3-SNAPSHOT</version>
+    <version>0.9.5</version>
     <packaging>pom</packaging>
 
     <name>gephi-plugins-parent</name>
@@ -46,7 +46,7 @@
     <!-- Properties -->
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <gephi.version>0.9.3</gephi.version>
+        <gephi.version>0.9.5</gephi.version>
         <netbeans.version>RELEASE130</netbeans.version>
 
         <!-- Java compilation settings -->
