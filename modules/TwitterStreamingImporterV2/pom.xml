@@ -4,7 +4,7 @@
     <parent>
         <artifactId>gephi-plugin-parent</artifactId>
         <groupId>org.gephi</groupId>
-        <version>0.9.3</version>
+        <version>0.9.6</version>
     </parent>
     <properties>
         <maven.compiler.source>11</maven.compiler.source>
@@ -42,7 +42,14 @@
         <dependency>
             <groupId>org.gephi</groupId>
             <artifactId>graph-api</artifactId>
-      
+        </dependency>
+        <dependency>
+            <groupId>org.gephi</groupId>
+            <artifactId>project-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.gephi</groupId>
+            <artifactId>utils-longtask</artifactId>
         </dependency>
         <dependency>
             <groupId>org.jsoup</groupId>
@@ -55,10 +62,6 @@
             <version>3.4</version>
         </dependency>
         <dependency>
-            <groupId>org.gephi</groupId>
-            <artifactId>project-api</artifactId>
-        </dependency>
-        <dependency>
             <groupId>com.vdurmont</groupId>
             <artifactId>emoji-java</artifactId>
             <version>4.0.0</version>
@@ -68,11 +71,6 @@
             <artifactId>twitter-api-java-sdk</artifactId>
             <version>1.2.4</version>
         </dependency>
-              <dependency>
-                <groupId>org.gephi</groupId>
-                <artifactId>utils-longtask</artifactId>
-          
-            </dependency>
     </dependencies>
 
     <build>
@@ -83,6 +81,7 @@
                 <configuration>
                     <verifyRuntime>skip</verifyRuntime>
                     <licenseName>Apache 2.0</licenseName>
+                    <licenseFile>LICENSE.txt</licenseFile>
                     <author>totetmatt</author>
                     <authorEmail>matthieu.totet+tsi@gmail.com</authorEmail>
                     <authorUrl>http://totetmatt.fr</authorUrl>
