@@ -148,7 +148,7 @@
                 <plugin>
                     <groupId>org.gephi</groupId>
                     <artifactId>gephi-maven-plugin</artifactId>
-                    <version>1.3.2</version>
+                    <version>1.3.3</version>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
@@ -168,6 +168,7 @@
                     <metadataUrl>https://gephi.org/gephi-plugins/plugins/</metadataUrl>
                     <gephiDirectory>${project.build.directory}/gephi-${gephi.version}</gephiDirectory>
                     <outputDirectory>${project.build.directory}/site/plugins/</outputDirectory>
+                    <skipUnchangedVersions>true</skipUnchangedVersions>
                     <clusters>
                         <cluster>${clusters.path}/plugins</cluster>
                     </clusters>
