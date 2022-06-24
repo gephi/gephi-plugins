@@ -4023,9 +4023,9 @@
       "images": null,
       "versions": {
         "0.9.6": {
-          "url": "0.9/twitter-v2-2.0.0.nbm",
+          "url": "0.9/twitter-v2-2.0.1.nbm",
           "last_update": "June 24, 2022",
-          "plugin_version": "2.0.0"
+          "plugin_version": "2.0.1"
         }
       },
       "sourcecode": "https://github.com/totetmatt/gephi-plugins.git",
