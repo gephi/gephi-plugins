@@ -7,16 +7,19 @@ import com.twitter.clientlib.model.AddOrDeleteRulesRequest;
 import com.twitter.clientlib.model.AddRulesRequest;
 import com.twitter.clientlib.model.DeleteRulesRequest;
 import com.twitter.clientlib.model.DeleteRulesRequestDelete;
+import com.twitter.clientlib.model.GetRulesResponse;
 import com.twitter.clientlib.model.Rule;
 import com.twitter.clientlib.model.RuleNoId;
 import fr.totetmatt.gephi.twitter.networklogics.Networklogic;
 import fr.totetmatt.gephi.twitter.utils.listener.filtered.TweetsStreamListenersExecutor;
 import fr.totetmatt.gephi.twitter.utils.TwitterApiFields;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.List;
 import org.gephi.project.api.Project;
 import org.gephi.project.api.ProjectController;
 import org.gephi.project.api.Workspace;
+import org.openide.util.Exceptions;
 import org.openide.util.Lookup;
 import org.openide.util.NbPreferences;
 import org.openide.util.lookup.ServiceProvider;
@@ -89,14 +92,23 @@ public final class TwitterStreamerV2 {
     }
 
     public List<Rule> refreshRules() throws ApiException {
-        if (!this.credentialProperty.getBearerToken().isEmpty()) {
-            rules = apiInstance.tweets().getRules(null, 100, null).getData();
-            if(currentNetworkLogic!=null){
-                currentNetworkLogic.refreshRulesNodeColumn(rules);
+        try {
+            if (!this.credentialProperty.getBearerToken().isEmpty()) {
+                GetRulesResponse getRules = apiInstance.tweets().getRules(null, 100, null);
+                if(getRules!=null){
+                rules = getRules.getData();
+                if(currentNetworkLogic!=null){
+                    currentNetworkLogic.refreshRulesNodeColumn(rules);
+                }
+                return rules;
+                }
             }
-            return rules;
+        } catch(Exception e){
+            // Exceptions.printStackTrace(e);
+            // The sdk don't parse correctly if there is no rules.
+            // So this catch is needed
         }
-        return null;
+        return rules=new ArrayList<Rule>();
     }
 
     public List<Rule> getRules() throws ApiException {
