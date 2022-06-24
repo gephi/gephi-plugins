@@ -1482,7 +1482,7 @@
         }
       ],
       "category": "Metric",
-      "last_update": "April 7, 2022",
+      "last_update": "June 24, 2022",
       "images": null,
       "versions": {
         "0.8.2": {
@@ -1501,9 +1501,9 @@
           "plugin_version": null
         },
         "0.9.3": {
-          "url": "0.9/lineage-0.9.3-SNAPSHOT.nbm",
-          "last_update": "April 7, 2022",
-          "plugin_version": "0.9.3-SNAPSHOT"
+          "url": "0.9/lineage-0.9.3.nbm",
+          "last_update": "June 24, 2022",
+          "plugin_version": "0.9.3"
         }
       },
       "sourcecode": "$sourcecode_url",
@@ -2459,7 +2459,7 @@
         }
       ],
       "category": "Tool",
-      "last_update": "April 7, 2022",
+      "last_update": "June 24, 2022",
       "images": [
         {
           "image": "imgs/scripting.plugin/img1.png",
@@ -2478,9 +2478,9 @@
           "plugin_version": null
         },
         "0.9.3": {
-          "url": "0.9/scripting.plugin-0.9.3-SNAPSHOT.nbm",
-          "last_update": "April 7, 2022",
-          "plugin_version": "0.9.3-SNAPSHOT"
+          "url": "0.9/scripting.plugin-0.9.3.nbm",
+          "last_update": "June 24, 2022",
+          "plugin_version": "0.9.3"
         }
       },
       "sourcecode": "https://github.com/gephi/gephi-plugins/tree/python-scripting-plugin",
@@ -2490,18 +2490,18 @@
       "id": "twitter-streaming-importer",
       "name": "TwitterStreamingImporter",
       "short_description": "Realtime Twitter Graph Importer",
-      "long_description": "\u003cp\u003eThis plugin connects to the Twitter Streaming API and represents tweets as graph.\u003c/p\u003e\u003cp\u003eIt includes two possible ways to represent a graph:\u003cul\u003e\u003cli\u003eFull Smart Network: A full representation with nodes for Users, Tweets, Hashtags, Urls, Media and Symbols\u003c/li\u003e\u003cli\u003eUser Network: A weighted User to User network with parallel edges for RT and Mentions\u003c/li\u003e\u003cli\u003eHashtag Network : A weighted Hashtag to Hashtag network\u003c/li\u003e\u003c/p\u003e",
+      "long_description": "\u003cp\u003e⚠⚠ \u003cb\u003eDeprecated plugin, please use Twitter Streaming Importer V2 ⚠⚠\u003c/b\u003e\u003c/p\u003e ",
       "readme": "## Twitter Stream Plugin\n\n### Description\nPlugin that use the Twitter Stream Api and represent tweet as graph.\n\n3 methods of representation (network logic):\n\n* Full Smart Netowrk : Do a full representation of User, Tweet, Hashtag, Url, Media \u0026 Symbol \n* User Network : Do a weighter User to User network with parallel edges for RT and Mentions\n* Hashtag Network : A weighted Hashtag to Hashtag network\n",
       "license": "Apache 2.0",
       "authors": [
         {
-          "name": "@totetmatt",
-          "email": "matthieu.totet@gmail.com",
-          "link": "http://matthieu-totet.fr/"
+          "name": "totetmatt",
+          "email": "matthieu.totet+tsi@gmail.com",
+          "link": "http://totetmatt.fr"
         }
       ],
       "category": "Import",
-      "last_update": "April 7, 2022",
+      "last_update": "June 24, 2022",
       "images": [
         {
           "image": "imgs/twitter-streaming-importer/A_Screenshot.png",
@@ -2536,12 +2536,12 @@
           "plugin_version": null
         },
         "0.9.3": {
-          "url": "0.9/twitter-streaming-importer-1.4.3.nbm",
-          "last_update": "April 7, 2022",
-          "plugin_version": "1.4.3"
+          "url": "0.9/twitter-streaming-importer-1.4.4.nbm",
+          "last_update": "June 24, 2022",
+          "plugin_version": "1.4.4"
         }
       },
-      "sourcecode": "https://github.com/totetmatt/gephi-plugins/tree/twitter",
+      "sourcecode": "https://github.com/totetmatt/gephi-plugins.git",
       "homepage": null
     },
     {
@@ -2738,7 +2738,7 @@
         }
       ],
       "category": "Layout",
-      "last_update": "April 7, 2022",
+      "last_update": "June 24, 2022",
       "images": null,
       "versions": {
         "0.9.1": {
@@ -2752,9 +2752,9 @@
           "plugin_version": null
         },
         "0.9.3": {
-          "url": "0.9/mdslayout-0.9.3-SNAPSHOT.nbm",
-          "last_update": "April 7, 2022",
-          "plugin_version": "0.9.3-SNAPSHOT"
+          "url": "0.9/mdslayout-0.9.3.nbm",
+          "last_update": "June 24, 2022",
+          "plugin_version": "0.9.3"
         }
       },
       "sourcecode": "https://github.com/WouterSpekkink/gephi-plugins/tree/mdslayout",
@@ -2954,7 +2954,7 @@
         }
       ],
       "category": "Metric",
-      "last_update": "April 7, 2022",
+      "last_update": "June 24, 2022",
       "images": [
         {
           "image": "imgs/mdsmetric/img.png",
@@ -2973,9 +2973,9 @@
           "plugin_version": null
         },
         "0.9.3": {
-          "url": "0.9/mdsmetric-0.9.3-SNAPSHOT.nbm",
-          "last_update": "April 7, 2022",
-          "plugin_version": "0.9.3-SNAPSHOT"
+          "url": "0.9/mdsmetric-0.9.3.nbm",
+          "last_update": "June 24, 2022",
+          "plugin_version": "0.9.3"
         }
       },
       "sourcecode": "https://github.com/WouterSpekkink/gephi-plugins/tree/mds_metric",
@@ -3469,7 +3469,7 @@
         }
       ],
       "category": "Export",
-      "last_update": "April 7, 2022",
+      "last_update": "June 24, 2022",
       "images": null,
       "versions": {
         "0.9.2": {
@@ -3478,9 +3478,9 @@
           "plugin_version": null
         },
         "0.9.3": {
-          "url": "0.9/polinodeexporter-0.9.3-SNAPSHOT.nbm",
-          "last_update": "April 7, 2022",
-          "plugin_version": "0.9.3-SNAPSHOT"
+          "url": "0.9/polinodeexporter-0.9.3.nbm",
+          "last_update": "June 24, 2022",
+          "plugin_version": "0.9.3"
         }
       },
       "sourcecode": "http://github.com/Polinode/gephi-plugins",
