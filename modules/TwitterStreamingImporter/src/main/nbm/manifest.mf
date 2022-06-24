@@ -1,5 +1,5 @@
 Manifest-Version: 1.0
 OpenIDE-Module-Name: TwitterStreamingImporter
 OpenIDE-Module-Short-Description: Realtime Twitter Graph Importer
-OpenIDE-Module-Long-Description: <p>This plugin connects to the Twitter Streaming API and represents tweets as graph.</p><p>It includes two possible ways to represent a graph:<ul><li>Full Smart Network: A full representation with nodes for Users, Tweets, Hashtags, Urls, Media and Symbols</li><li>User Network: A weighted User to User network with parallel edges for RT and Mentions</li><li>Hashtag Network : A weighted Hashtag to Hashtag network</li></p>
+OpenIDE-Module-Long-Description: <p>⚠⚠ <b>Deprecated plugin, please use Twitter Streaming Importer V2 ⚠⚠</b></p> 
 OpenIDE-Module-Display-Category: Import
