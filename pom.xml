@@ -33,6 +33,7 @@
         <module>modules/MapOfCountries</module>
         <module>modules/ScriptingPlugin</module>
         <module>modules/TwitterStreamingImporter</module>
+        <module>modules/TwitterStreamingImporterV2</module>
         <module>modules/IsometricLayout</module>
         <module>modules/NetworkSplitter3D</module>
         <module>modules/ExcelCsvImporter</module>
@@ -74,7 +75,7 @@
     <!-- Properties -->
     <properties>
         <!-- Version of Gephi building plugins against. Plugins with anterior versions will be ignored -->
-        <gephi.version>0.9.3</gephi.version>
+        <gephi.version>0.9.6</gephi.version>
         <clusters.path>${project.build.directory}/plugins_clusters</clusters.path>
         <github.global.server>github</github.global.server>
     </properties>
