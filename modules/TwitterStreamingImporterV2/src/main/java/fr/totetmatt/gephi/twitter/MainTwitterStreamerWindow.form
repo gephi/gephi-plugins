@@ -129,14 +129,14 @@
             <Component class="javax.swing.JLabel" name="labelCredentials">
               <Properties>
                 <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                  <ResourceString bundle="fr/totetmatt/gephi/twitter/Bundle.properties" key="MainTwitterStreamerWindow.labelCredentials.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+                  <ResourceString bundle="" key="MainTwitterStreamerWindow.labelCredentials.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
                 </Property>
               </Properties>
             </Component>
             <Component class="javax.swing.JButton" name="buttonCredentialShow">
               <Properties>
                 <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                  <ResourceString bundle="fr/totetmatt/gephi/twitter/Bundle.properties" key="MainTwitterStreamerWindow.buttonCredentialShow.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+                  <ResourceString bundle="" key="MainTwitterStreamerWindow.buttonCredentialShow.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
                 </Property>
               </Properties>
               <Events>
@@ -146,14 +146,14 @@
             <Component class="javax.swing.JLabel" name="labelDefineRules">
               <Properties>
                 <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                  <ResourceString bundle="fr/totetmatt/gephi/twitter/Bundle.properties" key="MainTwitterStreamerWindow.labelDefineRules.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+                  <ResourceString bundle="" key="MainTwitterStreamerWindow.labelDefineRules.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
                 </Property>
               </Properties>
             </Component>
             <Component class="javax.swing.JLabel" name="labelOfficialDocumentation">
               <Properties>
                 <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                  <ResourceString bundle="fr/totetmatt/gephi/twitter/Bundle.properties" key="MainTwitterStreamerWindow.labelOfficialDocumentation.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+                  <ResourceString bundle="" key="MainTwitterStreamerWindow.labelOfficialDocumentation.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
                 </Property>
                 <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
                   <Color id="Hand Cursor"/>
@@ -214,14 +214,14 @@
                 <Component class="javax.swing.JLabel" name="labelAddRuleTag">
                   <Properties>
                     <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                      <ResourceString bundle="fr/totetmatt/gephi/twitter/Bundle.properties" key="MainTwitterStreamerWindow.labelAddRuleTag.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+                      <ResourceString bundle="" key="MainTwitterStreamerWindow.labelAddRuleTag.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
                     </Property>
                   </Properties>
                 </Component>
                 <Component class="javax.swing.JTextField" name="textFieldAddRuleTag">
                   <Properties>
                     <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                      <ResourceString bundle="fr/totetmatt/gephi/twitter/Bundle.properties" key="MainTwitterStreamerWindow.textFieldAddRuleTag.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+                      <ResourceString bundle="" key="MainTwitterStreamerWindow.textFieldAddRuleTag.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
                     </Property>
                   </Properties>
                 </Component>
@@ -233,7 +233,7 @@
                     <Property name="viewportBorder" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
                       <Border info="org.netbeans.modules.form.compat2.border.TitledBorderInfo">
                         <TitledBorder title="Rule Value">
-                          <ResourceString PropertyName="titleX" bundle="fr/totetmatt/gephi/twitter/Bundle.properties" key="MainTwitterStreamerWindow.scrollPaneAddRuleValue.viewportBorder.title" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+                          <ResourceString PropertyName="titleX" bundle="" key="MainTwitterStreamerWindow.scrollPaneAddRuleValue.viewportBorder.title" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
                         </TitledBorder>
                       </Border>
                     </Property>
@@ -258,7 +258,7 @@
                 <Component class="javax.swing.JButton" name="buttonAddRule">
                   <Properties>
                     <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                      <ResourceString bundle="fr/totetmatt/gephi/twitter/Bundle.properties" key="MainTwitterStreamerWindow.buttonAddRule.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+                      <ResourceString bundle="" key="MainTwitterStreamerWindow.buttonAddRule.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
                     </Property>
                   </Properties>
                   <Events>
@@ -284,7 +284,7 @@
                 <Component class="javax.swing.JButton" name="buttonDeleteRule">
                   <Properties>
                     <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                      <ResourceString bundle="fr/totetmatt/gephi/twitter/Bundle.properties" key="MainTwitterStreamerWindow.buttonDeleteRule.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+                      <ResourceString bundle="" key="MainTwitterStreamerWindow.buttonDeleteRule.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
                     </Property>
                   </Properties>
                   <Events>
@@ -296,7 +296,7 @@
             <Component class="javax.swing.JLabel" name="labelNetworkLogic">
               <Properties>
                 <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                  <ResourceString bundle="fr/totetmatt/gephi/twitter/Bundle.properties" key="MainTwitterStreamerWindow.labelNetworkLogic.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+                  <ResourceString bundle="" key="MainTwitterStreamerWindow.labelNetworkLogic.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
                 </Property>
               </Properties>
             </Component>
@@ -316,7 +316,7 @@
             <Component class="javax.swing.JCheckBox" name="checkboxSampleStream">
               <Properties>
                 <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                  <ResourceString bundle="fr/totetmatt/gephi/twitter/Bundle.properties" key="MainTwitterStreamerWindow.checkboxSampleStream.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+                  <ResourceString bundle="" key="MainTwitterStreamerWindow.checkboxSampleStream.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
                 </Property>
               </Properties>
               <Events>
@@ -326,7 +326,7 @@
             <Component class="javax.swing.JToggleButton" name="toggleStartStopStream">
               <Properties>
                 <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                  <ResourceString bundle="fr/totetmatt/gephi/twitter/Bundle.properties" key="MainTwitterStreamerWindow.toggleStartStopStream.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+                  <ResourceString bundle="" key="MainTwitterStreamerWindow.toggleStartStopStream.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
                 </Property>
               </Properties>
               <Events>
