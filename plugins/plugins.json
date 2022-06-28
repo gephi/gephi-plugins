@@ -5,7 +5,7 @@
       "name": "GeoLayout",
       "short_description": "A layout to display geocoded data",
       "long_description": "This plugin contains the \"GeoLayout\", which displays your graph based on geocoded attributes (i.e. latitude and longitude) and standard projections.",
-      "readme": "## Introduction\n\nA Gephi plugin to display your geocoded graphs.\n\n## Plugin Owner’s Notes\n\nThis plugin contains only a layout (“GeoLayout”) to display your graph according to geocoded attributes. To use it:\n\n1. Select the two attributes which contain the geocoded coordinates of your nodes (latitude and longitude). The attributes must have a numeric type.\n2. Select the projection you want to use\n3. Set the other parameters according to the selected projection\n4. Launch the algorithm\n\nThe available projections are:\n\n* [Mercator](http://bit.ly/JQuvw)\n* [Tranverse Mercator](http://bit.ly/btWRTI)\n* [Miller cylindrical](http://bit.ly/agJOxd)\n* [Gall-Peters](http://bit.ly/Nj5cW)\n* [Sinusoidal](http://bit.ly/a8SsNg)\n* [Lambert cylindrical](http://bit.ly/cnuxqr)\n* [Winkel Tripel](http://en.wikipedia.org/wiki/Winkel_tripel_projection)\n* [Equirectangular](http://bit.ly/vxEmy)\n\nFor any questions or just more information, you can check the related [thread](http://bit.ly/2vISDFd) on the Gephi forum.\n\nAnd if, for any reason, some of your nodes do not have valid values on the selected attributes (for latitude and longitude), they will be displayed on a line on the bottom of your graph (then, you can delete them or do what you want). Also make sure your latitude and longitude columns are of a numeric type, not \u0027string\u0027.\n",
+      "readme": "## Introduction\n\nA Gephi plugin to display your geocoded graphs.\n\n## Plugin Owner’s Notes\n\nThis plugin contains only a layout (“GeoLayout”) to display your graph according to geocoded attributes. To use it:\n\n1. Select the two attributes which contain the geocoded coordinates of your nodes (latitude and longitude). The attributes must have a numeric type.\n2. Select the projection you want to use\n3. Set the other parameters according to the selected projection\n4. Launch the algorithm\n\nThe available projections are:\n\n* [Mercator](https://en.wikipedia.org/wiki/Mercator_projection)\n* [Tranverse Mercator](https://en.wikipedia.org/wiki/Transverse_Mercator_projection)\n* [Miller cylindrical](https://en.wikipedia.org/wiki/Miller_cylindrical_projection)\n* [Gall-Peters](https://en.wikipedia.org/wiki/Gall%E2%80%93Peters_projection)\n* [Sinusoidal](https://en.wikipedia.org/wiki/Sinusoidal_projection)\n* [Lambert cylindrical](https://en.wikipedia.org/wiki/Lambert_cylindrical_equal-area_projection)\n* [Winkel Tripel](http://en.wikipedia.org/wiki/Winkel_tripel_projection)\n* [Equirectangular](https://en.wikipedia.org/wiki/Equirectangular_projection)\n\nAnd if, for any reason, some of your nodes do not have valid values on the selected attributes (for latitude and longitude), they will be displayed on a line on the bottom of your graph (then, you can delete them or do what you want). Also make sure your latitude and longitude columns are of a numeric type, not \u0027string\u0027.\n",
       "license": "GPL v3",
       "authors": [
         {
@@ -15,7 +15,7 @@
         }
       ],
       "category": "Layout",
-      "last_update": "June 24, 2022",
+      "last_update": "June 28, 2022",
       "images": [
         {
           "image": "imgs/geolayout-plugin/geolayout_example.png",
@@ -53,9 +53,9 @@
           "plugin_version": "0.9.3"
         },
         "0.9.6": {
-          "url": "0.9/geolayout-plugin-0.9.3.nbm",
-          "last_update": "June 24, 2022",
-          "plugin_version": "0.9.3"
+          "url": "0.9/geolayout-plugin-1.0.0.nbm",
+          "last_update": "June 28, 2022",
+          "plugin_version": "1.0.0"
         }
       },
       "sourcecode": "https://github.com/gephi/gephi-plugins/tree/geolayout-plugin",
