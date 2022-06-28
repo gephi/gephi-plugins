@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
 <!DOCTYPE module_updates PUBLIC "-//NetBeans//DTD Autoupdate Catalog 2.8//EN" "https://netbeans.apache.org/dtds/autoupdate-catalog-2_8.dtd">
-<module_updates timestamp="11/13/14/28/06/2022">
+<module_updates timestamp="25/29/19/28/06/2022">
 
 
 
@@ -319,11 +319,11 @@
     <message_digest algorithm="SHA-512" value="04eeec52e1d8aaab92e9bc48a1bf1484cc8ffc6daef90db7a992d8e57ef892ad3d185ed032c2baf7af4bb9b06299dee2bf61423ab0f792ab77848255849d1f95"/>
 </module>
 
-<module codenamebase="comsort.polygon.shaped.nodes" distribution="polygon-shaped-nodes-1.0.0.nbm" downloadsize="9259" homepage="http://github.com/gephi/gephi-plugins/polygon-shaped-nodes" moduleauthor="Daniel Iachan" needsrestart="true" releasedate="2022/06/24" targetcluster="plugins">
+<module codenamebase="comsort.polygon.shaped.nodes" distribution="polygon-shaped-nodes-1.0.1.nbm" downloadsize="9296" homepage="http://github.com/gephi/gephi-plugins/polygon-shaped-nodes" moduleauthor="Daniel Iachan" needsrestart="true" releasedate="2022/06/28" targetcluster="plugins">
         
-    <manifest OpenIDE-Module="comsort.polygon.shaped.nodes" OpenIDE-Module-Display-Category="Layout" OpenIDE-Module-Implementation-Version="1.0.0" OpenIDE-Module-Long-Description="Extends default node renderer to support polygon shaped nodes with arbitrary number of sides. Add a column of Integers in the data table named &quot;Polygon&quot;, the value corresponds to the number of sides. The renderer must be enabled in the &quot;Manage Renderers&quot; tab." OpenIDE-Module-Module-Dependencies="org.gephi.graph.api &gt; 0.9.3, org.gephi.preview.api &gt; 0.9.3, org.gephi.preview.plugin &gt; 0.9.3, org.openide.util &gt; 9.23, org.openide.util.lookup &gt; 8.49" OpenIDE-Module-Name="Polygon Shaped Nodes" OpenIDE-Module-Requires="org.openide.modules.ModuleFormat1" OpenIDE-Module-Short-Description="Allows node shapes to be changed to any polygon" OpenIDE-Module-Specification-Version="1.0.0"/>
+    <manifest OpenIDE-Module="comsort.polygon.shaped.nodes" OpenIDE-Module-Display-Category="Preview" OpenIDE-Module-Implementation-Version="1.0.1" OpenIDE-Module-Long-Description="Extends default node renderer to support polygon shaped nodes with arbitrary number of sides. Add a column of Integers in the data table named &quot;Polygon&quot;, the value corresponds to the number of sides. The renderer must be enabled in the &quot;Manage Renderers&quot; tab." OpenIDE-Module-Module-Dependencies="org.gephi.graph.api &gt; 0.9.3, org.gephi.preview.api &gt; 0.9.3, org.gephi.preview.plugin &gt; 0.9.3, org.openide.util &gt; 9.23, org.openide.util.lookup &gt; 8.49" OpenIDE-Module-Name="Polygon Shaped Nodes" OpenIDE-Module-Requires="org.openide.modules.ModuleFormat1" OpenIDE-Module-Short-Description="Allows node shapes to be changed to any polygon" OpenIDE-Module-Specification-Version="1.0.1"/>
     
-    <message_digest algorithm="SHA-512" value="771d392752ba065568a602cbca928aa931b8b3a38ecc774bd52e45231ef0c0b8bcaed41378bcf38652b5eaf7356603811f8ebf5193f0a93ccdf7ae85f360e374"/>
+    <message_digest algorithm="SHA-512" value="13efa25716ddf2d7b988deffa48169b3e9353ca7ac0f632d8578441a6c04145d7dd992a7d41b59d539e4997bcee461710b57d894abbebf708e268dc7a3a1a751"/>
 </module>
 
 <module codenamebase="ch.michihenninger.prestige.plugin" distribution="prestige-plugin-1.0.0.nbm" downloadsize="2403800" homepage="http://github.com/gephi/gephi-plugins/prestige-plugin" moduleauthor="Michael Henninger" needsrestart="true" releasedate="2022/06/24" targetcluster="plugins">

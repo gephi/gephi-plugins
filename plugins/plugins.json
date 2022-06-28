@@ -3421,8 +3421,8 @@
           "link": "https://github.com/iachan"
         }
       ],
-      "category": "Layout",
-      "last_update": "June 24, 2022",
+      "category": "Preview",
+      "last_update": "June 28, 2022",
       "images": null,
       "versions": {
         "0.9.1": {
@@ -3441,9 +3441,9 @@
           "plugin_version": "1.0.0"
         },
         "0.9.6": {
-          "url": "0.9/polygon-shaped-nodes-1.0.0.nbm",
-          "last_update": "June 24, 2022",
-          "plugin_version": "1.0.0"
+          "url": "0.9/polygon-shaped-nodes-1.0.1.nbm",
+          "last_update": "June 28, 2022",
+          "plugin_version": "1.0.1"
         }
       },
       "sourcecode": "http://github.com/iachan/gephi-plugins",
