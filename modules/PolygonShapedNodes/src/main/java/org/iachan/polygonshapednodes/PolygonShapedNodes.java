@@ -160,4 +160,10 @@ public class PolygonShapedNodes extends NodeRenderer {
     public void preProcess(PreviewModel previewModel) {
         //Not implemented
     }
+
+    @Override
+    public void postProcess(PreviewModel previewModel, RenderTarget renderTarget,
+                            PreviewProperties properties) {
+        //Not implemented
+    }
 }

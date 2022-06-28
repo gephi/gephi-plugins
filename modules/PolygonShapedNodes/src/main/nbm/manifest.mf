@@ -2,4 +2,4 @@ Manifest-Version: 1.0
 OpenIDE-Module-Name: Polygon Shaped Nodes
 OpenIDE-Module-Short-Description: Allows node shapes to be changed to any polygon
 OpenIDE-Module-Long-Description: Extends default node renderer to support polygon shaped nodes with arbitrary number of sides. Add a column of Integers in the data table named "Polygon", the value corresponds to the number of sides. The renderer must be enabled in the "Manage Renderers" tab.
-OpenIDE-Module-Display-Category: Layout
+OpenIDE-Module-Display-Category: Preview
