@@ -13,15 +13,13 @@ This plugin contains only a layout (“GeoLayout”) to display your graph accor
 
 The available projections are:
 
-* [Mercator](http://bit.ly/JQuvw)
-* [Tranverse Mercator](http://bit.ly/btWRTI)
-* [Miller cylindrical](http://bit.ly/agJOxd)
-* [Gall-Peters](http://bit.ly/Nj5cW)
-* [Sinusoidal](http://bit.ly/a8SsNg)
-* [Lambert cylindrical](http://bit.ly/cnuxqr)
+* [Mercator](https://en.wikipedia.org/wiki/Mercator_projection)
+* [Tranverse Mercator](https://en.wikipedia.org/wiki/Transverse_Mercator_projection)
+* [Miller cylindrical](https://en.wikipedia.org/wiki/Miller_cylindrical_projection)
+* [Gall-Peters](https://en.wikipedia.org/wiki/Gall%E2%80%93Peters_projection)
+* [Sinusoidal](https://en.wikipedia.org/wiki/Sinusoidal_projection)
+* [Lambert cylindrical](https://en.wikipedia.org/wiki/Lambert_cylindrical_equal-area_projection)
 * [Winkel Tripel](http://en.wikipedia.org/wiki/Winkel_tripel_projection)
-* [Equirectangular](http://bit.ly/vxEmy)
-
-For any questions or just more information, you can check the related [thread](http://bit.ly/2vISDFd) on the Gephi forum.
+* [Equirectangular](https://en.wikipedia.org/wiki/Equirectangular_projection)
 
 And if, for any reason, some of your nodes do not have valid values on the selected attributes (for latitude and longitude), they will be displayed on a line on the bottom of your graph (then, you can delete them or do what you want). Also make sure your latitude and longitude columns are of a numeric type, not 'string'.
