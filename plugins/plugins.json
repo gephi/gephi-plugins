@@ -2080,7 +2080,7 @@
       "short_description": "Multimode Networks Transformations",
       "long_description": "This plugin allows multimode networks projection. You can project your bipartite (2-mode) graph to monopartite (one-mode) graph. The projection/transformation is based on the matrix multiplication approach and allows different types of transformations. The limitation is matrix multiplication - large matrix multiplication takes time and memory. Joan Codina: some modification are added to allow cosine similarity and filtering of low weight edges to simplify graph.",
       "readme": null,
-      "license": "license",
+      "license": "GPL v3",
       "authors": [
         {
           "name": "Jaroslav Kuchar, Joan Codina",
@@ -2088,8 +2088,8 @@
           "link": null
         }
       ],
-      "category": "Tool",
-      "last_update": "June 24, 2022",
+      "category": "Other Category",
+      "last_update": "June 29, 2022",
       "images": null,
       "versions": {
         "0.8.2": {
@@ -2118,12 +2118,12 @@
           "plugin_version": "1.1.0"
         },
         "0.9.6": {
-          "url": "0.9/multimode-1.1.0.nbm",
-          "last_update": "June 24, 2022",
-          "plugin_version": "1.1.0"
+          "url": "0.9/multimode-1.1.1.nbm",
+          "last_update": "June 29, 2022",
+          "plugin_version": "1.1.1"
         }
       },
-      "sourcecode": "https://github.com/totetmatt/gephi-plugins/tree/multimode-network",
+      "sourcecode": "https://github.com/gephi/gephi-plugins/tree/multimode-plugin",
       "homepage": "https://github.com/jaroslav-kuchar/Multimode-Networks"
     },
     {
