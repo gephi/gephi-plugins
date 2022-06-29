@@ -9,7 +9,7 @@
 
     <groupId>cz.cvut.fit.gephi</groupId>
     <artifactId>multimode</artifactId>
-    <version>1.1.0</version>
+    <version>1.1.1</version>
     <packaging>nbm</packaging>
 
     <name>Multimode-Networks</name>
@@ -59,10 +59,11 @@
                 <groupId>org.apache.netbeans.utilities</groupId>
                 <artifactId>nbm-maven-plugin</artifactId>
                 <configuration>
-                    <licenseName>license</licenseName>
-                    <licenseFile>license.txt</licenseFile>
                     <author>Jaroslav Kuchar, Joan Codina</author>
-                    <sourceCodeUrl>https://github.com/totetmatt/gephi-plugins/tree/multimode-network</sourceCodeUrl>
+                    <licenseName>GPL v3</licenseName>
+                    <licenseFile>gpl-3.0.txt</licenseFile>
+                    <author>Jaroslav Kuchar, Joan Codina</author>
+                    <sourceCodeUrl>https://github.com/gephi/gephi-plugins/tree/multimode-plugin</sourceCodeUrl>
                     <homePageUrl>https://github.com/jaroslav-kuchar/Multimode-Networks</homePageUrl>
                     <publicPackages>
                         
