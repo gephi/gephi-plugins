@@ -220,14 +220,15 @@ public class KatzCentrality implements Statistics {
 
     private String getReportHtml(String header, String content) {
         return "<html> " +
-                "<body><h1>Katz Centrality Report</h1> "
-                + "<hr><br />"
-                + "<h2>Parameters:</h2>"
-                + "Alpha = " + this.alpha + "<br>"
-                + String.format("<br><h2>%s:</h2>", header)
-                + content
-                + "<br /><br />"
-                + "</body></html>";
+            "<body><h1>Katz Centrality Report</h1> "
+            + "<hr><br />"
+            + "<h2>Parameters:</h2>"
+            + "Directed = " + this.isDirected + "<br>"
+            + "Alpha = " + this.alpha + "<br>"
+            + String.format("<br><h2>%s:</h2>", header)
+            + content
+            + "<br /><br />"
+            + "</body></html>";
     }
 
     public String getReport() {
@@ -241,10 +242,10 @@ public class KatzCentrality implements Statistics {
         String textAlign = "text-align: left;";
         String headerStyle = borderStyle + textAlign;
         String headers = String.format("<tr>" +
-                        "<th style=\"%s\">Rank</th>" +
-                        "<th style=\"%s\">Node</th>" +
-                        "<th style=\"%s\">Katz Centrality</th></tr>\n",
-                headerStyle, headerStyle, headerStyle);
+                "<th style=\"%s\">Rank</th>" +
+                "<th style=\"%s\">Node</th>" +
+                "<th style=\"%s\">Katz Centrality</th></tr>\n",
+            headerStyle, headerStyle, headerStyle);
 
         StringBuilder rows = new StringBuilder(headers);
 
@@ -257,7 +258,7 @@ public class KatzCentrality implements Statistics {
                 return Double.compare(katzCentrality2, katzCentrality1);
             }
         });
-        
+
         for (Node node : this.nodesMap.keySet()) {
             pq.add(node);
         }
@@ -268,22 +269,22 @@ public class KatzCentrality implements Statistics {
             String label = node.getLabel() != null ? node.getLabel() : node.getId().toString();
             Double katzCentralityValue = ((Double) node.getAttribute(KATZ_CENTRALITY));
             rows.append(String.format("<tr>" +
-                            "<td style=\"%s\">%d</td>" +
-                            "<td style=\"%s\" data-type=\"%s\">%s</td>" +
-                            "<td style=\"%s\">%.2f</td></tr>\n",
-                    borderStyle,
-                    ++index,
-                    borderStyle,
-                    LABEL,
-                    label,
-                    borderStyle,
-                    katzCentralityValue
+                    "<td style=\"%s\">%d</td>" +
+                    "<td style=\"%s\" data-type=\"%s\">%s</td>" +
+                    "<td style=\"%s\">%.2f</td></tr>\n",
+                borderStyle,
+                ++index,
+                borderStyle,
+                LABEL,
+                label,
+                borderStyle,
+                katzCentralityValue
             ));
         }
 
         String table = "<table style=\"width:100%;" + borderStyle + "\">\n" +
-                rows.toString() +
-                "</table>";
+            rows.toString() +
+            "</table>";
 
         String header = String.format("Results (Top %d)", index) ;
         String report = this.getReportHtml(header, table);
