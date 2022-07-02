@@ -274,7 +274,9 @@ public class ForceAtlas2 implements Layout {
                     }
                     n.setX((float) x);
                     n.setY((float) y);
-                    n.setZ((float) z);
+                    if (threeD) {
+                        n.setZ((float) z);
+                    }
                 }
             }
         } else {
@@ -297,7 +299,10 @@ public class ForceAtlas2 implements Layout {
                     }
                     n.setX((float) x);
                     n.setY((float) y);
-                    n.setZ((float) z);
+
+                    if (threeD) {
+                        n.setZ((float) z);
+                    }
                 }
             }
         }
