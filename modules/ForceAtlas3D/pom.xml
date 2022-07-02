@@ -4,12 +4,12 @@
     <parent>
         <artifactId>gephi-plugin-parent</artifactId>
         <groupId>org.gephi</groupId>
-        <version>0.9.1</version>
+        <version>0.9.3</version>
     </parent>
 
     <groupId>net.clementlevallois</groupId>
-    <artifactId>ForceAtlas3D</artifactId>
-    <version>1.2.0</version>
+    <artifactId>force-atlas-3d</artifactId>
+    <version>1.2.1</version>
     <packaging>nbm</packaging>
 
     <name>ForceAtlas3D</name>
@@ -57,13 +57,13 @@
     <build>
         <plugins>
             <plugin>
-                <groupId>org.codehaus.mojo</groupId>
+                <groupId>org.apache.netbeans.utilities</groupId>
                 <artifactId>nbm-maven-plugin</artifactId>
                 <configuration>
                     <licenseName>Apache v2</licenseName>
                     <licenseFile>Apache v2.txt</licenseFile>
-                    <author>Clement Levallois</author>
-                    <sourceCodeUrl>https://github.com/seinecle/gephi-plugins/tree/force-atlas-3D</sourceCodeUrl>
+                    <author>Clement Levallois (@seinecle)</author>
+                    <sourceCodeUrl>https://github.com/gephi/gephi-plugins/tree/force-atlas3d-plugin</sourceCodeUrl>
                     <homePageUrl>http://www.clementlevallois.net</homePageUrl>
                     <publicPackages>
                         
