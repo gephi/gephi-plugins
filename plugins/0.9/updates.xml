@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
 <!DOCTYPE module_updates PUBLIC "-//NetBeans//DTD Autoupdate Catalog 2.8//EN" "https://netbeans.apache.org/dtds/autoupdate-catalog-2_8.dtd">
-<module_updates timestamp="17/42/19/29/06/2022">
+<module_updates timestamp="37/40/11/02/07/2022">
 
 
 
@@ -107,6 +107,14 @@
     <manifest OpenIDE-Module="dk.icourts.graphfilter" OpenIDE-Module-Display-Category="Filter" OpenIDE-Module-Implementation-Version="1.0.0" OpenIDE-Module-Long-Description="&lt;p&gt;This plugin allows users to filter the graph by providing a text file with the list of node labels they want to keep. To run it go to the Filters section and select Attributes &gt; Filter by list by double-clicking or dragging it to the Queries area.&lt;/p&gt; &lt;p&gt;The filter allows you to select a text file (*.txt) from your hard drive and use it as a list of the nodes to be kept. The text shall contain one node label per line.&lt;/p&gt; &lt;p&gt;Any line that isn't a label will not be taken into account. If you wish to keep also the neighbors of the nodes belonging to the list, then check the option &quot;Include neighbors&quot;. This will keep all the nodes that are connected to the nodes in the text file via incoming or outgoing edges.&lt;/p&gt;" OpenIDE-Module-Module-Dependencies="org.gephi.graph.api &gt; 0.9.3, org.openide.util &gt; 9.23, org.gephi.filters.api &gt; 0.9.3, org.openide.util.lookup &gt; 8.49, org.gephi.project.api &gt; 0.9.3" OpenIDE-Module-Name="FilterFromFile" OpenIDE-Module-Requires="org.openide.modules.ModuleFormat1" OpenIDE-Module-Short-Description="A plugin to allow users filter graph by providing a text file with the list of node labels they want to keep" OpenIDE-Module-Specification-Version="1.0.0"/>
     
     <message_digest algorithm="SHA-512" value="070a9796d1f27270648260861b82f59660982a15b1f18d9da410e0c8012990a63ffcccfadf3140b2bbdd88f4bb5dd4b4f9e0d9ae111adaff0fe6fde8c5963b7d"/>
+</module>
+
+<module codenamebase="net.clementlevallois.force.atlas.3d" distribution="force-atlas-3d-1.2.1.nbm" downloadsize="50823" homepage="http://www.clementlevallois.net" license="C509E6BE" moduleauthor="Clement Levallois (@seinecle)" needsrestart="true" releasedate="2022/07/02" targetcluster="plugins">
+        
+    <manifest OpenIDE-Module="net.clementlevallois.force.atlas.3d" OpenIDE-Module-Display-Category="Layout" OpenIDE-Module-Implementation-Version="1.2.1" OpenIDE-Module-Long-Description="Same as Force Atlas 2 with an option for 3D.&#10;Author: Clement Levallois&#10;&#10;Versions:&#10;1.0 --- initial version (28 June 2013)&#10;1.1 --- conversion of nodes to spheres when layout in 3D (30 June 2013)&#10;1.2 --- migration to Gephi 0.9 (February 2017)" OpenIDE-Module-Module-Dependencies="org.gephi.visualization.api &gt; 0.9.3, org.gephi.utils &gt; 0.9.3, org.openide.util.lookup &gt; 8.49, org.gephi.graph.api &gt; 0.9.3, org.gephi.visualization &gt; 0.9.3, org.gephi.layout.plugin &gt; 0.9.3, org.openide.util &gt; 9.23, org.gephi.layout.api &gt; 0.9.3, org.gephi.project.api &gt; 0.9.3" OpenIDE-Module-Name="Force Atlas 3D" OpenIDE-Module-Requires="org.openide.modules.ModuleFormat1" OpenIDE-Module-Short-Description="Same as Force Atlas 2 with an option for 3D." OpenIDE-Module-Specification-Version="1.2.1"/>
+        
+
+    <message_digest algorithm="SHA-512" value="c3ff1dd9fd0f97dc3b8e0ede358d259cf99993db2c83d33df46ad35cabd62f013aec659336fa0925ac7f562eaca9f59832785bba18eb274f95d2493afb79c64a"/>
 </module>
 
 <module codenamebase="org.gephi.geolayout.plugin" distribution="geolayout-plugin-1.0.0.nbm" downloadsize="27296" homepage="https://gephi.org/plugins/#/plugin/geolayout-plugin" license="671322F0" moduleauthor="Alexis Jacomy" needsrestart="true" releasedate="2022/06/28" targetcluster="plugins">

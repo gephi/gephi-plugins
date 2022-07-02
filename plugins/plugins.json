@@ -1200,23 +1200,23 @@
     {
       "id": "force-atlas-3d",
       "name": "Force Atlas 3D",
-      "short_description": "",
-      "long_description": "\u003ch2\u003eAuthor\u003c/h2\u003e\n\u003cp\u003eClement Levallois, \u003ca href\u003d\"http://www.em-lyon.com/fr/faculte-recherche-enseignement-superieur/faculte-recherche-emlyon/corps-professoral/Professeurs-permanents/Clement-LEVALLOIS\" target\u003d\"_blank\"\u003eAssistant Professor at EMLYON Business School\u003c/a\u003e.\u003c/p\u003e\n\u003cp\u003eThe classic layout of Gephi extended to 3D.\u003c/p\u003e\n\u003cp\u003eVersions:\u003cbr\u003e\n1.0 — initial version (28 June 2013)\u003cbr\u003e\n1.1 — conversion of nodes to spheres when layout in 3D (30 June 2013)\u003c/p\u003e\n\u003cp\u003e\u0026nbsp;\u003c/p\u003e",
+      "short_description": "Same as Force Atlas 2 with an option for 3D.",
+      "long_description": "Same as Force Atlas 2 with an option for 3D.\nAuthor: Clement Levallois\n\nVersions:\n1.0 --- initial version (28 June 2013)\n1.1 --- conversion of nodes to spheres when layout in 3D (30 June 2013)\n1.2 --- migration to Gephi 0.9 (February 2017)",
       "readme": null,
       "license": "Apache v2",
       "authors": [
         {
-          "name": "Clement Levallois",
+          "name": "Clement Levallois (@seinecle)",
           "email": null,
-          "link": "http://www.clementlevallois.net"
+          "link": null
         }
       ],
       "category": "Layout",
-      "last_update": "October 19, 2014",
+      "last_update": "July 2, 2022",
       "images": [
         {
-          "image": "imgs/force-atlas-3d/pic.jpg",
-          "thumbnail": "imgs/force-atlas-3d/pic.jpg"
+          "image": "imgs/force-atlas-3d/fa3d.png",
+          "thumbnail": "imgs/force-atlas-3d/fa3d-thumbnail.png"
         }
       ],
       "versions": {
@@ -1224,10 +1224,15 @@
           "url": "0.8.2/net-clementlevallois-ForceAtlas3D_1.11.nbm",
           "last_update": "October 19, 2014",
           "plugin_version": null
+        },
+        "0.9.6": {
+          "url": "0.9/force-atlas-3d-1.2.1.nbm",
+          "last_update": "July 2, 2022",
+          "plugin_version": "1.2.1"
         }
       },
-      "sourcecode": "https://github.com/seinecle/ForceAtlas3D",
-      "homepage": null
+      "sourcecode": "https://github.com/gephi/gephi-plugins/tree/force-atlas3d-plugin",
+      "homepage": "http://www.clementlevallois.net"
     },
     {
       "id": "multipartite-layout",
