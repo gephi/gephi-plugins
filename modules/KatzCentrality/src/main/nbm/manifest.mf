@@ -1,0 +1,5 @@
+Manifest-Version: 1.0
+OpenIDE-Module-Name: Katz Centrality
+OpenIDE-Module-Short-Description: Katz Centrality calculationK
+OpenIDE-Module-Long-Description: Katz Centrality calculation
+OpenIDE-Module-Display-Category: Data Laboratory
