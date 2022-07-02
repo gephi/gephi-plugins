@@ -70,6 +70,7 @@
         <module>modules/columnCalculator</module>
         <module>modules/GroupPartition</module>
         <module>modules/HairballBuster</module>
+        <module>modules/ForceAtlas3D</module>
     </modules>
     
     <!-- Properties -->
