@@ -117,14 +117,19 @@ public class KatzCentrality implements Statistics {
     }
 
     private void saveCalculations(Graph graph, Column katzCentralityColumn) {
-        for (Node node : graph.getNodes()) {
-            int index = this.nodesMap.get(node);
-            double attributeValue = this.resultVector.getEntry(index, FIRST_COLUMN);
-            if (attributeValue < 0) {
-                this.error = SINGULAR_MATRIX_ERROR_MESSAGE;
-                break;
+        NodeIterable nodeIterable = graph.getNodes();
+        for (Node node : nodeIterable) {
+            Integer index = this.nodesMap.get(node);
+            if (index != null) {
+                double attributeValue = this.resultVector.getEntry(index, FIRST_COLUMN);
+                if (attributeValue < 0) {
+                    this.error = SINGULAR_MATRIX_ERROR_MESSAGE;
+                    nodeIterable.doBreak();
+                    break;
+                }
+                node.setAttribute(katzCentralityColumn,
+                    this.resultVector.getEntry(index, FIRST_COLUMN));
             }
-            node.setAttribute(katzCentralityColumn, this.resultVector.getEntry(index, FIRST_COLUMN));
         }
     }
 
@@ -138,20 +143,21 @@ public class KatzCentrality implements Statistics {
 
         Column katzCentralityColumn = this.initKatzCentralityColumn(graph.getModel());
 
+        double[][] matrix;
         try {
             graph.readLock();
-            double[][] matrix = this.getMatrix(graph);
-            if (matrix != null) {
-                this.calculateKatzCentrality(matrix);
-
-                if (this.error == null) {
-                    this.saveCalculations(graph, katzCentralityColumn);
-                }
-            }
+            matrix = this.getMatrix(graph);
         }  finally {
             graph.readUnlockAll();
         }
 
+        if (matrix != null) {
+            this.calculateKatzCentrality(matrix);
+
+            if (this.error == null) {
+                this.saveCalculations(graph, katzCentralityColumn);
+            }
+        }
     }
 
     private void calculateKatzCentrality(double[][] matrix) {
