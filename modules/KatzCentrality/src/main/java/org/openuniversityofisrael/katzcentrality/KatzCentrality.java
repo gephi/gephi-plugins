@@ -52,6 +52,10 @@ public class KatzCentrality implements Statistics {
         return this.isDirected;
     }
 
+    public void setDirected(boolean directed) {
+        isDirected = directed;
+    }
+
     public RealMatrix getResultVector() {
         return this.resultVector;
     }

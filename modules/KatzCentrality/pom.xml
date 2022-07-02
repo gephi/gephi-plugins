@@ -53,32 +53,10 @@
             <artifactId>ui-library-wrapper</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.testng</groupId>
-            <artifactId>testng</artifactId>
-            <version>6.8</version>
+            <groupId>org.netbeans.api</groupId>
+            <artifactId>org-netbeans-modules-nbjunit</artifactId>
             <scope>test</scope>
         </dependency>
-        <dependency>
-            <groupId>org.gephi</groupId>
-            <artifactId>io-importer-api</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.gephi</groupId>
-            <artifactId>io-importer-plugin</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.gephi</groupId>
-            <artifactId>project-api</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.gephi</groupId>
-            <artifactId>statistics-plugin</artifactId>
-            <scope>test</scope>
-        </dependency>
-
     </dependencies>
 
     <build>

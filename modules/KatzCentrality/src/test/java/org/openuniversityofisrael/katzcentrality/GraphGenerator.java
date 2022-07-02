@@ -10,7 +10,7 @@ import org.openide.util.Lookup;
 
 public class GraphGenerator {
     public static GraphModel generateGraphWithoutEdges() {
-        GraphModel graphModel = Lookup.getDefault().lookup(GraphController.class).getGraphModel();
+        GraphModel graphModel = GraphModel.Factory.newInstance();
         DirectedGraph directedGraph = graphModel.getDirectedGraph();
         Node n0 = graphModel.factory().newNode(((Integer) 0).toString());
         Node n1 = graphModel.factory().newNode(((Integer) 1).toString());
@@ -24,7 +24,7 @@ public class GraphGenerator {
     }
 
     public static GraphModel generateUndirectedGraphWithSelfLoop() {
-        GraphModel graphModel = Lookup.getDefault().lookup(GraphController.class).getGraphModel();
+        GraphModel graphModel = GraphModel.Factory.newInstance();
         UndirectedGraph undirectedGraph = graphModel.getUndirectedGraph();
         Node n0 = graphModel.factory().newNode(((Integer) 0).toString());
         Node n1 = graphModel.factory().newNode(((Integer) 1).toString());
@@ -51,7 +51,7 @@ public class GraphGenerator {
     }
 
     public static GraphModel generateDirectedGraphWithoutWeights() {
-        GraphModel graphModel = Lookup.getDefault().lookup(GraphController.class).getGraphModel();
+        GraphModel graphModel = GraphModel.Factory.newInstance();
         DirectedGraph directedGraph = graphModel.getDirectedGraph();
         Node n0 = graphModel.factory().newNode(((Integer) 0).toString());
         Node n1 = graphModel.factory().newNode(((Integer) 1).toString());
@@ -74,7 +74,7 @@ public class GraphGenerator {
     }
 
     public static GraphModel generateGraphWithWeights(boolean isDirected, boolean withLabels) {
-        GraphModel graphModel = Lookup.getDefault().lookup(GraphController.class).getGraphModel();
+        GraphModel graphModel = GraphModel.Factory.newInstance();
         DirectedGraph directedGraph = graphModel.getDirectedGraph();
         Node n0 = graphModel.factory().newNode(((Integer) 0).toString());
         Node n1 = graphModel.factory().newNode(((Integer) 1).toString());
@@ -106,7 +106,7 @@ public class GraphGenerator {
     }
 
     public static GraphModel generateSingularMatrixGraph(boolean isDirected) {
-        GraphModel graphModel = Lookup.getDefault().lookup(GraphController.class).getGraphModel();
+        GraphModel graphModel = GraphModel.Factory.newInstance();
         DirectedGraph directedGraph = graphModel.getDirectedGraph();
         Node n0 = graphModel.factory().newNode(((Integer) 0).toString());
         Node n1 = graphModel.factory().newNode(((Integer) 1).toString());
@@ -134,7 +134,7 @@ public class GraphGenerator {
     }
 
     public static GraphModel generateGraphResultingInNegativeEigenvalues(boolean isDirected) {
-        GraphModel graphModel = Lookup.getDefault().lookup(GraphController.class).getGraphModel();
+        GraphModel graphModel = GraphModel.Factory.newInstance();
         DirectedGraph directedGraph = graphModel.getDirectedGraph();
         Node n1 = graphModel.factory().newNode(((Integer) 0).toString());
         Node n2 = graphModel.factory().newNode(((Integer) 1).toString());
