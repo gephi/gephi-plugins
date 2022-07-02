@@ -76,7 +76,7 @@ public class KatzCentrality implements Statistics {
             this.error = NO_EDGES_MESSAGE;
             return null;
         }
-        int nodesNum = nodes.toArray().length;
+        int nodesNum = graph.getNodeCount();
         double[][] matrix = new double[nodesNum][nodesNum];
         int index = 0;
 
