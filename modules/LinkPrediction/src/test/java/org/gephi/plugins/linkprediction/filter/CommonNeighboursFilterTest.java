@@ -1,26 +1,27 @@
 package org.gephi.plugins.linkprediction.filter;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+
 import org.gephi.graph.api.*;
 import org.gephi.plugins.linkprediction.base.LinkPredictionFilter;
 import org.gephi.plugins.linkprediction.base.LinkPredictionStatistics;
 import org.gephi.plugins.linkprediction.statistics.CommonNeighboursStatistics;
 import org.gephi.plugins.linkprediction.statistics.CommonNeighboursStatisticsBuilder;
 import org.gephi.project.api.ProjectController;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.Before;
+import org.junit.Test;
 import org.openide.util.Lookup;
 
 import java.util.Arrays;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
-class CommonNeighboursFilterTest {
+public class CommonNeighboursFilterTest {
 
     GraphModel graphModel;
 
-    @BeforeEach void setUp() {
+    @Before
+    public void setUp() {
         //Init project - and therefore a workspace
         ProjectController pc = Lookup.getDefault().lookup(ProjectController.class);
         pc.newProject();
@@ -88,7 +89,8 @@ class CommonNeighboursFilterTest {
         undirectedGraph.addEdge(e12);
     }
 
-    @Test void testFilter_EdgesLimit_Successfully() {
+    @Test
+    public void testFilter_EdgesLimit_Successfully() {
         LinkPredictionStatistics statistic = new CommonNeighboursStatistics();
 
         statistic.execute(graphModel);
@@ -107,7 +109,8 @@ class CommonNeighboursFilterTest {
         //        edge -> edge.getAttribute(colLastPrediction).equals(CommonNeighboursFilterBuilder.COMMON_NEIGHBOURS_NAME)));
     }
 
-    @Test void getName() {
+    @Test
+    public void getName() {
         LinkPredictionFilter filter = new CommonNeighboursFilter();
         assertEquals(CommonNeighboursStatisticsBuilder.COMMON_NEIGHBOURS_NAME, filter.getName());
     }

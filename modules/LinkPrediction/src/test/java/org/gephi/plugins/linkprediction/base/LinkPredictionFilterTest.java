@@ -1,25 +1,27 @@
 package org.gephi.plugins.linkprediction.base;
 
+import java.util.Collection;
 import org.gephi.graph.api.*;
 import org.gephi.plugins.linkprediction.filter.CommonNeighboursFilter;
 import org.gephi.plugins.linkprediction.statistics.CommonNeighboursStatistics;
 import org.gephi.plugins.linkprediction.statistics.PreferentialAttachmentStatistics;
 import org.gephi.project.api.ProjectController;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
 import org.openide.util.Lookup;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
-import static junit.framework.TestCase.assertTrue;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import org.junit.Before;
+import org.junit.Test;
 
-class LinkPredictionFilterTest {
+public class LinkPredictionFilterTest {
     GraphModel graphModel;
 
-    @BeforeEach void setUp() {
+    @Before
+    public void setUp() {
         //Init project - and therefore a workspace
         ProjectController pc = Lookup.getDefault().lookup(ProjectController.class);
         pc.newProject();
@@ -87,7 +89,8 @@ class LinkPredictionFilterTest {
         undirectedGraph.addEdge(e12);
     }
 
-    @Test void removeOtherEdges_Single() {
+    @Test
+    public void removeOtherEdges_Single() {
         CommonNeighboursFilter cn = new CommonNeighboursFilter();
         CommonNeighboursStatistics cs = new CommonNeighboursStatistics();
 
@@ -103,7 +106,8 @@ class LinkPredictionFilterTest {
         assertEquals(edges.size(), remainigEdges.size());
     }
 
-    @Test void removeOtherEdges_Multi() {
+    @Test
+    public void removeOtherEdges_Multi() {
         CommonNeighboursFilter cn = new CommonNeighboursFilter();
         CommonNeighboursStatistics cs = new CommonNeighboursStatistics();
         PreferentialAttachmentStatistics ps = new PreferentialAttachmentStatistics();
@@ -121,17 +125,19 @@ class LinkPredictionFilterTest {
         assertTrue(remainigEdges.size() == 1);
     }
 
-    @Test void getNodesToRemove_Full() {
+    @Test
+    public void getNodesToRemove_Full() {
         List<Edge> edges = new ArrayList<>();
         CommonNeighboursFilter cn = new CommonNeighboursFilter();
 
-        List<Node> nodesToRemove = cn.getNodesToRemove(graphModel.getGraph(), edges);
+        Collection<Node> nodesToRemove = cn.getNodesToRemove(graphModel.getGraph(), edges);
 
         int nodeCount = graphModel.getGraph().getNodeCount();
         assertEquals(nodeCount, nodesToRemove.size());
     }
 
-    @Test void getNodesToRemove_Empty() {
+    @Test
+    public void getNodesToRemove_Empty() {
         List<Edge> edges = new ArrayList<>();
         // Add all edges to list
         List<Edge> graphEdges = Arrays.asList(graphModel.getGraph().getEdges().toArray());
@@ -139,13 +145,14 @@ class LinkPredictionFilterTest {
 
         CommonNeighboursFilter cn = new CommonNeighboursFilter();
 
-        List<Node> nodesToRemove = cn.getNodesToRemove(graphModel.getGraph(), edges);
+        Collection<Node> nodesToRemove = cn.getNodesToRemove(graphModel.getGraph(), edges);
 
         int nodeCount = 0;
         assertEquals(nodeCount, nodesToRemove.size());
     }
 
-    @Test void retainEdges_Full() {
+    @Test
+    public void retainEdges_Full() {
         List<Edge> edges = new ArrayList<>();
         // Add all edges to list
         List<Edge> graphEdges = Arrays.asList(graphModel.getGraph().getEdges().toArray());

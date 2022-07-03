@@ -1,23 +1,23 @@
 package org.gephi.plugins.linkprediction.statistics;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+
 import org.gephi.graph.api.*;
 import org.gephi.plugins.linkprediction.base.LinkPredictionStatistics;
 import org.gephi.project.api.ProjectController;
-import org.gephi.project.api.Workspace;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.Before;
+import org.junit.Test;
 import org.openide.util.Lookup;
 
 import java.util.Arrays;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
-class LinkPredictionMacroTest {
+public class LinkPredictionMacroTest {
     GraphModel graphModel;
 
-    @BeforeEach void setUp() {
+    @Before
+    public void setUp() {
         //Init project - and therefore a workspace
         ProjectController pc = Lookup.getDefault().lookup(ProjectController.class);
         pc.newProject();
@@ -85,7 +85,8 @@ class LinkPredictionMacroTest {
         undirectedGraph.addEdge(e12);
     }
 
-    @Test void testExecuteOnce_SingleSuccessfully() {
+    @Test
+    public void testExecuteOnce_SingleSuccessfully() {
 
         List<Edge> edgesOld = Arrays.asList(graphModel.getGraph().getEdges().toArray());
 
@@ -104,7 +105,8 @@ class LinkPredictionMacroTest {
         assertEquals(1, cnCount);
     }
 
-    @Test void testExecuteTwice_SingleSuccessfully() {
+    @Test
+    public void testExecuteTwice_SingleSuccessfully() {
 
         List<Edge> edgesOld = Arrays.asList(graphModel.getGraph().getEdges().toArray());
 
@@ -125,7 +127,8 @@ class LinkPredictionMacroTest {
         assertEquals(2, cnCount);
     }
 
-    @Test void testExecuteOnce_MultiSuccessfully() {
+    @Test
+    public void testExecuteOnce_MultiSuccessfully() {
 
         List<Edge> edgesOld = Arrays.asList(graphModel.getGraph().getEdges().toArray());
 
@@ -151,7 +154,8 @@ class LinkPredictionMacroTest {
         assertEquals(1, panCount);
     }
 
-    @Test void testExecuteTwice_MultiSuccessfully() {
+    @Test
+    public void testExecuteTwice_MultiSuccessfully() {
 
         List<Edge> edgesOld = Arrays.asList(graphModel.getGraph().getEdges().toArray());
 
@@ -179,7 +183,8 @@ class LinkPredictionMacroTest {
         assertEquals(2, panCount);
     }
 
-    @Test void addStatistic_Successfully() {
+    @Test
+    public void addStatistic_Successfully() {
         LinkPredictionStatistics cn = new CommonNeighboursStatistics();
         LinkPredictionStatistics pa = new PreferentialAttachmentStatistics();
         LinkPredictionMacro macro = new LinkPredictionMacro();
@@ -192,7 +197,8 @@ class LinkPredictionMacroTest {
         assertTrue(statistics.contains(pa));
     }
 
-    @Test void removeStatistic_Successfully() {
+    @Test
+    public void removeStatistic_Successfully() {
         LinkPredictionStatistics cn = new CommonNeighboursStatistics();
         LinkPredictionStatistics pa = new PreferentialAttachmentStatistics();
         LinkPredictionMacro macro = new LinkPredictionMacro();

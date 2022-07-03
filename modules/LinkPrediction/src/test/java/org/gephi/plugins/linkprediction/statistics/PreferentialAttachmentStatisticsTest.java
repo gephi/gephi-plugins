@@ -4,17 +4,19 @@ import org.gephi.graph.api.*;
 import org.gephi.plugins.linkprediction.base.LinkPredictionStatistics;
 import org.gephi.project.api.ProjectController;
 import org.junit.Ignore;
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.Before;
+import org.junit.Test;
 import org.openide.util.Lookup;
 
 import static org.gephi.plugins.linkprediction.base.LinkPredictionStatistics.*;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
-@Ignore class PreferentialAttachmentStatisticsTest {
+public class PreferentialAttachmentStatisticsTest {
     GraphModel graphModel;
 
-    @BeforeEach void setUp() {
+    @Before
+    public void setUp() {
         //Init project - and therefore a workspace
         ProjectController pc = Lookup.getDefault().lookup(ProjectController.class);
         pc.newProject();
@@ -82,7 +84,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
         undirectedGraph.addEdge(e12);
     }
 
-    @org.junit.jupiter.api.Test void testExecute_EdgeCount() {
+    @Test
+    public void testExecute_EdgeCount() {
 
         LinkPredictionStatistics statistic = new PreferentialAttachmentStatistics();
         int edgesCountOriginal = graphModel.getGraph().getEdges().toArray().length;
@@ -93,7 +96,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
         assertEquals(edgesCountOriginal + 1, edgesCountNew);
     }
 
-    @org.junit.jupiter.api.Test void testGetHighestPrediction_Successfully() {
+    @Test
+    public void testGetHighestPrediction_Successfully() {
 
         LinkPredictionStatistics statistic = new PreferentialAttachmentStatistics();
         statistic.execute(graphModel);
@@ -109,7 +113,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
         assertTrue((int) maxEdge.getAttribute(getColLastCalculatedValue()) == 12);
     }
 
-    @org.junit.jupiter.api.Test void testExecute_Successfully() {
+    @Test
+    public void testExecute_Successfully() {
 
         LinkPredictionStatistics statistic = new PreferentialAttachmentStatistics();
         statistic.execute(graphModel);
@@ -124,7 +129,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
         assertTrue(graphModel.getGraph().contains(maxEdge));
     }
 
-    @org.junit.jupiter.api.Test void testGetNextIteration_Successfully() {
+    @Test
+    public void testGetNextIteration_Successfully() {
         LinkPredictionStatistics statistic = new PreferentialAttachmentStatistics();
 
         Table edgeTable = graphModel.getEdgeTable();

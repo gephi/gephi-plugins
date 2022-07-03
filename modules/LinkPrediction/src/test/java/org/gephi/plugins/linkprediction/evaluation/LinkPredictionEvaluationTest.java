@@ -8,14 +8,15 @@ import org.gephi.plugins.linkprediction.statistics.PreferentialAttachmentStatist
 import org.gephi.project.api.Project;
 import org.gephi.project.api.ProjectController;
 import org.gephi.project.api.Workspace;
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.Before;
+import org.junit.Test;
 import org.openide.util.Lookup;
 
 import java.util.List;
 
 import static junit.framework.TestCase.assertTrue;
 
-class LinkPredictionEvaluationTest {
+public class LinkPredictionEvaluationTest {
     GraphModel initModel;
     GraphModel validationModel;
 
@@ -26,7 +27,8 @@ class LinkPredictionEvaluationTest {
     Node b;
     Node c;
 
-    @BeforeEach void setUp() {
+    @Before
+    public void setUp() {
         //Init project - and therefore a workspace
         ProjectController pc = Lookup.getDefault().lookup(ProjectController.class);
         pc.newProject();
@@ -105,7 +107,8 @@ class LinkPredictionEvaluationTest {
         validationModel.bridge().copyNodes(initial.getNodes().toArray());
     }
 
-    @org.junit.jupiter.api.Test void testGetEvaluations() {
+    @Test
+    public void testGetEvaluations() {
 
         LinkPredictionEvaluation evaluation = new LinkPredictionEvaluation();
 
@@ -131,7 +134,8 @@ class LinkPredictionEvaluationTest {
         assertTrue(evaluations.contains(accuracyPa));
     }
 
-    @org.junit.jupiter.api.Test void testGetEvaluation() {
+    @Test
+    public void testGetEvaluation() {
 
         LinkPredictionEvaluation evaluation = new LinkPredictionEvaluation();
 
@@ -155,7 +159,8 @@ class LinkPredictionEvaluationTest {
         assertTrue(metric == accuracyCn);
     }
 
-    @org.junit.jupiter.api.Test void testAddEvaluation() {
+    @Test
+    public void testAddEvaluation() {
 
         LinkPredictionEvaluation evaluation = new LinkPredictionEvaluation();
 
@@ -191,7 +196,8 @@ class LinkPredictionEvaluationTest {
         assertTrue(evaluations.contains(accuracyPa));
     }
 
-    @org.junit.jupiter.api.Test void testRemoveEvaluation() {
+    @Test
+    public void testRemoveEvaluation() {
 
         LinkPredictionEvaluation evaluation = new LinkPredictionEvaluation();
 
@@ -237,7 +243,8 @@ class LinkPredictionEvaluationTest {
         assertTrue(evaluations.contains(accuracyPa));
     }
 
-    @org.junit.jupiter.api.Test void testGetReport() {
+    @Test
+    public void testGetReport() {
 
         LinkPredictionEvaluation evaluation = new LinkPredictionEvaluation();
 

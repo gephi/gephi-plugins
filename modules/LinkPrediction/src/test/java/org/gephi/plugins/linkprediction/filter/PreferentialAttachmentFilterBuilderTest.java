@@ -8,17 +8,18 @@ import org.gephi.plugins.linkprediction.statistics.PreferentialAttachmentStatist
 import org.gephi.plugins.linkprediction.statistics.PreferentialAttachmentStatisticsBuilder;
 import org.gephi.project.api.ProjectController;
 import org.gephi.project.api.Workspace;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.Before;
+import org.junit.Test;
 import org.openide.util.Lookup;
 
 import static org.gephi.plugins.linkprediction.base.LinkPredictionFilterBuilder.LINK_PREDICTION_CATEGORY;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.Assert.assertEquals;
 
-class PreferentialAttachmentFilterBuilderTest {
+public class PreferentialAttachmentFilterBuilderTest {
     GraphModel graphModel;
 
-    @BeforeEach void setUp() {
+    @Before
+    public void setUp() {
         //Init project - and therefore a workspace
         ProjectController pc = Lookup.getDefault().lookup(ProjectController.class);
         pc.newProject();
@@ -86,17 +87,20 @@ class PreferentialAttachmentFilterBuilderTest {
         undirectedGraph.addEdge(e12);
     }
 
-    @Test void getName() {
+    @Test
+    public void getName() {
         PreferentialAttachmentFilterBuilder builder = new PreferentialAttachmentFilterBuilder();
         assertEquals(PreferentialAttachmentStatisticsBuilder.PREFERENTIAL_ATTACHMENT_NAME, builder.getName());
     }
 
-    @Test void getDescription() {
+    @Test
+    public void getDescription() {
         PreferentialAttachmentFilterBuilder builder = new PreferentialAttachmentFilterBuilder();
         assertEquals(PreferentialAttachmentFilterBuilder.PREFERENTIAL_ATTACHMENT_DESC, builder.getDescription());
     }
 
-    @Test void getFilter() {
+    @Test
+    public void getFilter() {
         ProjectController pc = Lookup.getDefault().lookup(ProjectController.class);
         pc.newProject();
         Workspace workspace = pc.getCurrentWorkspace();
@@ -105,14 +109,16 @@ class PreferentialAttachmentFilterBuilderTest {
         assertEquals(PreferentialAttachmentFilter.class, builder.getFilter(workspace).getClass());
     }
 
-    @Test void getCategory() {
+    @Test
+    public void getCategory() {
         PreferentialAttachmentFilterBuilder builder = new PreferentialAttachmentFilterBuilder();
         Category category  = builder.getCategory();
 
         assertEquals(LINK_PREDICTION_CATEGORY, category.getName());
     }
 
-    @Test void getPanel() {
+    @Test
+    public void getPanel() {
         LinkPredictionStatistics statistic = new PreferentialAttachmentStatistics();
         statistic.execute(graphModel);
 

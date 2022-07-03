@@ -8,17 +8,18 @@ import org.gephi.plugins.linkprediction.statistics.CommonNeighboursStatistics;
 import org.gephi.plugins.linkprediction.statistics.CommonNeighboursStatisticsBuilder;
 import org.gephi.project.api.ProjectController;
 import org.gephi.project.api.Workspace;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.Before;
+import org.junit.Test;
 import org.openide.util.Lookup;
 
 import static org.gephi.plugins.linkprediction.base.LinkPredictionFilterBuilder.LINK_PREDICTION_CATEGORY;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.Assert.assertEquals;
 
-class CommonNeighboursFilterBuilderTest {
+public class CommonNeighboursFilterBuilderTest {
     GraphModel graphModel;
 
-    @BeforeEach void setUp() {
+    @Before
+    public void setUp() {
         //Init project - and therefore a workspace
         ProjectController pc = Lookup.getDefault().lookup(ProjectController.class);
         pc.newProject();
@@ -86,17 +87,20 @@ class CommonNeighboursFilterBuilderTest {
         undirectedGraph.addEdge(e12);
     }
 
-    @Test void getName() {
+    @Test
+    public void getName() {
         CommonNeighboursFilterBuilder builder = new CommonNeighboursFilterBuilder();
         assertEquals(CommonNeighboursStatisticsBuilder.COMMON_NEIGHBOURS_NAME, builder.getName());
     }
 
-    @Test void getDescription() {
+    @Test
+    public void getDescription() {
         CommonNeighboursFilterBuilder builder = new CommonNeighboursFilterBuilder();
         assertEquals(CommonNeighboursFilterBuilder.COMMON_NEIGHBOURS_DESC, builder.getDescription());
     }
 
-    @Test void getFilter() {
+    @Test
+    public void getFilter() {
         ProjectController pc = Lookup.getDefault().lookup(ProjectController.class);
         pc.newProject();
         Workspace workspace = pc.getCurrentWorkspace();
@@ -105,14 +109,16 @@ class CommonNeighboursFilterBuilderTest {
         assertEquals(CommonNeighboursFilter.class, builder.getFilter(workspace).getClass());
     }
 
-    @Test void getCategory() {
+    @Test
+    public void getCategory() {
         CommonNeighboursFilterBuilder builder = new CommonNeighboursFilterBuilder();
         Category category  = builder.getCategory();
 
         assertEquals(LINK_PREDICTION_CATEGORY, category.getName());
     }
 
-    @Test void getPanel() {
+    @Test
+    public void getPanel() {
         LinkPredictionStatistics statistic = new CommonNeighboursStatistics();
         statistic.execute(graphModel);
 

@@ -1,18 +1,19 @@
 package org.gephi.plugins.linkprediction.statistics;
 
+import static org.junit.Assert.assertEquals;
+
 import org.gephi.graph.api.*;
 import org.gephi.plugins.linkprediction.base.LinkPredictionStatistics;
 import org.gephi.project.api.ProjectController;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
 import org.openide.util.Lookup;
+import org.junit.Before;
+import org.junit.Test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
-class PreferentialAttachmentStatisticsBuilderTest {
+public class PreferentialAttachmentStatisticsBuilderTest {
     GraphModel graphModel;
 
-    @BeforeEach void setUp() {
+    @Before
+    public void setUp() {
         //Init project - and therefore a workspace
         ProjectController pc = Lookup.getDefault().lookup(ProjectController.class);
         pc.newProject();
@@ -80,7 +81,8 @@ class PreferentialAttachmentStatisticsBuilderTest {
         undirectedGraph.addEdge(e12);
     }
 
-    @Test void getName() {
+    @Test
+    public void getName() {
         LinkPredictionStatistics statistic = new PreferentialAttachmentStatistics();
         statistic.execute(graphModel);
 
@@ -90,7 +92,8 @@ class PreferentialAttachmentStatisticsBuilderTest {
         assertEquals("Preferential Attachment", name);
     }
 
-    @Test void getStatistics() {
+    @Test
+    public void getStatistics() {
         LinkPredictionStatistics statistic = new PreferentialAttachmentStatistics();
         statistic.execute(graphModel);
 

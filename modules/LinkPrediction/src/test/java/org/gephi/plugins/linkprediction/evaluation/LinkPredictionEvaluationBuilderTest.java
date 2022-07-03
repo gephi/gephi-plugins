@@ -1,17 +1,19 @@
 package org.gephi.plugins.linkprediction.evaluation;
 
+import static org.junit.Assert.assertEquals;
+
 import org.gephi.graph.api.*;
 import org.gephi.project.api.ProjectController;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.Before;
+import org.junit.Test;
 import org.openide.util.Lookup;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
-class LinkPredictionEvaluationBuilderTest {
+public class LinkPredictionEvaluationBuilderTest {
     GraphModel graphModel;
 
-    @BeforeEach void setUp() {
+    @Before
+    public void setUp() {
         //Init project - and therefore a workspace
         ProjectController pc = Lookup.getDefault().lookup(ProjectController.class);
         pc.newProject();
@@ -79,7 +81,8 @@ class LinkPredictionEvaluationBuilderTest {
         undirectedGraph.addEdge(e12);
     }
 
-    @Test void getName() {
+    @Test
+    public void getName() {
         LinkPredictionEvaluation evaluation = new LinkPredictionEvaluation();
         evaluation.execute(graphModel);
 
@@ -89,7 +92,8 @@ class LinkPredictionEvaluationBuilderTest {
         assertEquals("Eval. Link Prediction Algorithms", name);
     }
 
-    @Test void getStatistics() {
+    @Test
+    public void getStatistics() {
         LinkPredictionEvaluation evaluation = new LinkPredictionEvaluation();
         evaluation.execute(graphModel);
 
@@ -100,7 +104,8 @@ class LinkPredictionEvaluationBuilderTest {
 
     }
 
-    @Test void getStatisticsClass() {
+    @Test
+    public void getStatisticsClass() {
         LinkPredictionEvaluationBuilder builder = new LinkPredictionEvaluationBuilder();
         Class statisticClass = builder.getStatisticsClass();
 

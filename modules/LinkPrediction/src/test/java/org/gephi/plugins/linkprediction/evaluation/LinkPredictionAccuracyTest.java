@@ -2,20 +2,18 @@ package org.gephi.plugins.linkprediction.evaluation;
 
 import org.gephi.graph.api.*;
 import org.gephi.plugins.linkprediction.base.LinkPredictionStatistics;
-import org.gephi.plugins.linkprediction.evaluation.LinkPredictionAccuracy;
-import org.gephi.plugins.linkprediction.evaluation.LinkPredictionEvaluation;
 import org.gephi.plugins.linkprediction.statistics.CommonNeighboursStatistics;
 import org.gephi.plugins.linkprediction.statistics.CommonNeighboursStatisticsBuilder;
 import org.gephi.plugins.linkprediction.statistics.PreferentialAttachmentStatisticsBuilder;
 import org.gephi.project.api.Project;
 import org.gephi.project.api.ProjectController;
 import org.gephi.project.api.Workspace;
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.Before;
+import org.junit.Test;
 import org.openide.util.Lookup;
+import static org.junit.Assert.assertEquals;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
-class LinkPredictionAccuracyTest {
+public class LinkPredictionAccuracyTest {
     GraphModel initModel;
     GraphModel validationModel;
 
@@ -27,7 +25,8 @@ class LinkPredictionAccuracyTest {
     Node f;
     Node h;
 
-    @BeforeEach void setUp() {
+    @Before
+    public void setUp() {
         //Init project - and therefore a workspace
         ProjectController pc = Lookup.getDefault().lookup(ProjectController.class);
         pc.newProject();
@@ -110,7 +109,8 @@ class LinkPredictionAccuracyTest {
         validationModel.bridge().copyNodes(initial.getNodes().toArray());
     }
 
-    @org.junit.jupiter.api.Test void testExecute_Successfully() {
+    @Test
+    public void testExecute_Successfully() {
 
         LinkPredictionEvaluation evaluation = new LinkPredictionEvaluation();
 

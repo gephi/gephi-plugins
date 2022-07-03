@@ -2,7 +2,6 @@ package org.gephi.plugins.linkprediction.base;
 
 import org.gephi.graph.api.*;
 import org.gephi.plugins.linkprediction.evaluation.LinkPredictionAccuracy;
-import org.gephi.plugins.linkprediction.evaluation.LinkPredictionEvaluation;
 import org.gephi.plugins.linkprediction.statistics.CommonNeighboursStatistics;
 import org.gephi.plugins.linkprediction.statistics.CommonNeighboursStatisticsBuilder;
 import org.gephi.plugins.linkprediction.statistics.PreferentialAttachmentStatistics;
@@ -10,19 +9,19 @@ import org.gephi.plugins.linkprediction.statistics.PreferentialAttachmentStatist
 import org.gephi.project.api.Project;
 import org.gephi.project.api.ProjectController;
 import org.gephi.project.api.Workspace;
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.Before;
+import org.junit.Test;
 import org.openide.util.Lookup;
 
 import java.util.Arrays;
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Objects;
 
-import static junit.framework.TestCase.assertTrue;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.Assert.assertTrue;
 
-class EvaluationMetricTest {
+public class EvaluationMetricTest {
     GraphModel initModel;
     GraphModel validationModel;
 
@@ -34,8 +33,8 @@ class EvaluationMetricTest {
     Node f;
     Node h;
 
-    @BeforeEach
-    void setUp() {
+    @Before
+    public void setUp() {
         //Init project - and therefore a workspace
         ProjectController pc = Lookup.getDefault().lookup(ProjectController.class);
         pc.newProject();
@@ -118,8 +117,8 @@ class EvaluationMetricTest {
         validationModel.bridge().copyNodes(initial.getNodes().toArray());
     }
 
-    @org.junit.jupiter.api.Test
-    void testCalculate_Successfully() {
+    @Test
+    public void testCalculate_Successfully() {
 
         // Create objects used for metric
         CommonNeighboursStatistics cn = new CommonNeighboursStatistics();
@@ -162,8 +161,8 @@ class EvaluationMetricTest {
         assertEquals(50, result, 0.001);
     }
 
-    @org.junit.jupiter.api.Test
-    void testEquals() {
+    @Test
+    public void testEquals() {
 
         Graph init = initModel.getUndirectedGraph();
         Graph validation = validationModel.getUndirectedGraph();
@@ -196,8 +195,8 @@ class EvaluationMetricTest {
         assertFalse(metricCn1.equals(new Object()));
     }
 
-    @org.junit.jupiter.api.Test
-    void testHashCode() {
+    @Test
+    public void testHashCode() {
 
         Graph init = initModel.getUndirectedGraph();
         Graph validation = validationModel.getUndirectedGraph();
@@ -208,8 +207,8 @@ class EvaluationMetricTest {
         assertEquals(Objects.hash(cn), metric.hashCode());
     }
 
-    @org.junit.jupiter.api.Test
-    void testPredictLinks() {
+    @Test
+    public void testPredictLinks() {
 
         // Create objects used for metric
         CommonNeighboursStatistics cn = new CommonNeighboursStatistics();
@@ -241,8 +240,8 @@ class EvaluationMetricTest {
 
     }
 
-    @org.junit.jupiter.api.Test
-    void testDeterminCurrentGrapModel() {
+    @Test
+    public void testDeterminCurrentGrapModel() {
 
         // Create objects used for metric
         CommonNeighboursStatistics cn = new CommonNeighboursStatistics();
@@ -279,8 +278,8 @@ class EvaluationMetricTest {
         assertEquals(init.getModel(), current);
     }
 
-    @org.junit.jupiter.api.Test
-    void testCalculateCurrentResult_Successful() {
+    @Test
+    public void testCalculateCurrentResult_Successful() {
 
         // Create objects used for metric
         CommonNeighboursStatistics cn = new CommonNeighboursStatistics();
@@ -310,8 +309,8 @@ class EvaluationMetricTest {
         assertEquals(100, finalResult, 0.001);
     }
 
-    @org.junit.jupiter.api.Test
-    void testCalculateCurrentResult_Failure() {
+    @Test
+    public void testCalculateCurrentResult_Failure() {
 
         // Create objects used for metric
         CommonNeighboursStatistics cn = new CommonNeighboursStatistics();

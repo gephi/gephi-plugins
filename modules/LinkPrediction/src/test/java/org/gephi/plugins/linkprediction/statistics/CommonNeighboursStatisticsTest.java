@@ -3,17 +3,19 @@ package org.gephi.plugins.linkprediction.statistics;
 import org.gephi.graph.api.*;
 import org.gephi.plugins.linkprediction.base.LinkPredictionStatistics;
 import org.gephi.project.api.ProjectController;
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.Before;
+import org.junit.Test;
 import org.openide.util.Lookup;
 
 import static org.gephi.plugins.linkprediction.base.LinkPredictionStatistics.*;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
-class CommonNeighboursStatisticsTest {
+public class CommonNeighboursStatisticsTest {
     GraphModel graphModel;
 
-    @BeforeEach void setUp() {
+    @Before
+    public void setUp() {
         //Init project - and therefore a workspace
         ProjectController pc = Lookup.getDefault().lookup(ProjectController.class);
         pc.newProject();
@@ -81,7 +83,8 @@ class CommonNeighboursStatisticsTest {
         undirectedGraph.addEdge(e12);
     }
 
-    @org.junit.jupiter.api.Test void testExecute_EdgeCount() {
+    @Test
+    public void testExecute_EdgeCount() {
 
         LinkPredictionStatistics statistic = new CommonNeighboursStatistics();
         int edgesCountOriginal = graphModel.getGraph().getEdges().toArray().length;
@@ -92,7 +95,8 @@ class CommonNeighboursStatisticsTest {
         assertEquals(edgesCountOriginal + 1, edgesCountNew);
     }
 
-    @org.junit.jupiter.api.Test void testGetHighestPrediction_Successfully() {
+    @Test
+    public void testGetHighestPrediction_Successfully() {
 
         LinkPredictionStatistics statistic = new CommonNeighboursStatistics();
         statistic.execute(graphModel);
@@ -109,7 +113,8 @@ class CommonNeighboursStatisticsTest {
         assertTrue((int) maxEdge.getAttribute(getColLastCalculatedValue()) == 2);
     }
 
-    @org.junit.jupiter.api.Test void testExecute_Successfully() {
+    @Test
+    public void testExecute_Successfully() {
 
         LinkPredictionStatistics statistic = new CommonNeighboursStatistics();
         statistic.execute(graphModel);
@@ -124,7 +129,8 @@ class CommonNeighboursStatisticsTest {
     }
 
 
-    @org.junit.jupiter.api.Test void testGetNextIteration_Successfully() {
+    @Test
+    public void testGetNextIteration_Successfully() {
         LinkPredictionStatistics statistic = new CommonNeighboursStatistics();
 
         Table edgeTable = graphModel.getEdgeTable();
