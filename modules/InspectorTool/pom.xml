@@ -9,7 +9,7 @@
 
     <groupId>com.atopion.gephi</groupId>
     <artifactId>inspector-tool</artifactId>
-    <version>0.2.0</version>
+    <version>0.2.1</version>
     <packaging>nbm</packaging>
 
     <name>Inspector Tool</name>
