@@ -33,6 +33,7 @@ public class ErdosRenyiGnpUI implements GeneratorUI {
 
         panel.add(new JLabel(EDGE_CREATE_PROBABILITY, SwingConstants.LEFT));
         edgeCreateProbabilitySpinner = new JSpinner(new SpinnerNumberModel(DEFAULT_EDGE_CREATE_PROBABILITY, 0, 1, 0.05));
+        edgeCreateProbabilitySpinner.setEditor(new JSpinner.NumberEditor(edgeCreateProbabilitySpinner, "0.#####"));
         panel.add(edgeCreateProbabilitySpinner);
     }
 
