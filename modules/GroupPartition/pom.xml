@@ -4,15 +4,15 @@
     <parent>
         <artifactId>gephi-plugin-parent</artifactId>
         <groupId>org.gephi</groupId>
-        <version>0.9.2</version>
+        <version>0.9.3</version>
     </parent>
 
     <groupId>upf</groupId>
     <artifactId>group-partition-gephi-plugin</artifactId>
-    <version>1.0.0</version>
+    <version>1.0.1</version>
     <packaging>nbm</packaging>
 
-    <name>Groups by partition</name>
+    <name>Groups By Partition</name>
 
     <dependencies>
         <!-- Insert dependencies here -->
@@ -37,6 +37,10 @@
             <artifactId>org-openide-util</artifactId>
         </dependency>
         <dependency>
+            <groupId>org.netbeans.api</groupId>
+            <artifactId>org-openide-util-ui</artifactId>
+        </dependency>
+        <dependency>
             <groupId>org.gephi</groupId>
             <artifactId>utils-longtask</artifactId>    
         </dependency> 
@@ -49,12 +53,12 @@
     <build>
         <plugins>
             <plugin>
-                <groupId>org.codehaus.mojo</groupId>
+                <groupId>org.apache.netbeans.utilities</groupId>
                 <artifactId>nbm-maven-plugin</artifactId>
                 <configuration>
                     <licenseName>Apache 2.0</licenseName>
-                    <author>Marc Torrelles</author>
-                    <author>Sergi Puig</author>
+                    <licenseFile>Apache v2.txt</licenseFile>
+                    <author>Sergi Puig, Marc Torrelles</author>
                     <authorUrl>https://github.com/sergipuig</authorUrl>
                     <sourceCodeUrl>https://github.com/sergipuig/gephi-plugins</sourceCodeUrl>
                     <publicPackages>
