@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
 <!DOCTYPE module_updates PUBLIC "-//NetBeans//DTD Autoupdate Catalog 2.8//EN" "https://netbeans.apache.org/dtds/autoupdate-catalog-2_8.dtd">
-<module_updates timestamp="24/17/13/03/07/2022">
+<module_updates timestamp="46/33/13/03/07/2022">
 
 
 
@@ -177,12 +177,12 @@
     <message_digest algorithm="SHA-512" value="7793626b9f7476e118e53fa979831871307d7675afbc3d3a85c488b94b93e17a0b1751a70fb937e3b93ef51dda63ab5b6537d02cec4849426e89ba6ac87b6ff5"/>
 </module>
 
-<module codenamebase="com.atopion.gephi.inspector.tool" distribution="inspector-tool-0.2.0.nbm" downloadsize="19604" homepage="http://github.com/gephi/gephi-plugins/inspector-tool" license="864AC530" moduleauthor="atopion" needsrestart="true" releasedate="2022/07/03" targetcluster="plugins">
+<module codenamebase="com.atopion.gephi.inspector.tool" distribution="inspector-tool-0.2.1.nbm" downloadsize="19551" homepage="http://github.com/gephi/gephi-plugins/inspector-tool" license="864AC530" moduleauthor="atopion" needsrestart="true" releasedate="2022/07/03" targetcluster="plugins">
         
-    <manifest OpenIDE-Module="com.atopion.gephi.inspector.tool" OpenIDE-Module-Display-Category="Tool" OpenIDE-Module-Implementation-Version="0.2.0" OpenIDE-Module-Long-Description="Inspector lets you view the node attributes directly from the Overview window. After installation, simply activate the inspector under `Tools | Inspector` or using the keyboard shortcut `Ctrl + Alt + I`. After that, whenever your cursor hovers over a node, its attributes are displayed in a small overlay right next to the cursor." OpenIDE-Module-Module-Dependencies="org.openide.util &gt; 9.23, org.openide.awt &gt; 7.83, org.gephi.graph.api &gt; 0.9.3, org.gephi.tools.api &gt; 0.9.3, org.gephi.visualization &gt; 0.9.3, org.openide.util.ui &gt; 9.24" OpenIDE-Module-Name="Inspector" OpenIDE-Module-Requires="org.openide.modules.ModuleFormat1" OpenIDE-Module-Short-Description="Inspect the nodes of your graph interactively" OpenIDE-Module-Specification-Version="0.2.0"/>
+    <manifest OpenIDE-Module="com.atopion.gephi.inspector.tool" OpenIDE-Module-Display-Category="Tool" OpenIDE-Module-Implementation-Version="0.2.1" OpenIDE-Module-Long-Description="Inspector lets you view the node attributes directly from the Overview window. &lt;br&gt;After installation, simply locate the Inspector tool in the Toolbar and enable. Whenever your cursor hovers over a node, its attributes are displayed in a small overlay right next to the cursor." OpenIDE-Module-Module-Dependencies="org.openide.util &gt; 9.23, org.openide.awt &gt; 7.83, org.gephi.graph.api &gt; 0.9.3, org.gephi.tools.api &gt; 0.9.3, org.gephi.visualization &gt; 0.9.3, org.openide.util.ui &gt; 9.24" OpenIDE-Module-Name="Inspector" OpenIDE-Module-Requires="org.openide.modules.ModuleFormat1" OpenIDE-Module-Short-Description="Inspect the nodes of your graph interactively" OpenIDE-Module-Specification-Version="0.2.1"/>
         
 
-    <message_digest algorithm="SHA-512" value="0887140c33ac8a55a80d05f389ef78f3a0268947516d6b03d578c77e5489f85bece54722a37617e87353c1009b99f76103551b5797a3abc5b1ddfc23cd64af17"/>
+    <message_digest algorithm="SHA-512" value="e8db23d29587b69a2f03070be02b08d6cfa1b6f4d52c2e9d0676248a52b24351424ce0b344e2abd151862d6c7728228810b664dea73dbadb58d4eb210fc42a9e"/>
 </module>
 
 <module codenamebase="org.alexandrebarao.isometric.layout" distribution="isometric-layout-1.0.0.nbm" downloadsize="23446" homepage="http://github.com/gephi/gephi-plugins/isometric-layout" license="671322F0" moduleauthor="Alexandre Barão" needsrestart="true" releasedate="2022/06/24" targetcluster="plugins">

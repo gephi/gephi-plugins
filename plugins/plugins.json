@@ -4040,7 +4040,7 @@
       "id": "inspector-tool",
       "name": "Inspector",
       "short_description": "Inspect the nodes of your graph interactively",
-      "long_description": "Inspector lets you view the node attributes directly from the Overview window. After installation, simply activate the inspector under `Tools | Inspector` or using the keyboard shortcut `Ctrl + Alt + I`. After that, whenever your cursor hovers over a node, its attributes are displayed in a small overlay right next to the cursor.",
+      "long_description": "Inspector lets you view the node attributes directly from the Overview window. \u003cbr\u003eAfter installation, simply locate the Inspector tool in the Toolbar and enable. Whenever your cursor hovers over a node, its attributes are displayed in a small overlay right next to the cursor.",
       "readme": "## Inspector\n\nThis README supports Markdown, see [syntax](https://help.github.com/articles/markdown-basics/)\n\n",
       "license": "Apache 2.0",
       "authors": [
@@ -4052,12 +4052,21 @@
       ],
       "category": "Tool",
       "last_update": "July 3, 2022",
-      "images": null,
+      "images": [
+        {
+          "image": "imgs/inspector-tool/inspector.png",
+          "thumbnail": "imgs/inspector-tool/inspector-thumbnail.png"
+        },
+        {
+          "image": "imgs/inspector-tool/panel.png",
+          "thumbnail": "imgs/inspector-tool/panel-thumbnail.png"
+        }
+      ],
       "versions": {
         "0.9.6": {
-          "url": "0.9/inspector-tool-0.2.0.nbm",
+          "url": "0.9/inspector-tool-0.2.1.nbm",
           "last_update": "July 3, 2022",
-          "plugin_version": "0.2.0"
+          "plugin_version": "0.2.1"
         }
       },
       "sourcecode": "https://github.com/atopion/gephi-plugins",
