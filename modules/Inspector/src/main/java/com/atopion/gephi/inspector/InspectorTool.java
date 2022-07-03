@@ -30,86 +30,82 @@ import java.awt.geom.RoundRectangle2D;
 import java.util.List;
 import java.util.Set;
 import javax.swing.BorderFactory;
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 import org.gephi.graph.api.Node;
+import org.gephi.tools.spi.Tool;
+import org.gephi.tools.spi.ToolEventListener;
+import org.gephi.tools.spi.ToolSelectionType;
+import org.gephi.tools.spi.ToolUI;
 import org.gephi.visualization.VizController;
-import org.openide.awt.ActionID;
-import org.openide.awt.ActionReference;
-import org.openide.awt.ActionReferences;
-import org.openide.awt.ActionRegistration;
-import org.openide.util.HelpCtx;
-import org.openide.util.NbBundle.Messages;
-import org.openide.util.actions.BooleanStateAction;
+import org.openide.util.lookup.ServiceProvider;
 
-@ActionID(
-        category = "Tools",
-        id = "com.atopion.gephi.inspector.InspectorAction"
-)
-@ActionRegistration(
-        displayName = "#CTL_InspectorAction"
-)
-@ActionReferences({
-    @ActionReference(path = "Menu/Tools", position = 0),
-    @ActionReference(path = "Shortcuts", name = "DO-I")
-})
-@Messages("CTL_InspectorAction=Inspector")
-public final class InspectorAction extends BooleanStateAction {
-
-    public InspectorAction() {
-        super();
-        
-        // Initial state is false
-        setBooleanState(false);
-    }
-    
-    @Override
-    public void actionPerformed(ActionEvent e) {
-        setBooleanState(!getBooleanState());
-        
-        // Plugins main method
-        toggleInspector();
-    }
-
-    @Override
-    public String getName() {
-        return "Inspector";
-    }
-
-    @Override
-    public HelpCtx getHelpCtx() {
-        return HelpCtx.DEFAULT_HELP;
-    }
-    
-    @Override
-    public JMenuItem getMenuPresenter() {
-        return new org.openide.awt.Actions.CheckboxMenuItem(this, false);
-    }
-    
-    
+@ServiceProvider(service = Tool.class)
+public final class InspectorTool implements Tool {
     
     private Timer timer = null;
-    
-    private void toggleInspector() {
-        final int delay = 500; // Timer run delay in ms. Shorter value means more CPU load but more reactive UI.
-        
-        // The user has just activated the inspector.
-        if(getBooleanState()) {
-            timer = new Timer(delay, runner);
-            timer.start();
-        }
-        
-        // The user has just deactivated the inspector
-        else {
-            nodePropertiesFrame.remove(); // To make sure it isn't stuck.
-            timer.stop();
-            timer = null;
-        }
+
+    // Timer run delay in ms. Shorter value means more CPU load but more reactive UI.
+    private static final int DELAY = 500;
+
+    @Override
+    public void select() {
+        timer = new Timer(DELAY, runner);
+        timer.start();
     }
-    
+
+    @Override
+    public void unselect() {
+        nodePropertiesFrame.remove(); // To make sure it isn't stuck.
+        timer.stop();
+        timer = null;
+    }
+
+    @Override
+    public ToolEventListener[] getListeners() {
+        return new ToolEventListener[0];
+    }
+
+    @Override
+    public ToolUI getUI() {
+        return new ToolUI() {
+
+            @Override
+            public JPanel getPropertiesBar(Tool tool) {
+                return new JPanel();
+            }
+
+            @Override
+            public Icon getIcon() {
+                return new ImageIcon(getClass().getResource("/com/atopion/gephi/inspector/inspector.png"));
+            }
+
+            @Override
+            public String getName() {
+                return "Inspector";
+            }
+
+            @Override
+            public String getDescription() {
+                return "Display node attributes on mouse hover";
+            }
+
+            @Override
+            public int getPosition() {
+                return 300;
+            }
+        };
+    }
+
+    @Override
+    public ToolSelectionType getSelectionType() {
+        return ToolSelectionType.SELECTION;
+    }
+
     private final ActionListener runner = new ActionListener() {
         @Override
         public void actionPerformed(ActionEvent e) {
