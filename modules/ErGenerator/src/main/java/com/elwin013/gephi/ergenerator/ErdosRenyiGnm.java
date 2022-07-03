@@ -37,7 +37,7 @@ public class ErdosRenyiGnm implements Generator {
 
     public void generate(ContainerLoader containerLoader) {
         this.containerLoader = containerLoader;
-        Progress.start(progressTicket, noOfNodes + noOfNodes * noOfNodes + noOfEdges);
+        Progress.start(progressTicket, noOfNodes + noOfNodes + noOfNodes * noOfNodes + noOfEdges);
         containerLoader.setEdgeDefault(EdgeDirectionDefault.UNDIRECTED);
 
         createNodes(noOfNodes);
@@ -57,11 +57,12 @@ public class ErdosRenyiGnm implements Generator {
 
     private void createEdges(int noOfNodes, int noOfEdges) {
         List<Pair> edgePairs = new ArrayList<>();
-        for (int i = 0; i < noOfNodes; i++) {
+        for (int i = 0; i < noOfNodes && !cancelled; i++) {
             // Undirected graph - we can start from i + 1 (no loops!)
             for (int j = i + 1; j < noOfNodes; j++) {
                 edgePairs.add(new Pair(i, j));
             }
+            Progress.progress(progressTicket);
         }
         Random rnd = new Random();
         int i = 0;
