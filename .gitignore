@@ -146,7 +146,8 @@ fabric.properties
 # Comment Reason: https://github.com/joeblau/gitignore.io/issues/186#issuecomment-215987721
 .idea
 
-# *.iml
+*.iml
+.idea/
 # modules.xml
 # .idea/misc.xml
 # *.ipr
@@ -177,3 +178,5 @@ nbdist/
 .nb-gradle/
 
 # End of https://www.gitignore.io/api/maven,eclipse,netbeans,intellij
+
+.java-version
