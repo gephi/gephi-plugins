@@ -71,6 +71,7 @@
         <module>modules/GroupPartition</module>
         <module>modules/HairballBuster</module>
         <module>modules/ForceAtlas3D</module>
+        <module>modules/InspectorTool</module>
     </modules>
     
     <!-- Properties -->
