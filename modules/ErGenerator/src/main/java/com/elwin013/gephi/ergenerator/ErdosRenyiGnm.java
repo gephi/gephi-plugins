@@ -86,8 +86,10 @@ public class ErdosRenyiGnm implements Generator {
         return new ErdosRenyiGnmUI();
     }
 
+    @Override
     public boolean cancel() {
-        return false;
+        cancelled = true;
+        return true;
     }
 
     public int getNoOfNodes() {
@@ -106,22 +108,10 @@ public class ErdosRenyiGnm implements Generator {
         this.noOfEdges = noOfEdges;
     }
 
-    public ProgressTicket getProgressTicket() {
-        return progressTicket;
-    }
-
     public void setProgressTicket(ProgressTicket progressTicket) {
         this.progressTicket = progressTicket;
     }
-
-    public boolean isCancelled() {
-        return cancelled;
-    }
-
-    public void setCancelled(boolean cancelled) {
-        this.cancelled = cancelled;
-    }
-
+    
     static class Pair {
         int x;
         int y;
