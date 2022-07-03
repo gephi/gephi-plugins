@@ -1,5 +1,5 @@
 Manifest-Version: 1.0
-OpenIDE-Module-Name: Groups by partition
+OpenIDE-Module-Name: Groups By Partition
 OpenIDE-Module-Short-Description: It creates a graph where each node is the aggregation of a group of nodes (of the previous workspace) using the colors given to the nodes.
 OpenIDE-Module-Long-Description: It creates a graph where each node is the aggregation of a group of nodes (of the previous workspace) using the colors given to the nodes.
-OpenIDE-Module-Display-Category: Tool
+OpenIDE-Module-Display-Category: Other Category

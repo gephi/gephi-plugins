@@ -18,7 +18,8 @@ public class GraphPartitionAlgorithmFactory {
     
     public IGraphPartitionAlgorithm getGraphPartition(){
         if(graph.isDirected()) algorithm = new DirectedGraphPartitionAlgorithm(graph);
-        else if(graph.isUndirected()) algorithm = new UndirectedGraphPartitionAlgorithm(graph); 
+        else if(graph.isUndirected()) algorithm = new UndirectedGraphPartitionAlgorithm(graph);
+        else if(graph.isMixed()) throw new UnsupportedOperationException("Mixed graph type is not supported yet.");
         else throw new UnsupportedOperationException("Graph type is not supported yet."); //Other cases like mixed are not implemented yet.
         return algorithm;
     }
