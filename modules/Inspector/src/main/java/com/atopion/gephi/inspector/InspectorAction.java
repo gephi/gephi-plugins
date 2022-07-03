@@ -113,23 +113,27 @@ public final class InspectorAction extends BooleanStateAction {
     private final ActionListener runner = new ActionListener() {
         @Override
         public void actionPerformed(ActionEvent e) {
-            // Query the currently selected Nodes
-            List<Node> nodes = VizController.getInstance().getSelectionManager().getSelectedNodes();
-            
-            // If the mouse currently hovers over a node, only one is selected.
-            // In all other cases, remove the frame and end.
-            if(nodes.size() != 1) {
-                nodePropertiesFrame.remove();
-                return;
+            if (VizController.getInstance().getSelectionManager() != null) {
+                // Query the currently selected Nodes
+                List<Node> nodes =
+                    VizController.getInstance().getSelectionManager().getSelectedNodes();
+
+                // If the mouse currently hovers over a node, only one is selected.
+                // In all other cases, remove the frame and end.
+                if (nodes.size() != 1) {
+                    nodePropertiesFrame.remove();
+                    return;
+                }
+
+                // The mouse currently hovers over a node.
+                // First, calculate the mouse location.
+                int[] mousePosition = calculateMouseLocation();
+
+                // Then display the nodePropertiesFrame using the currently selected node.
+                // The window will be located 20px left and 20px down of the mouse.
+                nodePropertiesFrame.show(nodes.get(0), mousePosition[0] + 20,
+                    mousePosition[1] + 20);
             }
-            
-            // The mouse currently hovers over a node.
-            // First, calculate the mouse location.
-            int[] mousePosition = calculateMouseLocation();
-            
-            // Then display the nodePropertiesFrame using the currently selected node.
-            // The window will be located 20px left and 20px down of the mouse.
-            nodePropertiesFrame.show(nodes.get(0), mousePosition[0] + 20, mousePosition[1] + 20);
         }
         
         
@@ -142,16 +146,17 @@ public final class InspectorAction extends BooleanStateAction {
             // therefore we need its location on screen.
             
             int[] mousePosition = new int[2];
-            
+
+            float scale = VizController.getInstance().getDrawable().getGlobalScale();
             float[] mouse = VizController.getInstance().getGraphIO().getMousePosition();
             Point screenLocation = VizController.getInstance().getDrawable().getLocationOnScreen();
             int viewportHeight = VizController.getInstance().getDrawable().getViewportHeight();
             
             // The x coordinate
-            mousePosition[0] = screenLocation.x + (int) mouse[0];
+            mousePosition[0] = screenLocation.x + (int) (mouse[0] / scale);
             
             // The y coordinate
-            mousePosition[1] = screenLocation.y + (viewportHeight - (int) mouse[1]);
+            mousePosition[1] = screenLocation.y + (int) ((viewportHeight - (int) mouse[1]) / scale);
             
             return mousePosition;
         }
