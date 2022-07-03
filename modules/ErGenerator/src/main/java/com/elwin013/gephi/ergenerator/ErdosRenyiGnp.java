@@ -79,7 +79,8 @@ public class ErdosRenyiGnp implements Generator {
     }
 
     public boolean cancel() {
-        return false;
+        cancelled = true;
+        return true;
     }
 
     public int getNoOfNodes() {
@@ -98,19 +99,7 @@ public class ErdosRenyiGnp implements Generator {
         this.edgeCreateProbability = edgeCreateProbability;
     }
 
-    public ProgressTicket getProgressTicket() {
-        return progressTicket;
-    }
-
     public void setProgressTicket(ProgressTicket progressTicket) {
         this.progressTicket = progressTicket;
-    }
-
-    public boolean isCancelled() {
-        return cancelled;
-    }
-
-    public void setCancelled(boolean cancelled) {
-        this.cancelled = cancelled;
     }
 }
