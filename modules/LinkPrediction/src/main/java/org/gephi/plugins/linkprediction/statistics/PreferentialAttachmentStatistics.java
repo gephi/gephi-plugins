@@ -1,8 +1,7 @@
 package org.gephi.plugins.linkprediction.statistics;
 
-import org.apache.logging.log4j.Level;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.gephi.graph.api.GraphFactory;
 import org.gephi.graph.api.Node;
 import org.gephi.plugins.linkprediction.base.LinkPredictionStatistics;
@@ -22,7 +21,7 @@ import static org.gephi.plugins.linkprediction.statistics.PreferentialAttachment
  */
 public class PreferentialAttachmentStatistics extends LinkPredictionStatistics {
     // Console logger
-    private static Logger consoleLogger = LogManager.getLogger(PreferentialAttachmentStatistics.class);
+    private static Logger consoleLogger = Logger.getLogger(PreferentialAttachmentStatistics.class.getName());
 
     static {
         complexity = Complexity.QUADRATIC;
@@ -45,12 +44,12 @@ public class PreferentialAttachmentStatistics extends LinkPredictionStatistics {
      */
     protected void calculateAll(GraphFactory factory) {
         // Iterate on all nodes for first execution
-        consoleLogger.debug("Initial calculation");
+        consoleLogger.log(Level.FINE,"Initial calculation");
         ArrayList<Node> nodesA = new ArrayList<Node>(Arrays.asList(graph.getNodes().toArray()));
         ArrayList<Node> nodesB = new ArrayList<Node>(Arrays.asList(graph.getNodes().toArray()));
 
         for (Node a : nodesA) {
-            consoleLogger.log(Level.DEBUG, () -> "Calculation for node " + a.getId());
+            consoleLogger.log(Level.FINE, () -> "Calculation for node " + a.getId());
 
             // Remove self from neighbours
             nodesB.remove(a);
@@ -61,12 +60,12 @@ public class PreferentialAttachmentStatistics extends LinkPredictionStatistics {
             // Calculate preferential attachment
             for (Node b : nodesB) {
                 // Get neighbours of b
-                consoleLogger.log(Level.DEBUG, () -> "Calculation for node " + b.getId());
+                consoleLogger.log(Level.FINE, () -> "Calculation for node " + b.getId());
                 ArrayList<Node> bNeighbours = getNeighbours(b);
 
                 // Calculate prediction value
                 int totalNeighboursCount = aNeighbours.size() * bNeighbours.size();
-                consoleLogger.log(Level.DEBUG, () -> "Total neighbours product: " + totalNeighboursCount);
+                consoleLogger.log(Level.FINE, () -> "Total neighbours product: " + totalNeighboursCount);
 
                 // Temporary save calculated
                 // value if edge does not exist
@@ -85,7 +84,7 @@ public class PreferentialAttachmentStatistics extends LinkPredictionStatistics {
      */
     @Override
     protected void recalculateProbability(GraphFactory factory, Node a) {
-        consoleLogger.debug("Recalculate probability for affected nodes");
+        consoleLogger.log(Level.FINE,"Recalculate probability for affected nodes");
         // Get neighbours of a
         List<Node> aNeighbours = getNeighbours(a);
 
@@ -101,12 +100,12 @@ public class PreferentialAttachmentStatistics extends LinkPredictionStatistics {
             // Update temporary saved values
             // if edge does not exist
             if (isNewEdge(a, b, PREFERENTIAL_ATTACHMENT_NAME)) {
-                consoleLogger.log(Level.DEBUG, () -> "Calculation for edge new between " + a.getId() + " and " + b.getId());
+                consoleLogger.log(Level.FINE, () -> "Calculation for edge new between " + a.getId() + " and " + b.getId());
                 List<Node> bNeighbours = getNeighbours(b);
                 int totalNeighboursCount = aNeighbours.size() * bNeighbours.size();
 
                 // Update saved and calculated values
-                consoleLogger.log(Level.DEBUG, () -> "Update value to " + totalNeighboursCount);
+                consoleLogger.log(Level.FINE, () -> "Update value to " + totalNeighboursCount);
                 updateCalculatedValue(factory, a, b, totalNeighboursCount);
             }
         }

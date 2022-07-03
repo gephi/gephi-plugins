@@ -1,8 +1,7 @@
 package org.gephi.plugins.linkprediction.statistics;
 
-import org.apache.logging.log4j.Level;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.gephi.graph.api.GraphFactory;
 import org.gephi.graph.api.GraphModel;
 import org.gephi.graph.api.Node;
@@ -23,7 +22,7 @@ public class LinkPredictionMacro extends LinkPredictionStatistics {
     private List<LinkPredictionStatistics> statistics = new ArrayList<>();
 
     // Console logger
-    private static Logger consoleLogger = LogManager.getLogger(LinkPredictionMacro.class);
+    private static final Logger consoleLogger = Logger.getLogger(LinkPredictionMacro.class.getName());
 
     // Serial uid
     private static final long serialVersionUID = 6605122051350231817L;
@@ -62,7 +61,7 @@ public class LinkPredictionMacro extends LinkPredictionStatistics {
      */
     public void addStatistic(LinkPredictionStatistics statistic) {
         if (!statistics.contains(statistic)) {
-            consoleLogger.log(Level.DEBUG, () -> "Add algorithm " + statistic.getAlgorithmName());
+            consoleLogger.log(Level.FINE, () -> "Add algorithm " + statistic.getAlgorithmName());
             statistics.add(statistic);
         }
     }
@@ -74,7 +73,7 @@ public class LinkPredictionMacro extends LinkPredictionStatistics {
      */
     public void removeStatistic(LinkPredictionStatistics statistic) {
         if (statistics.contains(statistic)) {
-            consoleLogger.log(Level.DEBUG, () -> "Remove algorithm " + statistic.getAlgorithmName());
+            consoleLogger.log(Level.FINE, () -> "Remove algorithm " + statistic.getAlgorithmName());
             statistics.remove(statistic);
         }
     }
@@ -140,7 +139,7 @@ public class LinkPredictionMacro extends LinkPredictionStatistics {
      * Clears predictions on internal calculation stack.
      */
     private void clearPredictions() {
-        consoleLogger.debug("Clear predictions");
+        consoleLogger.log(Level.FINE,"Clear predictions");
         queue = null;
         probabilities = null;
         lastPrediction = null;

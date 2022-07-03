@@ -11,7 +11,7 @@ public abstract class LinkPredictionWarning {
 
     LinkPredictionWarning(String message) {
         f = new JFrame();
-        JOptionPane.showMessageDialog(f, message, "Exception", JOptionPane.WARNING_MESSAGE);
+        SwingUtilities.invokeLater(() -> JOptionPane.showMessageDialog(f, message, "Exception", JOptionPane.WARNING_MESSAGE));
     }
 
 }

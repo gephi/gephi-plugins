@@ -1,7 +1,7 @@
 package org.gephi.plugins.linkprediction.evaluation;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.gephi.graph.api.GraphModel;
 import org.gephi.plugins.linkprediction.base.EvaluationMetric;
 import org.gephi.statistics.plugin.ChartUtils;
@@ -35,7 +35,7 @@ public class LinkPredictionEvaluation implements Statistics, Serializable {
     private static final String LINEBREAK = "<br /><br />";
 
     // Console Logger
-    private static Logger consoleLogger = LogManager.getLogger(LinkPredictionEvaluation.class);
+    private static Logger consoleLogger = Logger.getLogger(LinkPredictionEvaluation.class.getName());
 
 
     /**
@@ -52,7 +52,7 @@ public class LinkPredictionEvaluation implements Statistics, Serializable {
 
     @Override
     public String getReport() {
-        consoleLogger.debug("Create report");
+        consoleLogger.log(Level.FINE,"Create report");
         //This is the HTML report shown when execution ends.
         //One could add a distribution histogram for instance
         String html = "<HTML> <BODY> <h1>Evaluation of different prediction algorithms</h1> " + "<hr>";
@@ -100,7 +100,7 @@ public class LinkPredictionEvaluation implements Statistics, Serializable {
      * @return LinkPredictionStatistic
      */
     public EvaluationMetric getEvaluation(EvaluationMetric evaluation) {
-        consoleLogger.debug("Attempt to get metric for " + evaluation.getAlgorithmName());
+        consoleLogger.log(Level.FINE,"Attempt to get metric for " + evaluation.getAlgorithmName());
         return evaluations.get(evaluations.indexOf(evaluation));
     }
 
@@ -110,7 +110,7 @@ public class LinkPredictionEvaluation implements Statistics, Serializable {
      * @param evaluation Metric to evaluate.
      */
     public void addEvaluation(EvaluationMetric evaluation) {
-        consoleLogger.debug("Attempt to add metric for " + evaluation.getAlgorithmName());
+        consoleLogger.log(Level.FINE,"Attempt to add metric for " + evaluation.getAlgorithmName());
         if (!evaluations.contains(evaluation)) {
             evaluations.add(evaluation);
         }
@@ -122,7 +122,7 @@ public class LinkPredictionEvaluation implements Statistics, Serializable {
      * @param evaluation Metric to evaluate.
      */
     public void removeEvaluation(EvaluationMetric evaluation) {
-        consoleLogger.debug("Attempt to remove metric for " + evaluation.getAlgorithmName());
+        consoleLogger.log(Level.FINE,"Attempt to remove metric for " + evaluation.getAlgorithmName());
         if (evaluations.contains(evaluation)) {
             evaluations.remove(evaluation);
         }
@@ -135,7 +135,7 @@ public class LinkPredictionEvaluation implements Statistics, Serializable {
      * @return Sorted map, highest first
      */
     private static Map<String, Double> sortByValue(Map<String, Double> allValues) {
-        consoleLogger.debug("Sort metrics by value");
+        consoleLogger.log(Level.FINE,"Sort metrics by value");
         LinkedHashMap<String, Double> allValuesSorted = new LinkedHashMap<>();
 
         // Sort entries by value
@@ -151,7 +151,7 @@ public class LinkPredictionEvaluation implements Statistics, Serializable {
      * @param chart Chart to format
      */
     private static void formatChart(JFreeChart chart) {
-        consoleLogger.debug("Format chart");
+        consoleLogger.log(Level.FINE,"Format chart");
 
         // Format chart
         XYPlot plot = (XYPlot) chart.getPlot();
@@ -174,7 +174,7 @@ public class LinkPredictionEvaluation implements Statistics, Serializable {
      * @return Completed html
      */
     private String appendAlgorithms(String html) {
-        consoleLogger.debug("Append algorithms section to report");
+        consoleLogger.log(Level.FINE,"Append algorithms section to report");
 
         html += "<h2>Algorithms:</h2>";
         html += "Michael Henninger,<i> Link Prediction</i>, in Soziale Netzwerkanalyse 2018 (p. 96)";
@@ -190,7 +190,7 @@ public class LinkPredictionEvaluation implements Statistics, Serializable {
      * @return Completed html
      */
     private String appendIterationResults(String html, String imageFile) {
-        consoleLogger.debug("Append iteration results section to report");
+        consoleLogger.log(Level.FINE,"Append iteration results section to report");
 
         html += "<h2>Iteration Results:</h2>";
         html += LINEBREAK + imageFile + LINEBREAK;
@@ -204,12 +204,12 @@ public class LinkPredictionEvaluation implements Statistics, Serializable {
      * @return Rendered diagram
      */
     private String renderDiagram() {
-        consoleLogger.debug("Render diagram");
+        consoleLogger.log(Level.FINE,"Render diagram");
 
         // Create dataset
         XYSeriesCollection dataset = new XYSeriesCollection();
         for (EvaluationMetric e : evaluations) {
-            consoleLogger.debug("Add metric for " + e.getAlgorithmName() + " to dataset");
+            consoleLogger.log(Level.FINE,"Add metric for " + e.getAlgorithmName() + " to dataset");
             dataset.addSeries(ChartUtils.createXYSeries(e.getIterationResults(), e.getAlgorithmName()));
         }
 
@@ -232,7 +232,7 @@ public class LinkPredictionEvaluation implements Statistics, Serializable {
      * @return Completed html
      */
     private String appendResults(String html, Map<String, Double> sortedValues) {
-        consoleLogger.debug("Append result section to report");
+        consoleLogger.log(Level.FINE,"Append result section to report");
         html += "<h2>Results:</h2>";
 
         // Create ranking
@@ -253,7 +253,7 @@ public class LinkPredictionEvaluation implements Statistics, Serializable {
      * @return Completed html
      */
     private String appendParameters(String html) {
-        consoleLogger.debug("Append parameter section to report");
+        consoleLogger.log(Level.FINE,"Append parameter section to report");
 
         html += "<h2>Parameters:</h2>";
         int iterationCount = evaluations.isEmpty() ? 0 : evaluations.get(0).getDiffEdgeCount();

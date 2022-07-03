@@ -1,6 +1,6 @@
 package org.gephi.plugins.linkprediction.evaluation;
 
-import org.apache.logging.log4j.Level;
+import java.util.logging.Level;
 import org.gephi.graph.api.Edge;
 import org.gephi.graph.api.Graph;
 import org.gephi.plugins.linkprediction.base.EvaluationMetric;
@@ -44,16 +44,16 @@ public class LinkPredictionAccuracy extends EvaluationMetric {
      */
     @Override
     public double calculate(int addedEdges, Graph trained, Graph validation, LinkPredictionStatistics statistics) {
-        consoleLogger.debug("Calculate accuracy");
+        consoleLogger.log(Level.FINE,"Calculate accuracy");
         Set<Edge> trainedEdges = new HashSet<>(Arrays.asList(trained.getEdges().toArray()));
 
         // Remove edges from other algorithms and
         // edges that initially existed
-        consoleLogger.debug("Remove irrelevant edges");
+        consoleLogger.log(Level.FINE,"Remove irrelevant edges");
         trainedEdges.removeIf(e -> !e.getAttribute(LinkPredictionColumn.LP_ALGORITHM.getName()).equals(statistics.getAlgorithmName()));
 
         // Get edges that are in both sets
-        consoleLogger.debug("Get congruent edges");
+        consoleLogger.log(Level.FINE,"Get congruent edges");
         Set<Edge> diff = trainedEdges;
         diff.removeIf(e -> !validation.isAdjacent(validation.getNode(e.getSource().getId()), validation.getNode(e.getTarget().getId())));
 
@@ -62,7 +62,7 @@ public class LinkPredictionAccuracy extends EvaluationMetric {
 
         // Round to two decimals
         double rounded = Math.round(accuracy * 100.0) / 100.0;
-        consoleLogger.log(Level.DEBUG, () -> "Accuracy for " + statistic.getAlgorithmName() + " is " + rounded);
+        consoleLogger.log(Level.FINE, () -> "Accuracy for " + statistic.getAlgorithmName() + " is " + rounded);
 
         return rounded;
     }

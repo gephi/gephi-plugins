@@ -8,7 +8,7 @@ public enum LinkPredictionColumn {
     ADDED_IN_RUN("added_in_run"), LAST_VALUE("last_link_prediction_value"), LP_ALGORITHM("link_prediction_algorithm");
 
     // Column name
-    private String name;
+    private final String name;
 
     /**
      * Returns name of the column.

@@ -1,8 +1,7 @@
 package org.gephi.plugins.linkprediction.base;
 
-import org.apache.logging.log4j.Level;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.gephi.graph.api.*;
 import org.gephi.plugins.linkprediction.statistics.LinkPredictionColumn;
 import org.gephi.plugins.linkprediction.util.Complexity;
@@ -50,7 +49,7 @@ public abstract class LinkPredictionStatistics implements Statistics {
     protected LinkPredictionProbability highestPrediction;
 
     // Console Logger
-    private static Logger consoleLogger = LogManager.getLogger(LinkPredictionStatistics.class);
+    private static final Logger consoleLogger = Logger.getLogger(LinkPredictionStatistics.class.getName());
 
 
     /**
@@ -59,20 +58,20 @@ public abstract class LinkPredictionStatistics implements Statistics {
      * @param graphModel Graph on which edge will be added
      */
     @Override public void execute(GraphModel graphModel) {
-        consoleLogger.debug("Execution of link prediction started");
+        consoleLogger.log(Level.FINE,"Execution of link prediction started");
 
         // Look if the result column already exist and create it if needed
-        consoleLogger.debug("Initialize columns");
+        consoleLogger.log(Level.FINE,"Initialize columns");
         Table edgeTable = graphModel.getEdgeTable();
         initializeColumns(edgeTable);
 
         // Get graph factory
-        consoleLogger.debug("Get factory");
+        consoleLogger.log(Level.FINE,"Get factory");
         graph = graphModel.getGraph();
         GraphFactory factory = graphModel.factory();
 
         // Lock graph for writes
-        consoleLogger.debug("Lock graph");
+        consoleLogger.log(Level.FINE,"Lock graph");
         graph.writeLock();
 
         if (isInitialExecution()) {
@@ -88,7 +87,7 @@ public abstract class LinkPredictionStatistics implements Statistics {
         addHighestPredictedEdgeToGraph(factory, getAlgorithmName());
 
         // Unlock graph
-        consoleLogger.debug("Unlock graph");
+        consoleLogger.log(Level.FINE,"Unlock graph");
         graph.writeUnlock();
     }
 
@@ -107,21 +106,21 @@ public abstract class LinkPredictionStatistics implements Statistics {
     public static void initializeColumns(Table edgeTable) {
         // Column containing info about last prediction algorithm
         colLastPrediction = edgeTable.getColumn(LinkPredictionColumn.LP_ALGORITHM.getName());
-        consoleLogger.debug("Initialize column " + LinkPredictionColumn.LP_ALGORITHM.getName());
+        consoleLogger.log(Level.FINE,"Initialize column " + LinkPredictionColumn.LP_ALGORITHM.getName());
         if (colLastPrediction == null) {
             colLastPrediction = edgeTable.addColumn(LinkPredictionColumn.LP_ALGORITHM.getName(), "Chosen Link Prediction Algorithm", String.class, "");
         }
 
         // Column containing info about iteration in which edge was added
         colAddedInRun = edgeTable.getColumn(LinkPredictionColumn.ADDED_IN_RUN.getName());
-        consoleLogger.debug("Initialize column " + LinkPredictionColumn.ADDED_IN_RUN.getName());
+        consoleLogger.log(Level.FINE,"Initialize column " + LinkPredictionColumn.ADDED_IN_RUN.getName());
         if (colAddedInRun == null) {
             colAddedInRun = edgeTable.addColumn(LinkPredictionColumn.ADDED_IN_RUN.getName(), "Added in Run", Integer.class, 0);
         }
 
         // Column containing info about the calculated value
         colLastCalculatedValue = edgeTable.getColumn(LinkPredictionColumn.LAST_VALUE.getName());
-        consoleLogger.debug("Initialize column " + LinkPredictionColumn.LAST_VALUE.getName());
+        consoleLogger.log(Level.FINE,"Initialize column " + LinkPredictionColumn.LAST_VALUE.getName());
         if (colLastCalculatedValue == null) {
             colLastCalculatedValue = edgeTable.addColumn(LinkPredictionColumn.LAST_VALUE.getName(), "Last Link Prediction Value", Integer.class, 0);
         }
@@ -135,8 +134,8 @@ public abstract class LinkPredictionStatistics implements Statistics {
      * @return Number of highest iteration
      */
     public static int getMaxIteration(Graph graph, String algorithm) {
-        consoleLogger.debug("Get current max iteration");
-        return Arrays.asList(graph.getEdges().toArray()).stream()
+        consoleLogger.log(Level.FINE,"Get current max iteration");
+        return Arrays.stream(graph.getEdges().toArray())
                 .filter(edge -> edge.getAttribute(colLastPrediction).toString().equals(algorithm))
                 .map(edge -> (int) edge.getAttribute(colAddedInRun)).max(Comparator.comparing(Integer::valueOf))
                 .orElse(0);
@@ -207,11 +206,11 @@ public abstract class LinkPredictionStatistics implements Statistics {
      * @return Number of next iteration
      */
     public int getNextIteration(Graph graph, String algorithm) {
-        int lastIteration = Arrays.asList(graph.getEdges().toArray()).stream()
+        int lastIteration = Arrays.stream(graph.getEdges().toArray())
                 .filter(edge -> edge.getAttribute(colLastPrediction).toString().equals(algorithm))
                 .map(edge -> (int) edge.getAttribute(colAddedInRun)).max(Comparator.comparing(Integer::valueOf))
                 .orElse(0);
-        consoleLogger.log(Level.DEBUG, () -> "Number of last iteration: " + lastIteration);
+        consoleLogger.log(Level.FINE, () -> "Number of last iteration: " + lastIteration);
 
         return lastIteration + 1;
     }
@@ -256,7 +255,7 @@ public abstract class LinkPredictionStatistics implements Statistics {
      */
     protected boolean isNewEdge(Node a, Node b, String algorithm) {
         // Get edges between a and b
-        consoleLogger.log(Level.DEBUG, () -> "Check if edge exists already");
+        consoleLogger.log(Level.FINE, () -> "Check if edge exists already");
         // FIXME graph.getEdges returns always null
         List<Edge> existingEdges = GraphUtils.getEdges(graph, a, b);
 
@@ -267,7 +266,7 @@ public abstract class LinkPredictionStatistics implements Statistics {
 
         // Count number of edges
         long numberOfExistingEdges = existingEdges.size();
-        consoleLogger.log(Level.DEBUG, () -> "Size of existing edges: " + numberOfExistingEdges);
+        consoleLogger.log(Level.FINE, () -> "Size of existing edges: " + numberOfExistingEdges);
 
         return numberOfExistingEdges == 0;
     }
@@ -284,7 +283,7 @@ public abstract class LinkPredictionStatistics implements Statistics {
         // Create new edge
         Edge newEdge = factory.newEdge(a, b, false);
         newEdge.setAttribute(colLastCalculatedValue, value);
-        consoleLogger.log(Level.DEBUG, () -> "Save edge: " + a.getLabel() + ", " + b.getLabel() + ", " + value);
+        consoleLogger.log(Level.FINE, () -> "Save edge: " + a.getLabel() + ", " + b.getLabel() + ", " + value);
 
         // Add edge to temporary helper data structures
         LinkPredictionProbability predictionProbability = new LinkPredictionProbability(newEdge.getSource(),
@@ -308,7 +307,7 @@ public abstract class LinkPredictionStatistics implements Statistics {
         // Create edge with new calculated value
         Edge newEdge = factory.newEdge(a, b, false);
         newEdge.setAttribute(colLastCalculatedValue, value);
-        consoleLogger.log(Level.DEBUG,
+        consoleLogger.log(Level.FINE,
                 () -> "Temporarily add new edge: " + a.getLabel() + ", " + b.getLabel() + ", " + value);
 
         if (predictionProbability != null) {
@@ -333,14 +332,14 @@ public abstract class LinkPredictionStatistics implements Statistics {
      * @return Probability of edge between node a and b
      */
     protected LinkPredictionProbability getPredictionProbability(Node a, Node b) {
-        consoleLogger.debug("Get prediction probability");
+        consoleLogger.log(Level.FINE,"Get prediction probability");
 
         // Loop through calculated values
         LinkPredictionProbability predictionProbability = null;
         for (LinkPredictionProbability p : probabilities) {
             if ((p.getNodeSource().equals(a) && p.getNodeTarget().equals(b)) || (p.getNodeSource().equals(b)
                     && p.getNodeTarget().equals(a))) {
-                consoleLogger.log(Level.DEBUG, () -> "Probability is " + p);
+                consoleLogger.log(Level.FINE, () -> "Probability is " + p);
                 predictionProbability = p;
             }
         }
@@ -362,7 +361,7 @@ public abstract class LinkPredictionStatistics implements Statistics {
      */
     protected void recalculateAffected(GraphFactory factory) {
         // Recalculate only affected nodes
-        consoleLogger.debug("Subsequent calculation");
+        consoleLogger.log(Level.FINE,"Subsequent calculation");
         // Remove last added element from queue
         highestPrediction = getHighestPrediction();
         queue.remove(highestPrediction);
@@ -382,7 +381,7 @@ public abstract class LinkPredictionStatistics implements Statistics {
     protected void addHighestPredictedEdgeToGraph(GraphFactory factory, String algorithm) {
         // Get highest predicted value
         highestPrediction = getHighestPrediction();
-        consoleLogger.log(Level.DEBUG, () -> "Highest predicted value is " + highestPrediction);
+        consoleLogger.log(Level.FINE, () -> "Highest predicted value is " + highestPrediction);
 
         final Edge max;
         if (highestPrediction != null) {
@@ -394,7 +393,7 @@ public abstract class LinkPredictionStatistics implements Statistics {
             max.setAttribute(colAddedInRun, iteration);
             max.setAttribute(colLastPrediction, algorithm);
             max.setAttribute(colLastCalculatedValue, highestPrediction.getPredictionValue());
-            consoleLogger.log(Level.DEBUG, () -> "Add highest predicted edge: " + max);
+            consoleLogger.log(Level.FINE, () -> "Add highest predicted edge: " + max);
 
             graph.addEdge(max);
             lastPrediction = max;
@@ -417,21 +416,19 @@ public abstract class LinkPredictionStatistics implements Statistics {
      * @return Neighbours, that were added by algorithm or already have been there initially
      */
     protected ArrayList<Node> getNeighbours(Node n) {
-        consoleLogger.debug("Get relevant neighbours");
+        consoleLogger.log(Level.FINE,"Get relevant neighbours");
 
         // Get all neighbours
-        ArrayList<Node> neighbours = new ArrayList<>(
-                Arrays.asList(graph.getNeighbors(n).toArray()).stream()
-                        .distinct()
-                        .collect(Collectors.toList()));
+        ArrayList<Node> neighbours = Arrays.stream(graph.getNeighbors(n).toArray())
+            .distinct().collect(Collectors.toCollection(ArrayList::new));
 
         // Filter neighbours with edges from
         // same algorithm or that initially existed
-        return new ArrayList<>(neighbours.stream()
-                .filter(r -> GraphUtils.getEdges(graph, n, r).stream().filter(e -> e.getAttribute(colLastPrediction).equals(getAlgorithmName()) || e
-                        .getAttribute(colLastPrediction).equals("")).count() > 0)
-                .distinct()
-                .collect(Collectors.toList()));
+        return neighbours.stream()
+            .filter(r -> GraphUtils.getEdges(graph, n, r).stream()
+                .anyMatch(e -> e.getAttribute(colLastPrediction).equals(getAlgorithmName()) || e
+                    .getAttribute(colLastPrediction).equals("")))
+            .distinct().collect(Collectors.toCollection(ArrayList::new));
     }
 
     /**
@@ -439,8 +436,8 @@ public abstract class LinkPredictionStatistics implements Statistics {
      */
     public static class LinkPredictionProbability implements Comparable<LinkPredictionProbability> {
 
-        private Node nodeSource;
-        private Node nodeTarget;
+        private final Node nodeSource;
+        private final Node nodeTarget;
         private Integer predictionValue;
 
         public LinkPredictionProbability(Node nodeSource, Node nodeTarget, int predictionValue) {

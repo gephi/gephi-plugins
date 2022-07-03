@@ -1,8 +1,7 @@
 package org.gephi.plugins.linkprediction.evaluation;
 
-import org.apache.logging.log4j.Level;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.gephi.graph.api.Graph;
 import org.gephi.graph.api.GraphController;
 import org.gephi.plugins.linkprediction.statistics.*;
@@ -46,11 +45,11 @@ public class LinkPredictionEvaluationPanel extends javax.swing.JPanel implements
     private Map<String, Workspace> workspaces = new HashMap<>();
 
     // Console logger
-    private static Logger consoleLogger = LogManager.getLogger(LinkPredictionEvaluationPanel.class);
+    private static Logger consoleLogger = Logger.getLogger(LinkPredictionEvaluationPanel.class.getName());
 
 
     public LinkPredictionEvaluationPanel() {
-        consoleLogger.debug("Setup evaluation panel");
+        consoleLogger.log(Level.FINE,"Setup evaluation panel");
 
         // Initialize labels
         initialLabel = new javax.swing.JLabel("Initial Workspace: ");
@@ -72,7 +71,7 @@ public class LinkPredictionEvaluationPanel extends javax.swing.JPanel implements
         for (Workspace w : allWorkspaces) {
             // Add workspace to selection list
             String name = w.getLookup().lookup(WorkspaceInformation.class).getName();
-            consoleLogger.log(Level.DEBUG, () -> "Add workspace " + name);
+            consoleLogger.log(Level.FINE, () -> "Add workspace " + name);
 
             initialWorkspace.addItem(name);
             validationWorkspace.addItem(name);
@@ -109,7 +108,7 @@ public class LinkPredictionEvaluationPanel extends javax.swing.JPanel implements
      * @param e Event that caused refresh
      */
     @Override public void itemStateChanged(ItemEvent e) {
-        consoleLogger.debug("Item change detected");
+        consoleLogger.log(Level.FINE,"Item change detected");
 
         // Determine initial and validation workspaces
         String initialItem = initialWorkspace.getSelectedItem().toString();
@@ -125,20 +124,20 @@ public class LinkPredictionEvaluationPanel extends javax.swing.JPanel implements
         // Common neighbour accuracy
         LinkPredictionAccuracy cnAccuracy = new LinkPredictionAccuracy(new CommonNeighboursStatistics(), initial, validation, initialWS, validationWS);
         if (commonNeighbourCheckbox.isSelected()) {
-            consoleLogger.debug("Add common neighbour to evaluations");
+            consoleLogger.log(Level.FINE,"Add common neighbour to evaluations");
             this.evaluation.addEvaluation(cnAccuracy);
         } else if (!commonNeighbourCheckbox.isSelected()) {
-            consoleLogger.debug("Remove common neighbour from evaluations");
+            consoleLogger.log(Level.FINE,"Remove common neighbour from evaluations");
             this.evaluation.removeEvaluation(cnAccuracy);
         }
 
         // Preferential attachment accuracy
         LinkPredictionAccuracy paAccuracy = new LinkPredictionAccuracy(new PreferentialAttachmentStatistics(), initial, validation, initialWS, validationWS);
         if (preferentialAttachmentCheckbox.isSelected()) {
-            consoleLogger.debug("Add preferential attachment to evaluations");
+            consoleLogger.log(Level.FINE,"Add preferential attachment to evaluations");
             this.evaluation.addEvaluation(paAccuracy);
         } else if (!preferentialAttachmentCheckbox.isSelected()) {
-            consoleLogger.debug("Add preferential attachment from evaluations");
+            consoleLogger.log(Level.FINE,"Add preferential attachment from evaluations");
             this.evaluation.removeEvaluation(paAccuracy);
         }
     }
