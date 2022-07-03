@@ -1,6 +1,6 @@
 ## Erdős-Rényi model generator
 
-This plugin enable user to genrate Erdős-Rényi G(n,p) and G(n,m) random graph model.
+This plugin enables users to generate Erdős-Rényi G(n,p) and G(n,m) random graph model.
 
 ### ER model G(n,p)
 
