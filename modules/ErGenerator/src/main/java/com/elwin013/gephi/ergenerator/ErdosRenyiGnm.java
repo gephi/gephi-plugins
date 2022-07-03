@@ -37,7 +37,7 @@ public class ErdosRenyiGnm implements Generator {
 
     public void generate(ContainerLoader containerLoader) {
         this.containerLoader = containerLoader;
-        Progress.start(progressTicket, noOfNodes + noOfNodes + noOfNodes * noOfNodes + noOfEdges);
+        Progress.start(progressTicket, noOfNodes + noOfNodes + noOfEdges);
         containerLoader.setEdgeDefault(EdgeDirectionDefault.UNDIRECTED);
 
         createNodes(noOfNodes);
@@ -111,7 +111,7 @@ public class ErdosRenyiGnm implements Generator {
     public void setProgressTicket(ProgressTicket progressTicket) {
         this.progressTicket = progressTicket;
     }
-    
+
     static class Pair {
         int x;
         int y;
