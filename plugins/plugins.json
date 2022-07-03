@@ -3937,21 +3937,26 @@
     },
     {
       "id": "group-partition-gephi-plugin",
-      "name": "Groups by partition",
+      "name": "Groups By Partition",
       "short_description": "It creates a graph where each node is the aggregation of a group of nodes (of the previous workspace) using the colors given to the nodes.",
       "long_description": "It creates a graph where each node is the aggregation of a group of nodes (of the previous workspace) using the colors given to the nodes.",
       "readme": "## Groups by partition\n\nThis README supports Markdown, see [syntax](https://help.github.com/articles/markdown-basics/)\n\n",
       "license": "Apache 2.0",
       "authors": [
         {
-          "name": "Sergi Puig",
+          "name": "Sergi Puig, Marc Torrelles",
           "email": null,
           "link": "https://github.com/sergipuig"
         }
       ],
-      "category": "Tool",
-      "last_update": "June 24, 2022",
-      "images": null,
+      "category": "Other Category",
+      "last_update": "July 3, 2022",
+      "images": [
+        {
+          "image": "imgs/group-partition-gephi-plugin/menu.png",
+          "thumbnail": "imgs/group-partition-gephi-plugin/menu-thumbnail.png"
+        }
+      ],
       "versions": {
         "0.9.2": {
           "url": "0.9.2/group-partition-gephi-plugin-1.0.0.nbm",
@@ -3964,9 +3969,9 @@
           "plugin_version": "1.0.0"
         },
         "0.9.6": {
-          "url": "0.9/group-partition-gephi-plugin-1.0.0.nbm",
-          "last_update": "June 24, 2022",
-          "plugin_version": "1.0.0"
+          "url": "0.9/group-partition-gephi-plugin-1.0.1.nbm",
+          "last_update": "July 3, 2022",
+          "plugin_version": "1.0.1"
         }
       },
       "sourcecode": "https://github.com/sergipuig/gephi-plugins",

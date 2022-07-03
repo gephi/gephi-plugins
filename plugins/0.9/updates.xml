@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
 <!DOCTYPE module_updates PUBLIC "-//NetBeans//DTD Autoupdate Catalog 2.8//EN" "https://netbeans.apache.org/dtds/autoupdate-catalog-2_8.dtd">
-<module_updates timestamp="46/33/13/03/07/2022">
+<module_updates timestamp="25/43/18/03/07/2022">
 
 
 
@@ -156,11 +156,12 @@
     <message_digest algorithm="SHA-512" value="5e7cb32f8f31e8e1a3b959f479b1e47b16303c8348fed18176e6fc40c6d3ea5833e6e82a2862e94b271511d5e4cf235b5a0b114eac7444f059515dbd3db886c1"/>
 </module>
 
-<module codenamebase="upf.group.partition.gephi.plugin" distribution="group-partition-gephi-plugin-1.0.0.nbm" downloadsize="15863" homepage="http://github.com/gephi/gephi-plugins/group-partition-gephi-plugin" moduleauthor="Sergi Puig" needsrestart="true" releasedate="2022/06/24" targetcluster="plugins">
+<module codenamebase="upf.group.partition.gephi.plugin" distribution="group-partition-gephi-plugin-1.0.1.nbm" downloadsize="19417" homepage="http://github.com/gephi/gephi-plugins/group-partition-gephi-plugin" license="4923300D" moduleauthor="Sergi Puig, Marc Torrelles" needsrestart="true" releasedate="2022/07/03" targetcluster="plugins">
         
-    <manifest OpenIDE-Module="upf.group.partition.gephi.plugin" OpenIDE-Module-Display-Category="Tool" OpenIDE-Module-Implementation-Version="1.0.0" OpenIDE-Module-Long-Description="It creates a graph where each node is the aggregation of a group of nodes (of the previous workspace) using the colors given to the nodes." OpenIDE-Module-Module-Dependencies="org.openide.dialogs &gt; 7.57, org.openide.awt &gt; 7.83, org.openide.util.lookup &gt; 8.49, org.gephi.graph.api &gt; 0.9.3, org.openide.util &gt; 9.23, org.gephi.utils.longtask &gt; 0.9.3, org.gephi.project.api &gt; 0.9.3" OpenIDE-Module-Name="Groups by partition" OpenIDE-Module-Requires="org.openide.modules.ModuleFormat1" OpenIDE-Module-Short-Description="It creates a graph where each node is the aggregation of a group of nodes (of the previous workspace) using the colors given to the nodes." OpenIDE-Module-Specification-Version="1.0.0"/>
-    
-    <message_digest algorithm="SHA-512" value="0626305bb24bcd7e3a2132f6f91563892566c36ac1b9dceaf2b62d57c4729c9e23f89919422bdebd55e2f75e94f85007a868d95c97b54032fc4251f54edce7e6"/>
+    <manifest OpenIDE-Module="upf.group.partition.gephi.plugin" OpenIDE-Module-Display-Category="Other Category" OpenIDE-Module-Implementation-Version="1.0.1" OpenIDE-Module-Long-Description="It creates a graph where each node is the aggregation of a group of nodes (of the previous workspace) using the colors given to the nodes." OpenIDE-Module-Module-Dependencies="org.openide.dialogs &gt; 7.57, org.openide.awt &gt; 7.83, org.openide.util.lookup &gt; 8.49, org.gephi.graph.api &gt; 0.9.3, org.openide.util &gt; 9.23, org.openide.util.ui &gt; 9.24, org.gephi.utils.longtask &gt; 0.9.3, org.gephi.project.api &gt; 0.9.3" OpenIDE-Module-Name="Groups By Partition" OpenIDE-Module-Requires="org.openide.modules.ModuleFormat1" OpenIDE-Module-Short-Description="It creates a graph where each node is the aggregation of a group of nodes (of the previous workspace) using the colors given to the nodes." OpenIDE-Module-Specification-Version="1.0.1"/>
+        
+
+    <message_digest algorithm="SHA-512" value="f089f64bbb860acbd880d1f7bfe9baf8b636db731819c24ec9fcecb059c50cfcf7c626fec3b5bbdb5e11118565734de4fddb4a898235194d4a5969a8dd046fb5"/>
 </module>
 
 <module codenamebase="johns.hopkins.university.applied.phyics.laboratory.hairball.buster" distribution="hairball-buster-0.9.3.nbm" downloadsize="18841" homepage="http://github.com/gephi/gephi-plugins/hairball-buster" moduleauthor="Carter Matties, Mark Matties, Elisha Peterson, Patrick Allen" needsrestart="true" releasedate="2022/06/24" targetcluster="plugins">
