@@ -27,6 +27,8 @@ import java.awt.event.ActionListener;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.awt.geom.RoundRectangle2D;
+import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
 import javax.swing.BorderFactory;
@@ -36,6 +38,8 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.Timer;
+import org.gephi.graph.api.Column;
+import org.gephi.graph.api.ColumnIterable;
 import org.gephi.graph.api.Node;
 import org.gephi.tools.spi.Tool;
 import org.gephi.tools.spi.ToolEventListener;
@@ -198,12 +202,21 @@ public final class InspectorTool implements Tool {
         // Updates the frame's content with a new node and displays it at a given location.
         public void show(Node node, int x, int y) {
             this.contentPanel.removeAll();
-            Set<String> keys = node.getAttributeKeys();
+
+            // Get column and sort them so the properties are first and then sorted by column index
+            Column[] columns = node.getAttributeColumns().toArray();
+            Arrays.sort(columns, (o1, o2) -> {
+                int c = Boolean.compare(o2.isProperty(), o1.isProperty());
+                if (c == 0) {
+                    return Integer.compare(o1.getIndex(), o2.getIndex());
+                }
+                return c;
+            });
             
             // For each attribute of the node, one row will be displayed,
             // containing the column name and the nodes value (or "null" if none).
-            for(String key : keys) {
-                Object attr = node.getAttribute(key);
+            for(Column column : columns) {
+                Object attr = node.getAttribute(column);
                 JLabel keyLabel = new JLabel();
                 JLabel dataLabel = new JLabel();
                 
@@ -216,7 +229,7 @@ public final class InspectorTool implements Tool {
                 // Making use of HTML to force the JLabel to use multiple lines
                 // if the text is particularly long and exceeds the maximum
                 // label width of 200.
-                String keyText = key + " : ";
+                String keyText = column.getTitle() + " : ";
                 int keyTextLength = keyLabel.getFontMetrics(keyLabel.getFont()).stringWidth(keyText);
                 keyLabel.setText("<html><body style='width: " +
                         (keyTextLength > 200 ? 200 : keyTextLength) +
