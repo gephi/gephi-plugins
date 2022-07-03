@@ -12,7 +12,7 @@
     <!-- List of modules -->
     <modules>
         <!-- Add here the paths of all modules (e.g. <module>modules/MyModule</module>) -->
-        <module>modules/er-generator</module>
+        <module>modules/ErGenerator</module>
     </modules>
     
     <!-- Properties -->
