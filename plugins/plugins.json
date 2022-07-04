@@ -853,38 +853,6 @@
       "homepage": null
     },
     {
-      "id": "isometriclayout",
-      "name": "IsometricLayout",
-      "short_description": "",
-      "long_description": "\u003cp\u003eThis layout uses an isometric perspective to visualize networks. I.e. it generates 3D coordinates for all network nodes (x,y,z).\u003cbr\u003e\nThus, is a method for the visual representation of three-dimensional nodes in two dimensions.\u003cbr\u003e\nIt can be used to split a network into distinct Z-Layers (e.g. to better visualize high-performers and/or low-performers, or communities after using modularity algorithms).\u003cbr\u003e\nBesides, computed Z-layers can be used in Gephi ranking and/or partition procedures.\u003cbr\u003e\nTo use it, is quite simple, network nodes should have an attribute containing “[z]�? in its name. E.g., something like “Degree [z]�? or “YourNodeColumn[z]“.\u003cbr\u003e\nThe IsometricLayout will compute and segment z-Levels regarding your “[z]�? column values (with any ranges).\u003cbr\u003e\nIf your network don’t have a “[z]�? column, no problem, all nodes will be placed in Z-Layer 0 (Zero).\u003c/p\u003e",
-      "readme": null,
-      "license": "GPL v3",
-      "authors": [
-        {
-          "name": "Alexandre Barão",
-          "email": null,
-          "link": "http://pt.linkedin.com/in/alexandrebarao"
-        }
-      ],
-      "category": "Layout",
-      "last_update": "April 9, 2014",
-      "images": [
-        {
-          "image": "imgs/isometriclayout/isometriclayout_logo.jpg",
-          "thumbnail": "imgs/isometriclayout/isometriclayout_logo.jpg"
-        }
-      ],
-      "versions": {
-        "0.8.2": {
-          "url": "0.8.2/org-alexandrebarao-isometriclayout.nbm",
-          "last_update": "April 9, 2014",
-          "plugin_version": null
-        }
-      },
-      "sourcecode": "http://www.relationalcapitalvalue.com/gephi/plugins/isometric/IsometricLayout.zip",
-      "homepage": null
-    },
-    {
       "id": "force-atlas-3d",
       "name": "Force Atlas 3D",
       "short_description": "Same as Force Atlas 2 with an option for 3D.",
@@ -1117,42 +1085,6 @@
       "homepage": null
     },
     {
-      "id": "circular-layout",
-      "name": "Circular Layout",
-      "short_description": "",
-      "long_description": "\u003ch3\u003eIntroduction\u003c/h3\u003e\n\u003cp\u003eThis plugin provides three circular layouts; one simple circle (titled “Circular Layout�?, one simple dual circle layout (titled “Dual Circle Layout�?), and a grouped layout with radial axes (titled “Radial Axis Layout�?).\u003c/p\u003e\n\u003ch3\u003ePlugin Owner’s Notes\u003c/h3\u003e\n\u003ch4\u003eCircular Layout\u003c/h4\u003e\n\u003cp\u003eThe Circular Layout draws nodes in a circle and offers the following options:\u003c/p\u003e\n\u003cul\u003e\n\u003cli\u003eOrder nodes by Node ID.\u003c/li\u003e\n\u003cli\u003eOrder nodes in random order.\u003c/li\u003e\n\u003cli\u003eOrder nodes by degree, in degree, out degree, etc.\u003c/li\u003e\n\u003cli\u003eOrder nodes by attribute sort (based on data type of attribute).\u003c/li\u003e\n\u003cli\u003eAllows drawing node order on circle either clockwise or counter-clockwise.\u003c/li\u003e\n\u003cli\u003eBy default scales circle to prevent node overlap.\u003c/li\u003e\n\u003cli\u003eAllows a user entered fixed circle size.\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch4\u003eDual Circle Layout\u003c/h4\u003e\n\u003cp\u003eThe Dual Circle Layout draws nodes on two circles. By default it draws the top four “high�? nodes on an internal circle, with the remaining nodes on an external circle.\u003c/p\u003e\n\u003cp\u003eIt offers the following options:\u003c/p\u003e\n\u003cul\u003e\n\u003cli\u003eOrder nodes by degree, in degree, out degree, etc.\u003c/li\u003e\n\u003cli\u003eOrder nodes by attribute sort (based on data type of attribute).\u003c/li\u003e\n\u003cli\u003eAllows placing “high�? nodes on inside or outside circle.\u003c/li\u003e\n\u003cli\u003eAllows setting number of “high�? nodes to use on second circle.\u003c/li\u003e\n\u003cli\u003eAllows drawing node order on circle either clockwise or counter-clockwise.\u003c/li\u003e\n\u003cli\u003eBy default scales circle to prevent node overlap.\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch4\u003eRadial Axis Layout\u003c/h4\u003e\n\u003cp\u003eThe Radial Axis Layout groups nodes and draws the groups in axes (or spars) radiating outwards from a central circle.\u003c/p\u003e\n\u003cp\u003eIt offers the following options:\u003c/p\u003e\n\u003cul\u003e\n\u003cli\u003eGroup nodes by degree, in degree, out degree, etc.\u003c/li\u003e\n\u003cli\u003eGroup nodes by attribute sort (based on data type of attribute).\u003c/li\u003e\n\u003cli\u003eDraw axes/spars in ascending or descending order.\u003c/li\u003e\n\u003cli\u003eAllows top, middle or bottom “knockdown�? of axes/spars, along with ability to specify number of spars resulting after knockdown.\u003c/li\u003e\n\u003cli\u003eAllows drawing in either clockwise or counter-clockwise.\u003c/li\u003e\n\u003cli\u003eBy default this layout tries to prevent node overlap but may fail in certain instances.\u003c/li\u003e\n\u003cli\u003eAllows tuning of spacing between nodes to allow an easy way to overcome overlap issues.\u003c/li\u003e\n\u003cli\u003eAllows uniform resize of nodes.\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch4\u003eRelease Notes\u003c/h4\u003e\n\u003cp\u003e\u003cstrong\u003ev0.1: December 8th, 2010\u003c/strong\u003e\u003cbr\u003e\nInitial Release.\u003c/p\u003e\n\u003cp\u003e\u003cstrong\u003ev0.2: December 12th, 2010\u003c/strong\u003e\u003cbr\u003e\nUser Interface changes (use of dropdown/combobox instead of check boxes).\u003cbr\u003e\nCircle layout now defaults to “No Overlap�?.\u003c/p\u003e\n\u003cp\u003e\u003cstrong\u003ev0.3: December 14th, 2010\u003c/strong\u003e\u003cbr\u003e\nAdded node ordering by In-Degree, Out-Degree, Mutual Degree, Children and Descendants (where graphs support it).\u003cbr\u003e\nFixed boundary checking on Dual Circle Layout.\u003c/p\u003e\n\u003cp\u003e\u003cstrong\u003ev0.4: April 30th, 2011\u003c/strong\u003e\u003cbr\u003e\nFixed “missing�? node ordering of Node-ID and Random.\u003cbr\u003e\nRebuilt against 0.8-alpha.\u003c/p\u003e\n\u003cp\u003e\u003cstrong\u003ev0.5.1: June 2nd, 2011\u003c/strong\u003e\u003cbr\u003e\nIntroduced attribute ordering.\u003cbr\u003e\nIntroduced Radial Axes Layout.\u003c/p\u003e\n\u003cp\u003e\u003cstrong\u003ev0.6: June 24nd, 2011\u003c/strong\u003e\u003cbr\u003e\nRe-add “Random�? to sort option for CircleLayout\u003cbr\u003e\nHonor “fixed�? nodes\u003cbr\u003e\nNodeComparator (all bundled layouts) now support null values in attribute data\u003c/p\u003e\n\u003cp\u003e\u003cstrong\u003ev0.7: April 5th, 2012\u003c/strong\u003e\u003cbr\u003e\nAdd Transition settings to allow simple transition between layouts.\u003c/p\u003e",
-      "readme": null,
-      "license": "3-clause BSD",
-      "authors": [
-        {
-          "name": "Matt Groeninger",
-          "email": null,
-          "link": "http://disruptive--it.com"
-        }
-      ],
-      "category": "Layout",
-      "last_update": "March 2, 2013",
-      "images": [
-        {
-          "image": "imgs/circular-layout/circular-layout.png",
-          "thumbnail": "imgs/circular-layout/circular-layout.png"
-        },
-        {
-          "image": "imgs/circular-layout/circle.jpg",
-          "thumbnail": "imgs/circular-layout/circle.jpg"
-        }
-      ],
-      "versions": {
-        "0.8.2": {
-          "url": "0.8.2/org-gephi-layout-plugin-circularlayout2.nbm",
-          "last_update": "March 2, 2013",
-          "plugin_version": null
-        }
-      },
-      "sourcecode": "https://github.com/mgroeninger/gephi-plugins/tree/circularlayout",
-      "homepage": null
-    },
-    {
       "id": "layered-layout",
       "name": "Layered Layout",
       "short_description": "",
@@ -1229,38 +1161,6 @@
         }
       },
       "sourcecode": "$sourcecode_url",
-      "homepage": null
-    },
-    {
-      "id": "mds-statistics",
-      "name": "MDS Statistics",
-      "short_description": "",
-      "long_description": "\u003cp\u003eThis plugin performs a Multidimensional Scaling Analysis, using the Stress Minimization algorithm included in the MDSJ library. The MDSJ library was created by Algorithmics Group of the University of Konstanz (see reference below). The MDSJ library was made available under the Creative Commons License “by-nc-sa�? 3.0. The license is available at http://creativecommons.org/licenses/by-nc-sa/3.0/.\u003c/p\u003e\n\u003cp\u003eThe plugin uses path distances between nodes as input for the Multidimensional Scaling analysis, and it assigns geometric coordinates to the nodes in such a way that nodes with shorter path distances are close together and nodes with longer path distances are far apart. The plugin also reports a stress value that indicates the fit of the configuration. The lower the stress, the better the configuration represents that actual path distances between the nodes. A weight matrix is used to determine how much the distance between any pair of nodes contributes to stress (weight[i][j]\u0026nbsp; \u003d distance[i][j]^exponent). In the default setting, no weighting of the distances occurs (all distances are treated equally). It is also possible to downweigh large distances and upweigh small distances (an exponent of -2 is used). \u003ca title\u003d\"According to the authors of the MDSJ library this is the more common choice.\" href\u003d\"http://www.inf.uni-konstanz.de/algo/software/mdsj/javadoc/\" target\u003d\"_blank\"\u003eAccording to the authors of the MDSJ library this is the more common choice\u003c/a\u003e.\u003c/p\u003e\n\u003cp\u003eOptionally, edge weights can be interpreted by the plugin as representing distances / dissimilarities or proximities / similarities. In that case the distances between nodes will be based on the edge weights (which are first normalized to values from 1 to 2). These options will not make sense for all applications, and the plugin will in some cases return missing values.\u003c/p\u003e\n\u003cp\u003eThe plugin produces coordinates on up to 10 dimensions (to be selected by the user) and assigns these to the nodes in the nodes list (see the data laboratory). The coordinates can then be used by the MDS_Layout plugin \u003ca title\u003d\"needs to be downloaded separately\" href\u003d\"https://marketplace.gephi.org/plugin/mds-layout/\" target\u003d\"_blank\"\u003e(needs to be downloaded separately\u003c/a\u003e).\u003c/p\u003e\n\u003cp\u003eThe direction of edges/paths is currently ignored. With directed paths the resulting MDS configuration typically has a lot of overlapping nodes.\u003c/p\u003e\n\u003cp\u003eReference:\u003cbr\u003e\nAlgorithmics Group. MDSJ: Java Library for Multidimensional Scaling (Version 0.2). Available at http://www.inf.uni-konstanz.de/algo/software/mdsj/. University of Konstanz, 2009.\u003c/p\u003e",
-      "readme": null,
-      "license": "GPL v3",
-      "authors": [
-        {
-          "name": "Wouter Spekkink",
-          "email": null,
-          "link": "http://www.wouterspekkink.org"
-        }
-      ],
-      "category": "Metric",
-      "last_update": "September 29, 2015",
-      "images": [
-        {
-          "image": "imgs/mds-statistics/ScreenshotMDS.png",
-          "thumbnail": "imgs/mds-statistics/ScreenshotMDS.png"
-        }
-      ],
-      "versions": {
-        "0.8.2": {
-          "url": "0.8.2/org-wouterspekkink-mdsstatistics5.nbm",
-          "last_update": "September 29, 2015",
-          "plugin_version": null
-        }
-      },
-      "sourcecode": "https://github.com/WouterSpekkink/MDSStatistics.git",
       "homepage": null
     },
     {
@@ -1966,6 +1866,11 @@
       "last_update": "June 24, 2022",
       "images": null,
       "versions": {
+        "0.8.2": {
+          "url": "0.8.2/org-gephi-layout-plugin-circularlayout2.nbm",
+          "last_update": "March 2, 2013",
+          "plugin_version": null
+        },
         "0.9.1": {
           "url": "0.9.1/circularlayout-0.9.1.nbm",
           "last_update": "August 10, 2017",
@@ -2230,6 +2135,11 @@
         }
       ],
       "versions": {
+        "0.8.2": {
+          "url": "0.8.2/org-alexandrebarao-isometriclayout.nbm",
+          "last_update": "April 9, 2014",
+          "plugin_version": null
+        },
         "0.9.1": {
           "url": "0.9.1/isometric-layout-1.0.0.nbm",
           "last_update": "August 10, 2017",
@@ -2695,6 +2605,11 @@
         }
       ],
       "versions": {
+        "0.8.2": {
+          "url": "0.8.2/org-wouterspekkink-mdsstatistics5.nbm",
+          "last_update": "September 29, 2015",
+          "plugin_version": null
+        },
         "0.9.1": {
           "url": "0.9.1/mdsmetric-0.9.1.nbm",
           "last_update": "August 10, 2017",
