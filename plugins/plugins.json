@@ -381,33 +381,6 @@
       "homepage": null
     },
     {
-      "id": "export-to-shp",
-      "name": "Export to SHP",
-      "short_description": "",
-      "long_description": "\u003cp\u003eThis Plugin exports two Shapefiles: one for the edges, and one for the nodes. The shapefiles (the respective DBF-Files) contain the columns of the edge and shape tables. It adds the current width/size and color in gephi to two additional columns.\u003c/p\u003e\n\u003cp\u003eThe geography is rather simple. The location info is either read from columns in the node table (I use parts of David Sheppard’s ExportToEarth Exporter to do that) or from a fake geography – that is the current position of the nodes in the gephi layout.\u003c/p\u003e\n\u003cp\u003eOne can then easily import the two datasets into QGIS or any other mapping tool and add a symbology. The only drawback of this simple solution is that in such tools you won’t be able to draw arrows or even more arrows that don’t intersect when they go into both directions.\u003c/p\u003e\n\u003cp\u003eCopyright (c) 2013 by Roman Seidl – romanAeTgranul.at\u003c/p\u003e\n\u003cp\u003eThis Program uses code copyright (c) 2012 by David Shepard\u003c/p\u003e",
-      "readme": null,
-      "license": "GPL v3",
-      "authors": [
-        {
-          "name": "Roman Seidl",
-          "email": null,
-          "link": "http://granul.at"
-        }
-      ],
-      "category": "Export",
-      "last_update": "April 16, 2013",
-      "images": [],
-      "versions": {
-        "0.8.2": {
-          "url": "0.8.2/at-granul-gephi-shpexporter.nbm",
-          "last_update": "April 16, 2013",
-          "plugin_version": null
-        }
-      },
-      "sourcecode": "https://github.com/romanseidl/SHPExporter",
-      "homepage": null
-    },
-    {
       "id": "seadragon-web-export",
       "name": "Seadragon Web Export",
       "short_description": "",
@@ -445,78 +418,6 @@
         }
       },
       "sourcecode": "https://github.com/mbastian/gephi-plugins/tree/seadragon-plugin",
-      "homepage": null
-    },
-    {
-      "id": "loxa-web-site-export",
-      "name": "Loxa Web Site Export",
-      "short_description": "",
-      "long_description": "\u003cp\u003eLoxa Web Site Export Plugin is a plugin developed for Gephi whose purpose is to allow easy publication of the analysis, descriptions and findings. The result of the implementation of the plugin is a fully functional website and easy customization, thereby allowing to publish the results of their work\u003c/p\u003e\n\u003cp\u003eFeatures:\u003c/p\u003e\n\u003cp\u003eLets build a Web site for the project.\u003cbr\u003e\nWorkspaces are the analysis performed, of which you can see a browse graph (using sigmajs), see statistics (number of nodes and arcs, weight and density of the graph), description of the analysis and lets you download files (from the graph and image – pdf format).\u003cbr\u003e\nThe analysis information is stored in a JSON file for easy editing, which supports HTML tags to enhance your presentation.\u003cbr\u003e\nThe most important and significant findings are displayed in the bottom of the image.\u003cbr\u003e\nFull AJAX for asynchronous calls to the server to see statistics for each analysis.\u003cbr\u003e\nIt works in most modern browsers (tested: Safari, Firefox, Chrome, Internet Explorer).\u003c/p\u003e\n\u003cp\u003eVersion 0.3:\u003cbr\u003e\nVery quick generation\u003cbr\u003e\nBrowse the graph using sigmajs. Now you can select nodes\u003cbr\u003e\nNew interface\u003cbr\u003e\nAnd now you can download the source code from GitHub\u003c/p\u003e\n\u003cp\u003eVersion 0.3.1:\u003c/p\u003e\n\u003cul\u003e\n\u003cli\u003eSupport Gephi 0.8.2beta\u003c/li\u003e\n\u003cli\u003e\u003cspan style\u003d\"line-height: 13px\"\u003eRedesign interface new style\u003c/span\u003e\u003c/li\u003e\n\u003cli\u003eSearch nodes via autocomplete, the node selected is placed in the center of the viewer of graph\u003c/li\u003e\n\u003cli\u003eGet more information from project properties. In Gephi go to File-\u0026gt;Properties and complete the form and this values will be used in the Website generated.\u003c/li\u003e\n\u003cli\u003eCustomization more easy!. The json file, now is in pretty format.\u003c/li\u003e\n\u003cli\u003eLess clicks to view description and metrics.\u003c/li\u003e\n\u003cli\u003eNow you can publish metrics and his values, with a description (it is shown when you click the metric name).\u003c/li\u003e\n\u003c/ul\u003e\n\u003cp\u003eTo view all the new features, visit our web page.\u003c/p\u003e",
-      "readme": null,
-      "license": "GPL v3",
-      "authors": [
-        {
-          "name": "Jorge Lopez-Vargas",
-          "email": null,
-          "link": "http://cafelojano.wordpress.com"
-        }
-      ],
-      "category": "Export",
-      "last_update": "June 22, 2013",
-      "images": [
-        {
-          "image": "imgs/loxa-web-site-export/lwseV031.png",
-          "thumbnail": "imgs/loxa-web-site-export/lwseV031.png"
-        },
-        {
-          "image": "imgs/loxa-web-site-export/loxa.png",
-          "thumbnail": "imgs/loxa-web-site-export/loxa.png"
-        },
-        {
-          "image": "imgs/loxa-web-site-export/example.png",
-          "thumbnail": "imgs/loxa-web-site-export/example.png"
-        }
-      ],
-      "versions": {
-        "0.8.2": {
-          "url": "0.8.2/ec-loxa-sna-gephi-031.nbm",
-          "last_update": "June 22, 2013",
-          "plugin_version": null
-        }
-      },
-      "sourcecode": "https://github.com/jorgaf/LoxaWebSiteExport",
-      "homepage": null
-    },
-    {
-      "id": "graph-streaming",
-      "name": "Graph Streaming",
-      "short_description": "",
-      "long_description": "\u003ch3\u003eIntroduction\u003c/h3\u003e\n\u003cp\u003eThe purpose of the Graph Streaming API is to build a unified framework for streaming graph objects. Gephi’s data structure and visualization engine has been built with the idea that a graph is not static and might change continuously. By connecting Gephi with external data-sources, we leverage its power to visualize and monitor complex systems or enterprise data in real-time. Moreover, the idea of streaming graph data goes beyond Gephi, and a unified and standardized API could bring interoperability with other available tools for graph and network analysis, as they could start to interoperate with other tools in a distributed and cooperative fashion.\u003c/p\u003e\n\u003ch3\u003ePlugin Owner’s Notes\u003c/h3\u003e\n\u003cp\u003eWith the increasing level of connectivity and cooperation between systems, for a system that aim to be interoperable, it is imperative to comply with the available standards. Graph objects are abstractions that can represent a wide range of real-world structures, from computer networks to human interactions, and there are a lot of standards to exchange graph data in different formats, from text-based formats to xml-based formats. But the real-world structures are constantly changing, and the current formats are not suitable to exchange such type of dynamic data.\u003c/p\u003e\n\u003cp\u003eA lot of well-established systems already stream data to its users using a streaming API. Twitter for example defined a Streaming API to allow near-realtime access to its data. They are using two different formats: XML and JSON, but JSON is strongly encouraged over XML, as JSON is more compact and parsing is greatly simplified.\u003c/p\u003e\n\u003cp\u003eWe are not the first to implement a Graph Streaming API, and another very interesting experience is the GraphStream Java Library. It is composed of an API that gives a way to add edges and nodes in a graph and make them evolve. The graphs are composed of nodes and edges that can appear, disappear or be modified, and these operations are called events. The sequence of operations that occur in a graph is seen as a stream of events.\u003c/p\u003e\n\u003cp\u003eSo, as other people already had successful experiences with graph streaming, why not start our work based on these experiences? That’s what we are doing, and beyond finding these experiences very useful, we are also trying to be compatible with the available work. This Gephi Graph Streaming release is using two formats: JSON for flexibility, and a text-based format, based in the GraphStream implementation.\u003c/p\u003e\n\u003cp\u003eTo illustrate how simple it will be to connect to a master, \u003ca href\u003d\"http://www.youtube.com/watch?v\u003d7SW_FDiY0sg\" target\u003d\"_blank\"\u003ethis video\u003c/a\u003e shows Gephi connecting to a master and visualizing the received graph data in real time. The graph in this demo is a part of the Amazon.com library, where the nodes represent books and the edges represent their similarities. For each book, a node is added, the similar books are explored, adding the similar ones as nodes and the similarity as an edge.\u003c/p\u003e\n\u003cp\u003eThe Graph Streaming specification goes beyond the simple fact that a client can pull data from a master: in fact, clients can interact with the master pushing data to it, in a REST architecture. The same data format used by the master to send graph events to the clients is used by clients to interact with the master.\u003c/p\u003e\n\u003cp\u003eBut what about connecting two different Gephi instances together? One instance will be master, and the other client. Using the Graph Streaming API, a change in a graph at the master’s workspace should cause a change in the client’s workspace, and a change at the client’s workspace will cause it to send requests to the master to update its graph accordingly. Both instances working in a distributed mode. In fact, different people could work in a distributed mode to construct a graph: it’s the Collaborative Graph Construction.\u003c/p\u003e",
-      "readme": null,
-      "license": "GPL v2",
-      "authors": [
-        {
-          "name": "André Panisson",
-          "email": null,
-          "link": "https://code.launchpad.net/~panisson"
-        }
-      ],
-      "category": "Import",
-      "last_update": "April 18, 2013",
-      "images": [
-        {
-          "image": "imgs/graph-streaming/tumbnail.jpeg",
-          "thumbnail": "imgs/graph-streaming/tumbnail.jpeg"
-        }
-      ],
-      "versions": {
-        "0.8.2": {
-          "url": "0.8.2/org-gephi-graphstreaming.nbm",
-          "last_update": "April 18, 2013",
-          "plugin_version": null
-        }
-      },
-      "sourcecode": "https://github.com/gephi/gephi-plugins/tree/graph-streaming",
       "homepage": null
     },
     {
@@ -714,54 +615,6 @@
       "homepage": null
     },
     {
-      "id": "excel-csv-converter-to-network",
-      "name": "Excel / csv converter to network",
-      "short_description": "",
-      "long_description": "\u003ch2\u003eAuthor\u003c/h2\u003e\n\u003cp\u003eClement Levallois, \u003ca href\u003d\"http://www.em-lyon.com/en/faculte-recherche-enseignement-superieur/faculte-recherche-emlyon/corps-professoral/Permanent-Professors/Clement-LEVALLOIS\" target\u003d\"_blank\"\u003eAssistant Professor at EMLYON Business School\u003c/a\u003e.\u003c/p\u003e\n\u003ch2\u003eConvert Excel and csv files into networks\u003c/h2\u003e\n\u003cp\u003eThis plugin helps transform your Excel files (or csv files) into a network, directly imported into Gephi. You can choose which entities, and which relations, form the network.\u003c/p\u003e\n\u003cp\u003e\u003cstrong\u003e\u003cem\u003eNew since plugin version 1.4: you can create dynamic networks if your Excel file includes a column with a year or date indication.\u003c/em\u003e\u003c/strong\u003e\u003c/p\u003e\n\u003ch2\u003e1. Quick how-to\u003c/h2\u003e\n\u003cp\u003e- Install the plugin in Gephi (File -\u0026gt; Tools -\u0026gt; Plugins -\u0026gt; Available).\u003cbr\u003e\n- Restart Gephi\u003c/p\u003e\n\u003cp\u003eIn the Gephi menu, select File -\u0026gt; Import Spigot.\u003cbr\u003e\n- Select “Data importer�?\u003cbr\u003e\n- Get your Excel file ready!\u003cbr\u003e\n- Follow the steps of the wizard.\u003c/p\u003e\n\u003ch2\u003e2. To go further…\u003c/h2\u003e\n\u003cp\u003eThe plugin gives you the possibility to create network of two types of entities. Let’s say that your Excel file looks like:\u003c/p\u003e\n\u003ctable border\u003d\"1\"\u003e\n\u003ctbody\u003e\n\u003ctr\u003e\n\u003ctd width\u003d\"80\" height\u003d\"20\"\u003e\u003cstrong\u003eAuthor\u003c/strong\u003e\u003c/td\u003e\n\u003ctd width\u003d\"80\"\u003e\u003cstrong\u003eBook\u003c/strong\u003e\u003c/td\u003e\n\u003ctd width\u003d\"80\"\u003e\u003cstrong\u003eYear\u003c/strong\u003e\u003c/td\u003e\n\u003ctd width\u003d\"300\"\u003e\u003cstrong\u003eSales of the book\u003c/strong\u003e\u003c/td\u003e\n\u003c/tr\u003e\n\u003ctr\u003e\n\u003ctd height\u003d\"20\"\u003eDavid\u003c/td\u003e\n\u003ctd\u003eMy life\u003c/td\u003e\n\u003ctd\u003e1972\u003c/td\u003e\n\u003ctd\u003e350 copies\u003c/td\u003e\n\u003c/tr\u003e\n\u003ctr\u003e\n\u003ctd height\u003d\"20\"\u003eMary\u003c/td\u003e\n\u003ctd\u003eMy story\u003c/td\u003e\n\u003ctd\u003e1968\u003c/td\u003e\n\u003ctd\u003e400 copies\u003c/td\u003e\n\u003c/tr\u003e\n\u003c/tbody\u003e\n\u003c/table\u003e\n\u003cp\u003eIn the wizard you’ll get to a window where you’ll select “Author�? and “Book�? as the two types of entities you want to connect:\u003c/p\u003e\n\u003cp\u003e(click to enlarge)\u003c/p\u003e\n\u003cp\u003e\u003ca href\u003d\"https://marketplace.gephi.org/wp-content/uploads/2013/10/bipartite.jpg?022bbc\"\u003e\u003cimg class\u003d\"alignnone size-medium wp-image-5762\" alt\u003d\"bipartite\" src\u003d\"https://marketplace.gephi.org/wp-content/uploads/2013/10/bipartite-300x241.jpg?022bbc\" width\u003d\"300\" height\u003d\"241\"\u003e\u003c/a\u003e\u003c/p\u003e\n\u003cp\u003eAnd the result in Gephi will be:\u003c/p\u003e\n\u003cp\u003e\u003ca href\u003d\"https://marketplace.gephi.org/wp-content/uploads/2013/10/network-bipartite.jpg?022bbc\"\u003e\u003cimg class\u003d\"alignnone size-medium wp-image-5763\" alt\u003d\"network bipartite\" src\u003d\"https://marketplace.gephi.org/wp-content/uploads/2013/10/network-bipartite-300x189.jpg?022bbc\" width\u003d\"300\" height\u003d\"189\"\u003e\u003c/a\u003e\u003c/p\u003e\n\u003cp\u003eThis looks fantastic, \u003cstrong\u003ebut in practice this type of networks gets quickly messy\u003c/strong\u003e – lots of connections between both types of agents, making it hard to disentangle and to visualize.\u003c/p\u003e\n\u003cp\u003e\u0026nbsp;\u003c/p\u003e\n\u003cp\u003e-\u0026gt; For this reason, I’d suggest to also try the plugin on this type of files:\u003c/p\u003e\n\u003ctable border\u003d\"1\" cellspacing\u003d\"0\" cellpadding\u003d\"0\"\u003e\n\u003ctbody\u003e\n\u003ctr\u003e\n\u003ctd width\u003d\"80\" height\u003d\"20\"\u003e\u003cstrong\u003eAuthor\u003c/strong\u003e\u003c/td\u003e\n\u003ctd width\u003d\"80\"\u003e\u003cstrong\u003eBook\u003c/strong\u003e\u003c/td\u003e\n\u003ctd width\u003d\"80\"\u003e\u003cstrong\u003eYear\u003c/strong\u003e\u003c/td\u003e\n\u003ctd width\u003d\"170\"\u003e\u003cstrong\u003eSales of the book\u003c/strong\u003e\u003c/td\u003e\n\u003ctd width\u003d\"300\"\u003e\u003cstrong\u003eLiterary agent\u003c/strong\u003e\u003c/td\u003e\n\u003c/tr\u003e\n\u003ctr\u003e\n\u003ctd height\u003d\"20\"\u003eDavid\u003c/td\u003e\n\u003ctd\u003eMy life\u003c/td\u003e\n\u003ctd\u003e1972\u003c/td\u003e\n\u003ctd\u003e350 copies\u003c/td\u003e\n\u003ctd\u003ePhilip\u003c/td\u003e\n\u003c/tr\u003e\n\u003ctr\u003e\n\u003ctd height\u003d\"20\"\u003eMary\u003c/td\u003e\n\u003ctd\u003eMy story\u003c/td\u003e\n\u003ctd\u003e1968\u003c/td\u003e\n\u003ctd\u003e\u0026nbsp;400 copies\u003c/td\u003e\n\u003ctd\u003ePhilip\u003c/td\u003e\n\u003c/tr\u003e\n\u003c/tbody\u003e\n\u003c/table\u003e\n\u003cp\u003e\u0026nbsp;\u003c/p\u003e\n\u003cp\u003eHere, by selecting a network made of ‘Authors’ and ‘Literary Agent’ in the plugin, the resulting network will be much more interesting (because it is made of one type of agents: persons).\u003c/p\u003e\n\u003cp\u003eSo in the plugin you select (click to enlarge):\u003c/p\u003e\n\u003cp\u003e\u003ca href\u003d\"https://marketplace.gephi.org/wp-content/uploads/2013/10/tttt.jpg?022bbc\"\u003e\u003cimg class\u003d\"alignnone size-medium wp-image-5764\" alt\u003d\"tttt\" src\u003d\"https://marketplace.gephi.org/wp-content/uploads/2013/10/tttt-300x241.jpg?022bbc\" width\u003d\"300\" height\u003d\"241\"\u003e\u003c/a\u003e\u003c/p\u003e\n\u003cp\u003e\u0026nbsp;\u003c/p\u003e\n\u003cp\u003eAnd this leads to something more meaningful, in my opinion at least:\u003c/p\u003e\n\u003cp\u003e\u0026nbsp;\u003c/p\u003e\n\u003cp\u003e\u003ca href\u003d\"https://marketplace.gephi.org/wp-content/uploads/2013/10/network.jpg?022bbc\"\u003e\u003cimg class\u003d\"alignnone size-medium wp-image-5761\" alt\u003d\"network\" src\u003d\"https://marketplace.gephi.org/wp-content/uploads/2013/10/network-300x188.jpg?022bbc\" width\u003d\"300\" height\u003d\"188\"\u003e\u003c/a\u003e\u003c/p\u003e\n\u003cp\u003e\u0026nbsp;\u003c/p\u003e\n\u003ch2\u003e3. Dynamics: what are the correct formats for time?\u003c/h2\u003e\n\u003cp\u003eYou need a column that includes indications of time. Several possibilties:\u003c/p\u003e\n\u003ch3\u003e1) Years or dates\u003c/h3\u003e\n\u003cp\u003eDates must be formatted in yyy-mm-dd: \u003cstrong\u003e2012-06-27\u003c/strong\u003e\u003cbr\u003e\nYears are just yyyy: \u003cstrong\u003e1968\u003c/strong\u003e\u003c/p\u003e\n\u003cp\u003e\u0026nbsp;\u003c/p\u003e\n\u003ch3\u003e2) Durations or single values:\u003c/h3\u003e\n\u003cp\u003e- Durations are just a start and end time separated with a comma:\u0026nbsp;\u003cstrong\u003e2012-06-27,2014-01-01\u003c/strong\u003e\u003cbr\u003e\nOr for a duration in years: \u003cstrong\u003e1958, 1999\u003c/strong\u003e\u003c/p\u003e\n\u003cp\u003e- single values are, well: just a year: \u003cstrong\u003e1876\u003c/strong\u003e or just a date: \u003cstrong\u003e1879-03-19\u003c/strong\u003e\u003c/p\u003e\n\u003cp\u003e\u0026nbsp;\u003c/p\u003e\n\u003ch2\u003e4. Issues and feature requests?\u003c/h2\u003e\n\u003cp\u003ePlease post your comments and questions on Github:\u0026nbsp;\u003ca href\u003d\"https://github.com/seinecle/My-Plugins-for-Gephi/issues\" target\u003d\"_blank\"\u003ehttps://github.com/seinecle/My-Plugins-for-Gephi/issues\u003c/a\u003e\u003c/p\u003e\n\u003cp\u003eI am Clement Levallois (\u003ca href\u003d\"https://twitter.com/seinecle\" target\u003d\"_blank\"\u003e@seinecle\u003c/a\u003e), Assistant Professor at EMLYON Business School, and you can see my other projects on \u003ca href\u003d\"http://www.clementlevallois.net\" target\u003d\"_blank\"\u003ewww.clementlevallois.net\u003c/a\u003e.\u003c/p\u003e\n\u003ch2\u003e5. Release history\u003c/h2\u003e\n\u003cp\u003eInitial release (Nov. 2013).\u003c/p\u003e\n\u003cp\u003eVersion 1.1 (Nov. 2013). Added error messages helping the user navigate the plugin.\u003c/p\u003e\n\u003cp\u003eVersion 1.3 (March 2014). Bug fix: same names in different columns are now treated correctly. Bug report / analysis by Wouters A.H. Spekkink.\u003c/p\u003e\n\u003cp\u003eVersion 1.4 (September 2014). Time dimension added: if your file includes a column with a time stamp, the nodes and edges will be created at this time. Durations also possible. More info in the wizzard included in the plugin.\u003c/p\u003e\n\u003cp\u003eVersion 1.4.1 (September 2014). Bug fix: time intervals can now include spaces after the comma: “2013-05-13, 2013-05-14″ (previously, only\u0026nbsp;�?2013-05-13,2013-05-14″ would have worked.) Bug report by Anne van Summeren.\u003c/p\u003e\n\u003cp\u003eVersion 1.4.2 (September 2014). Bug fix: the names of entities to be connected had to be textual in Excel : “45″ would not be a correct value. Version 1.4.2 corrects that and adds minor bug fixes. Bug report by Prem Sankar C.\u003c/p\u003e\n\u003cp\u003eVersion 1.4.3 (November 2014). Bug fix: Null pointer exception when nodes have empty values. Bug report by Xin Xin of University of North Texas.\u003c/p\u003e\n\u003cp\u003e\u0026nbsp;\u003c/p\u003e",
-      "readme": null,
-      "license": "Apache v2",
-      "authors": [
-        {
-          "name": "Clement Levallois",
-          "email": null,
-          "link": "http://www.clementlevallois.net"
-        }
-      ],
-      "category": "Import",
-      "last_update": "November 25, 2014",
-      "images": [
-        {
-          "image": "imgs/excel-csv-converter-to-network/tttt.jpg",
-          "thumbnail": "imgs/excel-csv-converter-to-network/tttt.jpg"
-        },
-        {
-          "image": "imgs/excel-csv-converter-to-network/network-bipartite.jpg",
-          "thumbnail": "imgs/excel-csv-converter-to-network/network-bipartite.jpg"
-        },
-        {
-          "image": "imgs/excel-csv-converter-to-network/bipartite.jpg",
-          "thumbnail": "imgs/excel-csv-converter-to-network/bipartite.jpg"
-        },
-        {
-          "image": "imgs/excel-csv-converter-to-network/network.jpg",
-          "thumbnail": "imgs/excel-csv-converter-to-network/network.jpg"
-        },
-        {
-          "image": "imgs/excel-csv-converter-to-network/excel-e1381336984215.jpg",
-          "thumbnail": "imgs/excel-csv-converter-to-network/excel-e1381336984215.jpg"
-        }
-      ],
-      "versions": {
-        "0.8.2": {
-          "url": "0.8.2/ExcelCsvImporter-1.43.nbm",
-          "last_update": "November 25, 2014",
-          "plugin_version": null
-        }
-      },
-      "sourcecode": "https://github.com/seinecle/My-Plugins-for-Gephi",
-      "homepage": null
-    },
-    {
       "id": "random-waypoint-and-truncated-levy-walk-mobility-graph-generators",
       "name": "Random Waypoint and Truncated Lévy Walk Mobility Graph Generators",
       "short_description": "",
@@ -813,33 +666,6 @@
         }
       },
       "sourcecode": "https://github.com/cbartosiak/gephi-plugins/tree/complex-generators",
-      "homepage": null
-    },
-    {
-      "id": "http-graph",
-      "name": "HTTP Graph",
-      "short_description": "",
-      "long_description": "\u003cp\u003eRuns a proxy server and collects data from your web browsing to generate a graph!\u003c/p\u003e\n\u003cp\u003e\u003ciframe src\u003d\"http://player.vimeo.com/video/18591468\" width\u003d\"500\" height\u003d\"281\" frameborder\u003d\"0\" webkitallowfullscreen\u003d\"\" mozallowfullscreen\u003d\"\" allowfullscreen\u003d\"\"\u003e\u003c/iframe\u003e\n\u003c/p\u003e\u003cp\u003e\u003ca href\u003d\"http://vimeo.com/18591468\"\u003eHTTP Graph — A Gephi plugin\u003c/a\u003e from \u003ca href\u003d\"http://vimeo.com/user5689367\"\u003ephreakocious\u003c/a\u003e on \u003ca href\u003d\"http://vimeo.com\"\u003eVimeo\u003c/a\u003e.\u003c/p\u003e",
-      "readme": null,
-      "license": "2-clause BSD",
-      "authors": [
-        {
-          "name": "phreakocious ",
-          "email": null,
-          "link": "http://phreakocious.net"
-        }
-      ],
-      "category": "Generator",
-      "last_update": "February 27, 2013",
-      "images": [],
-      "versions": {
-        "0.8.2": {
-          "url": "0.8.2/net-phreakocious-httpgraph.nbm",
-          "last_update": "February 27, 2013",
-          "plugin_version": null
-        }
-      },
-      "sourcecode": "https://github.com/phreakocious/gephi-plugins",
       "homepage": null
     },
     {
@@ -911,54 +737,6 @@
       "homepage": null
     },
     {
-      "id": "semanticwebimport",
-      "name": "SemanticWebImport",
-      "short_description": "",
-      "long_description": "\u003cp\u003eThis plugins allows to apply a SPARQL request on: 1. a set of RDF local files, i.e. on your computer. This is done by using the Corese SPARQL engine; 2. a SPARQL SOAP or REST end-point. It provides also the following functionalities: – statistics on the types present in the rdf obtained (if the rdf:type relations are provided in the construct request). – a filter on the type of the nodes. – filtering on the nodes, based on a SPARQL “Select�? request.\u003cbr\u003e\nPlugin Owner’s Notes\u003c/p\u003e\n\u003cp\u003eSome examples are available: – the humans example use local files and the Corese engine. To make it run, choose “humans�? in the bottom drop-list, the click on the “Load�? button, then Start. – the DBPedia-Movies example access to dbpedia in order to depict the relationships between the actors, directors and movies. To make it run, choose “DBPedia-Movies�? in the bottom drop-list, the click on the “Load�? button, then Start.\u003c/p\u003e",
-      "readme": null,
-      "license": "Cecill-C",
-      "authors": [
-        {
-          "name": "Erwan Demairy",
-          "email": null,
-          "link": "http://www-sop.inria.fr/dream/Team/Edemairy"
-        }
-      ],
-      "category": "Import",
-      "last_update": "July 3, 2013",
-      "images": [
-        {
-          "image": "imgs/semanticwebimport/RDF.png",
-          "thumbnail": "imgs/semanticwebimport/RDF.png"
-        },
-        {
-          "image": "imgs/semanticwebimport/Tab2.png",
-          "thumbnail": "imgs/semanticwebimport/Tab2.png"
-        },
-        {
-          "image": "imgs/semanticwebimport/re�?seau_social_isicil_zoom_communaute�?_e�?nergie.png",
-          "thumbnail": "imgs/semanticwebimport/re�?seau_social_isicil_zoom_communaute�?_e�?nergie.png"
-        },
-        {
-          "image": "imgs/semanticwebimport/psychedelic-music-on-wikipedia2.png",
-          "thumbnail": "imgs/semanticwebimport/psychedelic-music-on-wikipedia2.png"
-        },
-        {
-          "image": "imgs/semanticwebimport/proglanginfluence.png",
-          "thumbnail": "imgs/semanticwebimport/proglanginfluence.png"
-        }
-      ],
-      "versions": {
-        "0.8.2": {
-          "url": "0.8.2/fr-inria-edelweiss-semantic3.nbm",
-          "last_update": "July 3, 2013",
-          "plugin_version": null
-        }
-      },
-      "sourcecode": "git://scm.gforge.inria.fr/segviz-public/gephi-plugins.git",
-      "homepage": null
-    },
-    {
       "id": "neo4j-graph-database-support",
       "name": "Neo4J Graph Database Support",
       "short_description": "",
@@ -988,65 +766,6 @@
         }
       },
       "sourcecode": "https://github.com/gephi/gephi-plugins/tree/neo4j-plugin",
-      "homepage": null
-    },
-    {
-      "id": "mds-layout",
-      "name": "MDS Layout",
-      "short_description": "",
-      "long_description": "\u003cp\u003eThe layout takes the coordinates of a Multidimensional Scaling (MDS) configuration as inputs and uses these coordinates to layout the nodes of a graph. MDS is sometimes used in Social Network Analysis to create layouts that reflect some type of distance between the nodes. This distance can be based on the length of paths between the nodes, but it can also be based on (dis)similarities in attributes of nodes.\u003c/p\u003e\n\u003cp\u003eA separate plugin is available for MDS analysis (\u003ca href\u003d\"https://marketplace.gephi.org/plugin/mds-statistics/\"\u003eMDS Statistics) \u003c/a\u003efrom the Gephi Marketplace. It is also possible to perform the MDS analysis with external software (e.g. R or SPSS). In the latter case the coordinates of the MDS configuration have to be added to the nodes list manually.\u003c/p\u003e\n\u003cp\u003eIf you have the results of an MDS analysis, add the coordinates as variables to your nodes list. When importing the nodes list, make sure that you import the nodes as ‘doubles.’ Otherwise the layout plugin won’t be able to read the coordinates and use them for the layout.\u003c/p\u003e",
-      "readme": null,
-      "license": "GPL v3",
-      "authors": [
-        {
-          "name": "Wouter Spekkink",
-          "email": null,
-          "link": "http://www.wouterspekkink.org"
-        }
-      ],
-      "category": "Layout",
-      "last_update": "March 18, 2015",
-      "images": [],
-      "versions": {
-        "0.8.2": {
-          "url": "0.8.2/org-wouterspekkink-mdslayout1.nbm",
-          "last_update": "March 18, 2015",
-          "plugin_version": null
-        }
-      },
-      "sourcecode": "https://github.com/WouterSpekkink/MDSLayout.git",
-      "homepage": null
-    },
-    {
-      "id": "event-graph-layout",
-      "name": "Event Graph Layout",
-      "short_description": "",
-      "long_description": "\u003ch2\u003eDescription\u003c/h2\u003e\n\u003cp\u003eThe event graph layout plugin was written to allow for the easy creation of event graphs. In an event graph the nodes represent events and the edges/arcs represent relationships between the events (e.g. causality). The layout plugin places the events in a user-specified order on the x-axis. If vertical force is activated, the plugin will push unconnected groups of events away from each other on the y-axis, and keep connected nodes together.\u003c/p\u003e\n\u003ch2\u003eHow to use\u003c/h2\u003e\n\u003cp\u003eTo use this plugin you need to add a numerical variable (integer, float or double) to your nodes that gives them a rank order. This rank order will be used to determine the position of the nodes on the x-axis. Typically, this order variable will indicate the order of events (represented by the nodes) in time. The order scale can be used to scale up or scale down the distances between the nodes on the x-axis.\u003c/p\u003e\n\u003cp\u003eIn its default setting the plugin will only lay out the nodes on the x-axis. If vertical force is activated the plugin will also lay out the nodes on the y-axis, based primarily on their degree of interconnectedness. Thus, groups of nodes that are highly interconnected tend to stay close to each other, and nodes that are not highly interconnected tend to drift away from each other. The vertical force can be used to increase or decrease the distance between the nodes on the y-axis.\u003c/p\u003e\n\u003ch2\u003eHints\u003c/h2\u003e\n\u003cul\u003e\n\u003cli\u003eFor larger event graphs it may be helpful to increase the jitter tolerance somewhat if the vertical layout moves too slow.\u003c/li\u003e\n\u003cli\u003eIf you want to move the nodes on the y-axis with your mouse, but want to make sure that they keep their position on the x-axis, then run the plugin without vertical force activated\u003c/li\u003e\n\u003c/ul\u003e",
-      "readme": null,
-      "license": "GPL v3",
-      "authors": [
-        {
-          "name": "Wouter Spekkink",
-          "email": null,
-          "link": "https://www.wouterspekkink.org"
-        }
-      ],
-      "category": "Layout",
-      "last_update": "September 21, 2014",
-      "images": [
-        {
-          "image": "imgs/event-graph-layout/Temp.png",
-          "thumbnail": "imgs/event-graph-layout/Temp.png"
-        }
-      ],
-      "versions": {
-        "0.8.2": {
-          "url": "0.8.2/org-wouterspekkink-eventgraphlayout.nbm",
-          "last_update": "September 21, 2014",
-          "plugin_version": null
-        }
-      },
-      "sourcecode": "https://github.com/WouterSpekkink/EventGraphLayout",
       "homepage": null
     },
     {
@@ -1163,38 +882,6 @@
         }
       },
       "sourcecode": "http://www.relationalcapitalvalue.com/gephi/plugins/isometric/IsometricLayout.zip",
-      "homepage": null
-    },
-    {
-      "id": "maps-of-countries",
-      "name": "Maps of Countries",
-      "short_description": "",
-      "long_description": "\u003ch2\u003eAuthor\u003c/h2\u003e\n\u003cp\u003eClement Levallois, \u003ca href\u003d\"http://www.em-lyon.com/en/faculte-recherche-enseignement-superieur/faculte-recherche-emlyon/corps-professoral/Permanent-Professors/Clement-LEVALLOIS\" target\u003d\"_blank\"\u003eAssistant Professor at EMLYON Business School\u003c/a\u003e.\u003c/p\u003e\n\u003ch2\u003eFunction of the plugin\u003c/h2\u003e\n\u003cp\u003eUse this plugin to insert maps of countries and world regions in Gephi. Now also includes country sub-regions: states and territories of Australia. You can also control the thickness of the line with the “Weight�? parameter.\u003c/p\u003e\n\u003cp\u003e\u0026nbsp;\u003c/p\u003e\n\u003ch2\u003eQuick instructions\u003c/h2\u003e\n\u003cp\u003e- Install the plugin, open a new Project, go to the layout tab and select the layout “Map Of Countries�?.\u003c/p\u003e\n\u003cp\u003e- Click on “Run�? to load the map of the world.\u003c/p\u003e\n\u003cp\u003e\u0026nbsp;\u003c/p\u003e\n\u003ch2\u003eAll features explained\u003c/h2\u003e\n\u003cp\u003eBesides showing the map of the world, you can show single countries, subregions (parts of continents), and regions (continents).\u003cbr\u003e\nPlease refer to the original data source for the definitions of borders:\u0026nbsp;\u003ca href\u003d\"http://thematicmapping.org/downloads/world_borders.php\"\u003ehttp://thematicmapping.org/downloads/world_borders.php\u003c/a\u003e.\u003c/p\u003e\n\u003cp\u003e\u0026nbsp;\u003c/p\u003e\n\u003cp\u003e1) To load just the \u003cstrong\u003e\u003cspan style\u003d\"text-decoration: underline\"\u003emap of a single country\u003c/span\u003e\u003c/strong\u003e (example: Laos):\u003cbr\u003e\n-\u0026gt; “No subregion�? must be selected in the subregion dropdown menu\u003cbr\u003e\n-\u0026gt; “No region�? must be selected in the region dropdown menu\u003cbr\u003e\n-\u0026gt; Select “Lao People’s Democratic Republic�? in the country menu, and click “run�?.\u003c/p\u003e\n\u003cp\u003e2) To load just the \u003cspan style\u003d\"text-decoration: underline\"\u003e\u003cstrong\u003emap of a subregion\u003c/strong\u003e\u003c/span\u003e (example of a subregion: South-Eastern Asia):\u003c/p\u003e\n\u003cp\u003e-\u0026gt; “World�? must be selected in the countries dropdown menu\u003cbr\u003e\n-\u0026gt; “No region�? must be selected in the region dropdown menu\u003cbr\u003e\n-\u0026gt; Select “South-Eastern Asia�? in the subregion menu, and click “run�?.\u003c/p\u003e\n\u003cp\u003e3) To load just the \u003cstrong\u003e\u003cspan style\u003d\"text-decoration: underline\"\u003emap of a region\u003c/span\u003e\u003c/strong\u003e (example of a region: Asia):\u003cbr\u003e\n-\u0026gt; “World�? must be selected in the countries dropdown menu\u003cbr\u003e\n-\u0026gt; “No subregion�? must be selected in the subregion dropdown menu\u003cbr\u003e\n-\u0026gt; Select “Asia�? in the region menu, and click “run�?.\u003c/p\u003e\n\u003cp\u003e\u0026nbsp;\u003c/p\u003e\n\u003ch2\u003eThese maps and your network: how do they interact?\u003c/h2\u003e\n\u003cp\u003e\u003cem\u003e\u003cstrong\u003eNote: if your map and your network are slightly off mark, run the “Geolayout�? plugin once to get them properly aligned.\u003c/strong\u003e\u003c/em\u003e\u003c/p\u003e\n\u003cp\u003e- You can have a map and your network shown in the same project – that’s what this plugin is for!\u003c/p\u003e\n\u003cp\u003e- Loading a new map will erase the one previously displayed, but will leave your network intact.\u003c/p\u003e\n\u003cp\u003e- If you want to delete / modify the map manually, go to the data laboratory and look for nodes that have a label “background_map_node�?\u003c/p\u003e\n\u003cp\u003e- What if you apply a layout (like Force Atlas 2) to your network? Your network will move, but the map is “fixed�? so it will stay as it is.\u003c/p\u003e\n\u003cp\u003e- What if you apply the Geolayout plugin to your network? To do that you need your latitude attribute to be called “lat�? and the longitude called “lng�? for the nodes of your network. If you have that, your network will be nicely placed over the maps.\u003c/p\u003e\n\u003cp\u003eOther questions? Open an issue on Github:\u0026nbsp;\u003ca href\u003d\"https://github.com/seinecle/My-Plugins-for-Gephi/issues\"\u003ehttps://github.com/seinecle/My-Plugins-for-Gephi/issues\u003c/a\u003e\u003c/p\u003e\n\u003cp\u003e\u0026nbsp;\u003c/p\u003e\n\u003ch2\u003eRelease History\u003c/h2\u003e\n\u003cp\u003eSept. 24, 2013: 1.0, first release\u003c/p\u003e\n\u003cp\u003eOct 19, 2014: 1.1, removed labels from background nodes because they were just an inconvenience.\u003c/p\u003e\n\u003cp\u003eJan 5, 2015: 1.2, solved a null pointer exception.\u003c/p\u003e\n\u003cp\u003eMay 13, 2015: added Australian states / territories and built support to easily add more regions from other countries.\u003c/p\u003e\n\u003cp\u003eAug 05, 2015: 1.4, added a new feature: “Weight�? allows to control the thickness of the lines of the borders\u003c/p\u003e",
-      "readme": null,
-      "license": "Apache v2",
-      "authors": [
-        {
-          "name": "Clement Levallois",
-          "email": null,
-          "link": "http://www.clementlevallois.net"
-        }
-      ],
-      "category": "Layout",
-      "last_update": "August 5, 2015",
-      "images": [
-        {
-          "image": "imgs/maps-of-countries/pic_1.jpg",
-          "thumbnail": "imgs/maps-of-countries/pic_1.jpg"
-        }
-      ],
-      "versions": {
-        "0.8.2": {
-          "url": "0.8.2/net-clementlevallois-1.4.1.nbm",
-          "last_update": "August 5, 2015",
-          "plugin_version": null
-        }
-      },
-      "sourcecode": "https://github.com/seinecle/My-Plugins-for-Gephi/tree/master/MapOfCountries",
       "homepage": null
     },
     {
@@ -1658,11 +1345,7 @@
         }
       ],
       "versions": {
-        "0.8.2": {
-          "url": "0.8.2/cz-cvut-fit-krizeji1-edge_betweenness.nbm",
-          "last_update": "May 6, 2014",
-          "plugin_version": null
-        }
+
       },
       "sourcecode": "https://github.com/jaroslav-kuchar/EdgeBetweennessMetric",
       "homepage": null
@@ -1791,38 +1474,6 @@
       "homepage": null
     },
     {
-      "id": "polygon-nodes",
-      "name": "Polygon Nodes",
-      "short_description": "",
-      "long_description": "\u003cp\u003ePolygon shaped nodes\u003cbr\u003e\nDescription:\u003cbr\u003e\nExtends default node renderer to support polygon shaped nodes with arbitrary number of sides. Add a column of Integers in the data table named “Polygon�?, the value corresponds to the number of sides. The renderer must be enabled in the “Manage Renderers�? tab.\u003c/p\u003e\n\u003cp\u003eHow to use:\u003cbr\u003e\n1. In the “Data Laboratory�? tab, add a column with the title “Polygon�? and type “Integer�?.\u003cbr\u003e\n- This number in the Polygon column corresponds to the desired number of sides the node will have in the preview.\u003cbr\u003e\n- NOTE: A null/invalid value (i.e. leaving the column blank or a value less than 3) will result in the node being rendered as a circle.\u003cbr\u003e\n2. In the “Preview�? tab, make sure “Polygon shaped nodes�? is checked in the “Manager renderers�? tab.\u003cbr\u003e\n3. Then in the “Settings�? tab make sure “Enable polygon shaped nodes�? is checked.\u003cbr\u003e\n4. When the preview is refreshed the nodes should be displayed as polygons with sides corresponding to the number in the “Polygon�? column.\u003c/p\u003e",
-      "readme": null,
-      "license": "GPL v2",
-      "authors": [
-        {
-          "name": "Z D Eager",
-          "email": null,
-          "link": "https://github.com/zeager/"
-        }
-      ],
-      "category": "Preview",
-      "last_update": "June 9, 2015",
-      "images": [
-        {
-          "image": "imgs/polygon-nodes/polygonnodes1.png",
-          "thumbnail": "imgs/polygon-nodes/polygonnodes1.png"
-        }
-      ],
-      "versions": {
-        "0.8.2": {
-          "url": "0.8.2/org-zeager-polygonnodes.nbm",
-          "last_update": "June 9, 2015",
-          "plugin_version": null
-        }
-      },
-      "sourcecode": "https://github.com/zeager/gephi-polygonnodes",
-      "homepage": null
-    },
-    {
       "id": "multi-colour-renderer",
       "name": "Multi Colour Renderer",
       "short_description": "",
@@ -1923,38 +1574,6 @@
       "homepage": null
     },
     {
-      "id": "give-color-to-edges",
-      "name": "Give Color To Edges",
-      "short_description": "",
-      "long_description": "\u003cp\u003eColorizes edges according to an RGB or HEX attribute\u003c/p\u003e",
-      "readme": null,
-      "license": "Apache v2",
-      "authors": [
-        {
-          "name": "Clement Levallois",
-          "email": null,
-          "link": "http://www.clementlevallois.net"
-        }
-      ],
-      "category": "Tool",
-      "last_update": "May 11, 2015",
-      "images": [
-        {
-          "image": "imgs/give-color-to-edges/colorwheel.png",
-          "thumbnail": "imgs/give-color-to-edges/colorwheel.png"
-        }
-      ],
-      "versions": {
-        "0.8.2": {
-          "url": "0.8.2/net-clementlevallois-givecolortoedges-1.0.nbm",
-          "last_update": "May 11, 2015",
-          "plugin_version": null
-        }
-      },
-      "sourcecode": "https://github.com/seinecle/Plugins-for-Gephi/tree/master/GiveColorToEdges",
-      "homepage": null
-    },
-    {
       "id": "clique-percolation",
       "name": "Clique Percolation",
       "short_description": "",
@@ -2016,67 +1635,6 @@
         }
       },
       "sourcecode": "https://github.com/mirsamantajbakhsh/CliquePercolationMethod",
-      "homepage": null
-    },
-    {
-      "id": "give-color-to-nodes",
-      "name": "Give color to nodes",
-      "short_description": "",
-      "long_description": "\u003ch2\u003eAuthor\u003c/h2\u003e\n\u003cp\u003eClement Levallois, \u003ca href\u003d\"http://www.em-lyon.com/fr/faculte-recherche-enseignement-superieur/faculte-recherche-emlyon/corps-professoral/Professeurs-permanents/Clement-LEVALLOIS\" target\u003d\"_blank\"\u003eAssistant Professor at EMLYON Business School\u003c/a\u003e.\u003c/p\u003e\n\u003ch2\u003eFunction\u003c/h2\u003e\n\u003cp\u003eReads an attribute for nodes containing a RGB or #hex value. Colors nodes accordingly.\u003c/p\u003e\n\u003ch2\u003eWhen is it useful?\u003c/h2\u003e\n\u003cp\u003eThis plugin gives you full control on the color of your nodes in Gephi. Define the color for each node as an attribute, that’s it!\u003c/p\u003e\n\u003ch2\u003eQuick instructions\u003c/h2\u003e\n\u003cp\u003e1. Your nodes should have an attribute containing “color�? in its name. For example, something like “myColor�? would work.\u003cbr\u003e\n2. The value of this attribute for each node can be RGB (example: “255,0,0″ -\u0026gt; for the red color) or hexadecimal (example: “#00FF00″ for bright green).\u003cbr\u003e\n3. Click on this pic to enlarge the illustration:\u003c/p\u003e\n\u003cp\u003e\u003ca href\u003d\"https://marketplace.gephi.org/wp-content/uploads/2013/11/illustration.jpg?022bbc\"\u003e\u003cimg class\u003d\"alignnone size-medium wp-image-5978\" alt\u003d\"illustration\" src\u003d\"https://marketplace.gephi.org/wp-content/uploads/2013/11/illustration-300x69.jpg?022bbc\" width\u003d\"300\" height\u003d\"69\"\u003e\u003c/a\u003e\u003c/p\u003e\n\u003cp\u003e4. After installing the plugin, restart Gephi.\u003cbr\u003e\n5. A new icon in the form of a color wheel appears on the left of the graph window (below existing icons). Click on the illustration below to see where the icon is exactly located:\u003c/p\u003e\n\u003cp\u003e\u003ca href\u003d\"https://marketplace.gephi.org/wp-content/uploads/2013/11/illustration2.jpg?022bbc\"\u003e\u003cimg class\u003d\"alignnone size-medium wp-image-5984\" alt\u003d\"illustration2\" src\u003d\"https://marketplace.gephi.org/wp-content/uploads/2013/11/illustration2-300x191.jpg?022bbc\" width\u003d\"300\" height\u003d\"191\"\u003e\u003c/a\u003e\u003c/p\u003e\n\u003cp\u003e6. Click on the icon, your nodes will be colored according to their color values!\u003c/p\u003e\n\u003ch2\u003eVersion history\u003c/h2\u003e\n\u003cp\u003e1.0. initial release, 2013.\u003c/p\u003e\n\u003cp\u003e1.1. The plugin now detects node attributes titled with the British spelling “colour�?, in addition to “color�?. April 2015.\u003c/p\u003e\n\u003ch2\u003eAuthor of the plugin\u003c/h2\u003e\n\u003cp\u003e\u003ca href\u003d\"http://www.clementlevallois.net\" target\u003d\"_blank\"\u003eClement Levallois\u003c/a\u003e. The original idea was suggested by \u003ca href\u003d\"http://www.frankvandermost.nl\" target\u003d\"_blank\"\u003eFrank van der Most\u003c/a\u003e.\u003c/p\u003e\n\u003cp\u003e\u0026nbsp;\u003c/p\u003e\n\u003cp\u003e\u0026nbsp;\u003c/p\u003e",
-      "readme": null,
-      "license": "Apache v2",
-      "authors": [
-        {
-          "name": "Clement Levallois",
-          "email": null,
-          "link": "http://www.clementlevallois.net"
-        }
-      ],
-      "category": "Tool",
-      "last_update": "May 7, 2015",
-      "images": [
-        {
-          "image": "imgs/give-color-to-nodes/illustration2.jpg",
-          "thumbnail": "imgs/give-color-to-nodes/illustration2.jpg"
-        },
-        {
-          "image": "imgs/give-color-to-nodes/illustration.jpg",
-          "thumbnail": "imgs/give-color-to-nodes/illustration.jpg"
-        },
-        {
-          "image": "imgs/give-color-to-nodes/colourwheel.png",
-          "thumbnail": "imgs/give-color-to-nodes/colourwheel.png"
-        }
-      ],
-      "versions": {
-        "0.8.2": {
-          "url": "0.8.2/net-clementlevallois-givecolortonodes_1.1.nbm",
-          "last_update": "May 7, 2015",
-          "plugin_version": null
-        }
-      },
-      "sourcecode": "https://github.com/seinecle/My-Plugins-for-Gephi",
-      "homepage": null
-    },
-    {
-      "id": "scripting-plugin",
-      "name": "Scripting Plugin",
-      "short_description": "",
-      "long_description": "\u003ch3\u003eIntroduction\u003c/h3\u003e\n\u003cp\u003eA Python Scripting Console plugin for Gephi.\u003c/p\u003e\n\u003ch3\u003ePlugin Owner’s Notes\u003c/h3\u003e\n\u003cp\u003eThis Scripting Plugin originated as a joint proposal with the \u003ca href\u003d\"http://graphexploration.cond.org/\"\u003eGUESS project\u003c/a\u003e which aimed at porting the Gython language as a console plugin for Gephi during the \u003ca href\u003d\"http://code.google.com/soc/\"\u003eGoogle Summer of Code\u003c/a\u003e 2011 program. For those who are not familiar with it, GUESS is a software that was originally created to support the interactive manipulation of graph structures. This feature is achieved through a mix of a visualization framework and a domain-specific embedded language called Gython.\u003c/p\u003e\n\u003cp\u003eAs you have probably already guessed, Gython is an extension of the \u003ca href\u003d\"http://www.python.org/\"\u003ePython programming language\u003c/a\u003e or, more specifically, \u003ca href\u003d\"http://www.jython.org/\"\u003eJython\u003c/a\u003e, which is a Java implementation of Python. Thus, Gython is backwards-compatible with Python itself and can be used with many different Python 2.5 libraries without much pain.\u003c/p\u003e\n\u003ch4\u003eFeatures\u003c/h4\u003e\n\u003cp\u003eAs of the current version (0.1.1), the plugin has the following features:\u003c/p\u003e\n\u003cp\u003eInspired by the Gython language from the GUESS project (i.e. additional operators for manipulating graphs). Based on Jython 2.5.2, which implements the Python 2.5 specification. Graph structure and attributes manipulation. Filtering support. Support for running layouts. Export API support (i.e. generate PDF/GEXF/PNG exports from within the console). Batch scripts support for automating tasks. Loads third-party Python libraries.\u003c/p\u003e\n\u003ch4\u003eDocumentation\u003c/h4\u003e\n\u003cp\u003eThe official documentation is available on the \u003ca href\u003d\"http://wiki.gephi.org/index.php/Scripting_Plugin\"\u003ewiki page\u003c/a\u003e.\u003c/p\u003e\n\u003ch4\u003eSource Code\u003c/h4\u003e\n\u003cp\u003eThe plugin’s source code is hosted on the \u003ca href\u003d\"https://github.com/gephi/gephi-plugins/tree/python-scripting-plugin\"\u003epython-scripting-plugin\u003c/a\u003e branch of the gephi-plugins repository on GitHub.\u003c/p\u003e\n\u003ch4\u003eFeedback\u003c/h4\u003e\n\u003cp\u003ePlease, leave us your feedback/bug report through our \u003ca href\u003d\"https://github.com/gephi/gephi-plugins/issues?labels\u003dpython-scripting-plugin\"\u003eIssues tracker\u003c/a\u003e on GitHub.\u003c/p\u003e",
-      "readme": null,
-      "license": "GPL v2",
-      "authors": [],
-      "category": "Tool",
-      "last_update": "February 12, 2013",
-      "images": [],
-      "versions": {
-        "0.8.2": {
-          "url": "0.8.2/scripting-plugin-0.1.0-2.zip",
-          "last_update": "February 12, 2013",
-          "plugin_version": null
-        }
-      },
-      "sourcecode": "https://github.com/gephi/gephi-plugins/tree/python-scripting-plugin",
       "homepage": null
     },
     {
@@ -2361,6 +1919,11 @@
       "last_update": "June 24, 2022",
       "images": null,
       "versions": {
+        "0.8.2": {
+          "url": "0.8.2/org-gephi-graphstreaming.nbm",
+          "last_update": "April 18, 2013",
+          "plugin_version": null
+        },
         "0.9.1": {
           "url": "0.9.1/graphstreaming-1.0.3.zip",
           "last_update": "August 10, 2017",
@@ -2458,6 +2021,11 @@
         }
       ],
       "versions": {
+        "0.8.2": {
+          "url": "0.8.2/fr-inria-edelweiss-semantic3.nbm",
+          "last_update": "July 3, 2013",
+          "plugin_version": null
+        },
         "0.9.1": {
           "url": "0.9.1/semantic-1.0.0.nbm",
           "last_update": "August 10, 2017",
@@ -2495,6 +2063,11 @@
         }
       ],
       "versions": {
+        "0.8.2": {
+          "url": "0.8.2/ec-loxa-sna-gephi-031.nbm",
+          "last_update": "June 22, 2013",
+          "plugin_version": null
+        },
         "0.9.1": {
           "url": "0.9.1/loxawebsiteexport-0.3.2.nbm",
           "last_update": "August 10, 2017",
@@ -2542,6 +2115,11 @@
         }
       ],
       "versions": {
+        "0.8.2": {
+          "url": "0.8.2/scripting-plugin-0.1.0-2.zip",
+          "last_update": "February 12, 2013",
+          "plugin_version": null
+        },
         "0.9.1": {
           "url": "0.9.1/scripting.plugin-0.9.1.2.nbm",
           "last_update": "August 10, 2017",
@@ -2715,6 +2293,11 @@
         }
       ],
       "versions": {
+        "0.8.2": {
+          "url": "0.8.2/ExcelCsvImporter-1.43.nbm",
+          "last_update": "November 25, 2014",
+          "plugin_version": null
+        },
         "0.9.1": {
           "url": "0.9.1/ExcelCsvImporter-1.0.0.nbm",
           "last_update": "August 10, 2017",
@@ -2804,6 +2387,11 @@
         }
       ],
       "versions": {
+        "0.8.2": {
+          "url": "0.8.2/org-wouterspekkink-eventgraphlayout.nbm",
+          "last_update": "September 21, 2014",
+          "plugin_version": null
+        },
         "0.9.1": {
           "url": "0.9.1/eventgraphlayout-1.0.0.nbm",
           "last_update": "August 10, 2017",
@@ -2846,6 +2434,11 @@
       "last_update": "June 24, 2022",
       "images": null,
       "versions": {
+        "0.8.2": {
+          "url": "0.8.2/org-wouterspekkink-mdslayout1.nbm",
+          "last_update": "March 18, 2015",
+          "plugin_version": null
+        },
         "0.9.1": {
           "url": "0.9.1/mdslayout-0.9.1.nbm",
           "last_update": "August 10, 2017",
@@ -2943,6 +2536,11 @@
         }
       ],
       "versions": {
+        "0.8.2": {
+          "url": "0.8.2/net-clementlevallois-givecolortonodes_1.1.nbm",
+          "last_update": "May 7, 2015",
+          "plugin_version": null
+        },
         "0.9.1": {
           "url": "0.9.1/givecolortonodes-1.0.0.nbm",
           "last_update": "August 10, 2017",
@@ -2990,6 +2588,11 @@
         }
       ],
       "versions": {
+        "0.8.2": {
+          "url": "0.8.2/net-clementlevallois-givecolortoedges-1.0.nbm",
+          "last_update": "May 11, 2015",
+          "plugin_version": null
+        },
         "0.9.1": {
           "url": "0.9.1/givecolortoedges-1.0.0.nbm",
           "last_update": "August 10, 2017",
@@ -3218,6 +2821,11 @@
       "last_update": "June 3, 2020",
       "images": null,
       "versions": {
+        "0.8.2": {
+          "url": "0.8.2/net-phreakocious-httpgraph.nbm",
+          "last_update": "February 27, 2013",
+          "plugin_version": null
+        },
         "0.9.1": {
           "url": "0.9.1/httpgraph-1.0.8.nbm",
           "last_update": "August 10, 2017",
@@ -3356,6 +2964,11 @@
       "last_update": "June 24, 2022",
       "images": null,
       "versions": {
+        "0.8.2": {
+          "url": "0.8.2/net-clementlevallois-1.4.1.nbm",
+          "last_update": "August 5, 2015",
+          "plugin_version": null
+        },
         "0.9.1": {
           "url": "0.9.1/mapofcountries-1.5.1.nbm",
           "last_update": "August 10, 2017",
@@ -3430,6 +3043,11 @@
       "last_update": "June 28, 2022",
       "images": null,
       "versions": {
+        "0.8.2": {
+          "url": "0.8.2/org-zeager-polygonnodes.nbm",
+          "last_update": "June 9, 2015",
+          "plugin_version": null
+        },
         "0.9.1": {
           "url": "0.9.1/polygon-shaped-nodes-1.0.0.nbm",
           "last_update": "August 10, 2017",
@@ -3556,6 +3174,11 @@
       "last_update": "June 3, 2019",
       "images": null,
       "versions": {
+        "0.8.2": {
+          "url": "0.8.2/at-granul-gephi-shpexporter.nbm",
+          "last_update": "April 16, 2013",
+          "plugin_version": null
+        },
         "0.9.2": {
           "url": "0.9.2/shpexporter-1.1.0.nbm",
           "last_update": "June 3, 2019",
