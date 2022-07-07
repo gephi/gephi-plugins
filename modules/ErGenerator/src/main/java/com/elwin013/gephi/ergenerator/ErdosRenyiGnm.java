@@ -37,7 +37,7 @@ public class ErdosRenyiGnm implements Generator {
 
     public void generate(ContainerLoader containerLoader) {
         this.containerLoader = containerLoader;
-        Progress.start(progressTicket, noOfNodes + noOfNodes + noOfEdges);
+        Progress.start(progressTicket, noOfNodes + noOfEdges + noOfEdges);
         containerLoader.setEdgeDefault(EdgeDirectionDefault.UNDIRECTED);
 
         createNodes(noOfNodes);
@@ -56,25 +56,20 @@ public class ErdosRenyiGnm implements Generator {
     }
 
     private void createEdges(int noOfNodes, int noOfEdges) {
-        List<Pair> edgePairs = new ArrayList<>();
-        for (int i = 0; i < noOfNodes && !cancelled; i++) {
-            // Undirected graph - we can start from i + 1 (no loops!)
-            for (int j = i + 1; j < noOfNodes; j++) {
-                edgePairs.add(new Pair(i, j));
-            }
-            Progress.progress(progressTicket);
-        }
         Random rnd = new Random();
         int i = 0;
         while (i < noOfEdges && !cancelled) {
-            EdgeDraft edgeDraft = containerLoader.factory().newEdgeDraft();
-            Pair pair = edgePairs.get(rnd.nextInt(edgePairs.size()));
-            edgeDraft.setSource(containerLoader.getNode(String.valueOf(pair.x)));
-            edgeDraft.setTarget(containerLoader.getNode(String.valueOf(pair.y)));
-            edgePairs.remove(pair);
-            containerLoader.addEdge(edgeDraft);
-            Progress.progress(progressTicket);
-            i++;
+            int source = rnd.nextInt(noOfNodes);
+            int target = rnd.nextInt(noOfNodes);
+
+            if (source != target && !containerLoader.edgeExists(Integer.toString(source), Integer.toString(target))) {
+                EdgeDraft edgeDraft = containerLoader.factory().newEdgeDraft();
+                edgeDraft.setSource(containerLoader.getNode(Integer.toString(source)));
+                edgeDraft.setTarget(containerLoader.getNode(Integer.toString(target)));
+                containerLoader.addEdge(edgeDraft);
+                Progress.progress(progressTicket);
+                i++;
+            }
         }
     }
 
@@ -110,31 +105,5 @@ public class ErdosRenyiGnm implements Generator {
 
     public void setProgressTicket(ProgressTicket progressTicket) {
         this.progressTicket = progressTicket;
-    }
-
-    static class Pair {
-        int x;
-        int y;
-
-        Pair(int x, int y) {
-            this.x = x;
-            this.y = y;
-        }
-
-        public int getX() {
-            return x;
-        }
-
-        public void setX(int x) {
-            this.x = x;
-        }
-
-        public int getY() {
-            return y;
-        }
-
-        public void setY(int y) {
-            this.y = y;
-        }
     }
 }
