@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
 <!DOCTYPE module_updates PUBLIC "-//NetBeans//DTD Autoupdate Catalog 2.8//EN" "https://netbeans.apache.org/dtds/autoupdate-catalog-2_8.dtd">
-<module_updates timestamp="25/43/18/03/07/2022">
+<module_updates timestamp="49/10/16/17/07/2022">
 
 
 
@@ -85,6 +85,14 @@
         
 
     <message_digest algorithm="SHA-512" value="deb48e3788397d56d2d56dfa924295628c440496cf0a6ea54a0c85a7b80e874326a98fdd775c210b0bdaa89921768f3496366b308866ee38ce4008657c9a9f88"/>
+</module>
+
+<module codenamebase="com.elwin013.gephi.er.generator" distribution="er-generator-1.0.1.nbm" downloadsize="14175" homepage="http://github.com/gephi/gephi-plugins/er-generator" license="AF2C12EC" moduleauthor="Kamil Banach" needsrestart="true" releasedate="2022/07/17" targetcluster="plugins">
+        
+    <manifest OpenIDE-Module="com.elwin013.gephi.er.generator" OpenIDE-Module-Display-Category="Generator" OpenIDE-Module-Implementation-Version="1.0.1" OpenIDE-Module-Long-Description=" This plugin enable user to genrate Erdős-Rényi G(n,p) and G(n,m) random graph model." OpenIDE-Module-Module-Dependencies="org.openide.util.lookup &gt; 8.49, org.openide.util &gt; 9.23, org.gephi.io.importer.api &gt; 0.9.3, org.gephi.io.generator.api &gt; 0.9.3, org.gephi.utils.longtask &gt; 0.9.3" OpenIDE-Module-Name="Erdős-Rényi Generator" OpenIDE-Module-Requires="org.openide.modules.ModuleFormat1" OpenIDE-Module-Short-Description="Erdős-Rényi random graph model generator." OpenIDE-Module-Specification-Version="1.0.1"/>
+        
+
+    <message_digest algorithm="SHA-512" value="268e4ff586f1ae94dc43d300015d9da98b7ffde717ccc289779ccfdbfc32f0b91197531ee251fabc366739c5b5d41427bc0d1191db8d81251f1f5304321cb6fe"/>
 </module>
 
 <module codenamebase="wouterspekkink.eventgraphlayout" distribution="eventgraphlayout-1.0.0.nbm" downloadsize="21461" homepage="http://github.com/gephi/gephi-plugins/eventgraphlayout" moduleauthor="Wouter Spekkink" needsrestart="true" releasedate="2022/06/24" targetcluster="plugins">
@@ -2378,5 +2386,29 @@ Apache 2.0</license>
 -----------------------------------------------------
 License terms:
 Apache 2.0 - http://www.opensource.org/licenses/Apache-2.0</license>
+<license name="AF2C12EC">MIT License
+
+Copyright (c) 2019-2022 Kamil Banach
+
+Permission is hereby granted, free of charge, to any person obtaining
+a copy of this software and associated documentation files (the
+"Software"), to deal in the Software without restriction, including
+without limitation the rights to use, copy, modify, merge, publish,
+distribute, sublicense, and/or sell copies of the Software, and to
+permit persons to whom the Software is furnished to do so, subject to
+the following conditions:
+
+The above copyright notice and this permission notice shall be
+included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
+LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
+WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+-----------------------------------------------------
+MIT</license>
 </module_updates>
 

@@ -1244,9 +1244,7 @@
           "thumbnail": "imgs/edge-betweenness-metric/eb2.png"
         }
       ],
-      "versions": {
-
-      },
+      "versions": {},
       "sourcecode": "https://github.com/jaroslav-kuchar/EdgeBetweennessMetric",
       "homepage": null
     },
@@ -3613,6 +3611,33 @@
         }
       },
       "sourcecode": "https://github.com/atopion/gephi-plugins",
+      "homepage": null
+    },
+    {
+      "id": "er-generator",
+      "name": "Erdős-Rényi Generator",
+      "short_description": "Erdős-Rényi random graph model generator.",
+      "long_description": " This plugin enable user to genrate Erdős-Rényi G(n,p) and G(n,m) random graph model.",
+      "readme": "## Erdős-Rényi model generator\n\nThis plugin enables users to generate Erdős-Rényi G(n,p) and G(n,m) random graph model.\n\n### ER model G(n,p)\n\nGenerates random graph with *n* nodes. Edges are generated randomly with *p* probability.\n\nConstraints:\n- n \u003e 0\n- p \u003e\u003d 0\n- p \u003c\u003d 1\n\n\n### ER model G(n,m)\n\nGenerates random graph with *n* nodes and *m* edges. Edges are created with same probability.\n\nConstraints:\n- n \u003e 0\n- m \u003e\u003d 0\n- m \u003c n (n - 1) / 2\n\n### Bibliography\n\n- P. Erdős, A. Rényi. On random graphs. Publicationes Mathematicae Debrecen, 6: 290-297, 1959\n  * Access \\[13.05.2019\\]: \u003chttps://www.renyi.hu/~p_erdos/1959-11.pdf\u003e\n  * Access \\[13.05.2019\\]: \u003chttp://snap.stanford.edu/class/cs224w-readings/erdos59random.pdf\u003e\n- P. Erdős, A. Rényi. On the evolution of random graphs. Publicationes of the Mathematical\n  Institute of the Hungarian Academy of Sciences, 5: 17-61, 1960.\n  * Access \\[13.05.2019\\]: \u003chttps://www.renyi.hu/~p_erdos/1960-10.pdf\u003e\n  * Access \\[13.05.2019\\]: \u003chttp://snap.stanford.edu/class/cs224w-readings/erdos60random.pdf\u003e\n",
+      "license": "MIT",
+      "authors": [
+        {
+          "name": "Kamil Banach",
+          "email": "kontakt@elwin013.com",
+          "link": "https://github.com/elwin013"
+        }
+      ],
+      "category": "Generator",
+      "last_update": "July 17, 2022",
+      "images": null,
+      "versions": {
+        "0.9.6": {
+          "url": "0.9/er-generator-1.0.1.nbm",
+          "last_update": "July 17, 2022",
+          "plugin_version": "1.0.1"
+        }
+      },
+      "sourcecode": "https://github.com/elwin013/gephi-plugins/tree/er-generator",
       "homepage": null
     }
   ]
