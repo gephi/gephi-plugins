@@ -49,6 +49,11 @@
         </dependency>
         <dependency>
             <groupId>org.gephi</groupId>
+            <artifactId>desktop-project</artifactId>
+
+        </dependency>
+        <dependency>
+            <groupId>org.gephi</groupId>
             <artifactId>utils-longtask</artifactId>
         </dependency>
         <dependency>
