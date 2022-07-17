@@ -1,7 +1,7 @@
 package fr.totetmatt.gephi.twitter.networklogics;
 
-import com.twitter.clientlib.model.FilteredStreamingTweet;
-import com.twitter.clientlib.model.FilteredStreamingTweetMatchingRules;
+import com.twitter.clientlib.model.FilteredStreamingTweetResponse;
+import com.twitter.clientlib.model.FilteredStreamingTweetResponseMatchingRules;
 import com.twitter.clientlib.model.Rule;
 import com.twitter.clientlib.model.Tweet;
 import com.vdurmont.emoji.EmojiParser;
@@ -33,10 +33,10 @@ public class EmojiNetwork extends Networklogic {
     }
 
     @Override
-    public void onStatus(FilteredStreamingTweet streamingTweet) {
+    public void onStatus(FilteredStreamingTweetResponse streamingTweet) {
         long currentMillis = System.currentTimeMillis();
         Tweet tweetData = streamingTweet.getData();
-        List<FilteredStreamingTweetMatchingRules> rules = streamingTweet.getMatchingRules();
+        List<FilteredStreamingTweetResponseMatchingRules> rules = streamingTweet.getMatchingRules();
         if (tweetData != null) {
             List<String> emojis = EmojiParser.extractEmojis(tweetData.getText());
             for (String s : emojis) {

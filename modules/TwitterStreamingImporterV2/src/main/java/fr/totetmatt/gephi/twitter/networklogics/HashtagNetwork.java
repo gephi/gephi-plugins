@@ -4,8 +4,9 @@
  */
 package fr.totetmatt.gephi.twitter.networklogics;
 
-import com.twitter.clientlib.model.FilteredStreamingTweet;
-import com.twitter.clientlib.model.FilteredStreamingTweetMatchingRules;
+
+import com.twitter.clientlib.model.FilteredStreamingTweetResponse;
+import com.twitter.clientlib.model.FilteredStreamingTweetResponseMatchingRules;
 import com.twitter.clientlib.model.FullTextEntities;
 import com.twitter.clientlib.model.HashtagEntity;
 import com.twitter.clientlib.model.Tweet;
@@ -32,7 +33,7 @@ public class HashtagNetwork extends Networklogic {
         return 2;
     }
 
-    private void generateHashtags(Tweet tweetData, List<FilteredStreamingTweetMatchingRules> rules) {
+    private void generateHashtags(Tweet tweetData, List<FilteredStreamingTweetResponseMatchingRules> rules) {
         long currentMillis = System.currentTimeMillis();
         if (tweetData != null) {
             FullTextEntities entities = tweetData.getEntities();
@@ -73,9 +74,9 @@ public class HashtagNetwork extends Networklogic {
     }
 
     @Override
-    public void onStatus(FilteredStreamingTweet streamingTweet) {
+    public void onStatus(FilteredStreamingTweetResponse streamingTweet) {
         Tweet tweetData = streamingTweet.getData();
-        List<FilteredStreamingTweetMatchingRules> rules = streamingTweet.getMatchingRules();
+        List<FilteredStreamingTweetResponseMatchingRules> rules = streamingTweet.getMatchingRules();
         generateHashtags(tweetData, rules);
         var expansions = streamingTweet.getIncludes();
         if (expansions != null) {

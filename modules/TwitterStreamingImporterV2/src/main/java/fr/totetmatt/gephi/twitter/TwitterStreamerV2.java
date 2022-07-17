@@ -1,21 +1,26 @@
 package fr.totetmatt.gephi.twitter;
 
+import com.twitter.clientlib.ApiCallback;
 import com.twitter.clientlib.ApiException;
 import com.twitter.clientlib.TwitterCredentialsBearer;
+import com.twitter.clientlib.api.TweetsApi;
 import com.twitter.clientlib.api.TwitterApi;
 import com.twitter.clientlib.model.AddOrDeleteRulesRequest;
 import com.twitter.clientlib.model.AddRulesRequest;
 import com.twitter.clientlib.model.DeleteRulesRequest;
 import com.twitter.clientlib.model.DeleteRulesRequestDelete;
-import com.twitter.clientlib.model.GetRulesResponse;
 import com.twitter.clientlib.model.Rule;
 import com.twitter.clientlib.model.RuleNoId;
+import com.twitter.clientlib.model.RulesLookupResponse;
+import com.twitter.clientlib.model.StreamingTweetResponse;
 import fr.totetmatt.gephi.twitter.networklogics.Networklogic;
 import fr.totetmatt.gephi.twitter.utils.listener.filtered.TweetsStreamListenersExecutor;
 import fr.totetmatt.gephi.twitter.utils.TwitterApiFields;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.logging.Logger;
 import org.gephi.desktop.project.api.ProjectControllerUI;
 import org.gephi.project.api.Project;
 import org.openide.util.Lookup;
@@ -26,7 +31,7 @@ import org.openide.util.lookup.ServiceProvider;
 public final class TwitterStreamerV2 {
 
     private CredentialProperty credentialProperty = new CredentialProperty();
-    private final TwitterApi apiInstance;
+    private TwitterApi apiInstance;
     private InputStream streamResult;
     private TweetsStreamListenersExecutor tsle;
     private List<Rule> rules;
@@ -43,10 +48,10 @@ public final class TwitterStreamerV2 {
 
     public TwitterStreamerV2() {
         initProjectAndWorkspace();
-        apiInstance = new TwitterApi();
+        
 
         this.loadCredentialProperty();
-        apiInstance.setTwitterCredentials(new TwitterCredentialsBearer(this.getCredentialProperty().getBearerToken()));
+        apiInstance = new TwitterApi(new TwitterCredentialsBearer(this.getCredentialProperty().getBearerToken()));
 
     }
 
@@ -56,7 +61,7 @@ public final class TwitterStreamerV2 {
 
     public void setCredentialProperty(CredentialProperty credentialProperty) {
         this.credentialProperty = credentialProperty;
-        apiInstance.setTwitterCredentials(new TwitterCredentialsBearer(this.getCredentialProperty().getBearerToken()));
+        apiInstance = new TwitterApi(new TwitterCredentialsBearer(this.getCredentialProperty().getBearerToken()));
     }
 
     public void loadCredentialProperty() {
@@ -71,9 +76,25 @@ public final class TwitterStreamerV2 {
         currentNetworkLogic = networklogic;
         currentNetworkLogic.refreshGraphModel(this.rules);
         if (useSampleStream) {
-            streamResult = apiInstance.tweets().sampleStream(TwitterApiFields.expansionsFields, TwitterApiFields.tweetFields, TwitterApiFields.userFields, TwitterApiFields.mediaFields, null, null, 0);
+           streamResult = apiInstance.tweets().sampleStream()
+                    .backfillMinutes(0)
+                    .tweetFields(TwitterApiFields.tweetFields)
+                    .expansions(TwitterApiFields.expansionsFields)
+                    .userFields(TwitterApiFields.userFields)
+                    .mediaFields(TwitterApiFields.mediaFields).executeWithHttpInfo();
+                    
+              
+            
+            //streamResult = apiInstance.tweets().sampleStream(TwitterApiFields.expansionsFields, TwitterApiFields.tweetFields, TwitterApiFields.userFields, TwitterApiFields.mediaFields, null, null, 0);
         } else {
-            streamResult = apiInstance.tweets().searchStream(TwitterApiFields.expansionsFields, TwitterApiFields.tweetFields, TwitterApiFields.userFields, TwitterApiFields.mediaFields, null, null, 0);
+                   streamResult = apiInstance.tweets().searchStream()
+                    .backfillMinutes(0)
+                    
+                    .tweetFields(TwitterApiFields.tweetFields)
+                    .expansions(TwitterApiFields.expansionsFields)
+                    .userFields(TwitterApiFields.userFields)
+                    .mediaFields(TwitterApiFields.mediaFields).executeWithHttpInfo();
+            //streamResult = apiInstance.tweets().searchStream(TwitterApiFields.expansionsFields, TwitterApiFields.tweetFields, TwitterApiFields.userFields, TwitterApiFields.mediaFields, null, null, 0);
         }
         tsle = new TweetsStreamListenersExecutor(streamResult, currentNetworkLogic.getGraphModel().getGraph());
         tsle.addListener(currentNetworkLogic);
@@ -88,7 +109,8 @@ public final class TwitterStreamerV2 {
     public List<Rule> refreshRules() throws ApiException {
         try {
             if (!this.credentialProperty.getBearerToken().isEmpty()) {
-                GetRulesResponse getRules = apiInstance.tweets().getRules(null, 100, null);
+                RulesLookupResponse getRules = apiInstance.tweets().getRules().execute();
+                
                 if(getRules!=null){
                 rules = getRules.getData();
                 if(currentNetworkLogic!=null){
@@ -116,7 +138,8 @@ public final class TwitterStreamerV2 {
             final DeleteRulesRequest deleteRuleRequest = new DeleteRulesRequest();
             deleteRuleRequest.setDelete(deleteRequestDelete);
             final AddOrDeleteRulesRequest addOrDeleteRulesRequest = new AddOrDeleteRulesRequest(deleteRuleRequest);
-            return apiInstance.tweets().addOrDeleteRules(1, addOrDeleteRulesRequest, false).getData();
+            
+            return apiInstance.tweets().addOrDeleteRules(addOrDeleteRulesRequest).execute().getData();
         }
         return this.rules;
 
@@ -129,7 +152,7 @@ public final class TwitterStreamerV2 {
         final AddRulesRequest addRule = new AddRulesRequest();
         addRule.addAddItem(rule);
         final AddOrDeleteRulesRequest addRequest = new AddOrDeleteRulesRequest(addRule);
-        return apiInstance.tweets().addOrDeleteRules(1, addRequest, false).getData();
+        return apiInstance.tweets().addOrDeleteRules(addRequest).execute().getData();
     }
 
 }

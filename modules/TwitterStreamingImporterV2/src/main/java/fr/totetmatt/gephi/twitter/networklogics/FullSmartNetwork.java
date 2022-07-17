@@ -2,8 +2,8 @@ package fr.totetmatt.gephi.twitter.networklogics;
 
 import fr.totetmatt.gephi.twitter.networklogics.utils.ExpansionParser;
 import com.twitter.clientlib.model.CashtagEntity;
-import com.twitter.clientlib.model.FilteredStreamingTweet;
-import com.twitter.clientlib.model.FilteredStreamingTweetMatchingRules;
+import com.twitter.clientlib.model.FilteredStreamingTweetResponse;
+import com.twitter.clientlib.model.FilteredStreamingTweetResponseMatchingRules;
 import com.twitter.clientlib.model.FullTextEntities;
 import com.twitter.clientlib.model.HashtagEntity;
 import com.twitter.clientlib.model.MentionEntity;
@@ -50,7 +50,7 @@ public class FullSmartNetwork extends Networklogic {
         IN_REPLY_TO = graphModel.addEdgeType("in_reply_to");
     }
 
-    private void generateHashtags(FullTextEntities entities, Node tweet, ExpansionParser.ExpansionData expansionData, List<FilteredStreamingTweetMatchingRules> rules) {
+    private void generateHashtags(FullTextEntities entities, Node tweet, ExpansionParser.ExpansionData expansionData, List<FilteredStreamingTweetResponseMatchingRules> rules) {
         if (entities.getHashtags() != null) {
             List<HashtagEntity> hashtags = entities.getHashtags();
             if (hashtags != null) {
@@ -66,7 +66,7 @@ public class FullSmartNetwork extends Networklogic {
         }
     }
 
-    private void generateCashtags(FullTextEntities entities, Node tweet, ExpansionParser.ExpansionData expansionData, List<FilteredStreamingTweetMatchingRules> rules) {
+    private void generateCashtags(FullTextEntities entities, Node tweet, ExpansionParser.ExpansionData expansionData, List<FilteredStreamingTweetResponseMatchingRules> rules) {
         if (entities.getCashtags() != null) {
             List<CashtagEntity> cashtags = entities.getCashtags();
             if (cashtags != null) {
@@ -79,7 +79,7 @@ public class FullSmartNetwork extends Networklogic {
         }
     }
 
-    private void generateUrls(FullTextEntities entities, Node tweet, ExpansionParser.ExpansionData expansionData, List<FilteredStreamingTweetMatchingRules> rules) {
+    private void generateUrls(FullTextEntities entities, Node tweet, ExpansionParser.ExpansionData expansionData, List<FilteredStreamingTweetResponseMatchingRules> rules) {
         var urls = entities.getUrls();
         if (urls != null) {
             for (UrlEntity link : urls) {
@@ -90,7 +90,7 @@ public class FullSmartNetwork extends Networklogic {
         }
     }
 
-    private void generateMentions(FullTextEntities entities, Node tweet, ExpansionParser.ExpansionData expansionData, List<FilteredStreamingTweetMatchingRules> rules) {
+    private void generateMentions(FullTextEntities entities, Node tweet, ExpansionParser.ExpansionData expansionData, List<FilteredStreamingTweetResponseMatchingRules> rules) {
         List<MentionEntity> mentions = entities.getMentions();
         if (mentions != null) {
             for (MentionEntity mention : mentions) {
@@ -117,7 +117,7 @@ public class FullSmartNetwork extends Networklogic {
         }
     }
 
-    private void createTweet(Tweet tweetData, ExpansionParser.ExpansionData expansionData, List<FilteredStreamingTweetMatchingRules> rules) {
+    private void createTweet(Tweet tweetData, ExpansionParser.ExpansionData expansionData, List<FilteredStreamingTweetResponseMatchingRules> rules) {
 
         Node tweet = createTweet(tweetData, rules);
         tweet.addTimestamp(expansionData.getCurrentMillis());
@@ -173,9 +173,9 @@ public class FullSmartNetwork extends Networklogic {
     }
 
     @Override
-    public void onStatus(FilteredStreamingTweet streamingTweet) {
+    public void onStatus(FilteredStreamingTweetResponse streamingTweet) {
 
-        List<FilteredStreamingTweetMatchingRules> rules = streamingTweet.getMatchingRules();
+        List<FilteredStreamingTweetResponseMatchingRules> rules = streamingTweet.getMatchingRules();
         ExpansionParser.ExpansionData expansionData = ExpansionParser.parse(streamingTweet.getIncludes());
 
         Tweet tweetData = streamingTweet.getData();
