@@ -1,0 +1,5 @@
+Manifest-Version: 1.0
+OpenIDE-Module-Name: Erdős-Rényi Generator
+OpenIDE-Module-Short-Description: Erdős-Rényi random graph model generator.
+OpenIDE-Module-Long-Description:  This plugin enable user to genrate Erdős-Rényi G(n,p) and G(n,m) random graph model.
+OpenIDE-Module-Display-Category: Generator

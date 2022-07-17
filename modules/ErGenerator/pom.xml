@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <artifactId>gephi-plugin-parent</artifactId>
+        <groupId>org.gephi</groupId>
+        <version>0.9.3</version>
+    </parent>
+
+    <groupId>com.elwin013.gephi</groupId>
+    <artifactId>er-generator</artifactId>
+    <version>1.0.1</version>
+    <packaging>nbm</packaging>
+
+    <name>Erdos-Renyi Generator</name>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.netbeans.api</groupId>
+            <artifactId>org-openide-util-lookup</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.netbeans.api</groupId>
+            <artifactId>org-openide-util</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.gephi</groupId>
+            <artifactId>io-importer-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.gephi</groupId>
+            <artifactId>io-generator-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.gephi</groupId>
+            <artifactId>utils-longtask</artifactId>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.netbeans.utilities</groupId>
+                <artifactId>nbm-maven-plugin</artifactId>
+                <configuration>
+                    <licenseName>MIT</licenseName>
+                    <licenseFile>LICENSE.txt</licenseFile>
+                    <author>Kamil Banach</author>
+                    <authorEmail>kontakt@elwin013.com</authorEmail>
+                    <authorUrl>https://github.com/elwin013</authorUrl>
+                    <sourceCodeUrl>https://github.com/elwin013/gephi-plugins/tree/er-generator</sourceCodeUrl>
+                    <publicPackages>
+                        <!-- Insert public packages -->
+                    </publicPackages>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+</project>
+
+
