@@ -1,28 +1,25 @@
 package fr.totetmatt.gephi.twitter;
 
-import com.twitter.clientlib.ApiCallback;
 import com.twitter.clientlib.ApiException;
 import com.twitter.clientlib.TwitterCredentialsBearer;
-import com.twitter.clientlib.api.TweetsApi;
 import com.twitter.clientlib.api.TwitterApi;
 import com.twitter.clientlib.model.AddOrDeleteRulesRequest;
+import com.twitter.clientlib.model.AddOrDeleteRulesResponse;
 import com.twitter.clientlib.model.AddRulesRequest;
 import com.twitter.clientlib.model.DeleteRulesRequest;
 import com.twitter.clientlib.model.DeleteRulesRequestDelete;
 import com.twitter.clientlib.model.Rule;
 import com.twitter.clientlib.model.RuleNoId;
 import com.twitter.clientlib.model.RulesLookupResponse;
-import com.twitter.clientlib.model.StreamingTweetResponse;
 import fr.totetmatt.gephi.twitter.networklogics.Networklogic;
 import fr.totetmatt.gephi.twitter.utils.listener.filtered.TweetsStreamListenersExecutor;
 import fr.totetmatt.gephi.twitter.utils.TwitterApiFields;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.logging.Logger;
 import org.gephi.desktop.project.api.ProjectControllerUI;
 import org.gephi.project.api.Project;
+import org.openide.util.Exceptions;
 import org.openide.util.Lookup;
 import org.openide.util.NbPreferences;
 import org.openide.util.lookup.ServiceProvider;
@@ -42,8 +39,6 @@ public final class TwitterStreamerV2 {
         if (currentProject == null) {
             projectController.newProject();
         }
-        
-        
     }
 
     public TwitterStreamerV2() {
@@ -82,19 +77,13 @@ public final class TwitterStreamerV2 {
                     .expansions(TwitterApiFields.expansionsFields)
                     .userFields(TwitterApiFields.userFields)
                     .mediaFields(TwitterApiFields.mediaFields).executeWithHttpInfo();
-                    
-              
-            
-            //streamResult = apiInstance.tweets().sampleStream(TwitterApiFields.expansionsFields, TwitterApiFields.tweetFields, TwitterApiFields.userFields, TwitterApiFields.mediaFields, null, null, 0);
         } else {
                    streamResult = apiInstance.tweets().searchStream()
                     .backfillMinutes(0)
-                    
                     .tweetFields(TwitterApiFields.tweetFields)
                     .expansions(TwitterApiFields.expansionsFields)
                     .userFields(TwitterApiFields.userFields)
                     .mediaFields(TwitterApiFields.mediaFields).executeWithHttpInfo();
-            //streamResult = apiInstance.tweets().searchStream(TwitterApiFields.expansionsFields, TwitterApiFields.tweetFields, TwitterApiFields.userFields, TwitterApiFields.mediaFields, null, null, 0);
         }
         tsle = new TweetsStreamListenersExecutor(streamResult, currentNetworkLogic.getGraphModel().getGraph());
         tsle.addListener(currentNetworkLogic);
@@ -119,12 +108,12 @@ public final class TwitterStreamerV2 {
                 return rules;
                 }
             }
-        } catch(Exception e){
-            // Exceptions.printStackTrace(e);
+        } catch(ApiException e){
+             Exceptions.printStackTrace(e);
             // The sdk don't parse correctly if there is no rules.
             // So this catch is needed
         }
-        return rules=new ArrayList<Rule>();
+        return rules=new ArrayList<>();
     }
 
     public List<Rule> getRules() throws ApiException {
@@ -138,21 +127,37 @@ public final class TwitterStreamerV2 {
             final DeleteRulesRequest deleteRuleRequest = new DeleteRulesRequest();
             deleteRuleRequest.setDelete(deleteRequestDelete);
             final AddOrDeleteRulesRequest addOrDeleteRulesRequest = new AddOrDeleteRulesRequest(deleteRuleRequest);
-            
-            return apiInstance.tweets().addOrDeleteRules(addOrDeleteRulesRequest).execute().getData();
+            AddOrDeleteRulesResponse response = apiInstance.tweets().addOrDeleteRules(addOrDeleteRulesRequest).execute();
+            if(response.getErrors()!=null) {
+            response.getErrors().forEach(error -> {
+                Exceptions.printStackTrace(new Exception(error.toJson()));
+            });
+        }
+            return response.getData();
         }
         return this.rules;
 
     }
 
     public List<Rule> addRule(String tag, String value) throws ApiException {
+        
         final RuleNoId rule = new RuleNoId();
         rule.setTag(tag);
         rule.setValue(value);
         final AddRulesRequest addRule = new AddRulesRequest();
         addRule.addAddItem(rule);
         final AddOrDeleteRulesRequest addRequest = new AddOrDeleteRulesRequest(addRule);
-        return apiInstance.tweets().addOrDeleteRules(addRequest).execute().getData();
+        AddOrDeleteRulesResponse response = apiInstance.tweets().addOrDeleteRules(addRequest).execute();
+        if(response.getErrors()!=null) {
+            response.getErrors().forEach(error -> {
+                String msg = error.toJson()+
+                        "\n\n" +
+                        "Check also that your application have the right access level to use the Advanced Operators \n"+
+                        "More info at https://developer.twitter.com/en/docs/twitter-api/tweets/filtered-stream/integrate/build-a-rule \n\n";
+                Exceptions.printStackTrace(new Exception(msg));
+            });
+        }
+        return response.getData();
     }
 
 }
