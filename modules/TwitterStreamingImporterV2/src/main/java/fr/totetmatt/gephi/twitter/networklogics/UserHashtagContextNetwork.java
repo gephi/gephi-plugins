@@ -1,8 +1,9 @@
 package fr.totetmatt.gephi.twitter.networklogics;
 
+import com.twitter.clientlib.model.FilteredStreamingTweetResponse;
+import com.twitter.clientlib.model.FilteredStreamingTweetResponseMatchingRules;
 import fr.totetmatt.gephi.twitter.networklogics.utils.ExpansionParser;
-import com.twitter.clientlib.model.FilteredStreamingTweet;
-import com.twitter.clientlib.model.FilteredStreamingTweetMatchingRules;
+
 import com.twitter.clientlib.model.FullTextEntities;
 import com.twitter.clientlib.model.HashtagEntity;
 import com.twitter.clientlib.model.MentionEntity;
@@ -57,7 +58,7 @@ public class UserHashtagContextNetwork extends Networklogic {
         }
     }
 
-    private void createProjection(Tweet tweetData, ExpansionParser.ExpansionData expansionData, List<FilteredStreamingTweetMatchingRules> rules) {
+    private void createProjection(Tweet tweetData, ExpansionParser.ExpansionData expansionData, List<FilteredStreamingTweetResponseMatchingRules> rules) {
 
         if (tweetData != null) {
             FullTextEntities entities = tweetData.getEntities();
@@ -125,9 +126,9 @@ public class UserHashtagContextNetwork extends Networklogic {
     }
 
     @Override
-    public void onStatus(FilteredStreamingTweet streamingTweet) {
+    public void onStatus(FilteredStreamingTweetResponse streamingTweet) {
         ExpansionParser.ExpansionData expansionData = ExpansionParser.parse(streamingTweet.getIncludes());
-        List<FilteredStreamingTweetMatchingRules> rules = streamingTweet.getMatchingRules();
+        List<FilteredStreamingTweetResponseMatchingRules> rules = streamingTweet.getMatchingRules();
 
         Tweet tweetData = streamingTweet.getData();
         createProjection(tweetData, expansionData, rules);

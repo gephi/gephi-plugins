@@ -1,7 +1,8 @@
 package fr.totetmatt.gephi.twitter.networklogics;
 
-import com.twitter.clientlib.model.FilteredStreamingTweet;
-import com.twitter.clientlib.model.FilteredStreamingTweetMatchingRules;
+
+import com.twitter.clientlib.model.FilteredStreamingTweetResponse;
+import com.twitter.clientlib.model.FilteredStreamingTweetResponseMatchingRules;
 import com.twitter.clientlib.model.Media;
 import com.twitter.clientlib.model.Rule;
 import com.twitter.clientlib.model.Tweet;
@@ -29,18 +30,18 @@ import org.openide.util.Lookup;
  *
  * @author totetmatt
  */
-public abstract class Networklogic implements Comparable, TweetsStreamListener<FilteredStreamingTweet> {
+public abstract class Networklogic implements Comparable, TweetsStreamListener<FilteredStreamingTweetResponse> {
 
     protected static final Logger logger = Logger.getLogger(Networklogic.class.getName());
 
-    abstract public void onStatus(FilteredStreamingTweet newTweet);
+    abstract public void onStatus(FilteredStreamingTweetResponse newTweet);
 
     protected GraphModel graphModel;
 
     protected Set<String> rulesTokenized = new HashSet<>();
 
     @Override
-    final synchronized public void actionOnTweetsStream(FilteredStreamingTweet newTweet) {
+    final synchronized public void actionOnTweetsStream(FilteredStreamingTweetResponse newTweet) {
 
         if (newTweet == null) {
             logger.log(Level.SEVERE, "Error: actionOnTweetsStream - streamingTweet is null ");
@@ -151,7 +152,7 @@ public abstract class Networklogic implements Comparable, TweetsStreamListener<F
 
     }
 
-    final protected Node createNode(String id, String label, NodeType type, List<FilteredStreamingTweetMatchingRules> rules) {
+    final protected Node createNode(String id, String label, NodeType type, List<FilteredStreamingTweetResponseMatchingRules> rules) {
         Node node = graphModel.getGraph().getNode(id);
 
         if (node == null) {
@@ -166,7 +167,7 @@ public abstract class Networklogic implements Comparable, TweetsStreamListener<F
             node.setX((float) ((0.01 + Math.random()) * 1000) - 500);
             node.setY((float) ((0.01 + Math.random()) * 1000) - 500);
             if (rules != null) {
-                for (FilteredStreamingTweetMatchingRules r : rules) {
+                for (FilteredStreamingTweetResponseMatchingRules r : rules) {
                     node.setAttribute("twitter_tag_" + r.getTag(), true);
                 }
             }
@@ -176,7 +177,7 @@ public abstract class Networklogic implements Comparable, TweetsStreamListener<F
         return node;
     }
 
-    final protected Node createTweet(Tweet status, List<FilteredStreamingTweetMatchingRules> rules) {
+    final protected Node createTweet(Tweet status, List<FilteredStreamingTweetResponseMatchingRules> rules) {
         Node tweet = createNode(status.getId(), status.getText(), NodeType.TWEET, rules);
         tweet.setAttribute(TwitterNodeColumn.NODE_CREATED_AT.label, status.getCreatedAt().toString());
         tweet.setAttribute(TwitterNodeColumn.NODE_LANG.label, status.getLang());
@@ -185,27 +186,27 @@ public abstract class Networklogic implements Comparable, TweetsStreamListener<F
         return tweet;
     }
 
-    final protected Node createMedia(Media media, List<FilteredStreamingTweetMatchingRules> rules) {
+    final protected Node createMedia(Media media, List<FilteredStreamingTweetResponseMatchingRules> rules) {
         Node mediaNode = createNode(media.getMediaKey(), media.getMediaKey(), NodeType.MEDIA, rules);
         mediaNode.setAttribute(TwitterNodeColumn.NODE_LANG.label, media.getType());
         return mediaNode;
     }
 
-    final protected Node createSymbol(String symbol, List<FilteredStreamingTweetMatchingRules> rules) {
+    final protected Node createSymbol(String symbol, List<FilteredStreamingTweetResponseMatchingRules> rules) {
         symbol = "$" + symbol;
         return createNode(symbol, symbol, NodeType.SYMBOL, rules);
     }
 
-    final protected Node createUrl(String url, List<FilteredStreamingTweetMatchingRules> rules) {
+    final protected Node createUrl(String url, List<FilteredStreamingTweetResponseMatchingRules> rules) {
         return createNode(url, url, NodeType.URL, rules);
     }
 
-    final protected Node createHashtag(String hashtag, List<FilteredStreamingTweetMatchingRules> rules) {
+    final protected Node createHashtag(String hashtag, List<FilteredStreamingTweetResponseMatchingRules> rules) {
         hashtag = "#" + hashtag.toLowerCase();
         return createNode(hashtag, hashtag, NodeType.HASHTAG, rules);
     }
 
-    final protected Node createUser(User u, List<FilteredStreamingTweetMatchingRules> rules) {
+    final protected Node createUser(User u, List<FilteredStreamingTweetResponseMatchingRules> rules) {
         String screenName = "@" + u.getUsername().toLowerCase();
         Node user = createNode(u.getId(), screenName, NodeType.USER, rules);
         user.setAttribute(TwitterNodeColumn.NODE_USER_DESCRIPTION.label, u.getDescription());
@@ -216,7 +217,7 @@ public abstract class Networklogic implements Comparable, TweetsStreamListener<F
         return user;
     }
 
-    final protected Node createEmoji(String emoji_utf8, List<FilteredStreamingTweetMatchingRules> rules) {
+    final protected Node createEmoji(String emoji_utf8, List<FilteredStreamingTweetResponseMatchingRules> rules) {
         Node emoji = createNode(EmojiParser.parseToHtmlDecimal(emoji_utf8), emoji_utf8, NodeType.EMOJI, rules);
         emoji.setAttribute(TwitterNodeColumn.NODE_EMOJI_UTF8.label, emoji_utf8);
         emoji.setAttribute(TwitterNodeColumn.NODE_EMOJI_ALIAS.label, EmojiParser.parseToAliases(emoji_utf8));
@@ -224,7 +225,7 @@ public abstract class Networklogic implements Comparable, TweetsStreamListener<F
         return emoji;
     }
 
-    final protected Node createUser(String id, String username, List<FilteredStreamingTweetMatchingRules> rules) {
+    final protected Node createUser(String id, String username, List<FilteredStreamingTweetResponseMatchingRules> rules) {
         String screenName = "@" + username.toLowerCase();
         Node user = createNode(id, screenName, NodeType.USER, rules);
         return user;

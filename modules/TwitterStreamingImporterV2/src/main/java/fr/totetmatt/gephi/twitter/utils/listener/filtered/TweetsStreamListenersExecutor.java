@@ -30,6 +30,7 @@ import com.twitter.clientlib.model.*;
 
 import fr.totetmatt.gephi.twitter.utils.listener.ITweetsQueue;
 import fr.totetmatt.gephi.twitter.utils.listener.LinkedListTweetsQueue;
+import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.gephi.graph.api.Graph;
@@ -46,7 +47,7 @@ public class TweetsStreamListenersExecutor {
 
     private ProgressTicket progressTicket;
     protected static final Logger logger = Logger.getLogger(TweetsStreamListenersExecutor.class.getName());
-    private final ITweetsQueue<FilteredStreamingTweet> tweetsQueue;
+    private final ITweetsQueue<FilteredStreamingTweetResponse> tweetsQueue;
     private final List<TweetsStreamListener> listeners = new ArrayList<>();
     private final InputStream stream;
     private volatile boolean isRunning = true;
@@ -111,7 +112,7 @@ public class TweetsStreamListenersExecutor {
         }
 
         private void processTweets() {
-            FilteredStreamingTweet streamingTweet;
+            FilteredStreamingTweetResponse streamingTweet;
             try {
                 while (isRunning) {
                     graphModel.getGraph().writeLock(); 
@@ -158,8 +159,8 @@ public class TweetsStreamListenersExecutor {
                         continue;
                     }
                     try {
-                        tweetsQueue.add(FilteredStreamingTweet.fromJson(line));
-                    } catch (Exception e) {
+                        tweetsQueue.add(FilteredStreamingTweetResponse.fromJson(line));
+                    } catch (IOException e) {
                         Exceptions.printStackTrace(e);
                     }
                 }

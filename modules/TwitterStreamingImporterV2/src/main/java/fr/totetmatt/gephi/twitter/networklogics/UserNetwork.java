@@ -1,8 +1,8 @@
 package fr.totetmatt.gephi.twitter.networklogics;
 
+import com.twitter.clientlib.model.FilteredStreamingTweetResponse;
 import fr.totetmatt.gephi.twitter.networklogics.utils.ExpansionParser;
-import com.twitter.clientlib.model.FilteredStreamingTweet;
-import com.twitter.clientlib.model.FilteredStreamingTweetMatchingRules;
+import com.twitter.clientlib.model.FilteredStreamingTweetResponseMatchingRules;
 import com.twitter.clientlib.model.FullTextEntities;
 import com.twitter.clientlib.model.MentionEntity;
 import com.twitter.clientlib.model.Rule;
@@ -49,7 +49,7 @@ public class UserNetwork extends Networklogic {
         MENTION = graphModel.addEdgeType("mention");
     }
 
-    private void generateUsers(Tweet tweetData, ExpansionParser.ExpansionData expansionData, List<FilteredStreamingTweetMatchingRules> rules) {
+    private void generateUsers(Tweet tweetData, ExpansionParser.ExpansionData expansionData, List<FilteredStreamingTweetResponseMatchingRules> rules) {
         long currentMillis = System.currentTimeMillis();
         if (tweetData != null) {
             var authorId = tweetData.getAuthorId();
@@ -100,9 +100,9 @@ public class UserNetwork extends Networklogic {
     }
 
     @Override
-    public void onStatus(FilteredStreamingTweet streamingTweet) {
+    public void onStatus(FilteredStreamingTweetResponse streamingTweet) {
 
-        List<FilteredStreamingTweetMatchingRules> rules = streamingTweet.getMatchingRules();
+        List<FilteredStreamingTweetResponseMatchingRules> rules = streamingTweet.getMatchingRules();
         ExpansionParser.ExpansionData expansionData = ExpansionParser.parse(streamingTweet.getIncludes());
 
         Tweet tweetData = streamingTweet.getData();

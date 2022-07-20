@@ -12,7 +12,7 @@
     </properties>
     <groupId>fr.totetmatt</groupId>
     <artifactId>twitter-v2</artifactId>
-    <version>2.0.1</version>
+    <version>2.0.2</version>
     <packaging>nbm</packaging>
 
     <name>Twitter Streaming Importer V2</name>
@@ -49,6 +49,11 @@
         </dependency>
         <dependency>
             <groupId>org.gephi</groupId>
+            <artifactId>desktop-project</artifactId>
+
+        </dependency>
+        <dependency>
+            <groupId>org.gephi</groupId>
             <artifactId>utils-longtask</artifactId>
         </dependency>
         <dependency>
@@ -69,7 +74,7 @@
            <dependency>
             <groupId>com.twitter</groupId>
             <artifactId>twitter-api-java-sdk</artifactId>
-            <version>1.2.4</version>
+            <version>2.0.2</version>
         </dependency>
     </dependencies>
 
