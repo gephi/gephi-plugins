@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
 <!DOCTYPE module_updates PUBLIC "-//NetBeans//DTD Autoupdate Catalog 2.8//EN" "https://netbeans.apache.org/dtds/autoupdate-catalog-2_8.dtd">
-<module_updates timestamp="49/10/16/17/07/2022">
+<module_updates timestamp="04/24/06/20/07/2022">
 
 
 
@@ -419,12 +419,12 @@
     <message_digest algorithm="SHA-512" value="4f552cc0e86c51ab9f62a851a1456e13afe3b1442cc92efd55cee626f44cfa3dc46781671f842a583b2bd289821059a257aebea04919a8a2f27261c69c6a01f9"/>
 </module>
 
-<module codenamebase="fr.totetmatt.twitter.v2" distribution="twitter-v2-2.0.1.nbm" downloadsize="9402280" homepage="http://github.com/gephi/gephi-plugins/twitter-v2" license="E9F38623" moduleauthor="totetmatt" needsrestart="true" releasedate="2022/06/24" targetcluster="plugins">
+<module codenamebase="fr.totetmatt.twitter.v2" distribution="twitter-v2-2.0.2.nbm" downloadsize="9415511" homepage="http://github.com/gephi/gephi-plugins/twitter-v2" license="E9F38623" moduleauthor="totetmatt" needsrestart="true" releasedate="2022/07/20" targetcluster="plugins">
         
-    <manifest OpenIDE-Module="fr.totetmatt.twitter.v2" OpenIDE-Module-Display-Category="Import" OpenIDE-Module-Implementation-Version="2.0.1" OpenIDE-Module-Long-Description="&lt;p&gt;This plugin connects to the Twitter Streaming API and represents tweets as graph in realtime.&lt;/p&gt;" OpenIDE-Module-Module-Dependencies="org.openide.awt &gt; 7.84, org.openide.windows &gt; 6.93, org.netbeans.modules.settings/1 &gt; 1.65, org.openide.util.lookup &gt; 8.50, org.openide.util &gt; 9.24, org.gephi.graph.api &gt; 0.9.6, org.gephi.project.api &gt; 0.9.6, org.gephi.utils.longtask &gt; 0.9.6" OpenIDE-Module-Name="Twitter Streaming Importer V2" OpenIDE-Module-Requires="org.openide.modules.ModuleFormat1" OpenIDE-Module-Short-Description="Realtime Twitter Graph Importer" OpenIDE-Module-Specification-Version="2.0.1"/>
+    <manifest OpenIDE-Module="fr.totetmatt.twitter.v2" OpenIDE-Module-Display-Category="Import" OpenIDE-Module-Implementation-Version="2.0.2" OpenIDE-Module-Long-Description="&lt;p&gt;This plugin connects to the Twitter Streaming API and represents tweets as graph in realtime.&lt;/p&gt;" OpenIDE-Module-Module-Dependencies="org.openide.awt &gt; 7.84, org.openide.windows &gt; 6.93, org.netbeans.modules.settings/1 &gt; 1.65, org.openide.util.lookup &gt; 8.50, org.openide.util &gt; 9.24, org.gephi.graph.api &gt; 0.9.6, org.gephi.project.api &gt; 0.9.6, org.gephi.desktop.project &gt; 0.9.6, org.gephi.utils.longtask &gt; 0.9.6" OpenIDE-Module-Name="Twitter Streaming Importer V2" OpenIDE-Module-Requires="org.openide.modules.ModuleFormat1" OpenIDE-Module-Short-Description="Realtime Twitter Graph Importer" OpenIDE-Module-Specification-Version="2.0.2"/>
         
 
-    <message_digest algorithm="SHA-512" value="38ab67d481d570a91a251bbbf37068769d14ca0132305e13dcb33f2aa620772807166ed3e726db94831102271af7f6a70d8ea43037d700f27f95dc75100b65b9"/>
+    <message_digest algorithm="SHA-512" value="f6bd594e0303a29e4684d4ad73f6259444252dc7fe7d54ea49a7eaa9a000ede8d98d3298669b747e0d51e74fc5d124dfbb8addc5613f8604e7adb478abb65e96"/>
 </module>
 
 <module codenamebase="personable.solutions.vector.calculator" distribution="vector-calculator-0.5.0.nbm" downloadsize="15968" homepage="http://github.com/gephi/gephi-plugins/vector-calculator" moduleauthor="Jonas Persson" needsrestart="true" releasedate="2022/06/24" targetcluster="plugins">
