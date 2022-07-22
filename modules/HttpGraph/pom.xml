@@ -9,7 +9,7 @@
 
     <groupId>net.phreakocious</groupId>
     <artifactId>httpgraph</artifactId>
-    <version>1.0.8</version>
+    <version>1.0.9</version>
     <packaging>nbm</packaging>
 
     <name>HttpGraph</name>
@@ -63,7 +63,7 @@
         <dependency>
             <groupId>org.membrane-soa</groupId>
             <artifactId>service-proxy-core</artifactId>
-            <version>4.3.0</version>
+            <version>4.7.3</version>
             <type>jar</type>
         </dependency>
         <dependency>

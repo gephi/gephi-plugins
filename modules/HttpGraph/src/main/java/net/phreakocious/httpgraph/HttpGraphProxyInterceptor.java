@@ -33,7 +33,7 @@ public class HttpGraphProxyInterceptor extends AbstractInterceptor {
 			referer = null;
 		}
 		int statuscode = exchange.getResponse().getStatusCode();
-		int bytes = exchange.getResponseContentLength();
+		long bytes = exchange.getResponseContentLength();
 
 		if (!exchange.getResponse().isBodyEmpty()) {
 			bytes = exchange.getResponse().getBody().getLength();
