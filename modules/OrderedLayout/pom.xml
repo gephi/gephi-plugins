@@ -9,34 +9,35 @@
 
     <groupId>wouterspekkink</groupId>
     <artifactId>orderedlayout</artifactId>
-    <version>0.9.3</version>
+    <version>1.0.0</version>
     <packaging>nbm</packaging>
 
-    <name>OrderedGraphLayout</name>
+    <name>Ordered Layout</name>
 
 
     <dependencies>
-        <!-- Insert dependencies here -->
+        
+        <dependency>
+            <groupId>org.gephi</groupId>
+            <artifactId>graph-api</artifactId>
+        </dependency>
         <dependency>
             <groupId>org.gephi</groupId>
             <artifactId>layout-api</artifactId>
-            <version>0.9.2</version>
+        </dependency>
+        <dependency>
+            <groupId>org.gephi</groupId>
+            <artifactId>ui-utils</artifactId>
         </dependency>
         <dependency>
             <groupId>org.gephi</groupId>
             <artifactId>graph-api</artifactId>
-            <version>0.9.2</version>
-        </dependency>
-        <dependency>
-            <groupId>org.gephi</groupId>
-            <artifactId>ui-propertyeditor</artifactId>
-            <version>0.9.2</version>
         </dependency>
         <dependency>
             <groupId>org.netbeans.api</groupId>
             <artifactId>org-openide-util</artifactId>
-            <version>RELEASE140</version>
         </dependency>
+        
     </dependencies>
 
     <build>
@@ -47,17 +48,28 @@
                 <configuration>
                     <licenseName>GPL 3.0</licenseName>
                     <author>Wouter Spekkink</author>
-                    <authorEmail>wouterspekkink@gmail.com</authorEmail>
+                    <authorEmail>wahsp@tutanota.com</authorEmail>
                     <authorUrl>www.wouterspekkink.org</authorUrl>
+                    <sourceCodeUrl>https://github.com/WouterSpekkink/gephi-plugins</sourceCodeUrl>
                     <publicPackages>
                         <!-- Insert public packages -->
-                        <publicPackage></publicPackage>
                     </publicPackages>
                 </configuration>
             </plugin>
         </plugins>
     </build>
-    <description>TO DO</description>
+
+    <!-- Snapshot Repositories (only needed if developing against a SNAPSHOT version) -->
+    <repositories>
+        <repository>
+            <id>oss-sonatype</id>
+            <name>oss-sonatype</name>
+            <url>https://oss.sonatype.org/content/repositories/snapshots/</url>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </repository>
+    </repositories>
 </project>
 
 
