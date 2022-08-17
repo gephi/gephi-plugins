@@ -4,7 +4,7 @@
 
     <groupId>org.gephi</groupId>
     <artifactId>gephi-plugin-parent</artifactId>
-    <version>0.9.1</version>
+    <version>0.9.2</version>
     <packaging>pom</packaging>
 
     <name>gephi-plugins-parent</name>
@@ -46,8 +46,8 @@
     <!-- Properties -->
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <gephi.version>0.9.1</gephi.version>
-        <netbeans.version>RELEASE81</netbeans.version>
+        <gephi.version>0.9.2</gephi.version>
+        <netbeans.version>RELEASE82</netbeans.version>
     </properties>
 
     <!-- Repositories -->
@@ -431,6 +431,11 @@
             <dependency>
                 <groupId>org.netbeans.api</groupId>
                 <artifactId>org-openide-filesystems</artifactId>
+                <version>${netbeans.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.netbeans.modules</groupId>
+                <artifactId>org-netbeans-modules-masterfs</artifactId>
                 <version>${netbeans.version}</version>
             </dependency>
             <dependency>

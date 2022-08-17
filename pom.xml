@@ -4,7 +4,7 @@
 
     <groupId>org.gephi</groupId>
     <artifactId>gephi-plugins</artifactId>
-    <version>0.9.1</version>
+    <version>0.9.2</version>
     <packaging>pom</packaging>
 
     <name>gephi-plugins</name>
@@ -18,7 +18,7 @@
     <!-- Properties -->
     <properties>
         <!-- Version of Gephi building plugins against. Plugins with anterior versions will be ignored -->
-        <gephi.version>0.9.1</gephi.version>
+        <gephi.version>0.9.2</gephi.version>
         <clusters.path>${project.build.directory}/plugins_clusters</clusters.path>
         <github.global.server>github</github.global.server>
     </properties>
@@ -65,21 +65,21 @@
         </dependency>
         <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>layout-api</artifactId>
-            <version>0.9.2</version>
+            <artifactId>project-api</artifactId>
+            <version>${project.version}</version>
             <type>nbm</type>
         </dependency>
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>graph-api</artifactId>
-            <version>0.9.2</version>
+            <version>${project.version}</version>
             <type>nbm</type>
         </dependency>
         <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>project-api</artifactId>
-            <version>0.9.2</version>
-            <type>nbm</type>
+            <artifactId>graph-api</artifactId>
+            <version>${project.version}</version>
+            <type>pom</type>
         </dependency>
     </dependencies>
     

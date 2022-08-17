@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <artifactId>gephi-plugin-parent</artifactId>
+        <groupId>org.gephi</groupId>
+        <version>0.9.2</version>
+    </parent>
+
+    <groupId>org.freetime</groupId>
+    <artifactId>trophic-levels</artifactId>
+    <version>1.0.0</version>
+    <packaging>nbm</packaging>
+
+    <name>Trophic Levels</name>
+
+    <dependencies>
+        <!-- Insert dependencies here -->
+        <dependency>
+            <groupId>org.gephi</groupId>
+            <artifactId>gephi-maven-plugin</artifactId>
+            <version>1.2.3</version>
+            <type>jar</type>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>nbm-maven-plugin</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+	
+	<dependency>
+	    <groupId>org.gephi</groupId>
+	    <artifactId>statistics-api</artifactId>
+	    <version>0.9.2</version>
+	    <exclusions>
+	     <exclusion>
+	      <groupId>org.gephi</groupId>
+	      <artifactId>graph-api</artifactId>
+	     </exclusion>
+	    </exclusions>
+	</dependency>
+        <dependency>
+            <groupId>org.la4j</groupId>
+            <artifactId>la4j</artifactId>
+            <version>0.6.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.netbeans.api</groupId>
+            <artifactId>org-openide-util-lookup</artifactId>
+            <version>RELEASE82</version>
+            <type>jar</type>
+        </dependency>
+        <dependency>
+            <groupId>org.netbeans.api</groupId>
+            <artifactId>org-openide-util</artifactId>
+            <version>RELEASE82</version>
+        </dependency>
+        <dependency>
+            <groupId>org.gephi</groupId>
+            <artifactId>graph-api</artifactId>
+            <version>0.9.2</version>
+        </dependency>
+        <dependency>
+            <groupId>org.gephi</groupId>
+            <artifactId>project-api</artifactId>
+            <version>0.9.2</version>
+        </dependency>
+        <dependency>
+            <groupId>org.gephi</groupId>
+            <artifactId>statistics-plugin</artifactId>
+            <version>0.9.2</version>
+            <type>jar</type>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>nbm-maven-plugin</artifactId>
+                <configuration>
+                    <licenseName>Apache 2.0</licenseName>
+                    <author>Wouter Spekkink, Bazil Sansom</author>
+                    <authorEmail>wahsp@tutanota.com</authorEmail>
+                    <authorUrl>www.wouterspekkink.org</authorUrl>
+                    <sourceCodeUrl>http://github.com/WouterSpekkink/gephi-plugins</sourceCodeUrl>
+                    <publicPackages>
+                        <!-- Insert public packages -->
+                    </publicPackages>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+</project>
+
+
