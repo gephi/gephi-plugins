@@ -4,12 +4,12 @@
     <parent>
         <artifactId>gephi-plugin-parent</artifactId>
         <groupId>org.gephi</groupId>
-        <version>0.9.1</version>
+        <version>0.9.3</version>
     </parent>
 
     <groupId>wouterspekkink</groupId>
     <artifactId>orderedlayout</artifactId>
-    <version>0.9.1</version>
+    <version>0.9.3</version>
     <packaging>nbm</packaging>
 
     <name>OrderedGraphLayout</name>
@@ -35,14 +35,14 @@
         <dependency>
             <groupId>org.netbeans.api</groupId>
             <artifactId>org-openide-util</artifactId>
-            <version>RELEASE81</version>
+            <version>RELEASE140</version>
         </dependency>
     </dependencies>
 
     <build>
         <plugins>
             <plugin>
-                <groupId>org.codehaus.mojo</groupId>
+                <groupId>org.apache.netbeans.utilities</groupId>
                 <artifactId>nbm-maven-plugin</artifactId>
                 <configuration>
                     <licenseName>GPL 3.0</licenseName>
