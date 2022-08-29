@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <artifactId>gephi-plugin-parent</artifactId>
+        <groupId>org.gephi</groupId>
+        <version>0.9.3</version>
+    </parent>
+  
+    <groupId>net.clementlevallois</groupId>
+    <artifactId>mapofcountries</artifactId>
+    <version>1.5.1</version>
+    <packaging>nbm</packaging>
+
+    <name>Map Of Countries</name>
+
+    <dependencies>
+        
+    <dependency>
+      <groupId>org.netbeans.api</groupId>
+      <artifactId>org-openide-util-lookup</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.gephi</groupId>
+      <artifactId>graph-api</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.gephi</groupId>
+      <artifactId>layout-plugin</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.netbeans.api</groupId>
+      <artifactId>org-openide-util</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.gephi</groupId>
+      <artifactId>layout-api</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.gephi</groupId>
+      <artifactId>ui-utils</artifactId>
+    </dependency>
+  </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.netbeans.utilities</groupId>
+                <artifactId>nbm-maven-plugin</artifactId>
+                <configuration>
+                    <licenseName>Apache 2.0</licenseName>
+                    <licenseFile>Apache v2.txt</licenseFile>
+                    <author>Clement Levallois</author>
+                    <sourceCodeUrl>https://github.com/seinecle/gephi-plugins/tree/mapOfCountriesBranch</sourceCodeUrl>
+                    <homePageUrl>http://www.clementlevallois.net</homePageUrl>
+                    <publicPackages>
+                        
+                    </publicPackages>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+</project>
