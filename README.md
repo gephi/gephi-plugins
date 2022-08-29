@@ -2,39 +2,11 @@
 
 This repository is an out-of-the-box development environment for Gephi plugins. Gephi plugins are implemented in Java and can extend [Gephi](https://gephi.org) in many different ways, adding or improving features. Getting started is easy with this repository but also checkout the [Bootcamp](https://github.com/gephi/gephi-plugins-bootcamp) for examples of plugins you can create. 
 
-## Migrate Gephi 0.8 plugins
-
-The process in which plugins are developed and submitted had an overhaul when Gephi 0.9 was released. Details can be read on this article: [Plugin development gets new tools and opens-up to the community](https://gephi.wordpress.com/2015/12/16/plugin-development-gets-new-tools-and-opens-up-to-the-community/).
-
-This section is a step-by-step guide to migrate 0.8 plugins. Before going through the code and configuration, let's summerize the key differences between the two environements.
-
-- The 0.8 base is built using Ant, whereas the 0.9 uses Maven. These two are significantly different. If you aren't familiar with Maven, you can start with [Maven in 5 Minutes]( https://maven.apache.org/guides/getting-started/maven-in-five-minutes.html). Maven configurations are defined in the `pom.xml` files.
-- The 0.8 base finds the Gephi modules into the `platform` folder checked in the repository, whereas the 0.9 base downloads everything from the central Maven repository, where all Gephi modules are available.
-- Maven requires to separate source files (e.g. .java) and resources files (e.g. .properties) into distinct folders. Sources are located in `src/main/java` and resources in `src/main/resources`.
-
-A custom `migrate` goal is available in the [Gephi Maven Plugin](https://github.com/gephi/gephi-maven-plugin) to facilitate the migration from 0.8 to 0.9. This automated process migrates ant-based plugins to maven and takes care of copying the configuration and code. Follow these steps to migrate your plugin:
-
-- Fork and checkout this repository:
-
-        git clone git@github.com:username/gephi-plugins.git
-
-If you've already had a forked repository based on 0.8 we suggest to save your code somewhere, delete it and fork again as the history was cleared.
-
-- Copy your plugin folder at the root of this directory.
-
-- Run this command:
-
-        mvn org.gephi:gephi-maven-plugin:migrate
-
-This command will detect the ant-based plugin and migrate it. The resulting folder is then located into the `modules` folder.
-
-The plugin code can then be inspected in Netbeans or built via command line with `mvn clean package`.
-
 ## Get started
 
 ### Requirements
 
-Developing Gephi plugins requires [JDK 7](http://www.oracle.com/technetwork/java/javase/downloads/index.html) or later and [Maven](http://maven.apache.org/). Although any IDE/Editor can be used, [Netbeans IDE](https://netbeans.org/) is recommend as Gephi itself is based on [Netbeans Platform](https://netbeans.org/features/platform/index.html).
+Developing Gephi plugins requires JDK 11 or later and [Maven](http://maven.apache.org/).
 
 ### Create a plugin
 
@@ -76,7 +48,7 @@ Run the following command to compile and build your plugin:
 
        mvn clean package
 
-In addition of compiling and building the JAR and NBM, this command uses the `Gephi Maven Plugin` to verify the plugin's configuration. In care something is wrong it will fail and indicte the reason.
+In addition to compiling and building the JAR and NBM, this command uses the `Gephi Maven Plugin` to verify the plugin's configuration. In case something is wrong it will fail and indicate the reason.
 
 ### Run Gephi with plugin
 
@@ -98,13 +70,15 @@ Submitting a Gephi plugin for approval is a simple process based on GitHub's [pu
 
 - Navigate to your fork's URL and create a pull request. Select `master-forge` instead of `master` as base branch.
 
-- Submit your pull request.
+- Submit your pull request. If possible, before you submit make sure to [enable edits from maintainers](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/working-with-forks/allowing-changes-to-a-pull-request-branch-created-from-a-fork) so that we can help you tweak the code and configuration when needed.
 
 ## Update a plugin
 
-Updating a Gephi plugin has the same process as submiting it for the first time. Don't forget to merge from upstream's master branch.
+Updating a Gephi plugin has the same process as submitting it for the first time. Don't forget to merge from upstream's master branch.
 
 ## IDE Support
+
+Although any IDE/Editor can be used, [Netbeans IDE](https://netbeans.org/) is recommended as Gephi itself is based on [Netbeans Platform](https://netbeans.org/features/platform/index.html).
 
 ### Netbeans IDE
 
@@ -133,22 +107,21 @@ Gephi can be extended in many ways but the major categories are `Layout`, `Expor
 
 Plugins can use any JVM languages (e.g. Scala, Python, Groovy) but the default option is Java. 
 
-#### Can native librairies be used?
+#### Can native libraries be used?
 
-Yes, native librairies can be used in modules.
+Yes, native libraries can be used in modules.
 
 #### How is this repository structured?
 
-The `modules` folder is where plugin modules go. Each plugin is defined in a in single folder in this directory. A plugin can be composed of multiple modules (it's called a suite then) but usually one is enough to do what you want.
+The `modules` folder is where plugin modules go. Each plugin is defined in a single folder in this directory. A plugin can be composed of multiple modules (it's called a suite then) but usually one is enough to do what you want.
 
 The `pom.xml` file in `modules` is the parent pom for plugins. A Maven pom can inherit configurations from a parent and that is something we use to keep each plugin's pom very simple. Notice that each plugin's pom (i.e. the `pom.xml` file in the plugin folder) has a `<parent>` defined.
 
-The `pom.xml` file at the root folder makes eveything fit together and notably lists the modules.
+The `pom.xml` file at the root folder makes everything fit together and notably lists the modules.
 
 #### How are the manifest settings defined?
 
-There are two options. The first option is what the `generate` task does: it puts entries `OpenIDE-Module-Short-Description`, `OpenIDE-Module-Long-Description`, `OpenIDE-Module-Display-Category` and `OpenIDE-Module-Name` into the `src/main/nbm/manifest.mf` file. The second option sets a `
-OpenIDE-Module-Localizing-Bundle` entry into the `manifest.mf` so values are defined elsewhere in `Bundle.properties` file. The value is then simply the path to the file (e.g. `OpenIDE-Module-Localizing-Bundle: org/project/Bundle.properties`).
+There are two options. The first option is what the `generate` task does: it puts entries `OpenIDE-Module-Short-Description`, `OpenIDE-Module-Long-Description`, `OpenIDE-Module-Display-Category` and `OpenIDE-Module-Name` into the `src/main/nbm/manifest.mf` file. The second option sets a `OpenIDE-Module-Localizing-Bundle` entry into the `manifest.mf` so values are defined elsewhere in `Bundle.properties` file. The value is then simply the path to the file (e.g. `OpenIDE-Module-Localizing-Bundle: org/project/Bundle.properties`).
 
 The second option is preferable when the short or long description have too many characters as the manifest format is pretty restrictive.  
 
@@ -185,7 +158,7 @@ The list of Gephi and Netbeans dependencies one can use can be found in the `mod
 
 #### What are public packages for?
 
-This applies for suite plugins with multiple modules. A module should declare the packages it wants to nake accessible to other modules. For instance, if a module `B` depends on the class `my.org.project.ExampleController` defined in a module `A`, the `A` module should declare `my.org.project` as public package.
+This applies for suite plugins with multiple modules. A module should declare the packages it wants to make accessible to other modules. For instance, if a module `B` depends on the class `my.org.project.ExampleController` defined in a module `A`, the `A` module should declare `my.org.project` as public package.
 
 Public packages are configured in the module's `pom.xml` file. Edit the `<publicPackages>` entry. Example:
 
@@ -197,8 +170,36 @@ Public packages are configured in the module's `pom.xml` file. Edit the `<public
 
 #### What is the difference between plugin and module?
 
-It's the same thing. We say module because Gephi is a modular application and is composed of many independent modules. Plugins also are modules but we call them plugin because they aren't in the _core_ Gephi.
+It's the same thing. We say module because Gephi is a modular application and is composed of many independent modules. Plugins also are modules, but we call them plugin because they aren't in the _core_ Gephi.
 
 #### When running the plugin in Netbeans I get an error "Running standalone modules or suites requires..."
 
 This error appears when you try to run a module. To run Gephi with your plugin you need to run the `gephi-plugins` project, not your module.
+
+## Migrate Gephi 0.8 plugins
+
+The process in which plugins are developed and submitted had an overhaul when Gephi 0.9 was released. Details can be read on this article: [Plugin development gets new tools and opens-up to the community](https://gephi.wordpress.com/2015/12/16/plugin-development-gets-new-tools-and-opens-up-to-the-community/).
+
+This section is a step-by-step guide to migrate 0.8 plugins. Before going through the code and configuration, let's summerize the key differences between the two environements.
+
+- The 0.8 base is built using Ant, whereas the 0.9 uses Maven. These two are significantly different. If you aren't familiar with Maven, you can start with [Maven in 5 Minutes]( https://maven.apache.org/guides/getting-started/maven-in-five-minutes.html). Maven configurations are defined in the `pom.xml` files.
+- The 0.8 base finds the Gephi modules into the `platform` folder checked in the repository, whereas the 0.9 base downloads everything from the central Maven repository, where all Gephi modules are available.
+- Maven requires to separate source files (e.g. .java) and resources files (e.g. .properties) into distinct folders. Sources are located in `src/main/java` and resources in `src/main/resources`.
+
+A custom `migrate` goal is available in the [Gephi Maven Plugin](https://github.com/gephi/gephi-maven-plugin) to facilitate the migration from 0.8 to 0.9. This automated process migrates ant-based plugins to maven and takes care of copying the configuration and code. Follow these steps to migrate your plugin:
+
+- Fork and checkout this repository:
+
+        git clone git@github.com:username/gephi-plugins.git
+
+If you've already had a forked repository based on 0.8 we suggest to save your code somewhere, delete it and fork again as the history was cleared.
+
+- Copy your plugin folder at the root of this directory.
+
+- Run this command:
+
+        mvn org.gephi:gephi-maven-plugin:migrate
+
+This command will detect the ant-based plugin and migrate it. The resulting folder is then located into the `modules` folder.
+
+The plugin code can then be inspected in Netbeans or built via command line with `mvn clean package`.
