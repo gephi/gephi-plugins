@@ -14,7 +14,8 @@ The creation of a new plugin is simple thanks to our custom [Gephi Maven Plugin]
 
 - Fork and checkout the latest version of this repository:
 
-        git clone git@github.com:username/gephi-plugins.git
+        git clone git@github.com:gephi/gephi-plugins.git
+        
 - Run the following command and answer the questions:
 
         mvn org.gephi:gephi-maven-plugin:generate
