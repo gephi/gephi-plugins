@@ -4,7 +4,7 @@
     <parent>
         <artifactId>gephi-plugin-parent</artifactId>
         <groupId>org.gephi</groupId>
-        <version>0.9.1</version>
+        <version>0.9.3</version>
     </parent>
 
     <groupId>ExcelCsvImporter</groupId>
@@ -15,11 +15,6 @@
     <name>ExcelCsvImporter</name>
 
     <dependencies>
-        
-        <dependency>
-            <groupId>org.gephi</groupId>
-            <artifactId>io-processor-plugin</artifactId>
-        </dependency>
         <dependency>
             <groupId>org.netbeans.api</groupId>
             <artifactId>org-openide-dialogs</artifactId>
@@ -74,7 +69,7 @@
     <build>
         <plugins>
             <plugin>
-                <groupId>org.codehaus.mojo</groupId>
+                <groupId>org.apache.netbeans.utilities</groupId>
                 <artifactId>nbm-maven-plugin</artifactId>
                 <configuration>
                     <licenseName>Apache v2</licenseName>
