@@ -4,7 +4,7 @@
     <parent>
         <artifactId>gephi-plugin-parent</artifactId>
         <groupId>org.gephi</groupId>
-        <version>0.9.1</version>
+        <version>0.9.3</version>
     </parent>
 
     <groupId>SimilarityComputer</groupId>
@@ -41,10 +41,6 @@
             <artifactId>io-importer-api</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.gephi</groupId>
-            <artifactId>io-processor-plugin</artifactId>
-        </dependency>
-        <dependency>
             <groupId>org.netbeans.api</groupId>
             <artifactId>org-openide-dialogs</artifactId>
         </dependency>
@@ -60,10 +56,10 @@
             <groupId>org.gephi</groupId>
             <artifactId>directory-chooser</artifactId>
         </dependency>
-        <!--        <dependency>
+        <dependency>
             <groupId>org.gephi</groupId>
             <artifactId>ui-utils</artifactId>
-        </dependency>-->
+        </dependency>
         <dependency>
             <groupId>org.netbeans.api</groupId>
             <artifactId>org-openide-util-ui</artifactId>
@@ -91,10 +87,6 @@
         <dependency>
             <groupId>org.gephi</groupId>
             <artifactId>visualization</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.gephi</groupId>
-            <artifactId>ui-propertyeditor</artifactId>
         </dependency>
         <dependency>
             <groupId>org.gephi</groupId>
@@ -157,7 +149,7 @@
     <build>
         <plugins>
             <plugin>
-                <groupId>org.codehaus.mojo</groupId>
+                <groupId>org.apache.netbeans.utilities</groupId>
                 <artifactId>nbm-maven-plugin</artifactId>
                 <configuration>
                     <licenseName>Apache v2</licenseName>
