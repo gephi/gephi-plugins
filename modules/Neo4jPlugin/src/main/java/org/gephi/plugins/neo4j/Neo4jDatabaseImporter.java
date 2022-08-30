@@ -8,6 +8,7 @@ import org.neo4j.driver.*;
 import org.neo4j.driver.types.Node;
 import org.neo4j.driver.types.Relationship;
 import org.neo4j.driver.util.Pair;
+import org.openide.util.NotImplementedException;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -32,8 +33,8 @@ public class Neo4jDatabaseImporter implements WizardImporter, LongTask {
             "      any(label IN labels(m) WHERE label IN $labels) " +
             "RETURN r";
 
-    public static ContainerLoader container;
-    private static Report report;
+    public ContainerLoader container;
+    private Report report;
     private boolean cancel = false;
 
 
@@ -41,45 +42,45 @@ public class Neo4jDatabaseImporter implements WizardImporter, LongTask {
      * Url of Neo4j database.
      * Default is `neo4j://localhost`
      */
-    private static String url = "neo4j://localhost";
+    private String url = "neo4j://localhost";
 
     /**
      * Username for the Neo4j database.
      * Default is `neo4j`
      */
-    private static String username = "neo4j";
+    private String username = "neo4j";
 
     /**
      * Password for the Neo4j database.
      * If not specified, we do not do auth
      */
-    private static String passwd;
+    private String passwd;
 
     /**
      * Database name
      * If not specified, we use the default neo4j database
      */
-    private static String DBName;
+    private String DBName;
 
     /**
      * List of labels that we want to import
      */
-    private static List<String> labels;
+    private List<String> labels;
 
     /**
      * List of relationship that we want to import
      */
-    private static List<String> relationshipTypes;
+    private List<String> relationshipTypes;
 
     /**
      * Cypher query to retrieve nodes
      */
-    private static String nodeQuery;
+    private String nodeQuery;
 
     /**
      * Cypher query to retrieve edges
      */
-    private static String edgeQuery;
+    private String edgeQuery;
 
     /**
      * Neo4J driver instance.
@@ -164,7 +165,7 @@ public class Neo4jDatabaseImporter implements WizardImporter, LongTask {
                 // Query nodes
                 Result nodesResult = tx.run(this.nodeQuery);
                 // Checking for mandatory keys
-                if (nodesResult.keys().containsAll(Arrays.asList("id"))) {
+                if (!nodesResult.keys().containsAll(Arrays.asList("id"))) {
                     this.getReport().logIssue(new Issue(new Exception("Node query returns no `id` column"), Issue.Level.CRITICAL));
                     return 1;
                 }
@@ -173,7 +174,7 @@ public class Neo4jDatabaseImporter implements WizardImporter, LongTask {
                 while (nodesResult.hasNext()) {
                     Record record = nodesResult.next();
                     this.mergeNodeInGephi(
-                            record.get("id").asString(),
+                            record.get("id").toString(),
                             record.containsKey("labels") ? record.get("labels").asList(t -> t.toString()).toArray(new String[0]) : null,
                             record.fields().stream().filter(t -> !Arrays.asList("id", "labels").contains(t.key())).collect(Collectors.toMap(Pair::key, Pair::value))
                     );
@@ -184,7 +185,7 @@ public class Neo4jDatabaseImporter implements WizardImporter, LongTask {
                 // Query edges
                 Result edgesResult = tx.run(this.edgeQuery);
                 // Checking for mandatory keys
-                if (nodesResult.keys().containsAll(Arrays.asList("id", "sourceId", "targetId"))) {
+                if (!edgesResult.keys().containsAll(Arrays.asList("id", "sourceId", "targetId"))) {
                     this.getReport().logIssue(new Issue(new Exception("Edge query returns no `id` column"), Issue.Level.CRITICAL));
                     return 1;
                 }
@@ -214,7 +215,7 @@ public class Neo4jDatabaseImporter implements WizardImporter, LongTask {
     private List<String> getDbLabels() {
         try (Session session = this.driver.session(this.DBName != null ? SessionConfig.forDatabase(this.DBName) : SessionConfig.defaultConfig())) {
             return session.readTransaction(tx -> {
-                List<String> labels = new ArrayList();
+                List<String> labels = new ArrayList<String>();
                 Result rs = tx.run("CALL db.labels()");
                 while (rs.hasNext()) {
                     labels.add(rs.next().get(0).asString());
@@ -230,7 +231,7 @@ public class Neo4jDatabaseImporter implements WizardImporter, LongTask {
     private List<String> getDbRelationshipTypes() {
         try (Session session = this.driver.session(this.DBName != null ? SessionConfig.forDatabase(this.DBName) : SessionConfig.defaultConfig())) {
             return session.readTransaction(tx -> {
-                List<String> labels = new ArrayList();
+                List<String> labels = new ArrayList<String>();
                 Result rs = tx.run("CALL db.relationshipTypes()");
                 while (rs.hasNext()) {
                     labels.add(rs.next().get(0).asString());
@@ -260,7 +261,7 @@ public class Neo4jDatabaseImporter implements WizardImporter, LongTask {
      */
     private void mergeNodeInGephi(String id, String[] labels, Map<String, Value> attributes) {
         if (!this.getContainer().nodeExists(id)) {
-            NodeDraft draft = this.getContainer().factory().newNodeDraft();
+            NodeDraft draft = this.getContainer().factory().newNodeDraft(id);
             String mainLabel = (labels != null && labels.length > 0) ? labels[0] : "";
 
             // Setting gephi label
@@ -271,12 +272,12 @@ public class Neo4jDatabaseImporter implements WizardImporter, LongTask {
             } else {
                 draft.setLabel(id);
             }
-
             // Setting node label
-            draft.setValue("labels", labels);
-
+            if(labels!=null) draft.setValue("labels", labels);
+            // Setting attributes
             this.addNeo4jAttributes(draft, attributes, mainLabel);
 
+            // Add node to gephi
             this.getContainer().addNode(draft);
         }
     }
@@ -301,19 +302,21 @@ public class Neo4jDatabaseImporter implements WizardImporter, LongTask {
      * @param attributes Neo4j rel's attributes
      */
     private void mergeEdgeInGephi(String id, String type, String sourceId, String targetId, Map<String, Value> attributes) {
-        if (!this.getContainer().edgeExists(id) &&
-                this.getContainer().nodeExists(sourceId) &&
-                this.getContainer().nodeExists(targetId)
-        ) {
-            EdgeDraft draft = this.getContainer().factory().newEdgeDraft();
+        if (!this.getContainer().edgeExists(id)) {
+            if (this.getContainer().nodeExists(sourceId) && this.getContainer().nodeExists(targetId)) {
 
-            draft.setLabel(type);
-            draft.setType(type);
-            draft.setSource(this.getContainer().getNode(sourceId));
-            draft.setTarget(this.getContainer().getNode(targetId));
-            this.addNeo4jAttributes(draft, attributes, type);
+                EdgeDraft draft = this.getContainer().factory().newEdgeDraft(id);
+                draft.setLabel(type);
+                draft.setType(type);
+                draft.setSource(this.getContainer().getNode(sourceId));
+                draft.setTarget(this.getContainer().getNode(targetId));
+                this.addNeo4jAttributes(draft, attributes, type);
 
-            this.getContainer().addEdge(draft);
+                // Add edge to Gephi
+                this.getContainer().addEdge(draft);
+            } else {
+                this.report.log(String.format("Edge %s has been skipped due to missing extrimity", id));
+            }
         }
     }
 
@@ -324,17 +327,51 @@ public class Neo4jDatabaseImporter implements WizardImporter, LongTask {
 
             try {
                 switch (value.getClass().getSimpleName()) {
-                    case "IntegerValue":
-                        draft.setValue(gephiColKey, value.asInt());
-                        break;
                     case "BooleanValue":
                         draft.setValue(gephiColKey, value.asBoolean());
                         break;
+                    case "BytesValue":
+                        throw new NotImplementedException("Bytes value is not implemented");
+                    case "DateTimeValue":
+                        throw new NotImplementedException("DateTime value is not implemented");
+                    case "DateValue":
+                        throw new NotImplementedException("Date value is not implemented");
+                    case "DurationValue":
+                        throw new NotImplementedException("Duration value is not implemented");
                     case "FloatValue":
                         draft.setValue(gephiColKey, value.asFloat());
                         break;
+                    case "IntegerValue":
+                        draft.setValue(gephiColKey, value.asInt());
+                        break;
+                    case "ListValue":
+                        draft.setValue(gephiColKey, value.asList());
+                        break;
+                    case "LocalDateTimeValue":
+                        throw new NotImplementedException("LocalDateTime value is not implemented");
+                    case "LocalTimeValue":
+                        throw new NotImplementedException("LocalTime value is not implemented");
+                    case "MapValue":
+                        throw new NotImplementedException("Map value is not implemented");
+                    case "NodeValue":
+                        throw new NotImplementedException("Node value is not implemented");
+                    case "NullValue":
+                        break;
+                    case "NumberValueAdapter":
+                        draft.setValue(gephiColKey, value.asNumber());
+                        break;
+                    case "ObjectValueAdapter":
+                        throw new NotImplementedException("Object value is not implemented");
+                    case "PathValue":
+                        throw new NotImplementedException("Path value is not implemented");
+                    case "PointValue":
+                        throw new NotImplementedException("Point  value is not implemented");
+                    case "RelationshipValue":
+                        throw new NotImplementedException("Relationship value is not implemented");
+                    case "TimeValue":
+                        throw new NotImplementedException("Time value is not implemented");
                     case "StringValue":
-                        draft.setValue(gephiColKey, value.toString());
+                        draft.setValue(gephiColKey, value.asString());
                         break;
                 }
             } catch (Exception e) {
@@ -367,36 +404,36 @@ public class Neo4jDatabaseImporter implements WizardImporter, LongTask {
     // Generated setter for import parameters
     //
 
-    public static void setUrl(String url) {
-        Neo4jDatabaseImporter.url = url;
+    public void setUrl(String url) {
+        this.url = url;
     }
 
-    public static void setUsername(String username) {
-        Neo4jDatabaseImporter.username = username;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
-    public static void setPasswd(String passwd) {
-        Neo4jDatabaseImporter.passwd = passwd;
+    public void setPasswd(String passwd) {
+        this.passwd = passwd;
     }
 
-    public static void setDBName(String DBName) {
-        Neo4jDatabaseImporter.DBName = DBName;
+    public void setDBName(String DBName) {
+        this.DBName = DBName;
     }
 
-    public static void setLabels(List<String> labels) {
-        Neo4jDatabaseImporter.labels = labels;
+    public void setLabels(List<String> labels) {
+        this.labels = labels;
     }
 
-    public static void setRelationshipTypes(List<String> relationshipTypes) {
-        Neo4jDatabaseImporter.relationshipTypes = relationshipTypes;
+    public void setRelationshipTypes(List<String> relationshipTypes) {
+        this.relationshipTypes = relationshipTypes;
     }
 
-    public static void setNodeQuery(String nodeQuery) {
-        Neo4jDatabaseImporter.nodeQuery = nodeQuery;
+    public void setNodeQuery(String nodeQuery) {
+        this.nodeQuery = nodeQuery;
     }
 
-    public static void setEdgeQuery(String edgeQuery) {
-        Neo4jDatabaseImporter.edgeQuery = edgeQuery;
+    public void setEdgeQuery(String edgeQuery) {
+        this.edgeQuery = edgeQuery;
     }
 
 }
