@@ -48,7 +48,7 @@ public class HttpGraph implements Generator {
 	static {
 		INSTANCE = new HttpGraph();
 		log = Logger.getLogger(HttpGraph.class.getName());
-		colormap = new HashMap<String, Color>();
+		colormap = new HashMap<>();
 		generateColors(COLORDIV);
 	}
 
@@ -145,7 +145,7 @@ public class HttpGraph implements Generator {
 	}
 
 	private static void generateColors(int n) {
-		colors = new ArrayList<Color>(COLORDIV);
+		colors = new ArrayList<>(COLORDIV);
 		for (int i = 0; i < n; i++) {
 			//colors.add(Color.getHSBColor((float) i / (float) n, 0.6f, 0.75f));
 			colors.add(Color.getHSBColor((float) i / (float) n, 0.85f, 1f));
