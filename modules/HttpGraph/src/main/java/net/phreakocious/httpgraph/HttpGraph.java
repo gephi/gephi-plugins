@@ -70,6 +70,7 @@ public class HttpGraph implements Generator {
 		container.setReport(new Report());
 
 		ContainerLoader cldr = container.getLoader();
+		cldr.setEdgesMergeStrategy(EdgeMergeStrategy.NO_MERGE);
 
 //	cldr.setTimeRepresentation(TimeRepresentation.TIMESTAMP);
 
