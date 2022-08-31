@@ -1,6 +1,8 @@
 package net.phreakocious.httpgraph;
 
 import com.predic8.membrane.core.HttpRouter;
+import com.predic8.membrane.core.rules.ProxyRule;
+import com.predic8.membrane.core.rules.ProxyRuleKey;
 import java.awt.Color;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -136,8 +138,11 @@ public class HttpGraph implements Generator {
 		router = new HttpRouter();
 
 		try {
+			router.getRuleManager().addProxyAndOpenPortIfNew(new ProxyRule(new ProxyRuleKey(proxyport)));
+			router.addUserFeatureInterceptor(new HttpGraphProxyInterceptor());
+			router.init();
 			server = new HttpGraphServer();
-		} catch (IOException ex) {
+		} catch (Exception ex) {
 			Exceptions.printStackTrace(ex);
 		}
 

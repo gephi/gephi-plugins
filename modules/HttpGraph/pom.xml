@@ -50,8 +50,12 @@
         <dependency>
             <groupId>org.membrane-soa</groupId>
             <artifactId>service-proxy-core</artifactId>
-            <version>4.7.3</version>
-            <type>jar</type>
+            <version>4.8.8</version>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-jdk14</artifactId>
+            <version>1.7.36</version>
         </dependency>
         <dependency>
             <groupId>org.gephi</groupId>
