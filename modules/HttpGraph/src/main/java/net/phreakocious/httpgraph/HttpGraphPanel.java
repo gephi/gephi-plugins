@@ -34,6 +34,10 @@ public class HttpGraphPanel extends JPanel {
                 Validators.REQUIRE_VALID_INTEGER,
                 Validators.numberRange(1, 65535));
 
+        group.add(innerPanel.restField, Validators.REQUIRE_NON_EMPTY_STRING,
+                Validators.REQUIRE_VALID_INTEGER,
+                Validators.numberRange(1, 65535));
+
         return validationPanel;
     }
 
@@ -68,11 +72,18 @@ public class HttpGraphPanel extends JPanel {
                 jTextArea1 = new javax.swing.JTextArea();
                 jButton1 = new javax.swing.JButton();
                 jButton2 = new javax.swing.JButton();
+                restField = new javax.swing.JTextField();
+                restLabel = new javax.swing.JLabel();
 
                 portLabel.setText(org.openide.util.NbBundle.getMessage(HttpGraphPanel.class, "HttpGraphPanel.portLabel.text")); // NOI18N
 
                 portField.setHorizontalAlignment(javax.swing.JTextField.TRAILING);
                 portField.setText(org.openide.util.NbBundle.getMessage(HttpGraphPanel.class, "HttpGraphPanel.portField.text")); // NOI18N
+                portField.addActionListener(new java.awt.event.ActionListener() {
+                        public void actionPerformed(java.awt.event.ActionEvent evt) {
+                                portFieldActionPerformed(evt);
+                        }
+                });
 
                 jLabel1.setText(org.openide.util.NbBundle.getMessage(HttpGraphPanel.class, "HttpGraphPanel.jLabel1.text")); // NOI18N
 
@@ -116,6 +127,7 @@ public class HttpGraphPanel extends JPanel {
                 jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
                 jLabel3.setText(org.openide.util.NbBundle.getMessage(HttpGraphPanel.class, "HttpGraphPanel.jLabel3.text")); // NOI18N
 
+                jTextArea1.setEditable(false);
                 jTextArea1.setColumns(20);
                 jTextArea1.setLineWrap(true);
                 jTextArea1.setRows(5);
@@ -140,67 +152,84 @@ public class HttpGraphPanel extends JPanel {
                         }
                 });
 
+                restField.setHorizontalAlignment(javax.swing.JTextField.TRAILING);
+                restField.setText(org.openide.util.NbBundle.getMessage(HttpGraphPanel.class, "HttpGraphPanel.restField.text")); // NOI18N
+                restField.addActionListener(new java.awt.event.ActionListener() {
+                        public void actionPerformed(java.awt.event.ActionEvent evt) {
+                                restFieldActionPerformed(evt);
+                        }
+                });
+
+                restLabel.setText(org.openide.util.NbBundle.getMessage(HttpGraphPanel.class, "HttpGraphPanel.restLabel.text")); // NOI18N
+
                 javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
                 this.setLayout(layout);
                 layout.setHorizontalGroup(
                         layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 384, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                                .addGap(28, 28, 28)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addGroup(layout.createSequentialGroup()
                                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                                                .addContainerGap(26, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                                                        .addComponent(startLayout)
-                                                                        .addComponent(jLabel2)
-                                                                        .addGroup(layout.createSequentialGroup()
-                                                                                .addComponent(clientLabels)
-                                                                                .addGap(18, 18, 18)
-                                                                                .addComponent(domainLabels)
-                                                                                .addGap(18, 18, 18)
-                                                                                .addComponent(hostLabels)
-                                                                                .addGap(18, 18, 18)
-                                                                                .addComponent(resourceLabels)))
-                                                                .addGap(42, 42, 42))
                                                         .addGroup(layout.createSequentialGroup()
-                                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                                                        .addGroup(layout.createSequentialGroup()
-                                                                                .addGap(44, 44, 44)
-                                                                                .addComponent(portLabel)
-                                                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                                                .addComponent(portField, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                                                        .addGroup(layout.createSequentialGroup()
-                                                                                .addGap(34, 34, 34)
-                                                                                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 167, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                                                .addGap(18, 18, 18)
-                                                                                .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 167, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                                                .addGap(18, 18, 18)))
-                                                .addComponent(jLabel1)))
-                                .addContainerGap(15, Short.MAX_VALUE))
+                                                                .addGap(6, 6, 6)
+                                                                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 167, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                                .addGap(18, 18, 18)
+                                                                .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 167, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                                .addGap(9, 9, 9))
+                                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                                                        .addGap(41, 41, 41)
+                                                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                                                .addComponent(startLayout)
+                                                                                .addComponent(jLabel2)
+                                                                                .addGroup(layout.createSequentialGroup()
+                                                                                        .addComponent(clientLabels)
+                                                                                        .addGap(18, 18, 18)
+                                                                                        .addComponent(domainLabels)
+                                                                                        .addGap(18, 18, 18)
+                                                                                        .addComponent(hostLabels)
+                                                                                        .addGap(18, 18, 18)
+                                                                                        .addComponent(resourceLabels)))
+                                                                        .addGap(37, 37, 37))
+                                                                .addGroup(layout.createSequentialGroup()
+                                                                        .addComponent(restLabel)
+                                                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                                        .addComponent(restField, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                                        .addGap(18, 18, 18)
+                                                                        .addComponent(portLabel)
+                                                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                                        .addComponent(portField, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                .addComponent(jLabel1))
+                                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 367, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addContainerGap(25, Short.MAX_VALUE))
                 );
                 layout.setVerticalGroup(
                         layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addGroup(layout.createSequentialGroup()
                                 .addContainerGap()
                                 .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 171, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                         .addGroup(layout.createSequentialGroup()
-                                                .addGap(175, 175, 175)
-                                                .addComponent(jLabel1))
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 17, Short.MAX_VALUE)
+                                                .addComponent(jLabel1)
+                                                .addGap(168, 168, 168))
                                         .addGroup(layout.createSequentialGroup()
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
                                                 .addGap(18, 18, 18)
                                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                                                         .addComponent(jButton1)
                                                         .addComponent(jButton2))
                                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                                        .addComponent(restField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                        .addComponent(restLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 19, javax.swing.GroupLayout.PREFERRED_SIZE)
                                                         .addComponent(portField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                                         .addComponent(portLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 19, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                                .addGap(13, 13, 13)
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                                 .addComponent(startLayout)
                                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                                 .addComponent(jLabel2)
@@ -209,8 +238,8 @@ public class HttpGraphPanel extends JPanel {
                                                         .addComponent(clientLabels)
                                                         .addComponent(hostLabels)
                                                         .addComponent(domainLabels)
-                                                        .addComponent(resourceLabels))))
-                                .addContainerGap(15, Short.MAX_VALUE))
+                                                        .addComponent(resourceLabels))
+                                                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                 );
         }// </editor-fold>//GEN-END:initComponents
 
@@ -234,6 +263,14 @@ public class HttpGraphPanel extends JPanel {
 		openWebpage(jButton2.getToolTipText());
         }//GEN-LAST:event_jButton2ActionPerformed
 
+        private void restFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_restFieldActionPerformed
+                // TODO add your handling code here:
+        }//GEN-LAST:event_restFieldActionPerformed
+
+        private void portFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_portFieldActionPerformed
+                // TODO add your handling code here:
+        }//GEN-LAST:event_portFieldActionPerformed
+
         // Variables declaration - do not modify//GEN-BEGIN:variables
         protected javax.swing.JCheckBox clientLabels;
         protected javax.swing.JCheckBox domainLabels;
@@ -248,6 +285,8 @@ public class HttpGraphPanel extends JPanel {
         protected javax.swing.JTextField portField;
         private javax.swing.JLabel portLabel;
         protected javax.swing.JCheckBox resourceLabels;
+        protected javax.swing.JTextField restField;
+        private javax.swing.JLabel restLabel;
         public javax.swing.JCheckBox startLayout;
         // End of variables declaration//GEN-END:variables
 }

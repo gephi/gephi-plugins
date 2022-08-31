@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.logging.Logger;
+import org.openide.util.Exceptions;
 
 //TODO: Standardize calls to Logger
 /**
@@ -252,10 +253,13 @@ public class SnarfData {
 		}
 	}
 
-	//TODO: Redo this with a blocking queue
 	public void graphUpdate() {
 		//   dump();
-		HttpGraph.INSTANCE.graphupdate(this);
+		try {
+			HttpGraph.INSTANCE.queue.put(this);
+		} catch (InterruptedException ex) {
+			Exceptions.printStackTrace(ex);
+		}
 	}
 
 	private void dump() {
