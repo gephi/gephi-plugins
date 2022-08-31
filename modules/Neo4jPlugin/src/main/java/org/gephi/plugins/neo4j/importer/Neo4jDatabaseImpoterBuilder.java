@@ -1,4 +1,4 @@
-package org.gephi.plugins.neo4j;
+package org.gephi.plugins.neo4j.importer;
 
 import org.gephi.io.importer.spi.WizardImporter;
 import org.gephi.io.importer.spi.WizardImporterBuilder;

@@ -1,10 +1,13 @@
-package org.gephi.plugins.neo4j;
+package org.gephi.plugins.neo4j.importer;
 
+import io.reactivex.Flowable;
+import io.reactivex.Observable;
 import org.gephi.io.importer.api.*;
 import org.gephi.io.importer.spi.WizardImporter;
 import org.gephi.utils.longtask.spi.LongTask;
 import org.gephi.utils.progress.ProgressTicket;
 import org.neo4j.driver.*;
+import org.neo4j.driver.reactive.RxResult;
 import org.neo4j.driver.types.Node;
 import org.neo4j.driver.types.Relationship;
 import org.neo4j.driver.util.Pair;
@@ -128,85 +131,105 @@ public class Neo4jDatabaseImporter implements WizardImporter, LongTask {
      * Do import by specifying node & edge types.
      */
     private void doImportByNodeAndEdgeTypes(List<String> labels, List<String> relationshipTypes) {
-        try (Session session = this.driver.session(this.DBName != null ? SessionConfig.forDatabase(this.DBName) : SessionConfig.defaultConfig())) {
-            session.readTransaction(tx -> {
+        Value parameters = parameters("labels", labels, "relationshipTypes", relationshipTypes);
 
-                // Query and import nodes
-                long nbNodesImported = 0;
-                Value params = parameters("labels", labels, "relationshipTypes", relationshipTypes);
-                Result nodesResult = tx.run(QUERY_BY_LABELS, params);
-                while (nodesResult.hasNext()) {
-                    this.mergeNodeInGephi(nodesResult.next().get("n").asNode());
-                    nbNodesImported++;
-                }
-                this.getReport().log(String.format("%s nodes imported", nbNodesImported));
+        // Import nodes
+        long nbNodesImported = Flowable.using(
+                () -> this.driver.rxSession(this.DBName != null ? SessionConfig.forDatabase(this.DBName) : SessionConfig.defaultConfig()),
+                session -> session.readTransaction(tx -> {
+                    RxResult result = tx.run(QUERY_BY_LABELS, parameters);
+                    return Flowable.fromPublisher(result.records())
+                            .map(record -> record.get("n").asNode())
+                            .map(this::mergeNodeInGephi)
+                            .filter(Boolean::booleanValue)
+                            .count()
+                            .toFlowable();
+                }),
+                session -> Observable.fromPublisher(session.close()).subscribe()
+        ).blockingSingle();
+        this.getReport().log(String.format("%s nodes imported", nbNodesImported));
 
-                // Query and import edges
-                long nbEdgeImported = 0;
-                Result edgesResult = tx.run(QUERY_BY_RELS, params);
-                while (edgesResult.hasNext()) {
-                    this.mergeEdgeInGephi(edgesResult.next().get("r").asRelationship());
-                    nbEdgeImported++;
-                }
-                this.getReport().log(String.format("%s edges imported", nbEdgeImported));
+        // Import edges
+        long nbEdgesImported = Flowable.using(
+                () -> this.driver.rxSession(this.DBName != null ? SessionConfig.forDatabase(this.DBName) : SessionConfig.defaultConfig()),
+                session -> session.readTransaction(tx -> {
+                    RxResult result = tx.run(QUERY_BY_RELS, parameters);
+                    return Flowable.fromPublisher(result.records())
+                            .map(record -> record.get("r").asRelationship())
+                            .map(this::mergeEdgeInGephi)
+                            .filter(Boolean::booleanValue)
+                            .count()
+                            .toFlowable();
+                }),
+                session -> Observable.fromPublisher(session.close()).subscribe()
+        ).blockingSingle();
+        this.getReport().log(String.format("%s edges imported", nbEdgesImported));
 
-                return 1;
-            });
-        }
     }
 
     /**
      * Do import by specifying node & edge query.
      */
     private void doImportByNodeAndEdgeQueries() {
-        try (Session session = this.driver.session(this.DBName != null ? SessionConfig.forDatabase(this.DBName) : SessionConfig.defaultConfig())) {
-            session.readTransaction(tx -> {
+        // Import nodes
+        long nbNodesImported = Flowable.using(
+                () -> this.driver.rxSession(this.DBName != null ? SessionConfig.forDatabase(this.DBName) : SessionConfig.defaultConfig()),
+                session -> session.readTransaction(tx -> {
+                    RxResult result = tx.run(this.nodeQuery);
+                    return Flowable.fromPublisher(result.records())
+                            .map(record -> {
+                                if (record.get("id").isNull()) {
+                                    this.getReport().logIssue(new Issue(new Exception(String.format("Node result %s has no ID", record.toString())), Issue.Level.SEVERE));
+                                    return false;
+                                }
+                                return this.mergeNodeInGephi(
+                                        record.get("id").toString(),
+                                        record.containsKey("labels") ? record.get("labels").asList(Value::toString).toArray(new String[0]) : null,
+                                        record.fields().stream().filter(t -> !Arrays.asList("id", "labels").contains(t.key())).collect(Collectors.toMap(Pair::key, Pair::value))
+                                );
+                            })
+                            .filter(Boolean::booleanValue)
+                            .count()
+                            .toFlowable();
+                }),
+                session -> Observable.fromPublisher(session.close()).subscribe()
+        ).blockingSingle();
+        this.getReport().log(String.format("%s nodes imported", nbNodesImported));
 
-                // Query nodes
-                Result nodesResult = tx.run(this.nodeQuery);
-                // Checking for mandatory keys
-                if (!nodesResult.keys().containsAll(Arrays.asList("id"))) {
-                    this.getReport().logIssue(new Issue(new Exception("Node query returns no `id` column"), Issue.Level.CRITICAL));
-                    return 1;
-                }
-                // Import nodes
-                long nbNodesImported = 0;
-                while (nodesResult.hasNext()) {
-                    Record record = nodesResult.next();
-                    this.mergeNodeInGephi(
-                            record.get("id").toString(),
-                            record.containsKey("labels") ? record.get("labels").asList(t -> t.toString()).toArray(new String[0]) : null,
-                            record.fields().stream().filter(t -> !Arrays.asList("id", "labels").contains(t.key())).collect(Collectors.toMap(Pair::key, Pair::value))
-                    );
-                    nbNodesImported++;
-                }
-                this.getReport().log(String.format("%s nodes imported", nbNodesImported));
-
-                // Query edges
-                Result edgesResult = tx.run(this.edgeQuery);
-                // Checking for mandatory keys
-                if (!edgesResult.keys().containsAll(Arrays.asList("id", "sourceId", "targetId"))) {
-                    this.getReport().logIssue(new Issue(new Exception("Edge query returns no `id` column"), Issue.Level.CRITICAL));
-                    return 1;
-                }
-                // Query and import edges
-                long nbEdgeImported = 0;
-                while (edgesResult.hasNext()) {
-                    Record record = edgesResult.next();
-                    this.mergeEdgeInGephi(
-                            record.get("id").asString(),
-                            record.containsKey("type") ? record.get("type").asString() : null,
-                            record.get("sourceId").asString(),
-                            record.get("targetId").asString(),
-                            record.fields().stream().filter(t -> !Arrays.asList("id", "type", "sourceId", "targetId").contains(t.key())).collect(Collectors.toMap(Pair::key, Pair::value))
-                    );
-                    nbEdgeImported++;
-                }
-                this.getReport().log(String.format("%s edges imported", nbEdgeImported));
-
-                return 1;
-            });
-        }
+        // Import edges
+        long nbEdgesImported = Flowable.using(
+                () -> this.driver.rxSession(this.DBName != null ? SessionConfig.forDatabase(this.DBName) : SessionConfig.defaultConfig()),
+                session -> session.readTransaction(tx -> {
+                    RxResult result = tx.run(this.edgeQuery);
+                    return Flowable.fromPublisher(result.records())
+                            .map(record -> {
+                                if (record.get("id").isNull()) {
+                                    this.getReport().logIssue(new Issue(new Exception(String.format("Edge result %s has no ID", record.toString())), Issue.Level.SEVERE));
+                                    return false;
+                                }
+                                if (record.get("sourceId").isNull()) {
+                                    this.getReport().logIssue(new Issue(new Exception(String.format("Edge %s has no sourceId", record.get("id").asString())), Issue.Level.SEVERE));
+                                    return false;
+                                }
+                                if (record.get("targetId").isNull()) {
+                                    this.getReport().logIssue(new Issue(new Exception(String.format("Edge %s has no targetId", record.get("id").asString())), Issue.Level.SEVERE));
+                                    return false;
+                                }
+                                return this.mergeEdgeInGephi(
+                                        record.get("id").asString(),
+                                        record.containsKey("type") ? record.get("type").asString() : null,
+                                        record.get("sourceId").asString(),
+                                        record.get("targetId").asString(),
+                                        record.fields().stream().filter(t -> !Arrays.asList("id", "type", "sourceId", "targetId").contains(t.key())).collect(Collectors.toMap(Pair::key, Pair::value))
+                                );
+                            })
+                            .filter(Boolean::booleanValue)
+                            .count()
+                            .toFlowable();
+                }),
+                session -> Observable.fromPublisher(session.close()).subscribe()
+        ).blockingSingle();
+        this.getReport().log(String.format("%s edges imported", nbEdgesImported));
     }
 
     /**
@@ -215,7 +238,7 @@ public class Neo4jDatabaseImporter implements WizardImporter, LongTask {
     private List<String> getDbLabels() {
         try (Session session = this.driver.session(this.DBName != null ? SessionConfig.forDatabase(this.DBName) : SessionConfig.defaultConfig())) {
             return session.readTransaction(tx -> {
-                List<String> labels = new ArrayList<String>();
+                List<String> labels = new ArrayList<>();
                 Result rs = tx.run("CALL db.labels()");
                 while (rs.hasNext()) {
                     labels.add(rs.next().get(0).asString());
@@ -231,7 +254,7 @@ public class Neo4jDatabaseImporter implements WizardImporter, LongTask {
     private List<String> getDbRelationshipTypes() {
         try (Session session = this.driver.session(this.DBName != null ? SessionConfig.forDatabase(this.DBName) : SessionConfig.defaultConfig())) {
             return session.readTransaction(tx -> {
-                List<String> labels = new ArrayList<String>();
+                List<String> labels = new ArrayList<>();
                 Result rs = tx.run("CALL db.relationshipTypes()");
                 while (rs.hasNext()) {
                     labels.add(rs.next().get(0).asString());
@@ -245,8 +268,8 @@ public class Neo4jDatabaseImporter implements WizardImporter, LongTask {
     /**
      * Merge a Neo4j node in Gephi container.
      */
-    private void mergeNodeInGephi(Node neo4jNode) {
-        this.mergeNodeInGephi(
+    private Boolean mergeNodeInGephi(Node neo4jNode) {
+        return this.mergeNodeInGephi(
                 String.valueOf(neo4jNode.id()),
                 StreamSupport.stream(neo4jNode.labels().spliterator(), false).toArray(String[]::new),
                 neo4jNode.asMap(value -> value));
@@ -259,34 +282,35 @@ public class Neo4jDatabaseImporter implements WizardImporter, LongTask {
      * @param labels     Neo4j node's labels
      * @param attributes Neo4j node's attributes
      */
-    private void mergeNodeInGephi(String id, String[] labels, Map<String, Value> attributes) {
-        if (!this.getContainer().nodeExists(id)) {
-            NodeDraft draft = this.getContainer().factory().newNodeDraft(id);
-            String mainLabel = (labels != null && labels.length > 0) ? labels[0] : "";
+    private Boolean mergeNodeInGephi(String id, String[] labels, Map<String, Value> attributes) {
+        if (this.getContainer().nodeExists(id)) return false;
 
-            // Setting gephi label
-            if (attributes.containsKey("name")) {
-                draft.setLabel(attributes.get("name").asString());
-            } else if (attributes.containsKey("id")) {
-                draft.setLabel(attributes.get("id").asString());
-            } else {
-                draft.setLabel(id);
-            }
-            // Setting node label
-            if(labels!=null) draft.setValue("labels", labels);
-            // Setting attributes
-            this.addNeo4jAttributes(draft, attributes, mainLabel);
+        NodeDraft draft = this.getContainer().factory().newNodeDraft(id);
+        String mainLabel = (labels != null && labels.length > 0) ? labels[0] : "";
 
-            // Add node to gephi
-            this.getContainer().addNode(draft);
+        // Setting gephi label
+        if (attributes.containsKey("name")) {
+            draft.setLabel(attributes.get("name").asString());
+        } else if (attributes.containsKey("id")) {
+            draft.setLabel(attributes.get("id").asString());
+        } else {
+            draft.setLabel(id);
         }
+        // Setting node label
+        if (labels != null) draft.setValue("labels", labels);
+        // Setting attributes
+        this.addNeo4jAttributes(draft, attributes, mainLabel);
+
+        // Add node to gephi
+        this.getContainer().addNode(draft);
+        return true;
     }
 
     /**
      * Merge a Neo4j relationship in Gephi container.
      */
-    private void mergeEdgeInGephi(Relationship neo4jRel) {
-        this.mergeEdgeInGephi(
+    private Boolean mergeEdgeInGephi(Relationship neo4jRel) {
+        return this.mergeEdgeInGephi(
                 String.valueOf(neo4jRel.id()),
                 neo4jRel.type(),
                 String.valueOf(neo4jRel.startNodeId()),
@@ -301,23 +325,26 @@ public class Neo4jDatabaseImporter implements WizardImporter, LongTask {
      * @param type       Neo4j rel's type
      * @param attributes Neo4j rel's attributes
      */
-    private void mergeEdgeInGephi(String id, String type, String sourceId, String targetId, Map<String, Value> attributes) {
-        if (!this.getContainer().edgeExists(id)) {
-            if (this.getContainer().nodeExists(sourceId) && this.getContainer().nodeExists(targetId)) {
+    private Boolean mergeEdgeInGephi(String id, String type, String sourceId, String
+            targetId, Map<String, Value> attributes) {
 
-                EdgeDraft draft = this.getContainer().factory().newEdgeDraft(id);
-                draft.setLabel(type);
-                draft.setType(type);
-                draft.setSource(this.getContainer().getNode(sourceId));
-                draft.setTarget(this.getContainer().getNode(targetId));
-                this.addNeo4jAttributes(draft, attributes, type);
-
-                // Add edge to Gephi
-                this.getContainer().addEdge(draft);
-            } else {
-                this.report.log(String.format("Edge %s has been skipped due to missing extrimity", id));
-            }
+        // Do some check to validate that the edge can be imported
+        if (this.getContainer().edgeExists(id)) return false;
+        if (!this.getContainer().nodeExists(sourceId) || !this.getContainer().nodeExists(targetId)) {
+            this.report.log(String.format("Edge %s has been skipped due to missing extrimity", id));
+            return false;
         }
+
+        EdgeDraft draft = this.getContainer().factory().newEdgeDraft(id);
+        draft.setLabel(type);
+        draft.setType(type);
+        draft.setSource(this.getContainer().getNode(sourceId));
+        draft.setTarget(this.getContainer().getNode(targetId));
+        this.addNeo4jAttributes(draft, attributes, type);
+
+        // Add edge to Gephi
+        this.getContainer().addEdge(draft);
+        return true;
     }
 
     private void addNeo4jAttributes(ElementDraft draft, Map<String, Value> attributes, String attributePrefix) {
