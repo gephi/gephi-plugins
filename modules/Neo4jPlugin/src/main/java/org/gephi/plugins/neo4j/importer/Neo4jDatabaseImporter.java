@@ -86,9 +86,33 @@ public class Neo4jDatabaseImporter implements WizardImporter, LongTask {
     private String edgeQuery;
 
     /**
-     * Neo4J driver instance.
+     * Neo4j driver instance.
      */
     private Driver driver;
+
+
+    public static void checkConnection(String url, String username, String password, String dbName) {
+        Driver driver = GraphDatabase.driver(url, password != null ? AuthTokens.basic(username, password) : AuthTokens.none());
+        try {
+            driver.verifyConnectivity();
+            driver.session(dbName != null ? SessionConfig.forDatabase(dbName) : SessionConfig.defaultConfig()).run("RETURN 1");
+        } catch (Exception e) {
+            throw e;
+        } finally {
+            driver.close();
+        }
+    }
+
+    public static void checkQuery(String url, String username, String password, String dbName, String query) {
+        Driver driver = GraphDatabase.driver(url, password != null ? AuthTokens.basic(username, password) : AuthTokens.none(), Config.builder().withFetchSize(5).build());
+        try {
+            driver.session(dbName != null ? SessionConfig.forDatabase(dbName) : SessionConfig.defaultConfig()).run(query);
+        } catch (Exception e) {
+            throw e;
+        } finally {
+            driver.close();
+        }
+    }
 
     @Override
     public boolean execute(ContainerLoader containerLoader) {
