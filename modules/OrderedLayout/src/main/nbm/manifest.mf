@@ -1,5 +1,5 @@
 Manifest-Version: 1.0
 OpenIDE-Module-Name: Ordered Layout
 OpenIDE-Module-Short-Description: A layout algorithm that takes one fixed coordinate variable as input for the layout on one axis and then uses a force-based algorithm to layout the nodes on the remaining axis.
-OpenIDE-Module-Long-Description: This layout algorithm requires that for each node a numeric variable is defined that represents their coordinates on one axis of the layout. The algorithm then uses a force-based algorithm (derived from force atlas 2) to create the coordinates for the nodes on the remaiickly create layouts that have some meaningful predefined order on one axis, such as timestamp.
+OpenIDE-Module-Long-Description: This layout algorithm requires that for each node a numeric variable is defined that represents their coordinates on one axis of the layout (x or y). The algorithm then uses a force-based algorithm (derived from force atlas 2) to create the coordinates for the nodes on the remaining axis. The plugin is useful for creating layouts for nodes that have some meaningful order, such as an order in time.
 OpenIDE-Module-Display-Category: Layout
