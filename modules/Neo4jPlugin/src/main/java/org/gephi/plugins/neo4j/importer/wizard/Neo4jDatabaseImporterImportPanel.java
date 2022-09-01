@@ -57,7 +57,7 @@ public class Neo4jDatabaseImporterImportPanel extends javax.swing.JPanel {
         }
         finally {
             this.checkNodeQuery.setEnabled(true);
-            this.nodeActionText.setVisible(false);
+            this.nodeActionText.setVisible(true);
         }
     }
 
@@ -66,7 +66,7 @@ public class Neo4jDatabaseImporterImportPanel extends javax.swing.JPanel {
         this.checkEdgeQuery.setEnabled(false);
         try{
             if (Utils.isEmptyOrNull(this.edgeQuery.getText())) throw new Exception("Node query is empty");
-            Utils.neo4jWizardCheckQuery(this.edgeQuery.getText(), Arrays.asList("id"));
+            Utils.neo4jWizardCheckQuery(this.edgeQuery.getText(), Arrays.asList("id", "sourceId", "targetId"));
             this.edgeActionText.setText("Query is valid");
             this.edgeActionText.setForeground(Color.GREEN);
         }
@@ -76,7 +76,7 @@ public class Neo4jDatabaseImporterImportPanel extends javax.swing.JPanel {
         }
         finally {
             this.checkEdgeQuery.setEnabled(true);
-            this.edgeActionText.setVisible(false);
+            this.edgeActionText.setVisible(true);
         }
     }
 
