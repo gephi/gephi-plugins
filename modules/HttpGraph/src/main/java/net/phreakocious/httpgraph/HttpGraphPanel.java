@@ -15,6 +15,8 @@ import org.openide.util.Exceptions;
  */
 public class HttpGraphPanel extends JPanel {
 
+    private static final long serialVersionUID = 1L;
+
     public HttpGraphPanel() {
         initComponents();
         startLayout.setEnabled(true);
