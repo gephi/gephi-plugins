@@ -7,7 +7,14 @@ import java.util.HashMap;
 import java.util.logging.Logger;
 import org.openide.util.Exceptions;
 
-//TODO: Standardize calls to Logger
+/*
+TODO: Standardize calls to Logger
+      Figure out screen flicker on update
+      Keep a window open to allow canceling/stopping thread (maybe with stats from the server service ?
+      Set the font to Arial Narrow....
+      Make it restartable somehow after canceling?  No clue wtf is up with that.
+*/
+
 /**
  *
  * @author phreakocious
@@ -256,7 +263,7 @@ public class SnarfData {
 	public void graphUpdate() {
 		//   dump();
 		try {
-			HttpGraph.INSTANCE.queue.put(this);
+			HttpGraph.queue.put(this);
 		} catch (InterruptedException ex) {
 			Exceptions.printStackTrace(ex);
 		}
