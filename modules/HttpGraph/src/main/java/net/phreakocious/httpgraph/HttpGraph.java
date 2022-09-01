@@ -41,7 +41,7 @@ public class HttpGraph implements Generator {
 	private HttpRouter router;
 	private HttpGraphServer server;
 	private static final int COLORDIV = 40;
-	private static ArrayList<Color> colors;
+	private static final ArrayList<Color> colors;
 	private static final HashMap<String, Color> colormap;
 	private Workspace workspace;
 	private ImportController importController;
@@ -57,9 +57,9 @@ public class HttpGraph implements Generator {
 		INSTANCE = new HttpGraph();
 		log = Logger.getLogger(HttpGraph.class.getName());
 		log.setLevel(Level.INFO);
-		colormap = new HashMap<>();
-		colormap.put("localdomain", Color.GRAY);
-		generateColors(COLORDIV);
+		colormap = new HashMap<>(COLORDIV * 2);
+		colormap.put("localdomain", Color.LIGHT_GRAY);
+		colors = generateColors(COLORDIV);
 		queue = new LinkedBlockingQueue<>();
 	}
 
@@ -90,8 +90,14 @@ public class HttpGraph implements Generator {
 						colormap.put(domain, colors.remove(0));
 					}
 
+					if (colormap.containsKey(domain)) {
+						nd.setColor(colormap.get(domain));
+					} else {
+						nd.setColor(Color.DARK_GRAY);
+					}
+
 					nd.setLabel(n.label);
-					nd.setColor(colormap.get(domain));
+
 					//nd.addTimestamp(new Date().getTime());
 
 					for (String attrib : n.attributes.keySet()) {
@@ -171,13 +177,14 @@ public class HttpGraph implements Generator {
 		log.finest("HttpGraph.generate() finished");
 	}
 
-	private static void generateColors(int n) {
-		colors = new ArrayList<>(COLORDIV);
+	private static ArrayList<Color> generateColors(int n) {
+		var c = new ArrayList<Color>(n);
 		for (int i = 0; i < n; i++) {
 			//colors.add(Color.getHSBColor((float) i / (float) n, 0.6f, 0.75f));
-			colors.add(Color.getHSBColor((float) i / (float) n, 0.85f, 1f));
+			c.add(Color.getHSBColor((float) i / (float) n, 0.85f, 1f));
 			//colors.add(Color.getHSBColor((float) i / (float) n, 0.65f, 0.8f));
 		}
+		return c;
 	}
 
 // <editor-fold defaultstate="collapsed" desc="comment">
