@@ -6,7 +6,7 @@ This repository is an out-of-the-box development environment for Gephi plugins. 
 
 ### Requirements
 
-Developing Gephi plugins requires JDK 8 or later and [Maven](http://maven.apache.org/). Although any IDE/Editor can be used, [Netbeans IDE](https://netbeans.org/) is recommended as Gephi itself is based on [Netbeans Platform](https://netbeans.org/features/platform/index.html).
+Developing Gephi plugins requires JDK 11 or later and [Maven](http://maven.apache.org/).
 
 ### Create a plugin
 
@@ -70,13 +70,15 @@ Submitting a Gephi plugin for approval is a simple process based on GitHub's [pu
 
 - Navigate to your fork's URL and create a pull request. Select `master-forge` instead of `master` as base branch.
 
-- Submit your pull request.
+- Submit your pull request. If possible, before you submit make sure to [enable edits from maintainers](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/working-with-forks/allowing-changes-to-a-pull-request-branch-created-from-a-fork) so that we can help you tweak the code and configuration when needed.
 
 ## Update a plugin
 
 Updating a Gephi plugin has the same process as submitting it for the first time. Don't forget to merge from upstream's master branch.
 
 ## IDE Support
+
+Although any IDE/Editor can be used, [Netbeans IDE](https://netbeans.org/) is recommended as Gephi itself is based on [Netbeans Platform](https://netbeans.org/features/platform/index.html).
 
 ### Netbeans IDE
 
