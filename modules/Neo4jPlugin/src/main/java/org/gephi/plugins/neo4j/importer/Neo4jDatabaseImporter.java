@@ -1,5 +1,6 @@
 package org.gephi.plugins.neo4j.importer;
 
+import cern.colt.list.ObjectArrayList;
 import io.reactivex.Flowable;
 import io.reactivex.Observable;
 import org.gephi.io.importer.api.*;
@@ -90,30 +91,6 @@ public class Neo4jDatabaseImporter implements WizardImporter, LongTask {
      */
     private Driver driver;
 
-
-    public static void checkConnection(String url, String username, String password, String dbName) {
-        Driver driver = GraphDatabase.driver(url, password != null ? AuthTokens.basic(username, password) : AuthTokens.none());
-        try {
-            driver.verifyConnectivity();
-            driver.session(dbName != null ? SessionConfig.forDatabase(dbName) : SessionConfig.defaultConfig()).run("RETURN 1");
-        } catch (Exception e) {
-            throw e;
-        } finally {
-            driver.close();
-        }
-    }
-
-    public static void checkQuery(String url, String username, String password, String dbName, String query) {
-        Driver driver = GraphDatabase.driver(url, password != null ? AuthTokens.basic(username, password) : AuthTokens.none(), Config.builder().withFetchSize(5).build());
-        try {
-            driver.session(dbName != null ? SessionConfig.forDatabase(dbName) : SessionConfig.defaultConfig()).run(query);
-        } catch (Exception e) {
-            throw e;
-        } finally {
-            driver.close();
-        }
-    }
-
     @Override
     public boolean execute(ContainerLoader containerLoader) {
         this.container = containerLoader;
@@ -131,7 +108,6 @@ public class Neo4jDatabaseImporter implements WizardImporter, LongTask {
             this.driver.verifyConnectivity();
             // Creating default columns for nodes/edges
             this.getContainer().addNodeColumn("labels", String[].class);
-            this.getContainer().addEdgeColumn("type", String.class);
 
             // Do the related import
             if (this.nodeQuery != null && this.edgeQuery != null) {
@@ -317,6 +293,8 @@ public class Neo4jDatabaseImporter implements WizardImporter, LongTask {
             draft.setLabel(attributes.get("name").asString());
         } else if (attributes.containsKey("id")) {
             draft.setLabel(attributes.get("id").asString());
+        } else if (attributes.containsKey("title")) {
+            draft.setLabel(attributes.get("title").asString());
         } else {
             draft.setLabel(id);
         }
@@ -375,60 +353,84 @@ public class Neo4jDatabaseImporter implements WizardImporter, LongTask {
         attributes.keySet().forEach(key -> {
             Value value = attributes.get(key);
             String gephiColKey = attributePrefix != null ? attributePrefix + "_" + key : key;
-
             try {
-                switch (value.getClass().getSimpleName()) {
-                    case "BooleanValue":
-                        draft.setValue(gephiColKey, value.asBoolean());
-                        break;
-                    case "BytesValue":
-                        throw new NotImplementedException("Bytes value is not implemented");
-                    case "DateTimeValue":
-                        throw new NotImplementedException("DateTime value is not implemented");
-                    case "DateValue":
-                        throw new NotImplementedException("Date value is not implemented");
-                    case "DurationValue":
-                        throw new NotImplementedException("Duration value is not implemented");
-                    case "FloatValue":
-                        draft.setValue(gephiColKey, value.asFloat());
-                        break;
-                    case "IntegerValue":
-                        draft.setValue(gephiColKey, value.asInt());
-                        break;
-                    case "ListValue":
-                        draft.setValue(gephiColKey, value.asList());
-                        break;
-                    case "LocalDateTimeValue":
-                        throw new NotImplementedException("LocalDateTime value is not implemented");
-                    case "LocalTimeValue":
-                        throw new NotImplementedException("LocalTime value is not implemented");
-                    case "MapValue":
-                        throw new NotImplementedException("Map value is not implemented");
-                    case "NodeValue":
-                        throw new NotImplementedException("Node value is not implemented");
-                    case "NullValue":
-                        break;
-                    case "NumberValueAdapter":
-                        draft.setValue(gephiColKey, value.asNumber());
-                        break;
-                    case "ObjectValueAdapter":
-                        throw new NotImplementedException("Object value is not implemented");
-                    case "PathValue":
-                        throw new NotImplementedException("Path value is not implemented");
-                    case "PointValue":
-                        throw new NotImplementedException("Point  value is not implemented");
-                    case "RelationshipValue":
-                        throw new NotImplementedException("Relationship value is not implemented");
-                    case "TimeValue":
-                        throw new NotImplementedException("Time value is not implemented");
-                    case "StringValue":
-                        draft.setValue(gephiColKey, value.asString());
-                        break;
+                Object gephiValue = this.neo4jValueToGephi(value);
+                if (gephiValue != null) {
+                    System.out.println(gephiValue.getClass().toString());
+                    draft.setValue(gephiColKey, gephiValue);
                 }
             } catch (Exception e) {
-                this.getReport().log(String.format("Property %s on node %s has been skipped due to bad type", key, draft.getId()));
+                this.getReport().log(String.format("Property %s on %s %s has been skipped due to bad type", key, draft instanceof NodeDraft ? "node" : "edge", draft.getId()));
             }
         });
+    }
+
+    private Object neo4jValueToGephi(Value value) {
+        Object result = null;
+        System.out.println(value);
+        System.out.println(value.type().name());
+        switch (value.type().name()) {
+            case "ANY":
+                throw new NotImplementedException("Any value is not implemented");
+            case "BOOLEAN":
+                result = value.asBoolean();
+                break;
+            case "BYTES":
+                throw new NotImplementedException("Bytes value is not implemented");
+            case "DATE_TIME":
+                throw new NotImplementedException("DateTime value is not implemented");
+            case "DATE":
+                throw new NotImplementedException("Date value is not implemented");
+            case "DURATION":
+                throw new NotImplementedException("Duration value is not implemented");
+            case "FLOAT":
+                result = value.asFloat();
+                break;
+            case "INTEGER":
+                result = value.asInt();
+                break;
+            case "LIST":
+            case "LIST OF ANY?":
+                if(value.asList().size() > 0) {
+                    result = toArray(value.asList(this::neo4jValueToGephi));
+                }
+
+                break;
+            case "LOCAL_DATE_TIME":
+                throw new NotImplementedException("LocalDateTime value is not implemented");
+            case "LOCAL_TIME":
+                throw new NotImplementedException("LocalTime value is not implemented");
+            case "MAP":
+                throw new NotImplementedException("Map value is not implemented");
+            case "NODE":
+                throw new NotImplementedException("Node value is not implemented");
+            case "NULL":
+                result = null;
+                break;
+            case "NUMBER":
+                result = value.asNumber();
+                break;
+            case "ObjectValueAdapter":
+                throw new NotImplementedException("Object value is not implemented");
+            case "PATH":
+                throw new NotImplementedException("Path value is not implemented");
+            case "POINT":
+                throw new NotImplementedException("Point  value is not implemented");
+            case "RELATIONSHIP":
+                throw new NotImplementedException("Relationship value is not implemented");
+            case "STRING":
+                result = value.asString();
+                break;
+            case "TIME":
+                throw new NotImplementedException("Time value is not implemented");
+        }
+        return result;
+    }
+
+    public <T> T[] toArray(List<T> list) {
+        Class clazz = list.get(0).getClass(); // check for size and null before
+        T[] array = (T[]) java.lang.reflect.Array.newInstance(clazz, list.size());
+        return list.toArray(array);
     }
 
     @Override

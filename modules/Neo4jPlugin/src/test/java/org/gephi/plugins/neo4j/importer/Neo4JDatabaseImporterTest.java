@@ -1,5 +1,6 @@
 package org.gephi.plugins.neo4j.importer;
 
+import org.gephi.io.importer.api.Report;
 import org.gephi.io.importer.impl.ImportContainerImpl;
 import org.gephi.plugins.neo4j.AbstractNeo4jIntegrationTest;
 import org.junit.BeforeClass;
@@ -39,6 +40,8 @@ public class Neo4JDatabaseImporterTest extends AbstractNeo4jIntegrationTest {
 
             assertEquals("Bad node size", nbNodes, container.getNodeCount());
             assertEquals("Bad edge size", nbEdges, container.getEdgeCount());
+
+            this.logReport(importer.getReport());
         }
     }
 
@@ -65,6 +68,8 @@ public class Neo4JDatabaseImporterTest extends AbstractNeo4jIntegrationTest {
 
             assertEquals("Bad node size", nbNodes, container.getNodeCount());
             assertEquals("Bad edge size", nbEdges, container.getEdgeCount());
+
+            this.logReport(importer.getReport());
         }
     }
 
@@ -90,6 +95,8 @@ public class Neo4JDatabaseImporterTest extends AbstractNeo4jIntegrationTest {
 
             assertEquals("Bad node size", nbNodes, container.getNodeCount());
             assertEquals("Bad edge size", nbEdges, container.getEdgeCount());
+
+            this.logReport(importer.getReport());
         }
     }
 
@@ -115,6 +122,8 @@ public class Neo4JDatabaseImporterTest extends AbstractNeo4jIntegrationTest {
 
             assertEquals("Bad node size", nbNodes, container.getNodeCount());
             assertEquals("Bad edge size", nbEdges, container.getEdgeCount());
+
+            this.logReport(importer.getReport());
         }
     }
 
@@ -142,7 +151,14 @@ public class Neo4JDatabaseImporterTest extends AbstractNeo4jIntegrationTest {
 
             assertEquals("Bad node size", nbNodes, container.getNodeCount());
             assertEquals("Bad edge size", nbEdges, container.getEdgeCount());
+
+            this.logReport(importer.getReport());
         }
+    }
+
+    private void logReport(Report report) {
+        System.out.println(report.getText());
+        report.getIssues(100).forEachRemaining(i -> System.out.println(i.getMessage()));
     }
 
 }
