@@ -95,13 +95,15 @@ public class Neo4jDatabaseImporter implements WizardImporter, LongTask {
     public boolean execute(ContainerLoader containerLoader) {
         this.container = containerLoader;
         this.report = new Report();
-        this.progressTicket.setDisplayName("Neo4j import");
-        this.progressTicket.switchToIndeterminate();
-        this.progressTicket.start();
+        if (this.progressTicket != null) {
+            this.progressTicket.setDisplayName("Neo4j import");
+            this.progressTicket.switchToIndeterminate();
+            this.progressTicket.start();
+        }
 
         try {
             // Create the neo4j driver
-            this.progressTicket.progress("Connecting to neo4j...");
+            if (this.progressTicket != null) this.progressTicket.progress("Connecting to neo4j...");
             if (this.driver != null) this.driver.close();
             this.driver = GraphDatabase.driver(
                     url != null ? url : "neo4j://localhost",
@@ -125,7 +127,7 @@ public class Neo4jDatabaseImporter implements WizardImporter, LongTask {
             this.getReport().logIssue(new Issue(e, Issue.Level.CRITICAL));
         } finally {
             if (this.driver != null) this.driver.close();
-            this.progressTicket.finish();
+            if (this.progressTicket != null) this.progressTicket.finish();
         }
 
         return !cancel;
@@ -138,7 +140,7 @@ public class Neo4jDatabaseImporter implements WizardImporter, LongTask {
         Value parameters = parameters("labels", labels, "relationshipTypes", relationshipTypes);
 
         // Import nodes
-        this.progressTicket.progress("Importing nodes...");
+        if (this.progressTicket != null) this.progressTicket.progress("Importing nodes...");
         long nbNodesImported = Flowable.using(
                 () -> this.driver.rxSession(this.DBName != null ? SessionConfig.forDatabase(this.DBName) : SessionConfig.defaultConfig()),
                 session -> session.readTransaction(tx -> {
@@ -155,7 +157,7 @@ public class Neo4jDatabaseImporter implements WizardImporter, LongTask {
         this.getReport().log(String.format("%s nodes imported", nbNodesImported));
 
         // Import edges
-        this.progressTicket.progress("Importing edges...");
+        if (this.progressTicket != null) this.progressTicket.progress("Importing edges...");
         long nbEdgesImported = Flowable.using(
                 () -> this.driver.rxSession(this.DBName != null ? SessionConfig.forDatabase(this.DBName) : SessionConfig.defaultConfig()),
                 session -> session.readTransaction(tx -> {
@@ -178,7 +180,7 @@ public class Neo4jDatabaseImporter implements WizardImporter, LongTask {
      */
     private void doImportByNodeAndEdgeQueries() {
         // Import nodes
-        this.progressTicket.progress("Importing nodes...");
+        if (this.progressTicket != null) this.progressTicket.progress("Importing nodes...");
         long nbNodesImported = Flowable.using(
                 () -> this.driver.rxSession(this.DBName != null ? SessionConfig.forDatabase(this.DBName) : SessionConfig.defaultConfig()),
                 session -> session.readTransaction(tx -> {
@@ -204,7 +206,7 @@ public class Neo4jDatabaseImporter implements WizardImporter, LongTask {
         this.getReport().log(String.format("%s nodes imported", nbNodesImported));
 
         // Import edges
-        this.progressTicket.progress("Importing edges...");
+        if (this.progressTicket != null) this.progressTicket.progress("Importing edges...");
         long nbEdgesImported = Flowable.using(
                 () -> this.driver.rxSession(this.DBName != null ? SessionConfig.forDatabase(this.DBName) : SessionConfig.defaultConfig()),
                 session -> session.readTransaction(tx -> {
