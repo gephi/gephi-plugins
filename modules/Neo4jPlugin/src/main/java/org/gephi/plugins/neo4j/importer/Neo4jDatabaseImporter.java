@@ -1,6 +1,5 @@
 package org.gephi.plugins.neo4j.importer;
 
-import cern.colt.list.ObjectArrayList;
 import io.reactivex.Flowable;
 import io.reactivex.Observable;
 import org.gephi.io.importer.api.*;
@@ -40,6 +39,7 @@ public class Neo4jDatabaseImporter implements WizardImporter, LongTask {
     public ContainerLoader container;
     private Report report;
     private boolean cancel = false;
+    private ProgressTicket progressTicket;
 
 
     /**
@@ -95,17 +95,20 @@ public class Neo4jDatabaseImporter implements WizardImporter, LongTask {
     public boolean execute(ContainerLoader containerLoader) {
         this.container = containerLoader;
         this.report = new Report();
-
-
-        // Create the neo4j driver
-        if (this.driver != null) this.driver.close();
-        this.driver = GraphDatabase.driver(
-                url != null ? url : "neo4j://localhost",
-                this.passwd != null ? AuthTokens.basic(this.username, this.passwd) : AuthTokens.none()
-        );
+        this.progressTicket.setDisplayName("Neo4j import");
+        this.progressTicket.switchToIndeterminate();
+        this.progressTicket.start();
 
         try {
+            // Create the neo4j driver
+            this.progressTicket.progress("Connecting to neo4j...");
+            if (this.driver != null) this.driver.close();
+            this.driver = GraphDatabase.driver(
+                    url != null ? url : "neo4j://localhost",
+                    this.passwd != null ? AuthTokens.basic(this.username, this.passwd) : AuthTokens.none()
+            );
             this.driver.verifyConnectivity();
+
             // Creating default columns for nodes/edges
             this.getContainer().addNodeColumn("labels", String[].class);
 
@@ -122,6 +125,7 @@ public class Neo4jDatabaseImporter implements WizardImporter, LongTask {
             this.getReport().logIssue(new Issue(e, Issue.Level.CRITICAL));
         } finally {
             if (this.driver != null) this.driver.close();
+            this.progressTicket.finish();
         }
 
         return !cancel;
@@ -134,6 +138,7 @@ public class Neo4jDatabaseImporter implements WizardImporter, LongTask {
         Value parameters = parameters("labels", labels, "relationshipTypes", relationshipTypes);
 
         // Import nodes
+        this.progressTicket.progress("Importing nodes...");
         long nbNodesImported = Flowable.using(
                 () -> this.driver.rxSession(this.DBName != null ? SessionConfig.forDatabase(this.DBName) : SessionConfig.defaultConfig()),
                 session -> session.readTransaction(tx -> {
@@ -150,6 +155,7 @@ public class Neo4jDatabaseImporter implements WizardImporter, LongTask {
         this.getReport().log(String.format("%s nodes imported", nbNodesImported));
 
         // Import edges
+        this.progressTicket.progress("Importing edges...");
         long nbEdgesImported = Flowable.using(
                 () -> this.driver.rxSession(this.DBName != null ? SessionConfig.forDatabase(this.DBName) : SessionConfig.defaultConfig()),
                 session -> session.readTransaction(tx -> {
@@ -172,6 +178,7 @@ public class Neo4jDatabaseImporter implements WizardImporter, LongTask {
      */
     private void doImportByNodeAndEdgeQueries() {
         // Import nodes
+        this.progressTicket.progress("Importing nodes...");
         long nbNodesImported = Flowable.using(
                 () -> this.driver.rxSession(this.DBName != null ? SessionConfig.forDatabase(this.DBName) : SessionConfig.defaultConfig()),
                 session -> session.readTransaction(tx -> {
@@ -197,6 +204,7 @@ public class Neo4jDatabaseImporter implements WizardImporter, LongTask {
         this.getReport().log(String.format("%s nodes imported", nbNodesImported));
 
         // Import edges
+        this.progressTicket.progress("Importing edges...");
         long nbEdgesImported = Flowable.using(
                 () -> this.driver.rxSession(this.DBName != null ? SessionConfig.forDatabase(this.DBName) : SessionConfig.defaultConfig()),
                 session -> session.readTransaction(tx -> {
@@ -216,10 +224,10 @@ public class Neo4jDatabaseImporter implements WizardImporter, LongTask {
                                     return false;
                                 }
                                 return this.mergeEdgeInGephi(
-                                        record.get("id").asString(),
+                                        record.get("id").toString(),
                                         record.containsKey("type") ? record.get("type").asString() : null,
-                                        record.get("sourceId").asString(),
-                                        record.get("targetId").asString(),
+                                        record.get("sourceId").toString(),
+                                        record.get("targetId").toString(),
                                         record.fields().stream().filter(t -> !Arrays.asList("id", "type", "sourceId", "targetId").contains(t.key())).collect(Collectors.toMap(Pair::key, Pair::value))
                                 );
                             })
@@ -290,11 +298,11 @@ public class Neo4jDatabaseImporter implements WizardImporter, LongTask {
 
         // Setting gephi label
         if (attributes.containsKey("name")) {
-            draft.setLabel(attributes.get("name").asString());
+            draft.setLabel(attributes.get("name").toString());
         } else if (attributes.containsKey("id")) {
-            draft.setLabel(attributes.get("id").asString());
+            draft.setLabel(attributes.get("id").toString());
         } else if (attributes.containsKey("title")) {
-            draft.setLabel(attributes.get("title").asString());
+            draft.setLabel(attributes.get("title").toString());
         } else {
             draft.setLabel(id);
         }
@@ -333,7 +341,7 @@ public class Neo4jDatabaseImporter implements WizardImporter, LongTask {
         // Do some check to validate that the edge can be imported
         if (this.getContainer().edgeExists(id)) return false;
         if (!this.getContainer().nodeExists(sourceId) || !this.getContainer().nodeExists(targetId)) {
-            this.report.log(String.format("Edge %s has been skipped due to missing extrimity", id));
+            this.report.log(String.format("Edge %s has been skipped due to missing extremity", id));
             return false;
         }
 
@@ -342,6 +350,19 @@ public class Neo4jDatabaseImporter implements WizardImporter, LongTask {
         draft.setType(type);
         draft.setSource(this.getContainer().getNode(sourceId));
         draft.setTarget(this.getContainer().getNode(targetId));
+
+        // Setting gephi Weight if possible
+        try {
+            if (attributes.get("Weight") != null) {
+                draft.setWeight(attributes.get("Weight").asDouble());
+            } else if (attributes.get("weight") != null) {
+                draft.setWeight(attributes.get("weight").asDouble());
+            } else if (attributes.get("score") != null) {
+                draft.setWeight(attributes.get("score").asDouble());
+            }
+        } catch (Exception e) {
+            // nothing to do
+        }
         this.addNeo4jAttributes(draft, attributes, type);
 
         // Add edge to Gephi
@@ -356,19 +377,16 @@ public class Neo4jDatabaseImporter implements WizardImporter, LongTask {
             try {
                 Object gephiValue = this.neo4jValueToGephi(value);
                 if (gephiValue != null) {
-                    System.out.println(gephiValue.getClass().toString());
                     draft.setValue(gephiColKey, gephiValue);
                 }
             } catch (Exception e) {
-                this.getReport().log(String.format("Property %s on %s %s has been skipped due to bad type", key, draft instanceof NodeDraft ? "node" : "edge", draft.getId()));
+                this.getReport().log(String.format("Property %s on %s %s has been skipped: %s", key, draft instanceof NodeDraft ? "node" : "edge", draft.getId(), e.getMessage()));
             }
         });
     }
 
     private Object neo4jValueToGephi(Value value) {
         Object result = null;
-        System.out.println(value);
-        System.out.println(value.type().name());
         switch (value.type().name()) {
             case "ANY":
                 throw new NotImplementedException("Any value is not implemented");
@@ -391,7 +409,7 @@ public class Neo4jDatabaseImporter implements WizardImporter, LongTask {
                 break;
             case "LIST":
             case "LIST OF ANY?":
-                if(value.asList().size() > 0) {
+                if (value.asList().size() > 0) {
                     result = toArray(value.asList(this::neo4jValueToGephi));
                 }
 
@@ -435,6 +453,7 @@ public class Neo4jDatabaseImporter implements WizardImporter, LongTask {
 
     @Override
     public void setProgressTicket(ProgressTicket progressTicket) {
+        this.progressTicket = progressTicket;
     }
 
     @Override
