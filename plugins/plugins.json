@@ -3644,6 +3644,38 @@
       },
       "sourcecode": "https://github.com/elwin013/gephi-plugins/tree/er-generator",
       "homepage": null
+    },
+    {
+      "id": "katz-centrality",
+      "name": "Katz Centrality",
+      "short_description": "Katz Centrality calculation",
+      "long_description": "Katz Centrality calculation",
+      "readme": "## Katz Centrality\n\nThe plugin was developed under the initiative of the [Open University Of Israel](https://www.openu.ac.il/en/pages/default.aspx).\n\n### The Algorithm Description\n\nFor a network with `n` nodes, the `n x n` adjacency matrix `A` is the matrix\nin which `a_ij \u003d 1` when the network has an edge from node `i` to node `j`; and\n`a_ij \u003d 0` otherwise. In the particular case in which the network is undirected\nwe have `a_ij \u003d a_ji`; i.e. the adjacency matrix is symmetric `A \u003d A^T`. More\ngenerally, if the edges are weighted, then `a_ij` is the weight of the edge from\nnode `i` to node `j`:\nThe Katz (sometimes also called Katz-Bonacich) centrality measures with\nthe parameter of the network nodes are defined by the `n x 1` vector:\n\n\n![Katz Centrality Formula](./KatzCentralityFormula.png)\n\n\n### Installation\n\nIf the official Gephi distribution doesn\u0027t include this plugin yet, it can be installed as follows:\n\n- open Gephi application\n- go to Plugins menu, search for Katz Centrality and Install\n- finally select Restart Now\n\nAfter Gephi application re-opens the plugin will be available\nunder Statistics plugins:\n\n![Katz Centrality Plugin Location](./gephi_with_katz.png)\n\n\n",
+      "license": "Apache 2.0",
+      "authors": [
+        {
+          "name": "Yossi Spektor",
+          "email": "easpex@gmail.com",
+          "link": "https://spektor.dev"
+        }
+      ],
+      "category": "Metric",
+      "last_update": "September 2, 2022",
+      "images": [
+        {
+          "image": "imgs/katz-centrality/KatzCentralityFormula.png",
+          "thumbnail": "imgs/katz-centrality/KatzCentralityFormula-thumbnail.png"
+        }
+      ],
+      "versions": {
+        "0.9.6": {
+          "url": "0.9/katz-centrality-1.0.0.nbm",
+          "last_update": "September 2, 2022",
+          "plugin_version": "1.0.0"
+        }
+      },
+      "sourcecode": "$sourcecode_url",
+      "homepage": null
     }
   ]
 }
