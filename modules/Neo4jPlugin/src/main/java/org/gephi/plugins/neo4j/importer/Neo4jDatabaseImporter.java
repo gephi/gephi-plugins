@@ -295,7 +295,6 @@ public class Neo4jDatabaseImporter implements WizardImporter, LongTask {
     private Boolean mergeNodeInGephi(String id, String[] labels, Map<String, Value> attributes) {
         if (this.getContainer().nodeExists(id)) return false;
 
-        if(this.progressTicket != null) this.progressTicket.progress(String.format("Importing node %s", id));
         NodeDraft draft = this.getContainer().factory().newNodeDraft(id);
         String mainLabel = (labels != null && labels.length > 0) ? labels[0] : "";
 
@@ -348,7 +347,6 @@ public class Neo4jDatabaseImporter implements WizardImporter, LongTask {
             return false;
         }
 
-        if(this.progressTicket != null) this.progressTicket.progress(String.format("Importing edge %s", id));
         EdgeDraft draft = this.getContainer().factory().newEdgeDraft(id);
         draft.setLabel(type);
         draft.setType(type);
@@ -449,7 +447,13 @@ public class Neo4jDatabaseImporter implements WizardImporter, LongTask {
         return result;
     }
 
-    public <T> T[] toArray(List<T> list) {
+    /**
+     * Create an
+     * @param list
+     * @param <T>
+     * @return
+     */
+    private <T> T[] toArray(List<T> list) {
         Class clazz = list.get(0).getClass(); // check for size and null before
         T[] array = (T[]) java.lang.reflect.Array.newInstance(clazz, list.size());
         return list.toArray(array);
