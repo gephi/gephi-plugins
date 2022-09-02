@@ -1,0 +1,486 @@
+/*
+ * author: Clément Levallois
+ */
+package net.clementlevallois.web.publish.plugin.controller;
+
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+import java.awt.Color;
+import java.io.IOException;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+import java.util.ResourceBundle;
+import java.util.UUID;
+import java.util.prefs.Preferences;
+
+import javax.swing.JTextField;
+import javax.swing.SwingWorker;
+import org.openide.util.Exceptions;
+import org.openide.util.NbBundle;
+import org.openide.util.NbPreferences;
+
+/**
+ *
+ * @author LEVALLOIS
+ */
+public class JPanelWebExport extends javax.swing.JPanel {
+
+    private JsonObject responseGithubConnectAction;
+    private JsonObject responseGithubUserCodeInput;
+    private String accessToken;
+    private String deviceCode;
+    private static final ResourceBundle bundle = NbBundle.getBundle(GephiPluginDesktopLogic.class);
+
+    /**
+     * Creates new form JPanelWebExport
+     */
+    public JPanelWebExport() {
+        initComponents();
+        Preferences preferences = NbPreferences.forModule(this.getClass());
+        accessToken = preferences.get("access_token", "");
+        if (accessToken.isBlank()) {
+            jLabelAlreadyLoggedIn.setVisible(false);
+        } else {
+            jLabelAlreadyLoggedIn.setVisible(true);
+        }
+        jTextFieldGithubErrorMsg.setBackground(Color.WHITE);
+        jTextFieldGithubErrorMsg.setText("");
+        jTextFieldUserCode.setForeground(Color.RED);
+        jTextAreaUrls.setText("");
+    }
+
+    SwingWorker pollWorker = new SwingWorker<Void, Integer>() {
+
+        @Override
+        protected Void doInBackground() throws Exception {
+            JsonObject jsonObject = new JsonObject();
+            String clientId = "Iv1.936245ffcd310336";
+            try {
+                HttpClient client = HttpClient.newHttpClient();
+                String url = "https://github.com/login/oauth/access_token";
+
+                String inputParams = "client_id="
+                        + clientId
+                        + "&"
+                        + "device_code="
+                        + deviceCode
+                        + "&"
+                        + "grant_type=urn:ietf:params:oauth:grant-type:device_code";
+                HttpRequest request = HttpRequest.newBuilder()
+                        .uri(URI.create(url))
+                        .header("accept", "application/json")
+                        .POST(HttpRequest.BodyPublishers.ofString(inputParams))
+                        .build();
+
+                boolean success = false;
+                long startTime = System.currentTimeMillis();
+                long maxDuration = 900_000;
+                float currDuration = 0;
+                int loops = 0;
+                while (!success && currDuration < maxDuration) {
+                    HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+                    JsonElement responseAsJsonElement = JsonParser.parseString(response.body());
+                    jsonObject = responseAsJsonElement.getAsJsonObject();
+                    if (jsonObject.has("access_token")) {
+                        break;
+                    }
+                    currDuration = (float) (System.currentTimeMillis() - startTime) / (float) 1000;
+                    Thread.sleep(5200);
+                    publish(++loops);
+                }
+            } catch (IOException | InterruptedException ex) {
+                Exceptions.printStackTrace(ex);
+                jTextFieldGithubErrorMsg.setText(ex.getMessage());
+            }
+            responseGithubUserCodeInput = jsonObject;
+            return null;
+        }
+
+        @Override
+        public void done() {
+            if (responseGithubUserCodeInput.has("access_token")) {
+                accessToken = responseGithubUserCodeInput.get("access_token").getAsString();
+                Preferences preferences = NbPreferences.forModule(this.getClass());
+                preferences.put("access_token", accessToken);
+                jTextFieldGithubErrorMsg.setForeground(Color.decode("#45ba48"));
+                jTextFieldGithubErrorMsg.setText(bundle.getString("general.message.success_switch_to_publish"));
+            } else {
+                jTextFieldGithubErrorMsg.setText(bundle.getString("general.message.error.no_user_code"));
+            }
+        }
+
+        protected void process(Integer loops) {
+            jTextFieldGithubErrorMsg.setText(loops.toString());
+        }
+
+    };
+
+    public JTextField getjTextFieldUserCode() {
+        return jTextFieldUserCode;
+    }
+
+    public JsonObject getResponseGithubConnectAction() {
+        return responseGithubConnectAction;
+    }
+
+    /**
+     * This method is called from within the constructor to initialize the form.
+     * WARNING: Do NOT modify this code. The content of this method is always
+     * regenerated by the Form Editor.
+     */
+    @SuppressWarnings("unchecked")
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+    private void initComponents() {
+
+        tabs = new javax.swing.JTabbedPane();
+        tabGithub = new javax.swing.JPanel();
+        jButtonGithubConnect = new javax.swing.JButton();
+        jTextFieldUserCode = new javax.swing.JTextField();
+        jTextFieldWebsiteLoginUrl = new javax.swing.JTextField();
+        jLabel2 = new javax.swing.JLabel();
+        jTextFieldGithubErrorMsg = new javax.swing.JTextField();
+        jLabel3 = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
+        jTextField1 = new javax.swing.JTextField();
+        jLabel5 = new javax.swing.JLabel();
+        jLabel6 = new javax.swing.JLabel();
+        jTextField2 = new javax.swing.JTextField();
+        jLabel7 = new javax.swing.JLabel();
+        jLabel8 = new javax.swing.JLabel();
+        jLabel9 = new javax.swing.JLabel();
+        jLabel1 = new javax.swing.JLabel();
+        jLabelAlreadyLoggedIn = new javax.swing.JLabel();
+        jButtonResetLogin = new javax.swing.JButton();
+        tabPublish = new javax.swing.JPanel();
+        jButtonPublish = new javax.swing.JButton();
+        jLabel10 = new javax.swing.JLabel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jTextAreaUrls = new javax.swing.JTextArea();
+        jLabel11 = new javax.swing.JLabel();
+
+        tabs.setMinimumSize(new java.awt.Dimension(700, 454));
+        tabs.setPreferredSize(new java.awt.Dimension(700, 454));
+
+        jButtonGithubConnect.setBackground(new java.awt.Color(204, 204, 204));
+        org.openide.awt.Mnemonics.setLocalizedText(jButtonGithubConnect, org.openide.util.NbBundle.getMessage(JPanelWebExport.class, "JPanelWebExport.jButtonGithubConnect.text")); // NOI18N
+        jButtonGithubConnect.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonGithubConnectActionPerformed(evt);
+            }
+        });
+
+        jTextFieldUserCode.setForeground(new java.awt.Color(255, 0, 0));
+        jTextFieldUserCode.setText(org.openide.util.NbBundle.getMessage(JPanelWebExport.class, "JPanelWebExport.jTextFieldUserCode.text")); // NOI18N
+
+        jTextFieldWebsiteLoginUrl.setText(org.openide.util.NbBundle.getMessage(JPanelWebExport.class, "JPanelWebExport.jTextFieldWebsiteLoginUrl.text")); // NOI18N
+
+        org.openide.awt.Mnemonics.setLocalizedText(jLabel2, "<html>"+bundle.getString("general.message.success_ready_to_publish")+"</html>");
+
+        jTextFieldGithubErrorMsg.setForeground(new java.awt.Color(255, 0, 0));
+        jTextFieldGithubErrorMsg.setText(org.openide.util.NbBundle.getMessage(JPanelWebExport.class, "JPanelWebExport.jTextFieldGithubErrorMsg.text")); // NOI18N
+
+        org.openide.awt.Mnemonics.setLocalizedText(jLabel3, org.openide.util.NbBundle.getMessage(JPanelWebExport.class, "JPanelWebExport.jLabel3.text")); // NOI18N
+
+        jLabel4.setFont(new java.awt.Font("Segoe UI", 2, 12)); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(jLabel4, "<html>"+bundle.getString("general.message.github.create_account")+"</html>");
+
+        jTextField1.setText(org.openide.util.NbBundle.getMessage(JPanelWebExport.class, "JPanelWebExport.jTextField1.text")); // NOI18N
+
+        org.openide.awt.Mnemonics.setLocalizedText(jLabel5, org.openide.util.NbBundle.getMessage(JPanelWebExport.class, "JPanelWebExport.jLabel5.text")); // NOI18N
+
+        org.openide.awt.Mnemonics.setLocalizedText(jLabel6, "<html>"+bundle.getString("general.message.github.install_gephi_app")+"</html>");
+
+        jTextField2.setText(org.openide.util.NbBundle.getMessage(JPanelWebExport.class, "JPanelWebExport.jTextField2.text")); // NOI18N
+
+        org.openide.awt.Mnemonics.setLocalizedText(jLabel7, org.openide.util.NbBundle.getMessage(JPanelWebExport.class, "JPanelWebExport.jLabel7.text")); // NOI18N
+
+        org.openide.awt.Mnemonics.setLocalizedText(jLabel8, org.openide.util.NbBundle.getMessage(JPanelWebExport.class, "JPanelWebExport.jLabel8.text")); // NOI18N
+
+        org.openide.awt.Mnemonics.setLocalizedText(jLabel9, "<html>"+bundle.getString("general.message.github.past_code")+"</html>");
+
+        jLabel1.setFont(new java.awt.Font("Segoe UI", 2, 12)); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(jLabel1, org.openide.util.NbBundle.getMessage(JPanelWebExport.class, "JPanelWebExport.jLabel1.text")); // NOI18N
+
+        jLabelAlreadyLoggedIn.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        jLabelAlreadyLoggedIn.setForeground(new java.awt.Color(0, 204, 102));
+        org.openide.awt.Mnemonics.setLocalizedText(jLabelAlreadyLoggedIn, "<html>"+bundle.getString("general.message.warning_setup_already_done")+"</html>");
+
+        jButtonResetLogin.setBackground(new java.awt.Color(204, 204, 204));
+        org.openide.awt.Mnemonics.setLocalizedText(jButtonResetLogin, org.openide.util.NbBundle.getMessage(JPanelWebExport.class, "JPanelWebExport.jButtonResetLogin.text")); // NOI18N
+        jButtonResetLogin.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonResetLoginActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout tabGithubLayout = new javax.swing.GroupLayout(tabGithub);
+        tabGithub.setLayout(tabGithubLayout);
+        tabGithubLayout.setHorizontalGroup(
+            tabGithubLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(tabGithubLayout.createSequentialGroup()
+                .addGap(23, 23, 23)
+                .addGroup(tabGithubLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel3)
+                    .addComponent(jLabel5)
+                    .addGroup(tabGithubLayout.createSequentialGroup()
+                        .addComponent(jLabel6)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(tabGithubLayout.createSequentialGroup()
+                        .addComponent(jLabel8)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jTextFieldUserCode, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(tabGithubLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, tabGithubLayout.createSequentialGroup()
+                            .addComponent(jLabel9)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jTextFieldWebsiteLoginUrl, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, tabGithubLayout.createSequentialGroup()
+                            .addComponent(jLabel7)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(jButtonGithubConnect)))
+                    .addComponent(jLabel2)
+                    .addGroup(tabGithubLayout.createSequentialGroup()
+                        .addComponent(jTextFieldGithubErrorMsg, javax.swing.GroupLayout.PREFERRED_SIZE, 321, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(76, 76, 76)
+                        .addComponent(jButtonResetLogin, javax.swing.GroupLayout.PREFERRED_SIZE, 191, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(tabGithubLayout.createSequentialGroup()
+                        .addGap(16, 16, 16)
+                        .addComponent(jLabel4)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(tabGithubLayout.createSequentialGroup()
+                        .addGap(6, 6, 6)
+                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 573, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jLabelAlreadyLoggedIn, javax.swing.GroupLayout.PREFERRED_SIZE, 616, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(61, Short.MAX_VALUE))
+        );
+        tabGithubLayout.setVerticalGroup(
+            tabGithubLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, tabGithubLayout.createSequentialGroup()
+                .addContainerGap(20, Short.MAX_VALUE)
+                .addComponent(jLabelAlreadyLoggedIn)
+                .addGap(18, 18, 18)
+                .addComponent(jLabel3)
+                .addGap(2, 2, 2)
+                .addGroup(tabGithubLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel4)
+                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(tabGithubLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel6)
+                    .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(21, 21, 21)
+                .addGroup(tabGithubLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel7)
+                    .addComponent(jButtonGithubConnect))
+                .addGap(18, 18, 18)
+                .addGroup(tabGithubLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel8)
+                    .addComponent(jTextFieldUserCode, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(tabGithubLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel9)
+                    .addComponent(jTextFieldWebsiteLoginUrl, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(26, 26, 26)
+                .addComponent(jLabel2)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel1)
+                .addGap(18, 18, 18)
+                .addGroup(tabGithubLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jTextFieldGithubErrorMsg, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButtonResetLogin))
+                .addContainerGap())
+        );
+
+        tabs.addTab(org.openide.util.NbBundle.getMessage(JPanelWebExport.class, "JPanelWebExport.tabGithub.TabConstraints.tabTitle"), tabGithub); // NOI18N
+
+        jButtonPublish.setBackground(new java.awt.Color(204, 204, 204));
+        jButtonPublish.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(jButtonPublish, org.openide.util.NbBundle.getMessage(JPanelWebExport.class, "JPanelWebExport.jButtonPublish.text")); // NOI18N
+        jButtonPublish.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonPublishActionPerformed(evt);
+            }
+        });
+
+        jLabel10.setForeground(new java.awt.Color(255, 51, 51));
+        jLabel10.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        org.openide.awt.Mnemonics.setLocalizedText(jLabel10, "<html>"+bundle.getString("general.message.warning_confidentiality")+"</html>");
+
+        jTextAreaUrls.setEditable(false);
+        jTextAreaUrls.setColumns(20);
+        jTextAreaUrls.setRows(5);
+        jScrollPane1.setViewportView(jTextAreaUrls);
+
+        jLabel11.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        org.openide.awt.Mnemonics.setLocalizedText(jLabel11, "<html>"+bundle.getString("general.message.info.url_will_appear_below")+"</html>");
+
+        javax.swing.GroupLayout tabPublishLayout = new javax.swing.GroupLayout(tabPublish);
+        tabPublish.setLayout(tabPublishLayout);
+        tabPublishLayout.setHorizontalGroup(
+            tabPublishLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(tabPublishLayout.createSequentialGroup()
+                .addGroup(tabPublishLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(tabPublishLayout.createSequentialGroup()
+                        .addGap(115, 115, 115)
+                        .addComponent(jButtonPublish, javax.swing.GroupLayout.PREFERRED_SIZE, 375, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(tabPublishLayout.createSequentialGroup()
+                        .addGap(66, 66, 66)
+                        .addGroup(tabPublishLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jLabel11, javax.swing.GroupLayout.PREFERRED_SIZE, 476, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 472, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addContainerGap(158, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, tabPublishLayout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 514, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        tabPublishLayout.setVerticalGroup(
+            tabPublishLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(tabPublishLayout.createSequentialGroup()
+                .addGap(31, 31, 31)
+                .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 59, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(29, 29, 29)
+                .addComponent(jButtonPublish, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(jLabel11, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 167, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(15, Short.MAX_VALUE))
+        );
+
+        tabs.addTab(org.openide.util.NbBundle.getMessage(JPanelWebExport.class, "JPanelWebExport.tabPublish.TabConstraints.tabTitle"), tabPublish); // NOI18N
+
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
+        this.setLayout(layout);
+        layout.setHorizontalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(tabs, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGap(0, 0, Short.MAX_VALUE))
+        );
+        layout.setVerticalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(tabs, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+    }// </editor-fold>//GEN-END:initComponents
+
+    private void jButtonGithubConnectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonGithubConnectActionPerformed
+        jTextFieldGithubErrorMsg.setBackground(Color.WHITE);
+        jTextFieldGithubErrorMsg.setText("");
+        responseGithubConnectAction = PublishingActions.connectToGithub();
+        if (!responseGithubConnectAction.has("user_code")) {
+            jTextFieldUserCode.setForeground(Color.RED);
+            jTextFieldGithubErrorMsg.setText(bundle.getString("general.message.error.cant_retrieve_user_code"));
+        } else {
+            String userCode = responseGithubConnectAction.get("user_code").getAsString();
+            deviceCode = responseGithubConnectAction.get("device_code").getAsString();
+            jTextFieldUserCode.setForeground(Color.decode("#45ba48")); //green
+            jTextFieldUserCode.setText(userCode);
+            pollWorker.execute();
+        }
+    }//GEN-LAST:event_jButtonGithubConnectActionPerformed
+
+    private void jButtonResetLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonResetLoginActionPerformed
+        Preferences preferences = NbPreferences.forModule(this.getClass());
+        preferences.remove("access_token");
+        jLabelAlreadyLoggedIn.setVisible(false);
+        jTextFieldGithubErrorMsg.setText(bundle.getString("general.message.success_reset"));
+    }//GEN-LAST:event_jButtonResetLoginActionPerformed
+
+    private void jButtonPublishActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonPublishActionPerformed
+        JsonObject jsonObjectOfGexfAsStringRetrieval = PublishingActions.getGexfAsString();
+        if (!jsonObjectOfGexfAsStringRetrieval.has("200")) {
+            if (!jsonObjectOfGexfAsStringRetrieval.keySet().isEmpty()) {
+                String errorKey = jsonObjectOfGexfAsStringRetrieval.keySet().iterator().next();
+                jTextAreaUrls.setText(jsonObjectOfGexfAsStringRetrieval.get(errorKey).getAsString());
+            } else {
+                jTextAreaUrls.setText(bundle.getString("general.message.error.gexf_not_retrieved"));
+            }
+        } else {
+            String gexf = jsonObjectOfGexfAsStringRetrieval.get("200").getAsString();
+            Preferences preferences = NbPreferences.forModule(this.getClass());
+            accessToken = preferences.get("access_token", "");
+            if (accessToken.isBlank()) {
+                jTextAreaUrls.setText(bundle.getString("general.message.error.no_token"));
+            } else {
+                String fileName = "network-" + UUID.randomUUID().toString().substring(0, 12) + ".gexf";
+
+                JsonObject responseGistPublished = PublishingActions.postGexfToGist(gexf, accessToken, fileName);
+                if (!responseGistPublished.has("201")) {
+                    if (responseGistPublished.keySet().isEmpty()) {
+                        jTextAreaUrls.setText(bundle.getString("general.message.error.unspecific_error_while_publishing"));
+                    } else {
+                        String errorMsgInBodyKey = responseGistPublished.keySet().iterator().next();
+                        if (responseGistPublished.get(errorMsgInBodyKey) != null) {
+                            String errorMsgInBodyValue = responseGistPublished.get(errorMsgInBodyKey).getAsString();
+                            jTextAreaUrls.setText(
+                                    bundle.getString("general.message.error.gist_creation")
+                                            + errorMsgInBodyKey
+                                            + "; "
+                                            + bundle.getString("general.message.error_message")
+                                            + errorMsgInBodyValue);
+                        }
+                    }
+                } else {
+                    JsonObject metadataOnGist = responseGistPublished.get("201").getAsJsonObject();
+                    String htmlUrl = metadataOnGist.get("html_url").getAsString();
+                    JsonObject metadataOnFiles = metadataOnGist.get("files").getAsJsonObject();
+                    JsonObject metadataOnOneFile = metadataOnFiles.get(fileName).getAsJsonObject();
+                    String rawUrl = metadataOnOneFile.get("raw_url").getAsString();
+                    String retinaBareURl = "https://ouestware.gitlab.io/retina/beta/#/graph/";
+                    String retinaFullURl = retinaBareURl + "?url=" + rawUrl;
+
+                    String textForUserWithURL = bundle.getString("general.message.url_published_gexf")
+                            + "\n"
+                            + htmlUrl
+                            + "\n\n"
+                            + bundle.getString("general.message.url_published_on_retina")
+                            + "\n"
+                            + retinaFullURl;
+
+                    jTextAreaUrls.setText(textForUserWithURL);
+                }
+            }
+        }
+    }//GEN-LAST:event_jButtonPublishActionPerformed
+
+
+    // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton jButtonGithubConnect;
+    private javax.swing.JButton jButtonPublish;
+    private javax.swing.JButton jButtonResetLogin;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel11;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
+    private javax.swing.JLabel jLabelAlreadyLoggedIn;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JTextArea jTextAreaUrls;
+    private javax.swing.JTextField jTextField1;
+    private javax.swing.JTextField jTextField2;
+    private javax.swing.JTextField jTextFieldGithubErrorMsg;
+    private javax.swing.JTextField jTextFieldUserCode;
+    private javax.swing.JTextField jTextFieldWebsiteLoginUrl;
+    private javax.swing.JPanel tabGithub;
+    private javax.swing.JPanel tabPublish;
+    private javax.swing.JTabbedPane tabs;
+    // End of variables declaration//GEN-END:variables
+}

@@ -1,5 +1,0 @@
-Manifest-Version: 1.0
-OpenIDE-Module-Name: Web Exporters
-OpenIDE-Module-Short-Description: Export and share your network on the web in a couple of clicks
-OpenIDE-Module-Long-Description: This plugin helps you export and share the graph you have created in Gephi, to the web. It aims at offering export functions to web applications that are free and without the need for registration, if possible.
-OpenIDE-Module-Display-Category: Export
