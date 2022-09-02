@@ -22,9 +22,7 @@ the parameter of the network nodes are defined by the `n x 1` vector:
 If the official Gephi distribution doesn't include this plugin yet, it can be installed as follows:
 
 - open Gephi application
-- go to Plugins menu, click on Downloaded tab, click Add plugins
-- download `katz-centrality-1.0.0.nbm` [file](https://app.box.com/s/pcu10d0at159fehp24rb6jt9jpdqyi18) and click Install
-- a dialog window will open, click Continue until the process is finished
+- go to Plugins menu, search for Katz Centrality and Install
 - finally select Restart Now
 
 After Gephi application re-opens the plugin will be available
