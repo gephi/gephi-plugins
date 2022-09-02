@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
 <!DOCTYPE module_updates PUBLIC "-//NetBeans//DTD Autoupdate Catalog 2.8//EN" "https://netbeans.apache.org/dtds/autoupdate-catalog-2_8.dtd">
-<module_updates timestamp="11/43/15/01/09/2022">
+<module_updates timestamp="41/44/05/02/09/2022">
 
 
 
@@ -177,6 +177,14 @@
     <manifest OpenIDE-Module="johns.hopkins.university.applied.phyics.laboratory.hairball.buster" OpenIDE-Module-Display-Category="Layout" OpenIDE-Module-Implementation-Version="0.9.3" OpenIDE-Module-Long-Description="Hairball Buster (HB) (also called node-neighbor centrality or NNC) is an approach to graph analytic triage that uses simple calculations and visualization to quickly understand and compare graphs. Rather than displaying highly interconnected graphs as `hairballs' that are difficult to understand, HB provides a simple standard visual representation of a graph and its metrics." OpenIDE-Module-Module-Dependencies="org.gephi.graph.api &gt; 0.9.3, org.gephi.layout.api &gt; 0.9.3, org.openide.util &gt; 9.23" OpenIDE-Module-Name="Hairball Buster" OpenIDE-Module-Requires="org.openide.modules.ModuleFormat1" OpenIDE-Module-Short-Description="Implementation of Hairball Buster Graph Analytic Triage Approach for Gephi." OpenIDE-Module-Specification-Version="0.9.3"/>
     
     <message_digest algorithm="SHA-512" value="af8296dc82aa6800c9e37d7f506d54e48b3bf16fd9d9569fa801106f1cbfc83b3d944afe085f5ce9189e22627e50c323d4cd1227e713f6a8a9a0e1b2a6a1aa6c"/>
+</module>
+
+<module codenamebase="net.phreakocious.httpgraph" distribution="httpgraph-1.0.9.nbm" downloadsize="50332124" homepage="http://phreakocious.net" license="A3782299" moduleauthor="phreakocious" needsrestart="true" releasedate="2022/09/02" targetcluster="plugins">
+        
+    <manifest OpenIDE-Module="net.phreakocious.httpgraph" OpenIDE-Module-Display-Category="Generator" OpenIDE-Module-Implementation-Version="1.0.9" OpenIDE-Module-Long-Description="&lt;br /&gt;&#10;This plugin runs a proxy server in Java and collects data from your web browsing to generate a graph of the web. &lt;br /&gt;&#10;&lt;br /&gt;&#10;All you have to do is configure the proxy setting in your browser for http://127.0.0.1:8088 (or a port of your choosing) &lt;br /&gt;&#10;&lt;br /&gt;&#10;** Don't forget to disable this browser setting when&lt;br /&gt;&#10;** you're done or your browing won't work! &lt;br /&gt;&#10;&lt;br /&gt;&#10;Proxy functionality provided by Membrane ESB - http://membrane-soa.org/esb/&lt;br /&gt;&#10;A video that shows how this works is available on Vimeo - http://vimeo.com/18591468&lt;br /&gt;&#10;&lt;br /&gt;&#10;Many thanks to @kutsalb for his patience and repeated educational floggings.  Retraining a perl apologist in Java is no trivial task!&lt;br /&gt;&#10;&lt;br /&gt;" OpenIDE-Module-Module-Dependencies="org.gephi.layout.plugin &gt; 0.9.3, org.gephi.project.api &gt; 0.9.3, org.gephi.io.importer.plugin &gt; 0.9.3, org.openide.util.lookup &gt; 8.49, org.openide.util &gt; 9.23, org.gephi.layout.api &gt; 0.9.3, org.gephi.io.generator.api &gt; 0.9.3, org.gephi.utils.longtask &gt; 0.9.3, org.gephi.ui.utils &gt; 0.9.3, org.gephi.io.importer.api &gt; 0.9.3" OpenIDE-Module-Name="HttpGraph" OpenIDE-Module-Requires="org.openide.modules.ModuleFormat1" OpenIDE-Module-Short-Description="Generate a graph of the web while you're browsing" OpenIDE-Module-Specification-Version="1.0.9"/>
+        
+
+    <message_digest algorithm="SHA-512" value="cf0607b431bdbc568e385c41999d4a8ae9d86bfb65785c1f61dcc04b04e6041ed7c5bd0c0dd0daec6a76c4f5695a3a60f3a130ba54243ea3e756af3f68f0adb4"/>
 </module>
 
 <module codenamebase="org.yale.cs.graphics.gephi.imagepreview" distribution="imagepreview-1.0.0.nbm" downloadsize="15488" homepage="http://github.com/gephi/gephi-plugins/imagepreview" moduleauthor="Yitzchak Lockerman (Yale Computer Graphics Group)" needsrestart="true" releasedate="2022/06/24" targetcluster="plugins">
@@ -664,6 +672,34 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
    limitations under the License.
 -----------------------------------------------------
 Apache 2.0</license>
+<license name="A3782299">Copyright (c) 2011, phreakocious
+All rights reserved.
+
+Redistribution and use in source and binary forms, with or without 
+modification, are permitted provided that the following conditions 
+are met:
+
+  o Redistributions of source code must retain the above copyright 
+    notice, this list of conditions and the following disclaimer.
+  o Redistributions in binary form must reproduce the above copyright
+    notice, this list of conditions and the following disclaimer in 
+    the documentation and/or other materials provided with the 
+    distribution.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS 
+"AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT 
+LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT 
+HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, 
+INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, 
+BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS 
+OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED 
+AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT 
+LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY
+WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE 
+POSSIBILITY OF SUCH DAMAGE.
+-----------------------------------------------------
+license</license>
 <license name="3B86D65B">                    GNU GENERAL PUBLIC LICENSE
                        Version 3, 29 June 2007
 
