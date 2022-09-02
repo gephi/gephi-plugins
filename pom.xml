@@ -73,6 +73,7 @@
         <module>modules/ForceAtlas3D</module>
         <module>modules/InspectorTool</module>
         <module>modules/ErGenerator</module>
+        <module>modules/KatzCentrality</module>
     </modules>
     
     <!-- Properties -->
