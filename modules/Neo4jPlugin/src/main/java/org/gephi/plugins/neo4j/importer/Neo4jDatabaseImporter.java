@@ -96,9 +96,9 @@ public class Neo4jDatabaseImporter implements WizardImporter, LongTask {
         this.container = containerLoader;
         this.report = new Report();
         if (this.progressTicket != null) {
+            this.progressTicket.start();
             this.progressTicket.setDisplayName("Neo4j import");
             this.progressTicket.switchToIndeterminate();
-            this.progressTicket.start();
         }
 
         try {
@@ -295,6 +295,7 @@ public class Neo4jDatabaseImporter implements WizardImporter, LongTask {
     private Boolean mergeNodeInGephi(String id, String[] labels, Map<String, Value> attributes) {
         if (this.getContainer().nodeExists(id)) return false;
 
+        if(this.progressTicket != null) this.progressTicket.progress(String.format("Importing node %s", id));
         NodeDraft draft = this.getContainer().factory().newNodeDraft(id);
         String mainLabel = (labels != null && labels.length > 0) ? labels[0] : "";
 
@@ -347,6 +348,7 @@ public class Neo4jDatabaseImporter implements WizardImporter, LongTask {
             return false;
         }
 
+        if(this.progressTicket != null) this.progressTicket.progress(String.format("Importing edge %s", id));
         EdgeDraft draft = this.getContainer().factory().newEdgeDraft(id);
         draft.setLabel(type);
         draft.setType(type);
