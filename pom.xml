@@ -48,7 +48,7 @@
         <module>modules/MdsMetric</module>
         <module>modules/VectorCalculator</module>
         <module>modules/PrestigePlugin</module>
-<!--        <module>modules/HttpGraph</module>-->
+        <module>modules/HttpGraph</module>
         <module>modules/MinimumSpanningTree</module>
         <module>modules/SimilarityComputer</module>
 <!--        <module>modules/AgensGraphPlugin</module>-->

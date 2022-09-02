@@ -5,8 +5,16 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.logging.Logger;
+import org.openide.util.Exceptions;
 
-//TODO: Standardize calls to Logger
+/*
+TODO: Standardize calls to Logger
+      Figure out screen flicker on update
+      Keep a window open to allow canceling/stopping thread (maybe with stats from the server service ?
+      Set the font to Arial Narrow....
+      Make it restartable somehow after canceling?  No clue wtf is up with that.
+*/
+
 /**
  *
  * @author phreakocious
@@ -252,10 +260,13 @@ public class SnarfData {
 		}
 	}
 
-	//TODO: Redo this with a blocking queue
 	public void graphUpdate() {
 		//   dump();
-		HttpGraph.INSTANCE.graphupdate(this);
+		try {
+			HttpGraph.queue.put(this);
+		} catch (InterruptedException ex) {
+			Exceptions.printStackTrace(ex);
+		}
 	}
 
 	private void dump() {

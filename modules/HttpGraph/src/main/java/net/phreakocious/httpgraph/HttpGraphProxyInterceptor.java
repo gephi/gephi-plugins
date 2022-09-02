@@ -15,10 +15,6 @@ public class HttpGraphProxyInterceptor extends AbstractInterceptor {
 
 	private static final Logger log = Logger.getLogger(HttpGraphProxyInterceptor.class.getName());
 
-	public HttpGraphProxyInterceptor() {
-		log.info(String.format("HTTP Graph proxy now running on port %d", HttpGraph.INSTANCE.getProxyPort()));
-	}
-
 	@Override
 	public Outcome handleResponse(Exchange exchange) throws Exception {
 		String srchost = exchange.getRemoteAddrIp();
@@ -33,7 +29,7 @@ public class HttpGraphProxyInterceptor extends AbstractInterceptor {
 			referer = null;
 		}
 		int statuscode = exchange.getResponse().getStatusCode();
-		int bytes = exchange.getResponseContentLength();
+		long bytes = exchange.getResponseContentLength();
 
 		if (!exchange.getResponse().isBodyEmpty()) {
 			bytes = exchange.getResponse().getBody().getLength();
@@ -49,7 +45,7 @@ public class HttpGraphProxyInterceptor extends AbstractInterceptor {
 		sd.nullCheck();
 		sd.graphUpdate();
 
-		log.info(String.format("%s %s %s %s", urinode.id, type, urinode.getAttribAsString("status code"), urinode.getAttribAsString("bytes")));
+		log.info(String.format("%s %s %d %d", urinode.id, type, statuscode, bytes));
 		return Outcome.CONTINUE;
 	}
 }
