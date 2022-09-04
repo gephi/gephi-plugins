@@ -13,7 +13,6 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.util.ResourceBundle;
-import java.util.UUID;
 import org.gephi.graph.api.GraphController;
 import org.gephi.graph.api.GraphModel;
 import org.gephi.io.exporter.api.ExportController;
@@ -55,47 +54,6 @@ public class PublishingActions {
 
         jsonObject.addProperty("200", gexfToSendAsString);
 
-        return jsonObject;
-    }
-
-    public static JsonObject pollGithubToCheckForUserAuth(String deviceCode) {
-        JsonObject jsonObject = new JsonObject();
-        String clientId = "Iv1.936245ffcd310336";
-        try {
-            HttpClient client = HttpClient.newHttpClient();
-            String url = "https://github.com/login/oauth/access_token";
-
-            String inputParams = "client_id="
-                    + clientId
-                    + "&"
-                    + "device_code="
-                    + deviceCode
-                    + "&"
-                    + "grant_type=urn:ietf:params:oauth:grant-type:device_code";
-            HttpRequest request = HttpRequest.newBuilder()
-                    .uri(URI.create(url))
-                    .header("accept", "application/json")
-                    .POST(HttpRequest.BodyPublishers.ofString(inputParams))
-                    .build();
-
-            boolean success = false;
-            long startTime = System.currentTimeMillis();
-            long maxDuration = 900_000;
-            float currDuration = 0;
-            while (!success && currDuration < maxDuration) {
-                HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-                JsonElement responseAsJsonElement = JsonParser.parseString(response.body());
-                jsonObject = responseAsJsonElement.getAsJsonObject();
-                if (jsonObject.has("access_token")) {
-                    System.out.println(jsonObject.toString());
-                    break;
-                }
-                currDuration = (float) (System.currentTimeMillis() - startTime) / (float) 1000;
-                Thread.sleep(5200);
-            }
-        } catch (IOException | InterruptedException ex) {
-            Exceptions.printStackTrace(ex);
-        }
         return jsonObject;
     }
 
