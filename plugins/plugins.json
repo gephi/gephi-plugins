@@ -1440,38 +1440,6 @@
       "homepage": null
     },
     {
-      "id": "spatial-ranking",
-      "name": "Spatial Ranking",
-      "short_description": "",
-      "long_description": "\u003ch3\u003eIntroduction\u003c/h3\u003e\n\u003cp\u003eSpatialRanking is a plugin to map an attribute into a spatial coordinate.\u003c/p\u003e\n\u003ch3\u003ePlugin Owner’s Notes\u003c/h3\u003e\n\u003cp\u003eSpatialRanking is a plugin to map an attribute into a spatial coordinate. As any other ranking, it is possible to choose the spline, the minimal and maximal values. The SpatialRanking interface will be found in the ranking interface.\u003c/p\u003e",
-      "readme": null,
-      "license": "AGPL v3",
-      "authors": [
-        {
-          "name": "Mathieu Bastian",
-          "email": null,
-          "link": "http://gephi.org"
-        }
-      ],
-      "category": "Appearance",
-      "last_update": "January 4, 2013",
-      "images": [
-        {
-          "image": "imgs/spatial-ranking/spatialranking_screenshot.png",
-          "thumbnail": "imgs/spatial-ranking/spatialranking_screenshot.png"
-        }
-      ],
-      "versions": {
-        "0.8.2": {
-          "url": "0.8.2/org-gephi-plugins-spatialranking1.nbm",
-          "last_update": "January 4, 2013",
-          "plugin_version": null
-        }
-      },
-      "sourcecode": "https://github.com/gephi/gephi-plugins/tree/spatial-ranking",
-      "homepage": null
-    },
-    {
       "id": "clique-percolation",
       "name": "Clique Percolation",
       "short_description": "",
@@ -3704,6 +3672,11 @@
         }
       ],
       "versions": {
+        "0.8.2": {
+          "url": "0.8.2/org-gephi-plugins-spatialranking1.nbm",
+          "last_update": "January 4, 2013",
+          "plugin_version": null
+        },
         "0.9.6": {
           "url": "0.9/position-ranking-plugin-2.0.0.nbm",
           "last_update": "September 6, 2022",
