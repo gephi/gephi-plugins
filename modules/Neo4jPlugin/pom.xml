@@ -5,12 +5,12 @@
     <parent>
         <artifactId>gephi-plugin-parent</artifactId>
         <groupId>org.gephi</groupId>
-        <version>0.9.5</version>
+        <version>0.9.6</version>
     </parent>
 
     <groupId>ouestware</groupId>
     <artifactId>neo4j-plugin</artifactId>
-    <name>Neo4j plugin</name>
+    <name>Neo4j Plugin</name>
     <version>1.0.0</version>
     <packaging>nbm</packaging>
 
@@ -109,6 +109,7 @@
                 <artifactId>nbm-maven-plugin</artifactId>
                 <configuration>
                     <licenseName>Apache 2.0</licenseName>
+                    <licenseFile>Apache v2.txt</licenseFile>
                     <author>Benoit Simard</author>
                     <authorEmail>contact@bsimard.com</authorEmail>
                     <authorUrl>https://wwww.ouestware.com/en</authorUrl>
