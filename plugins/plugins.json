@@ -3676,6 +3676,42 @@
       },
       "sourcecode": "$sourcecode_url",
       "homepage": null
+    },
+    {
+      "id": "position-ranking-plugin",
+      "name": "Position Ranking",
+      "short_description": "Position ranking to transform nodes\u0027 coordinates",
+      "long_description": "A plugin to create nice scatter plots. Adds a new ranking transformer for X/Y/Z positions in the Appearance Window The position of nodes is set according to the ranking output.",
+      "readme": "## Introduction\n\nPositionRanking is a plugin to map an attribute into the X/Y/Z coordinate to create nice scatter plots.\n\nAs any other ranking, it is possible to choose the spline, the minimal and maximal values.\n\n",
+      "license": "Apache 2.0",
+      "authors": [
+        {
+          "name": "Mathieu Bastian, Alexis Jacomy",
+          "email": "mathieu.bastian@gephi.org",
+          "link": ""
+        }
+      ],
+      "category": "Appearance",
+      "last_update": "September 6, 2022",
+      "images": [
+        {
+          "image": "imgs/position-ranking-plugin/panel.png",
+          "thumbnail": "imgs/position-ranking-plugin/panel-thumbnail.png"
+        },
+        {
+          "image": "imgs/position-ranking-plugin/scatterplot.png",
+          "thumbnail": "imgs/position-ranking-plugin/scatterplot-thumbnail.png"
+        }
+      ],
+      "versions": {
+        "0.9.6": {
+          "url": "0.9/position-ranking-plugin-2.0.0.nbm",
+          "last_update": "September 6, 2022",
+          "plugin_version": "2.0.0"
+        }
+      },
+      "sourcecode": "https://github.com/gephi/gephi-plugins/tree/position-ranking-plugin",
+      "homepage": null
     }
   ]
 }
