@@ -19,7 +19,7 @@
  along with Gephi.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package org.gephi.plugins.spatialranking;
+package org.gephi.plugins.positionranking;
 
 import org.gephi.appearance.api.Ranking;
 import org.gephi.appearance.spi.RankingTransformer;
@@ -31,7 +31,7 @@ import org.openide.util.lookup.ServiceProvider;
  * @author Alexis Jacomy, Mathieu Bastian
  */
 @ServiceProvider(service = Transformer.class, position = 1000)
-public class SpatialTransformer implements RankingTransformer<Node> {
+public class PositionTransformer implements RankingTransformer<Node> {
 
     public static String X_AXIS = "X";
     public static String Y_AXIS = "Y";

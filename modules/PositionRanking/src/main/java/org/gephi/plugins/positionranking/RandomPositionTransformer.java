@@ -1,4 +1,4 @@
-package org.gephi.plugins.spatialranking;
+package org.gephi.plugins.positionranking;
 
 import java.util.Random;
 import org.gephi.appearance.spi.SimpleTransformer;

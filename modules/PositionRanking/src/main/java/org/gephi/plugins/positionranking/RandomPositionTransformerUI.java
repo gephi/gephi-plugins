@@ -1,4 +1,4 @@
-package org.gephi.plugins.spatialranking;
+package org.gephi.plugins.positionranking;
 
 import javax.swing.AbstractButton;
 import javax.swing.Icon;
@@ -14,7 +14,7 @@ public class RandomPositionTransformerUI implements TransformerUI {
 
     @Override
     public TransformerCategory getCategory() {
-        return SpatialTransformerUI.CATEGORY;
+        return PositionTransformerUI.CATEGORY;
     }
 
     @Override
@@ -24,7 +24,7 @@ public class RandomPositionTransformerUI implements TransformerUI {
 
     @Override
     public String getDisplayName() {
-        return NbBundle.getMessage(SpatialTransformerUI.class, "RandomPositionTransformerUI.name");
+        return NbBundle.getMessage(PositionTransformerUI.class, "RandomPositionTransformerUI.name");
     }
 
     @Override

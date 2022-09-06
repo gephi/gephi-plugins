@@ -19,7 +19,7 @@
  along with Gephi.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package org.gephi.plugins.spatialranking;
+package org.gephi.plugins.positionranking;
 
 import javax.swing.AbstractButton;
 import javax.swing.Icon;
@@ -36,19 +36,19 @@ import org.openide.util.lookup.ServiceProvider;
  * @author Alexis Jacomy, Mathieu Bastian
  */
 @ServiceProvider(service = TransformerUI.class, position = 1000)
-public class SpatialTransformerUI implements TransformerUI {
+public class PositionTransformerUI implements TransformerUI {
 
-    private SpatialTransformerPanel panel;
+    private PositionTransformerPanel panel;
 
     protected static final TransformerCategory CATEGORY = new TransformerCategory() {
         @Override
         public String getDisplayName() {
-            return NbBundle.getMessage(SpatialTransformerUI.class, "SpatialTransformerUI.category");
+            return NbBundle.getMessage(PositionTransformerUI.class, "PositionTransformerUI.category");
         }
 
         @Override
         public Icon getIcon() {
-            return ImageUtilities.loadImageIcon("org/gephi/plugins/spatialranking/xyz.png", false);
+            return ImageUtilities.loadImageIcon("org/gephi/plugins/positionranking/xyz.png", false);
         }
     };
 
@@ -60,7 +60,7 @@ public class SpatialTransformerUI implements TransformerUI {
     @Override
     public synchronized JPanel getPanel(Function function) {
         if (panel == null) {
-            panel = new SpatialTransformerPanel();
+            panel = new PositionTransformerPanel();
         }
         panel.setup((RankingFunction) function);
         return panel;
@@ -68,7 +68,7 @@ public class SpatialTransformerUI implements TransformerUI {
 
     @Override
     public String getDisplayName() {
-        return NbBundle.getMessage(SpatialTransformerUI.class, "SpatialTransformerUI.name");
+        return NbBundle.getMessage(PositionTransformerUI.class, "PositionTransformerUI.name");
     }
 
     @Override
@@ -88,6 +88,6 @@ public class SpatialTransformerUI implements TransformerUI {
 
     @Override
     public Class getTransformerClass() {
-        return SpatialTransformer.class;
+        return PositionTransformer.class;
     }
 }

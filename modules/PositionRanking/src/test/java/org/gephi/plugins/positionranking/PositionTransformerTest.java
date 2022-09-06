@@ -1,4 +1,4 @@
-package org.gephi.plugins.spatialranking;
+package org.gephi.plugins.positionranking;
 
 import java.util.Arrays;
 import java.util.Optional;
@@ -13,7 +13,7 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.openide.util.Lookup;
 
-public class SpatialTransformerTest {
+public class PositionTransformerTest {
 
     @Test
     public void testTransform() {
@@ -22,26 +22,26 @@ public class SpatialTransformerTest {
         AppearanceModel model = appearanceController.getModel();
 
         Function[] functions = model.getNodeFunctions();
-        Optional<Function> function = Arrays.stream(functions).filter(f -> f.getTransformer() instanceof SpatialTransformer).findFirst();
+        Optional<Function> function = Arrays.stream(functions).filter(f -> f.getTransformer() instanceof PositionTransformer).findFirst();
         Assert.assertTrue(function.isPresent());
 
-        SpatialTransformer spatialTransformer = function.get().getTransformer();
-        spatialTransformer.setAxe(SpatialTransformer.X_AXIS);
+        PositionTransformer positionTransformer = function.get().getTransformer();
+        positionTransformer.setAxe(PositionTransformer.X_AXIS);
 
         Node node = graph.getNode("1");
-        spatialTransformer.transform(node, null, null, 1f);
-        Assert.assertEquals(spatialTransformer.getMax(), node.x(), 0.0);
+        positionTransformer.transform(node, null, null, 1f);
+        Assert.assertEquals(positionTransformer.getMax(), node.x(), 0.0);
 
-        spatialTransformer.transform(node, null, null, 0.5f);
-        Assert.assertEquals((spatialTransformer.getMax() - spatialTransformer.getMin()) / 2.0, node.x(), 0.0);
+        positionTransformer.transform(node, null, null, 0.5f);
+        Assert.assertEquals((positionTransformer.getMax() - positionTransformer.getMin()) / 2.0, node.x(), 0.0);
 
-        spatialTransformer.setAxe(SpatialTransformer.Y_AXIS);
-        spatialTransformer.transform(node, null, null, 1f);
-        Assert.assertEquals(spatialTransformer.getMax(), node.y(), 0.0);
+        positionTransformer.setAxe(PositionTransformer.Y_AXIS);
+        positionTransformer.transform(node, null, null, 1f);
+        Assert.assertEquals(positionTransformer.getMax(), node.y(), 0.0);
 
-        spatialTransformer.setAxe(SpatialTransformer.Z_AXIS);
-        spatialTransformer.transform(node, null, null, 1f);
-        Assert.assertEquals(spatialTransformer.getMax(), node.z(), 0.0);
+        positionTransformer.setAxe(PositionTransformer.Z_AXIS);
+        positionTransformer.transform(node, null, null, 1f);
+        Assert.assertEquals(positionTransformer.getMax(), node.z(), 0.0);
     }
 
     @Test
@@ -51,7 +51,7 @@ public class SpatialTransformerTest {
         AppearanceModel model = appearanceController.getModel();
 
         Function[] functions = model.getNodeFunctions();
-        Optional<Function> function = Arrays.stream(functions).filter(f -> f.getTransformer() instanceof SpatialTransformer).findFirst();
+        Optional<Function> function = Arrays.stream(functions).filter(f -> f.getTransformer() instanceof PositionTransformer).findFirst();
         Assert.assertTrue(function.isPresent());
 
         TransformerUI ui = function.get().getUI();

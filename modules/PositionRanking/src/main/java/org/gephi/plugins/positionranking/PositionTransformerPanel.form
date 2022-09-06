@@ -68,7 +68,7 @@
     <Component class="javax.swing.JLabel" name="labelMinValue">
       <Properties>
         <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-          <ResourceString bundle="com/ofnodesandedges/spatialRanking/Bundle.properties" key="SpatialTransformerPanel.labelMinValue.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+          <ResourceString bundle="org/gephi/plugins/positionranking/Bundle.properties" key="PositionTransformerPanel.labelMinValue.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
         </Property>
       </Properties>
     </Component>
@@ -82,7 +82,7 @@
     <Component class="javax.swing.JLabel" name="labelMaxValue">
       <Properties>
         <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-          <ResourceString bundle="com/ofnodesandedges/spatialRanking/Bundle.properties" key="SpatialTransformerPanel.labelMaxValue.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+          <ResourceString bundle="org/gephi/plugins/positionranking/Bundle.properties" key="PositionTransformerPanel.labelMaxValue.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
         </Property>
       </Properties>
     </Component>
@@ -108,7 +108,7 @@
     <Component class="javax.swing.JLabel" name="labelAxis">
       <Properties>
         <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-          <ResourceString bundle="com/ofnodesandedges/spatialRanking/Bundle.properties" key="SpatialTransformerPanel.labelAxis.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+          <ResourceString bundle="org/gephi/plugins/positionranking/Bundle.properties" key="PositionTransformerPanel.labelAxis.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
         </Property>
       </Properties>
     </Component>

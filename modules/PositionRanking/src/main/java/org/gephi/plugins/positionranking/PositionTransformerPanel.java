@@ -19,7 +19,7 @@
  along with Gephi.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package org.gephi.plugins.spatialranking;
+package org.gephi.plugins.positionranking;
 
 import javax.swing.JPanel;
 import org.gephi.appearance.api.RankingFunction;
@@ -28,24 +28,24 @@ import org.openide.util.NbPreferences;
 /**
  * @author Alexis Jacomy, Mathieu Bastian
  */
-public class SpatialTransformerPanel extends JPanel {
+public class PositionTransformerPanel extends JPanel {
 
-    public SpatialTransformerPanel() {
+    public PositionTransformerPanel() {
         initComponents();
     }
 
     public void setup(RankingFunction function) {
-        final String MIN_VALUE = "SpatialTransformerPanel_min";
-        final String MAX_VALUE = "SpatialTransformerPanel__max";
-        final String AXIS = "SpatialTransformerPanel_axis";
+        final String MIN_VALUE = "PositionTransformerPanel_min";
+        final String MAX_VALUE = "PositionTransformerPanel__max";
+        final String AXIS = "PositionTransformerPanel_axis";
 
-        final SpatialTransformer transformer = function.getTransformer();
+        final PositionTransformer transformer = function.getTransformer();
 
-        float minValueStart = NbPreferences.forModule(SpatialTransformerPanel.class)
+        float minValueStart = NbPreferences.forModule(PositionTransformerPanel.class)
             .getFloat(MIN_VALUE, transformer.getMin());
-        float maxValueStart = NbPreferences.forModule(SpatialTransformerPanel.class)
+        float maxValueStart = NbPreferences.forModule(PositionTransformerPanel.class)
             .getFloat(MAX_VALUE, transformer.getMax());
-        String axisStart = NbPreferences.forModule(SpatialTransformerPanel.class)
+        String axisStart = NbPreferences.forModule(PositionTransformerPanel.class)
             .get(AXIS, transformer.getAxe());
 
         transformer.setMin(minValueStart);
@@ -55,20 +55,20 @@ public class SpatialTransformerPanel extends JPanel {
         axeComboBox.setSelectedItem(axisStart);
         axeComboBox.addActionListener(evt -> {
             transformer.setAxe(axeComboBox.getModel().getSelectedItem().toString());
-            NbPreferences.forModule(SpatialTransformerPanel.class)
+            NbPreferences.forModule(PositionTransformerPanel.class)
                 .put(AXIS, axeComboBox.getModel().getSelectedItem().toString());
         });
 
         minValue.setValue(minValueStart);
         minValue.addChangeListener(e -> {
             transformer.setMin((Float) minValue.getValue());
-            NbPreferences.forModule(SpatialTransformerPanel.class).putFloat(MIN_VALUE, (Float) minValue.getValue());
+            NbPreferences.forModule(PositionTransformerPanel.class).putFloat(MIN_VALUE, (Float) minValue.getValue());
         });
 
         maxValue.setValue(maxValueStart);
         maxValue.addChangeListener(e -> {
             transformer.setMax((Float) maxValue.getValue());
-            NbPreferences.forModule(SpatialTransformerPanel.class).putFloat(MAX_VALUE, (Float) maxValue.getValue());
+            NbPreferences.forModule(PositionTransformerPanel.class).putFloat(MAX_VALUE, (Float) maxValue.getValue());
         });
     }
 
@@ -90,21 +90,21 @@ public class SpatialTransformerPanel extends JPanel {
 
         setPreferredSize(new java.awt.Dimension(225, 114));
 
-        labelMinValue.setText(org.openide.util.NbBundle.getMessage(SpatialTransformerPanel.class,
-            "SpatialTransformerPanel.labelMinValue.text")); // NOI18N
+        labelMinValue.setText(org.openide.util.NbBundle.getMessage(PositionTransformerPanel.class,
+            "PositionTransformerPanel.labelMinValue.text")); // NOI18N
 
         minValue.setModel(new javax.swing.SpinnerNumberModel(1.0f, 0.1f, null, 0.5f));
 
-        labelMaxValue.setText(org.openide.util.NbBundle.getMessage(SpatialTransformerPanel.class,
-            "SpatialTransformerPanel.labelMaxValue.text")); // NOI18N
+        labelMaxValue.setText(org.openide.util.NbBundle.getMessage(PositionTransformerPanel.class,
+            "PositionTransformerPanel.labelMaxValue.text")); // NOI18N
 
         maxValue.setModel(new javax.swing.SpinnerNumberModel(4.0f, 0.5f, null, 0.5f));
 
         axeComboBox.setModel(
             new javax.swing.DefaultComboBoxModel(new String[] {"Item 1", "Item 2", "Item 3", "Item 4"}));
 
-        labelAxis.setText(org.openide.util.NbBundle.getMessage(SpatialTransformerPanel.class,
-            "SpatialTransformerPanel.labelAxis.text")); // NOI18N
+        labelAxis.setText(org.openide.util.NbBundle.getMessage(PositionTransformerPanel.class,
+            "PositionTransformerPanel.labelAxis.text")); // NOI18N
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
