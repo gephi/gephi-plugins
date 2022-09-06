@@ -74,6 +74,7 @@
         <module>modules/InspectorTool</module>
         <module>modules/ErGenerator</module>
         <module>modules/KatzCentrality</module>
+        <module>modules/PositionRanking</module>
     </modules>
     
     <!-- Properties -->
