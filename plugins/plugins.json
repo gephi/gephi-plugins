@@ -3685,6 +3685,38 @@
       },
       "sourcecode": "https://github.com/gephi/gephi-plugins/tree/position-ranking-plugin",
       "homepage": null
+    },
+    {
+      "id": "neo4j-plugin",
+      "name": "Neo4j plugin",
+      "short_description": "Import Neo4j data in gephi",
+      "long_description": "Helps you to import Neo4j data in Gephi by selecting nodes \u0026 relationships types, or by defining two cypher queries, one for nodes and the other for edges",
+      "readme": "## Neo4j plugin\n\nThis plugin allows you to import a network from a Neo4j database 4.X.\n\n### Import \n\n#### Step 1: Neo4j connection \n\nTo import data from Neo4J, you must define how to connect to the Neo4j server.\nThe plugin uses the official Neo4j driver with neo4j/bolt protocol.\n\nSo to create a connection to the database you must fill : \n\n- Neo4j URL (ex: `neo4j://localhost` )\n- Database  : If empty we will use the default database \n- Authentication : Select the authentication mechanism. We support \"username/password\" and \"No authentication\" modes.\n- Username : Neo4j user with whom you want to connect to the database (ex: `neo4j`)\n- Password: Neo4j user\u0027s password\n\nYou can click on the button *Verify* to test the connection to the database with the provided values. \nIf an error occurred, its message will be displayed. \n\n#### Step 2: Import configuration\n\nThere are two import modes available :\n\n- By selecting labels and relationship types \n- By specifying two Cypher queries, one for nodes and the other for edges.\n\n##### By labels and relationship types\n\nOn this screen you have two list one for nodes, and the other for edges.\nIf you select nothing, it\u0027s the same as selecting everything. \n\nSo for example, if it\u0027s the first time you see this screen, you can click on *Finish*, and the plugin will import the whole Neo4j otherwise.\n\nIf you want to import a subset of your Neo4j database, you must provide a selection.\nIn order to do a multi-selection, just use *ctrl + click*.\n\nNOTE: We only import relationships where node extremities are part from the labels selections. \n\n##### By queries\n\nOn this screen you can define two Cypher queries : \n\n- One for retrieving nodes  \n- The other for edges\n\nWith this configuration, you can define precisely what you want to import. \nIt\u0027s really useful when you want to project your graph (ex: create the colleagues graph  when in your database you have `(:Person)-[:WORK_AT]-\u003e(:Company)`  )\n\nThe node query must return a field named *id* that is the unique identifier of your node.\nEx: `MATCH (n) RETURN id(n) AS id, labels(n) AS labels`\n\nThe edge query must return a field named *id* that is the unique identifier of your edge, but also a *sourceId* \u0026 *targetId* that must match an id from the node query\nEx: `MATCH (n)-[r]-\u003e(m) RETURN id(r) AS id, type(r) AS type, id(n) AS sourceId, id(m) AS targetId`\n\n",
+      "license": "Apache 2.0",
+      "authors": [
+        {
+          "name": "Benoit Simard",
+          "email": "contact@bsimard.com",
+          "link": "https://wwww.ouestware.com/en"
+        }
+      ],
+      "category": "Import",
+      "last_update": "September 8, 2022",
+      "images": [
+        {
+          "image": "imgs/neo4j-plugin/neo4j-logo.png",
+          "thumbnail": "imgs/neo4j-plugin/neo4j-logo-thumbnail.png"
+        }
+      ],
+      "versions": {
+        "0.9.6": {
+          "url": "0.9/neo4j-plugin-4.0.0.nbm",
+          "last_update": "September 8, 2022",
+          "plugin_version": "4.0.0"
+        }
+      },
+      "sourcecode": "https://github.com/gephi/gephi-plugins",
+      "homepage": null
     }
   ]
 }
