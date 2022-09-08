@@ -64,7 +64,7 @@ public class Neo4jDatabaseImporterConnectionPanel extends javax.swing.JPanel {
         layout.rowHeights = new int[] {0, 5, 0, 5, 0, 5, 0, 5, 0, 5, 0, 5, 0, 5, 0, 5, 0};
         setLayout(layout);
 
-        org.openide.awt.Mnemonics.setLocalizedText(dbUrlLabel, org.openide.util.NbBundle.getMessage(Neo4jDatabaseImporterConnectionPanel.class, "Neo4jDatabaseImporterConnectionPanel.dbUrlLabel.text_1")); // NOI18N
+        dbUrlLabel.setText(org.openide.util.NbBundle.getMessage(Neo4jDatabaseImporterConnectionPanel.class, "Neo4jDatabaseImporterConnectionPanel.dbUrlLabel.text_1_1")); // NOI18N
         dbUrlLabel.setName("dbUrlLabel"); // NOI18N
         dbUrlLabel.setPreferredSize(new java.awt.Dimension(100, 25));
         dbUrlLabel.setRequestFocusEnabled(false);
@@ -74,7 +74,7 @@ public class Neo4jDatabaseImporterConnectionPanel extends javax.swing.JPanel {
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         add(dbUrlLabel, gridBagConstraints);
 
-        dbUrl.setText(org.openide.util.NbBundle.getMessage(Neo4jDatabaseImporterConnectionPanel.class, "Neo4jDatabaseImporterConnectionPanel.dbUrl.text_1")); // NOI18N
+        dbUrl.setText(org.openide.util.NbBundle.getMessage(Neo4jDatabaseImporterConnectionPanel.class, "Neo4jDatabaseImporterConnectionPanel.dbUrl.text_1_1")); // NOI18N
         dbUrl.setName("dbUrl"); // NOI18N
         dbUrl.setPreferredSize(new java.awt.Dimension(300, 25));
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -83,14 +83,14 @@ public class Neo4jDatabaseImporterConnectionPanel extends javax.swing.JPanel {
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         add(dbUrl, gridBagConstraints);
 
-        org.openide.awt.Mnemonics.setLocalizedText(dbUsernameLabel, org.openide.util.NbBundle.getMessage(Neo4jDatabaseImporterConnectionPanel.class, "Neo4jDatabaseImporterConnectionPanel.dbUsernameLabel.text_1")); // NOI18N
+        dbUsernameLabel.setText(org.openide.util.NbBundle.getMessage(Neo4jDatabaseImporterConnectionPanel.class, "Neo4jDatabaseImporterConnectionPanel.dbUsernameLabel.text_1_1")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 10;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         add(dbUsernameLabel, gridBagConstraints);
 
-        dbUsername.setText(org.openide.util.NbBundle.getMessage(Neo4jDatabaseImporterConnectionPanel.class, "Neo4jDatabaseImporterConnectionPanel.dbUsername.text_1")); // NOI18N
+        dbUsername.setText(org.openide.util.NbBundle.getMessage(Neo4jDatabaseImporterConnectionPanel.class, "Neo4jDatabaseImporterConnectionPanel.dbUsername.text_1_1")); // NOI18N
         dbUsername.setName("dbUsername"); // NOI18N
         dbUsername.setPreferredSize(new java.awt.Dimension(10, 25));
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -99,7 +99,7 @@ public class Neo4jDatabaseImporterConnectionPanel extends javax.swing.JPanel {
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         add(dbUsername, gridBagConstraints);
 
-        org.openide.awt.Mnemonics.setLocalizedText(dbPasswordLabel, org.openide.util.NbBundle.getMessage(Neo4jDatabaseImporterConnectionPanel.class, "Neo4jDatabaseImporterConnectionPanel.dbPasswordLabel.text_1")); // NOI18N
+        dbPasswordLabel.setText(org.openide.util.NbBundle.getMessage(Neo4jDatabaseImporterConnectionPanel.class, "Neo4jDatabaseImporterConnectionPanel.dbPasswordLabel.text_1_1")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 12;
@@ -113,7 +113,7 @@ public class Neo4jDatabaseImporterConnectionPanel extends javax.swing.JPanel {
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         add(dbPassword, gridBagConstraints);
 
-        org.openide.awt.Mnemonics.setLocalizedText(checkBtn, org.openide.util.NbBundle.getMessage(Neo4jDatabaseImporterConnectionPanel.class, "Neo4jDatabaseImporterConnectionPanel.checkBtn.text")); // NOI18N
+        checkBtn.setText(org.openide.util.NbBundle.getMessage(Neo4jDatabaseImporterConnectionPanel.class, "Neo4jDatabaseImporterConnectionPanel.checkBtn.text_1")); // NOI18N
         checkBtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 checkBtnActionPerformed(evt);
@@ -125,21 +125,21 @@ public class Neo4jDatabaseImporterConnectionPanel extends javax.swing.JPanel {
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         add(checkBtn, gridBagConstraints);
 
-        org.openide.awt.Mnemonics.setLocalizedText(dbNameLabel, org.openide.util.NbBundle.getMessage(Neo4jDatabaseImporterConnectionPanel.class, "Neo4jDatabaseImporterConnectionPanel.dbNameLabel.text_1")); // NOI18N
+        dbNameLabel.setText(org.openide.util.NbBundle.getMessage(Neo4jDatabaseImporterConnectionPanel.class, "Neo4jDatabaseImporterConnectionPanel.dbNameLabel.text_1_1")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 6;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         add(dbNameLabel, gridBagConstraints);
 
-        dbName.setToolTipText(org.openide.util.NbBundle.getMessage(Neo4jDatabaseImporterConnectionPanel.class, "Neo4jDatabaseImporterConnectionPanel.dbName.toolTipText")); // NOI18N
+        dbName.setToolTipText(org.openide.util.NbBundle.getMessage(Neo4jDatabaseImporterConnectionPanel.class, "Neo4jDatabaseImporterConnectionPanel.dbName.toolTipText_1")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 6;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         add(dbName, gridBagConstraints);
 
-        org.openide.awt.Mnemonics.setLocalizedText(dbAuthTypeLabel, org.openide.util.NbBundle.getMessage(Neo4jDatabaseImporterConnectionPanel.class, "Neo4jDatabaseImporterConnectionPanel.dbAuthTypeLabel.text_1")); // NOI18N
+        dbAuthTypeLabel.setText(org.openide.util.NbBundle.getMessage(Neo4jDatabaseImporterConnectionPanel.class, "Neo4jDatabaseImporterConnectionPanel.dbAuthTypeLabel.text_1_1")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 8;

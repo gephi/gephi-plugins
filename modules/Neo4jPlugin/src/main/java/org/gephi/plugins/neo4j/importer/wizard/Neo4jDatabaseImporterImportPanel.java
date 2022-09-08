@@ -166,7 +166,7 @@ public class Neo4jDatabaseImporterImportPanel extends javax.swing.JPanel {
         typesPanel.add(typesScroll, gridBagConstraints);
 
         labelsLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        org.openide.awt.Mnemonics.setLocalizedText(labelsLabel, org.openide.util.NbBundle.getMessage(Neo4jDatabaseImporterImportPanel.class, "Neo4jDatabaseImporterImportPanel.labelsLabel.text")); // NOI18N
+        labelsLabel.setText(org.openide.util.NbBundle.getMessage(Neo4jDatabaseImporterImportPanel.class, "Neo4jDatabaseImporterImportPanel.labelsLabel.text_1")); // NOI18N
         labelsLabel.setMaximumSize(null);
         labelsLabel.setMinimumSize(new java.awt.Dimension(200, 24));
         labelsLabel.setPreferredSize(new java.awt.Dimension(245, 24));
@@ -178,7 +178,7 @@ public class Neo4jDatabaseImporterImportPanel extends javax.swing.JPanel {
         typesPanel.add(labelsLabel, gridBagConstraints);
 
         typesLabels.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        org.openide.awt.Mnemonics.setLocalizedText(typesLabels, org.openide.util.NbBundle.getMessage(Neo4jDatabaseImporterImportPanel.class, "Neo4jDatabaseImporterImportPanel.typesLabels.text")); // NOI18N
+        typesLabels.setText(org.openide.util.NbBundle.getMessage(Neo4jDatabaseImporterImportPanel.class, "Neo4jDatabaseImporterImportPanel.typesLabels.text_1")); // NOI18N
         typesLabels.setMinimumSize(new java.awt.Dimension(200, 24));
         typesLabels.setPreferredSize(new java.awt.Dimension(245, 24));
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -190,7 +190,7 @@ public class Neo4jDatabaseImporterImportPanel extends javax.swing.JPanel {
 
         help.setFont(new java.awt.Font("sansserif", 2, 13)); // NOI18N
         help.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        org.openide.awt.Mnemonics.setLocalizedText(help, org.openide.util.NbBundle.getMessage(Neo4jDatabaseImporterImportPanel.class, "Neo4jDatabaseImporterImportPanel.help.text")); // NOI18N
+        help.setText(org.openide.util.NbBundle.getMessage(Neo4jDatabaseImporterImportPanel.class, "Neo4jDatabaseImporterImportPanel.help.text_1")); // NOI18N
         help.setPreferredSize(new java.awt.Dimension(500, 48));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -205,8 +205,8 @@ public class Neo4jDatabaseImporterImportPanel extends javax.swing.JPanel {
         queriesPanel.setPreferredSize(new java.awt.Dimension(500, 500));
         queriesPanel.setLayout(new java.awt.GridBagLayout());
 
-        org.openide.awt.Mnemonics.setLocalizedText(nodeQueryLabel, org.openide.util.NbBundle.getMessage(Neo4jDatabaseImporterImportPanel.class, "Neo4jDatabaseImporterImportPanel.nodesQueryLabel.text")); // NOI18N
-        nodeQueryLabel.setToolTipText(org.openide.util.NbBundle.getMessage(Neo4jDatabaseImporterImportPanel.class, "Neo4jDatabaseImporterImportPanel.nodeQueryLabel.toolTipText")); // NOI18N
+        nodeQueryLabel.setText(org.openide.util.NbBundle.getMessage(Neo4jDatabaseImporterImportPanel.class, "Neo4jDatabaseImporterImportPanel.nodesQueryLabel.text")); // NOI18N
+        nodeQueryLabel.setToolTipText(org.openide.util.NbBundle.getMessage(Neo4jDatabaseImporterImportPanel.class, "Neo4jDatabaseImporterImportPanel.nodeQueryLabel.toolTipText_1")); // NOI18N
         nodeQueryLabel.setName("nodesQueryLabel"); // NOI18N
         nodeQueryLabel.setPreferredSize(new java.awt.Dimension(500, 24));
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -230,7 +230,7 @@ public class Neo4jDatabaseImporterImportPanel extends javax.swing.JPanel {
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         queriesPanel.add(nodeQueryScroll, gridBagConstraints);
 
-        org.openide.awt.Mnemonics.setLocalizedText(edgeQueryLabel, org.openide.util.NbBundle.getMessage(Neo4jDatabaseImporterImportPanel.class, "Neo4jDatabaseImporterImportPanel.edgeQueryLabel.text")); // NOI18N
+        edgeQueryLabel.setText(org.openide.util.NbBundle.getMessage(Neo4jDatabaseImporterImportPanel.class, "Neo4jDatabaseImporterImportPanel.edgeQueryLabel.text_1")); // NOI18N
         edgeQueryLabel.setPreferredSize(new java.awt.Dimension(500, 24));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -260,7 +260,6 @@ public class Neo4jDatabaseImporterImportPanel extends javax.swing.JPanel {
         nodeActionText.setColumns(20);
         nodeActionText.setLineWrap(true);
         nodeActionText.setRows(2);
-        nodeActionText.setText(org.openide.util.NbBundle.getMessage(Neo4jDatabaseImporterImportPanel.class, "Neo4jDatabaseImporterImportPanel.nodeActionText.text")); // NOI18N
         nodeActionText.setBorder(null);
         nodeActionText.setMinimumSize(new java.awt.Dimension(200, 48));
         nodeActionText.setPreferredSize(new java.awt.Dimension(400, 60));
@@ -272,8 +271,8 @@ public class Neo4jDatabaseImporterImportPanel extends javax.swing.JPanel {
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         queriesPanel.add(nodeActionTextScroll, gridBagConstraints);
 
-        org.openide.awt.Mnemonics.setLocalizedText(checkNodeQuery, org.openide.util.NbBundle.getMessage(Neo4jDatabaseImporterImportPanel.class, "Neo4jDatabaseImporterImportPanel.checkNodeQuery.text")); // NOI18N
-        checkNodeQuery.setActionCommand(org.openide.util.NbBundle.getMessage(Neo4jDatabaseImporterImportPanel.class, "Neo4jDatabaseImporterImportPanel.checkNodeQuery.actionCommand")); // NOI18N
+        checkNodeQuery.setText(org.openide.util.NbBundle.getMessage(Neo4jDatabaseImporterImportPanel.class, "Neo4jDatabaseImporterImportPanel.checkNodeQuery.text_1")); // NOI18N
+        checkNodeQuery.setActionCommand(org.openide.util.NbBundle.getMessage(Neo4jDatabaseImporterImportPanel.class, "Neo4jDatabaseImporterImportPanel.checkNodeQuery.actionCommand_1")); // NOI18N
         checkNodeQuery.setPreferredSize(new java.awt.Dimension(110, 25));
         checkNodeQuery.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -286,7 +285,7 @@ public class Neo4jDatabaseImporterImportPanel extends javax.swing.JPanel {
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTH;
         queriesPanel.add(checkNodeQuery, gridBagConstraints);
 
-        org.openide.awt.Mnemonics.setLocalizedText(checkEdgeQuery, org.openide.util.NbBundle.getMessage(Neo4jDatabaseImporterImportPanel.class, "Neo4jDatabaseImporterImportPanel.checkEdgeQuery.text")); // NOI18N
+        checkEdgeQuery.setText(org.openide.util.NbBundle.getMessage(Neo4jDatabaseImporterImportPanel.class, "Neo4jDatabaseImporterImportPanel.checkEdgeQuery.text_1")); // NOI18N
         checkEdgeQuery.setPreferredSize(new java.awt.Dimension(110, 25));
         checkEdgeQuery.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -317,7 +316,7 @@ public class Neo4jDatabaseImporterImportPanel extends javax.swing.JPanel {
         queriesPanel.add(edgeActionTextScroll, gridBagConstraints);
 
         nodeQueryHelp.setFont(new java.awt.Font("sansserif", 2, 13)); // NOI18N
-        org.openide.awt.Mnemonics.setLocalizedText(nodeQueryHelp, org.openide.util.NbBundle.getMessage(Neo4jDatabaseImporterImportPanel.class, "Neo4jDatabaseImporterImportPanel.nodeQueryHelp.text")); // NOI18N
+        nodeQueryHelp.setText(org.openide.util.NbBundle.getMessage(Neo4jDatabaseImporterImportPanel.class, "Neo4jDatabaseImporterImportPanel.nodeQueryHelp.text_1")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
@@ -326,7 +325,7 @@ public class Neo4jDatabaseImporterImportPanel extends javax.swing.JPanel {
         queriesPanel.add(nodeQueryHelp, gridBagConstraints);
 
         edgeQueryHelp.setFont(new java.awt.Font("sansserif", 2, 13)); // NOI18N
-        org.openide.awt.Mnemonics.setLocalizedText(edgeQueryHelp, org.openide.util.NbBundle.getMessage(Neo4jDatabaseImporterImportPanel.class, "Neo4jDatabaseImporterImportPanel.edgeQueryHelp.text")); // NOI18N
+        edgeQueryHelp.setText(org.openide.util.NbBundle.getMessage(Neo4jDatabaseImporterImportPanel.class, "Neo4jDatabaseImporterImportPanel.edgeQueryHelp.text_1")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 6;
@@ -343,30 +342,30 @@ public class Neo4jDatabaseImporterImportPanel extends javax.swing.JPanel {
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton checkEdgeQuery;
-    private javax.swing.JButton checkNodeQuery;
-    private javax.swing.JTextArea edgeActionText;
-    private javax.swing.JScrollPane edgeActionTextScroll;
-    private javax.swing.JTextArea edgeQuery;
-    private javax.swing.JLabel edgeQueryHelp;
-    private javax.swing.JLabel edgeQueryLabel;
-    private javax.swing.JScrollPane edgeQueryScroll;
-    private javax.swing.JLabel help;
+    javax.swing.JButton checkEdgeQuery;
+    javax.swing.JButton checkNodeQuery;
+    javax.swing.JTextArea edgeActionText;
+    javax.swing.JScrollPane edgeActionTextScroll;
+    javax.swing.JTextArea edgeQuery;
+    javax.swing.JLabel edgeQueryHelp;
+    javax.swing.JLabel edgeQueryLabel;
+    javax.swing.JScrollPane edgeQueryScroll;
+    javax.swing.JLabel help;
     private javax.swing.JList<String> labels;
-    private javax.swing.JLabel labelsLabel;
-    private javax.swing.JScrollPane labelsScroll;
-    private javax.swing.JTabbedPane menu;
-    private javax.swing.JTextArea nodeActionText;
-    private javax.swing.JScrollPane nodeActionTextScroll;
-    private javax.swing.JTextArea nodeQuery;
-    private javax.swing.JLabel nodeQueryHelp;
-    private javax.swing.JLabel nodeQueryLabel;
-    private javax.swing.JScrollPane nodeQueryScroll;
-    private javax.swing.JPanel queriesPanel;
+    javax.swing.JLabel labelsLabel;
+    javax.swing.JScrollPane labelsScroll;
+    javax.swing.JTabbedPane menu;
+    javax.swing.JTextArea nodeActionText;
+    javax.swing.JScrollPane nodeActionTextScroll;
+    javax.swing.JTextArea nodeQuery;
+    javax.swing.JLabel nodeQueryHelp;
+    javax.swing.JLabel nodeQueryLabel;
+    javax.swing.JScrollPane nodeQueryScroll;
+    javax.swing.JPanel queriesPanel;
     private javax.swing.JList<String> types;
-    private javax.swing.JLabel typesLabels;
-    private javax.swing.JPanel typesPanel;
-    private javax.swing.JScrollPane typesScroll;
+    javax.swing.JLabel typesLabels;
+    javax.swing.JPanel typesPanel;
+    javax.swing.JScrollPane typesScroll;
     // End of variables declaration//GEN-END:variables
 
 

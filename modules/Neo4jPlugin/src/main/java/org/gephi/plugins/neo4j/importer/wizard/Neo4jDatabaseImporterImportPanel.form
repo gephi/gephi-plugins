@@ -4,14 +4,14 @@
   <AuxValues>
     <AuxValue name="FormSettings_autoResourcing" type="java.lang.Integer" value="1"/>
     <AuxValue name="FormSettings_autoSetComponentName" type="java.lang.Boolean" value="false"/>
-    <AuxValue name="FormSettings_formBundle" type="java.lang.String" value="org/gephi/plugins/neo4j/Bundle"/>
+    <AuxValue name="FormSettings_formBundle" type="java.lang.String" value="org/gephi/plugins/neo4j/importer/wizard/Bundle"/>
     <AuxValue name="FormSettings_generateFQN" type="java.lang.Boolean" value="true"/>
-    <AuxValue name="FormSettings_generateMnemonicsCode" type="java.lang.Boolean" value="true"/>
+    <AuxValue name="FormSettings_generateMnemonicsCode" type="java.lang.Boolean" value="false"/>
     <AuxValue name="FormSettings_i18nAutoMode" type="java.lang.Boolean" value="true"/>
     <AuxValue name="FormSettings_layoutCodeTarget" type="java.lang.Integer" value="1"/>
     <AuxValue name="FormSettings_listenerGenerationStyle" type="java.lang.Integer" value="0"/>
     <AuxValue name="FormSettings_variablesLocal" type="java.lang.Boolean" value="false"/>
-    <AuxValue name="FormSettings_variablesModifier" type="java.lang.Integer" value="2"/>
+    <AuxValue name="FormSettings_variablesModifier" type="java.lang.Integer" value="0"/>
     <AuxValue name="designerSize" type="java.awt.Dimension" value="-84,-19,0,5,115,114,0,18,106,97,118,97,46,97,119,116,46,68,105,109,101,110,115,105,111,110,65,-114,-39,-41,-84,95,68,20,2,0,2,73,0,6,104,101,105,103,104,116,73,0,5,119,105,100,116,104,120,112,0,0,1,-10,0,0,2,3"/>
   </AuxValues>
 
@@ -149,7 +149,7 @@
               <Properties>
                 <Property name="horizontalAlignment" type="int" value="0"/>
                 <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                  <ResourceString bundle="org/gephi/plugins/neo4j/Bundle.properties" key="Neo4jDatabaseImporterImportPanel.labelsLabel.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+                  <ResourceString bundle="org/gephi/plugins/neo4j/importer/wizard/Bundle.properties" key="Neo4jDatabaseImporterImportPanel.labelsLabel.text_1" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
                 </Property>
                 <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
                   <Dimension value="null"/>
@@ -171,7 +171,7 @@
               <Properties>
                 <Property name="horizontalAlignment" type="int" value="0"/>
                 <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                  <ResourceString bundle="org/gephi/plugins/neo4j/Bundle.properties" key="Neo4jDatabaseImporterImportPanel.typesLabels.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+                  <ResourceString bundle="org/gephi/plugins/neo4j/importer/wizard/Bundle.properties" key="Neo4jDatabaseImporterImportPanel.typesLabels.text_1" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
                 </Property>
                 <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
                   <Dimension value="[200, 24]"/>
@@ -193,7 +193,7 @@
                 </Property>
                 <Property name="horizontalAlignment" type="int" value="0"/>
                 <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                  <ResourceString bundle="org/gephi/plugins/neo4j/Bundle.properties" key="Neo4jDatabaseImporterImportPanel.help.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+                  <ResourceString bundle="org/gephi/plugins/neo4j/importer/wizard/Bundle.properties" key="Neo4jDatabaseImporterImportPanel.help.text_1" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
                 </Property>
                 <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
                   <Dimension value="[500, 48]"/>
@@ -252,7 +252,7 @@
             </CodeStatement>
             <CodeStatement>
               <CodeExpression id="4_typesPanel">
-                <CodeVariable name="typesPanel" type="8194" declaredType="javax.swing.JPanel"/>
+                <CodeVariable name="typesPanel" type="8192" declaredType="javax.swing.JPanel"/>
                 <ExpressionOrigin>
                   <ExpressionProvider type="ComponentRef">
                     <ComponentRef name="typesPanel"/>
@@ -338,7 +338,7 @@
               </StatementProvider>
               <Parameters>
                 <CodeExpression id="10_labelsScroll">
-                  <CodeVariable name="labelsScroll" type="8194" declaredType="javax.swing.JScrollPane"/>
+                  <CodeVariable name="labelsScroll" type="8192" declaredType="javax.swing.JScrollPane"/>
                   <ExpressionOrigin>
                     <ExpressionProvider type="ComponentRef">
                       <ComponentRef name="labelsScroll"/>
@@ -420,7 +420,7 @@
               </StatementProvider>
               <Parameters>
                 <CodeExpression id="16_typesScroll">
-                  <CodeVariable name="typesScroll" type="8194" declaredType="javax.swing.JScrollPane"/>
+                  <CodeVariable name="typesScroll" type="8192" declaredType="javax.swing.JScrollPane"/>
                   <ExpressionOrigin>
                     <ExpressionProvider type="ComponentRef">
                       <ComponentRef name="typesScroll"/>
@@ -502,7 +502,7 @@
               </StatementProvider>
               <Parameters>
                 <CodeExpression id="22_labelsLabel">
-                  <CodeVariable name="labelsLabel" type="8194" declaredType="javax.swing.JLabel"/>
+                  <CodeVariable name="labelsLabel" type="8192" declaredType="javax.swing.JLabel"/>
                   <ExpressionOrigin>
                     <ExpressionProvider type="ComponentRef">
                       <ComponentRef name="labelsLabel"/>
@@ -584,7 +584,7 @@
               </StatementProvider>
               <Parameters>
                 <CodeExpression id="28_typesLabels">
-                  <CodeVariable name="typesLabels" type="8194" declaredType="javax.swing.JLabel"/>
+                  <CodeVariable name="typesLabels" type="8192" declaredType="javax.swing.JLabel"/>
                   <ExpressionOrigin>
                     <ExpressionProvider type="ComponentRef">
                       <ComponentRef name="typesLabels"/>
@@ -666,7 +666,7 @@
               </StatementProvider>
               <Parameters>
                 <CodeExpression id="34_help">
-                  <CodeVariable name="help" type="8194" declaredType="javax.swing.JLabel"/>
+                  <CodeVariable name="help" type="8192" declaredType="javax.swing.JLabel"/>
                   <ExpressionOrigin>
                     <ExpressionProvider type="ComponentRef">
                       <ComponentRef name="help"/>
@@ -703,7 +703,7 @@
                   <ResourceString bundle="org/gephi/plugins/neo4j/Bundle.properties" key="Neo4jDatabaseImporterImportPanel.nodesQueryLabel.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
                 </Property>
                 <Property name="toolTipText" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                  <ResourceString bundle="org/gephi/plugins/neo4j/Bundle.properties" key="Neo4jDatabaseImporterImportPanel.nodeQueryLabel.toolTipText" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+                  <ResourceString bundle="org/gephi/plugins/neo4j/importer/wizard/Bundle.properties" key="Neo4jDatabaseImporterImportPanel.nodeQueryLabel.toolTipText_1" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
                 </Property>
                 <Property name="name" type="java.lang.String" value="nodesQueryLabel" noResource="true"/>
                 <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
@@ -747,7 +747,7 @@
             <Component class="javax.swing.JLabel" name="edgeQueryLabel">
               <Properties>
                 <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                  <ResourceString bundle="org/gephi/plugins/neo4j/Bundle.properties" key="Neo4jDatabaseImporterImportPanel.edgeQueryLabel.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+                  <ResourceString bundle="org/gephi/plugins/neo4j/importer/wizard/Bundle.properties" key="Neo4jDatabaseImporterImportPanel.edgeQueryLabel.text_1" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
                 </Property>
                 <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
                   <Dimension value="[500, 24]"/>
@@ -810,9 +810,6 @@
                     <Property name="columns" type="int" value="20"/>
                     <Property name="lineWrap" type="boolean" value="true"/>
                     <Property name="rows" type="int" value="2"/>
-                    <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                      <ResourceString bundle="org/gephi/plugins/neo4j/Bundle.properties" key="Neo4jDatabaseImporterImportPanel.nodeActionText.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
-                    </Property>
                     <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
                       <Border info="null"/>
                     </Property>
@@ -829,10 +826,10 @@
             <Component class="javax.swing.JButton" name="checkNodeQuery">
               <Properties>
                 <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                  <ResourceString bundle="org/gephi/plugins/neo4j/Bundle.properties" key="Neo4jDatabaseImporterImportPanel.checkNodeQuery.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+                  <ResourceString bundle="org/gephi/plugins/neo4j/importer/wizard/Bundle.properties" key="Neo4jDatabaseImporterImportPanel.checkNodeQuery.text_1" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
                 </Property>
                 <Property name="actionCommand" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                  <ResourceString bundle="org/gephi/plugins/neo4j/Bundle.properties" key="Neo4jDatabaseImporterImportPanel.checkNodeQuery.actionCommand" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+                  <ResourceString bundle="org/gephi/plugins/neo4j/importer/wizard/Bundle.properties" key="Neo4jDatabaseImporterImportPanel.checkNodeQuery.actionCommand_1" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
                 </Property>
                 <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
                   <Dimension value="[110, 25]"/>
@@ -850,7 +847,7 @@
             <Component class="javax.swing.JButton" name="checkEdgeQuery">
               <Properties>
                 <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                  <ResourceString bundle="org/gephi/plugins/neo4j/Bundle.properties" key="Neo4jDatabaseImporterImportPanel.checkEdgeQuery.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+                  <ResourceString bundle="org/gephi/plugins/neo4j/importer/wizard/Bundle.properties" key="Neo4jDatabaseImporterImportPanel.checkEdgeQuery.text_1" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
                 </Property>
                 <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
                   <Dimension value="[110, 25]"/>
@@ -907,7 +904,7 @@
                   <Font name="sansserif" size="13" style="2"/>
                 </Property>
                 <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                  <ResourceString bundle="org/gephi/plugins/neo4j/Bundle.properties" key="Neo4jDatabaseImporterImportPanel.nodeQueryHelp.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+                  <ResourceString bundle="org/gephi/plugins/neo4j/importer/wizard/Bundle.properties" key="Neo4jDatabaseImporterImportPanel.nodeQueryHelp.text_1" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
                 </Property>
               </Properties>
               <Constraints>
@@ -922,7 +919,7 @@
                   <Font name="sansserif" size="13" style="2"/>
                 </Property>
                 <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                  <ResourceString bundle="org/gephi/plugins/neo4j/Bundle.properties" key="Neo4jDatabaseImporterImportPanel.edgeQueryHelp.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+                  <ResourceString bundle="org/gephi/plugins/neo4j/importer/wizard/Bundle.properties" key="Neo4jDatabaseImporterImportPanel.edgeQueryHelp.text_1" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
                 </Property>
               </Properties>
               <Constraints>
