@@ -71,24 +71,6 @@
             <classifier>linux-x64</classifier>
             <type>tar.gz</type>
         </dependency>
-        <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>project-api</artifactId>
-            <version>${project.version}</version>
-            <type>nbm</type>
-        </dependency>
-        <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>graph-api</artifactId>
-            <version>${project.version}</version>
-            <type>nbm</type>
-        </dependency>
-        <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>graph-api</artifactId>
-            <version>${project.version}</version>
-            <type>pom</type>
-        </dependency>
     </dependencies>
     
     <build>
