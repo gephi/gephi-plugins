@@ -49,7 +49,7 @@ public class Neo4jDatabaseImporterWizard implements ImporterWizardUI {
     @Override
     public void unsetup(WizardImporter importer, Panel panel) {
         this.panels = null;
-        if(this.isUIForImporter(importer)) {
+        if (this.isUIForImporter(importer)) {
             Neo4jDatabaseImporter neoImporter = (Neo4jDatabaseImporter) importer;
             neoImporter.setUrl(Neo4jImporterWizardData.dbUrl);
             neoImporter.setDBName(Utils.isEmptyOrNull(Neo4jImporterWizardData.dbName) ? null : Neo4jImporterWizardData.dbName);

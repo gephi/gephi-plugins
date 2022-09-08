@@ -23,10 +23,10 @@ public class Neo4jDatabaseImporterConnectionWizard implements WizardDescriptor.V
 
     @Override
     public void readSettings(Object settings) {
-        this.component.getDbUrl().setText(Utils.isEmptyOrNull(Neo4jImporterWizardData.dbUrl) ?  "neo4j://localhost" : Neo4jImporterWizardData.dbUrl);
+        this.component.getDbUrl().setText(Utils.isEmptyOrNull(Neo4jImporterWizardData.dbUrl) ? "neo4j://localhost" : Neo4jImporterWizardData.dbUrl);
         this.component.getDbName().setText(Neo4jImporterWizardData.dbName != null ? Neo4jImporterWizardData.dbName : "");
         this.component.getDbAuthType().setSelectedIndex(Neo4jImporterWizardData.dbAuthType != null ? Neo4jImporterWizardData.dbAuthType : 0);
-        this.component.getDbUsername().setText(Utils.isEmptyOrNull(Neo4jImporterWizardData.dbUsername ) ? "neo4j" : Neo4jImporterWizardData.dbUsername);
+        this.component.getDbUsername().setText(Utils.isEmptyOrNull(Neo4jImporterWizardData.dbUsername) ? "neo4j" : Neo4jImporterWizardData.dbUsername);
         this.component.getDbPassword().setText(Neo4jImporterWizardData.dbPassword != null ? Neo4jImporterWizardData.dbPassword : "");
     }
 

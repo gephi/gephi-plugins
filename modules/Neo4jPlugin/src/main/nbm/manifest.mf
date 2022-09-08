@@ -1,5 +1,2 @@
 Manifest-Version: 1.0
-OpenIDE-Module-Name: Neo4j plugin
-OpenIDE-Module-Short-Description: Helps you to import Neo4j data in gephi
-OpenIDE-Module-Long-Description: Helps you to import Neo4j data in Gephi
-OpenIDE-Module-Display-Category: Import
+OpenIDE-Module-Localizing-Bundle: org/gephi/plugins/neo4j/Bundle.properties

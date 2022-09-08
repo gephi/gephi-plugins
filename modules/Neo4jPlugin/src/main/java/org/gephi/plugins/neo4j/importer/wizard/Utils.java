@@ -1,6 +1,5 @@
 package org.gephi.plugins.neo4j.importer.wizard;
 
-import org.gephi.plugins.neo4j.importer.wizard.Neo4jImporterWizardData;
 import org.neo4j.driver.*;
 
 import java.util.ArrayList;
@@ -50,6 +49,7 @@ public class Utils {
     public static Driver neo4jWizardDriver() {
         return neo4jWizardDriver(null);
     }
+
     public static Driver neo4jWizardDriver(Integer fetchSize) {
         if (Neo4jImporterWizardData.dbAuthType == 0)
             return neo4jDriver(Neo4jImporterWizardData.dbUrl, Neo4jImporterWizardData.dbUsername, Neo4jImporterWizardData.dbPassword, fetchSize);
@@ -66,8 +66,7 @@ public class Utils {
             if (!result.keys().containsAll(mandatoryFields))
                 throw new Exception("Query MUST returns the following field(s) " + mandatoryFields.stream().collect(Collectors.joining(", ")));
             if (result.list().size() == 0) throw new Exception("Query returns no data");
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             throw e;
         }
     }

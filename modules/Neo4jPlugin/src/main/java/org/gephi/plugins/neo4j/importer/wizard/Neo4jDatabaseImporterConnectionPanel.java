@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JPanel.java to edit this template
- */
 package org.gephi.plugins.neo4j.importer.wizard;
 
 import javax.swing.*;
@@ -35,7 +31,7 @@ public class Neo4jDatabaseImporterConnectionPanel extends javax.swing.JPanel {
         if (this.dbAuthType.getSelectedIndex() == 0)
             Utils.neo4jCheckConnection(dbUrl.getText(), dbUsername.getText(), dbPassword.getText(), dbName.getText());
         else
-            Utils.neo4jCheckConnection(dbUrl.getText(),null, null, dbName.getText());
+            Utils.neo4jCheckConnection(dbUrl.getText(), null, null, dbName.getText());
 
     }
 
@@ -110,7 +106,6 @@ public class Neo4jDatabaseImporterConnectionPanel extends javax.swing.JPanel {
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         add(dbPasswordLabel, gridBagConstraints);
 
-        dbPassword.setText(org.openide.util.NbBundle.getMessage(Neo4jDatabaseImporterConnectionPanel.class, "Neo4jDatabaseImporterConnectionPanel.dbPassword.text_1")); // NOI18N
         dbPassword.setName("dbPassword"); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
@@ -137,7 +132,6 @@ public class Neo4jDatabaseImporterConnectionPanel extends javax.swing.JPanel {
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         add(dbNameLabel, gridBagConstraints);
 
-        dbName.setText(org.openide.util.NbBundle.getMessage(Neo4jDatabaseImporterConnectionPanel.class, "Neo4jDatabaseImporterConnectionPanel.dbName.text_1")); // NOI18N
         dbName.setToolTipText(org.openide.util.NbBundle.getMessage(Neo4jDatabaseImporterConnectionPanel.class, "Neo4jDatabaseImporterConnectionPanel.dbName.toolTipText")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;

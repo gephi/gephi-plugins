@@ -28,7 +28,7 @@ public class Neo4jDatabaseImporterImportWizard implements WizardDescriptor.Valid
         this.component.getTypes().setListData(Utils.neo4jWizardGetRelationshipTypes().toArray(new String[0]));
         this.component.getMenu().setSelectedIndex(Neo4jImporterWizardData.importMode != null ? Neo4jImporterWizardData.importMode : 0);
         this.component.getNodeQuery().setText(Utils.isEmptyOrNull(Neo4jImporterWizardData.nodeQuery) ? "MATCH (n) RETURN id(n) AS id, labels(n) AS labels" : Neo4jImporterWizardData.nodeQuery);
-        this.component.getEdgeQuery().setText(Utils.isEmptyOrNull(Neo4jImporterWizardData.edgeQuery) ? "MATCH (n)-[r]->(m) RETURN id(r) AS id, type(r) AS type, id(n) AS sourceId, id(m) AS targetId" :Neo4jImporterWizardData.edgeQuery);
+        this.component.getEdgeQuery().setText(Utils.isEmptyOrNull(Neo4jImporterWizardData.edgeQuery) ? "MATCH (n)-[r]->(m) RETURN id(r) AS id, type(r) AS type, id(n) AS sourceId, id(m) AS targetId" : Neo4jImporterWizardData.edgeQuery);
     }
 
     @Override

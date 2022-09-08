@@ -16,8 +16,8 @@ public class Neo4jImporterWizardData {
 
     /**
      * Neo4j authentication mechanism
-     *  - 0 -> login/password
-     *  - 1 -> no auth
+     * - 0 -> login/password
+     * - 1 -> no auth
      */
     public static Integer dbAuthType = null;
 
@@ -33,10 +33,10 @@ public class Neo4jImporterWizardData {
 
     /**
      * Mode for the import
-     *   - 0 -> by types
-     *   - 1 -> by queries
+     * - 0 -> by types
+     * - 1 -> by queries
      */
-    public static Integer importMode  = null;
+    public static Integer importMode = null;
 
     /**
      * Neo4j labels to import
@@ -46,7 +46,7 @@ public class Neo4jImporterWizardData {
 
     /**
      * Neo4j types to import
-     *  If null we import every types
+     * If null we import every types
      */
     public static List<String> relationshipTypes = null;
 
