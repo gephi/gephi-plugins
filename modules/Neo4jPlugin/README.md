@@ -50,6 +50,8 @@ With this configuration, you can define precisely what you want to import.
 It's really useful when you want to project your graph (ex: create the colleagues graph  when in your database you have `(:Person)-[:WORK_AT]->(:Company)`  )
 
 The node query must return a field named *id* that is the unique identifier of your node.
-The edge query must return a field named *id* that is the unique identifier of your edge, but also a *sourceId* & *targetId* that must match an id from the node query
+Ex: `MATCH (n) RETURN id(n) AS id, labels(n) AS labels`
 
+The edge query must return a field named *id* that is the unique identifier of your edge, but also a *sourceId* & *targetId* that must match an id from the node query
+Ex: `MATCH (n)-[r]->(m) RETURN id(r) AS id, type(r) AS type, id(n) AS sourceId, id(m) AS targetId`
 
