@@ -737,38 +737,6 @@
       "homepage": null
     },
     {
-      "id": "neo4j-graph-database-support",
-      "name": "Neo4J Graph Database Support",
-      "short_description": "",
-      "long_description": "\u003ch3\u003eIntroduction\u003c/h3\u003e\n\u003cp\u003eNeo4j Graph Database support\u003c/p\u003e\n\u003ch3\u003ePlugin Owner’s Notes\u003c/h3\u003e\n\u003cp\u003eThis plugin adds support for Neo4j graph database. You can open Neo4j 2.1.3 database directory and manipulate with graph as any other Gephi graph. You can also export any graph into Neo4j database, you can filter import or export and you can use debugging as well as lazy loading support.\u003c/p\u003e\n\u003ch4\u003eFeatures\u003c/h4\u003e\n\u003cul\u003e\n\u003cli\u003eImport all data from Neo4j database\u003c/li\u003e\n\u003cli\u003eTraversal and filtered import\u003c/li\u003e\n\u003cli\u003eExport to Neo4J\u003c/li\u003e\n\u003cli\u003eLazy loading, use the mouse to expand nodes\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch4\u003eNeo4j\u003c/h4\u003e\n\u003cp\u003eSupports the 2.1.3 version of\u0026nbsp;\u003ca href\u003d\"http://neo4j.org/download/\"\u003eNeo4j\u003c/a\u003e. If you have trouble with other versions of Neo4j please let us know.\u003c/p\u003e\n\u003ch4\u003eKnown problems\u003c/h4\u003e\n\u003cp\u003eNeo4j 2.0 refuses to work under any Java version previous to Java 7. If you are stuck with Java 6, you can download a Neo4j 1.9 version of this plugin for manual installation that may suffice you \u003ca title\u003d\"Neo4j 1.9M4 plugin\" href\u003d\"https://marketplace.gephi.org/wp-content/uploads/2014/08/neo4j-plugin-1.9M4.zip?022bbc\"\u003ehere\u003c/a\u003e.\u003c/p\u003e\n\u003ch4\u003ePreview\u003c/h4\u003e\n\u003cdiv id\u003d\"attachment_2444\" class\u003d\"wp-caption alignnone\" style\u003d\"width: 519px\"\u003e\u003ca href\u003d\"https://marketplace.gephi.org/wp-content/uploads/2013/01/Open-database-dialog.png?022bbc\"\u003e\u003cimg class\u003d\"size-full wp-image-2444\" title\u003d\"Open-database-dialog\" alt\u003d\"\" src\u003d\"https://marketplace.gephi.org/wp-content/uploads/2013/01/Open-database-dialog.png?022bbc\" width\u003d\"509\" height\u003d\"403\"\u003e\u003c/a\u003e\u003cp class\u003d\"wp-caption-text\"\u003eOpen Neo4J Database from Gephi\u003c/p\u003e\u003c/div\u003e\n\u003cp\u003e\u0026nbsp;\u003c/p\u003e\n\u003cdiv id\u003d\"attachment_3868\" class\u003d\"wp-caption alignnone\" style\u003d\"width: 539px\"\u003e\u003ca href\u003d\"https://marketplace.gephi.org/wp-content/uploads/2013/01/gephi_neo4j-2.png?022bbc\"\u003e\u003cimg class\u003d\"size-full wp-image-3868\" title\u003d\"gephi_neo4j-2\" alt\u003d\"\" src\u003d\"https://marketplace.gephi.org/wp-content/uploads/2013/01/gephi_neo4j-2.png?022bbc\" width\u003d\"529\" height\u003d\"291\"\u003e\u003c/a\u003e\u003cp class\u003d\"wp-caption-text\"\u003eFull Import\u003c/p\u003e\u003c/div\u003e\n\u003cp\u003e\u0026nbsp;\u003c/p\u003e\n\u003cdiv id\u003d\"attachment_3869\" class\u003d\"wp-caption alignnone\" style\u003d\"width: 551px\"\u003e\u003ca href\u003d\"https://marketplace.gephi.org/wp-content/uploads/2013/01/gephi_neo4j-3.png?022bbc\"\u003e\u003cimg class\u003d\"size-full wp-image-3869\" title\u003d\"gephi_neo4j-3\" alt\u003d\"\" src\u003d\"https://marketplace.gephi.org/wp-content/uploads/2013/01/gephi_neo4j-3.png?022bbc\" width\u003d\"541\" height\u003d\"629\"\u003e\u003c/a\u003e\u003cp class\u003d\"wp-caption-text\"\u003eTraversal Import\u003c/p\u003e\u003c/div\u003e\n\u003ch4\u003eCode\u003c/h4\u003e\n\u003cp\u003eThe code is hosted on\u0026nbsp;\u003ca href\u003d\"https://github.com/gephi/gephi-plugins/tree/neo4j-plugin\"\u003eGitHub\u003c/a\u003e\u0026nbsp;in a ‘neo4j-plugin’ branch of the ‘gephi-plugins’ repository.\u003c/p\u003e\n\u003cp\u003eThe plugin is composed of four modules:\u003cbr\u003e\n* Neo4jWrapper: Wrapper around Neo4j JARs\u003cbr\u003e\n* Neo4jPlugin: Business logic\u003cbr\u003e\n* DesktopNeo4j: User interface\u003cbr\u003e\n* Neo4jGraphDatabase: Empty module that depends on all other three\u003c/p\u003e\n\u003cp\u003eTo build, simply run:\u003cbr\u003e\n\u003ccode\u003eant clean nbms\u003c/code\u003e\u003c/p\u003e",
-      "readme": null,
-      "license": "AGPL v3",
-      "authors": [
-        {
-          "name": "Eduardo Ramos",
-          "email": null,
-          "link": "https://github.com/gephi/gephi-plugins/tree/neo4j-plugin"
-        }
-      ],
-      "category": "Import",
-      "last_update": "August 7, 2014",
-      "images": [
-        {
-          "image": "imgs/neo4j-graph-database-support/neo4j_logo.png",
-          "thumbnail": "imgs/neo4j-graph-database-support/neo4j_logo.png"
-        }
-      ],
-      "versions": {
-        "0.8.2": {
-          "url": "0.8.2/neo4j-plugin-2.1.3.zip",
-          "last_update": "August 7, 2014",
-          "plugin_version": null
-        }
-      },
-      "sourcecode": "https://github.com/gephi/gephi-plugins/tree/neo4j-plugin",
-      "homepage": null
-    },
-    {
       "id": "random-3d-layout",
       "name": "Random 3D Layout",
       "short_description": "",
@@ -3709,13 +3677,18 @@
         }
       ],
       "versions": {
+        "0.8.2": {
+          "url": "0.8.2/neo4j-plugin-2.1.3.zip",
+          "last_update": "August 7, 2014",
+          "plugin_version": null
+        },
         "0.9.6": {
           "url": "0.9/neo4j-plugin-4.0.0.nbm",
           "last_update": "September 8, 2022",
           "plugin_version": "4.0.0"
         }
       },
-      "sourcecode": "https://github.com/gephi/gephi-plugins",
+      "sourcecode": "https://github.com/gephi/gephi-plugins/tree/neo4j-bolt-plugin",
       "homepage": null
     }
   ]
