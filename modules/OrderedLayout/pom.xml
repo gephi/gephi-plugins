@@ -14,9 +14,7 @@
 
     <name>Ordered Layout</name>
 
-
     <dependencies>
-        
         <dependency>
             <groupId>org.gephi</groupId>
             <artifactId>graph-api</artifactId>
