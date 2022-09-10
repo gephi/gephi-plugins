@@ -69,7 +69,7 @@
                     <author>Yossi Spektor</author>
                     <authorEmail>easpex@gmail.com</authorEmail>
                     <authorUrl>https://spektor.dev</authorUrl>
-                    <sourceCodeUrl>$sourcecode_url</sourceCodeUrl>
+                    <sourceCodeUrl>https://github.com/gephi/gephi-plugins/tree/master-forge/modules/KatzCentrality</sourceCodeUrl>
                     <publicPackages>
                         <!-- Insert public packages -->
                     </publicPackages>
