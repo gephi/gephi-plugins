@@ -14,7 +14,7 @@ The Katz (sometimes also called Katz-Bonacich) centrality measures with
 the parameter of the network nodes are defined by the `n x 1` vector:
 
 
-![Katz Centrality Formula](https://i.imgur.com/9IwArh8.png)
+![Katz Centrality Formula](https://github.com/gephi/gephi-plugins/raw/katz-centrality-plugin/modules/KatzCentrality/KatzCentralityFormula.png)
 
 
 ### Installation
@@ -29,7 +29,7 @@ The plugin can also be installed manually:
 After Gephi application re-opens the plugin will be available
 under Node Overview plugins:
 
-![Katz Centrality Plugin Location](https://i.imgur.com/8r9pQtx.png)
+![Katz Centrality Plugin Location](https://github.com/gephi/gephi-plugins/raw/katz-centrality-plugin/modules/KatzCentrality/gephi_with_katz.png)
 
 ### Contributions
 
