@@ -76,6 +76,7 @@
         <module>modules/KatzCentrality</module>
         <module>modules/PositionRanking</module>
         <module>modules/Neo4jPlugin</module>
+        <module>modules/LinkPrediction</module>
     </modules>
 
     <!-- Properties -->
