@@ -9,7 +9,7 @@ The plugin is released under the Apache 2.0 license.
 
 In release 1.3.0 the plugin contains the following functionality:
 
-* __Statistics__: New edges can be added to an undirected graph using selected [link prediction algorithms](#algorithms) in the `statistics` tab. The number of new edges can be specified. In doing so, _n_ new edges are added to the graph iteratively. The calculation of the next predicted edge is always based on the graph of the preceding iteration step.
+* __Statistics__: New edges can be added to an undirected graph using selected algorithms in the `statistics` tab. The number of new edges can be specified. In doing so, _n_ new edges are added to the graph iteratively. The calculation of the next predicted edge is always based on the graph of the preceding iteration step.
 * __Filter__: The added edges can be displayed by means of filters. On the one hand, the corresponding algorithm is specified as the filter criterion. On the other hand, the number of added edges can also be restricted.
 * __Evaluation__: Based on an initial graph and a validation graph the accuracy of the link predictions using different algorithms are evaluated. Besides the final accuracy, the generated report also shows the accuracy after each iteration step.  
 
@@ -49,7 +49,7 @@ For each algorithm a new workspace is created which is used to apply the predict
 The following figure shows the graphs <a href="https://www.codecogs.com/eqnedit.php?latex=G_i_,_t" target="_blank"><img src="https://latex.codecogs.com/gif.latex?G_i_,_t" title="G_i_,_t" /></a> 
 (on the left) and <a href="https://www.codecogs.com/eqnedit.php?latex=G_i_,_t_&plus;_n" target="_blank"><img src="https://latex.codecogs.com/gif.latex?G_i_,_t_&plus;_n" title="G_i_,_t_+_n" /></a> (on the right):
 
-![Initial graph](src/main/resources/graph_init.jpg?raw=true "Initial graph") 
+![Initial graph](https://github.com/gephi/gephi-plugins/raw/link-prediction-plugin/modules/LinkPrediction/src/main/resources/graph_init.jpg "Initial graph") 
 
 To evaluate their accuracy using a validation graph <a href="https://www.codecogs.com/eqnedit.php?latex=G_v_,_t_&plus;_n" target="_blank"><img src="https://latex.codecogs.com/gif.latex?G_v_,_t_&plus;_n" title="G_v_,_t_+_n" /></a>
 and its additional edges <a href="https://www.codecogs.com/eqnedit.php?latex=E_v" target="_blank"><img src="https://latex.codecogs.com/gif.latex?E_v" title="E_v" /></a>
@@ -58,7 +58,7 @@ this graph additionally contains the edges <a href="https://www.codecogs.com/eqn
 <a href="https://www.codecogs.com/eqnedit.php?latex=(E,H)" target="_blank"><img src="https://latex.codecogs.com/gif.latex?(E,H)" title="(E,H)" /></a> and
 <a href="https://www.codecogs.com/eqnedit.php?latex=(H,I)" target="_blank"><img src="https://latex.codecogs.com/gif.latex?(H,I)" title="(H,I)" /></a>:
 
-![Validation graph](src/main/resources/graph_validation.jpg?raw=true "Validation graph") 
+![Validation graph](https://github.com/gephi/gephi-plugins/raw/link-prediction-plugin/modules/LinkPrediction/graph_validation.jpg "Validation graph") 
 
 The accuracy then is calculated as percentage of the correct predicted edges. In the current implementation, the results are rounded to two places.
 
@@ -79,7 +79,7 @@ were predicted correctly. Therefore an accuracy of 66.67% is achieved:
 
 Link prediction is based on an existing network and attempts to predict new edges. The most popular application is the suggestion of new friends on social networking platforms.
 To predict a new edge, different algorithms exist. The plugin allows to easily add new algorithms. Currently, the algorithms [common neighbours](#common-neighbours) and [preferential attachment](#preferential-attachment) are implemented. To show the functionality of the algorithms, the following example graph is used:
-![Example graph](src/main/resources/graph_example.jpg?raw=true "Example graph") 
+![Example graph](https://github.com/gephi/gephi-plugins/raw/link-prediction-plugin/modules/LinkPrediction/src/main/resources/graph_example.jpg "Example graph") 
 
 ### Common neighbours
 

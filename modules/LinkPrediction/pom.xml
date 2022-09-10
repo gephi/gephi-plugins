@@ -19,27 +19,22 @@
             <groupId>org.gephi</groupId>
             <artifactId>graph-api</artifactId>
         </dependency>
-
         <dependency>
             <groupId>org.gephi</groupId>
             <artifactId>filters-api</artifactId>
         </dependency>
-
         <dependency>
             <groupId>org.gephi</groupId>
             <artifactId>project-api</artifactId>
         </dependency>
-
         <dependency>
             <groupId>org.gephi</groupId>
             <artifactId>core-library-wrapper</artifactId>
         </dependency>
-
         <dependency>
             <groupId>org.netbeans.api</groupId>
             <artifactId>org-openide-util-lookup</artifactId>
         </dependency>
-
         <dependency>
             <groupId>org.netbeans.api</groupId>
             <artifactId>org-openide-util</artifactId>
@@ -49,7 +44,6 @@
             <artifactId>org-netbeans-modules-nbjunit</artifactId>
             <scope>test</scope>
         </dependency>
-
         <dependency>
             <groupId>org.gephi</groupId>
             <artifactId>statistics-api</artifactId>
@@ -78,13 +72,10 @@
                 <groupId>org.apache.netbeans.utilities</groupId>
                 <artifactId>nbm-maven-plugin</artifactId>
                 <configuration>
-                    <licenseName>GPL v3</licenseName>
+                    <licenseName>Apache 2.0</licenseName>
+                    <licenseFile>Apache v2.txt</licenseFile>
                     <author>Marco Romanutti, Saskia Schueler</author>
-                    <!-- Optional
-                    <authorEmail></authorEmail>
-                    <authorUrl></authorUrl>
-                    <sourceCodeUrl>$sourcecode_url</sourceCodeUrl>
-                    -->
+                    <sourceCodeUrl>https://github.com/gephi/gephi-plugins/tree/link-prediction-plugin</sourceCodeUrl>
                     <publicPackages>
                         <!-- Insert public packages -->
                     </publicPackages>
@@ -205,12 +196,6 @@
                         </reports>
                     </reportSet>
                 </reportSets>
-            </plugin>
-
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-surefire-report-plugin</artifactId>
-                <version>3.0.0-M3</version>
             </plugin>
         </plugins>
     </reporting>
