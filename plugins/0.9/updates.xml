@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
 <!DOCTYPE module_updates PUBLIC "-//NetBeans//DTD Autoupdate Catalog 2.8//EN" "https://netbeans.apache.org/dtds/autoupdate-catalog-2_8.dtd">
-<module_updates timestamp="04/05/18/08/09/2022">
+<module_updates timestamp="50/12/09/10/09/2022">
 
 
 
@@ -268,6 +268,14 @@
         
 
     <message_digest algorithm="SHA-512" value="931ca031146d7829f900cb8e5e6218b49ac8725473635f4c85514a8844c797ad3a18d29f03d4d3e60ad9eca2732ba530a541922117c403f407171f9eb0751215"/>
+</module>
+
+<module codenamebase="org.gephi.plugins.link.prediction" distribution="link-prediction-1.3.1.nbm" downloadsize="97533" homepage="http://github.com/gephi/gephi-plugins/link-prediction" license="864AC530" moduleauthor="Marco Romanutti, Saskia Schueler" needsrestart="true" releasedate="2022/09/10" targetcluster="plugins">
+        
+    <manifest OpenIDE-Module="org.gephi.plugins.link.prediction" OpenIDE-Module-Display-Category="Filter" OpenIDE-Module-Implementation-Version="1.3.1" OpenIDE-Module-Long-Description="Link-prediction plugin for Gephi, which allows to predict the next edges to be formed using different prediction algorithms. Edges that are added to the network based on the prediction are marked accordingly. Users can limit the number of edges predicted. The plugin contains an evaluation component, which allows to compare the quality of the different algorithms." OpenIDE-Module-Module-Dependencies="org.gephi.graph.api &gt; 0.9.3, org.gephi.filters.api &gt; 0.9.3, org.gephi.project.api &gt; 0.9.3, org.gephi.core.library.wrapper &gt; 0.9.3, org.openide.util.lookup &gt; 8.49, org.openide.util &gt; 9.23, org.gephi.statistics.api &gt; 0.9.3, org.gephi.statistics.plugin &gt; 0.9.3" OpenIDE-Module-Name="Link Prediction" OpenIDE-Module-Requires="org.openide.modules.ModuleFormat1" OpenIDE-Module-Short-Description="Link-prediction plugin for Gephi, which allows to predict the next edges to be formed using different prediction algorithms." OpenIDE-Module-Specification-Version="1.3.1"/>
+        
+
+    <message_digest algorithm="SHA-512" value="080b445c06cc860d39ed13b4e3786786ad3baa110d29f2b173f43b73d5655e261b30cb0535c1faab9b3f5966fe46635fa458f624295e5f234856e2108edf2b9e"/>
 </module>
 
 <module codenamebase="ec.loxa.sna.gephi.websiteexport.loxawebsiteexport" distribution="loxawebsiteexport-0.3.2.nbm" downloadsize="1058337" homepage="http://github.com/gephi/gephi-plugins/loxawebsiteexport" moduleauthor="Jorge Lopez-Vargas" needsrestart="true" releasedate="2022/06/24" targetcluster="plugins">
