@@ -1,5 +1,4 @@
 # Link Prediction
-![Travis (.com)](https://img.shields.io/travis/com/romanutti/gephi-plugins.svg?label=Build)
 [![license](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 
 Link-prediction plugin for Gephi, which allows to predict the next edges to be formed using different prediction algorithms. Edges that are added to the network based on the prediction are marked accordingly. Users can limit the number of edges predicted. The plugin contains an evaluation component, which allows to compare the quality of the different algorithms regarding the graph on hand.
