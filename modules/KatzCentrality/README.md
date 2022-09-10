@@ -31,4 +31,6 @@ under Node Overview plugins:
 
 ![Katz Centrality Plugin Location](https://i.imgur.com/8r9pQtx.png)
 
+### Contributions
 
+Any contributions to the plugin are welcome! Please note that currently there's an [issue](https://github.com/gephi/gephi/issues/1059) with Gephi development on Mac.
