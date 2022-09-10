@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
 <!DOCTYPE module_updates PUBLIC "-//NetBeans//DTD Autoupdate Catalog 2.8//EN" "https://netbeans.apache.org/dtds/autoupdate-catalog-2_8.dtd">
-<module_updates timestamp="50/12/09/10/09/2022">
+<module_updates timestamp="08/29/09/10/09/2022">
 
 
 
@@ -226,11 +226,11 @@
     <message_digest algorithm="SHA-512" value="a2c60b91957bde365ae28cf70ae511f5db06677280cf589c539d426eb0d8c80f4d9c1b26e8e8763e8027c8a8964649203ce381bc161db2f6239b60ce08fca41f"/>
 </module>
 
-<module codenamebase="org.openuniversityofisrael.katz.centrality" distribution="katz-centrality-1.0.0.nbm" downloadsize="17307" homepage="http://github.com/gephi/gephi-plugins/katz-centrality" moduleauthor="Yossi Spektor" needsrestart="true" releasedate="2022/09/02" targetcluster="plugins">
+<module codenamebase="org.openuniversityofisrael.katz.centrality" distribution="katz-centrality-1.0.1.nbm" downloadsize="17329" homepage="http://github.com/gephi/gephi-plugins/katz-centrality" moduleauthor="Yossi Spektor" needsrestart="true" releasedate="2022/09/10" targetcluster="plugins">
         
-    <manifest OpenIDE-Module="org.openuniversityofisrael.katz.centrality" OpenIDE-Module-Display-Category="Metric" OpenIDE-Module-Implementation-Version="1.0.0" OpenIDE-Module-Long-Description="Katz Centrality calculation" OpenIDE-Module-Module-Dependencies="org.openide.util.lookup &gt; 8.49, org.openide.util &gt; 9.23, org.gephi.graph.api &gt; 0.9.3, org.gephi.utils.longtask &gt; 0.9.3, org.gephi.utils &gt; 0.9.3, org.gephi.statistics.api &gt; 0.9.3, org.gephi.core.library.wrapper &gt; 0.9.3, org.gephi.ui.library.wrapper &gt; 0.9.3" OpenIDE-Module-Name="Katz Centrality" OpenIDE-Module-Requires="org.openide.modules.ModuleFormat1" OpenIDE-Module-Short-Description="Katz Centrality calculation" OpenIDE-Module-Specification-Version="1.0.0"/>
+    <manifest OpenIDE-Module="org.openuniversityofisrael.katz.centrality" OpenIDE-Module-Display-Category="Metric" OpenIDE-Module-Implementation-Version="1.0.1" OpenIDE-Module-Long-Description="Katz Centrality calculation" OpenIDE-Module-Module-Dependencies="org.openide.util.lookup &gt; 8.49, org.openide.util &gt; 9.23, org.gephi.graph.api &gt; 0.9.3, org.gephi.utils.longtask &gt; 0.9.3, org.gephi.utils &gt; 0.9.3, org.gephi.statistics.api &gt; 0.9.3, org.gephi.core.library.wrapper &gt; 0.9.3, org.gephi.ui.library.wrapper &gt; 0.9.3" OpenIDE-Module-Name="Katz Centrality" OpenIDE-Module-Requires="org.openide.modules.ModuleFormat1" OpenIDE-Module-Short-Description="Katz Centrality calculation" OpenIDE-Module-Specification-Version="1.0.1"/>
     
-    <message_digest algorithm="SHA-512" value="5f936529b533ef9e9a0eb54c1c2b1bf2c1cfb6a5d0a34af5852afa526faf08d9c914a9f37679b4cb5c886d33059713818d258a68ecefa321efa8dcb471d7b1eb"/>
+    <message_digest algorithm="SHA-512" value="42fe9263e3b97f6e67d8611225c02dbc273aa1596281ebd793b83c05274ce27b593b22173029e6422740a2d5061f07eb9d698702d9137fb1f6dcb70f8d4c504e"/>
 </module>
 
 <module codenamebase="org.gephi.kbrace.filter" distribution="kbrace-filter-1.1.0.nbm" downloadsize="16269" homepage="https://gephi.org/plugins/#/plugin/kbrace-filter" license="E9F38623" moduleauthor="Mathieu Bastian" needsrestart="true" releasedate="2022/06/24" targetcluster="plugins">
