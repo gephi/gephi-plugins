@@ -129,7 +129,7 @@
               <Properties>
                 <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
                   <Border info="org.netbeans.modules.form.compat2.border.TitledBorderInfo">
-                    <TitledBorder title="1. You need to have a Github Account.">
+                    <TitledBorder title="1. You need a Github account and be logged in">
                       <ResourceString PropertyName="titleX" bundle="net/clementlevallois/web/publish/plugin/controller/Bundle.properties" key="JPanelWebExport.step1.title" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
                       <Font PropertyName="font" name="Segoe UI" size="12" style="1"/>
                     </TitledBorder>
@@ -188,7 +188,7 @@
               <Properties>
                 <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
                   <Border info="org.netbeans.modules.form.compat2.border.TitledBorderInfo">
-                    <TitledBorder title="3. Confirm the installation of the gephi-lite application">
+                    <TitledBorder title="2. Confirm the installation of the gephi-lite application">
                       <ResourceString PropertyName="titleX" bundle="net/clementlevallois/web/publish/plugin/controller/Bundle.properties" key="JPanelWebExport.step3.title" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
                       <Font PropertyName="font" name="Segoe UI" size="12" style="1"/>
                     </TitledBorder>
@@ -256,7 +256,7 @@
               <Properties>
                 <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
                   <Border info="org.netbeans.modules.form.compat2.border.TitledBorderInfo">
-                    <TitledBorder title="4. Start to connect to the Gephi-lite app, click here:">
+                    <TitledBorder title="3. Start to connect to the Gephi-lite app, click here:">
                       <ResourceString PropertyName="titleX" bundle="net/clementlevallois/web/publish/plugin/controller/Bundle.properties" key="JPanelWebExport.step4.title" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
                       <Font PropertyName="font" name="Segoe UI" size="12" style="1"/>
                     </TitledBorder>
@@ -326,7 +326,7 @@
               <Properties>
                 <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
                   <Border info="org.netbeans.modules.form.compat2.border.TitledBorderInfo">
-                    <TitledBorder title="6. Paste the code on this website:">
+                    <TitledBorder title="4. Paste the code on this website:">
                       <ResourceString PropertyName="titleX" bundle="net/clementlevallois/web/publish/plugin/controller/Bundle.properties" key="JPanelWebExport.step6.title" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
                       <Font PropertyName="font" name="Segoe UI" size="12" style="1"/>
                     </TitledBorder>

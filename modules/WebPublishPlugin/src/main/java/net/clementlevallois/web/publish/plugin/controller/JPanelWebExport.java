@@ -18,6 +18,7 @@ import java.util.prefs.Preferences;
 
 import javax.swing.JTextField;
 import javax.swing.SwingWorker;
+import static net.clementlevallois.web.publish.plugin.controller.GlobalConfigParams.*;
 import org.openide.util.Exceptions;
 import org.openide.util.NbBundle;
 import org.openide.util.NbPreferences;
@@ -25,6 +26,10 @@ import org.openide.util.NbPreferences;
 /**
  *
  * @author LEVALLOIS
+ * 
+ * The logic of this plugin follows the logic laid out here:
+ * https://github.com/gephi/gephi-plugins/issues/262#issuecomment-1231627948
+ * 
  */
 public class JPanelWebExport extends javax.swing.JPanel {
 
@@ -32,16 +37,17 @@ public class JPanelWebExport extends javax.swing.JPanel {
     private JsonObject responseGithubUserCodeInput;
     private String accessToken;
     private String deviceCode;
+    
     private static final ResourceBundle bundle = NbBundle.getBundle(GephiPluginDesktopLogic.class);
 
-    /**
-     * Creates new form JPanelWebExport
-     */
+    public static final String COLOR_SUCCESS = "#45ba48";
+    
+    
     public JPanelWebExport() {
         initComponents();
         Preferences preferences = NbPreferences.forModule(this.getClass());
-        accessToken = preferences.get("access_token", "");
-        if (accessToken.isBlank()) {
+        accessToken = preferences.get(ACCESS_TOKEN_KEY_IN_USER_PREFS, "");
+        if (accessToken == null || accessToken.isBlank()) {
             jLabelAlreadyLoggedIn.setVisible(false);
         } else {
             jLabelAlreadyLoggedIn.setVisible(true);
@@ -58,13 +64,12 @@ public class JPanelWebExport extends javax.swing.JPanel {
         @Override
         protected Void doInBackground() throws Exception {
             JsonObject jsonObject = new JsonObject();
-            String clientId = "Iv1.936245ffcd310336";
             try {
                 HttpClient client = HttpClient.newHttpClient();
                 String url = "https://github.com/login/oauth/access_token";
 
                 String inputParams = "client_id="
-                        + clientId
+                        + GEPHI_APP_CLIENT_ID
                         + "&"
                         + "device_code="
                         + deviceCode
@@ -89,6 +94,8 @@ public class JPanelWebExport extends javax.swing.JPanel {
                         break;
                     }
                     currDuration = (float) (System.currentTimeMillis() - startTime) / (float) 1000;
+                    // the min duration recommended by Github between two polls is 5 seconds
+                    // -> https://docs.github.com/en/developers/apps/building-oauth-apps/authorizing-oauth-apps#device-flow
                     Thread.sleep(5200);
                     publish(++loops);
                 }
@@ -106,8 +113,8 @@ public class JPanelWebExport extends javax.swing.JPanel {
             if (responseGithubUserCodeInput.has("access_token")) {
                 accessToken = responseGithubUserCodeInput.get("access_token").getAsString();
                 Preferences preferences = NbPreferences.forModule(this.getClass());
-                preferences.put("access_token", accessToken);
-                jTextFieldGithubErrorMsg.setForeground(Color.decode("#45ba48"));
+                preferences.put(ACCESS_TOKEN_KEY_IN_USER_PREFS, accessToken);
+                jTextFieldGithubErrorMsg.setForeground(Color.decode(COLOR_SUCCESS));
                 jTextFieldGithubErrorMsg.setText(bundle.getString("general.message.success_switch_to_publish"));
                 jTextFieldGithubErrorMsg.setCaretPosition(0);
             } else {
@@ -480,7 +487,7 @@ public class JPanelWebExport extends javax.swing.JPanel {
 
     private void jButtonResetLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonResetLoginActionPerformed
         Preferences preferences = NbPreferences.forModule(this.getClass());
-        preferences.remove("access_token");
+        preferences.remove(ACCESS_TOKEN_KEY_IN_USER_PREFS);
         jLabelAlreadyLoggedIn.setVisible(false);
         jTextFieldGithubErrorMsg.setText(bundle.getString("general.message.success_reset"));
         jTextFieldGithubErrorMsg.setCaretPosition(0);
@@ -488,7 +495,7 @@ public class JPanelWebExport extends javax.swing.JPanel {
 
     private void jButtonPublishActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonPublishActionPerformed
         JsonObject jsonObjectOfGexfAsStringRetrieval = PublishingActions.getGexfAsString();
-        if (!jsonObjectOfGexfAsStringRetrieval.has("200")) {
+        if (!jsonObjectOfGexfAsStringRetrieval.has(SUCCESS_CODE)) {
             if (!jsonObjectOfGexfAsStringRetrieval.keySet().isEmpty()) {
                 String errorKey = jsonObjectOfGexfAsStringRetrieval.keySet().iterator().next();
                 jTextAreaUrls.setText(jsonObjectOfGexfAsStringRetrieval.get(errorKey).getAsString());
@@ -496,10 +503,10 @@ public class JPanelWebExport extends javax.swing.JPanel {
                 jTextAreaUrls.setText(bundle.getString("general.message.error.gexf_not_retrieved"));
             }
         } else {
-            String gexf = jsonObjectOfGexfAsStringRetrieval.get("200").getAsString();
+            String gexf = jsonObjectOfGexfAsStringRetrieval.get(SUCCESS_CODE).getAsString();
             Preferences preferences = NbPreferences.forModule(this.getClass());
-            accessToken = preferences.get("access_token", "");
-            if (accessToken.isBlank()) {
+            accessToken = preferences.get(ACCESS_TOKEN_KEY_IN_USER_PREFS, "");
+            if (accessToken == null || accessToken.isBlank()) {
                 jTextAreaUrls.setText(bundle.getString("general.message.error.no_token"));
             } else {
                 String fileName = "network-" + UUID.randomUUID().toString().substring(0, 12) + ".gexf";
@@ -526,8 +533,7 @@ public class JPanelWebExport extends javax.swing.JPanel {
                     JsonObject metadataOnFiles = metadataOnGist.get("files").getAsJsonObject();
                     JsonObject metadataOnOneFile = metadataOnFiles.get(fileName).getAsJsonObject();
                     String rawUrl = metadataOnOneFile.get("raw_url").getAsString();
-                    String retinaBareURl = "https://ouestware.gitlab.io/retina/beta/#/graph/";
-                    String retinaFullURl = retinaBareURl + "?url=" + rawUrl;
+                    String retinaFullURl = RETINA_BASE_URL + "?url=" + rawUrl;
 
                     String textForUserWithURL = bundle.getString("general.message.url_published_gexf")
                             + "\n"
@@ -555,7 +561,7 @@ public class JPanelWebExport extends javax.swing.JPanel {
         } else {
             String userCode = responseGithubConnectAction.get("user_code").getAsString();
             deviceCode = responseGithubConnectAction.get("device_code").getAsString();
-            jTextFieldUserCode.setForeground(Color.decode("#45ba48")); //green
+            jTextFieldUserCode.setForeground(Color.decode(COLOR_SUCCESS));
             jTextFieldUserCode.setText(userCode);
             pollWorker.execute();
         }

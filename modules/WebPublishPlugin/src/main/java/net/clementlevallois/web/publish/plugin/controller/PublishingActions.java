@@ -13,6 +13,7 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.util.ResourceBundle;
+import static net.clementlevallois.web.publish.plugin.controller.GlobalConfigParams.*;
 import org.gephi.graph.api.GraphController;
 import org.gephi.graph.api.GraphModel;
 import org.gephi.io.exporter.api.ExportController;
@@ -35,13 +36,13 @@ public class PublishingActions {
         JsonObject jsonObject = new JsonObject();
         ProjectController pc = Lookup.getDefault().lookup(ProjectController.class);
         if (pc.getCurrentProject() == null) {
-            jsonObject.addProperty("95", bundle.getString("general.message.error.no_open_project"));
+            jsonObject.addProperty(ERROR_CODE_NO_OPEN_PROJECT, bundle.getString("general.message.error.no_open_project"));
             return jsonObject;
         }
         GraphModel graphModel = Lookup.getDefault().lookup(GraphController.class).getGraphModel();
         if (graphModel.getGraph().getNodeCount() == 0) {
             jsonObject = new JsonObject();
-            jsonObject.addProperty("96", bundle.getString("general.message.error.empty_network"));
+            jsonObject.addProperty(ERROR_CODE_EMPTY_NETWORK, bundle.getString("general.message.error.empty_network"));
             return jsonObject;
         }
         Workspace workspace = pc.getCurrentWorkspace();
@@ -52,7 +53,7 @@ public class PublishingActions {
         ec.exportWriter(stringWriter, (CharacterExporter) exporterGexf);
         String gexfToSendAsString = stringWriter.toString();
 
-        jsonObject.addProperty("200", gexfToSendAsString);
+        jsonObject.addProperty(SUCCESS_CODE, gexfToSendAsString);
 
         return jsonObject;
     }
@@ -61,8 +62,7 @@ public class PublishingActions {
         JsonObject responseCOnnectGithubAsJO = null;
         try {
             HttpClient client = HttpClient.newHttpClient();
-            String clientId = "Iv1.936245ffcd310336";
-            String inputParams = "client_id=" + clientId + "&scope=gist";
+            String inputParams = "client_id=" + GEPHI_APP_CLIENT_ID + "&scope=gist";
             String url = "https://github.com/login/device/code";
             HttpRequest request = HttpRequest.newBuilder()
                     .uri(URI.create(url))
