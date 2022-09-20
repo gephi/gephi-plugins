@@ -54,6 +54,10 @@
             <artifactId>io-exporter-api</artifactId>
         </dependency>
         <dependency>
+            <groupId>org.gephi</groupId>
+            <artifactId>io-exporter-plugin</artifactId>
+        </dependency>
+        <dependency>
             <groupId>org.netbeans.api</groupId>
             <artifactId>org-openide-windows</artifactId>
         </dependency>

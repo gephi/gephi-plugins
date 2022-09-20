@@ -19,6 +19,7 @@ import org.gephi.graph.api.Graph;
 import org.gephi.graph.api.GraphController;
 import org.gephi.graph.api.GraphModel;
 import org.gephi.io.exporter.api.ExportController;
+import org.gephi.io.exporter.plugin.ExporterGEXF;
 import org.gephi.io.exporter.spi.CharacterExporter;
 import org.gephi.io.exporter.spi.Exporter;
 import org.gephi.project.api.ProjectController;
@@ -52,10 +53,13 @@ public class PublishingActions {
         }
         Workspace workspace = pc.getCurrentWorkspace();
         ExportController ec = Lookup.getDefault().lookup(ExportController.class);
-        Exporter exporterGexf = ec.getExporter("gexf");
+
+        ExporterGEXF exporterGexf = (ExporterGEXF) ec.getExporter("gexf");
         exporterGexf.setWorkspace(workspace);
+        exporterGexf.setExportDynamic(false);
+
         StringWriter stringWriter = new StringWriter();
-        ec.exportWriter(stringWriter, (CharacterExporter) exporterGexf);
+        ec.exportWriter(stringWriter, exporterGexf);
         String gexfToSendAsString = stringWriter.toString();
 
         int sizeGexfInBytes = gexfToSendAsString.getBytes(StandardCharsets.UTF_8).length; //
