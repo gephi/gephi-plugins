@@ -1,22 +1,17 @@
 # Gephi Plugin: Publish to the web
 
-This is a work initiated during the Gephi Code Retreat (Aug 29 to Sept 2, 2022). The plugin will allow users to:
+This is a work initiated during the Gephi Code Retreat (Aug 29 to Sept 2, 2022).
+The plugin allows users to publish their network to the web, directly from the Gephi desktop app.
 
-- export a gexf file directly from the Gephi desktop app, to the web
-- the exported gexf file gets hosted on the web and users get a url that allows them to explore it directly or share the url
+## Function of the plugin
 
-## Types of export
-
-At the moment: Retina only: https://ouestware.gitlab.io/retina/beta
-
-Hosting: through a gist 
-
-## Progress so far
-The plugin is functional and its interface is available in all languages that Gephi supports.
-The plugin is going to be reviewed (quality checks...) before it can be released and made available.
-
+- the plugin's interface can be accessed via a new item added to the File -> Export menu of Gephi.
+- the user needs to follow a series of steps to authenticate
+- then, the user can publish the network currently open in Gephi. The network gets exported as a gexf file hosted as a Github's gist.
+- the users get a url to the Retina web app, that allows them to explore this gexf directly from their browser
 
 ## Author and contact
-Detailed design of the roadmap: Alexis Jacomy, see: https://github.com/gephi/gephi-plugins/issues/262#issuecomment-1231627948
-Plugin development: Clement Levallois (admin@clementlevallois.net or https://twitter.com/seinecle)
-Retina: https://ouestware.gitlab.io/retina/beta
+
+- Detailed design of the roadmap: Alexis Jacomy, see: https://github.com/gephi/gephi-plugins/issues/262#issuecomment-1231627948
+- Plugin development: Clement Levallois (admin@clementlevallois.net or https://twitter.com/seinecle)
+- Retina: https://ouestware.gitlab.io/retina/beta

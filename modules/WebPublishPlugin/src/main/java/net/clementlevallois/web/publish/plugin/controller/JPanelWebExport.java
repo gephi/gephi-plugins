@@ -15,10 +15,14 @@ import java.net.http.HttpResponse;
 import java.util.ResourceBundle;
 import java.util.UUID;
 import java.util.prefs.Preferences;
+import javax.swing.JLabel;
 
 import javax.swing.JTextField;
 import javax.swing.SwingWorker;
 import static net.clementlevallois.web.publish.plugin.controller.GlobalConfigParams.*;
+import org.openide.DialogDescriptor;
+import org.openide.DialogDisplayer;
+import org.openide.NotifyDescriptor;
 import org.openide.util.Exceptions;
 import org.openide.util.NbBundle;
 import org.openide.util.NbPreferences;
@@ -26,10 +30,10 @@ import org.openide.util.NbPreferences;
 /**
  *
  * @author LEVALLOIS
- * 
+ *
  * The logic of this plugin follows the logic laid out here:
  * https://github.com/gephi/gephi-plugins/issues/262#issuecomment-1231627948
- * 
+ *
  */
 public class JPanelWebExport extends javax.swing.JPanel {
 
@@ -37,12 +41,11 @@ public class JPanelWebExport extends javax.swing.JPanel {
     private JsonObject responseGithubUserCodeInput;
     private String accessToken;
     private String deviceCode;
-    
+
     private static final ResourceBundle bundle = NbBundle.getBundle(GephiPluginDesktopLogic.class);
 
     public static final String COLOR_SUCCESS = "#45ba48";
-    
-    
+
     public JPanelWebExport() {
         initComponents();
         Preferences preferences = NbPreferences.forModule(this.getClass());
@@ -335,7 +338,6 @@ public class JPanelWebExport extends javax.swing.JPanel {
         jPanel8.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
         jTextFieldGithubErrorMsg.setForeground(new java.awt.Color(255, 0, 0));
-        jTextFieldGithubErrorMsg.setText(org.openide.util.NbBundle.getMessage(JPanelWebExport.class, "JPanelWebExport.jTextFieldGithubErrorMsg.text")); // NOI18N
 
         javax.swing.GroupLayout jPanel8Layout = new javax.swing.GroupLayout(jPanel8);
         jPanel8.setLayout(jPanel8Layout);
@@ -495,59 +497,68 @@ public class JPanelWebExport extends javax.swing.JPanel {
 
     private void jButtonPublishActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonPublishActionPerformed
         JsonObject jsonObjectOfGexfAsStringRetrieval = PublishingActions.getGexfAsString();
-        if (!jsonObjectOfGexfAsStringRetrieval.has(SUCCESS_CODE)) {
-            if (!jsonObjectOfGexfAsStringRetrieval.keySet().isEmpty()) {
-                String errorKey = jsonObjectOfGexfAsStringRetrieval.keySet().iterator().next();
-                jTextAreaUrls.setText(jsonObjectOfGexfAsStringRetrieval.get(errorKey).getAsString());
-            } else {
-                jTextAreaUrls.setText(bundle.getString("general.message.error.gexf_not_retrieved"));
-            }
-        } else {
-            String gexf = jsonObjectOfGexfAsStringRetrieval.get(SUCCESS_CODE).getAsString();
-            Preferences preferences = NbPreferences.forModule(this.getClass());
-            accessToken = preferences.get(ACCESS_TOKEN_KEY_IN_USER_PREFS, "");
-            if (accessToken == null || accessToken.isBlank()) {
-                jTextAreaUrls.setText(bundle.getString("general.message.error.no_token"));
-            } else {
-                String fileName = "network-" + UUID.randomUUID().toString().substring(0, 12) + ".gexf";
+        if (jsonObjectOfGexfAsStringRetrieval.keySet().size() != 1) {
+            jTextAreaUrls.setText(bundle.getString("general.message.error.gexf_not_retrieved"));
+            return;
+        }
+        String key = jsonObjectOfGexfAsStringRetrieval.keySet().iterator().next();
 
-                JsonObject responseGistPublished = PublishingActions.postGexfToGist(gexf, accessToken, fileName);
-                if (!responseGistPublished.has("201")) {
-                    if (responseGistPublished.keySet().isEmpty()) {
-                        jTextAreaUrls.setText(bundle.getString("general.message.error.unspecific_error_while_publishing"));
-                    } else {
-                        String errorMsgInBodyKey = responseGistPublished.keySet().iterator().next();
-                        if (responseGistPublished.get(errorMsgInBodyKey) != null) {
-                            String errorMsgInBodyValue = responseGistPublished.get(errorMsgInBodyKey).getAsString();
-                            jTextAreaUrls.setText(
-                                    bundle.getString("general.message.error.gist_creation")
-                                    + errorMsgInBodyKey
-                                    + "; "
-                                    + bundle.getString("general.message.error_message")
-                                    + errorMsgInBodyValue);
-                        }
-                    }
-                } else {
-                    JsonObject metadataOnGist = responseGistPublished.get("201").getAsJsonObject();
-                    String htmlUrl = metadataOnGist.get("html_url").getAsString();
-                    JsonObject metadataOnFiles = metadataOnGist.get("files").getAsJsonObject();
-                    JsonObject metadataOnOneFile = metadataOnFiles.get(fileName).getAsJsonObject();
-                    String rawUrl = metadataOnOneFile.get("raw_url").getAsString();
-                    String retinaFullURl = RETINA_BASE_URL + "?url=" + rawUrl;
-
-                    String textForUserWithURL = bundle.getString("general.message.url_published_gexf")
-                            + "\n"
-                            + htmlUrl
-                            + "\n\n"
-                            + bundle.getString("general.message.url_published_on_retina")
-                            + "\n"
-                            + retinaFullURl;
-
-                    jTextAreaUrls.setText(textForUserWithURL);
-                    jTextAreaUrls.setCaretPosition(0);
-                }
+        if (!key.equals(SUCCESS_CODE) & !key.equals(SUCCESS_BUT_WITH_WARNING)) {
+            jTextAreaUrls.setText(jsonObjectOfGexfAsStringRetrieval.get(key).getAsString());
+            return;
+        } else if (key.equals(SUCCESS_BUT_WITH_WARNING)) {
+            JLabel warningMessage = new JLabel();
+            warningMessage.setText(bundle.getString("general.message.warning.network_too_big"));
+            NotifyDescriptor.Confirmation confirmation = new DialogDescriptor.Confirmation(warningMessage, bundle.getString("general.noun.warning"), NotifyDescriptor.WARNING_MESSAGE, NotifyDescriptor.YES_NO_OPTION);
+            if (DialogDisplayer.getDefault().notify(confirmation) != NotifyDescriptor.YES_OPTION) {
+                return;
             }
         }
+        String gexf = jsonObjectOfGexfAsStringRetrieval.get(SUCCESS_CODE).getAsString();
+        Preferences preferences = NbPreferences.forModule(this.getClass());
+        accessToken = preferences.get(ACCESS_TOKEN_KEY_IN_USER_PREFS, "");
+        if (accessToken == null || accessToken.isBlank()) {
+            jTextAreaUrls.setText(bundle.getString("general.message.error.no_token"));
+        } else {
+            String fileName = "network-" + UUID.randomUUID().toString().substring(0, 12) + ".gexf";
+
+            JsonObject responseGistPublished = PublishingActions.postGexfToGist(gexf, accessToken, fileName);
+            if (!responseGistPublished.has("201")) {
+                if (responseGistPublished.keySet().isEmpty()) {
+                    jTextAreaUrls.setText(bundle.getString("general.message.error.unspecific_error_while_publishing"));
+                } else {
+                    String errorMsgInBodyKey = responseGistPublished.keySet().iterator().next();
+                    if (responseGistPublished.get(errorMsgInBodyKey) != null) {
+                        String errorMsgInBodyValue = responseGistPublished.get(errorMsgInBodyKey).getAsString();
+                        jTextAreaUrls.setText(
+                                bundle.getString("general.message.error.gist_creation")
+                                + errorMsgInBodyKey
+                                + "; "
+                                + bundle.getString("general.message.error_message")
+                                + errorMsgInBodyValue);
+                    }
+                }
+            } else {
+                JsonObject metadataOnGist = responseGistPublished.get("201").getAsJsonObject();
+                String htmlUrl = metadataOnGist.get("html_url").getAsString();
+                JsonObject metadataOnFiles = metadataOnGist.get("files").getAsJsonObject();
+                JsonObject metadataOnOneFile = metadataOnFiles.get(fileName).getAsJsonObject();
+                String rawUrl = metadataOnOneFile.get("raw_url").getAsString();
+                String retinaFullURl = RETINA_BASE_URL + "?url=" + rawUrl;
+
+                String textForUserWithURL = bundle.getString("general.message.url_published_gexf")
+                        + "\n"
+                        + htmlUrl
+                        + "\n\n"
+                        + bundle.getString("general.message.url_published_on_retina")
+                        + "\n"
+                        + retinaFullURl;
+
+                jTextAreaUrls.setText(textForUserWithURL);
+                jTextAreaUrls.setCaretPosition(0);
+            }
+        }
+
     }//GEN-LAST:event_jButtonPublishActionPerformed
 
     private void jButtonConnectToGephiLiteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonConnectToGephiLiteActionPerformed

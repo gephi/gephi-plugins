@@ -12,8 +12,10 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.nio.charset.StandardCharsets;
 import java.util.ResourceBundle;
 import static net.clementlevallois.web.publish.plugin.controller.GlobalConfigParams.*;
+import org.gephi.graph.api.Graph;
 import org.gephi.graph.api.GraphController;
 import org.gephi.graph.api.GraphModel;
 import org.gephi.io.exporter.api.ExportController;
@@ -30,7 +32,10 @@ import org.openide.util.NbBundle;
  * @author LEVALLOIS
  */
 public class PublishingActions {
+
     private static final ResourceBundle bundle = NbBundle.getBundle(GephiPluginDesktopLogic.class);
+
+    private static final int BYTES_IN_A_MEGABYTE = 1_048_576;
 
     public static JsonObject getGexfAsString() {
         JsonObject jsonObject = new JsonObject();
@@ -40,8 +45,8 @@ public class PublishingActions {
             return jsonObject;
         }
         GraphModel graphModel = Lookup.getDefault().lookup(GraphController.class).getGraphModel();
-        if (graphModel.getGraph().getNodeCount() == 0) {
-            jsonObject = new JsonObject();
+        Graph graph = graphModel.getGraph();
+        if (graph.getNodeCount() == 0) {
             jsonObject.addProperty(ERROR_CODE_EMPTY_NETWORK, bundle.getString("general.message.error.empty_network"));
             return jsonObject;
         }
@@ -53,8 +58,20 @@ public class PublishingActions {
         ec.exportWriter(stringWriter, (CharacterExporter) exporterGexf);
         String gexfToSendAsString = stringWriter.toString();
 
-        jsonObject.addProperty(SUCCESS_CODE, gexfToSendAsString);
+        int sizeGexfInBytes = gexfToSendAsString.getBytes(StandardCharsets.UTF_8).length; //
 
+        // Files pushed to a github shouldn't be larger than 100Mb
+        // There is still a doubt: is this limit the same for uploads to a gist?
+        if (sizeGexfInBytes >= (BYTES_IN_A_MEGABYTE * MAX_MB_FOR_GITHUB_PUSH)) {
+            jsonObject.addProperty(ERROR_CODE_GEXF_TOO_BIG, bundle.getString("general.message.error.network_too_big"));
+            return jsonObject;
+        }
+
+        if (graph.getNodeCount() > 10_000 || graph.getEdgeCount() > 20_000) {
+            jsonObject.addProperty(SUCCESS_BUT_WITH_WARNING, gexfToSendAsString);
+        } else {
+            jsonObject.addProperty(SUCCESS_CODE, gexfToSendAsString);
+        }
         return jsonObject;
     }
 
@@ -104,8 +121,7 @@ public class PublishingActions {
 
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
             if (response.statusCode() < 200 || response.statusCode() > 299) {
-                JsonObject error = new JsonObject();
-                error.addProperty(String.valueOf(response.statusCode()), response.body());
+                responsePostGexfToGist.addProperty(String.valueOf(response.statusCode()), response.body());
             } else {
                 JsonElement responseAsJsonElement = JsonParser.parseString(response.body());
                 JsonObject responseBodyAsSJsonObject = responseAsJsonElement.getAsJsonObject();
