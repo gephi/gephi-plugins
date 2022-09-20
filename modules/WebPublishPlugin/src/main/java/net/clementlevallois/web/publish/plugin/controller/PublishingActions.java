@@ -45,13 +45,19 @@ public class PublishingActions {
             jsonObject.addProperty(ERROR_CODE_NO_OPEN_PROJECT, bundle.getString("general.message.error.no_open_project"));
             return jsonObject;
         }
-        GraphModel graphModel = Lookup.getDefault().lookup(GraphController.class).getGraphModel();
+        return getGexfAsString(pc.getCurrentWorkspace());
+    }
+
+    public static JsonObject getGexfAsString(Workspace workspace) {
+        JsonObject jsonObject = new JsonObject();
+
+        GraphModel graphModel = Lookup.getDefault().lookup(GraphController.class).getGraphModel(workspace);
         Graph graph = graphModel.getGraph();
         if (graph.getNodeCount() == 0) {
             jsonObject.addProperty(ERROR_CODE_EMPTY_NETWORK, bundle.getString("general.message.error.empty_network"));
             return jsonObject;
         }
-        Workspace workspace = pc.getCurrentWorkspace();
+
         ExportController ec = Lookup.getDefault().lookup(ExportController.class);
 
         ExporterGEXF exporterGexf = (ExporterGEXF) ec.getExporter("gexf");
