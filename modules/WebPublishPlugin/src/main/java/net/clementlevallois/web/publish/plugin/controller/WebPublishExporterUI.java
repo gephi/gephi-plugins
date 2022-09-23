@@ -1,6 +1,3 @@
-/*
- * author: Clément Levallois
- */
 package net.clementlevallois.web.publish.plugin.controller;
 
 /*
@@ -14,14 +11,11 @@ import org.openide.NotifyDescriptor;
 import org.openide.util.NbBundle;
 import org.openide.util.lookup.ServiceProvider;
 
-/*
 
- * @author Clement Levallois
- */
-@ServiceProvider(service = ExporterClassUI.class)
-public final class GephiPluginDesktopLogic implements ExporterClassUI {
+@ServiceProvider(service = ExporterClassUI.class, position = Integer.MAX_VALUE)
+public final class WebPublishExporterUI implements ExporterClassUI {
 
-    private static final ResourceBundle bundle = NbBundle.getBundle(GephiPluginDesktopLogic.class);
+    private static final ResourceBundle bundle = NbBundle.getBundle(WebPublishExporterUI.class);
 
     @Override
     public String getName() {

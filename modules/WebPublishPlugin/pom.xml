@@ -99,6 +99,7 @@
                 <artifactId>nbm-maven-plugin</artifactId>
                 <configuration>
                     <licenseName>Apache 2.0</licenseName>
+                    <licenseFile>Apache-LICENSE-2.0.txt</licenseFile>
                     <author>Clement Levallois</author>
                     <authorEmail>admin@clementlevallois.net</authorEmail>
                     <authorUrl>https://nocodefunctions.com</authorUrl>

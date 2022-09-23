@@ -1,17 +1,12 @@
 /*
- * author: Clément Levallois
+ * author: ClÃ©ment Levallois
  */
 package net.clementlevallois.web.publish.plugin.controller;
 
-import com.google.gson.JsonElement;
+import net.clementlevallois.web.publish.plugin.github.PublishingActions;
 import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 import java.awt.Color;
 import java.io.IOException;
-import java.net.URI;
-import java.net.http.HttpClient;
-import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
 import java.util.ResourceBundle;
 import java.util.UUID;
 import java.util.prefs.Preferences;
@@ -20,6 +15,12 @@ import javax.swing.JLabel;
 import javax.swing.JTextField;
 import javax.swing.SwingWorker;
 import static net.clementlevallois.web.publish.plugin.controller.GlobalConfigParams.*;
+import net.clementlevallois.web.publish.plugin.exceptions.EmptyGraphException;
+import net.clementlevallois.web.publish.plugin.exceptions.FileAboveMaxGithubSizeException;
+import net.clementlevallois.web.publish.plugin.github.GithubPollerCreator;
+import net.clementlevallois.web.publish.plugin.exceptions.NoOpenProjectException;
+import net.clementlevallois.web.publish.plugin.exceptions.PublishToGistException;
+import net.clementlevallois.web.publish.plugin.model.PluginModel;
 import org.openide.DialogDescriptor;
 import org.openide.DialogDisplayer;
 import org.openide.NotifyDescriptor;
@@ -37,19 +38,18 @@ import org.openide.util.NbPreferences;
  */
 public class JPanelWebExport extends javax.swing.JPanel {
 
-    private JsonObject responseGithubConnectAction;
-    private JsonObject responseGithubUserCodeInput;
-    private String accessToken;
-    private String deviceCode;
+    private PluginModel pluginModel;
 
-    private static final ResourceBundle bundle = NbBundle.getBundle(GephiPluginDesktopLogic.class);
+    private static final ResourceBundle bundle = NbBundle.getBundle(WebPublishExporterUI.class);
 
     public static final String COLOR_SUCCESS = "#45ba48";
 
     public JPanelWebExport() {
         initComponents();
+        pluginModel = new PluginModel();
         Preferences preferences = NbPreferences.forModule(this.getClass());
-        accessToken = preferences.get(ACCESS_TOKEN_KEY_IN_USER_PREFS, "");
+        String accessToken = preferences.get(ACCESS_TOKEN_KEY_IN_USER_PREFS, "");
+        pluginModel.setAccessToken(accessToken);
         if (accessToken == null || accessToken.isBlank()) {
             jLabelAlreadyLoggedIn.setVisible(false);
         } else {
@@ -62,82 +62,8 @@ public class JPanelWebExport extends javax.swing.JPanel {
         jTextAreaUrls.setText("");
     }
 
-    SwingWorker pollWorker = new SwingWorker<Void, Integer>() {
-
-        @Override
-        protected Void doInBackground() throws Exception {
-            JsonObject jsonObject = new JsonObject();
-            try {
-                HttpClient client = HttpClient.newHttpClient();
-                String url = "https://github.com/login/oauth/access_token";
-
-                String inputParams = "client_id="
-                        + GEPHI_APP_CLIENT_ID
-                        + "&"
-                        + "device_code="
-                        + deviceCode
-                        + "&"
-                        + "grant_type=urn:ietf:params:oauth:grant-type:device_code";
-                HttpRequest request = HttpRequest.newBuilder()
-                        .uri(URI.create(url))
-                        .header("accept", "application/json")
-                        .POST(HttpRequest.BodyPublishers.ofString(inputParams))
-                        .build();
-
-                boolean success = false;
-                long startTime = System.currentTimeMillis();
-                long maxDuration = 900_000;
-                float currDuration = 0;
-                int loops = 0;
-                while (!success && currDuration < maxDuration) {
-                    HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-                    JsonElement responseAsJsonElement = JsonParser.parseString(response.body());
-                    jsonObject = responseAsJsonElement.getAsJsonObject();
-                    if (jsonObject.has("access_token")) {
-                        break;
-                    }
-                    currDuration = (float) (System.currentTimeMillis() - startTime) / (float) 1000;
-                    // the min duration recommended by Github between two polls is 5 seconds
-                    // -> https://docs.github.com/en/developers/apps/building-oauth-apps/authorizing-oauth-apps#device-flow
-                    Thread.sleep(5200);
-                    publish(++loops);
-                }
-            } catch (IOException | InterruptedException ex) {
-                Exceptions.printStackTrace(ex);
-                jTextFieldGithubErrorMsg.setText(ex.getMessage());
-                jTextFieldGithubErrorMsg.setCaretPosition(0);
-            }
-            responseGithubUserCodeInput = jsonObject;
-            return null;
-        }
-
-        @Override
-        public void done() {
-            if (responseGithubUserCodeInput.has("access_token")) {
-                accessToken = responseGithubUserCodeInput.get("access_token").getAsString();
-                Preferences preferences = NbPreferences.forModule(this.getClass());
-                preferences.put(ACCESS_TOKEN_KEY_IN_USER_PREFS, accessToken);
-                jTextFieldGithubErrorMsg.setForeground(Color.decode(COLOR_SUCCESS));
-                jTextFieldGithubErrorMsg.setText(bundle.getString("general.message.success_switch_to_publish"));
-                jTextFieldGithubErrorMsg.setCaretPosition(0);
-            } else {
-                jTextFieldGithubErrorMsg.setText(bundle.getString("general.message.error.no_user_code"));
-                jTextFieldGithubErrorMsg.setCaretPosition(0);
-            }
-        }
-
-        protected void process(Integer loops) {
-            jTextFieldGithubErrorMsg.setText(loops.toString());
-        }
-
-    };
-
     public JTextField getjTextFieldUserCode() {
         return jTextFieldUserCode;
-    }
-
-    public JsonObject getResponseGithubConnectAction() {
-        return responseGithubConnectAction;
     }
 
     /**
@@ -496,17 +422,17 @@ public class JPanelWebExport extends javax.swing.JPanel {
     }//GEN-LAST:event_jButtonResetLoginActionPerformed
 
     private void jButtonPublishActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonPublishActionPerformed
-        JsonObject jsonObjectOfGexfAsStringRetrieval = PublishingActions.getGexfAsString();
-        if (jsonObjectOfGexfAsStringRetrieval.keySet().size() != 1) {
-            jTextAreaUrls.setText(bundle.getString("general.message.error.gexf_not_retrieved"));
+        String gexfAsString;
+        try {
+            gexfAsString = PublishingActions.getGexfAsString();
+        } catch (NoOpenProjectException | EmptyGraphException | FileAboveMaxGithubSizeException ex) {
+            jTextFieldGithubErrorMsg.setText(ex.getMessage());
+            jTextFieldGithubErrorMsg.setCaretPosition(0);
             return;
         }
-        String key = jsonObjectOfGexfAsStringRetrieval.keySet().iterator().next();
 
-        if (!key.equals(SUCCESS_CODE) & !key.equals(SUCCESS_BUT_WITH_WARNING)) {
-            jTextAreaUrls.setText(jsonObjectOfGexfAsStringRetrieval.get(key).getAsString());
-            return;
-        } else if (key.equals(SUCCESS_BUT_WITH_WARNING)) {
+        boolean isAveryLargeGraph = PublishingActions.isGraphVeryLarge();
+        if (isAveryLargeGraph) {
             JLabel warningMessage = new JLabel();
             warningMessage.setText(bundle.getString("general.message.warning.network_too_big"));
             NotifyDescriptor.Confirmation confirmation = new DialogDescriptor.Confirmation(warningMessage, bundle.getString("general.noun.warning"), NotifyDescriptor.WARNING_MESSAGE, NotifyDescriptor.YES_NO_OPTION);
@@ -514,67 +440,64 @@ public class JPanelWebExport extends javax.swing.JPanel {
                 return;
             }
         }
-        String gexf = jsonObjectOfGexfAsStringRetrieval.get(SUCCESS_CODE).getAsString();
+
         Preferences preferences = NbPreferences.forModule(this.getClass());
-        accessToken = preferences.get(ACCESS_TOKEN_KEY_IN_USER_PREFS, "");
+        String accessToken = preferences.get(ACCESS_TOKEN_KEY_IN_USER_PREFS, "");
+        pluginModel.setAccessToken(accessToken);
         if (accessToken == null || accessToken.isBlank()) {
             jTextAreaUrls.setText(bundle.getString("general.message.error.no_token"));
         } else {
-            String fileName = "network-" + UUID.randomUUID().toString().substring(0, 12) + ".gexf";
-
-            JsonObject responseGistPublished = PublishingActions.postGexfToGist(gexf, accessToken, fileName);
-            if (!responseGistPublished.has("201")) {
-                if (responseGistPublished.keySet().isEmpty()) {
-                    jTextAreaUrls.setText(bundle.getString("general.message.error.unspecific_error_while_publishing"));
-                } else {
-                    String errorMsgInBodyKey = responseGistPublished.keySet().iterator().next();
-                    if (responseGistPublished.get(errorMsgInBodyKey) != null) {
-                        String errorMsgInBodyValue = responseGistPublished.get(errorMsgInBodyKey).getAsString();
-                        jTextAreaUrls.setText(
-                                bundle.getString("general.message.error.gist_creation")
-                                + errorMsgInBodyKey
-                                + "; "
-                                + bundle.getString("general.message.error_message")
-                                + errorMsgInBodyValue);
-                    }
-                }
-            } else {
-                JsonObject metadataOnGist = responseGistPublished.get("201").getAsJsonObject();
-                String htmlUrl = metadataOnGist.get("html_url").getAsString();
-                JsonObject metadataOnFiles = metadataOnGist.get("files").getAsJsonObject();
-                JsonObject metadataOnOneFile = metadataOnFiles.get(fileName).getAsJsonObject();
-                String rawUrl = metadataOnOneFile.get("raw_url").getAsString();
-                String retinaFullURl = RETINA_BASE_URL + "?url=" + rawUrl;
-
-                String textForUserWithURL = bundle.getString("general.message.url_published_gexf")
-                        + "\n"
-                        + htmlUrl
-                        + "\n\n"
-                        + bundle.getString("general.message.url_published_on_retina")
-                        + "\n"
-                        + retinaFullURl;
-
-                jTextAreaUrls.setText(textForUserWithURL);
+            String result = "";
+            try {
+                result = PublishingActions.postGexfToGist(gexfAsString, accessToken);
+                jTextAreaUrls.setText(result);
+                jTextAreaUrls.setCaretPosition(0);
+            } catch (PublishToGistException ex) {
+                jTextAreaUrls.setText(result);
+                jTextAreaUrls.setCaretPosition(0);
+            } catch (IOException | InterruptedException ex) {
+                Exceptions.printStackTrace(ex);
+                jTextAreaUrls.setText(bundle.getString("general.message.error.probably_internet_connection"));
                 jTextAreaUrls.setCaretPosition(0);
             }
         }
+
 
     }//GEN-LAST:event_jButtonPublishActionPerformed
 
     private void jButtonConnectToGephiLiteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonConnectToGephiLiteActionPerformed
         jTextFieldGithubErrorMsg.setBackground(Color.WHITE);
         jTextFieldGithubErrorMsg.setText("");
-        responseGithubConnectAction = PublishingActions.connectToGithub();
+        JsonObject responseGithubConnectAction;
+        try {
+            responseGithubConnectAction = PublishingActions.connectToGithub();
+        } catch (IOException | InterruptedException ex) {
+            Exceptions.printStackTrace(ex);
+            jTextFieldUserCode.setForeground(Color.RED);
+            jTextFieldGithubErrorMsg.setText(bundle.getString("general.message.error.probably_internet_connection"));
+            jTextFieldGithubErrorMsg.setCaretPosition(0);
+            return;
+        }
         if (!responseGithubConnectAction.has("user_code")) {
             jTextFieldUserCode.setForeground(Color.RED);
             jTextFieldGithubErrorMsg.setText(bundle.getString("general.message.error.cant_retrieve_user_code"));
             jTextFieldGithubErrorMsg.setCaretPosition(0);
         } else {
             String userCode = responseGithubConnectAction.get("user_code").getAsString();
-            deviceCode = responseGithubConnectAction.get("device_code").getAsString();
+            String deviceCode = responseGithubConnectAction.get("device_code").getAsString();
+            pluginModel.setDeviceCode(deviceCode);
             jTextFieldUserCode.setForeground(Color.decode(COLOR_SUCCESS));
             jTextFieldUserCode.setText(userCode);
-            pollWorker.execute();
+            try {
+                GithubPollerCreator githubPollerCreator = new GithubPollerCreator();
+                SwingWorker githubPoller = githubPollerCreator.createPoller(pluginModel);
+                githubPoller.execute();
+            } catch (IOException | InterruptedException ex) {
+                Exceptions.printStackTrace(ex);
+                jTextFieldUserCode.setForeground(Color.RED);
+                jTextFieldGithubErrorMsg.setText(bundle.getString("general.message.error.probably_internet_connection"));
+                jTextFieldGithubErrorMsg.setCaretPosition(0);
+            }
         }
     }//GEN-LAST:event_jButtonConnectToGephiLiteActionPerformed
 
@@ -602,7 +525,7 @@ public class JPanelWebExport extends javax.swing.JPanel {
     private javax.swing.JTextArea jTextAreaUrls;
     private javax.swing.JTextField jTextField1;
     private javax.swing.JTextField jTextField2;
-    private javax.swing.JTextField jTextFieldGithubErrorMsg;
+    public static javax.swing.JTextField jTextFieldGithubErrorMsg;
     private javax.swing.JTextField jTextFieldUserCode;
     private javax.swing.JTextField jTextFieldWebsiteLoginUrl;
     private javax.swing.JPanel tabGithub;

@@ -1,29 +1,30 @@
 package net.clementlevallois.web.publish.plugin.controller;
 
-import com.google.gson.JsonObject;
+import net.clementlevallois.web.publish.plugin.github.PublishingActions;
+import net.clementlevallois.web.publish.plugin.exceptions.EmptyGraphException;
+import net.clementlevallois.web.publish.plugin.exceptions.FileAboveMaxGithubSizeException;
+import net.clementlevallois.web.publish.plugin.exceptions.NoOpenProjectException;
 import org.gephi.graph.GraphGenerator;
 import org.junit.Assert;
 import org.junit.Test;
 
 public class PublishingActionsTest {
 
-    @Test
-    public void testNoProject() {
-        JsonObject obj = PublishingActions.getGexfAsString();
-        Assert.assertTrue(obj.has(GlobalConfigParams.ERROR_CODE_NO_OPEN_PROJECT));
+    @Test (expected = NoOpenProjectException.class)
+    public void testNoProject() throws NoOpenProjectException, EmptyGraphException, FileAboveMaxGithubSizeException {
+        String result = PublishingActions.getGexfAsString();
     }
 
-    @Test
-    public void testEmptyGraph() {
+    @Test (expected = EmptyGraphException.class)
+    public void testEmptyGraph() throws EmptyGraphException, FileAboveMaxGithubSizeException {
         GraphGenerator graphGenerator = GraphGenerator.build().withWorkspace();
-        JsonObject obj = PublishingActions.getGexfAsString(graphGenerator.getWorkspace());
-        Assert.assertTrue(obj.has(GlobalConfigParams.ERROR_CODE_EMPTY_NETWORK));
+        String result = PublishingActions.getGexfAsStringFromWorkspace(graphGenerator.getWorkspace());
     }
 
     @Test
-    public void testSuccess() {
+    public void testSuccess() throws EmptyGraphException, FileAboveMaxGithubSizeException {
         GraphGenerator graphGenerator = GraphGenerator.build().withWorkspace().generateTinyGraph();
-        JsonObject obj = PublishingActions.getGexfAsString(graphGenerator.getWorkspace());
-        Assert.assertTrue(obj.has(GlobalConfigParams.SUCCESS_CODE));
+        String result = PublishingActions.getGexfAsStringFromWorkspace(graphGenerator.getWorkspace());
+        Assert.assertNotNull(result);
     }
 }
