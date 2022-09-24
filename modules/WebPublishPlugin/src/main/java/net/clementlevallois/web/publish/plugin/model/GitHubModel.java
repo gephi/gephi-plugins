@@ -8,7 +8,7 @@ package net.clementlevallois.web.publish.plugin.model;
  *
  * @author LEVALLOIS
  */
-public class PluginModel {
+public class GitHubModel {
     
     private String accessToken;
     private String deviceCode;
@@ -28,7 +28,5 @@ public class PluginModel {
     public void setDeviceCode(String deviceCode) {
         this.deviceCode = deviceCode;
     }
-    
-    
     
 }

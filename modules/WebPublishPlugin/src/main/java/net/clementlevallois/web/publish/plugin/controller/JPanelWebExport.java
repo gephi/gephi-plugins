@@ -8,7 +8,6 @@ import com.google.gson.JsonObject;
 import java.awt.Color;
 import java.io.IOException;
 import java.util.ResourceBundle;
-import java.util.UUID;
 import java.util.prefs.Preferences;
 import javax.swing.JLabel;
 
@@ -20,7 +19,7 @@ import net.clementlevallois.web.publish.plugin.exceptions.FileAboveMaxGithubSize
 import net.clementlevallois.web.publish.plugin.github.GithubPollerCreator;
 import net.clementlevallois.web.publish.plugin.exceptions.NoOpenProjectException;
 import net.clementlevallois.web.publish.plugin.exceptions.PublishToGistException;
-import net.clementlevallois.web.publish.plugin.model.PluginModel;
+import net.clementlevallois.web.publish.plugin.model.GitHubModel;
 import org.openide.DialogDescriptor;
 import org.openide.DialogDisplayer;
 import org.openide.NotifyDescriptor;
@@ -38,7 +37,7 @@ import org.openide.util.NbPreferences;
  */
 public class JPanelWebExport extends javax.swing.JPanel {
 
-    private PluginModel pluginModel;
+    private GitHubModel gitHubModel;
 
     private static final ResourceBundle bundle = NbBundle.getBundle(WebPublishExporterUI.class);
 
@@ -46,10 +45,10 @@ public class JPanelWebExport extends javax.swing.JPanel {
 
     public JPanelWebExport() {
         initComponents();
-        pluginModel = new PluginModel();
+        gitHubModel = new GitHubModel();
         Preferences preferences = NbPreferences.forModule(this.getClass());
         String accessToken = preferences.get(ACCESS_TOKEN_KEY_IN_USER_PREFS, "");
-        pluginModel.setAccessToken(accessToken);
+        gitHubModel.setAccessToken(accessToken);
         if (accessToken == null || accessToken.isBlank()) {
             jLabelAlreadyLoggedIn.setVisible(false);
         } else {
@@ -443,7 +442,7 @@ public class JPanelWebExport extends javax.swing.JPanel {
 
         Preferences preferences = NbPreferences.forModule(this.getClass());
         String accessToken = preferences.get(ACCESS_TOKEN_KEY_IN_USER_PREFS, "");
-        pluginModel.setAccessToken(accessToken);
+        gitHubModel.setAccessToken(accessToken);
         if (accessToken == null || accessToken.isBlank()) {
             jTextAreaUrls.setText(bundle.getString("general.message.error.no_token"));
         } else {
@@ -485,12 +484,12 @@ public class JPanelWebExport extends javax.swing.JPanel {
         } else {
             String userCode = responseGithubConnectAction.get("user_code").getAsString();
             String deviceCode = responseGithubConnectAction.get("device_code").getAsString();
-            pluginModel.setDeviceCode(deviceCode);
+            gitHubModel.setDeviceCode(deviceCode);
             jTextFieldUserCode.setForeground(Color.decode(COLOR_SUCCESS));
             jTextFieldUserCode.setText(userCode);
             try {
                 GithubPollerCreator githubPollerCreator = new GithubPollerCreator();
-                SwingWorker githubPoller = githubPollerCreator.createPoller(pluginModel);
+                SwingWorker githubPoller = githubPollerCreator.createPoller(gitHubModel, jTextFieldGithubErrorMsg);
                 githubPoller.execute();
             } catch (IOException | InterruptedException ex) {
                 Exceptions.printStackTrace(ex);
@@ -525,7 +524,7 @@ public class JPanelWebExport extends javax.swing.JPanel {
     private javax.swing.JTextArea jTextAreaUrls;
     private javax.swing.JTextField jTextField1;
     private javax.swing.JTextField jTextField2;
-    public static javax.swing.JTextField jTextFieldGithubErrorMsg;
+    public javax.swing.JTextField jTextFieldGithubErrorMsg;
     private javax.swing.JTextField jTextFieldUserCode;
     private javax.swing.JTextField jTextFieldWebsiteLoginUrl;
     private javax.swing.JPanel tabGithub;

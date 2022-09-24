@@ -54,6 +54,7 @@ public class PublishingActions {
     }
 
     public static String getGexfAsStringFromWorkspace(Workspace workspace) throws EmptyGraphException, FileAboveMaxGithubSizeException {
+
         GraphModel graphModel = Lookup.getDefault().lookup(GraphController.class).getGraphModel(workspace);
         Graph graph = graphModel.getGraph();
         if (graph.getNodeCount() == 0) {
