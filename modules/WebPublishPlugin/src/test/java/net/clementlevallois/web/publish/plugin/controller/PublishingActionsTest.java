@@ -12,13 +12,13 @@ public class PublishingActionsTest {
 
     @Test (expected = NoOpenProjectException.class)
     public void testNoProject() throws NoOpenProjectException, EmptyGraphException, FileAboveMaxGithubSizeException {
-        String result = PublishingActions.getGexfAsString();
+        PublishingActions.getGexfAsString();
     }
 
     @Test (expected = EmptyGraphException.class)
     public void testEmptyGraph() throws EmptyGraphException, FileAboveMaxGithubSizeException {
         GraphGenerator graphGenerator = GraphGenerator.build().withWorkspace();
-        String result = PublishingActions.getGexfAsStringFromWorkspace(graphGenerator.getWorkspace());
+        PublishingActions.getGexfAsStringFromWorkspace(graphGenerator.getWorkspace());
     }
 
     @Test
