@@ -3,7 +3,8 @@
  */
 package net.clementlevallois.web.publish.plugin.controller;
 
-import net.clementlevallois.web.publish.plugin.github.PublishingActions;
+import javax.swing.SwingUtilities;
+import net.clementlevallois.web.publish.plugin.github.PublishRunnable;
 import com.google.gson.JsonObject;
 import java.awt.Color;
 import java.io.IOException;
@@ -14,12 +15,11 @@ import javax.swing.JLabel;
 import javax.swing.JTextField;
 import javax.swing.SwingWorker;
 import static net.clementlevallois.web.publish.plugin.controller.GlobalConfigParams.*;
-import net.clementlevallois.web.publish.plugin.exceptions.EmptyGraphException;
-import net.clementlevallois.web.publish.plugin.exceptions.FileAboveMaxGithubSizeException;
-import net.clementlevallois.web.publish.plugin.github.GithubPollerCreator;
-import net.clementlevallois.web.publish.plugin.exceptions.NoOpenProjectException;
+
+import net.clementlevallois.web.publish.plugin.github.GithubAuthRunnable;
 import net.clementlevallois.web.publish.plugin.exceptions.PublishToGistException;
 import net.clementlevallois.web.publish.plugin.model.GitHubModel;
+import org.gephi.utils.longtask.api.LongTaskExecutor;
 import org.openide.DialogDescriptor;
 import org.openide.DialogDisplayer;
 import org.openide.NotifyDescriptor;
@@ -37,11 +37,13 @@ import org.openide.util.NbPreferences;
  */
 public class JPanelWebExport extends javax.swing.JPanel {
 
-    private GitHubModel gitHubModel;
+    private final GitHubModel gitHubModel;
 
     private static final ResourceBundle bundle = NbBundle.getBundle(WebPublishExporterUI.class);
 
     public static final String COLOR_SUCCESS = "#45ba48";
+
+    private final LongTaskExecutor executor;
 
     public JPanelWebExport() {
         initComponents();
@@ -49,16 +51,52 @@ public class JPanelWebExport extends javax.swing.JPanel {
         Preferences preferences = NbPreferences.forModule(this.getClass());
         String accessToken = preferences.get(ACCESS_TOKEN_KEY_IN_USER_PREFS, "");
         gitHubModel.setAccessToken(accessToken);
-        if (accessToken == null || accessToken.isBlank()) {
-            jLabelAlreadyLoggedIn.setVisible(false);
-        } else {
-            jLabelAlreadyLoggedIn.setVisible(true);
-        }
+        jLabelAlreadyLoggedIn.setVisible(accessToken != null && !accessToken.isBlank());
         jTextFieldGithubErrorMsg.setBackground(Color.WHITE);
         jTextFieldGithubErrorMsg.setText(bundle.getString("general.message.errors_appear.here"));
         jTextFieldGithubErrorMsg.setCaretPosition(0);
         jTextFieldUserCode.setForeground(Color.RED);
         jTextAreaUrls.setText("");
+
+        // Setup executor
+        executor = new LongTaskExecutor(true, "WebPublishPlugin");
+        executor.setDefaultErrorHandler((Throwable t) -> {
+            SwingUtilities.invokeLater(() -> {
+                if (t instanceof PublishToGistException) {
+                    jTextAreaUrls.setText(t.getMessage());
+                    jTextAreaUrls.setCaretPosition(0);
+                } else {
+                    jTextFieldGithubErrorMsg.setText(t.getMessage());
+                    jTextFieldGithubErrorMsg.setCaretPosition(0);
+                }
+            });
+            Exceptions.printStackTrace(t);
+        });
+
+        // When task finished
+        executor.setLongTaskListener(longTask -> {
+            if (longTask instanceof PublishRunnable) {
+                String urlResult = ((PublishRunnable) longTask).getResultUrl();
+                if (urlResult != null) {
+                    SwingUtilities.invokeLater(() -> {
+                        jTextAreaUrls.setText(urlResult);
+                        jTextAreaUrls.setCaretPosition(0);
+                    });
+                }
+            } else if (longTask instanceof GithubAuthRunnable) {
+                SwingUtilities.invokeLater(() -> {
+                    if (gitHubModel.hasAccessToken()) {
+                        jTextFieldGithubErrorMsg.setForeground(Color.decode(COLOR_SUCCESS));
+                        jTextFieldGithubErrorMsg.setText(
+                            bundle.getString("general.message.success_switch_to_publish"));
+                        jTextFieldGithubErrorMsg.setCaretPosition(0);
+                    } else {
+                        jTextFieldGithubErrorMsg.setText(bundle.getString("general.message.error.no_user_code"));
+                        jTextFieldGithubErrorMsg.setCaretPosition(0);
+                    }
+                });
+            }
+        });
     }
 
     public JTextField getjTextFieldUserCode() {
@@ -421,17 +459,8 @@ public class JPanelWebExport extends javax.swing.JPanel {
     }//GEN-LAST:event_jButtonResetLoginActionPerformed
 
     private void jButtonPublishActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonPublishActionPerformed
-        String gexfAsString;
-        try {
-            gexfAsString = PublishingActions.getGexfAsString();
-        } catch (NoOpenProjectException | EmptyGraphException | FileAboveMaxGithubSizeException ex) {
-            jTextFieldGithubErrorMsg.setText(ex.getMessage());
-            jTextFieldGithubErrorMsg.setCaretPosition(0);
-            return;
-        }
-
-        boolean isAveryLargeGraph = PublishingActions.isGraphVeryLarge();
-        if (isAveryLargeGraph) {
+        // Confirms in case the graph is large
+        if (PublishRunnable.isGraphVeryLarge()) {
             JLabel warningMessage = new JLabel();
             warningMessage.setText(bundle.getString("general.message.warning.network_too_big"));
             NotifyDescriptor.Confirmation confirmation = new DialogDescriptor.Confirmation(warningMessage, bundle.getString("general.noun.warning"), NotifyDescriptor.WARNING_MESSAGE, NotifyDescriptor.YES_NO_OPTION);
@@ -440,28 +469,18 @@ public class JPanelWebExport extends javax.swing.JPanel {
             }
         }
 
+        // Access token
         Preferences preferences = NbPreferences.forModule(this.getClass());
         String accessToken = preferences.get(ACCESS_TOKEN_KEY_IN_USER_PREFS, "");
         gitHubModel.setAccessToken(accessToken);
         if (accessToken == null || accessToken.isBlank()) {
             jTextAreaUrls.setText(bundle.getString("general.message.error.no_token"));
-        } else {
-            String result = "";
-            try {
-                result = PublishingActions.postGexfToGist(gexfAsString, accessToken);
-                jTextAreaUrls.setText(result);
-                jTextAreaUrls.setCaretPosition(0);
-            } catch (PublishToGistException ex) {
-                jTextAreaUrls.setText(result);
-                jTextAreaUrls.setCaretPosition(0);
-            } catch (IOException | InterruptedException ex) {
-                Exceptions.printStackTrace(ex);
-                jTextAreaUrls.setText(bundle.getString("general.message.error.probably_internet_connection"));
-                jTextAreaUrls.setCaretPosition(0);
-            }
+            return;
         }
 
-
+        // Execute
+        PublishRunnable publishRunnable = new PublishRunnable(gitHubModel);
+        executor.execute(publishRunnable, publishRunnable);
     }//GEN-LAST:event_jButtonPublishActionPerformed
 
     private void jButtonConnectToGephiLiteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonConnectToGephiLiteActionPerformed
@@ -469,7 +488,7 @@ public class JPanelWebExport extends javax.swing.JPanel {
         jTextFieldGithubErrorMsg.setText("");
         JsonObject responseGithubConnectAction;
         try {
-            responseGithubConnectAction = PublishingActions.connectToGithub();
+            responseGithubConnectAction = PublishRunnable.connectToGithub();
         } catch (IOException | InterruptedException ex) {
             Exceptions.printStackTrace(ex);
             jTextFieldUserCode.setForeground(Color.RED);
@@ -487,16 +506,8 @@ public class JPanelWebExport extends javax.swing.JPanel {
             gitHubModel.setDeviceCode(deviceCode);
             jTextFieldUserCode.setForeground(Color.decode(COLOR_SUCCESS));
             jTextFieldUserCode.setText(userCode);
-            try {
-                GithubPollerCreator githubPollerCreator = new GithubPollerCreator();
-                SwingWorker githubPoller = githubPollerCreator.createPoller(gitHubModel, jTextFieldGithubErrorMsg);
-                githubPoller.execute();
-            } catch (IOException | InterruptedException ex) {
-                Exceptions.printStackTrace(ex);
-                jTextFieldUserCode.setForeground(Color.RED);
-                jTextFieldGithubErrorMsg.setText(bundle.getString("general.message.error.probably_internet_connection"));
-                jTextFieldGithubErrorMsg.setCaretPosition(0);
-            }
+            GithubAuthRunnable githubAuthRunnable = new GithubAuthRunnable(gitHubModel);
+            executor.execute(githubAuthRunnable, githubAuthRunnable);
         }
     }//GEN-LAST:event_jButtonConnectToGephiLiteActionPerformed
 

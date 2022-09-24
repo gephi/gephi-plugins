@@ -17,6 +17,10 @@ public class GitHubModel {
         return accessToken;
     }
 
+    public boolean hasAccessToken() {
+        return accessToken != null && !accessToken.isEmpty();
+    }
+
     public void setAccessToken(String accessToken) {
         this.accessToken = accessToken;
     }

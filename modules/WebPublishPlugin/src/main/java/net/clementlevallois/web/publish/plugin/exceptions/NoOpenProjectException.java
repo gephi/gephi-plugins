@@ -12,7 +12,7 @@ import org.openide.util.NbBundle;
  *
  * @author LEVALLOIS
  */
-public class NoOpenProjectException extends Exception {
+public class NoOpenProjectException extends RuntimeException {
 
     private static final ResourceBundle bundle = NbBundle.getBundle(WebPublishExporterUI.class);
 

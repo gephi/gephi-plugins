@@ -21,6 +21,7 @@ import java.util.UUID;
 import net.clementlevallois.web.publish.plugin.controller.WebPublishExporterUI;
 import static net.clementlevallois.web.publish.plugin.controller.GlobalConfigParams.*;
 import net.clementlevallois.web.publish.plugin.exceptions.PublishToGistException;
+import net.clementlevallois.web.publish.plugin.model.GitHubModel;
 import org.gephi.graph.api.Graph;
 import org.gephi.graph.api.GraphController;
 import org.gephi.graph.api.GraphModel;
@@ -28,20 +29,60 @@ import org.gephi.io.exporter.api.ExportController;
 import org.gephi.io.exporter.plugin.ExporterGEXF;
 import org.gephi.project.api.ProjectController;
 import org.gephi.project.api.Workspace;
+import org.gephi.utils.longtask.spi.LongTask;
+import org.gephi.utils.progress.Progress;
+import org.gephi.utils.progress.ProgressTicket;
 import org.openide.util.Lookup;
 import org.openide.util.NbBundle;
 
-public class PublishingActions {
+public class PublishRunnable implements LongTask, Runnable {
 
     private static final ResourceBundle bundle = NbBundle.getBundle(WebPublishExporterUI.class);
 
-    private static final int BYTES_IN_A_MEGABYTE = 1_048_576;
+    private ProgressTicket progressTicket;
+    private final GitHubModel gitHubModel;
+
+    private String resultUrl;
+
+    public PublishRunnable(GitHubModel gitHubModel) {
+        this.gitHubModel = gitHubModel;
+    }
+
+    @Override
+    public void run() {
+        Progress.start(progressTicket);
+        try {
+            Progress.setDisplayName(progressTicket, "Exporting GEXF");
+            String gexfAsString = getGexfAsString();
+
+            Progress.setDisplayName(progressTicket, "Publishing to Gist");
+            resultUrl = postGexfToGist(gexfAsString, gitHubModel.getAccessToken());
+
+            Progress.finish(progressTicket, "Export finished");
+        } catch (IOException ex) {
+            throw new RuntimeException(ex);
+        }
+    }
+
+    public String getResultUrl() {
+        return resultUrl;
+    }
+
+    @Override
+    public boolean cancel() {
+        return false;
+    }
+
+    @Override
+    public void setProgressTicket(ProgressTicket progressTicket) {
+        this.progressTicket = progressTicket;
+    }
 
     private static String createNameForGistFile() {
         return "network-" + UUID.randomUUID().toString().substring(0, 12) + ".gexf";
     }
 
-    public static String getGexfAsString() throws NoOpenProjectException, EmptyGraphException, FileAboveMaxGithubSizeException {
+    protected static String getGexfAsString() throws IOException {
         ProjectController pc = Lookup.getDefault().lookup(ProjectController.class);
         if (pc.getCurrentProject() == null) {
             throw new NoOpenProjectException();
@@ -53,7 +94,7 @@ public class PublishingActions {
 
     }
 
-    public static String getGexfAsStringFromWorkspace(Workspace workspace) throws EmptyGraphException, FileAboveMaxGithubSizeException {
+    protected static String getGexfAsStringFromWorkspace(Workspace workspace) throws IOException {
 
         GraphModel graphModel = Lookup.getDefault().lookup(GraphController.class).getGraphModel(workspace);
         Graph graph = graphModel.getGraph();
@@ -69,13 +110,14 @@ public class PublishingActions {
 
         StringWriter stringWriter = new StringWriter();
         ec.exportWriter(stringWriter, exporterGexf);
+        stringWriter.close();
         String gexfToSendAsString = stringWriter.toString();
 
         int sizeGexfInBytes = gexfToSendAsString.getBytes(StandardCharsets.UTF_8).length; //
 
         // Files pushed to a github shouldn't be larger than 100Mb
         // There is still a doubt: is this limit the same for uploads to a gist?
-        if (sizeGexfInBytes >= (BYTES_IN_A_MEGABYTE * MAX_MB_FOR_GITHUB_PUSH)) {
+        if (sizeGexfInBytes >= (1_048_576 * MAX_MB_FOR_GITHUB_PUSH)) {
             throw new FileAboveMaxGithubSizeException();
         }
 
@@ -89,7 +131,6 @@ public class PublishingActions {
         Graph graph = graphModel.getGraph();
 
         return graph.getNodeCount() > WARNING_NODE_COUNT || graph.getEdgeCount() > WARNING_EDGE_COUNT;
-
     }
 
     public static JsonObject connectToGithub() throws IOException, InterruptedException {
@@ -110,7 +151,7 @@ public class PublishingActions {
         return responseConnectGithubAsJO;
     }
 
-    public static String postGexfToGist(String gexfFile, String access_token) throws PublishToGistException, IOException, InterruptedException {
+    protected static String postGexfToGist(String gexfFile, String access_token) throws PublishToGistException {
         String fileName = createNameForGistFile();
         String textForUserWithURL;
         JsonObject bodyPostGexfToGist = new JsonObject();
@@ -132,9 +173,14 @@ public class PublishingActions {
                 .POST(HttpRequest.BodyPublishers.ofString(bodyToString))
                 .build();
 
-        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-        if (response.statusCode() < 200 || response.statusCode() > 299) {
-            throw new PublishToGistException(String.valueOf(response.statusCode()), response.body());
+        HttpResponse<String> response;
+        try {
+            response = client.send(request, HttpResponse.BodyHandlers.ofString());
+            if (response.statusCode() < 200 || response.statusCode() > 299) {
+                throw new PublishToGistException(String.valueOf(response.statusCode()), response.body());
+            }
+        } catch (IOException | InterruptedException ex) {
+            throw new PublishToGistException(ex);
         }
         JsonElement responseAsJsonElement = JsonParser.parseString(response.body());
         JsonObject metadataOnGist = responseAsJsonElement.getAsJsonObject();
@@ -154,5 +200,4 @@ public class PublishingActions {
 
         return textForUserWithURL;
     }
-
 }

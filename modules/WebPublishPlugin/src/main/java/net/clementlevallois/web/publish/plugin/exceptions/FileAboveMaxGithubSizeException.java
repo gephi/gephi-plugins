@@ -12,7 +12,7 @@ import org.openide.util.NbBundle;
  *
  * @author LEVALLOIS
  */
-public class FileAboveMaxGithubSizeException extends Exception {
+public class FileAboveMaxGithubSizeException extends RuntimeException {
 
     private static final ResourceBundle bundle = NbBundle.getBundle(WebPublishExporterUI.class);
 

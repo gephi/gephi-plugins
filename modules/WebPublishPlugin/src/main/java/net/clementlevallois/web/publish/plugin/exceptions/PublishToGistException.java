@@ -12,7 +12,7 @@ import org.openide.util.NbBundle;
  *
  * @author LEVALLOIS
  */
-public class PublishToGistException extends Exception {
+public class PublishToGistException extends RuntimeException {
 
     private static final ResourceBundle bundle = NbBundle.getBundle(WebPublishExporterUI.class);
 
@@ -23,5 +23,13 @@ public class PublishToGistException extends Exception {
                 + "; "
                 + bundle.getString("general.message.error_message")
                 + errorBody);
+    }
+
+    public PublishToGistException(Throwable throwable) {
+        super(bundle.getString("general.message.error.gist_creation")
+            + ""
+            + "; "
+            + bundle.getString("general.message.error_message")
+            + throwable.getMessage(), throwable);
     }
 }

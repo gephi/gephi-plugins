@@ -12,7 +12,7 @@ import org.openide.util.NbBundle;
  *
  * @author LEVALLOIS
  */
-public class EmptyGraphException extends Exception {
+public class EmptyGraphException extends RuntimeException {
 
     private static final ResourceBundle bundle = NbBundle.getBundle(WebPublishExporterUI.class);
 
