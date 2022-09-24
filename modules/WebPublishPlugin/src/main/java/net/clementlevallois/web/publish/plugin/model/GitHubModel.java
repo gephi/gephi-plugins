@@ -28,5 +28,5 @@ public class GitHubModel {
     public void setDeviceCode(String deviceCode) {
         this.deviceCode = deviceCode;
     }
-    
+
 }
