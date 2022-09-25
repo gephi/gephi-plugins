@@ -31,7 +31,7 @@ public final class WebPublishExporterUI implements ExporterClassUI {
     public void action() {
         String initialValue = bundle.getString("general.verb.close_window");
         String[] options = new String[]{initialValue};
-        JPanelWebExport jPanelWebExport = new JPanelWebExport();
+        WebExportJPanel jPanelWebExport = new WebExportJPanel();
         NotifyDescriptor dd = new NotifyDescriptor(jPanelWebExport,
                 bundle.getString("general.message.plugin.name"),
                 NotifyDescriptor.INFORMATION_MESSAGE,

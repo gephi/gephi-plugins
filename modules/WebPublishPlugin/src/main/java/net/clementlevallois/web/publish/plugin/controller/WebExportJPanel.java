@@ -7,13 +7,20 @@ import javax.swing.SwingUtilities;
 import net.clementlevallois.web.publish.plugin.github.PublishRunnable;
 import com.google.gson.JsonObject;
 import java.awt.Color;
+import java.awt.Desktop;
+import java.awt.Toolkit;
+import java.awt.datatransfer.Clipboard;
+import java.awt.datatransfer.StringSelection;
 import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.util.ResourceBundle;
 import java.util.prefs.Preferences;
 import javax.swing.JLabel;
 
 import javax.swing.JTextField;
-import javax.swing.SwingWorker;
+import javax.swing.Timer;
 import static net.clementlevallois.web.publish.plugin.controller.GlobalConfigParams.*;
 
 import net.clementlevallois.web.publish.plugin.github.GithubAuthRunnable;
@@ -35,7 +42,7 @@ import org.openide.util.NbPreferences;
  * https://github.com/gephi/gephi-plugins/issues/262#issuecomment-1231627948
  *
  */
-public class JPanelWebExport extends javax.swing.JPanel {
+public class WebExportJPanel extends javax.swing.JPanel {
 
     private final GitHubModel gitHubModel;
 
@@ -45,7 +52,10 @@ public class JPanelWebExport extends javax.swing.JPanel {
 
     private final LongTaskExecutor executor;
 
-    public JPanelWebExport() {
+    private String retinaUrl;
+    private String gistUrl;
+
+    public WebExportJPanel() {
         initComponents();
         gitHubModel = new GitHubModel();
         Preferences preferences = NbPreferences.forModule(this.getClass());
@@ -57,6 +67,30 @@ public class JPanelWebExport extends javax.swing.JPanel {
         jTextFieldGithubErrorMsg.setCaretPosition(0);
         jTextFieldUserCode.setForeground(Color.RED);
         jTextAreaUrls.setText("");
+        jButtonOpenViewerlink.setEnabled(false);
+        jButtonCopyViewerLink.setEnabled(false);
+        jButtonOpenGexf.setEnabled(false);
+        jButtonCopyGexfLink.setEnabled(false);
+
+        jButtonCopyViewerLink.addActionListener(e -> {
+            String oldText = jButtonCopyViewerLink.getText();
+            jButtonCopyViewerLink.setText(bundle.getString("general.message.link_is_copied"));
+            Timer timer = new Timer(2000, event -> {
+                jButtonCopyViewerLink.setText(oldText);
+            });
+            timer.setRepeats(false);
+            timer.start();
+        });
+
+        jButtonCopyGexfLink.addActionListener(e -> {
+            String oldText = jButtonCopyGexfLink.getText();
+            jButtonCopyGexfLink.setText(bundle.getString("general.message.link_is_copied"));
+            Timer timer = new Timer(2000, event -> {
+                jButtonCopyGexfLink.setText(oldText);
+            });
+            timer.setRepeats(false);
+            timer.start();
+        });
 
         // Setup executor
         executor = new LongTaskExecutor(true, "WebPublishPlugin");
@@ -76,19 +110,38 @@ public class JPanelWebExport extends javax.swing.JPanel {
         // When task finished
         executor.setLongTaskListener(longTask -> {
             if (longTask instanceof PublishRunnable) {
-                String urlResult = ((PublishRunnable) longTask).getResultUrl();
-                if (urlResult != null) {
+                retinaUrl = ((PublishRunnable) longTask).getRetinaUrl();
+                if (retinaUrl != null) {
                     SwingUtilities.invokeLater(() -> {
-                        jTextAreaUrls.setText(urlResult);
+                        jButtonCopyViewerLink.setEnabled(true);
+                        jButtonOpenViewerlink.setEnabled(true);
+                        jTextAreaUrls.setText("");
                         jTextAreaUrls.setCaretPosition(0);
                     });
+                } else {
+                    SwingUtilities.invokeLater(() -> {
+                        jButtonOpenViewerlink.setEnabled(false);
+                        jButtonCopyViewerLink.setEnabled(false);
+                    });
+                }
+                gistUrl = ((PublishRunnable) longTask).getGistUrl();
+                if (gistUrl != null) {
+                    SwingUtilities.invokeLater(() -> {
+                        jButtonCopyGexfLink.setEnabled(true);
+                        jButtonOpenGexf.setEnabled(true);
+                        jTextAreaUrls.setText("");
+                        jTextAreaUrls.setCaretPosition(0);
+                    });
+                } else {
+                    jButtonOpenGexf.setEnabled(false);
+                    jButtonCopyGexfLink.setEnabled(false);
                 }
             } else if (longTask instanceof GithubAuthRunnable) {
                 SwingUtilities.invokeLater(() -> {
                     if (gitHubModel.hasAccessToken()) {
                         jTextFieldGithubErrorMsg.setForeground(Color.decode(COLOR_SUCCESS));
                         jTextFieldGithubErrorMsg.setText(
-                            bundle.getString("general.message.success_switch_to_publish"));
+                                bundle.getString("general.message.success_switch_to_publish"));
                         jTextFieldGithubErrorMsg.setCaretPosition(0);
                     } else {
                         jTextFieldGithubErrorMsg.setText(bundle.getString("general.message.error.no_user_code"));
@@ -135,11 +188,20 @@ public class JPanelWebExport extends javax.swing.JPanel {
         jTextFieldGithubErrorMsg = new javax.swing.JTextField();
         jButtonResetLogin = new javax.swing.JButton();
         tabPublish = new javax.swing.JPanel();
-        jButtonPublish = new javax.swing.JButton();
+        jPanel11 = new javax.swing.JPanel();
         jLabel10 = new javax.swing.JLabel();
-        jLabel11 = new javax.swing.JLabel();
+        jPanel12 = new javax.swing.JPanel();
+        jButtonPublish = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTextAreaUrls = new javax.swing.JTextArea();
+        jPanel2 = new javax.swing.JPanel();
+        jButtonCopyGexfLink = new javax.swing.JButton();
+        jButtonOpenGexf = new javax.swing.JButton();
+        jLabel8 = new javax.swing.JLabel();
+        jPanel9 = new javax.swing.JPanel();
+        jButtonCopyViewerLink = new javax.swing.JButton();
+        jButtonOpenViewerlink = new javax.swing.JButton();
+        jLabel2 = new javax.swing.JLabel();
 
         tabs.setMinimumSize(new java.awt.Dimension(700, 454));
         tabs.setPreferredSize(new java.awt.Dimension(700, 454));
@@ -148,12 +210,12 @@ public class JPanelWebExport extends javax.swing.JPanel {
         jLabelAlreadyLoggedIn.setForeground(new java.awt.Color(0, 204, 102));
         org.openide.awt.Mnemonics.setLocalizedText(jLabelAlreadyLoggedIn, "<html>"+bundle.getString("general.message.warning_setup_already_done")+"</html>");
 
-        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(null, org.openide.util.NbBundle.getMessage(JPanelWebExport.class, "JPanelWebExport.step1.title"), javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Segoe UI", 1, 12))); // NOI18N
+        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(null, org.openide.util.NbBundle.getMessage(WebExportJPanel.class, "JPanelWebExport.step1.title"), javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Segoe UI", 1, 12))); // NOI18N
 
         jLabel4.setFont(new java.awt.Font("Segoe UI", 2, 12)); // NOI18N
         org.openide.awt.Mnemonics.setLocalizedText(jLabel4, "<html>"+bundle.getString("general.message.github.create_account")+"</html>");
 
-        jTextField1.setText(org.openide.util.NbBundle.getMessage(JPanelWebExport.class, "JPanelWebExport.jTextField1.text")); // NOI18N
+        jTextField1.setText(org.openide.util.NbBundle.getMessage(WebExportJPanel.class, "WebExportJPanel.jTextField1.text")); // NOI18N
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -177,13 +239,13 @@ public class JPanelWebExport extends javax.swing.JPanel {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder(null, org.openide.util.NbBundle.getMessage(JPanelWebExport.class, "JPanelWebExport.step3.title"), javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Segoe UI", 1, 12))); // NOI18N
+        jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder(null, org.openide.util.NbBundle.getMessage(WebExportJPanel.class, "JPanelWebExport.step3.title"), javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Segoe UI", 1, 12))); // NOI18N
 
-        org.openide.awt.Mnemonics.setLocalizedText(jLabel3, org.openide.util.NbBundle.getMessage(JPanelWebExport.class, "JPanelWebExport.step3.info1")); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(jLabel3, org.openide.util.NbBundle.getMessage(WebExportJPanel.class, "JPanelWebExport.step3.info1")); // NOI18N
 
-        jTextField2.setText(org.openide.util.NbBundle.getMessage(JPanelWebExport.class, "JPanelWebExport.jTextField2.text")); // NOI18N
+        jTextField2.setText(org.openide.util.NbBundle.getMessage(WebExportJPanel.class, "WebExportJPanel.jTextField2.text")); // NOI18N
 
-        org.openide.awt.Mnemonics.setLocalizedText(jLabel5, org.openide.util.NbBundle.getMessage(JPanelWebExport.class, "JPanelWebExport.step3.info2")); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(jLabel5, org.openide.util.NbBundle.getMessage(WebExportJPanel.class, "JPanelWebExport.step3.info2")); // NOI18N
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -211,9 +273,9 @@ public class JPanelWebExport extends javax.swing.JPanel {
                 .addContainerGap())
         );
 
-        jPanel4.setBorder(javax.swing.BorderFactory.createTitledBorder(null, org.openide.util.NbBundle.getMessage(JPanelWebExport.class, "JPanelWebExport.step4.title"), javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Segoe UI", 1, 12))); // NOI18N
+        jPanel4.setBorder(javax.swing.BorderFactory.createTitledBorder(null, org.openide.util.NbBundle.getMessage(WebExportJPanel.class, "JPanelWebExport.step4.title"), javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Segoe UI", 1, 12))); // NOI18N
 
-        org.openide.awt.Mnemonics.setLocalizedText(jButtonConnectToGephiLite, org.openide.util.NbBundle.getMessage(JPanelWebExport.class, "JPanelWebExport.jButtonConnectToGephiLite.text")); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(jButtonConnectToGephiLite, org.openide.util.NbBundle.getMessage(WebExportJPanel.class, "WebExportJPanel.jButtonConnectToGephiLite.text")); // NOI18N
         jButtonConnectToGephiLite.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonConnectToGephiLiteActionPerformed(evt);
@@ -224,7 +286,7 @@ public class JPanelWebExport extends javax.swing.JPanel {
         );
 
         jTextFieldUserCode.setForeground(new java.awt.Color(255, 0, 0));
-        jTextFieldUserCode.setText(org.openide.util.NbBundle.getMessage(JPanelWebExport.class, "JPanelWebExport.jTextFieldUserCode.text")); // NOI18N
+        jTextFieldUserCode.setText(org.openide.util.NbBundle.getMessage(WebExportJPanel.class, "WebExportJPanel.jTextFieldUserCode.text")); // NOI18N
 
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
@@ -250,11 +312,11 @@ public class JPanelWebExport extends javax.swing.JPanel {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        jPanel6.setBorder(javax.swing.BorderFactory.createTitledBorder(null, org.openide.util.NbBundle.getMessage(JPanelWebExport.class, "JPanelWebExport.step6.title"), javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Segoe UI", 1, 12))); // NOI18N
+        jPanel6.setBorder(javax.swing.BorderFactory.createTitledBorder(null, org.openide.util.NbBundle.getMessage(WebExportJPanel.class, "JPanelWebExport.step6.title"), javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Segoe UI", 1, 12))); // NOI18N
 
-        jTextFieldWebsiteLoginUrl.setText(org.openide.util.NbBundle.getMessage(JPanelWebExport.class, "JPanelWebExport.jTextFieldWebsiteLoginUrl.text")); // NOI18N
+        jTextFieldWebsiteLoginUrl.setText(org.openide.util.NbBundle.getMessage(WebExportJPanel.class, "WebExportJPanel.jTextFieldWebsiteLoginUrl.text")); // NOI18N
 
-        org.openide.awt.Mnemonics.setLocalizedText(jLabel6, org.openide.util.NbBundle.getMessage(JPanelWebExport.class, "JPanelWebExport.step6.info1")); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(jLabel6, org.openide.util.NbBundle.getMessage(WebExportJPanel.class, "JPanelWebExport.step6.info1")); // NOI18N
 
         javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
         jPanel6.setLayout(jPanel6Layout);
@@ -320,7 +382,7 @@ public class JPanelWebExport extends javax.swing.JPanel {
         );
 
         jButtonResetLogin.setBackground(new java.awt.Color(204, 204, 204));
-        org.openide.awt.Mnemonics.setLocalizedText(jButtonResetLogin, org.openide.util.NbBundle.getMessage(JPanelWebExport.class, "JPanelWebExport.jButtonResetLogin.text")); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(jButtonResetLogin, org.openide.util.NbBundle.getMessage(WebExportJPanel.class, "WebExportJPanel.jButtonResetLogin.text")); // NOI18N
         jButtonResetLogin.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonResetLoginActionPerformed(evt);
@@ -372,65 +434,199 @@ public class JPanelWebExport extends javax.swing.JPanel {
                 .addGap(130, 130, 130))
         );
 
-        tabs.addTab(org.openide.util.NbBundle.getMessage(JPanelWebExport.class, "JPanelWebExport.tabGithub.TabConstraints.tabTitle"), tabGithub); // NOI18N
+        tabs.addTab(org.openide.util.NbBundle.getMessage(WebExportJPanel.class, "WebExportJPanel.tabGithub.TabConstraints.tabTitle"), tabGithub); // NOI18N
+
+        jPanel11.setFocusTraversalPolicyProvider(true);
+
+        jLabel10.setForeground(new java.awt.Color(255, 51, 51));
+        jLabel10.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        org.openide.awt.Mnemonics.setLocalizedText(jLabel10, "<html>"+bundle.getString("general.message.warning_confidentiality")+"</html>");
+
+        javax.swing.GroupLayout jPanel11Layout = new javax.swing.GroupLayout(jPanel11);
+        jPanel11.setLayout(jPanel11Layout);
+        jPanel11Layout.setHorizontalGroup(
+            jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel11Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel10, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+        jPanel11Layout.setVerticalGroup(
+            jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel11Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
 
         jButtonPublish.setBackground(new java.awt.Color(204, 204, 204));
         jButtonPublish.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        org.openide.awt.Mnemonics.setLocalizedText(jButtonPublish, org.openide.util.NbBundle.getMessage(JPanelWebExport.class, "JPanelWebExport.jButtonPublish.text")); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(jButtonPublish, org.openide.util.NbBundle.getMessage(WebExportJPanel.class, "WebExportJPanel.jButtonPublish.text")); // NOI18N
         jButtonPublish.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonPublishActionPerformed(evt);
             }
         });
 
-        jLabel10.setForeground(new java.awt.Color(255, 51, 51));
-        jLabel10.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        org.openide.awt.Mnemonics.setLocalizedText(jLabel10, "<html>"+bundle.getString("general.message.warning_confidentiality")+"</html>");
-
-        jLabel11.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        org.openide.awt.Mnemonics.setLocalizedText(jLabel11, "<html>"+bundle.getString("general.message.info.url_will_appear_below")+"</html>");
+        javax.swing.GroupLayout jPanel12Layout = new javax.swing.GroupLayout(jPanel12);
+        jPanel12.setLayout(jPanel12Layout);
+        jPanel12Layout.setHorizontalGroup(
+            jPanel12Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel12Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jButtonPublish)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        jPanel12Layout.setVerticalGroup(
+            jPanel12Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel12Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jButtonPublish, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(17, Short.MAX_VALUE))
+        );
 
         jTextAreaUrls.setColumns(20);
         jTextAreaUrls.setRows(5);
+        jTextAreaUrls.setText(org.openide.util.NbBundle.getMessage(WebExportJPanel.class, "general.message.errors_appear.here")); // NOI18N
         jScrollPane1.setViewportView(jTextAreaUrls);
+
+        jPanel2.setPreferredSize(new java.awt.Dimension(315, 97));
+
+        org.openide.awt.Mnemonics.setLocalizedText(jButtonCopyGexfLink, org.openide.util.NbBundle.getMessage(WebExportJPanel.class, "general.message.copy_to_clipboard")); // NOI18N
+        jButtonCopyGexfLink.setMaximumSize(new java.awt.Dimension(244, 23));
+        jButtonCopyGexfLink.setMinimumSize(new java.awt.Dimension(244, 23));
+        jButtonCopyGexfLink.setPreferredSize(new java.awt.Dimension(244, 23));
+        jButtonCopyGexfLink.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonCopyGexfLinkActionPerformed(evt);
+            }
+        });
+
+        org.openide.awt.Mnemonics.setLocalizedText(jButtonOpenGexf, org.openide.util.NbBundle.getMessage(WebExportJPanel.class, "general.message.open_in_web_browser")); // NOI18N
+        jButtonOpenGexf.setMaximumSize(new java.awt.Dimension(244, 23));
+        jButtonOpenGexf.setMinimumSize(new java.awt.Dimension(244, 23));
+        jButtonOpenGexf.setPreferredSize(new java.awt.Dimension(244, 23));
+        jButtonOpenGexf.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonOpenGexfActionPerformed(evt);
+            }
+        });
+
+        jLabel8.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        org.openide.awt.Mnemonics.setLocalizedText(jLabel8, org.openide.util.NbBundle.getMessage(WebExportJPanel.class, "general.message.link_to_network_viz")); // NOI18N
+
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addContainerGap(31, Short.MAX_VALUE)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
+                    .addComponent(jLabel8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jButtonCopyGexfLink, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButtonOpenGexf, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(34, 34, 34))
+        );
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel8)
+                .addGap(13, 13, 13)
+                .addComponent(jButtonCopyGexfLink, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jButtonOpenGexf, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(10, Short.MAX_VALUE))
+        );
+
+        org.openide.awt.Mnemonics.setLocalizedText(jButtonCopyViewerLink, org.openide.util.NbBundle.getMessage(WebExportJPanel.class, "general.message.copy_to_clipboard")); // NOI18N
+        jButtonCopyViewerLink.setMaximumSize(new java.awt.Dimension(244, 23));
+        jButtonCopyViewerLink.setMinimumSize(new java.awt.Dimension(244, 23));
+        jButtonCopyViewerLink.setPreferredSize(new java.awt.Dimension(244, 23));
+        jButtonCopyViewerLink.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonCopyViewerLinkActionPerformed(evt);
+            }
+        });
+
+        org.openide.awt.Mnemonics.setLocalizedText(jButtonOpenViewerlink, org.openide.util.NbBundle.getMessage(WebExportJPanel.class, "general.message.open_in_web_browser")); // NOI18N
+        jButtonOpenViewerlink.setMaximumSize(new java.awt.Dimension(244, 23));
+        jButtonOpenViewerlink.setMinimumSize(new java.awt.Dimension(244, 23));
+        jButtonOpenViewerlink.setPreferredSize(new java.awt.Dimension(244, 23));
+        jButtonOpenViewerlink.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonOpenViewerlinkActionPerformed(evt);
+            }
+        });
+
+        jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        org.openide.awt.Mnemonics.setLocalizedText(jLabel2, org.openide.util.NbBundle.getMessage(WebExportJPanel.class, "general.message.link_to_gexf")); // NOI18N
+
+        javax.swing.GroupLayout jPanel9Layout = new javax.swing.GroupLayout(jPanel9);
+        jPanel9.setLayout(jPanel9Layout);
+        jPanel9Layout.setHorizontalGroup(
+            jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel9Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
+            .addGroup(jPanel9Layout.createSequentialGroup()
+                .addGap(30, 30, 30)
+                .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jButtonOpenViewerlink, javax.swing.GroupLayout.PREFERRED_SIZE, 244, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButtonCopyViewerLink, javax.swing.GroupLayout.PREFERRED_SIZE, 244, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(35, Short.MAX_VALUE))
+        );
+        jPanel9Layout.setVerticalGroup(
+            jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel9Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jButtonCopyViewerLink, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jButtonOpenViewerlink, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(11, Short.MAX_VALUE))
+        );
 
         javax.swing.GroupLayout tabPublishLayout = new javax.swing.GroupLayout(tabPublish);
         tabPublish.setLayout(tabPublishLayout);
         tabPublishLayout.setHorizontalGroup(
             tabPublishLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(tabPublishLayout.createSequentialGroup()
+                .addContainerGap()
                 .addGroup(tabPublishLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, tabPublishLayout.createSequentialGroup()
+                        .addGroup(tabPublishLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jPanel11, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jPanel12, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGap(70, 70, 70))
                     .addGroup(tabPublishLayout.createSequentialGroup()
-                        .addGap(141, 141, 141)
-                        .addComponent(jButtonPublish, javax.swing.GroupLayout.PREFERRED_SIZE, 375, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(tabPublishLayout.createSequentialGroup()
-                        .addGap(66, 66, 66)
-                        .addComponent(jLabel11, javax.swing.GroupLayout.PREFERRED_SIZE, 476, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(158, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, tabPublishLayout.createSequentialGroup()
-                .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 514, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(tabPublishLayout.createSequentialGroup()
-                .addGap(136, 136, 136)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 385, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGroup(tabPublishLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(tabPublishLayout.createSequentialGroup()
+                                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 309, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jPanel9, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addContainerGap(70, Short.MAX_VALUE))))
         );
         tabPublishLayout.setVerticalGroup(
             tabPublishLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(tabPublishLayout.createSequentialGroup()
-                .addGap(31, 31, 31)
-                .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 59, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(29, 29, 29)
-                .addComponent(jButtonPublish, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap()
+                .addComponent(jPanel11, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jPanel12, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(jLabel11, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(27, 27, 27)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(97, Short.MAX_VALUE))
+                .addGroup(tabPublishLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jPanel9, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 63, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(40, Short.MAX_VALUE))
         );
 
-        tabs.addTab(org.openide.util.NbBundle.getMessage(JPanelWebExport.class, "JPanelWebExport.tabPublish.TabConstraints.tabTitle"), tabPublish); // NOI18N
+        tabs.addTab(org.openide.util.NbBundle.getMessage(WebExportJPanel.class, "WebExportJPanel.tabPublish.TabConstraints.tabTitle"), tabPublish); // NOI18N
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -457,31 +653,6 @@ public class JPanelWebExport extends javax.swing.JPanel {
         jTextFieldGithubErrorMsg.setText(bundle.getString("general.message.success_reset"));
         jTextFieldGithubErrorMsg.setCaretPosition(0);
     }//GEN-LAST:event_jButtonResetLoginActionPerformed
-
-    private void jButtonPublishActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonPublishActionPerformed
-        // Confirms in case the graph is large
-        if (PublishRunnable.isGraphVeryLarge()) {
-            JLabel warningMessage = new JLabel();
-            warningMessage.setText(bundle.getString("general.message.warning.network_too_big"));
-            NotifyDescriptor.Confirmation confirmation = new DialogDescriptor.Confirmation(warningMessage, bundle.getString("general.noun.warning"), NotifyDescriptor.WARNING_MESSAGE, NotifyDescriptor.YES_NO_OPTION);
-            if (DialogDisplayer.getDefault().notify(confirmation) != NotifyDescriptor.YES_OPTION) {
-                return;
-            }
-        }
-
-        // Access token
-        Preferences preferences = NbPreferences.forModule(this.getClass());
-        String accessToken = preferences.get(ACCESS_TOKEN_KEY_IN_USER_PREFS, "");
-        gitHubModel.setAccessToken(accessToken);
-        if (accessToken == null || accessToken.isBlank()) {
-            jTextAreaUrls.setText(bundle.getString("general.message.error.no_token"));
-            return;
-        }
-
-        // Execute
-        PublishRunnable publishRunnable = new PublishRunnable(gitHubModel);
-        executor.execute(publishRunnable, publishRunnable);
-    }//GEN-LAST:event_jButtonPublishActionPerformed
 
     private void jButtonConnectToGephiLiteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonConnectToGephiLiteActionPerformed
         jTextFieldGithubErrorMsg.setBackground(Color.WHITE);
@@ -511,31 +682,113 @@ public class JPanelWebExport extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_jButtonConnectToGephiLiteActionPerformed
 
+    private void jButtonCopyGexfLinkActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonCopyGexfLinkActionPerformed
+        if (gistUrl == null) {
+            return;
+        }
+        StringSelection stringSelection = new StringSelection(gistUrl);
+        Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+        clipboard.setContents(stringSelection, null);
+    }//GEN-LAST:event_jButtonCopyGexfLinkActionPerformed
+
+    private void jButtonOpenGexfActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonOpenGexfActionPerformed
+        openWebpage(URI.create(gistUrl));
+    }//GEN-LAST:event_jButtonOpenGexfActionPerformed
+
+    private void jButtonCopyViewerLinkActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonCopyViewerLinkActionPerformed
+        if (retinaUrl == null) {
+            return;
+        }
+        StringSelection stringSelection = new StringSelection(retinaUrl);
+        Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+        clipboard.setContents(stringSelection, null);
+
+    }//GEN-LAST:event_jButtonCopyViewerLinkActionPerformed
+
+    private void jButtonOpenViewerlinkActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonOpenViewerlinkActionPerformed
+        openWebpage(URI.create(retinaUrl));
+    }//GEN-LAST:event_jButtonOpenViewerlinkActionPerformed
+
+    private void jButtonPublishActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonPublishActionPerformed
+        // Confirms in case the graph is large
+        if (PublishRunnable.isGraphVeryLarge()) {
+            JLabel warningMessage = new JLabel();
+            warningMessage.setText(bundle.getString("general.message.warning.network_too_big"));
+            NotifyDescriptor.Confirmation confirmation = new DialogDescriptor.Confirmation(warningMessage, bundle.getString("general.noun.warning"), NotifyDescriptor.WARNING_MESSAGE, NotifyDescriptor.YES_NO_OPTION);
+            if (DialogDisplayer.getDefault().notify(confirmation) != NotifyDescriptor.YES_OPTION) {
+                return;
+            }
+        }
+
+        // Access token
+        Preferences preferences = NbPreferences.forModule(this.getClass());
+        String accessToken = preferences.get(ACCESS_TOKEN_KEY_IN_USER_PREFS, "");
+        gitHubModel.setAccessToken(accessToken);
+        if (accessToken == null || accessToken.isBlank()) {
+            jTextAreaUrls.setText(bundle.getString("general.message.error.no_token"));
+            return;
+        }
+
+        // Execute
+        PublishRunnable publishRunnable = new PublishRunnable(gitHubModel);
+        executor.execute(publishRunnable, publishRunnable);
+    }//GEN-LAST:event_jButtonPublishActionPerformed
+
+    public static boolean openWebpage(URI uri) {
+        Desktop desktop = Desktop.isDesktopSupported() ? Desktop.getDesktop() : null;
+        if (desktop != null && desktop.isSupported(Desktop.Action.BROWSE)) {
+            try {
+                desktop.browse(uri);
+                return true;
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return false;
+    }
+
+    public static boolean openWebpage(URL url) {
+        try {
+            return openWebpage(url.toURI());
+        } catch (URISyntaxException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButtonConnectToGephiLite;
+    private javax.swing.JButton jButtonCopyGexfLink;
+    private javax.swing.JButton jButtonCopyViewerLink;
+    private javax.swing.JButton jButtonOpenGexf;
+    private javax.swing.JButton jButtonOpenViewerlink;
     private javax.swing.JButton jButtonPublish;
     private javax.swing.JButton jButtonResetLogin;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
-    private javax.swing.JLabel jLabel11;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabelAlreadyLoggedIn;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel11;
+    private javax.swing.JPanel jPanel12;
+    private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel6;
     private javax.swing.JPanel jPanel7;
     private javax.swing.JPanel jPanel8;
+    private javax.swing.JPanel jPanel9;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTextArea jTextAreaUrls;
     private javax.swing.JTextField jTextField1;
     private javax.swing.JTextField jTextField2;
-    public javax.swing.JTextField jTextFieldGithubErrorMsg;
+    public static javax.swing.JTextField jTextFieldGithubErrorMsg;
     private javax.swing.JTextField jTextFieldUserCode;
     private javax.swing.JTextField jTextFieldWebsiteLoginUrl;
     private javax.swing.JPanel tabGithub;

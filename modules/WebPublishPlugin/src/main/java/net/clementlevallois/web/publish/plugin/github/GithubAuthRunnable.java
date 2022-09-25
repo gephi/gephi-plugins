@@ -45,7 +45,7 @@ public class GithubAuthRunnable implements LongTask, Runnable {
     @Override
     public void run() {
         Progress.start(progressTicket);
-        Progress.setDisplayName(progressTicket, "Authenticating with GitHub");
+        Progress.setDisplayName(progressTicket, bundle.getString("general.message.authenticating_with_github"));
 
         JsonObject responseAsJsonObject = new JsonObject();
         HttpClient client = HttpClient.newHttpClient();
@@ -72,9 +72,7 @@ public class GithubAuthRunnable implements LongTask, Runnable {
             HttpResponse<String> response = null;
             try {
                 response = client.send(request, HttpResponse.BodyHandlers.ofString());
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            } catch (InterruptedException e) {
+            } catch (IOException | InterruptedException e) {
                 throw new RuntimeException(e);
             }
             JsonElement responseAsJsonElement = JsonParser.parseString(response.body());
