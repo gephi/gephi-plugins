@@ -14,4 +14,5 @@ The plugin allows users to publish their network to the web, directly from the G
 
 - Detailed design of the roadmap: Alexis Jacomy, see: https://github.com/gephi/gephi-plugins/issues/262#issuecomment-1231627948
 - Plugin development: Clement Levallois (admin@clementlevallois.net or https://twitter.com/seinecle)
+- Code review: [Mathieu Bastian](https://www.linkedin.com/in/mathieubastian/)
 - Retina: https://ouestware.gitlab.io/retina/beta
