@@ -3722,6 +3722,33 @@
       },
       "sourcecode": "https://github.com/gephi/gephi-plugins/tree/link-prediction-plugin",
       "homepage": null
+    },
+    {
+      "id": "web-publish-plugin",
+      "name": "Publish your network to the web",
+      "short_description": "This plugin allows you to publish, visualize and share your network on the web, directly from Gephi.",
+      "long_description": "This plugin converts your network into a gexf file. This file is sent to a \"Gist\" of Github, where it becomes publicly accessible. Then, a link is created, which allows you to view, explore and share your network with the Retina web application. Be careful, do not publish your networks if the data is confidential!",
+      "readme": "# Gephi Plugin: Publish to the web\n\nThis is a work initiated during the Gephi Code Retreat (Aug 29 to Sept 2, 2022).\nThe plugin allows users to publish their network to the web, directly from the Gephi desktop app.\n\n## Function of the plugin\n\n- the plugin\u0027s interface can be accessed via a new item added to the File -\u003e Export menu of Gephi.\n- the user needs to follow a series of steps to authenticate\n- then, the user can publish the network currently open in Gephi. The network gets exported as a gexf file hosted as a Github\u0027s gist.\n- the users get a url to the Retina web app, that allows them to explore this gexf directly from their browser\n\n## Author and contact\n\n- Detailed design of the roadmap: Alexis Jacomy, see: https://github.com/gephi/gephi-plugins/issues/262#issuecomment-1231627948\n- Plugin development: Clement Levallois (admin@clementlevallois.net or https://twitter.com/seinecle)\n- Code review: [Mathieu Bastian](https://www.linkedin.com/in/mathieubastian/)\n- Retina: https://ouestware.gitlab.io/retina/beta\n",
+      "license": "Apache 2.0",
+      "authors": [
+        {
+          "name": "Clement Levallois",
+          "email": "admin@clementlevallois.net",
+          "link": "https://nocodefunctions.com"
+        }
+      ],
+      "category": "Export",
+      "last_update": "September 30, 2022",
+      "images": null,
+      "versions": {
+        "0.9.6": {
+          "url": "0.9/web-publish-plugin-1.0.0.nbm",
+          "last_update": "September 30, 2022",
+          "plugin_version": "1.0.0"
+        }
+      },
+      "sourcecode": "https://github.com/gephi/gephi-plugins/tree/web-publish-plugin",
+      "homepage": null
     }
   ]
 }

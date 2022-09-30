@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
 <!DOCTYPE module_updates PUBLIC "-//NetBeans//DTD Autoupdate Catalog 2.8//EN" "https://netbeans.apache.org/dtds/autoupdate-catalog-2_8.dtd">
-<module_updates timestamp="08/29/09/10/09/2022">
+<module_updates timestamp="30/46/18/30/09/2022">
 
 
 
@@ -395,6 +395,14 @@
     <manifest OpenIDE-Module="ch.michihenninger.prestige.plugin" OpenIDE-Module-Display-Category="Metric" OpenIDE-Module-Implementation-Version="1.0.0" OpenIDE-Module-Long-Description="Plugin calculates indegree prestige, domain prestige, proximity prestige and rank prestige on directed graphs." OpenIDE-Module-Module-Dependencies="org.openide.util.lookup &gt; 8.49, org.openide.util &gt; 9.23, org.gephi.graph.api &gt; 0.9.3, org.gephi.ui.library.wrapper &gt; 0.9.3, org.gephi.statistics.api &gt; 0.9.3, org.gephi.utils.longtask &gt; 0.9.3, org.gephi.statistics.plugin &gt; 0.9.3, org.gephi.core.library.wrapper &gt; 0.9.3" OpenIDE-Module-Name="Prestige Plugin" OpenIDE-Module-Requires="org.openide.modules.ModuleFormat1" OpenIDE-Module-Short-Description="Plugin calculates several prestige metrics" OpenIDE-Module-Specification-Version="1.0.0"/>
     
     <message_digest algorithm="SHA-512" value="45fd7359ed0243bf8f43e1fb2672da5cfcb3378eb6d5456b6c9332437f79ba0ca334eea7939172e3470661d8f06174e3b420ea2f541d8088018eb67a306e3cad"/>
+</module>
+
+<module codenamebase="net.clementlevallois.web.publish.plugin" distribution="web-publish-plugin-1.0.0.nbm" downloadsize="302465" homepage="http://github.com/gephi/gephi-plugins/web-publish-plugin" license="864AC530" moduleauthor="Clement Levallois" needsrestart="true" releasedate="2022/09/30" targetcluster="plugins">
+        
+    <manifest OpenIDE-Module="net.clementlevallois.web.publish.plugin" OpenIDE-Module-Display-Category="Export" OpenIDE-Module-Implementation-Version="1.0.0" OpenIDE-Module-Long-Description="This plugin converts your network into a gexf file. This file is sent to a &quot;Gist&quot; of Github, where it becomes publicly accessible. Then, a link is created, which allows you to view, explore and share your network with the Retina web application. Be careful, do not publish your networks if the data is confidential!" OpenIDE-Module-Module-Dependencies="org.openide.dialogs &gt; 7.61, org.openide.awt &gt; 7.84, org.openide.util.lookup &gt; 8.50, org.gephi.graph.api &gt; 0.9.7, org.gephi.utils.longtask &gt; 0.9.7, org.gephi.project.api &gt; 0.9.7, org.openide.util &gt; 9.24, org.gephi.io.exporter.api &gt; 0.9.7, org.gephi.io.exporter.plugin &gt; 0.9.7, org.openide.windows &gt; 6.93, org.gephi.io.importer.api &gt; 0.9.7, org.openide.util.ui &gt; 9.24, org.gephi.desktop.import &gt; 0.9.7, org.gephi.desktop.io.export &gt; 0.9.7" OpenIDE-Module-Name="Publish your network to the web" OpenIDE-Module-Requires="org.openide.modules.ModuleFormat1" OpenIDE-Module-Short-Description="This plugin allows you to publish, visualize and share your network on the web, directly from Gephi." OpenIDE-Module-Specification-Version="1.0.0"/>
+        
+
+    <message_digest algorithm="SHA-512" value="89c18cd60f9e4bbf2a6609eac9156394c417ae1172feedd1cc102d6c2f875dde8f5e678a5f020e87cb548f728f0c08279a8dab71af994aa8b6768f953da1efa6"/>
 </module>
 
 <module codenamebase="imperialcollegelondon.scale.plugin" distribution="scale-plugin-1.1.0.nbm" downloadsize="14607" homepage="http://github.com/gephi/gephi-plugins/scale-plugin" moduleauthor="Huangsong Wei,Imperial College London" needsrestart="true" releasedate="2022/06/24" targetcluster="plugins">
