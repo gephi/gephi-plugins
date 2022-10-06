@@ -62,6 +62,8 @@ public class MainTwitterStreamerWindow extends TopComponent {
 
         if (this.streamer.getRules() != null) {
             this.tableRules.setModel(new RuleTableModel(streamer.getRules()));
+        } else {
+            this.tableRules.setModel(new RuleTableModel());
         }
     }
 

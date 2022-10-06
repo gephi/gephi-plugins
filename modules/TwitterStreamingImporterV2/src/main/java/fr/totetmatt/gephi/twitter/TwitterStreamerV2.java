@@ -101,11 +101,11 @@ public final class TwitterStreamerV2 {
                 RulesLookupResponse getRules = apiInstance.tweets().getRules().execute();
                 
                 if(getRules!=null){
-                rules = getRules.getData();
-                if(currentNetworkLogic!=null){
-                    currentNetworkLogic.refreshRulesNodeColumn(rules);
-                }
-                return rules;
+                    rules = getRules.getData();
+                    if(currentNetworkLogic!=null){
+                        currentNetworkLogic.refreshRulesNodeColumn(rules);
+                    } 
+                    return rules;
                 }
             }
         } catch(ApiException e){
@@ -129,10 +129,10 @@ public final class TwitterStreamerV2 {
             final AddOrDeleteRulesRequest addOrDeleteRulesRequest = new AddOrDeleteRulesRequest(deleteRuleRequest);
             AddOrDeleteRulesResponse response = apiInstance.tweets().addOrDeleteRules(addOrDeleteRulesRequest).execute();
             if(response.getErrors()!=null) {
-            response.getErrors().forEach(error -> {
-                Exceptions.printStackTrace(new Exception(error.toJson()));
-            });
-        }
+                response.getErrors().forEach(error -> {
+                    Exceptions.printStackTrace(new Exception(error.toJson()));
+                });
+            }
             return response.getData();
         }
         return this.rules;
