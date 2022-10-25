@@ -1,0 +1,5 @@
+Manifest-Version: 1.0
+OpenIDE-Module-Name: MultiVizPlugin
+OpenIDE-Module-Short-Description: multi layer visualization
+OpenIDE-Module-Long-Description: visualizes multilayer complex networks
+OpenIDE-Module-Display-Category: Layout
