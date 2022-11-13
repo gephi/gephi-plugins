@@ -1,9 +1,6 @@
 package multiviz;
 
-import algorithms.basic.CircleLayout;
-import algorithms.basic.GridLayout;
-import algorithms.basic.LinearLayout;
-import algorithms.basic.RandomLayout;
+import algorithms.BasicLayout;
 import algorithms.force.ForceAtlas2Layout;
 import algorithms.force.ForceAtlasLayout;
 import algorithms.force.FruchtermanReingoldLayout;
@@ -185,13 +182,10 @@ public class MultiLayerVisualization implements Layout {
         
         switch (layoutAlgorithm) {
             case "Linear Layout":
-                new LinearLayout(getLayerDistance(), layers, initialLayer, initialNode, sortLayers).start();
-                break;
             case "Grid Layout":
-                new GridLayout(getLayerDistance(), layers, initialLayer, initialNode, sortLayers).start();
-                break;
             case "Circle Layout":
-                new CircleLayout(getLayerDistance(), layers, initialLayer, initialNode, sortLayers).start();
+            case "Random Layout":
+                new BasicLayout(getLayerDistance(), layers, initialLayer, initialNode, sortLayers, layoutAlgorithm).start();
                 break;
             case "ForceAtlas":
                 //AbstractLayout.ensureSafeLayoutNodePositions(graphModel);
@@ -206,9 +200,6 @@ public class MultiLayerVisualization implements Layout {
             case "Fruchterman Reingold":
                 VizUtils.nodesRandom(nodes);
                 new FruchtermanReingoldLayout(getNoOfIterations(), getLayerDistance(), edges, getArea(), getGravity(), getSpeed(), layers, initialLayer, initialNode, sortLayers, splitAsLevel, nodes).start();
-                break;
-            case "Random Layout":
-                new RandomLayout(getLayerDistance(), layers, initialLayer, initialNode, sortLayers).start();
                 break;
             default:
                 endAlgo();
