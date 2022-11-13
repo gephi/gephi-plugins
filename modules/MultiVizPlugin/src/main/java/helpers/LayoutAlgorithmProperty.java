@@ -28,10 +28,11 @@ import java.beans.PropertyEditorSupport;
  */
 public abstract class LayoutAlgorithmProperty extends PropertyEditorSupport{
     
-    private String[] listOfAlgorithms = {"Circle Layout", "Grid Layout", "Linear Layout", "ForceAtlas", "ForceAtlas2", "Fruchterman Reingold"};
+    private final String[] listOfAlgorithms;
     private String selectedAlgorithm = "Linear Layout";
     
     protected LayoutAlgorithmProperty(){
+        this.listOfAlgorithms = new String[]{"Circle Layout", "Grid Layout", "Linear Layout", "Random Layout", "ForceAtlas", "ForceAtlas2", "Fruchterman Reingold"};
     }
 
     
