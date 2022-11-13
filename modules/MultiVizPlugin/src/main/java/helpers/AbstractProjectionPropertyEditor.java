@@ -1,6 +1,6 @@
 /*
 Copyright 2008 WebAtlas
-Authors : Mathieu Bastian, Mathieu Jacomy, Julian Bilcke
+Authors : Mathieu Bastian, Alexis Jacomy, Julian Bilcke
 Website : http://www.gephi.org
 
 This file is part of Gephi.
@@ -24,22 +24,23 @@ import java.beans.PropertyEditorSupport;
 
 /**
  *
- * @author Alexis Jacomy
+ * @author J
  */
 abstract class AbstractProjectionPropertyEditor extends PropertyEditorSupport {
 
     protected AbstractProjectionPropertyEditor() {
+        this.defaultColumns = new String[]{"Node Label", "Edge Type"};
     }
     
     private String selectedColumn;
-    private String[] tempoColumns = {"Node Label","Edge Type"};
+    private final String[] defaultColumns;
 
     @Override
     public String[] getTags() {
         if (multiviz.MultiLayerVisualization.selectableColumns.isEmpty()){
-            return tempoColumns;
+            return defaultColumns;
         } else {
-            return multiviz.MultiLayerVisualization.selectableColumns.toArray(new String[multiviz.MultiLayerVisualization.selectableColumns.size()]);
+            return multiviz.MultiLayerVisualization.selectableColumns.toArray(String[]::new);
         }
     }
 
@@ -51,9 +52,9 @@ abstract class AbstractProjectionPropertyEditor extends PropertyEditorSupport {
     @Override
     public void setValue(Object value) {
         if(multiviz.MultiLayerVisualization.selectableColumns.isEmpty()){
-            for (String dummyColumn : tempoColumns) {
-                if (dummyColumn.equals((String)value)) {
-                    selectedColumn = dummyColumn;
+            for (String gColumn : defaultColumns) {
+                if (gColumn.equals((String)value)) {
+                    selectedColumn = gColumn;
                     break;
                 }
             }
