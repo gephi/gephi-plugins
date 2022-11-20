@@ -1,4 +1,4 @@
-#Ordered layout
+# Ordered layout
 Author: Wouter Spekkink (wahsp(at)tutanota.com)
 
 This is the source code for the Ordered Graph layout plugin for Gephi (http://gephi.org/).
