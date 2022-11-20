@@ -11,7 +11,7 @@ Once activated, the layout plugin will run continuously until the user stops it.
 
 ### Controls
 The plugin has only a few controls: 
-- Vertical layout: Toggle to change from a horizontally ordered to a vertically ordered layout. Effects are sometimes only noticeable when force on free axis is activated 
+- Vertical layout: Toggle to change from a horizontally ordered to a vertically ordered layout. Effects are sometimes only noticeable when force on free axis is activated. 
 - Inverted layout: Toggle to invert layout from left-right / top-bottom to right-left / bottom-top.
 - Order: a dropdown selection menu to select the user-supplied 'order-variable.' 
 - Scale of order: determines the distance between the nodes on the fixed axis. 
