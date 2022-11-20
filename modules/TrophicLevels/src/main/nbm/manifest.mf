@@ -1,5 +1,0 @@
-Manifest-Version: 1.0
-OpenIDE-Module-Name: Trophic Levels
-OpenIDE-Module-Short-Description: Calculates trophic levels of a directed adjacency matrix
-OpenIDE-Module-Long-Description: Calculates trophic levels of a directed adjacency matrix that we reconstruct from a directed network. The trophic levels can be used to, for example, lay out directed networks in a way that corresponds with their trophic levels.
-OpenIDE-Module-Display-Category: Metric
