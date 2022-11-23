@@ -1,0 +1,5 @@
+Manifest-Version: 1.0
+OpenIDE-Module-Name: Lexical Explorer Plugin
+OpenIDE-Module-Short-Description: This plugin displays a summary of the textual information related to a group of nodes that are visible in the Overview. Useful for a quick understanding of the identity of this group of nodes.
+OpenIDE-Module-Long-Description: This plugin helps a user better understand the meaning of a group of nodes by displaying the lexical information related to theses nodes, in a compact way on the Overview. The lexical information on the nodes comes from a textual attribute of these nodes. The user can select which attribute should be the source of this textual information. The user is able to select which group of node is summarized in the panel.
+OpenIDE-Module-Display-Category: Tool
