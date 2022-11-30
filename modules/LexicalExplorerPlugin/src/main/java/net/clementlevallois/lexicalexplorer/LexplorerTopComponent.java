@@ -2,30 +2,43 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/NetBeansModuleDevelopment-files/templateTopComponent637.java to edit this template
  */
-package net.clementlevallois.lexicalexplorerplugin.userinterface;
+package net.clementlevallois.lexicalexplorer;
 
+import java.util.ResourceBundle;
 import org.netbeans.api.settings.ConvertAsProperties;
 import org.openide.awt.ActionID;
 import org.openide.awt.ActionReference;
+import org.openide.util.NbBundle;
 import org.openide.windows.TopComponent;
 
-@ConvertAsProperties(dtd = "-//org.gephi.plugins.example.panel//Simple//EN",
-        autostore = false)
-@TopComponent.Description(preferredID = "SimpleTopComponent"
-//        iconBase = "fr/totetmatt/gephi/twitter/twitterlogo.png"
+/**
+ * Top component which displays something.
+ */
+@ConvertAsProperties(
+        dtd = "-//net.clementlevallois.lexicalexplorer//Lexplorer//EN",
+        autostore = false
+)
+@TopComponent.Description(
+        preferredID = "LexplorerTopComponent",
+        //iconBase="SET/PATH/TO/ICON/HERE",
+        persistenceType = TopComponent.PERSISTENCE_ALWAYS
 )
 @TopComponent.Registration(mode = "layoutmode", openAtStartup = true)
-@ActionID(category = "Window", id = "net.clementlevallois.lexicalexplorerplugin.userinterface.SimpleTopComponent")
-@ActionReference(path = "Menu/Window", position = 333)
-@TopComponent.OpenActionRegistration(displayName = "hello kittie",
-        preferredID = "SimpleTopComponent")
-public final class SimpleTopComponent extends TopComponent {
+@ActionID(category = "Window", id = "net.clementlevallois.lexicalexplorer.LexplorerTopComponent")
+@ActionReference(path = "Menu/Window" /*, position = 333 */)
+@TopComponent.OpenActionRegistration(
+        displayName = "#expression.gephi_menu_item.title",
+        preferredID = "LexplorerTopComponent"
+)
 
-    public SimpleTopComponent() {
+public final class LexplorerTopComponent extends TopComponent {
+    
+    private static final ResourceBundle bundle = NbBundle.getBundle(LexplorerTopComponent.class);
+
+    public LexplorerTopComponent() {
         initComponents();
-        setName("allooo");
-        setToolTipText("yeyyyy");
-
+        setName(bundle.getString("expression.top_panel.title"));
+        setToolTipText(bundle.getString("expression.top_panel.tooltip"));
     }
 
     /**
@@ -36,19 +49,30 @@ public final class SimpleTopComponent extends TopComponent {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jLabel1 = new javax.swing.JLabel();
+
+        org.openide.awt.Mnemonics.setLocalizedText(jLabel1, org.openide.util.NbBundle.getMessage(LexplorerTopComponent.class, "LexplorerTopComponent.jLabel1.text")); // NOI18N
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(62, 62, 62)
+                .addComponent(jLabel1)
+                .addContainerGap(181, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(58, 58, 58)
+                .addComponent(jLabel1)
+                .addContainerGap(226, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel jLabel1;
     // End of variables declaration//GEN-END:variables
     @Override
     public void componentOpened() {
