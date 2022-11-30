@@ -113,13 +113,15 @@ public abstract class Networklogic implements Comparable, TweetsStreamListener<F
 
     final public void refreshRulesNodeColumn(List<Rule> rules){
         graphModel.getGraph().writeLock();
-        for (Rule r : rules) {
-            String nodeTagAttributeName = "twitter_tag_" + r.getTag();
-            if (!graphModel.getNodeTable().hasColumn(nodeTagAttributeName)) {
-                graphModel.getNodeTable().addColumn(nodeTagAttributeName, Boolean.class, Origin.DATA);
-            }
-            for (String token : r.getValue().split(" ")) {
-                rulesTokenized.add(token.toLowerCase());
+        if(rules!=null){
+            for (Rule r : rules) {
+                String nodeTagAttributeName = "twitter_tag_" + r.getTag();
+                if (!graphModel.getNodeTable().hasColumn(nodeTagAttributeName)) {
+                    graphModel.getNodeTable().addColumn(nodeTagAttributeName, Boolean.class, Origin.DATA);
+                }
+                for (String token : r.getValue().split(" ")) {
+                    rulesTokenized.add(token.toLowerCase());
+                }
             }
         }
         graphModel.getGraph().writeUnlock();
@@ -143,7 +145,9 @@ public abstract class Networklogic implements Comparable, TweetsStreamListener<F
             }
         }
         // Flag if multiple rules
-        refreshRulesNodeColumn(rules);
+        if(rules!=null && !rules.isEmpty()){
+            refreshRulesNodeColumn(rules);
+        }
         for (TwitterNodeColumn c : TwitterNodeColumn.values()) {
             if (!graphModel.getNodeTable().hasColumn(c.label)) {
                 graphModel.getNodeTable().addColumn(c.label, c.classType, Origin.DATA);
