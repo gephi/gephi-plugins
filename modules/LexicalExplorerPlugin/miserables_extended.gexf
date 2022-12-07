@@ -1,0 +1,1352 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gexf xmlns="http://www.gexf.net/1.3" version="1.3" xmlns:viz="http://www.gexf.net/1.3/viz" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.gexf.net/1.3 http://www.gexf.net/1.3/gexf.xsd">
+  <meta lastmodifieddate="2017-01-20">
+    <creator>Gephi, Knuth 1993, Clement Levallois</creator>
+    <description>A network of the characters from the Les Miserables novel by Victor Hugo (Knuth 1993). Modified by Clement Levallois to add the "gender" attribute.</description>
+  </meta>
+  <graph defaultedgetype="undirected" mode="static">
+    <attributes class="node" mode="static">
+      <attribute id="Gender" title="Gender" type="string"></attribute>
+    </attributes>
+    <nodes>
+      <node id="0" label="Myriel">
+        <attvalues>
+          <attvalue for="Gender" value="M"></attvalue>
+        </attvalues>
+        <viz:size value="1.0"></viz:size>
+        <viz:position x="-95.274315" y="-46.711082" z="0.0"></viz:position>
+        <viz:color r="153" g="153" b="153"></viz:color>
+      </node>
+      <node id="1" label="Napoleon">
+        <attvalues>
+          <attvalue for="Gender" value="M"></attvalue>
+        </attvalues>
+        <viz:size value="1.0"></viz:size>
+        <viz:position x="-48.155075" y="45.006344" z="0.0"></viz:position>
+        <viz:color r="153" g="153" b="153"></viz:color>
+      </node>
+      <node id="2" label="MlleBaptistine">
+        <attvalues>
+          <attvalue for="Gender" value="F"></attvalue>
+        </attvalues>
+        <viz:size value="1.0"></viz:size>
+        <viz:position x="-25.879744" y="61.14878" z="0.0"></viz:position>
+        <viz:color r="153" g="153" b="153"></viz:color>
+      </node>
+      <node id="3" label="MmeMagloire">
+        <attvalues>
+          <attvalue for="Gender" value="F"></attvalue>
+        </attvalues>
+        <viz:size value="1.0"></viz:size>
+        <viz:position x="8.465163" y="13.662047" z="0.0"></viz:position>
+        <viz:color r="153" g="153" b="153"></viz:color>
+      </node>
+      <node id="4" label="CountessDeLo">
+        <attvalues>
+          <attvalue for="Gender" value="F"></attvalue>
+        </attvalues>
+        <viz:size value="1.0"></viz:size>
+        <viz:position x="72.727455" y="-87.02954" z="0.0"></viz:position>
+        <viz:color r="153" g="153" b="153"></viz:color>
+      </node>
+      <node id="5" label="Geborand">
+        <attvalues>
+          <attvalue for="Gender" value="F"></attvalue>
+        </attvalues>
+        <viz:size value="1.0"></viz:size>
+        <viz:position x="-93.04595" y="5.3092685" z="0.0"></viz:position>
+        <viz:color r="153" g="153" b="153"></viz:color>
+      </node>
+      <node id="6" label="Champtercier">
+        <attvalues>
+          <attvalue for="Gender" value="M"></attvalue>
+        </attvalues>
+        <viz:size value="1.0"></viz:size>
+        <viz:position x="-21.922136" y="-0.95019495" z="0.0"></viz:position>
+        <viz:color r="153" g="153" b="153"></viz:color>
+      </node>
+      <node id="7" label="Cravatte">
+        <attvalues>
+          <attvalue for="Gender" value="M"></attvalue>
+        </attvalues>
+        <viz:size value="1.0"></viz:size>
+        <viz:position x="68.75737" y="-73.847786" z="0.0"></viz:position>
+        <viz:color r="153" g="153" b="153"></viz:color>
+      </node>
+      <node id="8" label="Count">
+        <attvalues>
+          <attvalue for="Gender" value="M"></attvalue>
+        </attvalues>
+        <viz:size value="1.0"></viz:size>
+        <viz:position x="-99.8661" y="-36.346424" z="0.0"></viz:position>
+        <viz:color r="153" g="153" b="153"></viz:color>
+      </node>
+      <node id="9" label="OldMan">
+        <attvalues>
+          <attvalue for="Gender" value="M"></attvalue>
+        </attvalues>
+        <viz:size value="1.0"></viz:size>
+        <viz:position x="-32.387157" y="32.16534" z="0.0"></viz:position>
+        <viz:color r="153" g="153" b="153"></viz:color>
+      </node>
+      <node id="10" label="Labarre">
+        <attvalues>
+          <attvalue for="Gender" value="M"></attvalue>
+        </attvalues>
+        <viz:size value="1.0"></viz:size>
+        <viz:position x="-74.822395" y="3.2839394" z="0.0"></viz:position>
+        <viz:color r="153" g="153" b="153"></viz:color>
+      </node>
+      <node id="11" label="Valjean">
+        <attvalues>
+          <attvalue for="Gender" value="M"></attvalue>
+        </attvalues>
+        <viz:size value="1.0"></viz:size>
+        <viz:position x="42.094852" y="98.30752" z="0.0"></viz:position>
+        <viz:color r="153" g="153" b="153"></viz:color>
+      </node>
+      <node id="12" label="Marguerite">
+        <attvalues>
+          <attvalue for="Gender" value="F"></attvalue>
+        </attvalues>
+        <viz:size value="1.0"></viz:size>
+        <viz:position x="-90.827965" y="-87.47986" z="0.0"></viz:position>
+        <viz:color r="153" g="153" b="153"></viz:color>
+      </node>
+      <node id="13" label="MmeDeR">
+        <attvalues>
+          <attvalue for="Gender" value="F"></attvalue>
+        </attvalues>
+        <viz:size value="1.0"></viz:size>
+        <viz:position x="1.1174107" y="21.49804" z="0.0"></viz:position>
+        <viz:color r="153" g="153" b="153"></viz:color>
+      </node>
+      <node id="14" label="Isabeau">
+        <attvalues>
+          <attvalue for="Gender" value="M"></attvalue>
+        </attvalues>
+        <viz:size value="1.0"></viz:size>
+        <viz:position x="-53.713703" y="-59.519527" z="0.0"></viz:position>
+        <viz:color r="153" g="153" b="153"></viz:color>
+      </node>
+      <node id="15" label="Gervais">
+        <attvalues>
+          <attvalue for="Gender" value="M"></attvalue>
+        </attvalues>
+        <viz:size value="1.0"></viz:size>
+        <viz:position x="32.557796" y="40.02654" z="0.0"></viz:position>
+        <viz:color r="153" g="153" b="153"></viz:color>
+      </node>
+      <node id="16" label="Tholomyes">
+        <attvalues>
+          <attvalue for="Gender" value="M"></attvalue>
+        </attvalues>
+        <viz:size value="1.0"></viz:size>
+        <viz:position x="33.781372" y="-50.731934" z="0.0"></viz:position>
+        <viz:color r="153" g="153" b="153"></viz:color>
+      </node>
+      <node id="17" label="Listolier">
+        <attvalues>
+          <attvalue for="Gender" value="M"></attvalue>
+        </attvalues>
+        <viz:size value="1.0"></viz:size>
+        <viz:position x="-1.2040751" y="83.514206" z="0.0"></viz:position>
+        <viz:color r="153" g="153" b="153"></viz:color>
+      </node>
+      <node id="18" label="Fameuil">
+        <attvalues>
+          <attvalue for="Gender" value="M"></attvalue>
+        </attvalues>
+        <viz:size value="1.0"></viz:size>
+        <viz:position x="56.21236" y="-49.665672" z="0.0"></viz:position>
+        <viz:color r="153" g="153" b="153"></viz:color>
+      </node>
+      <node id="19" label="Blacheville">
+        <attvalues>
+          <attvalue for="Gender" value="M"></attvalue>
+        </attvalues>
+        <viz:size value="1.0"></viz:size>
+        <viz:position x="-17.152504" y="55.239113" z="0.0"></viz:position>
+        <viz:color r="153" g="153" b="153"></viz:color>
+      </node>
+      <node id="20" label="Favourite">
+        <attvalues>
+          <attvalue for="Gender" value="F"></attvalue>
+        </attvalues>
+        <viz:size value="1.0"></viz:size>
+        <viz:position x="-80.0899" y="-64.485725" z="0.0"></viz:position>
+        <viz:color r="153" g="153" b="153"></viz:color>
+      </node>
+      <node id="21" label="Dahlia">
+        <attvalues>
+          <attvalue for="Gender" value="F"></attvalue>
+        </attvalues>
+        <viz:size value="1.0"></viz:size>
+        <viz:position x="-65.09832" y="92.583694" z="0.0"></viz:position>
+        <viz:color r="153" g="153" b="153"></viz:color>
+      </node>
+      <node id="22" label="Zephine">
+        <attvalues>
+          <attvalue for="Gender" value="F"></attvalue>
+        </attvalues>
+        <viz:size value="1.0"></viz:size>
+        <viz:position x="-17.03683" y="16.55806" z="0.0"></viz:position>
+        <viz:color r="153" g="153" b="153"></viz:color>
+      </node>
+      <node id="23" label="Fantine">
+        <attvalues>
+          <attvalue for="Gender" value="F"></attvalue>
+        </attvalues>
+        <viz:size value="1.0"></viz:size>
+        <viz:position x="61.45696" y="51.55769" z="0.0"></viz:position>
+        <viz:color r="153" g="153" b="153"></viz:color>
+      </node>
+      <node id="24" label="MmeThenardier">
+        <attvalues>
+          <attvalue for="Gender" value="F"></attvalue>
+        </attvalues>
+        <viz:size value="1.0"></viz:size>
+        <viz:position x="46.429005" y="40.303635" z="0.0"></viz:position>
+        <viz:color r="153" g="153" b="153"></viz:color>
+      </node>
+      <node id="26" label="Cosette">
+        <attvalues>
+          <attvalue for="Gender" value="F"></attvalue>
+        </attvalues>
+        <viz:size value="1.0"></viz:size>
+        <viz:position x="-2.1184385" y="17.795311" z="0.0"></viz:position>
+        <viz:color r="153" g="153" b="153"></viz:color>
+      </node>
+      <node id="27" label="Javert">
+        <attvalues>
+          <attvalue for="Gender" value="M"></attvalue>
+        </attvalues>
+        <viz:size value="1.0"></viz:size>
+        <viz:position x="99.260765" y="56.2055" z="0.0"></viz:position>
+        <viz:color r="153" g="153" b="153"></viz:color>
+      </node>
+      <node id="28" label="Fauchelevent">
+        <attvalues>
+          <attvalue for="Gender" value="M"></attvalue>
+        </attvalues>
+        <viz:size value="1.0"></viz:size>
+        <viz:position x="-89.892365" y="-40.879402" z="0.0"></viz:position>
+        <viz:color r="153" g="153" b="153"></viz:color>
+      </node>
+      <node id="29" label="Bamatabois">
+        <attvalues>
+          <attvalue for="Gender" value="M"></attvalue>
+        </attvalues>
+        <viz:size value="1.0"></viz:size>
+        <viz:position x="-57.555744" y="78.755066" z="0.0"></viz:position>
+        <viz:color r="153" g="153" b="153"></viz:color>
+      </node>
+      <node id="30" label="Perpetue">
+        <attvalues>
+          <attvalue for="Gender" value="F"></attvalue>
+        </attvalues>
+        <viz:size value="1.0"></viz:size>
+        <viz:position x="82.30133" y="-96.27978" z="0.0"></viz:position>
+        <viz:color r="153" g="153" b="153"></viz:color>
+      </node>
+      <node id="31" label="Simplice">
+        <attvalues>
+          <attvalue for="Gender" value="F"></attvalue>
+        </attvalues>
+        <viz:size value="1.0"></viz:size>
+        <viz:position x="-42.902878" y="-90.6018" z="0.0"></viz:position>
+        <viz:color r="153" g="153" b="153"></viz:color>
+      </node>
+      <node id="32" label="Scaufflaire">
+        <attvalues>
+          <attvalue for="Gender" value="M"></attvalue>
+        </attvalues>
+        <viz:size value="1.0"></viz:size>
+        <viz:position x="64.73349" y="53.15847" z="0.0"></viz:position>
+        <viz:color r="153" g="153" b="153"></viz:color>
+      </node>
+      <node id="33" label="Woman1">
+        <attvalues>
+          <attvalue for="Gender" value="F"></attvalue>
+        </attvalues>
+        <viz:size value="1.0"></viz:size>
+        <viz:position x="26.790405" y="-39.123863" z="0.0"></viz:position>
+        <viz:color r="153" g="153" b="153"></viz:color>
+      </node>
+      <node id="34" label="Judge">
+        <attvalues>
+          <attvalue for="Gender" value="M"></attvalue>
+        </attvalues>
+        <viz:size value="1.0"></viz:size>
+        <viz:position x="79.7088" y="20.914177" z="0.0"></viz:position>
+        <viz:color r="153" g="153" b="153"></viz:color>
+      </node>
+      <node id="35" label="Champmathieu">
+        <attvalues>
+          <attvalue for="Gender" value="M"></attvalue>
+        </attvalues>
+        <viz:size value="1.0"></viz:size>
+        <viz:position x="-23.889849" y="61.48595" z="0.0"></viz:position>
+        <viz:color r="153" g="153" b="153"></viz:color>
+      </node>
+      <node id="36" label="Brevet">
+        <attvalues>
+          <attvalue for="Gender" value="M"></attvalue>
+        </attvalues>
+        <viz:size value="1.0"></viz:size>
+        <viz:position x="-86.70633" y="-75.18495" z="0.0"></viz:position>
+        <viz:color r="153" g="153" b="153"></viz:color>
+      </node>
+      <node id="37" label="Chenildieu">
+        <attvalues>
+          <attvalue for="Gender" value="M"></attvalue>
+        </attvalues>
+        <viz:size value="1.0"></viz:size>
+        <viz:position x="45.484814" y="-92.42266" z="0.0"></viz:position>
+        <viz:color r="153" g="153" b="153"></viz:color>
+      </node>
+      <node id="38" label="Cochepaille">
+        <attvalues>
+          <attvalue for="Gender" value="M"></attvalue>
+        </attvalues>
+        <viz:size value="1.0"></viz:size>
+        <viz:position x="-43.28366" y="-44.310276" z="0.0"></viz:position>
+        <viz:color r="153" g="153" b="153"></viz:color>
+      </node>
+      <node id="40" label="Boulatruelle">
+        <attvalues>
+          <attvalue for="Gender" value="M"></attvalue>
+        </attvalues>
+        <viz:size value="1.0"></viz:size>
+        <viz:position x="86.56184" y="-20.327356" z="0.0"></viz:position>
+        <viz:color r="153" g="153" b="153"></viz:color>
+      </node>
+      <node id="41" label="Eponine">
+        <attvalues>
+          <attvalue for="Gender" value="F"></attvalue>
+        </attvalues>
+        <viz:size value="1.0"></viz:size>
+        <viz:position x="3.695109" y="94.75363" z="0.0"></viz:position>
+        <viz:color r="153" g="153" b="153"></viz:color>
+      </node>
+      <node id="42" label="Anzelma">
+        <attvalues>
+          <attvalue for="Gender" value="F"></attvalue>
+        </attvalues>
+        <viz:size value="1.0"></viz:size>
+        <viz:position x="-67.07529" y="-59.082645" z="0.0"></viz:position>
+        <viz:color r="153" g="153" b="153"></viz:color>
+      </node>
+      <node id="43" label="Woman2">
+        <attvalues>
+          <attvalue for="Gender" value="F"></attvalue>
+        </attvalues>
+        <viz:size value="1.0"></viz:size>
+        <viz:position x="58.583817" y="58.689697" z="0.0"></viz:position>
+        <viz:color r="153" g="153" b="153"></viz:color>
+      </node>
+      <node id="44" label="MotherInnocent">
+        <attvalues>
+          <attvalue for="Gender" value="F"></attvalue>
+        </attvalues>
+        <viz:size value="1.0"></viz:size>
+        <viz:position x="-22.300407" y="-3.8612525" z="0.0"></viz:position>
+        <viz:color r="153" g="153" b="153"></viz:color>
+      </node>
+      <node id="45" label="Gribier">
+        <attvalues>
+          <attvalue for="Gender" value="M"></attvalue>
+        </attvalues>
+        <viz:size value="1.0"></viz:size>
+        <viz:position x="-34.893864" y="-85.91956" z="0.0"></viz:position>
+        <viz:color r="153" g="153" b="153"></viz:color>
+      </node>
+      <node id="47" label="MmeBurgon">
+        <attvalues>
+          <attvalue for="Gender" value="F"></attvalue>
+        </attvalues>
+        <viz:size value="1.0"></viz:size>
+        <viz:position x="-27.39175" y="5.610493" z="0.0"></viz:position>
+        <viz:color r="153" g="153" b="153"></viz:color>
+      </node>
+      <node id="48" label="Gavroche">
+        <attvalues>
+          <attvalue for="Gender" value="M"></attvalue>
+        </attvalues>
+        <viz:size value="1.0"></viz:size>
+        <viz:position x="-73.41672" y="-78.20674" z="0.0"></viz:position>
+        <viz:color r="153" g="153" b="153"></viz:color>
+      </node>
+      <node id="50" label="Magnon">
+        <attvalues>
+          <attvalue for="Gender" value="F"></attvalue>
+        </attvalues>
+        <viz:size value="1.0"></viz:size>
+        <viz:position x="52.282246" y="-80.30847" z="0.0"></viz:position>
+        <viz:color r="153" g="153" b="153"></viz:color>
+      </node>
+      <node id="51" label="MlleGillenormand">
+        <attvalues>
+          <attvalue for="Gender" value="F"></attvalue>
+        </attvalues>
+        <viz:size value="1.0"></viz:size>
+        <viz:position x="-44.057457" y="47.116062" z="0.0"></viz:position>
+        <viz:color r="153" g="153" b="153"></viz:color>
+      </node>
+      <node id="52" label="MmePontmercy">
+        <attvalues>
+          <attvalue for="Gender" value="F"></attvalue>
+        </attvalues>
+        <viz:size value="1.0"></viz:size>
+        <viz:position x="-16.839344" y="-71.172386" z="0.0"></viz:position>
+        <viz:color r="153" g="153" b="153"></viz:color>
+      </node>
+      <node id="53" label="MlleVaubois">
+        <attvalues>
+          <attvalue for="Gender" value="F"></attvalue>
+        </attvalues>
+        <viz:size value="1.0"></viz:size>
+        <viz:position x="-32.573334" y="2.885632" z="0.0"></viz:position>
+        <viz:color r="153" g="153" b="153"></viz:color>
+      </node>
+      <node id="56" label="BaronessT">
+        <attvalues>
+          <attvalue for="Gender" value="F"></attvalue>
+        </attvalues>
+        <viz:size value="1.0"></viz:size>
+        <viz:position x="38.05177" y="7.9744687" z="0.0"></viz:position>
+        <viz:color r="153" g="153" b="153"></viz:color>
+      </node>
+      <node id="57" label="Mabeuf">
+        <attvalues>
+          <attvalue for="Gender" value="M"></attvalue>
+        </attvalues>
+        <viz:size value="1.0"></viz:size>
+        <viz:position x="1.8072288" y="80.54642" z="0.0"></viz:position>
+        <viz:color r="153" g="153" b="153"></viz:color>
+      </node>
+      <node id="58" label="Enjolras">
+        <attvalues>
+          <attvalue for="Gender" value="M"></attvalue>
+        </attvalues>
+        <viz:size value="1.0"></viz:size>
+        <viz:position x="-94.553116" y="75.32172" z="0.0"></viz:position>
+        <viz:color r="153" g="153" b="153"></viz:color>
+      </node>
+      <node id="59" label="Combeferre">
+        <attvalues>
+          <attvalue for="Gender" value="M"></attvalue>
+        </attvalues>
+        <viz:size value="1.0"></viz:size>
+        <viz:position x="-36.962322" y="-31.977032" z="0.0"></viz:position>
+        <viz:color r="153" g="153" b="153"></viz:color>
+      </node>
+      <node id="60" label="Prouvaire">
+        <attvalues>
+          <attvalue for="Gender" value="M"></attvalue>
+        </attvalues>
+        <viz:size value="1.0"></viz:size>
+        <viz:position x="56.93208" y="-17.7331" z="0.0"></viz:position>
+        <viz:color r="153" g="153" b="153"></viz:color>
+      </node>
+      <node id="61" label="Feuilly">
+        <attvalues>
+          <attvalue for="Gender" value="M"></attvalue>
+        </attvalues>
+        <viz:size value="1.0"></viz:size>
+        <viz:position x="36.664684" y="53.484207" z="0.0"></viz:position>
+        <viz:color r="153" g="153" b="153"></viz:color>
+      </node>
+      <node id="62" label="Courfeyrac">
+        <attvalues>
+          <attvalue for="Gender" value="M"></attvalue>
+        </attvalues>
+        <viz:size value="1.0"></viz:size>
+        <viz:position x="16.551872" y="4.9095616" z="0.0"></viz:position>
+        <viz:color r="153" g="153" b="153"></viz:color>
+      </node>
+      <node id="63" label="Bahorel">
+        <attvalues>
+          <attvalue for="Gender" value="M"></attvalue>
+        </attvalues>
+        <viz:size value="1.0"></viz:size>
+        <viz:position x="58.94923" y="-29.47664" z="0.0"></viz:position>
+        <viz:color r="153" g="153" b="153"></viz:color>
+      </node>
+      <node id="64" label="Bossuet">
+        <attvalues>
+          <attvalue for="Gender" value="M"></attvalue>
+        </attvalues>
+        <viz:size value="1.0"></viz:size>
+        <viz:position x="2.736131" y="16.905321" z="0.0"></viz:position>
+        <viz:color r="153" g="153" b="153"></viz:color>
+      </node>
+      <node id="65" label="Joly">
+        <attvalues>
+          <attvalue for="Gender" value="M"></attvalue>
+        </attvalues>
+        <viz:size value="1.0"></viz:size>
+        <viz:position x="-89.46837" y="-47.027603" z="0.0"></viz:position>
+        <viz:color r="153" g="153" b="153"></viz:color>
+      </node>
+      <node id="66" label="Grantaire">
+        <attvalues>
+          <attvalue for="Gender" value="M"></attvalue>
+        </attvalues>
+        <viz:size value="1.0"></viz:size>
+        <viz:position x="46.40981" y="89.34042" z="0.0"></viz:position>
+        <viz:color r="153" g="153" b="153"></viz:color>
+      </node>
+      <node id="67" label="MotherPlutarch">
+        <attvalues>
+          <attvalue for="Gender" value="F"></attvalue>
+        </attvalues>
+        <viz:size value="1.0"></viz:size>
+        <viz:position x="-80.39242" y="-63.48453" z="0.0"></viz:position>
+        <viz:color r="153" g="153" b="153"></viz:color>
+      </node>
+      <node id="68" label="Gueulemer">
+        <attvalues>
+          <attvalue for="Gender" value="M"></attvalue>
+        </attvalues>
+        <viz:size value="1.0"></viz:size>
+        <viz:position x="-71.83741" y="85.357475" z="0.0"></viz:position>
+        <viz:color r="153" g="153" b="153"></viz:color>
+      </node>
+      <node id="69" label="Babet">
+        <attvalues>
+          <attvalue for="Gender" value="M"></attvalue>
+        </attvalues>
+        <viz:size value="1.0"></viz:size>
+        <viz:position x="76.965004" y="69.46076" z="0.0"></viz:position>
+        <viz:color r="153" g="153" b="153"></viz:color>
+      </node>
+      <node id="70" label="Claquesous">
+        <attvalues>
+          <attvalue for="Gender" value="M"></attvalue>
+        </attvalues>
+        <viz:size value="1.0"></viz:size>
+        <viz:position x="-77.136505" y="95.583336" z="0.0"></viz:position>
+        <viz:color r="153" g="153" b="153"></viz:color>
+      </node>
+      <node id="71" label="Montparnasse">
+        <attvalues>
+          <attvalue for="Gender" value="M"></attvalue>
+        </attvalues>
+        <viz:size value="1.0"></viz:size>
+        <viz:position x="-11.135532" y="-23.52413" z="0.0"></viz:position>
+        <viz:color r="153" g="153" b="153"></viz:color>
+      </node>
+      <node id="72" label="Toussaint">
+        <attvalues>
+          <attvalue for="Gender" value="M"></attvalue>
+        </attvalues>
+        <viz:size value="1.0"></viz:size>
+        <viz:position x="-8.13674" y="94.98056" z="0.0"></viz:position>
+        <viz:color r="153" g="153" b="153"></viz:color>
+      </node>
+      <node id="73" label="Child1">
+        <attvalues>
+          <attvalue for="Gender" value="M"></attvalue>
+        </attvalues>
+        <viz:size value="1.0"></viz:size>
+        <viz:position x="-76.37146" y="-43.21316" z="0.0"></viz:position>
+        <viz:color r="153" g="153" b="153"></viz:color>
+      </node>
+      <node id="74" label="Child2">
+        <attvalues>
+          <attvalue for="Gender" value="M"></attvalue>
+        </attvalues>
+        <viz:size value="1.0"></viz:size>
+        <viz:position x="-79.06484" y="-7.4359756" z="0.0"></viz:position>
+        <viz:color r="153" g="153" b="153"></viz:color>
+      </node>
+      <node id="75" label="Brujon">
+        <attvalues>
+          <attvalue for="Gender" value="M"></attvalue>
+        </attvalues>
+        <viz:size value="1.0"></viz:size>
+        <viz:position x="43.93847" y="92.28644" z="0.0"></viz:position>
+        <viz:color r="153" g="153" b="153"></viz:color>
+      </node>
+      <node id="76" label="MmeHucheloup">
+        <attvalues>
+          <attvalue for="Gender" value="F"></attvalue>
+        </attvalues>
+        <viz:size value="1.0"></viz:size>
+        <viz:position x="-33.6374" y="92.494705" z="0.0"></viz:position>
+        <viz:color r="153" g="153" b="153"></viz:color>
+      </node>
+      <node id="55" label="Marius">
+        <attvalues>
+          <attvalue for="Gender" value="M"></attvalue>
+        </attvalues>
+        <viz:size value="1.0"></viz:size>
+        <viz:position x="-40.78077" y="-8.80742" z="0.0"></viz:position>
+        <viz:color r="153" g="153" b="153"></viz:color>
+      </node>
+      <node id="25" label="Thenardier,Jondrette">
+        <attvalues>
+          <attvalue for="Gender" value="M"></attvalue>
+        </attvalues>
+        <viz:size value="1.0"></viz:size>
+        <viz:position x="42.089966" y="88.382835" z="0.0"></viz:position>
+        <viz:color r="153" g="153" b="153"></viz:color>
+      </node>
+      <node id="54" label="LtGillenormand">
+        <attvalues>
+          <attvalue for="Gender" value="M"></attvalue>
+        </attvalues>
+        <viz:size value="1.0"></viz:size>
+        <viz:position x="81.12688" y="-0.6569929" z="0.0"></viz:position>
+        <viz:color r="153" g="153" b="153"></viz:color>
+      </node>
+    </nodes>
+    <edges>
+      <edge source="1" target="0">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="2" target="0" weight="8.0">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="3" target="0" weight="10.0">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="3" target="2" weight="6.0">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="4" target="0">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="5" target="0">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="6" target="0">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="7" target="0">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="8" target="0" weight="2.0">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="9" target="0">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="11" target="0" weight="5.0">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="11" target="2" weight="3.0">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="11" target="3" weight="3.0">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="11" target="10">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="12" target="11">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="13" target="11">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="14" target="11">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="15" target="11">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="17" target="16" weight="4.0">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="18" target="16" weight="4.0">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="18" target="17" weight="4.0">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="19" target="16" weight="4.0">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="19" target="17" weight="4.0">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="19" target="18" weight="4.0">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="20" target="16" weight="3.0">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="20" target="17" weight="3.0">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="20" target="18" weight="3.0">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="20" target="19" weight="4.0">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="21" target="16" weight="3.0">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="21" target="17" weight="3.0">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="21" target="18" weight="3.0">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="21" target="19" weight="3.0">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="21" target="20" weight="5.0">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="22" target="16" weight="3.0">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="22" target="17" weight="3.0">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="22" target="18" weight="3.0">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="22" target="19" weight="3.0">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="22" target="20" weight="4.0">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="22" target="21" weight="4.0">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="23" target="11" weight="9.0">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="23" target="12" weight="2.0">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="23" target="16" weight="3.0">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="23" target="17" weight="3.0">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="23" target="18" weight="3.0">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="23" target="19" weight="3.0">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="23" target="20" weight="4.0">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="23" target="21" weight="4.0">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="23" target="22" weight="4.0">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="24" target="11" weight="7.0">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="24" target="23" weight="2.0">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="26" target="11" weight="31.0">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="26" target="16">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="26" target="24" weight="4.0">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="26" target="25">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="27" target="11" weight="17.0">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="27" target="23" weight="5.0">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="27" target="24">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="27" target="26">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="27" target="25" weight="5.0">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="28" target="11" weight="8.0">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="28" target="27">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="29" target="11" weight="2.0">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="29" target="23">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="29" target="27">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="30" target="23">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="31" target="11" weight="3.0">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="31" target="23" weight="2.0">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="31" target="27">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="31" target="30" weight="2.0">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="32" target="11">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="33" target="11" weight="2.0">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="33" target="27">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="34" target="11" weight="3.0">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="34" target="29" weight="2.0">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="35" target="11" weight="3.0">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="35" target="29" weight="2.0">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="35" target="34" weight="3.0">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="36" target="11" weight="2.0">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="36" target="29">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="36" target="34" weight="2.0">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="36" target="35" weight="2.0">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="37" target="11" weight="2.0">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="37" target="29">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="37" target="34" weight="2.0">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="37" target="35" weight="2.0">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="37" target="36" weight="2.0">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="38" target="11" weight="2.0">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="38" target="29">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="38" target="34" weight="2.0">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="38" target="35" weight="2.0">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="38" target="36" weight="2.0">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="38" target="37" weight="2.0">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="40" target="25">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="41" target="24" weight="2.0">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="41" target="25" weight="3.0">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="42" target="24">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="42" target="41" weight="2.0">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="42" target="25" weight="2.0">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="43" target="11" weight="3.0">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="43" target="26">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="43" target="27">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="44" target="11">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="44" target="28" weight="3.0">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="45" target="28" weight="2.0">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="47" target="25">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="48" target="11">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="48" target="27">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="48" target="47" weight="2.0">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="48" target="25">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="50" target="24">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="50" target="54">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="51" target="11" weight="2.0">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="51" target="26" weight="2.0">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="51" target="54" weight="9.0">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="52" target="51">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="52" target="55">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="53" target="51">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="56" target="55">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="56" target="54">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="57" target="41">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="57" target="48">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="57" target="55">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="58" target="11" weight="4.0">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="58" target="27" weight="6.0">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="58" target="48" weight="7.0">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="58" target="57">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="58" target="55" weight="7.0">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="59" target="48" weight="6.0">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="59" target="57" weight="2.0">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="59" target="58" weight="15.0">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="59" target="55" weight="5.0">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="60" target="48">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="60" target="58" weight="4.0">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="60" target="59" weight="2.0">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="61" target="48" weight="2.0">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="61" target="57">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="61" target="58" weight="6.0">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="61" target="59" weight="5.0">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="61" target="60" weight="2.0">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="61" target="55">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="62" target="41">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="62" target="48" weight="7.0">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="62" target="57" weight="2.0">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="62" target="58" weight="17.0">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="62" target="59" weight="13.0">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="62" target="60" weight="3.0">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="62" target="61" weight="6.0">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="62" target="55" weight="9.0">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="63" target="48" weight="5.0">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="63" target="57" weight="2.0">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="63" target="58" weight="4.0">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="63" target="59" weight="5.0">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="63" target="60" weight="2.0">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="63" target="61" weight="3.0">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="63" target="62" weight="6.0">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="63" target="55">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="64" target="11">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="64" target="48" weight="5.0">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="64" target="57">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="64" target="58" weight="10.0">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="64" target="59" weight="9.0">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="64" target="60" weight="2.0">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="64" target="61" weight="6.0">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="64" target="62" weight="12.0">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="64" target="63" weight="4.0">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="64" target="55" weight="5.0">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="65" target="48" weight="3.0">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="65" target="57">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="65" target="58" weight="5.0">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="65" target="59" weight="5.0">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="65" target="60" weight="2.0">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="65" target="61" weight="5.0">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="65" target="62" weight="5.0">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="65" target="63" weight="5.0">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="65" target="64" weight="7.0">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="65" target="55" weight="2.0">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="66" target="48">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="66" target="58" weight="3.0">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="66" target="59">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="66" target="60">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="66" target="61">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="66" target="62" weight="2.0">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="66" target="63">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="66" target="64" weight="3.0">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="66" target="65" weight="2.0">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="67" target="57" weight="3.0">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="68" target="11">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="68" target="24">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="68" target="27">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="68" target="41">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="68" target="48">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="68" target="25" weight="5.0">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="69" target="11">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="69" target="24">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="69" target="27" weight="2.0">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="69" target="41">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="69" target="48">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="69" target="68" weight="6.0">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="69" target="25" weight="6.0">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="70" target="11">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="70" target="24">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="70" target="27">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="70" target="41">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="70" target="58">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="70" target="68" weight="4.0">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="70" target="69" weight="4.0">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="70" target="25" weight="4.0">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="71" target="11">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="71" target="27">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="71" target="41">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="71" target="48">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="71" target="68" weight="2.0">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="71" target="69" weight="2.0">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="71" target="70" weight="2.0">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="71" target="25">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="72" target="11">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="72" target="26" weight="2.0">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="72" target="27">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="73" target="48" weight="2.0">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="74" target="48" weight="2.0">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="74" target="73" weight="3.0">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="75" target="41">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="75" target="48">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="75" target="68" weight="3.0">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="75" target="69" weight="3.0">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="75" target="70">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="75" target="71">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="75" target="25" weight="3.0">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="76" target="48">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="76" target="58">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="76" target="62">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="76" target="63">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="76" target="64">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="76" target="65">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="76" target="66">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="55" target="11" weight="19.0">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="55" target="16">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="55" target="26" weight="21.0">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="55" target="41" weight="5.0">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="55" target="48" weight="4.0">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="55" target="51" weight="6.0">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="55" target="25" weight="2.0">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="55" target="54" weight="12.0">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="25" target="11" weight="12.0">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="25" target="23">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="25" target="24" weight="13.0">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="54" target="11" weight="2.0">
+        <attvalues></attvalues>
+      </edge>
+      <edge source="54" target="26" weight="3.0">
+        <attvalues></attvalues>
+      </edge>
+    </edges>
+  </graph>
+</gexf>
