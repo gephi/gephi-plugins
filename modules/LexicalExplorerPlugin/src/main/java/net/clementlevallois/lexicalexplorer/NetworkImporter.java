@@ -9,8 +9,21 @@ import java.io.StringReader;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Set;
+import net.clementlevallois.umigon.model.TextFragment;
+import net.clementlevallois.umigon.model.TypeOfTextFragment.TypeOfTextFragmentEnum;
+import net.clementlevallois.umigon.tokenizer.controller.UmigonTokenizer;
+import org.gephi.graph.api.Column;
+import org.gephi.graph.api.Graph;
 import org.gephi.graph.api.GraphController;
 import org.gephi.graph.api.GraphModel;
+import org.gephi.graph.api.Node;
+import org.gephi.graph.api.NodeIterable;
 import org.gephi.io.importer.api.Container;
 import org.gephi.io.importer.api.ContainerUnloader;
 import org.gephi.io.importer.api.ImportController;
@@ -32,7 +45,7 @@ public class NetworkImporter {
 
     public void importFromFile() throws IOException {
 
-        Path exampleGexf = Path.of("G:\\Mon Drive\\Twitch stream\\gephi plugin development\\gephi-plugins\\modules\\LexicalExplorerPlugin\\miserables_extended.gexf");
+        Path exampleGexf = Path.of("G:\\Mon Drive\\Twitch stream\\gephi plugin development\\gephi-plugins\\modules\\LexicalExplorerPlugin\\qatar user network.gexf");
 
         String gexfFileAsString = Files.readString(exampleGexf, StandardCharsets.UTF_8);
 
@@ -55,11 +68,43 @@ public class NetworkImporter {
         processor.setWorkspace(pc.getCurrentWorkspace());
         processor.setContainers(new ContainerUnloader[]{container.getUnloader()});
         processor.process();
+
         GraphModel gm = graphController.getGraphModel();
 
-        System.out.println("number of edges:" + gm.getGraph().getEdgeCount());
-        System.out.println("number of nodes:" + gm.getGraph().getNodeCount());
+        Graph graph = gm.getGraph();
 
+        System.out.println("number of edges:" + graph.getEdgeCount());
+        System.out.println("number of nodes:" + graph.getNodeCount());
+
+        Column descriptionAttribute = gm.getNodeTable().getColumn("description");
+
+        NodeIterable nodes = graph.getNodes();
+
+        List<String> descriptions = new ArrayList();
+
+        Iterator<Node> iteratorOnNodes = nodes.iterator();
+        while (iteratorOnNodes.hasNext()) {
+            Node node = iteratorOnNodes.next();
+            String descriptionForOneNode = (String) node.getAttribute(descriptionAttribute);
+            if (descriptionForOneNode != null && !descriptionForOneNode.isBlank()) {
+                descriptions.add(descriptionForOneNode);
+            }
+        }
+
+        System.out.println("number of nodes that have a description: " + descriptions.size());
+
+        List<TextFragment> textFragments = new ArrayList();
+        Set<String> languageSpecificLexicon = new HashSet();
+
+        for (String description : descriptions) {
+            List<TextFragment> textFragmentsForOneDescription = UmigonTokenizer.tokenize(description, languageSpecificLexicon);
+            for (TextFragment oneTextFragment: textFragmentsForOneDescription){                
+                if (oneTextFragment.getTypeOfTextFragmentEnum()!= TypeOfTextFragmentEnum.WHITE_SPACE & oneTextFragment.getTypeOfTextFragmentEnum()!= TypeOfTextFragmentEnum.PUNCTUATION){
+                    textFragments.add(oneTextFragment);
+                }                
+            }
+        }        
+        System.out.println("number of text fragments in the description: " + textFragments.size());
     }
 
 }
