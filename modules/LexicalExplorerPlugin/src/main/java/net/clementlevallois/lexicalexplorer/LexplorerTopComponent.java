@@ -4,6 +4,7 @@
  */
 package net.clementlevallois.lexicalexplorer;
 
+import java.io.IOException;
 import java.util.ResourceBundle;
 import org.netbeans.api.settings.ConvertAsProperties;
 import org.openide.awt.ActionID;
@@ -35,7 +36,7 @@ public final class LexplorerTopComponent extends TopComponent {
 
     private static final ResourceBundle bundle = NbBundle.getBundle(LexplorerTopComponent.class);
 
-    public LexplorerTopComponent() {
+    public LexplorerTopComponent() throws IOException {
         initComponents();
         setName(bundle.getString("expression.top_panel.title"));
         setToolTipText(bundle.getString("expression.top_panel.tooltip"));
