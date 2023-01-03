@@ -4,12 +4,12 @@
 	<parent>
 		<artifactId>gephi-plugin-parent</artifactId>
 		<groupId>org.gephi</groupId>
-		<version>0.9.1</version>
+		<version>0.9.7</version>
 	</parent>
 
 	<groupId>fr.inria.edelweiss</groupId>
 	<artifactId>semantic</artifactId>
-	<version>1.0.0</version>
+	<version>1.1.0</version>
 	<packaging>nbm</packaging>
 
 	<name>SemanticWebImport</name>
@@ -47,10 +47,10 @@
 			<groupId>org.gephi</groupId>
 			<artifactId>statistics-api</artifactId>
 		</dependency>
-		<dependency>
-			<groupId>org.gephi</groupId>
-			<artifactId>io-processor-plugin</artifactId>
-		</dependency>
+<!--		<dependency>-->
+<!--			<groupId>org.gephi</groupId>-->
+<!--			<artifactId>io-processor-plugin</artifactId>-->
+<!--		</dependency>-->
 		<dependency>
 			<groupId>org.gephi</groupId>
 			<artifactId>io-importer-plugin</artifactId>
@@ -118,14 +118,14 @@
 	<build>
 		<plugins>
 			<plugin>
-				<groupId>org.codehaus.mojo</groupId>
+				<groupId>org.apache.netbeans.utilities</groupId>
 				<artifactId>nbm-maven-plugin</artifactId>
 				<configuration>
 					<licenseName>Licence_CeCILL-C_V1-en</licenseName>
 					<licenseFile>Licence_CeCILL-C_V1-en.txt</licenseFile>
 					<author>Erwan Demairy</author>
-					<sourceCodeUrl>http://github.com/gephi/gephi-plugins</sourceCodeUrl>
-					<homePageUrl>http://wiki.gephi.org/index.php/SemanticWebImport</homePageUrl>
+					<sourceCodeUrl>https://github.com/gephi/gephi-plugins</sourceCodeUrl>
+					<homePageUrl>https://wiki.gephi.org/index.php/SemanticWebImport</homePageUrl>
 					<publicPackages>
                         
 					</publicPackages>

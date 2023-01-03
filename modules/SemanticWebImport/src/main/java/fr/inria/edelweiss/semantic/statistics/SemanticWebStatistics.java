@@ -19,6 +19,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.tree.TreeNode;
 import org.gephi.graph.api.GraphModel;
 import org.gephi.statistics.spi.Statistics;
 
@@ -191,9 +192,9 @@ public class SemanticWebStatistics implements Statistics {
 			currentNode.setPercentage(100.0 * countType / total);
 			seenTypes.add(nodeName);
 
-			Enumeration<TypeTreeNode> childs = currentNode.children();
+			Enumeration<TreeNode> childs = currentNode.children();
 			while (childs.hasMoreElements()) {
-				queue.addFirst(childs.nextElement());
+				queue.addFirst( (TypeTreeNode) childs.nextElement());
 			}
 		}
 		Set<String> unseenTypes = countTypes.keySet();

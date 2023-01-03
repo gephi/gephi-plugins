@@ -39,7 +39,7 @@
  */
 package fr.inria.edelweiss.semantic.statistics.gui;
 
-import com.sun.java.swing.*;
+import javax.swing.*;
 import java.awt.Dimension;
 import java.awt.Component;
 import java.awt.Graphics;

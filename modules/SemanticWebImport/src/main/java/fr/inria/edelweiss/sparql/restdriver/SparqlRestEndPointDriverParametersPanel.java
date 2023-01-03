@@ -374,7 +374,7 @@ public class SparqlRestEndPointDriverParametersPanel
     // End of variables declaration//GEN-END:variables
 
     void fillMap(Map<String, String> map) {
-        ArrayList<ArrayList<String>> data = new ArrayList<ArrayList<String>>(restParametersModel.getDataVector());
+        ArrayList<ArrayList<String>> data = new ArrayList<ArrayList<String>>(restParametersModel.getDataVector().size());
         map.clear();
         for (int row = 0; row < data.size(); ++row) {
             ArrayList<String> currentRow = data.get(row);

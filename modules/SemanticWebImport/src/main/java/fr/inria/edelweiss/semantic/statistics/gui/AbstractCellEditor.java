@@ -43,7 +43,7 @@ package fr.inria.edelweiss.semantic.statistics.gui;
 import java.awt.Component;
 import java.awt.event.*;
 import java.awt.AWTEvent;
-import com.sun.java.swing.*;
+import javax.swing.*;
 import java.util.EventObject;
 import java.io.Serializable;
 import javax.swing.CellEditor;
