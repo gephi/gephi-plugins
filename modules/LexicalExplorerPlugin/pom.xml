@@ -21,6 +21,10 @@
         </dependency>
         <dependency>
             <groupId>org.gephi</groupId>
+            <artifactId>graph-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.gephi</groupId>
             <artifactId>io-importer-api</artifactId>
         </dependency>
         <dependency>
@@ -63,7 +67,17 @@
         </dependency>
         <dependency>
             <groupId>net.clementlevallois.functions</groupId>
+            <artifactId>umigon-stopwords</artifactId>
+            <version>1.0</version>
+        </dependency>
+        <dependency>
+            <groupId>net.clementlevallois.functions</groupId>
             <artifactId>umigon-tokenizer</artifactId>
+            <version>1.0</version>
+        </dependency>
+        <dependency>
+            <groupId>net.clementlevallois.utils</groupId>
+            <artifactId>utils-core</artifactId>
             <version>1.0</version>
         </dependency>
     </dependencies>
