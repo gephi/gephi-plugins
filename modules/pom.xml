@@ -4,7 +4,7 @@
 
     <groupId>org.gephi</groupId>
     <artifactId>gephi-plugin-parent</artifactId>
-    <version>0.9.7</version>
+    <version>0.10.0</version>
     <packaging>pom</packaging>
 
     <name>gephi-plugins-parent</name>
@@ -46,8 +46,8 @@
     <!-- Properties -->
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <gephi.version>0.9.7</gephi.version>
-        <netbeans.version>RELEASE140</netbeans.version>
+        <gephi.version>0.10.0</gephi.version>
+        <netbeans.version>RELEASE160</netbeans.version>
 
         <!-- Java compilation settings -->
         <javac.release>11</javac.release>
@@ -377,11 +377,6 @@
             </dependency>
             <dependency>
                 <groupId>org.gephi</groupId>
-                <artifactId>directory-chooser</artifactId>
-                <version>${gephi.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.gephi</groupId>
                 <artifactId>desktop-filters</artifactId>
                 <version>${gephi.version}</version>
             </dependency>
@@ -393,6 +388,16 @@
             <dependency>
                 <groupId>org.gephi</groupId>
                 <artifactId>ui-library-wrapper</artifactId>
+                <version>${gephi.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.gephi</groupId>
+                <artifactId>desktop-icons</artifactId>
+                <version>${gephi.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.gephi</groupId>
+                <artifactId>desktop-search</artifactId>
                 <version>${gephi.version}</version>
             </dependency>
             <dependency>
