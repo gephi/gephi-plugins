@@ -56,7 +56,7 @@
         <module>modules/CirclePack</module>
 <!--        &lt;!&ndash;<module>modules/SHPExporter</module> Dependency fails: Could not find artifact org.geotools:gt-api:jar:17.2 in osgeo (http://download.osgeo.org/webdav/geotools/)&ndash;&gt;-->
         <module>modules/newmangirvan</module>
-        <module>modules/image-preview</module>
+<!--        <module>modules/image-preview</module>-->
         <module>modules/polinodeExporter</module>
         <module>modules/LeidenAlgorithm</module>
         <module>modules/BridgingPlugin</module>
