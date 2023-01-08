@@ -30,7 +30,7 @@ assignees: ''
 
 ## Your Environment
 
-* Gephi Version used: Gephi 0.9.6
+* Gephi Version used: Gephi 0.10.0
 * Plugin Version used: 
 * Operating System: 
 
