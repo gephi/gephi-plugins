@@ -115,9 +115,9 @@ Yes, native libraries can be used in modules.
 
 The `modules` folder is where plugin modules go. Each plugin is defined in a single folder in this directory. A plugin can be composed of multiple modules (it's called a suite then) but usually one is enough to do what you want.
 
-The `pom.xml` file in `modules` is the parent pom for plugins. A Maven pom can inherit configurations from a parent and that is something we use to keep each plugin's pom very simple. Notice that each plugin's pom (i.e. the `pom.xml` file in the plugin folder) has a `<parent>` defined.
+A Maven pom can inherit configurations from a parent and that is something we use to keep each plugin's pom very simple. Notice that each plugin's pom (i.e. the `pom.xml` file in the plugin folder) has a `<parent>` defined.
 
-The `pom.xml` file at the root folder makes everything fit together and notably lists the modules.
+The `pom.xml` file at the root folder makes everything fit together and notably lists the modules. No need to change anything there besises this list.
 
 #### How are the manifest settings defined?
 
@@ -141,7 +141,7 @@ This applies for suite plugins with multiple modules. Besides creating the modul
 
 Dependencies are configured in the `<dependencies>` section in the plugin folder's `pom.xml`. Each dependency has a `groupId`, an `artifactId` and a `version`. There are three types of dependencies a plugin can have: an external library, a Gephi module or a Netbeans module.
 
-The list of Gephi and Netbeans dependencies one can use can be found in the `modules/pom.xml` file. All possible dependencies are listed in the `<dependencyManagement>` section. Because each plugin module inherits from this parent pom the version can be omitted when the dependency is set. For instance, this is how a plugin depends on `GraphAPI` and Netbeans's `Lookup`.
+The list of Gephi and Netbeans dependencies one can use can be found in the parent POM, which you can browse [here](https://github.com/gephi/gephi-plugins/blob/6136ba8427349aa16c4f4b94265267fc3de0e767/modules/pom.xml#L76). All possible dependencies are listed in the `<dependencyManagement>` section. Because each plugin module already inherits the version from this parent pom, it can be omitted. For instance, this is how a plugin depends on `GraphAPI` and Netbeans's `Lookup`.
 
 ```
 <dependencies>
@@ -170,7 +170,7 @@ Public packages are configured in the module's `pom.xml` file. Edit the `<public
 
 #### What is the difference between plugin and module?
 
-It's the same thing. We say module because Gephi is a modular application and is composed of many independent modules. Plugins also are modules, but we call them plugin because they aren't in the _core_ Gephi.
+It's the same thing. We say module because Gephi is a modular application and is composed of many independent modules. Plugins also are modules but we call them plugin because they aren't in the _core_ Gephi.
 
 #### When running the plugin in Netbeans I get an error "Running standalone modules or suites requires..."
 
