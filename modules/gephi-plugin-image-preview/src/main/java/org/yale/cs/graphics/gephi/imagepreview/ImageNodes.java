@@ -25,10 +25,13 @@ This file is based on, and meant to be used with, Gephi. (http://gephi.org/)
 package org.yale.cs.graphics.gephi.imagepreview;
 
 import com.itextpdf.text.DocumentException;
-import com.itextpdf.text.Image;
 import com.itextpdf.text.pdf.PdfContentByte;
 import com.itextpdf.text.pdf.PdfGState;
+import java.awt.AlphaComposite;
+import java.awt.Composite;
+import java.awt.Graphics2D;
 import java.awt.geom.AffineTransform;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -42,33 +45,28 @@ import org.openide.util.NbBundle;
 import org.openide.util.NbPreferences;
 import org.openide.util.lookup.ServiceProvider;
 import org.w3c.dom.Element;
-import processing.core.PImage;
 
 /**
  * A service that renders Nodes as images.
  * <p>
- * This class works in conjunction with {@link ImageItem} and
- * {@link NodeImageItemBuilder}.
+ * This class works in conjunction with {@link ImageItem} and {@link NodeImageItemBuilder}.
  * <p>
- * This class provides the properties and last step rendering code for the
- * images themselves. It can easily be overloaded to support other images. All
- * that would be needed would be the creation of a new {@link ItemBuilder} that
- * creates proper images. (This class may need to be overidden to modify
- * <code>needsItemBuilder</code>.
+ * This class provides the properties and last step rendering code for the images themselves. It can easily be overloaded to support other images. All that would be needed would be the creation of a
+ * new {@link ItemBuilder} that creates proper images. (This class may need to be overidden to modify <code>needsItemBuilder</code>.
  * <p>
  *
  * @author Yirzchak Lockerman (Yale Computer Graphics Group)
  */
-@ServiceProvider(service = Renderer.class, position = 200)
+@ServiceProvider(service = Renderer.class, position = 350)
 public class ImageNodes implements Renderer {
 
     final static String IMAGE_DESCRIPTION = "ImageNodes.property.imageDescription";
     final static String IMAGE_DIRECTORY = "ImageNodes.property.path";
     final static String IMAGE_OPACITY = "ImageNodes.property.opacity";
-    final static String IMAGE_SCALE ="ImageNodes.property.scale";
+    final static String IMAGE_SCALE = "ImageNodes.property.scale";
     final static String CATEGORY_NODE_IMAGE = "Node Images";
 
-    private static final Logger logger = Logger.getLogger(ImageNodes.class.getName());
+    private static final Logger LOG = Logger.getLogger(ImageNodes.class.getName());
 
     @Override
     public String getDisplayName() {
@@ -82,13 +80,14 @@ public class ImageNodes implements Renderer {
         }
 
         String imagesPath = properties.getValue(IMAGE_DIRECTORY);
-        if (imagesPath == null || imagesPath.isEmpty()) {
+        if (imagesPath == null || imagesPath.trim().isEmpty()) {
             return;
         }
+
         File imagesDir = new File(imagesPath);
         if (showNodes(properties)) {
             if (target instanceof G2DTarget) {
-                renderImageProcessing((ImageItem) item, (G2DTarget) target, properties, imagesDir);
+                renderImageGraphics2d((ImageItem) item, (G2DTarget) target, properties, imagesDir);
             } else if (target instanceof SVGTarget) {
                 renderImageSVG((ImageItem) item, (SVGTarget) target, properties, imagesDir);
             } else if (target instanceof PDFTarget) {
@@ -98,40 +97,59 @@ public class ImageNodes implements Renderer {
 
     }
 
-    public void renderImageProcessing(ImageItem item, G2DTarget target, PreviewProperties properties, File directory) {
-        PImage image = item.renderProcessing(directory, target);
+    public void renderImageGraphics2d(ImageItem item, G2DTarget target, PreviewProperties properties, File directory) {
+        BufferedImage image = item.loadImage(directory);
         if (image == null) {
-            logger.log(Level.WARNING, "Unable to load image: {0}", item.getSource());
+            LOG.log(Level.WARNING, "Unable to load image: {0}", item.getSource());
             return;
         }
 
-        Float x = item.getData(NodeItem.X);
-        Float y = item.getData(NodeItem.Y);
-        Float size = item.getData(NodeItem.SIZE);
+        float x = item.getData(NodeItem.X);
+        float y = item.getData(NodeItem.Y);
+        float size = item.getData(NodeItem.SIZE);
 
-        int alpha = (int) ((properties.getFloatValue(IMAGE_OPACITY) / 100f) * 255f);
-        if (alpha > 255) {
-            alpha = 255;
+        float alpha = (properties.getFloatValue(IMAGE_OPACITY) / 100f);
+        if (alpha <= 0) {
+            return;
         }
+
+        if (alpha > 1) {
+            alpha = 1f;
+        }
+
         /* Taking height of an image as "base" dimention
-           1 - Need to preserve the aspect on the width 
-           2 - Apply a "Image Scale" to adjust the image 
-        */
-        int aspectRatio = size.intValue() * image.width / image.height;
-        int newHeight =(int)(aspectRatio * properties.getFloatValue(IMAGE_SCALE));
-        int newWidth  = (int)(size.intValue()* properties.getFloatValue(IMAGE_SCALE));
-        image.resize(newHeight,newWidth); // There is a AffineTransformation Scale , didn't manage how to properly use it.
+           1 - Need to preserve the aspect on the width
+           2 - Apply a "Image Scale" to adjust the image
+         */
+        float aspectRatio = (float) image.getWidth() / (float) image.getHeight();
+        int width = image.getWidth();
 
-        // The AffineTransform will position the image to the center of the "node"
-        target.getGraphics().drawImage(image.getImage(), AffineTransform.getTranslateInstance(x - (image.width / 2), y - (image.height / 2)), null);
+        //Draw:
+        Graphics2D g2 = target.getGraphics();
 
+        Composite originalComposite = g2.getComposite();
+        if (alpha < 1) {
+            Composite comp = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, alpha);
+
+            g2.setComposite(comp);
+        }
+
+        AffineTransform transform = new AffineTransform();
+        transform.translate(x - size / 2, y - size / 2 / aspectRatio);
+        float scaleRatio = size / width;
+        transform.scale(scaleRatio, scaleRatio);
+        g2.drawImage(image, transform, null);
+
+        if (alpha < 1f) {
+            g2.setComposite(originalComposite);
+        }
     }
 
     public void renderImagePDF(ImageItem item, PDFTarget target, PreviewProperties properties, File directory) {
-        Image image = item.renderPDF(directory);
+        com.itextpdf.text.Image image = item.renderPDF(directory);
 
         if (image == null) {
-            logger.log(Level.WARNING, "Unable to load image: {0}", item.getSource());
+            LOG.log(Level.WARNING, "Unable to load image: {0}", item.getSource());
             return;
         }
 
@@ -151,12 +169,13 @@ public class ImageNodes implements Renderer {
             cb.setGState(gState);
         }
 
-        image.setAbsolutePosition(x - size / 2, -y - size / 2);
+        float aspectRatio = (float) image.getWidth() / (float) image.getHeight();
+        image.setAbsolutePosition(x - size / 2, -y - size / 2 / aspectRatio);
         image.scaleToFit(size, size);
         try {
             cb.addImage(image);
         } catch (DocumentException ex) {
-            logger.log(Level.SEVERE, "Unable to add image to document: " + item.getSource(), ex);
+            LOG.log(Level.SEVERE, "Unable to add image to document: " + item.getSource(), ex);
         }
 
         if (alpha < 1f) {
@@ -191,33 +210,38 @@ public class ImageNodes implements Renderer {
     @Override
     public void preProcess(PreviewModel previewModel) {
         NbPreferences.forModule(NodeImageItemBuilder.class)
-                .put("ImageNodes.imageDirectory", (String)previewModel.getProperties().getValue(IMAGE_DIRECTORY));
+            .put("ImageNodes.imageDirectory", (String) previewModel.getProperties().getValue(IMAGE_DIRECTORY));
     }
-    
+
+    @Override
+    public void postProcess(PreviewModel previewModel, RenderTarget renderTarget,
+                            PreviewProperties previewProperties) {
+    }
+
     private String getImageDirectory() {
         return NbPreferences.forModule(NodeImageItemBuilder.class)
-                .get("ImageNodes.imageDirectory", FileSystemView.getFileSystemView().getDefaultDirectory().getAbsolutePath());
+            .get("ImageNodes.imageDirectory", FileSystemView.getFileSystemView().getDefaultDirectory().getAbsolutePath());
     }
 
     @Override
     public PreviewProperty[] getProperties() {
         return new PreviewProperty[]{
             PreviewProperty.createProperty(this, "ImageNodes.property.enable", Boolean.class,
-            NbBundle.getMessage(ImageNodes.class, "ImageNodes.property.enable.name"),
-            NbBundle.getMessage(ImageNodes.class, "ImageNodes.property.enable.description"),
-            CATEGORY_NODE_IMAGE).setValue(false),
+                NbBundle.getMessage(ImageNodes.class, "ImageNodes.property.enable.name"),
+                NbBundle.getMessage(ImageNodes.class, "ImageNodes.property.enable.description"),
+                CATEGORY_NODE_IMAGE).setValue(false),
             PreviewProperty.createProperty(this, IMAGE_DIRECTORY, String.class,
-            NbBundle.getMessage(ImageNodes.class, IMAGE_DIRECTORY + ".name"),
-            NbBundle.getMessage(ImageNodes.class, IMAGE_DIRECTORY + ".description"),
-            CATEGORY_NODE_IMAGE, "ImageNodes.property.enable").setValue(getImageDirectory()), // Default to home document
+                NbBundle.getMessage(ImageNodes.class, IMAGE_DIRECTORY + ".name"),
+                NbBundle.getMessage(ImageNodes.class, IMAGE_DIRECTORY + ".description"),
+                CATEGORY_NODE_IMAGE, "ImageNodes.property.enable").setValue(getImageDirectory()), // Default to home document
             PreviewProperty.createProperty(this, IMAGE_OPACITY, Float.class,
-            NbBundle.getMessage(NodeRenderer.class, "NodeRenderer.property.opacity.displayName"),
-            NbBundle.getMessage(NodeRenderer.class, "NodeRenderer.property.opacity.description"),
-            CATEGORY_NODE_IMAGE, "ImageNodes.property.enable").setValue(100f),
+                NbBundle.getMessage(NodeRenderer.class, "NodeRenderer.property.opacity.displayName"),
+                NbBundle.getMessage(NodeRenderer.class, "NodeRenderer.property.opacity.description"),
+                CATEGORY_NODE_IMAGE, "ImageNodes.property.enable").setValue(100f),
             PreviewProperty.createProperty(this, IMAGE_SCALE, Float.class,
-            NbBundle.getMessage(ImageNodes.class, IMAGE_SCALE + ".name"),
-            NbBundle.getMessage(ImageNodes.class, IMAGE_SCALE + ".description"),
-            CATEGORY_NODE_IMAGE, "ImageNodes.property.enable").setValue(1f)};
+                NbBundle.getMessage(ImageNodes.class, IMAGE_SCALE + ".name"),
+                NbBundle.getMessage(ImageNodes.class, IMAGE_SCALE + ".description"),
+                CATEGORY_NODE_IMAGE, "ImageNodes.property.enable").setValue(1f)};
 
     }
 

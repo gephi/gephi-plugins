@@ -21,16 +21,19 @@ enclosed by brackets [] replaced by your own identifying information:
 Contributor(s): Totetmatt (0.9.X Transition)
 
 This file is based on, and meant to be used with, Gephi. (http://gephi.org/)
-*/
-
+ */
 package org.yale.cs.graphics.gephi.imagepreview;
 
 import java.awt.Color;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.gephi.graph.api.Column;
 import org.gephi.graph.api.Graph;
 import org.gephi.graph.api.Node;
+import org.gephi.graph.api.NodeIterable;
 import org.gephi.preview.api.Item;
 import org.gephi.preview.plugin.items.NodeItem;
 import org.gephi.preview.spi.ItemBuilder;
@@ -38,42 +41,53 @@ import org.openide.util.lookup.ServiceProvider;
 
 /**
  * This is a simple class that creates an {@link ImageItem} for each node.
- * 
+ *
  * @author Yitzchak Lockerman
  */
-@ServiceProvider(service=ItemBuilder.class)
-public class NodeImageItemBuilder implements ItemBuilder{
-    private static final Logger logger = Logger.getLogger(NodeImageItemBuilder.class.getName());
+@ServiceProvider(service = ItemBuilder.class)
+public class NodeImageItemBuilder implements ItemBuilder {
+
+    private static final Logger LOG = Logger.getLogger(NodeImageItemBuilder.class.getName());
+
     @Override
     public Item[] getItems(Graph graph) {
+        final List<Item> items = new ArrayList<Item>();
+        final Column imageColumn = graph.getModel().getNodeTable().getColumn("image");
 
-        Item[] items = new ImageItem[graph.getNodeCount()];
-        
-        int i = 0;
+        if (imageColumn == null) {
+            return new Item[0];
+        }
+
+        final NodeIterable nodesIterable = graph.getNodes();
         try {
-            for (Node n : graph.getNodes()) {
-                ImageItem imageItem = new ImageItem((String)n.getAttribute("image"));
-                imageItem.setData(NodeItem.X, n.x());
-                imageItem.setData(NodeItem.Y, -n.y());
-                imageItem.setData(NodeItem.Z, n.z());
-                imageItem.setData(NodeItem.SIZE, n.size() * 2f);
-                imageItem.setData(NodeItem.COLOR, new Color((int) (n.r() * 255),
-                        (int) (n.g() * 255),
-                        (int) (n.b() * 255),
-                        (int) (n.alpha() * 255)));
-                items[i++] = imageItem;
+            for (Node node : nodesIterable) {
+                final String imageName = Objects.toString(node.getAttribute(imageColumn), null);
+
+                if (imageName != null && !imageName.trim().isEmpty()) {
+                    final ImageItem imageItem = new ImageItem(imageName);
+                    imageItem.setData(NodeItem.X, node.x());
+                    imageItem.setData(NodeItem.Y, -node.y());
+                    imageItem.setData(NodeItem.Z, node.z());
+                    imageItem.setData(NodeItem.SIZE, node.size() * 2f);
+                    imageItem.setData(NodeItem.COLOR, new Color((int) (node.r() * 255),
+                        (int) (node.g() * 255),
+                        (int) (node.b() * 255),
+                        (int) (node.alpha() * 255)));
+
+                    items.add(imageItem);
+                }
             }
-        } catch (Exception e){
-            items = new ImageItem[0];
-            logger.log(Level.SEVERE,null,e);
-        } 
-        return items;
+        } catch (Exception e) {
+            nodesIterable.doBreak();
+            LOG.log(Level.SEVERE, null, e);
+        }
+
+        return items.toArray(new Item[0]);
     }
 
     @Override
     public String getType() {
         return ImageItem.IMAGE;
     }
-    
-    
+
 }
