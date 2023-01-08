@@ -24,7 +24,6 @@ This file is based on, and meant to be used with, Gephi. (http://gephi.org/)
  */
 package org.yale.cs.graphics.gephi.imagepreview;
 
-import com.itextpdf.text.BadElementException;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;

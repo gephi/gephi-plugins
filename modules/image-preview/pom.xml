@@ -9,13 +9,13 @@
 
     <groupId>org.yale.cs.graphics.gephi</groupId>
     <artifactId>imagepreview</artifactId>
-    <version>1.0.0</version>
+    <version>1.0.1</version>
     <packaging>nbm</packaging>
 
     <name>gephi-plugin-image-preview</name>
 
     <dependencies>
-        
+
         <dependency>
             <groupId>org.gephi</groupId>
             <artifactId>preview-plugin</artifactId>

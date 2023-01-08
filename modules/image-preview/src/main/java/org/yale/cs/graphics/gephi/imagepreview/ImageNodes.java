@@ -118,8 +118,8 @@ public class ImageNodes implements Renderer {
         }
 
         /* Taking height of an image as "base" dimention
-           1 - Need to preserve the aspect on the width 
-           2 - Apply a "Image Scale" to adjust the image 
+           1 - Need to preserve the aspect on the width
+           2 - Apply a "Image Scale" to adjust the image
          */
         float aspectRatio = (float) image.getWidth() / (float) image.getHeight();
         int width = image.getWidth();
@@ -210,7 +210,7 @@ public class ImageNodes implements Renderer {
     @Override
     public void preProcess(PreviewModel previewModel) {
         NbPreferences.forModule(NodeImageItemBuilder.class)
-                .put("ImageNodes.imageDirectory", (String) previewModel.getProperties().getValue(IMAGE_DIRECTORY));
+            .put("ImageNodes.imageDirectory", (String) previewModel.getProperties().getValue(IMAGE_DIRECTORY));
     }
 
     @Override
@@ -220,28 +220,28 @@ public class ImageNodes implements Renderer {
 
     private String getImageDirectory() {
         return NbPreferences.forModule(NodeImageItemBuilder.class)
-                .get("ImageNodes.imageDirectory", FileSystemView.getFileSystemView().getDefaultDirectory().getAbsolutePath());
+            .get("ImageNodes.imageDirectory", FileSystemView.getFileSystemView().getDefaultDirectory().getAbsolutePath());
     }
 
     @Override
     public PreviewProperty[] getProperties() {
         return new PreviewProperty[]{
             PreviewProperty.createProperty(this, "ImageNodes.property.enable", Boolean.class,
-            NbBundle.getMessage(ImageNodes.class, "ImageNodes.property.enable.name"),
-            NbBundle.getMessage(ImageNodes.class, "ImageNodes.property.enable.description"),
-            CATEGORY_NODE_IMAGE).setValue(false),
+                NbBundle.getMessage(ImageNodes.class, "ImageNodes.property.enable.name"),
+                NbBundle.getMessage(ImageNodes.class, "ImageNodes.property.enable.description"),
+                CATEGORY_NODE_IMAGE).setValue(false),
             PreviewProperty.createProperty(this, IMAGE_DIRECTORY, String.class,
-            NbBundle.getMessage(ImageNodes.class, IMAGE_DIRECTORY + ".name"),
-            NbBundle.getMessage(ImageNodes.class, IMAGE_DIRECTORY + ".description"),
-            CATEGORY_NODE_IMAGE, "ImageNodes.property.enable").setValue(getImageDirectory()), // Default to home document
+                NbBundle.getMessage(ImageNodes.class, IMAGE_DIRECTORY + ".name"),
+                NbBundle.getMessage(ImageNodes.class, IMAGE_DIRECTORY + ".description"),
+                CATEGORY_NODE_IMAGE, "ImageNodes.property.enable").setValue(getImageDirectory()), // Default to home document
             PreviewProperty.createProperty(this, IMAGE_OPACITY, Float.class,
-            NbBundle.getMessage(NodeRenderer.class, "NodeRenderer.property.opacity.displayName"),
-            NbBundle.getMessage(NodeRenderer.class, "NodeRenderer.property.opacity.description"),
-            CATEGORY_NODE_IMAGE, "ImageNodes.property.enable").setValue(100f),
+                NbBundle.getMessage(NodeRenderer.class, "NodeRenderer.property.opacity.displayName"),
+                NbBundle.getMessage(NodeRenderer.class, "NodeRenderer.property.opacity.description"),
+                CATEGORY_NODE_IMAGE, "ImageNodes.property.enable").setValue(100f),
             PreviewProperty.createProperty(this, IMAGE_SCALE, Float.class,
-            NbBundle.getMessage(ImageNodes.class, IMAGE_SCALE + ".name"),
-            NbBundle.getMessage(ImageNodes.class, IMAGE_SCALE + ".description"),
-            CATEGORY_NODE_IMAGE, "ImageNodes.property.enable").setValue(1f)};
+                NbBundle.getMessage(ImageNodes.class, IMAGE_SCALE + ".name"),
+                NbBundle.getMessage(ImageNodes.class, IMAGE_SCALE + ".description"),
+                CATEGORY_NODE_IMAGE, "ImageNodes.property.enable").setValue(1f)};
 
     }
 

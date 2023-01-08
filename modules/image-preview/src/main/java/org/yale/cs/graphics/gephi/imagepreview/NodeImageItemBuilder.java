@@ -70,9 +70,9 @@ public class NodeImageItemBuilder implements ItemBuilder {
                     imageItem.setData(NodeItem.Z, node.z());
                     imageItem.setData(NodeItem.SIZE, node.size() * 2f);
                     imageItem.setData(NodeItem.COLOR, new Color((int) (node.r() * 255),
-                            (int) (node.g() * 255),
-                            (int) (node.b() * 255),
-                            (int) (node.alpha() * 255)));
+                        (int) (node.g() * 255),
+                        (int) (node.b() * 255),
+                        (int) (node.alpha() * 255)));
 
                     items.add(imageItem);
                 }
