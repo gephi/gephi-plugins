@@ -18,6 +18,7 @@ import net.clementlevallois.excelcsvimporter.controller.MyFileImporter;
 import net.clementlevallois.excelcsvimporter.utils.Utils;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -183,20 +184,20 @@ public class ExcelParser {
 
             String firstAgent = null;
             switch (cell.getCellType()) {
-                case Cell.CELL_TYPE_BOOLEAN:
+                case BOOLEAN:
                     break;
-                case Cell.CELL_TYPE_NUMERIC:
+                case NUMERIC:
                     firstAgent = String.valueOf(cell.getNumericCellValue());
                     break;
-                case Cell.CELL_TYPE_STRING:
+                case STRING:
                     firstAgent = cell.getStringCellValue();
                     break;
-                case Cell.CELL_TYPE_BLANK:
+                case BLANK:
                     break;
-                case Cell.CELL_TYPE_ERROR:
+                case ERROR:
                     break;
                 // CELL_TYPE_FORMULA will never occur
-                case Cell.CELL_TYPE_FORMULA:
+                case FORMULA:
                     break;
             }
 
@@ -223,20 +224,20 @@ public class ExcelParser {
                     continue;
                 }
                 switch (cell.getCellType()) {
-                    case Cell.CELL_TYPE_BOOLEAN:
+                    case BOOLEAN:
                         break;
-                    case Cell.CELL_TYPE_NUMERIC:
+                    case NUMERIC:
                         secondAgent = String.valueOf(cell.getNumericCellValue());
                         break;
-                    case Cell.CELL_TYPE_STRING:
+                    case STRING:
                         secondAgent = cell.getStringCellValue();
                         break;
-                    case Cell.CELL_TYPE_BLANK:
+                    case BLANK:
                         break;
-                    case Cell.CELL_TYPE_ERROR:
+                    case ERROR:
                         break;
                     // CELL_TYPE_FORMULA will never occur
-                    case Cell.CELL_TYPE_FORMULA:
+                    case FORMULA:
                         break;
                 }
                 if (secondAgent == null || secondAgent.isEmpty()) {
@@ -304,20 +305,20 @@ public class ExcelParser {
                 String timeField = null;
 
                 switch (cell.getCellType()) {
-                    case Cell.CELL_TYPE_BOOLEAN:
+                    case BOOLEAN:
                         break;
-                    case Cell.CELL_TYPE_NUMERIC:
+                    case NUMERIC:
                         timeField = String.valueOf(cell.getNumericCellValue()).split("[.,]")[0];
                         break;
-                    case Cell.CELL_TYPE_STRING:
+                    case STRING:
                         timeField = cell.getStringCellValue();
                         break;
-                    case Cell.CELL_TYPE_BLANK:
+                    case BLANK:
                         break;
-                    case Cell.CELL_TYPE_ERROR:
+                    case ERROR:
                         break;
                     // CELL_TYPE_FORMULA will never occur
-                    case Cell.CELL_TYPE_FORMULA:
+                    case FORMULA:
                         break;
                 }
 
