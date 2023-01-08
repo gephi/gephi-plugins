@@ -9,17 +9,12 @@
 
     <groupId>ec.loxa.sna.gephi.websiteexport</groupId>
     <artifactId>loxawebsiteexport</artifactId>
-    <version>0.3.2</version>
+    <version>0.3.3</version>
     <packaging>nbm</packaging>
 
     <name>Loxa Web Site Export</name>
 
     <dependencies>
-        <dependency>
-            <groupId>com.google.code.gson</groupId>
-            <artifactId>gson</artifactId>
-            <version>2.6.2</version>
-        </dependency>
         <dependency>
             <groupId>org.jsoup</groupId>
             <artifactId>jsoup</artifactId>
@@ -50,7 +45,7 @@
         <dependency>
             <groupId>org.gephi</groupId>
             <artifactId>desktop-io-export</artifactId>
-        </dependency>        
+        </dependency>
         <dependency>
             <groupId>org.gephi</groupId>
             <artifactId>graph-api</artifactId>
@@ -69,7 +64,7 @@
         </dependency>
         <dependency>
             <groupId>org.gephi</groupId>
-            <artifactId>preview-plugin</artifactId>            
+            <artifactId>preview-plugin</artifactId>
         </dependency>
         <dependency>
             <groupId>org.gephi</groupId>
@@ -137,5 +132,4 @@
         Full AJAX for asynchronous calls to see statistics for each analysis.
         It works in most modern browsers (tested: Safari, Firefox, Chrome, Internet Explorer).</description>
 </project>
-
 

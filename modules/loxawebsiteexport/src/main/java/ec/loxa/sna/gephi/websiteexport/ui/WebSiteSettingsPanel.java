@@ -19,9 +19,9 @@ import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import org.gephi.graph.api.GraphModel;
 import org.gephi.project.api.*;
-import org.netbeans.validation.api.builtin.Validators;
+import org.netbeans.validation.api.builtin.stringvalidation.StringValidators;
 import org.netbeans.validation.api.ui.ValidationGroup;
-import org.netbeans.validation.api.ui.ValidationPanel;
+import org.netbeans.validation.api.ui.swing.ValidationPanel;
 import org.openide.util.Lookup;
 import org.openide.util.NbBundle;
 import org.openide.util.NbPreferences;
@@ -147,7 +147,7 @@ public class WebSiteSettingsPanel extends javax.swing.JPanel {
 
         ValidationGroup group = validationPanel.getValidationGroup();
 
-        group.add(innerPanel.txtPath, Validators.FILE_MUST_BE_DIRECTORY);
+        group.add(innerPanel.txtPath, StringValidators.FILE_MUST_BE_DIRECTORY);
 
         return validationPanel;
     }
