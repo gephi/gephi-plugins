@@ -85,10 +85,6 @@ public class MultiLayerVisualization implements Layout {
         }
     }
 
-    public static HashMap<Object, Integer> sortByValue(HashMap<Object, Integer> hm) {
-        return hm.entrySet().stream().sorted((e1, e2) -> Integer.compare(e2.getValue(), e1.getValue())).collect(Collectors.toMap(HashMap.Entry::getKey, HashMap.Entry::getValue, (e1, e2) -> e1, LinkedHashMap::new));
-    }
-
     @Override
     public void goAlgo() {
 
@@ -109,81 +105,83 @@ public class MultiLayerVisualization implements Layout {
         classes = new HashMap<>();
         if (selectedColumn.startsWith("Node ")) {
             label = VizUtils.getLabel(graph.getModel().getNodeTable(), selectedColumn.substring(5));
-            for (Node node : nodes) {
-                Object key = node.getAttribute(label);
-                if (classes.containsKey(key)) {
-                    Integer value = classes.get(key);
-                    classes.replace(key, value, 1 + value);
-                } else {
-                    classes.put(key, 1);
+            if(label != null) {
+                for (Node node : nodes) {
+                    Object key = node.getAttribute(label);
+                    if (classes.containsKey(key)) {
+                        Integer value = classes.get(key);
+                        classes.replace(key, value, 1 + value);
+                    } else {
+                        classes.put(key, 1);
+                    }
                 }
+                partitionFilter = new NodePartitionFilter(appearanceModel.getNodePartition(label));
             }
-            partitionFilter = new NodePartitionFilter(appearanceModel.getNodePartition(label));
         } else if (selectedColumn.startsWith("Edge ")) {
 
             Column newColumn = VizUtils.getLabel(graph.getModel().getNodeTable(), "mviz_edge_" + selectedColumn.substring(5));
             label = VizUtils.getLabel(graph.getModel().getEdgeTable(), selectedColumn.substring(5));
 
-            if (newColumn == null) {
-                newColumn = graphModel.getNodeTable().addColumn("mviz_edge_" + label.getTitle(), String.class);
+            if (label != null) {
+
+                if (newColumn == null) {
+                    newColumn = graphModel.getNodeTable().addColumn("mviz_edge_" + label.getTitle(), String.class);
+                }
+
+                List<Node> edgeNodes = new ArrayList<>();
+                for (Edge edge : edges) {
+
+                    Object key = edge.getAttribute(label);
+
+                    if (edgeNodes.contains(edge.getSource())) {
+                    } else {
+                        edgeNodes.add(edge.getSource());
+                        edge.getSource().setAttribute(newColumn, String.valueOf(key));
+                    }
+                    if (edgeNodes.contains(edge.getTarget())) {
+                    } else {
+                        edgeNodes.add(edge.getTarget());
+                        edge.getTarget().setAttribute(newColumn, String.valueOf(key));
+                    }
+                }
+
+                /**
+                 * If same label/nodes exists in multiple layers then node should
+                 * only be allowed to primary layer
+                 */
+                for (Node node : nodes) {
+                    if (edgeNodes.contains(node)) {
+                    } else {
+                        node.setAttribute(newColumn, "mviz_outlier_nodes");
+                    }
+
+                    Object key = node.getAttribute(newColumn);
+                    if (classes.containsKey(key)) {
+                        Integer value = classes.get(key);
+                        classes.replace(key, value, 1 + value);
+                    } else {
+                        classes.put(key, 1);
+                    }
+                }
+                partitionFilter = new NodePartitionFilter(appearanceModel.getNodePartition(newColumn));
             }
-
-            List<Node> edgeNodes = new ArrayList<>();
-            for (Edge edge : edges) {
-
-                Object key = edge.getAttribute(label);
-
-                if (edgeNodes.contains(edge.getSource())) {
-                } else {
-                    edgeNodes.add(edge.getSource());
-                    edge.getSource().setAttribute(newColumn, String.valueOf(key));
-                }
-                if (edgeNodes.contains(edge.getTarget())) {
-                } else {
-                    edgeNodes.add(edge.getTarget());
-                    edge.getTarget().setAttribute(newColumn, String.valueOf(key));
-                }
-            }
-
-//            /**
-//             * If same label/nodes exists in multiple layers then node should
-//             * only be allowed to primary layer
-//             */
-//            Set<Node> valueset = new HashSet<>();
-            for (Node node : nodes) {
-                if (edgeNodes.contains(node)) {
-                } else {
-                    node.setAttribute(newColumn, "mviz_outlier_nodes");
-                }
-
-                Object key = node.getAttribute(newColumn);
-                if (classes.containsKey(key)) {
-                    Integer value = classes.get(key);
-                    classes.replace(key, value, 1 + value);
-                } else {
-                    classes.put(key, 1);
-                }
-            }
-
-            partitionFilter = new NodePartitionFilter(appearanceModel.getNodePartition(newColumn));
-            //JOptionPane.showMessageDialog(null,"Pending Implementation, may not work properly ", "Warning", JOptionPane.WARNING_MESSAGE);
         }
 
         if (partitionFilter != null) {
 
             if (sortLayers) {
-                classes = sortByValue(classes);
+                classes = VizUtils.sortByValue(classes);
             }
 
             VizUtils.nodesRandom(nodes);
-
+            
             if ("ForceD".equals(getAlgorithmType())) {
                 if (!isSplitAsLevel()) {
                     Node farthestNode = null;
                     for (Object layer : classes.keySet()) {
                         Pair pair = getSubset(partitionFilter, filterController, layer);
                         Node[] subset = (Node[]) pair.getNodes();
-                        if (subset.length > 0) {
+                        if (subset != null && subset.length > 0) {
                             Node biggestNode = (Node) pair.getBiggestNode();
                             drawForceDirectedLayouts(graphModel);
                             splitLayer(subset, farthestNode, biggestNode);
@@ -197,9 +195,11 @@ public class MultiLayerVisualization implements Layout {
                     for (Object layer : classes.keySet()) {
                         Pair pair = getSubset(partitionFilter, filterController, layer);
                         Node[] subset = (Node[]) pair.getNodes();
-                        splitLayer(subset, farthestNode, (Node) pair.getBiggestNode());
-                        farthestNode = Arrays.stream(subset).max(Comparator.comparing(v -> v.y())).get();
-                        graphModel.setVisibleView(null);
+                        if(subset != null) {
+                            splitLayer(subset, farthestNode, (Node) pair.getBiggestNode());
+                            farthestNode = Arrays.stream(subset).max(Comparator.comparing(v -> v.y())).get();
+                            graphModel.setVisibleView(null);
+                        }
                     }
                 }
             } else {
@@ -209,7 +209,7 @@ public class MultiLayerVisualization implements Layout {
                 for (Object layer : classes.keySet()) {
                     Pair pair = getSubset(partitionFilter, filterController, layer);
                     Node[] subset = (Node[]) pair.getNodes();
-                    if (subset.length > 0) {
+                    if (subset != null && subset.length > 0) {
                         Node biggestNode = (Node) pair.getBiggestNode();
                         if (iter == 0) {
                             initialNode = subset[0];
@@ -573,15 +573,19 @@ public class MultiLayerVisualization implements Layout {
     }
 
     private Pair<GraphModel, Node[], Node> getSubset(PartitionFilter partitionFilter, FilterController filterController, Object value) {
-        partitionFilter.unselectAll();
-        partitionFilter.addPart(value);
-        graphModel.setVisibleView(filterController.filter(filterController.createQuery(partitionFilter)));
-        Node[] subset = graphModel.getGraphVisible().getNodes().toArray();
-        Node biggestNode = null;
-        if (subset.length > 0) {
-            biggestNode = Arrays.stream(subset).max(Comparator.comparing(node -> node.size())).orElse(subset[0]);
+        try {
+            partitionFilter.unselectAll();
+            partitionFilter.addPart(value);
+            graphModel.setVisibleView(filterController.filter(filterController.createQuery(partitionFilter)));
+            Node[] subset = graphModel.getGraphVisible().getNodes().toArray();
+            Node biggestNode = null;
+            if (subset.length > 0) {
+                biggestNode = Arrays.stream(subset).max(Comparator.comparing(node -> node.size())).orElse(subset[0]);
+            }
+            return new Pair(graphModel, subset, biggestNode);
+        } catch(Exception e) {
+            return new Pair(graphModel, null, null);        
         }
-        return new Pair(graphModel, subset, biggestNode);
     }
 
     private void splitLayer(Node[] subset, Node farthestNode, Node biggestNode) {
