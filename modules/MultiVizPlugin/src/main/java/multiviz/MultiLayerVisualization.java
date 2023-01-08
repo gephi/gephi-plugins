@@ -1,59 +1,68 @@
 package multiviz;
 
-import algorithms.BasicLayout;
-import algorithms.force.ForceAtlas2Layout;
-import algorithms.force.ForceAtlasLayout;
-import algorithms.force.FruchtermanReingoldLayout;
 import helpers.CustomComboBoxEditor;
 import helpers.LayoutDropDowns;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
 import helpers.VizUtils;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.stream.Collectors;
-import static java.util.stream.Collectors.toList;
 import org.gephi.graph.api.Column;
-import org.gephi.graph.api.Edge;
 import org.gephi.graph.api.Graph;
 import org.gephi.graph.api.GraphModel;
-import org.gephi.graph.api.Interval;
 import org.gephi.graph.api.Node;
-import org.gephi.graph.api.Table;
 import org.gephi.layout.spi.Layout;
 import org.gephi.layout.spi.LayoutBuilder;
 import org.gephi.layout.spi.LayoutProperty;
 
+import org.gephi.filters.api.FilterController;
+import org.gephi.filters.plugin.partition.PartitionBuilder.NodePartitionFilter;
+import org.openide.util.Lookup;
+import org.gephi.appearance.api.AppearanceController;
+import org.gephi.appearance.api.AppearanceModel;
+import org.gephi.filters.plugin.partition.PartitionBuilder.PartitionFilter;
+import org.gephi.graph.api.Edge;
+import org.gephi.layout.plugin.force.StepDisplacement;
+import org.gephi.layout.plugin.force.yifanHu.YifanHuLayout;
+import org.gephi.layout.plugin.forceAtlas2.ForceAtlas2;
+import org.gephi.layout.plugin.fruchterman.FruchtermanReingold;
+import org.gephi.layout.plugin.random.RandomLayout;
+
 /**
  *
- * @author Jaymohan
+ * @author J
  */
+
 public class MultiLayerVisualization implements Layout {
-    
+
     private final LayoutBuilder builder;
     private GraphModel graphModel;
     private boolean executing = false;
-    
+
     private int layerDistance;
     private int noOfIterations;
-    
-    private String selectedColumn= "Node Label";
+
+    private String selectedColumn = "Node Label";
     private String layoutAlgorithm;
-    
+
     private boolean horizontalLayout;
     private boolean is3DLayout;
     private boolean sortLayers = false;
 
-    private int layerArea;
+    private float layerArea;
     private double gravity;
-    private float speed;
+    private double speed;
     private boolean splitAsLevel;
     public static List<String> selectableColumns = new ArrayList<>();
-    
+
+    private Column label;
     Graph graph;
-    
+    HashMap<Object, Integer> classes;
+    private String algorithmType = "BasicL";
+
     MultiLayerVisualization(MLVBuilder mBuilder) {
         this.builder = mBuilder;
     }
@@ -76,146 +85,166 @@ public class MultiLayerVisualization implements Layout {
         }
     }
 
+    public static HashMap<Object, Integer> sortByValue(HashMap<Object, Integer> hm) {
+        return hm.entrySet().stream().sorted((e1, e2) -> Integer.compare(e2.getValue(), e1.getValue())).collect(Collectors.toMap(HashMap.Entry::getKey, HashMap.Entry::getValue, (e1, e2) -> e1, LinkedHashMap::new));
+    }
+
     @Override
     public void goAlgo() {
-        if (graphModel == null) return;
-        
+
+        if (graphModel == null) {
+            return;
+        }
         graph = graphModel.getGraphVisible();
-        graph.readLock();
-        
-        HashMap<String, List<Node>> layers = new HashMap<>();
-        List<Node> nodes = graph.getNodes().toCollection().stream().collect(toList());
-        List<Edge> edges = graph.getEdges().toCollection().stream().collect(toList());
-        
-        Table selectedTable;
-        Column label;
-        
-        // case1 :layer disjoint
-        // case2 :node aligned
-        if(selectedColumn.startsWith("Node ")){
-            
-            selectedTable = graph.getModel().getNodeTable();
-            
-            //remove word 'Edge / Node ' from selected layer
-            label = VizUtils.getLabel(selectedTable, selectedColumn.substring(5));
-            
+
+        Node[] nodes = graph.getNodes().toArray();
+        Edge[] edges = graph.getEdges().toArray();
+
+        label = graphModel.getNodeTable().getColumn(0);
+
+        FilterController filterController = Lookup.getDefault().lookup(FilterController.class);
+        AppearanceModel appearanceModel = Lookup.getDefault().lookup(AppearanceController.class).getModel();
+        NodePartitionFilter partitionFilter = null;
+
+        classes = new HashMap<>();
+        if (selectedColumn.startsWith("Node ")) {
+            label = VizUtils.getLabel(graph.getModel().getNodeTable(), selectedColumn.substring(5));
             for (Node node : nodes) {
-                String key = VizUtils.getLabel(node, label);
-                List<Node> values = layers.get(key);
-                if (values == null) values = new ArrayList<>();
-                values.add(node);
-                layers.put(key, values);
-            }
-            
-        } else if(selectedColumn.startsWith("Edge ")) {
-            
-            selectedTable = graph.getModel().getEdgeTable();
-            label = VizUtils.getLabel(selectedTable, selectedColumn.substring(5));
-
-            /**
-             * get nodes without any edges/connections*
-             */
-            List<Node> edgeSourceNodes = edges.stream().map(v -> v.getTarget()).distinct().collect(Collectors.toList());
-            List<Node> edgeTargetNodes = edges.stream().map(v -> v.getSource()).distinct().collect(Collectors.toList());
-            List<Node> outliers = new ArrayList<>();
-
-            nodes.forEach(node -> {
-                if (edgeSourceNodes.contains(node) || edgeTargetNodes.contains(node)) {
+                Object key = node.getAttribute(label);
+                if (classes.containsKey(key)) {
+                    Integer value = classes.get(key);
+                    classes.replace(key, value, 1 + value);
                 } else {
-                    outliers.add(node);
+                    classes.put(key, 1);
                 }
-            });
+            }
+            partitionFilter = new NodePartitionFilter(appearanceModel.getNodePartition(label));
+        } else if (selectedColumn.startsWith("Edge ")) {
 
-            /**
-             * If same label/nodes exists in multiple layers then node should
-             * only be allowed to primary layer
-             */
-            Set<Node> valueList = new HashSet<>();
+            Column newColumn = VizUtils.getLabel(graph.getModel().getNodeTable(), "mviz_edge_" + selectedColumn.substring(5));
+            label = VizUtils.getLabel(graph.getModel().getEdgeTable(), selectedColumn.substring(5));
 
-            edges.forEach(edge -> {
-                String key = VizUtils.getLabel(edge, label);
-                List<Node> value = layers.get(key);
-                if (value == null) {
-                    value = new ArrayList<>();
-                }
-                if (!value.contains(edge.getSource())) {
-            
-                    if(!valueList.contains(edge.getSource())){
-                        value.add(edge.getSource());
-                    }
-                    valueList.add(edge.getSource());
-                }
-                if (!value.contains(edge.getTarget())) {
-                    
-                    if(!valueList.contains(edge.getTarget())){
-                        value.add(edge.getTarget());
-                    }
-                    valueList.add(edge.getTarget());
-                }
-                layers.put(key, value);
-            });
-
-            if (!outliers.isEmpty()) {
-                layers.put("outliers", outliers);
+            if (newColumn == null) {
+                newColumn = graphModel.getNodeTable().addColumn("mviz_edge_" + label.getTitle(), String.class);
             }
 
-            for (List<Node> layer : layers.values()) {
-                Collections.sort(layer, (Node o1, Node o2) -> {
-                    if (o1.getLabel() != null) {
-                        try {
-                            return (o1.getLabel()).compareTo(o2.getLabel());
-                        } catch (NumberFormatException e) {
-                            return Integer.compare(o1.getStoreId(), o2.getStoreId());
-                        }
-                    } else {
-                        return Integer.compare(o1.getStoreId(), o2.getStoreId());
-                    }
-                });
+            List<Node> edgeNodes = new ArrayList<>();
+            for (Edge edge : edges) {
+
+                Object key = edge.getAttribute(label);
+
+                if (edgeNodes.contains(edge.getSource())) {
+                } else {
+                    edgeNodes.add(edge.getSource());
+                    edge.getSource().setAttribute(newColumn, String.valueOf(key));
+                }
+                if (edgeNodes.contains(edge.getTarget())) {
+                } else {
+                    edgeNodes.add(edge.getTarget());
+                    edge.getTarget().setAttribute(newColumn, String.valueOf(key));
+                }
             }
-        } else return;
-        
-        String initialLayer = layers.keySet().stream().findFirst().get();
-        Node initialNode = layers.get(initialLayer).get(0);
-        
-        boolean isDynamicWeight = graphModel.getEdgeTable().getColumn("weight").isDynamic();
-        Interval interval = graph.getView().getTimeInterval();
-        
-        switch (layoutAlgorithm) {
-            case "Linear Layout":
-            case "Grid Layout":
-            case "Circle Layout":
-            case "Random Layout":
-                new BasicLayout(getLayerDistance(), layers, initialLayer, initialNode, sortLayers, layoutAlgorithm).start();
-                break;
-            case "ForceAtlas":
-                //AbstractLayout.ensureSafeLayoutNodePositions(graphModel);
-                VizUtils.nodesRandom(nodes);
-                new ForceAtlasLayout(getLayerDistance(), layers, initialLayer, initialNode, sortLayers, splitAsLevel, getGravity(), getSpeed(), isDynamicWeight, interval, nodes, edges, graph, getNoOfIterations()).start();
-                break;
-            case "ForceAtlas2":
-                VizUtils.nodesRandom(nodes);
-                //AbstractLayout.ensureSafeLayoutNodePositions(graphModel);
-                new ForceAtlas2Layout(getLayerDistance(), layers, initialLayer, initialNode, splitAsLevel, sortLayers, getNoOfIterations(), getArea(), getSpeed(), getGravity(), isDynamicWeight, interval, nodes, edges, graph, graphModel).start();
-                break;
-            case "Fruchterman Reingold":
-                VizUtils.nodesRandom(nodes);
-                new FruchtermanReingoldLayout(getNoOfIterations(), getLayerDistance(), edges, getArea(), getGravity(), getSpeed(), layers, initialLayer, initialNode, sortLayers, splitAsLevel, nodes).start();
-                break;
-            default:
-                endAlgo();
-        }
-        
-        if(is3DLayout()){
+
+//            /**
+//             * If same label/nodes exists in multiple layers then node should
+//             * only be allowed to primary layer
+//             */
+//            Set<Node> valueset = new HashSet<>();
             for (Node node : nodes) {
-                double theta = 65 * Math.PI / 180;
-                //if(isHorizontalLayout()){
+                if (edgeNodes.contains(node)) {
+                } else {
+                    node.setAttribute(newColumn, "mviz_outlier_nodes");
+                }
+
+                Object key = node.getAttribute(newColumn);
+                if (classes.containsKey(key)) {
+                    Integer value = classes.get(key);
+                    classes.replace(key, value, 1 + value);
+                } else {
+                    classes.put(key, 1);
+                }
+            }
+
+            partitionFilter = new NodePartitionFilter(appearanceModel.getNodePartition(newColumn));
+            //JOptionPane.showMessageDialog(null,"Pending Implementation, may not work properly ", "Warning", JOptionPane.WARNING_MESSAGE);
+        }
+
+        if (partitionFilter != null) {
+
+            if (sortLayers) {
+                classes = sortByValue(classes);
+            }
+
+            VizUtils.nodesRandom(nodes);
+
+            if ("ForceD".equals(getAlgorithmType())) {
+                if (!isSplitAsLevel()) {
+                    Node farthestNode = null;
+                    for (Object layer : classes.keySet()) {
+                        Pair pair = getSubset(partitionFilter, filterController, layer);
+                        Node[] subset = (Node[]) pair.getNodes();
+                        if (subset.length > 0) {
+                            Node biggestNode = (Node) pair.getBiggestNode();
+                            drawForceDirectedLayouts(graphModel);
+                            splitLayer(subset, farthestNode, biggestNode);
+                            farthestNode = Arrays.stream(subset).max(Comparator.comparing(v -> v.y())).get();
+                        }
+                    }
+                    graphModel.setVisibleView(null);
+                } else {
+                    drawForceDirectedLayouts(graphModel);
+                    Node farthestNode = null;
+                    for (Object layer : classes.keySet()) {
+                        Pair pair = getSubset(partitionFilter, filterController, layer);
+                        Node[] subset = (Node[]) pair.getNodes();
+                        splitLayer(subset, farthestNode, (Node) pair.getBiggestNode());
+                        farthestNode = Arrays.stream(subset).max(Comparator.comparing(v -> v.y())).get();
+                        graphModel.setVisibleView(null);
+                    }
+                }
+            } else {
+                Node initialNode = nodes[0];
+                Node farthestNode = null;
+                int iter = 0;
+                for (Object layer : classes.keySet()) {
+                    Pair pair = getSubset(partitionFilter, filterController, layer);
+                    Node[] subset = (Node[]) pair.getNodes();
+                    if (subset.length > 0) {
+                        Node biggestNode = (Node) pair.getBiggestNode();
+                        if (iter == 0) {
+                            initialNode = subset[0];
+                        }
+                        if ("Linear Layout".equals(getLayoutAlgorithm())) {
+                            linearLayout(subset, initialNode);
+                        } else if ("Grid Layout".equals(getLayoutAlgorithm())) {
+                            gridLayout(subset, biggestNode, initialNode);
+                        } else if ("Circle Layout".equals(getLayoutAlgorithm())) {
+                            circleLayout(subset, initialNode);
+                        } else if ("Random Layout".equals(getLayoutAlgorithm())) {
+                            randomLayout(graphModel, subset, biggestNode);
+                        }
+                        splitLayer(subset, farthestNode, biggestNode);
+                        farthestNode = Arrays.stream(subset).max(Comparator.comparing(v -> v.y())).get();
+                    }
+                    iter += 1;
+                }
+                graphModel.setVisibleView(null);
+            }
+        } else {
+        }
+
+        graph.readLock();
+        if (is3DLayout()) {
+            for (Node node : nodes) {
+                if (!node.isFixed()) {
+                    double theta = 65 * Math.PI / 180;
                     node.setY((float) (node.y() * Math.cos(theta) - node.z() * Math.sin(theta)));
-                //}
-                node.setZ((float) (Math.random() * 0.01));
+                    node.setZ((float) (Math.random() * 0.01));
+                }
             }
         }
-        
-        if(isHorizontalLayout()){
+
+        if (isHorizontalLayout()) {
             double theta = 270 * Math.PI / 180;
             float px = 0;
             float py = 0;
@@ -228,8 +257,7 @@ public class MultiLayerVisualization implements Layout {
                 }
             }
         }
-        
-        graph.readUnlock();       
+        graph.readUnlock();
         endAlgo();
     }
 
@@ -256,12 +284,11 @@ public class MultiLayerVisualization implements Layout {
         List<LayoutProperty> properties = new ArrayList<>();
         final String BASIC = "Basic Features";
         final String FORCED = "Force Directed Features";
-        
-        try{
+        try {
             properties.add(LayoutProperty.createProperty(this, Integer.class, "Iterations", FORCED, "Number of iterations", "getNoOfIterations", "setNoOfIterations"));
-            properties.add(LayoutProperty.createProperty(this, Integer.class, "Set Area", FORCED, "Set area for a layer", "getArea", "setArea"));
+            properties.add(LayoutProperty.createProperty(this, Float.class, "Set Area", FORCED, "Set area for a layer", "getArea", "setArea"));
             properties.add(LayoutProperty.createProperty(this, Boolean.class, "Split by level", FORCED, "If selected, Layout Algorithm will be applied on the whole network before splitting in to layers, If not Algorithm will be applied on each layer.", "isSplitAsLevel", "setSplitAsLevel"));
-            properties.add(LayoutProperty.createProperty(this, Float.class, "Set Speed", FORCED, "Set Speed", "getSpeed", "setSpeed"));
+            properties.add(LayoutProperty.createProperty(this, Double.class, "Set Speed", FORCED, "Set Speed", "getSpeed", "setSpeed"));
             properties.add(LayoutProperty.createProperty(this, Double.class, "Set Gravity", FORCED, "Set gravity to prevent nodes going off the screen in force directed layouts", "getGravity", "setGravity"));
             properties.add(LayoutProperty.createProperty(this, Boolean.class, "Horizontal Layout", BASIC, "If selected, layers will be placed next to each other, instad of stacking top of one another", "isHorizontalLayout", "setHorizontalLayout"));
             properties.add(LayoutProperty.createProperty(this, Boolean.class, "Set as 3D", BASIC, "Set nodes in 3 Dimension", "is3DLayout", "set3DLayout"));
@@ -269,23 +296,23 @@ public class MultiLayerVisualization implements Layout {
             properties.add(LayoutProperty.createProperty(this, Integer.class, "Layer Distance", BASIC, "Distance between two layers", "getLayerDistance", "setLayerDistance"));
             properties.add(LayoutProperty.createProperty(this, String.class, "Select Layer", BASIC, "Select the feature which is to be considered as a layer", "getSelectedColumn", "setSelectedColumn", CustomComboBoxEditor.class));
             properties.add(LayoutProperty.createProperty(this, String.class, "Layout Algorithm", BASIC, "Select the layout algorithm which is to be applied to a layer", "getLayoutAlgorithm", "setLayoutAlgorithm", LayoutDropDowns.class));
-        } catch(NoSuchMethodException e) {
+        } catch (NoSuchMethodException e) {
             e.printStackTrace();
         }
-        
+
         return properties.toArray(LayoutProperty[]::new);
     }
 
     @Override
     public void resetPropertiesValues() {
-            layerDistance = 400;
-            gravity = 10d;
-            layerArea = 10000;
-            noOfIterations = 100;
-            horizontalLayout = false;
-            is3DLayout = false;
-            splitAsLevel = false;
-            speed = 1f;
+        layerDistance = 400;
+        gravity = 10d;
+        layerArea = 10000f;
+        noOfIterations = 100;
+        horizontalLayout = false;
+        is3DLayout = false;
+        splitAsLevel = false;
+        speed = 1.0;
     }
 
     @Override
@@ -323,6 +350,11 @@ public class MultiLayerVisualization implements Layout {
 
     public void setLayoutAlgorithm(String layoutAlgorithm) {
         this.layoutAlgorithm = layoutAlgorithm;
+        if (!"ForceAtlas2".equals(layoutAlgorithm) && !"Fruchterman Reingold".equals(layoutAlgorithm) && !"Yifan Hu".equals(layoutAlgorithm)) {
+            setAlgorithmType("BasicL");
+        } else {
+            setAlgorithmType("ForceD");
+        }
     }
 
     public Boolean isHorizontalLayout() {
@@ -341,11 +373,11 @@ public class MultiLayerVisualization implements Layout {
         this.is3DLayout = is3DLayout;
     }
 
-    public Integer getArea() {
+    public Float getArea() {
         return layerArea;
     }
 
-    public void setArea(Integer layerArea) {
+    public void setArea(Float layerArea) {
         this.layerArea = layerArea;
     }
 
@@ -357,11 +389,11 @@ public class MultiLayerVisualization implements Layout {
         this.gravity = gravity;
     }
 
-    public Float getSpeed() {
+    public Double getSpeed() {
         return speed;
     }
 
-    public void setSpeed(Float speed) {
+    public void setSpeed(Double speed) {
         this.speed = speed;
     }
 
@@ -372,12 +404,193 @@ public class MultiLayerVisualization implements Layout {
     public void setSplitAsLevel(Boolean splitAsLevel) {
         this.splitAsLevel = splitAsLevel;
     }
-    
+
     public Boolean isSorted() {
         return sortLayers;
     }
 
     public void setSorted(Boolean sortLayers) {
         this.sortLayers = sortLayers;
+    }
+
+    public String getAlgorithmType() {
+        return algorithmType;
+    }
+
+    public void setAlgorithmType(String algorithmType) {
+        this.algorithmType = algorithmType;
+    }
+
+    private void linearLayout(Node[] subset, Node initialNode) {
+        double distancex = 0;
+        int index = 0;
+        for (Node node : subset) {
+            if (index > 0) {
+                distancex += subset[index - 1].size() + (node.size() * 2) + (node.getTextProperties().getWidth() + 20);
+                double ry = Math.random() * ((subset[index - 1].size() + subset[index - 1].getTextProperties().getHeight() + node.size() + node.getTextProperties().getSize()) - 1 + 1) + 1;
+                node.setX(initialNode.x() + (float) distancex);
+                node.setY(node.y() + (float) ry);
+            }
+            index++;
+        }
+    }
+
+    private void gridLayout(Node[] subset, Node biggestNode, Node initialNode) {
+        int rows = (int) Math.round(Math.sqrt(subset.length)) + 1;
+        int cols = (int) Math.round(Math.sqrt(subset.length)) + 1;
+        double layerSize = ((biggestNode.size() + biggestNode.getTextProperties().getSize()) * subset.length) * 1.2f;
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < cols && (i * rows + j) < subset.length; j++) {
+                Node node = subset[i * rows + j];
+                double nx = (-layerSize / 2f) + ((float) j / cols) * layerSize;
+                double ny = (layerSize / 2f) - ((float) i / rows) * layerSize;
+                double tx = nx;
+                double ty = (initialNode.y() + (initialNode.y() + (ny - initialNode.y())));
+                if (i == 0 && j == 0) {
+                    tx = ((initialNode.x() + (nx - initialNode.x())) + (0));
+                } else {
+                    tx = ((initialNode.x() + (nx - initialNode.x())) + (10 * j));
+                }
+                node.setX((float) tx);
+                node.setY((float) ty);
+                node.setZ(initialNode.z());
+            }
+        }
+    }
+
+    private void circleLayout(Node[] subset, Node initialNode) {
+        if (subset.length == 1) {
+            subset[0].setX(initialNode.x());
+            subset[0].setY(initialNode.y());
+            subset[0].setZ(initialNode.z());
+        } else {
+            double circumference = 0;
+            for (Node node : subset) {
+                circumference += (node.size() * 2) + node.getTextProperties().getWidth();
+            }
+            circumference = circumference * 1.2f;
+
+            double diameter = circumference / Math.PI;
+            double theta = (2 * Math.PI) / circumference;
+
+            double tempTheta = 0;
+            double nodeSize = 0;
+
+            for (Node node : subset) {
+                if (!node.isFixed()) {
+                    nodeSize = node.size() + node.getTextProperties().getWidth() / 2;
+                    double arc = nodeSize * 1.2f * theta;
+                    float dx = (float) (diameter * (Math.cos((tempTheta + arc) + (Math.PI / 2))));
+                    float dy = (float) (diameter * (Math.sin((tempTheta + arc) + (Math.PI / 2))));
+                    tempTheta += nodeSize * 2 * theta * 1.2f;
+                    node.setX(initialNode.x() + dx);
+                    node.setY(initialNode.y() + dy);
+                    node.setZ(initialNode.z());
+                }
+            }
+        }
+    }
+
+    private void randomLayout(GraphModel graphModel, Node[] subset, Node biggestNode) {
+        float layerSpace = (biggestNode.size() + biggestNode.getTextProperties().getSize()) * subset.length;
+        var randomLayout = new RandomLayout(builder, layerSpace);
+        randomLayout.setGraphModel(graphModel);
+        randomLayout.initAlgo();
+        randomLayout.goAlgo();
+        randomLayout.endAlgo();
+    }
+
+    private void forceAtlas2(GraphModel graphModel) {
+        var forceAtlas2 = new ForceAtlas2(null);
+        forceAtlas2.setGraphModel(graphModel);
+        forceAtlas2.setJitterTolerance(1.0);
+        forceAtlas2.setBarnesHutOptimize(true);
+        forceAtlas2.setBarnesHutTheta(1.2);
+        forceAtlas2.setOutboundAttractionDistribution(true);
+        //forceAtlas2.setThreadsCount(1); //1 to 7
+        forceAtlas2.setGravity(gravity);
+        forceAtlas2.setAdjustSizes(true);
+        forceAtlas2.initAlgo();
+        for (int i = 0; i < getNoOfIterations(); i++) {
+            forceAtlas2.goAlgo();
+        }
+    }
+
+    private void fruchterman(GraphModel graphModel) {
+        var fruchtermanReingold = new FruchtermanReingold(getBuilder());
+        fruchtermanReingold.setGraphModel(graphModel);
+        fruchtermanReingold.setArea(getArea());
+        fruchtermanReingold.setGravity(getGravity());
+        fruchtermanReingold.setSpeed(getSpeed());
+        fruchtermanReingold.initAlgo();
+        for (int i = 0; i < getNoOfIterations(); i++) {
+            fruchtermanReingold.goAlgo();
+        }
+    }
+
+    private void yifanHuNormal(GraphModel graphModel) {
+        var yifanHu = new YifanHuLayout(getBuilder(), new StepDisplacement(1f));
+        yifanHu.setGraphModel(graphModel);
+        yifanHu.initAlgo();
+        for (int i = 0; i < getNoOfIterations(); i++) {
+            yifanHu.goAlgo();
+        }
+    }
+
+    private void drawForceDirectedLayouts(GraphModel graphModel) {
+        if ("ForceAtlas2".equals(getLayoutAlgorithm())) {
+            forceAtlas2(graphModel);
+        } else if ("Fruchterman Reingold".equals(getLayoutAlgorithm())) {
+            fruchterman(graphModel);
+        } else if ("Yifan Hu".equals(getLayoutAlgorithm())) {
+            yifanHuNormal(graphModel);
+        }
+    }
+
+    class Pair<U, V, W> {
+
+        private U mGraphModel;
+        private V mNodes;
+        private W mBiggestNode;
+
+        public Pair(U mGraphModel, V mNodes, W mBiggestNode) {
+            this.mGraphModel = mGraphModel;
+            this.mNodes = mNodes;
+            this.mBiggestNode = mBiggestNode;
+        }
+
+        public W getBiggestNode() {
+            return mBiggestNode;
+        }
+
+        public U getGraphModel() {
+            return mGraphModel;
+        }
+
+        public V getNodes() {
+            return mNodes;
+        }
+    }
+
+    private Pair<GraphModel, Node[], Node> getSubset(PartitionFilter partitionFilter, FilterController filterController, Object value) {
+        partitionFilter.unselectAll();
+        partitionFilter.addPart(value);
+        graphModel.setVisibleView(filterController.filter(filterController.createQuery(partitionFilter)));
+        Node[] subset = graphModel.getGraphVisible().getNodes().toArray();
+        Node biggestNode = null;
+        if (subset.length > 0) {
+            biggestNode = Arrays.stream(subset).max(Comparator.comparing(node -> node.size())).orElse(subset[0]);
+        }
+        return new Pair(graphModel, subset, biggestNode);
+    }
+
+    private void splitLayer(Node[] subset, Node farthestNode, Node biggestNode) {
+        for (Node node : subset) {
+            float y = node.y();
+            if (farthestNode != null) {
+                y = y + (farthestNode.y() + farthestNode.size() + farthestNode.getTextProperties().getHeight()) + getLayerDistance() + biggestNode.size();
+            }
+            node.setY(y);
+        }
     }
 }
