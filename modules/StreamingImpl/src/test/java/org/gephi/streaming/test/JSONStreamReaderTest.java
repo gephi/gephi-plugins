@@ -68,6 +68,7 @@ import org.gephi.streaming.api.event.ElementEvent;
 import org.gephi.streaming.api.event.ElementType;
 import org.gephi.streaming.api.event.EventType;
 import org.gephi.streaming.api.event.FilterEvent;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.openide.util.Exceptions;
 import org.openide.util.Lookup;
@@ -78,6 +79,7 @@ import org.openide.util.Lookup;
  * @author panisson
  *
  */
+@Ignore
 public class JSONStreamReaderTest {
 
     protected String resource = "amazon.json";

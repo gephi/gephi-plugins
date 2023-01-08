@@ -4,12 +4,12 @@
     <parent>
         <artifactId>gephi-plugin-parent</artifactId>
         <groupId>org.gephi</groupId>
-        <version>0.9.1</version>
+        <version>0.10.0</version>
     </parent>
 
     <groupId>org.gephi</groupId>
     <artifactId>streaming-server</artifactId>
-    <version>1.0.3</version>
+    <version>1.0.4</version>
     <packaging>nbm</packaging>
 
     <name>StreamingServer</name>
@@ -58,7 +58,7 @@
     <build>
         <plugins>
             <plugin>
-                <groupId>org.codehaus.mojo</groupId>
+                <groupId>org.apache.netbeans.utilities</groupId>
                 <artifactId>nbm-maven-plugin</artifactId>
                 <configuration>
                     <author>Andre Panisson</author>
