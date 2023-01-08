@@ -32,7 +32,7 @@ public abstract class LayoutAlgorithmProperty extends PropertyEditorSupport{
     private String selectedAlgorithm = "Linear Layout";
     
     protected LayoutAlgorithmProperty(){
-        this.listOfAlgorithms = new String[]{"Circle Layout", "Grid Layout", "Linear Layout", "Random Layout", "ForceAtlas", "ForceAtlas2", "Fruchterman Reingold"};
+        this.listOfAlgorithms = new String[]{"Circle Layout", "Grid Layout", "Linear Layout", "Random Layout", "ForceAtlas2", "Fruchterman Reingold", "Yifan Hu"};
     }
 
     
