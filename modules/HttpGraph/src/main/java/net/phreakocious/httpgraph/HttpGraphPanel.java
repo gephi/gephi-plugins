@@ -2,10 +2,10 @@ package net.phreakocious.httpgraph;
 
 import java.awt.Desktop;
 import java.net.URL;
-import org.netbeans.validation.api.builtin.Validators;
-import org.netbeans.validation.api.ui.ValidationGroup;
-import org.netbeans.validation.api.ui.ValidationPanel;
 import javax.swing.JPanel;
+import org.netbeans.validation.api.builtin.stringvalidation.StringValidators;
+import org.netbeans.validation.api.ui.ValidationGroup;
+import org.netbeans.validation.api.ui.swing.ValidationPanel;
 import org.openide.util.Exceptions;
 
 
@@ -32,13 +32,13 @@ public class HttpGraphPanel extends JPanel {
 
         ValidationGroup group = validationPanel.getValidationGroup();
 
-        group.add(innerPanel.portField, Validators.REQUIRE_NON_EMPTY_STRING,
-                Validators.REQUIRE_VALID_INTEGER,
-                Validators.numberRange(1, 65535));
+        group.add(innerPanel.portField, StringValidators.REQUIRE_NON_EMPTY_STRING,
+            StringValidators.REQUIRE_VALID_INTEGER,
+            StringValidators.numberRange(1, 65535));
 
-        group.add(innerPanel.restField, Validators.REQUIRE_NON_EMPTY_STRING,
-                Validators.REQUIRE_VALID_INTEGER,
-                Validators.numberRange(1, 65535));
+        group.add(innerPanel.restField, StringValidators.REQUIRE_NON_EMPTY_STRING,
+            StringValidators.REQUIRE_VALID_INTEGER,
+            StringValidators.numberRange(1, 65535));
 
         return validationPanel;
     }
