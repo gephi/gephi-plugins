@@ -17,9 +17,10 @@ public class PositionTransformerTest {
 
     @Test
     public void testTransform() {
-        Graph graph = GraphGenerator.build().withProject().generateTinyGraph().addIntNodeColumn().getGraph();
+        GraphGenerator graphGenerator = GraphGenerator.build().generateTinyGraph().addIntNodeColumn();
+        Graph graph = graphGenerator.getGraph();
         AppearanceController appearanceController = Lookup.getDefault().lookup(AppearanceController.class);
-        AppearanceModel model = appearanceController.getModel();
+        AppearanceModel model = appearanceController.getModel(graphGenerator.getWorkspace());
 
         Function[] functions = model.getNodeFunctions();
         Optional<Function> function = Arrays.stream(functions).filter(f -> f.getTransformer() instanceof PositionTransformer).findFirst();
@@ -46,9 +47,9 @@ public class PositionTransformerTest {
 
     @Test
     public void testTransformerUI() {
-        GraphGenerator.build().withProject();
+        GraphGenerator graphGenerator = GraphGenerator.build();
         AppearanceController appearanceController = Lookup.getDefault().lookup(AppearanceController.class);
-        AppearanceModel model = appearanceController.getModel();
+        AppearanceModel model = appearanceController.getModel(graphGenerator.getWorkspace());
 
         Function[] functions = model.getNodeFunctions();
         Optional<Function> function = Arrays.stream(functions).filter(f -> f.getTransformer() instanceof PositionTransformer).findFirst();
