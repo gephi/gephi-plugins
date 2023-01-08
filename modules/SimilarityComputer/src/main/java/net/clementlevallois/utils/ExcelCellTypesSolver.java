@@ -5,6 +5,7 @@
 package net.clementlevallois.utils;
 
 import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.ss.usermodel.DateUtil;
 
 /**
@@ -20,20 +21,20 @@ public class ExcelCellTypesSolver {
 
         switch (cell.getCellType()) {
 
-            case Cell.CELL_TYPE_STRING:
+            case STRING:
                 return cell.getRichStringCellValue().getString();
 
-            case Cell.CELL_TYPE_NUMERIC:
+            case NUMERIC:
                 if (DateUtil.isCellDateFormatted(cell)) {
                     return String.valueOf(cell.getDateCellValue());
                 } else {
                     return String.valueOf(cell.getNumericCellValue());
                 }
 
-            case Cell.CELL_TYPE_BOOLEAN:
+            case BOOLEAN:
                 return String.valueOf(cell.getBooleanCellValue());
 
-            case Cell.CELL_TYPE_FORMULA:
+            case FORMULA:
                 return String.valueOf(cell.getCellFormula());
 
             default:
@@ -48,11 +49,11 @@ public class ExcelCellTypesSolver {
      * @return {@code true} if the {@link XSSFCell} is empty. {@code false} otherwise.
      */
     private static boolean isCellEmpty(Cell cell) {
-        if (cell == null || cell.getCellType() == Cell.CELL_TYPE_BLANK) {
+        if (cell == null || cell.getCellType() == CellType.BLANK) {
             return true;
         }
 
-        if (cell.getCellType() == Cell.CELL_TYPE_STRING && cell.getStringCellValue().isEmpty()) {
+        if (cell.getCellType() == CellType.STRING && cell.getStringCellValue().isEmpty()) {
             return true;
         }
 
