@@ -6,16 +6,12 @@
 package org.gephi.plugins.prestige.util;
 
 import java.util.Iterator;
+import org.gephi.graph.GraphGenerator;
 import org.gephi.graph.api.DirectedGraph;
 import org.gephi.graph.api.Edge;
 import org.gephi.graph.api.Graph;
-import org.gephi.graph.api.GraphController;
 import org.gephi.graph.api.GraphModel;
 import org.gephi.graph.api.Node;
-import org.gephi.project.api.Workspace;
-import org.gephi.project.impl.ProjectImpl;
-import org.gephi.workspace.impl.WorkspaceImpl;
-import org.openide.util.Lookup;
 
 /**
  * Generates several networks for testing
@@ -115,8 +111,6 @@ public final class GraphGeneratorUtil {
     * Helper classes
      */
     private static GraphModel createGraphModel() {
-        Workspace ws = new WorkspaceImpl(new ProjectImpl("sample"), 1);
-        Lookup.getDefault().lookup(GraphController.class).getGraphModel(ws);
-        return Lookup.getDefault().lookup(GraphController.class).getGraphModel(ws);
+        return GraphGenerator.build().getGraphModel();
     }
 }
