@@ -9,7 +9,7 @@
 
     <groupId>org.gephi</groupId>
     <artifactId>desktop-streaming</artifactId>
-    <version>1.0.3</version>
+    <version>1.0.4</version>
     <packaging>nbm</packaging>
 
     <name>DesktopStreaming</name>
@@ -72,11 +72,14 @@
       <groupId>org.gephi</groupId>
       <artifactId>ui-utils</artifactId>
     </dependency>
-    
+    <dependency>
+        <groupId>org.gephi</groupId>
+        <artifactId>ui-library-wrapper</artifactId>
+    </dependency>
     <dependency> 
         <groupId>org.gephi</groupId>
-    <artifactId>streaming-api</artifactId>
-    <version>${project.version}</version>
+        <artifactId>streaming-api</artifactId>
+        <version>${project.version}</version>
     </dependency>
     <dependency>
         <groupId>org.gephi</groupId>

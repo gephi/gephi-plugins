@@ -42,9 +42,9 @@ Portions Copyrighted 2011 Gephi Consortium.
 package org.gephi.desktop.streaming;
 
 import org.gephi.streaming.server.StreamingServerConfig;
-import org.netbeans.validation.api.builtin.Validators;
 import org.netbeans.validation.api.ui.ValidationGroup;
-import org.netbeans.validation.api.ui.ValidationPanel;
+import org.netbeans.validation.api.ui.swing.ValidationPanel;
+import org.netbeans.validation.api.builtin.stringvalidation.StringValidators;
 
 /**
  * A JPanel implementation used to change the Streaming Settings.
@@ -69,8 +69,8 @@ public class StreamingSettingsPanel extends javax.swing.JPanel {
         validationPanel.setInnerComponent(innerPanel);
 
         ValidationGroup group = validationPanel.getValidationGroup();
-        group.add(innerPanel.portTextField, Validators.REQUIRE_VALID_INTEGER);
-        group.add(innerPanel.sslPortTextField, Validators.REQUIRE_VALID_INTEGER);
+        group.add(innerPanel.portTextField, StringValidators.REQUIRE_VALID_INTEGER);
+        group.add(innerPanel.sslPortTextField, StringValidators.REQUIRE_VALID_INTEGER);
 
         return validationPanel;
      }

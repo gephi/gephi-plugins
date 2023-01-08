@@ -49,9 +49,9 @@ import javax.swing.ComboBoxModel;
 import javax.swing.DefaultComboBoxModel;
 import org.gephi.streaming.api.StreamingEndpoint;
 import org.gephi.streaming.api.StreamType;
-import org.netbeans.validation.api.builtin.Validators;
+import org.netbeans.validation.api.ui.swing.ValidationPanel;
+import org.netbeans.validation.api.builtin.stringvalidation.StringValidators;
 import org.netbeans.validation.api.ui.ValidationGroup;
-import org.netbeans.validation.api.ui.ValidationPanel;
 import org.openide.util.Exceptions;
 import org.openide.util.Lookup;
 
@@ -118,8 +118,8 @@ public class StreamingClientPanel extends javax.swing.JPanel {
         validationPanel.setInnerComponent(innerPanel);
 
         ValidationGroup group = validationPanel.getValidationGroup();
-        group.add(innerPanel.streamUrlTextField, Validators.REQUIRE_NON_EMPTY_STRING);
-        group.add(innerPanel.streamUrlTextField, Validators.URL_MUST_BE_VALID);
+        group.add(innerPanel.streamUrlTextField, StringValidators.REQUIRE_NON_EMPTY_STRING);
+        group.add(innerPanel.streamUrlTextField, StringValidators.URL_MUST_BE_VALID);
 
         return validationPanel;
      }
