@@ -1,10 +1,8 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package helpers;
 
-import java.util.Comparator;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.stream.Collectors;
 import javax.swing.JOptionPane;
 import org.gephi.graph.api.Column;
 import org.gephi.graph.api.Edge;
@@ -16,6 +14,10 @@ import org.gephi.graph.api.Table;
  * @author J
  */
 public class VizUtils {
+
+    public static HashMap<Object, Integer> sortByValue(HashMap<Object, Integer> hm) {
+        return hm.entrySet().stream().sorted((e1, e2) -> Integer.compare(e2.getValue(), e1.getValue())).collect(Collectors.toMap(HashMap.Entry::getKey, HashMap.Entry::getValue, (e1, e2) -> e1, LinkedHashMap::new));
+    }
 
     public static String getLabel(Node node, Column column) {
         return node.getAttribute(column).toString();
