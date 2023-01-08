@@ -11,11 +11,12 @@ import javax.swing.SwingUtilities;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import org.gephi.desktop.io.export.spi.ExporterClassUI;
+import org.gephi.lib.validation.DialogDescriptorWithValidation;
 import org.gephi.utils.longtask.api.LongTaskErrorHandler;
 import org.gephi.utils.longtask.api.LongTaskExecutor;
 import org.gephi.utils.longtask.api.LongTaskListener;
 import org.gephi.utils.longtask.spi.LongTask;
-import org.netbeans.validation.api.ui.ValidationPanel;
+import org.netbeans.validation.api.ui.swing.ValidationPanel;
 import org.openide.DialogDescriptor;
 import org.openide.DialogDisplayer;
 import org.openide.NotifyDescriptor;
@@ -92,16 +93,8 @@ public class WebSiteExporterUI implements ExporterClassUI {
         ValidationPanel validationPanel =
                 WebSiteSettingsPanel.createValidationPanel(wsPanelSettings);
 
-        final DialogDescriptor dialogDescriptor =
-                new DialogDescriptor(validationPanel, getMessage("WebSiteExporterUI.dialogdescriptor.description"));
-
-        validationPanel.addChangeListener(new ChangeListener() {
-
-            @Override
-            public void stateChanged(ChangeEvent e) {
-                dialogDescriptor.setValid(!((ValidationPanel) e.getSource()).isProblem());
-            }
-        });
+        final DialogDescriptor dialogDescriptor = DialogDescriptorWithValidation.dialog(validationPanel,
+            getMessage("WebSiteExporterUI.dialogdescriptor.description"));
         Object result = DialogDisplayer.getDefault().notify(dialogDescriptor);
         if (result == NotifyDescriptor.OK_OPTION) {
             wsPanelSettings.unsetup(true);
