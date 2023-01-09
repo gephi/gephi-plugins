@@ -9,7 +9,7 @@
 
     <groupId>net.clementlevallois</groupId>
     <artifactId>web-publish-plugin</artifactId>
-    <version>1.0.0</version>
+    <version>1.0.1</version>
     <packaging>nbm</packaging>
 
     <name>Web Publish Plugin</name>
@@ -48,10 +48,6 @@
         <dependency>
             <groupId>org.netbeans.api</groupId>
             <artifactId>org-openide-util</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.gephi</groupId>
-            <artifactId>utils-longtask</artifactId>
         </dependency>
         <dependency>
             <groupId>org.gephi</groupId>

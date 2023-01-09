@@ -29,6 +29,7 @@ public final class WebPublishExporterUI implements ExporterClassUI {
 
     @Override
     public void action() {
+        System.out.println("test this is a new line");
         String initialValue = bundle.getString("general.verb.close_window");
         String[] options = new String[]{initialValue};
         WebExportJPanel jPanelWebExport = new WebExportJPanel();

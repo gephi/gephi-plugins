@@ -18,6 +18,7 @@ import java.net.http.HttpResponse;
 import java.nio.charset.StandardCharsets;
 import java.util.ResourceBundle;
 import java.util.UUID;
+import net.clementlevallois.web.publish.plugin.controller.GlobalConfigParams;
 import net.clementlevallois.web.publish.plugin.controller.WebPublishExporterUI;
 import static net.clementlevallois.web.publish.plugin.controller.GlobalConfigParams.*;
 import net.clementlevallois.web.publish.plugin.exceptions.PublishToGistException;
@@ -192,6 +193,7 @@ public class PublishRunnable implements LongTask, Runnable {
                 .uri(URI.create(url))
                 .header("accept", "application/vnd.github+json")
                 .header("Authorization", "Bearer " + access_token)
+                .header("X-GitHub-Api-Version", GlobalConfigParams.GITHUB_API_VERSION)
                 .POST(HttpRequest.BodyPublishers.ofString(bodyToString))
                 .build();
 

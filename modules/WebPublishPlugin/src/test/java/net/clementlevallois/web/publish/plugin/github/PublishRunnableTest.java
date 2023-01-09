@@ -16,13 +16,13 @@ public class PublishRunnableTest {
 
     @Test (expected = EmptyGraphException.class)
     public void testEmptyGraph() throws IOException {
-        GraphGenerator graphGenerator = GraphGenerator.build().withWorkspace();
+        GraphGenerator graphGenerator = GraphGenerator.build();
         PublishRunnable.getGexfAsStringFromWorkspace(graphGenerator.getWorkspace());
     }
 
     @Test
     public void testSuccess() throws IOException {
-        GraphGenerator graphGenerator = GraphGenerator.build().withWorkspace().generateTinyGraph();
+        GraphGenerator graphGenerator = GraphGenerator.build().generateTinyGraph();
         String result = PublishRunnable.getGexfAsStringFromWorkspace(graphGenerator.getWorkspace());
         Assert.assertNotNull(result);
     }
