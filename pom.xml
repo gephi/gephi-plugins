@@ -32,7 +32,7 @@
         <module>modules/Export-To-Earth</module>
         <module>modules/MapOfCountries</module>
         <module>modules/ScriptingPlugin</module>
-<!--        <module>modules/TwitterStreamingImporterV2</module>-->
+        <module>modules/TwitterStreamingImporterV2</module>
         <module>modules/IsometricLayout</module>
         <module>modules/NetworkSplitter3D</module>
         <module>modules/ExcelCsvImporter</module>
