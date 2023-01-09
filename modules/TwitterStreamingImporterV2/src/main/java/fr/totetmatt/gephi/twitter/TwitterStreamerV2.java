@@ -17,8 +17,8 @@ import fr.totetmatt.gephi.twitter.utils.TwitterApiFields;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
-import org.gephi.desktop.project.api.ProjectControllerUI;
 import org.gephi.project.api.Project;
+import org.gephi.project.api.ProjectController;
 import org.openide.util.Exceptions;
 import org.openide.util.Lookup;
 import org.openide.util.NbPreferences;
@@ -34,7 +34,7 @@ public final class TwitterStreamerV2 {
     private List<Rule> rules;
     private Networklogic currentNetworkLogic = null;
     private void initProjectAndWorkspace() {
-        ProjectControllerUI  projectController = Lookup.getDefault().lookup(ProjectControllerUI.class);
+        ProjectController  projectController = Lookup.getDefault().lookup(ProjectController.class);
         Project currentProject = projectController.getCurrentProject();
         if (currentProject == null) {
             projectController.newProject();
