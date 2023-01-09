@@ -60,9 +60,9 @@
         <module>modules/polinodeExporter</module>
         <module>modules/LeidenAlgorithm</module>
         <module>modules/BridgingPlugin</module>
-        <module>modules/BoundingDiametersSuite</module>
-        <module>modules/BoundingDiameters</module>
-        <module>modules/BoundingDiametersUI</module>
+<!--        <module>modules/BoundingDiametersSuite</module>-->
+<!--        <module>modules/BoundingDiameters</module>-->
+<!--        <module>modules/BoundingDiametersUI</module>-->
         <module>modules/dbscan</module>
         <module>modules/ClusteringCoefficient</module>
         <module>modules/KleinbergGenerator</module>
