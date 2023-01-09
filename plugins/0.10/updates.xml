@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
 <!DOCTYPE module_updates PUBLIC "-//NetBeans//DTD Autoupdate Catalog 2.8//EN" "https://netbeans.apache.org/dtds/autoupdate-catalog-2_8.dtd">
-<module_updates timestamp="35/46/08/09/01/2023">
+<module_updates timestamp="55/32/19/09/01/2023">
 
 
 
@@ -372,6 +372,14 @@
         
 
     <message_digest algorithm="SHA-512" value="77250bfc93b6bafd4e0bce5edf11bdbd3d637ed6c8f061a99dfa5f918828327c496fe944c17c8ab8c5b7608b55696e4eb4e8899bc615f5f7cc80f12646e735b9"/>
+</module>
+
+<module codenamebase="fr.totetmatt.twitter.v2" distribution="twitter-v2-2.0.5.nbm" downloadsize="9629345" homepage="http://github.com/gephi/gephi-plugins/twitter-v2" license="E9F38623" moduleauthor="totetmatt" needsrestart="true" releasedate="2023/01/09" targetcluster="plugins">
+        
+    <manifest OpenIDE-Module="fr.totetmatt.twitter.v2" OpenIDE-Module-Display-Category="Import" OpenIDE-Module-Implementation-Version="2.0.5" OpenIDE-Module-Long-Description="&lt;p&gt;This plugin connects to the Twitter Streaming API and represents tweets as graph in realtime.&lt;/p&gt;" OpenIDE-Module-Module-Dependencies="org.openide.awt &gt; 7.86, org.openide.windows &gt; 6.95, org.netbeans.modules.settings/1 &gt; 1.67, org.openide.util.lookup &gt; 8.52, org.openide.util &gt; 9.26, org.gephi.graph.api &gt; 0.10.0, org.gephi.project.api &gt; 0.10.0, org.gephi.desktop.project &gt; 0.10.0, org.gephi.utils.longtask &gt; 0.10.0" OpenIDE-Module-Name="Twitter Streaming Importer V2" OpenIDE-Module-Requires="org.openide.modules.ModuleFormat1" OpenIDE-Module-Short-Description="Realtime Twitter Graph Importer" OpenIDE-Module-Specification-Version="2.0.5"/>
+        
+
+    <message_digest algorithm="SHA-512" value="da988c5b87d748999dce99af35c487db397ba1694e58b550a8919be2e27a57e02fca2374e01876e10342857955158d443f4bf8a84df0651bd233261c80b82235"/>
 </module>
 
 <module codenamebase="personable.solutions.vector.calculator" distribution="vector-calculator-0.5.0.nbm" downloadsize="15985" homepage="http://github.com/gephi/gephi-plugins/vector-calculator" moduleauthor="Jonas Persson" needsrestart="true" releasedate="2023/01/09" targetcluster="plugins">

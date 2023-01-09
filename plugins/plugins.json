@@ -3726,13 +3726,18 @@
         }
       ],
       "category": "Import",
-      "last_update": "December 3, 2022",
+      "last_update": "January 9, 2023",
       "images": null,
       "versions": {
         "0.9.6": {
           "url": "0.9/twitter-v2-2.0.4.nbm",
           "last_update": "December 3, 2022",
           "plugin_version": "2.0.4"
+        },
+        "0.10.0": {
+          "url": "0.10/twitter-v2-2.0.5.nbm",
+          "last_update": "January 9, 2023",
+          "plugin_version": "2.0.5"
         }
       },
       "sourcecode": "https://github.com/totetmatt/gephi-plugins.git",
