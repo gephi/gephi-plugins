@@ -50,6 +50,11 @@ public class PositionTransformerUI implements TransformerUI {
         public Icon getIcon() {
             return ImageUtilities.loadImageIcon("org/gephi/plugins/positionranking/xyz.png", false);
         }
+
+        @Override
+        public String getId() {
+            return "POSITION";
+        }
     };
 
     @Override
