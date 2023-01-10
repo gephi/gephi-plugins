@@ -3914,7 +3914,7 @@
         }
       ],
       "category": "Import",
-      "last_update": "September 8, 2022",
+      "last_update": "January 10, 2023",
       "images": [
         {
           "image": "imgs/neo4j-plugin/neo4j-logo.png",
@@ -3931,9 +3931,14 @@
           "url": "0.9/neo4j-plugin-4.0.0.nbm",
           "last_update": "September 8, 2022",
           "plugin_version": "4.0.0"
+        },
+        "0.10.0": {
+          "url": "0.10/neo4j-plugin-4.0.1.nbm",
+          "last_update": "January 10, 2023",
+          "plugin_version": "4.0.1"
         }
       },
-      "sourcecode": "https://github.com/gephi/gephi-plugins/tree/neo4j-bolt-plugin",
+      "sourcecode": "https://github.com/gephi/gephi-plugins",
       "homepage": null
     },
     {

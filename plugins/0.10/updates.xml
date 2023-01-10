@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
 <!DOCTYPE module_updates PUBLIC "-//NetBeans//DTD Autoupdate Catalog 2.8//EN" "https://netbeans.apache.org/dtds/autoupdate-catalog-2_8.dtd">
-<module_updates timestamp="55/32/19/09/01/2023">
+<module_updates timestamp="32/50/20/10/01/2023">
 
 
 
@@ -275,6 +275,14 @@
         
 
     <message_digest algorithm="SHA-512" value="c0bae64ec4f290de974ae1e42fcb56253a5ab26adea28fa7afcd905a15b4c8f306df76ffa160a0bfda99ead1d2822071d25355ba835b1a859badcf4291a7d5b1"/>
+</module>
+
+<module codenamebase="ouestware.neo4j.plugin" distribution="neo4j-plugin-4.0.1.nbm" downloadsize="6355346" homepage="http://github.com/gephi/gephi-plugins/neo4j-plugin" license="864AC530" moduleauthor="Benoit Simard" needsrestart="true" releasedate="2023/01/10" targetcluster="plugins">
+        
+    <manifest OpenIDE-Module="ouestware.neo4j.plugin" OpenIDE-Module-Display-Category="Import" OpenIDE-Module-Implementation-Version="4.0.1" OpenIDE-Module-Long-Description="Helps you to import Neo4j data in Gephi by selecting nodes &amp; relationships types, or by defining two cypher queries, one for nodes and the other for edges" OpenIDE-Module-Module-Dependencies="org.openide.dialogs &gt; 7.64, org.openide.awt &gt; 7.86, org.gephi.core.library.wrapper &gt; 0.10.0, org.openide.util.lookup &gt; 8.52, org.gephi.graph.api &gt; 0.10.0, org.openide.io &gt; 1.67, org.openide.util &gt; 9.26, org.openide.util.ui &gt; 9.26, org.gephi.io.importer.api &gt; 0.10.0, org.gephi.project.api &gt; 0.10.0, org.gephi.utils.longtask &gt; 0.10.0, org.netbeans.api.annotations.common/1 &gt; 1.46" OpenIDE-Module-Name="Neo4j plugin" OpenIDE-Module-Requires="org.openide.modules.ModuleFormat1" OpenIDE-Module-Short-Description="Import Neo4j data in gephi" OpenIDE-Module-Specification-Version="4.0.1"/>
+        
+
+    <message_digest algorithm="SHA-512" value="f6965ab23d992ca0c23ebc1acff43b5975c34e51d158955a67fdbca48ef6a5f7cb7d88ca2eb83e58ed35122aa19e7fd83d07eac1b43d29c4e0bc9768352097e7"/>
 </module>
 
 <module codenamebase="org.alexandrebarao.network.splitter.3d" distribution="network-splitter-3d-1.0.0.nbm" downloadsize="24902" homepage="http://github.com/gephi/gephi-plugins/network-splitter-3d" license="671322F0" moduleauthor="Alexandre Barão" needsrestart="true" releasedate="2023/01/09" targetcluster="plugins">
