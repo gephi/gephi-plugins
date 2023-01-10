@@ -11,7 +11,7 @@
     <groupId>ouestware</groupId>
     <artifactId>neo4j-plugin</artifactId>
     <name>Neo4j Plugin</name>
-    <version>4.0.0</version>
+    <version>4.0.1</version>
     <packaging>nbm</packaging>
 
     <properties>
@@ -108,6 +108,7 @@
                 <groupId>org.apache.netbeans.utilities</groupId>
                 <artifactId>nbm-maven-plugin</artifactId>
                 <configuration>
+                    <verifyRuntime>skip</verifyRuntime>
                     <licenseName>Apache 2.0</licenseName>
                     <licenseFile>Apache v2.txt</licenseFile>
                     <author>Benoit Simard</author>

@@ -24,12 +24,12 @@ public class Neo4jDatabaseImporterConnectionPanel extends javax.swing.JPanel {
     public void checkValidity() throws Exception {
         // Check inputs
         if (Utils.isEmptyOrNull(dbUrl.getText())) throw new Exception("Url field is mandatory");
-        if (this.dbAuthType.getSelectedIndex() == 0 && (Utils.isEmptyOrNull(dbUsername.getText()) || Utils.isEmptyOrNull(dbPassword.getText())))
+        if (this.dbAuthType.getSelectedIndex() == 0 && (Utils.isEmptyOrNull(dbUsername.getText()) || Utils.isEmptyOrNull(new String(dbPassword.getPassword()))))
             throw new Exception("Username and password are mandatory");
 
         // Check connection
         if (this.dbAuthType.getSelectedIndex() == 0)
-            Utils.neo4jCheckConnection(dbUrl.getText(), dbUsername.getText(), dbPassword.getText(), dbName.getText());
+            Utils.neo4jCheckConnection(dbUrl.getText(), dbUsername.getText(), new String(dbPassword.getPassword()), dbName.getText());
         else
             Utils.neo4jCheckConnection(dbUrl.getText(), null, null, dbName.getText());
 
