@@ -12,7 +12,6 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -34,16 +33,17 @@ import org.gephi.io.importer.plugin.file.ImporterGEXF;
 import org.gephi.io.importer.spi.FileImporter;
 import org.gephi.io.processor.plugin.DefaultProcessor;
 import org.gephi.project.api.ProjectController;
+import org.gephi.project.api.Workspace;
 import org.openide.util.Lookup;
 
 /**
  *
  * @author LEVALLOIS
  */
-public class NetworkImporter {
+public class TopTermExtractor {
 
     public static void main(String args[]) throws IOException, Exception {
-        new NetworkImporter().importFromFile();
+        new TopTermExtractor().importFromFile();
     }
 
     public void importFromFile() throws IOException, Exception {
@@ -73,14 +73,25 @@ public class NetworkImporter {
         processor.setContainers(new ContainerUnloader[]{container.getUnloader()});
         processor.process();
 
-        GraphModel gm = graphController.getGraphModel();
+    }
+
+    public String mineAndSortTextualAttribute(String attributeName, String lang, int maxNumberOfTerms) throws IOException {
+
+        //Init a project - and therefore a workspace
+        ProjectController pc = Lookup.getDefault().lookup(ProjectController.class);
+        if (pc.getCurrentProject() == null) {
+            System.out.println("a project should be open");
+        }
+
+        Workspace workspace = pc.getCurrentWorkspace();
+        GraphModel gm = Lookup.getDefault().lookup(GraphController.class).getGraphModel(workspace);
 
         Graph graph = gm.getGraph();
 
         System.out.println("number of edges:" + graph.getEdgeCount());
         System.out.println("number of nodes:" + graph.getNodeCount());
 
-        Column descriptionAttribute = gm.getNodeTable().getColumn("description");
+        Column attributeToBeAnalyzed = gm.getNodeTable().getColumn(attributeName);
 
         NodeIterable nodes = graph.getNodes();
 
@@ -89,7 +100,7 @@ public class NetworkImporter {
         Iterator<Node> iteratorOnNodes = nodes.iterator();
         while (iteratorOnNodes.hasNext()) {
             Node node = iteratorOnNodes.next();
-            String descriptionForOneNode = (String) node.getAttribute(descriptionAttribute);
+            String descriptionForOneNode = (String) node.getAttribute(attributeToBeAnalyzed);
             if (descriptionForOneNode != null && !descriptionForOneNode.isBlank()) {
                 descriptions.add(descriptionForOneNode);
             }
@@ -110,18 +121,16 @@ public class NetworkImporter {
 
          */
         StopWordsRemover stopWordsRemoverEN = new StopWordsRemover(3, "en");
-        StopWordsRemover stopWordsRemoverES = new StopWordsRemover(3, "es");
+        StopWordsRemover stopWordsRemoverSECONDLANGUAGE = new StopWordsRemover(3, lang);
 
         for (String description : descriptions) {
             List<TextFragment> textFragmentsForOneDescription = UmigonTokenizer.tokenize(description, languageSpecificLexicon);
             for (TextFragment oneTextFragment : textFragmentsForOneDescription) {
-                if (
-                        oneTextFragment.getTypeOfTextFragmentEnum() != TypeOfTextFragmentEnum.WHITE_SPACE
+                if (oneTextFragment.getTypeOfTextFragmentEnum() != TypeOfTextFragmentEnum.WHITE_SPACE
                         & oneTextFragment.getTypeOfTextFragmentEnum() != TypeOfTextFragmentEnum.PUNCTUATION
                         & !stopWordsRemoverEN.shouldItBeRemoved(oneTextFragment.getOriginalForm())
-                        & !stopWordsRemoverES.shouldItBeRemoved(oneTextFragment.getOriginalForm())
-                        & oneTextFragment.getOriginalForm().length() > 4
-                        ) {
+                        & !stopWordsRemoverSECONDLANGUAGE.shouldItBeRemoved(oneTextFragment.getOriginalForm())
+                        & oneTextFragment.getOriginalForm().length() > 4) {
                     textFragments.addOne(oneTextFragment.getOriginalForm());
                 }
             }
@@ -131,12 +140,15 @@ public class NetworkImporter {
         List<Map.Entry<String, Integer>> multisetRankedFromTopFrequency = textFragments.sortDesc(textFragments);
 
         int i = 0;
+        StringBuilder sb = new StringBuilder();
         for (Map.Entry<String, Integer> tf : multisetRankedFromTopFrequency) {
+            sb.append(tf.getKey()).append(" (").append(tf.getValue()).append(")").append("\n");
             System.out.println("top term: " + tf.getKey() + " (appearing " + tf.getValue() + " times).");
-            if (i++ > 10) {
+            if (i++ > maxNumberOfTerms) {
                 break;
             }
         }
+        return sb.toString();
 
     }
 

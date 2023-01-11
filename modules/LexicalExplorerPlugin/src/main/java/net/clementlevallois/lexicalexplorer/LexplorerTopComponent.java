@@ -9,6 +9,7 @@ import java.util.ResourceBundle;
 import org.netbeans.api.settings.ConvertAsProperties;
 import org.openide.awt.ActionID;
 import org.openide.awt.ActionReference;
+import org.openide.util.Exceptions;
 import org.openide.util.NbBundle;
 import org.openide.windows.TopComponent;
 
@@ -33,6 +34,8 @@ import org.openide.windows.TopComponent;
 )
 
 public final class LexplorerTopComponent extends TopComponent {
+    
+    private static final long serialVersionUID = 305983503930l;
 
     private static final ResourceBundle bundle = NbBundle.getBundle(LexplorerTopComponent.class);
 
@@ -40,7 +43,6 @@ public final class LexplorerTopComponent extends TopComponent {
         initComponents();
         setName(bundle.getString("expression.top_panel.title"));
         setToolTipText(bundle.getString("expression.top_panel.tooltip"));
-        new NetworkImporter().importFromFile();
     }
 
     /**
@@ -51,30 +53,53 @@ public final class LexplorerTopComponent extends TopComponent {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jLabel1 = new javax.swing.JLabel();
+        placeHolderForTopTerms = new javax.swing.JLabel();
+        runButton = new javax.swing.JButton();
 
-        org.openide.awt.Mnemonics.setLocalizedText(jLabel1, org.openide.util.NbBundle.getMessage(LexplorerTopComponent.class, "LexplorerTopComponent.jLabel1.text")); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(placeHolderForTopTerms, org.openide.util.NbBundle.getMessage(LexplorerTopComponent.class, "LexplorerTopComponent.placeHolderForTopTerms.text")); // NOI18N
+
+        org.openide.awt.Mnemonics.setLocalizedText(runButton, org.openide.util.NbBundle.getMessage(LexplorerTopComponent.class, "LexplorerTopComponent.runButton.text")); // NOI18N
+        runButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                runButtonActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(62, 62, 62)
-                .addComponent(jLabel1)
-                .addContainerGap(181, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(34, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(placeHolderForTopTerms, javax.swing.GroupLayout.PREFERRED_SIZE, 337, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(runButton))
+                .addGap(29, 29, 29))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(58, 58, 58)
-                .addComponent(jLabel1)
-                .addContainerGap(226, Short.MAX_VALUE))
+                .addContainerGap()
+                .addComponent(runButton)
+                .addGap(29, 29, 29)
+                .addComponent(placeHolderForTopTerms, javax.swing.GroupLayout.PREFERRED_SIZE, 204, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(38, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
+    private void runButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_runButtonActionPerformed
+        try {
+            TopTermExtractor topTermExtractor = new TopTermExtractor();
+            String topTermsAsString = topTermExtractor.mineAndSortTextualAttribute("description", "en", 10);
+            placeHolderForTopTerms.setText(topTermsAsString);
+        } catch (IOException ex) {
+            Exceptions.printStackTrace(ex);
+        }
+    }//GEN-LAST:event_runButtonActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel placeHolderForTopTerms;
+    private javax.swing.JButton runButton;
     // End of variables declaration//GEN-END:variables
     @Override
     public void componentOpened() {
