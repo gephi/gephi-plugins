@@ -6,6 +6,9 @@ package net.clementlevallois.lexicalexplorer;
 
 import java.io.IOException;
 import java.util.ResourceBundle;
+import javax.swing.DefaultListModel;
+import javax.swing.ListSelectionModel;
+import org.gephi.graph.api.GraphModel;
 import org.netbeans.api.settings.ConvertAsProperties;
 import org.openide.awt.ActionID;
 import org.openide.awt.ActionReference;
@@ -34,7 +37,9 @@ import org.openide.windows.TopComponent;
 )
 
 public final class LexplorerTopComponent extends TopComponent {
-    
+
+    private GraphModel gm;
+
     private static final long serialVersionUID = 305983503930l;
 
     private static final ResourceBundle bundle = NbBundle.getBundle(LexplorerTopComponent.class);
@@ -43,6 +48,23 @@ public final class LexplorerTopComponent extends TopComponent {
         initComponents();
         setName(bundle.getString("expression.top_panel.title"));
         setToolTipText(bundle.getString("expression.top_panel.tooltip"));
+
+        // initializing the graph
+        gm = GraphOperations.graphInitFromCurrentlyOpendProject();
+        DefaultListModel<String> listModelOfNodeAttributes;
+
+        // loading the names of nodes attributes
+        if (gm == null) {
+            listModelOfNodeAttributes = new DefaultListModel();
+        } else {
+            listModelOfNodeAttributes = GraphOperations.returnTextualNodeAttributesAsListOfNames(gm);
+        }
+        jListOfNodeAttributes.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        jListOfNodeAttributes.setModel(listModelOfNodeAttributes);
+
+        // setting the default value of the top terms to display
+        jSpinnerNumberTopTerms.setValue(10);
+
     }
 
     /**
@@ -55,6 +77,12 @@ public final class LexplorerTopComponent extends TopComponent {
 
         placeHolderForTopTerms = new javax.swing.JLabel();
         runButton = new javax.swing.JButton();
+        jInternalFrame1 = new javax.swing.JInternalFrame();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jListOfNodeAttributes = new javax.swing.JList<>();
+        javax.swing.JButton jButtonRefreshNodeAttributes = new javax.swing.JButton();
+        jInternalFrame2 = new javax.swing.JInternalFrame();
+        jSpinnerNumberTopTerms = new javax.swing.JSpinner();
 
         org.openide.awt.Mnemonics.setLocalizedText(placeHolderForTopTerms, org.openide.util.NbBundle.getMessage(LexplorerTopComponent.class, "LexplorerTopComponent.placeHolderForTopTerms.text")); // NOI18N
 
@@ -65,39 +93,137 @@ public final class LexplorerTopComponent extends TopComponent {
             }
         });
 
+        jInternalFrame1.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        jInternalFrame1.setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
+        jInternalFrame1.setTitle(org.openide.util.NbBundle.getMessage(LexplorerTopComponent.class, "LexplorerTopComponent.jInternalFrame1.title")); // NOI18N
+        jInternalFrame1.setVisible(true);
+
+        jListOfNodeAttributes.setModel(new javax.swing.AbstractListModel<String>() {
+            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
+            public int getSize() { return strings.length; }
+            public String getElementAt(int i) { return strings[i]; }
+        });
+        jScrollPane1.setViewportView(jListOfNodeAttributes);
+
+        org.openide.awt.Mnemonics.setLocalizedText(jButtonRefreshNodeAttributes, org.openide.util.NbBundle.getMessage(LexplorerTopComponent.class, "LexplorerTopComponent.jButtonRefreshNodeAttributes.text")); // NOI18N
+        jButtonRefreshNodeAttributes.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonRefreshNodeAttributesActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jInternalFrame1Layout = new javax.swing.GroupLayout(jInternalFrame1.getContentPane());
+        jInternalFrame1.getContentPane().setLayout(jInternalFrame1Layout);
+        jInternalFrame1Layout.setHorizontalGroup(
+            jInternalFrame1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jInternalFrame1Layout.createSequentialGroup()
+                .addGap(24, 24, 24)
+                .addGroup(jInternalFrame1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jButtonRefreshNodeAttributes)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 137, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(43, Short.MAX_VALUE))
+        );
+        jInternalFrame1Layout.setVerticalGroup(
+            jInternalFrame1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jInternalFrame1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jButtonRefreshNodeAttributes)
+                .addContainerGap(9, Short.MAX_VALUE))
+        );
+
+        jInternalFrame2.setTitle(org.openide.util.NbBundle.getMessage(LexplorerTopComponent.class, "LexplorerTopComponent.jInternalFrame2.title")); // NOI18N
+        jInternalFrame2.setVisible(true);
+
+        javax.swing.GroupLayout jInternalFrame2Layout = new javax.swing.GroupLayout(jInternalFrame2.getContentPane());
+        jInternalFrame2.getContentPane().setLayout(jInternalFrame2Layout);
+        jInternalFrame2Layout.setHorizontalGroup(
+            jInternalFrame2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jInternalFrame2Layout.createSequentialGroup()
+                .addGap(67, 67, 67)
+                .addComponent(jSpinnerNumberTopTerms, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(78, Short.MAX_VALUE))
+        );
+        jInternalFrame2Layout.setVerticalGroup(
+            jInternalFrame2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jInternalFrame2Layout.createSequentialGroup()
+                .addGap(23, 23, 23)
+                .addComponent(jSpinnerNumberTopTerms, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(34, Short.MAX_VALUE))
+        );
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(34, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(placeHolderForTopTerms, javax.swing.GroupLayout.PREFERRED_SIZE, 337, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(runButton))
-                .addGap(29, 29, 29))
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(placeHolderForTopTerms, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGap(38, 38, 38))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jInternalFrame1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jInternalFrame2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(runButton)
+                        .addGap(0, 0, Short.MAX_VALUE))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(runButton)
-                .addGap(29, 29, 29)
-                .addComponent(placeHolderForTopTerms, javax.swing.GroupLayout.PREFERRED_SIZE, 204, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(38, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(runButton)
+                    .addComponent(jInternalFrame2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jInternalFrame1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addComponent(placeHolderForTopTerms, javax.swing.GroupLayout.PREFERRED_SIZE, 176, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(95, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
     private void runButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_runButtonActionPerformed
         try {
             TopTermExtractor topTermExtractor = new TopTermExtractor();
-            String topTermsAsString = topTermExtractor.mineAndSortTextualAttribute("description", "en", 10);
+            String selectedColumnId = jListOfNodeAttributes.getSelectedValue();
+            if (selectedColumnId == null || selectedColumnId.isEmpty()) {
+                System.out.println("no attribute selected. Please choose one");
+                return;
+            }
+            Integer nbTopTermsToDisplay = (Integer) jSpinnerNumberTopTerms.getValue();
+            String topTermsAsString = topTermExtractor.mineAndSortTextualAttribute(gm, selectedColumnId, "en", nbTopTermsToDisplay);
             placeHolderForTopTerms.setText(topTermsAsString);
         } catch (IOException ex) {
             Exceptions.printStackTrace(ex);
         }
     }//GEN-LAST:event_runButtonActionPerformed
 
+    private void jButtonRefreshNodeAttributesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonRefreshNodeAttributesActionPerformed
+        // loading the names of nodes attributes
+        DefaultListModel<String> listModelOfNodeAttributes;
+        if (gm == null) {
+            gm = GraphOperations.graphInitFromCurrentlyOpendProject();
+
+        }
+        if (gm == null) {
+            listModelOfNodeAttributes = new DefaultListModel();
+        } else {
+            listModelOfNodeAttributes = GraphOperations.returnTextualNodeAttributesAsListOfNames(gm);
+        }
+        jListOfNodeAttributes.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        jListOfNodeAttributes.setModel(listModelOfNodeAttributes);
+
+    }//GEN-LAST:event_jButtonRefreshNodeAttributesActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JInternalFrame jInternalFrame1;
+    private javax.swing.JInternalFrame jInternalFrame2;
+    private javax.swing.JList<String> jListOfNodeAttributes;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JSpinner jSpinnerNumberTopTerms;
     private javax.swing.JLabel placeHolderForTopTerms;
     private javax.swing.JButton runButton;
     // End of variables declaration//GEN-END:variables

@@ -75,39 +75,35 @@ public class TopTermExtractor {
 
     }
 
-    public String mineAndSortTextualAttribute(String attributeName, String lang, int maxNumberOfTerms) throws IOException {
-
-        //Init a project - and therefore a workspace
-        ProjectController pc = Lookup.getDefault().lookup(ProjectController.class);
-        if (pc.getCurrentProject() == null) {
-            System.out.println("a project should be open");
-        }
-
-        Workspace workspace = pc.getCurrentWorkspace();
-        GraphModel gm = Lookup.getDefault().lookup(GraphController.class).getGraphModel(workspace);
-
+    public String mineAndSortTextualAttribute(GraphModel gm, String attributeName, String lang, int maxNumberOfTerms) throws IOException {
+        
         Graph graph = gm.getGraph();
-
+        
         System.out.println("number of edges:" + graph.getEdgeCount());
         System.out.println("number of nodes:" + graph.getNodeCount());
 
+        // selecting the column corresponding to the attribute we want to analyze
         Column attributeToBeAnalyzed = gm.getNodeTable().getColumn(attributeName);
 
+        // we will iterate / loop on the nodes of the graph
         NodeIterable nodes = graph.getNodes();
 
-        List<String> descriptions = new ArrayList();
+        // we will store the text of the attribute for each node in a list
+        List<String> textsFromTheAttribute = new ArrayList();
 
+        // doing the iteration now
         Iterator<Node> iteratorOnNodes = nodes.iterator();
         while (iteratorOnNodes.hasNext()) {
             Node node = iteratorOnNodes.next();
             String descriptionForOneNode = (String) node.getAttribute(attributeToBeAnalyzed);
             if (descriptionForOneNode != null && !descriptionForOneNode.isBlank()) {
-                descriptions.add(descriptionForOneNode);
+                textsFromTheAttribute.add(descriptionForOneNode);
             }
         }
 
-        System.out.println("number of nodes that have a description: " + descriptions.size());
+        System.out.println("number of nodes that have a description: " + textsFromTheAttribute.size());
 
+        // the multiset will store unique terms from the text we collected and count how many times each term appears
         Multiset<String> textFragments = new Multiset();
         Set<String> languageSpecificLexicon = new HashSet();
 
@@ -123,7 +119,7 @@ public class TopTermExtractor {
         StopWordsRemover stopWordsRemoverEN = new StopWordsRemover(3, "en");
         StopWordsRemover stopWordsRemoverSECONDLANGUAGE = new StopWordsRemover(3, lang);
 
-        for (String description : descriptions) {
+        for (String description : textsFromTheAttribute) {
             List<TextFragment> textFragmentsForOneDescription = UmigonTokenizer.tokenize(description, languageSpecificLexicon);
             for (TextFragment oneTextFragment : textFragmentsForOneDescription) {
                 if (oneTextFragment.getTypeOfTextFragmentEnum() != TypeOfTextFragmentEnum.WHITE_SPACE
@@ -137,17 +133,25 @@ public class TopTermExtractor {
         }
         System.out.println("number of text fragments in the description: " + textFragments.getSize());
 
+        // once we have all the terms and their counts in a multiset, we can sort the terms from the most to the least frequent and select the top n
         List<Map.Entry<String, Integer>> multisetRankedFromTopFrequency = textFragments.sortDesc(textFragments);
 
         int i = 0;
         StringBuilder sb = new StringBuilder();
+        sb.append("<html><body>");
         for (Map.Entry<String, Integer> tf : multisetRankedFromTopFrequency) {
-            sb.append(tf.getKey()).append(" (").append(tf.getValue()).append(")").append("\n");
+            sb
+                    .append(tf.getKey())
+                    .append(" (")
+                    .append(tf.getValue())
+                    .append(")")
+                    .append("<br/>");
             System.out.println("top term: " + tf.getKey() + " (appearing " + tf.getValue() + " times).");
             if (i++ > maxNumberOfTerms) {
                 break;
             }
         }
+        sb.append("</body></html>");
         return sb.toString();
 
     }
