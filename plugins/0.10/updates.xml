@@ -1,9 +1,32 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
 <!DOCTYPE module_updates PUBLIC "-//NetBeans//DTD Autoupdate Catalog 2.8//EN" "https://netbeans.apache.org/dtds/autoupdate-catalog-2_8.dtd">
-<module_updates timestamp="32/50/20/10/01/2023">
+<module_updates timestamp="50/46/11/28/01/2023">
 
 
+
+<module codenamebase="nl.liacs.boundingdiameters" distribution="boundingdiameters-0.0.1.nbm" downloadsize="12803" homepage="http://github.com/gephi/gephi-plugins/boundingdiameters" license="37E4BDC7" needsrestart="true" releasedate="2023/01/28" targetcluster="plugins">
+        
+    <manifest AutoUpdate-Show-In-Client="false" OpenIDE-Module="nl.liacs.boundingdiameters" OpenIDE-Module-Display-Category="Metric" OpenIDE-Module-Implementation-Version="0.0.1" OpenIDE-Module-Long-Description="Plugin implementing the BoundingDiameters algorithm described in the papers &quot;Determining the Diameter of Small World Networks&quot; and &quot;Computing the Eccentricity Distribution of Large Graphs&quot;" OpenIDE-Module-Module-Dependencies="org.openide.util.lookup &gt; 8.52, org.gephi.statistics.api &gt; 0.10.0, org.gephi.statistics.plugin &gt; 0.10.0, org.gephi.utils.longtask &gt; 0.10.0, org.gephi.graph.api &gt; 0.10.0, org.gephi.core.library.wrapper &gt; 0.10.0, org.gephi.ui.library.wrapper &gt; 0.10.0, org.openide.windows &gt; 6.95, org.openide.util &gt; 9.26, org.openide.util.ui &gt; 9.26, org.openide.awt &gt; 7.86, org.netbeans.modules.settings/1 &gt; 1.67" OpenIDE-Module-Name="BoundingDiameters" OpenIDE-Module-Requires="org.openide.windows.WindowManager" OpenIDE-Module-Short-Description="Plugin implementing the a fast algorithm for the diameter and radius of a network" OpenIDE-Module-Specification-Version="0.0.1"/>
+        
+
+    <message_digest algorithm="SHA-512" value="d814677b4afba1db8c98dd2c299664eb6426a2af12a361b048f6496de4b8d2c412a99672d4a665c8d37d13aa2fa6eb36036072cd2e52a96e6442141280a115a4"/>
+</module>
+
+<module codenamebase="nl.liacs.boundingdiametersssuite" distribution="boundingdiametersssuite-0.0.1.nbm" downloadsize="5970" homepage="http://github.com/gephi/gephi-plugins/boundingdiametersssuite" moduleauthor="T. Oosterhoorn" needsrestart="true" releasedate="2023/01/28" targetcluster="plugins">
+        
+    <manifest OpenIDE-Module="nl.liacs.boundingdiametersssuite" OpenIDE-Module-Display-Category="Metric" OpenIDE-Module-Implementation-Version="0.0.1" OpenIDE-Module-Long-Description="Plugin implementing the BoundingDiameters algorithm described in the papers &quot;Determining the Diameter of Small World Networks&quot; and &quot;Computing the Eccentricity Distribution of Large Graphs&quot;" OpenIDE-Module-Module-Dependencies="nl.liacs.boundingdiameters &gt; 0.0.1, nl.liacs.boundingdiametersui &gt; 0.0.1" OpenIDE-Module-Name="BoundingDiameters Suite" OpenIDE-Module-Requires="org.openide.windows.WindowManager" OpenIDE-Module-Short-Description="Plugin implementing the a fast algorithm for the diameter and radius of a network" OpenIDE-Module-Specification-Version="0.0.1"/>
+    
+    <message_digest algorithm="SHA-512" value="bd7a05325de5dc2466ef9d11be4ef9649ab1716d14fad84deab7bb865bb484fb1671c17a5b292710bcda14ad7d56531bca7c5a8221f67f45464ce3a7b5279751"/>
+</module>
+
+<module codenamebase="nl.liacs.boundingdiametersui" distribution="boundingdiametersui-0.0.1.nbm" downloadsize="12787" homepage="http://github.com/gephi/gephi-plugins/boundingdiametersui" license="37E4BDC7" needsrestart="true" releasedate="2023/01/28" targetcluster="plugins">
+        
+    <manifest AutoUpdate-Show-In-Client="false" OpenIDE-Module="nl.liacs.boundingdiametersui" OpenIDE-Module-Display-Category="Metric" OpenIDE-Module-Implementation-Version="0.0.1" OpenIDE-Module-Long-Description="Plugin implementing the BoundingDiameters algorithm described in the papers &quot;Determining the Diameter of Small World Networks&quot; and &quot;Computing the Eccentricity Distribution of Large Graphs&quot;" OpenIDE-Module-Module-Dependencies="nl.liacs.boundingdiameters &gt; 0.0.1, org.gephi.graph.api &gt; 0.10.0, org.openide.util.lookup &gt; 8.52, org.gephi.statistics.api &gt; 0.10.0, org.gephi.statistics.plugin &gt; 0.10.0, org.gephi.ui.library.wrapper &gt; 0.10.0, org.openide.windows &gt; 6.95, org.openide.util &gt; 9.26, org.openide.util.ui &gt; 9.26, org.openide.awt &gt; 7.86, org.netbeans.modules.settings/1 &gt; 1.67" OpenIDE-Module-Name="BoundingDiameters UI" OpenIDE-Module-Requires="org.openide.windows.WindowManager" OpenIDE-Module-Short-Description="Plugin implementing the a fast algorithm for the diameter and radius of a network" OpenIDE-Module-Specification-Version="0.0.1"/>
+        
+
+    <message_digest algorithm="SHA-512" value="238029729e491ce9bc02e10839f47ff9df91c21ef78b2738e714e2fcea0e7a8278ce02e0ff20d91d99dca7f11e2a7597b2d44ed88dc0bd11852ca5f919ac6f90"/>
+</module>
 
 <module codenamebase="ia.ppgco.facom.ufu.br.bridge.gephi.plugin" distribution="bridge-gephi-plugin-1.0.1.nbm" downloadsize="21146" homepage="http://github.com/gephi/gephi-plugins/bridge-gephi-plugin" moduleauthor="Anderson Rodrigues dos Santos" needsrestart="true" releasedate="2023/01/09" targetcluster="plugins">
         
@@ -54,6 +77,14 @@
     <manifest OpenIDE-Module="pl.edu.wat.wcy.student.dbscan.gephi.plugin" OpenIDE-Module-Display-Category="Tool" OpenIDE-Module-Implementation-Version="1.0.0" OpenIDE-Module-Long-Description="DBSCAN clustering algorithm that groups points that are closely packed together." OpenIDE-Module-Module-Dependencies="org.gephi.ui.library.wrapper &gt; 0.10.0, org.gephi.graph.api &gt; 0.10.0, org.gephi.utils.longtask &gt; 0.10.0, org.gephi.statistics.api &gt; 0.10.0" OpenIDE-Module-Name="dbscan" OpenIDE-Module-Requires="org.openide.modules.ModuleFormat1" OpenIDE-Module-Short-Description="Density-based spatial clustering of applications with noise." OpenIDE-Module-Specification-Version="1.0.0"/>
     
     <message_digest algorithm="SHA-512" value="8b902c5d65fd462b743143bf6bae42167cbecd391b8adcfa67c5273d55f172b5b7c3ff4fc95b015b4291d368e7b8bc454c6f344fbfd88e9fefbbeaf92e036882"/>
+</module>
+
+<module codenamebase="org.gephi.desktop.streaming" distribution="desktop-streaming-1.0.5.nbm" downloadsize="69389" homepage="http://github.com/gephi/gephi-plugins/desktop-streaming" license="37E4BDC7" moduleauthor="Andre Panisson" needsrestart="true" releasedate="2023/01/28" targetcluster="plugins">
+        
+    <manifest AutoUpdate-Show-In-Client="false" OpenIDE-Module="org.gephi.desktop.streaming" OpenIDE-Module-Display-Category="Gephi UI" OpenIDE-Module-Implementation-Version="1.0.5" OpenIDE-Module-Long-Description="Desktop Streaming" OpenIDE-Module-Module-Dependencies="org.gephi.ui.components &gt; 0.10.0, org.openide.dialogs &gt; 7.64, org.openide.awt &gt; 7.86, org.openide.explorer &gt; 6.80, org.openide.windows &gt; 6.95, org.netbeans.swing.outline &gt; 1.52, org.netbeans.modules.settings/1 &gt; 1.67, org.openide.nodes &gt; 7.63, org.openide.util.lookup &gt; 8.52, org.gephi.graph.api &gt; 0.10.0, org.openide.util &gt; 9.26, org.openide.util.ui &gt; 9.26, org.gephi.project.api &gt; 0.10.0, org.gephi.ui.utils &gt; 0.10.0, org.gephi.ui.library.wrapper &gt; 0.10.0, org.gephi.streaming.api &gt; 1.0.5, org.gephi.streaming.server &gt; 1.0.5" OpenIDE-Module-Name="Desktop Streaming" OpenIDE-Module-Requires="org.openide.modules.ModuleFormat1" OpenIDE-Module-Short-Description="Desktop Streaming" OpenIDE-Module-Specification-Version="1.0.5"/>
+        
+
+    <message_digest algorithm="SHA-512" value="d5753224de95c164b3dee2f635bdd655f2d66cbc8bb466d987b04c6b0606facf24d7522c2fdbbb7a3baf2520d28dc03c85975a649367426628eccdb2cf3ab1ca"/>
 </module>
 
 <module codenamebase="com.elwin013.gephi.er.generator" distribution="er-generator-1.0.1.nbm" downloadsize="14165" homepage="http://github.com/gephi/gephi-plugins/er-generator" license="AF2C12EC" moduleauthor="Kamil Banach" needsrestart="true" releasedate="2023/01/09" targetcluster="plugins">
@@ -118,6 +149,13 @@
     <message_digest algorithm="SHA-512" value="b8069b00943b6c98ecbb1f7d1200fa49779446340cd899e37f647a64215d3436248d722126a4d242c7c749b1532db3603860e135fae230b6dc8318ac6b42dae0"/>
 </module>
 
+<module codenamebase="org.gephi.graphstreaming" distribution="graphstreaming-1.0.5.nbm" downloadsize="6445" homepage="gephi.org" moduleauthor="Andre Panisson" needsrestart="true" releasedate="2023/01/28" targetcluster="plugins">
+        
+    <manifest OpenIDE-Module="org.gephi.graphstreaming" OpenIDE-Module-Display-Category="Import" OpenIDE-Module-Implementation-Version="1.0.5" OpenIDE-Module-Long-Description="The purpose of the Graph Streaming API and Plugins is to build a unified framework for streaming graph objects. Gephi’s data structure and visualization engine has been built with the idea that a graph is not static and might change continuously. By connecting Gephi with external data-sources, we leverage its power to visualize and monitor complex systems or enterprise data in real-time. Moreover, the idea of streaming graph data goes beyond Gephi, and a unified and standardized API could bring interoperability with other available tools for graph and network analysis, as they could start to interoperate with other tools in a distributed and cooperative fashion." OpenIDE-Module-Module-Dependencies="org.gephi.streaming.api &gt; 1.0.5, org.gephi.streaming.impl &gt; 1.0.5, org.gephi.streaming.server &gt; 1.0.5, org.gephi.desktop.streaming &gt; 1.0.5, org.gephi.jetty.library.wrapper &gt; 1.0.5" OpenIDE-Module-Name="Graph Streaming" OpenIDE-Module-Requires="org.openide.modules.ModuleFormat1" OpenIDE-Module-Short-Description="Graph Streaming Plugin" OpenIDE-Module-Specification-Version="1.0.5"/>
+    
+    <message_digest algorithm="SHA-512" value="b51bbcf1748988f6c3bf9205f8d0ae15ff1af816d6954fa10a11ca33e93803c5c4baa8a7ac17c3ed2e7f45dfe571ab36f2c1c2e3a5cf1bfbd9e64e709b7efe42"/>
+</module>
+
 <module codenamebase="org.icculus.chunky.gephigraphviz" distribution="gephigraphviz-1.0.0.nbm" downloadsize="49656" homepage="http://github.com/gephi/gephi-plugins/gephigraphviz" license="E0509B40" moduleauthor="Gary &quot;ChunkyKs&quot; Briggs" needsrestart="true" releasedate="2023/01/09" targetcluster="plugins">
         
     <manifest OpenIDE-Module="org.icculus.chunky.gephigraphviz" OpenIDE-Module-Display-Category="Layout" OpenIDE-Module-Implementation-Version="1.0.0" OpenIDE-Module-Long-Description="A simple plugin that calls graphviz at the command line and uses it to lay out a graph. Graphviz has a selection of very high-quality layout algorithms available." OpenIDE-Module-Module-Dependencies="org.openide.nodes &gt; 7.63, org.openide.util.lookup &gt; 8.52, org.gephi.graph.api &gt; 0.10.0, org.gephi.layout.plugin &gt; 0.10.0, org.openide.util &gt; 9.26, org.gephi.layout.api &gt; 0.10.0, org.gephi.ui.utils &gt; 0.10.0, org.gephi.project.api &gt; 0.10.0" OpenIDE-Module-Name="Graphviz Layout" OpenIDE-Module-Requires="org.openide.modules.ModuleFormat1" OpenIDE-Module-Short-Description="Graphiz Layout Plugin" OpenIDE-Module-Specification-Version="1.0.0"/>
@@ -163,6 +201,14 @@
         
 
     <message_digest algorithm="SHA-512" value="3be3f6d564dfcf6c4c28a4e19f8ac8d88af5b332b9267b0ce2baf1114d61ee023e327911bf7c80e07fc6481a709b0b848137a9e3847428dc87acdce951923e84"/>
+</module>
+
+<module codenamebase="org.gephi.jetty.library.wrapper" distribution="jetty-library-wrapper-1.0.5.nbm" downloadsize="1299909" homepage="http://github.com/gephi/gephi-plugins/jetty-library-wrapper" license="37E4BDC7" needsrestart="true" releasedate="2023/01/28" targetcluster="plugins">
+        
+    <manifest AutoUpdate-Show-In-Client="false" OpenIDE-Module="org.gephi.jetty.library.wrapper" OpenIDE-Module-Display-Category="Libraries" OpenIDE-Module-Implementation-Version="1.0.5" OpenIDE-Module-Long-Description="Parent POM for all Gephi plugins" OpenIDE-Module-Name="Jetty Wrapper" OpenIDE-Module-Requires="org.openide.modules.ModuleFormat1" OpenIDE-Module-Short-Description="Parent POM for all Gephi plugins" OpenIDE-Module-Specification-Version="1.0.5"/>
+        
+
+    <message_digest algorithm="SHA-512" value="651cc1e57182d12048ec86d98487fc58d7194549dcc042685329ba01425b640a7d76319327a5e1cfaa5a750d00ac352e8a07baa833008edf8a61996d9d8006c0"/>
 </module>
 
 <module codenamebase="uk.ac.ox.oii.jsonexporter.plugin" distribution="jsonexporter-plugin-2.0.0.nbm" downloadsize="235467" homepage="http://blogs.oii.ox.ac.uk/vis/" license="671322F0" moduleauthor="Scott A. Hale" needsrestart="true" releasedate="2023/01/09" targetcluster="plugins">
@@ -380,6 +426,30 @@
         
 
     <message_digest algorithm="SHA-512" value="77250bfc93b6bafd4e0bce5edf11bdbd3d637ed6c8f061a99dfa5f918828327c496fe944c17c8ab8c5b7608b55696e4eb4e8899bc615f5f7cc80f12646e735b9"/>
+</module>
+
+<module codenamebase="org.gephi.streaming.api" distribution="streaming-api-1.0.5.nbm" downloadsize="37037" homepage="http://github.com/gephi/gephi-plugins/streaming-api" license="37E4BDC7" moduleauthor="Andre Panisson" needsrestart="true" releasedate="2023/01/28" targetcluster="plugins">
+        
+    <manifest AutoUpdate-Show-In-Client="false" OpenIDE-Module="org.gephi.streaming.api" OpenIDE-Module-Display-Category="Gephi Core" OpenIDE-Module-Implementation-Version="1.0.5" OpenIDE-Module-Long-Description="API graph streaming" OpenIDE-Module-Module-Dependencies="org.gephi.filters.api &gt; 0.10.0, org.gephi.graph.api &gt; 0.10.0" OpenIDE-Module-Name="Streaming API" OpenIDE-Module-Requires="org.openide.modules.ModuleFormat1" OpenIDE-Module-Short-Description="API graph streaming" OpenIDE-Module-Specification-Version="1.0.5"/>
+        
+
+    <message_digest algorithm="SHA-512" value="68db3beb0cfc78de9bc10511b9378068c87fca7445e0f9a9f66b22cfe9a222a131b6447147a957c058479c4a66d9152cd55d4ecfe464c04c5d519fea2a6a5974"/>
+</module>
+
+<module codenamebase="org.gephi.streaming.impl" distribution="streaming-impl-1.0.5.nbm" downloadsize="97160" homepage="http://github.com/gephi/gephi-plugins/streaming-impl" license="37E4BDC7" moduleauthor="Andre Panisson" needsrestart="true" releasedate="2023/01/28" targetcluster="plugins">
+        
+    <manifest AutoUpdate-Show-In-Client="false" OpenIDE-Module="org.gephi.streaming.impl" OpenIDE-Module-Display-Category="Gephi Core" OpenIDE-Module-Implementation-Version="1.0.5" OpenIDE-Module-Long-Description="Streaming Implementation" OpenIDE-Module-Module-Dependencies="org.gephi.filters.api &gt; 0.10.0, org.openide.filesystems &gt; 9.30, org.gephi.core.library.wrapper &gt; 0.10.0, org.openide.util.lookup &gt; 8.52, org.gephi.graph.api &gt; 0.10.0, org.gephi.streaming.api &gt; 1.0.5" OpenIDE-Module-Name="Streaming Impl" OpenIDE-Module-Requires="org.openide.modules.ModuleFormat1" OpenIDE-Module-Short-Description="Streaming Implementation" OpenIDE-Module-Specification-Version="1.0.5"/>
+        
+
+    <message_digest algorithm="SHA-512" value="51b41603d002128bbfeb8633b436a26a759badd0df446591e7b8521b9e18387207b624551f658f9366c4269e786b67fe39473fd90ae8cde3ce8ba3d7b1b3127e"/>
+</module>
+
+<module codenamebase="org.gephi.streaming.server" distribution="streaming-server-1.0.5.nbm" downloadsize="41036" homepage="http://github.com/gephi/gephi-plugins/streaming-server" license="37E4BDC7" moduleauthor="Andre Panisson" needsrestart="true" releasedate="2023/01/28" targetcluster="plugins">
+        
+    <manifest AutoUpdate-Show-In-Client="false" OpenIDE-Module="org.gephi.streaming.server" OpenIDE-Module-Display-Category="Plugin" OpenIDE-Module-Implementation-Version="1.0.5" OpenIDE-Module-Long-Description="Streaming Server" OpenIDE-Module-Module-Dependencies="org.gephi.streaming.api &gt; 1.0.5, org.gephi.streaming.impl &gt; 1.0.5, org.gephi.jetty.library.wrapper &gt; 1.0.5, org.openide.util.lookup &gt; 8.52, org.gephi.graph.api &gt; 0.10.0, org.openide.util &gt; 9.26, org.gephi.project.api &gt; 0.10.0" OpenIDE-Module-Name="Streaming Server" OpenIDE-Module-Requires="org.openide.modules.ModuleFormat1" OpenIDE-Module-Short-Description="Streaming Server" OpenIDE-Module-Specification-Version="1.0.5"/>
+        
+
+    <message_digest algorithm="SHA-512" value="fcded543fc0cd39d4e403f7085798ca56e0e06c12c98b20b7dd5e1b35abbae6ccc913f00a610eb591fde0aefbe98152992051ecc89c4675c238414285e11da9a"/>
 </module>
 
 <module codenamebase="fr.totetmatt.twitter.v2" distribution="twitter-v2-2.0.5.nbm" downloadsize="9629345" homepage="http://github.com/gephi/gephi-plugins/twitter-v2" license="E9F38623" moduleauthor="totetmatt" needsrestart="true" releasedate="2023/01/09" targetcluster="plugins">
@@ -2007,6 +2077,10 @@ Public License instead of this License.  But first, please read
 &lt;http://www.gnu.org/philosophy/why-not-lgpl.html&gt;.
 -----------------------------------------------------
 GPL v3</license>
+<license name="37E4BDC7">Copyright  2015-2023
+-----------------------------------------------------
+License terms:
+Apache 2.0 - http://www.opensource.org/licenses/Apache-2.0</license>
 <license name="A83208AD">Copyright (c) 2010, Matt Groeninger
 All rights reserved.
 

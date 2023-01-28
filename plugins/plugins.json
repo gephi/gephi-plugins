@@ -1810,7 +1810,7 @@
         }
       ],
       "category": "Import",
-      "last_update": "June 24, 2022",
+      "last_update": "January 28, 2023",
       "images": null,
       "versions": {
         "0.8.2": {
@@ -1837,6 +1837,11 @@
           "url": "0.9/graphstreaming-1.0.3.zip",
           "last_update": "June 24, 2022",
           "plugin_version": "1.0.3"
+        },
+        "0.10.0": {
+          "url": "0.10/graphstreaming-1.0.5.zip",
+          "last_update": "January 28, 2023",
+          "plugin_version": "1.0.5"
         }
       },
       "sourcecode": "https://github.com/panisson/gephi-plugins/tree/graph-streaming",
@@ -3432,7 +3437,7 @@
         }
       ],
       "category": "Metric",
-      "last_update": "June 24, 2022",
+      "last_update": "January 28, 2023",
       "images": null,
       "versions": {
         "0.9.2": {
@@ -3448,6 +3453,11 @@
         "0.9.6": {
           "url": "0.9/boundingdiametersssuite-0.0.1.zip",
           "last_update": "June 24, 2022",
+          "plugin_version": "0.0.1"
+        },
+        "0.10.0": {
+          "url": "0.10/boundingdiametersssuite-0.0.1.zip",
+          "last_update": "January 28, 2023",
           "plugin_version": "0.0.1"
         }
       },
