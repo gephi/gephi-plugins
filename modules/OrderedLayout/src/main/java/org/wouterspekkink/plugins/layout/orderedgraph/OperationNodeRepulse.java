@@ -39,18 +39,10 @@ Contributor(s):
 
 Portions Copyrighted 2011 Gephi Consortium.
  */
-<<<<<<<< HEAD:modules/GravityPlugin/src/main/java/org/gephi/plugins/layout/forceAtlas2/multigravity/OperationNodeRepulse.java
-package org.gephi.plugins.layout.forceAtlas2.multigravity;
-
-import org.gephi.graph.api.Node;
-import org.gephi.plugins.layout.forceAtlas2.multigravity.ForceFactory.RepulsionForce;
-========
-
 package org.wouterspekkink.plugins.layout.orderedgraph;
 
 import org.gephi.graph.api.Node;
 import org.wouterspekkink.plugins.layout.orderedgraph.ForceFactory.RepulsionForce;
->>>>>>>> orderedlayout-plugin:modules/OrderedLayout/src/main/java/org/wouterspekkink/plugins/layout/orderedgraph/OperationNodeRepulse.java
 
 /**
  *
