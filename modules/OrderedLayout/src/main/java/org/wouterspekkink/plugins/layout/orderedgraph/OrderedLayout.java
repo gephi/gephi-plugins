@@ -44,7 +44,7 @@
 
  Portions Copyrighted 2011 Gephi Consortium.
  */
-package org.wouterspekkink.plugins.layout.eventgraph;
+package org.wouterspekkink.plugins.layout.orderedgraph;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -62,18 +62,18 @@ import org.gephi.layout.spi.LayoutBuilder;
 import org.gephi.layout.spi.LayoutProperty;
 import org.gephi.ui.propertyeditor.NodeColumnNumbersEditor;
 import org.openide.util.Exceptions;
-import org.wouterspekkink.plugins.layout.eventgraph.ForceFactory.AttractionForce;
-import org.wouterspekkink.plugins.layout.eventgraph.ForceFactory.RepulsionForce;
+import org.wouterspekkink.plugins.layout.orderedgraph.ForceFactory.AttractionForce;
+import org.wouterspekkink.plugins.layout.orderedgraph.ForceFactory.RepulsionForce;
 
 /**
  *
  * @author wouterspekkink
  */
-public class TimeForce implements Layout {
+public class OrderedLayout implements Layout {
 
     private GraphModel graphModel;
     private Graph graph;
-    private final TimeForceBuilder layoutBuilder;
+    private final OrderedLayoutBuilder layoutBuilder;
     private double jitterTolerance;
     private double scalingRatio;
     private double orderScale;
@@ -84,10 +84,12 @@ public class TimeForce implements Layout {
     private int threadCount;
     private int currentThreadCount;
     private ExecutorService pool;
+    private boolean force;
     private boolean vertical;
+    private boolean inverted;
     private boolean center;
 
-    public TimeForce(TimeForceBuilder layoutBuilder) {
+    public OrderedLayout(OrderedLayoutBuilder layoutBuilder) {
         this.layoutBuilder = layoutBuilder;
         this.threadCount = Math.min(4, Math.max(1, Runtime.getRuntime().availableProcessors() - 1));
         resetPropertiesValues();
@@ -104,11 +106,11 @@ public class TimeForce implements Layout {
 
         // Initialise layout data
         for (Node n : nodes) {
-            if (n.getLayoutData() == null || !(n.getLayoutData() instanceof TimeForceLayoutData)) {
-                TimeForceLayoutData nLayout = new TimeForceLayoutData();
+            if (n.getLayoutData() == null || !(n.getLayoutData() instanceof OrderedLayoutData)) {
+                OrderedLayoutData nLayout = new OrderedLayoutData();
                 n.setLayoutData(nLayout);
             }
-            TimeForceLayoutData nLayout = n.getLayoutData();
+            OrderedLayoutData nLayout = n.getLayoutData();
             nLayout.mass = 1 + graph.getDegree(n);
             nLayout.old_dx = 0;
             nLayout.old_dy = 0;
@@ -129,7 +131,7 @@ public class TimeForce implements Layout {
         graph = graphModel.getGraphVisible();
 
         double ord;
-
+        
         graph.readLock();
         Node[] nodes = graph.getNodes().toArray();
         Edge[] edges = graph.getEdges().toArray();
@@ -144,11 +146,11 @@ public class TimeForce implements Layout {
 
         // Initialise layout data
         for (Node n : nodes) {
-            if (n.getLayoutData() == null || !(n.getLayoutData() instanceof TimeForceLayoutData)) {
-                TimeForceLayoutData nLayout = new TimeForceLayoutData();
+            if (n.getLayoutData() == null || !(n.getLayoutData() instanceof OrderedLayoutData)) {
+                OrderedLayoutData nLayout = new OrderedLayoutData();
                 n.setLayoutData(nLayout);
             }
-            TimeForceLayoutData nLayout = n.getLayoutData();
+            OrderedLayoutData nLayout = n.getLayoutData();
             nLayout.mass = 1 + graph.getDegree(n);
             nLayout.dx = 0;
             nLayout.dy = 0;
@@ -188,7 +190,7 @@ public class TimeForce implements Layout {
         double totalSwinging = 0d;  // How much irregular movement
         double totalEffectiveTraction = 0d;  // Hom much useful movement
         for (Node n : nodes) {
-            TimeForceLayoutData nLayout = n.getLayoutData();
+            OrderedLayoutData nLayout = n.getLayoutData();
             if (!n.isFixed()) {
                 double swinging = Math.sqrt(Math.pow(nLayout.old_dx - nLayout.dx, 2) + Math.pow(nLayout.old_dy - nLayout.dy, 2));
                 totalSwinging += nLayout.mass * swinging;   // If the node has a burst change of direction, then it's not converging.
@@ -205,7 +207,7 @@ public class TimeForce implements Layout {
         // Apply Forces 
         for (Node n : validNodes) {
             //AttributeRow row = (AttributeRow) n.getNodeData().getAttributes();
-            TimeForceLayoutData nLayout = n.getLayoutData();
+            OrderedLayoutData nLayout = n.getLayoutData();
 
             if (!n.isFixed()) {
 
@@ -225,16 +227,33 @@ public class TimeForce implements Layout {
                 double averageY = 0;
 
                 ord = ord * (double) orderScale;
-
                 float ordFloat = (float) ord;
-                n.setX(ordFloat);
-                if (vertical == true) {
-                    n.setY((float) y);
-                } else {
-                    n.setY(n.y());
-                }
 
-                if (center == true) {
+                if (vertical)
+                {
+                    if (inverted) {
+                        n.setY(ordFloat);
+                    } else {
+                        n.setY(-ordFloat);
+                    }
+                    if (force) {
+                        n.setX((float) x);
+                    } else {
+                        n.setX(n.x());
+                    }
+                } else {
+                    if (inverted) {
+                        n.setX(-ordFloat);
+                    } else {
+                        n.setX(ordFloat);
+                    }
+                    if (force) {
+                        n.setY((float) y);
+                    } else {
+                        n.setY(n.y());
+                    }
+                }
+                if (center) {
                     averageX += x;
                     averageY += y;
 
@@ -273,61 +292,73 @@ public class TimeForce implements Layout {
     @Override
     public LayoutProperty[] getProperties() {
         List<LayoutProperty> properties = new ArrayList<LayoutProperty>();
-        final String TIMEFORCE = "Time Force Layout";
+        final String ORDEREDLAYOUT = "Ordered Layout";
 
         try {
             properties.add(LayoutProperty.createProperty(
-                    this, Double.class,
-                    "Scale of Order",
-                    TIMEFORCE,
-                    "Determines the separation of the nodes on the x-axis",
-                    "getOrderScale", "setOrderScale"));
+                    this, Boolean.class,
+                    "Vertical layout",
+                    ORDEREDLAYOUT,
+                    "Sets the layout to a vertical orientation",
+                    "isVertical", "setVertical"));
+            properties.add(LayoutProperty.createProperty(
+                    this, Boolean.class,
+                    "Inverted layout",
+                    ORDEREDLAYOUT,
+                    "Inverts the layout",
+                    "isInverted", "setInverted"));
             properties.add(LayoutProperty.createProperty(
                     this, Column.class,
                     "Order",
-                    TIMEFORCE,
-                    "Selects the attribute that indicates the order of events",
+                    ORDEREDLAYOUT,
+                    "Selects the attribute that indicates the ordering of nodes",
                     "getOrder", "setOrder", NodeColumnNumbersEditor.class));
             properties.add(LayoutProperty.createProperty(
+                    this, Double.class,
+                    "Scale of Order",
+                    ORDEREDLAYOUT,
+                    "Determines the separation of the nodes on the axis that is fixed",
+                    "getOrderScale", "setOrderScale"));
+            properties.add(LayoutProperty.createProperty(
                     this, Boolean.class,
-                    "Set Vertical Force",
-                    TIMEFORCE,
+                    "Set Force on free axis",
+                    ORDEREDLAYOUT,
                     "Used to push unconnected groups of nodes away from each other",
-                    "isVertical", "setVertical"));
+                    "isForce", "setForce"));
             properties.add(LayoutProperty.createProperty(
                     this, Double.class,
-                    "Vertical Scale",
-                    TIMEFORCE,
-                    "Sets the strength of the vertical force",
+                    "Force strength",
+                    ORDEREDLAYOUT,
+                    "Sets the strength of the force",
                     "getScalingRatio", "setScalingRatio"));
             properties.add(LayoutProperty.createProperty(
                     this, Boolean.class,
                     "Strong Gravity Mode",
-                    TIMEFORCE,
+                    ORDEREDLAYOUT,
                     "Sets the strong gravity mode",
                     "isStrongGravityMode", "setStrongGravityMode"));
             properties.add(LayoutProperty.createProperty(
                     this, Double.class,
                     "Gravity",
-                    TIMEFORCE,
-                    "Pulls nodes to origin of the y-axis. Prevents islands from drifting away.",
+                    ORDEREDLAYOUT,
+                    "Pulls nodes to origin of the free axis. Prevents islands from drifting away.",
                     "getGravity", "setGravity"));
             properties.add(LayoutProperty.createProperty(
                     this, Double.class,
                     "Jitter Tolerance",
-                    TIMEFORCE,
+                    ORDEREDLAYOUT,
                     "How much swiging you allow.",
                     "getJitterTolerance", "setJitterTolerance"));
             properties.add(LayoutProperty.createProperty(
                     this, Integer.class,
                     "Threads",
-                    TIMEFORCE,
+                    ORDEREDLAYOUT,
                     "Possibility to use more threads if your cores can handle it.",
                     "getThreadsCount", "setThreadsCount"));
             properties.add(LayoutProperty.createProperty(
                     this, Boolean.class,
                     "Center",
-                    TIMEFORCE,
+                    ORDEREDLAYOUT,
                     "Centers the graph",
                     "isCenter", "setCenter"));
 
@@ -340,33 +371,65 @@ public class TimeForce implements Layout {
 
     @Override
     public void resetPropertiesValues() {
+        order = null;
         if (graphModel != null) {
             for (Column c : graphModel.getNodeTable()) {
                 if (c.getId().equalsIgnoreCase("order")
                         || c.getId().equalsIgnoreCase("ord")
-                        || c.getTitle().equalsIgnoreCase("order")
-                        || c.getTitle().equalsIgnoreCase("ord")) {
+                        || c.getId().equalsIgnoreCase("order")
+                        || c.getId().equalsIgnoreCase("trophic_level")) {
                     order = c;
-                } else {
-                    order = null;
                 }
             }
         }
         int nodesCount = 0;
-
+        setOrderScale(10.0);
         if (graphModel != null) {
             nodesCount = graphModel.getGraphVisible().getNodeCount();
+            if (order != null) {
+                double min = 0.0;
+                double max = 0.0;
+                Node[] nodes = graphModel.getGraphVisible().getNodes().toArray();
+                boolean initialized = false;
+                for (int i = 0; i !=  nodes.length; i++) {
+                    if (nodes[i].getAttribute(order) != null) {
+                        if (!initialized) {
+                            min = ((Number) nodes[i].getAttribute(order)).doubleValue();
+                            max = ((Number) nodes[i].getAttribute(order)).doubleValue();
+                            initialized = true;
+                        } else {
+                            if (((Number) nodes[i].getAttribute(order)).doubleValue() < min) {
+                                min = ((Number) nodes[i].getAttribute(order)).doubleValue();
+                            }
+                            if (((Number) nodes[i].getAttribute(order)).doubleValue() > max) {
+                                max = ((Number) nodes[i].getAttribute(order)).doubleValue();
+                            }
+                        }
+                    } 
+                }
+                double range = max - min;
+                if (range < 10.0) {
+                    setOrderScale(1000.0);
+                } else if (range < 100.0) {
+                    setOrderScale(100.0);
+                } else if (range < 1000) {
+                    setOrderScale(10.0);
+                } else if (range < 10000) {
+                    setOrderScale(1.0);
+                }
+            }
         }
 
-        setOrderScale(10.0);
-
+        setVertical(false);
+        setInverted(false);
+        
         // Tuning
-        setScalingRatio(1.0);
+        setScalingRatio(4.0);
 
         setStrongGravityMode(false);
         setGravity(1.);
 
-        setVertical(false);
+        setForce(false);
         setCenter(false);
 
         // Performance
@@ -377,9 +440,7 @@ public class TimeForce implements Layout {
         } else {
             setJitterTolerance(0.3d);
         }
-
         setThreadsCount(2);
-
     }
 
     @Override
@@ -418,6 +479,14 @@ public class TimeForce implements Layout {
         this.strongGravityMode = strongGravityMode;
     }
 
+    public Boolean isForce() {
+        return force;
+    }
+
+    public void setForce(Boolean force) {
+        this.force = force;
+    }
+    
     public Boolean isVertical() {
         return vertical;
     }
@@ -425,7 +494,15 @@ public class TimeForce implements Layout {
     public void setVertical(Boolean vertical) {
         this.vertical = vertical;
     }
-
+    
+    public Boolean isInverted() {
+        return inverted;
+    }
+    
+    public void setInverted (Boolean inverted) {
+        this.inverted = inverted;
+    }
+    
     public Boolean isCenter() {
         return center;
     }

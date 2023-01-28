@@ -39,50 +39,37 @@ Contributor(s):
 
 Portions Copyrighted 2011 Gephi Consortium.
  */
-package org.wouterspekkink.plugins.layout.eventgraph;
+<<<<<<<< HEAD:modules/GravityPlugin/src/main/java/org/gephi/plugins/layout/forceAtlas2/multigravity/OperationNodeRepulse.java
+package org.gephi.plugins.layout.forceAtlas2.multigravity;
 
 import org.gephi.graph.api.Node;
-import org.wouterspekkink.plugins.layout.eventgraph.ForceFactory.RepulsionForce;
+import org.gephi.plugins.layout.forceAtlas2.multigravity.ForceFactory.RepulsionForce;
+========
+
+package org.wouterspekkink.plugins.layout.orderedgraph;
+
+import org.gephi.graph.api.Node;
+import org.wouterspekkink.plugins.layout.orderedgraph.ForceFactory.RepulsionForce;
+>>>>>>>> orderedlayout-plugin:modules/OrderedLayout/src/main/java/org/wouterspekkink/plugins/layout/orderedgraph/OperationNodeRepulse.java
 
 /**
  *
  * @author Mathieu Jacomy
  */
-public class NodesThread implements Runnable {
+public class OperationNodeRepulse extends Operation {
 
-    private Node[] nodes;
-    private int from;
-    private int to;
-    private RepulsionForce Repulsion;
-    private double gravity;
-    private RepulsionForce GravityForce;
-    private double scaling;
+    private Node n;
+    private RepulsionForce f;
+    private double coefficient;
 
-    public NodesThread(Node[] nodes, int from, int to, double gravity, RepulsionForce GravityForce, double scaling, RepulsionForce Repulsion) {
-        this.nodes = nodes;
-        this.from = from;
-        this.to = to;
-        this.Repulsion = Repulsion;
-        this.gravity = gravity;
-        this.GravityForce = GravityForce;
-        this.scaling = scaling;
+    public OperationNodeRepulse(Node n, RepulsionForce f, double coefficient) {
+        this.n = n;
+        this.f = f;
+        this.coefficient = coefficient;
     }
 
     @Override
-    public void run() {
-        // Repulsion
-        for (int n1Index = from; n1Index < to; n1Index++) {
-            Node n1 = nodes[n1Index];
-            for (int n2Index = 0; n2Index < n1Index; n2Index++) {
-                Node n2 = nodes[n2Index];
-                Repulsion.apply(n1, n2);
-            }
-        }
-
-        // Gravity
-        for (int nIndex = from; nIndex < to; nIndex++) {
-            Node n = nodes[nIndex];
-            GravityForce.apply(n, gravity / scaling);
-        }
+    public void execute() {
+        f.apply(n, coefficient);
     }
 }

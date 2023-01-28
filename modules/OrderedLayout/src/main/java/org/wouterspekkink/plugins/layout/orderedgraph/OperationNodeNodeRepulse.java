@@ -40,10 +40,10 @@
  Portions Copyrighted 2011 Gephi Consortium.
  */
 
-package org.wouterspekkink.plugins.layout.eventgraph;
+package org.wouterspekkink.plugins.layout.orderedgraph;
 
 import org.gephi.graph.api.Node;
-import org.wouterspekkink.plugins.layout.eventgraph.ForceFactory.RepulsionForce;
+import org.wouterspekkink.plugins.layout.orderedgraph.ForceFactory.RepulsionForce;
 
 /**
  *

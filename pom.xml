@@ -37,7 +37,6 @@
         <module>modules/NetworkSplitter3D</module>
         <module>modules/ExcelCsvImporter</module>
         <module>modules/OracleDriver</module>
-        <module>modules/EventGraphLayout</module>
         <module>modules/Lineage</module>
         <module>modules/MdsLayout</module>
         <module>modules/filterfromfile</module>
@@ -77,6 +76,7 @@
         <module>modules/Neo4jPlugin</module>
         <module>modules/LinkPrediction</module>
 		<module>modules/WebPublishPlugin</module>
+        <module>modules/OrderedLayout</module>
     </modules>
 
     <!-- Properties -->

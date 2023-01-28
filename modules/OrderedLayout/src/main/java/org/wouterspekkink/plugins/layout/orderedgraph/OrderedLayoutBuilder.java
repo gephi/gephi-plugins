@@ -39,19 +39,64 @@ Contributor(s):
 
 Portions Copyrighted 2011 Gephi Consortium.
  */
+package org.wouterspekkink.plugins.layout.orderedgraph;
 
-package org.wouterspekkink.plugins.layout.eventgraph;
-
-import org.gephi.graph.spi.LayoutData;
+import javax.swing.Icon;
+import javax.swing.JPanel;
+import org.gephi.layout.spi.Layout;
+import org.gephi.layout.spi.LayoutBuilder;
+import org.gephi.layout.spi.LayoutUI;
+import org.openide.util.lookup.ServiceProvider;
 
 /**
  *
  * @author Mathieu Jacomy
  */
-public class TimeForceLayoutData implements LayoutData {
-    public double dx = 0;
-    public double dy = 0;
-    public double old_dx = 0;
-    public double old_dy = 0;
-    public double mass = 1;
+@ServiceProvider(service = LayoutBuilder.class)
+public class OrderedLayoutBuilder implements LayoutBuilder {
+    private TimeForceUI ui = new TimeForceUI();
+
+    @Override
+    public String getName() {
+        return "Ordered Graph Layout";
+    }
+
+    @Override
+    public LayoutUI getUI() {
+        return ui;
+    }
+
+    @Override
+    public OrderedLayout buildLayout() {
+        OrderedLayout layout = new OrderedLayout(this);
+        return layout;
+    }
+
+    private class TimeForceUI implements LayoutUI {
+
+        @Override
+        public String getDescription() {
+            return "A layout plugin for ordered graphs.";
+        }
+
+        @Override
+        public Icon getIcon() {
+            return null;
+        }
+
+        @Override
+        public JPanel getSimplePanel(Layout layout) {
+            return null;
+        }
+
+        @Override
+        public int getQualityRank() {
+            return 4;
+        }
+
+        @Override
+        public int getSpeedRank() {
+            return 4;
+        }
+    }
 }
