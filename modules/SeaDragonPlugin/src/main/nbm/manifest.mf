@@ -1,0 +1,5 @@
+Manifest-Version: 1.0
+OpenIDE-Module-Name: Sea Dragon Plugin
+OpenIDE-Module-Short-Description: Sea Dragon exporter
+OpenIDE-Module-Long-Description: Sea Dragon exporter
+OpenIDE-Module-Display-Category: Export

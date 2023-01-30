@@ -1,0 +1,61 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+
+    <head>
+        <title>Gephi Seadragon Export</title>
+        <!-- Copy the code below on your HTML file or header -->
+        <script src="js/seadragon-min.js" type="text/javascript"></script>
+        <!-- <script src="http://seadragon.com/ajax/0.8/seadragon-min.js" type="text/javascript"></script> -->
+        <script type="text/javascript">
+            Seadragon.Config.imagePath = "img/";
+            //Seadragon.Config.debugMode = true;
+                
+            // Start the viewer
+            function start() {
+                var viewer = new Seadragon.Viewer("seadragon");
+                viewer.openDzi("map/map.xml");
+            }
+        </script>
+        <style type="text/css">
+            body {
+                margin: 0px;
+            }
+            #seadragon {
+                width: 800px;
+                height: 600px;
+                background-color: Black;
+            }
+        </style>
+        <!-- End -->
+    </head>
+
+    <body onload="start();">
+
+        <table cellpadding="10" cellspacing="0" style="width: 100%">
+            <tr>
+                <td>
+                    <span style="font-size: large; font-family: Verdana; background-color: #F0F0F0;"><strong>Gephi Seadragon Export</strong></span>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <div id="seadragon"></div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <h3>Instructions to put online</h3>
+                    <ul>
+                        <li>Copy all files on your server.</li>
+                        <li>Use this HTML file as an example, copy the script and define a <strong>seadragon</strong> div in your page.</li>
+                        <li>Find help on the <a href="http://www.seadragon.com/developer/ajax/">Seadragon AJAX website</a>.</li>
+                        <li>Note that its not possible to preview Seadragon locally with Chrome browser.</li>
+                    </ul>
+                </td>
+            </tr>
+        </table>
+
+    </body>
+
+</html>
