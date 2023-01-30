@@ -91,6 +91,7 @@
                 <groupId>org.apache.netbeans.utilities</groupId>
                 <artifactId>nbm-maven-plugin</artifactId>
                 <configuration>
+                    <verifyRuntime>skip</verifyRuntime>
                     <licenseName>Apache 2.0</licenseName>
                     <author>mbastian</author>
                     <authorEmail></authorEmail>

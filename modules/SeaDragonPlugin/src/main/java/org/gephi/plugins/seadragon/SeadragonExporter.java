@@ -8,7 +8,9 @@
  */
 package org.gephi.plugins.seadragon;
 
+import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
+import java.awt.image.BufferedImageOp;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -28,10 +30,10 @@ import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import org.gephi.io.exporter.preview.PNGExporter;
 import org.gephi.io.exporter.spi.Exporter;
+import org.gephi.preview.api.G2DTarget;
 import org.gephi.preview.api.PreviewController;
 import org.gephi.preview.api.PreviewProperties;
 import org.gephi.preview.api.PreviewProperty;
-import org.gephi.preview.api.ProcessingTarget;
 import org.gephi.preview.api.RenderTarget;
 import org.gephi.project.api.Workspace;
 import org.gephi.utils.longtask.spi.LongTask;
@@ -39,8 +41,6 @@ import org.gephi.utils.progress.Progress;
 import org.gephi.utils.progress.ProgressTicket;
 import org.openide.util.Lookup;
 import org.w3c.dom.Element;
-import processing.core.PGraphicsJava2D;
-
 /**
  *
  * @author Mathieu Bastian
@@ -80,16 +80,18 @@ public class SeadragonExporter implements Exporter, LongTask {
         props.putValue("width", width);
         props.putValue("height", height);
         props.putValue(PreviewProperty.MARGIN, new Float((float) margin));
-        ProcessingTarget target = (ProcessingTarget) controller.getRenderTarget(RenderTarget.PROCESSING_TARGET, workspace);
+        G2DTarget target = (G2DTarget) controller.getRenderTarget(RenderTarget.G2D_TARGET, workspace);
         
         target.refresh();
         
         Progress.switchToIndeterminate(progress);
-        
-        PGraphicsJava2D pg2 = (PGraphicsJava2D) target.getGraphics();
+     
+        Graphics2D pg2 = target.getGraphics();
+   
         BufferedImage img = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
-        img.setRGB(0, 0, width, height, pg2.pixels, 0, width);
         
+        //img.setRGB(0, 0, width, height, pg2.pixels, 0, width);
+        pg2.drawImage(img, null, width, width);
         try {
             export(img);
         } catch (Exception ex) {
