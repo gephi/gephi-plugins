@@ -15,9 +15,10 @@ import javax.swing.JFileChooser;
 import org.gephi.lib.validation.Multiple4NumberValidator;
 import org.gephi.lib.validation.PositiveNumberValidator;
 import org.gephi.plugins.seadragon.SeadragonExporter;
-import org.netbeans.validation.api.builtin.Validators;
+import org.netbeans.validation.api.Validator;
+import org.netbeans.validation.api.builtin.stringvalidation.StringValidators;
 import org.netbeans.validation.api.ui.ValidationGroup;
-import org.netbeans.validation.api.ui.ValidationPanel;
+import org.netbeans.validation.api.ui.swing.ValidationPanel;
 import org.openide.util.NbPreferences;
 import org.openide.windows.WindowManager;
 
@@ -219,19 +220,19 @@ public class SeadragonSettingsPanel extends javax.swing.JPanel {
         validationPanel.setInnerComponent(innerPanel);
 
         ValidationGroup group = validationPanel.getValidationGroup();
-        group.add(innerPanel.tileSizeTextField, Validators.REQUIRE_NON_EMPTY_STRING,
+        group.add(innerPanel.tileSizeTextField, StringValidators.REQUIRE_NON_EMPTY_STRING,
                 new Multiple4NumberValidator());
 
-        group.add(innerPanel.widthTextField, Validators.REQUIRE_NON_EMPTY_STRING,
+        group.add(innerPanel.widthTextField, StringValidators.REQUIRE_NON_EMPTY_STRING,
                 new PositiveNumberValidator());
-        group.add(innerPanel.heightTextField, Validators.REQUIRE_NON_EMPTY_STRING,
+        group.add(innerPanel.heightTextField, StringValidators.REQUIRE_NON_EMPTY_STRING,
                 new PositiveNumberValidator());
 
-        group.add(innerPanel.pathTextField, Validators.FILE_MUST_BE_DIRECTORY);
+        group.add(innerPanel.pathTextField, StringValidators.FILE_MUST_BE_DIRECTORY);
 
         //Margins
-        group.add(innerPanel.marginTextField, Validators.REQUIRE_NON_EMPTY_STRING,
-                Validators.REQUIRE_VALID_NUMBER);
+        group.add(innerPanel.marginTextField, StringValidators.REQUIRE_NON_EMPTY_STRING,
+                StringValidators.REQUIRE_VALID_NUMBER);
 
         return validationPanel;
     }

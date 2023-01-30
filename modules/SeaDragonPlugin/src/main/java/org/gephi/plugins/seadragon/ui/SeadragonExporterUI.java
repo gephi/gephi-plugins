@@ -21,7 +21,7 @@ import org.gephi.utils.longtask.api.LongTaskErrorHandler;
 import org.gephi.utils.longtask.api.LongTaskExecutor;
 import org.gephi.utils.longtask.api.LongTaskListener;
 import org.gephi.utils.longtask.spi.LongTask;
-import org.netbeans.validation.api.ui.ValidationPanel;
+import org.netbeans.validation.api.ui.swing.ValidationPanel;
 import org.openide.DialogDescriptor;
 import org.openide.DialogDisplayer;
 import org.openide.NotifyDescriptor;
@@ -116,12 +116,12 @@ public class SeadragonExporterUI implements ExporterClassUI {
 
         SeadragonSettingsPanel panel = new SeadragonSettingsPanel();
         panel.setup(exporter);
-        ValidationPanel validationPanel = SeadragonSettingsPanel.createValidationPanel(panel);
+        ValidationPanel validationPanel = (ValidationPanel) SeadragonSettingsPanel.createValidationPanel(panel);
         final DialogDescriptor dd = new DialogDescriptor(validationPanel, "Seadragon Web Export");
         validationPanel.addChangeListener(new ChangeListener() {
 
             public void stateChanged(ChangeEvent e) {
-                dd.setValid(!((ValidationPanel) e.getSource()).isProblem());
+                dd.setValid(!((ValidationPanel) e.getSource()).getProblem().isFatal());
             }
         });
         Object result = DialogDisplayer.getDefault().notify(dd);
