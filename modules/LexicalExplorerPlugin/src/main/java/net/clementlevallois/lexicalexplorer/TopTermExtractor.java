@@ -10,6 +10,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -33,7 +34,6 @@ import org.gephi.io.importer.plugin.file.ImporterGEXF;
 import org.gephi.io.importer.spi.FileImporter;
 import org.gephi.io.processor.plugin.DefaultProcessor;
 import org.gephi.project.api.ProjectController;
-import org.gephi.project.api.Workspace;
 import org.openide.util.Lookup;
 
 /**
@@ -76,9 +76,9 @@ public class TopTermExtractor {
     }
 
     public String mineAndSortTextualAttribute(GraphModel gm, String attributeName, String lang, int maxNumberOfTerms) throws IOException {
-        
+
         Graph graph = gm.getGraph();
-        
+
         System.out.println("number of edges:" + graph.getEdgeCount());
         System.out.println("number of nodes:" + graph.getNodeCount());
 
@@ -89,52 +89,78 @@ public class TopTermExtractor {
         NodeIterable nodes = graph.getNodes();
 
         // we will store the text of the attribute for each node in a list
-        List<String> textsFromTheAttribute = new ArrayList();
+        Map<String, String> textsFromTheAttribute = new HashMap();
+        
+        // listing all node ids because for this first run of the plugin we want to show the top terms of the entire network
+        List<String> allNodeIds = new ArrayList();
 
         // doing the iteration now
         Iterator<Node> iteratorOnNodes = nodes.iterator();
         while (iteratorOnNodes.hasNext()) {
             Node node = iteratorOnNodes.next();
+            allNodeIds.add((String) node.getId());
             String descriptionForOneNode = (String) node.getAttribute(attributeToBeAnalyzed);
             if (descriptionForOneNode != null && !descriptionForOneNode.isBlank()) {
-                textsFromTheAttribute.add(descriptionForOneNode);
+                textsFromTheAttribute.put((String) node.getId(), descriptionForOneNode);
             }
         }
 
         System.out.println("number of nodes that have a description: " + textsFromTheAttribute.size());
 
-        // the multiset will store unique terms from the text we collected and count how many times each term appears
-        Multiset<String> textFragments = new Multiset();
         Set<String> languageSpecificLexicon = new HashSet();
 
         /*
-        
         1. we loop through the list of textual descriptions and tokenize them
-        
         2. The result is a list of TextFragment objects
-        
         3. We keep only the text fragments that are not punctuation signs nor whitespaces
-
          */
+        Map<String, List<String>> mapOfNodeIdsToTheirTextFragments = DataManager.getMapOfNodeIdsToTheirTextFragments();
+
         StopWordsRemover stopWordsRemoverEN = new StopWordsRemover(3, "en");
         StopWordsRemover stopWordsRemoverSECONDLANGUAGE = new StopWordsRemover(3, lang);
 
-        for (String description : textsFromTheAttribute) {
-            List<TextFragment> textFragmentsForOneDescription = UmigonTokenizer.tokenize(description, languageSpecificLexicon);
+        Iterator<Map.Entry<String, String>> iteratorOnNodesAndTheirTextualAttribute = textsFromTheAttribute.entrySet().iterator();
+        while (iteratorOnNodesAndTheirTextualAttribute.hasNext()) {
+            Map.Entry<String, String> next = iteratorOnNodesAndTheirTextualAttribute.next();
+            String textualAttribute = next.getValue();
+            String nodeId = next.getKey();
+            List<TextFragment> textFragmentsForOneDescription = UmigonTokenizer.tokenize(textualAttribute, languageSpecificLexicon);
             for (TextFragment oneTextFragment : textFragmentsForOneDescription) {
                 if (oneTextFragment.getTypeOfTextFragmentEnum() != TypeOfTextFragmentEnum.WHITE_SPACE
                         & oneTextFragment.getTypeOfTextFragmentEnum() != TypeOfTextFragmentEnum.PUNCTUATION
                         & !stopWordsRemoverEN.shouldItBeRemoved(oneTextFragment.getOriginalForm())
                         & !stopWordsRemoverSECONDLANGUAGE.shouldItBeRemoved(oneTextFragment.getOriginalForm())
                         & oneTextFragment.getOriginalForm().length() > 4) {
-                    textFragments.addOne(oneTextFragment.getOriginalForm());
+
+                    if (mapOfNodeIdsToTheirTextFragments.containsKey(nodeId)) {
+                        List<String> textFragmentsForThisNode = mapOfNodeIdsToTheirTextFragments.get(nodeId);
+                        textFragmentsForThisNode.add(oneTextFragment.getOriginalForm());
+                        mapOfNodeIdsToTheirTextFragments.put(nodeId, textFragmentsForThisNode);
+                    } else {
+                        List<String> textFragmentsForThisNode = new ArrayList();
+                        textFragmentsForThisNode.add(oneTextFragment.getOriginalForm());
+                        mapOfNodeIdsToTheirTextFragments.put(nodeId, textFragmentsForThisNode);
+                    }
                 }
             }
         }
-        System.out.println("number of text fragments in the description: " + textFragments.getSize());
+        String topTermsForTheEntireNetwork = topTermsExtractorFromSelectedNodes(allNodeIds, maxNumberOfTerms);
+        return topTermsForTheEntireNetwork;
+    }
+
+    private String topTermsExtractorFromSelectedNodes(List<String> nodeIds, int maxNumberOfTerms) {
+        // the multiset will store unique terms from the text we collected and count how many times each term appears
+        Multiset<String> allTextFragmentsFromAllSelectedNodes = new Multiset();
+
+        Map<String, List<String>> mapOfNodeIdsToTheirTextFragments = DataManager.getMapOfNodeIdsToTheirTextFragments();
+
+        for (String nodeId : nodeIds) {
+            List<String> textFragmentsForTheSelectedNode = mapOfNodeIdsToTheirTextFragments.get(nodeId);
+            allTextFragmentsFromAllSelectedNodes.addAllFromListOrSet(textFragmentsForTheSelectedNode);
+        }
 
         // once we have all the terms and their counts in a multiset, we can sort the terms from the most to the least frequent and select the top n
-        List<Map.Entry<String, Integer>> multisetRankedFromTopFrequency = textFragments.sortDesc(textFragments);
+        List<Map.Entry<String, Integer>> multisetRankedFromTopFrequency = allTextFragmentsFromAllSelectedNodes.sortDesc(allTextFragmentsFromAllSelectedNodes);
 
         int i = 0;
         StringBuilder sb = new StringBuilder();
@@ -155,5 +181,4 @@ public class TopTermExtractor {
         return sb.toString();
 
     }
-
 }

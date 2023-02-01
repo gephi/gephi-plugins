@@ -6,13 +6,20 @@ package net.clementlevallois.lexicalexplorer;
 
 import java.io.IOException;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.DefaultListModel;
 import javax.swing.ListSelectionModel;
+import javax.swing.event.ChangeListener;
 import org.gephi.graph.api.GraphModel;
+import org.gephi.project.api.ProjectController;
+import org.gephi.visualization.VizController;
+import org.gephi.visualization.api.selection.SelectionManager;
 import org.netbeans.api.settings.ConvertAsProperties;
 import org.openide.awt.ActionID;
 import org.openide.awt.ActionReference;
 import org.openide.util.Exceptions;
+import org.openide.util.Lookup;
 import org.openide.util.NbBundle;
 import org.openide.windows.TopComponent;
 
@@ -38,7 +45,7 @@ import org.openide.windows.TopComponent;
 
 public final class LexplorerTopComponent extends TopComponent {
 
-    private GraphModel gm;
+    private GraphModel graphModel;
 
     private static final long serialVersionUID = 305983503930l;
 
@@ -50,14 +57,17 @@ public final class LexplorerTopComponent extends TopComponent {
         setToolTipText(bundle.getString("expression.top_panel.tooltip"));
 
         // initializing the graph
-        gm = GraphOperations.graphInitFromCurrentlyOpendProject();
+        graphModel = GraphOperations.graphInitFromCurrentlyOpendProject();
         DefaultListModel<String> listModelOfNodeAttributes;
 
+        SelectionChangeListener selectionChangListenerTest = new SelectionChangeListener();
+        VizController.getInstance().getSelectionManager().addChangeListener(selectionChangListenerTest);
+
         // loading the names of nodes attributes
-        if (gm == null) {
+        if (graphModel == null) {
             listModelOfNodeAttributes = new DefaultListModel();
         } else {
-            listModelOfNodeAttributes = GraphOperations.returnTextualNodeAttributesAsListOfNames(gm);
+            listModelOfNodeAttributes = GraphOperations.returnTextualNodeAttributesAsListOfNames(graphModel);
         }
         jListOfNodeAttributes.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         jListOfNodeAttributes.setModel(listModelOfNodeAttributes);
@@ -121,7 +131,7 @@ public final class LexplorerTopComponent extends TopComponent {
                 .addGroup(jInternalFrame1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jButtonRefreshNodeAttributes)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 137, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(43, Short.MAX_VALUE))
+                .addContainerGap(44, Short.MAX_VALUE))
         );
         jInternalFrame1Layout.setVerticalGroup(
             jInternalFrame1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -194,7 +204,7 @@ public final class LexplorerTopComponent extends TopComponent {
                 return;
             }
             Integer nbTopTermsToDisplay = (Integer) jSpinnerNumberTopTerms.getValue();
-            String topTermsAsString = topTermExtractor.mineAndSortTextualAttribute(gm, selectedColumnId, "en", nbTopTermsToDisplay);
+            String topTermsAsString = topTermExtractor.mineAndSortTextualAttribute(graphModel, selectedColumnId, "en", nbTopTermsToDisplay);
             placeHolderForTopTerms.setText(topTermsAsString);
         } catch (IOException ex) {
             Exceptions.printStackTrace(ex);
@@ -204,18 +214,16 @@ public final class LexplorerTopComponent extends TopComponent {
     private void jButtonRefreshNodeAttributesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonRefreshNodeAttributesActionPerformed
         // loading the names of nodes attributes
         DefaultListModel<String> listModelOfNodeAttributes;
-        if (gm == null) {
-            gm = GraphOperations.graphInitFromCurrentlyOpendProject();
-
+        if (graphModel == null) {
+            graphModel = GraphOperations.graphInitFromCurrentlyOpendProject();
         }
-        if (gm == null) {
+        if (graphModel == null) {
             listModelOfNodeAttributes = new DefaultListModel();
         } else {
-            listModelOfNodeAttributes = GraphOperations.returnTextualNodeAttributesAsListOfNames(gm);
+            listModelOfNodeAttributes = GraphOperations.returnTextualNodeAttributesAsListOfNames(graphModel);
         }
         jListOfNodeAttributes.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         jListOfNodeAttributes.setModel(listModelOfNodeAttributes);
-
     }//GEN-LAST:event_jButtonRefreshNodeAttributesActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

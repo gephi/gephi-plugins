@@ -1,0 +1,19 @@
+When the user selects the attribute they want to analyze:
+
+- the tokenizer should run on the textual values of this attribute for each node
+
+- the tokens should be stored in a particular way:
+
+-> the list of tokens for each node should be stored separately, in a MAP
+
+MAP <NODE, LIST OF TOKENS FOR THIS NODE>
+
+When the selection changes AND IF the last refresh happened more than a second ago,
+    - we retrieve from the selection manager the list of the nodes being currently selected
+    - with this list, we query the map and retrieve the lists of tokens for all the selected nodes
+    - we sort this tokens from the most frequent to the least frequent and pick the 10 most frequent terms
+    - and we show these terms in the plugin!
+
+ELSE, DO NOTHING
+
+THAT'S IT!!
