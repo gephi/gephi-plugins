@@ -9,7 +9,7 @@
 
     <groupId>net.clementlevallois</groupId>
     <artifactId>web-publish-plugin</artifactId>
-    <version>1.0.1</version>
+    <version>1.1.0</version>
     <packaging>nbm</packaging>
 
     <name>Web Publish Plugin</name>
