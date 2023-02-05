@@ -19,15 +19,13 @@
             <groupId>org.netbeans.api</groupId>
             <artifactId>org-openide-awt</artifactId>
         </dependency>
-     
-    <dependency>
-        <groupId>org.netbeans.external</groupId>
-        <artifactId>ValidationAPI</artifactId>
-        <version>RELEASE160</version>
-    </dependency>
         <dependency>
             <groupId>org.netbeans.api</groupId>
             <artifactId>org-openide-windows</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.netbeans.api</groupId>
+            <artifactId>org-openide-dialogs</artifactId>
         </dependency>
         <dependency>
             <groupId>org.netbeans.api</groupId>
@@ -45,44 +43,47 @@
             <groupId>org.gephi</groupId>
             <artifactId>core-library-wrapper</artifactId>
        </dependency>
+        <dependency>
+            <groupId>org.gephi</groupId>
+            <artifactId>ui-library-wrapper</artifactId>
+        </dependency>
        <dependency>
             <groupId>org.gephi</groupId>
             <artifactId>io-exporter-api</artifactId>
-
         </dependency>
         <dependency>
             <groupId>org.gephi</groupId>
             <artifactId>io-exporter-preview</artifactId>
-
         </dependency>
-
         <dependency>
             <groupId>org.gephi</groupId>
             <artifactId>preview-export-ui</artifactId>
-
         </dependency>
-
         <dependency>
             <groupId>org.gephi</groupId>
             <artifactId>desktop-io-export</artifactId>
-
         </dependency>
         <dependency>
-            <groupId>org.processing</groupId>
-            <artifactId>core</artifactId>
-            <version>3.3.7</version>
+            <groupId>org.imgscalr</groupId>
+            <artifactId>imgscalr-lib</artifactId>
+            <version>4.2</version>
         </dependency>
-<dependency>
-    <groupId>org.imgscalr</groupId>
-    <artifactId>imgscalr-lib</artifactId>
-    <version>4.2</version>
-</dependency>
         <dependency>
             <groupId>org.gephi</groupId>
             <artifactId>utils-longtask</artifactId>
-
         </dependency>
-
+        <dependency>
+            <groupId>org.gephi</groupId>
+            <artifactId>ui-utils</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.gephi</groupId>
+            <artifactId>project-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.gephi</groupId>
+            <artifactId>preview-api</artifactId>
+        </dependency>
     </dependencies>
 
     <build>
@@ -91,7 +92,6 @@
                 <groupId>org.apache.netbeans.utilities</groupId>
                 <artifactId>nbm-maven-plugin</artifactId>
                 <configuration>
-                    <verifyRuntime>skip</verifyRuntime>
                     <licenseName>Apache 2.0</licenseName>
                     <author>mbastian</author>
                     <authorEmail></authorEmail>

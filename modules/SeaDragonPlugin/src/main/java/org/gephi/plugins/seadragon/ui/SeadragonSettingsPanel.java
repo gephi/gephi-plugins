@@ -9,13 +9,11 @@
 package org.gephi.plugins.seadragon.ui;
 
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.io.File;
 import javax.swing.JFileChooser;
 import org.gephi.lib.validation.Multiple4NumberValidator;
 import org.gephi.lib.validation.PositiveNumberValidator;
 import org.gephi.plugins.seadragon.SeadragonExporter;
-import org.netbeans.validation.api.Validator;
 import org.netbeans.validation.api.builtin.stringvalidation.StringValidators;
 import org.netbeans.validation.api.ui.ValidationGroup;
 import org.netbeans.validation.api.ui.swing.ValidationPanel;
@@ -77,7 +75,7 @@ public class SeadragonSettingsPanel extends javax.swing.JPanel {
         browseButton.setText(org.openide.util.NbBundle.getMessage(SeadragonSettingsPanel.class, "SeadragonSettingsPanel.browseButton.text")); // NOI18N
 
         header.setDescription(org.openide.util.NbBundle.getMessage(SeadragonSettingsPanel.class, "SeadragonSettingsPanel.header.description")); // NOI18N
-        header.setIcon(new javax.swing.ImageIcon(getClass().getResource("/org/gephi/plugins/seadragon/ui/resources/logo.png"))); // NOI18N
+        header.setIcon(new javax.swing.ImageIcon(getClass().getResource("/org/gephi/plugins/seadragon/ui/logo.png"))); // NOI18N
         header.setTitle(org.openide.util.NbBundle.getMessage(SeadragonSettingsPanel.class, "SeadragonSettingsPanel.header.title")); // NOI18N
 
         labelTileSize.setText(org.openide.util.NbBundle.getMessage(SeadragonSettingsPanel.class, "SeadragonSettingsPanel.labelTileSize.text")); // NOI18N

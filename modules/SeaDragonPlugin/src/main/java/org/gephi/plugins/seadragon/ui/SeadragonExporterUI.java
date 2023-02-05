@@ -6,14 +6,14 @@
  * Website : http://www.gephi.org
  * Licensed under Apache 2 License (http://www.apache.org/licenses/LICENSE-2.0)
  */
+
 package org.gephi.plugins.seadragon.ui;
 
 import java.io.File;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 import org.gephi.desktop.io.export.spi.ExporterClassUI;
+import org.gephi.lib.validation.DialogDescriptorWithValidation;
 import org.gephi.plugins.seadragon.SeadragonExporter;
 import org.gephi.project.api.ProjectController;
 import org.gephi.project.api.Workspace;
@@ -31,7 +31,6 @@ import org.openide.util.lookup.ServiceProvider;
 import org.openide.windows.WindowManager;
 
 /**
- *
  * @author Mathieu Bastian
  */
 @ServiceProvider(service = ExporterClassUI.class)
@@ -58,13 +57,13 @@ public class SeadragonExporterUI implements ExporterClassUI {
                             if (desktop.isSupported(java.awt.Desktop.Action.BROWSE)) {
                                 Object[] options = {"Open in browser", "OK"};
                                 int n = JOptionPane.showOptionDialog(WindowManager.getDefault().getMainWindow(),
-                                        "Seadragon export finished.",
-                                        "Export finished",
-                                        JOptionPane.YES_NO_OPTION,
-                                        JOptionPane.INFORMATION_MESSAGE,
-                                        null, //do not use a custom Icon
-                                        options, //the titles of buttons
-                                        options[0]); //default button title
+                                    "Seadragon export finished.",
+                                    "Export finished",
+                                    JOptionPane.YES_NO_OPTION,
+                                    JOptionPane.INFORMATION_MESSAGE,
+                                    null, //do not use a custom Icon
+                                    options, //the titles of buttons
+                                    options[0]); //default button title
                                 if (n == 0) {
                                     try {
                                         File f = new File(filePath + File.separator + "seadragon.html");
@@ -76,7 +75,8 @@ public class SeadragonExporterUI implements ExporterClassUI {
                                     }
                                 }
                             } else {
-                                JOptionPane.showMessageDialog(WindowManager.getDefault().getMainWindow(), "Seadragon export finished.", "Export finished", JOptionPane.INFORMATION_MESSAGE);
+                                JOptionPane.showMessageDialog(WindowManager.getDefault().getMainWindow(),
+                                    "Seadragon export finished.", "Export finished", JOptionPane.INFORMATION_MESSAGE);
                             }
                         }
                     }
@@ -117,13 +117,8 @@ public class SeadragonExporterUI implements ExporterClassUI {
         SeadragonSettingsPanel panel = new SeadragonSettingsPanel();
         panel.setup(exporter);
         ValidationPanel validationPanel = (ValidationPanel) SeadragonSettingsPanel.createValidationPanel(panel);
-        final DialogDescriptor dd = new DialogDescriptor(validationPanel, "Seadragon Web Export");
-        validationPanel.addChangeListener(new ChangeListener() {
 
-            public void stateChanged(ChangeEvent e) {
-                dd.setValid(!((ValidationPanel) e.getSource()).getProblem().isFatal());
-            }
-        });
+        DialogDescriptor dd = DialogDescriptorWithValidation.dialog(validationPanel, "Seadragon Web Export");
         Object result = DialogDisplayer.getDefault().notify(dd);
         if (result == NotifyDescriptor.OK_OPTION) {
             panel.unsetup(true);
@@ -137,7 +132,8 @@ public class SeadragonExporterUI implements ExporterClassUI {
 
                 @Override
                 public void run() {
-                    Workspace currentWorkspace = Lookup.getDefault().lookup(ProjectController.class).getCurrentWorkspace();
+                    Workspace currentWorkspace =
+                        Lookup.getDefault().lookup(ProjectController.class).getCurrentWorkspace();
                     exporter.setWorkspace(currentWorkspace);
                     cancelled = !exporter.execute();
                 }
