@@ -4003,7 +4003,7 @@
         }
       ],
       "category": "Export",
-      "last_update": "February 5, 2023",
+      "last_update": "February 7, 2023",
       "images": null,
       "versions": {
         "0.9.6": {
@@ -4012,9 +4012,9 @@
           "plugin_version": "1.0.0"
         },
         "0.10.0": {
-          "url": "0.10/web-publish-plugin-1.1.0.nbm",
-          "last_update": "February 5, 2023",
-          "plugin_version": "1.1.0"
+          "url": "0.10/web-publish-plugin-1.1.1.nbm",
+          "last_update": "February 7, 2023",
+          "plugin_version": "1.1.1"
         }
       },
       "sourcecode": "https://github.com/gephi/gephi-plugins/tree/web-publish-plugin",

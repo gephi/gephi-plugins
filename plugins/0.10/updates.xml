@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
 <!DOCTYPE module_updates PUBLIC "-//NetBeans//DTD Autoupdate Catalog 2.8//EN" "https://netbeans.apache.org/dtds/autoupdate-catalog-2_8.dtd">
-<module_updates timestamp="15/27/16/05/02/2023">
+<module_updates timestamp="07/32/20/07/02/2023">
 
 
 
@@ -391,12 +391,12 @@
     <message_digest algorithm="SHA-512" value="9d3c1a73c19ed7390788da76d9b395c6a692b52b75288f94805ce41f12bc84159b72520f5f421dc0847ffaad77f7f3f4b37c15946a4484c3b98e6fbf9c5dc5e2"/>
 </module>
 
-<module codenamebase="net.clementlevallois.web.publish.plugin" distribution="web-publish-plugin-1.1.0.nbm" downloadsize="303406" homepage="http://github.com/gephi/gephi-plugins/web-publish-plugin" license="864AC530" moduleauthor="Clement Levallois" needsrestart="true" releasedate="2023/02/05" targetcluster="plugins">
+<module codenamebase="net.clementlevallois.web.publish.plugin" distribution="web-publish-plugin-1.1.1.nbm" downloadsize="303385" homepage="http://github.com/gephi/gephi-plugins/web-publish-plugin" license="864AC530" moduleauthor="Clement Levallois" needsrestart="true" releasedate="2023/02/07" targetcluster="plugins">
         
-    <manifest OpenIDE-Module="net.clementlevallois.web.publish.plugin" OpenIDE-Module-Display-Category="Export" OpenIDE-Module-Implementation-Version="1.1.0" OpenIDE-Module-Long-Description="This plugin converts your network into a gexf file. This file is sent to a &quot;Gist&quot; of Github, where it becomes publicly accessible. Then, a link is created, which allows you to view, explore and share your network with the Retina web application. Be careful, do not publish your networks if the data is confidential!" OpenIDE-Module-Module-Dependencies="org.openide.dialogs &gt; 7.64, org.openide.awt &gt; 7.86, org.openide.util.lookup &gt; 8.52, org.gephi.graph.api &gt; 0.10.0, org.gephi.utils.longtask &gt; 0.10.0, org.gephi.project.api &gt; 0.10.0, org.openide.util &gt; 9.26, org.gephi.io.exporter.api &gt; 0.10.0, org.gephi.io.exporter.plugin &gt; 0.10.0, org.openide.windows &gt; 6.95, org.gephi.io.importer.api &gt; 0.10.0, org.openide.util.ui &gt; 9.26, org.gephi.desktop.import &gt; 0.10.0, org.gephi.desktop.io.export &gt; 0.10.0" OpenIDE-Module-Name="Publish your network to the web" OpenIDE-Module-Requires="org.openide.modules.ModuleFormat1" OpenIDE-Module-Short-Description="This plugin allows you to publish, visualize and share your network on the web, directly from Gephi." OpenIDE-Module-Specification-Version="1.1.0"/>
+    <manifest OpenIDE-Module="net.clementlevallois.web.publish.plugin" OpenIDE-Module-Display-Category="Export" OpenIDE-Module-Implementation-Version="1.1.1" OpenIDE-Module-Long-Description="This plugin converts your network into a gexf file. This file is sent to a &quot;Gist&quot; of Github, where it becomes publicly accessible. Then, a link is created, which allows you to view, explore and share your network with the Retina web application. Be careful, do not publish your networks if the data is confidential!" OpenIDE-Module-Module-Dependencies="org.openide.dialogs &gt; 7.64, org.openide.awt &gt; 7.86, org.openide.util.lookup &gt; 8.52, org.gephi.graph.api &gt; 0.10.0, org.gephi.utils.longtask &gt; 0.10.0, org.gephi.project.api &gt; 0.10.0, org.openide.util &gt; 9.26, org.gephi.io.exporter.api &gt; 0.10.0, org.gephi.io.exporter.plugin &gt; 0.10.0, org.openide.windows &gt; 6.95, org.gephi.io.importer.api &gt; 0.10.0, org.openide.util.ui &gt; 9.26, org.gephi.desktop.import &gt; 0.10.0, org.gephi.desktop.io.export &gt; 0.10.0" OpenIDE-Module-Name="Publish your network to the web" OpenIDE-Module-Requires="org.openide.modules.ModuleFormat1" OpenIDE-Module-Short-Description="This plugin allows you to publish, visualize and share your network on the web, directly from Gephi." OpenIDE-Module-Specification-Version="1.1.1"/>
         
 
-    <message_digest algorithm="SHA-512" value="5a404c6a63a7b4c83dcbf97f80fc9d7c1d24c6076fe655e050d0a16555176710bba5020033a4490262b73f5fd5ca75810f45805b1fb23dbd8df24bff157ff15a"/>
+    <message_digest algorithm="SHA-512" value="23ac37e2b9ebe2930f5b0772c32909cebae0e3d28eaf52d331c8f216aeb1e31f1b6a71c71c8105b84ef5a8ef4d3c6497ecf240a445240e03df91fb2b34226b08"/>
 </module>
 
 <module codenamebase="imperialcollegelondon.scale.plugin" distribution="scale-plugin-1.1.0.nbm" downloadsize="14609" homepage="http://github.com/gephi/gephi-plugins/scale-plugin" moduleauthor="Huangsong Wei,Imperial College London" needsrestart="true" releasedate="2023/01/09" targetcluster="plugins">
