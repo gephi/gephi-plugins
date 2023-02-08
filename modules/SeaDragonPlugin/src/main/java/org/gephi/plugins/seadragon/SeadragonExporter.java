@@ -10,8 +10,6 @@ package org.gephi.plugins.seadragon;
 
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
-import java.awt.image.BufferedImageOp;
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -21,10 +19,12 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Result;
 import javax.xml.transform.Source;
 import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
@@ -40,6 +40,7 @@ import org.gephi.utils.longtask.spi.LongTask;
 import org.gephi.utils.progress.Progress;
 import org.gephi.utils.progress.ProgressTicket;
 import org.openide.util.Lookup;
+import org.w3c.dom.DOMException;
 import org.w3c.dom.Element;
 /**
  *
@@ -55,7 +56,7 @@ public class SeadragonExporter implements Exporter, LongTask {
     private Workspace workspace;
     private ProgressTicket progress;
     private boolean cancel = false;
-    private PNGExporter pngExporter = new PNGExporter();
+    private final PNGExporter pngExporter = new PNGExporter();
     private TileRenderer tileRenderer;
     //Settings
     private int width;
@@ -67,7 +68,6 @@ public class SeadragonExporter implements Exporter, LongTask {
     
     @Override
     public boolean execute() {
-        ByteArrayOutputStream stream = new ByteArrayOutputStream();
         
         Progress.start(progress);
         Progress.setDisplayName(progress, "Export Seadragon");
@@ -79,19 +79,15 @@ public class SeadragonExporter implements Exporter, LongTask {
         PreviewProperties props = controller.getModel(workspace).getProperties();
         props.putValue("width", width);
         props.putValue("height", height);
-        props.putValue(PreviewProperty.MARGIN, new Float((float) margin));
+        props.putValue(PreviewProperty.MARGIN, (float) margin);
         G2DTarget target = (G2DTarget) controller.getRenderTarget(RenderTarget.G2D_TARGET, workspace);
         
         target.refresh();
-        
+    
         Progress.switchToIndeterminate(progress);
-     
-        Graphics2D pg2 = target.getGraphics();
-   
         BufferedImage img = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
-        
-        //img.setRGB(0, 0, width, height, pg2.pixels, 0, width);
-        pg2.drawImage(img, null, width, width);
+        img.getGraphics().drawImage(target.getImage(), 0, 0, null);
+   
         try {
             export(img);
         } catch (Exception ex) {
@@ -148,7 +144,7 @@ public class SeadragonExporter implements Exporter, LongTask {
             document = documentBuilder.newDocument();
             document.setXmlVersion("1.0");
             document.setXmlStandalone(true);
-        } catch (Exception ex) {
+        } catch (ParserConfigurationException | DOMException ex) {
             throw new RuntimeException("Can't create XML file", ex);
         }
         
@@ -172,7 +168,7 @@ public class SeadragonExporter implements Exporter, LongTask {
             transformer.setOutputProperty(OutputKeys.INDENT, "yes");
             transformer.setOutputProperty(OutputKeys.ENCODING, "UTF-8");
             transformer.transform(source, result);
-        } catch (Exception ex) {
+        } catch (IllegalArgumentException | TransformerException ex) {
             throw new RuntimeException("Can't write XML file", ex);
         }
     }
@@ -203,19 +199,19 @@ public class SeadragonExporter implements Exporter, LongTask {
     }
     
     private void copyFromJar(String source, File folder) throws Exception {
-        InputStream is = getClass().getResourceAsStream("/org/gephi/plugins/seadragon/" + source);
-        File file = new File(folder + (folder.getPath().endsWith(File.separator) ? "" : File.separator) + source);
-        if (!file.getParentFile().exists()) {
-            file.getParentFile().mkdir();
+        try (InputStream is = getClass().getResourceAsStream("/org/gephi/plugins/seadragon/" + source)) {
+            File file = new File(folder + (folder.getPath().endsWith(File.separator) ? "" : File.separator) + source);
+            if (!file.getParentFile().exists()) {
+                file.getParentFile().mkdir();
+            }
+            try (OutputStream os = new FileOutputStream(file)) {
+                byte[] buffer = new byte[4096];
+                int length;
+                while ((length = is.read(buffer)) > 0) {
+                    os.write(buffer, 0, length);
+                }
+            }
         }
-        OutputStream os = new FileOutputStream(file);
-        byte[] buffer = new byte[4096];
-        int length;
-        while ((length = is.read(buffer)) > 0) {
-            os.write(buffer, 0, length);
-        }
-        os.close();
-        is.close();
     }
     
     public int getTileSize() {
