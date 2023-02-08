@@ -203,7 +203,7 @@ public class SeadragonExporter implements Exporter, LongTask {
     }
     
     private void copyFromJar(String source, File folder) throws Exception {
-        InputStream is = getClass().getResourceAsStream("/org/gephi/plugins/seadragon/resources/" + source);
+        InputStream is = getClass().getResourceAsStream("/org/gephi/plugins/seadragon/" + source);
         File file = new File(folder + (folder.getPath().endsWith(File.separator) ? "" : File.separator) + source);
         if (!file.getParentFile().exists()) {
             file.getParentFile().mkdir();
