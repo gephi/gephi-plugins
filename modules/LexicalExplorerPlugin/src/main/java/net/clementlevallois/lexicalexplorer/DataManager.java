@@ -7,7 +7,6 @@ package net.clementlevallois.lexicalexplorer;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import net.clementlevallois.umigon.model.TextFragment;
 
 /**
  *

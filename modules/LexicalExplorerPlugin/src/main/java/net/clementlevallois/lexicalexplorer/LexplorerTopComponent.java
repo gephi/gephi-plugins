@@ -5,21 +5,25 @@
 package net.clementlevallois.lexicalexplorer;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.ResourceBundle;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.util.stream.Collectors;
 import javax.swing.DefaultListModel;
 import javax.swing.ListSelectionModel;
-import javax.swing.event.ChangeListener;
 import org.gephi.graph.api.GraphModel;
-import org.gephi.project.api.ProjectController;
+import org.gephi.graph.api.Node;
 import org.gephi.visualization.VizController;
 import org.gephi.visualization.api.selection.SelectionManager;
+import org.gephi.visualization.apiimpl.VizEvent;
+import org.gephi.visualization.apiimpl.VizEvent.Type;
+import org.gephi.visualization.apiimpl.VizEventListener;
+import org.gephi.visualization.apiimpl.VizEventManager;
+import org.gephi.visualization.events.StandardVizEventManager;
+import org.gephi.visualization.opengl.AbstractEngine;
 import org.netbeans.api.settings.ConvertAsProperties;
 import org.openide.awt.ActionID;
 import org.openide.awt.ActionReference;
 import org.openide.util.Exceptions;
-import org.openide.util.Lookup;
 import org.openide.util.NbBundle;
 import org.openide.windows.TopComponent;
 
@@ -60,8 +64,10 @@ public final class LexplorerTopComponent extends TopComponent {
         graphModel = GraphOperations.graphInitFromCurrentlyOpendProject();
         DefaultListModel<String> listModelOfNodeAttributes;
 
-        SelectionChangeListener selectionChangListenerTest = new SelectionChangeListener();
-        VizController.getInstance().getSelectionManager().addChangeListener(selectionChangListenerTest);
+        // instantiating the change listener and adding it to the listeners of the selection manager
+        MouseMoveListener listener = new MouseMoveListener();
+        VizController.getInstance().getVizEventManager().addListener(listener);
+        boolean hasListeners = VizController.getInstance().getVizEventManager().hasListeners(Type.MOUSE_MOVE);
 
         // loading the names of nodes attributes
         if (graphModel == null) {
@@ -160,7 +166,7 @@ public final class LexplorerTopComponent extends TopComponent {
             .addGroup(jInternalFrame2Layout.createSequentialGroup()
                 .addGap(23, 23, 23)
                 .addComponent(jSpinnerNumberTopTerms, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(34, Short.MAX_VALUE))
+                .addContainerGap(28, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
@@ -187,8 +193,8 @@ public final class LexplorerTopComponent extends TopComponent {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(runButton)
-                    .addComponent(jInternalFrame2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jInternalFrame1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jInternalFrame1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jInternalFrame2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addComponent(placeHolderForTopTerms, javax.swing.GroupLayout.PREFERRED_SIZE, 176, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(95, Short.MAX_VALUE))
@@ -204,8 +210,14 @@ public final class LexplorerTopComponent extends TopComponent {
                 return;
             }
             Integer nbTopTermsToDisplay = (Integer) jSpinnerNumberTopTerms.getValue();
-            String topTermsAsString = topTermExtractor.mineAndSortTextualAttribute(graphModel, selectedColumnId, "en", nbTopTermsToDisplay);
-            placeHolderForTopTerms.setText(topTermsAsString);
+            topTermExtractor.tokenizeSelectedTextualAttributeForTheEntireGraph(graphModel, selectedColumnId, "en");
+
+            List<Node> selectedNodes = VizController.getInstance().getSelectionManager().getSelectedNodes();
+            List<String> selectedNodesIds = selectedNodes.stream().map(Node::getId).map(Object::toString).collect(Collectors.toList());
+
+            String topTermsExtractorFromSelectedNodes = topTermExtractor.topTermsExtractorFromSelectedNodes(selectedNodesIds, nbTopTermsToDisplay);
+            placeHolderForTopTerms.setText(topTermsExtractorFromSelectedNodes);
+
         } catch (IOException ex) {
             Exceptions.printStackTrace(ex);
         }
@@ -231,8 +243,8 @@ public final class LexplorerTopComponent extends TopComponent {
     private javax.swing.JInternalFrame jInternalFrame2;
     private javax.swing.JList<String> jListOfNodeAttributes;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JSpinner jSpinnerNumberTopTerms;
-    private javax.swing.JLabel placeHolderForTopTerms;
+    public static javax.swing.JSpinner jSpinnerNumberTopTerms;
+    public static javax.swing.JLabel placeHolderForTopTerms;
     private javax.swing.JButton runButton;
     // End of variables declaration//GEN-END:variables
     @Override

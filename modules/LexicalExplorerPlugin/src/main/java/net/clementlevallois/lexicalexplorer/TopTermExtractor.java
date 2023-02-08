@@ -75,7 +75,7 @@ public class TopTermExtractor {
 
     }
 
-    public String mineAndSortTextualAttribute(GraphModel gm, String attributeName, String lang, int maxNumberOfTerms) throws IOException {
+    public void tokenizeSelectedTextualAttributeForTheEntireGraph(GraphModel gm, String attributeName, String lang) throws IOException {
 
         Graph graph = gm.getGraph();
 
@@ -144,11 +144,10 @@ public class TopTermExtractor {
                 }
             }
         }
-        String topTermsForTheEntireNetwork = topTermsExtractorFromSelectedNodes(allNodeIds, maxNumberOfTerms);
-        return topTermsForTheEntireNetwork;
+        DataManager.setMapOfNodeIdsToTheirTextFragments(mapOfNodeIdsToTheirTextFragments);
     }
 
-    private String topTermsExtractorFromSelectedNodes(List<String> nodeIds, int maxNumberOfTerms) {
+    public String topTermsExtractorFromSelectedNodes(List<String> nodeIds, int maxNumberOfTerms) {
         // the multiset will store unique terms from the text we collected and count how many times each term appears
         Multiset<String> allTextFragmentsFromAllSelectedNodes = new Multiset();
 

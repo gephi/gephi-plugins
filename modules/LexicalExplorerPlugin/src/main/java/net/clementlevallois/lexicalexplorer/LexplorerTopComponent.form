@@ -62,8 +62,8 @@
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
                   <Component id="runButton" min="-2" max="-2" attributes="0"/>
-                  <Component id="jInternalFrame2" min="-2" max="-2" attributes="0"/>
                   <Component id="jInternalFrame1" alignment="0" min="-2" max="-2" attributes="0"/>
+                  <Component id="jInternalFrame2" alignment="0" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace type="separate" max="-2" attributes="0"/>
               <Component id="placeHolderForTopTerms" min="-2" pref="176" max="-2" attributes="0"/>
@@ -79,6 +79,9 @@
           <ResourceString bundle="net/clementlevallois/lexicalexplorer/Bundle.properties" key="LexplorerTopComponent.placeHolderForTopTerms.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
         </Property>
       </Properties>
+      <AuxValues>
+        <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="9"/>
+      </AuxValues>
     </Component>
     <Component class="javax.swing.JButton" name="runButton">
       <Properties>
@@ -194,13 +197,16 @@
               <Group type="102" alignment="0" attributes="0">
                   <EmptySpace min="-2" pref="23" max="-2" attributes="0"/>
                   <Component id="jSpinnerNumberTopTerms" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace pref="34" max="32767" attributes="0"/>
+                  <EmptySpace pref="28" max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
       </Layout>
       <SubComponents>
         <Component class="javax.swing.JSpinner" name="jSpinnerNumberTopTerms">
+          <AuxValues>
+            <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="9"/>
+          </AuxValues>
         </Component>
       </SubComponents>
     </Container>
