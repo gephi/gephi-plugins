@@ -64,7 +64,7 @@ public final class LexplorerTopComponent extends TopComponent {
         graphModel = GraphOperations.graphInitFromCurrentlyOpendProject();
         DefaultListModel<String> listModelOfNodeAttributes;
 
-        // instantiating the change listener and adding it to the listeners of the selection manager
+        // instantiating the mouse move listener and adding it to the listeners of the viz event manager
         MouseMoveListener listener = new MouseMoveListener();
         VizController.getInstance().getVizEventManager().addListener(listener);
         boolean hasListeners = VizController.getInstance().getVizEventManager().hasListeners(Type.MOUSE_MOVE);
