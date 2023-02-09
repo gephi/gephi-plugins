@@ -1,0 +1,3 @@
+[submodule "modules/SeaDragonPlugin/src/main/resources/org/gephi/plugins/openseadragon"]
+	path = modules/SeaDragonPlugin/src/main/resources/org/gephi/plugins/openseadragon
+	url = https://github.com/totetmatt/gephi-openseadragon-plugin-frontend.git
