@@ -103,7 +103,7 @@ public class SeadragonExporter implements Exporter, LongTask {
     }
     
     public void export(BufferedImage img) throws Exception {
-        delete(new File(path, PATH_MAP));
+
         File folder = new File(path, PATH_MAP);
         folder.mkdir();
         folder = new File(folder, PATH_MAP + PATH_FILES);
@@ -175,31 +175,31 @@ public class SeadragonExporter implements Exporter, LongTask {
     
     private void exportOtherFiles() {
         try {
-            copyFromJar("seadragon.html", path);
-            copyFromJar("img/fullpage_grouphover.png", path);
-            copyFromJar("img/fullpage_hover.png", path);
-            copyFromJar("img/fullpage_pressed.png", path);
-            copyFromJar("img/fullpage_rest.png", path);
-            copyFromJar("img/home_grouphover.png", path);
-            copyFromJar("img/home_hover.png", path);
-            copyFromJar("img/home_pressed.png", path);
-            copyFromJar("img/home_rest.png", path);
-            copyFromJar("img/zoomin_grouphover.png", path);
-            copyFromJar("img/zoomin_hover.png", path);
-            copyFromJar("img/zoomin_pressed.png", path);
-            copyFromJar("img/zoomin_rest.png", path);
-            copyFromJar("img/zoomout_grouphover.png", path);
-            copyFromJar("img/zoomout_hover.png", path);
-            copyFromJar("img/zoomout_pressed.png", path);
-            copyFromJar("img/zoomout_rest.png", path);
-            copyFromJar("js/seadragon-min.js", path);
+            copyFromJar("index.html", path);
+            copyFromJar("images/fullpage_grouphover.png", path);
+            copyFromJar("images/fullpage_hover.png", path);
+            copyFromJar("images/fullpage_pressed.png", path);
+            copyFromJar("images/fullpage_rest.png", path);
+            copyFromJar("images/home_grouphover.png", path);
+            copyFromJar("images/home_hover.png", path);
+            copyFromJar("images/home_pressed.png", path);
+            copyFromJar("images/home_rest.png", path);
+            copyFromJar("images/zoomin_grouphover.png", path);
+            copyFromJar("images/zoomin_hover.png", path);
+            copyFromJar("images/zoomin_pressed.png", path);
+            copyFromJar("images/zoomin_rest.png", path);
+            copyFromJar("images/zoomout_grouphover.png", path);
+            copyFromJar("images/zoomout_hover.png", path);
+            copyFromJar("images/zoomout_pressed.png", path);
+            copyFromJar("images/zoomout_rest.png", path);
+            copyFromJar("js/openseadragon.min.js", path);
         } catch (Exception ex) {
             Logger.getLogger(SeadragonExporter.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
     
     private void copyFromJar(String source, File folder) throws Exception {
-        try (InputStream is = getClass().getResourceAsStream("/org/gephi/plugins/seadragon/" + source)) {
+        try (InputStream is = getClass().getResourceAsStream("/org/gephi/plugins/openseadragon/" + source)) {
             File file = new File(folder + (folder.getPath().endsWith(File.separator) ? "" : File.separator) + source);
             if (!file.getParentFile().exists()) {
                 file.getParentFile().mkdir();
@@ -286,15 +286,5 @@ public class SeadragonExporter implements Exporter, LongTask {
     public void setProgressTicket(ProgressTicket progressTicket) {
         this.progress = progressTicket;
     }
-    
-    private void delete(File f) throws IOException {
-        if (f.isDirectory()) {
-            for (File c : f.listFiles()) {
-                delete(c);
-            }
-        }
-        if (f.exists() && !f.delete()) {
-            throw new IOException("Failed to delete file: " + f);
-        }
-    }
+
 }
