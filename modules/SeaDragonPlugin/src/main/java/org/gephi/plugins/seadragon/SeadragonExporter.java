@@ -175,6 +175,9 @@ public class SeadragonExporter implements Exporter, LongTask {
     
     private void exportOtherFiles() {
         try {
+            // TODO : Should be automatically listed from resources files.
+            // But listing file from your resource looks painfull 
+            // So thinking about packaging into a zip and unzip when needed.
             copyFromJar("index.html", path);
             copyFromJar("images/fullpage_grouphover.png", path);
             copyFromJar("images/fullpage_hover.png", path);
