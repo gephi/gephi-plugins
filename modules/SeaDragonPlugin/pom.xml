@@ -9,7 +9,7 @@
 
     <groupId>org.gephi</groupId>
     <artifactId>sea-dragon-plugin</artifactId>
-    <version>1.0.0</version>
+    <version>2.0.0</version>
     <packaging>nbm</packaging>
 
     <name>Sea Dragon Plugin</name>
