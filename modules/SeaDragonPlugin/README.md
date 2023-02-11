@@ -1,8 +1,8 @@
-## Sea Dragon Plugin
+# Sea Dragon Plugin
 
-This plugin export 
+This plugin export your graph as a Deepzoom image that can be read with [https://openseadragon.github.io/](https://openseadragon.github.io/)
 
-## Quick Run
+# Quick Run
 
 - Open Gephi, and make sure you installed the `sea-dragon-plugin` plugin.
 - Open the graph you want to render with the plugin.
@@ -29,3 +29,20 @@ You should be able to open the web page and use opensea dragon plugin with your 
 
 If you have a website, all you need to do is to copy the directory where you exported the graph via the plugin to your server. Then you should be able to access the page and the graph
 via your remote website.
+
+# Development
+
+The plugin is split into 2 parts :
+- The backend / java part which main purpose is to convert from Gephi the graph 
+- The frontend / Html part which is only 
+
+## Frontend
+The frontend part is a git submodule from another git repository currently here (https://github.com/totetmatt/gephi-openseadragon-plugin-frontend) 
+
+Which means any update for the frontend needs to be done on the git repository and then propagated on the plugin by updating the submodule with the command :
+`git submodule update --remote`
+
+
+# TODO 
+- Better frontend managment on code
+- Write only map file option
