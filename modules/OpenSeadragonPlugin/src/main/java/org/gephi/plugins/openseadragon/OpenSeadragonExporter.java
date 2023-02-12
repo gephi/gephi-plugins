@@ -46,7 +46,7 @@ import org.w3c.dom.Element;
  *
  * @author Mathieu Bastian
  */
-public class SeadragonExporter implements Exporter, LongTask {
+public class OpenSeadragonExporter implements Exporter, LongTask {
 
     //Const
     private static final String XML_FILE = "map.xml";
@@ -70,7 +70,7 @@ public class SeadragonExporter implements Exporter, LongTask {
     public boolean execute() {
         
         Progress.start(progress);
-        Progress.setDisplayName(progress, "Export Seadragon");
+        Progress.setDisplayName(progress, "Export OpenSeadragon");
         
         PreviewController controller = Lookup.getDefault().lookup(PreviewController.class);
         controller.getModel(workspace).getProperties().putValue(PreviewProperty.VISIBILITY_RATIO, 1.0);
@@ -197,7 +197,7 @@ public class SeadragonExporter implements Exporter, LongTask {
             copyFromJar("images/zoomout_rest.png", path);
             copyFromJar("js/openseadragon.min.js", path);
         } catch (Exception ex) {
-            Logger.getLogger(SeadragonExporter.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(OpenSeadragonExporter.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
     

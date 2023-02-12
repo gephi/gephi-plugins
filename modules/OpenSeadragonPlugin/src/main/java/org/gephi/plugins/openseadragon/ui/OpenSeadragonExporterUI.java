@@ -14,7 +14,7 @@ import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 import org.gephi.desktop.io.export.spi.ExporterClassUI;
 import org.gephi.lib.validation.DialogDescriptorWithValidation;
-import org.gephi.plugins.openseadragon.SeadragonExporter;
+import org.gephi.plugins.openseadragon.OpenSeadragonExporter;
 import org.gephi.project.api.ProjectController;
 import org.gephi.project.api.Workspace;
 import org.gephi.utils.longtask.api.LongTaskErrorHandler;
@@ -34,7 +34,7 @@ import org.openide.windows.WindowManager;
  * @author Mathieu Bastian
  */
 @ServiceProvider(service = ExporterClassUI.class)
-public class SeadragonExporterUI implements ExporterClassUI {
+public class OpenSeadragonExporterUI implements ExporterClassUI {
 
     private final ExporterSettings settings = new ExporterSettings();
     private final LongTaskListener longTaskListener;
@@ -42,7 +42,7 @@ public class SeadragonExporterUI implements ExporterClassUI {
     private boolean cancelled = true;
     private String filePath;
 
-    public SeadragonExporterUI() {
+    public OpenSeadragonExporterUI() {
         longTaskListener = new LongTaskListener() {
 
             @Override
@@ -57,7 +57,7 @@ public class SeadragonExporterUI implements ExporterClassUI {
                             if (desktop.isSupported(java.awt.Desktop.Action.BROWSE)) {
                                 Object[] options = {"Open in browser", "OK"};
                                 int n = JOptionPane.showOptionDialog(WindowManager.getDefault().getMainWindow(),
-                                    "Seadragon export finished.",
+                                    "OpenSeadragon export finished.",
                                     "Export finished",
                                     JOptionPane.YES_NO_OPTION,
                                     JOptionPane.INFORMATION_MESSAGE,
@@ -76,7 +76,7 @@ public class SeadragonExporterUI implements ExporterClassUI {
                                 }
                             } else {
                                 JOptionPane.showMessageDialog(WindowManager.getDefault().getMainWindow(),
-                                    "Seadragon export finished.", "Export finished", JOptionPane.INFORMATION_MESSAGE);
+                                    "OpenSeadragon export finished.", "Export finished", JOptionPane.INFORMATION_MESSAGE);
                             }
                         }
                     }
@@ -111,12 +111,12 @@ public class SeadragonExporterUI implements ExporterClassUI {
     @Override
     public void action() {
 
-        final SeadragonExporter exporter = new SeadragonExporter();
+        final OpenSeadragonExporter exporter = new OpenSeadragonExporter();
         settings.load(exporter);
 
-        SeadragonSettingsPanel panel = new SeadragonSettingsPanel();
+        OpenSeadragonSettingsPanel panel = new OpenSeadragonSettingsPanel();
         panel.setup(exporter);
-        ValidationPanel validationPanel = SeadragonSettingsPanel.createValidationPanel(panel);
+        ValidationPanel validationPanel = OpenSeadragonSettingsPanel.createValidationPanel(panel);
 
         DialogDescriptor dd = DialogDescriptorWithValidation.dialog(validationPanel, "Seadragon Web Export");
         Object result = DialogDisplayer.getDefault().notify(dd);
@@ -155,24 +155,24 @@ public class SeadragonExporterUI implements ExporterClassUI {
         private int tileSize = 256;
         private int margin = 4;
 
-        public void save(SeadragonExporter exporter) {
+        public void save(OpenSeadragonExporter exporter) {
             this.overlap = exporter.getOverlap();
             this.width = exporter.getWidth();
             this.height = exporter.getHeight();
             this.tileSize = exporter.getTileSize();
             this.margin = exporter.getMargin();
 
-            NbPreferences.forModule(SeadragonExporterUI.class).putInt(LAST_WIDTH, width);
-            NbPreferences.forModule(SeadragonExporterUI.class).putInt(LAST_HEIGHT, height);
-            NbPreferences.forModule(SeadragonExporterUI.class).putFloat(LAST_MARGIN, margin);
-            NbPreferences.forModule(SeadragonExporterUI.class).putInt(LAST_TILESIZE, tileSize);
+            NbPreferences.forModule(OpenSeadragonExporterUI.class).putInt(LAST_WIDTH, width);
+            NbPreferences.forModule(OpenSeadragonExporterUI.class).putInt(LAST_HEIGHT, height);
+            NbPreferences.forModule(OpenSeadragonExporterUI.class).putFloat(LAST_MARGIN, margin);
+            NbPreferences.forModule(OpenSeadragonExporterUI.class).putInt(LAST_TILESIZE, tileSize);
         }
 
-        public void load(SeadragonExporter exporter) {
-            width = NbPreferences.forModule(SeadragonExporterUI.class).getInt(LAST_WIDTH, width);
-            height = NbPreferences.forModule(SeadragonExporterUI.class).getInt(LAST_HEIGHT, height);
-            margin = NbPreferences.forModule(SeadragonExporterUI.class).getInt(LAST_MARGIN, margin);
-            tileSize = NbPreferences.forModule(SeadragonExporterUI.class).getInt(LAST_TILESIZE, tileSize);
+        public void load(OpenSeadragonExporter exporter) {
+            width = NbPreferences.forModule(OpenSeadragonExporterUI.class).getInt(LAST_WIDTH, width);
+            height = NbPreferences.forModule(OpenSeadragonExporterUI.class).getInt(LAST_HEIGHT, height);
+            margin = NbPreferences.forModule(OpenSeadragonExporterUI.class).getInt(LAST_MARGIN, margin);
+            tileSize = NbPreferences.forModule(OpenSeadragonExporterUI.class).getInt(LAST_TILESIZE, tileSize);
 
             exporter.setOverlap(overlap);
             exporter.setWidth(width);
