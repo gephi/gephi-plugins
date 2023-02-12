@@ -1,4 +1,0 @@
-Manifest-Version: 1.0
-OpenIDE-Module-Name: SeaDragon Export
-OpenIDE-Module-Localizing-Bundle: org/gephi/plugins/seadragon/Bundle.properties
-OpenIDE-Module-Display-Category: Export
