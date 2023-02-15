@@ -34,6 +34,7 @@ import org.gephi.io.importer.plugin.file.ImporterGEXF;
 import org.gephi.io.importer.spi.FileImporter;
 import org.gephi.io.processor.plugin.DefaultProcessor;
 import org.gephi.project.api.ProjectController;
+import org.openide.util.Exceptions;
 import org.openide.util.Lookup;
 
 /**
@@ -75,7 +76,7 @@ public class TopTermExtractor {
 
     }
 
-    public void tokenizeSelectedTextualAttributeForTheEntireGraph(GraphModel gm, String attributeName, String lang) throws IOException {
+    public Boolean tokenizeSelectedTextualAttributeForTheEntireGraph(GraphModel gm, String attributeName, String lang) {
 
         Graph graph = gm.getGraph();
 
@@ -90,7 +91,7 @@ public class TopTermExtractor {
 
         // we will store the text of the attribute for each node in a list
         Map<String, String> textsFromTheAttribute = new HashMap();
-        
+
         // listing all node ids because for this first run of the plugin we want to show the top terms of the entire network
         List<String> allNodeIds = new ArrayList();
 
@@ -114,37 +115,43 @@ public class TopTermExtractor {
         2. The result is a list of TextFragment objects
         3. We keep only the text fragments that are not punctuation signs nor whitespaces
          */
-        Map<String, List<String>> mapOfNodeIdsToTheirTextFragments = DataManager.getMapOfNodeIdsToTheirTextFragments();
+        Map<String, List<String>> mapOfNodeIdsToTheirTextFragments = new HashMap();
 
         StopWordsRemover stopWordsRemoverEN = new StopWordsRemover(3, "en");
         StopWordsRemover stopWordsRemoverSECONDLANGUAGE = new StopWordsRemover(3, lang);
 
         Iterator<Map.Entry<String, String>> iteratorOnNodesAndTheirTextualAttribute = textsFromTheAttribute.entrySet().iterator();
         while (iteratorOnNodesAndTheirTextualAttribute.hasNext()) {
-            Map.Entry<String, String> next = iteratorOnNodesAndTheirTextualAttribute.next();
-            String textualAttribute = next.getValue();
-            String nodeId = next.getKey();
-            List<TextFragment> textFragmentsForOneDescription = UmigonTokenizer.tokenize(textualAttribute, languageSpecificLexicon);
-            for (TextFragment oneTextFragment : textFragmentsForOneDescription) {
-                if (oneTextFragment.getTypeOfTextFragmentEnum() != TypeOfTextFragmentEnum.WHITE_SPACE
-                        & oneTextFragment.getTypeOfTextFragmentEnum() != TypeOfTextFragmentEnum.PUNCTUATION
-                        & !stopWordsRemoverEN.shouldItBeRemoved(oneTextFragment.getOriginalForm())
-                        & !stopWordsRemoverSECONDLANGUAGE.shouldItBeRemoved(oneTextFragment.getOriginalForm())
-                        & oneTextFragment.getOriginalForm().length() > 4) {
+            try {
+                Map.Entry<String, String> next = iteratorOnNodesAndTheirTextualAttribute.next();
+                String textualAttribute = next.getValue();
+                String nodeId = next.getKey();
+                List<TextFragment> textFragmentsForOneDescription = UmigonTokenizer.tokenize(textualAttribute, languageSpecificLexicon);
+                for (TextFragment oneTextFragment : textFragmentsForOneDescription) {
+                    if (oneTextFragment.getTypeOfTextFragmentEnum() != TypeOfTextFragmentEnum.WHITE_SPACE
+                            & oneTextFragment.getTypeOfTextFragmentEnum() != TypeOfTextFragmentEnum.PUNCTUATION
+                            & !stopWordsRemoverEN.shouldItBeRemoved(oneTextFragment.getOriginalForm())
+                            & !stopWordsRemoverSECONDLANGUAGE.shouldItBeRemoved(oneTextFragment.getOriginalForm())
+                            & oneTextFragment.getOriginalForm().length() > 4) {
 
-                    if (mapOfNodeIdsToTheirTextFragments.containsKey(nodeId)) {
-                        List<String> textFragmentsForThisNode = mapOfNodeIdsToTheirTextFragments.get(nodeId);
-                        textFragmentsForThisNode.add(oneTextFragment.getOriginalForm());
-                        mapOfNodeIdsToTheirTextFragments.put(nodeId, textFragmentsForThisNode);
-                    } else {
-                        List<String> textFragmentsForThisNode = new ArrayList();
-                        textFragmentsForThisNode.add(oneTextFragment.getOriginalForm());
-                        mapOfNodeIdsToTheirTextFragments.put(nodeId, textFragmentsForThisNode);
+                        if (mapOfNodeIdsToTheirTextFragments.containsKey(nodeId)) {
+                            List<String> textFragmentsForThisNode = mapOfNodeIdsToTheirTextFragments.get(nodeId);
+                            textFragmentsForThisNode.add(oneTextFragment.getOriginalForm());
+                            mapOfNodeIdsToTheirTextFragments.put(nodeId, textFragmentsForThisNode);
+                        } else {
+                            List<String> textFragmentsForThisNode = new ArrayList();
+                            textFragmentsForThisNode.add(oneTextFragment.getOriginalForm());
+                            mapOfNodeIdsToTheirTextFragments.put(nodeId, textFragmentsForThisNode);
+                        }
                     }
                 }
+            } catch (IOException ex) {
+                Exceptions.printStackTrace(ex);
+                return false;
             }
         }
         DataManager.setMapOfNodeIdsToTheirTextFragments(mapOfNodeIdsToTheirTextFragments);
+        return true;
     }
 
     public String topTermsExtractorFromSelectedNodes(List<String> nodeIds, int maxNumberOfTerms) {
@@ -155,7 +162,14 @@ public class TopTermExtractor {
 
         for (String nodeId : nodeIds) {
             List<String> textFragmentsForTheSelectedNode = mapOfNodeIdsToTheirTextFragments.get(nodeId);
+            if (textFragmentsForTheSelectedNode == null) {
+                continue;
+            }
             allTextFragmentsFromAllSelectedNodes.addAllFromListOrSet(textFragmentsForTheSelectedNode);
+        }
+
+        if (allTextFragmentsFromAllSelectedNodes.getSize() == 0) {
+            return "no node selected";
         }
 
         // once we have all the terms and their counts in a multiset, we can sort the terms from the most to the least frequent and select the top n

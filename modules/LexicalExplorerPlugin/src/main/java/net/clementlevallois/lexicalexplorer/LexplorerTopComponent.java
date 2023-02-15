@@ -4,22 +4,17 @@
  */
 package net.clementlevallois.lexicalexplorer;
 
+import java.beans.PropertyChangeEvent;
 import java.io.IOException;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.stream.Collectors;
 import javax.swing.DefaultListModel;
 import javax.swing.ListSelectionModel;
+import javax.swing.SwingWorker;
 import org.gephi.graph.api.GraphModel;
 import org.gephi.graph.api.Node;
 import org.gephi.visualization.VizController;
-import org.gephi.visualization.api.selection.SelectionManager;
-import org.gephi.visualization.apiimpl.VizEvent;
-import org.gephi.visualization.apiimpl.VizEvent.Type;
-import org.gephi.visualization.apiimpl.VizEventListener;
-import org.gephi.visualization.apiimpl.VizEventManager;
-import org.gephi.visualization.events.StandardVizEventManager;
-import org.gephi.visualization.opengl.AbstractEngine;
 import org.netbeans.api.settings.ConvertAsProperties;
 import org.openide.awt.ActionID;
 import org.openide.awt.ActionReference;
@@ -51,6 +46,10 @@ public final class LexplorerTopComponent extends TopComponent {
 
     private GraphModel graphModel;
 
+    private Boolean running = false;
+
+    public static long timeLastFetchSelectedNodes = 0;
+
     private static final long serialVersionUID = 305983503930l;
 
     private static final ResourceBundle bundle = NbBundle.getBundle(LexplorerTopComponent.class);
@@ -63,11 +62,6 @@ public final class LexplorerTopComponent extends TopComponent {
         // initializing the graph
         graphModel = GraphOperations.graphInitFromCurrentlyOpendProject();
         DefaultListModel<String> listModelOfNodeAttributes;
-
-        // instantiating the mouse move listener and adding it to the listeners of the viz event manager
-        MouseMoveListener listener = new MouseMoveListener();
-        VizController.getInstance().getVizEventManager().addListener(listener);
-        boolean hasListeners = VizController.getInstance().getVizEventManager().hasListeners(Type.MOUSE_MOVE);
 
         // loading the names of nodes attributes
         if (graphModel == null) {
@@ -202,25 +196,62 @@ public final class LexplorerTopComponent extends TopComponent {
     }// </editor-fold>//GEN-END:initComponents
 
     private void runButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_runButtonActionPerformed
-        try {
+
+        running = !running;
+        
+        if (running){
+            runButton.setText("cancel");
+        }else{
+            runButton.setText("run");
+        }
+        SwingWorker worker = new SwingWorker<String, String>() {
+            @Override
+            public String doInBackground() {
+                while (!isCancelled()) {
+                    TopTermExtractor topTermExtractor = new TopTermExtractor();
+                    List<Node> selectedNodes = VizController.getInstance().getSelectionManager().getSelectedNodes();
+
+                    List<String> selectedNodesIds = selectedNodes.stream().map(Node::getId).map(Object::toString).collect(Collectors.toList());
+                    Integer nbTopTermsToDisplay = (Integer) jSpinnerNumberTopTerms.getValue();
+
+                    String topTermsExtractorFromSelectedNodes = topTermExtractor.topTermsExtractorFromSelectedNodes(selectedNodesIds, nbTopTermsToDisplay);
+                    publish(topTermsExtractorFromSelectedNodes);
+                    try {
+                        Thread.sleep(200);
+                    } catch (InterruptedException ex) {
+                        Exceptions.printStackTrace(ex);
+                    }
+                }
+                return "";
+            }
+
+            @Override
+            protected void process(List<String> v) {
+                for (String s : v) {
+                    placeHolderForTopTerms.setText(s);
+                }
+            }
+        };
+
+        if (running) {
             TopTermExtractor topTermExtractor = new TopTermExtractor();
             String selectedColumnId = jListOfNodeAttributes.getSelectedValue();
             if (selectedColumnId == null || selectedColumnId.isEmpty()) {
-                System.out.println("no attribute selected. Please choose one");
+                placeHolderForTopTerms.setText("no attribute selected. Please choose one");
                 return;
             }
-            Integer nbTopTermsToDisplay = (Integer) jSpinnerNumberTopTerms.getValue();
             topTermExtractor.tokenizeSelectedTextualAttributeForTheEntireGraph(graphModel, selectedColumnId, "en");
+            worker.addPropertyChangeListener((PropertyChangeEvent event) -> {
+                if ("progress".equals(event.getPropertyName())) {
+                    placeHolderForTopTerms.setText((String) event.getNewValue());
+                }
+            });
 
-            List<Node> selectedNodes = VizController.getInstance().getSelectionManager().getSelectedNodes();
-            List<String> selectedNodesIds = selectedNodes.stream().map(Node::getId).map(Object::toString).collect(Collectors.toList());
-
-            String topTermsExtractorFromSelectedNodes = topTermExtractor.topTermsExtractorFromSelectedNodes(selectedNodesIds, nbTopTermsToDisplay);
-            placeHolderForTopTerms.setText(topTermsExtractorFromSelectedNodes);
-
-        } catch (IOException ex) {
-            Exceptions.printStackTrace(ex);
+            worker.execute();
+        } else {
+            worker.cancel(true);
         }
+
     }//GEN-LAST:event_runButtonActionPerformed
 
     private void jButtonRefreshNodeAttributesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonRefreshNodeAttributesActionPerformed
