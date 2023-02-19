@@ -4,7 +4,7 @@ This plugin export your graph as a Deepzoom image that can be read with [https:/
 
 # Quick Run
 
-- Open Gephi, and make sure you installed the `OpenSeadragon Exporter` plugin.
+- Open Gephi, and make sure you installed the `OpenSeadragon Export` plugin.
 - Open the graph you want to render with the plugin.
 - Do your layout and filtering on your graph until you're satisfied.
 - Go to the `Preview panel` and select a preset on the `Preview Settings`. The plugin will base the output on the style you selected. Have an overview by clicking `Refresh`
@@ -23,7 +23,7 @@ One solution is to run a server locally. If you have Python installed on your ma
 - Type the command `python -m http.server 8765`
 - Open your web browser and go to `http://localhost:8765` 
 
-You should be able to open the web page and use Openseadragon plugin with your graph loaded.
+You should be able to open the web page and use OpenSeadragon plugin with your graph loaded.
 
 ## How to share via a website 
 
