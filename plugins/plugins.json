@@ -4051,6 +4051,33 @@
       },
       "sourcecode": "https://github.com/WouterSpekkink/gephi-plugins",
       "homepage": null
+    },
+    {
+      "id": "openseadragon-export",
+      "name": "SeaDragon Export",
+      "short_description": "Export networks on the web, works with all browsers",
+      "long_description": "\u003cp\u003eExport networks on the web with the OpenSeadragon dynamic exploration tool.\u003c/p\u003e\n\n\u003cul\u003e\n\u003cli\u003eWhen a graph is loaded, go to \"File \u003e Export \u003e OpenSeadragon...\" and get the HTML file with the OpenSeadragon widget ready to use.\u003c/li\u003e\n\u003cli\u003eZoom and pan into the graph\u003c/li\u003e\n\u003cli\u003eOpenSeadragon is pure Javascript and works on all browsers\u003c/li\u003e\n\u003cli\u003eAs it uses image tiles (like Google Maps), there is no graph size limit\u003c/li\u003e\n\u003cli\u003eExport is similar as PDF and includes all settings from Preview\u003c/li\u003e\n\u003c/ul\u003e\n\nSee \n\u003cul\u003e\u003cli\u003eOfficial page \u003ca href\u003d\"https://github.com/gephi/gephi-plugins/tree/openseadragon-plugin\"\u003ehttps://github.com/gephi/gephi-plugins/tree/openseadragon-plugin\u003c/a\u003e\u003c/li\u003e\n\u003cli\u003eOpenSeadragon examples \u003ca href\u003d\"https://openseadragon.github.io/\"\u003ehttps://openseadragon.github.io/\u003c/a\u003e\u003c/li\u003e\u003c/ul\u003e",
+      "readme": "# OpenSeadragon Plugin\n\nThis plugin export your graph as a Deepzoom image that can be read with [https://openseadragon.github.io/](https://openseadragon.github.io/)\n\n# Quick Run\n\n- Open Gephi, and make sure you installed the `OpenSeadragon Exporter` plugin.\n- Open the graph you want to render with the plugin.\n- Do your layout and filtering on your graph until you\u0027re satisfied.\n- Go to the `Preview panel` and select a preset on the `Preview Settings`. The plugin will base the output on the style you selected. Have an overview by clicking `Refresh`\n- When you\u0027re satisfied click on `File \u003e\u003e Export \u003e\u003e OpenSeadragon...`\n- Choose where to export the map and the configuration about the size and click `Ok`\n- The plugin should be processing now, the time will vary and can be long if you have a lot of entities and asking for big dimension.\n- When finished, a message will tell you it has finished exporting your graph.\n\nBecause of security issue, you can\u0027t open the html as a normal file on you web browser to make it work. See the solutions bellow to make it works properly\n\n## How to run locally\n\nOne solution is to run a server locally. If you have Python installed on your machine, here is the easiest way to make it works :\n\n- With a command line, go to the directory where you exported the graph (it should be a directory with a file called `index.html` )\n- Type the command `python -m http.server 8765`\n- Open your web browser and go to `http://localhost:8765` \n\nYou should be able to open the web page and use Openseadragon plugin with your graph loaded.\n\n## How to share via a website \n\nIf you have a website, all you need to do is to copy the directory where you exported the graph via the plugin to your server. Then you should be able to access the page and the graph\nvia your remote website.\n\n# Development\n\nThe plugin is split into 2 parts :\n- The backend / java part which main purpose is to convert from Gephi the graph \n- The frontend / Html part which is only \n\n## Frontend\nThe frontend part is a git submodule from another git repository currently here (https://github.com/totetmatt/gephi-openseadragon-plugin-frontend) \n\nWhich means any update for the frontend needs to be done on the git repository and then propagated on the plugin by updating the submodule with the command :\n`git submodule update --remote`\n\n\n# TODO \n- Better frontend management on code\n- Write only map file option\n",
+      "license": "Apache 2.0",
+      "authors": [
+        {
+          "name": "totetmatt",
+          "email": "",
+          "link": ""
+        }
+      ],
+      "category": "Export",
+      "last_update": "February 19, 2023",
+      "images": null,
+      "versions": {
+        "0.10.0": {
+          "url": "0.10/openseadragon-export-2.0.1.nbm",
+          "last_update": "February 19, 2023",
+          "plugin_version": "2.0.1"
+        }
+      },
+      "sourcecode": "https://github.com/gephi/gephi-plugins/tree/seadragon-plugin",
+      "homepage": null
     }
   ]
 }
