@@ -391,46 +391,6 @@
       "homepage": null
     },
     {
-      "id": "seadragon-web-export",
-      "name": "Seadragon Web Export",
-      "short_description": "",
-      "long_description": "\u003cp\u003eExport networks on the web with the \u003ca href\u003d\"http://www.seadragon.com\"\u003eSeadragon\u003c/a\u003e dynamic exploration tool.\u003c/p\u003e\n\u003cp\u003e* When a graph is loaded, go to \u003cstrong\u003eFile \u0026gt; Export \u0026gt; Seadragon Web\u003c/strong\u003e and get the HTML file ready to use\u003cbr\u003e\n* Zoom and pan into the graph\u003cbr\u003e\n* Seadragon is pure Javascript and works on \u003cstrong\u003eall modern browsers\u003c/strong\u003e\u003cbr\u003e\n* As it uses image tiles (like Google Maps), there is \u003cstrong\u003eno graph size limit\u003c/strong\u003e\u003cbr\u003e\n* Export is similar as PDF and includes all settings from Preview\u003c/p\u003e\n\u003cp\u003eSeadragon is a Microsoft Live Labs application and is released under Ms-PL license (Microsoft’s open source license) . Kudos to them for this great library.\u003cbr\u003e\nExample Sample with \u003ca href\u003d\"http://diseasome.eu\"\u003eDiseasome\u003c/a\u003e Network dataset directly exported from Gephi How to use the Plugin\u003c/p\u003e\n\u003cp style\u003d\"margin-bottom: 25px; margin-top: 20px;\"\u003eInstall the plugin from Gephi, “Tools \u0026gt; Plugin�? and find \u003cstrong\u003eSeadragon Web Export\u003c/strong\u003e. After restarting Gephi, the plugin is installed in the export menu. Load a sample network and try the plugin. Go to the Preview tab to configure the rendering settings like colors, labels and edges.\u003c/p\u003e\n\u003cdiv id\u003d\"attachment_3895\" class\u003d\"wp-caption alignnone\" style\u003d\"width: 488px\"\u003e\u003ca href\u003d\"https://marketplace.gephi.org/wp-content/uploads/2013/01/seadragon-plugin-export.png?022bbc\"\u003e\u003cimg class\u003d\"size-full wp-image-3895\" title\u003d\"seadragon-plugin-export\" src\u003d\"https://marketplace.gephi.org/wp-content/uploads/2013/01/seadragon-plugin-export.png?022bbc\" alt\u003d\"\" width\u003d\"478\" height\u003d\"383\"\u003e\u003c/a\u003e\u003cp class\u003d\"wp-caption-text\"\u003eExport directly from Gephi Export menu\u003c/p\u003e\u003c/div\u003e\n\u003cp style\u003d\"margin-bottom: 25px; margin-top: 20px;\"\u003eThe settings asks for a valid directory where to export the files and the size of the canvas. Bigger is the canvas, more you can zoom in, but it takes longer time to generate and to load. If the process hangs and never finishes, reduce the dimensions as you’re hitting the memory limit.\u003c/p\u003e\n\u003cdiv id\u003d\"attachment_3896\" class\u003d\"wp-caption alignnone\" style\u003d\"width: 489px\"\u003e\u003ca href\u003d\"https://marketplace.gephi.org/wp-content/uploads/2013/01/seadragon-plugin-settings.png?022bbc\"\u003e\u003cimg class\u003d\"size-full wp-image-3896\" title\u003d\"seadragon-plugin-settings\" src\u003d\"https://marketplace.gephi.org/wp-content/uploads/2013/01/seadragon-plugin-settings.png?022bbc\" alt\u003d\"\" width\u003d\"479\" height\u003d\"399\"\u003e\u003c/a\u003e\u003cp class\u003d\"wp-caption-text\"\u003eExport settings, configure the size of the image\u003c/p\u003e\u003c/div\u003e\n\u003cp\u003eNote that result on the local hard-drive can’t be viewed with Chrome, due to \u003ca href\u003d\"http://code.google.com/p/chromium/issues/detail?id\u003d40787\u0026amp;q\u003dajax%20local\u0026amp;colspec\u003dID%20Stars%20Pri%20Area%20Feature%20Type%20Status%20Summary%20Modified%20Owner%20Mstone%20OS\"\u003ea bug\u003c/a\u003e. Run Chrome with “–allow-file-access-from-files�? option to make it work.\u003c/p\u003e",
-      "readme": null,
-      "license": "Apache v2",
-      "authors": [
-        {
-          "name": "Mathieu Bastian",
-          "email": null,
-          "link": "http://gephi.org"
-        }
-      ],
-      "category": "Export",
-      "last_update": "January 4, 2013",
-      "images": [
-        {
-          "image": "imgs/seadragon-web-export/seadragon-plugin-settings.png",
-          "thumbnail": "imgs/seadragon-web-export/seadragon-plugin-settings.png"
-        },
-        {
-          "image": "imgs/seadragon-web-export/seadragon-plugin-export.png",
-          "thumbnail": "imgs/seadragon-web-export/seadragon-plugin-export.png"
-        },
-        {
-          "image": "imgs/seadragon-web-export/seadragon-a.png",
-          "thumbnail": "imgs/seadragon-web-export/seadragon-a.png"
-        }
-      ],
-      "versions": {
-        "0.8.2": {
-          "url": "0.8.2/seadragon-web-export.zip",
-          "last_update": "January 4, 2013",
-          "plugin_version": null
-        }
-      },
-      "sourcecode": "https://github.com/mbastian/gephi-plugins/tree/seadragon-plugin",
-      "homepage": null
-    },
-    {
       "id": "exporttoearth",
       "name": "ExportToEarth",
       "short_description": "Export networks with geographic attributes to Google Earth",
@@ -4070,6 +4030,11 @@
       "last_update": "February 19, 2023",
       "images": null,
       "versions": {
+        "0.8.2": {
+          "url": "0.8.2/seadragon-web-export.zip",
+          "last_update": "January 4, 2013",
+          "plugin_version": null
+        },
         "0.10.0": {
           "url": "0.10/openseadragon-export-2.0.1.nbm",
           "last_update": "February 19, 2023",
