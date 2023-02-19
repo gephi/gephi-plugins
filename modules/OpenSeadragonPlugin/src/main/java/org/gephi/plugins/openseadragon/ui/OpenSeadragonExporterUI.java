@@ -26,6 +26,7 @@ import org.openide.DialogDescriptor;
 import org.openide.DialogDisplayer;
 import org.openide.NotifyDescriptor;
 import org.openide.util.Lookup;
+import org.openide.util.NbBundle;
 import org.openide.util.NbPreferences;
 import org.openide.util.lookup.ServiceProvider;
 import org.openide.windows.WindowManager;
@@ -66,7 +67,7 @@ public class OpenSeadragonExporterUI implements ExporterClassUI {
                                     options[0]); //default button title
                                 if (n == 0) {
                                     try {
-                                        File f = new File(filePath + File.separator + "seadragon.html");
+                                        File f = new File(filePath + File.separator + "index.html");
                                         if (f.exists()) {
                                             desktop.browse(f.toURI());
                                         }
@@ -83,24 +84,20 @@ public class OpenSeadragonExporterUI implements ExporterClassUI {
                 });
             }
         };
-        errorHandler = new LongTaskErrorHandler() {
-
-            @Override
-            public void fatalError(Throwable t) {
-                cancelled = true;
-                String message = t.getCause().getMessage();
-                if (message == null || message.isEmpty()) {
-                    message = t.getMessage();
-                }
-                NotifyDescriptor.Message msg = new NotifyDescriptor.Message(message, NotifyDescriptor.WARNING_MESSAGE);
-                DialogDisplayer.getDefault().notify(msg);
+        errorHandler = t -> {
+            cancelled = true;
+            String message = t.getCause().getMessage();
+            if (message == null || message.isEmpty()) {
+                message = t.getMessage();
             }
+            NotifyDescriptor.Message msg = new NotifyDescriptor.Message(message, NotifyDescriptor.WARNING_MESSAGE);
+            DialogDisplayer.getDefault().notify(msg);
         };
     }
 
     @Override
     public String getName() {
-        return "Seadragon Web...";
+        return NbBundle.getMessage(OpenSeadragonExporterUI.class, "OpenSeadragonExporterUI.action");
     }
 
     @Override
@@ -118,14 +115,15 @@ public class OpenSeadragonExporterUI implements ExporterClassUI {
         panel.setup(exporter);
         ValidationPanel validationPanel = OpenSeadragonSettingsPanel.createValidationPanel(panel);
 
-        DialogDescriptor dd = DialogDescriptorWithValidation.dialog(validationPanel, "Seadragon Web Export");
+        DialogDescriptor dd = DialogDescriptorWithValidation.dialog(validationPanel,
+            NbBundle.getMessage(OpenSeadragonExporterUI.class, "SeadragonSettingsPanel.header.title"));
         Object result = DialogDisplayer.getDefault().notify(dd);
         if (result == NotifyDescriptor.OK_OPTION) {
             panel.unsetup(true);
             settings.save(exporter);
             filePath = exporter.getPath().getAbsolutePath();
 
-            LongTaskExecutor executor = new LongTaskExecutor(true, "Seadragon");
+            LongTaskExecutor executor = new LongTaskExecutor(true, "OpenSeadragon");
             executor.setLongTaskListener(longTaskListener);
             executor.setDefaultErrorHandler(errorHandler);
             executor.execute(exporter, new Runnable() {
