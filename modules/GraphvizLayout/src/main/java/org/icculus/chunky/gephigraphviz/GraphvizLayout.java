@@ -105,15 +105,15 @@ public class GraphvizLayout extends AbstractLayout implements Layout {
             graph.readLock();
         
             for (final Node n : this.graph.getNodes()) {
-                dotfile.append(n.getId());
+		dotfile.append("\"").append(n.getId()).append("\"");
                 dotfile.append(" [");
                 dotfile.append("pos=\"").append(n.x()).append(',').append(n.y()).append('"');
                 dotfile.append("];\n");
             }
             for (final Edge e : this.graph.getEdges()) {
-                dotfile.append(e.getSource().getId());
+		dotfile.append("\"").append(e.getSource().getId()).append("\"");
                 dotfile.append(edgearrow);
-                dotfile.append(e.getTarget().getId());
+		dotfile.append("\"").append(e.getTarget().getId()).append("\"");
                 dotfile.append(" [weight=");
                 dotfile.append(e.getWeight());
                 dotfile.append("];\n");
@@ -130,6 +130,7 @@ public class GraphvizLayout extends AbstractLayout implements Layout {
         cmd.add(this.dotBinary);
         cmd.add("-Tdot");
         final ProcessBuilder pb = new ProcessBuilder(cmd);
+
 
         try {
             dotprocess = pb.start();
@@ -265,7 +266,7 @@ public class GraphvizLayout extends AbstractLayout implements Layout {
                 entireOutput.append("\n");
             }
             
-            final String regex = "^\\s*(?<nodeid>\\S+)\\s+\\[[^\\]]*?[, ]?pos=\"(?<pos>[^\"]+?)\".*?\\]";
+	    final String regex = "^\\s*\"(?<nodeid>\\S+)\"\\s+\\[[^\\]]*?[, ]?pos=\"(?<pos>[^\"]+?)\".*?\\]";
             final Pattern pat = Pattern.compile(regex, Pattern.MULTILINE | Pattern.CASE_INSENSITIVE | Pattern.DOTALL);
             Matcher matcher = pat.matcher(entireOutput.toString());
             while(matcher.find()) {
