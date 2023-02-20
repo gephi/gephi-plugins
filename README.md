@@ -76,9 +76,9 @@ Submitting a Gephi plugin for approval is a simple process based on GitHub's [pu
 
 Updating a Gephi plugin has the same process as submitting it for the first time. Don't forget to merge from upstream's master branch.
 
-## IDE Support
+Also, make sure to increment the version number of your plugin in your module's `pom.xml` file before submitting.
 
-Although any IDE/Editor can be used, [Netbeans IDE](https://netbeans.org/) is recommended as Gephi itself is based on [Netbeans Platform](https://netbeans.org/features/platform/index.html).
+## IDE Support
 
 ### Netbeans IDE
 
@@ -97,11 +97,13 @@ To run Gephi with your plugin pre-installed when you click `Run`, create a `Mave
 
 To debug Gephi with your plugin, create a `Remote` configuration and switch the `Debugger mode` option to `Listen`. Then create a `Maven` run configuration like abobe but add `-Drun.params.debug="-J-Xdebug -J-Xnoagent -J-Xrunjdwp:transport=dt_socket,suspend=n,server=n,address=5005"` into the `Runner` > `VM Options` field. Then, go to the `Run` menu and first run debug with the remote configuration and then only run debug with the Maven configuration.
 
+When you make changes to your plugin and want to run Gephi with the changes, make sure to build the `gephi-plugins` root module, and not only your module. Otherwise, your changes won't be reflected.
+
 ## FAQ
 
 #### What kind of plugins can I create?
 
-Gephi can be extended in many ways but the major categories are `Layout`, `Export`, `Import`, `Data Laboratory`, `Filter`, `Generator`, `Metric`, `Preview`, `Tool`, `Appearance` and `Clustering`. A good way to start is to look at examples with the [bootcamp](https://github.com/gephi/gephi-plugins-bootcamp).
+Gephi can be extended in many ways but the major categories are `Layout`, `Export`, `Import`, `Data Laboratory`, `Filter`, `Generator`, `Metric`, `Preview`, `Tool` and `Appearance`. A good way to start is to look at examples with the [bootcamp](https://github.com/gephi/gephi-plugins-bootcamp).
 
 #### In which language can plugins be created?
 
@@ -115,9 +117,9 @@ Yes, native libraries can be used in modules.
 
 The `modules` folder is where plugin modules go. Each plugin is defined in a single folder in this directory. A plugin can be composed of multiple modules (it's called a suite then) but usually one is enough to do what you want.
 
-The `pom.xml` file in `modules` is the parent pom for plugins. A Maven pom can inherit configurations from a parent and that is something we use to keep each plugin's pom very simple. Notice that each plugin's pom (i.e. the `pom.xml` file in the plugin folder) has a `<parent>` defined.
+A Maven pom can inherit configurations from a parent and that is something we use to keep each plugin's pom very simple. Notice that each plugin's pom (i.e. the `pom.xml` file in the plugin folder) has a `<parent>` defined.
 
-The `pom.xml` file at the root folder makes everything fit together and notably lists the modules.
+The `pom.xml` file at the root folder makes everything fit together and notably lists the modules. No need to change anything there besides the `<modules>...</modules>` list.
 
 #### How are the manifest settings defined?
 
@@ -141,7 +143,7 @@ This applies for suite plugins with multiple modules. Besides creating the modul
 
 Dependencies are configured in the `<dependencies>` section in the plugin folder's `pom.xml`. Each dependency has a `groupId`, an `artifactId` and a `version`. There are three types of dependencies a plugin can have: an external library, a Gephi module or a Netbeans module.
 
-The list of Gephi and Netbeans dependencies one can use can be found in the `modules/pom.xml` file. All possible dependencies are listed in the `<dependencyManagement>` section. Because each plugin module inherits from this parent pom the version can be omitted when the dependency is set. For instance, this is how a plugin depends on `GraphAPI` and Netbeans's `Lookup`.
+The list of Gephi and Netbeans dependencies one can use can be found in the parent POM, which you can browse [here](https://github.com/gephi/gephi-plugins/blob/6136ba8427349aa16c4f4b94265267fc3de0e767/modules/pom.xml#L76). All possible dependencies are listed in the `<dependencyManagement>` section. Because each plugin module already inherits the version from this parent pom, it can be omitted. For instance, this is how a plugin depends on `GraphAPI` and Netbeans's `Lookup`.
 
 ```
 <dependencies>
@@ -155,6 +157,22 @@ The list of Gephi and Netbeans dependencies one can use can be found in the `mod
     </dependency>
 </dependencies>
 ```
+
+#### How to best write unit tests for my plugin?
+
+It's recommended to use unit-testing to ensure a reliable plugin.
+
+A JUnit4 dependency can be added to your module's `pom.xml`
+
+```
+<dependency>
+    <groupId>org.netbeans.api</groupId>
+    <artifactId>org-netbeans-modules-nbjunit</artifactId>
+    <scope>test</scope>
+</dependency>
+```
+
+Those tests will automatically be run when your plugin is built.
 
 #### What are public packages for?
 
@@ -170,36 +188,8 @@ Public packages are configured in the module's `pom.xml` file. Edit the `<public
 
 #### What is the difference between plugin and module?
 
-It's the same thing. We say module because Gephi is a modular application and is composed of many independent modules. Plugins also are modules, but we call them plugin because they aren't in the _core_ Gephi.
+It's the same thing. We say module because Gephi is a modular application and is composed of many independent modules. Plugins also are modules but we call them plugin because they aren't in the _core_ Gephi.
 
 #### When running the plugin in Netbeans I get an error "Running standalone modules or suites requires..."
 
 This error appears when you try to run a module. To run Gephi with your plugin you need to run the `gephi-plugins` project, not your module.
-
-## Migrate Gephi 0.8 plugins
-
-The process in which plugins are developed and submitted had an overhaul when Gephi 0.9 was released. Details can be read on this article: [Plugin development gets new tools and opens-up to the community](https://gephi.wordpress.com/2015/12/16/plugin-development-gets-new-tools-and-opens-up-to-the-community/).
-
-This section is a step-by-step guide to migrate 0.8 plugins. Before going through the code and configuration, let's summerize the key differences between the two environements.
-
-- The 0.8 base is built using Ant, whereas the 0.9 uses Maven. These two are significantly different. If you aren't familiar with Maven, you can start with [Maven in 5 Minutes]( https://maven.apache.org/guides/getting-started/maven-in-five-minutes.html). Maven configurations are defined in the `pom.xml` files.
-- The 0.8 base finds the Gephi modules into the `platform` folder checked in the repository, whereas the 0.9 base downloads everything from the central Maven repository, where all Gephi modules are available.
-- Maven requires to separate source files (e.g. .java) and resources files (e.g. .properties) into distinct folders. Sources are located in `src/main/java` and resources in `src/main/resources`.
-
-A custom `migrate` goal is available in the [Gephi Maven Plugin](https://github.com/gephi/gephi-maven-plugin) to facilitate the migration from 0.8 to 0.9. This automated process migrates ant-based plugins to maven and takes care of copying the configuration and code. Follow these steps to migrate your plugin:
-
-- Fork and checkout this repository:
-
-        git clone git@github.com:username/gephi-plugins.git
-
-If you've already had a forked repository based on 0.8 we suggest to save your code somewhere, delete it and fork again as the history was cleared.
-
-- Copy your plugin folder at the root of this directory.
-
-- Run this command:
-
-        mvn org.gephi:gephi-maven-plugin:migrate
-
-This command will detect the ant-based plugin and migrate it. The resulting folder is then located into the `modules` folder.
-
-The plugin code can then be inspected in Netbeans or built via command line with `mvn clean package`.

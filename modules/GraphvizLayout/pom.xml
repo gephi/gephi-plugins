@@ -9,7 +9,7 @@
 
     <groupId>org.icculus.chunky</groupId>
     <artifactId>gephigraphviz</artifactId>
-    <version>1.0.0</version>
+    <version>1.0.1</version>
     <packaging>nbm</packaging>
 
     <name>GraphvizLayout</name>
