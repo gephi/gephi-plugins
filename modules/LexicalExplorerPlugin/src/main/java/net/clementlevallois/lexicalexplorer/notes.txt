@@ -17,3 +17,10 @@ When the selection changes AND IF the last refresh happened more than a second a
 ELSE, DO NOTHING
 
 THAT'S IT!!
+
+
+DESIGN TASKS
+- make sure the words are visible on top
+- removing "https"
+- put everything in lower case
+- put the params on a tab in the back

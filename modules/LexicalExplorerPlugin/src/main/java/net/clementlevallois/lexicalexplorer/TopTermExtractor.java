@@ -102,7 +102,7 @@ public class TopTermExtractor {
             allNodeIds.add((String) node.getId());
             String descriptionForOneNode = (String) node.getAttribute(attributeToBeAnalyzed);
             if (descriptionForOneNode != null && !descriptionForOneNode.isBlank()) {
-                textsFromTheAttribute.put((String) node.getId(), descriptionForOneNode);
+                textsFromTheAttribute.put((String) node.getId(), descriptionForOneNode.toLowerCase());
             }
         }
 

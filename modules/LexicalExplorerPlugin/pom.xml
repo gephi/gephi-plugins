@@ -65,6 +65,10 @@
         </dependency>
         <dependency>
             <groupId>org.gephi</groupId>
+            <artifactId>utils-longtask</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.gephi</groupId>
             <artifactId>io-importer-api</artifactId>
         </dependency>
         <dependency>
