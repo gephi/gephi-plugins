@@ -3,11 +3,13 @@
  */
 package net.clementlevallois.lexicalexplorer;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.stream.Collectors;
+import org.gephi.graph.api.GraphModel;
 import org.gephi.graph.api.Node;
 import org.gephi.utils.longtask.spi.LongTask;
 import org.gephi.utils.progress.Progress;
@@ -32,12 +34,26 @@ public class TopWordsFinderRunnable implements LongTask, Runnable {
     @Override
     public void run() {
         Progress.start(progressTicket);
-        Progress.setDisplayName(progressTicket, "message");
+        Progress.setDisplayName(progressTicket, "word cloud running");
         while (true && !this.cancelled) {
             if (!VizController.getInstance().getSelectionManager().isBlocked() && VizController.getInstance().getSelectionManager().isSelectionEnabled()) {
                 List<Node> selectedNodes = VizController.getInstance().getSelectionManager().getSelectedNodes();
                 Set<String> setIdsForTestChange = selectedNodes.stream().map(Node::getId).map(Object::toString).collect(Collectors.toSet());
-                if (setIdsForTestChange.equals(previousSelectedNodes)){
+                if (selectedNodes.isEmpty()) {
+                    try {
+                        results.put("");
+                        try {
+                            Thread.sleep(pauseBetweenComputations);
+                        } catch (InterruptedException ex) {
+                            Exceptions.printStackTrace(ex);
+                        }
+                        previousSelectedNodes = new HashSet(setIdsForTestChange);
+                        continue;
+                    } catch (InterruptedException ex) {
+                        Exceptions.printStackTrace(ex);
+                    }
+                }
+                if (setIdsForTestChange.equals(previousSelectedNodes)) {
                     try {
                         Thread.sleep(pauseBetweenComputations);
                     } catch (InterruptedException ex) {
@@ -45,31 +61,23 @@ public class TopWordsFinderRunnable implements LongTask, Runnable {
                     }
                     continue;
                 }
-                previousSelectedNodes = new HashSet(setIdsForTestChange);
-                if (selectedNodes.isEmpty()) {
-                    try {
-                        results.put("no node selected");
-                    } catch (InterruptedException ex) {
-                        Exceptions.printStackTrace(ex);
-                    }
-                } else {
-                    // retrieve the textual attributes of these nodes
-                    // and compute the top terms of these
-                    TopTermExtractor topTermExtractor = new TopTermExtractor();
-                    List<String> selectedNodesIds = selectedNodes.stream().map(Node::getId).map(Object::toString).collect(Collectors.toList());
-
-                    String topTermsExtractorFromSelectedNodes = topTermExtractor.topTermsExtractorFromSelectedNodes(selectedNodesIds, nbTopTerms);
-                    try {
-                        Thread.sleep(pauseBetweenComputations);
-                    } catch (InterruptedException ex) {
-                        Exceptions.printStackTrace(ex);
-                    }
-                    try {
-                        results.put(topTermsExtractorFromSelectedNodes);
-                    } catch (InterruptedException ex) {
-                        Exceptions.printStackTrace(ex);
-                    }
+                // retrieve the textual attributes of these nodes
+                // and compute the top terms of these
+                TopTermExtractor topTermExtractor = new TopTermExtractor();
+                List<String> selectedNodesIds = new ArrayList(setIdsForTestChange);
+                String topTermsExtractorFromSelectedNodes = topTermExtractor.topTermsExtractorFromSelectedNodes(selectedNodesIds, nbTopTerms);
+                try {
+                    Thread.sleep(pauseBetweenComputations);
+                } catch (InterruptedException ex) {
+                    Exceptions.printStackTrace(ex);
                 }
+                try {
+                    results.put(topTermsExtractorFromSelectedNodes);
+                } catch (InterruptedException ex) {
+                    Exceptions.printStackTrace(ex);
+                }
+                previousSelectedNodes = new HashSet(setIdsForTestChange);
+
             }
         }
     }
@@ -85,6 +93,7 @@ public class TopWordsFinderRunnable implements LongTask, Runnable {
     @Override
     public boolean cancel() {
         this.cancelled = true;
+        Progress.finish(progressTicket, "word cloud stopped");
         return false;
     }
 

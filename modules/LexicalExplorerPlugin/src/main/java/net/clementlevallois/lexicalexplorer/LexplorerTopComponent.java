@@ -8,6 +8,8 @@ import java.io.IOException;
 import java.util.ResourceBundle;
 import javax.swing.DefaultListModel;
 import javax.swing.ListSelectionModel;
+import javax.swing.SpinnerModel;
+import javax.swing.SpinnerNumberModel;
 import javax.swing.SwingWorker;
 import org.gephi.graph.api.GraphModel;
 import org.gephi.utils.longtask.api.LongTaskExecutor;
@@ -49,9 +51,12 @@ public final class LexplorerTopComponent extends TopComponent {
 
     private final LongTaskExecutor executor;
 
-    private TopWordsFinderRunnable runnable;
+    private TopWordsFinderRunnable topWordsRetrieverAsRunnable;
+    private InitialWordProcessingRunnable initialWordProcessingRunnable;
 
-    private SwingWorker worker;
+    private SwingWorker uiUpdaterAsSwingWorker;
+
+    private LogAreaUpdater logAreaUpdater;
 
     public LexplorerTopComponent() throws IOException {
         initComponents();
@@ -59,24 +64,39 @@ public final class LexplorerTopComponent extends TopComponent {
         setToolTipText(bundle.getString("expression.top_panel.tooltip"));
 
         // initializing the graph
-        graphModel = GraphOperations.graphInitFromCurrentlyOpendProject();
+        graphModel = GraphOperations.graphInitFromCurrentlyOpenedProject();
         DefaultListModel<String> listModelOfNodeAttributes;
 
         // loading the names of nodes attributes
         if (graphModel == null) {
             listModelOfNodeAttributes = new DefaultListModel();
-            loggingjTextField.setText("open a network to use this plugin");
+            loggingjTextField.setText("<html>open a network to use this plugin" + "</html>");
         } else {
             listModelOfNodeAttributes = GraphOperations.returnTextualNodeAttributesAsListOfNames(graphModel);
         }
         jListOfNodeAttributes.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         jListOfNodeAttributes.setModel(listModelOfNodeAttributes);
 
-        // setting the default value of the top terms to display
-        jSpinnerNumberTopTerms.setValue(10);
+        // setting the default values of the top terms to display
+        // in the constructor: spinnerMode: value, min, max, step
+        SpinnerModel spinnerModel = new SpinnerNumberModel(5, 1, 10, 1);
+        jSpinnerNumberTopTerms.setModel(spinnerModel);
 
         executor = new LongTaskExecutor(true, "Lexical Explorer Plugin");
-
+        executor.setLongTaskListener(longTask -> {
+            if (longTask instanceof InitialWordProcessingRunnable) {
+                logAreaUpdater = new LogAreaUpdater("Finished. Ready to run.");
+                logAreaUpdater.execute();
+                Integer nbTopTermsToDisplay = (Integer) jSpinnerNumberTopTerms.getValue();
+                Integer pauseBetweenComputations = 100;
+                topWordsRetrieverAsRunnable = new TopWordsFinderRunnable(nbTopTermsToDisplay, pauseBetweenComputations);
+                uiUpdaterAsSwingWorker = new UIUpdater(10);
+                uiUpdaterAsSwingWorker.execute();
+                executor.execute(topWordsRetrieverAsRunnable, topWordsRetrieverAsRunnable);
+                logAreaUpdater = new LogAreaUpdater("Switch to the word cloud tab, and mouse over the network");
+                logAreaUpdater.execute();
+            }
+        });
     }
 
     /**
@@ -87,35 +107,46 @@ public final class LexplorerTopComponent extends TopComponent {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        runButton = new javax.swing.JButton();
         jPanel1 = new javax.swing.JPanel();
         tabbedPane = new javax.swing.JTabbedPane();
         parametersPanel = new javax.swing.JPanel();
+        jPanelForTwoParams = new javax.swing.JPanel();
         attributeFrame = new javax.swing.JInternalFrame();
         jScrollPane1 = new javax.swing.JScrollPane();
         jListOfNodeAttributes = new javax.swing.JList<>();
+        jPanelRefreshButton = new javax.swing.JPanel();
         javax.swing.JButton jButtonRefreshNodeAttributes = new javax.swing.JButton();
+        jPanelNumberTopTerms = new javax.swing.JPanel();
         numberTopWordsFrame = new javax.swing.JInternalFrame();
         jSpinnerNumberTopTerms = new javax.swing.JSpinner();
-        loggingjTextField = new javax.swing.JTextField();
+        loggingjTextField = new javax.swing.JLabel();
         wordCloudPanel = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
         placeHolderForTopTerms = new javax.swing.JLabel();
+        runButton = new javax.swing.JButton();
 
-        org.openide.awt.Mnemonics.setLocalizedText(runButton, org.openide.util.NbBundle.getMessage(LexplorerTopComponent.class, "LexplorerTopComponent.runButton.text")); // NOI18N
-        runButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                runButtonActionPerformed(evt);
-            }
-        });
+        setLayout(new java.awt.BorderLayout());
 
-        jPanel1.setLayout(new javax.swing.BoxLayout(jPanel1, javax.swing.BoxLayout.Y_AXIS));
+        jPanel1.setLayout(new java.awt.BorderLayout());
+
+        parametersPanel.setName(""); // NOI18N
+        parametersPanel.setLayout(new java.awt.GridLayout(2, 1));
+
+        jPanelForTwoParams.setLayout(new java.awt.GridLayout(2, 1));
 
         attributeFrame.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         attributeFrame.setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         attributeFrame.setTitle(org.openide.util.NbBundle.getMessage(LexplorerTopComponent.class, "LexplorerTopComponent.attributeFrame.title")); // NOI18N
+        attributeFrame.setMaximumSize(new java.awt.Dimension(250, 2147483647));
+        attributeFrame.setMinimumSize(new java.awt.Dimension(250, 5));
+        attributeFrame.setPreferredSize(new java.awt.Dimension(250, 137));
         attributeFrame.setVisible(true);
+        attributeFrame.getContentPane().setLayout(new java.awt.GridLayout(2, 1));
 
+        jScrollPane1.setMaximumSize(new java.awt.Dimension(250, 100));
+
+        jListOfNodeAttributes.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        jListOfNodeAttributes.setAutoscrolls(false);
         jListOfNodeAttributes.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
             public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
                 jListOfNodeAttributesValueChanged(evt);
@@ -123,90 +154,54 @@ public final class LexplorerTopComponent extends TopComponent {
         });
         jScrollPane1.setViewportView(jListOfNodeAttributes);
 
+        attributeFrame.getContentPane().add(jScrollPane1);
+
+        jPanelRefreshButton.setPreferredSize(new java.awt.Dimension(250, 100));
+
         org.openide.awt.Mnemonics.setLocalizedText(jButtonRefreshNodeAttributes, org.openide.util.NbBundle.getMessage(LexplorerTopComponent.class, "LexplorerTopComponent.jButtonRefreshNodeAttributes.text")); // NOI18N
         jButtonRefreshNodeAttributes.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonRefreshNodeAttributesActionPerformed(evt);
             }
         });
+        jPanelRefreshButton.add(jButtonRefreshNodeAttributes);
 
-        javax.swing.GroupLayout attributeFrameLayout = new javax.swing.GroupLayout(attributeFrame.getContentPane());
-        attributeFrame.getContentPane().setLayout(attributeFrameLayout);
-        attributeFrameLayout.setHorizontalGroup(
-            attributeFrameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(attributeFrameLayout.createSequentialGroup()
-                .addGap(24, 24, 24)
-                .addGroup(attributeFrameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 199, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(attributeFrameLayout.createSequentialGroup()
-                        .addGap(67, 67, 67)
-                        .addComponent(jButtonRefreshNodeAttributes)))
-                .addContainerGap(50, Short.MAX_VALUE))
-        );
-        attributeFrameLayout.setVerticalGroup(
-            attributeFrameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(attributeFrameLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jButtonRefreshNodeAttributes)
-                .addContainerGap(14, Short.MAX_VALUE))
-        );
+        attributeFrame.getContentPane().add(jPanelRefreshButton);
+
+        jPanelForTwoParams.add(attributeFrame);
+
+        jPanelNumberTopTerms.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        jPanelNumberTopTerms.setPreferredSize(new java.awt.Dimension(250, 200));
+        jPanelNumberTopTerms.setLayout(new java.awt.BorderLayout());
 
         numberTopWordsFrame.setTitle(org.openide.util.NbBundle.getMessage(LexplorerTopComponent.class, "LexplorerTopComponent.numberTopWordsFrame.title")); // NOI18N
+        numberTopWordsFrame.setMaximumSize(new java.awt.Dimension(250, 100));
+        numberTopWordsFrame.setMinimumSize(new java.awt.Dimension(250, 100));
+        numberTopWordsFrame.setPreferredSize(new java.awt.Dimension(250, 100));
         numberTopWordsFrame.setVisible(true);
+        numberTopWordsFrame.getContentPane().setLayout(new javax.swing.BoxLayout(numberTopWordsFrame.getContentPane(), javax.swing.BoxLayout.Y_AXIS));
 
-        javax.swing.GroupLayout numberTopWordsFrameLayout = new javax.swing.GroupLayout(numberTopWordsFrame.getContentPane());
-        numberTopWordsFrame.getContentPane().setLayout(numberTopWordsFrameLayout);
-        numberTopWordsFrameLayout.setHorizontalGroup(
-            numberTopWordsFrameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(numberTopWordsFrameLayout.createSequentialGroup()
-                .addGap(67, 67, 67)
-                .addComponent(jSpinnerNumberTopTerms, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-        numberTopWordsFrameLayout.setVerticalGroup(
-            numberTopWordsFrameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(numberTopWordsFrameLayout.createSequentialGroup()
-                .addGap(23, 23, 23)
-                .addComponent(jSpinnerNumberTopTerms, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(18, Short.MAX_VALUE))
-        );
+        jSpinnerNumberTopTerms.setMaximumSize(new java.awt.Dimension(250, 50));
+        jSpinnerNumberTopTerms.setMinimumSize(new java.awt.Dimension(250, 50));
+        jSpinnerNumberTopTerms.setPreferredSize(new java.awt.Dimension(250, 50));
+        numberTopWordsFrame.getContentPane().add(jSpinnerNumberTopTerms);
 
-        loggingjTextField.setEditable(false);
+        jPanelNumberTopTerms.add(numberTopWordsFrame, java.awt.BorderLayout.CENTER);
+
+        jPanelForTwoParams.add(jPanelNumberTopTerms);
+
+        parametersPanel.add(jPanelForTwoParams);
+
         loggingjTextField.setBackground(new java.awt.Color(102, 102, 102));
-        loggingjTextField.setForeground(new java.awt.Color(51, 255, 51));
-        loggingjTextField.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-        loggingjTextField.setText(org.openide.util.NbBundle.getMessage(LexplorerTopComponent.class, "LexplorerTopComponent.loggingjTextField.text")); // NOI18N
+        loggingjTextField.setForeground(new java.awt.Color(102, 255, 0));
+        loggingjTextField.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        org.openide.awt.Mnemonics.setLocalizedText(loggingjTextField, org.openide.util.NbBundle.getMessage(LexplorerTopComponent.class, "LexplorerTopComponent.loggingjTextField.text")); // NOI18N
+        loggingjTextField.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        loggingjTextField.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        loggingjTextField.setOpaque(true);
+        parametersPanel.add(loggingjTextField);
 
-        javax.swing.GroupLayout parametersPanelLayout = new javax.swing.GroupLayout(parametersPanel);
-        parametersPanel.setLayout(parametersPanelLayout);
-        parametersPanelLayout.setHorizontalGroup(
-            parametersPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(parametersPanelLayout.createSequentialGroup()
-                .addGroup(parametersPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(parametersPanelLayout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(attributeFrame))
-                    .addComponent(numberTopWordsFrame, javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(parametersPanelLayout.createSequentialGroup()
-                        .addGap(6, 6, 6)
-                        .addComponent(loggingjTextField)))
-                .addContainerGap())
-        );
-        parametersPanelLayout.setVerticalGroup(
-            parametersPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(parametersPanelLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(attributeFrame, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(numberTopWordsFrame, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(loggingjTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 76, Short.MAX_VALUE)
-                .addContainerGap())
-        );
-
-        tabbedPane.addTab(org.openide.util.NbBundle.getMessage(LexplorerTopComponent.class, "LexplorerTopComponent.parametersPanel.TabConstraints.tabTitle"), parametersPanel); // NOI18N
+        tabbedPane.addTab(org.openide.util.NbBundle.getMessage(LexplorerTopComponent.class, "LexplorerTopComponent.TabConstraints.tabTitle"), parametersPanel); // NOI18N
 
         org.openide.awt.Mnemonics.setLocalizedText(placeHolderForTopTerms, org.openide.util.NbBundle.getMessage(LexplorerTopComponent.class, "LexplorerTopComponent.placeHolderForTopTerms.text")); // NOI18N
         jScrollPane2.setViewportView(placeHolderForTopTerms);
@@ -216,110 +211,109 @@ public final class LexplorerTopComponent extends TopComponent {
         wordCloudPanelLayout.setHorizontalGroup(
             wordCloudPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, wordCloudPanelLayout.createSequentialGroup()
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 283, Short.MAX_VALUE)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 328, Short.MAX_VALUE)
                 .addContainerGap())
         );
         wordCloudPanelLayout.setVerticalGroup(
             wordCloudPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, wordCloudPanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 330, Short.MAX_VALUE))
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 456, Short.MAX_VALUE)
+                .addGap(48, 48, 48))
         );
 
         tabbedPane.addTab(org.openide.util.NbBundle.getMessage(LexplorerTopComponent.class, "LexplorerTopComponent.wordCloudPanel.TabConstraints.tabTitle"), wordCloudPanel); // NOI18N
 
-        jPanel1.add(tabbedPane);
+        jPanel1.add(tabbedPane, java.awt.BorderLayout.CENTER);
         tabbedPane.getAccessibleContext().setAccessibleName(org.openide.util.NbBundle.getMessage(LexplorerTopComponent.class, "LexplorerTopComponent.tabbedPane.AccessibleContext.accessibleName")); // NOI18N
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
-        this.setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
-            .addGroup(layout.createSequentialGroup()
-                .addGap(81, 81, 81)
-                .addComponent(runButton)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 367, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(runButton)
-                .addContainerGap())
-        );
+        org.openide.awt.Mnemonics.setLocalizedText(runButton, org.openide.util.NbBundle.getMessage(LexplorerTopComponent.class, "LexplorerTopComponent.runButton.text")); // NOI18N
+        runButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                runButtonActionPerformed(evt);
+            }
+        });
+        jPanel1.add(runButton, java.awt.BorderLayout.SOUTH);
+
+        add(jPanel1, java.awt.BorderLayout.CENTER);
     }// </editor-fold>//GEN-END:initComponents
 
     private void runButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_runButtonActionPerformed
 
         // Boolean (true / false) variable checking if the plugin is running or not
         running = !running;
-
         if (running) {
-            runButton.setText("cancel");
-            Integer topTermsToDisplay = (Integer) jSpinnerNumberTopTerms.getValue();
-            Integer pauseBetweenComputations = 100;
-            runnable = new TopWordsFinderRunnable(topTermsToDisplay, pauseBetweenComputations);
-            worker = new UIupdater(10);
-            worker.execute();
-            executor.execute(runnable, runnable);
-            loggingjTextField.setText("switch to the word cloud tab, and mouse over the network");
-        } else {
-            runnable.cancel();
-            runButton.setText("run");
-            executor.cancel();
-            worker.cancel(true);
-            loggingjTextField.setText("word cloud analysis stopped");
-        }
-
-        if (running) {
-            TopTermExtractor topTermExtractor = new TopTermExtractor();
-            String selectedColumnId = jListOfNodeAttributes.getSelectedValue();
-            if (selectedColumnId == null || selectedColumnId.isEmpty()) {
-                loggingjTextField.setText("No node attribute selected. Please choose one in the list");
-                placeHolderForTopTerms.setText("");
+            if (graphModel == null) {
+                logAreaUpdater = new LogAreaUpdater("Please open a network, first.");
+                logAreaUpdater.execute();
+                running = !running;
                 return;
             }
-            loggingjTextField.setText("Analyzing the text, please wait...");
-            topTermExtractor.tokenizeSelectedTextualAttributeForTheEntireGraph(graphModel, selectedColumnId, "en");
-            loggingjTextField.setText("Finished. Ready to run.");
+            runButton.setText("cancel");
+            String selectedColumnId = jListOfNodeAttributes.getSelectedValue();
+            if (selectedColumnId == null || selectedColumnId.isEmpty()) {
+                logAreaUpdater = new LogAreaUpdater("No node attribute selected. Please choose one in the list");
+                logAreaUpdater.execute();
+                placeHolderForTopTerms.setText("");
+                running = !running;
+                return;
+            }
+            logAreaUpdater = new LogAreaUpdater("Analyzing the text, please wait...");
+            logAreaUpdater.execute();
+            initialWordProcessingRunnable = new InitialWordProcessingRunnable(graphModel, selectedColumnId, "en");
+            executor.execute(initialWordProcessingRunnable, initialWordProcessingRunnable);
+        } else {
+            if (initialWordProcessingRunnable != null) {
+                initialWordProcessingRunnable.cancel();
+            }
+            if (topWordsRetrieverAsRunnable != null) {
+                topWordsRetrieverAsRunnable.cancel();
+            }
+            runButton.setText("run");
+            executor.cancel();
+            if (uiUpdaterAsSwingWorker != null) {
+                uiUpdaterAsSwingWorker.cancel(true);
+            }
+            logAreaUpdater = new LogAreaUpdater("word cloud analysis stopped");
+            logAreaUpdater.execute();
     }//GEN-LAST:event_runButtonActionPerformed
     }
     private void jButtonRefreshNodeAttributesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonRefreshNodeAttributesActionPerformed
-        // loading the names of nodes attributes
+        // loading the names of nodes attributes inthe currently opened network
         DefaultListModel<String> listModelOfNodeAttributes;
-        if (graphModel == null) {
-            graphModel = GraphOperations.graphInitFromCurrentlyOpendProject();
-        }
+
+        graphModel = GraphOperations.graphInitFromCurrentlyOpenedProject();
+        // if we still don't have a graphModel, it means no network is currently opened
         if (graphModel == null) {
             listModelOfNodeAttributes = new DefaultListModel();
-            loggingjTextField.setText("No network found. Open a network to use this plugin");
+            logAreaUpdater = new LogAreaUpdater("no network found. Open a network to use this plugin");
+            logAreaUpdater.execute();
         } else {
+            // we have retrieved the opened network. Let's get the names of the nodes attributes from it
             listModelOfNodeAttributes = GraphOperations.returnTextualNodeAttributesAsListOfNames(graphModel);
-            loggingjTextField.setText("Select a node attribute in the list.");
+            logAreaUpdater = new LogAreaUpdater("select a node attribute in the list.");
+            logAreaUpdater.execute();
         }
         jListOfNodeAttributes.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         jListOfNodeAttributes.setModel(listModelOfNodeAttributes);
     }//GEN-LAST:event_jButtonRefreshNodeAttributesActionPerformed
 
     private void jListOfNodeAttributesValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_jListOfNodeAttributesValueChanged
-        loggingjTextField.setText("the word cloud will be created from this node attribute: " + jListOfNodeAttributes.getSelectedValue());
-
+        logAreaUpdater = new LogAreaUpdater("the word cloud will analyze this node attribute: " + jListOfNodeAttributes.getSelectedValue());
+        logAreaUpdater.execute();
     }//GEN-LAST:event_jListOfNodeAttributesValueChanged
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JInternalFrame attributeFrame;
     private javax.swing.JList<String> jListOfNodeAttributes;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanelForTwoParams;
+    private javax.swing.JPanel jPanelNumberTopTerms;
+    private javax.swing.JPanel jPanelRefreshButton;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JSpinner jSpinnerNumberTopTerms;
-    private javax.swing.JTextField loggingjTextField;
+    private javax.swing.JLabel loggingjTextField;
     private javax.swing.JInternalFrame numberTopWordsFrame;
     private javax.swing.JPanel parametersPanel;
     public static javax.swing.JLabel placeHolderForTopTerms;
@@ -347,25 +341,43 @@ public final class LexplorerTopComponent extends TopComponent {
     void readProperties(java.util.Properties p) {
         String version = p.getProperty("version");
         // TODO read your settings according to their version
+
     }
 
-    private class UIupdater extends SwingWorker<String, String> {
+    private class UIUpdater extends SwingWorker<String, String> {
 
         long pauseInMillis;
 
-        public UIupdater(long pauseInMillis) {
+        public UIUpdater(long pauseInMillis) {
             this.pauseInMillis = pauseInMillis;
         }
 
         @Override
         public String doInBackground() throws InterruptedException {
             while (!this.isCancelled()) {
-                String intermediary = runnable.getIntermediary();
-                if (intermediary != null) {
+                String intermediary = topWordsRetrieverAsRunnable.getIntermediary();
+                if (intermediary != null && !intermediary.isBlank()) {
                     placeHolderForTopTerms.setText(intermediary);
+                } else {
+                    placeHolderForTopTerms.setText("no node selected");
                 }
                 Thread.sleep(pauseInMillis);
             }
+            return "";
+        }
+    }
+
+    private class LogAreaUpdater extends SwingWorker<String, String> {
+
+        String messageWithoutHtmlEnclosingTags;
+
+        public LogAreaUpdater(String messageWithoutHtmlEnclosingTags) {
+            this.messageWithoutHtmlEnclosingTags = messageWithoutHtmlEnclosingTags;
+        }
+
+        @Override
+        public String doInBackground() throws InterruptedException {
+            loggingjTextField.setText("<html>" + messageWithoutHtmlEnclosingTags + "<html>");
             return "";
         }
     }

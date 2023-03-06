@@ -169,7 +169,7 @@ public class TopTermExtractor {
         }
 
         if (allTextFragmentsFromAllSelectedNodes.getSize() == 0) {
-            return "no node selected";
+            return "";
         }
 
         // once we have all the terms and their counts in a multiset, we can sort the terms from the most to the least frequent and select the top n

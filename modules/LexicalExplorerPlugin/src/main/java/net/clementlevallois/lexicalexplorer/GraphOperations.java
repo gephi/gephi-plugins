@@ -15,7 +15,7 @@ import org.openide.util.Lookup;
 
 public class GraphOperations {
 
-    public static GraphModel graphInitFromCurrentlyOpendProject() {
+    public static GraphModel graphInitFromCurrentlyOpenedProject() {
         //Init a project by grasping the one currently opened- and therefore a workspace
         ProjectController pc = Lookup.getDefault().lookup(ProjectController.class);
         if (pc.getCurrentProject() == null) {
