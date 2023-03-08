@@ -4,9 +4,13 @@
  */
 package net.clementlevallois.lexicalexplorer;
 
+import java.awt.Image;
+import java.awt.image.BufferedImage;
+import java.beans.PropertyVetoException;
 import java.io.IOException;
 import java.util.ResourceBundle;
 import javax.swing.DefaultListModel;
+import javax.swing.ImageIcon;
 import javax.swing.ListSelectionModel;
 import javax.swing.SpinnerModel;
 import javax.swing.SpinnerNumberModel;
@@ -31,7 +35,7 @@ import org.openide.windows.TopComponent;
         //iconBase="SET/PATH/TO/ICON/HERE",
         persistenceType = TopComponent.PERSISTENCE_ALWAYS
 )
-@TopComponent.Registration(mode = "layoutmode", openAtStartup = true)
+@TopComponent.Registration(mode = "filtersmode", openAtStartup = true)
 @ActionID(category = "Window", id = "net.clementlevallois.lexicalexplorer.LexplorerTopComponent")
 @ActionReference(path = "Menu/Window" /*, position = 333 */)
 @TopComponent.OpenActionRegistration(
@@ -58,11 +62,11 @@ public final class LexplorerTopComponent extends TopComponent {
 
     private LogAreaUpdater logAreaUpdater;
 
-    public LexplorerTopComponent() throws IOException {
+    public LexplorerTopComponent() throws IOException, PropertyVetoException {
         initComponents();
         setName(bundle.getString("expression.top_panel.title"));
         setToolTipText(bundle.getString("expression.top_panel.tooltip"));
-
+        
         // initializing the graph
         graphModel = GraphOperations.graphInitFromCurrentlyOpenedProject();
         DefaultListModel<String> listModelOfNodeAttributes;
@@ -137,6 +141,7 @@ public final class LexplorerTopComponent extends TopComponent {
         attributeFrame.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         attributeFrame.setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         attributeFrame.setTitle(org.openide.util.NbBundle.getMessage(LexplorerTopComponent.class, "LexplorerTopComponent.attributeFrame.title")); // NOI18N
+        attributeFrame.setFrameIcon(null);
         attributeFrame.setMaximumSize(new java.awt.Dimension(250, 2147483647));
         attributeFrame.setMinimumSize(new java.awt.Dimension(250, 5));
         attributeFrame.setPreferredSize(new java.awt.Dimension(250, 137));
@@ -175,6 +180,7 @@ public final class LexplorerTopComponent extends TopComponent {
         jPanelNumberTopTerms.setLayout(new java.awt.BorderLayout());
 
         numberTopWordsFrame.setTitle(org.openide.util.NbBundle.getMessage(LexplorerTopComponent.class, "LexplorerTopComponent.numberTopWordsFrame.title")); // NOI18N
+        numberTopWordsFrame.setFrameIcon(null);
         numberTopWordsFrame.setMaximumSize(new java.awt.Dimension(250, 100));
         numberTopWordsFrame.setMinimumSize(new java.awt.Dimension(250, 100));
         numberTopWordsFrame.setPreferredSize(new java.awt.Dimension(250, 100));
