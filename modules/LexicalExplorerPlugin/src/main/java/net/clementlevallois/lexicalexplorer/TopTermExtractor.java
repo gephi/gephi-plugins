@@ -56,7 +56,6 @@ public class TopTermExtractor {
         //Init a project - and therefore a workspace
         ProjectController pc = Lookup.getDefault().lookup(ProjectController.class);
         pc.newProject();
-        GraphController graphController = Lookup.getDefault().lookup(GraphController.class);
 
         //Get controllers and models
         ImportController importController = Lookup.getDefault().lookup(ImportController.class);
@@ -80,9 +79,6 @@ public class TopTermExtractor {
 
         Graph graph = gm.getGraph();
 
-        System.out.println("number of edges:" + graph.getEdgeCount());
-        System.out.println("number of nodes:" + graph.getNodeCount());
-
         // selecting the column corresponding to the attribute we want to analyze
         Column attributeToBeAnalyzed = gm.getNodeTable().getColumn(attributeName);
 
@@ -105,8 +101,6 @@ public class TopTermExtractor {
                 textsFromTheAttribute.put((String) node.getId(), descriptionForOneNode.toLowerCase());
             }
         }
-
-        System.out.println("number of nodes that have a description: " + textsFromTheAttribute.size());
 
         Set<String> languageSpecificLexicon = new HashSet();
 
@@ -185,7 +179,7 @@ public class TopTermExtractor {
                     .append(tf.getValue())
                     .append(")")
                     .append("<br/>");
-            System.out.println("top term: " + tf.getKey() + " (appearing " + tf.getValue() + " times).");
+//            System.out.println("top term: " + tf.getKey() + " (appearing " + tf.getValue() + " times).");
             if (i++ > maxNumberOfTerms) {
                 break;
             }

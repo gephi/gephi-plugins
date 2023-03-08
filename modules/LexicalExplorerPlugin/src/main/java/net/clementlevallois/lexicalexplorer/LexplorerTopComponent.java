@@ -4,13 +4,10 @@
  */
 package net.clementlevallois.lexicalexplorer;
 
-import java.awt.Image;
-import java.awt.image.BufferedImage;
 import java.beans.PropertyVetoException;
 import java.io.IOException;
 import java.util.ResourceBundle;
 import javax.swing.DefaultListModel;
-import javax.swing.ImageIcon;
 import javax.swing.ListSelectionModel;
 import javax.swing.SpinnerModel;
 import javax.swing.SpinnerNumberModel;
@@ -74,7 +71,7 @@ public final class LexplorerTopComponent extends TopComponent {
         // loading the names of nodes attributes
         if (graphModel == null) {
             listModelOfNodeAttributes = new DefaultListModel();
-            loggingjTextField.setText("<html>open a network to use this plugin" + "</html>");
+            loggingjTextField.setText("<html>"+ bundle.getString("expression.warning.open_network") + "</html>");
         } else {
             listModelOfNodeAttributes = GraphOperations.returnTextualNodeAttributesAsListOfNames(graphModel);
         }
@@ -89,7 +86,7 @@ public final class LexplorerTopComponent extends TopComponent {
         executor = new LongTaskExecutor(true, "Lexical Explorer Plugin");
         executor.setLongTaskListener(longTask -> {
             if (longTask instanceof InitialWordProcessingRunnable) {
-                logAreaUpdater = new LogAreaUpdater("Finished. Ready to run.");
+                logAreaUpdater = new LogAreaUpdater(bundle.getString("expression.finished_ready_to_run"));
                 logAreaUpdater.execute();
                 Integer nbTopTermsToDisplay = (Integer) jSpinnerNumberTopTerms.getValue();
                 Integer pauseBetweenComputations = 100;
@@ -97,7 +94,7 @@ public final class LexplorerTopComponent extends TopComponent {
                 uiUpdaterAsSwingWorker = new UIUpdater(10);
                 uiUpdaterAsSwingWorker.execute();
                 executor.execute(topWordsRetrieverAsRunnable, topWordsRetrieverAsRunnable);
-                logAreaUpdater = new LogAreaUpdater("Switch to the word cloud tab, and mouse over the network");
+                logAreaUpdater = new LogAreaUpdater(bundle.getString("expression.switch_to_wordcloud_tab_and_select"));
                 logAreaUpdater.execute();
             }
         });
@@ -250,21 +247,21 @@ public final class LexplorerTopComponent extends TopComponent {
         running = !running;
         if (running) {
             if (graphModel == null) {
-                logAreaUpdater = new LogAreaUpdater("Please open a network, first.");
+                logAreaUpdater = new LogAreaUpdater(bundle.getString("expression.warning.open_network"));
                 logAreaUpdater.execute();
                 running = !running;
                 return;
             }
-            runButton.setText("cancel");
+            runButton.setText(bundle.getString("expression.cancel"));
             String selectedColumnId = jListOfNodeAttributes.getSelectedValue();
             if (selectedColumnId == null || selectedColumnId.isEmpty()) {
-                logAreaUpdater = new LogAreaUpdater("No node attribute selected. Please choose one in the list");
+                logAreaUpdater = new LogAreaUpdater(bundle.getString("expression.warning.no_node_attribute_selected"));
                 logAreaUpdater.execute();
                 placeHolderForTopTerms.setText("");
                 running = !running;
                 return;
             }
-            logAreaUpdater = new LogAreaUpdater("Analyzing the text, please wait...");
+            logAreaUpdater = new LogAreaUpdater(bundle.getString("expression.analyzing_text_please_wait"));
             logAreaUpdater.execute();
             initialWordProcessingRunnable = new InitialWordProcessingRunnable(graphModel, selectedColumnId, "en");
             executor.execute(initialWordProcessingRunnable, initialWordProcessingRunnable);
@@ -275,12 +272,12 @@ public final class LexplorerTopComponent extends TopComponent {
             if (topWordsRetrieverAsRunnable != null) {
                 topWordsRetrieverAsRunnable.cancel();
             }
-            runButton.setText("run");
+            runButton.setText(bundle.getString("LexplorerTopComponent.runButton.text"));
             executor.cancel();
             if (uiUpdaterAsSwingWorker != null) {
                 uiUpdaterAsSwingWorker.cancel(true);
             }
-            logAreaUpdater = new LogAreaUpdater("word cloud analysis stopped");
+            logAreaUpdater = new LogAreaUpdater(bundle.getString("expression.warning.wordcloud_analysis_stopped"));
             logAreaUpdater.execute();
     }//GEN-LAST:event_runButtonActionPerformed
     }
@@ -292,12 +289,12 @@ public final class LexplorerTopComponent extends TopComponent {
         // if we still don't have a graphModel, it means no network is currently opened
         if (graphModel == null) {
             listModelOfNodeAttributes = new DefaultListModel();
-            logAreaUpdater = new LogAreaUpdater("no network found. Open a network to use this plugin");
+            logAreaUpdater = new LogAreaUpdater(bundle.getString("expression.warning.open_network"));
             logAreaUpdater.execute();
         } else {
             // we have retrieved the opened network. Let's get the names of the nodes attributes from it
             listModelOfNodeAttributes = GraphOperations.returnTextualNodeAttributesAsListOfNames(graphModel);
-            logAreaUpdater = new LogAreaUpdater("select a node attribute in the list.");
+            logAreaUpdater = new LogAreaUpdater(bundle.getString("expression.please_select_attribute"));
             logAreaUpdater.execute();
         }
         jListOfNodeAttributes.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -305,7 +302,7 @@ public final class LexplorerTopComponent extends TopComponent {
     }//GEN-LAST:event_jButtonRefreshNodeAttributesActionPerformed
 
     private void jListOfNodeAttributesValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_jListOfNodeAttributesValueChanged
-        logAreaUpdater = new LogAreaUpdater("the word cloud will analyze this node attribute: " + jListOfNodeAttributes.getSelectedValue());
+        logAreaUpdater = new LogAreaUpdater(bundle.getString("expression.plugin_wil_analyze_this_attribute") + jListOfNodeAttributes.getSelectedValue());
         logAreaUpdater.execute();
     }//GEN-LAST:event_jListOfNodeAttributesValueChanged
 
@@ -365,7 +362,7 @@ public final class LexplorerTopComponent extends TopComponent {
                 if (intermediary != null && !intermediary.isBlank()) {
                     placeHolderForTopTerms.setText(intermediary);
                 } else {
-                    placeHolderForTopTerms.setText("no node selected");
+                    placeHolderForTopTerms.setText(bundle.getString("expression.no_node_selected"));
                 }
                 Thread.sleep(pauseInMillis);
             }

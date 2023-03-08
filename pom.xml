@@ -7,7 +7,7 @@
     <version>0.10.0</version>
     <packaging>pom</packaging>
 
-    <name>gephi-plugins</name>
+    <name>parent project for lexical plugin</name>
     
     <!-- List of modules -->
     <modules>
