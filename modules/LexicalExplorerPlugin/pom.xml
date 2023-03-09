@@ -17,10 +17,8 @@
         <gephi.projectid>org.gephi</gephi.projectid>
         <gephi.version>0.10.0</gephi.version>
         <netbeans.version>RELEASE160</netbeans.version>
-        <graphstore.version>0.6.14</graphstore.version>
         <maven.compiler.source>11</maven.compiler.source>
         <maven.compiler.target>11</maven.compiler.target>
-        <gephi.sentry.version>5.7.3</gephi.sentry.version>
     </properties>
 
 
@@ -49,11 +47,6 @@
             <groupId>net.clementlevallois.utils</groupId>
             <artifactId>utils-core</artifactId>
             <version>1.0</version>
-        </dependency>
-        <dependency>
-            <groupId>org.gephi</groupId>
-            <artifactId>graphstore</artifactId>
-            <version>0.6.14</version>
         </dependency>
         <dependency>
             <groupId>org.gephi</groupId>
