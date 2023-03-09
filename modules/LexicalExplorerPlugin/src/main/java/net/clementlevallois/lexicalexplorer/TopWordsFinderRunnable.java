@@ -21,13 +21,12 @@ public class TopWordsFinderRunnable implements LongTask, Runnable {
 
     private ProgressTicket progressTicket;
     private final LinkedBlockingQueue<String> results = new LinkedBlockingQueue();
-    private Integer nbTopTerms;
     private Integer pauseBetweenComputations;
+    private Integer topWordsToRetrieve = 5;
     private boolean cancelled = false;
     private Set<String> previousSelectedNodes = new HashSet();
 
-    public TopWordsFinderRunnable(Integer nbTopTerms, Integer pauseBetweenComputations) {
-        this.nbTopTerms = nbTopTerms;
+    public TopWordsFinderRunnable(Integer pauseBetweenComputations) {
         this.pauseBetweenComputations = pauseBetweenComputations;
     }
 
@@ -65,7 +64,7 @@ public class TopWordsFinderRunnable implements LongTask, Runnable {
                 // and compute the top terms of these
                 TopTermExtractor topTermExtractor = new TopTermExtractor();
                 List<String> selectedNodesIds = new ArrayList(setIdsForTestChange);
-                String topTermsExtractorFromSelectedNodes = topTermExtractor.topTermsExtractorFromSelectedNodes(selectedNodesIds, nbTopTerms);
+                String topTermsExtractorFromSelectedNodes = topTermExtractor.topTermsExtractorFromSelectedNodes(selectedNodesIds, topWordsToRetrieve);
                 try {
                     Thread.sleep(pauseBetweenComputations);
                 } catch (InterruptedException ex) {
@@ -101,5 +100,11 @@ public class TopWordsFinderRunnable implements LongTask, Runnable {
     public void setProgressTicket(ProgressTicket progressTicket) {
         this.progressTicket = progressTicket;
     }
+
+    public void setTopWordsToRetrieve(Integer topWordsToRetrieve) {
+        this.topWordsToRetrieve = topWordsToRetrieve;
+    }
+    
+    
 
 }

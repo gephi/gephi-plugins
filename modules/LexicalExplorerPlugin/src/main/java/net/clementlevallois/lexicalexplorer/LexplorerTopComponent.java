@@ -63,7 +63,7 @@ public final class LexplorerTopComponent extends TopComponent {
         initComponents();
         setName(bundle.getString("expression.top_panel.title"));
         setToolTipText(bundle.getString("expression.top_panel.tooltip"));
-        
+
         // initializing the graph
         graphModel = GraphOperations.graphInitFromCurrentlyOpenedProject();
         DefaultListModel<String> listModelOfNodeAttributes;
@@ -71,7 +71,7 @@ public final class LexplorerTopComponent extends TopComponent {
         // loading the names of nodes attributes
         if (graphModel == null) {
             listModelOfNodeAttributes = new DefaultListModel();
-            loggingjTextField.setText("<html>"+ bundle.getString("expression.warning.open_network") + "</html>");
+            loggingjTextField.setText("<html>" + bundle.getString("expression.warning.open_network") + "</html>");
         } else {
             listModelOfNodeAttributes = GraphOperations.returnTextualNodeAttributesAsListOfNames(graphModel);
         }
@@ -84,20 +84,7 @@ public final class LexplorerTopComponent extends TopComponent {
         jSpinnerNumberTopTerms.setModel(spinnerModel);
 
         executor = new LongTaskExecutor(true, "Lexical Explorer Plugin");
-        executor.setLongTaskListener(longTask -> {
-            if (longTask instanceof InitialWordProcessingRunnable) {
-                logAreaUpdater = new LogAreaUpdater(bundle.getString("expression.finished_ready_to_run"));
-                logAreaUpdater.execute();
-                Integer nbTopTermsToDisplay = (Integer) jSpinnerNumberTopTerms.getValue();
-                Integer pauseBetweenComputations = 100;
-                topWordsRetrieverAsRunnable = new TopWordsFinderRunnable(nbTopTermsToDisplay, pauseBetweenComputations);
-                uiUpdaterAsSwingWorker = new UIUpdater(10);
-                uiUpdaterAsSwingWorker.execute();
-                executor.execute(topWordsRetrieverAsRunnable, topWordsRetrieverAsRunnable);
-                logAreaUpdater = new LogAreaUpdater(bundle.getString("expression.switch_to_wordcloud_tab_and_select"));
-                logAreaUpdater.execute();
-            }
-        });
+
     }
 
     /**
@@ -122,13 +109,14 @@ public final class LexplorerTopComponent extends TopComponent {
         jSpinnerNumberTopTerms = new javax.swing.JSpinner();
         loggingjTextField = new javax.swing.JLabel();
         wordCloudPanel = new javax.swing.JPanel();
-        jScrollPane2 = new javax.swing.JScrollPane();
         placeHolderForTopTerms = new javax.swing.JLabel();
         runButton = new javax.swing.JButton();
 
         setLayout(new java.awt.BorderLayout());
 
         jPanel1.setLayout(new java.awt.BorderLayout());
+
+        tabbedPane.setAlignmentX(1.5F);
 
         parametersPanel.setName(""); // NOI18N
         parametersPanel.setLayout(new java.awt.GridLayout(2, 1));
@@ -182,12 +170,17 @@ public final class LexplorerTopComponent extends TopComponent {
         numberTopWordsFrame.setMinimumSize(new java.awt.Dimension(250, 100));
         numberTopWordsFrame.setPreferredSize(new java.awt.Dimension(250, 100));
         numberTopWordsFrame.setVisible(true);
-        numberTopWordsFrame.getContentPane().setLayout(new javax.swing.BoxLayout(numberTopWordsFrame.getContentPane(), javax.swing.BoxLayout.Y_AXIS));
+        numberTopWordsFrame.getContentPane().setLayout(new java.awt.GridBagLayout());
 
         jSpinnerNumberTopTerms.setMaximumSize(new java.awt.Dimension(250, 50));
-        jSpinnerNumberTopTerms.setMinimumSize(new java.awt.Dimension(250, 50));
+        jSpinnerNumberTopTerms.setMinimumSize(new java.awt.Dimension(100, 50));
         jSpinnerNumberTopTerms.setPreferredSize(new java.awt.Dimension(250, 50));
-        numberTopWordsFrame.getContentPane().add(jSpinnerNumberTopTerms);
+        jSpinnerNumberTopTerms.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                jSpinnerNumberTopTermsStateChanged(evt);
+            }
+        });
+        numberTopWordsFrame.getContentPane().add(jSpinnerNumberTopTerms, new java.awt.GridBagConstraints());
 
         jPanelNumberTopTerms.add(numberTopWordsFrame, java.awt.BorderLayout.CENTER);
 
@@ -198,7 +191,7 @@ public final class LexplorerTopComponent extends TopComponent {
         loggingjTextField.setBackground(new java.awt.Color(102, 102, 102));
         loggingjTextField.setForeground(new java.awt.Color(102, 255, 0));
         loggingjTextField.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        org.openide.awt.Mnemonics.setLocalizedText(loggingjTextField, org.openide.util.NbBundle.getMessage(LexplorerTopComponent.class, "LexplorerTopComponent.loggingjTextField.text")); // NOI18N
+        loggingjTextField.setAlignmentX(1.5F);
         loggingjTextField.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
         loggingjTextField.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         loggingjTextField.setOpaque(true);
@@ -206,23 +199,23 @@ public final class LexplorerTopComponent extends TopComponent {
 
         tabbedPane.addTab(org.openide.util.NbBundle.getMessage(LexplorerTopComponent.class, "LexplorerTopComponent.TabConstraints.tabTitle"), parametersPanel); // NOI18N
 
-        org.openide.awt.Mnemonics.setLocalizedText(placeHolderForTopTerms, org.openide.util.NbBundle.getMessage(LexplorerTopComponent.class, "LexplorerTopComponent.placeHolderForTopTerms.text")); // NOI18N
-        jScrollPane2.setViewportView(placeHolderForTopTerms);
+        placeHolderForTopTerms.setAlignmentX(1.5F);
 
         javax.swing.GroupLayout wordCloudPanelLayout = new javax.swing.GroupLayout(wordCloudPanel);
         wordCloudPanel.setLayout(wordCloudPanelLayout);
         wordCloudPanelLayout.setHorizontalGroup(
             wordCloudPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, wordCloudPanelLayout.createSequentialGroup()
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 328, Short.MAX_VALUE)
-                .addContainerGap())
+            .addGroup(wordCloudPanelLayout.createSequentialGroup()
+                .addGap(0, 35, Short.MAX_VALUE)
+                .addComponent(placeHolderForTopTerms, javax.swing.GroupLayout.DEFAULT_SIZE, 348, Short.MAX_VALUE)
+                .addGap(0, 37, Short.MAX_VALUE))
         );
         wordCloudPanelLayout.setVerticalGroup(
             wordCloudPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, wordCloudPanelLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 456, Short.MAX_VALUE)
-                .addGap(48, 48, 48))
+            .addGroup(wordCloudPanelLayout.createSequentialGroup()
+                .addGap(0, 177, Short.MAX_VALUE)
+                .addComponent(placeHolderForTopTerms, javax.swing.GroupLayout.DEFAULT_SIZE, 445, Short.MAX_VALUE)
+                .addGap(0, 178, Short.MAX_VALUE))
         );
 
         tabbedPane.addTab(org.openide.util.NbBundle.getMessage(LexplorerTopComponent.class, "LexplorerTopComponent.wordCloudPanel.TabConstraints.tabTitle"), wordCloudPanel); // NOI18N
@@ -230,6 +223,8 @@ public final class LexplorerTopComponent extends TopComponent {
         jPanel1.add(tabbedPane, java.awt.BorderLayout.CENTER);
         tabbedPane.getAccessibleContext().setAccessibleName(org.openide.util.NbBundle.getMessage(LexplorerTopComponent.class, "LexplorerTopComponent.tabbedPane.AccessibleContext.accessibleName")); // NOI18N
 
+        runButton.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        runButton.setForeground(new java.awt.Color(204, 51, 0));
         org.openide.awt.Mnemonics.setLocalizedText(runButton, org.openide.util.NbBundle.getMessage(LexplorerTopComponent.class, "LexplorerTopComponent.runButton.text")); // NOI18N
         runButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -263,6 +258,19 @@ public final class LexplorerTopComponent extends TopComponent {
             }
             logAreaUpdater = new LogAreaUpdater(bundle.getString("expression.analyzing_text_please_wait"));
             logAreaUpdater.execute();
+            executor.setLongTaskListener(longTask -> {
+                if (longTask instanceof InitialWordProcessingRunnable) {
+                    logAreaUpdater = new LogAreaUpdater(bundle.getString("expression.finished_ready_to_run"));
+                    logAreaUpdater.execute();
+                    Integer pauseBetweenComputations = 100;
+                    topWordsRetrieverAsRunnable = new TopWordsFinderRunnable(pauseBetweenComputations);
+                    uiUpdaterAsSwingWorker = new UIUpdater(10);
+                    uiUpdaterAsSwingWorker.execute();
+                    executor.execute(topWordsRetrieverAsRunnable, topWordsRetrieverAsRunnable);
+                    logAreaUpdater = new LogAreaUpdater(bundle.getString("expression.switch_to_wordcloud_tab_and_select"));
+                    logAreaUpdater.execute();
+                }
+            });
             initialWordProcessingRunnable = new InitialWordProcessingRunnable(graphModel, selectedColumnId, "en");
             executor.execute(initialWordProcessingRunnable, initialWordProcessingRunnable);
         } else {
@@ -302,9 +310,15 @@ public final class LexplorerTopComponent extends TopComponent {
     }//GEN-LAST:event_jButtonRefreshNodeAttributesActionPerformed
 
     private void jListOfNodeAttributesValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_jListOfNodeAttributesValueChanged
-        logAreaUpdater = new LogAreaUpdater(bundle.getString("expression.plugin_wil_analyze_this_attribute") + jListOfNodeAttributes.getSelectedValue());
+        logAreaUpdater = new LogAreaUpdater(bundle.getString("expression.plugin_wil_analyze_this_attribute") + " " + jListOfNodeAttributes.getSelectedValue());
         logAreaUpdater.execute();
     }//GEN-LAST:event_jListOfNodeAttributesValueChanged
+
+    private void jSpinnerNumberTopTermsStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jSpinnerNumberTopTermsStateChanged
+        if (topWordsRetrieverAsRunnable != null) {
+            topWordsRetrieverAsRunnable.setTopWordsToRetrieve((Integer) jSpinnerNumberTopTerms.getValue());
+        }
+    }//GEN-LAST:event_jSpinnerNumberTopTermsStateChanged
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JInternalFrame attributeFrame;
@@ -314,7 +328,6 @@ public final class LexplorerTopComponent extends TopComponent {
     private javax.swing.JPanel jPanelNumberTopTerms;
     private javax.swing.JPanel jPanelRefreshButton;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JSpinner jSpinnerNumberTopTerms;
     private javax.swing.JLabel loggingjTextField;
     private javax.swing.JInternalFrame numberTopWordsFrame;
@@ -360,9 +373,9 @@ public final class LexplorerTopComponent extends TopComponent {
             while (!this.isCancelled()) {
                 String intermediary = topWordsRetrieverAsRunnable.getIntermediary();
                 if (intermediary != null && !intermediary.isBlank()) {
-                    placeHolderForTopTerms.setText(intermediary);
+                    placeHolderForTopTerms.setText(String.format("<html><body style=\"text-align: justify;  text-justify: inter-word;\">%s</body></html>", intermediary));
                 } else {
-                    placeHolderForTopTerms.setText(bundle.getString("expression.no_node_selected"));
+                    placeHolderForTopTerms.setText(String.format("<html><body style=\"text-align: justify;  text-justify: inter-word;\">%s</body></html>", bundle.getString("expression.no_node_selected")));
                 }
                 Thread.sleep(pauseInMillis);
             }

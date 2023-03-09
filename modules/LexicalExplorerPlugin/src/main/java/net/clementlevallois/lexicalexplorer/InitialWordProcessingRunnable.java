@@ -14,9 +14,9 @@ public class InitialWordProcessingRunnable implements LongTask, Runnable {
 
     private ProgressTicket progressTicket;
     private boolean cancelled = false;
-    private GraphModel graphModel;
-    private String columnName;
-    private String lang;
+    private final GraphModel graphModel;
+    private final String columnName;
+    private final String lang;
     private static final ResourceBundle bundle = NbBundle.getBundle(LexplorerTopComponent.class);
 
     public InitialWordProcessingRunnable(GraphModel graphModel, String columnName, String lang) {

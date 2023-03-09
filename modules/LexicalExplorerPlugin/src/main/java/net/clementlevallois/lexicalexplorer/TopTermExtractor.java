@@ -23,7 +23,6 @@ import net.clementlevallois.umigon.tokenizer.controller.UmigonTokenizer;
 import net.clementlevallois.utils.Multiset;
 import org.gephi.graph.api.Column;
 import org.gephi.graph.api.Graph;
-import org.gephi.graph.api.GraphController;
 import org.gephi.graph.api.GraphModel;
 import org.gephi.graph.api.Node;
 import org.gephi.graph.api.NodeIterable;
@@ -169,9 +168,8 @@ public class TopTermExtractor {
         // once we have all the terms and their counts in a multiset, we can sort the terms from the most to the least frequent and select the top n
         List<Map.Entry<String, Integer>> multisetRankedFromTopFrequency = allTextFragmentsFromAllSelectedNodes.sortDesc(allTextFragmentsFromAllSelectedNodes);
 
-        int i = 0;
+        int i = 1;
         StringBuilder sb = new StringBuilder();
-        sb.append("<html><body>");
         for (Map.Entry<String, Integer> tf : multisetRankedFromTopFrequency) {
             sb
                     .append(tf.getKey())
@@ -180,11 +178,11 @@ public class TopTermExtractor {
                     .append(")")
                     .append("<br/>");
 //            System.out.println("top term: " + tf.getKey() + " (appearing " + tf.getValue() + " times).");
-            if (i++ > maxNumberOfTerms) {
+            if (i >= maxNumberOfTerms) {
                 break;
             }
+            i++;
         }
-        sb.append("</body></html>");
         return sb.toString();
 
     }
