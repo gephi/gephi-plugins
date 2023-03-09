@@ -87,14 +87,11 @@ public class TopTermExtractor {
         // we will store the text of the attribute for each node in a list
         Map<String, String> textsFromTheAttribute = new HashMap();
 
-        // listing all node ids because for this first run of the plugin we want to show the top terms of the entire network
-        List<String> allNodeIds = new ArrayList();
 
         // doing the iteration now
         Iterator<Node> iteratorOnNodes = nodes.iterator();
         while (iteratorOnNodes.hasNext()) {
             Node node = iteratorOnNodes.next();
-            allNodeIds.add((String) node.getId());
             String descriptionForOneNode = (String) node.getAttribute(attributeToBeAnalyzed);
             if (descriptionForOneNode != null && !descriptionForOneNode.isBlank()) {
                 textsFromTheAttribute.put((String) node.getId(), descriptionForOneNode.toLowerCase());

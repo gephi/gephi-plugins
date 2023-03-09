@@ -80,7 +80,7 @@ public final class LexplorerTopComponent extends TopComponent {
 
         // setting the default values of the top terms to display
         // in the constructor: spinnerMode: value, min, max, step
-        SpinnerModel spinnerModel = new SpinnerNumberModel(5, 1, 10, 1);
+        SpinnerModel spinnerModel = new SpinnerNumberModel(StaticProperties.DEFAULT_WORDS_TO_DISPLAY, StaticProperties.MIN_WORDS_TO_DISPLAY, StaticProperties.MAX_WORDS_TO_DISPLAY, StaticProperties.STEP_SPINNER);
         jSpinnerNumberTopTerms.setModel(spinnerModel);
 
         executor = new LongTaskExecutor(true, "Lexical Explorer Plugin");
@@ -262,16 +262,15 @@ public final class LexplorerTopComponent extends TopComponent {
                 if (longTask instanceof InitialWordProcessingRunnable) {
                     logAreaUpdater = new LogAreaUpdater(bundle.getString("expression.finished_ready_to_run"));
                     logAreaUpdater.execute();
-                    Integer pauseBetweenComputations = 100;
-                    topWordsRetrieverAsRunnable = new TopWordsFinderRunnable(pauseBetweenComputations);
-                    uiUpdaterAsSwingWorker = new UIUpdater(10);
+                    topWordsRetrieverAsRunnable = new TopWordsFinderRunnable(StaticProperties.REFRESH_RATE_COMPUTATION);
+                    uiUpdaterAsSwingWorker = new UIUpdater(StaticProperties.REFRESH_RATE_UI);
                     uiUpdaterAsSwingWorker.execute();
                     executor.execute(topWordsRetrieverAsRunnable, topWordsRetrieverAsRunnable);
                     logAreaUpdater = new LogAreaUpdater(bundle.getString("expression.switch_to_wordcloud_tab_and_select"));
                     logAreaUpdater.execute();
                 }
             });
-            initialWordProcessingRunnable = new InitialWordProcessingRunnable(graphModel, selectedColumnId, "en");
+            initialWordProcessingRunnable = new InitialWordProcessingRunnable(graphModel, selectedColumnId, StaticProperties.DEFAULT_TEXT_LANGUAGE);
             executor.execute(initialWordProcessingRunnable, initialWordProcessingRunnable);
         } else {
             if (initialWordProcessingRunnable != null) {

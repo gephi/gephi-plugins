@@ -6,6 +6,7 @@ package net.clementlevallois.lexicalexplorer;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.ResourceBundle;
 import java.util.Set;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.stream.Collectors;
@@ -16,15 +17,17 @@ import org.gephi.utils.progress.Progress;
 import org.gephi.utils.progress.ProgressTicket;
 import org.gephi.visualization.VizController;
 import org.openide.util.Exceptions;
+import org.openide.util.NbBundle;
 
 public class TopWordsFinderRunnable implements LongTask, Runnable {
 
     private ProgressTicket progressTicket;
     private final LinkedBlockingQueue<String> results = new LinkedBlockingQueue();
-    private Integer pauseBetweenComputations;
-    private Integer topWordsToRetrieve = 5;
+    private final Integer pauseBetweenComputations;
+    private Integer topWordsToRetrieve = StaticProperties.DEFAULT_WORDS_TO_DISPLAY;
     private boolean cancelled = false;
     private Set<String> previousSelectedNodes = new HashSet();
+        private static final ResourceBundle bundle = NbBundle.getBundle(LexplorerTopComponent.class);
 
     public TopWordsFinderRunnable(Integer pauseBetweenComputations) {
         this.pauseBetweenComputations = pauseBetweenComputations;
@@ -33,7 +36,7 @@ public class TopWordsFinderRunnable implements LongTask, Runnable {
     @Override
     public void run() {
         Progress.start(progressTicket);
-        Progress.setDisplayName(progressTicket, "word cloud running");
+        Progress.setDisplayName(progressTicket, bundle.getString("expression.warning.wordcloud_analysis_running"));
         while (true && !this.cancelled) {
             if (!VizController.getInstance().getSelectionManager().isBlocked() && VizController.getInstance().getSelectionManager().isSelectionEnabled()) {
                 List<Node> selectedNodes = VizController.getInstance().getSelectionManager().getSelectedNodes();
@@ -92,7 +95,7 @@ public class TopWordsFinderRunnable implements LongTask, Runnable {
     @Override
     public boolean cancel() {
         this.cancelled = true;
-        Progress.finish(progressTicket, "word cloud stopped");
+        Progress.finish(progressTicket, bundle.getString("expression.warning.wordcloud_analysis_stopped"));
         return false;
     }
 
@@ -104,7 +107,4 @@ public class TopWordsFinderRunnable implements LongTask, Runnable {
     public void setTopWordsToRetrieve(Integer topWordsToRetrieve) {
         this.topWordsToRetrieve = topWordsToRetrieve;
     }
-    
-    
-
 }
