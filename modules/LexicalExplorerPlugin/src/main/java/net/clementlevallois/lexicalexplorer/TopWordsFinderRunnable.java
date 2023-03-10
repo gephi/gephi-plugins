@@ -10,7 +10,6 @@ import java.util.ResourceBundle;
 import java.util.Set;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.stream.Collectors;
-import org.gephi.graph.api.GraphModel;
 import org.gephi.graph.api.Node;
 import org.gephi.utils.longtask.spi.LongTask;
 import org.gephi.utils.progress.Progress;
@@ -27,10 +26,11 @@ public class TopWordsFinderRunnable implements LongTask, Runnable {
     private Integer topWordsToRetrieve = StaticProperties.DEFAULT_WORDS_TO_DISPLAY;
     private boolean cancelled = false;
     private Set<String> previousSelectedNodes = new HashSet();
-        private static final ResourceBundle bundle = NbBundle.getBundle(LexplorerTopComponent.class);
+    private static final ResourceBundle bundle = NbBundle.getBundle(LexplorerTopComponent.class);
 
-    public TopWordsFinderRunnable(Integer pauseBetweenComputations) {
+    public TopWordsFinderRunnable(Integer pauseBetweenComputations, int topWordsToRetrieve) {
         this.pauseBetweenComputations = pauseBetweenComputations;
+        this.topWordsToRetrieve = topWordsToRetrieve;
     }
 
     @Override

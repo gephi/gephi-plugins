@@ -4,8 +4,12 @@
  */
 package net.clementlevallois.lexicalexplorer;
 
+import java.awt.Desktop;
 import java.beans.PropertyVetoException;
 import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.util.ResourceBundle;
 import javax.swing.DefaultListModel;
 import javax.swing.ListSelectionModel;
@@ -104,24 +108,38 @@ public final class LexplorerTopComponent extends TopComponent {
         jListOfNodeAttributes = new javax.swing.JList<>();
         jPanelRefreshButton = new javax.swing.JPanel();
         javax.swing.JButton jButtonRefreshNodeAttributes = new javax.swing.JButton();
+        jPanel2 = new javax.swing.JPanel();
         jPanelNumberTopTerms = new javax.swing.JPanel();
         numberTopWordsFrame = new javax.swing.JInternalFrame();
         jSpinnerNumberTopTerms = new javax.swing.JSpinner();
         loggingjTextField = new javax.swing.JLabel();
         wordCloudPanel = new javax.swing.JPanel();
         placeHolderForTopTerms = new javax.swing.JLabel();
+        helpPanel = new javax.swing.JPanel();
+        jPanel5 = new javax.swing.JPanel();
+        jPanelForGephiLinks = new javax.swing.JPanel();
+        jLabelHelpfulLinks = new javax.swing.JLabel();
+        jLabelGephiFBUrl = new javax.swing.JLabel();
+        jPanel4 = new javax.swing.JPanel();
+        jPanelLabelsForMaintainer = new javax.swing.JPanel();
+        jLabelPluginMaintainedBy = new javax.swing.JLabel();
+        jLabelUrlClementLevallois = new javax.swing.JLabel();
+        filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 50), new java.awt.Dimension(0, 5000), new java.awt.Dimension(32767, 50));
         runButton = new javax.swing.JButton();
 
         setLayout(new java.awt.BorderLayout());
 
+        jPanel1.setPreferredSize(new java.awt.Dimension(350, 832));
         jPanel1.setLayout(new java.awt.BorderLayout());
 
+        tabbedPane.setTabLayoutPolicy(javax.swing.JTabbedPane.SCROLL_TAB_LAYOUT);
         tabbedPane.setAlignmentX(1.5F);
+        tabbedPane.setPreferredSize(new java.awt.Dimension(250, 800));
 
         parametersPanel.setName(""); // NOI18N
-        parametersPanel.setLayout(new java.awt.GridLayout(2, 1));
+        parametersPanel.setLayout(new java.awt.GridLayout(2, 1, 5, 5));
 
-        jPanelForTwoParams.setLayout(new java.awt.GridLayout(2, 1));
+        jPanelForTwoParams.setLayout(new java.awt.BorderLayout());
 
         attributeFrame.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         attributeFrame.setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
@@ -131,12 +149,13 @@ public final class LexplorerTopComponent extends TopComponent {
         attributeFrame.setMinimumSize(new java.awt.Dimension(250, 5));
         attributeFrame.setPreferredSize(new java.awt.Dimension(250, 137));
         attributeFrame.setVisible(true);
-        attributeFrame.getContentPane().setLayout(new java.awt.GridLayout(2, 1));
 
         jScrollPane1.setMaximumSize(new java.awt.Dimension(250, 100));
 
         jListOfNodeAttributes.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         jListOfNodeAttributes.setAutoscrolls(false);
+        jListOfNodeAttributes.setMinimumSize(new java.awt.Dimension(0, 100));
+        jListOfNodeAttributes.setPreferredSize(new java.awt.Dimension(0, 100));
         jListOfNodeAttributes.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
             public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
                 jListOfNodeAttributesValueChanged(evt);
@@ -144,21 +163,28 @@ public final class LexplorerTopComponent extends TopComponent {
         });
         jScrollPane1.setViewportView(jListOfNodeAttributes);
 
-        attributeFrame.getContentPane().add(jScrollPane1);
+        attributeFrame.getContentPane().add(jScrollPane1, java.awt.BorderLayout.CENTER);
 
-        jPanelRefreshButton.setPreferredSize(new java.awt.Dimension(250, 100));
+        jPanelRefreshButton.setPreferredSize(new java.awt.Dimension(250, 30));
+        jPanelRefreshButton.setLayout(new java.awt.BorderLayout());
 
         org.openide.awt.Mnemonics.setLocalizedText(jButtonRefreshNodeAttributes, org.openide.util.NbBundle.getMessage(LexplorerTopComponent.class, "LexplorerTopComponent.jButtonRefreshNodeAttributes.text")); // NOI18N
+        jButtonRefreshNodeAttributes.setMinimumSize(new java.awt.Dimension(72, 13));
+        jButtonRefreshNodeAttributes.setPreferredSize(new java.awt.Dimension(72, 13));
         jButtonRefreshNodeAttributes.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonRefreshNodeAttributesActionPerformed(evt);
             }
         });
-        jPanelRefreshButton.add(jButtonRefreshNodeAttributes);
+        jPanelRefreshButton.add(jButtonRefreshNodeAttributes, java.awt.BorderLayout.CENTER);
 
-        attributeFrame.getContentPane().add(jPanelRefreshButton);
+        attributeFrame.getContentPane().add(jPanelRefreshButton, java.awt.BorderLayout.SOUTH);
 
-        jPanelForTwoParams.add(attributeFrame);
+        jPanelForTwoParams.add(attributeFrame, java.awt.BorderLayout.CENTER);
+
+        parametersPanel.add(jPanelForTwoParams);
+
+        jPanel2.setLayout(new java.awt.GridLayout(2, 1));
 
         jPanelNumberTopTerms.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         jPanelNumberTopTerms.setPreferredSize(new java.awt.Dimension(250, 200));
@@ -184,9 +210,7 @@ public final class LexplorerTopComponent extends TopComponent {
 
         jPanelNumberTopTerms.add(numberTopWordsFrame, java.awt.BorderLayout.CENTER);
 
-        jPanelForTwoParams.add(jPanelNumberTopTerms);
-
-        parametersPanel.add(jPanelForTwoParams);
+        jPanel2.add(jPanelNumberTopTerms);
 
         loggingjTextField.setBackground(new java.awt.Color(102, 102, 102));
         loggingjTextField.setForeground(new java.awt.Color(102, 255, 0));
@@ -195,30 +219,78 @@ public final class LexplorerTopComponent extends TopComponent {
         loggingjTextField.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
         loggingjTextField.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         loggingjTextField.setOpaque(true);
-        parametersPanel.add(loggingjTextField);
+        jPanel2.add(loggingjTextField);
+
+        parametersPanel.add(jPanel2);
 
         tabbedPane.addTab(org.openide.util.NbBundle.getMessage(LexplorerTopComponent.class, "LexplorerTopComponent.TabConstraints.tabTitle"), parametersPanel); // NOI18N
 
-        placeHolderForTopTerms.setAlignmentX(1.5F);
+        wordCloudPanel.setPreferredSize(new java.awt.Dimension(250, 800));
+        wordCloudPanel.setLayout(new java.awt.BorderLayout());
 
-        javax.swing.GroupLayout wordCloudPanelLayout = new javax.swing.GroupLayout(wordCloudPanel);
-        wordCloudPanel.setLayout(wordCloudPanelLayout);
-        wordCloudPanelLayout.setHorizontalGroup(
-            wordCloudPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(wordCloudPanelLayout.createSequentialGroup()
-                .addGap(0, 35, Short.MAX_VALUE)
-                .addComponent(placeHolderForTopTerms, javax.swing.GroupLayout.DEFAULT_SIZE, 348, Short.MAX_VALUE)
-                .addGap(0, 37, Short.MAX_VALUE))
-        );
-        wordCloudPanelLayout.setVerticalGroup(
-            wordCloudPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(wordCloudPanelLayout.createSequentialGroup()
-                .addGap(0, 177, Short.MAX_VALUE)
-                .addComponent(placeHolderForTopTerms, javax.swing.GroupLayout.DEFAULT_SIZE, 445, Short.MAX_VALUE)
-                .addGap(0, 178, Short.MAX_VALUE))
-        );
+        placeHolderForTopTerms.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        org.openide.awt.Mnemonics.setLocalizedText(placeHolderForTopTerms, org.openide.util.NbBundle.getMessage(LexplorerTopComponent.class, "LexplorerTopComponent.placeHolderForTopTerms.text")); // NOI18N
+        placeHolderForTopTerms.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
+        wordCloudPanel.add(placeHolderForTopTerms, java.awt.BorderLayout.CENTER);
+        placeHolderForTopTerms.getAccessibleContext().setAccessibleName(org.openide.util.NbBundle.getMessage(LexplorerTopComponent.class, "LexplorerTopComponent.placeHolderForTopTerms.AccessibleContext.accessibleName")); // NOI18N
 
         tabbedPane.addTab(org.openide.util.NbBundle.getMessage(LexplorerTopComponent.class, "LexplorerTopComponent.wordCloudPanel.TabConstraints.tabTitle"), wordCloudPanel); // NOI18N
+
+        helpPanel.setMinimumSize(new java.awt.Dimension(110, 52));
+        helpPanel.setPreferredSize(new java.awt.Dimension(329, 150));
+        helpPanel.setLayout(new javax.swing.BoxLayout(helpPanel, javax.swing.BoxLayout.Y_AXIS));
+
+        jPanel5.setAlignmentX(10.0F);
+        jPanel5.setAlignmentY(3.0F);
+        jPanel5.setLayout(new java.awt.BorderLayout(5, 5));
+
+        jPanelForGephiLinks.setBorder(javax.swing.BorderFactory.createTitledBorder(org.openide.util.NbBundle.getMessage(LexplorerTopComponent.class, "LexplorerTopComponent.jPanelForGephiLinks.border.title"))); // NOI18N
+        jPanelForGephiLinks.setLayout(new java.awt.BorderLayout(5, 5));
+
+        org.openide.awt.Mnemonics.setLocalizedText(jLabelHelpfulLinks, org.openide.util.NbBundle.getMessage(LexplorerTopComponent.class, "LexplorerTopComponent.jLabelHelpfulLinks.text")); // NOI18N
+        jLabelHelpfulLinks.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jPanelForGephiLinks.add(jLabelHelpfulLinks, java.awt.BorderLayout.CENTER);
+
+        org.openide.awt.Mnemonics.setLocalizedText(jLabelGephiFBUrl, "<html><a href=\"https://facebook.com/groups/gephi\" style=\"color: #0000EE; text-decoration: underline;\">Facebook group for Gephi</a></html>"); // NOI18N
+        jLabelGephiFBUrl.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jLabelGephiFBUrl.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jLabelGephiFBUrlMouseClicked(evt);
+            }
+        });
+        jPanelForGephiLinks.add(jLabelGephiFBUrl, java.awt.BorderLayout.EAST);
+
+        jPanel5.add(jPanelForGephiLinks, java.awt.BorderLayout.CENTER);
+
+        helpPanel.add(jPanel5);
+
+        jPanel4.setAlignmentX(3.0F);
+        jPanel4.setAlignmentY(3.0F);
+        jPanel4.setLayout(new java.awt.BorderLayout(5, 5));
+
+        jPanelLabelsForMaintainer.setBorder(javax.swing.BorderFactory.createTitledBorder(org.openide.util.NbBundle.getMessage(LexplorerTopComponent.class, "LexplorerTopComponent.jPanelLabelsForMaintainer.border.title"))); // NOI18N
+        jPanelLabelsForMaintainer.setLayout(new java.awt.BorderLayout(5, 5));
+
+        org.openide.awt.Mnemonics.setLocalizedText(jLabelPluginMaintainedBy, org.openide.util.NbBundle.getMessage(LexplorerTopComponent.class, "LexplorerTopComponent.jLabelPluginMaintainedBy.text")); // NOI18N
+        jLabelPluginMaintainedBy.setAlignmentX(4.0F);
+        jLabelPluginMaintainedBy.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
+        jPanelLabelsForMaintainer.add(jLabelPluginMaintainedBy, java.awt.BorderLayout.CENTER);
+
+        org.openide.awt.Mnemonics.setLocalizedText(jLabelUrlClementLevallois, "<html><a href=\"https://twitter.com/seinecle\" style=\"color: #0000EE; text-decoration: underline;\">Clement Levallois</a></html>"); // NOI18N
+        jLabelUrlClementLevallois.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jLabelUrlClementLevallois.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jLabelUrlClementLevalloisMouseClicked(evt);
+            }
+        });
+        jPanelLabelsForMaintainer.add(jLabelUrlClementLevallois, java.awt.BorderLayout.EAST);
+
+        jPanel4.add(jPanelLabelsForMaintainer, java.awt.BorderLayout.CENTER);
+
+        helpPanel.add(jPanel4);
+        helpPanel.add(filler1);
+
+        tabbedPane.addTab(org.openide.util.NbBundle.getMessage(LexplorerTopComponent.class, "LexplorerTopComponent.helpPanel.TabConstraints.tabTitle"), helpPanel); // NOI18N
 
         jPanel1.add(tabbedPane, java.awt.BorderLayout.CENTER);
         tabbedPane.getAccessibleContext().setAccessibleName(org.openide.util.NbBundle.getMessage(LexplorerTopComponent.class, "LexplorerTopComponent.tabbedPane.AccessibleContext.accessibleName")); // NOI18N
@@ -262,7 +334,8 @@ public final class LexplorerTopComponent extends TopComponent {
                 if (longTask instanceof InitialWordProcessingRunnable) {
                     logAreaUpdater = new LogAreaUpdater(bundle.getString("expression.finished_ready_to_run"));
                     logAreaUpdater.execute();
-                    topWordsRetrieverAsRunnable = new TopWordsFinderRunnable(StaticProperties.REFRESH_RATE_COMPUTATION);
+                    int topTermsToRetrieve = (Integer) jSpinnerNumberTopTerms.getValue();
+                    topWordsRetrieverAsRunnable = new TopWordsFinderRunnable(StaticProperties.REFRESH_RATE_COMPUTATION, topTermsToRetrieve);
                     uiUpdaterAsSwingWorker = new UIUpdater(StaticProperties.REFRESH_RATE_UI);
                     uiUpdaterAsSwingWorker.execute();
                     executor.execute(topWordsRetrieverAsRunnable, topWordsRetrieverAsRunnable);
@@ -315,15 +388,35 @@ public final class LexplorerTopComponent extends TopComponent {
 
     private void jSpinnerNumberTopTermsStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jSpinnerNumberTopTermsStateChanged
         if (topWordsRetrieverAsRunnable != null) {
-            topWordsRetrieverAsRunnable.setTopWordsToRetrieve((Integer) jSpinnerNumberTopTerms.getValue());
+            int topTermsToRetrieve = (Integer) jSpinnerNumberTopTerms.getValue();
+            topWordsRetrieverAsRunnable.setTopWordsToRetrieve(topTermsToRetrieve);
         }
     }//GEN-LAST:event_jSpinnerNumberTopTermsStateChanged
 
+    private void jLabelUrlClementLevalloisMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabelUrlClementLevalloisMouseClicked
+        openWebpage(URI.create(StaticProperties.MAINTAINER_URL));
+    }//GEN-LAST:event_jLabelUrlClementLevalloisMouseClicked
+
+    private void jLabelGephiFBUrlMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabelGephiFBUrlMouseClicked
+        openWebpage(URI.create(StaticProperties.GEPHI_FACEBOOK_GROUP_URL));
+    }//GEN-LAST:event_jLabelGephiFBUrlMouseClicked
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JInternalFrame attributeFrame;
+    private javax.swing.Box.Filler filler1;
+    private javax.swing.JPanel helpPanel;
+    private javax.swing.JLabel jLabelGephiFBUrl;
+    private javax.swing.JLabel jLabelHelpfulLinks;
+    private javax.swing.JLabel jLabelPluginMaintainedBy;
+    private javax.swing.JLabel jLabelUrlClementLevallois;
     private javax.swing.JList<String> jListOfNodeAttributes;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel4;
+    private javax.swing.JPanel jPanel5;
+    private javax.swing.JPanel jPanelForGephiLinks;
     private javax.swing.JPanel jPanelForTwoParams;
+    private javax.swing.JPanel jPanelLabelsForMaintainer;
     private javax.swing.JPanel jPanelNumberTopTerms;
     private javax.swing.JPanel jPanelRefreshButton;
     private javax.swing.JScrollPane jScrollPane1;
@@ -331,7 +424,7 @@ public final class LexplorerTopComponent extends TopComponent {
     private javax.swing.JLabel loggingjTextField;
     private javax.swing.JInternalFrame numberTopWordsFrame;
     private javax.swing.JPanel parametersPanel;
-    public static javax.swing.JLabel placeHolderForTopTerms;
+    private javax.swing.JLabel placeHolderForTopTerms;
     private javax.swing.JButton runButton;
     private javax.swing.JTabbedPane tabbedPane;
     private javax.swing.JPanel wordCloudPanel;
@@ -392,8 +485,30 @@ public final class LexplorerTopComponent extends TopComponent {
 
         @Override
         public String doInBackground() throws InterruptedException {
-            loggingjTextField.setText("<html>" + messageWithoutHtmlEnclosingTags + "<html>");
+            loggingjTextField.setText("<html>" + messageWithoutHtmlEnclosingTags + "</html>");
             return "";
         }
+    }
+
+    public static boolean openWebpage(URI uri) {
+        Desktop desktop = Desktop.isDesktopSupported() ? Desktop.getDesktop() : null;
+        if (desktop != null && desktop.isSupported(Desktop.Action.BROWSE)) {
+            try {
+                desktop.browse(uri);
+                return true;
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        return false;
+    }
+
+    public static boolean openWebpage(URL url) {
+        try {
+            return openWebpage(url.toURI());
+        } catch (URISyntaxException e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 }

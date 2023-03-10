@@ -20,4 +20,7 @@ public class StaticProperties {
     
     public static String DEFAULT_TEXT_LANGUAGE = "en";
     
+    public static String MAINTAINER_URL = "https://twitter.com/seinecle";
+    public static String GEPHI_FACEBOOK_GROUP_URL = "https://facebook.com/groups/gephi";
+    
 }
