@@ -7,12 +7,12 @@
     <version>0.10.0</version>
     <packaging>pom</packaging>
 
-    <name>parent project for lexical plugin</name>
+    <name>parent project for word cloud plugin</name>
     
     <!-- List of modules -->
     <modules>
         <!-- Add here the paths of all modules (e.g. <module>modules/MyModule</module>) -->
-        <module>modules/LexicalExplorerPlugin</module>
+        <module>modules/WordCloudPlugin</module>
     </modules>
     
     <!-- Properties -->
