@@ -7,15 +7,14 @@
         <version>0.10.0</version>
     </parent>
 
-    <groupId>exploreyourdata</groupId>
+    <groupId>net.clementlevallois</groupId>
     <artifactId>word-cloud-plugin</artifactId>
-    <version>0.10.0</version>
+    <version>1.0.0</version>
     <packaging>nbm</packaging>
     <name>Word Cloud Plugin</name>
     
     <properties>
         <gephi.projectid>org.gephi</gephi.projectid>
-        <gephi.version>0.10.0</gephi.version>
         <netbeans.version>RELEASE160</netbeans.version>
         <maven.compiler.source>11</maven.compiler.source>
         <maven.compiler.target>11</maven.compiler.target>
@@ -26,27 +25,27 @@
         <dependency>
             <groupId>net.clementlevallois.functions</groupId>
             <artifactId>umigon-model</artifactId>
-            <version>1.0</version>
+            <version>0.10</version>
         </dependency>
         <dependency>
             <groupId>net.clementlevallois.functions</groupId>
             <artifactId>umigon-ngram-ops</artifactId>
-            <version>1.0</version>
+            <version>0.10</version>
         </dependency>
         <dependency>
             <groupId>net.clementlevallois.functions</groupId>
             <artifactId>umigon-stopwords</artifactId>
-            <version>1.0</version>
+            <version>0.10</version>
         </dependency>
         <dependency>
             <groupId>net.clementlevallois.functions</groupId>
             <artifactId>umigon-tokenizer</artifactId>
-            <version>1.0</version>
+            <version>0.10</version>
         </dependency>
         <dependency>
             <groupId>net.clementlevallois.utils</groupId>
             <artifactId>utils-core</artifactId>
-            <version>1.0</version>
+            <version>0.11</version>
         </dependency>
         <dependency>
             <groupId>org.gephi</groupId>

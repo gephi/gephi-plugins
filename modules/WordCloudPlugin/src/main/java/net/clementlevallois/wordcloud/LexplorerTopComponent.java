@@ -1,6 +1,5 @@
 /*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/NetBeansModuleDevelopment-files/templateTopComponent637.java to edit this template
+ * author: Clement Levallois
  */
 package net.clementlevallois.wordcloud;
 
@@ -24,9 +23,6 @@ import org.openide.awt.ActionReference;
 import org.openide.util.NbBundle;
 import org.openide.windows.TopComponent;
 
-/**
- * Top component which displays something.
- */
 @ConvertAsProperties(
         dtd = "-//net.clementlevallois.wordcloud//Lexplorer//EN",
         autostore = false
@@ -36,7 +32,7 @@ import org.openide.windows.TopComponent;
         //iconBase="SET/PATH/TO/ICON/HERE",
         persistenceType = TopComponent.PERSISTENCE_ALWAYS
 )
-@TopComponent.Registration(mode = "filtersmode", openAtStartup = true)
+@TopComponent.Registration(mode = "filtersmode", openAtStartup = false)
 @ActionID(category = "Window", id = "net.clementlevallois.wordcloud.LexplorerTopComponent")
 @ActionReference(path = "Menu/Window" /*, position = 333 */)
 @TopComponent.OpenActionRegistration(
@@ -376,10 +372,7 @@ public final class LexplorerTopComponent extends TopComponent {
             executor.execute(initialWordProcessingRunnable, initialWordProcessingRunnable);
         } else {
             if (initialWordProcessingRunnable != null) {
-                initialWordProcessingRunnable.cancel();
-            }
-            if (topWordsRetrieverAsRunnable != null) {
-                topWordsRetrieverAsRunnable.cancel();
+                initialWordProcessingRunnable.interruptInitialAnalysis();
             }
             runButton.setText(bundle.getString("LexplorerTopComponent.runButton.text"));
             executor.cancel();

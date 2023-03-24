@@ -1,7 +1,7 @@
 /*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ * author: Clement Levallois
  */
+
 package net.clementlevallois.wordcloud;
 
 import java.io.IOException;
@@ -33,6 +33,7 @@ import org.gephi.io.importer.plugin.file.ImporterGEXF;
 import org.gephi.io.importer.spi.FileImporter;
 import org.gephi.io.processor.plugin.DefaultProcessor;
 import org.gephi.project.api.ProjectController;
+import org.gephi.utils.progress.Progress;
 import org.openide.util.Exceptions;
 import org.openide.util.Lookup;
 
@@ -41,6 +42,8 @@ import org.openide.util.Lookup;
  * @author LEVALLOIS
  */
 public class TopTermExtractor {
+    
+    Boolean initialAnalysisInterruptedByUser = false;
 
     public static void main(String args[]) throws IOException, Exception {
         new TopTermExtractor().importFromFile();
@@ -77,6 +80,7 @@ public class TopTermExtractor {
     public Boolean tokenizeSelectedTextualAttributeForTheEntireGraph(GraphModel gm, String attributeName, String lang) {
 
         Graph graph = gm.getGraph();
+        initialAnalysisInterruptedByUser = false;
 
         // selecting the column corresponding to the attribute we want to analyze
         Column attributeToBeAnalyzed = gm.getNodeTable().getColumn(attributeName);
@@ -90,7 +94,7 @@ public class TopTermExtractor {
 
         // doing the iteration now
         Iterator<Node> iteratorOnNodes = nodes.iterator();
-        while (iteratorOnNodes.hasNext()) {
+        while (iteratorOnNodes.hasNext() & !initialAnalysisInterruptedByUser) {
             Node node = iteratorOnNodes.next();
             String descriptionForOneNode = (String) node.getAttribute(attributeToBeAnalyzed);
             if (descriptionForOneNode != null && !descriptionForOneNode.isBlank()) {
@@ -111,7 +115,7 @@ public class TopTermExtractor {
         StopWordsRemover stopWordsRemoverSECONDLANGUAGE = new StopWordsRemover(3, lang);
 
         Iterator<Map.Entry<String, String>> iteratorOnNodesAndTheirTextualAttribute = textsFromTheAttribute.entrySet().iterator();
-        while (iteratorOnNodesAndTheirTextualAttribute.hasNext()) {
+        while (iteratorOnNodesAndTheirTextualAttribute.hasNext()& !initialAnalysisInterruptedByUser) {
             try {
                 Map.Entry<String, String> next = iteratorOnNodesAndTheirTextualAttribute.next();
                 String textualAttribute = next.getValue();
@@ -181,6 +185,11 @@ public class TopTermExtractor {
             i++;
         }
         return sb.toString();
-
     }
+
+    public void setInitialAnalysisInterruptedByUser(Boolean initialAnalysisInterruptedByUser) {
+        this.initialAnalysisInterruptedByUser = initialAnalysisInterruptedByUser;
+    }
+    
+    
 }

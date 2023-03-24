@@ -7,7 +7,7 @@
     <version>0.10.0</version>
     <packaging>pom</packaging>
 
-    <name>parent project for word cloud plugin</name>
+    <name>gephi-plugins</name>
     
     <!-- List of modules -->
     <modules>

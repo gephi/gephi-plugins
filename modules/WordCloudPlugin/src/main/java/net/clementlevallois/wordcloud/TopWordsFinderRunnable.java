@@ -27,6 +27,7 @@ public class TopWordsFinderRunnable implements LongTask, Runnable {
     private boolean cancelled = false;
     private Set<String> previousSelectedNodes = new HashSet();
     private static final ResourceBundle bundle = NbBundle.getBundle(LexplorerTopComponent.class);
+    private TopTermExtractor topTermExtractor = new TopTermExtractor();
 
     public TopWordsFinderRunnable(Integer pauseBetweenComputations, int topWordsToRetrieve) {
         this.pauseBetweenComputations = pauseBetweenComputations;
@@ -37,7 +38,7 @@ public class TopWordsFinderRunnable implements LongTask, Runnable {
     public void run() {
         Progress.start(progressTicket);
         Progress.setDisplayName(progressTicket, bundle.getString("expression.warning.wordcloud_analysis_running"));
-        while (true && !this.cancelled) {
+        while (!this.cancelled) {
             if (!VizController.getInstance().getSelectionManager().isBlocked() && VizController.getInstance().getSelectionManager().isSelectionEnabled()) {
                 List<Node> selectedNodes = VizController.getInstance().getSelectionManager().getSelectedNodes();
                 Set<String> setIdsForTestChange = selectedNodes.stream().map(Node::getId).map(Object::toString).collect(Collectors.toSet());
@@ -65,7 +66,6 @@ public class TopWordsFinderRunnable implements LongTask, Runnable {
                 }
                 // retrieve the textual attributes of these nodes
                 // and compute the top terms of these
-                TopTermExtractor topTermExtractor = new TopTermExtractor();
                 List<String> selectedNodesIds = new ArrayList(setIdsForTestChange);
                 String topTermsExtractorFromSelectedNodes = topTermExtractor.topTermsExtractorFromSelectedNodes(selectedNodesIds, topWordsToRetrieve);
                 try {
@@ -107,4 +107,11 @@ public class TopWordsFinderRunnable implements LongTask, Runnable {
     public void setTopWordsToRetrieve(Integer topWordsToRetrieve) {
         this.topWordsToRetrieve = topWordsToRetrieve;
     }
+
+    public boolean cancelInitialAnalysis() {
+        Progress.finish(progressTicket, bundle.getString("expression.warning.wordcloud_analysis_stopped"));
+        topTermExtractor.setInitialAnalysisInterruptedByUser(true);
+        return true;
+    }
+
 }

@@ -1,5 +1,5 @@
 /*
- * author: Clément Levallois
+ * author: Clement Levallois
  */
 package net.clementlevallois.wordcloud;
 
@@ -14,10 +14,12 @@ public class InitialWordProcessingRunnable implements LongTask, Runnable {
 
     private ProgressTicket progressTicket;
     private boolean cancelled = false;
+    private Boolean initialAnalysisInterruptedByUser = false;
     private final GraphModel graphModel;
     private final String columnName;
     private final String lang;
     private static final ResourceBundle bundle = NbBundle.getBundle(LexplorerTopComponent.class);
+    private TopTermExtractor topTermExtractor = new TopTermExtractor();
 
     public InitialWordProcessingRunnable(GraphModel graphModel, String columnName, String lang) {
         this.graphModel = graphModel;
@@ -29,7 +31,6 @@ public class InitialWordProcessingRunnable implements LongTask, Runnable {
     public void run() {
         Progress.setDisplayName(progressTicket, bundle.getString("progress.initial_analysis_running"));
         Progress.start(progressTicket);
-        TopTermExtractor topTermExtractor = new TopTermExtractor();
         topTermExtractor.tokenizeSelectedTextualAttributeForTheEntireGraph(graphModel, columnName, lang);
         Progress.finish(progressTicket, bundle.getString("progress.initial_analysis_complete"));
 
@@ -39,12 +40,16 @@ public class InitialWordProcessingRunnable implements LongTask, Runnable {
     public boolean cancel() {
         this.cancelled = true;
         Progress.finish(progressTicket, bundle.getString("progress.initial_analysis_interrupted"));
-        return false;
+        return true;
     }
 
     @Override
     public void setProgressTicket(ProgressTicket progressTicket) {
         this.progressTicket = progressTicket;
+    }
+
+    public void interruptInitialAnalysis() {
+        topTermExtractor.setInitialAnalysisInterruptedByUser(true);
     }
 
 }
