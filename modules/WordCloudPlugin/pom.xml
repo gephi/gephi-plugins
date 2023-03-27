@@ -74,6 +74,14 @@
         <dependency>
             <groupId>org.gephi</groupId>
             <artifactId>visualization</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.gephi</groupId>
+                    <artifactId>desktop-project</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
         <!-- Test only -->
         <dependency>
             <groupId>org.netbeans.api</groupId>
