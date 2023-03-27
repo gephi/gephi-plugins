@@ -5,10 +5,6 @@
 package net.clementlevallois.wordcloud;
 
 import java.io.IOException;
-import java.io.StringReader;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -26,16 +22,7 @@ import org.gephi.graph.api.Graph;
 import org.gephi.graph.api.GraphModel;
 import org.gephi.graph.api.Node;
 import org.gephi.graph.api.NodeIterable;
-import org.gephi.io.importer.api.Container;
-import org.gephi.io.importer.api.ContainerUnloader;
-import org.gephi.io.importer.api.ImportController;
-import org.gephi.io.importer.plugin.file.ImporterGEXF;
-import org.gephi.io.importer.spi.FileImporter;
-import org.gephi.io.processor.plugin.DefaultProcessor;
-import org.gephi.project.api.ProjectController;
-import org.gephi.utils.progress.Progress;
 import org.openide.util.Exceptions;
-import org.openide.util.Lookup;
 
 /**
  *
@@ -43,41 +30,9 @@ import org.openide.util.Lookup;
  */
 public class TopTermExtractor {
     
-    Boolean initialAnalysisInterruptedByUser = false;
+    private boolean initialAnalysisInterruptedByUser = false;
 
-    public static void main(String args[]) throws IOException, Exception {
-        new TopTermExtractor().importFromFile();
-    }
-
-    public void importFromFile() throws IOException, Exception {
-
-        Path exampleGexf = Path.of("G:\\Mon Drive\\Twitch stream\\gephi plugin development\\gephi-plugins\\modules\\wordcloudPlugin\\qatar user network.gexf");
-
-        String gexfFileAsString = Files.readString(exampleGexf, StandardCharsets.UTF_8);
-
-        //Init a project - and therefore a workspace
-        ProjectController pc = Lookup.getDefault().lookup(ProjectController.class);
-        pc.newProject();
-
-        //Get controllers and models
-        ImportController importController = Lookup.getDefault().lookup(ImportController.class);
-
-        //Import file
-        Container container;
-        FileImporter fi = new ImporterGEXF();
-
-        //Append imported data to GraphAPI
-        container = importController.importFile(new StringReader(gexfFileAsString), fi);
-        container.closeLoader();
-
-        DefaultProcessor processor = new DefaultProcessor();
-        processor.setWorkspace(pc.getCurrentWorkspace());
-        processor.setContainers(new ContainerUnloader[]{container.getUnloader()});
-        processor.process();
-
-    }
-
-    public Boolean tokenizeSelectedTextualAttributeForTheEntireGraph(GraphModel gm, String attributeName, String lang) {
+    public boolean tokenizeSelectedTextualAttributeForTheEntireGraph(GraphModel gm, String attributeName, String lang) {
 
         Graph graph = gm.getGraph();
         initialAnalysisInterruptedByUser = false;
@@ -101,6 +56,7 @@ public class TopTermExtractor {
                 textsFromTheAttribute.put((String) node.getId(), descriptionForOneNode.toLowerCase());
             }
         }
+        graph.readUnlock();
 
         Set<String> languageSpecificLexicon = new HashSet();
 
@@ -190,6 +146,4 @@ public class TopTermExtractor {
     public void setInitialAnalysisInterruptedByUser(Boolean initialAnalysisInterruptedByUser) {
         this.initialAnalysisInterruptedByUser = initialAnalysisInterruptedByUser;
     }
-    
-    
 }
