@@ -74,10 +74,21 @@
         <dependency>
             <groupId>org.gephi</groupId>
             <artifactId>visualization</artifactId>
+        <!-- Test only -->
+        <dependency>
+            <groupId>org.netbeans.api</groupId>
+            <artifactId>org-netbeans-modules-nbjunit</artifactId>
         </dependency>
         <dependency>
             <groupId>org.gephi</groupId>
             <artifactId>io-importer-plugin</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.gephi</groupId>
+            <artifactId>io-importer-api</artifactId>
+            <scope>test</scope>
+            <type>test-jar</type>
         </dependency>
     </dependencies>
     <build>
