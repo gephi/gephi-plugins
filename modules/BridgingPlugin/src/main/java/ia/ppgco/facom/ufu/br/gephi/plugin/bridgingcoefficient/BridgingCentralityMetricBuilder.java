@@ -1,4 +1,4 @@
-package BCgephi;
+package ia.ppgco.facom.ufu.br.gephi.plugin.bridgingcoefficient;
 
 import org.gephi.statistics.spi.Statistics;
 import org.gephi.statistics.spi.StatisticsBuilder;

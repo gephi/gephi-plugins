@@ -8,7 +8,7 @@
     </parent>
 
     <groupId>ia.ppgco.facom.ufu.br</groupId>
-    <artifactId>bridge-plugin</artifactId>
+    <artifactId>bridge-gephi-plugin</artifactId>
     <version>1.0.1</version>
     <packaging>nbm</packaging>
 
@@ -53,12 +53,6 @@
         <dependency>
             <groupId>org.gephi</groupId>
             <artifactId>core-library-wrapper</artifactId>
-            <exclusions>
-                <exclusion>
-                    <groupId>jfree</groupId>
-                    <artifactId>jfreechart</artifactId>
-                </exclusion>
-            </exclusions>
         </dependency>
         <dependency>
             <groupId>org.netbeans.api</groupId>
@@ -67,11 +61,6 @@
         <dependency>
             <groupId>org.netbeans.api</groupId>
             <artifactId>org-openide-util-lookup</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.jfree</groupId>
-            <artifactId>jfreechart</artifactId>
-            <version>1.0.19</version>
         </dependency>
     </dependencies>
 
@@ -82,9 +71,10 @@
                 <artifactId>nbm-maven-plugin</artifactId>
                 <configuration>
                     <licenseName>Apache 2.0</licenseName>
-                    <author>Getúlio de Morais Pereira and Anderson Rodrigues dos Santos</author>
+                    <author>Getúlio de Morais Pereira</author>
+                    <author>Anderson Rodrigues dos Santos</author>
                     <authorEmail>santosardr@ufu.br</authorEmail>
-                    <sourceCodeUrl>$sourcecode_url</sourceCodeUrl>
+                    <sourceCodeUrl>https://github.com/santosardr/gephi-plugins</sourceCodeUrl>
                     <publicPackages>
                         <!-- Insert public packages -->
                     </publicPackages>
