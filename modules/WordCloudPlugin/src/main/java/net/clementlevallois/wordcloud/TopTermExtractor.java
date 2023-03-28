@@ -35,6 +35,7 @@ public class TopTermExtractor {
     public boolean tokenizeSelectedTextualAttributeForTheEntireGraph(GraphModel gm, String attributeName, String lang) {
 
         Graph graph = gm.getGraph();
+        graph.readLock();
         initialAnalysisInterruptedByUser = false;
 
         // selecting the column corresponding to the attribute we want to analyze
