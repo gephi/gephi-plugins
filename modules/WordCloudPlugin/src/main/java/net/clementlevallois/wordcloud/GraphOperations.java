@@ -3,9 +3,7 @@
  */
 package net.clementlevallois.wordcloud;
 
-import java.util.List;
 import javax.swing.DefaultListModel;
-import org.gephi.graph.api.Column;
 import org.gephi.graph.api.GraphController;
 import org.gephi.graph.api.GraphModel;
 import org.gephi.project.api.ProjectController;
@@ -26,13 +24,10 @@ public class GraphOperations {
     }
 
     public static DefaultListModel<String> returnTextualNodeAttributesAsListOfNames(GraphModel gm) {
-        List<Column> listOfNodeAttributes = gm.getNodeTable().toList();
         DefaultListModel<String> listModel = new DefaultListModel();
-        for (Column column : listOfNodeAttributes) {
-            if (column.getTypeClass() == String.class) {
-                listModel.addElement(column.getId());
-            }
-        }
+        gm.getNodeTable().toList().stream().filter((column) -> (column.getTypeClass().equals(String.class))).forEach((column) -> {
+            listModel.addElement(column.getId());
+        });
 
         return listModel;
     }

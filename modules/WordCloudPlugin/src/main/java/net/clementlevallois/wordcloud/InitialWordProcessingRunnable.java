@@ -13,13 +13,11 @@ import org.openide.util.NbBundle;
 public class InitialWordProcessingRunnable implements LongTask, Runnable {
 
     private ProgressTicket progressTicket;
-    private boolean cancelled = false;
-    private Boolean initialAnalysisInterruptedByUser = false;
     private final GraphModel graphModel;
     private final String columnName;
     private final String lang;
     private static final ResourceBundle bundle = NbBundle.getBundle(LexplorerTopComponent.class);
-    private TopTermExtractor topTermExtractor = new TopTermExtractor();
+    private TopTermExtractor topTermExtractor;
 
     public InitialWordProcessingRunnable(GraphModel graphModel, String columnName, String lang) {
         this.graphModel = graphModel;
@@ -31,6 +29,7 @@ public class InitialWordProcessingRunnable implements LongTask, Runnable {
     public void run() {
         Progress.setDisplayName(progressTicket, bundle.getString("progress.initial_analysis_running"));
         Progress.start(progressTicket);
+        topTermExtractor = new TopTermExtractor();
         topTermExtractor.tokenizeSelectedTextualAttributeForTheEntireGraph(graphModel, columnName, lang);
         Progress.finish(progressTicket, bundle.getString("progress.initial_analysis_complete"));
 
@@ -38,7 +37,9 @@ public class InitialWordProcessingRunnable implements LongTask, Runnable {
 
     @Override
     public boolean cancel() {
-        this.cancelled = true;
+        if (topTermExtractor != null) {
+            topTermExtractor.setInitialAnalysisInterruptedByUser(true);
+        }
         Progress.finish(progressTicket, bundle.getString("progress.initial_analysis_interrupted"));
         return true;
     }
@@ -49,7 +50,9 @@ public class InitialWordProcessingRunnable implements LongTask, Runnable {
     }
 
     public void interruptInitialAnalysis() {
-        topTermExtractor.setInitialAnalysisInterruptedByUser(true);
+        if (topTermExtractor != null) {
+            topTermExtractor.setInitialAnalysisInterruptedByUser(true);
+        }
     }
 
 }

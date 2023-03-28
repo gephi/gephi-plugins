@@ -17,16 +17,15 @@ import javax.swing.SpinnerNumberModel;
 import javax.swing.SwingWorker;
 import org.gephi.graph.api.GraphModel;
 import org.gephi.utils.longtask.api.LongTaskExecutor;
-import org.netbeans.api.settings.ConvertAsProperties;
 import org.openide.awt.ActionID;
 import org.openide.awt.ActionReference;
 import org.openide.util.NbBundle;
 import org.openide.windows.TopComponent;
 
-@ConvertAsProperties(
-        dtd = "-//net.clementlevallois.wordcloud//Lexplorer//EN",
-        autostore = false
-)
+//@ConvertAsProperties(
+//        dtd = "-//net.clementlevallois.wordcloud//Lexplorer//EN",
+//        autostore = false
+//)
 @TopComponent.Description(
         preferredID = "LexplorerTopComponent",
         //iconBase="SET/PATH/TO/ICON/HERE",
@@ -83,7 +82,7 @@ public final class LexplorerTopComponent extends TopComponent {
         SpinnerModel spinnerModel = new SpinnerNumberModel(StaticProperties.DEFAULT_WORDS_TO_DISPLAY, StaticProperties.MIN_WORDS_TO_DISPLAY, StaticProperties.MAX_WORDS_TO_DISPLAY, StaticProperties.STEP_SPINNER);
         jSpinnerNumberTopTerms.setModel(spinnerModel);
 
-        executor = new LongTaskExecutor(true, "Word Cloud Plugin");
+        executor = new LongTaskExecutor(true, "Word Cloud Plugin", 100);
 
     }
 
@@ -461,26 +460,17 @@ public final class LexplorerTopComponent extends TopComponent {
     // End of variables declaration//GEN-END:variables
     @Override
     public void componentOpened() {
-        // TODO add custom code on component opening
     }
 
     @Override
     public void componentClosed() {
-        // TODO add custom code on component closing
     }
 
-    void writeProperties(java.util.Properties p) {
-        // better to version settings since initial version as advocated at
-        // http://wiki.apidesign.org/wiki/PropertyFiles
-        p.setProperty("version", "1.0");
-        // TODO store your settings
-    }
-
-    void readProperties(java.util.Properties p) {
-        String version = p.getProperty("version");
-        // TODO read your settings according to their version
-
-    }
+//    void writeProperties(java.util.Properties p) {
+//    }
+//
+//    void readProperties(java.util.Properties p) {
+//    }
 
     private class UIUpdater extends SwingWorker<String, String> {
 
