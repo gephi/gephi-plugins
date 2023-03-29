@@ -4048,6 +4048,33 @@
       },
       "sourcecode": "https://github.com/gephi/gephi-plugins/tree/seadragon-plugin",
       "homepage": null
+    },
+    {
+      "id": "word-cloud-plugin",
+      "name": "Word Cloud plugin",
+      "short_description": "This plugin displays the most frequent keywords among a textual attribute of the network, in the form of a word cloud.",
+      "long_description": "This plugin displays the most frequent keywords among a textual attribute of the network. These keywords are refreshed according to the selection made with the mouse by the user. This is useful for exploring and understanding a network that you discover.",
+      "readme": "## Word Cloud Plugin\n\nThis plugin shows a word cloud of a textual node attribute, when you hover the network with your mouse.\nIt helps explore and understand the network quickly, without having to visit the data table to see what the nodes are about.\n\nAuthor of the plugin: [Clement Levallois](https://twitter.com/seinecle).\n",
+      "license": "Apache 2.0",
+      "authors": [
+        {
+          "name": "Clement Levallois",
+          "email": "analysis@exploreyourdata.com",
+          "link": "https://nocodefunctions.com"
+        }
+      ],
+      "category": "Tool",
+      "last_update": "March 29, 2023",
+      "images": null,
+      "versions": {
+        "0.10.0": {
+          "url": "0.10/word-cloud-plugin-1.0.0.nbm",
+          "last_update": "March 29, 2023",
+          "plugin_version": "1.0.0"
+        }
+      },
+      "sourcecode": "https://github.com/seinecle/gephi-plugins",
+      "homepage": null
     }
   ]
 }
