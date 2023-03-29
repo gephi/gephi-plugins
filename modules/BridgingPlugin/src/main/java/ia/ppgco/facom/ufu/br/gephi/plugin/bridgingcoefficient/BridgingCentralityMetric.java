@@ -443,6 +443,7 @@ public class BridgingCentralityMetric extends GraphDistance implements Statistic
                 + "<ul>"
                 + "<li>Get&uacute;lio de Morais Pereira</li>"
                 + "<li>Anderson Rodrigues dos Santos</li>"
+                + "<li>Luis Felipe Nunes Reis</li>"
                 + "<ul>"
                 + "<li>" + contact + " : santosardr@ufu.br </li>"
                 + "</ul>"
@@ -505,6 +506,9 @@ public class BridgingCentralityMetric extends GraphDistance implements Statistic
      * @return bridging coefficient value
      */
     private static double bridging_coeficient(Graph graph, Node node) {
+        if(isIsolatedNode(graph,node)){
+            return 0;
+        }
         //The inverse degree of a node divided by the inverse degree of all their imediate neighbors
         double n = 1.0 / graph.getDegree(node);
 
@@ -551,4 +555,15 @@ public class BridgingCentralityMetric extends GraphDistance implements Statistic
     public void setNormalized(boolean normalized) {
         this.normalized = normalized;
     }
+    
+    public static boolean isIsolatedNode(Graph graph, Node node) {
+        for (Node s : graph.getNodes()) {
+            if (graph.isAdjacent(node, s)) {
+                return false;
+            }
+        }
+        // If loop ends without return false, it is an isolated node
+        return true;
+    }
+
 }
