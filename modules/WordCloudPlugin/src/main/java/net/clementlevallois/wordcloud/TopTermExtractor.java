@@ -56,7 +56,7 @@ public class TopTermExtractor {
                 textsFromTheAttribute.put(node, descriptionForOneNode.toLowerCase());
             }
         }
-        graph.readUnlock();
+        graph.readUnlockAll();
 
         Set<String> languageSpecificLexicon = new HashSet();
 
