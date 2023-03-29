@@ -78,6 +78,7 @@
 		<module>modules/WebPublishPlugin</module>
         <module>modules/OrderedLayout</module>
         <module>modules/OpenSeadragonPlugin</module>
+        <module>modules/WordCloudPlugin</module>
     </modules>
 
     <!-- Properties -->
