@@ -107,12 +107,14 @@ public class TopTermExtractor {
     public String topTermsExtractorFromSelectedNodes(List<Node> selectedNodes, int maxNumberOfTerms) {
         Map<Node, List<String>> mapOfNodeIdsToTheirTextFragments = DataManager.getMapOfNodeIdsToTheirTextFragments();
 
-        List<String> flattenedListOfTerms = mapOfNodeIdsToTheirTextFragments.values().stream()
+        List<String> flattenedListOfTermsForSelectedNodes = selectedNodes.stream()
+                .filter(mapOfNodeIdsToTheirTextFragments::containsKey)
+                .map(mapOfNodeIdsToTheirTextFragments::get)
                 .flatMap(List::stream)
                 .collect(Collectors.toList());
 
         // once we have all the terms, we can sort the terms from the most to the least frequent and select the top n
-        List<Map.Entry<String, Long>> topNList = flattenedListOfTerms.stream()
+        List<Map.Entry<String, Long>> topNList = flattenedListOfTermsForSelectedNodes.stream()
                 .collect(Collectors.groupingBy(s -> s, Collectors.counting()))
                 .entrySet().stream()
                 .sorted(Collections.reverseOrder(Map.Entry.comparingByValue()))
