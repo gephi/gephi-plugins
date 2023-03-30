@@ -388,7 +388,7 @@
                       <Properties>
                         <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
                           <Border info="org.netbeans.modules.form.compat2.border.TitledBorderInfo">
-                            <TitledBorder title="&#xd83d;&#xdd17;">
+                            <TitledBorder title="">
                               <ResourceString PropertyName="titleX" bundle="net/clementlevallois/wordcloud/Bundle.properties" key="LexplorerTopComponent.jPanelForGephiLinks.border.title" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
                             </TitledBorder>
                           </Border>
@@ -453,7 +453,7 @@
                       <Properties>
                         <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
                           <Border info="org.netbeans.modules.form.compat2.border.TitledBorderInfo">
-                            <TitledBorder title="&#xd83d;&#xde0a;">
+                            <TitledBorder title="">
                               <ResourceString PropertyName="titleX" bundle="net/clementlevallois/wordcloud/Bundle.properties" key="LexplorerTopComponent.jPanelLabelsForMaintainer.border.title" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
                             </TitledBorder>
                           </Border>
@@ -516,7 +516,7 @@
                       <Properties>
                         <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
                           <Border info="org.netbeans.modules.form.compat2.border.TitledBorderInfo">
-                            <TitledBorder title="&#xd83d;&#xdca1;">
+                            <TitledBorder title="">
                               <ResourceString PropertyName="titleX" bundle="net/clementlevallois/wordcloud/Bundle.properties" key="LexplorerTopComponent.jPanel8.border.title" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
                             </TitledBorder>
                           </Border>

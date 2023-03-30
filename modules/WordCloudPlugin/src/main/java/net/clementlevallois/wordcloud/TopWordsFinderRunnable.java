@@ -37,11 +37,11 @@ public class TopWordsFinderRunnable implements LongTask, Runnable {
 
         Progress.start(progressTicket);
         Progress.setDisplayName(progressTicket, bundle.getString("expression.warning.wordcloud_analysis_running"));
+        Set<Node> previousSelectedNodes = new HashSet();
         while (!this.cancelled) {
             introduceAPauseBetweenCalculations();
             try {
-                Set<Node> previousSelectedNodes = new HashSet();
-                if (!VizController.getInstance().getSelectionManager().isBlocked() && !VizController.getInstance().getSelectionManager().isSelectionEnabled()) {
+                if (!VizController.getInstance().getSelectionManager().isBlocked() && VizController.getInstance().getSelectionManager().isSelectionEnabled()) {
                     List<Node> selectedNodes = VizController.getInstance().getSelectionManager().getSelectedNodes();
                     Set<Node> setNodesForTestChange = new HashSet(selectedNodes);
                     if (selectedNodes.isEmpty()) {
