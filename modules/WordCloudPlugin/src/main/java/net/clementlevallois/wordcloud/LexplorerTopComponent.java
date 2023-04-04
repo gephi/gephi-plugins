@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.util.List;
 import java.util.ResourceBundle;
 import javax.swing.DefaultListModel;
 import javax.swing.ListSelectionModel;
@@ -51,6 +52,8 @@ public final class LexplorerTopComponent extends TopComponent {
 
     private final LongTaskExecutor executor;
 
+    private List<String> selectedLanguages;
+
     private TopWordsFinderRunnable topWordsRetrieverAsRunnable;
     private InitialWordProcessingRunnable initialWordProcessingRunnable;
 
@@ -77,6 +80,11 @@ public final class LexplorerTopComponent extends TopComponent {
         jListOfNodeAttributes.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         jListOfNodeAttributes.setModel(listModelOfNodeAttributes);
 
+        jCheckBoxEnglishDefault.setSelected(true);
+
+        jListLanguages.setModel(TopTermExtractor.returnListOfLanguages());
+        jListLanguages.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
+
         // setting the default values of the top terms to display
         // in the constructor: spinnerMode: value, min, max, step
         SpinnerModel spinnerModel = new SpinnerNumberModel(StaticProperties.DEFAULT_WORDS_TO_DISPLAY, StaticProperties.MIN_WORDS_TO_DISPLAY, StaticProperties.MAX_WORDS_TO_DISPLAY, StaticProperties.STEP_SPINNER);
@@ -97,16 +105,20 @@ public final class LexplorerTopComponent extends TopComponent {
         jPanel1 = new javax.swing.JPanel();
         tabbedPane = new javax.swing.JTabbedPane();
         parametersPanel = new javax.swing.JPanel();
+        jPanel2 = new javax.swing.JPanel();
+        jCheckBoxEnglishDefault = new javax.swing.JCheckBox();
+        jPanelNumberTopTerms = new javax.swing.JPanel();
+        jInternalFrameMoreLanguages = new javax.swing.JInternalFrame();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        jListLanguages = new javax.swing.JList<>();
+        numberTopWordsFrame = new javax.swing.JInternalFrame();
+        jSpinnerNumberTopTerms = new javax.swing.JSpinner();
         jPanelForTwoParams = new javax.swing.JPanel();
         attributeFrame = new javax.swing.JInternalFrame();
         jScrollPane1 = new javax.swing.JScrollPane();
         jListOfNodeAttributes = new javax.swing.JList<>();
         jPanelRefreshButton = new javax.swing.JPanel();
         javax.swing.JButton jButtonRefreshNodeAttributes = new javax.swing.JButton();
-        jPanel2 = new javax.swing.JPanel();
-        jPanelNumberTopTerms = new javax.swing.JPanel();
-        numberTopWordsFrame = new javax.swing.JInternalFrame();
-        jSpinnerNumberTopTerms = new javax.swing.JSpinner();
         loggingjTextField = new javax.swing.JLabel();
         wordCloudPanel = new javax.swing.JPanel();
         placeHolderForTopTerms = new javax.swing.JLabel();
@@ -136,7 +148,56 @@ public final class LexplorerTopComponent extends TopComponent {
         tabbedPane.setPreferredSize(new java.awt.Dimension(250, 800));
 
         parametersPanel.setName(""); // NOI18N
-        parametersPanel.setLayout(new java.awt.GridLayout(2, 1, 5, 5));
+        parametersPanel.setLayout(new java.awt.GridLayout(3, 1, 5, 5));
+
+        jPanel2.setLayout(new java.awt.BorderLayout());
+
+        org.openide.awt.Mnemonics.setLocalizedText(jCheckBoxEnglishDefault, org.openide.util.NbBundle.getMessage(LexplorerTopComponent.class, "LexplorerTopComponent.jCheckBoxEnglishDefault.text")); // NOI18N
+        jPanel2.add(jCheckBoxEnglishDefault, java.awt.BorderLayout.NORTH);
+
+        jPanelNumberTopTerms.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        jPanelNumberTopTerms.setPreferredSize(new java.awt.Dimension(250, 200));
+        jPanelNumberTopTerms.setLayout(new java.awt.GridLayout(1, 2));
+
+        jInternalFrameMoreLanguages.setTitle(org.openide.util.NbBundle.getMessage(LexplorerTopComponent.class, "LexplorerTopComponent.LanguageSelection.Title")); // NOI18N
+        jInternalFrameMoreLanguages.setAutoscrolls(true);
+        jInternalFrameMoreLanguages.setFrameIcon(null);
+        jInternalFrameMoreLanguages.setVisible(true);
+
+        jListLanguages.setModel(new javax.swing.AbstractListModel<String>() {
+            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
+            public int getSize() { return strings.length; }
+            public String getElementAt(int i) { return strings[i]; }
+        });
+        jScrollPane2.setViewportView(jListLanguages);
+
+        jInternalFrameMoreLanguages.getContentPane().add(jScrollPane2, java.awt.BorderLayout.CENTER);
+
+        jPanelNumberTopTerms.add(jInternalFrameMoreLanguages);
+
+        numberTopWordsFrame.setTitle(org.openide.util.NbBundle.getMessage(LexplorerTopComponent.class, "LexplorerTopComponent.numberTopWordsFrame.title")); // NOI18N
+        numberTopWordsFrame.setFrameIcon(null);
+        numberTopWordsFrame.setMaximumSize(new java.awt.Dimension(250, 100));
+        numberTopWordsFrame.setMinimumSize(new java.awt.Dimension(250, 100));
+        numberTopWordsFrame.setPreferredSize(new java.awt.Dimension(250, 100));
+        numberTopWordsFrame.setVisible(true);
+        numberTopWordsFrame.getContentPane().setLayout(new java.awt.GridBagLayout());
+
+        jSpinnerNumberTopTerms.setMaximumSize(new java.awt.Dimension(250, 50));
+        jSpinnerNumberTopTerms.setMinimumSize(new java.awt.Dimension(100, 50));
+        jSpinnerNumberTopTerms.setPreferredSize(new java.awt.Dimension(250, 50));
+        jSpinnerNumberTopTerms.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                jSpinnerNumberTopTermsStateChanged(evt);
+            }
+        });
+        numberTopWordsFrame.getContentPane().add(jSpinnerNumberTopTerms, new java.awt.GridBagConstraints());
+
+        jPanelNumberTopTerms.add(numberTopWordsFrame);
+
+        jPanel2.add(jPanelNumberTopTerms, java.awt.BorderLayout.CENTER);
+
+        parametersPanel.add(jPanel2);
 
         jPanelForTwoParams.setLayout(new java.awt.BorderLayout());
 
@@ -149,12 +210,12 @@ public final class LexplorerTopComponent extends TopComponent {
         attributeFrame.setPreferredSize(new java.awt.Dimension(250, 137));
         attributeFrame.setVisible(true);
 
+        jScrollPane1.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+        jScrollPane1.setAutoscrolls(true);
         jScrollPane1.setMaximumSize(new java.awt.Dimension(250, 100));
 
         jListOfNodeAttributes.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
-        jListOfNodeAttributes.setAutoscrolls(false);
         jListOfNodeAttributes.setMinimumSize(new java.awt.Dimension(0, 100));
-        jListOfNodeAttributes.setPreferredSize(new java.awt.Dimension(0, 100));
         jListOfNodeAttributes.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
             public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
                 jListOfNodeAttributesValueChanged(evt);
@@ -163,6 +224,7 @@ public final class LexplorerTopComponent extends TopComponent {
         jScrollPane1.setViewportView(jListOfNodeAttributes);
 
         attributeFrame.getContentPane().add(jScrollPane1, java.awt.BorderLayout.CENTER);
+        jScrollPane1.getAccessibleContext().setAccessibleName(org.openide.util.NbBundle.getMessage(LexplorerTopComponent.class, "LexplorerTopComponent.jScrollPane1.AccessibleContext.accessibleName")); // NOI18N
 
         jPanelRefreshButton.setPreferredSize(new java.awt.Dimension(250, 30));
         jPanelRefreshButton.setLayout(new java.awt.BorderLayout());
@@ -183,34 +245,6 @@ public final class LexplorerTopComponent extends TopComponent {
 
         parametersPanel.add(jPanelForTwoParams);
 
-        jPanel2.setLayout(new java.awt.GridLayout(2, 1));
-
-        jPanelNumberTopTerms.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
-        jPanelNumberTopTerms.setPreferredSize(new java.awt.Dimension(250, 200));
-        jPanelNumberTopTerms.setLayout(new java.awt.BorderLayout());
-
-        numberTopWordsFrame.setTitle(org.openide.util.NbBundle.getMessage(LexplorerTopComponent.class, "LexplorerTopComponent.numberTopWordsFrame.title")); // NOI18N
-        numberTopWordsFrame.setFrameIcon(null);
-        numberTopWordsFrame.setMaximumSize(new java.awt.Dimension(250, 100));
-        numberTopWordsFrame.setMinimumSize(new java.awt.Dimension(250, 100));
-        numberTopWordsFrame.setPreferredSize(new java.awt.Dimension(250, 100));
-        numberTopWordsFrame.setVisible(true);
-        numberTopWordsFrame.getContentPane().setLayout(new java.awt.GridBagLayout());
-
-        jSpinnerNumberTopTerms.setMaximumSize(new java.awt.Dimension(250, 50));
-        jSpinnerNumberTopTerms.setMinimumSize(new java.awt.Dimension(100, 50));
-        jSpinnerNumberTopTerms.setPreferredSize(new java.awt.Dimension(250, 50));
-        jSpinnerNumberTopTerms.addChangeListener(new javax.swing.event.ChangeListener() {
-            public void stateChanged(javax.swing.event.ChangeEvent evt) {
-                jSpinnerNumberTopTermsStateChanged(evt);
-            }
-        });
-        numberTopWordsFrame.getContentPane().add(jSpinnerNumberTopTerms, new java.awt.GridBagConstraints());
-
-        jPanelNumberTopTerms.add(numberTopWordsFrame, java.awt.BorderLayout.CENTER);
-
-        jPanel2.add(jPanelNumberTopTerms);
-
         loggingjTextField.setBackground(new java.awt.Color(102, 102, 102));
         loggingjTextField.setForeground(new java.awt.Color(102, 255, 0));
         loggingjTextField.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -218,9 +252,7 @@ public final class LexplorerTopComponent extends TopComponent {
         loggingjTextField.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
         loggingjTextField.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         loggingjTextField.setOpaque(true);
-        jPanel2.add(loggingjTextField);
-
-        parametersPanel.add(jPanel2);
+        parametersPanel.add(loggingjTextField);
 
         tabbedPane.addTab(org.openide.util.NbBundle.getMessage(LexplorerTopComponent.class, "LexplorerTopComponent.TabConstraints.tabTitle"), parametersPanel); // NOI18N
 
@@ -367,7 +399,14 @@ public final class LexplorerTopComponent extends TopComponent {
                     logAreaUpdater.execute();
                 }
             });
-            initialWordProcessingRunnable = new InitialWordProcessingRunnable(graphModel, selectedColumnId, StaticProperties.DEFAULT_TEXT_LANGUAGE);
+
+            selectedLanguages = jListLanguages.getSelectedValuesList();
+
+            if (jCheckBoxEnglishDefault.isSelected()) {
+                selectedLanguages.add(StaticProperties.DEFAULT_TEXT_LANGUAGE);
+            }
+
+            initialWordProcessingRunnable = new InitialWordProcessingRunnable(graphModel, selectedColumnId, selectedLanguages);
             executor.execute(initialWordProcessingRunnable, initialWordProcessingRunnable);
         } else {
             if (initialWordProcessingRunnable != null) {
@@ -430,12 +469,15 @@ public final class LexplorerTopComponent extends TopComponent {
     private javax.swing.JInternalFrame attributeFrame;
     private javax.swing.Box.Filler filler1;
     private javax.swing.JPanel helpPanel;
+    private javax.swing.JCheckBox jCheckBoxEnglishDefault;
+    private javax.swing.JInternalFrame jInternalFrameMoreLanguages;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabelGephiFBUrl;
     private javax.swing.JLabel jLabelHelpfulLinks;
     private javax.swing.JLabel jLabelPluginMaintainedBy;
     private javax.swing.JLabel jLabelUrlClementLevallois;
     private javax.swing.JLabel jLabelVisitTheTutorial;
+    private javax.swing.JList<String> jListLanguages;
     private javax.swing.JList<String> jListOfNodeAttributes;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
@@ -449,6 +491,7 @@ public final class LexplorerTopComponent extends TopComponent {
     private javax.swing.JPanel jPanelNumberTopTerms;
     private javax.swing.JPanel jPanelRefreshButton;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JSpinner jSpinnerNumberTopTerms;
     private javax.swing.JLabel loggingjTextField;
     private javax.swing.JInternalFrame numberTopWordsFrame;
@@ -471,7 +514,6 @@ public final class LexplorerTopComponent extends TopComponent {
 //
 //    void readProperties(java.util.Properties p) {
 //    }
-
     private class UIUpdater extends SwingWorker<String, String> {
 
         long pauseInMillis;
