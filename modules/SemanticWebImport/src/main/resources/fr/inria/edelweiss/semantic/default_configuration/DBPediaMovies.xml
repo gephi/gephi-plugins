@@ -19,7 +19,7 @@ CONSTRUCT{
   ?film &lt;http://dbpedia.org/ontology/starring&gt; ?actor
   FILTER(lang(?title)="en")
 } LIMIT 1000</entry>
-<entry key="restSparqlEndPointURL">http://dbpedia.org/sparql</entry>
+<entry key="restSparqlEndPointURL">https://dbpedia.org/sparql</entry>
 <entry key="SparqlDriver">fr.inria.edelweiss.sparql.restdriver.SparqlRestEndPointDriver</entry>
 <entry key="restSparqlEndPointQuery">query</entry>
 <entry key="rdfResourceList"/>

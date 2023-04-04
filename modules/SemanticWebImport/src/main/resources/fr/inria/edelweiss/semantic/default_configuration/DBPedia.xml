@@ -9,7 +9,7 @@
   ?x ?r ?y
 }
  limit 100</entry>
-<entry key="restSparqlEndPointURL">http://dbpedia.org/sparql</entry>
+<entry key="restSparqlEndPointURL">https://dbpedia.org/sparql</entry>
 <entry key="SparqlDriver">fr.inria.edelweiss.sparql.restdriver.SparqlRestEndPointDriver</entry>
 <entry key="restSparqlEndPointQuery">query</entry>
 <entry key="rdfResourceList"/>

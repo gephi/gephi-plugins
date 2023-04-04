@@ -9,6 +9,6 @@
 } where {
 ?x ?r ?y 
 } limit 100</entry>
-<entry key="restSparqlEndPointURL">http://bio2rdf.org/sparql</entry>
+<entry key="restSparqlEndPointURL">https://bio2rdf.org/sparql</entry>
 <entry key="SparqlDriver">fr.inria.edelweiss.sparql.restdriver.SparqlRestEndPointDriver</entry>
 </properties>
