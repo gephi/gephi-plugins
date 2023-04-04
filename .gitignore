@@ -182,3 +182,4 @@ nbdist/
 
 .java-version
 >>>>>>> gephi-plugins/master
+/log.txt
