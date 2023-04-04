@@ -193,3 +193,9 @@ It's the same thing. We say module because Gephi is a modular application and is
 #### When running the plugin in Netbeans I get an error "Running standalone modules or suites requires..."
 
 This error appears when you try to run a module. To run Gephi with your plugin you need to run the `gephi-plugins` project, not your module.
+
+## Best practices
+
+### Code quality
+
+- Write your code in English, so it can be best reviewed and maintained.
