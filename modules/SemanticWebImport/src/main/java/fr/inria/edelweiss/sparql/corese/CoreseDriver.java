@@ -4,21 +4,33 @@
 package fr.inria.edelweiss.sparql.corese;
 
 //~--- non-JDK imports --------------------------------------------------------
-import fr.inria.acacia.corese.api.EngineFactory;
-import fr.inria.acacia.corese.api.IEngine;
-import fr.inria.acacia.corese.api.IResult;
-import fr.inria.acacia.corese.exceptions.EngineException;
-import fr.inria.edelweiss.kgengine.QueryResults;
+
+import fr.inria.corese.core.Graph;
+import fr.inria.corese.core.load.Load;
+import fr.inria.corese.core.load.LoadException;
+import fr.inria.corese.core.print.ResultFormat;
+import fr.inria.corese.core.query.QueryProcess;
+import fr.inria.corese.kgram.api.core.Node;
+import fr.inria.corese.kgram.core.Mapping;
+import fr.inria.corese.kgram.core.Mappings;
 import fr.inria.edelweiss.semantic.PluginProperties;
 import fr.inria.edelweiss.sparql.SparqlDriver;
-import java.io.*;
-import java.util.Observable;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpStatus;
 import org.apache.commons.httpclient.methods.GetMethod;
 import org.openide.util.lookup.ServiceProvider;
+
+import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.util.Observable;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 /**
  */
@@ -26,7 +38,9 @@ import org.openide.util.lookup.ServiceProvider;
 public class CoreseDriver extends SparqlDriver<CoreseDriverParameters> {
 
     private static final Logger logger = Logger.getLogger(CoreseDriver.class.getName());
-    private IEngine wrapped;
+    private Load loader;
+    private Graph graph;
+    private QueryProcess queryProcess;
     private boolean ignoreBlankNodes = false;
 
     public CoreseDriver() {
@@ -36,12 +50,12 @@ public class CoreseDriver extends SparqlDriver<CoreseDriverParameters> {
     /**
      * Load the files given as parameters.
      *
-     * @throws new value
      */
     @Override
     public void init() {
-        final EngineFactory engineFactory = new EngineFactory();
-        this.wrapped = engineFactory.newInstance();
+        graph = Graph.create();
+        loader = Load.create( graph );
+        this.queryProcess = QueryProcess.create( graph );
 
         for (String resourceName : getParameters().getRdfResources()) {
             logger.log(Level.INFO, "loading {0}", resourceName);
@@ -57,10 +71,11 @@ public class CoreseDriver extends SparqlDriver<CoreseDriverParameters> {
     public String sparqlQuery(final String request) {
         StringBuilder result = new StringBuilder();
 
-        QueryResults results;
+        Mappings results;
         try {
-            results = (QueryResults) wrapped.SPARQLQuery(request);
-            result.append(results.toCoreseResult());
+            results = queryProcess.query(request);
+            ResultFormat resultRdf = ResultFormat.create(results, ResultFormat.RDF_XML_FORMAT);
+            result.append(resultRdf);
         } catch (Exception e) {
             throw new IllegalArgumentException(e);
         }
@@ -69,19 +84,19 @@ public class CoreseDriver extends SparqlDriver<CoreseDriverParameters> {
 
     @Override
     public String[][] selectOnGraph(String request) {
-        QueryResults queryResults;
+        Mappings queryResults;
         try {
-            queryResults = (QueryResults) wrapped.SPARQLQuery(request);
+            queryResults = queryProcess.query(request);
         } catch (Exception e) {
             throw new IllegalArgumentException(e);
         }
-        String[] variables = queryResults.getVariables();
+        String[] variables = queryResults.getSelect().stream().map(Node::getKey).collect(Collectors.toList()).toArray(String[]::new);
         String[][] result = new String[queryResults.size()][variables.length];
         int counterResult = 0;
-        for (IResult queryResult : queryResults) {
+        for (Mapping queryResult : queryResults) {
             int variableNum = 0;
             for (String variable : variables) {
-                result[counterResult][variableNum] = queryResult.getStringValue(variable);
+                result[counterResult][variableNum] = queryResult.getValue(variable).toString();
                 ++variableNum;
             }
             ++counterResult;
@@ -89,7 +104,7 @@ public class CoreseDriver extends SparqlDriver<CoreseDriverParameters> {
         return result;
     }
 
-    private void loadUrl(final String url) throws IOException, EngineException {
+    private void loadUrl(final String url) throws IOException, LoadException {
         HttpClient client = new HttpClient();
         GetMethod method = new GetMethod(url);
 
@@ -100,7 +115,7 @@ public class CoreseDriver extends SparqlDriver<CoreseDriverParameters> {
                 throw new IOException("An error occurred");
             } else {
                 InputStream input = new ByteArrayInputStream(method.getResponseBodyAsString().getBytes());
-                wrapped.load(input, url);
+                loader.parse(input);
             }
         } finally {
             method.releaseConnection();
@@ -112,7 +127,7 @@ public class CoreseDriver extends SparqlDriver<CoreseDriverParameters> {
             if (fileName.startsWith("http://")) {
                 loadUrl(fileName);
             } else if (checkFileExist(fileName)) {
-                wrapped.load(fileName);
+                queryProcess.parse(fileName);
             } else if (checkResourceExist(fileName)) {
                 load_resource_workaround(fileName);
             } else {
@@ -126,18 +141,18 @@ public class CoreseDriver extends SparqlDriver<CoreseDriverParameters> {
         }
     }
 
-    private void load_resource(final String fileName) throws EngineException {
+    private void load_resource(final String fileName) throws LoadException {
         final InputStream resource = this.getClass().getResourceAsStream(fileName);
-        wrapped.load(resource, "file:/" + fileName);
+        loader.parse(resource);
     }
 
     /**
      * Workaround because corese does not know which type is the file when loading inputstreams.
      *
      * @param fileName
-     * @throws EngineException
+     * @throws LoadException
      */
-    private void load_resource_workaround(final String fileName) throws EngineException, IOException {
+    private void load_resource_workaround(final String fileName) throws IOException, LoadException {
         int dotPos = fileName.lastIndexOf('.');
         File tempFile = File.createTempFile("corese_input", '.' + fileName.substring(dotPos + 1, fileName.length()));
         FileWriter outputTempFile = new FileWriter(tempFile);
@@ -148,7 +163,7 @@ public class CoreseDriver extends SparqlDriver<CoreseDriverParameters> {
         }
         resource.close();
         outputTempFile.close();
-        wrapped.load(tempFile.getAbsolutePath());
+        loader.parse(tempFile.getAbsolutePath());
     }
 
     private boolean checkFileExist(final String fileName) {

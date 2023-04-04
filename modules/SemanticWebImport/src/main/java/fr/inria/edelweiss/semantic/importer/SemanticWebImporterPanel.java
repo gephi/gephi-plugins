@@ -34,7 +34,7 @@ public class SemanticWebImporterPanel extends javax.swing.JPanel {
 
         jPanel1 = new javax.swing.JPanel();
         jSplitPane1 = new javax.swing.JSplitPane();
-        sparqlQueryEditor = new fr.inria.acacia.corese.gui.query.SparqlQueryEditor();
+        sparqlQueryEditor = new fr.inria.corese.gui.query.SparqlQueryEditor();
         coreseDriverParametersPanel = new fr.inria.edelweiss.sparql.corese.CoreseDriverParametersPanel();
 
         jSplitPane1.setOrientation(javax.swing.JSplitPane.VERTICAL_SPLIT);
@@ -76,7 +76,7 @@ public class SemanticWebImporterPanel extends javax.swing.JPanel {
     private fr.inria.edelweiss.sparql.corese.CoreseDriverParametersPanel coreseDriverParametersPanel;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JSplitPane jSplitPane1;
-    private fr.inria.acacia.corese.gui.query.SparqlQueryEditor sparqlQueryEditor;
+    private fr.inria.corese.gui.query.SparqlQueryEditor sparqlQueryEditor;
     // End of variables declaration//GEN-END:variables
 
     public void addResource(String lastFileName) {
@@ -88,7 +88,7 @@ public class SemanticWebImporterPanel extends javax.swing.JPanel {
     }
 
     String getSparqlRequest() {
-        return sparqlQueryEditor.getQueryText();
+        return ""; //sparqlQueryEditor.getQueryText();
     }
     
     public List<String> getResourceList() {

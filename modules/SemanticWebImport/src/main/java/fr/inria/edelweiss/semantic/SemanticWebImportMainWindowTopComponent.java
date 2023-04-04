@@ -211,7 +211,7 @@ public final class SemanticWebImportMainWindowTopComponent extends TopComponent 
                 parametersPanel = new javax.swing.JPanel();
                 sparqlEditorPanel = new javax.swing.JPanel();
                 sparqlRequestLabel = new javax.swing.JLabel();
-                sparqlRequestEditor = new fr.inria.acacia.corese.gui.query.SparqlQueryEditor();
+                sparqlRequestEditor = new fr.inria.corese.gui.query.SparqlQueryEditor();
                 logPanel = new javax.swing.JPanel();
                 jScrollPane2 = new javax.swing.JScrollPane();
                 logWindow = new javax.swing.JTextArea();
@@ -863,7 +863,7 @@ public final class SemanticWebImportMainWindowTopComponent extends TopComponent 
         private javax.swing.JButton sparqlQueryResultButton;
         private javax.swing.JTextField sparqlQueryResultFileName;
         private javax.swing.JLabel sparqlQueryResultLabel;
-        private fr.inria.acacia.corese.gui.query.SparqlQueryEditor sparqlRequestEditor;
+        private fr.inria.corese.gui.query.SparqlQueryEditor sparqlRequestEditor;
         private javax.swing.JLabel sparqlRequestLabel;
         private javax.swing.JButton start;
         // End of variables declaration//GEN-END:variables

@@ -189,7 +189,7 @@
                     </Property>
                   </Properties>
                 </Component>
-                <Component class="fr.inria.acacia.corese.gui.query.SparqlQueryEditor" name="sparqlRequestEditor">
+                <Component class="fr.inria.corese.gui.query.SparqlQueryEditor" name="sparqlRequestEditor">
                 </Component>
               </SubComponents>
             </Container>

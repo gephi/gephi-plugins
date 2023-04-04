@@ -4,14 +4,10 @@
  */
 package fr.inria.wimmics.semanticweb.filter.sparql;
 
-import fr.inria.wimmics.semanticweb.filter.instance.*;
+import org.gephi.filters.spi.FilterProperty;
+
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
-import java.awt.event.ActionListener;
-import java.awt.event.InputMethodEvent;
-import java.awt.event.InputMethodListener;
-import org.gephi.filters.spi.FilterProperty;
 
 /**
  *
@@ -19,7 +15,7 @@ import org.gephi.filters.spi.FilterProperty;
  */
 public class SPARQLFilterPanel extends javax.swing.JPanel implements ActionListener {
 
-    private final SPARQLFilter filter;
+    private final transient SPARQLFilter filter; // \TODO assess whether filter should be Serializable
 
     public SPARQLFilterPanel(SPARQLFilter filter) {
         this.filter = filter;
@@ -42,7 +38,7 @@ public class SPARQLFilterPanel extends javax.swing.JPanel implements ActionListe
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        sparqlRequestEditor = new fr.inria.acacia.corese.gui.query.SparqlQueryEditor();
+        sparqlRequestEditor = new fr.inria.corese.gui.query.SparqlQueryEditor();
         updateButton = new javax.swing.JButton();
 
         sparqlRequestEditor.setMinimumSize(new java.awt.Dimension(431, 253));
@@ -50,11 +46,7 @@ public class SPARQLFilterPanel extends javax.swing.JPanel implements ActionListe
         sparqlRequestEditor.setQueryText(org.openide.util.NbBundle.getMessage(SPARQLFilterPanel.class, "SPARQLFilterPanel.queryText")); // NOI18N
 
         updateButton.setText(org.openide.util.NbBundle.getMessage(SPARQLFilterPanel.class, "SPARQLFilterPanel.updateButton.text")); // NOI18N
-        updateButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                updateButtonActionPerformed(evt);
-            }
-        });
+        updateButton.addActionListener(this::updateButtonActionPerformed);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -78,11 +70,11 @@ public class SPARQLFilterPanel extends javax.swing.JPanel implements ActionListe
         );
     }// </editor-fold>//GEN-END:initComponents
 
-    private void updateButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_updateButtonActionPerformed
+    private void updateButtonActionPerformed(java.awt.event.ActionEvent ignoredEvt) {//GEN-FIRST:event_updateButtonActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_updateButtonActionPerformed
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private fr.inria.acacia.corese.gui.query.SparqlQueryEditor sparqlRequestEditor;
+    private fr.inria.corese.gui.query.SparqlQueryEditor sparqlRequestEditor;
     private javax.swing.JButton updateButton;
     // End of variables declaration//GEN-END:variables
 

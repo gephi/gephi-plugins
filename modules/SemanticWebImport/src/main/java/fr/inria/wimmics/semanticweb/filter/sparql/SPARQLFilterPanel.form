@@ -39,7 +39,7 @@
     </DimensionLayout>
   </Layout>
   <SubComponents>
-    <Component class="fr.inria.acacia.corese.gui.query.SparqlQueryEditor" name="sparqlRequestEditor">
+    <Component class="fr.inria.corese.gui.query.SparqlQueryEditor" name="sparqlRequestEditor">
       <Properties>
         <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
           <Dimension value="[431, 253]"/>

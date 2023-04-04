@@ -9,7 +9,7 @@
 
 	<groupId>fr.inria.edelweiss</groupId>
 	<artifactId>semantic</artifactId>
-	<version>1.1.0</version>
+	<version>1.2.0</version>
 	<packaging>nbm</packaging>
 
 	<name>SemanticWebImport</name>
@@ -76,14 +76,14 @@
 			<artifactId>utils-longtask</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>fr.inria.wimmics</groupId>
-			<artifactId>kgengine</artifactId>
-			<version>3.2.1</version>
+			<groupId>fr.inria.corese</groupId>
+			<artifactId>corese-core</artifactId>
+			<version>4.3.0</version>
 		</dependency>
 		<dependency>
-			<groupId>fr.inria.wimmics</groupId>
-			<artifactId>corese</artifactId>
-			<version>3.2.1</version>
+			<groupId>fr.inria.corese</groupId>
+			<artifactId>corese-gui</artifactId>
+			<version>4.3.0</version>
 		 <type>jar</type>
 		</dependency>
 		<dependency>
@@ -124,7 +124,7 @@
 					<licenseName>Licence_CeCILL-C_V1-en</licenseName>
 					<licenseFile>Licence_CeCILL-C_V1-en.txt</licenseFile>
 					<author>Erwan Demairy</author>
-					<sourceCodeUrl>https://github.com/gephi/gephi-plugins</sourceCodeUrl>
+<!--					<sourceCodeUrl>https://github.com/gephi/gephi-plugins</sourceCodeUrl>-->
 					<homePageUrl>https://wiki.gephi.org/index.php/SemanticWebImport</homePageUrl>
 					<publicPackages>
                         
