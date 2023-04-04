@@ -3,6 +3,7 @@
  */
 package net.clementlevallois.wordcloud;
 
+import java.util.List;
 import java.util.ResourceBundle;
 import org.gephi.graph.api.GraphModel;
 import org.gephi.utils.longtask.spi.LongTask;
@@ -15,14 +16,14 @@ public class InitialWordProcessingRunnable implements LongTask, Runnable {
     private ProgressTicket progressTicket;
     private final GraphModel graphModel;
     private final String columnName;
-    private final String lang;
+    private final List<String> langs;
     private static final ResourceBundle bundle = NbBundle.getBundle(LexplorerTopComponent.class);
     private TopTermExtractor topTermExtractor;
 
-    public InitialWordProcessingRunnable(GraphModel graphModel, String columnName, String lang) {
+    public InitialWordProcessingRunnable(GraphModel graphModel, String columnName, List<String> langs) {
         this.graphModel = graphModel;
         this.columnName = columnName;
-        this.lang = lang;
+        this.langs = langs;
     }
 
     @Override
@@ -30,7 +31,7 @@ public class InitialWordProcessingRunnable implements LongTask, Runnable {
         Progress.setDisplayName(progressTicket, bundle.getString("progress.initial_analysis_running"));
         Progress.start(progressTicket);
         topTermExtractor = new TopTermExtractor();
-        topTermExtractor.tokenizeSelectedTextualAttributeForTheEntireGraph(graphModel, columnName, lang);
+        topTermExtractor.tokenizeSelectedTextualAttributeForTheEntireGraph(graphModel, columnName, langs);
         Progress.finish(progressTicket, bundle.getString("progress.initial_analysis_complete"));
 
     }

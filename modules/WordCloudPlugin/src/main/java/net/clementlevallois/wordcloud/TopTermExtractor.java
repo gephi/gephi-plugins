@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
+import javax.swing.DefaultListModel;
 import net.clementlevallois.stopwords.StopWordsRemover;
 import net.clementlevallois.umigon.model.TextFragment;
 import net.clementlevallois.umigon.model.TypeOfTextFragment.TypeOfTextFragmentEnum;
@@ -32,7 +33,16 @@ public class TopTermExtractor {
 
     Boolean initialAnalysisInterruptedByUser = false;
 
-    public boolean tokenizeSelectedTextualAttributeForTheEntireGraph(GraphModel gm, String attributeName, String lang) {
+    public static DefaultListModel<String> returnListOfLanguages() {
+        DefaultListModel<String> listModel = new DefaultListModel();
+        String[] SUPPORTED_LANGUAGES = StaticProperties.SUPPORTED_LANGUAGES;
+        for (String lang : SUPPORTED_LANGUAGES) {
+            listModel.addElement(lang);
+        }
+        return listModel;
+    }
+
+    public boolean tokenizeSelectedTextualAttributeForTheEntireGraph(GraphModel gm, String attributeName, List<String> langs) {
 
         Graph graph = gm.getGraph();
         graph.readLock();
@@ -67,8 +77,16 @@ public class TopTermExtractor {
          */
         Map<Node, List<String>> mapOfNodesToTheirTextFragments = new HashMap();
 
-        StopWordsRemover stopWordsRemoverEN = new StopWordsRemover(3, "en");
-        StopWordsRemover stopWordsRemoverSECONDLANGUAGE = new StopWordsRemover(3, lang);
+        List<StopWordsRemover> stopWordsRemovers = new ArrayList();
+
+        if (langs == null) {
+            langs = new ArrayList();
+            langs.add(StaticProperties.DEFAULT_TEXT_LANGUAGE);
+        }
+        for (String lang : langs) {
+            StopWordsRemover stopWordsRemover = new StopWordsRemover(3, lang);
+            stopWordsRemovers.add(stopWordsRemover);
+        }
 
         Iterator<Map.Entry<Node, String>> iteratorOnNodesAndTheirTextualAttribute = textsFromTheAttribute.entrySet().iterator();
         while (iteratorOnNodesAndTheirTextualAttribute.hasNext() & !initialAnalysisInterruptedByUser) {
@@ -78,21 +96,22 @@ public class TopTermExtractor {
                 Node node = next.getKey();
                 List<TextFragment> textFragmentsForOneDescription = UmigonTokenizer.tokenize(textualAttribute, languageSpecificLexicon);
                 for (TextFragment oneTextFragment : textFragmentsForOneDescription) {
-                    if (oneTextFragment.getTypeOfTextFragmentEnum() != TypeOfTextFragmentEnum.WHITE_SPACE
-                            & oneTextFragment.getTypeOfTextFragmentEnum() != TypeOfTextFragmentEnum.PUNCTUATION
-                            & !stopWordsRemoverEN.shouldItBeRemoved(oneTextFragment.getOriginalForm())
-                            & !stopWordsRemoverSECONDLANGUAGE.shouldItBeRemoved(oneTextFragment.getOriginalForm())
-                            & oneTextFragment.getOriginalForm().length() > 4) {
-
-                        if (mapOfNodesToTheirTextFragments.containsKey(node)) {
-                            List<String> textFragmentsForThisNode = mapOfNodesToTheirTextFragments.get(node);
-                            textFragmentsForThisNode.add(oneTextFragment.getOriginalForm());
-                            mapOfNodesToTheirTextFragments.put(node, textFragmentsForThisNode);
-                        } else {
-                            List<String> textFragmentsForThisNode = new ArrayList();
-                            textFragmentsForThisNode.add(oneTextFragment.getOriginalForm());
-                            mapOfNodesToTheirTextFragments.put(node, textFragmentsForThisNode);
+                    if (oneTextFragment.getTypeOfTextFragmentEnum() == TypeOfTextFragmentEnum.WHITE_SPACE
+                            || oneTextFragment.getTypeOfTextFragmentEnum() == TypeOfTextFragmentEnum.PUNCTUATION
+                            || oneTextFragment.getOriginalForm().length() < StaticProperties.MIN_WORD_LENGTH) {
+                        continue;
+                    }
+                    boolean removeIt = false;
+                    for (StopWordsRemover swr : stopWordsRemovers) {
+                        removeIt = swr.shouldItBeRemoved(oneTextFragment.getOriginalForm());
+                        if (removeIt) {
+                            break;
                         }
+                    }
+                    if (!removeIt) {
+                        List<String> textFragmentsForThisNode = mapOfNodesToTheirTextFragments.getOrDefault(node, new ArrayList());
+                        textFragmentsForThisNode.add(oneTextFragment.getOriginalForm());
+                        mapOfNodesToTheirTextFragments.put(node, textFragmentsForThisNode);
                     }
                 }
             } catch (IOException ex) {
@@ -100,7 +119,9 @@ public class TopTermExtractor {
                 return false;
             }
         }
+
         DataManager.setMapOfNodeIdsToTheirTextFragments(mapOfNodesToTheirTextFragments);
+
         return true;
     }
 
