@@ -100,10 +100,9 @@
           <ResourceString bundle="fr/inria/edelweiss/sparql/restdriver/Bundle.properties" key="SparqlRestEndPointDriverParametersPanel.urlTextField.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
         </Property>
       </Properties>
-      <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="urlTextFieldActionPerformed"/>
-        <EventHandler event="keyTyped" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="urlTextFieldKeyTyped"/>
-      </Events>
+      <AuxValues>
+        <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="urlTextField.getDocument().addDocumentListener(new DocumentListener() {&#xa;            public void changedUpdate(DocumentEvent e) {&#xa;                updateUrlText();&#xa;            }&#xa;            public void removeUpdate(DocumentEvent e) {&#xa;                updateUrlText();&#xa;            }&#xa;            public void insertUpdate(DocumentEvent e) {&#xa;                updateUrlText();&#xa;            }&#xa;            private void updateUrlText() {&#xa;                try {&#xa;                    inParametersUpdate = true;&#xa;                    getParameters().setEndPointUrl(urlTextField.getText());&#xa;                } finally {&#xa;                    inParametersUpdate = false;&#xa;                }&#xa;            }&#xa;        });"/>
+      </AuxValues>
     </Component>
     <Component class="javax.swing.JLabel" name="urlLabel1">
       <Properties>
@@ -195,10 +194,9 @@
           <ResourceString bundle="fr/inria/edelweiss/sparql/restdriver/Bundle.properties" key="SparqlRestEndPointDriverParametersPanel.queryTagName.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
         </Property>
       </Properties>
-      <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="queryTagNameActionPerformed"/>
-        <EventHandler event="keyTyped" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="queryTagNameKeyTyped"/>
-      </Events>
+      <AuxValues>
+        <AuxValue name="JavaCodeGenerator_ListenersCodePost" type="java.lang.String" value="queryTagName.getDocument().addDocumentListener(new DocumentListener() {&#xa;            public void changedUpdate(DocumentEvent e) {&#xa;                updateQueryTagName();&#xa;            }&#xa;            public void removeUpdate(DocumentEvent e) {&#xa;                updateQueryTagName();&#xa;            }&#xa;            public void insertUpdate(DocumentEvent e) {&#xa;                updateQueryTagName();&#xa;            }&#xa;            private void updateQueryTagName() {&#xa;                try { &#xa;                    inParametersUpdate = true;&#xa;                    getParameters().setQueryTagName(queryTagName.getText());&#xa;                } finally {&#xa;                    inParametersUpdate = false;&#xa;                }&#xa;            }&#xa;        });"/>
+      </AuxValues>
     </Component>
     <Component class="javax.swing.JLabel" name="jLabel1">
       <Properties>

@@ -1,9 +1,13 @@
 package fr.inria.edelweiss.sparql.restdriver;
 
 import fr.inria.edelweiss.sparql.DriverParametersPanel;
+import fr.inria.edelweiss.sparql.RdfParser;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.Observable;
+import java.util.logging.Level;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import javax.swing.table.DefaultTableModel;
 
 /*
@@ -18,9 +22,11 @@ import javax.swing.table.DefaultTableModel;
 public class SparqlRestEndPointDriverParametersPanel
         extends DriverParametersPanel<SparqlRestEndPointDriverParameters> {
 
+    private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(RdfParser.class.getName());
     private DefaultTableModel restParametersModel;
     private DefaultTableModel restPropertiesModel;
-
+    private boolean inParametersUpdate = false;
+    
     public SparqlRestEndPointDriverParametersPanel(final SparqlRestEndPointDriverParameters parameters) {
         super();
         initComponents();
@@ -120,14 +126,23 @@ public class SparqlRestEndPointDriverParametersPanel
         removePropertyButton = new javax.swing.JButton();
 
         urlTextField.setText(org.openide.util.NbBundle.getMessage(SparqlRestEndPointDriverParametersPanel.class, "SparqlRestEndPointDriverParametersPanel.urlTextField.text")); // NOI18N
-        urlTextField.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                urlTextFieldActionPerformed(evt);
+        urlTextField.getDocument().addDocumentListener(new DocumentListener() {
+            public void changedUpdate(DocumentEvent e) {
+                updateUrlText();
             }
-        });
-        urlTextField.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyTyped(java.awt.event.KeyEvent evt) {
-                urlTextFieldKeyTyped(evt);
+            public void removeUpdate(DocumentEvent e) {
+                updateUrlText();
+            }
+            public void insertUpdate(DocumentEvent e) {
+                updateUrlText();
+            }
+            private void updateUrlText() {
+                try {
+                    inParametersUpdate = true;
+                    getParameters().setEndPointUrl(urlTextField.getText());
+                } finally {
+                    inParametersUpdate = false;
+                }
             }
         });
 
@@ -145,8 +160,10 @@ public class SparqlRestEndPointDriverParametersPanel
         restParametersTable.setColumnSelectionAllowed(true);
         jScrollPane1.setViewportView(restParametersTable);
         restParametersTable.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
-        restParametersTable.getColumnModel().getColumn(0).setHeaderValue(org.openide.util.NbBundle.getMessage(SparqlRestEndPointDriverParametersPanel.class, "SparqlRestEndPointDriverParametersPanel.restParametersTable.columnModel.title0")); // NOI18N
-        restParametersTable.getColumnModel().getColumn(1).setHeaderValue(org.openide.util.NbBundle.getMessage(SparqlRestEndPointDriverParametersPanel.class, "SparqlRestEndPointDriverParametersPanel.restParametersTable.columnModel.title1")); // NOI18N
+        if (restParametersTable.getColumnModel().getColumnCount() > 0) {
+            restParametersTable.getColumnModel().getColumn(0).setHeaderValue(org.openide.util.NbBundle.getMessage(SparqlRestEndPointDriverParametersPanel.class, "SparqlRestEndPointDriverParametersPanel.restParametersTable.columnModel.title0")); // NOI18N
+            restParametersTable.getColumnModel().getColumn(1).setHeaderValue(org.openide.util.NbBundle.getMessage(SparqlRestEndPointDriverParametersPanel.class, "SparqlRestEndPointDriverParametersPanel.restParametersTable.columnModel.title1")); // NOI18N
+        }
 
         addTagButton.setText(org.openide.util.NbBundle.getMessage(SparqlRestEndPointDriverParametersPanel.class, "SparqlRestEndPointDriverParametersPanel.addTagButton.text")); // NOI18N
         addTagButton.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -172,14 +189,23 @@ public class SparqlRestEndPointDriverParametersPanel
         });
 
         queryTagName.setText(org.openide.util.NbBundle.getMessage(SparqlRestEndPointDriverParametersPanel.class, "SparqlRestEndPointDriverParametersPanel.queryTagName.text")); // NOI18N
-        queryTagName.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                queryTagNameActionPerformed(evt);
+        queryTagName.getDocument().addDocumentListener(new DocumentListener() {
+            public void changedUpdate(DocumentEvent e) {
+                updateQueryTagName();
             }
-        });
-        queryTagName.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyTyped(java.awt.event.KeyEvent evt) {
-                queryTagNameKeyTyped(evt);
+            public void removeUpdate(DocumentEvent e) {
+                updateQueryTagName();
+            }
+            public void insertUpdate(DocumentEvent e) {
+                updateQueryTagName();
+            }
+            private void updateQueryTagName() {
+                try {
+                    inParametersUpdate = true;
+                    getParameters().setQueryTagName(queryTagName.getText());
+                } finally {
+                    inParametersUpdate = false;
+                }
             }
         });
 
@@ -197,8 +223,10 @@ public class SparqlRestEndPointDriverParametersPanel
         restPropertiesTable.setColumnSelectionAllowed(true);
         jScrollPane2.setViewportView(restPropertiesTable);
         restPropertiesTable.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
-        restPropertiesTable.getColumnModel().getColumn(0).setHeaderValue(org.openide.util.NbBundle.getMessage(SparqlRestEndPointDriverParametersPanel.class, "SparqlRestEndPointParametersPanel.restParametersTable.columnModel.title0")); // NOI18N
-        restPropertiesTable.getColumnModel().getColumn(1).setHeaderValue(org.openide.util.NbBundle.getMessage(SparqlRestEndPointDriverParametersPanel.class, "SparqlRestEndPointParametersPanel.restParametersTable.columnModel.title1")); // NOI18N
+        if (restPropertiesTable.getColumnModel().getColumnCount() > 0) {
+            restPropertiesTable.getColumnModel().getColumn(0).setHeaderValue(org.openide.util.NbBundle.getMessage(SparqlRestEndPointDriverParametersPanel.class, "SparqlRestEndPointParametersPanel.restParametersTable.columnModel.title0")); // NOI18N
+            restPropertiesTable.getColumnModel().getColumn(1).setHeaderValue(org.openide.util.NbBundle.getMessage(SparqlRestEndPointDriverParametersPanel.class, "SparqlRestEndPointParametersPanel.restParametersTable.columnModel.title1")); // NOI18N
+        }
 
         newPropertyName.setText(org.openide.util.NbBundle.getMessage(SparqlRestEndPointDriverParametersPanel.class, "SparqlRestEndPointDriverParametersPanel.newPropertyName.text")); // NOI18N
 
@@ -338,22 +366,6 @@ public class SparqlRestEndPointDriverParametersPanel
         // TODO add your handling code here:
     }//GEN-LAST:event_newPropertyValueActionPerformed
 
-    private void urlTextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_urlTextFieldActionPerformed
-        getParameters().setEndPointUrl(urlTextField.getText());
-    }//GEN-LAST:event_urlTextFieldActionPerformed
-
-    private void queryTagNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_queryTagNameActionPerformed
-        getParameters().setQueryTagName(queryTagName.getText());
-    }//GEN-LAST:event_queryTagNameActionPerformed
-
-    private void queryTagNameKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_queryTagNameKeyTyped
-        getParameters().setQueryTagName(queryTagName.getText());
-    }//GEN-LAST:event_queryTagNameKeyTyped
-
-    private void urlTextFieldKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_urlTextFieldKeyTyped
-        getParameters().setEndPointUrl(urlTextField.getText());
-    }//GEN-LAST:event_urlTextFieldKeyTyped
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton addPropertyButton;
     private javax.swing.JButton addTagButton;
@@ -397,6 +409,9 @@ public class SparqlRestEndPointDriverParametersPanel
 
     @Override
     public void update(Observable o, Object arg) {
-        reset();
+        logger.log(Level.INFO, "in update: {0} {1}", new Object[]{inParametersUpdate, getParameters().getQueryTagName()});
+        if (!inParametersUpdate) {
+            reset();
+        }
     }
 }
