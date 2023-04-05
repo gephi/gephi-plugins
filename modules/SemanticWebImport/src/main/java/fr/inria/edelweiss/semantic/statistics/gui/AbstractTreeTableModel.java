@@ -57,7 +57,7 @@ public abstract class AbstractTreeTableModel implements TreeTableModel {
     protected Object root;
     protected EventListenerList listenerList = new EventListenerList();
 
-    public AbstractTreeTableModel(Object root) {
+    protected AbstractTreeTableModel(Object root) {
         this.root = root;
     }
 

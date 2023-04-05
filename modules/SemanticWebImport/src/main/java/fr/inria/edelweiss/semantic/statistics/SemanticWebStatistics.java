@@ -33,19 +33,13 @@ public class SemanticWebStatistics implements Statistics {
 	public static final String GET_SUBCLASSES = "select ?x ?t where { ?x rdfs:subClassOf ?t } group by ?x";
 	public static final String COUNT_TYPES = "select ?t (count(?x) as ?total) where { ?x rdf:type ?t } group by ?t";
 	public static final String DRIVER_TYPE = "fr.inria.edelweiss.sparql.corese.CoreseDriver";
-	private StringBuilder summary = new StringBuilder();
-	private StringBuilder report;
-
-	public SemanticWebStatistics() {
-		report = new StringBuilder();
-	}
+	private final StringBuilder summary = new StringBuilder();
+	private final StringBuilder report = new StringBuilder();
 
 	/**
-	 * Computes the statistics and put the result in am.
+	 * Computes the statistics. The resulting report can be obtained from the {@link Statistics#getReport() getReport} method.
 	 *
 	 * @param gm The input.
-	 * @param am The output. One attribute or more contains the result of
-	 * the statistics.
 	 */
 	@Override
 	public void execute(GraphModel gm) {
