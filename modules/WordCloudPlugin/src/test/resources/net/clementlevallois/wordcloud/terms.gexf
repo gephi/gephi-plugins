@@ -14,6 +14,18 @@
             <node id="3" label="Node 3">
                 <attvalue for="terms" value="gephi"/>
             </node>
+            <node id="4" label="Node 4">
+                <attvalue for="terms" value="allez pendant actuellement"/>
+            </node>
+            <node id="5" label="Node 5">
+                <attvalue for="terms" value="allez pendant actuellement"/>
+            </node>
+            <node id="6" label="Node 6">
+                <attvalue for="terms" value="allez pendant actuellement"/>
+            </node>
+            <node id="7" label="Node 7">
+                <attvalue for="terms" value="allez pendant actuellement"/>
+            </node>
         </nodes>
         <edges>
             <edge source="1" target="2" weight="1" />
