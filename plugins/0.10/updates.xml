@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
 <!DOCTYPE module_updates PUBLIC "-//NetBeans//DTD Autoupdate Catalog 2.8//EN" "https://netbeans.apache.org/dtds/autoupdate-catalog-2_8.dtd">
-<module_updates timestamp="39/58/17/30/03/2023">
+<module_updates timestamp="34/05/18/06/04/2023">
 
 
 
@@ -475,11 +475,11 @@
     <message_digest algorithm="SHA-512" value="447bd8058b15a3572b04240cf1cc974ea83189b72506cb390619dad65b7cb81b865803cb7ea04ca5d0aa0e9b67c26538d85872c7ce2169beac88e9259a28ef1a"/>
 </module>
 
-<module codenamebase="net.clementlevallois.word.cloud.plugin" distribution="word-cloud-plugin-1.0.1.nbm" downloadsize="413126" homepage="http://github.com/gephi/gephi-plugins/word-cloud-plugin" moduleauthor="Clement Levallois" needsrestart="true" releasedate="2023/03/30" targetcluster="plugins">
+<module codenamebase="net.clementlevallois.word.cloud.plugin" distribution="word-cloud-plugin-1.1.0.nbm" downloadsize="416420" homepage="http://github.com/gephi/gephi-plugins/word-cloud-plugin" moduleauthor="Clement Levallois" needsrestart="true" releasedate="2023/04/06" targetcluster="plugins">
         
-    <manifest OpenIDE-Module="net.clementlevallois.word.cloud.plugin" OpenIDE-Module-Display-Category="Tool" OpenIDE-Module-Implementation-Version="1.0.1" OpenIDE-Module-Long-Description="This plugin displays the most frequent keywords among a textual attribute of the network. These keywords are refreshed according to the selection made with the mouse by the user. This is useful for exploring and understanding a network that you discover." OpenIDE-Module-Module-Dependencies="org.gephi.graph.api &gt; 0.10.0, org.gephi.project.api &gt; 0.10.0, org.gephi.utils.longtask &gt; 0.10.0, org.gephi.io.importer.api &gt; 0.10.0, org.openide.awt &gt; 7.86, org.openide.windows &gt; 6.95, org.openide.util.lookup &gt; 8.52, org.openide.util &gt; 9.26, org.gephi.visualization &gt; 0.10.0" OpenIDE-Module-Name="Word Cloud plugin" OpenIDE-Module-Requires="org.openide.windows.WindowManager" OpenIDE-Module-Short-Description="This plugin displays the most frequent keywords among a textual attribute of the network, in the form of a word cloud." OpenIDE-Module-Specification-Version="1.0.1"/>
+    <manifest OpenIDE-Module="net.clementlevallois.word.cloud.plugin" OpenIDE-Module-Display-Category="Tool" OpenIDE-Module-Implementation-Version="1.1.0" OpenIDE-Module-Long-Description="This plugin displays the most frequent keywords among a textual attribute of the network. These keywords are refreshed according to the selection made with the mouse by the user. This is useful for exploring and understanding a network that you discover." OpenIDE-Module-Module-Dependencies="org.gephi.graph.api &gt; 0.10.0, org.gephi.project.api &gt; 0.10.0, org.gephi.utils.longtask &gt; 0.10.0, org.gephi.io.importer.api &gt; 0.10.0, org.openide.awt &gt; 7.86, org.openide.windows &gt; 6.95, org.openide.util.lookup &gt; 8.52, org.openide.util &gt; 9.26, org.gephi.visualization &gt; 0.10.0" OpenIDE-Module-Name="Word Cloud plugin" OpenIDE-Module-Requires="org.openide.windows.WindowManager" OpenIDE-Module-Short-Description="This plugin displays the most frequent keywords among a textual attribute of the network, in the form of a word cloud." OpenIDE-Module-Specification-Version="1.1.0"/>
     
-    <message_digest algorithm="SHA-512" value="eeb453a975110bfe59ab95277249057ea61f5e808049ab8eacc94016c2f3e6d4b50e14af0f12ea69cfae93faef77ab03a6ca786f8fdc60102faf9174cdc0ed24"/>
+    <message_digest algorithm="SHA-512" value="f107fe47ee26d50aebfa4d328ab211f74d91cb1b0ac3ea64a7eeb5ecec2fe39b04d037eaf09fcbaba250b769c9c6292592de3ae482a9a648d041cafe6c21db44"/>
 </module>
 
 <license name="5C743DF9">Copyright (c) 2016, Dave Shepard
