@@ -4,11 +4,11 @@
 package fr.inria.edelweiss.semantic.analyzer;
 
 import fr.inria.edelweiss.sparql.GephiUtils;
+
+import javax.swing.text.html.StyleSheet;
 import java.awt.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.text.html.StyleSheet;
-import org.gephi.graph.api.AttributeUtils;
 
 /**
  *
@@ -140,10 +140,10 @@ public class GephiExtension {
             String nameNewAttribute = edgeLabel.replaceFirst(GEPHI_PREFIX, "");
             if (gephiUtil.isEdge(sourceLabel)) {
                 gephiUtil.addAttributeToEdges(nameNewAttribute, String.class);
-		gephiUtil.setEdgeAttr(sourceLabel, nameNewAttribute, targetLabel);
+                gephiUtil.setEdgeAttr(sourceLabel, nameNewAttribute, targetLabel);
             } else {
                 gephiUtil.addAttributeToNodes(nameNewAttribute, String.class);
-		gephiUtil.setNodeAttr(sourceLabel, nameNewAttribute, targetLabel);
+                gephiUtil.setNodeAttr(sourceLabel, nameNewAttribute, targetLabel);
             }
         }
     }

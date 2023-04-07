@@ -37,16 +37,11 @@ public class FilesUtils {
     }
 
     public static InputStream readFile(String fileName) {
-        InputStream result = null;
         try {
-            result = new FileInputStream(fileName);
-        } catch (FileNotFoundException ex) {
-            throw new IllegalArgumentException(ex);
+            return new FileInputStream(fileName);
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
         }
-        if (result == null) {
-            throw new IllegalArgumentException("Impossible to open the file.");
-        }
-        return result;
     }
 
     /**

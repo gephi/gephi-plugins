@@ -73,6 +73,8 @@ public class SemanticWebImporter implements FileImporter, LongTask {
             rdfParser.waitEndpopulateRDFGraph();
         } catch (InterruptedException ex) {
             Exceptions.printStackTrace(ex);
+            LOGGER.log(Level.WARNING, "Interrupted!", ex);
+            Thread.currentThread().interrupt();
         }
         LOGGER.info("Finished the import");
 

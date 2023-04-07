@@ -72,9 +72,6 @@ public class ConfigurationManager {
                 return;
             }
             os = new java.io.FileOutputStream(newFile);
-            if (os == null) {
-                throw new IllegalArgumentException("Impossible to create file.");
-            }
             try {
                 Properties properties = new Properties(currentProperties);
 

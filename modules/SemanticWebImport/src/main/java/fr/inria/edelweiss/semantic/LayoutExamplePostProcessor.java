@@ -65,14 +65,15 @@ public class LayoutExamplePostProcessor extends PostProcessor {
         final Lookup lookup = Lookup.getDefault();
         final Collection<? extends StatisticsBuilder> statisticsBuilders = lookup.lookupAll(StatisticsBuilder.class);
 
-        StatisticsBuilder foundBuilder = null;
+        Optional<StatisticsBuilder> searchBuilder = Optional.empty();
         for (StatisticsBuilder statisticsBuilder : statisticsBuilders) {
             logger.info(statisticsBuilder.getName());
             if (statisticsBuilder.getName().equals(statisticName)) {
-                foundBuilder = statisticsBuilder;
+                searchBuilder = Optional.of(statisticsBuilder);
                 break;
             }
         }
+        StatisticsBuilder foundBuilder = searchBuilder.orElseThrow();
         Statistics statistics = foundBuilder.getStatistics();
         statistics.execute(getModel());
     }
