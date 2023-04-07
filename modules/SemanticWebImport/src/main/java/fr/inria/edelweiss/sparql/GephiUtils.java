@@ -200,10 +200,10 @@ public class GephiUtils {
         var node = findNode(sourceNodeName);
         if (node == null) {
             addNode(sourceNodeName);
-        } else {
-            Object[] attributes = node.getAttributes();
-            return attributes;
+            node = findNode(sourceNodeName);
         }
+        Object[] attributes = node.getAttributes();
+        return attributes;
     }
 
     public static void addAttributeToNodes(final String columnName, Class klass) {
