@@ -95,17 +95,17 @@ public class GephiUtils {
 		return decodedNum;
 	}
 
-	// Get values of color size RGB (0->1)
-	public static float convertFloatColor(final String id) {
-		float decodedNum = 0, temp;
-		try {
-			temp = Float.parseFloat(id.replaceAll("\"", "\\\""));
-			decodedNum = (temp % 256) / 255;
-		} catch (NumberFormatException ex) {
-			Exceptions.printStackTrace(ex);
-		}
-		return decodedNum;
-	}
+    // Get values of color size RGB (0->1)
+    public static float convertFloatColor(final String id) {
+        float decodedNum = 0, temp;
+        try {
+            temp = Float.parseFloat(id.replaceAll("\"", "\\\""));
+            decodedNum = (temp % 256) / 255;
+        } catch (NumberFormatException ex) {
+            Exceptions.printStackTrace(ex);
+        }
+        return decodedNum;
+    }
 
 	//Split color values RGB (0,0,0)
 	public static String[] stringSplit(final String id) {

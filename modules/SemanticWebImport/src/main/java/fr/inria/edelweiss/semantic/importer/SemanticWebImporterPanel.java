@@ -7,6 +7,7 @@
 package fr.inria.edelweiss.semantic.importer;
 
 import fr.inria.edelweiss.sparql.corese.CoreseDriver;
+
 import java.util.List;
 
 /**

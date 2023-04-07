@@ -200,20 +200,21 @@ public class ConfigurationManager {
             path = path.substring(1);
         }
         ArrayList<String> result = new ArrayList<String>();
-        JarFile jar = new JarFile(jarName);
-        Enumeration<JarEntry> entries = jar.entries();
-        while (entries.hasMoreElements()) {
-            String name = entries.nextElement().getName();
-            logger.log(Level.INFO, "{0}", name);
-            if (name.startsWith(path)) { //filter according to the path
-                String entry = name.substring(path.length());
-                int checkSubdir = entry.indexOf("/");
-                if (checkSubdir >= 0) {
-                    // if it is a subdirectory, we just return the directory name
-                    entry = entry.substring(0, checkSubdir);
-                }
-                if (!entry.isEmpty()) {
-                    result.add(entry);
+        try (JarFile jar = new JarFile(jarName)) {
+            var entries = jar.entries();
+            while (entries.hasMoreElements()) {
+                var name = entries.nextElement().getName();
+                logger.log(Level.INFO, "{0}", name);
+                if (name.startsWith(path)) { //filter according to the path
+                    var entry = name.substring(path.length());
+                    int checkSubdir = entry.indexOf("/");
+                    if (checkSubdir >= 0) {
+                        // if it is a subdirectory, we just return the directory name
+                        entry = entry.substring(0, checkSubdir);
+                    }
+                    if (!entry.isEmpty()) {
+                        result.add(entry);
+                    }
                 }
             }
         }

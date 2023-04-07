@@ -66,18 +66,18 @@ public class TypeFilter implements ComplexFilter {
 
     @Override
     public Graph filter(Graph graph) {
-        Formatter getSubtypesOfrequest = new Formatter().format(GET_SUBTYPES_OF, type);
+        try (Formatter getSubtypesOfrequest = new Formatter().format(GET_SUBTYPES_OF, type)) {
 
-        String[][] nodesToKeepList = SemanticWebImportMainWindowTopComponent.getSparqlRequester().selectOnGraph(getSubtypesOfrequest.toString());
-        HashSet<String> nodesToKeepSet = convertStringArrayToSet(nodesToKeepList);
+            String[][] nodesToKeepList = SemanticWebImportMainWindowTopComponent.getSparqlRequester().selectOnGraph(getSubtypesOfrequest.toString());
+            HashSet<String> nodesToKeepSet = convertStringArrayToSet(nodesToKeepList);
 
-        Node[] nodes = graph.getNodes().toArray();
-        for (Node node : nodes) {
-            if (!nodesToKeepSet.contains((String)node.getId())) {
-                graph.removeNode(node);
+            Node[] nodes = graph.getNodes().toArray();
+            for (Node node : nodes) {
+                if (!nodesToKeepSet.contains((String) node.getId())) {
+                    graph.removeNode(node);
+                }
             }
         }
-
         return graph;
     }
 

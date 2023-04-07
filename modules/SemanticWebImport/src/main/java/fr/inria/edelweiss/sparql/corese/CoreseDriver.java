@@ -154,15 +154,15 @@ public class CoreseDriver extends SparqlDriver<CoreseDriverParameters> {
      */
     private void load_resource_workaround(final String fileName) throws IOException, LoadException {
         int dotPos = fileName.lastIndexOf('.');
-        File tempFile = File.createTempFile("corese_input", '.' + fileName.substring(dotPos + 1, fileName.length()));
-        FileWriter outputTempFile = new FileWriter(tempFile);
-        final BufferedReader resource = new BufferedReader(new InputStreamReader(this.getClass().getResourceAsStream(fileName)));
-        String currentLine;
-        while ((currentLine = resource.readLine()) != null) {
-            outputTempFile.write(currentLine + '\n');
+        var tempFile = File.createTempFile("corese_input", '.' + fileName.substring(dotPos + 1, fileName.length()));
+        try (FileWriter outputTempFile = new FileWriter(tempFile);
+             var resource = new BufferedReader(new InputStreamReader(this.getClass().getResourceAsStream(fileName)))
+        ) {
+            String currentLine;
+            while ((currentLine = resource.readLine()) != null) {
+                outputTempFile.write(currentLine + '\n');
+            }
         }
-        resource.close();
-        outputTempFile.close();
         loader.parse(tempFile.getAbsolutePath());
     }
 
