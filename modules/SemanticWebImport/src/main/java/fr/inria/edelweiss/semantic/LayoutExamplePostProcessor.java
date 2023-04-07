@@ -6,12 +6,17 @@ package fr.inria.edelweiss.semantic;
 
 import fr.inria.edelweiss.semantic.analyzer.PostProcessor;
 import java.util.Collection;
+import java.util.Optional;
 import java.util.logging.Logger;
+
+import org.checkerframework.checker.nullness.Opt;
 import org.gephi.layout.spi.Layout;
 import org.gephi.layout.spi.LayoutBuilder;
 import org.gephi.statistics.spi.Statistics;
 import org.gephi.statistics.spi.StatisticsBuilder;
 import org.openide.util.Lookup;
+
+import javax.annotation.CheckForNull;
 
 /**
  *
@@ -32,19 +37,21 @@ public class LayoutExamplePostProcessor extends PostProcessor {
         final Lookup lookup = Lookup.getDefault();
         final Collection<? extends LayoutBuilder> layoutBuilders = lookup.lookupAll(LayoutBuilder.class);
 
-        LayoutBuilder foundBuilder = null;
+        Optional<LayoutBuilder> searchBuilder = Optional.empty();
         for (LayoutBuilder layoutBuilder : layoutBuilders) {
             logger.info(layoutBuilder.getName());
             if (layoutBuilder.getName().equals(layoutName)) {
-                foundBuilder = layoutBuilder;
+                searchBuilder = Optional.of(layoutBuilder);
                 break;
             }
         }
+
+        LayoutBuilder foundBuilder = searchBuilder.orElseThrow(IllegalStateException::new);
         Layout layout = foundBuilder.buildLayout();
         layout.setGraphModel(getModel());
         layout.initAlgo();
         int nbIterations = 0;
-        while (layout.canAlgo() && (nbIterations < 10000)) {
+        while (layout.canAlgo() && (nbIterations < 10_000)) {
             layout.goAlgo();
             nbIterations++;
         }
