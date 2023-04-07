@@ -79,12 +79,8 @@ public class JTreeTable extends JTable {
                 new TreeTableModelAdapter(treeTableModel, tree));
 
         // Force the JTable and JTree to share their row selection models.
-        tree.setSelectionModel(new DefaultTreeSelectionModel() {
-            // Extend the implementation of the constructor, as if:
-	 /* public this() */ {
-                setSelectionModel(listSelectionModel);
-            }
-        });
+        var selectionModel = new DefaultTreeSelectionModel();
+        tree.setSelectionModel( selectionModel );
         // Make the tree and table row heights the same.
         tree.setRowHeight(getRowHeight());
 

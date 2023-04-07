@@ -128,8 +128,8 @@ public class GephiUtils {
             newNode.setY((float) (100 * (idNum / 360.0) * Math.sin(Math.PI * (idNum / 36.0))));
             newNode.setZ(0);
             newNode.setR((float) ((idNum % 16) / 15.0));
-            newNode.setG((float) (((idNum / 256) >> 4) / 15.0));
-            newNode.setB((float) (((idNum / 1024) >> 8) / 15.0));
+            newNode.setG((float) ((idNum >> 8 >> 4) / 15.0));
+            newNode.setB((float) ((idNum >> 10 >> 8) / 15.0));
             newNode.setSize(1);
 
             graph.addNode(newNode);
@@ -189,11 +189,6 @@ public class GephiUtils {
     public void setNodeShape(final String sourceNodeName, final String shapeName) {
         // @todo find the correct way to access shape of a node.
         //findNode (sourceNodeName).setNodeData().setShape(shapeName);
-    }
-
-    public void setFollowYourNoseDepth(final int depth) {
-        RdfParser graphDepth = null;
-        graphDepth.setDepth(depth);
     }
 
     public Object[] getNodeAttributes(final String sourceNodeName) {
