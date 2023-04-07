@@ -16,6 +16,7 @@ import java.awt.event.ActionListener;
  */
 public class SPARQLFilterPanel extends javax.swing.JPanel implements ActionListener {
 
+    private static final long serialVersionUID = -1459885291629743647L;
     private final transient SPARQLFilter filter; // \TODO assess whether filter should be Serializable
 
     public SPARQLFilterPanel(SPARQLFilter filter) {

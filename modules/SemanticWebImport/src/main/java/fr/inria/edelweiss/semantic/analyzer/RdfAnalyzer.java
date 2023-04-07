@@ -7,15 +7,17 @@ package fr.inria.edelweiss.semantic.analyzer;
 import fr.inria.edelweiss.semantic.LayoutExamplePostProcessor;
 import fr.inria.edelweiss.sparql.RdfParser;
 import fr.inria.edelweiss.sparql.SparqlDriver;
-import java.io.*;
-import java.nio.charset.Charset;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.gephi.graph.api.GraphModel;
 import org.gephi.utils.longtask.spi.LongTask;
 import org.gephi.utils.progress.Progress;
 import org.gephi.utils.progress.ProgressTicket;
 import org.openide.util.Exceptions;
+
+import java.io.*;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * The purpose of this class is to build a semantic graph from the result of a
@@ -26,15 +28,15 @@ import org.openide.util.Exceptions;
  */
 public class RdfAnalyzer implements LongTask, Runnable {
 
-	private static final Logger logger = Logger.getLogger(RdfAnalyzer.class.getName());
-	private SparqlDriver driver;
-	final GraphModel model;
-	final String sparqlRequest;
-	private PostProcessor postProcessor;
-	private String saveResultName;
-	private String sparqlRequestResult;
-	private ProgressTicket progressTicket;
-	private int fynLevel;
+    private static final Logger logger = Logger.getLogger(RdfAnalyzer.class.getName());
+    final GraphModel model;
+    final String sparqlRequest;
+    private SparqlDriver driver;
+    private PostProcessor postProcessor;
+    private String saveResultName;
+    private String sparqlRequestResult;
+    private ProgressTicket progressTicket;
+    private final int fynLevel;
 
     /**
      * Constructor.
@@ -60,8 +62,8 @@ public class RdfAnalyzer implements LongTask, Runnable {
             Progress.progress(progressTicket);
             sparqlRequestResult = driver.sparqlQuery(sparqlRequest);
 
-			InputStream rdf = new ByteArrayInputStream(getSparqlRequestResult().getBytes(Charset.forName("UTF-8")));
-			RdfParser parser = new RdfParser(rdf, model, fynLevel);
+            InputStream rdf = new ByteArrayInputStream(getSparqlRequestResult().getBytes(StandardCharsets.UTF_8));
+            RdfParser parser = new RdfParser(rdf, model, fynLevel);
 
             Progress.progress(progressTicket);
             parser.parse();
@@ -89,17 +91,17 @@ public class RdfAnalyzer implements LongTask, Runnable {
         this.postProcessor = newPostProcessor;
     }
 
-	public final void setSparqlEngine(final SparqlDriver newDriver) {
-		this.driver = newDriver;
-	}
+    public final SparqlDriver getSparqlEngine() {
+        return this.driver;
+    }
 
-	public final SparqlDriver getSparqlEngine() {
-		return this.driver;
-	}
+    public final void setSparqlEngine(final SparqlDriver newDriver) {
+        this.driver = newDriver;
+    }
 
-	public void setSaveResult(String saveResultName) {
-		this.saveResultName = saveResultName;
-	}
+    public void setSaveResult(String saveResultName) {
+        this.saveResultName = saveResultName;
+    }
 
     private void saveResult(String sparqlRequestResult) throws IOException {
         if (this.saveResultName.isEmpty()) {

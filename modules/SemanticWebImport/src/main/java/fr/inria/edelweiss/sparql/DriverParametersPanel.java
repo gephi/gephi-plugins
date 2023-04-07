@@ -12,6 +12,7 @@ import javax.swing.JPanel;
  * @author Erwan Demairy <Erwan.Demairy@inria.fr>
  */
 public abstract class DriverParametersPanel<P extends SparqlDriverParameters> extends JPanel implements Observer {
+    private static final long serialVersionUID = 1512481963303513796L;
     private P parameters;
     public P getParameters() {
         return parameters;

@@ -17,6 +17,7 @@ import java.util.List;
 
 
 public class SemanticWebImporterPanel extends javax.swing.JPanel {
+    private static final long serialVersionUID = -5564063032941454007L;
     private CoreseDriver driver;
 
     /** Creates new form SemanticWebImporterPanel */
@@ -42,7 +43,7 @@ public class SemanticWebImporterPanel extends javax.swing.JPanel {
         jSplitPane1.setRightComponent(sparqlQueryEditor);
         jSplitPane1.setLeftComponent(coreseDriverParametersPanel);
 
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        var jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -93,8 +94,7 @@ public class SemanticWebImporterPanel extends javax.swing.JPanel {
     }
     
     public List<String> getResourceList() {
-        List<String> result = coreseDriverParametersPanel.getResourceList();
-        return result;
+        return coreseDriverParametersPanel.getResourceList();
     }
 
     void setDriver(CoreseDriver driver) {

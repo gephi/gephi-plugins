@@ -15,6 +15,7 @@ import javax.swing.tree.MutableTreeNode;
  */
 public class TypeTreeNode extends DefaultMutableTreeNode implements Comparable<TypeTreeNode> {
 
+    private static final long serialVersionUID = 5927002411753001709L;
     private String name;
     private int number;
     private double percentage;

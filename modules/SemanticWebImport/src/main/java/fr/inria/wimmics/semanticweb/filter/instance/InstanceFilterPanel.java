@@ -14,6 +14,7 @@ import org.gephi.filters.spi.FilterProperty;
  */
 public class InstanceFilterPanel extends javax.swing.JPanel implements ActionListener {
 
+    private static final long serialVersionUID = -6108289528761360770L;
     private final InstanceFilter filter;
 
     public InstanceFilterPanel(InstanceFilter filter) {

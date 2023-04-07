@@ -23,6 +23,7 @@ public class SparqlRestEndPointDriverParametersPanel
         extends DriverParametersPanel<SparqlRestEndPointDriverParameters> {
 
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(RdfParser.class.getName());
+    private static final long serialVersionUID = -2150909085565094001L;
     private DefaultTableModel restParametersModel;
     private DefaultTableModel restPropertiesModel;
     private boolean inParametersUpdate = false;

@@ -19,15 +19,15 @@ import javax.swing.DefaultListModel;
  */
 public class CoreseDriverParameters extends SparqlDriverParameters {
     public static final String RDF_RESOURCE_LIST = "rdfResourceList";
-    DefaultListModel rdfResourceListModel;
+    DefaultListModel<String> rdfResourceListModel;
 
     public CoreseDriverParameters() {
-        rdfResourceListModel = new DefaultListModel();
+        rdfResourceListModel = new DefaultListModel<>();
     }
 
     public String[] getRdfResources() {
-        final Enumeration<String> list = (Enumeration<String>) rdfResourceListModel.elements();
-        final ArrayList<String> resultList = new ArrayList<String>();
+        final Enumeration<String> list = rdfResourceListModel.elements();
+        final ArrayList<String> resultList = new ArrayList<>();
         while (list.hasMoreElements()) {
             resultList.add(list.nextElement());
         }

@@ -195,7 +195,7 @@ public class ConfigurationManager {
         return result;
     }
 
-    static protected ArrayList<String> listFilesInJar(String jarName, String path) throws IOException {
+    protected static ArrayList<String> listFilesInJar(String jarName, String path) throws IOException {
         if (path.startsWith("/")) {
             path = path.substring(1);
         }

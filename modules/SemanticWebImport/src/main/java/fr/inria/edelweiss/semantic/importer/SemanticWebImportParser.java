@@ -4,18 +4,10 @@
  */
 package fr.inria.edelweiss.semantic.importer;
 
-import fr.inria.edelweiss.semantic.LayoutExamplePostProcessor;
-import fr.inria.edelweiss.semantic.PluginProperties;
-import fr.inria.edelweiss.semantic.analyzer.RdfAnalyzer;
-import fr.inria.edelweiss.sparql.GephiUtils;
-import fr.inria.edelweiss.sparql.SparqlDriver;
-import java.util.Properties;
-import java.util.concurrent.Semaphore;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.gephi.graph.api.Graph;
 import org.gephi.graph.api.GraphController;
 import org.gephi.graph.api.GraphModel;
+import org.gephi.graph.api.Table;
 import org.gephi.project.api.ProjectController;
 import org.gephi.project.api.Workspace;
 import org.gephi.utils.longtask.api.LongTaskErrorHandler;
@@ -23,7 +15,17 @@ import org.gephi.utils.longtask.api.LongTaskExecutor;
 import org.gephi.utils.longtask.api.LongTaskListener;
 import org.gephi.utils.longtask.spi.LongTask;
 import org.openide.util.Lookup;
-import org.gephi.graph.api.Table;
+
+import java.util.Properties;
+import java.util.concurrent.Semaphore;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+import fr.inria.edelweiss.semantic.LayoutExamplePostProcessor;
+import fr.inria.edelweiss.semantic.PluginProperties;
+import fr.inria.edelweiss.semantic.analyzer.RdfAnalyzer;
+import fr.inria.edelweiss.sparql.GephiUtils;
+import fr.inria.edelweiss.sparql.SparqlDriver;
 
 
 /**
@@ -36,32 +38,15 @@ import org.gephi.graph.api.Table;
  */
 public class SemanticWebImportParser implements LongTaskListener {
 
-	private static final Logger logger = Logger.getLogger(SemanticWebImportParser.class.getName());
-	private ProjectController pc;
-	private Graph rdfGraph;
-	private RequestParameters parameters;
-	private RdfAnalyzer analyzer;
-	private SparqlDriver driver;
-	private final Semaphore waitEndPopulate = new Semaphore(0);
-	private LongTaskListener listener; // listener waiting for the end of the population task.
-	LongTaskExecutor executor = new LongTaskExecutor(true);
-
-	static public class RequestParameters {
-
-		private String rdfRequest;
-
-		public RequestParameters(String rdfRequest) {
-			setRdfRequest(rdfRequest);
-		}
-
-		public String getRdfRequest() {
-			return this.rdfRequest;
-		}
-
-		public final void setRdfRequest(String nodeRdfRequest) {
-			this.rdfRequest = nodeRdfRequest;
-		}
-	}
+    private static final Logger logger = Logger.getLogger(SemanticWebImportParser.class.getName());
+    private final Semaphore waitEndPopulate = new Semaphore(0);
+    LongTaskExecutor executor = new LongTaskExecutor(true);
+    private ProjectController pc;
+    private Graph rdfGraph;
+    private RequestParameters parameters;
+    private RdfAnalyzer analyzer;
+    private SparqlDriver driver;
+    private LongTaskListener listener; // listener waiting for the end of the population task.
 
     public SemanticWebImportParser() {
         this(new RequestParameters(""));
@@ -161,7 +146,24 @@ public class SemanticWebImportParser implements LongTaskListener {
         return this.rdfGraph;
     }
 
-	public String getLastRdfResult() {
-		return analyzer.getSparqlRequestResult();
-	}
+    public String getLastRdfResult() {
+        return analyzer.getSparqlRequestResult();
+    }
+
+    static public class RequestParameters {
+
+        private String rdfRequest;
+
+        public RequestParameters(String rdfRequest) {
+            setRdfRequest(rdfRequest);
+        }
+
+        public String getRdfRequest() {
+            return this.rdfRequest;
+        }
+
+        public final void setRdfRequest(String nodeRdfRequest) {
+            this.rdfRequest = nodeRdfRequest;
+        }
+    }
 }

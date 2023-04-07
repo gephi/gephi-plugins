@@ -16,6 +16,8 @@ import javax.swing.TransferHandler;
  */
 class JTreeTableHandler extends TransferHandler {
 
+    private static final long serialVersionUID = 2445967652825693813L;
+
     public JTreeTableHandler() {
     }
 

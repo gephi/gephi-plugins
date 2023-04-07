@@ -17,6 +17,7 @@ import org.gephi.statistics.spi.Statistics;
  * @author edemairy
  */
 public class SemanticWebStatisticsPanel extends javax.swing.JPanel {
+    private static final long serialVersionUID = 191053265603936122L;
     private Statistics statistics;
 
     /** Creates new form SemanticWebStatisticsPanel */

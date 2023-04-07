@@ -18,6 +18,7 @@ import javax.swing.JPanel;
  */
 public class CoreseDriverParametersPanel extends DriverParametersPanel<CoreseDriverParameters> {
 
+    private static final long serialVersionUID = 1590866778026160118L;
     CoreseDriverParameters parameters;
 
     public CoreseDriverParametersPanel() {

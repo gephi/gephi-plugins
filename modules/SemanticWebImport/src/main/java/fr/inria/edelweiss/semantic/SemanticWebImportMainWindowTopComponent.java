@@ -4,29 +4,6 @@
  */
 package fr.inria.edelweiss.semantic;
 
-import fr.inria.edelweiss.semantic.configurationmanager.ConfigurationManager;
-import fr.inria.edelweiss.semantic.importer.SemanticWebImportParser;
-import fr.inria.edelweiss.semantic.utils.FilesUtils;
-import fr.inria.edelweiss.semantic.utils.StopWatch;
-import fr.inria.edelweiss.sparql.DriverParametersPanel;
-import fr.inria.edelweiss.sparql.SparqlDriver;
-import fr.inria.edelweiss.sparql.SparqlDriverFactory;
-import fr.inria.edelweiss.sparql.SparqlDriverParameters;
-import fr.inria.edelweiss.sparql.SparqlRequester;
-import fr.inria.edelweiss.sparql.corese.CoreseDriver;
-import java.awt.Image;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
-import java.util.*;
-import java.util.logging.*;
-import javax.swing.Icon;
-import javax.swing.JFileChooser;
-import javax.swing.JPanel;
-import javax.swing.JTextField;
 import org.gephi.utils.longtask.api.LongTaskListener;
 import org.gephi.utils.longtask.spi.LongTask;
 import org.netbeans.api.settings.ConvertAsProperties;
@@ -39,6 +16,41 @@ import org.openide.util.NbBundle;
 import org.openide.util.lookup.ServiceProvider;
 import org.openide.windows.TopComponent;
 import org.openide.windows.WindowManager;
+
+import java.awt.Image;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Properties;
+import java.util.Set;
+import java.util.logging.Handler;
+import java.util.logging.Level;
+import java.util.logging.LogRecord;
+import java.util.logging.Logger;
+import java.util.logging.SimpleFormatter;
+
+import javax.swing.Icon;
+import javax.swing.JFileChooser;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
+
+import fr.inria.edelweiss.semantic.configurationmanager.ConfigurationManager;
+import fr.inria.edelweiss.semantic.importer.SemanticWebImportParser;
+import fr.inria.edelweiss.semantic.utils.FilesUtils;
+import fr.inria.edelweiss.semantic.utils.StopWatch;
+import fr.inria.edelweiss.sparql.DriverParametersPanel;
+import fr.inria.edelweiss.sparql.SparqlDriver;
+import fr.inria.edelweiss.sparql.SparqlDriverFactory;
+import fr.inria.edelweiss.sparql.SparqlDriverParameters;
+import fr.inria.edelweiss.sparql.SparqlRequester;
+import fr.inria.edelweiss.sparql.corese.CoreseDriver;
 //import org.gephi.scripting.api.ScriptingController;
 //import org.python.util.PythonInterpreter;
 
@@ -57,30 +69,75 @@ import org.openide.windows.WindowManager;
 @TopComponent.Registration(mode = "editor", openAtStartup = true, roles = {"overview"})
 public final class SemanticWebImportMainWindowTopComponent extends TopComponent implements SparqlRequester, LongTaskListener {
 
-	private static final Logger logger = Logger.getLogger(SemanticWebImportMainWindowTopComponent.class.getName());
-	private final ConfigurationManager configurationManager = new ConfigurationManager(this);
-	private static SemanticWebImportMainWindowTopComponent instance;
-	private static final String PREFERRED_ID = "SemanticWebImportMainWindowTopComponent";
-	private final static String ICON_PATH = "fr/inria/edelweiss/resources/semantic_web_icon_16.png";
-	public final static String DEFAULT_CONFIGURATION = "Humans";
-	private static final String DEFAULT_SPARQL_REQUEST = "construct {?x ?r ?y}\nwhere {?x ?r ?y}\nlimit 100";
-	private boolean sparqlDriverSelectorInitialized;
-	private static SemanticWebImportParser rdfParser;
-	private ArrayList<SparqlDriver> driverHandlers = new ArrayList<SparqlDriver>();
-	private SparqlDriver<SparqlDriverParameters> sparqlDriver;
-	private StopWatch watch;
-	private String lastPythonUsedDirectory;
+    public final static String DEFAULT_CONFIGURATION = "Humans";
+    private static final Logger logger = Logger.getLogger(SemanticWebImportMainWindowTopComponent.class.getName());
+    private static final String PREFERRED_ID = "SemanticWebImportMainWindowTopComponent";
+    private final static String ICON_PATH = "fr/inria/edelweiss/resources/semantic_web_icon_16.png";
+    private static final String DEFAULT_SPARQL_REQUEST = "construct {?x ?r ?y}\nwhere {?x ?r ?y}\nlimit 100";
+    static File lastLoadConfigurationDirectory = new File(getHome());
+    private static SemanticWebImportMainWindowTopComponent instance;
+    private static SemanticWebImportParser rdfParser;
+    private final ConfigurationManager configurationManager = new ConfigurationManager(this);
+    private boolean sparqlDriverSelectorInitialized;
+    private final ArrayList<SparqlDriver> driverHandlers = new ArrayList<SparqlDriver>();
+    private SparqlDriver<SparqlDriverParameters> sparqlDriver;
+    private StopWatch watch;
+    private String lastPythonUsedDirectory;
+    // This method is called whenever the user or program changes the selected item.
+    // Note: The new item may be the same as the previous item.
+    // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JCheckBox autoLayout;
+    private javax.swing.JPanel configurationPanel;
+    private javax.swing.JComboBox configurationSelector;
+    private javax.swing.JPanel confiugrationManagementPanel;
+    private javax.swing.JPanel driverSelectorPanel;
+    private javax.swing.JLabel fynLabel;
+    private javax.swing.JSpinner fynSpinner;
+    private javax.swing.JTabbedPane graphBuilderTab;
+    private javax.swing.JCheckBox ignoreBlankNode;
 
-	public SemanticWebImportMainWindowTopComponent() throws IOException {
-		initComponents();
-		setName(
-			NbBundle.getMessage(
-				SemanticWebImportMainWindowTopComponent.class,
-				"CTL_SemanticWebImportMainWindowTopComponent"));
-		setToolTipText(
-			NbBundle.getMessage(
-				SemanticWebImportMainWindowTopComponent.class,
-				"HINT_SemanticWebImportMainWindowTopComponent"));
+    /*
+     *
+     */
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JSeparator jSeparator1;
+    private javax.swing.JSeparator jSeparator2;
+    private javax.swing.JButton loadConfiguration;
+    private javax.swing.JPanel logPanel;
+    private javax.swing.JTextArea logWindow;
+    private javax.swing.JPanel parametersPanel;
+    private javax.swing.JPanel pythonPanel;
+    private javax.swing.JTextField pythonPostProcessingFileName;
+    private javax.swing.JLabel pythonPostProcessingLabel;
+    private javax.swing.JTextField pythonPreProcessingFileName;
+    private javax.swing.JLabel pythonPreProcessingLabel;
+    private javax.swing.JCheckBox resetWorkspace;
+    private javax.swing.JButton saveConfiguration;
+    private javax.swing.JTextField saveConfigurationNameTextField;
+    private javax.swing.JButton setConfiguration;
+    private javax.swing.JButton setPythonPostProcessingFileName;
+    private javax.swing.JButton setPythonPreProcessingFileName;
+    private javax.swing.JLabel sparqlDriverLabel;
+    private javax.swing.JComboBox sparqlDriverSelector;
+    private javax.swing.JPanel sparqlEditorPanel;
+    private javax.swing.JButton sparqlQueryResultButton;
+    private javax.swing.JTextField sparqlQueryResultFileName;
+    private javax.swing.JLabel sparqlQueryResultLabel;
+    private fr.inria.corese.gui.query.SparqlQueryEditor sparqlRequestEditor;
+    private javax.swing.JLabel sparqlRequestLabel;
+    private javax.swing.JButton start;
+    public SemanticWebImportMainWindowTopComponent() throws IOException {
+        initComponents();
+        setName(
+                NbBundle.getMessage(
+                        SemanticWebImportMainWindowTopComponent.class,
+                        "CTL_SemanticWebImportMainWindowTopComponent"));
+        setToolTipText(
+                NbBundle.getMessage(
+                        SemanticWebImportMainWindowTopComponent.class,
+                        "HINT_SemanticWebImportMainWindowTopComponent"));
 
         initConfigurations();
         Logger.getLogger("").addHandler(new LogWindowHandler());
@@ -96,12 +153,66 @@ public final class SemanticWebImportMainWindowTopComponent extends TopComponent 
 
     }
 
-	private void initConfigurations() throws IOException {
-		resetConfigurations();
-		addConfigurations(configurationManager.loadResourceConfigurations("/fr/inria/edelweiss/semantic/default_configuration/"));
-		addConfigurations(loadFileConfigurations(getHome() + "/.semanticwebimport/"));
-		refreshConfigurationSelector();
-	}
+    /**
+     * Gets default instance. Do not use directly: reserved for *.settings
+     * files only, i.e. deserialization routines; otherwise you could get a
+     * non-deserialized instance. To obtain the singleton instance, use
+     * {@link #findInstance}.
+     */
+    public static synchronized SemanticWebImportMainWindowTopComponent getDefault() throws IOException {
+        if (instance == null) {
+            instance = new SemanticWebImportMainWindowTopComponent();
+        }
+        return instance;
+    }
+
+    /**
+     * Obtain the SemanticWebImportMainWindowTopComponent instance. Never
+     * call {@link #getDefault} directly!
+     */
+    public static synchronized SemanticWebImportMainWindowTopComponent findInstance() throws IOException {
+        TopComponent win = WindowManager.getDefault().findTopComponent(PREFERRED_ID);
+
+        if (win == null) {
+            Logger.getLogger(SemanticWebImportMainWindowTopComponent.class.getName()).warning(
+                    "Cannot find " + PREFERRED_ID + " component. It will not be located properly in the window system.");
+            return getDefault();
+        }
+        if (win instanceof SemanticWebImportMainWindowTopComponent) {
+            return (SemanticWebImportMainWindowTopComponent) win;
+
+        }
+        Logger.getLogger(SemanticWebImportMainWindowTopComponent.class.getName()).warning(
+                "There seem to be multiple components with the '" + PREFERRED_ID
+                        + "' ID. That is a potential source of errors and unexpected behavior.");
+        return getDefault();
+    }
+
+    public static Icon loadIcon() {
+        Image image = ImageUtilities.loadImage(ICON_PATH, true);
+        Icon icon = ImageUtilities.image2Icon(image);
+        return icon;
+    }
+
+    public static SparqlRequester getSparqlRequester() {
+        return SemanticWebImportMainWindowTopComponent.instance;
+    }
+
+    private static String getHome() {
+        String result = System.getProperty("user.home");
+        if (result == null) {
+            logger.severe("user.home was not defined.");
+            result = ".";
+        }
+        return result;
+    }
+
+    private void initConfigurations() throws IOException {
+        resetConfigurations();
+        addConfigurations(configurationManager.loadResourceConfigurations("/fr/inria/edelweiss/semantic/default_configuration/"));
+        addConfigurations(loadFileConfigurations(getHome() + "/.semanticwebimport/"));
+        refreshConfigurationSelector();
+    }
 
     private void resetConfigurations() {
         resetConfigurationSelector();
@@ -143,31 +254,31 @@ public final class SemanticWebImportMainWindowTopComponent extends TopComponent 
         }
     }
 
-	protected Set<Properties> loadFileConfigurations(final String directoryPath) throws IOException {
-		Set<Properties> result = new HashSet<Properties>();
-		File fileProperties = new File(directoryPath);
-		if (fileProperties.exists()) {
-			if (fileProperties.isFile()) {
-				Properties newProperties = new Properties();
-				newProperties.loadFromXML(new FileInputStream(fileProperties));
-				result.add(newProperties);
-			} else if (fileProperties.isDirectory()) {
-				File[] files = fileProperties.listFiles();
-				for (File file : files) {
-					try {
-						Properties newProperties = new Properties();
-						FileInputStream is = new FileInputStream(file);
-						newProperties.loadFromXML(is);
-						is.close();
-						result.add(newProperties);
-					} catch (Exception ex) {
-						logger.log(Level.SEVERE, "An exception occured when trying to parse the file {0}: {1}", new Object[]{file.getName(), ex.getMessage()});
-					}
-				}
-			}
-		}
-		return result;
-	}
+    private Set<Properties> loadFileConfigurations(final String directoryPath) throws IOException {
+        Set<Properties> result = new HashSet<Properties>();
+        File fileProperties = new File(directoryPath);
+        if (fileProperties.exists()) {
+            if (fileProperties.isFile()) {
+                Properties newProperties = new Properties();
+                newProperties.loadFromXML(new FileInputStream(fileProperties));
+                result.add(newProperties);
+            } else if (fileProperties.isDirectory()) {
+                File[] files = fileProperties.listFiles();
+                for (File file : files) {
+                    try {
+                        Properties newProperties = new Properties();
+                        FileInputStream is = new FileInputStream(file);
+                        newProperties.loadFromXML(is);
+                        is.close();
+                        result.add(newProperties);
+                    } catch (Exception ex) {
+                        logger.log(Level.SEVERE, "An exception occured when trying to parse the file {0}: {1}", new Object[]{file.getName(), ex.getMessage()});
+                    }
+                }
+            }
+        }
+        return result;
+    }
 
     private void fillSparqlDriverSelector() {
         Collection<? extends SparqlDriver> sparqlDriverList = Lookup.getDefault().lookupAll(SparqlDriver.class);
@@ -192,16 +303,13 @@ public final class SemanticWebImportMainWindowTopComponent extends TopComponent 
         return -1;
     }
 
-	/*
-     *
-	 */
-	/**
-	 * This method is called from within the constructor to initialize the
-	 * form. WARNING: Do NOT modify this code. The content of this method is
-	 * always regenerated by the Form Editor.
-	 */
-        // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
-        private void initComponents() {
+    /**
+     * This method is called from within the constructor to initialize the
+     * form. WARNING: Do NOT modify this code. The content of this method is
+     * always regenerated by the Form Editor.
+     */
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+    private void initComponents() {
 
         jScrollPane1 = new javax.swing.JScrollPane();
         graphBuilderTab = new javax.swing.JTabbedPane();
@@ -396,7 +504,7 @@ public final class SemanticWebImportMainWindowTopComponent extends TopComponent 
                                 .addContainerGap())
         );
 
-                pythonPanelLayout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {setPythonPostProcessingFileName, setPythonPreProcessingFileName});
+        pythonPanelLayout.linkSize(javax.swing.SwingConstants.HORIZONTAL, setPythonPostProcessingFileName, setPythonPreProcessingFileName);
 
         pythonPanelLayout.setVerticalGroup(
                 pythonPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -414,7 +522,7 @@ public final class SemanticWebImportMainWindowTopComponent extends TopComponent 
                                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-                pythonPanelLayout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {pythonPostProcessingFileName, pythonPostProcessingLabel, pythonPreProcessingFileName, pythonPreProcessingLabel, setPythonPostProcessingFileName, setPythonPreProcessingFileName});
+        pythonPanelLayout.linkSize(javax.swing.SwingConstants.VERTICAL, pythonPostProcessingFileName, pythonPostProcessingLabel, pythonPreProcessingFileName, pythonPreProcessingLabel, setPythonPostProcessingFileName, setPythonPreProcessingFileName);
 
         org.openide.awt.Mnemonics.setLocalizedText(loadConfiguration, org.openide.util.NbBundle.getMessage(SemanticWebImportMainWindowTopComponent.class, "SemanticWebImportMainWindowTopComponent.loadConfiguration.text")); // NOI18N
         loadConfiguration.setToolTipText(org.openide.util.NbBundle.getMessage(SemanticWebImportMainWindowTopComponent.class, "SemanticWebImportMainWindowTopComponent.loadConfiguration.toolTipText")); // NOI18N
@@ -583,7 +691,7 @@ public final class SemanticWebImportMainWindowTopComponent extends TopComponent 
                                 .addContainerGap())
         );
 
-                jPanel1Layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {sparqlQueryResultButton, sparqlQueryResultFileName, sparqlQueryResultLabel});
+        jPanel1Layout.linkSize(javax.swing.SwingConstants.VERTICAL, sparqlQueryResultButton, sparqlQueryResultFileName, sparqlQueryResultLabel);
 
         javax.swing.GroupLayout configurationPanelLayout = new javax.swing.GroupLayout(configurationPanel);
         configurationPanel.setLayout(configurationPanelLayout);
@@ -839,15 +947,15 @@ public final class SemanticWebImportMainWindowTopComponent extends TopComponent 
         return this.sparqlDriver;
     }
 
-	protected void addConfigurations(Set<Properties> configurations) {
-		for (Properties p : configurations) {
-			addConfiguration(p);
-		}
-	}
+    private void addConfigurations(Set<Properties> configurations) {
+        for (Properties p : configurations) {
+            addConfiguration(p);
+        }
+    }
 
-	protected void addConfiguration(Properties configuration) {
-		configurationManager.getListProperties().put(configuration.getProperty(ConfigurationManager.CONFIGURATION_NAME), configuration);
-	}
+    private void addConfiguration(Properties configuration) {
+        configurationManager.getListProperties().put(configuration.getProperty(ConfigurationManager.CONFIGURATION_NAME), configuration);
+    }
 
     @Override
     public String sparqlQuery(String request) {
@@ -897,65 +1005,10 @@ public final class SemanticWebImportMainWindowTopComponent extends TopComponent 
         return configurationManager;
     }
 
-	class LogWindowHandler extends Handler {
-
-		public LogWindowHandler() {
-			setFormatter(new SimpleFormatter());
-		}
-
-		@Override
-		public void publish(LogRecord record) {
-			logWindow.append(getFormatter().format(record).replace("\n", " -- ") + '\n');
-		}
-
-		@Override
-		public void flush() {
-		}
-
-		@Override
-		public void close() throws SecurityException {
-		}
-	}
-
-	/**
-	 * Gets default instance. Do not use directly: reserved for *.settings
-	 * files only, i.e. deserialization routines; otherwise you could get a
-	 * non-deserialized instance. To obtain the singleton instance, use
-	 * {@link #findInstance}.
-	 */
-	public static synchronized SemanticWebImportMainWindowTopComponent getDefault() throws IOException {
-		if (instance == null) {
-			instance = new SemanticWebImportMainWindowTopComponent();
-		}
-		return instance;
-	}
-
-	/**
-	 * Obtain the SemanticWebImportMainWindowTopComponent instance. Never
-	 * call {@link #getDefault} directly!
-	 */
-	public static synchronized SemanticWebImportMainWindowTopComponent findInstance() throws IOException {
-		TopComponent win = WindowManager.getDefault().findTopComponent(PREFERRED_ID);
-
-		if (win == null) {
-			Logger.getLogger(SemanticWebImportMainWindowTopComponent.class.getName()).warning(
-				"Cannot find " + PREFERRED_ID + " component. It will not be located properly in the window system.");
-			return getDefault();
-		}
-		if (win instanceof SemanticWebImportMainWindowTopComponent) {
-			return (SemanticWebImportMainWindowTopComponent) win;
-
-		}
-		Logger.getLogger(SemanticWebImportMainWindowTopComponent.class.getName()).warning(
-			"There seem to be multiple components with the '" + PREFERRED_ID
-			+ "' ID. That is a potential source of errors and unexpected behavior.");
-		return getDefault();
-	}
-
-	@Override
-	public int getPersistenceType() {
-		return TopComponent.PERSISTENCE_ALWAYS;
-	}
+    @Override
+    public int getPersistenceType() {
+        return TopComponent.PERSISTENCE_ALWAYS;
+    }
 
     void writeProperties(java.util.Properties p) {
         // better to version settings since initial version as advocated at
@@ -984,19 +1037,9 @@ public final class SemanticWebImportMainWindowTopComponent extends TopComponent 
         return PREFERRED_ID;
     }
 
-	public static Icon loadIcon() {
-		Image image = ImageUtilities.loadImage(ICON_PATH, true);
-		Icon icon = ImageUtilities.image2Icon(image);
-		return icon;
-	}
-
-	public static SparqlRequester getSparqlRequester() {
-		return SemanticWebImportMainWindowTopComponent.instance;
-	}
-
-	public SparqlRequester getDriver() {
-		return sparqlDriver;
-	}
+    public SparqlRequester getDriver() {
+        return sparqlDriver;
+    }
 
     public void addTab(final String title, JPanel panel) {
         int tabIndex = findTab(title);
@@ -1017,12 +1060,23 @@ public final class SemanticWebImportMainWindowTopComponent extends TopComponent 
         return -1;
     }
 
-	private static String getHome() {
-		String result = System.getProperty("user.home");
-		if (result == null) {
-			logger.severe("user.home was not defined.");
-			result = ".";
-		}
-		return result;
-	}
+    class LogWindowHandler extends Handler {
+
+        public LogWindowHandler() {
+            setFormatter(new SimpleFormatter());
+        }
+
+        @Override
+        public void publish(LogRecord record) {
+            logWindow.append(getFormatter().format(record).replace("\n", " -- ") + '\n');
+        }
+
+        @Override
+        public void flush() {
+        }
+
+        @Override
+        public void close() throws SecurityException {
+        }
+    }
 }

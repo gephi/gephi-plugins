@@ -13,6 +13,7 @@ import java.util.Observable;
  */
 public final class SparqlSoapEndPointDriverParametersPanel extends DriverParametersPanel<SparqlSoapEndPointDriverParameters> {
 
+	private static final long serialVersionUID = 8752067213343400680L;
 	private final SparqlSoapEndPointDriverParameters driverParameters;
 
 	public SparqlSoapEndPointDriverParametersPanel(SparqlSoapEndPointDriverParameters newDriverParameters) {

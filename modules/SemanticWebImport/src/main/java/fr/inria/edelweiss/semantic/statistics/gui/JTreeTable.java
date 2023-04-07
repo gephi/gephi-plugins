@@ -65,6 +65,7 @@ import javax.swing.tree.TreeModel;
  */
 public class JTreeTable extends JTable {
 
+    private static final long serialVersionUID = 4435181815819049703L;
     protected TreeTableCellRenderer tree;
 
     public JTreeTable(TreeTableModel treeTableModel) {
@@ -113,6 +114,7 @@ public class JTreeTable extends JTable {
     //
     public class TreeTableCellRenderer extends JTree implements TableCellRenderer {
 
+        private static final long serialVersionUID = 1996621516702976415L;
         protected int visibleRow;
 
         public TreeTableCellRenderer(TreeModel model) {

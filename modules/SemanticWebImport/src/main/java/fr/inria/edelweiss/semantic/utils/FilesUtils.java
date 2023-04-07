@@ -39,7 +39,7 @@ public class FilesUtils {
     public static InputStream readFile(String fileName) {
         InputStream result = null;
         try {
-            result = new java.io.FileInputStream(fileName);
+            result = new FileInputStream(fileName);
         } catch (FileNotFoundException ex) {
             throw new IllegalArgumentException(ex);
         }
