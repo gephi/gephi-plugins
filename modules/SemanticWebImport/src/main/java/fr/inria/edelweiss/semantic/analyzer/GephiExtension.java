@@ -1,19 +1,16 @@
 /*
- * Copyright (c) 2011, INRIA All rights reserved.
+ * Copyright (c) 2011, INRIA
+ * All rights reserved.
  */
 package fr.inria.edelweiss.semantic.analyzer;
 
 import fr.inria.edelweiss.sparql.GephiUtils;
 
 import javax.swing.text.html.StyleSheet;
-import java.awt.*;
+import java.awt.Color;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-/**
- *
- * @author edemairy
- */
 public class GephiExtension {
 
     public static final String GEPHI_PREFIX = "http://gephi.org/";

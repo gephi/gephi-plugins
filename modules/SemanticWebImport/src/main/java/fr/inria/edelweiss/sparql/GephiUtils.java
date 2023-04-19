@@ -4,12 +4,17 @@
  */
 package fr.inria.edelweiss.sparql;
 
-import org.gephi.graph.api.*;
+import org.gephi.graph.api.Edge;
+import org.gephi.graph.api.Element;
+import org.gephi.graph.api.Graph;
+import org.gephi.graph.api.GraphController;
+import org.gephi.graph.api.GraphModel;
+import org.gephi.graph.api.Node;
 import org.gephi.project.api.ProjectController;
 import org.openide.util.Exceptions;
 import org.openide.util.Lookup;
 
-import java.awt.*;
+import java.awt.Color;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 import java.util.regex.Matcher;
