@@ -4,7 +4,7 @@
  */
 package fr.inria.edelweiss.semantic.analyzer;
 
-import fr.inria.edelweiss.semantic.LayoutExamplePostProcessor;
+import fr.inria.edelweiss.semantic.LayoutExampleAbstractPostProcessor;
 import fr.inria.edelweiss.sparql.RdfParser;
 import fr.inria.edelweiss.sparql.SparqlDriver;
 import org.gephi.graph.api.GraphModel;
@@ -31,7 +31,7 @@ public class RdfAnalyzer implements LongTask, Runnable {
     final GraphModel model;
     final String sparqlRequest;
     private SparqlDriver driver;
-    private PostProcessor postProcessor;
+    private AbstractPostProcessor abstractPostProcessor;
     private String saveResultName;
     private String sparqlRequestResult;
     private ProgressTicket progressTicket;
@@ -48,7 +48,7 @@ public class RdfAnalyzer implements LongTask, Runnable {
         this.model = newModel;
         this.sparqlRequest = newSparqlRequest;
         this.fynLevel = fynLevel;
-        postProcessor = new EmptyPostProcessor();
+        abstractPostProcessor = new EmptyAbstractPostProcessor();
     }
 
     @Override
@@ -79,15 +79,15 @@ public class RdfAnalyzer implements LongTask, Runnable {
             logger.log(Level.INFO, "error when saving the result: {0}", e.getMessage());
         }
         Progress.progress(progressTicket);
-        postProcessor.setModel(model);
-        postProcessor.run();
+        abstractPostProcessor.setModel(model);
+        abstractPostProcessor.run();
 
         logger.info("End: Building the implementation relationships graph.");
         Progress.finish(progressTicket);
     }
 
-    public final void setPostProcessing(final LayoutExamplePostProcessor newPostProcessor) {
-        this.postProcessor = newPostProcessor;
+    public final void setPostProcessing(final LayoutExampleAbstractPostProcessor newPostProcessor) {
+        this.abstractPostProcessor = newPostProcessor;
     }
 
     public final SparqlDriver getSparqlEngine() {

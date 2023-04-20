@@ -1,7 +1,8 @@
 /*
- * Copyright (c) 2012, INRIA
+ * Copyright (c) 2011, INRIA
  * All rights reserved.
  */
+
 package fr.inria.wimmics.semanticweb.filter.instance;
 
 import fr.inria.edelweiss.semantic.SemanticWebImportMainWindowTopComponent;

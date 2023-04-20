@@ -1,3 +1,8 @@
+/*
+ * Copyright (c) 2011, INRIA
+ * All rights reserved.
+ */
+
 package fr.inria.edelweiss.sparql.restdriver;
 
 import fr.inria.edelweiss.sparql.DriverParametersPanel;

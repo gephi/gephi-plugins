@@ -2,6 +2,7 @@
  * Copyright (c) 2011, INRIA
  * All rights reserved.
  */
+
 package fr.inria.edelweiss.semantic.configurationmanager;
 
 import fr.inria.edelweiss.semantic.SemanticWebImportMainWindowTopComponent;
@@ -10,10 +11,18 @@ import fr.inria.edelweiss.sparql.SparqlDriver;
 import fr.inria.edelweiss.sparql.SparqlDriverParameters;
 import java.awt.Component;
 import java.awt.event.ActionEvent;
-import java.io.*;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.URL;
 import java.net.URLDecoder;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Properties;
+import java.util.Set;
 import java.util.jar.JarFile;
 import java.util.logging.Level;
 import java.util.logging.Logger;

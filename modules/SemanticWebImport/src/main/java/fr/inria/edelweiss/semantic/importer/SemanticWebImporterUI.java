@@ -1,7 +1,11 @@
+/*
+ * Copyright (c) 2011, INRIA
+ * All rights reserved.
+ */
+
 package fr.inria.edelweiss.semantic.importer;
 
 import fr.inria.edelweiss.sparql.corese.CoreseDriver;
-
 import javax.swing.JPanel;
 import org.gephi.io.importer.spi.Importer;
 import org.gephi.io.importer.spi.ImporterUI;

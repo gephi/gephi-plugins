@@ -1,11 +1,11 @@
 /*
- * Copyright (c) 2012, INRIA
+ * Copyright (c) 2011, INRIA
  * All rights reserved.
  */
+
 package fr.inria.wimmics.semanticweb.filter.type;
 
 import fr.inria.edelweiss.semantic.SemanticWebImportMainWindowTopComponent;
-
 import java.util.Formatter;
 import java.util.HashSet;
 import java.util.logging.Level;

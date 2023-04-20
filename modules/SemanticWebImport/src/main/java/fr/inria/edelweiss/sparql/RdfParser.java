@@ -1,6 +1,8 @@
-/**
- * Copyright (c) 2011, INRIA All rights reserved.
+/*
+ * Copyright (c) 2011, INRIA
+ * All rights reserved.
  */
+
 package fr.inria.edelweiss.sparql;
 
 import com.hp.hpl.jena.rdf.arp.ALiteral;

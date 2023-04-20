@@ -4,6 +4,7 @@
  */
 package fr.inria.edelweiss.semantic.importer;
 
+import fr.inria.edelweiss.semantic.LayoutExampleAbstractPostProcessor;
 import org.gephi.graph.api.Graph;
 import org.gephi.graph.api.GraphController;
 import org.gephi.graph.api.GraphModel;
@@ -21,7 +22,6 @@ import java.util.concurrent.Semaphore;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import fr.inria.edelweiss.semantic.LayoutExamplePostProcessor;
 import fr.inria.edelweiss.semantic.PluginProperties;
 import fr.inria.edelweiss.semantic.analyzer.RdfAnalyzer;
 import fr.inria.edelweiss.sparql.GephiUtils;
@@ -94,7 +94,7 @@ public class SemanticWebImportParser implements LongTaskListener {
         analyzer = initAnalyzer(model, parameters.getRdfRequest(), fynLevel);
         analyzer.setSaveResult(saveResultName);
         if (postProcessing) {
-            LayoutExamplePostProcessor postProcessor = new LayoutExamplePostProcessor();
+            LayoutExampleAbstractPostProcessor postProcessor = new LayoutExampleAbstractPostProcessor();
             analyzer.setPostProcessing(postProcessor);
         }
         executor.setLongTaskListener(this);

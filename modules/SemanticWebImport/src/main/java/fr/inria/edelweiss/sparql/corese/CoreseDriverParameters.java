@@ -3,7 +3,6 @@
  * All rights reserved.
  */
 
-
 package fr.inria.edelweiss.sparql.corese;
 
 import fr.inria.edelweiss.sparql.SparqlDriverParameters;

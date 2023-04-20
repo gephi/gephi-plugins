@@ -4,7 +4,8 @@
  */
 package fr.inria.edelweiss.semantic;
 
-import fr.inria.edelweiss.semantic.analyzer.PostProcessor;
+import fr.inria.edelweiss.semantic.analyzer.AbstractPostProcessor;
+
 import java.util.Collection;
 import java.util.Optional;
 import java.util.logging.Logger;
@@ -19,9 +20,9 @@ import org.openide.util.Lookup;
  *
  * @author edemairy
  */
-public class LayoutExamplePostProcessor extends PostProcessor {
+public class LayoutExampleAbstractPostProcessor extends AbstractPostProcessor {
 
-    private static final Logger logger = Logger.getLogger(LayoutExamplePostProcessor.class.getName());
+    private static final Logger logger = Logger.getLogger(LayoutExampleAbstractPostProcessor.class.getName());
 
     @Override
     public void run() {

@@ -1,7 +1,6 @@
 /*
- * SemanticWebImporterPanel.java
- *
- * Created on Dec 4, 2011, 7:24:31 PM
+ * Copyright (c) 2011, INRIA
+ * All rights reserved.
  */
 
 package fr.inria.edelweiss.semantic.importer;
