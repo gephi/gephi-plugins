@@ -24,4 +24,8 @@ public enum PluginProperties {
     }
 
     private final String value;
+
+    public String toString() {
+        return this.value;
+    }
 }

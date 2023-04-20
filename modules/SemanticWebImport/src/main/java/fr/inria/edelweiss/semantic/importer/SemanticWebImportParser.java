@@ -83,9 +83,12 @@ public class SemanticWebImportParser implements LongTaskListener {
         Workspace dataWorkspace = pc.getCurrentWorkspace();
         GraphModel model = getCurrentGraphModel(dataWorkspace);
         // @TODO how to reset the graph
-//        if (resetWorkspace) {
-//            model.getNodeTable().clear();
-//        }
+        if (resetWorkspace) {
+            if (model != null) {
+              dataWorkspace.remove( model );
+              logger.log(Level.INFO, "workspace reset done");
+            }
+        }
         Table nodeTable = model.getNodeTable();
         if (!nodeTable.hasColumn("namespace")) {
             nodeTable.addColumn("namespace", String.class);

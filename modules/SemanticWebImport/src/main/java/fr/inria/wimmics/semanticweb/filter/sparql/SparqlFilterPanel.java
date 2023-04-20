@@ -14,12 +14,12 @@ import java.awt.event.ActionListener;
  *
  * @author Erwan Demairy <Erwan.Demairy@inria.fr>
  */
-public class SPARQLFilterPanel extends javax.swing.JPanel implements ActionListener {
+public class SparqlFilterPanel extends javax.swing.JPanel implements ActionListener {
 
     private static final long serialVersionUID = -1459885291629743647L;
-    private final transient SPARQLFilter filter; // \TODO assess whether filter should be Serializable
+    private final transient SparqlFilter filter; // \TODO assess whether filter should be Serializable
 
-    public SPARQLFilterPanel(SPARQLFilter filter) {
+    public SparqlFilterPanel(SparqlFilter filter) {
         this.filter = filter;
         initComponents();
         updateButton.addActionListener(this);
@@ -44,9 +44,9 @@ public class SPARQLFilterPanel extends javax.swing.JPanel implements ActionListe
 
         sparqlRequestEditor.setMinimumSize(new java.awt.Dimension(431, 253));
         sparqlRequestEditor.setName(""); // NOI18N
-        sparqlRequestEditor.setQueryText(org.openide.util.NbBundle.getMessage(SPARQLFilterPanel.class, "SPARQLFilterPanel.queryText")); // NOI18N
+        sparqlRequestEditor.setQueryText(org.openide.util.NbBundle.getMessage(SparqlFilterPanel.class, "SPARQLFilterPanel.queryText")); // NOI18N
 
-        updateButton.setText(org.openide.util.NbBundle.getMessage(SPARQLFilterPanel.class, "SPARQLFilterPanel.updateButton.text")); // NOI18N
+        updateButton.setText(org.openide.util.NbBundle.getMessage(SparqlFilterPanel.class, "SPARQLFilterPanel.updateButton.text")); // NOI18N
         updateButton.addActionListener(this::updateButtonActionPerformed);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);

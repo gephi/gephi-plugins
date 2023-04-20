@@ -51,6 +51,8 @@ import fr.inria.edelweiss.sparql.SparqlDriverFactory;
 import fr.inria.edelweiss.sparql.SparqlDriverParameters;
 import fr.inria.edelweiss.sparql.SparqlRequester;
 import fr.inria.edelweiss.sparql.corese.CoreseDriver;
+
+import static fr.inria.edelweiss.semantic.PluginProperties.*;
 //import org.gephi.scripting.api.ScriptingController;
 //import org.python.util.PythonInterpreter;
 
@@ -919,11 +921,11 @@ public final class SemanticWebImportMainWindowTopComponent extends TopComponent 
      * mechanism to update the properties.
      */
     private void refreshCurrentConfiguration() {
-        configurationManager.getCurrentProperties().setProperty(PluginProperties.IGNORE_BLANK_PROPERTIES.getValue(), Boolean.toString(ignoreBlankNode.isSelected()));
-        configurationManager.getCurrentProperties().setProperty(PluginProperties.RESET_WORKSPACE.getValue(), Boolean.toString(resetWorkspace.isSelected()));
-        configurationManager.getCurrentProperties().setProperty(PluginProperties.POST_PROCESSING.getValue(), Boolean.toString(autoLayout.isSelected()));
-        configurationManager.getCurrentProperties().setProperty(PluginProperties.SAVE_SPARQL_RESULT.getValue(), sparqlQueryResultFileName.getText());
-        configurationManager.getCurrentProperties().setProperty(PluginProperties.FYN_LEVEL.getValue(), Integer.toString((Integer) fynSpinner.getValue()));
+        configurationManager.getCurrentProperties().setProperty(String.valueOf(IGNORE_BLANK_PROPERTIES), Boolean.toString(ignoreBlankNode.isSelected()));
+        configurationManager.getCurrentProperties().setProperty(String.valueOf(RESET_WORKSPACE), Boolean.toString(resetWorkspace.isSelected()));
+        configurationManager.getCurrentProperties().setProperty(String.valueOf(POST_PROCESSING), Boolean.toString(autoLayout.isSelected()));
+        configurationManager.getCurrentProperties().setProperty(String.valueOf(SAVE_SPARQL_RESULT), sparqlQueryResultFileName.getText());
+        configurationManager.getCurrentProperties().setProperty(String.valueOf(FYN_LEVEL), Integer.toString((Integer) fynSpinner.getValue()));
     }
 
     /*
@@ -1012,7 +1014,7 @@ public final class SemanticWebImportMainWindowTopComponent extends TopComponent 
         // better to version settings since initial version as advocated at
         // http://wiki.apidesign.org/wiki/PropertyFiles
         p.setProperty("version", "1.0");
-        p.setProperty(PluginProperties.IGNORE_BLANK_PROPERTIES.getValue(),
+        p.setProperty(IGNORE_BLANK_PROPERTIES.getValue(),
                 Boolean.toString(ignoreBlankNode.isSelected()));
     }
 
@@ -1027,7 +1029,7 @@ public final class SemanticWebImportMainWindowTopComponent extends TopComponent 
     private void readPropertiesImpl(java.util.Properties p) {
         String version = p.getProperty("version");
         ignoreBlankNode.setSelected(
-                Boolean.getBoolean(p.getProperty(PluginProperties.IGNORE_BLANK_PROPERTIES.getValue())));
+                Boolean.getBoolean(p.getProperty(IGNORE_BLANK_PROPERTIES.getValue())));
     }
 
     @Override
