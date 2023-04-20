@@ -85,8 +85,8 @@ public class SemanticWebImportParser implements LongTaskListener {
         // @TODO how to reset the graph
         if (resetWorkspace) {
             if (model != null) {
-              dataWorkspace.remove( model );
-              logger.log(Level.INFO, "workspace reset done");
+                model.getGraph().clear();
+                logger.log(Level.INFO, "workspace reset done");
             }
         }
         Table nodeTable = model.getNodeTable();
