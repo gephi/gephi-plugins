@@ -5,8 +5,7 @@
 package fr.inria.wimmics.semanticweb.filter.type;
 
 import fr.inria.edelweiss.semantic.SemanticWebImportMainWindowTopComponent;
-import fr.inria.wimmics.semanticweb.filter.instance.InstanceFilter;
-import java.io.IOException;
+
 import java.util.Formatter;
 import java.util.HashSet;
 import java.util.logging.Level;

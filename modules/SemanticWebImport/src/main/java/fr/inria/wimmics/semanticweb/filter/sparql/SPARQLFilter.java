@@ -4,11 +4,9 @@
  */
 package fr.inria.wimmics.semanticweb.filter.sparql;
 
-import fr.inria.wimmics.semanticweb.filter.instance.*;
 import fr.inria.edelweiss.semantic.SemanticWebImportMainWindowTopComponent;
 import fr.inria.edelweiss.sparql.GephiUtils;
-import java.io.IOException;
-import java.util.Formatter;
+
 import java.util.HashSet;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -23,7 +21,7 @@ import org.gephi.graph.api.Node;
  */
 public class SPARQLFilter implements ComplexFilter {
 
-    private Logger logger = Logger.getLogger(SPARQLFilter.class.getName());
+    private final Logger logger = Logger.getLogger(SPARQLFilter.class.getName());
     private String selectRequest;
 
     public SPARQLFilter() {

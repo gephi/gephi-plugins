@@ -6,7 +6,6 @@ package fr.inria.edelweiss.semantic.analyzer;
 
 import fr.inria.edelweiss.semantic.analyzer.PostProcessor;
 import java.util.logging.Logger;
-import org.gephi.graph.api.GraphModel;
 
 /**
  *

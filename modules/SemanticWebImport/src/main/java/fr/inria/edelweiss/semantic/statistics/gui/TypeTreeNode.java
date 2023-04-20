@@ -30,7 +30,7 @@ public class TypeTreeNode extends DefaultMutableTreeNode implements Comparable<T
     @Override
     public void add(MutableTreeNode node) {
         if (children == null) {
-            children = new Vector();
+            children = new Vector<>();
         }
         children.insertElementAt(node, getChildCount());
         TypeTreeNode typeTreeNode = (TypeTreeNode) node;

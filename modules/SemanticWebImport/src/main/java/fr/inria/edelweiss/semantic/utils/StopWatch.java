@@ -4,8 +4,6 @@
  */
 package fr.inria.edelweiss.semantic.utils;
 
-import java.util.concurrent.TimeUnit;
-
 /**
  *
  * @author Erwan Demairy <Erwan.Demairy@inria.fr>

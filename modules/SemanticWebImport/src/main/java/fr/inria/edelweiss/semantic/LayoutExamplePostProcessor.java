@@ -9,14 +9,11 @@ import java.util.Collection;
 import java.util.Optional;
 import java.util.logging.Logger;
 
-import org.checkerframework.checker.nullness.Opt;
 import org.gephi.layout.spi.Layout;
 import org.gephi.layout.spi.LayoutBuilder;
 import org.gephi.statistics.spi.Statistics;
 import org.gephi.statistics.spi.StatisticsBuilder;
 import org.openide.util.Lookup;
-
-import javax.annotation.CheckForNull;
 
 /**
  *

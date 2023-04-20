@@ -10,7 +10,6 @@ import java.util.List;
 import java.util.Observable;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
-import javax.swing.JPanel;
 
 /**fr.inria.edelweiss.sparql.corese.CoreseDriverParametersPanel
  *

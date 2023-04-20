@@ -40,11 +40,11 @@ package fr.inria.edelweiss.semantic.statistics.gui;
  * maintenance of any nuclear facility.
  */
 
-import javax.swing.*;
+import java.util.EventObject;
+import javax.swing.CellEditor;
 import javax.swing.event.CellEditorListener;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.EventListenerList;
-import java.util.EventObject;
 
 /**
  * @version %I% %G%

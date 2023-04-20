@@ -47,7 +47,7 @@ public class SemanticWebImporter implements FileImporter, LongTask {
     private boolean cancel = false;
     private String sparqlRequest;
     private SemanticWebImportParser rdfParser;
-    private CoreseDriver sparqlDriver;
+    private final CoreseDriver sparqlDriver;
 
     public SemanticWebImporter() {
         sparqlDriver = new CoreseDriver();

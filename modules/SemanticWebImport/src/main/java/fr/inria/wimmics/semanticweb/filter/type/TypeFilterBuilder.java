@@ -7,7 +7,7 @@ package fr.inria.wimmics.semanticweb.filter.type;
 import fr.inria.edelweiss.semantic.SemanticWebImportMainWindowTopComponent;
 import javax.swing.Icon;
 import javax.swing.JPanel;
-import org.gephi.filters.api.FilterLibrary;
+
 import org.gephi.filters.spi.Category;
 import org.gephi.filters.spi.Filter;
 import org.gephi.filters.spi.FilterBuilder;

@@ -41,6 +41,8 @@ public class SparqlRestEndPointDriverParametersPanel
         restParametersTable.invalidate();
 
         restPropertiesModel = new DefaultTableModel() {
+            private static final long serialVersionUID = 320734002831587245L;
+
             @Override
             public int getRowCount() {
                 return parameters.getRequestProperties().size();

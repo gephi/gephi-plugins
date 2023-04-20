@@ -49,7 +49,7 @@ public class GephiExtension {
         SPHERE("sphere"), DISK("disk"), RECTANGLE("rectangle"), CIRCLE("circle"), DOT("dot"), SQUARE("square");
         private final String shapeName;
 
-        private Shape(final String shapeName) {
+        Shape(final String shapeName) {
             this.shapeName = shapeName;
         }
 
