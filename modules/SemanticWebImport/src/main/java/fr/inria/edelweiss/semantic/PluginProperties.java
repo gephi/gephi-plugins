@@ -15,7 +15,7 @@ public enum PluginProperties {
     SAVE_SPARQL_RESULT("semanticwebimport.save_sparql_result"),
     FYN_LEVEL("semanticwebimport.fyn_level");
 
-    private PluginProperties(String value) {
+    PluginProperties(String value) {
         this.value = value;
     }
 
@@ -23,5 +23,9 @@ public enum PluginProperties {
         return this.value;
     }
 
-    private String value;
+    private final String value;
+
+    public String toString() {
+        return this.value;
+    }
 }

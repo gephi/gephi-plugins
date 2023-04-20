@@ -7,8 +7,7 @@ package fr.inria.edelweiss.semantic.tests;
 import fr.inria.edelweiss.semantic.SemanticWebImportMainWindowTopComponent;
 import fr.inria.edelweiss.sparql.SparqlRequester;
 import java.io.IOException;
-import org.gephi.graph.api.GraphController;
-import org.gephi.graph.api.GraphModel;
+
 import org.gephi.project.api.Project;
 import org.gephi.project.api.ProjectController;
 import org.gephi.project.api.Workspace;
@@ -40,8 +39,7 @@ public class Utils {
     public Workspace[] whenUsingConfiguration(final String configurationName) throws IOException, InterruptedException {
         topComponent = new SemanticWebImportMainWindowTopComponent();
         topComponent.setConfigurationAction(configurationName);
-        Workspace workspaces[] = whenCreatingGraphs(topComponent);
-        return workspaces;
+        return whenCreatingGraphs(topComponent);
     }
 
     public Workspace[] whenCreatingGraphs(SemanticWebImportMainWindowTopComponent topComponent) throws InterruptedException {

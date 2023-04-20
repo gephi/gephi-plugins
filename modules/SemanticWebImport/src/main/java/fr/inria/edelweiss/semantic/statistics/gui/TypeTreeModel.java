@@ -29,8 +29,7 @@ public class TypeTreeModel extends AbstractTreeTableModel implements TreeTableMo
     // Some convenience methods.
     //
     protected TypeTreeNode[] getChildren(TypeTreeNode node) {
-        TypeTreeNode SimpleTypeNode = ((TypeTreeNode) node);
-        return SimpleTypeNode.getChildren();
+        return ((TypeTreeNode) node).getChildren();
     }
 
     //

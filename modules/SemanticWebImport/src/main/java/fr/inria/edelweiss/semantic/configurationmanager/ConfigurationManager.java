@@ -2,6 +2,7 @@
  * Copyright (c) 2011, INRIA
  * All rights reserved.
  */
+
 package fr.inria.edelweiss.semantic.configurationmanager;
 
 import fr.inria.edelweiss.semantic.SemanticWebImportMainWindowTopComponent;
@@ -10,11 +11,18 @@ import fr.inria.edelweiss.sparql.SparqlDriver;
 import fr.inria.edelweiss.sparql.SparqlDriverParameters;
 import java.awt.Component;
 import java.awt.event.ActionEvent;
-import java.io.*;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.URL;
 import java.net.URLDecoder;
-import java.util.*;
-import java.util.jar.JarEntry;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Properties;
+import java.util.Set;
 import java.util.jar.JarFile;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -72,9 +80,6 @@ public class ConfigurationManager {
                 return;
             }
             os = new java.io.FileOutputStream(newFile);
-            if (os == null) {
-                throw new IllegalArgumentException("Impossible to create file.");
-            }
             try {
                 Properties properties = new Properties(currentProperties);
 
@@ -195,25 +200,26 @@ public class ConfigurationManager {
         return result;
     }
 
-    static protected ArrayList<String> listFilesInJar(String jarName, String path) throws IOException {
+    protected static ArrayList<String> listFilesInJar(String jarName, String path) throws IOException {
         if (path.startsWith("/")) {
             path = path.substring(1);
         }
         ArrayList<String> result = new ArrayList<String>();
-        JarFile jar = new JarFile(jarName);
-        Enumeration<JarEntry> entries = jar.entries();
-        while (entries.hasMoreElements()) {
-            String name = entries.nextElement().getName();
-            logger.log(Level.INFO, "{0}", name);
-            if (name.startsWith(path)) { //filter according to the path
-                String entry = name.substring(path.length());
-                int checkSubdir = entry.indexOf("/");
-                if (checkSubdir >= 0) {
-                    // if it is a subdirectory, we just return the directory name
-                    entry = entry.substring(0, checkSubdir);
-                }
-                if (!entry.isEmpty()) {
-                    result.add(entry);
+        try (JarFile jar = new JarFile(jarName)) {
+            var entries = jar.entries();
+            while (entries.hasMoreElements()) {
+                var name = entries.nextElement().getName();
+                logger.log(Level.INFO, "{0}", name);
+                if (name.startsWith(path)) { //filter according to the path
+                    var entry = name.substring(path.length());
+                    int checkSubdir = entry.indexOf("/");
+                    if (checkSubdir >= 0) {
+                        // if it is a subdirectory, we just return the directory name
+                        entry = entry.substring(0, checkSubdir);
+                    }
+                    if (!entry.isEmpty()) {
+                        result.add(entry);
+                    }
                 }
             }
         }

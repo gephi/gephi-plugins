@@ -47,7 +47,7 @@ public class SemanticWebImporter implements FileImporter, LongTask {
     private boolean cancel = false;
     private String sparqlRequest;
     private SemanticWebImportParser rdfParser;
-    private CoreseDriver sparqlDriver;
+    private final CoreseDriver sparqlDriver;
 
     public SemanticWebImporter() {
         sparqlDriver = new CoreseDriver();
@@ -73,6 +73,8 @@ public class SemanticWebImporter implements FileImporter, LongTask {
             rdfParser.waitEndpopulateRDFGraph();
         } catch (InterruptedException ex) {
             Exceptions.printStackTrace(ex);
+            LOGGER.log(Level.WARNING, "Interrupted!", ex);
+            Thread.currentThread().interrupt();
         }
         LOGGER.info("Finished the import");
 

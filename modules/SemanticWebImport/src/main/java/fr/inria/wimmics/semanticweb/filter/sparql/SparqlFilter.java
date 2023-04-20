@@ -1,14 +1,13 @@
 /*
- * Copyright (c) 2012, INRIA
+ * Copyright (c) 2011, INRIA
  * All rights reserved.
  */
+
 package fr.inria.wimmics.semanticweb.filter.sparql;
 
-import fr.inria.wimmics.semanticweb.filter.instance.*;
 import fr.inria.edelweiss.semantic.SemanticWebImportMainWindowTopComponent;
 import fr.inria.edelweiss.sparql.GephiUtils;
-import java.io.IOException;
-import java.util.Formatter;
+
 import java.util.HashSet;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -21,12 +20,12 @@ import org.gephi.graph.api.Node;
  *
  * @author Erwan Demairy <Erwan.Demairy@inria.fr>
  */
-public class SPARQLFilter implements ComplexFilter {
+public class SparqlFilter implements ComplexFilter {
 
-    private Logger logger = Logger.getLogger(SPARQLFilter.class.getName());
+    private final Logger logger = Logger.getLogger(SparqlFilter.class.getName());
     private String selectRequest;
 
-    public SPARQLFilter() {
+    public SparqlFilter() {
     }
 
     @Override
@@ -40,7 +39,7 @@ public class SPARQLFilter implements ComplexFilter {
         try {
             result = new FilterProperty[]{FilterProperty.createProperty(this, String.class, "selectRequest", "getSelectRequest", "setSelectRequest")};
         } catch (NoSuchMethodException ex) {
-            Logger.getLogger(SPARQLFilter.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(SparqlFilter.class.getName()).log(Level.SEVERE, null, ex);
         }
         return result;
     }

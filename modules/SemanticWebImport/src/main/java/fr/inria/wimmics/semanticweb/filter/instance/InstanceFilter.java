@@ -1,7 +1,8 @@
 /*
- * Copyright (c) 2012, INRIA
+ * Copyright (c) 2011, INRIA
  * All rights reserved.
  */
+
 package fr.inria.wimmics.semanticweb.filter.instance;
 
 import fr.inria.edelweiss.semantic.SemanticWebImportMainWindowTopComponent;
@@ -59,14 +60,15 @@ public class InstanceFilter implements ComplexFilter {
 
     @Override
     public Graph filter(Graph graph) {
-        Formatter getSubtypesOfrequest = new Formatter().format(GET_ALLTYPES_OF, type);
-        String[][] nodesToKeepList = SemanticWebImportMainWindowTopComponent.getSparqlRequester().selectOnGraph(getSubtypesOfrequest.toString());
-        HashSet<String> nodesToKeepSet = convertStringArrayToSet(nodesToKeepList);
+        try (Formatter getSubtypesOfrequest = new Formatter().format(GET_ALLTYPES_OF, type)) {
+            String[][] nodesToKeepList = SemanticWebImportMainWindowTopComponent.getSparqlRequester().selectOnGraph(getSubtypesOfrequest.toString());
+            HashSet<String> nodesToKeepSet = convertStringArrayToSet(nodesToKeepList);
 
-        Node[] nodes = graph.getNodes().toArray();
-        for (Node node : nodes) {
-            if (!nodesToKeepSet.contains((String)node.getId())) {
-                graph.removeNode(node);
+            Node[] nodes = graph.getNodes().toArray();
+            for (Node node : nodes) {
+                if (!nodesToKeepSet.contains((String) node.getId())) {
+                    graph.removeNode(node);
+                }
             }
         }
         return graph;

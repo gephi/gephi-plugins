@@ -1,19 +1,16 @@
 /*
- * Copyright (c) 2011, INRIA All rights reserved.
+ * Copyright (c) 2011, INRIA
+ * All rights reserved.
  */
 package fr.inria.edelweiss.semantic.analyzer;
 
 import fr.inria.edelweiss.sparql.GephiUtils;
-import java.awt.*;
+
+import javax.swing.text.html.StyleSheet;
+import java.awt.Color;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.text.html.StyleSheet;
-import org.gephi.graph.api.AttributeUtils;
 
-/**
- *
- * @author edemairy
- */
 public class GephiExtension {
 
     public static final String GEPHI_PREFIX = "http://gephi.org/";
@@ -52,7 +49,7 @@ public class GephiExtension {
         SPHERE("sphere"), DISK("disk"), RECTANGLE("rectangle"), CIRCLE("circle"), DOT("dot"), SQUARE("square");
         private final String shapeName;
 
-        private Shape(final String shapeName) {
+        Shape(final String shapeName) {
             this.shapeName = shapeName;
         }
 
@@ -140,10 +137,10 @@ public class GephiExtension {
             String nameNewAttribute = edgeLabel.replaceFirst(GEPHI_PREFIX, "");
             if (gephiUtil.isEdge(sourceLabel)) {
                 gephiUtil.addAttributeToEdges(nameNewAttribute, String.class);
-		gephiUtil.setEdgeAttr(sourceLabel, nameNewAttribute, targetLabel);
+                gephiUtil.setEdgeAttr(sourceLabel, nameNewAttribute, targetLabel);
             } else {
                 gephiUtil.addAttributeToNodes(nameNewAttribute, String.class);
-		gephiUtil.setNodeAttr(sourceLabel, nameNewAttribute, targetLabel);
+                gephiUtil.setNodeAttr(sourceLabel, nameNewAttribute, targetLabel);
             }
         }
     }

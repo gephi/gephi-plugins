@@ -19,7 +19,7 @@ import org.openide.util.lookup.ServiceProvider;
  * @author Erwan Demairy <Erwan.Demairy@inria.fr>
  */
 @ServiceProvider(service = FilterBuilder.class)
-public class SPARQLFilterBuilder implements FilterBuilder {
+public class SparqlFilterBuilder implements FilterBuilder {
     @Override
     public Category getCategory() {
         return new Category("SemanticWeb", getIcon());
@@ -42,13 +42,13 @@ public class SPARQLFilterBuilder implements FilterBuilder {
 
     @Override
     public Filter getFilter(Workspace workspace) {
-        return new SPARQLFilter();
+        return new SparqlFilter();
     }
 
     @Override
     public JPanel getPanel(Filter filter) {
-        SPARQLFilter semanticWebFilter = (SPARQLFilter) filter;
-        return new SPARQLFilterPanel(semanticWebFilter);
+        SparqlFilter semanticWebFilter = (SparqlFilter) filter;
+        return new SparqlFilterPanel(semanticWebFilter);
     }
 
     @Override

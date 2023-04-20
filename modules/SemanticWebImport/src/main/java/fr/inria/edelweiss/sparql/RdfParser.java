@@ -1,6 +1,8 @@
-/**
- * Copyright (c) 2011, INRIA All rights reserved.
+/*
+ * Copyright (c) 2011, INRIA
+ * All rights reserved.
  */
+
 package fr.inria.edelweiss.sparql;
 
 import com.hp.hpl.jena.rdf.arp.ALiteral;
@@ -8,7 +10,12 @@ import com.hp.hpl.jena.rdf.arp.ARP;
 import com.hp.hpl.jena.rdf.arp.AResource;
 import com.hp.hpl.jena.rdf.arp.StatementHandler;
 import fr.inria.edelweiss.semantic.analyzer.GephiExtension;
-import java.io.*;
+
+import java.io.BufferedInputStream;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.logging.Level;
@@ -212,8 +219,7 @@ public class RdfParser {
 				URL url = new URL(strURI);
 				URLConnection conn = url.openConnection();
 				conn.addRequestProperty("Accept", "application/rdf+xml");
-				InputStream rdf = new BufferedInputStream(conn.getInputStream());
-				result = rdf;
+				result = new BufferedInputStream(conn.getInputStream());
 			} catch (Exception e) {
 				Exceptions.printStackTrace(e);
 			}

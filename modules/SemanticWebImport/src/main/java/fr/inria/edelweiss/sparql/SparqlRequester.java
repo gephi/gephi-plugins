@@ -14,13 +14,13 @@ public interface SparqlRequester {
      *  @param request Sparql request the driver has to execute.
      *  @return A string containing the RDF/XMF result.
      */
-    public abstract String sparqlQuery(String request);
+    String sparqlQuery(String request);
 
     /**
      *
      * @param request
      * @return Each line represent the ids of the binding returned by the select call.
      */
-    public abstract String[][] selectOnGraph(String request);
+    String[][] selectOnGraph(String request);
 
 }

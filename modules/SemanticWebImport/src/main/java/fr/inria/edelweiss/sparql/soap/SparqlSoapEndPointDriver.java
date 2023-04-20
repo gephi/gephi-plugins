@@ -1,3 +1,8 @@
+/*
+ * Copyright (c) 2011, INRIA
+ * All rights reserved.
+ */
+
 ////<editor-fold defaultstate="collapsed" desc="comment">
 ///*
 // * Copyright (c) 2011, INRIA

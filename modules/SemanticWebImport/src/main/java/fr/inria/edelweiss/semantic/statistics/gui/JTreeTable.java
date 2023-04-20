@@ -43,11 +43,6 @@ import javax.swing.*;
 import java.awt.Dimension;
 import java.awt.Component;
 import java.awt.Graphics;
-import java.awt.datatransfer.StringSelection;
-import java.awt.datatransfer.Transferable;
-import javax.swing.JComponent;
-import javax.swing.JTable;
-import javax.swing.JTree;
 import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.tree.DefaultTreeSelectionModel;
@@ -65,6 +60,7 @@ import javax.swing.tree.TreeModel;
  */
 public class JTreeTable extends JTable {
 
+    private static final long serialVersionUID = 4435181815819049703L;
     protected TreeTableCellRenderer tree;
 
     public JTreeTable(TreeTableModel treeTableModel) {
@@ -78,12 +74,8 @@ public class JTreeTable extends JTable {
                 new TreeTableModelAdapter(treeTableModel, tree));
 
         // Force the JTable and JTree to share their row selection models.
-        tree.setSelectionModel(new DefaultTreeSelectionModel() {
-            // Extend the implementation of the constructor, as if:
-	 /* public this() */ {
-                setSelectionModel(listSelectionModel);
-            }
-        });
+        var selectionModel = new DefaultTreeSelectionModel();
+        tree.setSelectionModel( selectionModel );
         // Make the tree and table row heights the same.
         tree.setRowHeight(getRowHeight());
 
@@ -113,6 +105,7 @@ public class JTreeTable extends JTable {
     //
     public class TreeTableCellRenderer extends JTree implements TableCellRenderer {
 
+        private static final long serialVersionUID = 1996621516702976415L;
         protected int visibleRow;
 
         public TreeTableCellRenderer(TreeModel model) {
@@ -156,8 +149,7 @@ public class JTreeTable extends JTable {
     }
 
     public String getCell(int row, int column) {
-        String result = getModel().getValueAt(row, column).toString();
-        return result;
+        return getModel().getValueAt(row, column).toString();
     }
 
 }
