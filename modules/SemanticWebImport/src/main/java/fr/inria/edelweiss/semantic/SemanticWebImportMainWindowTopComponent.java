@@ -190,8 +190,7 @@ public final class SemanticWebImportMainWindowTopComponent extends TopComponent 
 
     public static Icon loadIcon() {
         Image image = ImageUtilities.loadImage(ICON_PATH, true);
-        Icon icon = ImageUtilities.image2Icon(image);
-        return icon;
+        return ImageUtilities.image2Icon(image);
     }
 
     public static SparqlRequester getSparqlRequester() {
@@ -911,8 +910,7 @@ public final class SemanticWebImportMainWindowTopComponent extends TopComponent 
     private String getCurrentSelectedDriverName() {
         int driverIndex = sparqlDriverSelector.getSelectedIndex();
         SparqlDriver newDriver = driverHandlers.get(driverIndex);
-        String newDriverName = newDriver.getClass().getName();
-        return newDriverName;
+        return newDriver.getClass().getName();
     }
 
     /**

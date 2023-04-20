@@ -40,8 +40,7 @@ public class Utils {
     public Workspace[] whenUsingConfiguration(final String configurationName) throws IOException, InterruptedException {
         topComponent = new SemanticWebImportMainWindowTopComponent();
         topComponent.setConfigurationAction(configurationName);
-        Workspace workspaces[] = whenCreatingGraphs(topComponent);
-        return workspaces;
+        return whenCreatingGraphs(topComponent);
     }
 
     public Workspace[] whenCreatingGraphs(SemanticWebImportMainWindowTopComponent topComponent) throws InterruptedException {

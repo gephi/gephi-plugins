@@ -217,8 +217,7 @@ public class RdfParser {
 				URL url = new URL(strURI);
 				URLConnection conn = url.openConnection();
 				conn.addRequestProperty("Accept", "application/rdf+xml");
-				InputStream rdf = new BufferedInputStream(conn.getInputStream());
-				result = rdf;
+				result = new BufferedInputStream(conn.getInputStream());
 			} catch (Exception e) {
 				Exceptions.printStackTrace(e);
 			}

@@ -202,8 +202,7 @@ public class GephiUtils {
             addNode(sourceNodeName);
             node = findNode(sourceNodeName);
         }
-        Object[] attributes = node.getAttributes();
-        return attributes;
+        return node.getAttributes();
     }
 
     public static void addAttributeToNodes(final String columnName, Class klass) {
@@ -224,9 +223,7 @@ public class GephiUtils {
             namespace = "";
         }
 
-        var result = new SplittedName(namespace, shortenName(fullName));
-
-        return result;
+        return new SplittedName(namespace, shortenName(fullName));
     }
 
     protected static String shortenName(final String fullName) {
@@ -269,8 +266,7 @@ public class GephiUtils {
 
     public Object[] getEdgeAttributes(String id) {
         var edge = model.getGraph().getEdge(id);
-        Object[] attributes = edge.getAttributes();
-        return attributes;
+        return edge.getAttributes();
 
     }
 

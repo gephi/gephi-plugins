@@ -154,8 +154,7 @@ public class JTreeTable extends JTable {
     }
 
     public String getCell(int row, int column) {
-        String result = getModel().getValueAt(row, column).toString();
-        return result;
+        return getModel().getValueAt(row, column).toString();
     }
 
 }
