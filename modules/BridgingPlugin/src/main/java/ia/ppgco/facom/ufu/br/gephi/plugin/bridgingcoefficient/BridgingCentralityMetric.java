@@ -557,8 +557,12 @@ public class BridgingCentralityMetric extends GraphDistance implements Statistic
     }
     
     public static boolean isIsolatedNode(Graph graph, Node node) {
-        for (Node s : graph.getNodes()) {
+        
+        NodeIterable iterable = graph.getNodes();
+        
+        for (Node s : iterable) {
             if (graph.isAdjacent(node, s)) {
+                iterable.doBreak();
                 return false;
             }
         }
