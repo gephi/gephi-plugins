@@ -76,9 +76,9 @@ Submitting a Gephi plugin for approval is a simple process based on GitHub's [pu
 
 Updating a Gephi plugin has the same process as submitting it for the first time. Don't forget to merge from upstream's master branch.
 
-## IDE Support
+Also, make sure to increment the version number of your plugin in your module's `pom.xml` file before submitting.
 
-Although any IDE/Editor can be used, [Netbeans IDE](https://netbeans.org/) is recommended as Gephi itself is based on [Netbeans Platform](https://netbeans.org/features/platform/index.html).
+## IDE Support
 
 ### Netbeans IDE
 
@@ -97,11 +97,13 @@ To run Gephi with your plugin pre-installed when you click `Run`, create a `Mave
 
 To debug Gephi with your plugin, create a `Remote` configuration and switch the `Debugger mode` option to `Listen`. Then create a `Maven` run configuration like abobe but add `-Drun.params.debug="-J-Xdebug -J-Xnoagent -J-Xrunjdwp:transport=dt_socket,suspend=n,server=n,address=5005"` into the `Runner` > `VM Options` field. Then, go to the `Run` menu and first run debug with the remote configuration and then only run debug with the Maven configuration.
 
+When you make changes to your plugin and want to run Gephi with the changes, make sure to build the `gephi-plugins` root module, and not only your module. Otherwise, your changes won't be reflected.
+
 ## FAQ
 
 #### What kind of plugins can I create?
 
-Gephi can be extended in many ways but the major categories are `Layout`, `Export`, `Import`, `Data Laboratory`, `Filter`, `Generator`, `Metric`, `Preview`, `Tool`, `Appearance` and `Clustering`. A good way to start is to look at examples with the [bootcamp](https://github.com/gephi/gephi-plugins-bootcamp).
+Gephi can be extended in many ways but the major categories are `Layout`, `Export`, `Import`, `Data Laboratory`, `Filter`, `Generator`, `Metric`, `Preview`, `Tool` and `Appearance`. A good way to start is to look at examples with the [bootcamp](https://github.com/gephi/gephi-plugins-bootcamp).
 
 #### In which language can plugins be created?
 
@@ -117,7 +119,7 @@ The `modules` folder is where plugin modules go. Each plugin is defined in a sin
 
 A Maven pom can inherit configurations from a parent and that is something we use to keep each plugin's pom very simple. Notice that each plugin's pom (i.e. the `pom.xml` file in the plugin folder) has a `<parent>` defined.
 
-The `pom.xml` file at the root folder makes everything fit together and notably lists the modules. No need to change anything there besises this list.
+The `pom.xml` file at the root folder makes everything fit together and notably lists the modules. No need to change anything there besides the `<modules>...</modules>` list.
 
 #### How are the manifest settings defined?
 
@@ -156,6 +158,22 @@ The list of Gephi and Netbeans dependencies one can use can be found in the pare
 </dependencies>
 ```
 
+#### How to best write unit tests for my plugin?
+
+It's recommended to use unit-testing to ensure a reliable plugin.
+
+A JUnit4 dependency can be added to your module's `pom.xml`
+
+```
+<dependency>
+    <groupId>org.netbeans.api</groupId>
+    <artifactId>org-netbeans-modules-nbjunit</artifactId>
+    <scope>test</scope>
+</dependency>
+```
+
+Those tests will automatically be run when your plugin is built.
+
 #### What are public packages for?
 
 This applies for suite plugins with multiple modules. A module should declare the packages it wants to make accessible to other modules. For instance, if a module `B` depends on the class `my.org.project.ExampleController` defined in a module `A`, the `A` module should declare `my.org.project` as public package.
@@ -176,30 +194,8 @@ It's the same thing. We say module because Gephi is a modular application and is
 
 This error appears when you try to run a module. To run Gephi with your plugin you need to run the `gephi-plugins` project, not your module.
 
-## Migrate Gephi 0.8 plugins
+## Best practices
 
-The process in which plugins are developed and submitted had an overhaul when Gephi 0.9 was released. Details can be read on this article: [Plugin development gets new tools and opens-up to the community](https://gephi.wordpress.com/2015/12/16/plugin-development-gets-new-tools-and-opens-up-to-the-community/).
+### Code quality
 
-This section is a step-by-step guide to migrate 0.8 plugins. Before going through the code and configuration, let's summerize the key differences between the two environements.
-
-- The 0.8 base is built using Ant, whereas the 0.9 uses Maven. These two are significantly different. If you aren't familiar with Maven, you can start with [Maven in 5 Minutes]( https://maven.apache.org/guides/getting-started/maven-in-five-minutes.html). Maven configurations are defined in the `pom.xml` files.
-- The 0.8 base finds the Gephi modules into the `platform` folder checked in the repository, whereas the 0.9 base downloads everything from the central Maven repository, where all Gephi modules are available.
-- Maven requires to separate source files (e.g. .java) and resources files (e.g. .properties) into distinct folders. Sources are located in `src/main/java` and resources in `src/main/resources`.
-
-A custom `migrate` goal is available in the [Gephi Maven Plugin](https://github.com/gephi/gephi-maven-plugin) to facilitate the migration from 0.8 to 0.9. This automated process migrates ant-based plugins to maven and takes care of copying the configuration and code. Follow these steps to migrate your plugin:
-
-- Fork and checkout this repository:
-
-        git clone git@github.com:username/gephi-plugins.git
-
-If you've already had a forked repository based on 0.8 we suggest to save your code somewhere, delete it and fork again as the history was cleared.
-
-- Copy your plugin folder at the root of this directory.
-
-- Run this command:
-
-        mvn org.gephi:gephi-maven-plugin:migrate
-
-This command will detect the ant-based plugin and migrate it. The resulting folder is then located into the `modules` folder.
-
-The plugin code can then be inspected in Netbeans or built via command line with `mvn clean package`.
+- Write your code in English, so it can be best reviewed and maintained.
