@@ -78,6 +78,15 @@
         <pluginManagement>
             <plugins>
                 <plugin>
+                    <groupId>org.apache.netbeans.utilities</groupId>
+                    <artifactId>nb-repository-plugin</artifactId>
+                    <configuration>
+                        <netbeansInstallDirectory>${project.build.directory}/gephi-${gephi.version}</netbeansInstallDirectory>
+                        <netbeansNbmDirectory>/Users/edemairy/Developpement/update-semanticwebimport</netbeansNbmDirectory>
+                        <!--                        <forcedVersion>a.b.c</forcedVersion> -->
+                    </configuration>
+                </plugin>
+                <plugin>
                     <artifactId>maven-compiler-plugin</artifactId>
                     <configuration>
                         <source>11</source>
@@ -92,7 +101,7 @@
                 <plugin>
                     <groupId>org.apache.netbeans.utilities</groupId>
                     <artifactId>nbm-maven-plugin</artifactId>
-                    <version>4.5</version>
+                    <version>4.8</version>
                     <extensions>true</extensions>
                 </plugin>
                 <plugin>
