@@ -15,7 +15,7 @@ public class StaticProperties {
     public static int STEP_SPINNER = 1;
 
     public static String DEFAULT_TEXT_LANGUAGE = "en";
-    public static String[] SUPPORTED_LANGUAGES = new String[]{"ar", "da", "de", "el", "es", "fr", "it", "nl", "no", "pt", "ru"};
+    public static String[] SUPPORTED_LANGUAGES = new String[]{"ar", "bg", "br", "ca", "da", "de", "el", "es", "fr", "it", "ja", "nl", "no", "pl", "pt", "ro", "ru", "tr", "zh"};
 
     public static String MAINTAINER_URL = "https://twitter.com/seinecle";
     public static String GEPHI_FACEBOOK_GROUP_URL = "https://facebook.com/groups/gephi";
