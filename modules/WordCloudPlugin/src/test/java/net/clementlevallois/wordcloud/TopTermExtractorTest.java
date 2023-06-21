@@ -2,16 +2,13 @@ package net.clementlevallois.wordcloud;
 
 import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 import org.gephi.graph.api.GraphModel;
 import org.gephi.graph.api.Node;
 import org.gephi.graph.api.NodeIterable;
 import org.gephi.io.importer.GraphImporter;
-import org.hamcrest.CoreMatchers;
 import org.junit.Assert;
-import static org.junit.Assert.assertThat;
 import org.junit.Test;
 
 public class TopTermExtractorTest {

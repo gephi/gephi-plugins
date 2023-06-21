@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 import javax.swing.DefaultListModel;
@@ -400,7 +401,8 @@ public final class LexplorerTopComponent extends TopComponent {
                 }
             });
 
-            selectedLanguages = jListLanguages.getSelectedValuesList();
+            List<String> selectedValuesList = jListLanguages.getSelectedValuesList();
+            selectedLanguages = new ArrayList(selectedValuesList);
 
             if (jCheckBoxEnglishDefault.isSelected()) {
                 selectedLanguages.add(StaticProperties.DEFAULT_TEXT_LANGUAGE);

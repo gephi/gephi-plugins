@@ -9,7 +9,7 @@
 
     <groupId>net.clementlevallois</groupId>
     <artifactId>word-cloud-plugin</artifactId>
-    <version>1.1.0</version>
+    <version>1.1.1</version>
     <packaging>nbm</packaging>
     <name>Word Cloud Plugin</name>
 
@@ -22,22 +22,22 @@
         <dependency>
             <groupId>net.clementlevallois.functions</groupId>
             <artifactId>umigon-ngram-ops</artifactId>
-            <version>0.11</version>
+            <version>0.13</version>
         </dependency>
         <dependency>
             <groupId>net.clementlevallois.functions</groupId>
             <artifactId>umigon-stopwords</artifactId>
-            <version>0.12</version>
+            <version>0.14</version>
         </dependency>
         <dependency>
             <groupId>net.clementlevallois.functions</groupId>
             <artifactId>umigon-tokenizer</artifactId>
-            <version>0.11</version>
+            <version>0.14</version>
         </dependency>
         <dependency>
             <groupId>net.clementlevallois.utils</groupId>
             <artifactId>utils-core</artifactId>
-            <version>0.12</version>
+            <version>0.13</version>
         </dependency>
         <dependency>
             <groupId>org.gephi</groupId>
