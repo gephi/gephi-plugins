@@ -1,0 +1,5 @@
+Manifest-Version: 1.0
+OpenIDE-Module-Name: Complex Cenerator
+OpenIDE-Module-Short-Description: Complex Generator
+OpenIDE-Module-Long-Description: Complex Generator
+OpenIDE-Module-Display-Category: Generator
