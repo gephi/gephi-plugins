@@ -58,26 +58,23 @@ import org.openide.util.lookup.ServiceProvider;
 public class BarabasiAlbertGeneralized implements Generator {
     private boolean cancel = false;
     private ProgressTicket progressTicket;
+
     private int    N  = 50;
     private int    m0 = 1;
     private int    M  = 1;
     private double p  = 0.25;
     private double q  = 0.25;
 
-    List<NodeDraft> nodes;
+    NodeDraft[] nodes;
     List<EdgeDraft> edges;
 
     public BarabasiAlbertGeneralized() {
         edges = new ArrayList<>();
-        nodes = new ArrayList<>();
+        nodes = new NodeDraft[N + 1];
     }
 
     @Override
     public void generate(ContainerLoader container) {
-        N = InputHelper.InputIntValue("Wprowadź N:");
-        p = InputHelper.InputDoubleValue("Wprowadź p:");
-        q = InputHelper.InputDoubleValue("Wprowadź q:");
-
         Progress.start(progressTicket, N);
         Random random = new Random();
         container.setEdgeDefault(EdgeDirectionDefault.UNDIRECTED);
@@ -94,7 +91,7 @@ public class BarabasiAlbertGeneralized implements Generator {
             NodeDraft node = container.factory().newNodeDraft();
             node.setLabel("Node " + i);
             node.addInterval("0", N + "");
-            nodes.add(node);
+            nodes[i] = node;
             degrees[i] = 0;
             container.addNode(node);
         }
@@ -123,10 +120,10 @@ public class BarabasiAlbertGeneralized implements Generator {
                         for (int j = 0; j < n && !e && !cancel; ++j) {
                             pki += (degrees[j] + 1) / sum;
 
-                            if (b <= pki && a != j && !edgeExists(container, nodes.get(a), nodes.get(j))) {
+                            if (b <= pki && a != j && !edgeExists(container, nodes[a], nodes[j])) {
                                 EdgeDraft edge = container.factory().newEdgeDraft();
-                                edge.setSource(nodes.get(a));
-                                edge.setTarget(nodes.get(j));
+                                edge.setSource(nodes[a]);
+                                edge.setTarget(nodes[j]);
                                 edge.addInterval(et + "", N + "");
                                 degrees[a]++;
                                 degrees[j]++;
@@ -155,7 +152,7 @@ public class BarabasiAlbertGeneralized implements Generator {
                     while ((degrees[a] == 0 || degrees[a] == n - 1) && !cancel)
                         a = random.nextInt(n);
                     int l = random.nextInt(n);
-                    while (!edgeExists(container, nodes.get(l), nodes.get(a)) && !cancel)
+                    while (!edgeExists(container, nodes[l], nodes[a]) && !cancel)
                         l = random.nextInt(n);
                     double  b = random.nextDouble();
                     boolean e = false;
@@ -164,16 +161,16 @@ public class BarabasiAlbertGeneralized implements Generator {
                         for (int j = 0; j < n && !e && !cancel; ++j) {
                             pki += (degrees[j] + 1) / sum;
 
-                            if (b <= pki && a != j && !edgeExists(container, nodes.get(a), nodes.get(j))) {
-                                var edgeToRemove = getEdge(container, nodes.get(a), nodes.get(l));
+                            if (b <= pki && a != j && !edgeExists(container, nodes[a], nodes[j])) {
+                                var edgeToRemove = getEdge(container, nodes[a], nodes[l]);
                                 container.removeEdge(edgeToRemove);
                                 edges.remove(edgeToRemove);
                                 degrees[l]--;
 
                                 // TODO: timestamps!
                                 EdgeDraft edge = container.factory().newEdgeDraft();
-                                edge.setSource(nodes.get(a));
-                                edge.setTarget(nodes.get(j));
+                                edge.setSource(nodes[a]);
+                                edge.setTarget(nodes[j]);
                                 degrees[j]++;
                                 container.addEdge(edge);
                                 edges.add(edge);
@@ -188,7 +185,7 @@ public class BarabasiAlbertGeneralized implements Generator {
                 NodeDraft node = container.factory().newNodeDraft();
                 node.setLabel("Node " + n);
                 node.addInterval(vt + "", N + "");
-                nodes.set(n,node);
+                nodes[n] = node;
                 degrees[n] = 0;
                 container.addNode(node);
 
@@ -204,8 +201,8 @@ public class BarabasiAlbertGeneralized implements Generator {
 
                         if (r <= p) {
                             EdgeDraft edge = container.factory().newEdgeDraft();
-                            edge.setSource(nodes.get(n));
-                            edge.setTarget(nodes.get(j));
+                            edge.setSource(nodes[n]);
+                            edge.setTarget(nodes[j]);
                             edge.addInterval(et + "", N + "");
                             degrees[n]++;
                             degrees[j]++;
