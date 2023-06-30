@@ -47,7 +47,6 @@
                     <licenseName>Apache 2.0</licenseName>
                     <author>Jakub Gratkiewicz</author>
                     <authorEmail>jakub.gratkiewicz@gmail.com</authorEmail>
-                    <authorUrl></authorUrl>
                     <sourceCodeUrl>https://github.com/KGratkiewicz/gephi-plugins</sourceCodeUrl>
                     <publicPackages>
                         <!-- Insert public packages -->

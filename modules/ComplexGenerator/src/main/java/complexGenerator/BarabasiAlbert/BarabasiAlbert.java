@@ -18,9 +18,11 @@
  * You should have received a copy of the GNU General Public License
  * along with Gephi.  If not, see <http://www.gnu.org/licenses/>.
  */
-package complexGenerator;
+package complexGenerator.BarabasiAlbert;
 
 import java.util.Random;
+
+import complexGenerator.helpers.InputHelper;
 import org.gephi.io.generator.spi.Generator;
 import org.gephi.io.generator.spi.GeneratorUI;
 import org.gephi.io.importer.api.ContainerLoader;
@@ -60,6 +62,9 @@ public class BarabasiAlbert implements Generator {
 
     @Override
     public void generate(ContainerLoader container) {
+
+        N = InputHelper.InputIntValue("Wprowadź N:");
+
         Progress.start(progressTicket, m0 + (N - m0) * M);
         Random random = new Random();
         container.setEdgeDefault(EdgeDirectionDefault.UNDIRECTED);

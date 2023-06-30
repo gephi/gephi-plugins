@@ -18,12 +18,12 @@
  * You should have received a copy of the GNU General Public License
  * along with Gephi.  If not, see <http://www.gnu.org/licenses/>.
  */
-package complexGenerator;
+package complexGenerator.BalancedTree;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import complexGenerator.BalancedTreeUI;
+import complexGenerator.helpers.InputHelper;
 import org.gephi.io.generator.spi.Generator;
 import org.gephi.io.generator.spi.GeneratorUI;
 import org.gephi.io.importer.api.ContainerLoader;
@@ -34,6 +34,8 @@ import org.gephi.utils.progress.Progress;
 import org.gephi.utils.progress.ProgressTicket;
 import org.openide.util.Lookup;
 import org.openide.util.lookup.ServiceProvider;
+
+import javax.swing.*;
 
 /**
  * Generates a perfectly balanced r-tree of height h (edges are undirected).
@@ -49,12 +51,15 @@ import org.openide.util.lookup.ServiceProvider;
 public class BalancedTree implements Generator {
     private boolean cancel = false;
     private ProgressTicket progressTicket;
-
-    private int r = 2;
-    private int h = 4;
+    private int r;
+    private int h;
 
     @Override
     public void generate(ContainerLoader container) {
+
+        r = InputHelper.InputIntValue("Wprowadź r:");
+        h = InputHelper.InputIntValue("Wprowadź h:");
+
         int n = ((int)Math.pow(r, h + 1) - 1) / (r - 1);
 
         Progress.start(progressTicket, n - 1);

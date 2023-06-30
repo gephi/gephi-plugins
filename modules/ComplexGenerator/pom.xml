@@ -31,12 +31,25 @@
             <groupId>org.gephi</groupId>
             <artifactId>io-importer-api</artifactId>
             <version>0.10.0</version>
+            <scope>compile</scope>
         </dependency>
 
         <dependency>
             <groupId>org.netbeans.api</groupId>
             <artifactId>org-openide-util-lookup</artifactId>
             <version>RELEASE160</version>
+        </dependency>
+        <dependency>
+            <groupId>com.mastfrog</groupId>
+            <artifactId>simplevalidation</artifactId>
+            <version>1.14.1</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.mastfrog</groupId>
+            <artifactId>simplevalidation-swing</artifactId>
+            <version>1.14.1</version>
+            <scope>compile</scope>
         </dependency>
 
     </dependencies>
