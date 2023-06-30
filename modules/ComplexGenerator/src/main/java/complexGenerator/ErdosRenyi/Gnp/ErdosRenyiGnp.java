@@ -18,12 +18,8 @@
  * You should have received a copy of the GNU General Public License
  * along with Gephi.  If not, see <http://www.gnu.org/licenses/>.
  */
-package complexGenerator.BalancedTree;
+package complexGenerator.ErdosRenyi.Gnp;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import helpers.InputHelper;
 import org.gephi.io.generator.spi.Generator;
 import org.gephi.io.generator.spi.GeneratorUI;
 import org.gephi.io.importer.api.ContainerLoader;
@@ -35,113 +31,91 @@ import org.gephi.utils.progress.ProgressTicket;
 import org.openide.util.Lookup;
 import org.openide.util.lookup.ServiceProvider;
 
+import java.util.Random;
+
 /**
- * Generates a perfectly balanced r-tree of height h (edges are undirected).
+ * Generates an undirected not necessarily connected graph.
  *
- * r >= 2
- * h >= 1
+ * http://www.math-inst.hu/~p_erdos/1960-10.pdf
+ * http://www.inf.uni-konstanz.de/algo/publications/bb-eglrn-05.pdf
  *
- * O(r^h)
+ * n > 0
+ * 0 <= p <= 1
+ *
+ * O(n^2)
  *
  * @author Cezary Bartosiak
  */
 @ServiceProvider(service = Generator.class)
-public class BalancedTree implements Generator {
+public class ErdosRenyiGnp implements Generator {
     private boolean cancel = false;
     private ProgressTicket progressTicket;
-    private int r;
-    private int h;
+
+    private int    n = 50;
+    private double p = 0.05;
 
     @Override
     public void generate(ContainerLoader container) {
-
-        r = InputHelper.InputIntValue("Wprowadź r:");
-        h = InputHelper.InputIntValue("Wprowadź h:");
-
-        int n = ((int)Math.pow(r, h + 1) - 1) / (r - 1);
-
-        Progress.start(progressTicket, n - 1);
+        Progress.start(progressTicket, n + n * n);
+        Random random = new Random();
         container.setEdgeDefault(EdgeDirectionDefault.UNDIRECTED);
 
         // Timestamps
-        // int vt = 1;
+        // int vt = 0;
         // int et = 1;
 
-        // Creating a root of degree r
-        int v = 1;
-        NodeDraft root = container.factory().newNodeDraft();
-        root.setLabel("Node 0");
-        root.addInterval("0", h + "");
-        container.addNode(root);
-        List<NodeDraft> newLeaves = new ArrayList<NodeDraft>();
-        for (int i = 0; i < r && !cancel; ++i) {
+        NodeDraft[] nodes = new NodeDraft[n];
+
+        // Creating n nodes
+        for (int i = 0; i < n && !cancel; ++i) {
             NodeDraft node = container.factory().newNodeDraft();
-            node.setLabel("Node " + v++);
-            // node.addTimeInterval(vt + "", h + "");
-            newLeaves.add(node);
+            node.setLabel("Node " + i);
+            // node.addTimeInterval(vt + "", n * n + "");
+            nodes[i] = node;
             container.addNode(node);
-
-            EdgeDraft edge = container.factory().newEdgeDraft();
-            edge.setSource(root);
-            edge.setTarget(node);
-            // edge.addTimeInterval(et + "", h + "");
-            container.addEdge(edge);
-
             Progress.progress(progressTicket);
         }
-        // vt++;
-        // et++;
 
-        // Creating internal nodes
-        for (int height = 1; height < h && !cancel; ++height/* , ++vt, ++et */) {
-            List<NodeDraft> leaves = newLeaves;
-            newLeaves = new ArrayList<NodeDraft>();
-            for (NodeDraft leave : leaves)
-                for (int i = 0; i < r; ++i) {
-                    NodeDraft node = container.factory().newNodeDraft();
-                    node.setLabel("Node " + v++);
-                    // node.addTimeInterval(vt + "", h + "");
-                    newLeaves.add(node);
-                    container.addNode(node);
-
+        // Linking every node with each other with probability p (no self-loops)
+        for (int i = 0; i < n && !cancel; ++i)
+            for (int j =  i + 1; j < n && !cancel; ++j/* , ++et */)
+                if (random.nextDouble() <= p) {
                     EdgeDraft edge = container.factory().newEdgeDraft();
-                    edge.setSource(leave);
-                    edge.setTarget(node);
-                    // edge.addTimeInterval(et + "", h + "");
+                    edge.setSource(nodes[i]);
+                    edge.setTarget(nodes[j]);
+                    // edge.addTimeInterval(et + "", n * n + "");
                     container.addEdge(edge);
-
                     Progress.progress(progressTicket);
                 }
-        }
 
         Progress.finish(progressTicket);
         progressTicket = null;
     }
 
-    public int getr() {
-        return r;
+    public int getn() {
+        return n;
     }
 
-    public int geth() {
-        return h;
+    public double getp() {
+        return p;
     }
 
-    public void setr(int r) {
-        this.r = r;
+    public void setn(int n) {
+        this.n = n;
     }
 
-    public void seth(int h) {
-        this.h = h;
+    public void setp(double p) {
+        this.p = p;
     }
 
     @Override
     public String getName() {
-        return "Balanced Tree";
+        return "Erdos-Renyi G(n, p) model";
     }
 
     @Override
     public GeneratorUI getUI() {
-        return Lookup.getDefault().lookup(BalancedTreeUI.class);
+        return Lookup.getDefault().lookup(ErdosRenyiGnpUI.class);
     }
 
     @Override

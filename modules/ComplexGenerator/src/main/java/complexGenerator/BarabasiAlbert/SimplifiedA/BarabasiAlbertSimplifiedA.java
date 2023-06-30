@@ -18,11 +18,9 @@
  * You should have received a copy of the GNU General Public License
  * along with Gephi.  If not, see <http://www.gnu.org/licenses/>.
  */
-package complexGenerator.BarabasiAlbert;
+package complexGenerator.BarabasiAlbert.SimplifiedA;
 
 import java.util.Random;
-
-import helpers.InputHelper;
 import org.gephi.io.generator.spi.Generator;
 import org.gephi.io.generator.spi.GeneratorUI;
 import org.gephi.io.importer.api.ContainerLoader;
@@ -45,12 +43,12 @@ import org.openide.util.lookup.ServiceProvider;
  * m0 > 0 && m0 <  N
  * M  > 0 && M  <= m0
  *
- * O(N^2 * M)
+ * Ω(N * M)
  *
  * @author Cezary Bartosiak
  */
 @ServiceProvider(service = Generator.class)
-public class BarabasiAlbert implements Generator {
+public class BarabasiAlbertSimplifiedA implements Generator {
     private boolean cancel = false;
     private ProgressTicket progressTicket;
 
@@ -58,14 +56,9 @@ public class BarabasiAlbert implements Generator {
     private int m0 = 1;
     private int M  = 1;
 
-    private boolean considerExistingNodes;
-
     @Override
     public void generate(ContainerLoader container) {
-
-        N = InputHelper.InputIntValue("Wprowadź N:");
-
-        Progress.start(progressTicket, m0 + (N - m0) * M);
+        Progress.start(progressTicket, N + M);
         Random random = new Random();
         container.setEdgeDefault(EdgeDirectionDefault.UNDIRECTED);
 
@@ -74,7 +67,6 @@ public class BarabasiAlbert implements Generator {
         int et = 1;
 
         NodeDraft[] nodes = new NodeDraft[N];
-        int[] degrees = new int[N];
 
         // Creating m0 nodes
         for (int i = 0; i < m0 && !cancel; ++i) {
@@ -82,7 +74,6 @@ public class BarabasiAlbert implements Generator {
             node.setLabel("Node " + i);
             node.addInterval("0", (N - m0) + "");
             nodes[i] = node;
-            degrees[i] = 0;
             container.addNode(node);
             Progress.progress(progressTicket);
         }
@@ -94,9 +85,8 @@ public class BarabasiAlbert implements Generator {
                 edge.setSource(nodes[i]);
                 edge.setTarget(nodes[j]);
                 edge.addInterval("0", (N - m0) + "");
-                degrees[i]++;
-                degrees[j]++;
                 container.addEdge(edge);
+                Progress.progress(progressTicket);
             }
 
         // Adding N - m0 nodes, each with M edges
@@ -106,41 +96,19 @@ public class BarabasiAlbert implements Generator {
             node.setLabel("Node " + i);
             node.addInterval(vt + "", (N - m0) + "");
             nodes[i] = node;
-            degrees[i] = 0;
             container.addNode(node);
 
             // Adding M edges out of the new node
-            double sum = 0.0; // sum of all nodes degrees
-            for (int j = 0; j < i && !cancel; ++j)
-                sum += degrees[j];
-            double s = 0.0;
             for (int m = 0; m < M && !cancel; ++m) {
-                double r = random.nextDouble();
-                double p = 0.0;
-                for (int j = 0; j < i && !cancel; ++j) {
-                    if (container.edgeExists(nodes[i].toString(), nodes[j].toString()) || container.edgeExists(nodes[j].toString(), nodes[i].toString())) {
-                        continue;
-                    }
-
-                    if (i == 1)
-                        p = 1.0;
-                    else p += degrees[j] / sum + s / (i - m);
-
-                    if (r <= p) {
-                        s += degrees[j] / sum;
-
-                        EdgeDraft edge = container.factory().newEdgeDraft();
-                        edge.setSource(nodes[i]);
-                        edge.setTarget(nodes[j]);
-                        edge.addInterval(et + "", (N - m0) + "");
-                        degrees[i]++;
-                        degrees[j]++;
-                        container.addEdge(edge);
-                        Progress.progress(progressTicket);
-
-                        break;
-                    }
-                }
+                int j = random.nextInt(i);
+                while (container.edgeExists(nodes[i].toString(), nodes[j].toString()) || container.edgeExists(nodes[j].toString(), nodes[i].toString()))
+                    j = random.nextInt(i);
+                EdgeDraft edge = container.factory().newEdgeDraft();
+                edge.setSource(nodes[i]);
+                edge.setTarget(nodes[j]);
+                edge.addInterval(et + "", (N - m0) + "");
+                container.addEdge(edge);
+                Progress.progress(progressTicket);
             }
 
             Progress.progress(progressTicket);
@@ -174,22 +142,14 @@ public class BarabasiAlbert implements Generator {
         this.M = M;
     }
 
-    public boolean isConsiderExistingNodes() {
-        return considerExistingNodes;
-    }
-
-    public void setConsiderExistingNodes(boolean considerExistingNodes) {
-        this.considerExistingNodes = considerExistingNodes;
-    }
-
     @Override
     public String getName() {
-        return "Barabasi-Albert Scale Free model";
+        return "Barabasi-Albert Scale Free model A (uniform attachment)";
     }
 
     @Override
     public GeneratorUI getUI() {
-        return Lookup.getDefault().lookup(BarabasiAlbertUI.class);
+        return Lookup.getDefault().lookup(BarabasiAlbertSimplifiedAUI.class);
     }
 
     @Override

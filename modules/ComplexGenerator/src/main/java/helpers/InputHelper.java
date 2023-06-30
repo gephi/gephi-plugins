@@ -1,4 +1,4 @@
-package complexGenerator.helpers;
+package helpers;
 
 import javax.swing.*;
 
