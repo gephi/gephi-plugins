@@ -49,14 +49,11 @@ import org.openide.util.lookup.ServiceProvider;
 public class BalancedTree implements Generator {
     private boolean cancel = false;
     private ProgressTicket progressTicket;
-    private int r;
-    private int h;
+    private int r = 3;
+    private int h = 5;
 
     @Override
     public void generate(ContainerLoader container) {
-
-        r = InputHelper.InputIntValue("Wprowadź r:");
-        h = InputHelper.InputIntValue("Wprowadź h:");
 
         int n = ((int)Math.pow(r, h + 1) - 1) / (r - 1);
 
@@ -141,7 +138,7 @@ public class BalancedTree implements Generator {
 
     @Override
     public GeneratorUI getUI() {
-        return Lookup.getDefault().lookup(BalancedTreeUI.class);
+        return Lookup.getDefault().lookup(IBalancedTreeUI.class);
     }
 
     @Override
