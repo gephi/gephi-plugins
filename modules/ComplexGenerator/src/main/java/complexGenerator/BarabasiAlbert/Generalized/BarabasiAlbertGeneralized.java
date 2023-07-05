@@ -161,7 +161,7 @@ public class BarabasiAlbertGeneralized implements Generator {
                             pki += (degrees[j] + 1) / sum;
 
                             if (b <= pki && a != j && !edgeExists(container, nodes[a], nodes[j])) {
-                                var edgeToRemove = getEdge(container, nodes[a], nodes[l]);
+                                var edgeToRemove = getEdge(container, nodes[l], nodes[a]);
                                 container.removeEdge(edgeToRemove);
                                 edges.remove(edgeToRemove);
                                 degrees[l]--;
@@ -230,7 +230,7 @@ public class BarabasiAlbertGeneralized implements Generator {
     }
 
     private EdgeDraft getEdge(ContainerLoader container, NodeDraft sourceNode, NodeDraft tergetNode) {
-        return edges.stream().filter(x -> x.getSource() == sourceNode && x.getTarget() == tergetNode).findFirst().get();
+        return edges.stream().filter(x -> x.getSource() == sourceNode && x.getTarget() == tergetNode || x.getSource() == tergetNode && x.getTarget() == sourceNode ).findFirst().get();
     }
 
     public int getN() {
@@ -280,7 +280,7 @@ public class BarabasiAlbertGeneralized implements Generator {
 
     @Override
     public GeneratorUI getUI() {
-        return Lookup.getDefault().lookup(BarabasiAlbertGeneralizedUI.class);
+        return Lookup.getDefault().lookup(IBarabasiAlbertGeneralizedUI.class);
     }
 
     @Override

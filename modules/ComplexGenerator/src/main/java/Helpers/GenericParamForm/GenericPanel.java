@@ -36,6 +36,25 @@ public abstract class GenericPanel<TParams extends Params> extends JPanel {
         }
     };
 
+    DocumentFilter doubleFilter = new DocumentFilter() {
+        @Override
+        public void insertString(FilterBypass fb, int offset, String string, AttributeSet attr) throws BadLocationException {
+            if (string.matches("[0-9]*\\.?[0-9]*")) {
+                super.insertString(fb, offset, string, attr);
+                parseValues();
+            }
+        }
+
+        @Override
+        public void replace(FilterBypass fb, int offset, int length, String text, AttributeSet attrs) throws BadLocationException {
+            if (text.matches("[0-9]*\\.?[0-9]*")) {
+                super.replace(fb, offset, length, text, attrs);
+                parseValues();
+            }
+        }
+    };
+
+
     public GenericPanel() {
         CreateParamObject();
         setLayout(new GridBagLayout());
@@ -69,10 +88,10 @@ public abstract class GenericPanel<TParams extends Params> extends JPanel {
                 ((AbstractDocument) newField.getDocument()).setDocumentFilter(onlyDigitFilter);
             }
             else if (field.getType().equals(Boolean.class)) {
-                //todo
+                // todo
             }
             else if (field.getType().equals(Double.class)) {
-                //todo
+                ((AbstractDocument) newField.getDocument()).setDocumentFilter(doubleFilter);
             }
             else {
                 throw new IllegalStateException("Unexpected value: " + field.getType());
@@ -96,10 +115,10 @@ public abstract class GenericPanel<TParams extends Params> extends JPanel {
                     //todo
                 }
                 else if (field.getType().equals(Double.class)) {
-                    //todo
+                    field.set(tParams, Double.valueOf(textValue));
                 }
             } catch (IllegalAccessException e) {
-                throw new RuntimeException(e);
+
             }
         });
     }
