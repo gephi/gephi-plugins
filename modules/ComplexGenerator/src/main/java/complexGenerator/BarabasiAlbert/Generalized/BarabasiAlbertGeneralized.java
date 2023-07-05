@@ -161,6 +161,7 @@ public class BarabasiAlbertGeneralized implements Generator {
                             pki += (degrees[j] + 1) / sum;
 
                             if (b <= pki && a != j && !edgeExists(container, nodes[a], nodes[j])) {
+                                //todo : NoSuchElementException :(
                                 var edgeToRemove = getEdge(container, nodes[l], nodes[a]);
                                 container.removeEdge(edgeToRemove);
                                 edges.remove(edgeToRemove);
