@@ -52,7 +52,6 @@ import org.openide.util.lookup.ServiceProvider;
 public class BarabasiAlbert implements Generator {
     private boolean cancel = false;
     private ProgressTicket progressTicket;
-
     private int N  = 50;
     private int m0 = 1;
     private int M  = 1;
@@ -185,7 +184,7 @@ public class BarabasiAlbert implements Generator {
 
     @Override
     public GeneratorUI getUI() {
-        return Lookup.getDefault().lookup(BarabasiAlbertUI.class);
+        return Lookup.getDefault().lookup(IBarabasiAlbertUI.class);
     }
 
     @Override
