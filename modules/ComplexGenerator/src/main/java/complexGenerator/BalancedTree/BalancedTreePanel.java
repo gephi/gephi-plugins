@@ -4,9 +4,11 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.swing.*;
+import javax.swing.text.AbstractDocument;
+import javax.swing.text.AttributeSet;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.DocumentFilter;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 public class BalancedTreePanel extends JPanel {
     @Getter
@@ -15,9 +17,9 @@ public class BalancedTreePanel extends JPanel {
 
     @Getter
     private int rValue, hValue;
-    private JLabel rLabel, hLabel, messageLabel;
+    private JLabel rLabel, hLabel;
 
-    public BalancedTreePanel()  {
+    public BalancedTreePanel() {
         setLayout(new GridBagLayout());
 
         // Initialize components
@@ -25,7 +27,6 @@ public class BalancedTreePanel extends JPanel {
         hLabel = new JLabel("Enter h:");
         rField = new JTextField(10);
         hField = new JTextField(10);
-        messageLabel = new JLabel();
 
         // Add components
         GridBagConstraints constraints = new GridBagConstraints();
@@ -47,19 +48,42 @@ public class BalancedTreePanel extends JPanel {
         constraints.gridy = 3;
         constraints.gridwidth = 2;
         constraints.anchor = GridBagConstraints.CENTER;
-        add(messageLabel, constraints);
+
+        // Document filter to only allow digits
+        DocumentFilter onlyDigitFilter = new DocumentFilter() {
+            @Override
+            public void insertString(FilterBypass fb, int offset, String string, AttributeSet attr) throws BadLocationException {
+                if (string.matches("\\d*")) {
+                    super.insertString(fb, offset, string, attr);
+                    parseValues();
+                }
+            }
+
+            @Override
+            public void replace(FilterBypass fb, int offset, int length, String text, AttributeSet attrs) throws BadLocationException {
+                if (text.matches("\\d*")) {
+                    super.replace(fb, offset, length, text, attrs);
+                    parseValues();
+                }
+            }
+        };
+
+        // Set the document filter on the text fields
+        ((AbstractDocument) rField.getDocument()).setDocumentFilter(onlyDigitFilter);
+        ((AbstractDocument) hField.getDocument()).setDocumentFilter(onlyDigitFilter);
     }
 
-    public boolean parseValues(){
-        String rText = rField.getText();
-        String hText = hField.getText();
+    private void parseValues() {
+        rValue = parseValue(rField, "Invalid r - must be integer.");
+        hValue = parseValue(hField, "Invalid h - must be integer.");
+    }
+
+    private int parseValue(JTextField value, String message) {
         try {
-            rValue = Integer.parseInt(rText);
-            hValue = Integer.parseInt(hText);
-            return true;
+            return Integer.parseInt(value.getText());
         } catch (NumberFormatException ex) {
-            messageLabel.setText("Please enter valid integers.");
-            return false;
         }
+        value.setText("0");
+        return 0;
     }
 }

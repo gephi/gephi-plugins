@@ -28,11 +28,8 @@ public class BalancedTreeUI implements IBalancedTreeUI
 
     @Override
     public void unsetup() {
-        if(panel.parseValues()){
-            balancedTree.seth(panel.getHValue());
-            balancedTree.setr(panel.getRValue());
-            panel = null;
-        }
-        panel = new BalancedTreePanel();
+        balancedTree.seth(panel.getHValue());
+        balancedTree.setr(panel.getRValue());
+        panel = null;
     }
 }
