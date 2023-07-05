@@ -23,7 +23,6 @@ package complexGenerator.BalancedTree;
 import java.util.ArrayList;
 import java.util.List;
 
-import helpers.InputHelper;
 import org.gephi.io.generator.spi.Generator;
 import org.gephi.io.generator.spi.GeneratorUI;
 import org.gephi.io.importer.api.ContainerLoader;
