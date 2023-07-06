@@ -32,6 +32,7 @@ import org.gephi.io.importer.api.NodeDraft;
 import org.gephi.utils.progress.Progress;
 import org.gephi.utils.progress.ProgressTicket;
 import org.openide.util.Lookup;
+import org.openide.util.lookup.ServiceProvider;
 
 /**
  * Generates an undirected connected graph.
@@ -47,7 +48,7 @@ import org.openide.util.Lookup;
  *
  * @author Cezary Bartosiak
  */
-// @ServiceProvider(service = Generator.class)
+@ServiceProvider(service = Generator.class)
 public class MultiBarabasiAlbert implements Generator {
     private boolean cancel = false;
     private ProgressTicket progressTicket;
@@ -189,7 +190,7 @@ public class MultiBarabasiAlbert implements Generator {
 
     @Override
     public GeneratorUI getUI() {
-        return Lookup.getDefault().lookup(MultiBarabasiAlbertUI.class);
+        return Lookup.getDefault().lookup(IMultiBarabasiAlbertUI.class);
     }
 
     @Override

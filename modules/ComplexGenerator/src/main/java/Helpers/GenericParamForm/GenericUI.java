@@ -14,7 +14,7 @@ public abstract class GenericUI<TParam extends Params<TGenerator>, TGenerator ex
     protected abstract void CreatePanel();
 
     public GenericUI(){
-        CreatePanel();
+
     };
 
     @Override
@@ -24,6 +24,7 @@ public abstract class GenericUI<TParam extends Params<TGenerator>, TGenerator ex
 
     @Override
     public void setup(Generator generator) {
+        CreatePanel();
         this.generator = (TGenerator) generator;
     }
 
