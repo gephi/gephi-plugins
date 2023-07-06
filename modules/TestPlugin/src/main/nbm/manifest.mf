@@ -1,5 +1,0 @@
-Manifest-Version: 1.0
-OpenIDE-Module-Name: TestPlugin
-OpenIDE-Module-Short-Description: Hello world plugin, for gephi enviroment
-OpenIDE-Module-Long-Description: Hello world !
-OpenIDE-Module-Display-Category: Generator

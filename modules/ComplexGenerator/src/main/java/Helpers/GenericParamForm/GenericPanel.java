@@ -9,6 +9,8 @@ import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.DocumentFilter;
 import java.awt.*;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -54,68 +56,155 @@ public abstract class GenericPanel<TParams extends Params> extends JPanel {
         }
     };
 
+    ItemListener checkboxListener = new ItemListener() {
+        @Override
+        public void itemStateChanged(ItemEvent e) {
+            parseValues();
+        }
+    };
+
 
     public GenericPanel() {
         CreateParamObject();
+
         setLayout(new GridBagLayout());
-
-        // Initialize components
-        mapParams = new HashMap<>();
-
-        var allFields = tParams.getClass().getDeclaredFields();
-
-        AtomicInteger gridYIterator = new AtomicInteger(1);
         GridBagConstraints constraints = new GridBagConstraints();
 
-        Arrays.stream(allFields).forEach(field -> {
-            var fieldName = field.getName();
-            var newLabel = new JLabel("Enter " + fieldName + ": ");
-            var newField = new JTextField(10);
+        AtomicInteger gridYIterator = new AtomicInteger(1);
 
-            var newInputElement = new InputElement(newField, newLabel);
-            mapParams.put(fieldName, newInputElement);
+        constraints.insets = new Insets(5, 5, 5, 5);
 
-            constraints.gridy = gridYIterator.get();;
+        var description = tParams.Descritpion();
+        description.forEach(x -> {
+            constraints.gridy = gridYIterator.get();
             constraints.gridx = 0;
-            add(newLabel, constraints);
-            constraints.gridx = 1;
-            add(newField, constraints);
-
+            constraints.anchor = GridBagConstraints.WEST;
+            add(new JLabel(x.toString()), constraints);
             gridYIterator.getAndIncrement();
 
+        });
+
+        mapParams = new HashMap<>();
+
+        gridYIterator.set(1);
+        var allFields = tParams.getClass().getDeclaredFields();
+        Arrays.stream(allFields).forEach(field -> {
 
             if (field.getType().equals(Integer.class)) {
+
+                var fieldName = field.getName();
+
+                var fieldValue = "0";
+                try {
+                    fieldValue = field.get(tParams).toString();
+                } catch (IllegalAccessException e) {
+                }
+
+                var newLabel = new JLabel(fieldName);
+                var newField = new JTextField();
+
+                newField.setText(fieldValue);
+                newField.setColumns(6);
+
+                var newInputElement = new InputElement(newField, newLabel);
+                mapParams.put(fieldName, newInputElement);
+
+                constraints.gridy = gridYIterator.get();
+                constraints.gridx = 2;
+                constraints.anchor = GridBagConstraints.EAST;
+                add(newLabel, constraints);
+
+                constraints.gridx = 3;
+                constraints.anchor = GridBagConstraints.WEST;
+                add(newField, constraints);
+
+                gridYIterator.getAndIncrement();
+
                 ((AbstractDocument) newField.getDocument()).setDocumentFilter(onlyDigitFilter);
-            }
-            else if (field.getType().equals(Boolean.class)) {
-                // todo
-            }
-            else if (field.getType().equals(Double.class)) {
+            } else if (field.getType().equals(Double.class)) {
+
+                var fieldName = field.getName();
+                var fieldValue = "0";
+                try {
+                    fieldValue = field.get(tParams).toString();
+                } catch (IllegalAccessException e) {
+                }
+
+                var newLabel = new JLabel(fieldName);
+                var newField = new JTextField();
+
+                newField.setText(fieldValue);
+                newField.setColumns(6);
+
+                var newInputElement = new InputElement(newField, newLabel);
+                mapParams.put(fieldName, newInputElement);
+
+                constraints.gridy = gridYIterator.get();
+                constraints.gridx = 2;
+                constraints.anchor = GridBagConstraints.EAST;
+                add(newLabel, constraints);
+
+                constraints.gridx = 3;
+                constraints.anchor = GridBagConstraints.WEST;
+                add(newField, constraints);
+
+                gridYIterator.getAndIncrement();
                 ((AbstractDocument) newField.getDocument()).setDocumentFilter(doubleFilter);
-            }
-            else {
+            } else if (field.getType().equals(Boolean.class)) {
+                var fieldName = field.getName();
+                var newLabel = new JLabel(fieldName);
+                var newField = new JCheckBox();
+                var newInputElement = new InputElement(newField, newLabel);
+                mapParams.put(fieldName, newInputElement);
+
+                constraints.gridy = gridYIterator.get();
+                constraints.gridx = 2;
+                constraints.anchor = GridBagConstraints.EAST;
+                add(newLabel, constraints);
+
+                constraints.gridx = 3;
+                constraints.anchor = GridBagConstraints.WEST;
+                add(newField, constraints);
+
+                gridYIterator.getAndIncrement();
+
+                newField.addItemListener(checkboxListener);
+            }  else {
                 throw new IllegalStateException("Unexpected value: " + field.getType());
             }
-
         });
-        constraints.gridwidth = 4;
-        constraints.anchor = GridBagConstraints.CENTER;
+
+        JPanel separator = new JPanel() {
+            @Override
+            protected void paintComponent(Graphics g) {
+                super.paintComponent(g);
+                g.setColor(Color.BLACK);
+                g.drawLine(0, 0, 0, getHeight());
+            }
+        };
+        constraints.gridx = 1;
+        constraints.gridy = 0;
+        constraints.gridheight = GridBagConstraints.REMAINDER;
+        constraints.fill = GridBagConstraints.VERTICAL;
+        add(separator, constraints);
     }
 
     private void parseValues(){
         var allFields = tParams.getClass().getDeclaredFields();
         Arrays.stream(allFields).forEach(field -> {
             InputElement element = mapParams.get(field.getName());
-            var textValue = element.intTextFields.getText();
             try{
                 if (field.getType().equals(Integer.class)) {
+                    var textValue = element.intTextFields.getText();
                     field.set(tParams, Integer.valueOf(textValue));
                 }
-                else if (field.getType().equals(Boolean.class)) {
-                    //todo
-                }
                 else if (field.getType().equals(Double.class)) {
+                    var textValue = element.intTextFields.getText();
                     field.set(tParams, Double.valueOf(textValue));
+                }
+                else if (field.getType().equals(Boolean.class)) {
+                    Boolean value = element.checkBox.isSelected();
+                    field.set(tParams, value);
                 }
             } catch (IllegalAccessException e) {
 

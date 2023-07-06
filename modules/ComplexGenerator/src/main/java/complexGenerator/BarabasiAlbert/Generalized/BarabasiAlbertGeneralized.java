@@ -69,11 +69,12 @@ public class BarabasiAlbertGeneralized implements Generator {
 
     public BarabasiAlbertGeneralized() {
         edges = new ArrayList<>();
-        nodes = new NodeDraft[N + 1];
     }
 
     @Override
     public void generate(ContainerLoader container) {
+        nodes = new NodeDraft[N + 1];
+
         Progress.start(progressTicket, N);
         Random random = new Random();
         container.setEdgeDefault(EdgeDirectionDefault.UNDIRECTED);
