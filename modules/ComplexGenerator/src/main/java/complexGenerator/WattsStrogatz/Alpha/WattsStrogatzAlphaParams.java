@@ -2,10 +2,10 @@ package complexGenerator.WattsStrogatz.Alpha;
 
 import Helpers.GenericParamForm.Params;
 
-public class WattsStrigatzAlphaParams extends Params<WattsStrogatzAlpha> {
-    private Integer    n     = 20;
-    private Integer    k     = 4;
-    private Double alpha = 3.5;
+public class WattsStrogatzAlphaParams extends Params<WattsStrogatzAlpha> {
+    private Integer n;
+    private Integer k;
+    private Double alpha;
 
     @Override
     public void SetGeneratorParams(WattsStrogatzAlpha wattsStrogatzAlpha) {

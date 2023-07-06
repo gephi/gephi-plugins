@@ -6,7 +6,7 @@ import complexGenerator.Kleinberg.Kleinberg;
 public class WattsStrogatzBetaParams extends Params<WattsStrogatzBeta> {
     private Integer    N    = 20;
     private Integer    K    = 4;
-    private double beta = 0.2;
+    private Double beta = 0.2;
 
     @Override
     public void SetGeneratorParams(WattsStrogatzBeta wattsStrogatzBeta) {
