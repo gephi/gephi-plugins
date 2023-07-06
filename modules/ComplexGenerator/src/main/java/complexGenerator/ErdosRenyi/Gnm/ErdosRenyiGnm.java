@@ -24,7 +24,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import complexGenerator.ErdosRenyi.Gnm.ErdosRenyiGnmUI;
 import org.gephi.io.generator.spi.Generator;
 import org.gephi.io.generator.spi.GeneratorUI;
 import org.gephi.io.importer.api.ContainerLoader;
@@ -126,7 +125,7 @@ public class ErdosRenyiGnm implements Generator {
 
     @Override
     public GeneratorUI getUI() {
-        return Lookup.getDefault().lookup(ErdosRenyiGnmUI.class);
+        return Lookup.getDefault().lookup(IErdosRenyiGnmUI.class);
     }
 
     @Override
