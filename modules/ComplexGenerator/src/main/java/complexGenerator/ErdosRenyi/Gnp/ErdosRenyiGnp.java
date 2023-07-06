@@ -115,7 +115,7 @@ public class ErdosRenyiGnp implements Generator {
 
     @Override
     public GeneratorUI getUI() {
-        return Lookup.getDefault().lookup(ErdosRenyiGnpUI.class);
+        return Lookup.getDefault().lookup(IErdosRenyiGnpUI.class);
     }
 
     @Override

@@ -27,6 +27,6 @@ import org.gephi.io.generator.spi.GeneratorUI;
  *
  * @author Cezary Bartosiak
  */
-public interface ErdosRenyiGnpUI extends GeneratorUI {
+public interface IErdosRenyiGnpUI extends GeneratorUI {
 
 }

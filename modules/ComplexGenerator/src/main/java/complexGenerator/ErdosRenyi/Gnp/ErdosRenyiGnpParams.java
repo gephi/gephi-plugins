@@ -1,14 +1,15 @@
-package complexGenerator.ErdosRenyi.Gnm;
+package complexGenerator.ErdosRenyi.Gnp;
 
 import Helpers.GenericParamForm.Params;
+import complexGenerator.ErdosRenyi.Gnm.ErdosRenyiGnm;
 
-public class ErdosRenyiGnmParams extends Params<ErdosRenyiGnm> {
+public class ErdosRenyiGnpParams extends Params<ErdosRenyiGnp> {
     public Integer n;
-    public Integer m;
+    public Double p;
 
     @Override
-    public void SetGeneratorParams(ErdosRenyiGnm erdosRenyiGnm) {
-        erdosRenyiGnm.setm(m);
-        erdosRenyiGnm.setn(n);
+    public void SetGeneratorParams(ErdosRenyiGnp erdosRenyiGnp) {
+        erdosRenyiGnp.setp(p);
+        erdosRenyiGnp.setn(n);
     }
 }

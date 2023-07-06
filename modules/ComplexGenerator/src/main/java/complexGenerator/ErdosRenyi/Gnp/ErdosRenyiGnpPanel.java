@@ -1,10 +1,10 @@
-package complexGenerator.ErdosRenyi.Gnm;
+package complexGenerator.ErdosRenyi.Gnp;
 
 import Helpers.GenericParamForm.GenericPanel;
 
-public class ErdosRenyiGnmPanel extends GenericPanel<ErdosRenyiGnmParams> {
+public class ErdosRenyiGnpPanel extends GenericPanel<ErdosRenyiGnpParams> {
     @Override
     protected void CreateParamObject() {
-        this.setTParams(new ErdosRenyiGnmParams());
+        this.setTParams(new ErdosRenyiGnpParams());
     }
 }

@@ -1,15 +1,16 @@
-package complexGenerator.ErdosRenyi.Gnm;
+package complexGenerator.ErdosRenyi.Gnp;
 
 import Helpers.GenericParamForm.GenericUI;
-import complexGenerator.BarabasiAlbert.BarabasiAblertPanel;
+import complexGenerator.ErdosRenyi.Gnm.ErdosRenyiGnm;
+import complexGenerator.ErdosRenyi.Gnm.IErdosRenyiGnmUI;
 import org.openide.util.lookup.ServiceProvider;
 
 
-@ServiceProvider(service = IErdosRenyiGnmUI.class)
-public class ErdosRentiGnmUI extends GenericUI<ErdosRenyiGnmParams, ErdosRenyiGnm> implements IErdosRenyiGnmUI
+@ServiceProvider(service = IErdosRenyiGnpUI.class)
+public class ErdosRentiGnpUI extends GenericUI<ErdosRenyiGnpParams, ErdosRenyiGnp> implements IErdosRenyiGnpUI
 {
     @Override
     protected void CreatePanel() {
-        this.panel = new ErdosRenyiGnmPanel();
+        this.panel = new ErdosRenyiGnpPanel();
     }
 }
