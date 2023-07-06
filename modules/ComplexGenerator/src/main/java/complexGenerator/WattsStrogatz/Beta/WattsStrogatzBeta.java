@@ -65,11 +65,12 @@ public class WattsStrogatzBeta implements Generator {
 
     public WattsStrogatzBeta() {
         edges = new ArrayList<>();
-        nodes = new NodeDraft[N + 1];
     }
 
     @Override
     public void generate(ContainerLoader container) {
+        nodes = new NodeDraft[N + 1];
+
         Progress.start(progressTicket, N + N * K);
         Random random = new Random();
         container.setEdgeDefault(EdgeDirectionDefault.UNDIRECTED);
@@ -160,7 +161,7 @@ public class WattsStrogatzBeta implements Generator {
 
     @Override
     public GeneratorUI getUI() {
-        return Lookup.getDefault().lookup(WattsStrogatzBetaUI.class);
+        return Lookup.getDefault().lookup(IWattsStrogatzBetaUI.class);
     }
 
     @Override

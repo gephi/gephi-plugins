@@ -194,7 +194,7 @@ public class Kleinberg implements Generator {
 
     @Override
     public GeneratorUI getUI() {
-        return Lookup.getDefault().lookup(KleinbergUI.class);
+        return Lookup.getDefault().lookup(IKleinbergUI.class);
     }
 
     @Override

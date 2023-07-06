@@ -29,13 +29,15 @@ import org.gephi.io.importer.api.EdgeDirectionDefault;
 import org.gephi.utils.progress.Progress;
 import org.gephi.utils.progress.ProgressTicket;
 import org.openide.util.Lookup;
+import org.openide.util.lookup.ServiceProvider;
 
 /**
  * Generates a graph using the specified list of generators.
  *
  * @author Cezary Bartosiak
  */
-// @ServiceProvider(service = Generator.class)
+// todo: nie działa :(
+ @ServiceProvider(service = Generator.class)
 public class MultiGenerator implements Generator {
     private boolean cancel = false;
     private ProgressTicket progressTicket;
@@ -71,7 +73,7 @@ public class MultiGenerator implements Generator {
 
     @Override
     public GeneratorUI getUI() {
-        return Lookup.getDefault().lookup(MultiGeneratorUI.class);
+        return Lookup.getDefault().lookup(IMultiGeneratorUI.class);
     }
 
     @Override

@@ -185,7 +185,7 @@ public class WattsStrogatzAlpha implements Generator {
 
     @Override
     public GeneratorUI getUI() {
-        return Lookup.getDefault().lookup(WattsStrogatzAlphaUI.class);
+        return Lookup.getDefault().lookup(IWattsStrogatzAlphaUI.class);
     }
 
     @Override

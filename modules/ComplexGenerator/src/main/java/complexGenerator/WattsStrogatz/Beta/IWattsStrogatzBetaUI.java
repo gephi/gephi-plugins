@@ -18,7 +18,7 @@
  * You should have received a copy of the GNU General Public License
  * along with Gephi.  If not, see <http://www.gnu.org/licenses/>.
  */
-package complexGenerator.WattsStrogatz.Alpha;
+package complexGenerator.WattsStrogatz.Beta;
 
 import org.gephi.io.generator.spi.GeneratorUI;
 
@@ -27,6 +27,6 @@ import org.gephi.io.generator.spi.GeneratorUI;
  *
  * @author Cezary Bartosiak
  */
-public interface WattsStrogatzAlphaUI extends GeneratorUI {
+public interface IWattsStrogatzBetaUI extends GeneratorUI {
 
 }
