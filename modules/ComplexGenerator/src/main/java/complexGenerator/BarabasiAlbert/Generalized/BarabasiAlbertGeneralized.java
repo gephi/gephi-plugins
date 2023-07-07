@@ -57,7 +57,6 @@ import org.openide.util.lookup.ServiceProvider;
 public class BarabasiAlbertGeneralized implements Generator {
     private boolean cancel = false;
     private ProgressTicket progressTicket;
-
     private int    N  = 50;
     private int    m0 = 1;
     private int    M  = 1;
@@ -73,8 +72,6 @@ public class BarabasiAlbertGeneralized implements Generator {
 
     @Override
     public void generate(ContainerLoader container) {
-        nodes = new NodeDraft[N + 1];
-
         Progress.start(progressTicket, N);
         Random random = new Random();
         container.setEdgeDefault(EdgeDirectionDefault.UNDIRECTED);
@@ -83,7 +80,7 @@ public class BarabasiAlbertGeneralized implements Generator {
         int vt = 1;
         int et = 1;
 
-
+        nodes = new NodeDraft[N + 1];
         int[] degrees = new int[N + 1];
 
         // Creating m0 isolated nodes
@@ -163,7 +160,7 @@ public class BarabasiAlbertGeneralized implements Generator {
 
                             if (b <= pki && a != j && !edgeExists(container, nodes[a], nodes[j])) {
                                 //todo : NoSuchElementException :(
-                                var edgeToRemove = getEdge(container, nodes[l], nodes[a]);
+                                var edgeToRemove = getEdge(container, nodes[a], nodes[l]);
                                 container.removeEdge(edgeToRemove);
                                 edges.remove(edgeToRemove);
                                 degrees[l]--;
@@ -232,7 +229,7 @@ public class BarabasiAlbertGeneralized implements Generator {
     }
 
     private EdgeDraft getEdge(ContainerLoader container, NodeDraft sourceNode, NodeDraft tergetNode) {
-        return edges.stream().filter(x -> x.getSource() == sourceNode && x.getTarget() == tergetNode || x.getSource() == tergetNode && x.getTarget() == sourceNode ).findFirst().get();
+        return edges.stream().filter(x -> (x.getSource() == sourceNode && x.getTarget() == tergetNode) || (x.getSource() == tergetNode && x.getTarget() == sourceNode) ).findFirst().get();
     }
 
     public int getN() {
