@@ -28,12 +28,12 @@ public class AverageGlobalConnectionEfficiencyUI extends GenericUI<AverageGlobal
 
     @Override
     public String getDisplayName() {
-        return "Average Global Connection Efficiency";
+        return "Avg. Global Connection Efficiency";
     }
 
     @Override
     public String getShortDescription() {
-        return "Average Global Connection Efficiency";
+        return "Avg. Global Connection Efficiency";
     }
 
     @Override
