@@ -13,6 +13,7 @@
     <modules>
         <!-- Add here the paths of all modules (e.g. <module>modules/MyModule</module>) -->
         <module>modules/ComplexGenerator</module>
+        <module>modules/ComplexStatistics</module>
     </modules>
     
     <!-- Properties -->

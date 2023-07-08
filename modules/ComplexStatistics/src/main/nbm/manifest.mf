@@ -1,0 +1,5 @@
+Manifest-Version: 1.0
+OpenIDE-Module-Name: Complex Statistics
+OpenIDE-Module-Short-Description: Complex statistics
+OpenIDE-Module-Long-Description: complex statistics
+OpenIDE-Module-Display-Category: Metric
