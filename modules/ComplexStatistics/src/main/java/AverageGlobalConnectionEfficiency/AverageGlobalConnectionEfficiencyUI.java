@@ -11,7 +11,7 @@ import java.text.DecimalFormat;
 public class AverageGlobalConnectionEfficiencyUI extends GenericUI<AverageGlobalConnectionEfficiencyParam, AverageGlobalConnectionEfficiency> {
     @Override
     protected void CreatePanel() {
-
+        this.panel = new AverageGlobalConnectionEfficiencyPanel();
     }
 
 

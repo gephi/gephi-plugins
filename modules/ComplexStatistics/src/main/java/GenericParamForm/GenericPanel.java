@@ -72,10 +72,34 @@ public abstract class GenericPanel<TParams extends Params> extends JPanel {
         setLayout(new GridBagLayout());
         GridBagConstraints constraints = new GridBagConstraints();
 
-        AtomicInteger gridYIterator = new AtomicInteger(1);
+        constraints.insets = new Insets(5, 10, 5, 10);
 
-        constraints.insets = new Insets(5, 5, 5, 5);
+        constraints.gridwidth = 5;
+        String shortDescription = tParams.ShortDescription();
+        int length = shortDescription.length();
+        int approxLineLength = 30; // assuming 30 characters per line
+        int rows = (length / approxLineLength) + 1;
+        JTextArea shortDescriptionTextArea = new JTextArea(shortDescription, rows, approxLineLength);
+        shortDescriptionTextArea.setEditable(false);
+        shortDescriptionTextArea.setWrapStyleWord(true);
+        shortDescriptionTextArea.setLineWrap(true);
+        shortDescriptionTextArea.setPreferredSize(null);
+        add(shortDescriptionTextArea, constraints);
+        constraints.anchor = GridBagConstraints.CENTER;
 
+        constraints.gridy = 1;
+        constraints.gridx = 0;
+        constraints.gridwidth = 5;
+        constraints.fill = GridBagConstraints.HORIZONTAL;
+        JLabel separatorLabel = new JLabel();
+        separatorLabel.setBorder(BorderFactory.createMatteBorder(1, 0, 0, 0, Color.BLACK));
+        add(separatorLabel, constraints);
+        constraints.fill = GridBagConstraints.NONE;
+
+
+        AtomicInteger gridYIterator = new AtomicInteger(2); // Starts from 2 because 0 and 1 are taken by short descriptions
+
+        constraints.gridwidth = 1;
         var description = tParams.Descritpion();
         description.forEach(x -> {
             constraints.gridy = gridYIterator.get();
@@ -88,7 +112,7 @@ public abstract class GenericPanel<TParams extends Params> extends JPanel {
 
         mapParams = new HashMap<>();
 
-        gridYIterator.set(1);
+        gridYIterator.set(2);
         var allFields = tParams.getClass().getDeclaredFields();
         Arrays.stream(allFields).forEach(field -> {
 
@@ -185,7 +209,7 @@ public abstract class GenericPanel<TParams extends Params> extends JPanel {
             }
         };
         constraints.gridx = 1;
-        constraints.gridy = 0;
+        constraints.gridy = 2;
         constraints.gridheight = GridBagConstraints.REMAINDER;
         constraints.fill = GridBagConstraints.VERTICAL;
         add(separator, constraints);

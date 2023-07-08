@@ -14,12 +14,12 @@ public abstract class GenericUI<TParam extends Params<TStatistics>, TStatistics 
 
     @Override
     public JPanel getSettingsPanel() {
+        CreatePanel();
         return panel;
     }
 
     @Override
     public void setup(Statistics statistics) {
-        CreatePanel();
         this.statistics = (TStatistics) statistics;
     }
 

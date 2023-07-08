@@ -11,12 +11,17 @@ public class AverageGlobalConnectionEfficiencyParam extends Params<AverageGlobal
     private Integer samplesCount = 10;
     private Integer k = 0;
     private Boolean exactlyK = false;
-    // todo
+
+    @Override
+    protected String ShortDescription() {
+        return "Measures the average global connection efficiency of the network. In each iteration k or at most k nodes (in case of Random Random) will be removed using one of the methods below.";
+    }
+
+    // todo: multiple option builder :)
 //    private String mstype = "Random";
     @Override
     protected List<String> Descritpion() {
         var description = new ArrayList<String>();
-        description.add("Measures the average global connection efficiency of the network. In each iteration k or at most k nodes (in case of Random Random) will be removed using one of the methods below.");
         description.add("Parameters description:");
         description.add("directed - is graph directed (default undirected)");
         description.add("samplesCount - count of uses saples");
@@ -28,6 +33,10 @@ public class AverageGlobalConnectionEfficiencyParam extends Params<AverageGlobal
     }
 
     @Override
-    public void SetGeneratorParams(AverageGlobalConnectionEfficiency generator) {
+    public void SetGeneratorParams(AverageGlobalConnectionEfficiency averageGlobalConnectionEfficiency) {
+        averageGlobalConnectionEfficiency.setDirected(directed);
+        averageGlobalConnectionEfficiency.setK(k);
+        averageGlobalConnectionEfficiency.setSamplesCount(samplesCount);
+        averageGlobalConnectionEfficiency.setExactlyK(exactlyK);
     }
 }
