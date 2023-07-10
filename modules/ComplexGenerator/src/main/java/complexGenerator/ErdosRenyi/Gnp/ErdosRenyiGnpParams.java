@@ -7,8 +7,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ErdosRenyiGnpParams extends Params<ErdosRenyiGnp> {
-    public Integer n;
-    public Double p;
+    public Integer n = 50;
+    public Double p = 0.05;
 
     @Override
     protected List<String> Descritpion(){
