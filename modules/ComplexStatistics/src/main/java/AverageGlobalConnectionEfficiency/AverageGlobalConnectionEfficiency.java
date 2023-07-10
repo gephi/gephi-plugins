@@ -76,7 +76,7 @@ public class AverageGlobalConnectionEfficiency implements Statistics, LongTask {
     // Removal strategy options
     private int k = 0;
     private boolean exactlyK = true;
-    private String mstype = "Random"; // or "RandomRandom"
+    private MsType mstype = MsType.Random; // or "RandomRandom"
 
     @Override
     public void execute(GraphModel graphModel) {
@@ -120,7 +120,7 @@ public class AverageGlobalConnectionEfficiency implements Statistics, LongTask {
 
         Node[] nodes = graph.getNodes().toArray();
         List<Node> modNodes = new ArrayList<Node>();
-        if (mstype.equals("Random")) {
+        if (mstype.equals(MsType.Random)){
             List<Node> rNodes = new LinkedList<Node>(Arrays.asList(nodes));
             for (int i = 0; i < k; ++i)
                 if (exactlyK)
@@ -131,7 +131,7 @@ public class AverageGlobalConnectionEfficiency implements Statistics, LongTask {
                         modNodes.add(node);
                 }
         }
-        else if (mstype.equals("RandomRandom")) {
+        else if (mstype.equals(MsType.RandomRandom)) {
             List<Node> rNodes = new LinkedList<Node>(Arrays.asList(nodes));
             for (int i = 0; i < k; ++i) {
                 Node rNode;
@@ -199,7 +199,7 @@ public class AverageGlobalConnectionEfficiency implements Statistics, LongTask {
         this.exactlyK = exactlyK;
     }
 
-    public void setMstype(String mstype) {
+    public void setMstype(MsType mstype) {
         this.mstype = mstype;
     }
 
@@ -211,7 +211,7 @@ public class AverageGlobalConnectionEfficiency implements Statistics, LongTask {
         return samplesCount;
     }
 
-    public String getMstype() {
+    public MsType getMstype() {
         return mstype;
     }
 

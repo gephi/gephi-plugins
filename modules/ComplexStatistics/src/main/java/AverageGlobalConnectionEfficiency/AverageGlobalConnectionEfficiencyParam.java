@@ -7,10 +7,12 @@ import java.util.List;
 
 public class AverageGlobalConnectionEfficiencyParam extends Params<AverageGlobalConnectionEfficiency> {
 
-    private Boolean directed = false;
-    private Integer samplesCount = 10;
-    private Integer k = 0;
-    private Boolean exactlyK = false;
+    public Boolean directed = false;
+    public Integer samplesCount = 10;
+    public Integer k = 0;
+    public Boolean exactlyK = false;
+
+    public MsType msType = MsType.Random;
 
     @Override
     protected String ShortDescription() {
@@ -28,7 +30,7 @@ public class AverageGlobalConnectionEfficiencyParam extends Params<AverageGlobal
         description.add("Removal strategy options:");
         description.add("k - count of uses samples");
         description.add("exactlyK - is k exactly restricted");
-        description.add("mstype - strategyK");
+        description.add("Removal Strategy.");
         return description;
     }
 
@@ -38,5 +40,6 @@ public class AverageGlobalConnectionEfficiencyParam extends Params<AverageGlobal
         averageGlobalConnectionEfficiency.setK(k);
         averageGlobalConnectionEfficiency.setSamplesCount(samplesCount);
         averageGlobalConnectionEfficiency.setExactlyK(exactlyK);
+        averageGlobalConnectionEfficiency.setMstype(msType);
     }
 }

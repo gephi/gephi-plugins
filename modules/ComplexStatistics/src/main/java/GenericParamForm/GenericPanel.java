@@ -21,6 +21,7 @@ public abstract class GenericPanel<TParams extends Params> extends JPanel {
     private TParams tParams;
     Map<String, InputElement> mapParams;
     protected abstract void CreateParamObject();
+    protected abstract void CreateCustomFieldOption(GridBagConstraints constant, AtomicInteger gridYIterator);
 
     DocumentFilter onlyDigitFilter = new DocumentFilter() {
         @Override
@@ -145,7 +146,6 @@ public abstract class GenericPanel<TParams extends Params> extends JPanel {
                 add(newField, constraints);
 
                 gridYIterator.getAndIncrement();
-
                 ((AbstractDocument) newField.getDocument()).setDocumentFilter(onlyDigitFilter);
             } else if (field.getType().equals(Double.class)) {
 
@@ -195,10 +195,9 @@ public abstract class GenericPanel<TParams extends Params> extends JPanel {
                 gridYIterator.getAndIncrement();
 
                 newField.addItemListener(checkboxListener);
-            }  else {
-                throw new IllegalStateException("Unexpected value: " + field.getType());
             }
         });
+        CreateCustomFieldOption(constraints, gridYIterator);
 
         JPanel separator = new JPanel() {
             @Override
