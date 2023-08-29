@@ -1,0 +1,5 @@
+Manifest-Version: 1.0
+OpenIDE-Module-Name: Removal Strategy Filter
+OpenIDE-Module-Short-Description: Removal Strategy Filter
+OpenIDE-Module-Long-Description: Removal Strategy Filter
+OpenIDE-Module-Display-Category: Filter
