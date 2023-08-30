@@ -107,17 +107,9 @@ public class BridgingCentralityMetricUI implements StatisticsUI {
     
     private static class StatSettings {
 
-        private boolean isDirectedGraph = false;
-        private boolean isNormalized = false;
-
         private void save(BridgingCentralityMetric stat) {
-            this.isDirectedGraph = stat.isDirected();
-            this.isNormalized = stat.isNormalized();
-        }
-
-        private void load(BridgingCentralityMetric stat) {
-            stat.setDirected(isDirectedGraph);
-            stat.setNormalized(isNormalized);
+            stat.isDirected();
+            stat.isNormalized();
         }
     }
 
