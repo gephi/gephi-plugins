@@ -49,6 +49,8 @@ import org.gephi.filters.spi.FilterBuilder;
 import org.gephi.project.api.Workspace;
 import org.openide.util.lookup.ServiceProvider;
 
+import java.awt.*;
+
 /**
  * Filter builder for the {@link } filter.
  * <p>
@@ -65,7 +67,7 @@ public class RandomRemovalStrategyBuilder implements FilterBuilder {
 
     @Override
     public Category getCategory() {
-        return FilterLibrary.EDGE;
+        return FilterLibrary.TOPOLOGY;
     }
 
     @Override
@@ -90,10 +92,11 @@ public class RandomRemovalStrategyBuilder implements FilterBuilder {
 
     @Override
     public JPanel getPanel(Filter filter) {
-        return null;
+        RandomRemovalStrategyParams panel = new RandomRemovalStrategyParams(filter);
+        return panel;
     }
 
-    @Override
+        @Override
     public void destroy(Filter filter) {
     }
 }

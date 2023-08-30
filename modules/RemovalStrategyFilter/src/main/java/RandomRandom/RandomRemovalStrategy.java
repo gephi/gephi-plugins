@@ -40,6 +40,8 @@ Contributor(s):
 Portions Copyrighted 2011 Gephi Consortium.
  */
 
+import lombok.Getter;
+import lombok.Setter;
 import org.gephi.filters.spi.ComplexFilter;
 import org.gephi.filters.spi.EdgeFilter;
 import org.gephi.filters.spi.FilterProperty;
@@ -48,6 +50,7 @@ import org.gephi.graph.api.Column;
 import org.gephi.graph.api.Edge;
 import org.gephi.graph.api.Graph;
 import org.gephi.graph.api.Node;
+import org.gephi.io.generator.spi.Generator;
 import org.openide.util.Exceptions;
 
 import java.util.*;
@@ -69,32 +72,12 @@ import java.util.*;
  *
  * @author Mathieu Bastian
  */
-public class RandomRemovalStrategy implements NodeFilter {
+public class RandomRemovalStrategy implements ComplexFilter {
 
+    @Getter @Setter
     private Integer N = 5;
-
-    @Override
-    public boolean init(Graph graph) {
-        Node[] nodes = graph.getNodes().toArray();
-
-        Random random = new Random();
-        for(int i =0; i< N; i++){
-            var index = random.nextInt(nodes.length);
-            graph.removeNode(nodes[index]);
-        }
-
-
-        return true;
-    }
-
-    @Override
-    public boolean evaluate(Graph graph, Node node) {
-        return true;
-    }
-
-    @Override
-    public void finish() {
-    }
+    @Getter @Setter
+    private Integer Seed = 0;
 
     @Override
     public String getName() {
@@ -102,7 +85,30 @@ public class RandomRemovalStrategy implements NodeFilter {
     }
 
     @Override
-    public FilterProperty[] getProperties() {
-        return null;
+    public FilterProperty[] getProperties(){
+        try{
+            return new FilterProperty[]{
+                    FilterProperty.createProperty(this, N.getClass(), "N"),
+                    FilterProperty.createProperty(this, Seed.getClass(), "Seed")
+            };
+        }
+        catch (NoSuchMethodException e) {
+            throw new RuntimeException(e);
+        }
+
+
+    }
+
+    @Override
+    public Graph filter(Graph graph) {
+        Node[] nodes = graph.getNodes().toArray();
+
+        Random random = (Seed == 0) ? new Random() : new Random(Seed);
+
+        for(int i =0; i< N; i++){
+            var index = random.nextInt(nodes.length);
+            graph.removeNode(nodes[index]);
+        }
+        return graph;
     }
 }
