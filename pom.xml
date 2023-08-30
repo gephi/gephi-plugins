@@ -137,6 +137,14 @@
                     <artifactId>maven-scm-publish-plugin</artifactId>
                     <version>3.1.0</version>
                 </plugin>
+                <plugin>
+                    <groupId>org.netbeans.api</groupId>
+                    <artifactId>nbm-maven-plugin</artifactId>
+                    <version>4.5</version>
+                    <configuration>
+                        <licenseName>GPL-3.0</licenseName>
+                    </configuration>
+                </plugin>
             </plugins>
         </pluginManagement>
         
@@ -252,6 +260,13 @@
                             <checkinComment>Autoupdate update for ${project.version} and gephiVersion=${gephi.version}</checkinComment>
                             <serverId>github</serverId>
                             <skipDeletedFiles>true</skipDeletedFiles>
+                        </configuration>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.netbeans.api</groupId>
+                        <artifactId>nbm-maven-plugin</artifactId>
+                        <configuration>
+                            <licenseName>GPL-3.0</licenseName>
                         </configuration>
                     </plugin>
                 </plugins>

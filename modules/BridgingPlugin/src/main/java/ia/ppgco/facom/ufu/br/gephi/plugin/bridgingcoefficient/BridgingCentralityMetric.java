@@ -18,7 +18,6 @@ import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import org.gephi.graph.api.*;
 import org.gephi.statistics.plugin.ChartUtils;
-import org.gephi.statistics.spi.Statistics;
 import org.gephi.utils.TempDirUtils;
 import org.gephi.utils.TempDirUtils.TempDir;
 import org.gephi.utils.progress.Progress;
@@ -38,7 +37,7 @@ import org.jfree.chart.axis.NumberTickUnit;
  *
  * @author getulio
  */
-public class BridgingCentralityMetric extends GraphDistance implements Statistics {
+public class BridgingCentralityMetric extends GraphDistance {
 
     private static final Logger LOG = Logger.getLogger(BridgingCentralityMetric.class.getName());
 
