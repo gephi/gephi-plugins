@@ -40,16 +40,13 @@ Contributor(s):
 Portions Copyrighted 2011 Gephi Consortium.
  */
 
-import javax.swing.Icon;
-import javax.swing.JPanel;
-import org.gephi.filters.api.FilterLibrary;
 import org.gephi.filters.spi.Category;
 import org.gephi.filters.spi.Filter;
 import org.gephi.filters.spi.FilterBuilder;
 import org.gephi.project.api.Workspace;
 import org.openide.util.lookup.ServiceProvider;
 
-import java.awt.*;
+import javax.swing.*;
 
 /**
  * Filter builder for the {@link } filter.
@@ -63,16 +60,16 @@ import java.awt.*;
  * @author Mathieu Bastian
  */
 @ServiceProvider(service = FilterBuilder.class)
-public class RandomRemovalStrategyBuilder implements FilterBuilder {
+public class RandomRandomRemovalStrategyBuilder implements FilterBuilder {
 
     @Override
     public Category getCategory() {
-        return FilterLibrary.TOPOLOGY;
+        return new Category("RemovalStrategy");
     }
 
     @Override
     public String getName() {
-        return "Random - removal strategy";
+        return "Random Random";
     }
 
     @Override
@@ -82,17 +79,17 @@ public class RandomRemovalStrategyBuilder implements FilterBuilder {
 
     @Override
     public String getDescription() {
-        return "Random Removal strategy";
+        return "Remove N nodes - random neighbour of random node";
     }
 
     @Override
     public Filter getFilter(Workspace workspace) {
-        return new RandomRemovalStrategy();
+        return new RandomRandomRemovalStrategy();
     }
 
     @Override
     public JPanel getPanel(Filter filter) {
-        RandomRemovalStrategyParams panel = new RandomRemovalStrategyParams(filter);
+        RandomRandomRemovalStrategyParams panel = new RandomRandomRemovalStrategyParams(filter);
         return panel;
     }
 

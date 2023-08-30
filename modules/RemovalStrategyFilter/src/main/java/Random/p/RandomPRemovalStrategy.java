@@ -1,4 +1,4 @@
-package RandomRandom;/*
+package Random.p;/*
 Copyright 2008-2011 Gephi
 Authors : Mathieu Bastian <mathieu.bastian@gephi.org>
 Website : http://www.gephi.org
@@ -43,17 +43,11 @@ Portions Copyrighted 2011 Gephi Consortium.
 import lombok.Getter;
 import lombok.Setter;
 import org.gephi.filters.spi.ComplexFilter;
-import org.gephi.filters.spi.EdgeFilter;
 import org.gephi.filters.spi.FilterProperty;
-import org.gephi.filters.spi.NodeFilter;
-import org.gephi.graph.api.Column;
-import org.gephi.graph.api.Edge;
 import org.gephi.graph.api.Graph;
 import org.gephi.graph.api.Node;
-import org.gephi.io.generator.spi.Generator;
-import org.openide.util.Exceptions;
 
-import java.util.*;
+import java.util.Random;
 
 /**
  * Filter that detects crossing edge and randomly deletes one of the crossing
@@ -72,23 +66,23 @@ import java.util.*;
  *
  * @author Mathieu Bastian
  */
-public class RandomRemovalStrategy implements ComplexFilter {
+public class RandomPRemovalStrategy implements ComplexFilter {
 
     @Getter @Setter
-    private Integer N = 5;
+    private Double P = 0.1;
     @Getter @Setter
     private Integer Seed = 0;
 
     @Override
     public String getName() {
-        return "Remove random N nodes";
+        return "Remove nodes with P probability";
     }
 
     @Override
     public FilterProperty[] getProperties(){
         try{
             return new FilterProperty[]{
-                    FilterProperty.createProperty(this, N.getClass(), "N"),
+                    FilterProperty.createProperty(this, P.getClass(), "P"),
                     FilterProperty.createProperty(this, Seed.getClass(), "Seed")
             };
         }
@@ -105,9 +99,11 @@ public class RandomRemovalStrategy implements ComplexFilter {
 
         Random random = (Seed == 0) ? new Random() : new Random(Seed);
 
-        for(int i =0; i< N; i++){
-            var index = random.nextInt(nodes.length);
-            graph.removeNode(nodes[index]);
+        for(int i =0; i< nodes.length; i++){
+            var p = random.nextDouble();
+            if(p <= P){
+                graph.removeNode(nodes[i]);
+            }
         }
         return graph;
     }
