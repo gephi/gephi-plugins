@@ -1,0 +1,5 @@
+Manifest-Version: 1.0
+OpenIDE-Module-Name: Spread Simulator
+OpenIDE-Module-Short-Description: Spread Simulator
+OpenIDE-Module-Long-Description: Spread Simulator
+OpenIDE-Module-Display-Category: Data Laboratory

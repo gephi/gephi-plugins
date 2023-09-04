@@ -15,6 +15,7 @@
         <module>modules/ComplexGenerator</module>
         <module>modules/ComplexStatistics</module>
         <module>modules/RemovalStrategyFilter</module>
+        <module>modules/SpreadSimulator</module>
     </modules>
     
     <!-- Properties -->
