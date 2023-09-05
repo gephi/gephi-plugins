@@ -1,42 +1,41 @@
 {
-  "Name": "Susceptible-Infected-p05-p01",
-  "Description": "...",
-  "NodeRoles": [
+  "name": "susceptible-infected-p05-p01",
+  "description": "...",
+  "nodeRoles": [
     {
-      "Coverage": 1,
-      "NodeRole": {
-        "Name": "Susceptible",
-        "Description": "...",
-        "NodeStates": [
-          {
-            "Coverage": 0,
-            "MinCoverage": 1,
-            "Name": "Infected",
-            "Description": "...",
-            "TransitionMap": {
-              "Susceptible": {
-                "TransitionType": "NoConditionProbablity",
-                "Probablity": 0.1
-              }
-            }
-          },
-          {
-            "Coverage": 1,
-            "MinCoverage": 1,
-            "Name": "Susceptible",
-            "Description": "...",
-            "TransitionMap": {
-              "Infected": {
-                "TransitionType": "ConditionProbablity",
-                "Probablity": 0.5,
-                "ProvocativeNeighbourName": [
-                  "Infected"
-                ]
-              }
+      "coverage": 1,
+      "minCoverage": 0,
+      "name": "node",
+      "description": "...",
+      "nodeStates": [
+        {
+          "coverage": 0,
+          "minCoverage": 1,
+          "name": "infected",
+          "description": "...",
+          "transitionMap": {
+            "susceptible": {
+              "transitionType": "noConditionProbability",
+              "probability": 0.1
             }
           }
-        ]
-      }
+        },
+        {
+          "coverage": 1,
+          "minCoverage": 1,
+          "name": "susceptible",
+          "description": "...",
+          "transitionMap": {
+            "infected": {
+              "transitionType": "conditionProbability",
+              "probability": 0.5,
+              "provocativeNeighborName": [
+                "infected"
+              ]
+            }
+          }
+        }
+      ]
     }
   ]
 }
