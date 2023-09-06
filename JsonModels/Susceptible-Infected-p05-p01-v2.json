@@ -1,0 +1,29 @@
+{
+  "name": "node",
+  "description": "...",
+  "nodeStates": [
+    {
+      "name": "infected",
+      "description": "...",
+      "transitionMap": {
+        "susceptible": {
+          "transitionType": "noConditionProbability",
+          "probability": 0.1
+        }
+      }
+    },
+    {
+      "name": "susceptible",
+      "description": "...",
+      "transitionMap": {
+        "infected": {
+          "transitionType": "conditionProbability",
+          "probability": 0.5,
+          "provocativeNeighborName": [
+            "infected"
+          ]
+        }
+      }
+    }
+  ]
+}

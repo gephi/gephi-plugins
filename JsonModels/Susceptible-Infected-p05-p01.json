@@ -10,7 +10,7 @@
       "nodeStates": [
         {
           "coverage": 0,
-          "minCoverage": 1,
+          "minCoverage": 0,
           "name": "infected",
           "description": "...",
           "transitionMap": {
