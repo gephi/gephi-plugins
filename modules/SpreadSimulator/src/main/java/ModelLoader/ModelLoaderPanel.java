@@ -1,11 +1,8 @@
 package ModelLoader;
 
 import SimulationModel.Node.NodeRole;
-import SimulationModel.Node.NodeState;
-import SimulationModel.SimulationModel;
 import SimulationModel.Transition.CustomDeserializer.TransitionDeserializer;
 import SimulationModel.Transition.Transition;
-import it.unimi.dsi.fastutil.ints.Int2BooleanArrayMap;
 import org.codehaus.jackson.Version;
 import org.codehaus.jackson.map.DeserializationConfig;
 import org.codehaus.jackson.map.ObjectMapper;
