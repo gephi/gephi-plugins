@@ -19,6 +19,11 @@ Keep in mind current atproto access point from bluesky is quite permissive and m
 You can fetch network from user from multiple way :
 - Put one or multiple (separated by line return) handles or dids inside the plugin textarea and click on "Go!" 
 - You can right click on a node and select contextual menu item related to the plugin 
-  - *Bluesky Fetch default data* , will fetch network based on the current configuration on the plugin panel
-  - *Fetch followers only data*, will fetch only the followers of the node
-  - *Fetch follows only data*, will fetch only the follows of the node
+  - **Bluesky Fetch default data** , will fetch network based on the current configuration on the plugin panel
+  - **Fetch followers only data**, will fetch only the followers of the node
+  - **Fetch follows only data**, will fetch only the follows of the node
+
+## Deep Search
+By activating **Fetch also n+1**, the plugin will fetch the selected handles network **and also** the network of the handles found.
+
+/!\ Keep in mind that this can be very long as some users has a long list of followers or follows. /!\

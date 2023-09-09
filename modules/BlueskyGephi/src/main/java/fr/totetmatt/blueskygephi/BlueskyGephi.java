@@ -147,6 +147,7 @@ public class BlueskyGephi {
                     for (var response : responses) {
                         Identity subject = response.getSubject();
                         Node source = createNode(subject);
+                        source.setColor(Color.GREEN);
                         for (var follow : response.getFollows()) {
                             if (isDeepSearch) {
                                 foaf.add(follow.getDid());
@@ -166,6 +167,7 @@ public class BlueskyGephi {
                     for (var response : responses) {
                         Identity subject = response.getSubject();
                         Node target = createNode(subject);
+                        target.setColor(Color.GREEN);
                         for (var follower : response.getFollowers()) {
                             if (isDeepSearch) {
                                 foaf.add(follower.getDid());
