@@ -1,7 +1,6 @@
 package SimulationModel;
 
-import SimulationModel.Node.NodeRole;
-import lombok.AllArgsConstructor;
+import SimulationModel.Node.NodeRoleDecorator;
 import lombok.Getter;
 import lombok.Setter;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
@@ -13,10 +12,9 @@ import java.util.List;
 public class SimulationModel {
     private String name;
     private String description;
-    private List<NodeRole> nodeRoles;
+    private List<NodeRoleDecorator> nodeRoles;
 
     public boolean Validation() {
-        return nodeRoles.stream().mapToDouble(x -> x.getCoverage()).sum() == 1;
+        return nodeRoles.stream().mapToDouble(x -> x.getCoverage()).sum() - 1 < 0.01;
     }
-
 }

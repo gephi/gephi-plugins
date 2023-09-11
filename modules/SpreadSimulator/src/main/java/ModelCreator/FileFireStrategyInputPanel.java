@@ -1,8 +1,7 @@
 package ModelCreator;
 
 import Helper.ObjectMapperHelper;
-import ModelCreator.FileFireStrategy;
-import SimulationModel.Node.NodeRole;
+import SimulationModel.Node.NodeRoleDecorator;
 import org.codehaus.jackson.map.ObjectMapper;
 
 import javax.swing.*;
@@ -63,8 +62,8 @@ class FileFireStrategyInputPanel extends JPanel {
         }
     }
 
-    private ArrayList<NodeRole> LoadNodeRolesFromFiles(ObjectMapper objectMapper, ArrayList<FileFireStrategy> fireStrategyFiles) {
-        var nodeRoles = new ArrayList<NodeRole>();
+    private ArrayList<NodeRoleDecorator> LoadNodeRolesFromFiles(ObjectMapper objectMapper, ArrayList<FileFireStrategy> fireStrategyFiles) {
+        var nodeRoles = new ArrayList<NodeRoleDecorator>();
         for (FileFireStrategy fileFireStrategy : fireStrategyFiles) {
             if (!fileFireStrategy.getFile().isDirectory()) {
                 String content = null;
@@ -75,7 +74,7 @@ class FileFireStrategyInputPanel extends JPanel {
                 }
 
                 try {
-                    var nodeRole = objectMapper.readValue(content, NodeRole.class);
+                    var nodeRole = objectMapper.readValue(content, NodeRoleDecorator.class);
                     nodeRole.setCoverage(fileFireStrategy.getCoverage());
                     nodeRole.setMinCoverage(fileFireStrategy.getMinCoverage());
                     nodeRoles.add(nodeRole);

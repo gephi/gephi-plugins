@@ -1,4 +1,4 @@
-package SimulationModel.Transition.CustomDeserializer;
+package Helper.CustomDeserializer;
 
 import SimulationModel.Transition.*;
 import lombok.SneakyThrows;

@@ -2,11 +2,7 @@ package SimulationModelBuilder;
 
 import Helper.ObjectMapperHelper;
 import SimulationModel.SimulationModel;
-import SimulationModel.Transition.CustomDeserializer.TransitionDeserializer;
-import org.codehaus.jackson.Version;
-import org.codehaus.jackson.map.DeserializationConfig;
 import org.codehaus.jackson.map.ObjectMapper;
-import org.codehaus.jackson.map.module.SimpleModule;
 
 import javax.swing.*;
 import java.awt.*;

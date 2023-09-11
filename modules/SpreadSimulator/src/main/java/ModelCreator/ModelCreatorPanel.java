@@ -2,15 +2,11 @@ package ModelCreator;
 
 import Helper.ObjectMapperHelper;
 import SimulationModel.Node.NodeRole;
+import SimulationModel.Node.NodeRoleDecorator;
 import SimulationModel.SimulationModel;
-import SimulationModel.Transition.CustomDeserializer.TransitionDeserializer;
-import SimulationModel.Transition.Transition;
 import lombok.Getter;
 import lombok.Setter;
-import org.codehaus.jackson.Version;
-import org.codehaus.jackson.map.DeserializationConfig;
 import org.codehaus.jackson.map.ObjectMapper;
-import org.codehaus.jackson.map.module.SimpleModule;
 
 import javax.swing.*;
 import java.awt.*;
@@ -93,7 +89,7 @@ public class ModelCreatorPanel extends JPanel {
         }
         @Override
         public void actionPerformed(ActionEvent e) {
-            var nodeRoles = new ArrayList<NodeRole>();
+            var nodeRoles = new ArrayList<NodeRoleDecorator>();
 
             ObjectMapper objectMapper = ObjectMapperHelper.CustomObjectMapperCreator();
             fireStrategyFiles = initFileFireStrategyArray();
@@ -106,7 +102,7 @@ public class ModelCreatorPanel extends JPanel {
 
         }
 
-        private void LoadNodeRolesFromFiles(ArrayList<NodeRole> nodeRoles, ObjectMapper objectMapper, ArrayList<FileFireStrategy> fireStrategyFiles) {
+        private void LoadNodeRolesFromFiles(ArrayList<NodeRoleDecorator> nodeRoles, ObjectMapper objectMapper, ArrayList<FileFireStrategy> fireStrategyFiles) {
             for (FileFireStrategy fileFireStrategy : fireStrategyFiles) {
                 if (!fileFireStrategy.getFile().isDirectory()) {
                     String content = null;
@@ -117,7 +113,7 @@ public class ModelCreatorPanel extends JPanel {
                     }
 
                     try {
-                        var nodeRole = objectMapper.readValue(content, NodeRole.class);
+                        var nodeRole = objectMapper.readValue(content, NodeRoleDecorator.class);
                         nodeRole.setCoverage(fileFireStrategy.getCoverage());
                         nodeRole.setMinCoverage(fileFireStrategy.getMinCoverage());
                         nodeRoles.add(nodeRole);
