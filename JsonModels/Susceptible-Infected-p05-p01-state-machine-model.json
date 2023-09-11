@@ -1,0 +1,30 @@
+{
+  "name": "roleName",
+  "description": "...",
+  "transitionMap": [
+    {
+      "transitionType": "noConditionProbability",
+      "sourceState": {
+        "name": "infected"
+      },
+      "destinationState": {
+        "name": "susceptible"
+      },
+      "probability": 0.1
+    },
+    {
+      "transitionType": "conditionProbability",
+      "sourceState": {
+        "name": "susceptible"
+      },
+      "destinationState": {
+        "name": "infected"
+      },
+      "probability": 0.1,
+      "provocativeNeighborName": [
+        "infected"
+      ]
+    }
+  ]
+}
+

@@ -1,7 +1,7 @@
 package ModelLoader;
 
 import SimulationModel.Node.NodeRole;
-import SimulationModel.Transition.CustomDeserializer.TransitionDeserializer;
+import Helper.CustomDeserializer.TransitionDeserializer;
 import SimulationModel.Transition.Transition;
 import org.codehaus.jackson.Version;
 import org.codehaus.jackson.map.DeserializationConfig;

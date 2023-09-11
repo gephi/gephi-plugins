@@ -1,10 +1,10 @@
 package SimulationModelBuilder;
 
 
-import SimulationModel.Node.NodeRole;
+import Helper.ObjectMapperHelper;
+import SimulationModel.Node.NodeRoleDecorator;
 import SimulationModel.SimulationModel;
 import lombok.Setter;
-import org.codehaus.jackson.map.ObjectMapper;
 import org.gephi.datalab.api.datatables.DataTablesController;
 import org.gephi.datalab.spi.ManipulatorUI;
 import org.gephi.datalab.spi.general.PluginGeneralActionsManipulator;
@@ -44,11 +44,12 @@ public class SimulationModelBuilder implements PluginGeneralActionsManipulator {
 
     }
 
-    private static void SetupNodeRoles(List<Node> nodes, List<NodeRole> nodeRoles) {
+    private static void SetupNodeRoles(List<Node> nodes, List<NodeRoleDecorator> nodeRoles) {
         var nodesCount = nodes.stream().count();
+        var mapper = ObjectMapperHelper.CustomObjectMapperCreator();
 
         nodeRoles.stream()
-                .sorted(Comparator.comparingDouble(NodeRole::getCoverage))
+                .sorted(Comparator.comparingDouble(NodeRoleDecorator::getCoverage))
                 .forEach(nodeRole -> {
             var roleNodesNumber = nodesCount * nodeRole.getCoverage();
             if(nodeRole.getMinCoverage() > roleNodesNumber){
@@ -58,18 +59,22 @@ public class SimulationModelBuilder implements PluginGeneralActionsManipulator {
             Collections.shuffle(notAssignedToRoleNodes);
             for (int i = 0; i < roleNodesNumber && i < notAssignedToRoleNodes.stream().count(); i++) {
                 var node = notAssignedToRoleNodes.get(i);
-                node.setAttribute("NodeRole", nodeRole.getName());
+                node.setAttribute("NodeRole", nodeRole.getNodeRole().getName());
+                try {
+                    node.setAttribute("TransitionMap", mapper.writeValueAsString(nodeRole.getNodeRole().getTransitionMap()));
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
             }
         });
     }
 
-    private void SetupNodeStates(List<Node> nodes, List<NodeRole> nodeRoles) {
-        var mapper = new ObjectMapper();
+    private void SetupNodeStates(List<Node> nodes, List<NodeRoleDecorator> nodeRoles) {
         nodeRoles.stream()
-                .sorted(Comparator.comparingDouble(NodeRole::getCoverage))
+                .sorted(Comparator.comparingDouble(NodeRoleDecorator::getCoverage))
                 .forEach(nodeRole -> {
 
-                    var roleNodes = nodes.stream().filter(x -> x.getAttribute("NodeRole").toString().equals(nodeRole.getName())).collect(Collectors.toList());
+                    var roleNodes = nodes.stream().filter(x -> x.getAttribute("NodeRole").toString().equals(nodeRole.getNodeRole().getName())).collect(Collectors.toList());
 
                     var nodeStates = nodeRole.getNodeStates();
 
@@ -83,12 +88,8 @@ public class SimulationModelBuilder implements PluginGeneralActionsManipulator {
                         Collections.shuffle(notAssignedToRoleNodes);
                         for (int i = 0; i < roleStateNumber && i < notAssignedToRoleNodes.stream().count(); i++) {
                             var node = notAssignedToRoleNodes.get(i);
-                            node.setAttribute("NodeState", nodeState.getName());
-                            try {
-                                node.setAttribute("TransitionMap", mapper.writeValueAsString(nodeState.getTransitionMap()));
-                            } catch (IOException e) {
-                                throw new RuntimeException(e);
-                            }
+                            node.setAttribute("NodeState", nodeState.getNodeState().getName());
+
                         }
                     });
                 });
