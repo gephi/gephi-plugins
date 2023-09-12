@@ -1,7 +1,6 @@
 package AverageGlobalConnectionEfficiency;
 
 import GenericParamForm.Params;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,7 +10,6 @@ public class AverageGlobalConnectionEfficiencyParam extends Params<AverageGlobal
     public Integer samplesCount = 10;
     public Integer k = 0;
     public Boolean exactlyK = false;
-
     public MsType msType = MsType.Random;
 
     @Override

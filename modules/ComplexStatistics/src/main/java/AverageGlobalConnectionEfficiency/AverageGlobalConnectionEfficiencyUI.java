@@ -14,7 +14,6 @@ public class AverageGlobalConnectionEfficiencyUI extends GenericUI<AverageGlobal
         this.panel = new AverageGlobalConnectionEfficiencyPanel();
     }
 
-
     @Override
     public Class<? extends Statistics> getStatisticsClass() {
         return AverageGlobalConnectionEfficiency.class;
