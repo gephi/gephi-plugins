@@ -27,13 +27,13 @@ import java.nio.file.Paths;
 
 import static java.awt.Color.BLACK;
 
-@ConvertAsProperties(dtd = "-//Simulation//Simple//EN", autostore = false)
+@ConvertAsProperties(dtd = "-//Simulation//ModelLoader//EN", autostore = false)
 @TopComponent.Description(preferredID = "Simulation",
         //iconBase="SET/PATH/TO/ICON/HERE",
         persistenceType = TopComponent.PERSISTENCE_ALWAYS)
 @TopComponent.Registration(mode = "layoutmode", openAtStartup = true)
-@ActionID(category = "Window", id = "Simulation")
-@ActionReference(path = "Menu/Window", position = 333)
+@ActionID(category = "Window", id = "ModelLoader")
+@ActionReference(path = "Menu/Window", position = 0)
 @TopComponent.OpenActionRegistration(displayName = "#CTL_ModelLoaderComponent",
         preferredID = "ModelLoaderComponent")
 public class ModelLoaderComponent extends TopComponent {
