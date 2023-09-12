@@ -1,14 +1,18 @@
 package Simulation;
 
+import Helper.ApplySimulationHelper;
 import Helper.ObjectMapperHelper;
 import SimulationModel.Node.NodeRole;
 import SimulationModel.Node.NodeRoleDecorator;
 import SimulationModel.Node.NodeState;
 import SimulationModel.Node.NodeStateDecorator;
 import SimulationModel.SimulationModel;
+import org.gephi.graph.api.Graph;
+import org.gephi.graph.api.GraphController;
 import org.netbeans.api.settings.ConvertAsProperties;
 import org.openide.awt.ActionID;
 import org.openide.awt.ActionReference;
+import org.openide.util.Lookup;
 import org.openide.windows.TopComponent;
 
 import javax.swing.*;
@@ -19,7 +23,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
-import java.io.ObjectStreamException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -64,13 +67,21 @@ public class SimulationBuilderComponent extends TopComponent {
             add(generateInputFieldsForRolesAndStates());
 
 
-
             var apply = new Button("Apply");
             apply.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
                     simulationModel.setNodeRoles(nodeRoles);
                     simulationModel.setName(generateName());
+                    try {
+                        Graph graph = Lookup.getDefault().lookup(GraphController.class).getGraphModel().getGraph();
+                        ApplySimulationHelper.CrateModelCollumns(graph);
+                        ApplySimulationHelper.Apply(graph, simulationModel);
+                    }
+                    catch (NullPointerException ex){
+                        JOptionPane.showMessageDialog(null, "Setup graph model first");
+                    }
+
                 }
             });
 
