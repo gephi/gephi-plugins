@@ -2,14 +2,13 @@ package AverageGlobalConnectionEfficiency;
 
 import GenericParamForm.GenericPanel;
 
-import javax.swing.*;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
-import java.awt.*;
-import java.util.Random;
+import javax.swing.JLabel;
+import javax.swing.JList;
+import javax.swing.JScrollPane;
+import java.awt.GridBagConstraints;
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class AverageGlobalConnectionEfficiencyPanel  extends GenericPanel<AverageGlobalConnectionEfficiencyParam> {
+public class AverageGlobalConnectionEfficiencyPanel extends GenericPanel<AverageGlobalConnectionEfficiencyParam> {
     @Override
     protected void CreateParamObject() {
         this.setTParams(new AverageGlobalConnectionEfficiencyParam());
