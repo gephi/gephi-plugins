@@ -1,6 +1,7 @@
 package SimulationModelBuilder;
 
 
+import Helper.ApplySimulationHelper;
 import Helper.ObjectMapperHelper;
 import SimulationModel.Node.NodeRoleDecorator;
 import SimulationModel.SimulationModel;
@@ -29,81 +30,8 @@ public class SimulationModelBuilder implements PluginGeneralActionsManipulator {
     public void execute() {
         DataTablesController dtc = Lookup.getDefault().lookup(DataTablesController.class);
         Graph graph = Lookup.getDefault().lookup(GraphController.class).getGraphModel().getGraph();
-        var nodes = List.of(graph.getNodes().toArray());
-        var table = nodes.get(0).getTable();
-
-        CreateModelColumns(table);
-
-        if(simulationModel == null)
-            return;
-
-
-        var nodeRoles = simulationModel.getNodeRoles();
-        SetupNodeRoles(nodes, nodeRoles);
-        SetupNodeStates(nodes, nodeRoles);
-
-    }
-
-    private static void SetupNodeRoles(List<Node> nodes, List<NodeRoleDecorator> nodeRoles) {
-        var nodesCount = nodes.stream().count();
-        var mapper = ObjectMapperHelper.CustomObjectMapperCreator();
-
-        nodeRoles.stream()
-                .sorted(Comparator.comparingDouble(NodeRoleDecorator::getCoverage))
-                .forEach(nodeRole -> {
-            var roleNodesNumber = nodesCount * nodeRole.getCoverage();
-            if(nodeRole.getMinCoverage() > roleNodesNumber){
-                roleNodesNumber = nodeRole.getMinCoverage();
-            }
-            var notAssignedToRoleNodes = nodes.stream().filter(x -> x.getAttribute("NodeRole") == null || x.getAttribute("NodeRole").toString().isEmpty()).collect(Collectors.toList());
-            Collections.shuffle(notAssignedToRoleNodes);
-            for (int i = 0; i < roleNodesNumber && i < notAssignedToRoleNodes.stream().count(); i++) {
-                var node = notAssignedToRoleNodes.get(i);
-                node.setAttribute("NodeRole", nodeRole.getNodeRole().getName());
-                try {
-                    node.setAttribute("TransitionMap", mapper.writeValueAsString(nodeRole.getNodeRole().getTransitionMap()));
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
-                }
-            }
-        });
-    }
-
-    private void SetupNodeStates(List<Node> nodes, List<NodeRoleDecorator> nodeRoles) {
-        nodeRoles.stream()
-                .sorted(Comparator.comparingDouble(NodeRoleDecorator::getCoverage))
-                .forEach(nodeRole -> {
-
-                    var roleNodes = nodes.stream().filter(x -> x.getAttribute("NodeRole").toString().equals(nodeRole.getNodeRole().getName())).collect(Collectors.toList());
-
-                    var nodeStates = nodeRole.getNodeStates();
-
-                    nodeStates.stream().forEach(nodeState -> {
-                        var nodesCount = roleNodes.size();
-                        var roleStateNumber = nodesCount * nodeState.getCoverage();
-                        if(nodeState.getMinCoverage() > roleStateNumber){
-                            roleStateNumber = nodeState.getMinCoverage();
-                        }
-                        var notAssignedToRoleNodes = roleNodes.stream().filter(x -> x.getAttribute("NodeState") == null || x.getAttribute("NodeState").toString().isEmpty()).collect(Collectors.toList());
-                        Collections.shuffle(notAssignedToRoleNodes);
-                        for (int i = 0; i < roleStateNumber && i < notAssignedToRoleNodes.stream().count(); i++) {
-                            var node = notAssignedToRoleNodes.get(i);
-                            node.setAttribute("NodeState", nodeState.getNodeState().getName());
-
-                        }
-                    });
-                });
-    }
-
-    private static void CreateModelColumns(Table table) {
-        if(!table.hasColumn("NodeRole"))
-            table.addColumn("NodeRole", String.class);
-
-        if(!table.hasColumn("NodeState"))
-            table.addColumn("NodeState", String.class);
-
-        if(!table.hasColumn("TransitionMap"))
-            table.addColumn("TransitionMap", String.class);
+        ApplySimulationHelper.CrateModelCollumns(graph);
+        ApplySimulationHelper.Apply(graph, simulationModel);
     }
 
     @Override

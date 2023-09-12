@@ -1,0 +1,30 @@
+{
+  "name": "nodeName",
+  "description": "...",
+  "transitionMap": [
+    {
+      "transitionType": "noConditionProbability",
+      "sourceState": {
+        "name": "state1"
+      },
+      "destinationState": {
+        "name": "state2"
+      },
+      "probability": 0.2
+    },
+    {
+      "transitionType": "conditionProbability",
+      "sourceState": {
+        "name": "state2"
+      },
+      "destinationState": {
+        "name": "state1"
+      },
+      "probability": 0.3,
+      "provocativeNeighborName": [
+        "state1"
+      ]
+    }
+  ]
+}
+
