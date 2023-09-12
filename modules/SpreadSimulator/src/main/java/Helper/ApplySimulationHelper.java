@@ -24,11 +24,31 @@ public class ApplySimulationHelper {
         SetupNodeStates(nodes, nodeRoles);
     }
 
-    public static void CrateModelCollumns(Graph graph){
+    public static void CrateModelColumns(Graph graph){
 
         var nodes = List.of(graph.getNodes().toArray());
         var table = nodes.get(0).getTable();
         CreateModelColumns(table);
+
+    }
+
+    public static void ClearModel(Graph graph){
+
+        var nodes = List.of(graph.getNodes().toArray());
+        var table = nodes.get(0).getTable();
+        RemoveModel(table);
+
+    }
+
+    private static void RemoveModel(Table table) {
+        if(table.hasColumn("NodeRole"))
+            table.removeColumn("NodeRole");
+
+        if(table.hasColumn("NodeState"))
+            table.removeColumn("NodeState");
+
+        if(table.hasColumn("TransitionMap"))
+            table.removeColumn("TransitionMap");
 
     }
 
@@ -89,7 +109,6 @@ public class ApplySimulationHelper {
                         for (int i = 0; i < roleStateNumber && i < notAssignedToRoleNodes.stream().count(); i++) {
                             var node = notAssignedToRoleNodes.get(i);
                             node.setAttribute("NodeState", nodeState.getNodeState().getName());
-
                         }
                     });
                 });

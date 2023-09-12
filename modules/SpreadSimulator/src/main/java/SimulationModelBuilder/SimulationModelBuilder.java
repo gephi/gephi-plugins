@@ -2,8 +2,6 @@ package SimulationModelBuilder;
 
 
 import Helper.ApplySimulationHelper;
-import Helper.ObjectMapperHelper;
-import SimulationModel.Node.NodeRoleDecorator;
 import SimulationModel.SimulationModel;
 import lombok.Setter;
 import org.gephi.datalab.api.datatables.DataTablesController;
@@ -14,11 +12,6 @@ import org.openide.util.Lookup;
 import org.openide.util.lookup.ServiceProvider;
 
 import javax.swing.*;
-import java.io.IOException;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
-import java.util.stream.Collectors;
 
 @ServiceProvider(service = PluginGeneralActionsManipulator.class)
 public class SimulationModelBuilder implements PluginGeneralActionsManipulator {
@@ -30,7 +23,8 @@ public class SimulationModelBuilder implements PluginGeneralActionsManipulator {
     public void execute() {
         DataTablesController dtc = Lookup.getDefault().lookup(DataTablesController.class);
         Graph graph = Lookup.getDefault().lookup(GraphController.class).getGraphModel().getGraph();
-        ApplySimulationHelper.CrateModelCollumns(graph);
+        ApplySimulationHelper.ClearModel(graph);
+        ApplySimulationHelper.CrateModelColumns(graph);
         ApplySimulationHelper.Apply(graph, simulationModel);
     }
 

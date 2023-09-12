@@ -75,7 +75,8 @@ public class SimulationBuilderComponent extends TopComponent {
                     simulationModel.setName(generateName());
                     try {
                         Graph graph = Lookup.getDefault().lookup(GraphController.class).getGraphModel().getGraph();
-                        ApplySimulationHelper.CrateModelCollumns(graph);
+                        ApplySimulationHelper.ClearModel(graph);
+                        ApplySimulationHelper.CrateModelColumns(graph);
                         ApplySimulationHelper.Apply(graph, simulationModel);
                     }
                     catch (NullPointerException ex){
@@ -105,7 +106,9 @@ public class SimulationBuilderComponent extends TopComponent {
                     try {
                         File jsonFile = new File("simulations/"+ simulationModel.getName() + ".json");
                         mapper.writeValue(jsonFile, simulationModel);
+                        JOptionPane.showMessageDialog(null,"Model saved as " + simulationModel.getName() + ".json");
                     } catch (IOException ex) {
+                        JOptionPane.showMessageDialog(null,"Unexpected error");
                         throw new RuntimeException(ex);
                     }
                 }
