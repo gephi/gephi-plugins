@@ -2,30 +2,20 @@ package Simulation;
 
 
 import Helper.CustomDeserializer.TransitionDeserializer;
-import Helper.ObjectMapperHelper;
-import ModelLoader.ModelLoaderPanel;
 import SimulationModel.Node.NodeRole;
-import SimulationModel.Node.NodeState;
 import SimulationModel.Transition.Transition;
-import lombok.Setter;
 import org.codehaus.jackson.Version;
 import org.codehaus.jackson.map.DeserializationConfig;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.map.module.SimpleModule;
-import org.gephi.datalab.api.datatables.DataTablesController;
-import org.gephi.datalab.spi.ManipulatorUI;
-import org.gephi.datalab.spi.general.PluginGeneralActionsManipulator;
-import org.gephi.graph.api.Graph;
-import org.gephi.graph.api.GraphController;
-import org.gephi.graph.api.Node;
 import org.netbeans.api.settings.ConvertAsProperties;
 import org.openide.awt.ActionID;
 import org.openide.awt.ActionReference;
-import org.openide.util.Lookup;
-import org.openide.util.lookup.ServiceProvider;
 import org.openide.windows.TopComponent;
 
+import javax.sound.sampled.Line;
 import javax.swing.*;
+import javax.swing.border.LineBorder;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -33,26 +23,25 @@ import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.List;
-import java.util.Map;
+
+import static java.awt.Color.BLACK;
 
 @ConvertAsProperties(dtd = "-//Simulation//Simple//EN", autostore = false)
 @TopComponent.Description(preferredID = "Simulation",
         //iconBase="SET/PATH/TO/ICON/HERE",
         persistenceType = TopComponent.PERSISTENCE_ALWAYS)
-@TopComponent.Registration(mode = "rankingMode", openAtStartup = true)
+@TopComponent.Registration(mode = "layoutmode", openAtStartup = true)
 @ActionID(category = "Window", id = "Simulation")
 @ActionReference(path = "Menu/Window", position = 333)
-@TopComponent.OpenActionRegistration(displayName = "#CTL_SimpleAction",
-        preferredID = "SimpleTopComponent")
-public class Simulation extends TopComponent {
+@TopComponent.OpenActionRegistration(displayName = "#CTL_ModelLoaderComponent",
+        preferredID = "ModelLoaderComponent")
+public class ModelLoaderComponent extends TopComponent {
 
     private JPanel folderListPanel;
 
 
-    public Simulation() {
+    public ModelLoaderComponent() {
         initComponents();
         setName("Model Loader");
         setToolTipText("Model Loader");
@@ -65,7 +54,10 @@ public class Simulation extends TopComponent {
         folderListPanel.setLayout(new BoxLayout(folderListPanel, BoxLayout.Y_AXIS));
         refreshFolderList();
 
-        JTextField newFolderTextField = new JTextField(20);
+        JScrollPane scrollPane = new JScrollPane(folderListPanel);
+        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+
+        JTextField newFolderTextField = new JTextField(10);
         JButton createButton = new JButton("Create Model");
 
         createButton.addActionListener(new ActionListener() {
@@ -77,7 +69,7 @@ public class Simulation extends TopComponent {
                     if (!newFolder.exists()) {
                         if (newFolder.mkdir()) {
                             refreshFolderList();
-                            SwingUtilities.getWindowAncestor(Simulation.this).pack();  // Nowa linia
+                            SwingUtilities.getWindowAncestor(ModelLoaderComponent.this).pack();  // Nowa linia
                         } else {
                             JOptionPane.showMessageDialog(null, "Couldn't create model.");
                         }
@@ -88,12 +80,13 @@ public class Simulation extends TopComponent {
             }
         });
 
-        JPanel createFolderPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        createFolderPanel.add(new JLabel("Create new model:"));
+        JPanel createFolderPanel = new JPanel();
+        createFolderPanel.setLayout(new FlowLayout(FlowLayout.LEADING));
+        createFolderPanel.add(new JLabel("Name:"));
         createFolderPanel.add(newFolderTextField);
         createFolderPanel.add(createButton);
         add(createFolderPanel);
-        add(folderListPanel);
+        add(scrollPane);
     }
 
     private void refreshFolderList() {
@@ -112,12 +105,14 @@ public class Simulation extends TopComponent {
         if (listOfFolders != null && listOfFolders.length > 0) {
             for (File subFolder : listOfFolders) {
                 JPanel rowPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+                rowPanel.setLayout(new BoxLayout(rowPanel, BoxLayout.PAGE_AXIS));  // Ustawić layout jako BoxLayout wzdłuż osi Y
+
                 JLabel label = new JLabel("Simulation model: " + subFolder.getName());
+                rowPanel.add(label);
+
                 JButton button = new JButton("Load JSON");
                 button.addActionListener(new ModelListener(subFolder));
-                rowPanel.add(label);
                 rowPanel.add(button);
-
                 File[] listOfFiles = subFolder.listFiles();
                 StringBuilder fileListBuilder = new StringBuilder("State Machines: ");
                 if (listOfFiles != null) {
@@ -131,13 +126,20 @@ public class Simulation extends TopComponent {
                 rowPanel.add(fileListLabel);
 
                 folderListPanel.add(rowPanel);
+                folderListPanel.add(new JSeparator(SwingConstants.HORIZONTAL));
             }
         } else {
             folderListPanel.add(new JLabel("No folders found in 'models/'"));
         }
 
+
         revalidate();
         repaint();
+    }
+
+    @Override
+    public int getPersistenceType() {
+        return TopComponent.PERSISTENCE_ALWAYS;
     }
 
     void writeProperties(java.util.Properties p) {
@@ -192,7 +194,7 @@ public class Simulation extends TopComponent {
                         exx.printStackTrace();
                     }
                     refreshFolderList();
-                    SwingUtilities.getWindowAncestor(Simulation.this).pack();
+                    SwingUtilities.getWindowAncestor(ModelLoaderComponent.this).pack();
                     JOptionPane.showMessageDialog(null, "Model has been loaded");
                 } catch (IOException ex) {
                     throw new RuntimeException(ex);
