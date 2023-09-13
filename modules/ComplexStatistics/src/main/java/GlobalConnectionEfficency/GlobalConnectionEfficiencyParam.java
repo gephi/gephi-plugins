@@ -1,18 +1,16 @@
-package DisjoinMetricDistance;
+package GlobalConnectionEfficency;
 
 import GenericParamForm.Params;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DisjoinMetricDistanceParam extends Params<DisjoinMetricDistance> {
+public class GlobalConnectionEfficiencyParam extends Params<GlobalConnectionEfficiency> {
 
     private Boolean directed = false;
-
     @Override
     protected String ShortDescription() {
         return "?";
     }
-
     @Override
     protected List<String> Descritpion() {
         var description = new ArrayList<String>();
@@ -22,8 +20,8 @@ public class DisjoinMetricDistanceParam extends Params<DisjoinMetricDistance> {
     }
 
     @Override
-    public void SetGeneratorParams(DisjoinMetricDistance disjoinMetricDistance) {
-        disjoinMetricDistance.setDirected(directed);
+    public void SetGeneratorParams(GlobalConnectionEfficiency globalConnectionEfficiency) {
+        globalConnectionEfficiency.setDirected(directed);
     }
 
 }
