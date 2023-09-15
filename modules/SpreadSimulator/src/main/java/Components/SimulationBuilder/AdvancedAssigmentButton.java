@@ -7,6 +7,7 @@ import org.gephi.statistics.plugin.Degree;
 import org.openide.util.Lookup;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Arrays;
@@ -17,7 +18,8 @@ import java.util.stream.Collectors;
 public class AdvancedAssigmentButton extends JButton {
     private NodeRole nodeRole;
     private NodeStateDecorator nodeStateDecorator;
-    AdvancedAssigmentButton(NodeRole nodeRole, NodeStateDecorator nodeStateDecorator){
+
+    AdvancedAssigmentButton(NodeRole nodeRole, NodeStateDecorator nodeStateDecorator) {
         this.nodeRole = nodeRole;
         this.nodeStateDecorator = nodeStateDecorator;
         this.addActionListener(new AdvancedAssigmentButtonListner());
@@ -32,40 +34,67 @@ public class AdvancedAssigmentButton extends JButton {
 
         JTextField numOfNodesInput;
         JList centralityRateList;
+
         @Override
-        public void actionPerformed(ActionEvent e) {
+        public void actionPerformed(ActionEvent e){
             var dialog = new JDialog();
 
-            var panel = new JPanel();
-            panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+            var mainPanel = new JPanel();
+            mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
+            mainPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
-            var numOfNodesLabel = new JLabel("Number of nodes");
-            numOfNodesInput = new JTextField(10);
+            var numOfNodesPanel = new JPanel(new GridBagLayout());
+            var constraints = new GridBagConstraints();
+            constraints.anchor = GridBagConstraints.WEST;
+            var numOfNodesLabel = new JLabel("Number of nodes:");
+            var numOfNodesInput = new JTextField(5);
+            constraints.gridx = 0;
+            constraints.gridy = 0;
+            constraints.insets = new Insets(0, 0, 0, 5); // Right padding for the label
+            numOfNodesPanel.add(numOfNodesLabel, constraints);
+            constraints.gridx = 1;
+            constraints.gridy = 0;
+            constraints.insets = new Insets(0, 0, 0, 0); // Reset the padding for the input
+            numOfNodesPanel.add(numOfNodesInput, constraints);
 
-            var centralityRateLabel = new JLabel("Centrality Rate");
-            var centralityRateListModel = new DefaultListModel<>();
-            centralityRateListModel.addElement("Closeness");
-            centralityRateListModel.addElement("Betweenness");
-            centralityRateListModel.addElement("Degree");
-            centralityRateListModel.addElement("Closeness");
-            centralityRateListModel.addElement("Prestige");
-            centralityRateList = new JList<>(centralityRateListModel);
-            centralityRateList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+            var centralityRateLabel = new JLabel("Select Centrality Rate:");
+            centralityRateLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
+            var centralityRateOptions = new String[] {
+                    "Closeness", "Betweenness", "Degree", "Eigenvector", "Prestige"
+            };
+            var centralityRateDropdown = new JComboBox<>(centralityRateOptions);
+            centralityRateDropdown.setAlignmentX(Component.LEFT_ALIGNMENT);
 
             var applyButton = new JButton("Apply");
-            applyButton.addActionListener(new ApplyChangesListener());
+            applyButton.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    try {
+                        int numOfNodes = Integer.parseInt(numOfNodesInput.getText());
+                    } catch (NumberFormatException ex) {
+                        JOptionPane.showMessageDialog(dialog, "Please enter a valid number for 'Number of nodes'.", "Invalid Input", JOptionPane.ERROR_MESSAGE);
+                    }
+                }
+            });
 
-            panel.add(numOfNodesLabel);
-            panel.add(numOfNodesInput);
-            panel.add(centralityRateLabel);
-            panel.add(new JScrollPane(centralityRateList));
-            panel.add(applyButton);
+            var buttonPanel = new JPanel();
+            buttonPanel.setLayout(new FlowLayout(FlowLayout.RIGHT));  // Align the button to the right
+            buttonPanel.add(applyButton);
 
-            dialog.add(panel);
+            mainPanel.add(numOfNodesPanel);
+            mainPanel.add(Box.createVerticalStrut(10)); // Create some vertical space
+            mainPanel.add(centralityRateLabel);
+            mainPanel.add(Box.createVerticalStrut(5));
+            mainPanel.add(centralityRateDropdown);
+            mainPanel.add(Box.createVerticalStrut(10));
+            mainPanel.add(buttonPanel);
+
+            dialog.add(mainPanel);
 
             dialog.setTitle("Advanced options: " + nodeStateDecorator.getNodeState().getName());
             dialog.setSize(400, 300);
             dialog.setLocationRelativeTo(null);
+            dialog.setModal(true);  // Set dialog to be modal
             dialog.setVisible(true);
         }
 
@@ -78,7 +107,7 @@ public class AdvancedAssigmentButton extends JButton {
                 var centralityMethod = centralityRateList.getSelectedValue().toString();
                 var numOfNodesString = numOfNodesInput.getText();
                 var numOfNodes = Integer.valueOf(numOfNodesString);
-                switch (centralityMethod){
+                switch (centralityMethod) {
                     case "Degree":
                         var degree = new Degree();
                         degree.execute(graph);
