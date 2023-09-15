@@ -1,7 +1,6 @@
-package Simulation;
+package Components.SimulationBuilder;
 
 import SimulationModel.Node.NodeRole;
-import SimulationModel.Node.NodeState;
 import SimulationModel.Node.NodeStateDecorator;
 import org.gephi.graph.api.GraphController;
 import org.gephi.statistics.plugin.Degree;
@@ -13,7 +12,6 @@ import java.awt.event.ActionListener;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.List;
 import java.util.stream.Collectors;
 
 public class AdvancedAssigmentButton extends JButton {

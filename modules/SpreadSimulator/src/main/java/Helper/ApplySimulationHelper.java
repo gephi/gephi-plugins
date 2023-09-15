@@ -28,19 +28,15 @@ public class ApplySimulationHelper {
     }
 
     public static void CrateModelColumns(Graph graph){
-
         var nodes = List.of(graph.getNodes().toArray());
         var table = nodes.get(0).getTable();
         CreateModelColumns(table);
-
     }
 
     public static void ClearModel(Graph graph){
-
         var nodes = List.of(graph.getNodes().toArray());
         var table = nodes.get(0).getTable();
         RemoveModel(table);
-
     }
 
     public static boolean ValidateGraph(Graph graph){

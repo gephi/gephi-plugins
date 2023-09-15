@@ -1,4 +1,4 @@
-package Simulation;
+package Components.ModelLoader;
 
 
 import Helper.CustomDeserializer.TransitionDeserializer;
@@ -13,9 +13,7 @@ import org.openide.awt.ActionID;
 import org.openide.awt.ActionReference;
 import org.openide.windows.TopComponent;
 
-import javax.sound.sampled.Line;
 import javax.swing.*;
-import javax.swing.border.LineBorder;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -24,8 +22,6 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-
-import static java.awt.Color.BLACK;
 
 @ConvertAsProperties(dtd = "-//Simulation//ModelLoader//EN", autostore = false)
 @TopComponent.Description(preferredID = "ModelLoader",

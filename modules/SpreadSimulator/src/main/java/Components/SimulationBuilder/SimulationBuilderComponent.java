@@ -1,4 +1,4 @@
-package Simulation;
+package Components.SimulationBuilder;
 
 import Helper.ApplySimulationHelper;
 import Helper.ObjectMapperHelper;
