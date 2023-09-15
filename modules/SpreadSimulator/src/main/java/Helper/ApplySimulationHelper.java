@@ -6,13 +6,14 @@ import org.gephi.graph.api.Graph;
 import org.gephi.graph.api.Node;
 import org.gephi.graph.api.Table;
 
+import java.awt.*;
 import java.io.IOException;
-import java.util.Collections;
-import java.util.Comparator;
+import java.util.*;
 import java.util.List;
 import java.util.stream.Collectors;
 
 public class ApplySimulationHelper {
+
     public static void Apply(Graph graph, SimulationModel simulationModel){
         var nodes = List.of(graph.getNodes().toArray());
 
@@ -22,6 +23,7 @@ public class ApplySimulationHelper {
         var nodeRoles = simulationModel.getNodeRoles();
         SetupNodeRoles(nodes, nodeRoles);
         SetupNodeStates(nodes, nodeRoles);
+        PaintGraph(graph);
     }
 
     public static void CrateModelColumns(Graph graph){
@@ -38,6 +40,45 @@ public class ApplySimulationHelper {
         var table = nodes.get(0).getTable();
         RemoveModel(table);
 
+    }
+
+    public static boolean ValidateGraph(Graph graph){
+
+        var nodes = List.of(graph.getNodes().toArray());
+        var table = nodes.get(0).getTable();
+        return Validate(table);
+    }
+
+    public static void PaintGraph(Graph graph){
+        var nodes = List.of(graph.getNodes().toArray());
+        var nodeStates = nodes.stream().map(node -> node.getAttribute("NodeState").toString())
+                .distinct()
+                .collect(Collectors.toList());
+        var nodeStatesCount = nodeStates.stream().count();
+
+        var colors = generateUniqueColors((int)nodeStatesCount);
+
+        for (Node node: nodes) {
+            var state = node.getAttribute("NodeState").toString();
+            var i = nodeStates.indexOf(state);
+            node.setColor(colors.get(i));
+        }
+    }
+
+    public static List<Color> generateUniqueColors(int n) {
+        List<Color> uniqueColors = new ArrayList<>();
+        Random random = new Random();
+
+        while (uniqueColors.size() < n) {
+            int red = random.nextInt(256);
+            int green = random.nextInt(256);
+            int blue = random.nextInt(256);
+
+            Color newColor = new Color(red, green, blue);
+            uniqueColors.add(newColor);
+        }
+
+        return uniqueColors;
     }
 
     private static void RemoveModel(Table table) {
@@ -62,6 +103,19 @@ public class ApplySimulationHelper {
 
         if(!table.hasColumn("TransitionMap"))
             table.addColumn("TransitionMap", String.class);
+    }
+
+    private static boolean Validate(Table table) {
+        if(!table.hasColumn("NodeRole"))
+            return false;
+
+        if(!table.hasColumn("NodeState"))
+            return false;
+
+        if(!table.hasColumn("TransitionMap"))
+            return false;
+
+        return true;
     }
 
     private static void SetupNodeRoles(List<Node> nodes, List<NodeRoleDecorator> nodeRoles) {

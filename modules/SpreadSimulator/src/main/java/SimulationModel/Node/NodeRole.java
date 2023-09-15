@@ -18,4 +18,8 @@ public class NodeRole {
     private String name;
     private String description;
     private List<Transition> transitionMap;
+
+    public NodeRole(String name) {
+        this.name = name;
+    }
 }

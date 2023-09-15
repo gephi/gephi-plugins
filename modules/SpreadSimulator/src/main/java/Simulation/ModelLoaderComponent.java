@@ -28,18 +28,17 @@ import java.nio.file.Paths;
 import static java.awt.Color.BLACK;
 
 @ConvertAsProperties(dtd = "-//Simulation//ModelLoader//EN", autostore = false)
-@TopComponent.Description(preferredID = "Simulation",
+@TopComponent.Description(preferredID = "ModelLoader",
         //iconBase="SET/PATH/TO/ICON/HERE",
         persistenceType = TopComponent.PERSISTENCE_ALWAYS)
 @TopComponent.Registration(mode = "layoutmode", openAtStartup = true)
 @ActionID(category = "Window", id = "ModelLoader")
 @ActionReference(path = "Menu/Window", position = 0)
 @TopComponent.OpenActionRegistration(displayName = "#CTL_ModelLoaderComponent",
-        preferredID = "ModelLoaderComponent")
+        preferredID = "ModelLoader")
 public class ModelLoaderComponent extends TopComponent {
 
     private JPanel folderListPanel;
-
 
     public ModelLoaderComponent() {
         initComponents();
@@ -48,18 +47,17 @@ public class ModelLoaderComponent extends TopComponent {
     }
 
     private void initComponents() {
-        setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+        this.removeAll();
+        setLayout(new BorderLayout()); // Use BorderLayout for the main container
 
-        folderListPanel = new JPanel();
-        folderListPanel.setLayout(new BoxLayout(folderListPanel, BoxLayout.Y_AXIS));
-        refreshFolderList();
-
-        JScrollPane scrollPane = new JScrollPane(folderListPanel);
-        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+        JPanel inputPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        inputPanel.add(new JLabel("Name:"));
 
         JTextField newFolderTextField = new JTextField(10);
-        JButton createButton = new JButton("Create Model");
+        inputPanel.add(newFolderTextField);
 
+        JButton createButton = new JButton("Create Model");
+        inputPanel.add(createButton);
         createButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -80,13 +78,16 @@ public class ModelLoaderComponent extends TopComponent {
             }
         });
 
-        JPanel createFolderPanel = new JPanel();
-        createFolderPanel.setLayout(new FlowLayout(FlowLayout.LEADING));
-        createFolderPanel.add(new JLabel("Name:"));
-        createFolderPanel.add(newFolderTextField);
-        createFolderPanel.add(createButton);
-        add(createFolderPanel);
-        add(scrollPane);
+        add(inputPanel, BorderLayout.NORTH); // Add inputPanel to the top
+
+        // Rest of your folder list panel code remains unchanged
+        folderListPanel = new JPanel();
+        folderListPanel.setLayout(new BoxLayout(folderListPanel, BoxLayout.Y_AXIS));
+        refreshFolderList();
+
+        JScrollPane scrollPane = new JScrollPane(folderListPanel);
+        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+        add(scrollPane, BorderLayout.CENTER); // Add scrollPane to the center
     }
 
     private void refreshFolderList() {
@@ -104,38 +105,44 @@ public class ModelLoaderComponent extends TopComponent {
 
         if (listOfFolders != null && listOfFolders.length > 0) {
             for (File subFolder : listOfFolders) {
-                JPanel rowPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-                rowPanel.setLayout(new BoxLayout(rowPanel, BoxLayout.PAGE_AXIS));  // Ustawić layout jako BoxLayout wzdłuż osi Y
+                JPanel rowPanel = new JPanel();
+                rowPanel.setLayout(new BoxLayout(rowPanel, BoxLayout.Y_AXIS));
 
                 JLabel label = new JLabel("Simulation model: " + subFolder.getName());
+                label.setAlignmentX(Component.LEFT_ALIGNMENT);
                 rowPanel.add(label);
 
                 JButton button = new JButton("Load JSON");
                 button.addActionListener(new ModelListener(subFolder));
+                button.setAlignmentX(Component.LEFT_ALIGNMENT);
                 rowPanel.add(button);
+
                 File[] listOfFiles = subFolder.listFiles();
-                StringBuilder fileListBuilder = new StringBuilder("State Machines: ");
+                JLabel stateMachinesLabel = new JLabel("StateMachines: ");
+                Font currentFont = stateMachinesLabel.getFont();
+                stateMachinesLabel.setFont(currentFont.deriveFont(currentFont.getStyle() | Font.BOLD, currentFont.getSize()));
+                rowPanel.add(stateMachinesLabel);
                 if (listOfFiles != null) {
                     for (File file : listOfFiles) {
                         if (!file.isDirectory()) {
-                            fileListBuilder.append(file.getName()).append(", ");
+                            JLabel fileListLabel = new JLabel(file.getName());
+                            rowPanel.add(fileListLabel);
                         }
                     }
                 }
-                JLabel fileListLabel = new JLabel(fileListBuilder.toString());
-                rowPanel.add(fileListLabel);
-
                 folderListPanel.add(rowPanel);
-                folderListPanel.add(new JSeparator(SwingConstants.HORIZONTAL));
+                JSeparator separator = new JSeparator(SwingConstants.HORIZONTAL);
+                separator.setAlignmentX(Component.LEFT_ALIGNMENT);
+                folderListPanel.add(separator);
             }
         } else {
             folderListPanel.add(new JLabel("No folders found in 'models/'"));
         }
 
-
         revalidate();
         repaint();
     }
+
 
     @Override
     public int getPersistenceType() {

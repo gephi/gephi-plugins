@@ -23,4 +23,8 @@ public class NodeRoleDecorator {
         this.nodeRole = nodeRole;
         this.nodeStates = nodeStates;
     }
+
+    public NodeRoleDecorator(NodeRole nodeRole) {
+        this.nodeRole = nodeRole;
+    }
 }

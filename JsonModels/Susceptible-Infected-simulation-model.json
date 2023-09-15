@@ -6,7 +6,7 @@
       "coverage": 1,
       "minCoverage": 0,
       "nodeRole": {
-        "name": "roleName",
+        "name": "susceptible-infected-p05-p01",
         "description": "...",
         "transitionMap": [
           {

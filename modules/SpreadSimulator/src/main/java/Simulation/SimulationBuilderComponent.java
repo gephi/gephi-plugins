@@ -35,8 +35,8 @@ import java.util.stream.Collectors;
         persistenceType = TopComponent.PERSISTENCE_ALWAYS)
 @TopComponent.Registration(mode = "layoutmode", openAtStartup = true)
 @ActionID(category = "Window", id = "SimulationBuilder")
-@ActionReference(path = "Menu/Window", position = 0)
-@TopComponent.OpenActionRegistration(displayName = "#CTL_SimulationBuilder",
+@ActionReference(path = "Menu/Window", position = 1)
+@TopComponent.OpenActionRegistration(displayName = "#CTL_SimulationBuilderComponent",
         preferredID = "SimulationBuilder")
 public class SimulationBuilderComponent extends TopComponent {
 
@@ -285,6 +285,11 @@ public class SimulationBuilderComponent extends TopComponent {
                 stateLabel.setFont(currentFont.deriveFont(currentFont.getStyle() | Font.BOLD, currentFont.getSize())); // Wytłuszczenie i zwiększenie rozmiaru o 2 punkty
                 panel.add(stateLabel, gbc);
 
+                gbc.gridx = 1;
+                var advancedButton = new AdvancedAssigmentButton(role.getNodeRole(), state);
+                panel.add(advancedButton, gbc);
+
+                gbc.gridx = 0;
                 gbc.gridy = row++;
                 panel.add(new JLabel("Coverage:"), gbc);
                 gbc.gridx = 1;
@@ -296,7 +301,7 @@ public class SimulationBuilderComponent extends TopComponent {
                 gbc.gridx = 0;
                 panel.add(new JLabel("MinCoverage:"), gbc);
                 gbc.gridx = 1;
-                JTextField stateMinCoverageField = new JTextField(10); // 10 columns wide
+                JTextField stateMinCoverageField = new JTextField(10);
                 stateMinCoverageField.setText(state.getMinCoverage().toString());
 
                 stateCoverageField.getDocument().addDocumentListener(new NodeStateListener(state, stateCoverageField, stateMinCoverageField));
@@ -307,13 +312,12 @@ public class SimulationBuilderComponent extends TopComponent {
             gbc.gridy = row++;
             gbc.gridx = 0;
             gbc.gridwidth = 2;
-            gbc.fill = GridBagConstraints.HORIZONTAL; // Dodajemy wypełnienie poziome dla separatora
+            gbc.fill = GridBagConstraints.HORIZONTAL;
             panel.add(new JSeparator(), gbc);
             gbc.gridwidth = 1;
             gbc.fill = GridBagConstraints.NONE;
 
         }
-
 
         JScrollPane scrollPane = new JScrollPane(panel);
         scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
