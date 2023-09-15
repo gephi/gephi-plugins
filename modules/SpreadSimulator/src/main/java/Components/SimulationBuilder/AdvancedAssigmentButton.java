@@ -33,7 +33,7 @@ public class AdvancedAssigmentButton extends JButton {
         }
 
         JTextField numOfNodesInput;
-        JList centralityRateList;
+        JComboBox centralityRateDropdown;
 
         @Override
         public void actionPerformed(ActionEvent e){
@@ -47,14 +47,14 @@ public class AdvancedAssigmentButton extends JButton {
             var constraints = new GridBagConstraints();
             constraints.anchor = GridBagConstraints.WEST;
             var numOfNodesLabel = new JLabel("Number of nodes:");
-            var numOfNodesInput = new JTextField(5);
+            numOfNodesInput = new JTextField(5);
             constraints.gridx = 0;
             constraints.gridy = 0;
-            constraints.insets = new Insets(0, 0, 0, 5); // Right padding for the label
+            constraints.insets = new Insets(0, 0, 0, 5);
             numOfNodesPanel.add(numOfNodesLabel, constraints);
             constraints.gridx = 1;
             constraints.gridy = 0;
-            constraints.insets = new Insets(0, 0, 0, 0); // Reset the padding for the input
+            constraints.insets = new Insets(0, 0, 0, 0);
             numOfNodesPanel.add(numOfNodesInput, constraints);
 
             var centralityRateLabel = new JLabel("Select Centrality Rate:");
@@ -62,27 +62,18 @@ public class AdvancedAssigmentButton extends JButton {
             var centralityRateOptions = new String[] {
                     "Closeness", "Betweenness", "Degree", "Eigenvector", "Prestige"
             };
-            var centralityRateDropdown = new JComboBox<>(centralityRateOptions);
+            centralityRateDropdown = new JComboBox<>(centralityRateOptions);
             centralityRateDropdown.setAlignmentX(Component.LEFT_ALIGNMENT);
 
             var applyButton = new JButton("Apply");
-            applyButton.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    try {
-                        int numOfNodes = Integer.parseInt(numOfNodesInput.getText());
-                    } catch (NumberFormatException ex) {
-                        JOptionPane.showMessageDialog(dialog, "Please enter a valid number for 'Number of nodes'.", "Invalid Input", JOptionPane.ERROR_MESSAGE);
-                    }
-                }
-            });
+            applyButton.addActionListener(new ApplyChangesListener());
 
             var buttonPanel = new JPanel();
-            buttonPanel.setLayout(new FlowLayout(FlowLayout.RIGHT));  // Align the button to the right
+            buttonPanel.setLayout(new FlowLayout(FlowLayout.RIGHT));
             buttonPanel.add(applyButton);
 
             mainPanel.add(numOfNodesPanel);
-            mainPanel.add(Box.createVerticalStrut(10)); // Create some vertical space
+            mainPanel.add(Box.createVerticalStrut(10));
             mainPanel.add(centralityRateLabel);
             mainPanel.add(Box.createVerticalStrut(5));
             mainPanel.add(centralityRateDropdown);
@@ -94,7 +85,7 @@ public class AdvancedAssigmentButton extends JButton {
             dialog.setTitle("Advanced options: " + nodeStateDecorator.getNodeState().getName());
             dialog.setSize(400, 300);
             dialog.setLocationRelativeTo(null);
-            dialog.setModal(true);  // Set dialog to be modal
+            dialog.setModal(true);
             dialog.setVisible(true);
         }
 
@@ -102,9 +93,16 @@ public class AdvancedAssigmentButton extends JButton {
         private class ApplyChangesListener implements ActionListener {
             @Override
             public void actionPerformed(ActionEvent e) {
+
+                try {
+                    Integer.parseInt(numOfNodesInput.getText());
+                } catch (NumberFormatException ex) {
+                    JOptionPane.showMessageDialog(null, "Please enter a valid number for 'Number of nodes'.", "Invalid Input", JOptionPane.ERROR_MESSAGE);
+                }
+
                 var graphModel = Lookup.getDefault().lookup(GraphController.class).getGraphModel();
                 var graph = graphModel.getGraph();
-                var centralityMethod = centralityRateList.getSelectedValue().toString();
+                var centralityMethod = centralityRateDropdown.getSelectedItem().toString();
                 var numOfNodesString = numOfNodesInput.getText();
                 var numOfNodes = Integer.valueOf(numOfNodesString);
                 switch (centralityMethod) {

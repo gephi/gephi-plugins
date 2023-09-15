@@ -36,8 +36,8 @@ public class SimulationComponent extends TopComponent {
 
     public SimulationComponent() {
         initComponents();
-        setName("Components");
-        setToolTipText("Components");
+        setName("Simulation");
+        setToolTipText("Simulation");
     }
 
     private void initComponents() {
