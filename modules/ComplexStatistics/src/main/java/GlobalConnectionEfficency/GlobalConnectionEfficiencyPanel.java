@@ -39,50 +39,26 @@
  *
  * Portions Copyrighted 2011 Gephi Consortium.
  */
-package DisjoinMetricsSimple;
+package GlobalConnectionEfficency;
 
-import GenericParamForm.GenericUI;
-import org.gephi.statistics.spi.Statistics;
-import org.gephi.statistics.spi.StatisticsUI;
-import org.openide.util.lookup.ServiceProvider;
-import java.text.DecimalFormat;
-import java.text.NumberFormat;
+import GenericParamForm.GenericPanel;
+import java.awt.GridBagConstraints;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  *
  *
  * @author Cezary Bartosiak
  */
-@ServiceProvider(service = StatisticsUI.class)
-public class DisjoinMetricSimpleUI extends GenericUI<DisjoinMetricSimpleParam, DisjoinMetricSimple> {
+public class GlobalConnectionEfficiencyPanel extends GenericPanel<GlobalConnectionEfficiencyParam> {
 
     @Override
-    protected void CreatePanel() {
-        this.panel = null;
+    protected void CreateParamObject() {
+        this.setTParams(new GlobalConnectionEfficiencyParam());
     }
 
-    public Class<? extends Statistics> getStatisticsClass() {
-        return DisjoinMetricSimple.class;
+    @Override
+    protected void CreateCustomFieldOption(GridBagConstraints constraints, AtomicInteger gridYIterator) {
     }
 
-    public String getValue() {
-        NumberFormat f = new DecimalFormat("#0.0000");
-        return "" + f.format(statistics.getValue());
-    }
-
-    public String getDisplayName() {
-        return "Disjoin Metric Simple";
-    }
-
-    public String getShortDescription() {
-        return "Disjoin Metric Simple";
-    }
-
-    public String getCategory() {
-        return StatisticsUI.CATEGORY_NETWORK_OVERVIEW;
-    }
-
-    public int getPosition() {
-        return 7;
-    }
 }

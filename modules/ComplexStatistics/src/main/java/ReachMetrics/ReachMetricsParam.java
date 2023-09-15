@@ -1,12 +1,10 @@
-package DisjoinMetricDistance;
+package ReachMetrics;
 
 import GenericParamForm.Params;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DisjoinMetricDistanceParam extends Params<DisjoinMetricDistance> {
-
-    private Boolean directed = false;
+public class ReachMetricsParam extends Params<ReachMetrics> {
 
     @Override
     protected String ShortDescription() {
@@ -22,8 +20,7 @@ public class DisjoinMetricDistanceParam extends Params<DisjoinMetricDistance> {
     }
 
     @Override
-    public void SetGeneratorParams(DisjoinMetricDistance disjoinMetricDistance) {
-        disjoinMetricDistance.setDirected(directed);
+    public void SetGeneratorParams(ReachMetrics reachMetrics) {
     }
 
 }

@@ -39,50 +39,29 @@
  *
  * Portions Copyrighted 2011 Gephi Consortium.
  */
-package DisjoinMetricsSimple;
+package DisjoinMetricSize1;
 
-import GenericParamForm.GenericUI;
 import org.gephi.statistics.spi.Statistics;
-import org.gephi.statistics.spi.StatisticsUI;
+import org.gephi.statistics.spi.StatisticsBuilder;
+import org.openide.util.NbBundle;
 import org.openide.util.lookup.ServiceProvider;
-import java.text.DecimalFormat;
-import java.text.NumberFormat;
 
 /**
- *
+ * 
  *
  * @author Cezary Bartosiak
  */
-@ServiceProvider(service = StatisticsUI.class)
-public class DisjoinMetricSimpleUI extends GenericUI<DisjoinMetricSimpleParam, DisjoinMetricSimple> {
+@ServiceProvider(service=StatisticsBuilder.class)
+public class DisjoinMetricSize1Builder implements StatisticsBuilder {
+	public String getName() {
+		return "Disjoin Metric Size v1";
+	}
 
-    @Override
-    protected void CreatePanel() {
-        this.panel = null;
-    }
+	public Statistics getStatistics() {
+		return new DisjoinMetricSize1();
+	}
 
-    public Class<? extends Statistics> getStatisticsClass() {
-        return DisjoinMetricSimple.class;
-    }
-
-    public String getValue() {
-        NumberFormat f = new DecimalFormat("#0.0000");
-        return "" + f.format(statistics.getValue());
-    }
-
-    public String getDisplayName() {
-        return "Disjoin Metric Simple";
-    }
-
-    public String getShortDescription() {
-        return "Disjoin Metric Simple";
-    }
-
-    public String getCategory() {
-        return StatisticsUI.CATEGORY_NETWORK_OVERVIEW;
-    }
-
-    public int getPosition() {
-        return 7;
-    }
+	public Class<? extends Statistics> getStatisticsClass() {
+		return DisjoinMetricSize1.class;
+	}
 }

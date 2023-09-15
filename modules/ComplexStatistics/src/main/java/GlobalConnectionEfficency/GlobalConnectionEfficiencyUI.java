@@ -39,50 +39,50 @@
  *
  * Portions Copyrighted 2011 Gephi Consortium.
  */
-package DisjoinMetricsSimple;
+package GlobalConnectionEfficency;
 
 import GenericParamForm.GenericUI;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import org.gephi.statistics.spi.Statistics;
 import org.gephi.statistics.spi.StatisticsUI;
 import org.openide.util.lookup.ServiceProvider;
-import java.text.DecimalFormat;
-import java.text.NumberFormat;
 
 /**
- *
+ * 
  *
  * @author Cezary Bartosiak
  */
 @ServiceProvider(service = StatisticsUI.class)
-public class DisjoinMetricSimpleUI extends GenericUI<DisjoinMetricSimpleParam, DisjoinMetricSimple> {
+public class GlobalConnectionEfficiencyUI extends GenericUI<GlobalConnectionEfficiencyParam, GlobalConnectionEfficiency> {
 
-    @Override
-    protected void CreatePanel() {
-        this.panel = null;
-    }
+	@Override
+	protected void CreatePanel() {
+		this.panel = new GlobalConnectionEfficiencyPanel();
+	}
 
-    public Class<? extends Statistics> getStatisticsClass() {
-        return DisjoinMetricSimple.class;
-    }
+	public Class<? extends Statistics> getStatisticsClass() {
+		return GlobalConnectionEfficiency.class;
+	}
 
-    public String getValue() {
-        NumberFormat f = new DecimalFormat("#0.0000");
-        return "" + f.format(statistics.getValue());
-    }
+	public String getValue() {
+		NumberFormat f = new DecimalFormat("#0.0000");
+		return "" + f.format(statistics.getGCE());
+	}
 
-    public String getDisplayName() {
-        return "Disjoin Metric Simple";
-    }
+	public String getDisplayName() {
+		return "Global Connection Efficiency";
+	}
 
-    public String getShortDescription() {
-        return "Disjoin Metric Simple";
-    }
+	public String getShortDescription() {
+		return "Global Connection Efficiency";
+	}
 
-    public String getCategory() {
-        return StatisticsUI.CATEGORY_NETWORK_OVERVIEW;
-    }
+	public String getCategory() {
+		return StatisticsUI.CATEGORY_NETWORK_OVERVIEW;
+	}
 
-    public int getPosition() {
-        return 7;
-    }
+	public int getPosition() {
+		return 2;
+	}
 }
