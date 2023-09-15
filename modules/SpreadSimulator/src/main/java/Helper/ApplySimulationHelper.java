@@ -1,6 +1,7 @@
 package Helper;
 
 import SimulationModel.Node.NodeRoleDecorator;
+import SimulationModel.Node.NodeStateDecorator;
 import SimulationModel.SimulationModel;
 import org.gephi.graph.api.Graph;
 import org.gephi.graph.api.Node;
@@ -21,9 +22,9 @@ public class ApplySimulationHelper {
             return;
 
         var nodeRoles = simulationModel.getNodeRoles();
+        PaintGraph(nodeRoles);
         SetupNodeRoles(nodes, nodeRoles);
         SetupNodeStates(nodes, nodeRoles);
-        PaintGraph(graph);
     }
 
     public static void CrateModelColumns(Graph graph){
@@ -49,19 +50,19 @@ public class ApplySimulationHelper {
         return Validate(table);
     }
 
-    public static void PaintGraph(Graph graph){
-        var nodes = List.of(graph.getNodes().toArray());
-        var nodeStates = nodes.stream().map(node -> node.getAttribute("NodeState").toString())
-                .distinct()
-                .collect(Collectors.toList());
-        var nodeStatesCount = nodeStates.stream().count();
+    public static void PaintGraph(List<NodeRoleDecorator> nodeRoles){
+        var nodeStateList = new ArrayList<NodeStateDecorator>();
+        for (NodeRoleDecorator nodeRole: nodeRoles) {
+            nodeStateList.addAll(nodeRole.getNodeStates());
+        }
+        var nodeStatesCount = nodeStateList.stream().count();
 
         var colors = generateUniqueColors((int)nodeStatesCount);
 
-        for (Node node: nodes) {
-            var state = node.getAttribute("NodeState").toString();
-            var i = nodeStates.indexOf(state);
+        int i = 0;
+        for (var node: nodeStateList) {
             node.setColor(colors.get(i));
+            i++;
         }
     }
 
@@ -163,6 +164,7 @@ public class ApplySimulationHelper {
                         for (int i = 0; i < roleStateNumber && i < notAssignedToRoleNodes.stream().count(); i++) {
                             var node = notAssignedToRoleNodes.get(i);
                             node.setAttribute("NodeState", nodeState.getNodeState().getName());
+                            node.setColor(nodeState.getColor());
                         }
                     });
                 });

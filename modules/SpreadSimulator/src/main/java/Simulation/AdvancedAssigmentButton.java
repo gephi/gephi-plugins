@@ -94,7 +94,7 @@ public class AdvancedAssigmentButton extends JButton {
                         for (int i = 0; i < numOfNodes; i++) {
                             var chosenOne = nodeRoleNodes.get(i);
                             chosenOne.setAttribute("NodeState", nodeStateDecorator.getNodeState().getName());
-//                            chosenOne.setColor(nodeStateDecorator.getColor());
+                            chosenOne.setColor(nodeStateDecorator.getColor());
                         }
                         break;
                     case "Betweenness":
