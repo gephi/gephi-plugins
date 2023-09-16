@@ -1,0 +1,48 @@
+{
+  "name": "Sick State Simulation",
+  "description": "...",
+  "transitionMap": [
+    {
+      "transitionType": "noConditionProbability",
+      "sourceState": {
+        "name": "infected",
+        "description": null
+      },
+      "destinationState": {
+        "name": "recovered",
+        "description": null
+      },
+      "probability": 0.1
+    },
+    {
+      "transitionType": "conditionProbability",
+      "sourceState": {
+        "name": "healthy",
+        "description": null
+      },
+      "destinationState": {
+        "name": "infected",
+        "description": null
+      },
+      "probability": 0.1,
+      "provocativeNeighborName": [
+        "infected"
+      ]
+    },
+    {
+      "transitionType": "conditionProbability",
+      "sourceState": {
+        "name": "recovered",
+        "description": null
+      },
+      "destinationState": {
+        "name": "infected",
+        "description": null
+      },
+      "probability": 0.02,
+      "provocativeNeighborName": [
+        "infected"
+      ]
+    }
+  ]
+}

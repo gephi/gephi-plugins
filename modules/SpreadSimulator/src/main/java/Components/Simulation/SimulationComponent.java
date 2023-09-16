@@ -1,9 +1,7 @@
 package Components.Simulation;
 
 import Helper.ApplySimulationHelper;
-import SimulationModel.Node.NodeRole;
 import SimulationModel.Node.NodeRoleDecorator;
-import SimulationModel.Node.NodeState;
 import SimulationModel.Node.NodeStateDecorator;
 import org.gephi.graph.api.Graph;
 import org.gephi.graph.api.GraphController;
@@ -16,9 +14,6 @@ import org.openide.windows.TopComponent;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
-import java.util.Arrays;
-import java.util.List;
-import java.util.stream.Collectors;
 
 @ConvertAsProperties(dtd = "-//Simulation//Simulation//EN", autostore = false)
 @TopComponent.Description(preferredID = "Simulation",
@@ -32,7 +27,7 @@ import java.util.stream.Collectors;
 public class SimulationComponent extends TopComponent {
 
     private Graph graph;
-    private List<NodeRoleDecorator> nodeRoleDecoratorList;
+    private Simulation simulation;
 
     public SimulationComponent() {
         initComponents();
@@ -40,7 +35,7 @@ public class SimulationComponent extends TopComponent {
         setToolTipText("Simulation");
     }
 
-    private void initComponents() {
+    public void initComponents() {
         this.removeAll();
         setLayout(new FlowLayout());
         JButton initButton = new JButton("Init");
@@ -51,63 +46,13 @@ public class SimulationComponent extends TopComponent {
             return;
         }
 
-        nodeRoleDecoratorList = generateNodeDecoratorList();
         add(generateInputFieldsForRolesAndStates());
-        add(new StepButton(graph, nodeRoleDecoratorList));
+        add(new StepButton(simulation, this));
+        add(new SimulationButton(simulation, this));
     }
 
     private boolean isGraphValid() {
         return graph != null && ApplySimulationHelper.ValidateGraph(graph);
-    }
-
-    private List<NodeRoleDecorator> generateNodeDecoratorList() {
-        var nodes = Arrays.asList(graph.getNodes().toArray());
-        var nodesCount = nodes.size();
-        var nodeRoles = nodes.stream()
-                .map(node -> node.getAttribute("NodeRole").toString())
-                .distinct()
-                .collect(Collectors.toList());
-
-        return nodeRoles.stream().map(nodeRole -> new NodeRoleDecorator(new NodeRole(nodeRole)))
-                .peek(this::populateNodeRoleDecorator)
-                .collect(Collectors.toList());
-    }
-
-    private void populateNodeRoleDecorator(NodeRoleDecorator nodeRoleDecorator) {
-        var nodes = Arrays.asList(graph.getNodes().toArray());
-        var nodesCount = nodes.size();
-
-        var nodeStates = nodes.stream()
-                .filter(node -> node.getAttribute("NodeRole").equals(nodeRoleDecorator.getNodeRole().getName()))
-                .map(node -> node.getAttribute("NodeState").toString())
-                .distinct()
-                .map(nodeState -> new NodeStateDecorator(new NodeState(nodeState)))
-                .collect(Collectors.toList());
-
-        nodeStates.forEach(state -> state.setColor(getStateColor(state)));
-
-        nodeRoleDecorator.setNodeStates(nodeStates);
-        var nodeRoleCount = nodes.stream()
-                .filter(node -> node.getAttribute("NodeRole").equals(nodeRoleDecorator.getNodeRole().getName()))
-                .count();
-
-        nodeRoleDecorator.setMinCoverage((int) nodeRoleCount);
-        nodeRoleDecorator.setCoverage((double)nodeRoleCount / nodesCount);
-
-        nodeStates.forEach(nodeState -> {
-            var nodeStateCount = nodes.stream()
-                    .filter(node -> node.getAttribute("NodeRole").equals(nodeRoleDecorator.getNodeRole().getName()))
-                    .filter(node -> node.getAttribute("NodeState").equals(nodeState.getNodeState().getName()))
-                    .count();
-
-            nodeState.setCoverage((double)nodeStateCount / nodeRoleCount);
-            nodeState.setMinCoverage((int) nodeStateCount);
-        });
-    }
-
-    private Color getStateColor(NodeStateDecorator state) {
-        var nodes = Arrays.asList(graph.getNodes().toArray());
-        return nodes.stream().filter(node -> node.getAttribute("NodeState").equals(state.getNodeState().getName())).collect(Collectors.toList()).get(0).getColor();
     }
 
     private void initButtonActionPerformed(ActionEvent e) {
@@ -116,6 +61,7 @@ public class SimulationComponent extends TopComponent {
             if (!ApplySimulationHelper.ValidateGraph(graph)) {
                 JOptionPane.showMessageDialog(null, "This is not a valid graph model");
             } else {
+                simulation = new Simulation(graph);
                 initComponents();
                 revalidate();
                 repaint();
@@ -130,9 +76,11 @@ public class SimulationComponent extends TopComponent {
         panel.setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
 
-        int row = 0;
+        var stepLabel = new JLabel("Step: " + simulation.getStep().toString());
+        panel.add(stepLabel);
+        int row = 1;
         int padding = 4;
-        for (NodeRoleDecorator role : nodeRoleDecoratorList) {
+        for (NodeRoleDecorator role : simulation.nodeRoleDecoratorList) {
             addRoleToPanel(panel, role, gbc, row, padding);
             row += 3;
             for (NodeStateDecorator state : role.getNodeStates()) {
@@ -147,11 +95,63 @@ public class SimulationComponent extends TopComponent {
     }
 
     private void addRoleToPanel(JPanel panel, NodeRoleDecorator role, GridBagConstraints gbc, int row, int padding) {
-        // ... [existing code for adding NodeRole to the panel]
+        gbc.insets = new Insets(padding, padding, padding, padding);
+        gbc.gridy = row++;
+        gbc.gridx = 0;
+        gbc.anchor = GridBagConstraints.WEST;
+        JLabel nodeLabel = new JLabel("NodeRole: " + role.getNodeRole().getName());
+        Font currentFont = nodeLabel.getFont();
+        nodeLabel.setFont(currentFont.deriveFont(currentFont.getStyle() | Font.BOLD, currentFont.getSize()+5)); // Wytłuszczenie i zwiększenie rozmiaru o 2 punkty
+        panel.add(nodeLabel, gbc);
+
+        gbc.gridy = row++;
+        panel.add(new JLabel("Coverage:"), gbc);
+        gbc.gridx = 1;
+        JTextField roleCoverageField = new JTextField(10); // 10 columns wide
+        roleCoverageField.setEditable(false);
+        roleCoverageField.setText(role.getCoverage().toString());
+
+        panel.add(roleCoverageField, gbc);
+
+        gbc.gridy = row++;
+        gbc.gridx = 0;
+        panel.add(new JLabel("Count:"), gbc);
+        gbc.gridx = 1;
+        JTextField roleMinCoverageField = new JTextField(10);
+        roleMinCoverageField.setEditable(false);
+        roleMinCoverageField.setText(role.getMinCoverage().toString());
+
+        panel.add(roleMinCoverageField, gbc);
+
     }
 
     private void addStateToPanel(JPanel panel, NodeStateDecorator state, GridBagConstraints gbc, int row, int padding) {
-        // ... [existing code for adding NodeState to the panel]
+        gbc.insets = new Insets(padding, padding, padding, padding);
+        gbc.gridy = row++;
+        gbc.gridx = 0;
+
+        JLabel stateLabel = new JLabel("NodeState: " + state.getNodeState().getName());
+        var currentFont = stateLabel.getFont();
+        stateLabel.setFont(currentFont.deriveFont(currentFont.getStyle() | Font.BOLD, currentFont.getSize())); // Wytłuszczenie i zwiększenie rozmiaru o 2 punkty
+        panel.add(stateLabel, gbc);
+
+        gbc.gridy = row++;
+        panel.add(new JLabel("Coverage:"), gbc);
+        gbc.gridx = 1;
+        JTextField stateCoverageField = new JTextField(10); // 10 columns wide
+        stateCoverageField.setEditable(false);
+        stateCoverageField.setText(state.getCoverage().toString());
+        panel.add(stateCoverageField, gbc);
+
+        gbc.gridy = row++;
+        gbc.gridx = 0;
+        panel.add(new JLabel("Count:"), gbc);
+        gbc.gridx = 1;
+        JTextField stateMinCoverageField = new JTextField(10); // 10 columns wide
+        stateMinCoverageField.setText(state.getMinCoverage().toString());
+        stateMinCoverageField.setEditable(false);
+
+        panel.add(stateMinCoverageField, gbc);
     }
 
     @Override
