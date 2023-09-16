@@ -1,1 +1,33 @@
-{"name":"roleName","description":"...","transitionMap":[{"transitionType":"noConditionProbability","sourceState":{"name":"infected","description":null},"destinationState":{"name":"susceptible","description":null},"probability":0.1},{"transitionType":"conditionProbability","sourceState":{"name":"susceptible","description":null},"destinationState":{"name":"infected","description":null},"probability":0.1,"provocativeNeighborName":["infected"]}]}
+{
+  "name": "roleName",
+  "description": "...",
+  "transitionMap": [
+    {
+      "transitionType": "noConditionProbability",
+      "sourceState": {
+        "name": "infected",
+        "description": null
+      },
+      "destinationState": {
+        "name": "susceptible",
+        "description": null
+      },
+      "probability": 0.1
+    },
+    {
+      "transitionType": "conditionProbability",
+      "sourceState": {
+        "name": "susceptible",
+        "description": null
+      },
+      "destinationState": {
+        "name": "infected",
+        "description": null
+      },
+      "probability": 0.1,
+      "provocativeNeighborName": [
+        "infected"
+      ]
+    }
+  ]
+}

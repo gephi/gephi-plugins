@@ -47,10 +47,13 @@ public class SimulationComponent extends TopComponent {
         initButton.addActionListener(this::initButtonActionPerformed);
         add(initButton);
 
-        if (isGraphValid()) {
-            nodeRoleDecoratorList = generateNodeDecoratorList();
-            add(generateInputFieldsForRolesAndStates());
+        if (!isGraphValid()) {
+            return;
         }
+
+        nodeRoleDecoratorList = generateNodeDecoratorList();
+        add(generateInputFieldsForRolesAndStates());
+        add(new StepButton(graph, nodeRoleDecoratorList));
     }
 
     private boolean isGraphValid() {
@@ -81,6 +84,8 @@ public class SimulationComponent extends TopComponent {
                 .map(nodeState -> new NodeStateDecorator(new NodeState(nodeState)))
                 .collect(Collectors.toList());
 
+        nodeStates.forEach(state -> state.setColor(getStateColor(state)));
+
         nodeRoleDecorator.setNodeStates(nodeStates);
         var nodeRoleCount = nodes.stream()
                 .filter(node -> node.getAttribute("NodeRole").equals(nodeRoleDecorator.getNodeRole().getName()))
@@ -98,6 +103,11 @@ public class SimulationComponent extends TopComponent {
             nodeState.setCoverage((double)nodeStateCount / nodeRoleCount);
             nodeState.setMinCoverage((int) nodeStateCount);
         });
+    }
+
+    private Color getStateColor(NodeStateDecorator state) {
+        var nodes = Arrays.asList(graph.getNodes().toArray());
+        return nodes.stream().filter(node -> node.getAttribute("NodeState").equals(state.getNodeState().getName())).collect(Collectors.toList()).get(0).getColor();
     }
 
     private void initButtonActionPerformed(ActionEvent e) {

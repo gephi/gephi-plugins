@@ -22,7 +22,7 @@ public class ApplySimulationHelper {
             return;
 
         var nodeRoles = simulationModel.getNodeRoles();
-        PaintGraph(nodeRoles);
+        GenerateColorPaintings(nodeRoles);
         SetupNodeRoles(nodes, nodeRoles);
         SetupNodeStates(nodes, nodeRoles);
     }
@@ -46,7 +46,7 @@ public class ApplySimulationHelper {
         return Validate(table);
     }
 
-    public static void PaintGraph(List<NodeRoleDecorator> nodeRoles){
+    public static void GenerateColorPaintings(List<NodeRoleDecorator> nodeRoles){
         var nodeStateList = new ArrayList<NodeStateDecorator>();
         for (NodeRoleDecorator nodeRole: nodeRoles) {
             nodeStateList.addAll(nodeRole.getNodeStates());
@@ -161,6 +161,21 @@ public class ApplySimulationHelper {
                             var node = notAssignedToRoleNodes.get(i);
                             node.setAttribute("NodeState", nodeState.getNodeState().getName());
                             node.setColor(nodeState.getColor());
+                        }
+                    });
+                });
+    }
+
+    public static void PaintGraph(List<Node> nodes, List<NodeRoleDecorator> nodeRoles) {
+        nodeRoles.stream()
+                .sorted(Comparator.comparingDouble(NodeRoleDecorator::getCoverage))
+                .forEach(nodeRole -> {
+                    var nodeStates = nodeRole.getNodeStates();
+                    nodeStates.stream().forEach(nodeState -> {
+                        for (Node node : nodes) {
+                            if(node.getAttribute("NodeState").toString().contains(nodeState.getNodeState().getName())){
+                                node.setColor(nodeState.getColor());
+                            }
                         }
                     });
                 });
