@@ -168,15 +168,12 @@ public class ApplySimulationHelper {
 
     public static void PaintGraph(List<Node> nodes, List<NodeRoleDecorator> nodeRoles) {
         nodeRoles.stream()
-                .sorted(Comparator.comparingDouble(NodeRoleDecorator::getCoverage))
                 .forEach(nodeRole -> {
                     var nodeStates = nodeRole.getNodeStates();
+                    var nodeRoleNodes = nodes.stream().filter(node -> nodeRole.getNodeRole().getName().equals(node.getAttribute("NodeRole").toString())).collect(Collectors.toList());
                     nodeStates.stream().forEach(nodeState -> {
-                        for (Node node : nodes) {
-                            if(node.getAttribute("NodeState").toString().contains(nodeState.getNodeState().getName())){
-                                node.setColor(nodeState.getColor());
-                            }
-                        }
+                        var nodeRoleStateNodes = nodeRoleNodes.stream().filter(node -> nodeState.getNodeState().getName().equals(node.getAttribute("NodeState").toString())).collect(Collectors.toList());
+                        nodeRoleStateNodes.forEach(node -> node.setColor(nodeState.getColor()));
                     });
                 });
     }

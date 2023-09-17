@@ -1,0 +1,126 @@
+{
+  "name": "person",
+  "description": "...",
+  "transitionMap": [
+    {
+      "transitionType": "conditionProbability",
+      "sourceState": {
+        "name": "uninformed",
+        "description": null
+      },
+      "destinationState": {
+        "name": "informed",
+        "description": null
+      },
+      "probability": 0.01,
+      "provocativeNeighborName": [
+        "informed"
+      ]
+    },
+    {
+      "transitionType": "conditionProbability",
+      "sourceState": {
+        "name": "uninformed",
+        "description": null
+      },
+      "destinationState": {
+        "name": "informed",
+        "description": null
+      },
+      "probability": 0.02,
+      "provocativeNeighborName": [
+        "informing"
+      ]
+    },
+    {
+      "transitionType": "conditionProbability",
+      "sourceState": {
+        "name": "uninformed",
+        "description": null
+      },
+      "destinationState": {
+        "name": "disinformed",
+        "description": null
+      },
+      "probability": 0.02,
+      "provocativeNeighborName": [
+        "disinformed"
+      ]
+    },
+    {
+      "transitionType": "conditionProbability",
+      "sourceState": {
+        "name": "uninformed",
+        "description": null
+      },
+      "destinationState": {
+        "name": "disinformed",
+        "description": null
+      },
+      "probability": 0.03,
+      "provocativeNeighborName": [
+        "disinforming"
+      ]
+    },
+    {
+      "transitionType": "conditionProbability",
+      "sourceState": {
+        "name": "informed",
+        "description": null
+      },
+      "destinationState": {
+        "name": "disinformed",
+        "description": null
+      },
+      "probability": 0.01,
+      "provocativeNeighborName": [
+        "disinformed"
+      ]
+    },
+    {
+      "transitionType": "conditionProbability",
+      "sourceState": {
+        "name": "informed",
+        "description": null
+      },
+      "destinationState": {
+        "name": "disinformed",
+        "description": null
+      },
+      "probability": 0.01,
+      "provocativeNeighborName": [
+        "disinforming"
+      ]
+    },
+    {
+      "transitionType": "conditionProbability",
+      "sourceState": {
+        "name": "disinformed",
+        "description": null
+      },
+      "destinationState": {
+        "name": "informed",
+        "description": null
+      },
+      "probability": 0.01,
+      "provocativeNeighborName": [
+        "informed"
+      ]
+    },
+    {
+      "transitionType": "conditionProbability",
+      "sourceState": {
+        "name": "disinformed",
+        "description": null
+      },
+      "destinationState": {
+        "name": "informed",
+        "description": null
+      },
+      "probability": 0.01,
+      "provocativeNeighborName": [
+        "informing"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,21 @@
+{
+  "name": "informator",
+  "description": "...",
+  "transitionMap": [
+    {
+      "transitionType": "noConditionProbability",
+      "sourceState": {
+        "name": "informing",
+        "description": null
+      },
+      "destinationState": {
+        "name": "informing",
+        "description": null
+      },
+      "probability": 0
+    }
+      ]
+    }
+
+  ]
+}

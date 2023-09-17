@@ -1,6 +1,9 @@
 package Components.Simulation;
 
 import Components.Simulation.Report.ReportGeneratorHelper;
+
+import java.time.format.DateTimeFormatter;
+import java.util.UUID;
 import org.joda.time.DateTime;
 
 import javax.swing.*;
@@ -19,7 +22,10 @@ public class GetReportButton extends JButton {
     }
 
     public void GetReport(){
-        fileName = "SimulationReport_"+ DateTime.now().toString();
+        UUID uuid = UUID.randomUUID();
+        fileName = "SimulationReport_" + DateTime.now().toString("yyyy-MM-dd-HH-mm-ss");
         ReportGeneratorHelper.GenerateCSV(simulation.getReport(), fileName);
+        ReportGeneratorHelper.GenerateExcelJXL(simulation.getReport(), fileName);
+
     }
 }
