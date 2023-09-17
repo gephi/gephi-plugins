@@ -24,7 +24,7 @@
         "name": "infected",
         "description": null
       },
-      "probability": 0.1,
+      "probability": 0.3,
       "provocativeNeighborName": [
         "infected"
       ]
@@ -39,7 +39,7 @@
         "name": "infected",
         "description": null
       },
-      "probability": 0.02,
+      "probability": 0.05,
       "provocativeNeighborName": [
         "infected"
       ]

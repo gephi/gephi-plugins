@@ -1,12 +1,13 @@
 package Components.Simulation.Report;
 import SimulationModel.Node.NodeRoleDecorator;
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
-
+@Getter
 public class SimulationStepReport {
 
     private Integer step;
@@ -17,7 +18,8 @@ public class SimulationStepReport {
         roleReports = nodeRoleDecoratorList.stream().map( x -> new NodeRoleReport(x)).collect(Collectors.toList());
     }
 
-    private class NodeRoleReport {
+    @Getter
+    public class NodeRoleReport {
         private String nodeRoleName;
         private List<StateElement> statesReport;
 
@@ -34,15 +36,11 @@ public class SimulationStepReport {
 
         @AllArgsConstructor
         @NoArgsConstructor
-        private class StateElement{
+        @Getter
+        public class StateElement{
             private String nodeStateName;
             private Integer numberOfNodes;
             private Double coverage;
         }
     }
 }
-
-
-
-
-

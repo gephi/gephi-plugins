@@ -49,6 +49,7 @@ public class SimulationComponent extends TopComponent {
         add(generateInputFieldsForRolesAndStates());
         add(new StepButton(simulation, this));
         add(new SimulationButton(simulation, this));
+        add(new GetReportButton(simulation, this));
     }
 
     private boolean isGraphValid() {
