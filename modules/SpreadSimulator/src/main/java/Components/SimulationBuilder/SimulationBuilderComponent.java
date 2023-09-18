@@ -67,7 +67,7 @@ public class SimulationBuilderComponent extends TopComponent {
             add(generateInputFieldsForRolesAndStates());
 
 
-            var apply = new Button("Apply");
+            var apply = new JButton("Apply");
             apply.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
@@ -88,7 +88,7 @@ public class SimulationBuilderComponent extends TopComponent {
 
             add(apply);
 
-            var save = new Button("Save");
+            var save = new JButton("Save");
             save.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
@@ -115,6 +115,25 @@ public class SimulationBuilderComponent extends TopComponent {
             });
 
             add(save);
+
+            var paint = new JButton("Paint");
+            paint.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    try {
+                        Graph graph = Lookup.getDefault().lookup(GraphController.class).getGraphModel().getGraph();
+                        var nodes = List.of(graph.getNodes().toArray());
+                        ApplySimulationHelper.GenerateColorPaintings(nodeRoles);
+                        ApplySimulationHelper.PaintGraph(nodes, nodeRoles);
+                    }
+                    catch (NullPointerException ex){
+                        JOptionPane.showMessageDialog(null, "Setup graph model first");
+                    }
+
+                }
+            });
+
+            add(paint);
         }
     }
 

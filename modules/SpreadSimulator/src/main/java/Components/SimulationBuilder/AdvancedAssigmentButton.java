@@ -25,13 +25,13 @@ public class AdvancedAssigmentButton extends JButton {
     AdvancedAssigmentButton(NodeRole nodeRole, NodeStateDecorator nodeStateDecorator) {
         this.nodeRole = nodeRole;
         this.nodeStateDecorator = nodeStateDecorator;
-        this.addActionListener(new AdvancedAssigmentButtonListner());
+        this.addActionListener(new AdvancedAssigmentButtonListener());
         setText("Options");
     }
 
-    private class AdvancedAssigmentButtonListner implements ActionListener {
+    private class AdvancedAssigmentButtonListener implements ActionListener {
 
-        public AdvancedAssigmentButtonListner() {
+        public AdvancedAssigmentButtonListener() {
 
         }
 
@@ -115,6 +115,8 @@ public class AdvancedAssigmentButton extends JButton {
                     case "Eigenvector":
                         EigenvectorStatisticOption(graph, numOfNodes);
                         break;
+                    case "HITS":
+                        HITSStatisticOption(graph, numOfNodes);
                     default:
                         JOptionPane.showMessageDialog(null, "Not implemented method yet.");
 
@@ -152,8 +154,8 @@ public class AdvancedAssigmentButton extends JButton {
                 eigenvector.setDirected(false);
                 eigenvector.execute(graph);
                 var nodes = Arrays.stream(graph.getNodes().toArray()).collect(Collectors.toList());
-                //todo ...
-                nodes.sort(Comparator.comparingInt(node -> Integer.parseInt(node.getAttribute("...?").toString())));
+
+                nodes.sort(Comparator.comparingInt(node -> Integer.parseInt(node.getAttribute("Eigenvector Centrality").toString())));
                 Collections.reverse(nodes);
                 for (int i = 0; i < numOfNodes; i++) {
                     var chosenOne = nodes.get(i);

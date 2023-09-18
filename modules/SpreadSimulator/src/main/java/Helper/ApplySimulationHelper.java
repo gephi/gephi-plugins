@@ -22,7 +22,6 @@ public class ApplySimulationHelper {
             return;
 
         var nodeRoles = simulationModel.getNodeRoles();
-        GenerateColorPaintings(nodeRoles);
         SetupNodeRoles(nodes, nodeRoles);
         SetupNodeStates(nodes, nodeRoles);
     }
@@ -41,8 +40,7 @@ public class ApplySimulationHelper {
 
     public static boolean ValidateGraph(Graph graph){
 
-        var nodes = List.of(graph.getNodes().toArray());
-        var table = nodes.get(0).getTable();
+        var table = graph.getModel().getNodeTable();
         return Validate(table);
     }
 
@@ -160,7 +158,6 @@ public class ApplySimulationHelper {
                         for (int i = 0; i < roleStateNumber && i < notAssignedToRoleNodes.stream().count(); i++) {
                             var node = notAssignedToRoleNodes.get(i);
                             node.setAttribute("NodeState", nodeState.getNodeState().getName());
-                            node.setColor(nodeState.getColor());
                         }
                     });
                 });
