@@ -2,8 +2,11 @@ package Components.SimulationBuilder;
 
 import SimulationModel.Node.NodeRole;
 import SimulationModel.Node.NodeStateDecorator;
+import org.gephi.graph.api.Graph;
 import org.gephi.graph.api.GraphController;
 import org.gephi.statistics.plugin.Degree;
+import org.gephi.statistics.plugin.EigenvectorCentrality;
+import org.gephi.statistics.plugin.Hits;
 import org.openide.util.Lookup;
 
 import javax.swing.*;
@@ -60,7 +63,7 @@ public class AdvancedAssigmentButton extends JButton {
             var centralityRateLabel = new JLabel("Select Centrality Rate:");
             centralityRateLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
             var centralityRateOptions = new String[] {
-                    "Closeness", "Betweenness", "Degree", "Eigenvector", "Prestige"
+                    "Closeness", "Betweenness", "Degree", "Eigenvector", "Prestige", "HITS"
             };
             centralityRateDropdown = new JComboBox<>(centralityRateOptions);
             centralityRateDropdown.setAlignmentX(Component.LEFT_ALIGNMENT);
@@ -107,24 +110,56 @@ public class AdvancedAssigmentButton extends JButton {
                 var numOfNodes = Integer.valueOf(numOfNodesString);
                 switch (centralityMethod) {
                     case "Degree":
-                        var degree = new Degree();
-                        degree.execute(graph);
-                        var nodes = Arrays.stream(graph.getNodes().toArray()).collect(Collectors.toList());
-                        var nodeRoleNodes = nodes.stream()
-                                .filter(node -> node.getAttribute("NodeRole") == nodeRole.getName().toString())
-                                .collect(Collectors.toList());
-                        nodeRoleNodes
-                                .sort(Comparator.comparingInt(node -> Integer.parseInt(node.getAttribute("Degree").toString())));
-                        Collections.reverse(nodeRoleNodes);
-                        for (int i = 0; i < numOfNodes; i++) {
-                            var chosenOne = nodeRoleNodes.get(i);
-                            chosenOne.setAttribute("NodeState", nodeStateDecorator.getNodeState().getName());
-                            chosenOne.setColor(nodeStateDecorator.getColor());
-                        }
+                        DegreeStatisticOption(graph, numOfNodes);
                         break;
-                    case "Betweenness":
+                    case "Eigenvector":
+                        EigenvectorStatisticOption(graph, numOfNodes);
                         break;
+                    default:
+                        JOptionPane.showMessageDialog(null, "Not implemented method yet.");
 
+                }
+            }
+
+            private void DegreeStatisticOption(Graph graph, Integer numOfNodes) {
+                var degree = new Degree();
+                degree.execute(graph);
+                var nodes = Arrays.stream(graph.getNodes().toArray()).collect(Collectors.toList());
+                nodes.sort(Comparator.comparingInt(node -> Integer.parseInt(node.getAttribute("Degree").toString())));
+                Collections.reverse(nodes);
+                for (int i = 0; i < numOfNodes; i++) {
+                    var chosenOne = nodes.get(i);
+                    chosenOne.setAttribute("NodeRole", nodeRole.getName());
+                    chosenOne.setAttribute("NodeState", nodeStateDecorator.getNodeState().getName());
+                    chosenOne.setColor(nodeStateDecorator.getColor());
+                }
+            }
+            private void HITSStatisticOption(Graph graph, Integer numOfNodes) {
+                var hits = new Hits();
+                hits.execute(graph);
+                var nodes = Arrays.stream(graph.getNodes().toArray()).collect(Collectors.toList());
+                nodes.sort(Comparator.comparingInt(node -> Integer.parseInt(node.getAttribute("Eigenvector Centrality").toString())));
+                Collections.reverse(nodes);
+                for (int i = 0; i < numOfNodes; i++) {
+                    var chosenOne = nodes.get(i);
+                    chosenOne.setAttribute("NodeRole", nodeRole.getName());
+                    chosenOne.setAttribute("NodeState", nodeStateDecorator.getNodeState().getName());
+                    chosenOne.setColor(nodeStateDecorator.getColor());
+                }
+            }
+            private void EigenvectorStatisticOption(Graph graph, Integer numOfNodes) {
+                var eigenvector = new EigenvectorCentrality();
+                eigenvector.setDirected(false);
+                eigenvector.execute(graph);
+                var nodes = Arrays.stream(graph.getNodes().toArray()).collect(Collectors.toList());
+                //todo ...
+                nodes.sort(Comparator.comparingInt(node -> Integer.parseInt(node.getAttribute("...?").toString())));
+                Collections.reverse(nodes);
+                for (int i = 0; i < numOfNodes; i++) {
+                    var chosenOne = nodes.get(i);
+                    chosenOne.setAttribute("NodeRole", nodeRole.getName());
+                    chosenOne.setAttribute("NodeState", nodeStateDecorator.getNodeState().getName());
+                    chosenOne.setColor(nodeStateDecorator.getColor());
                 }
             }
         }
