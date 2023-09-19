@@ -27,20 +27,21 @@ public class TransitionDeserializer extends StdDeserializer<Transition> {
         ObjectCodec codec = parser.getCodec();
         JsonNode node = codec.readTree(parser);
 
-         TransitionType transitionType = getTransitionType(node);
+        TransitionType transitionType = getTransitionType(node);
 
-         var mapper = new ObjectMapper();
+        var mapper = new ObjectMapper();
 
-         switch (transitionType){
-             case conditionProbability:
-                 return mapper.readValue(node, TransitionCondition.class);
-             case noConditionProbability:
-                 return mapper.readValue(node, TransitionNoCondition.class);
-             case timeDependentProbabilityFunction:
-                 return mapper.readValue(node, TransitionTimeDependentFunction.class);
-             default:
-                 throw new Exception("Unknow transition type");
-         }
+        switch (transitionType) {
+            case conditionProbability:
+                return mapper.readValue(node, TransitionCondition.class);
+            case noConditionProbability:
+                return mapper.readValue(node, TransitionNoCondition.class);
+            case timeDependentProbabilityFunction:
+                return mapper.readValue(node, TransitionTimeDependentFunction.class);
+            default:
+                return mapper.readValue(node, Transition.class);
+
+        }
     }
 
     private static TransitionType getTransitionType(JsonNode node) {

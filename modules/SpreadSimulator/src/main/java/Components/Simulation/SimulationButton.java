@@ -27,19 +27,22 @@ public class SimulationButton extends JButton {
     }
 
     private void runSimulation() {
-        for (int i = 0; i < conductSteps; i++) {
-            simulation.Step();
-            if (visualization) {
-                simulationComponent.initComponents();
-                simulationComponent.revalidate();
-                simulationComponent.repaint();
-            }
-            try {
-                Thread.sleep(delay);
-            } catch (InterruptedException ex) {
-                throw new RuntimeException(ex);
+        if (visualization) {
+            for (int i = 0; i < conductSteps; i++) {
+                simulation.Step();
+                try {
+                    Thread.sleep(delay);
+                } catch (InterruptedException ex) {
+                    throw new RuntimeException(ex);
+                }
             }
         }
+        else{
+            for (int i = 0; i < conductSteps; i++) {
+                simulation.Step();
+            }
+        }
+
         simulationComponent.initComponents();
         simulationComponent.revalidate();
         simulationComponent.repaint();

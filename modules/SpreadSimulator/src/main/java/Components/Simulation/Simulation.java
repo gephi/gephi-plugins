@@ -56,6 +56,8 @@ public class Simulation {
                 var probabilityTransition = transitions.stream().filter(transition -> transition.getSourceState().getName().contains(node.getAttribute("NodeState").toString())).collect(Collectors.toList());
                 for (Transition transition : probabilityTransition) {
                     switch (transition.getTransitionType()){
+                        case zeroProbability:
+                            break;
                         case noConditionProbability:
                             NoConditionProbabilityNode(node, transition);
                             break;

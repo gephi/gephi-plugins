@@ -4,10 +4,7 @@ import SimulationModel.Node.NodeRole;
 import SimulationModel.Node.NodeStateDecorator;
 import org.gephi.graph.api.Graph;
 import org.gephi.graph.api.GraphController;
-import org.gephi.statistics.plugin.Degree;
-import org.gephi.statistics.plugin.EigenvectorCentrality;
-import org.gephi.statistics.plugin.GraphDistance;
-import org.gephi.statistics.plugin.Hits;
+import org.gephi.statistics.plugin.*;
 import org.openide.util.Lookup;
 import org.openide.util.NotImplementedException;
 
@@ -66,7 +63,7 @@ public class AdvancedAssigmentButton extends JButton {
             var centralityRateLabel = new JLabel("Select Centrality Rate:");
             centralityRateLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
             var centralityRateOptions = new String[]{
-                    "Closeness", "Harmonic Closeness", "Betweenness", "Degree", "Eigenvector", "Prestige", "HITS - hub", "HITS - authority"
+                    "Closeness", "Harmonic Closeness", "Betweenness", "Degree", "Eigenvector", "HITS - hub", "HITS - authority", "Eccentricity", "Modularity"
             };
             centralityRateDropdown = new JComboBox<>(centralityRateOptions);
             centralityRateDropdown.setAlignmentX(Component.LEFT_ALIGNMENT);
@@ -131,13 +128,16 @@ public class AdvancedAssigmentButton extends JButton {
                     case "Eigenvector":
                         EigenvectorStatisticOption(graph, numOfNodes, !descendingCheckbox.isSelected());
                         break;
-                    case "Prestige":
-                        JOptionPane.showMessageDialog(null, "Not implemented method yet.");
-                        break;
                     case "HITS - authority":
                         HITSAuthorityStatisticOption(graph, numOfNodes, !descendingCheckbox.isSelected());
                     case "HITS - hub":
                         HITSHubStatisticOption(graph, numOfNodes, !descendingCheckbox.isSelected());
+                        break;
+                    case "Eccentricity":
+                        GraphDistanceEccentricityStatisticOption(graph, numOfNodes, !descendingCheckbox.isSelected());
+                        break;
+                    case "Modularity":
+                        GraphDistanceModularityStatisticOption(graph, numOfNodes, !descendingCheckbox.isSelected());
                         break;
                     default:
                         JOptionPane.showMessageDialog(null, "Not implemented method yet.");
@@ -191,6 +191,20 @@ public class AdvancedAssigmentButton extends JButton {
                 hits.execute(graph);
                 StatisticsOptions(graph, numOfNodes, descending, "Hub");
             }
+
+            private void GraphDistanceEccentricityStatisticOption(Graph graph, Integer numOfNodes, Boolean descending) {
+                var eigenvector = new GraphDistance();
+                eigenvector.setDirected(false);
+                eigenvector.execute(graph);
+                StatisticsOptions(graph, numOfNodes, descending, "eccentricity");
+            }
+
+            private void GraphDistanceModularityStatisticOption(Graph graph, Integer numOfNodes, Boolean descending) {
+                var eigenvector = new Modularity();
+                eigenvector.execute(graph);
+                StatisticsOptions(graph, numOfNodes, descending, "modularity_class");
+            }
+
 
             private void StatisticsOptions(Graph graph, Integer numOfNodes, Boolean descending, String attributeName) {
                 var nodes = Arrays.stream(graph.getNodes().toArray()).collect(Collectors.toList());

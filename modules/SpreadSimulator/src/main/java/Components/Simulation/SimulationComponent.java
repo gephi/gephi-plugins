@@ -46,7 +46,7 @@ public class SimulationComponent extends TopComponent {
             return;
         }
 
-        add(generateInputFieldsForRolesAndStates());
+        add(generateInfoFieldsForRolesAndStates());
         add(new StepButton(simulation, this));
         add(new SimulationButton(simulation, this));
         add(new GetReportButton(simulation, this));
@@ -72,7 +72,7 @@ public class SimulationComponent extends TopComponent {
         }
     }
 
-    private JScrollPane generateInputFieldsForRolesAndStates() {
+    private JScrollPane generateInfoFieldsForRolesAndStates() {
         var panel = new JPanel();
         panel.setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
