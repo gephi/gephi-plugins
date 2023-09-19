@@ -4,6 +4,7 @@ import SimulationModel.Node.NodeRole;
 import SimulationModel.Node.NodeStateDecorator;
 import org.gephi.graph.api.Graph;
 import org.gephi.graph.api.GraphController;
+import org.gephi.graph.api.Node;
 import org.gephi.statistics.plugin.*;
 import org.openide.util.Lookup;
 import org.openide.util.NotImplementedException;
@@ -15,6 +16,7 @@ import java.awt.event.ActionListener;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Random;
 import java.util.stream.Collectors;
 
 public class AdvancedAssigmentButton extends JButton {
@@ -60,10 +62,10 @@ public class AdvancedAssigmentButton extends JButton {
             constraints.insets = new Insets(0, 0, 0, 0);
             numOfNodesPanel.add(numOfNodesInput, constraints);
 
-            var centralityRateLabel = new JLabel("Select Centrality Rate:");
+            var centralityRateLabel = new JLabel("Select Strategy:");
             centralityRateLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
             var centralityRateOptions = new String[]{
-                    "Closeness", "Harmonic Closeness", "Betweenness", "Degree", "Eigenvector", "HITS - hub", "HITS - authority", "Eccentricity", "Modularity"
+                    "Random", "Random-Random","Closeness", "Harmonic Closeness", "Betweenness", "Degree", "Eigenvector", "HITS - hub", "HITS - authority", "Eccentricity", "Modularity"
             };
             centralityRateDropdown = new JComboBox<>(centralityRateOptions);
             centralityRateDropdown.setAlignmentX(Component.LEFT_ALIGNMENT);
@@ -113,6 +115,12 @@ public class AdvancedAssigmentButton extends JButton {
                 var numOfNodesString = numOfNodesInput.getText();
                 var numOfNodes = Integer.valueOf(numOfNodesString);
                 switch (centralityMethod) {
+                    case "Random":
+                        RandomNStrategy(graph, numOfNodes, !descendingCheckbox.isSelected());
+                        break;
+                    case "Random-Random":
+                        RandomRandomStrategy(graph, numOfNodes, !descendingCheckbox.isSelected());
+                        break;
                     case "Closeness":
                         GraphDistanceClosenessStatisticOption(graph, numOfNodes, !descendingCheckbox.isSelected());
                         break;
@@ -144,6 +152,33 @@ public class AdvancedAssigmentButton extends JButton {
                         throw new NotImplementedException();
                 }
                 JOptionPane.showMessageDialog(null, "Changes have been imposed.");
+            }
+
+            private void RandomNStrategy(Graph graph, Integer numOfNodes, Boolean descending) {
+                Node[] nodes = graph.getNodes().toArray();
+                var rnd = new Random();
+                for (int i = 0; i < numOfNodes; i++) {
+                    var index = rnd.nextInt(nodes.length);
+                    var selectedNode = nodes[index];
+                    selectedNode.setAttribute("NodeRole", nodeRole.getName());
+                    selectedNode.setAttribute("NodeState", nodeStateDecorator.getNodeState().getName());
+                    selectedNode.setColor(nodeStateDecorator.getColor());
+                }
+            }
+
+            private void RandomRandomStrategy(Graph graph, Integer numOfNodes, Boolean descending) {
+                Node[] nodes = graph.getNodes().toArray();
+                var rnd = new Random();
+                for (int i = 0; i < numOfNodes; i++) {
+                    var index = rnd.nextInt(nodes.length);
+                    var selectedNode = nodes[index];
+                    var neighbours = graph.getNeighbors(selectedNode).toArray();
+                    index = rnd.nextInt(neighbours.length);
+                    selectedNode = neighbours[index];
+                    selectedNode.setAttribute("NodeRole", nodeRole.getName());
+                    selectedNode.setAttribute("NodeState", nodeStateDecorator.getNodeState().getName());
+                    selectedNode.setColor(nodeStateDecorator.getColor());
+                }
             }
 
             private void GraphDistanceClosenessStatisticOption(Graph graph, Integer numOfNodes, Boolean descending) {
