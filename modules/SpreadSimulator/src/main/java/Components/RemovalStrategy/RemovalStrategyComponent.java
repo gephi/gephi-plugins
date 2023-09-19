@@ -54,27 +54,34 @@ public class RemovalStrategyComponent extends TopComponent {
     public void initComponents() {
         this.removeAll();
 
-        setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+        setLayout(new BorderLayout());
         setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+
+        JPanel contentPanel = new JPanel();
+        contentPanel.setLayout(new BoxLayout(contentPanel, BoxLayout.Y_AXIS));
 
         var numOfNodesPanel = new JPanel(new GridBagLayout());
         var constraints = new GridBagConstraints();
         constraints.anchor = GridBagConstraints.WEST;
+
         var numOfNodesLabel = new JLabel("Number of nodes:");
         numOfNodesInput = new JTextField(5);
+
         constraints.gridx = 0;
         constraints.gridy = 0;
         constraints.insets = new Insets(0, 0, 0, 5);
         numOfNodesPanel.add(numOfNodesLabel, constraints);
+
         constraints.gridx = 1;
-        constraints.gridy = 0;
         constraints.insets = new Insets(0, 0, 0, 0);
         numOfNodesPanel.add(numOfNodesInput, constraints);
 
-        var centralityRateLabel = new JLabel("Select Centrality Rate:");
+        var centralityRateLabel = new JLabel("Select Strategy:");
         centralityRateLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
+
         var centralityRateOptions = new String[]{
-                "Random", "Random-Random","Closeness", "Harmonic Closeness", "Betweenness", "Degree", "Eigenvector", "HITS - hub", "HITS - authority", "Eccentricity", "Modularity"
+                "Random", "Random-Random", "Closeness", "Harmonic Closeness", "Betweenness", "Degree",
+                "Eigenvector", "HITS - hub", "HITS - authority", "Eccentricity", "Modularity"
         };
         centralityRateDropdown = new JComboBox<>(centralityRateOptions);
         centralityRateDropdown.setAlignmentX(Component.LEFT_ALIGNMENT);
@@ -88,18 +95,21 @@ public class RemovalStrategyComponent extends TopComponent {
         buttonPanel.setLayout(new FlowLayout(FlowLayout.RIGHT));
         buttonPanel.add(applyButton);
 
+        contentPanel.add(numOfNodesPanel);
+        contentPanel.add(Box.createVerticalStrut(10));
+        contentPanel.add(centralityRateLabel);
+        contentPanel.add(Box.createVerticalStrut(5));
+        contentPanel.add(centralityRateDropdown);
+        contentPanel.add(Box.createVerticalStrut(10));
+        contentPanel.add(descendingCheckbox);
+        contentPanel.add(buttonPanel);
 
-        add(numOfNodesPanel);
-        add(Box.createVerticalStrut(10));
-        add(centralityRateLabel);
-        add(Box.createVerticalStrut(5));
-        add(centralityRateDropdown);
-        add(Box.createVerticalStrut(10));
-        add(descendingCheckbox);
-        add(buttonPanel);
+        add(contentPanel, BorderLayout.NORTH);
 
         setVisible(true);
     }
+
+
 
     private class ApplyChangesListener implements ActionListener {
         @Override
