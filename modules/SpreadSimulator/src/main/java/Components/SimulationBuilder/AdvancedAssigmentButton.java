@@ -9,6 +9,7 @@ import org.gephi.statistics.plugin.EigenvectorCentrality;
 import org.gephi.statistics.plugin.GraphDistance;
 import org.gephi.statistics.plugin.Hits;
 import org.openide.util.Lookup;
+import org.openide.util.NotImplementedException;
 
 import javax.swing.*;
 import java.awt.*;
@@ -70,6 +71,8 @@ public class AdvancedAssigmentButton extends JButton {
             centralityRateDropdown = new JComboBox<>(centralityRateOptions);
             centralityRateDropdown.setAlignmentX(Component.LEFT_ALIGNMENT);
 
+            descendingCheckbox = new JCheckBox("descending");
+
             var applyButton = new JButton("Apply");
             applyButton.addActionListener(new ApplyChangesListener());
 
@@ -77,7 +80,6 @@ public class AdvancedAssigmentButton extends JButton {
             buttonPanel.setLayout(new FlowLayout(FlowLayout.RIGHT));
             buttonPanel.add(applyButton);
 
-            descendingCheckbox = new JCheckBox("descending");
 
             mainPanel.add(numOfNodesPanel);
             mainPanel.add(Box.createVerticalStrut(10));
@@ -85,8 +87,8 @@ public class AdvancedAssigmentButton extends JButton {
             mainPanel.add(Box.createVerticalStrut(5));
             mainPanel.add(centralityRateDropdown);
             mainPanel.add(Box.createVerticalStrut(10));
-            mainPanel.add(buttonPanel);
             mainPanel.add(descendingCheckbox);
+            mainPanel.add(buttonPanel);
 
             dialog.add(mainPanel);
 
@@ -139,8 +141,9 @@ public class AdvancedAssigmentButton extends JButton {
                         break;
                     default:
                         JOptionPane.showMessageDialog(null, "Not implemented method yet.");
-
+                        throw new NotImplementedException();
                 }
+                JOptionPane.showMessageDialog(null, "Changes have been imposed.");
             }
 
             private void GraphDistanceClosenessStatisticOption(Graph graph, Integer numOfNodes, Boolean descending) {
