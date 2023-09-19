@@ -6,6 +6,7 @@ import org.gephi.graph.api.Graph;
 import org.gephi.graph.api.GraphController;
 import org.gephi.statistics.plugin.Degree;
 import org.gephi.statistics.plugin.EigenvectorCentrality;
+import org.gephi.statistics.plugin.GraphDistance;
 import org.gephi.statistics.plugin.Hits;
 import org.openide.util.Lookup;
 
@@ -37,9 +38,10 @@ public class AdvancedAssigmentButton extends JButton {
 
         JTextField numOfNodesInput;
         JComboBox centralityRateDropdown;
+        JCheckBox descendingCheckbox;
 
         @Override
-        public void actionPerformed(ActionEvent e){
+        public void actionPerformed(ActionEvent e) {
             var dialog = new JDialog();
 
             var mainPanel = new JPanel();
@@ -62,8 +64,8 @@ public class AdvancedAssigmentButton extends JButton {
 
             var centralityRateLabel = new JLabel("Select Centrality Rate:");
             centralityRateLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
-            var centralityRateOptions = new String[] {
-                    "Closeness", "Betweenness", "Degree", "Eigenvector", "Prestige", "HITS"
+            var centralityRateOptions = new String[]{
+                    "Closeness", "Harmonic Closeness", "Betweenness", "Degree", "Eigenvector", "Prestige", "HITS - hub", "HITS - authority"
             };
             centralityRateDropdown = new JComboBox<>(centralityRateOptions);
             centralityRateDropdown.setAlignmentX(Component.LEFT_ALIGNMENT);
@@ -75,6 +77,8 @@ public class AdvancedAssigmentButton extends JButton {
             buttonPanel.setLayout(new FlowLayout(FlowLayout.RIGHT));
             buttonPanel.add(applyButton);
 
+            descendingCheckbox = new JCheckBox("descending");
+
             mainPanel.add(numOfNodesPanel);
             mainPanel.add(Box.createVerticalStrut(10));
             mainPanel.add(centralityRateLabel);
@@ -82,6 +86,7 @@ public class AdvancedAssigmentButton extends JButton {
             mainPanel.add(centralityRateDropdown);
             mainPanel.add(Box.createVerticalStrut(10));
             mainPanel.add(buttonPanel);
+            mainPanel.add(descendingCheckbox);
 
             dialog.add(mainPanel);
 
@@ -109,54 +114,87 @@ public class AdvancedAssigmentButton extends JButton {
                 var numOfNodesString = numOfNodesInput.getText();
                 var numOfNodes = Integer.valueOf(numOfNodesString);
                 switch (centralityMethod) {
+                    case "Closeness":
+                        GraphDistanceClosenessStatisticOption(graph, numOfNodes, !descendingCheckbox.isSelected());
+                        break;
+                    case "Harmonic Closeness":
+                        GraphDistanceHarmonicClosenessStatisticOption(graph, numOfNodes, !descendingCheckbox.isSelected());
+                        break;
+                    case "Betwenness":
+                        GraphDistanceBetweenessStatisticOption(graph, numOfNodes, !descendingCheckbox.isSelected());
+                        break;
                     case "Degree":
-                        DegreeStatisticOption(graph, numOfNodes);
+                        DegreeStatisticOption(graph, numOfNodes, !descendingCheckbox.isSelected());
                         break;
                     case "Eigenvector":
-                        EigenvectorStatisticOption(graph, numOfNodes);
+                        EigenvectorStatisticOption(graph, numOfNodes, !descendingCheckbox.isSelected());
                         break;
-                    case "HITS":
-                        HITSStatisticOption(graph, numOfNodes);
+                    case "Prestige":
+                        JOptionPane.showMessageDialog(null, "Not implemented method yet.");
+                        break;
+                    case "HITS - authority":
+                        HITSAuthorityStatisticOption(graph, numOfNodes, !descendingCheckbox.isSelected());
+                    case "HITS - hub":
+                        HITSHubStatisticOption(graph, numOfNodes, !descendingCheckbox.isSelected());
+                        break;
                     default:
                         JOptionPane.showMessageDialog(null, "Not implemented method yet.");
 
                 }
             }
 
-            private void DegreeStatisticOption(Graph graph, Integer numOfNodes) {
+            private void GraphDistanceClosenessStatisticOption(Graph graph, Integer numOfNodes, Boolean descending) {
+                var eigenvector = new GraphDistance();
+                eigenvector.setDirected(false);
+                eigenvector.execute(graph);
+                StatisticsOptions(graph, numOfNodes, descending, "closnesscentrality");
+            }
+
+            private void GraphDistanceHarmonicClosenessStatisticOption(Graph graph, Integer numOfNodes, Boolean descending) {
+                var eigenvector = new GraphDistance();
+                eigenvector.setDirected(false);
+                eigenvector.execute(graph);
+                StatisticsOptions(graph, numOfNodes, descending, "harmonicclosnesscentrality");
+            }
+
+            private void GraphDistanceBetweenessStatisticOption(Graph graph, Integer numOfNodes, Boolean descending) {
+                var eigenvector = new GraphDistance();
+                eigenvector.setDirected(false);
+                eigenvector.execute(graph);
+                StatisticsOptions(graph, numOfNodes, descending, "betweenesscentrality");
+            }
+
+            private void DegreeStatisticOption(Graph graph, Integer numOfNodes, Boolean descending) {
                 var degree = new Degree();
                 degree.execute(graph);
-                var nodes = Arrays.stream(graph.getNodes().toArray()).collect(Collectors.toList());
-                nodes.sort(Comparator.comparingInt(node -> Integer.parseInt(node.getAttribute("Degree").toString())));
-                Collections.reverse(nodes);
-                for (int i = 0; i < numOfNodes; i++) {
-                    var chosenOne = nodes.get(i);
-                    chosenOne.setAttribute("NodeRole", nodeRole.getName());
-                    chosenOne.setAttribute("NodeState", nodeStateDecorator.getNodeState().getName());
-                    chosenOne.setColor(nodeStateDecorator.getColor());
-                }
+                StatisticsOptions(graph, numOfNodes, descending, "Degree");
             }
-            private void HITSStatisticOption(Graph graph, Integer numOfNodes) {
-                var hits = new Hits();
-                hits.execute(graph);
-                var nodes = Arrays.stream(graph.getNodes().toArray()).collect(Collectors.toList());
-                nodes.sort(Comparator.comparingInt(node -> Integer.parseInt(node.getAttribute("Eigenvector Centrality").toString())));
-                Collections.reverse(nodes);
-                for (int i = 0; i < numOfNodes; i++) {
-                    var chosenOne = nodes.get(i);
-                    chosenOne.setAttribute("NodeRole", nodeRole.getName());
-                    chosenOne.setAttribute("NodeState", nodeStateDecorator.getNodeState().getName());
-                    chosenOne.setColor(nodeStateDecorator.getColor());
-                }
-            }
-            private void EigenvectorStatisticOption(Graph graph, Integer numOfNodes) {
+
+            private void EigenvectorStatisticOption(Graph graph, Integer numOfNodes, Boolean descending) {
                 var eigenvector = new EigenvectorCentrality();
                 eigenvector.setDirected(false);
                 eigenvector.execute(graph);
-                var nodes = Arrays.stream(graph.getNodes().toArray()).collect(Collectors.toList());
+                StatisticsOptions(graph, numOfNodes, descending, "eigencentrality");
+            }
 
-                nodes.sort(Comparator.comparingInt(node -> Integer.parseInt(node.getAttribute("Eigenvector Centrality").toString())));
-                Collections.reverse(nodes);
+            private void HITSAuthorityStatisticOption(Graph graph, Integer numOfNodes, Boolean descending) {
+                var hits = new Hits();
+                hits.execute(graph);
+                StatisticsOptions(graph, numOfNodes, descending, "Authority");
+            }
+
+            private void HITSHubStatisticOption(Graph graph, Integer numOfNodes, Boolean descending) {
+                var hits = new Hits();
+                hits.execute(graph);
+                StatisticsOptions(graph, numOfNodes, descending, "Hub");
+            }
+
+            private void StatisticsOptions(Graph graph, Integer numOfNodes, Boolean descending, String attributeName) {
+                var nodes = Arrays.stream(graph.getNodes().toArray()).collect(Collectors.toList());
+                nodes.sort(Comparator.comparingDouble(node -> Double.parseDouble(node.getAttribute(attributeName).toString())));
+                if (descending) {
+                    Collections.reverse(nodes);
+                }
                 for (int i = 0; i < numOfNodes; i++) {
                     var chosenOne = nodes.get(i);
                     chosenOne.setAttribute("NodeRole", nodeRole.getName());
