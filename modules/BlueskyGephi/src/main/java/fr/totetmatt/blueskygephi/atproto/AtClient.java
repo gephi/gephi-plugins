@@ -9,6 +9,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import fr.totetmatt.blueskygephi.atproto.response.AppBskyActorGetProfile;
 import fr.totetmatt.blueskygephi.atproto.response.AppBskyGraphGetFollowers;
 import fr.totetmatt.blueskygephi.atproto.response.AppBskyGraphGetFollows;
+import fr.totetmatt.blueskygephi.atproto.response.AppBskyGraphGetList;
 import fr.totetmatt.blueskygephi.atproto.response.ComAtprotoServerCreateSession;
 import java.io.IOException;
 import java.net.http.HttpClient;
@@ -17,6 +18,8 @@ import java.net.http.HttpResponse;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import org.openide.util.Exceptions;
 
 public class AtClient {
@@ -26,7 +29,7 @@ public class AtClient {
 
     private final HttpClient client = HttpClient.newHttpClient();
     private ComAtprotoServerCreateSession session = null;
-
+ExecutorService executorService = Executors.newFixedThreadPool(2);
     public AtClient(String host) {
         context = new AtContext(host);
     }
@@ -112,6 +115,29 @@ public class AtClient {
         }
         return null;
     }
+    
+     public List<AppBskyGraphGetList> appBskyGraphGetList(String list) {
+         List<AppBskyGraphGetList> lists = new ArrayList<>();
+        try {
+            var params = new HashMap<String, String>();
+            params.put("list", list);
+            params.put("limit", "100");
+            while (true) {
+            var request = getRequest("app.bsky.graph.getList", params);
+            var response = client.send(request, HttpResponse.BodyHandlers.ofString());
+              var objectResponse =  objectMapper.readValue(response.body(), AppBskyGraphGetList.class);
+               lists.add(objectResponse);
+                if (objectResponse.getCursor() == null) {
+                        break;
+                }
+               
+                params.put("cursor", objectResponse.getCursor());
+            }
+        } catch (IOException | InterruptedException ex) {
+            Exceptions.printStackTrace(ex);
+        }
+        return lists;
+    }
 
     public AppBskyActorGetProfile appBskyActorGetProfiles(String actors) {
         try {
@@ -121,7 +147,6 @@ public class AtClient {
                     .header("Authorization", "Bearer " + session.getAccessJwt())
                     .build();
             var response = client.send(request, HttpResponse.BodyHandlers.ofString());
-            System.out.println(response.body());
             return objectMapper.readValue(response.body(), AppBskyActorGetProfile.class);
         } catch (IOException | InterruptedException ex) {
             Exceptions.printStackTrace(ex);

@@ -3,13 +3,19 @@ package fr.totetmatt.blueskygephi;
 import fr.totetmatt.blueskygephi.atproto.AtClient;
 import fr.totetmatt.blueskygephi.atproto.response.AppBskyGraphGetFollowers;
 import fr.totetmatt.blueskygephi.atproto.response.AppBskyGraphGetFollows;
+import fr.totetmatt.blueskygephi.atproto.response.AppBskyGraphGetList;
 import fr.totetmatt.blueskygephi.atproto.response.common.Identity;
 import java.awt.Color;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.logging.Logger;
 import java.util.prefs.Preferences;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+import static org.apache.commons.math3.analysis.FunctionUtils.collector;
 import org.gephi.graph.api.Edge;
 import org.gephi.graph.api.GraphController;
 import org.gephi.graph.api.GraphModel;
@@ -19,6 +25,7 @@ import org.gephi.project.api.ProjectController;
 import org.gephi.utils.progress.Progress;
 import org.gephi.utils.progress.ProgressTicket;
 import org.gephi.utils.progress.ProgressTicketProvider;
+import org.openide.util.Exceptions;
 import org.openide.util.Lookup;
 import org.openide.util.NbPreferences;
 import org.openide.util.lookup.ServiceProvider;
@@ -133,56 +140,65 @@ public class BlueskyGephi {
         return edge;
     }
 
-    private void fetchFollowerFollowsFromActor(String actor, boolean isFollowsActive, boolean isFollowersActive, boolean isDeepSearch) {
+    private void fetchFollowerFollowsFromActor(String actor, List<String> listInit, boolean isFollowsActive, boolean isFollowersActive, boolean isDeepSearch) {
         // To avoid locking Gephi UI
         Thread t = new Thread() {
             private ProgressTicket progressTicket;
             Set<String> foaf = new HashSet<>();
 
             private void process(String actor, boolean isDeepSearch) {
-                if (isFollowsActive) {
-                    List<AppBskyGraphGetFollows> responses = client.appBskyGraphGetFollows(actor);
+                try {
+                    if (isFollowsActive) {
+                        List<AppBskyGraphGetFollows> responses = client.appBskyGraphGetFollows(actor);
 
-                    graphModel.getGraph().writeLock();
-                    for (var response : responses) {
-                        Identity subject = response.getSubject();
-                        Node source = createNode(subject);
-                        source.setColor(Color.GREEN);
-                        for (var follow : response.getFollows()) {
-                            if (isDeepSearch) {
-                                foaf.add(follow.getDid());
+                        graphModel.getGraph().writeLock();
+                        for (var response : responses) {
+                            Identity subject = response.getSubject();
+                            Node source = createNode(subject);
+                            source.setColor(Color.GREEN);
+                            for (var follow : response.getFollows()) {
+                                if (isDeepSearch) {
+                                    foaf.add(follow.getDid());
+                                }
+                                Node target = createNode(follow);
+                                createEdge(source, target);
                             }
-                            Node target = createNode(follow);
-                            createEdge(source, target);
+
                         }
-
+                        graphModel.getGraph().writeUnlock();
                     }
-                    graphModel.getGraph().writeUnlock();
-                }
 
-                if (isFollowersActive) {
-                    List<AppBskyGraphGetFollowers> responses = client.appBskyGraphGetFollowers(actor);
+                    if (isFollowersActive) {
+                        List<AppBskyGraphGetFollowers> responses = client.appBskyGraphGetFollowers(actor);
 
-                    graphModel.getGraph().writeLock();
-                    for (var response : responses) {
-                        Identity subject = response.getSubject();
-                        Node target = createNode(subject);
-                        target.setColor(Color.GREEN);
-                        for (var follower : response.getFollowers()) {
-                            if (isDeepSearch) {
-                                foaf.add(follower.getDid());
+                        graphModel.getGraph().writeLock();
+                        for (var response : responses) {
+                            Identity subject = response.getSubject();
+                            Node target = createNode(subject);
+                            target.setColor(Color.GREEN);
+                            for (var follower : response.getFollowers()) {
+                                if (isDeepSearch) {
+                                    foaf.add(follower.getDid());
+                                }
+                                Node source = createNode(follower);
+                                createEdge(source, target);
                             }
-                            Node source = createNode(follower);
-                            createEdge(source, target);
                         }
+                        graphModel.getGraph().writeUnlock();
                     }
-                    graphModel.getGraph().writeUnlock();
+                } catch(Exception e){
+                     Exceptions.printStackTrace(e);
                 }
             }
 
             @Override
             public void run() {
-                this.setName("Bluesky Gephi Fetching Data for " + actor);
+                
+                if(actor!=null){
+                      this.setName("Bluesky Gephi Fetching Data for " + actor);
+                } else {
+                         this.setName("Bluesky Gephi Fetching Data for List");
+                }
                 progressTicket = Lookup.getDefault()
                         .lookup(ProgressTicketProvider.class)
                         .createTicket(this.getName(), () -> {
@@ -190,11 +206,16 @@ public class BlueskyGephi {
                             Progress.finish(progressTicket);
                             return true;
                         });
-
                 Progress.start(progressTicket);
                 Progress.switchToIndeterminate(progressTicket);
-
-                process(actor, isDeepSearch);
+                
+                
+                if(listInit!=null){
+                    this.foaf.addAll(listInit);
+                }
+                if(actor!=null){
+                    process(actor, isDeepSearch);
+                }
                 if (isDeepSearch) {
                     for (var foafActor : foaf) {
                         process(foafActor, false);
@@ -206,12 +227,30 @@ public class BlueskyGephi {
         t.start();
 
     }
-
+    private Stream<String> manageList(String listId) {
+         List<AppBskyGraphGetList> list = client.appBskyGraphGetList(listId);
+         return list.stream().flatMap(x->x.getItems().stream().map(y->y.getSubject().getDid()));
+        
+    }
     public void fetchFollowerFollowsFromActors(List<String> actors, boolean isFollowsActive, boolean isFollowersActive, boolean isBlocksActive) {
-        actors.stream().forEach(actor -> fetchFollowerFollowsFromActor(actor, isFollowsActive, isFollowersActive, getIsDeepSearch()));
+        actors.stream().forEach(actor -> fetchFollowerFollowsFromActor(actor,null, isFollowsActive, isFollowersActive, getIsDeepSearch()));
     }
 
+     
     public void fetchFollowerFollowsFromActors(List<String> actors) {
-        actors.stream().forEach(actor -> fetchFollowerFollowsFromActor(actor, getIsFollowsActive(), getIsFollowersActive(), getIsDeepSearch()));
+       actors
+        .stream()
+        .sequential()
+        .filter(x -> !x.contains("app.bsky.graph.list"))
+        .forEach(actor -> fetchFollowerFollowsFromActor(actor,null, getIsFollowsActive(), getIsFollowersActive(), getIsDeepSearch()));
+       
+        List<String> listActor = actors
+                .stream()
+                .sequential()
+                .filter(x -> x.contains("app.bsky.graph.list"))
+                .flatMap(this::manageList)
+                .collect(Collectors.toList());
+        fetchFollowerFollowsFromActor(null,listActor, getIsFollowsActive(), getIsFollowersActive(), getIsDeepSearch());
+        
     }
 }
