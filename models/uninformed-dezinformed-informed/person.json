@@ -1,0 +1,96 @@
+{
+  "name": "person",
+  "description": "...",
+  "transitionMap": [
+    {
+      "transitionType": "conditionProbability",
+      "sourceState": {
+        "name": "uninformed",
+        "description": null
+      },
+      "destinationState": {
+        "name": "informed",
+        "description": null
+      },
+      "probability": 0.1,
+      "provocativeNeighborName": [
+        "informed"
+      ]
+    },
+    {
+      "transitionType": "conditionProbability",
+      "sourceState": {
+        "name": "uninformed",
+        "description": null
+      },
+      "destinationState": {
+        "name": "informed",
+        "description": null
+      },
+      "probability": 0.5,
+      "provocativeNeighborName": [
+        "informing"
+      ]
+    },
+    {
+      "transitionType": "conditionProbability",
+      "sourceState": {
+        "name": "uninformed",
+        "description": null
+      },
+      "destinationState": {
+        "name": "disinformed",
+        "description": null
+      },
+      "probability": 0.2,
+      "provocativeNeighborName": [
+        "disinformed"
+      ]
+    },
+    {
+      "transitionType": "conditionProbability",
+      "sourceState": {
+        "name": "uninformed",
+        "description": null
+      },
+      "destinationState": {
+        "name": "disinformed",
+        "description": null
+      },
+      "probability": 0.5,
+      "provocativeNeighborName": [
+        "disinforming"
+      ]
+    },
+    {
+      "transitionType": "conditionProbability",
+      "sourceState": {
+        "name": "disinformed",
+        "description": null
+      },
+      "destinationState": {
+        "name": "informed",
+        "description": null
+      },
+      "probability": 0.1,
+      "provocativeNeighborName": [
+        "informed"
+      ]
+    },
+    {
+      "transitionType": "conditionProbability",
+      "sourceState": {
+        "name": "disinformed",
+        "description": null
+      },
+      "destinationState": {
+        "name": "informed",
+        "description": null
+      },
+      "probability": 0.1,
+      "provocativeNeighborName": [
+        "informing"
+      ]
+    }
+  ]
+}

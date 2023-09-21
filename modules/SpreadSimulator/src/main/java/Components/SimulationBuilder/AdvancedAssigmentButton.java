@@ -1,7 +1,9 @@
 package Components.SimulationBuilder;
 
+import Helper.ObjectMapperHelper;
 import SimulationModel.Node.NodeRole;
 import SimulationModel.Node.NodeStateDecorator;
+import org.codehaus.jackson.map.ObjectMapper;
 import org.gephi.graph.api.Graph;
 import org.gephi.graph.api.GraphController;
 import org.gephi.graph.api.Node;
@@ -13,6 +15,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
@@ -251,6 +254,12 @@ public class AdvancedAssigmentButton extends JButton {
                     var chosenOne = nodes.get(i);
                     chosenOne.setAttribute("NodeRole", nodeRole.getName());
                     chosenOne.setAttribute("NodeState", nodeStateDecorator.getNodeState().getName());
+                    var mapper = ObjectMapperHelper.CustomObjectMapperCreator();
+                    try {
+                        chosenOne.setAttribute("TransitionMap", mapper.writeValueAsString(nodeRole.getTransitionMap()));
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
                     chosenOne.setColor(nodeStateDecorator.getColor());
                 }
             }
