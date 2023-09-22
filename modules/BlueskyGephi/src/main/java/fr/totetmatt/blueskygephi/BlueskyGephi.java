@@ -8,6 +8,7 @@ import fr.totetmatt.blueskygephi.atproto.response.common.Identity;
 import java.awt.Color;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -44,15 +45,17 @@ public class BlueskyGephi {
     private final static String NBPREF_QUERY_ISFOLLOWERSACTIVE = "query.isFollowersActive";
     private final static String NBPREF_QUERY_ISFOLLOWSACTIVE = "query.isFollowsActive";
     private final static String NBPREF_QUERY_ISDEEPSEARCH = "query.isDeepSearch";
-
+    private final static String NBPREF_QUERY_ISLIMITCRAWLACTIVE = "query.isLimitCrawlActive";
+    private final static String NBPREF_QUERY_LIMITCRAWL = "query.limitCrawl";
+     
     private final Preferences nbPref = NbPreferences.forModule(BlueskyGephi.class);
     // If ATProto get released and decentralized, this will change to adapt to other instances
     final private AtClient client = new AtClient("bsky.social");
-    final private GraphModel graphModel;
+    private GraphModel graphModel;
 
     public BlueskyGephi() {
         initProjectAndWorkspace();
-        graphModel = Lookup.getDefault().lookup(GraphController.class).getGraphModel();
+        
     }
 
     private void initProjectAndWorkspace() {
@@ -110,7 +113,21 @@ public class BlueskyGephi {
     public boolean getIsDeepSearch() {
         return nbPref.getBoolean(NBPREF_QUERY_ISDEEPSEARCH, true);
     }
+    
+   public void setIsLimitCrawlActive(boolean isLimitCrawlActive){
+         nbPref.putBoolean(NBPREF_QUERY_ISLIMITCRAWLACTIVE, isLimitCrawlActive);
+    }
+  public boolean getIsLimitCrawlActive(){
+        return nbPref.getBoolean(NBPREF_QUERY_ISLIMITCRAWLACTIVE, true);
+    }
 
+      
+   public void setLimitCrawl(int limitCrawl){
+         nbPref.putInt(NBPREF_QUERY_LIMITCRAWL, limitCrawl);
+    }
+  public int getLimitCrawl(){
+        return nbPref.getInt(NBPREF_QUERY_LIMITCRAWL, 1);
+    }
     private Node createNode(Identity i) {
 
         Node node = graphModel.getGraph().getNode(i.getDid());
@@ -146,10 +163,10 @@ public class BlueskyGephi {
             private ProgressTicket progressTicket;
             Set<String> foaf = new HashSet<>();
 
-            private void process(String actor, boolean isDeepSearch) {
+            private void process(String actor, boolean isDeepSearch, Optional<Integer> limitCrawl) {
                 try {
                     if (isFollowsActive) {
-                        List<AppBskyGraphGetFollows> responses = client.appBskyGraphGetFollows(actor);
+                        List<AppBskyGraphGetFollows> responses = client.appBskyGraphGetFollows(actor,limitCrawl);
 
                         graphModel.getGraph().writeLock();
                         for (var response : responses) {
@@ -169,7 +186,7 @@ public class BlueskyGephi {
                     }
 
                     if (isFollowersActive) {
-                        List<AppBskyGraphGetFollowers> responses = client.appBskyGraphGetFollowers(actor);
+                        List<AppBskyGraphGetFollowers> responses = client.appBskyGraphGetFollowers(actor,limitCrawl);
 
                         graphModel.getGraph().writeLock();
                         for (var response : responses) {
@@ -214,11 +231,11 @@ public class BlueskyGephi {
                     this.foaf.addAll(listInit);
                 }
                 if(actor!=null){
-                    process(actor, isDeepSearch);
+                    process(actor, isDeepSearch,Optional.empty());
                 }
-                if (isDeepSearch) {
+                if (listInit!=null||isDeepSearch ) {
                     for (var foafActor : foaf) {
-                        process(foafActor, false);
+                        process(foafActor, false,Optional.of(50));
                     }
                 }
                 Progress.finish(progressTicket);
@@ -233,23 +250,24 @@ public class BlueskyGephi {
         
     }
     public void fetchFollowerFollowsFromActors(List<String> actors, boolean isFollowsActive, boolean isFollowersActive, boolean isBlocksActive) {
+        graphModel = Lookup.getDefault().lookup(GraphController.class).getGraphModel();
         actors.stream().forEach(actor -> fetchFollowerFollowsFromActor(actor,null, isFollowsActive, isFollowersActive, getIsDeepSearch()));
     }
 
      
     public void fetchFollowerFollowsFromActors(List<String> actors) {
+        graphModel = Lookup.getDefault().lookup(GraphController.class).getGraphModel();
        actors
         .stream()
-        .sequential()
         .filter(x -> !x.contains("app.bsky.graph.list"))
         .forEach(actor -> fetchFollowerFollowsFromActor(actor,null, getIsFollowsActive(), getIsFollowersActive(), getIsDeepSearch()));
        
         List<String> listActor = actors
                 .stream()
-                .sequential()
                 .filter(x -> x.contains("app.bsky.graph.list"))
                 .flatMap(this::manageList)
                 .collect(Collectors.toList());
+     
         fetchFollowerFollowsFromActor(null,listActor, getIsFollowsActive(), getIsFollowersActive(), getIsDeepSearch());
         
     }

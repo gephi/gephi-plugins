@@ -18,6 +18,7 @@ import java.net.http.HttpResponse;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import org.openide.util.Exceptions;
@@ -57,13 +58,14 @@ ExecutorService executorService = Executors.newFixedThreadPool(2);
     }
 
     // Yeah, it should be generalized, and async, but it works right now so it's ok.
-    public List<AppBskyGraphGetFollowers> appBskyGraphGetFollowers(String actor) {
+    public List<AppBskyGraphGetFollowers> appBskyGraphGetFollowers(String actor, Optional<Integer> limitCrawl) {
         List<AppBskyGraphGetFollowers> pagedResponse = new ArrayList<>();
         try {
             var params = new HashMap<String, String>();
             params.put("actor", actor);
             params.put("limit", "100");
-            while (true) {
+            int currentCrawlLoop=0;
+            while (limitCrawl.isEmpty() ||currentCrawlLoop < limitCrawl.get()) {
                 var request = getRequest("app.bsky.graph.getFollowers", params);
                 var response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
@@ -73,6 +75,7 @@ ExecutorService executorService = Executors.newFixedThreadPool(2);
                     break;
                 }
                 params.put("cursor", objectResponse.getCursor());
+                currentCrawlLoop++;
             }
             return pagedResponse;
         } catch (IOException | InterruptedException e) {
@@ -80,13 +83,14 @@ ExecutorService executorService = Executors.newFixedThreadPool(2);
         }
     }
 
-    public List<AppBskyGraphGetFollows> appBskyGraphGetFollows(String actor) {
+    public List<AppBskyGraphGetFollows> appBskyGraphGetFollows(String actor, Optional<Integer> limitCrawl) {
         List<AppBskyGraphGetFollows> pagedResponse = new ArrayList<>();
         try {
             var params = new HashMap<String, String>();
             params.put("actor", actor);
             params.put("limit", "100");
-            while (true) {
+            int currentCrawlLoop=0;
+            while (limitCrawl.isEmpty() || currentCrawlLoop < limitCrawl.get()) {
                 var request = getRequest("app.bsky.graph.getFollows", params);
                 var response = client.send(request, HttpResponse.BodyHandlers.ofString());
                 var objectResponse = objectMapper.readValue(response.body(), AppBskyGraphGetFollows.class);
@@ -95,6 +99,7 @@ ExecutorService executorService = Executors.newFixedThreadPool(2);
                     break;
                 }
                 params.put("cursor", objectResponse.getCursor());
+                currentCrawlLoop++;
             }
             return pagedResponse;
         } catch (IOException | InterruptedException e) {
@@ -127,6 +132,7 @@ ExecutorService executorService = Executors.newFixedThreadPool(2);
             var response = client.send(request, HttpResponse.BodyHandlers.ofString());
               var objectResponse =  objectMapper.readValue(response.body(), AppBskyGraphGetList.class);
                lists.add(objectResponse);
+                         System.out.println(response.body());
                 if (objectResponse.getCursor() == null) {
                         break;
                 }

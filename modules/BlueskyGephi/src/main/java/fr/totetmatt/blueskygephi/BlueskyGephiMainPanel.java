@@ -49,6 +49,9 @@ public class BlueskyGephiMainPanel extends TopComponent {
         isFollowersActivated.setSelected(blueskyGephi.getIsFollowersActive());
         isFollowsActivated.setSelected(blueskyGephi.getIsFollowsActive());
         isDeepSearch.setSelected(blueskyGephi.getIsDeepSearch());
+        limitCrawlCheckbox.setSelected(blueskyGephi.getIsLimitCrawlActive());
+        limitCrawlSpinner.setValue(blueskyGephi.getLimitCrawl()*100);
+        limitCrawlSpinner.setEnabled(limitCrawlCheckbox.isSelected());
     }
 
     /**
@@ -73,6 +76,8 @@ public class BlueskyGephiMainPanel extends TopComponent {
         isFollowsActivated = new javax.swing.JCheckBox();
         runFetchButton = new javax.swing.JButton();
         isDeepSearch = new javax.swing.JCheckBox();
+        limitCrawlCheckbox = new javax.swing.JCheckBox();
+        limitCrawlSpinner = new javax.swing.JSpinner();
 
         setToolTipText(org.openide.util.NbBundle.getMessage(BlueskyGephiMainPanel.class, "BlueskyGephiMainPanel.toolTipText")); // NOI18N
         setName("Bluesky Gephi"); // NOI18N
@@ -173,6 +178,20 @@ public class BlueskyGephiMainPanel extends TopComponent {
             }
         });
 
+        org.openide.awt.Mnemonics.setLocalizedText(limitCrawlCheckbox, org.openide.util.NbBundle.getMessage(BlueskyGephiMainPanel.class, "BlueskyGephiMainPanel.limitCrawlCheckbox.text")); // NOI18N
+        limitCrawlCheckbox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                limitCrawlCheckboxActionPerformed(evt);
+            }
+        });
+
+        limitCrawlSpinner.setToolTipText(org.openide.util.NbBundle.getMessage(BlueskyGephiMainPanel.class, "BlueskyGephiMainPanel.limitCrawlSpinner.toolTipText")); // NOI18N
+        limitCrawlSpinner.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
+            public void propertyChange(java.beans.PropertyChangeEvent evt) {
+                limitCrawlSpinnerPropertyChange(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -180,22 +199,23 @@ public class BlueskyGephiMainPanel extends TopComponent {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(runFetchButton, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 353, Short.MAX_VALUE)
-                            .addComponent(credentialsPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addGap(12, 12, 12))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(fetchLabel)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(isDeepSearch)
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(isFollowersActivated)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(isFollowsActivated)))
-                        .addGap(0, 0, Short.MAX_VALUE))))
+                                .addComponent(isFollowsActivated))
+                            .addComponent(isDeepSearch))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(limitCrawlSpinner)
+                            .addComponent(limitCrawlCheckbox, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                    .addComponent(runFetchButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 353, Short.MAX_VALUE)
+                    .addComponent(credentialsPanel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(12, 12, 12))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -206,15 +226,20 @@ public class BlueskyGephiMainPanel extends TopComponent {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(fetchLabel)
                     .addComponent(isFollowersActivated)
-                    .addComponent(isFollowsActivated))
+                    .addComponent(isFollowsActivated)
+                    .addComponent(limitCrawlCheckbox))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(isDeepSearch)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(isDeepSearch)
+                    .addComponent(limitCrawlSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(runFetchButton)
-                .addContainerGap(53, Short.MAX_VALUE))
+                .addContainerGap(51, Short.MAX_VALUE))
         );
+
+        limitCrawlSpinner.getAccessibleContext().setAccessibleDescription(org.openide.util.NbBundle.getMessage(BlueskyGephiMainPanel.class, "BlueskyGephiMainPanel.limitCrawlSpinner.AccessibleContext.accessibleDescription")); // NOI18N
     }// </editor-fold>//GEN-END:initComponents
 
     private void isFollowersActivatedActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_isFollowersActivatedActionPerformed
@@ -255,6 +280,16 @@ public class BlueskyGephiMainPanel extends TopComponent {
         blueskyGephi.setIsDeepSearch(isDeepSearch.isSelected());
     }//GEN-LAST:event_isDeepSearchActionPerformed
 
+    private void limitCrawlCheckboxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_limitCrawlCheckboxActionPerformed
+            blueskyGephi.setIsLimitCrawlActive(limitCrawlCheckbox.isSelected());
+            limitCrawlSpinner.setEnabled(limitCrawlCheckbox.isSelected());
+            
+    }//GEN-LAST:event_limitCrawlCheckboxActionPerformed
+
+    private void limitCrawlSpinnerPropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_limitCrawlSpinnerPropertyChange
+            blueskyGephi.setLimitCrawl(Math.max(1,((int)limitCrawlSpinner.getValue())/100));
+    }//GEN-LAST:event_limitCrawlSpinnerPropertyChange
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton credentialsConnectButton;
@@ -269,6 +304,8 @@ public class BlueskyGephiMainPanel extends TopComponent {
     private javax.swing.JCheckBox isFollowersActivated;
     private javax.swing.JCheckBox isFollowsActivated;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JCheckBox limitCrawlCheckbox;
+    private javax.swing.JSpinner limitCrawlSpinner;
     private javax.swing.JButton runFetchButton;
     // End of variables declaration//GEN-END:variables
 }
