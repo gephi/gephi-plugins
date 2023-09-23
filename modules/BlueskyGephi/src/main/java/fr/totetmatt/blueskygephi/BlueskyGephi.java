@@ -10,13 +10,10 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 import java.util.logging.Logger;
 import java.util.prefs.Preferences;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-import static org.apache.commons.math3.analysis.FunctionUtils.collector;
 import org.gephi.graph.api.Edge;
 import org.gephi.graph.api.GraphController;
 import org.gephi.graph.api.GraphModel;
@@ -126,7 +123,7 @@ public class BlueskyGephi {
          nbPref.putInt(NBPREF_QUERY_LIMITCRAWL, limitCrawl);
     }
   public int getLimitCrawl(){
-        return nbPref.getInt(NBPREF_QUERY_LIMITCRAWL, 1);
+        return nbPref.getInt(NBPREF_QUERY_LIMITCRAWL, 50);
     }
     private Node createNode(Identity i) {
 
@@ -164,12 +161,14 @@ public class BlueskyGephi {
             Set<String> foaf = new HashSet<>();
 
             private void process(String actor, boolean isDeepSearch, Optional<Integer> limitCrawl) {
+                
                 try {
                     if (isFollowsActive) {
                         List<AppBskyGraphGetFollows> responses = client.appBskyGraphGetFollows(actor,limitCrawl);
 
-                        graphModel.getGraph().writeLock();
+                       
                         for (var response : responses) {
+                            graphModel.getGraph().writeLock();
                             Identity subject = response.getSubject();
                             Node source = createNode(subject);
                             source.setColor(Color.GREEN);
@@ -180,16 +179,19 @@ public class BlueskyGephi {
                                 Node target = createNode(follow);
                                 createEdge(source, target);
                             }
+                            graphModel.getGraph().writeUnlock();
 
                         }
-                        graphModel.getGraph().writeUnlock();
+                        
+                  
                     }
 
                     if (isFollowersActive) {
                         List<AppBskyGraphGetFollowers> responses = client.appBskyGraphGetFollowers(actor,limitCrawl);
 
-                        graphModel.getGraph().writeLock();
+                        
                         for (var response : responses) {
+                            graphModel.getGraph().writeLock();
                             Identity subject = response.getSubject();
                             Node target = createNode(subject);
                             target.setColor(Color.GREEN);
@@ -200,11 +202,13 @@ public class BlueskyGephi {
                                 Node source = createNode(follower);
                                 createEdge(source, target);
                             }
+                            graphModel.getGraph().writeUnlock();
                         }
-                        graphModel.getGraph().writeUnlock();
+                 
                     }
                 } catch(Exception e){
                      Exceptions.printStackTrace(e);
+                } finally {
                 }
             }
 
@@ -212,9 +216,9 @@ public class BlueskyGephi {
             public void run() {
                 
                 if(actor!=null){
-                      this.setName("Bluesky Gephi Fetching Data for " + actor);
+                      this.setName("[Bsky] fetching" + actor);
                 } else {
-                         this.setName("Bluesky Gephi Fetching Data for List");
+                         this.setName("[Bsky] fetching List");
                 }
                 progressTicket = Lookup.getDefault()
                         .lookup(ProgressTicketProvider.class)
@@ -225,7 +229,7 @@ public class BlueskyGephi {
                         });
                 Progress.start(progressTicket);
                 Progress.switchToIndeterminate(progressTicket);
-                
+              
                 
                 if(listInit!=null){
                     this.foaf.addAll(listInit);
@@ -234,8 +238,16 @@ public class BlueskyGephi {
                     process(actor, isDeepSearch,Optional.empty());
                 }
                 if (listInit!=null||isDeepSearch ) {
+                    Progress.switchToDeterminate(progressTicket, foaf.size());
                     for (var foafActor : foaf) {
-                        process(foafActor, false,Optional.of(50));
+                        Progress.setDisplayName(progressTicket, "[Bsky] fetching "+actor+" n+1 > "+foafActor);
+                        if(getIsLimitCrawlActive()){
+                            process(foafActor, false,Optional.of(getLimitCrawl()));
+                        } else {
+                            process(foafActor, false,Optional.empty());
+                        }
+                        Progress.progress(progressTicket);
+                        
                     }
                 }
                 Progress.finish(progressTicket);
