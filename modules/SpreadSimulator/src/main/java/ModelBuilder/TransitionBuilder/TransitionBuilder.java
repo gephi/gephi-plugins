@@ -53,6 +53,7 @@ public class TransitionBuilder implements PluginGeneralActionsManipulator {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+        edge.setLabel("Transition");
         edge.setAttribute("Probability", probability);
 
         graph.addEdge(edge);
