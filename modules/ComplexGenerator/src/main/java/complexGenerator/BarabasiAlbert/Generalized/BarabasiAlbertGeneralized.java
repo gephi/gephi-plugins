@@ -22,8 +22,10 @@ package complexGenerator.BarabasiAlbert.Generalized;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.Random;
 
+import java.util.stream.Collectors;
 import org.gephi.io.generator.spi.Generator;
 import org.gephi.io.generator.spi.GeneratorUI;
 import org.gephi.io.importer.api.ContainerLoader;
@@ -75,161 +77,171 @@ public class BarabasiAlbertGeneralized implements Generator {
         Progress.start(progressTicket, N);
         Random random = new Random();
         container.setEdgeDefault(EdgeDirectionDefault.UNDIRECTED);
+        edges = new ArrayList<>();
 
         // Timestamps
         int vt = 1;
         int et = 1;
-
-        nodes = new NodeDraft[N + 1];
-        int[] degrees = new int[N + 1];
+        ArrayList<Pair<NodeDraft, Integer>> nodesList = new ArrayList<>();
 
         // Creating m0 isolated nodes
         for (int i = 0; i < m0 && !cancel; ++i) {
             NodeDraft node = container.factory().newNodeDraft();
             node.setLabel("Node " + i);
             node.addInterval("0", N + "");
-            nodes[i] = node;
-            degrees[i] = 0;
+            nodesList.add(new Pair(node, 1));
             container.addNode(node);
         }
 
-        // Performing N steps of the algorithm
-        int n  = m0; // the number of existing nodes
-        int ec = 0;  // the number of existing edges
-        for (int i = 0; i < N && !cancel; ++i, ++vt, ++et) {
+        int i = 0;
+        while (i < N && !cancel) {
             double r = random.nextDouble();
-
             if (r <= p) { // adding M edges
-                if (ec == n * (n - 1) / 2)
-                    continue;
-
-                double sum = 0.0;
-                for (int j = 0; j < n && !cancel; ++j)
-                    sum += degrees[j] + 1;
+                int summedDegree = nodesList.stream().map(Pair::getSecond).reduce(0, Integer::sum);  //sum of degrees for all nodes
                 for (int m = 0; m < M && !cancel; ++m) {
-                    int a = random.nextInt(n);
-                    while (degrees[a] == n - 1 && !cancel)
-                        a = random.nextInt(n);
-                    double  b = random.nextDouble();
-                    boolean e = false;
-                    while (!e && !cancel) {
-                        double pki = 0.0;
-                        for (int j = 0; j < n && !e && !cancel; ++j) {
-                            pki += (degrees[j] + 1) / sum;
+                    double probabilityValue = random.nextDouble();
+                    NodeDraft nodeSource = null;
+                    NodeDraft nodeDestination = null;
 
-                            if (b <= pki && a != j && !edgeExists(container, nodes[a], nodes[j])) {
-                                EdgeDraft edge = container.factory().newEdgeDraft();
-                                edge.setSource(nodes[a]);
-                                edge.setTarget(nodes[j]);
-                                edge.addInterval(et + "", N + "");
-                                degrees[a]++;
-                                degrees[j]++;
-                                sum += 2.0;
-                                container.addEdge(edge);
-                                edges.add(edge);
-                                ec++;
-                                e = true;
-                            }
-                            else if (ec == n * (n - 1) / 2)
-                                e = true;
+                    int randomIndex = random.nextInt(nodesList.size());
+                    Integer nodeValue = 0;
+
+                    nodeSource = nodesList.get(randomIndex).getFirst();
+                    summedDegree -= nodesList.get(randomIndex).getSecond();
+                    int destinationIndex = -1;
+
+                    for (Pair<NodeDraft, Integer> pair : nodesList) {
+                        if (nodeDestination == null) {
+                            destinationIndex++;
                         }
-                        b = random.nextDouble();
-                    }
-                }
-            }
-            else if (r <= p + q) { // rewiring M edges
-                if (ec == 0 || ec == n * (n - 1) / 2)
-                    continue;
-
-                double sum = 0.0;
-                for (int j = 0; j < n && !cancel; ++j)
-                    sum += degrees[j] + 1;
-                for (int m = 0; m < M && !cancel; ++m) {
-                    int a = random.nextInt(n);
-                    while ((degrees[a] == 0 || degrees[a] == n - 1) && !cancel)
-                        a = random.nextInt(n);
-                    int l = random.nextInt(n);
-                    while (!edgeExists(container, nodes[l], nodes[a]) && !cancel)
-                        l = random.nextInt(n);
-                    double  b = random.nextDouble();
-                    boolean e = false;
-                    while (!e && !cancel) {
-                        double pki = 0.0;
-                        for (int j = 0; j < n && !e && !cancel; ++j) {
-                            pki += (degrees[j] + 1) / sum;
-
-                            if (b <= pki && a != j && !edgeExists(container, nodes[a], nodes[j])) {
-                                //todo : NoSuchElementException :(
-                                var edgeToRemove = getEdge(container, nodes[a], nodes[l]);
-                                container.removeEdge(edgeToRemove);
-                                edges.remove(edgeToRemove);
-                                degrees[l]--;
-
-                                // TODO: timestamps!
-                                EdgeDraft edge = container.factory().newEdgeDraft();
-                                edge.setSource(nodes[a]);
-                                edge.setTarget(nodes[j]);
-                                degrees[j]++;
-                                container.addEdge(edge);
-                                edges.add(edge);
-                                e = true;
+                        if (pair.getFirst() != nodeSource) {
+                            nodeValue += pair.getSecond();
+                            if (nodeValue.doubleValue()/summedDegree >= probabilityValue && nodeDestination == null) {
+                                nodeDestination = pair.getFirst();
+                                // chosen destination by preferential probability
                             }
                         }
-                        b = random.nextDouble();
+                    }
+
+                    if (nodeDestination != null && !edgeExists(container, nodeSource, nodeDestination) && nodeDestination.getId() != nodeSource.getId()) {
+                        EdgeDraft edge = container.factory().newEdgeDraft();
+                        edge.setSource(nodeSource);
+                        edge.setTarget(nodeDestination);
+                        edge.addInterval(et + "", N + "");
+                        container.addEdge(edge);
+                        edges.add(edge);
+                        summedDegree += 2;
+                        nodesList.set(randomIndex, new Pair(nodeSource, nodesList.get(randomIndex).getSecond() + 1));
+                        nodesList.set(destinationIndex, new Pair(nodeDestination, nodesList.get(destinationIndex).getSecond() + 1));
                     }
                 }
-            }
-            else { // adding a new node with M edges
+            } else if (r <= p + q) { // rewiring M edges
+                int summedDegree = nodesList.stream().map(Pair::getSecond).reduce(0, Integer::sum);  //sum of degrees for all nodes
+                double probabilityValue = random.nextDouble();
+                NodeDraft nodeSource = null;
+                NodeDraft nodeNewDestination = null;
+                NodeDraft nodeOldDestination = null;
+
+                int randomIndex = random.nextInt(nodesList.size());
+                Integer nodeValue = 0;
+
+                nodeSource = nodesList.get(randomIndex).getFirst();
+                summedDegree -= nodesList.get(randomIndex).getSecond();
+
+                List<Pair<NodeDraft, Integer>> connectedNodes = getNodesConnceted(container, nodesList, nodeSource);
+                if (connectedNodes.size() > 0) {
+                    int nodeConnectionToDeleteIndex = random.nextInt(connectedNodes.size());
+                    nodeOldDestination = connectedNodes.get(nodeConnectionToDeleteIndex).getFirst();
+                    int newDestinationIndex = -1;
+
+                    for (Pair<NodeDraft, Integer> pair : nodesList) {
+                        if (nodeNewDestination == null) {
+                            newDestinationIndex++;
+                        }
+                        if (pair.getFirst() != nodeSource) {
+                            nodeValue += pair.getSecond();
+                            if (nodeValue.doubleValue()/summedDegree >= probabilityValue && nodeNewDestination == null) {
+                                nodeNewDestination = pair.getFirst();
+                                // chosen destination by preferential probability
+                            }
+                        }
+                    }
+
+                    if (nodeNewDestination != null && nodeOldDestination != null && !edgeExists(container, nodeSource, nodeNewDestination) && nodeNewDestination.getId() != nodeSource.getId()) {
+                        var edgeToRemove = getEdge(container, nodeSource, nodeOldDestination).get();
+                        container.removeEdge(edgeToRemove);
+                        edges.remove(edgeToRemove);
+                        connectedNodes.set(nodeConnectionToDeleteIndex, new Pair(nodeOldDestination, connectedNodes.get(nodeConnectionToDeleteIndex).getSecond() - 1));
+
+                        EdgeDraft edge = container.factory().newEdgeDraft();
+                        edge.setSource(nodeSource);
+                        edge.setTarget(nodeNewDestination);
+                        container.addEdge(edge);
+                        edges.add(edge);
+                        nodesList.set(newDestinationIndex, new Pair(nodeNewDestination, nodesList.get(newDestinationIndex).getSecond() + 1));
+                    }
+                }
+            } else { // adding a new node with M edges
                 NodeDraft node = container.factory().newNodeDraft();
-                node.setLabel("Node " + n);
+                node.setLabel("Node " + nodesList.size() + 1);
                 node.addInterval(vt + "", N + "");
-                nodes[n] = node;
-                degrees[n] = 0;
                 container.addNode(node);
+                int newNodeValue = 1;
 
-                // Adding M edges out of the new node
-                double sum = 0.0;
-                for (int j = 0; j < n && !cancel; ++j)
-                    sum += degrees[j] + 1;
+//                nodesList.add(Pair.of(node, 1));
+                int summedDegree = nodesList.stream().map(Pair::getSecond).reduce(0, Integer::sum);  //sum of degrees for all nodes (except new one)
+                NodeDraft nodeSource = node;
                 for (int m = 0; m < M && !cancel; ++m) {
-                    r = random.nextDouble();
-                    double p = 0.0;
-                    for (int j = 0; j < n && !cancel; ++j) {
-                        p += (degrees[j] + 1) / sum;
+                    Integer nodeValue = 0;
+                    int destinationIndex = -1;
+                    double probabilityValue = random.nextDouble();
+                    NodeDraft nodeDestination = null;
 
-                        if (r <= p) {
-                            EdgeDraft edge = container.factory().newEdgeDraft();
-                            edge.setSource(nodes[n]);
-                            edge.setTarget(nodes[j]);
-                            edge.addInterval(et + "", N + "");
-                            degrees[n]++;
-                            degrees[j]++;
-                            sum += 2.0;
-                            container.addEdge(edge);
-                            edges.add(edge);
-                            ec++;
-
-                            break;
+                    for (Pair<NodeDraft, Integer> pair : nodesList) {
+                        if (nodeDestination == null) {
+                            destinationIndex++;
+                        }
+                        if (pair.getFirst() != nodeSource) {
+                            nodeValue += pair.getSecond();
+                            if (nodeValue.doubleValue()/summedDegree >= probabilityValue && nodeDestination == null) {
+                                nodeDestination = pair.getFirst();
+                                // chosen destination by preferential probability
+                            }
                         }
                     }
+
+                    if (nodeDestination != null && !edgeExists(container, nodeSource, nodeDestination) && nodeDestination.getId() != nodeSource.getId()) {
+                        EdgeDraft edge = container.factory().newEdgeDraft();
+                        edge.setSource(nodeSource);
+                        edge.setTarget(nodeDestination);
+                        edge.addInterval(et + "", N + "");
+                        container.addEdge(edge);
+                        edges.add(edge);
+                        summedDegree += 3;
+                        newNodeValue++;
+                        nodesList.set(destinationIndex, new Pair(nodeDestination, nodesList.get(destinationIndex).getSecond() + 1));
+                    }
                 }
-
-                n++;
+                nodesList.add(new Pair(node, newNodeValue));
+                i++;
             }
-
             Progress.progress(progressTicket);
         }
-
         Progress.finish(progressTicket);
         progressTicket = null;
     }
 
-    private boolean edgeExists(ContainerLoader container, NodeDraft node1, NodeDraft node2) {
-        return container.edgeExists(node1.toString(), node2.toString()) || container.edgeExists(node2.toString(), node1.toString());
+    private List<Pair<NodeDraft, Integer>> getNodesConnceted(ContainerLoader container, ArrayList<Pair<NodeDraft, Integer>> nodesList, NodeDraft nodeSource) {
+        return nodesList.stream().filter(nodeDestination -> edgeExists(container, nodeSource, nodeDestination.getFirst())).collect(Collectors.toList());
     }
 
-    private EdgeDraft getEdge(ContainerLoader container, NodeDraft sourceNode, NodeDraft tergetNode) {
-        return edges.stream().filter(x -> (x.getSource() == sourceNode && x.getTarget() == tergetNode) || (x.getSource() == tergetNode && x.getTarget() == sourceNode) ).findFirst().get();
+    private boolean edgeExists(ContainerLoader container, NodeDraft sourceNode, NodeDraft tergetNode) {
+        return edges.stream().anyMatch(x -> (x.getSource() == sourceNode && x.getTarget() == tergetNode) || (x.getSource() == tergetNode && x.getTarget() == sourceNode));
+    }
+
+    private Optional<EdgeDraft> getEdge(ContainerLoader container, NodeDraft sourceNode, NodeDraft tergetNode) {
+        return edges.stream().filter(x -> (x.getSource() == sourceNode && x.getTarget() == tergetNode) || (x.getSource() == tergetNode && x.getTarget() == sourceNode) )
+                .findFirst();
     }
 
     public int getN() {
