@@ -1,0 +1,106 @@
+{
+  "name": "information",
+  "description": "model",
+  "transitionMap": [
+    {
+      "transitionType": "conditionProbability",
+      "sourceState": {
+        "name": "uninformed",
+        "description": null
+      },
+      "destinationState": {
+        "name": "informed",
+        "description": null
+      },
+      "probability": 0.2,
+      "provocativeNeighborName": [
+        "informing"
+      ]
+    },
+    {
+      "transitionType": "conditionProbability",
+      "sourceState": {
+        "name": "uninformed",
+        "description": null
+      },
+      "destinationState": {
+        "name": "disinformed",
+        "description": null
+      },
+      "probability": 0.25,
+      "provocativeNeighborName": [
+        "disinforming"
+      ]
+    },
+    {
+      "transitionType": "conditionProbability",
+      "sourceState": {
+        "name": "informed",
+        "description": null
+      },
+      "destinationState": {
+        "name": "informing",
+        "description": null
+      },
+      "probability": 0.1,
+      "provocativeNeighborName": [
+        "uninformed",
+        "disinformed"
+      ]
+    },
+    {
+      "transitionType": "noConditionProbability",
+      "sourceState": {
+        "name": "informing",
+        "description": null
+      },
+      "destinationState": {
+        "name": "informed",
+        "description": null
+      },
+      "probability": 1.0
+    },
+    {
+      "transitionType": "conditionProbability",
+      "sourceState": {
+        "name": "disinformed",
+        "description": null
+      },
+      "destinationState": {
+        "name": "disinforming",
+        "description": null
+      },
+      "probability": 0.1,
+      "provocativeNeighborName": [
+        "uninformed"
+      ]
+    },
+    {
+      "transitionType": "noConditionProbability",
+      "sourceState": {
+        "name": "disinforming",
+        "description": null
+      },
+      "destinationState": {
+        "name": "disinformed",
+        "description": null
+      },
+      "probability": 1.0
+    },
+    {
+      "transitionType": "conditionProbability",
+      "sourceState": {
+        "name": "disinformed",
+        "description": null
+      },
+      "destinationState": {
+        "name": "informed",
+        "description": null
+      },
+      "probability": 0.05,
+      "provocativeNeighborName": [
+        "informing"
+      ]
+    }
+  ]
+}
