@@ -14,7 +14,7 @@ import org.openide.util.lookup.ServiceProvider;
 import javax.swing.*;
 
 @ServiceProvider(service = PluginGeneralActionsManipulator.class)
-public class ModelBuilder implements PluginGeneralActionsManipulator {
+public class StateBuilder implements PluginGeneralActionsManipulator {
     private Graph graph;
     private Table nodeTable;
     @Setter
@@ -22,7 +22,7 @@ public class ModelBuilder implements PluginGeneralActionsManipulator {
     @Setter
     private String description;
 
-    public ModelBuilder(){
+    public StateBuilder(){
     }
     @Override
     public void execute() {
@@ -62,7 +62,7 @@ public class ModelBuilder implements PluginGeneralActionsManipulator {
 
     @Override
     public ManipulatorUI getUI() {
-        return new ModelBuilderUI(this);
+        return new StateBuilderUI(this);
     }
 
     @Override

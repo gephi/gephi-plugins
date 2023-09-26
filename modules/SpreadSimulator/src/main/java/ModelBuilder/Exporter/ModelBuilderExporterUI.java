@@ -1,4 +1,4 @@
-package ModelBuilder.StateBuilder;
+package ModelBuilder.Exporter;
 
 import org.gephi.datalab.spi.DialogControls;
 import org.gephi.datalab.spi.Manipulator;
@@ -6,15 +6,11 @@ import org.gephi.datalab.spi.ManipulatorUI;
 
 import javax.swing.*;
 
-public class ModelBuilderUI extends JPanel implements ManipulatorUI {
-    ModelBuilder modelBuilder;
-
-    public ModelBuilderUI(ModelBuilder modelBuilder) {
-        this.modelBuilder = modelBuilder;
-    }
-
+public class ModelBuilderExporterUI implements ManipulatorUI {
+    private ModelBuilderExporter modelBuilderExporter;
     @Override
     public void setup(Manipulator manipulator, DialogControls dialogControls) {
+        modelBuilderExporter = (ModelBuilderExporter) manipulator;
     }
 
     @Override
@@ -29,7 +25,7 @@ public class ModelBuilderUI extends JPanel implements ManipulatorUI {
 
     @Override
     public JPanel getSettingsPanel() {
-        return new ModelBuilderPanel(modelBuilder);
+        return new ModelBuilderExporterPanel(modelBuilderExporter);
     }
 
     @Override

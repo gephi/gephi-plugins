@@ -95,7 +95,7 @@ public class TransitionBuilder implements PluginGeneralActionsManipulator {
 
     @Override
     public int getPosition() {
-        return 1;
+        return 2;
     }
 
     @Override

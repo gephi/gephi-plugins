@@ -1,19 +1,17 @@
 package ModelBuilder.StateBuilder;
 
-import org.gephi.graph.api.Node;
-
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
-public class ModelBuilderPanel extends JPanel {
-    private ModelBuilder modelBuilder;
+public class StateBuilderPanel extends JPanel {
+    private StateBuilder modelBuilder;
     private JTextField nameField;
     private JTextField descriptionField;
     private JLabel nameLabel;
     private JLabel descriptionLabel;
 
-    public ModelBuilderPanel(ModelBuilder modelBuilder) {
+    public StateBuilderPanel(StateBuilder modelBuilder) {
         this.modelBuilder = modelBuilder;
 
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
