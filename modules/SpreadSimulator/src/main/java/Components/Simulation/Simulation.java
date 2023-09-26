@@ -53,7 +53,7 @@ public class Simulation {
             var content = node.getAttribute("TransitionMap").toString();
             try {
                 List<Transition> transitions = mapper.readValue(content, new TypeReference<List<Transition>>() {});
-                var probabilityTransition = transitions.stream().filter(transition -> transition.getSourceState().getName().contains(node.getAttribute("NodeState").toString())).collect(Collectors.toList());
+                var probabilityTransition = transitions.stream().filter(transition -> transition.getSourceState().getName().equals(node.getAttribute("NodeState").toString())).collect(Collectors.toList());
                 for (Transition transition : probabilityTransition) {
                     switch (transition.getTransitionType()){
                         case zeroProbability:
@@ -118,7 +118,7 @@ public class Simulation {
 
     private boolean IsInNeighbourhood(List<String> neighboursNames, TransitionCondition trn) {
         for (String neighbourTrn : trn.getProvocativeNeighborName()) {
-            if(neighboursNames.contains(neighbourTrn))
+            if(neighboursNames.contains(neighbourTrn.toString()))
                 return true;
         }
         return false;
