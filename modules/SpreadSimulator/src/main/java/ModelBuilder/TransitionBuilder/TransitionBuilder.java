@@ -59,7 +59,7 @@ public class TransitionBuilder implements PluginGeneralActionsManipulator {
         graph.addEdge(edge);
     }
 
-    private void PrepareTable(Table table) {
+    public static void PrepareTable(Table table) {
         if(!table.hasColumn("TransitionType"))
             table.addColumn("TransitionType", String.class);
         if(!table.hasColumn("ProvocativeNeighbours"))

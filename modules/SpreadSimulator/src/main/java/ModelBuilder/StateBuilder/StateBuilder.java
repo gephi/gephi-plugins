@@ -38,7 +38,7 @@ public class StateBuilder implements PluginGeneralActionsManipulator {
         graph.addNode(node);
     }
 
-    private void PrepareTable(Table table) {
+    public static void PrepareTable(Table table) {
         if(!table.hasColumn("NodeState"))
             table.addColumn("NodeState", String.class);
         if(!table.hasColumn("Description"))
