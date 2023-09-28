@@ -41,6 +41,7 @@
  */
 package ReachMetrics;
 
+import static Utils.Utils.reachMetric;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import org.gephi.graph.api.Graph;
@@ -82,7 +83,7 @@ public class ReachMetrics implements Statistics, LongTask {
 		Progress.start(progressTicket, n + n * n + n * n + n + n + n);
 
 		double[][] d = floydWarshall(graph, cancel, progressTicket);
-		value = reachMetric(graph, nodeTable, d, cancel, progressTicket);
+		value = reachMetric(graph, nodeTable, d, cancel, progressTicket, COLUMN_NAME);
 
 		graph.readUnlock();
 	}
@@ -107,48 +108,6 @@ public class ReachMetrics implements Statistics, LongTask {
 				Progress.progress(progressTicket);
 			}
 		return d;
-	}
-
-	public double reachMetric(Graph graph, Table nodeTable, double[][] d, Boolean cancel, ProgressTicket progressTicket) {
-		int n = graph.getNodeCount();
-		int size = 0;
-
-		Node[] nodes = graph.getNodes().toArray();
-		boolean[] inset = new boolean[n];
-		if (nodeTable.hasColumn(COLUMN_NAME) && nodeTable.getColumn(COLUMN_NAME).getTypeClass().equals(Boolean.class))
-			for (int i = 0; i < n && !cancel; i++) {
-				Object val = nodes[i].getAttribute(COLUMN_NAME);
-				if (val != null && Boolean.valueOf(val.toString())) {
-					inset[i] = true;
-					size++;
-				}
-				Progress.progress(progressTicket);
-			}
-
-		double[] dset = new double[n];
-		for (int i = 0; i < n && !cancel; i++) {
-			dset[i] = Double.POSITIVE_INFINITY;
-			Progress.progress(progressTicket);
-		}
-		for (int i = 0; i < n && !cancel; i++) {
-			if (!inset[i])
-				for (int j = 0; j < n && !cancel; j++) {
-					if (inset[j]) {
-						if (d[i][j] < dset[i])
-							dset[i] = d[i][j];
-					}
-				}
-			else dset[i] = 0;
-			Progress.progress(progressTicket);
-		}
-
-		double sum = 0.0;
-		for (int j = 0; j < n && !cancel; j++) {
-			if (!inset[j])
-				sum += 1 / dset[j];
-			Progress.progress(progressTicket);
-		}
-		return sum / (n - size);
 	}
 
 	public double getValue() {

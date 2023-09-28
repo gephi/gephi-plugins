@@ -41,14 +41,11 @@
  */
 package DisjoinMetricsSimple;
 
+import static Utils.Utils.connectedComponents;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
-import java.util.HashMap;
-import java.util.Stack;
-
 import org.gephi.graph.api.Graph;
 import org.gephi.graph.api.GraphModel;
-import org.gephi.graph.api.Node;
 import org.gephi.statistics.spi.Statistics;
 import org.gephi.utils.longtask.spi.LongTask;
 import org.gephi.utils.progress.Progress;
@@ -87,46 +84,6 @@ public class DisjoinMetricSimple implements Statistics, LongTask {
         value = disjoinMetricSimple(n, count);
 
         graph.readUnlock();
-    }
-
-    public int connectedComponents(Graph graph, int[] componentIndex,
-                                          Boolean cancel, ProgressTicket progressTicket) {
-        int n = graph.getNodeCount();
-        int count = 0;
-
-        int index = 0;
-        HashMap<Node, Integer> indices = new HashMap<Node, Integer>();
-        for (Node node : graph.getNodes()) {
-            if (cancel)
-                break;
-            indices.put(node, index++);
-        }
-
-        boolean[] visited = new boolean[n];
-        for (Node node : graph.getNodes()) {
-            if (cancel)
-                break;
-            if (!visited[indices.get(node)]) {
-                Stack<Node> stack = new Stack<Node>();
-                stack.push(node);
-                while (!stack.empty()) {
-                    if (cancel)
-                        break;
-                    Progress.progress(progressTicket);
-                    Node v = stack.pop();
-                    visited[indices.get(v)] = true;
-                    componentIndex[indices.get(v)] = count;
-                    for (Node w : graph.getNeighbors(v)) {
-                        if (cancel)
-                            break;
-                        if (!visited[indices.get(w)])
-                            stack.push(w);
-                    }
-                }
-                count++;
-            }
-        }
-        return count;
     }
 
     public double disjoinMetricSimple(int n, int count) {

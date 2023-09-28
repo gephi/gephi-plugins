@@ -41,6 +41,9 @@
  */
 package DisjoinMetricSize2;
 
+import static Utils.Utils.connectedComponents;
+import static Utils.Utils.disjoinMetricSize2;
+
 import org.gephi.graph.api.Graph;
 import org.gephi.graph.api.GraphModel;
 import org.gephi.graph.api.Node;
@@ -86,62 +89,6 @@ public class DisjoinMetricSize2 implements Statistics, LongTask {
 		value = disjoinMetricSize2(n, count, componentIndex, cancel, progressTicket);
 
 		graph.readUnlock();
-	}
-
-	public int connectedComponents(Graph graph, int[] componentIndex,
-										  Boolean cancel, ProgressTicket progressTicket) {
-		int n = graph.getNodeCount();
-		int count = 0;
-
-		int index = 0;
-		HashMap<Node, Integer> indices = new HashMap<Node, Integer>();
-		for (Node node : graph.getNodes()) {
-			if (cancel)
-				break;
-			indices.put(node, index++);
-		}
-
-		boolean[] visited = new boolean[n];
-		for (Node node : graph.getNodes()) {
-			if (cancel)
-				break;
-			if (!visited[indices.get(node)]) {
-				Stack<Node> stack = new Stack<Node>();
-				stack.push(node);
-				while (!stack.empty()) {
-					if (cancel)
-						break;
-					Progress.progress(progressTicket);
-					Node v = stack.pop();
-					visited[indices.get(v)] = true;
-					componentIndex[indices.get(v)] = count;
-					for (Node w : graph.getNeighbors(v)) {
-						if (cancel)
-							break;
-						if (!visited[indices.get(w)])
-							stack.push(w);
-					}
-				}
-				count++;
-			}
-		}
-		return count;
-	}
-
-	public double disjoinMetricSize2(int n, int count, int[] componentIndex,
-											Boolean cancel, ProgressTicket progressTicket) {
-		int[] size = new int[count];
-		for (int i = 0; i < n; i++) {
-			if (cancel)
-				break;
-			Progress.progress(progressTicket);
-			size[componentIndex[i]]++;
-		}
-
-		double sum = 0.0;
-		for (int k = 0; k < count && !cancel; k++)
-			sum += size[k] * (size[k] - 1);
-		return 1 - sum / (double)(n * (n - 1));
 	}
 
 	public double getValue() {

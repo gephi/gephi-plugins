@@ -58,7 +58,7 @@ public class ReachMetricsUI extends GenericUI<ReachMetricsParam, ReachMetrics> {
 
 	@Override
 	protected void CreatePanel() {
-		this.panel = new ReachMetricsPanel();
+		this.panel = null;
 	}
 
 	public Class<? extends Statistics> getStatisticsClass() {

@@ -41,16 +41,16 @@
  */
 package DisjoinMetricDistance;
 
+import static Utils.Utils.disjoinMetricDistance;
+import static Utils.Utils.floydWarshall;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import org.gephi.graph.api.Graph;
 import org.gephi.graph.api.GraphModel;
-import org.gephi.graph.api.Node;
 import org.gephi.statistics.spi.Statistics;
 import org.gephi.utils.longtask.spi.LongTask;
 import org.gephi.utils.progress.Progress;
 import org.gephi.utils.progress.ProgressTicket;
-
-import java.text.DecimalFormat;
-import java.text.NumberFormat;
 
 /**
  *
@@ -88,39 +88,6 @@ public class DisjoinMetricDistance implements Statistics, LongTask {
         value = disjoinMetricDistance(n, d, cancel, progressTicket);
 
         graph.readUnlock();
-    }
-
-    public double[][] floydWarshall(Graph graph, Boolean cancel, ProgressTicket progressTicket) {
-        int n = graph.getNodeCount();
-        double[][] d = new double[n][n];
-        Node[] nodes = graph.getNodes().toArray();
-        for (int i = 0; i < n && !cancel; i++)
-            for (int j = 0; j < n && !cancel; j++) {
-                if (i == j)
-                    d[i][j] = 0.0;
-                else if (graph.isAdjacent(nodes[i], nodes[j]))
-                    d[i][j] = 1.0; // TODO: consider edge weight
-                else d[i][j] = Double.POSITIVE_INFINITY;
-                Progress.progress(progressTicket);
-            }
-        for (int k = 0; k < n && !cancel; k++)
-            for (int i = 0; i < n && !cancel; i++) {
-                for (int j = 0; j < n && !cancel; j++)
-                    d[i][j] = Math.min(d[i][j], d[i][k] + d[k][j]);
-                Progress.progress(progressTicket);
-            }
-        return d;
-    }
-
-    public double disjoinMetricDistance(int n, double[][] d, Boolean cancel, ProgressTicket progressTicket) {
-        double sum = 0.0;
-        for (int i = 0; i < n && !cancel; i++)
-            for (int j = 0; j < n && !cancel; j++) {
-                if (i != j)
-                    sum += 1.0 / d[i][j];
-                Progress.progress(progressTicket);
-            }
-        return 1 - sum / (double)(n * (n - 1));
     }
 
     public double getValue() {
