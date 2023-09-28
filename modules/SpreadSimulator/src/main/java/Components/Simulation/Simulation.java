@@ -7,6 +7,7 @@ import SimulationModel.Node.NodeRole;
 import SimulationModel.Node.NodeRoleDecorator;
 import SimulationModel.Node.NodeState;
 import SimulationModel.Node.NodeStateDecorator;
+import SimulationModel.SimulationModel;
 import SimulationModel.Transition.Transition;
 import SimulationModel.Transition.TransitionCondition;
 import SimulationModel.Transition.TransitionNoCondition;
@@ -30,19 +31,20 @@ import java.util.stream.Collectors;
 public class Simulation {
     private  Integer step;
     private Graph graph;
+    private SimulationModel simulationModel;
     List<NodeRoleDecorator> nodeRoleDecoratorList;
     List<SimulationStepReport> report;
 
-    public Simulation(Graph graph) {
+    public Simulation(Graph graph, SimulationModel simulationModel) {
         this.graph = graph;
         GenerateNodeDecoratorList();
         report = new ArrayList<>();
         step = 0;
+        this.simulationModel = simulationModel;
     }
 
     public void Step(){
         step += 1;
-        var mapper = ObjectMapperHelper.CustomObjectMapperCreator();
         var table = graph.getModel().getNodeTable();
         if(!table.hasColumn("NewNodeState"))
             table.addColumn("NewNodeState", String.class);
@@ -50,27 +52,21 @@ public class Simulation {
 
         for (Node node : nodes) {
             node.setAttribute("NewNodeState", node.getAttribute("NodeState").toString());
-            var content = node.getAttribute("TransitionMap").toString();
-            try {
-                List<Transition> transitions = mapper.readValue(content, new TypeReference<List<Transition>>() {});
-                var probabilityTransition = transitions.stream().filter(transition -> transition.getSourceState().getName().equals(node.getAttribute("NodeState").toString())).collect(Collectors.toList());
-                for (Transition transition : probabilityTransition) {
-                    switch (transition.getTransitionType()){
-                        case zeroProbability:
-                            break;
-                        case noConditionProbability:
-                            NoConditionProbabilityNode(node, transition);
-                            break;
-                        case conditionProbability:
-                            ConditionProbabilityNode(graph, node, transition);
-                            break;
-                        default:
-                            throw new NotImplementedException("Unknow transitiontype");
-                    }
+            List<Transition> transitions = simulationModel.getNodeRoles().stream().filter(role -> role.getNodeRole().getName().toString().equals(node.getAttribute("NodeRole").toString())).findFirst().get().getNodeRole().getTransitionMap();
+            var probabilityTransition = transitions.stream().filter(transition -> transition.getSourceState().getName().equals(node.getAttribute("NodeState").toString())).collect(Collectors.toList());
+            for (Transition transition : probabilityTransition) {
+                switch (transition.getTransitionType()){
+                    case zeroProbability:
+                        break;
+                    case noConditionProbability:
+                        NoConditionProbabilityNode(node, transition);
+                        break;
+                    case conditionProbability:
+                        ConditionProbabilityNode(graph, node, transition);
+                        break;
+                    default:
+                        throw new NotImplementedException("Unknow transitiontype");
                 }
-            } catch (IOException ex) {
-                table.removeColumn("NewNodeState");
-                throw new RuntimeException(ex);
             }
         }
 

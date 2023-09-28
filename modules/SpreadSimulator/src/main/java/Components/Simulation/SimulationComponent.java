@@ -1,8 +1,13 @@
 package Components.Simulation;
 
 import Helper.ApplySimulationHelper;
+import Helper.ObjectMapperHelper;
+import SimulationModel.Node.NodeRole;
 import SimulationModel.Node.NodeRoleDecorator;
 import SimulationModel.Node.NodeStateDecorator;
+import SimulationModel.SimulationModel;
+import org.codehaus.jackson.JsonParseException;
+import org.codehaus.jackson.map.JsonMappingException;
 import org.gephi.graph.api.Graph;
 import org.gephi.graph.api.GraphController;
 import org.netbeans.api.settings.ConvertAsProperties;
@@ -14,6 +19,10 @@ import org.openide.windows.TopComponent;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 
 @ConvertAsProperties(dtd = "-//Simulation//Simulation//EN", autostore = false)
 @TopComponent.Description(preferredID = "Simulation",
@@ -62,13 +71,23 @@ public class SimulationComponent extends TopComponent {
             if (!ApplySimulationHelper.ValidateGraph(graph)) {
                 JOptionPane.showMessageDialog(null, "This is not a valid graph model");
             } else {
-                simulation = new Simulation(graph);
+                var mapper = ObjectMapperHelper.CustomObjectMapperCreator();
+                var path = new File("tmp/"+ "simTmp.json");
+                var content = new String(Files.readAllBytes(Paths.get(path.getAbsolutePath())));
+                var simulationModel = mapper.readValue(content, SimulationModel.class);
+                simulation = new Simulation(graph, simulationModel);
                 initComponents();
                 revalidate();
                 repaint();
             }
         } catch (NullPointerException ex) {
             JOptionPane.showMessageDialog(null, "Set up graph model first");
+        } catch (JsonMappingException ex) {
+            throw new RuntimeException(ex);
+        } catch (JsonParseException ex) {
+            throw new RuntimeException(ex);
+        } catch (IOException ex) {
+            throw new RuntimeException(ex);
         }
     }
 
