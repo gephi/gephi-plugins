@@ -1,14 +1,9 @@
 package Components.ModelLoader;
 
 
-import Helper.CustomDeserializer.TransitionDeserializer;
 import Helper.ObjectMapperHelper;
 import SimulationModel.Node.NodeRole;
-import SimulationModel.Transition.Transition;
-import org.codehaus.jackson.Version;
-import org.codehaus.jackson.map.DeserializationConfig;
 import org.codehaus.jackson.map.ObjectMapper;
-import org.codehaus.jackson.map.module.SimpleModule;
 import org.netbeans.api.settings.ConvertAsProperties;
 import org.openide.awt.ActionID;
 import org.openide.awt.ActionReference;

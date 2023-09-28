@@ -11,7 +11,6 @@ import org.codehaus.jackson.map.annotate.JsonSerialize;
 import org.codehaus.jackson.map.module.SimpleModule;
 import org.codehaus.jackson.node.TextNode;
 
-import javax.swing.tree.TreeNode;
 import java.awt.*;
 import java.io.IOException;
 

@@ -103,10 +103,6 @@ public class ApplySimulationHelper {
 
         if(table.hasColumn("NodeState"))
             table.removeColumn("NodeState");
-
-        if(table.hasColumn("TransitionMap"))
-            table.removeColumn("TransitionMap");
-
     }
 
 
@@ -117,8 +113,6 @@ public class ApplySimulationHelper {
         if(!table.hasColumn("NodeState"))
             table.addColumn("NodeState", String.class);
 
-        if(!table.hasColumn("TransitionMap"))
-            table.addColumn("TransitionMap", String.class);
     }
 
     private static boolean Validate(Table table) {
@@ -128,15 +122,11 @@ public class ApplySimulationHelper {
         if(!table.hasColumn("NodeState"))
             return false;
 
-        if(!table.hasColumn("TransitionMap"))
-            return false;
-
         return true;
     }
 
     private static void SetupNodeRoles(List<Node> nodes, List<NodeRoleDecorator> nodeRoles) {
         var nodesCount = nodes.stream().count();
-        var mapper = ObjectMapperHelper.CustomObjectMapperCreator();
 
         nodeRoles.stream()
                 .sorted(Comparator.comparingDouble(NodeRoleDecorator::getCoverage))
@@ -150,11 +140,6 @@ public class ApplySimulationHelper {
                     for (int i = 0; i < roleNodesNumber && i < notAssignedToRoleNodes.stream().count(); i++) {
                         var node = notAssignedToRoleNodes.get(i);
                         node.setAttribute("NodeRole", nodeRole.getNodeRole().getName());
-//                        try {
-//                            node.setAttribute("TransitionMap", mapper.writeValueAsString(nodeRole.getNodeRole().getTransitionMap()));
-//                        } catch (IOException e) {
-//                            throw new RuntimeException(e);
-//                        }
                     }
                 });
     }
