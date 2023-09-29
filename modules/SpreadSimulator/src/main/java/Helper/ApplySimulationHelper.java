@@ -3,11 +3,14 @@ package Helper;
 import SimulationModel.Node.NodeRoleDecorator;
 import SimulationModel.Node.NodeStateDecorator;
 import SimulationModel.SimulationModel;
+import org.codehaus.jackson.map.ObjectMapper;
 import org.gephi.graph.api.Graph;
 import org.gephi.graph.api.Node;
 import org.gephi.graph.api.Table;
 
+import javax.swing.*;
 import java.awt.*;
+import java.io.File;
 import java.io.IOException;
 import java.util.*;
 import java.util.List;
@@ -24,6 +27,24 @@ public class ApplySimulationHelper {
         var nodeRoles = simulationModel.getNodeRoles();
         SetupNodeRoles(nodes, nodeRoles);
         SetupNodeStates(nodes, nodeRoles);
+        SaveSimulationModelIntoSimulationTmpFile(simulationModel);
+    }
+
+    private static void SaveSimulationModelIntoSimulationTmpFile(SimulationModel simulationModel) {
+        ObjectMapper objectMapper = ObjectMapperHelper.CustomObjectMapperCreator();
+        try {
+            File folder = new File("tmp/");
+            if (!folder.exists()) {
+                if (!folder.mkdir()) {
+                    JOptionPane.showMessageDialog(null,"Nie można utworzyć folderu 'tmp/'");
+                    return;
+                }
+            }
+            File jsonFile = new File("tmp/"+ "simTmp.json");
+            objectMapper.writeValue(jsonFile, simulationModel);
+        } catch (IOException exx) {
+            exx.printStackTrace();
+        }
     }
 
     public static void CrateModelColumns(Graph graph){
@@ -82,10 +103,6 @@ public class ApplySimulationHelper {
 
         if(table.hasColumn("NodeState"))
             table.removeColumn("NodeState");
-
-        if(table.hasColumn("TransitionMap"))
-            table.removeColumn("TransitionMap");
-
     }
 
 
@@ -96,8 +113,6 @@ public class ApplySimulationHelper {
         if(!table.hasColumn("NodeState"))
             table.addColumn("NodeState", String.class);
 
-        if(!table.hasColumn("TransitionMap"))
-            table.addColumn("TransitionMap", String.class);
     }
 
     private static boolean Validate(Table table) {
@@ -107,15 +122,11 @@ public class ApplySimulationHelper {
         if(!table.hasColumn("NodeState"))
             return false;
 
-        if(!table.hasColumn("TransitionMap"))
-            return false;
-
         return true;
     }
 
     private static void SetupNodeRoles(List<Node> nodes, List<NodeRoleDecorator> nodeRoles) {
         var nodesCount = nodes.stream().count();
-        var mapper = ObjectMapperHelper.CustomObjectMapperCreator();
 
         nodeRoles.stream()
                 .sorted(Comparator.comparingDouble(NodeRoleDecorator::getCoverage))
@@ -129,11 +140,6 @@ public class ApplySimulationHelper {
                     for (int i = 0; i < roleNodesNumber && i < notAssignedToRoleNodes.stream().count(); i++) {
                         var node = notAssignedToRoleNodes.get(i);
                         node.setAttribute("NodeRole", nodeRole.getNodeRole().getName());
-                        try {
-                            node.setAttribute("TransitionMap", mapper.writeValueAsString(nodeRole.getNodeRole().getTransitionMap()));
-                        } catch (IOException e) {
-                            throw new RuntimeException(e);
-                        }
                     }
                 });
     }

@@ -1,13 +1,5 @@
 package Components.RemovalStrategy;
 
-import Components.Simulation.GetReportButton;
-import Components.Simulation.Simulation;
-import Components.Simulation.SimulationButton;
-import Components.Simulation.StepButton;
-import Components.SimulationBuilder.AdvancedAssigmentButton;
-import Helper.ApplySimulationHelper;
-import SimulationModel.Node.NodeRoleDecorator;
-import SimulationModel.Node.NodeStateDecorator;
 import org.gephi.graph.api.Graph;
 import org.gephi.graph.api.GraphController;
 import org.gephi.graph.api.Node;

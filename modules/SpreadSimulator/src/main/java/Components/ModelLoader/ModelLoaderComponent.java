@@ -1,13 +1,9 @@
 package Components.ModelLoader;
 
 
-import Helper.CustomDeserializer.TransitionDeserializer;
+import Helper.ObjectMapperHelper;
 import SimulationModel.Node.NodeRole;
-import SimulationModel.Transition.Transition;
-import org.codehaus.jackson.Version;
-import org.codehaus.jackson.map.DeserializationConfig;
 import org.codehaus.jackson.map.ObjectMapper;
-import org.codehaus.jackson.map.module.SimpleModule;
 import org.netbeans.api.settings.ConvertAsProperties;
 import org.openide.awt.ActionID;
 import org.openide.awt.ActionReference;
@@ -178,12 +174,7 @@ public class ModelLoaderComponent extends TopComponent {
                 } catch (IOException ex) {
                     throw new RuntimeException(ex);
                 }
-                ObjectMapper objectMapper = new ObjectMapper();
-                objectMapper.configure(DeserializationConfig.Feature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-                SimpleModule module =
-                        new SimpleModule("TransitionCustomDeserializer", new Version(1, 0, 0, null));
-                module.addDeserializer(Transition.class, new TransitionDeserializer());
-                objectMapper.registerModule(module);
+                ObjectMapper objectMapper = ObjectMapperHelper.CustomObjectMapperCreator();
 
                 try {
                     var nodeRole = objectMapper.readValue(content, NodeRole.class);
