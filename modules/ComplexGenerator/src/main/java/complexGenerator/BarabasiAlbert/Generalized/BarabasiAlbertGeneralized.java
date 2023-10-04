@@ -224,8 +224,8 @@ public class BarabasiAlbertGeneralized implements Generator {
                 }
                 nodesList.add(new Pair(node, newNodeValue));
                 i++;
+                Progress.progress(progressTicket);
             }
-            Progress.progress(progressTicket);
         }
         Progress.finish(progressTicket);
         progressTicket = null;
