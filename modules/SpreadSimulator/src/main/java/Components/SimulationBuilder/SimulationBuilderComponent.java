@@ -2,6 +2,10 @@ package Components.SimulationBuilder;
 
 import Helper.ApplySimulationHelper;
 import Helper.ObjectMapperHelper;
+import SimulationModel.Interaction.AllInteraction;
+import SimulationModel.Interaction.InteractionType;
+import SimulationModel.Interaction.RelativeFreeInteraction;
+import SimulationModel.Interaction.RelativeInteraction;
 import SimulationModel.Node.NodeRole;
 import SimulationModel.Node.NodeRoleDecorator;
 import SimulationModel.Node.NodeState;
@@ -13,6 +17,7 @@ import org.netbeans.api.settings.ConvertAsProperties;
 import org.openide.awt.ActionID;
 import org.openide.awt.ActionReference;
 import org.openide.util.Lookup;
+import org.openide.util.NotImplementedException;
 import org.openide.windows.TopComponent;
 
 import javax.swing.*;
@@ -335,12 +340,59 @@ public class SimulationBuilderComponent extends TopComponent {
             panel.add(new JSeparator(), gbc);
             gbc.gridwidth = 1;
             gbc.fill = GridBagConstraints.NONE;
-
         }
+
+        var interactionLabel = new JLabel("Select Interaction Strategy:");
+        panel.add(interactionLabel);
+        interactionLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
+        var interactionOptions = new String[]{
+                "All", "Relative", "RelativeFree"
+        };
+        var interactionDropdown = new JComboBox<>(interactionOptions);
+        interactionDropdown.setAlignmentX(Component.LEFT_ALIGNMENT);
+        interactionDropdown.addActionListener(new InteractionDropdownListener(interactionDropdown, this));
+
+        panel.add(interactionDropdown);
 
         JScrollPane scrollPane = new JScrollPane(panel);
         scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
         return scrollPane;
+    }
+
+    private class InteractionDropdownListener implements ActionListener {
+        public InteractionDropdownListener(JComboBox interaction, SimulationBuilderComponent simulationBuilderComponent) {
+            this.interaction = interaction;
+            this.simulationBuilderComponent = simulationBuilderComponent;
+        }
+
+        JComboBox interaction;
+        SimulationBuilderComponent simulationBuilderComponent;
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            var interactionItem = interaction.getSelectedItem().toString();
+            switch (interactionItem) {
+                case "All":
+                    var allInteraction =  new AllInteraction();
+                    allInteraction.setInteractionType(InteractionType.All);
+                    simulationModel.setInteraction(allInteraction);
+                    break;
+                case "Relative":
+                    var relativeInteraction =  new RelativeInteraction();
+                    relativeInteraction.setInteractionType(InteractionType.Relative);
+                    //todo: wprowadź interakcjie
+                    simulationModel.setInteraction(relativeInteraction);
+                    break;
+                case "RelativeFree":
+                    var relativeFreeInteraction =  new RelativeFreeInteraction();
+                    relativeFreeInteraction.setInteractionType(InteractionType.RelativeFree);
+                    //todo: wprowadź interakcjie
+                    simulationModel.setInteraction(relativeFreeInteraction);
+                    break;
+                default:
+                    JOptionPane.showMessageDialog(null, "Not implemented method yet.");
+                    throw new NotImplementedException();
+            }
+        }
     }
 
     private class NodeRoleListener implements DocumentListener{
@@ -427,5 +479,61 @@ public class SimulationBuilderComponent extends TopComponent {
 
     void readProperties(java.util.Properties p) {
         String version = p.getProperty("version");
+    }
+
+    private class RelativeInteractionListener implements DocumentListener {
+        JTextField percentageField;
+        public RelativeInteractionListener(JTextField percentageField) {
+            this.percentageField = percentageField;
+        }
+
+        private void Change() {
+            var percentage = Double.parseDouble(percentageField.getText());
+            var interaction = (RelativeInteraction) simulationModel.getInteraction();
+            interaction.setPercentage(percentage);
+            simulationModel.setInteraction(interaction);
+        }
+
+        @Override
+        public void insertUpdate(DocumentEvent e) {
+            Change();
+        }
+        @Override
+        public void removeUpdate(DocumentEvent e) {
+            Change();
+        }
+
+        @Override
+        public void changedUpdate(DocumentEvent e) {
+            Change();
+        }
+    }
+
+    private class RelativeFreeInteractionListener implements DocumentListener {
+        JTextField numberField;
+        public RelativeFreeInteractionListener(JTextField numberField) {
+            this.numberField = numberField;
+        }
+
+        private void Change() {
+            var number = Integer.parseInt(numberField.getText());
+            var interaction = (RelativeFreeInteraction) simulationModel.getInteraction();
+            interaction.setNumber(number);
+            simulationModel.setInteraction(interaction);
+        }
+
+        @Override
+        public void insertUpdate(DocumentEvent e) {
+            Change();
+        }
+        @Override
+        public void removeUpdate(DocumentEvent e) {
+            Change();
+        }
+
+        @Override
+        public void changedUpdate(DocumentEvent e) {
+            Change();
+        }
     }
 }
