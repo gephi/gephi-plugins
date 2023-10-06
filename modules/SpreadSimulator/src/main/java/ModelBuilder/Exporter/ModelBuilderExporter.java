@@ -54,15 +54,6 @@ public class ModelBuilderExporter implements PluginGeneralActionsManipulator {
             var transitionType = TransitionType.valueOf(transition.getAttribute("TransitionType").toString());
             var probability = Double.parseDouble(transition.getAttribute("Probability").toString());
 
-            List<String> provNeighbours;
-            var provNeighboursContent = transition.getAttribute("ProvocativeNeighbours").toString();
-            try {
-                provNeighbours = mapper.readValue(provNeighboursContent, new TypeReference<List<String>>() {});
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-
-
             var sourceNodeState = source.getAttribute("Description") != null ?
                     new NodeState(source.getAttribute("NodeState").toString(), source.getAttribute("Description").toString())
                     :
@@ -72,10 +63,20 @@ public class ModelBuilderExporter implements PluginGeneralActionsManipulator {
                     :
                     new NodeState(destination.getAttribute("NodeState").toString());
 
+
+
             switch (transitionType){
                 case noConditionProbability:
                     return new TransitionNoCondition(transitionType, sourceNodeState, destinationNodeState, probability);
                 case conditionProbability:
+                    List<String> provNeighbours;
+                    var provNeighboursContent = transition.getAttribute("ProvocativeNeighbours").toString();
+                    try {
+                        provNeighbours = mapper.readValue(provNeighboursContent, new TypeReference<List<String>>() {});
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+
                     return new TransitionCondition(transitionType, sourceNodeState, destinationNodeState, probability, provNeighbours);
                 default:
                     throw new NotImplementedException();
