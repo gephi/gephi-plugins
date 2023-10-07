@@ -119,6 +119,8 @@ public class CreateButton extends JButton {
             simulationBuilderComponent.setNodeRoles(nodeRoles);
             simulationBuilderComponent.initComponents();
             dialog.dispose();
+            simulationBuilderComponent.revalidate();
+            simulationBuilderComponent.repaint();
         }
     }
 }

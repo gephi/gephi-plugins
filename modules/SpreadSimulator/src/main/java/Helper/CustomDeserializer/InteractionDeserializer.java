@@ -34,10 +34,14 @@ public class InteractionDeserializer extends StdDeserializer<Interaction> {
         switch (interactionType) {
             case All:
                 return mapper.readValue(node, AllInteraction.class);
-            case Relative:
-                return mapper.readValue(node, RelativeInteraction.class);
-            case RelativeFree:
-                return mapper.readValue(node, RelativeFreeInteraction.class);
+            case RelativeNodes:
+                return mapper.readValue(node, RelativeNodesInteraction.class);
+            case RelativeFreeNodes:
+                return mapper.readValue(node, RelativeFreeNodesInteraction.class);
+            case RelativeEdges:
+                return mapper.readValue(node, RelativeEdgesInteraction.class);
+            case RelativeFreeEdges:
+                return mapper.readValue(node, RelativeFreeEdgesInteraction.class);
             default:
                 return mapper.readValue(node, Interaction.class);
         }

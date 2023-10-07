@@ -52,15 +52,6 @@ public class SimulationBuilderComponent extends TopComponent {
         var modelStatisticInput = new ModelStatisticsDynamicInput().generate(nodeRoles);
         add(modelStatisticInput);
 
-        var interactionLabel = new JLabel("Select Interaction Strategy:");
-        interactionLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
-        add(interactionLabel);
-
-        var interactionDropdown = new InteractionDropdown().generate(this);
-        interactionDropdown.setAlignmentX(Component.LEFT_ALIGNMENT);
-        add(interactionDropdown);
-
-
         var apply = new ApplyButton(this);
         add(apply);
 
@@ -69,6 +60,14 @@ public class SimulationBuilderComponent extends TopComponent {
 
         var paint = new PaintButton(this);
         add(paint);
+
+        var interactionLabel = new JLabel("Select Interaction Strategy:");
+        interactionLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
+        add(interactionLabel);
+
+        var interactionDropdown = new InteractionDropdown().generate(this);
+        interactionDropdown.setAlignmentX(Component.LEFT_ALIGNMENT);
+        add(interactionDropdown);
     }
 
     @Override

@@ -11,6 +11,6 @@ import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 @JsonIgnoreProperties(ignoreUnknown = true)
 @NoArgsConstructor
 @AllArgsConstructor
-public class RelativeFreeInteraction extends Interaction {
+public class RelativeFreeNodesInteraction extends Interaction {
     private Integer number;
 }
