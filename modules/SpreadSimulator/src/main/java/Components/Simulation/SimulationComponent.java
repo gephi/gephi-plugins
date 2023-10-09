@@ -2,6 +2,10 @@ package Components.Simulation;
 
 import Helper.ApplySimulationHelper;
 import Helper.ObjectMapperHelper;
+import SimulationModel.Interaction.RelativeEdgesInteraction;
+import SimulationModel.Interaction.RelativeFreeEdgesInteraction;
+import SimulationModel.Interaction.RelativeFreeNodesInteraction;
+import SimulationModel.Interaction.RelativeNodesInteraction;
 import SimulationModel.Node.NodeRole;
 import SimulationModel.Node.NodeRoleDecorator;
 import SimulationModel.Node.NodeStateDecorator;
@@ -98,6 +102,29 @@ public class SimulationComponent extends TopComponent {
 
         var stepLabel = new JLabel("Step: " + simulation.getStep().toString());
         panel.add(stepLabel);
+
+        var interaction = simulation.getSimulationModel().getInteraction();
+        var interactionMessage = "";
+        switch (interaction.getInteractionType()){
+            case All:
+                interactionMessage = "All";
+                break;
+            case RelativeNodes:
+                interactionMessage = "RelativeNodes: " + ((RelativeNodesInteraction) interaction).getPercentage();
+                break;
+            case RelativeEdges:
+                interactionMessage = "RelativeEdges: " + ((RelativeEdgesInteraction) interaction).getPercentage();
+                break;
+            case RelativeFreeNodes:
+                interactionMessage = "RelativeFreeNodes: " + ((RelativeFreeNodesInteraction) interaction).getNumber();
+                break;
+            case RelativeFreeEdges:
+                interactionMessage = "RelativeFreeEdges: " + ((RelativeFreeEdgesInteraction) interaction).getNumber();
+                break;
+        }
+        var interactionLabel = new JLabel("Interaction: " + interactionMessage);
+        panel.add(interactionLabel);
+
         int row = 1;
         int padding = 4;
         for (NodeRoleDecorator role : simulation.nodeRoleDecoratorList) {

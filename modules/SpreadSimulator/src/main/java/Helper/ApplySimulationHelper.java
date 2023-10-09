@@ -180,4 +180,21 @@ public class ApplySimulationHelper {
                     });
                 });
     }
+
+    public static String GenerateName(List<NodeRoleDecorator> nodeRoles){
+        var name = "SIMULATION-";
+        for (NodeRoleDecorator role: nodeRoles) {
+            name += role.getNodeRole().getName();
+            name += "-";
+            name += role.getCoverage().toString();
+            name += "-states-";
+            for (NodeStateDecorator state: role.getNodeStates()) {
+                name += state.getNodeState().getName();
+                name += "-";
+                name += state.getCoverage().toString();
+            }
+            name += "_";
+        }
+        return name;
+    }
 }
