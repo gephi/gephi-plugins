@@ -1,0 +1,100 @@
+package ModelBuilder;
+
+import ModelBuilder.StateBuilder.StateBuilder;
+import ModelBuilder.StateBuilder.StateBuilderPanel;
+import ModelBuilder.TransitionBuilder.TransitionBuilder;
+import ModelBuilder.TransitionBuilder.TransitionBuilderPanel;
+import org.gephi.graph.api.Node;
+import org.gephi.project.api.ProjectController;
+import org.gephi.project.api.Workspace;
+import org.gephi.project.api.WorkspaceListener;
+import org.gephi.tools.spi.*;
+import org.openide.util.Lookup;
+import org.openide.util.lookup.ServiceProvider;
+
+import javax.swing.*;
+import java.awt.*;
+
+@ServiceProvider(service = Tool.class)
+public class ModelBuilderTool implements Tool {
+    private ToolEventListener[] listeners;
+    private Color color;
+    private float weight;
+    private ModelBuilderToolUI ui;
+    private Node sourceNode;
+
+    public ModelBuilderTool() {
+        ui = new ModelBuilderToolUI();
+        this.color = Color.GRAY;
+        this.weight = 1.0F;
+        ((ProjectController) Lookup.getDefault().lookup(ProjectController.class)).addWorkspaceListener(new WorkspaceListener() {
+            public void initialize(Workspace workspace) {
+
+            }
+
+            public void select(Workspace workspace) {
+
+            }
+
+            public void unselect(Workspace workspace) {
+            }
+
+            public void close(Workspace workspace) {
+            }
+
+            public void disable() {
+            }
+        });
+    }
+
+    public void select() {
+    }
+
+    public void unselect() {
+        this.listeners = null;
+        this.sourceNode = null;
+        this.color = Color.black;
+    }
+
+    public ToolEventListener[] getListeners() {
+        this.listeners = new ToolEventListener[2];
+        this.listeners[0] = new NodeClickEventListener() {
+            public void clickNodes(Node[] nodes) {
+                Node n = nodes[0];
+                if (ModelBuilderTool.this.sourceNode == null) {
+                    ModelBuilderTool.this.sourceNode = n;
+                } else {
+                    var transitionBuilder = new TransitionBuilder();
+                    var sourceName = sourceNode.getAttribute("NodeState").toString();
+                    var destinationName = n.getAttribute("NodeState").toString();
+                    JOptionPane.showMessageDialog(null, new TransitionBuilderPanel(transitionBuilder, sourceName, destinationName));
+                    transitionBuilder.execute();
+                    ModelBuilderTool.this.sourceNode = null;
+                }
+
+            }
+        };
+        this.listeners[1] = new MouseClickEventListener() {
+            public void mouseClick(int[] positionViewport, float[] position3d) {
+                if (ModelBuilderTool.this.sourceNode != null) {
+                    ModelBuilderTool.this.sourceNode = null;
+                } else{
+                    var modelBuilder = new StateBuilder();
+                    JOptionPane.showMessageDialog(null, new StateBuilderPanel(modelBuilder));
+                    modelBuilder.execute();
+                }
+
+            }
+        };
+        return this.listeners;
+    }
+
+    @Override
+    public ToolUI getUI() {
+        return ui;
+    }
+
+    public ToolSelectionType getSelectionType() {
+        return ToolSelectionType.SELECTION;
+    }
+}
