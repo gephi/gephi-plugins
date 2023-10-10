@@ -12,6 +12,7 @@ import org.openide.util.Lookup;
 import org.openide.util.lookup.ServiceProvider;
 
 import javax.swing.*;
+import java.util.List;
 
 @ServiceProvider(service = PluginGeneralActionsManipulator.class)
 public class StateBuilder implements PluginGeneralActionsManipulator {
@@ -26,15 +27,23 @@ public class StateBuilder implements PluginGeneralActionsManipulator {
     }
     @Override
     public void execute() {
+        if(name == null || name.isEmpty())
+            return;
+
         graph = Lookup.getDefault().lookup(GraphController.class).getGraphModel().getGraph();
         GraphElementsController gec = Lookup.getDefault().lookup(GraphElementsController.class);
         nodeTable = graph.getModel().getNodeTable();
         PrepareTable(this.nodeTable);
-        var node = gec.createNode("State");
 
+        var nodes  = List.of(graph.getNodes().toArray());
+        if (nodes.stream().filter(n -> n.getAttribute("NodeState").toString().equals(name)).count() > 0){
+            JOptionPane.showMessageDialog(null, "State " + name  + " already exist");
+            return;
+        }
+
+        var node = gec.createNode("State");
         node.setAttribute("NodeState", name);
         node.setAttribute("Description", description);
-
         graph.addNode(node);
     }
 
