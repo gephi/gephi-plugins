@@ -1,6 +1,7 @@
 package Components.Simulation;
 
 import Components.Simulation.Report.SimulationStepReport;
+import ConfigLoader.ConfigLoader;
 import Helper.ApplySimulationHelper;
 import SimulationModel.Interaction.RelativeEdgesInteraction;
 import SimulationModel.Interaction.RelativeFreeEdgesInteraction;
@@ -47,17 +48,17 @@ public class Simulation {
     public void Step(){
         step += 1;
         var table = graph.getModel().getNodeTable();
-        if(!table.hasColumn("NewNodeState"))
-            table.addColumn("NewNodeState", String.class);
+        if(!table.hasColumn(ConfigLoader.getProperty("colName.newNodeState")))
+            table.addColumn(ConfigLoader.getProperty("colName.newNodeState"), String.class);
         var nodes = graph.getNodes();
         var edges = graph.getEdges();
 
         var selectedNodes = SelectNodes(nodes, edges);
 
         for (Node node : selectedNodes) {
-            node.setAttribute("NewNodeState", node.getAttribute("NodeState").toString());
-            List<Transition> transitions = simulationModel.getNodeRoles().stream().filter(role -> role.getNodeRole().getName().toString().equals(node.getAttribute("NodeRole").toString())).findFirst().get().getNodeRole().getTransitionMap();
-            var probabilityTransition = transitions.stream().filter(transition -> transition.getSourceState().getName().equals(node.getAttribute("NodeState").toString())).collect(Collectors.toList());
+            node.setAttribute(ConfigLoader.getProperty("colName.newNodeState"), node.getAttribute(ConfigLoader.getProperty("colName.nodeState")).toString());
+            List<Transition> transitions = simulationModel.getNodeRoles().stream().filter(role -> role.getNodeRole().getName().toString().equals(node.getAttribute(ConfigLoader.getProperty("colName.nodeRole")).toString())).findFirst().get().getNodeRole().getTransitionMap();
+            var probabilityTransition = transitions.stream().filter(transition -> transition.getSourceState().getName().equals(node.getAttribute(ConfigLoader.getProperty("colName.nodeState")).toString())).collect(Collectors.toList());
             for (Transition transition : probabilityTransition) {
                 switch (transition.getTransitionType()){
                     case zeroProbability:
@@ -69,17 +70,17 @@ public class Simulation {
                         ConditionProbabilityNode(graph, node, selectedNodes, transition);
                         break;
                     default:
-                        throw new NotImplementedException("Unknow transitiontype");
+                        throw new NotImplementedException(ConfigLoader.getProperty("message.error.unknowTransitionType"));
                 }
             }
         }
 
         for (Node node : selectedNodes) {
-            node.setAttribute("NodeState", node.getAttribute("NewNodeState").toString());
+            node.setAttribute(ConfigLoader.getProperty("colName.nodeState"), node.getAttribute(ConfigLoader.getProperty("colName.newNodeState")).toString());
         }
 
         ApplySimulationHelper.PaintGraph(List.of(nodes.toArray()), nodeRoleDecoratorList);
-        table.removeColumn("NewNodeState");
+        table.removeColumn(ConfigLoader.getProperty("colName.newNodeState"));
         GenerateNodeDecoratorList();
         this.report.add(new SimulationStepReport(this.step, this.nodeRoleDecoratorList));
     }
@@ -137,7 +138,7 @@ public class Simulation {
         var neighbours = List.of(graph.getNeighbors(node).toArray());
         var selectedNeighbours = neighbours.stream().filter(neigh -> selectedNodes.contains(neigh)).collect(Collectors.toList());
 
-        var neighboursNames = selectedNeighbours.stream().map(n -> n.getAttribute("NodeState").toString()).distinct().collect(Collectors.toList());
+        var neighboursNames = selectedNeighbours.stream().map(n -> n.getAttribute(ConfigLoader.getProperty("colName.nodeState")).toString()).distinct().collect(Collectors.toList());
 
         if(!IsInNeighbourhood(neighboursNames, trn))
             return;
@@ -150,7 +151,7 @@ public class Simulation {
     }
 
     private void ChangeState(Node node, NodeState trn) {
-        node.setAttribute("NewNodeState", trn.getName());
+        node.setAttribute(ConfigLoader.getProperty("colName.newNodeState"), trn.getName());
     }
 
     private boolean IsInNeighbourhood(List<String> neighboursNames, TransitionCondition trn) {
@@ -164,7 +165,7 @@ public class Simulation {
     private void GenerateNodeDecoratorList() {
         var nodes = Arrays.asList(graph.getNodes().toArray());
         var nodeRoles = nodes.stream()
-                .map(node -> node.getAttribute("NodeRole").toString())
+                .map(node -> node.getAttribute(ConfigLoader.getProperty("colName.nodeRole")).toString())
                 .distinct()
                 .collect(Collectors.toList());
 
@@ -178,8 +179,8 @@ public class Simulation {
         var nodesCount = nodes.size();
 
         var nodeStates = nodes.stream()
-                .filter(node -> node.getAttribute("NodeRole").equals(nodeRoleDecorator.getNodeRole().getName()))
-                .map(node -> node.getAttribute("NodeState").toString())
+                .filter(node -> node.getAttribute(ConfigLoader.getProperty("colName.nodeRole")).equals(nodeRoleDecorator.getNodeRole().getName()))
+                .map(node -> node.getAttribute(ConfigLoader.getProperty("colName.nodeState")).toString())
                 .distinct()
                 .map(nodeState -> new NodeStateDecorator(new NodeState(nodeState)))
                 .collect(Collectors.toList());
@@ -188,7 +189,7 @@ public class Simulation {
 
         nodeRoleDecorator.setNodeStates(nodeStates);
         var nodeRoleCount = nodes.stream()
-                .filter(node -> node.getAttribute("NodeRole").equals(nodeRoleDecorator.getNodeRole().getName()))
+                .filter(node -> node.getAttribute(ConfigLoader.getProperty("colName.nodeRole")).equals(nodeRoleDecorator.getNodeRole().getName()))
                 .count();
 
         nodeRoleDecorator.setMinCoverage((int) nodeRoleCount);
@@ -196,8 +197,8 @@ public class Simulation {
 
         nodeStates.forEach(nodeState -> {
             var nodeStateCount = nodes.stream()
-                    .filter(node -> node.getAttribute("NodeRole").equals(nodeRoleDecorator.getNodeRole().getName()))
-                    .filter(node -> node.getAttribute("NodeState").equals(nodeState.getNodeState().getName()))
+                    .filter(node -> node.getAttribute(ConfigLoader.getProperty("colName.nodeRole")).equals(nodeRoleDecorator.getNodeRole().getName()))
+                    .filter(node -> node.getAttribute(ConfigLoader.getProperty("colName.nodeState")).equals(nodeState.getNodeState().getName()))
                     .count();
 
             nodeState.setCoverage((double)nodeStateCount / nodeRoleCount);
@@ -207,6 +208,6 @@ public class Simulation {
 
     private Color getStateColor(NodeStateDecorator state) {
         var nodes = Arrays.asList(graph.getNodes().toArray());
-        return nodes.stream().filter(node -> node.getAttribute("NodeState").equals(state.getNodeState().getName())).collect(Collectors.toList()).get(0).getColor();
+        return nodes.stream().filter(node -> node.getAttribute(ConfigLoader.getProperty("colName.nodeState")).equals(state.getNodeState().getName())).collect(Collectors.toList()).get(0).getColor();
     }
 }

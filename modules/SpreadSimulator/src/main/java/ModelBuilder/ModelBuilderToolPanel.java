@@ -1,6 +1,8 @@
 package ModelBuilder;
 
 
+import ConfigLoader.ConfigLoader;
+
 import javax.swing.*;
 
 public class ModelBuilderToolPanel extends JPanel {
@@ -17,7 +19,7 @@ public class ModelBuilderToolPanel extends JPanel {
     private void initComponents() {
         this.statusLabel = new JLabel();
         this.statusLabel.setFont(this.statusLabel.getFont().deriveFont(10.0F));
-        this.statusLabel.setText("Create State or select Source State");
+        this.statusLabel.setText(ConfigLoader.getProperty("modelBuilderTool.infoStatus.create"));
         GroupLayout layout = new GroupLayout(this);
         this.setLayout(layout);
     }

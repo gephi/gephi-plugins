@@ -8,7 +8,7 @@ public class ConfigLoader {
     private static final Properties prop = new Properties();
 
     public static String getProperty(String name) {
-        try (FileInputStream config = new FileInputStream("config.properties")) {
+        try (FileInputStream config = new FileInputStream("simulation.properties")) {
             prop.load(config);
             return prop.getProperty(name);
         } catch (IOException e) {

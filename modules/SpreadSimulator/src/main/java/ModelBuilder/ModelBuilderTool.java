@@ -1,5 +1,6 @@
 package ModelBuilder;
 
+import ConfigLoader.ConfigLoader;
 import ModelBuilder.StateBuilder.StateBuilder;
 import ModelBuilder.StateBuilder.StateBuilderPanel;
 import ModelBuilder.TransitionBuilder.TransitionBuilder;
@@ -23,7 +24,7 @@ public class ModelBuilderTool implements Tool {
 
     public ModelBuilderTool() {
         statusLabel = new JLabel();
-        statusLabel.setText("Create State or select Source State");
+        statusLabel.setText(ConfigLoader.getProperty("modelBuilderTool.infoStatus.create"));
         ui = new ModelBuilderToolUI(this);
         Lookup.getDefault().lookup(ProjectController.class).addWorkspaceListener(new WorkspaceListener() {
             public void initialize(Workspace workspace) {
@@ -49,7 +50,7 @@ public class ModelBuilderTool implements Tool {
     public void unselect() {
         this.listeners = null;
         this.sourceNode = null;
-        statusLabel.setText("Create State or select Source State");
+        statusLabel.setText(ConfigLoader.getProperty("modelBuilderTool.infoStatus.create"));
         ui = new ModelBuilderToolUI(this);
     }
 
@@ -59,20 +60,20 @@ public class ModelBuilderTool implements Tool {
             Node n = nodes[0];
             if (ModelBuilderTool.this.sourceNode == null) {
                 ModelBuilderTool.this.sourceNode = n;
-                statusLabel.setText("Selected source state: " + sourceNode.getAttribute("NodeState").toString() + " . Select destination state");
+                statusLabel.setText(ConfigLoader.getProperty("modelBuilderTool.infoStatus.link") + sourceNode.getAttribute(ConfigLoader.getProperty("colName.modelBuilder.nodeState")).toString());
                 ui = new ModelBuilderToolUI(this);
             } else if (sourceNode == n){
                 ModelBuilderTool.this.sourceNode = null;
-                statusLabel.setText("Create State or select Source State");
+                statusLabel.setText(ConfigLoader.getProperty("modelBuilderTool.infoStatus.create"));
                 ui = new ModelBuilderToolUI(this);
             } else {
                 var transitionBuilder = new TransitionBuilder();
-                var sourceName = sourceNode.getAttribute("NodeState").toString();
-                var destinationName = n.getAttribute("NodeState").toString();
+                var sourceName = sourceNode.getAttribute(ConfigLoader.getProperty("colName.modelBuilder.nodeState")).toString();
+                var destinationName = n.getAttribute(ConfigLoader.getProperty("colName.modelBuilder.nodeState")).toString();
                 JOptionPane.showMessageDialog(null, new TransitionBuilderPanel(transitionBuilder, sourceName, destinationName));
                 transitionBuilder.execute();
                 ModelBuilderTool.this.sourceNode = null;
-                statusLabel.setText("Create State or select Source State");
+                statusLabel.setText(ConfigLoader.getProperty("modelBuilderTool.infoStatus.create"));
                 ui = new ModelBuilderToolUI(this);
             }
 
@@ -80,7 +81,7 @@ public class ModelBuilderTool implements Tool {
         this.listeners[1] = (MouseClickEventListener) (positionViewport, position3d) -> {
             if (ModelBuilderTool.this.sourceNode != null) {
                 ModelBuilderTool.this.sourceNode = null;
-                statusLabel.setText("Create State or select Source State");
+                statusLabel.setText(ConfigLoader.getProperty("modelBuilderTool.infoStatus.create"));
                 ui = new ModelBuilderToolUI(this);
             } else{
                 var modelBuilder = new StateBuilder();

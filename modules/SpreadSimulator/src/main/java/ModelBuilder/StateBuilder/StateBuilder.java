@@ -1,6 +1,7 @@
 package ModelBuilder.StateBuilder;
 
 
+import ConfigLoader.ConfigLoader;
 import lombok.Setter;
 import org.gephi.datalab.api.GraphElementsController;
 import org.gephi.datalab.spi.ManipulatorUI;
@@ -36,22 +37,22 @@ public class StateBuilder implements PluginGeneralActionsManipulator {
         PrepareTable(this.nodeTable);
 
         var nodes  = List.of(graph.getNodes().toArray());
-        if (nodes.stream().filter(n -> n.getAttribute("NodeState").toString().equals(name)).count() > 0){
+        if (nodes.stream().filter(n -> n.getAttribute(ConfigLoader.getProperty("colName.modelBuilder.nodeState")).toString().equals(name)).count() > 0){
             JOptionPane.showMessageDialog(null, "State " + name  + " already exist");
             return;
         }
 
-        var node = gec.createNode("State");
-        node.setAttribute("NodeState", name);
-        node.setAttribute("Description", description);
+        var node = gec.createNode(ConfigLoader.getProperty("modelBuilder.label.state"));
+        node.setAttribute(ConfigLoader.getProperty("colName.modelBuilder.nodeState"), name);
+        node.setAttribute(ConfigLoader.getProperty("colName.modelBuilder.description"), description);
         graph.addNode(node);
     }
 
     public static void PrepareTable(Table table) {
-        if(!table.hasColumn("NodeState"))
-            table.addColumn("NodeState", String.class);
-        if(!table.hasColumn("Description"))
-            table.addColumn("Description", String.class);
+        if(!table.hasColumn(ConfigLoader.getProperty("colName.modelBuilder.nodeState")))
+            table.addColumn(ConfigLoader.getProperty("colName.modelBuilder.nodeState"), String.class);
+        if(!table.hasColumn(ConfigLoader.getProperty("colName.modelBuilder.description")))
+            table.addColumn(ConfigLoader.getProperty("colName.modelBuilder.description"), String.class);
     }
 
     @Override

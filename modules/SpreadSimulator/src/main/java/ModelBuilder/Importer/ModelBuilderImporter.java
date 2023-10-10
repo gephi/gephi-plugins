@@ -1,6 +1,7 @@
 package ModelBuilder.Importer;
 
 
+import ConfigLoader.ConfigLoader;
 import Helper.ObjectMapperHelper;
 import ModelBuilder.StateBuilder.StateBuilder;
 import ModelBuilder.TransitionBuilder.TransitionBuilder;
@@ -86,10 +87,10 @@ public class ModelBuilderImporter implements PluginGeneralActionsManipulator {
 
     private void CreateStateNodes(GraphElementsController gec, List<NodeState> states, ArrayList<Node> nodes) {
         states.forEach(x -> {
-            if(nodes.stream().filter(n -> n.getAttribute("NodeState").equals(x.getName())).count() == 0){
+            if(nodes.stream().filter(n -> n.getAttribute(ConfigLoader.getProperty("colName.modelBuilder.nodeState")).equals(x.getName())).count() == 0){
                 var node = gec.createNode("State");
-                node.setAttribute("NodeState", x.getName());
-                node.setAttribute("Description", x.getDescription());
+                node.setAttribute(ConfigLoader.getProperty("colName.modelBuilder.nodeState"), x.getName());
+                node.setAttribute(ConfigLoader.getProperty("colName.modelBuilder.description"), x.getDescription());
                 nodes.add(node);
             }
         });
@@ -97,16 +98,16 @@ public class ModelBuilderImporter implements PluginGeneralActionsManipulator {
 
     private void CreateNoConditionProbabilityEdge(GraphElementsController gec, ArrayList<Node> nodes, TransitionNoCondition t) {
         var edge = createDefaultEdge(gec, nodes, t);
-        edge.setAttribute("Probability", t.getProbability());
+        edge.setAttribute(ConfigLoader.getProperty("colName.modelBuilder.probability"), t.getProbability());
         graph.addEdge(edge);
     }
 
     private void CreateConditionProbabilityEdge(GraphElementsController gec, ArrayList<Node> nodes, TransitionCondition t) throws IOException {
         var edge = createDefaultEdge(gec, nodes, t);
-        edge.setAttribute("Probability", t.getProbability());
+        edge.setAttribute(ConfigLoader.getProperty("colName.modelBuilder.probability"), t.getProbability());
         var mapper = ObjectMapperHelper.CustomObjectMapperCreator();
         var provNeigh = mapper.writeValueAsString(t.getProvocativeNeighborName());
-        edge.setAttribute("ProvocativeNeighbours", provNeigh);
+        edge.setAttribute(ConfigLoader.getProperty("colName.modelBuilder.provocativeNeighbours"), provNeigh);
         graph.addEdge(edge);
     }
 
@@ -114,12 +115,12 @@ public class ModelBuilderImporter implements PluginGeneralActionsManipulator {
         var sourceName = t.getSourceState().getName();
         var destinationName = t.getDestinationState().getName();
 
-        var sourceNode = nodes.stream().filter(n -> n.getAttribute("NodeState").toString().equals(sourceName)).findFirst().get();
-        var destinationNode = nodes.stream().filter(n -> n.getAttribute("NodeState").toString().equals(destinationName)).findFirst().get();
+        var sourceNode = nodes.stream().filter(n -> n.getAttribute(ConfigLoader.getProperty("colName.modelBuilder.nodeState")).toString().equals(sourceName)).findFirst().get();
+        var destinationNode = nodes.stream().filter(n -> n.getAttribute(ConfigLoader.getProperty("colName.modelBuilder.nodeState")).toString().equals(destinationName)).findFirst().get();
 
         var edge = gec.createEdge(sourceNode, destinationNode, true);
-        edge.setLabel("Transition");
-        edge.setAttribute("TransitionType", t.getTransitionType().toString());
+        edge.setLabel(ConfigLoader.getProperty("modelBuilder.label.transition"));
+        edge.setAttribute(ConfigLoader.getProperty("colName.modelBuilder.transitionType"), t.getTransitionType().toString());
         return edge;
     }
 

@@ -1,5 +1,6 @@
 package Helper;
 
+import ConfigLoader.ConfigLoader;
 import SimulationModel.Node.NodeRoleDecorator;
 import SimulationModel.Node.NodeStateDecorator;
 import SimulationModel.SimulationModel;
@@ -33,14 +34,14 @@ public class ApplySimulationHelper {
     private static void SaveSimulationModelIntoSimulationTmpFile(SimulationModel simulationModel) {
         ObjectMapper objectMapper = ObjectMapperHelper.CustomObjectMapperCreator();
         try {
-            File folder = new File("tmp/");
+            File folder = new File(ConfigLoader.getProperty("folder.simulation.tmp"));
             if (!folder.exists()) {
                 if (!folder.mkdir()) {
-                    JOptionPane.showMessageDialog(null,"Nie można utworzyć folderu 'tmp/'");
+                    JOptionPane.showMessageDialog(null,"Cannot create folder " + ConfigLoader.getProperty("folder.simulation.tmp"));
                     return;
                 }
             }
-            File jsonFile = new File("tmp/"+ "simTmp.json");
+            File jsonFile = new File(ConfigLoader.getProperty("folder.simulation.tmp") + ConfigLoader.getProperty("folder.simulation.tmp.filename"));
             objectMapper.writeValue(jsonFile, simulationModel);
         } catch (IOException exx) {
             exx.printStackTrace();

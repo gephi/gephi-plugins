@@ -1,5 +1,6 @@
 package Components.Simulation;
 
+import ConfigLoader.ConfigLoader;
 import javax.swing.*;
 import java.awt.*;
 
@@ -11,7 +12,7 @@ public class SimulationButton extends JButton {
     private Integer delay;
 
     public SimulationButton(Simulation simulation, SimulationComponent simulationComponent) {
-        this.setText("Run Simulation");
+        this.setText(ConfigLoader.getProperty("button.label.runSimulation"));
         this.simulation = simulation;
         this.simulationComponent = simulationComponent;
         this.addActionListener(e -> openInputDialogAndRunSimulation());
