@@ -1,18 +1,22 @@
 package ModelBuilder;
 
-import ModelBuilder.TransitionBuilder.TransitionBuilder;
 import org.gephi.tools.spi.Tool;
 import org.gephi.tools.spi.ToolUI;
 
 import javax.swing.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 public class ModelBuilderToolUI implements ToolUI {
-    TransitionBuilder transitionBuilder = new TransitionBuilder();
+    private final ModelBuilderTool modelBuilderTool;
+
+    public ModelBuilderToolUI(ModelBuilderTool modelBuilderTool) {
+        this.modelBuilderTool = modelBuilderTool;
+    }
+
     @Override
     public JPanel getPropertiesBar(Tool tool) {
-        return new JPanel();
+        JPanel panel = new JPanel();
+        panel.add(modelBuilderTool.statusLabel);
+        return panel;
     }
 
     @Override
@@ -33,12 +37,5 @@ public class ModelBuilderToolUI implements ToolUI {
     @Override
     public int getPosition() {
         return 1000;
-    }
-
-    private class ApplyListener implements ActionListener {
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            transitionBuilder.execute();
-        }
     }
 }

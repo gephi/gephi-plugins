@@ -13,27 +13,23 @@ import org.openide.util.Lookup;
 import org.openide.util.lookup.ServiceProvider;
 
 import javax.swing.*;
-import java.awt.*;
 
 @ServiceProvider(service = Tool.class)
 public class ModelBuilderTool implements Tool {
     private ToolEventListener[] listeners;
-    private Color color;
-    private float weight;
+    public JLabel statusLabel;
     private ModelBuilderToolUI ui;
     private Node sourceNode;
 
     public ModelBuilderTool() {
-        ui = new ModelBuilderToolUI();
-        this.color = Color.GRAY;
-        this.weight = 1.0F;
-        ((ProjectController) Lookup.getDefault().lookup(ProjectController.class)).addWorkspaceListener(new WorkspaceListener() {
+        statusLabel = new JLabel();
+        statusLabel.setText("Create State or select Source State");
+        ui = new ModelBuilderToolUI(this);
+        Lookup.getDefault().lookup(ProjectController.class).addWorkspaceListener(new WorkspaceListener() {
             public void initialize(Workspace workspace) {
-
             }
 
             public void select(Workspace workspace) {
-
             }
 
             public void unselect(Workspace workspace) {
@@ -53,38 +49,41 @@ public class ModelBuilderTool implements Tool {
     public void unselect() {
         this.listeners = null;
         this.sourceNode = null;
-        this.color = Color.black;
+        statusLabel.setText("Create State or select Source State");
+        ui = new ModelBuilderToolUI(this);
     }
 
     public ToolEventListener[] getListeners() {
         this.listeners = new ToolEventListener[2];
-        this.listeners[0] = new NodeClickEventListener() {
-            public void clickNodes(Node[] nodes) {
-                Node n = nodes[0];
-                if (ModelBuilderTool.this.sourceNode == null) {
-                    ModelBuilderTool.this.sourceNode = n;
-                } else {
-                    var transitionBuilder = new TransitionBuilder();
-                    var sourceName = sourceNode.getAttribute("NodeState").toString();
-                    var destinationName = n.getAttribute("NodeState").toString();
-                    JOptionPane.showMessageDialog(null, new TransitionBuilderPanel(transitionBuilder, sourceName, destinationName));
-                    transitionBuilder.execute();
-                    ModelBuilderTool.this.sourceNode = null;
-                }
-
+        this.listeners[0] = (NodeClickEventListener) nodes -> {
+            Node n = nodes[0];
+            if (ModelBuilderTool.this.sourceNode == null) {
+                ModelBuilderTool.this.sourceNode = n;
+                statusLabel.setText("Selected source state: " + sourceNode.getAttribute("NodeState").toString() + " . Select destination state");
+                ui = new ModelBuilderToolUI(this);
+            } else {
+                var transitionBuilder = new TransitionBuilder();
+                var sourceName = sourceNode.getAttribute("NodeState").toString();
+                var destinationName = n.getAttribute("NodeState").toString();
+                JOptionPane.showMessageDialog(null, new TransitionBuilderPanel(transitionBuilder, sourceName, destinationName));
+                transitionBuilder.execute();
+                ModelBuilderTool.this.sourceNode = null;
+                statusLabel.setText("Create State or select Source State");
+                ui = new ModelBuilderToolUI(this);
             }
+
         };
-        this.listeners[1] = new MouseClickEventListener() {
-            public void mouseClick(int[] positionViewport, float[] position3d) {
-                if (ModelBuilderTool.this.sourceNode != null) {
-                    ModelBuilderTool.this.sourceNode = null;
-                } else{
-                    var modelBuilder = new StateBuilder();
-                    JOptionPane.showMessageDialog(null, new StateBuilderPanel(modelBuilder));
-                    modelBuilder.execute();
-                }
-
+        this.listeners[1] = (MouseClickEventListener) (positionViewport, position3d) -> {
+            if (ModelBuilderTool.this.sourceNode != null) {
+                ModelBuilderTool.this.sourceNode = null;
+                statusLabel.setText("Create State or select Source State");
+                ui = new ModelBuilderToolUI(this);
+            } else{
+                var modelBuilder = new StateBuilder();
+                JOptionPane.showMessageDialog(null, new StateBuilderPanel(modelBuilder));
+                modelBuilder.execute();
             }
+
         };
         return this.listeners;
     }
