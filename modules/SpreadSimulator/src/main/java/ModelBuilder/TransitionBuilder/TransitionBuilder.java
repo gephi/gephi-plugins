@@ -39,6 +39,11 @@ public class TransitionBuilder implements PluginGeneralActionsManipulator {
     }
     @Override
     public void execute() {
+        if(sourceNode == destinationNode){
+            JOptionPane.showMessageDialog(null, "Cannot create loop.");
+            return;
+        }
+
         graph = Lookup.getDefault().lookup(GraphController.class).getGraphModel().getGraph();
         GraphElementsController gec = Lookup.getDefault().lookup(GraphElementsController.class);
         edgeTable = graph.getModel().getEdgeTable();

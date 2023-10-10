@@ -1,6 +1,8 @@
 package Helper;
 
+import Helper.CustomDeserializer.InteractionDeserializer;
 import Helper.CustomDeserializer.TransitionDeserializer;
+import SimulationModel.Interaction.Interaction;
 import SimulationModel.Transition.Transition;
 import org.codehaus.jackson.JsonGenerator;
 import org.codehaus.jackson.JsonNode;
@@ -38,10 +40,15 @@ public class ObjectMapperHelper {
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.setSerializationInclusion(JsonSerialize.Inclusion.NON_NULL);
         objectMapper.configure(DeserializationConfig.Feature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-        SimpleModule module =
+        SimpleModule transitionModule =
                 new SimpleModule("TransitionCustomDeserializer", new Version(1, 0, 0, null));
-        module.addDeserializer(Transition.class, new TransitionDeserializer());
-        objectMapper.registerModule(module);
+        transitionModule.addDeserializer(Transition.class, new TransitionDeserializer());
+        objectMapper.registerModule(transitionModule);
+
+        SimpleModule interactionModule =
+                new SimpleModule("InteractionCustomDeserializer", new Version(1, 0, 0, null));
+        interactionModule.addDeserializer(Interaction.class, new InteractionDeserializer());
+        objectMapper.registerModule(interactionModule);
 
         SimpleModule colorModule = new SimpleModule("ColorDeserializer", new Version(1, 0, 0, null));
         colorModule.addSerializer(Color.class, new ColorSerializer());

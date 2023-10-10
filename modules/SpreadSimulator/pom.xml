@@ -60,11 +60,21 @@
             <artifactId>jxl</artifactId>
             <version>2.6.12</version>
         </dependency>
+        <dependency>
+            <groupId>org.gephi</groupId>
+            <artifactId>ui-components</artifactId>
+            <version>0.10.0</version>
+        </dependency>
 
 
         <dependency>
             <groupId>org.netbeans.api</groupId>
             <artifactId>org-openide-util</artifactId>
+            <version>RELEASE160</version>
+        </dependency>
+        <dependency>
+            <groupId>org.netbeans.api</groupId>
+            <artifactId>org-openide-util-ui</artifactId>
             <version>RELEASE160</version>
         </dependency>
 

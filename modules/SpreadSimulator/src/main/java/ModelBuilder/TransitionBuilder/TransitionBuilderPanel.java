@@ -44,31 +44,44 @@ public class TransitionBuilderPanel extends JPanel {
     private JTextField probabilityField;
 
     private JList<String> provNeighbourList;
-    public TransitionBuilderPanel(TransitionBuilder transitionBuilder) {
+
+    public TransitionBuilderPanel(TransitionBuilder transitionBuilder){
+        this(transitionBuilder, null, null);
+    }
+
+    public TransitionBuilderPanel(TransitionBuilder transitionBuilder, String source, String destination) {
         this.transitionBuilder = transitionBuilder;
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         graph = Lookup.getDefault().lookup(GraphController.class).getGraphModel().getGraph();
         var nodes = List.of(graph.getNodes().toArray());
         states = nodes.stream().filter(x -> x.getLabel().equals("State")).collect(Collectors.toList());
 
-        var firstState = states.get(0);
-
         nodeList = states.stream().map(x -> x.getAttribute("NodeState").toString()).toArray(String[]::new);
+
+        source = source != null ? source : nodeList[0];
+        destination = destination != null ? destination : nodeList[1];
+
+
+        String finalSource = source;
+        var sourceState = states.stream().filter(x -> x.getAttribute("NodeState").toString().equals(finalSource)).findFirst().get();
+        String finalDestination = destination;
+        var destinationState = states.stream().filter(x -> x.getAttribute("NodeState").toString().equals(finalDestination)).findFirst().get();
 
         sourceNodeLabel = new JLabel("Source node:");
         sourceNodeLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
         sourceNodeDropdown = new JComboBox<>(nodeList);
+        sourceNodeDropdown.setSelectedItem(source);
         sourceNodeDropdown.setAlignmentX(Component.LEFT_ALIGNMENT);
         sourceNodeDropdown.addActionListener(new SourceNodeDropdownActionListener());
-        this.transitionBuilder.setSourceNode(firstState);
+        this.transitionBuilder.setSourceNode(sourceState);
 
         destinationNodeLabel = new JLabel("Destination node:");
         destinationNodeLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
         destinationNodeDropdown = new JComboBox<>(nodeList);
+        destinationNodeDropdown.setSelectedItem(destination);
         destinationNodeDropdown.setAlignmentX(Component.LEFT_ALIGNMENT);
         destinationNodeDropdown.addActionListener(new DestinationNodeDropdownActionListener());
-        this.transitionBuilder.setDestinationNode(firstState);
-
+        this.transitionBuilder.setDestinationNode(destinationState);
 
         transitionTypes = new String[] {"No Condition Probability", "Condition Probability"};
         transitionTypeLabel = new JLabel("Transition Type:");

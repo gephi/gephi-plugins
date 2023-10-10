@@ -1,5 +1,6 @@
 package SimulationModel;
 
+import SimulationModel.Interaction.Interaction;
 import SimulationModel.Node.NodeRoleDecorator;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -15,6 +16,7 @@ public class SimulationModel {
     private String name;
     private String description;
     private List<NodeRoleDecorator> nodeRoles;
+    private Interaction interaction;
 
     public boolean Validation() {
         return nodeRoles.stream().mapToDouble(x -> x.getCoverage()).sum() - 1 < 0.01;
