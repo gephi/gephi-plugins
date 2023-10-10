@@ -61,6 +61,10 @@ public class ModelBuilderTool implements Tool {
                 ModelBuilderTool.this.sourceNode = n;
                 statusLabel.setText("Selected source state: " + sourceNode.getAttribute("NodeState").toString() + " . Select destination state");
                 ui = new ModelBuilderToolUI(this);
+            } else if (sourceNode == n){
+                ModelBuilderTool.this.sourceNode = null;
+                statusLabel.setText("Create State or select Source State");
+                ui = new ModelBuilderToolUI(this);
             } else {
                 var transitionBuilder = new TransitionBuilder();
                 var sourceName = sourceNode.getAttribute("NodeState").toString();
