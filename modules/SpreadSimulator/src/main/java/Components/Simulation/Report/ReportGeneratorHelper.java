@@ -1,5 +1,6 @@
 package Components.Simulation.Report;
 
+import ConfigLoader.ConfigLoader;
 import jxl.Workbook;
 import jxl.write.WritableSheet;
 import jxl.write.WritableWorkbook;
@@ -12,6 +13,7 @@ import java.util.Map;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.Properties;
 
 public class ReportGeneratorHelper {
 
@@ -32,12 +34,14 @@ public class ReportGeneratorHelper {
             }
         }
 
-        File directory = new File("reports/"+filename);
+        String path = ConfigLoader.getProperty("reports.path");
+
+        File directory = new File(path + filename);
         if (!directory.exists()) {
             directory.mkdir();
         }
 
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter("reports/"+filename+"/"+filename+".csv"))) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(path + filename + "/" + filename + ".csv"))) {
             // Write the headers
             writer.write("step," + String.join(",", csvData.keySet()));
             writer.newLine();

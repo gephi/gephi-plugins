@@ -36,6 +36,9 @@ public class InteractionDropdown {
         public InteractionDropdownListener(JComboBox interaction, SimulationBuilderComponent simulationBuilderComponent) {
             this.interaction = interaction;
             this.simulationModel = simulationBuilderComponent.getSimulationModel();
+            var allInteraction =  new AllInteraction();
+            allInteraction.setInteractionType(InteractionType.All);
+            this.simulationModel.setInteraction(allInteraction);
             this.simulationBuilderComponent = simulationBuilderComponent;
             numberField = new JTextField();
             percentageField = new JTextField();

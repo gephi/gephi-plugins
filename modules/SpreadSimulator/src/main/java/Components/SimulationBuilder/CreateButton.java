@@ -1,5 +1,6 @@
 package Components.SimulationBuilder;
 
+import ConfigLoader.ConfigLoader;
 import Helper.ObjectMapperHelper;
 import SimulationModel.Node.NodeRole;
 import SimulationModel.Node.NodeRoleDecorator;
@@ -39,10 +40,10 @@ public class CreateButton extends JButton {
         var folderListPanel = new JPanel();
         folderListPanel.setLayout((new BoxLayout(folderListPanel, BoxLayout.Y_AXIS)));
         folderListPanel.setSize(400, 300);
-        File folder = new File("models/");
+        File folder = new File(ConfigLoader.getProperty("folder.simulationBuilder.models"));
         if (!folder.exists()) {
             if (!folder.mkdir()) {
-                folderListPanel.add(new JLabel("Nie można utworzyć folderu 'models/'"));
+                folderListPanel.add(new JLabel("Cannot create folder " + ConfigLoader.getProperty("folder.simulationBuilder.models")));
                 return;
             }
         }
@@ -62,7 +63,7 @@ public class CreateButton extends JButton {
                 folderListPanel.add(rowPanel);
             }
         } else {
-            folderListPanel.add(new JLabel("No folders found in 'models/'"));
+            folderListPanel.add(new JLabel("No folders found in " + ConfigLoader.getProperty("folder.simulationBuilder.models")));
         }
 
         JScrollPane scrollPane = new JScrollPane(folderListPanel);
