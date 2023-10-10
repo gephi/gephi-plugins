@@ -86,10 +86,10 @@ public class ModelLoaderComponent extends TopComponent {
     private void refreshFolderList() {
         folderListPanel.removeAll();
 
-        File folder = new File("models/");
+        File folder = new File(ConfigLoader.getProperty("folder.simulationBuilder.models"));
         if (!folder.exists()) {
             if (!folder.mkdir()) {
-                folderListPanel.add(new JLabel("Nie można utworzyć folderu 'models/'"));
+                folderListPanel.add(new JLabel("Nie można utworzyć folderu " + ConfigLoader.getProperty("folder.simulationBuilder.models")));
                 return;
             }
         }
@@ -129,7 +129,7 @@ public class ModelLoaderComponent extends TopComponent {
                 folderListPanel.add(separator);
             }
         } else {
-            folderListPanel.add(new JLabel("No folders found in 'models/'"));
+            folderListPanel.add(new JLabel("No folders found in " + ConfigLoader.getProperty("folder.simulationBuilder.models")));
         }
 
         revalidate();
@@ -182,7 +182,7 @@ public class ModelLoaderComponent extends TopComponent {
 
                     try {
                         // Zapisuje obiekt do pliku JSON
-                        File jsonFile = new File("models/"+ subFolder.getName() + "/"+ nodeRole.getName() + ".json");
+                        File jsonFile = new File(ConfigLoader.getProperty("folder.simulationBuilder.models")+ subFolder.getName() + "/"+ nodeRole.getName() + ".json");
                         objectMapper.writeValue(jsonFile, nodeRole);
 
                     } catch (IOException exx) {
