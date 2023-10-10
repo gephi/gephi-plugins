@@ -7,6 +7,7 @@
 ### Eclipse ###
 
 simulation.properties
+modules/SpreadSimulator/src/main/java/ConfigLoader/ConfigLoader.java
 .metadata
 bin/
 tmp/

@@ -33,7 +33,7 @@ public class SaveButton extends JButton {
         public void actionPerformed(ActionEvent e) {
             File folder = new File(ConfigLoader.getProperty("folder.simulationBuilder.simulations"));
             if (!folder.exists()) {
-                if (!folder.mkdir()) {
+                if (!folder.mkdirs()) {
                     JOptionPane.showMessageDialog(null,"Nie można utworzyć folderu " + ConfigLoader.getProperty("folder.simulationBuilder.simulations"));
                     return;
                 }

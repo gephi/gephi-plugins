@@ -8,7 +8,7 @@ public class ConfigLoader {
     private static final Properties prop = new Properties();
 
     public static String getProperty(String name) {
-        try (FileInputStream config = new FileInputStream("simulation.properties")) {
+        try (FileInputStream config = new FileInputStream("C:\\Users\\admin\\Projekty\\gephi-plugins\\simulation.properties")) {
             prop.load(config);
             return prop.getProperty(name);
         } catch (IOException e) {

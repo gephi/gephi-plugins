@@ -42,7 +42,7 @@ public class CreateButton extends JButton {
         folderListPanel.setSize(400, 300);
         File folder = new File(ConfigLoader.getProperty("folder.simulationBuilder.models"));
         if (!folder.exists()) {
-            if (!folder.mkdir()) {
+            if (!folder.mkdirs()) {
                 folderListPanel.add(new JLabel("Cannot create folder " + ConfigLoader.getProperty("folder.simulationBuilder.models")));
                 return;
             }

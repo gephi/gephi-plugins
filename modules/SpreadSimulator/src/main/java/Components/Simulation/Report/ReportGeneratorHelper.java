@@ -38,7 +38,7 @@ public class ReportGeneratorHelper {
 
         File directory = new File(path + filename);
         if (!directory.exists()) {
-            directory.mkdir();
+            directory.mkdirs();
         }
 
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(path + filename + "/" + filename + ".csv"))) {
@@ -70,7 +70,7 @@ public class ReportGeneratorHelper {
         try {
             File directory = new File("reports/"+filename);
             if (!directory.exists()) {
-                directory.mkdir();
+                directory.mkdirs();
             }
 
             WritableWorkbook workbook = Workbook.createWorkbook(new File("reports/"+filename+"/" + filename + ".xls"));

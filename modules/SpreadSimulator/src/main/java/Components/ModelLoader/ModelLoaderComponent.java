@@ -58,7 +58,7 @@ public class ModelLoaderComponent extends TopComponent {
                 if (!folderName.isEmpty()) {
                     File newFolder = new File(ConfigLoader.getProperty("folder.simulationBuilder.models") + folderName);
                     if (!newFolder.exists()) {
-                        if (newFolder.mkdir()) {
+                        if (newFolder.mkdirs()) {
                             refreshFolderList();
                             SwingUtilities.getWindowAncestor(ModelLoaderComponent.this).pack();  // Nowa linia
                         } else {
@@ -88,7 +88,7 @@ public class ModelLoaderComponent extends TopComponent {
 
         File folder = new File(ConfigLoader.getProperty("folder.simulationBuilder.models"));
         if (!folder.exists()) {
-            if (!folder.mkdir()) {
+            if (!folder.mkdirs()) {
                 folderListPanel.add(new JLabel("Nie można utworzyć folderu " + ConfigLoader.getProperty("folder.simulationBuilder.models")));
                 return;
             }
