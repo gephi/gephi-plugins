@@ -1,6 +1,7 @@
 package Components.ModelLoader;
 
 
+import ConfigLoader.ConfigLoader;
 import Helper.ObjectMapperHelper;
 import SimulationModel.Node.NodeRole;
 import org.codehaus.jackson.map.ObjectMapper;
@@ -55,7 +56,7 @@ public class ModelLoaderComponent extends TopComponent {
             public void actionPerformed(ActionEvent e) {
                 String folderName = newFolderTextField.getText().trim();
                 if (!folderName.isEmpty()) {
-                    File newFolder = new File("models/" + folderName);
+                    File newFolder = new File(ConfigLoader.getProperty("folder.simulationBuilder.models") + folderName);
                     if (!newFolder.exists()) {
                         if (newFolder.mkdir()) {
                             refreshFolderList();
