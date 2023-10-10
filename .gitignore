@@ -180,5 +180,4 @@ nbdist/
 # End of https://www.gitignore.io/api/maven,eclipse,netbeans,intellij
 
 .java-version
-simulation.properties
 modules/SpreadSimulator/src/main/java/ConfigLoader/ConfigLoader.java
