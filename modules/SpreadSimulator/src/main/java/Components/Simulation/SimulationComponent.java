@@ -45,8 +45,8 @@ public class SimulationComponent extends TopComponent {
 
     public SimulationComponent() {
         initComponents();
-        setName(ConfigLoader.getProperty("component.name.simulationComponent"));
-        setToolTipText(ConfigLoader.getProperty("component.name.simulationComponent"));
+        setName(ConfigLoader.componentNameSimulationComponent);
+        setToolTipText(ConfigLoader.componentNameSimulationComponent);
     }
 
     public void initComponents() {
@@ -77,7 +77,7 @@ public class SimulationComponent extends TopComponent {
                 JOptionPane.showMessageDialog(null, "This is not a valid graph model");
             } else {
                 var mapper = ObjectMapperHelper.CustomObjectMapperCreator();
-                var path = new File(ConfigLoader.getProperty("folder.simulation.tmp") + ConfigLoader.getProperty("folder.simulation.tmp.filename") );
+                var path = new File(ConfigLoader.folderSimulationTmp + ConfigLoader.folderSimulationTmpFilename);
                 var content = new String(Files.readAllBytes(Paths.get(path.getAbsolutePath())));
                 var simulationModel = mapper.readValue(content, SimulationModel.class);
                 simulation = new Simulation(graph, simulationModel);

@@ -34,14 +34,14 @@ public class ApplySimulationHelper {
     private static void SaveSimulationModelIntoSimulationTmpFile(SimulationModel simulationModel) {
         ObjectMapper objectMapper = ObjectMapperHelper.CustomObjectMapperCreator();
         try {
-            File folder = new File(ConfigLoader.getProperty("folder.simulation.tmp"));
+            File folder = new File(ConfigLoader.folderSimulationTmp);
             if (!folder.exists()) {
                 if (!folder.mkdir()) {
-                    JOptionPane.showMessageDialog(null,"Cannot create folder " + ConfigLoader.getProperty("folder.simulation.tmp"));
+                    JOptionPane.showMessageDialog(null,"Cannot create folder " + ConfigLoader.folderSimulationTmp);
                     return;
                 }
             }
-            File jsonFile = new File(ConfigLoader.getProperty("folder.simulation.tmp") + ConfigLoader.getProperty("folder.simulation.tmp.filename"));
+            File jsonFile = new File(ConfigLoader.folderSimulationTmp + ConfigLoader.folderSimulationTmpFilename);
             objectMapper.writeValue(jsonFile, simulationModel);
         } catch (IOException exx) {
             exx.printStackTrace();

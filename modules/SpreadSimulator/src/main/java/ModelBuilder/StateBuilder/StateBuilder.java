@@ -37,22 +37,22 @@ public class StateBuilder implements PluginGeneralActionsManipulator {
         PrepareTable(this.nodeTable);
 
         var nodes  = List.of(graph.getNodes().toArray());
-        if (nodes.stream().filter(n -> n.getAttribute(ConfigLoader.getProperty("colName.modelBuilder.nodeState")).toString().equals(name)).count() > 0){
+        if (nodes.stream().filter(n -> n.getAttribute(ConfigLoader.colNameModelBuilderNodeState).toString().equals(name)).count() > 0){
             JOptionPane.showMessageDialog(null, "State " + name  + " already exist");
             return;
         }
 
-        var node = gec.createNode(ConfigLoader.getProperty("modelBuilder.label.state"));
-        node.setAttribute(ConfigLoader.getProperty("colName.modelBuilder.nodeState"), name);
-        node.setAttribute(ConfigLoader.getProperty("colName.modelBuilder.description"), description);
+        var node = gec.createNode(ConfigLoader.modelBuilderLabelState);
+        node.setAttribute(ConfigLoader.colNameModelBuilderNodeState, name);
+        node.setAttribute(ConfigLoader.colNameModelBuilderDescription, description);
         graph.addNode(node);
     }
 
     public static void PrepareTable(Table table) {
-        if(!table.hasColumn(ConfigLoader.getProperty("colName.modelBuilder.nodeState")))
-            table.addColumn(ConfigLoader.getProperty("colName.modelBuilder.nodeState"), String.class);
-        if(!table.hasColumn(ConfigLoader.getProperty("colName.modelBuilder.description")))
-            table.addColumn(ConfigLoader.getProperty("colName.modelBuilder.description"), String.class);
+        if(!table.hasColumn(ConfigLoader.colNameModelBuilderNodeState))
+            table.addColumn(ConfigLoader.colNameModelBuilderNodeState, String.class);
+        if(!table.hasColumn(ConfigLoader.colNameModelBuilderDescription))
+            table.addColumn(ConfigLoader.colNameModelBuilderDescription, String.class);
     }
 
     @Override
