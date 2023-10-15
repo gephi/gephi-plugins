@@ -1,6 +1,8 @@
 package ConfigLoader;
 
+import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Properties;
 
@@ -34,7 +36,14 @@ public class ConfigLoader {
             prop.load(config);
             return prop.getProperty(name);
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            File currentDir = new File(System.getProperty("user.dir"));
+            File targetFile = new File(currentDir.getParentFile().getParentFile(), "simulationWindows.properties");
+            try (FileInputStream config = new FileInputStream(targetFile)) {
+                prop.load(config);
+                return prop.getProperty(name);
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
+            }
         }
 
     }
