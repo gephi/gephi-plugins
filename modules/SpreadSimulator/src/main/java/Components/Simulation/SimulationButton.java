@@ -12,7 +12,7 @@ public class SimulationButton extends JButton {
     private Integer delay;
 
     public SimulationButton(Simulation simulation, SimulationComponent simulationComponent) {
-        this.setText(ConfigLoader.getProperty("button.label.runSimulation"));
+        this.setText(ConfigLoader.buttonLabelRunSimulation);
         this.simulation = simulation;
         this.simulationComponent = simulationComponent;
         this.addActionListener(e -> openInputDialogAndRunSimulation());

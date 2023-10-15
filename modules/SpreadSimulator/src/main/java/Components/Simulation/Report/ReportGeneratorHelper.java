@@ -34,7 +34,7 @@ public class ReportGeneratorHelper {
             }
         }
 
-        String path = ConfigLoader.getProperty("reports.path");
+        String path = ConfigLoader.reportsPath;
 
         File directory = new File(path + filename);
         if (!directory.exists()) {

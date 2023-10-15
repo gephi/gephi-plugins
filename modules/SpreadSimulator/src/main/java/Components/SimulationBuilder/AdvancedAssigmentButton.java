@@ -164,7 +164,7 @@ public class AdvancedAssigmentButton extends JButton {
                 for (int i = 0; i < numOfNodes; i++) {
                     var index = rnd.nextInt(nodes.length);
                     var selectedNode = nodes[index];
-                    selectedNode.setAttribute(ConfigLoader.getProperty("colName.nodeRole"), nodeRole.getName());
+                    selectedNode.setAttribute(ConfigLoader.colNameNodeRole, nodeRole.getName());
                     selectedNode.setAttribute("NodeState", nodeStateDecorator.getNodeState().getName());
                     selectedNode.setColor(nodeStateDecorator.getColor());
                 }
@@ -179,7 +179,7 @@ public class AdvancedAssigmentButton extends JButton {
                     var neighbours = graph.getNeighbors(selectedNode).toArray();
                     index = rnd.nextInt(neighbours.length);
                     selectedNode = neighbours[index];
-                    selectedNode.setAttribute(ConfigLoader.getProperty("colName.nodeRole"), nodeRole.getName());
+                    selectedNode.setAttribute(ConfigLoader.colNameNodeRole, nodeRole.getName());
                     selectedNode.setAttribute("NodeState", nodeStateDecorator.getNodeState().getName());
                     selectedNode.setColor(nodeStateDecorator.getColor());
                 }
@@ -253,8 +253,8 @@ public class AdvancedAssigmentButton extends JButton {
                 }
                 for (int i = 0; i < numOfNodes; i++) {
                     var chosenOne = nodes.get(i);
-                    chosenOne.setAttribute(ConfigLoader.getProperty("colName.nodeRole"), nodeRole.getName());
-                    chosenOne.setAttribute(ConfigLoader.getProperty("colName.nodeState"), nodeStateDecorator.getNodeState().getName());
+                    chosenOne.setAttribute(ConfigLoader.colNameNodeRole, nodeRole.getName());
+                    chosenOne.setAttribute(ConfigLoader.colNameNodeState, nodeStateDecorator.getNodeState().getName());
                     chosenOne.setColor(nodeStateDecorator.getColor());
                 }
             }

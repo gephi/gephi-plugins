@@ -42,7 +42,7 @@ public class ModelBuilderExporter implements PluginGeneralActionsManipulator {
     public void execute() {
         graph = Lookup.getDefault().lookup(GraphController.class).getGraphModel().getGraph();
         nodeRole = new NodeRole();
-        var transitionEdges = List.of(graph.getEdges().toArray()).stream().filter(x -> x.getLabel().equals(ConfigLoader.getProperty("modelBuilder.label.transition")));
+        var transitionEdges = List.of(graph.getEdges().toArray()).stream().filter(x -> x.getLabel().equals(ConfigLoader.modelBuilderLabelTransition));
 
         nodeRole.setName(modelName);
         nodeRole.setDescription(modeDescription);
@@ -52,17 +52,17 @@ public class ModelBuilderExporter implements PluginGeneralActionsManipulator {
         var transitionList = transitionEdges.map(transition -> {
             var source = transition.getSource();
             var destination = transition.getTarget();
-            var transitionType = TransitionType.valueOf(transition.getAttribute(ConfigLoader.getProperty("colName.modelBuilder.transitionType")).toString());
-            var probability = Double.parseDouble(transition.getAttribute(ConfigLoader.getProperty("colName.modelBuilder.probability")).toString());
+            var transitionType = TransitionType.valueOf(transition.getAttribute(ConfigLoader.colNameModelBuilderTransitionType).toString());
+            var probability = Double.parseDouble(transition.getAttribute(ConfigLoader.colNameModelBuilderProbability).toString());
 
-            var sourceNodeState = source.getAttribute(ConfigLoader.getProperty("colName.modelBuilder.description")) != null ?
-                    new NodeState(source.getAttribute(ConfigLoader.getProperty("colName.modelBuilder.nodeState")).toString(), source.getAttribute("Description").toString())
+            var sourceNodeState = source.getAttribute(ConfigLoader.colNameModelBuilderDescription) != null ?
+                    new NodeState(source.getAttribute(ConfigLoader.colNameModelBuilderNodeState).toString(), source.getAttribute("Description").toString())
                     :
-                    new NodeState(source.getAttribute(ConfigLoader.getProperty("colName.modelBuilder.nodeState")).toString());
+                    new NodeState(source.getAttribute(ConfigLoader.colNameModelBuilderNodeState).toString());
             var destinationNodeState = destination.getAttribute("Description") != null ?
-                    new NodeState(destination.getAttribute(ConfigLoader.getProperty("colName.modelBuilder.nodeState")).toString(), destination.getAttribute("Description").toString())
+                    new NodeState(destination.getAttribute(ConfigLoader.colNameModelBuilderNodeState).toString(), destination.getAttribute("Description").toString())
                     :
-                    new NodeState(destination.getAttribute(ConfigLoader.getProperty("colName.modelBuilder.nodeState")).toString());
+                    new NodeState(destination.getAttribute(ConfigLoader.colNameModelBuilderNodeState).toString());
 
 
 
@@ -71,7 +71,7 @@ public class ModelBuilderExporter implements PluginGeneralActionsManipulator {
                     return new TransitionNoCondition(transitionType, sourceNodeState, destinationNodeState, probability);
                 case conditionProbability:
                     List<String> provNeighbours;
-                    var provNeighboursContent = transition.getAttribute(ConfigLoader.getProperty("colName.modelBuilder.provocativeNeighbours")).toString();
+                    var provNeighboursContent = transition.getAttribute(ConfigLoader.colNameModelBuilderProvocativeNeighbours).toString();
                     try {
                         provNeighbours = mapper.readValue(provNeighboursContent, new TypeReference<List<String>>() {});
                     } catch (IOException e) {

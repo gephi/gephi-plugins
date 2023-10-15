@@ -31,10 +31,10 @@ public class SaveButton extends JButton {
         }
         @Override
         public void actionPerformed(ActionEvent e) {
-            File folder = new File(ConfigLoader.getProperty("folder.simulationBuilder.simulations"));
+            File folder = new File(ConfigLoader.folderSimulationBuilderSimulations);
             if (!folder.exists()) {
                 if (!folder.mkdirs()) {
-                    JOptionPane.showMessageDialog(null,"Nie można utworzyć folderu " + ConfigLoader.getProperty("folder.simulationBuilder.simulations"));
+                    JOptionPane.showMessageDialog(null,"Nie można utworzyć folderu " + ConfigLoader.folderSimulationBuilderSimulations);
                     return;
                 }
             }
@@ -43,7 +43,7 @@ public class SaveButton extends JButton {
             simulationModel.setName(ApplySimulationHelper.GenerateName(nodeRoles));
             var mapper = ObjectMapperHelper.CustomObjectMapperCreator();
             try {
-                File jsonFile = new File(ConfigLoader.getProperty("folder.simulationBuilder.simulations")+ simulationModel.getName() + ".json");
+                File jsonFile = new File(ConfigLoader.folderSimulationBuilderSimulations+ simulationModel.getName() + ".json");
                 mapper.writeValue(jsonFile, simulationModel);
                 JOptionPane.showMessageDialog(null,"Model saved as " + simulationModel.getName() + ".json");
             } catch (IOException ex) {

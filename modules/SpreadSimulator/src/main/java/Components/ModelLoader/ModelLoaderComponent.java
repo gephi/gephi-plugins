@@ -56,7 +56,7 @@ public class ModelLoaderComponent extends TopComponent {
             public void actionPerformed(ActionEvent e) {
                 String folderName = newFolderTextField.getText().trim();
                 if (!folderName.isEmpty()) {
-                    File newFolder = new File(ConfigLoader.getProperty("folder.simulationBuilder.models") + folderName);
+                    File newFolder = new File(ConfigLoader.folderSimulationBuilderModels + folderName);
                     if (!newFolder.exists()) {
                         if (newFolder.mkdirs()) {
                             refreshFolderList();
@@ -86,10 +86,10 @@ public class ModelLoaderComponent extends TopComponent {
     private void refreshFolderList() {
         folderListPanel.removeAll();
 
-        File folder = new File(ConfigLoader.getProperty("folder.simulationBuilder.models"));
+        File folder = new File(ConfigLoader.folderSimulationBuilderModels);
         if (!folder.exists()) {
             if (!folder.mkdirs()) {
-                folderListPanel.add(new JLabel("Nie można utworzyć folderu " + ConfigLoader.getProperty("folder.simulationBuilder.models")));
+                folderListPanel.add(new JLabel("Nie można utworzyć folderu " + ConfigLoader.folderSimulationBuilderModels));
                 return;
             }
         }
@@ -129,7 +129,7 @@ public class ModelLoaderComponent extends TopComponent {
                 folderListPanel.add(separator);
             }
         } else {
-            folderListPanel.add(new JLabel("No folders found in " + ConfigLoader.getProperty("folder.simulationBuilder.models")));
+            folderListPanel.add(new JLabel("No folders found in " + ConfigLoader.folderSimulationBuilderModels));
         }
 
         revalidate();
@@ -182,7 +182,7 @@ public class ModelLoaderComponent extends TopComponent {
 
                     try {
                         // Zapisuje obiekt do pliku JSON
-                        File jsonFile = new File(ConfigLoader.getProperty("folder.simulationBuilder.models")+ subFolder.getName() + "/"+ nodeRole.getName() + ".json");
+                        File jsonFile = new File(ConfigLoader.folderSimulationBuilderModels+ subFolder.getName() + "/"+ nodeRole.getName() + ".json");
                         objectMapper.writeValue(jsonFile, nodeRole);
 
                     } catch (IOException exx) {

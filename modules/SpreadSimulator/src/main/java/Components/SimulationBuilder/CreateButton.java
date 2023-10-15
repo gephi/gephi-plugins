@@ -40,10 +40,10 @@ public class CreateButton extends JButton {
         var folderListPanel = new JPanel();
         folderListPanel.setLayout((new BoxLayout(folderListPanel, BoxLayout.Y_AXIS)));
         folderListPanel.setSize(400, 300);
-        File folder = new File(ConfigLoader.getProperty("folder.simulationBuilder.models"));
+        File folder = new File(ConfigLoader.folderSimulationBuilderModels);
         if (!folder.exists()) {
             if (!folder.mkdirs()) {
-                folderListPanel.add(new JLabel("Cannot create folder " + ConfigLoader.getProperty("folder.simulationBuilder.models")));
+                folderListPanel.add(new JLabel("Cannot create folder " + ConfigLoader.folderSimulationBuilderModels));
                 return;
             }
         }
@@ -63,7 +63,7 @@ public class CreateButton extends JButton {
                 folderListPanel.add(rowPanel);
             }
         } else {
-            folderListPanel.add(new JLabel("No folders found in " + ConfigLoader.getProperty("folder.simulationBuilder.models")));
+            folderListPanel.add(new JLabel("No folders found in " + ConfigLoader.folderSimulationBuilderModels));
         }
 
         JScrollPane scrollPane = new JScrollPane(folderListPanel);

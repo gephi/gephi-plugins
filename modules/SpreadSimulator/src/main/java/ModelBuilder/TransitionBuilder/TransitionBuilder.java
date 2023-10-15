@@ -53,25 +53,25 @@ public class TransitionBuilder implements PluginGeneralActionsManipulator {
 
         var mapper = ObjectMapperHelper.CustomObjectMapperCreator();
 
-        edge.setAttribute(ConfigLoader.getProperty("colName.modelBuilder.transitionType"), transitionType.toString());
+        edge.setAttribute(ConfigLoader.colNameModelBuilderTransitionType, transitionType.toString());
         try {
-            edge.setAttribute(ConfigLoader.getProperty("colName.modelBuilder.provocativeNeighbours"), mapper.writeValueAsString(provocativeNeighbours));
+            edge.setAttribute(ConfigLoader.colNameModelBuilderProvocativeNeighbours, mapper.writeValueAsString(provocativeNeighbours));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        edge.setLabel(ConfigLoader.getProperty("modelBuilder.label.transition"));
-        edge.setAttribute(ConfigLoader.getProperty("colName.modelBuilder.probability"), probability);
+        edge.setLabel(ConfigLoader.modelBuilderLabelTransition);
+        edge.setAttribute(ConfigLoader.colNameModelBuilderProbability, probability);
 
         graph.addEdge(edge);
     }
 
     public static void PrepareTable(Table table) {
-        if(!table.hasColumn(ConfigLoader.getProperty("colName.modelBuilder.transitionType")))
-            table.addColumn(ConfigLoader.getProperty("colName.modelBuilder.transitionType"), String.class);
-        if(!table.hasColumn(ConfigLoader.getProperty("colName.modelBuilder.provocativeNeighbours")))
-            table.addColumn(ConfigLoader.getProperty("colName.modelBuilder.provocativeNeighbours"), String.class);
-        if(!table.hasColumn(ConfigLoader.getProperty("colName.modelBuilder.probability")))
-            table.addColumn(ConfigLoader.getProperty("colName.modelBuilder.probability"), Double.class);
+        if(!table.hasColumn(ConfigLoader.colNameModelBuilderTransitionType))
+            table.addColumn(ConfigLoader.colNameModelBuilderTransitionType, String.class);
+        if(!table.hasColumn(ConfigLoader.colNameModelBuilderProvocativeNeighbours))
+            table.addColumn(ConfigLoader.colNameModelBuilderProvocativeNeighbours, String.class);
+        if(!table.hasColumn(ConfigLoader.colNameModelBuilderProbability))
+            table.addColumn(ConfigLoader.colNameModelBuilderProbability, Double.class);
     }
 
     @Override
