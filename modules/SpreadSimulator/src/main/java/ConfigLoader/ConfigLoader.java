@@ -24,21 +24,20 @@ public class ConfigLoader {
     public static final String colNameNodeRole = getProperty("colName.nodeRole");
     public static final String colNameModelBuilderDescription = getProperty("colName.modelBuilder.description");
     public static final String modelBuilderLabelTransition = getProperty("modelBuilder.label.transition");
-    public static final String folderSimulationBuilderModels = getProperty("folderSimulationBuilderModels");
+    public static final String folderSimulationBuilderModels = getProperty("folder.simulationBuilder.models");
     public static final String modelBuilderLabelState = getProperty("modelBuilder.label.state");
     public static final String reportsPath = getProperty("reports.path");
     public static final String folderSimulationBuilderSimulations = getProperty("folder.simulationBuilder.simulations");
 
-    static final Properties prop = new Properties();
-
     static String getProperty(String name) {
+        Properties prop = new Properties();
         try (FileInputStream config = new FileInputStream("simulation.properties")) {
             prop.load(config);
             return prop.getProperty(name);
         } catch (IOException e) {
             File currentDir = new File(System.getProperty("user.dir"));
             File targetFile = new File(currentDir.getParentFile().getParentFile(), "simulationWindows.properties");
-            try (FileInputStream config = new FileInputStream(targetFile)) {
+            try (FileInputStream config = new FileInputStream(targetFile.getAbsolutePath())) {
                 prop.load(config);
                 return prop.getProperty(name);
             } catch (IOException ex) {
