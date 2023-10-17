@@ -103,7 +103,7 @@ public class CreateButton extends JButton {
                             var content = new String(Files.readAllBytes(Paths.get(file.getAbsolutePath())));
                             var nodeRole = mapper.readValue(content, NodeRole.class);
                             var nodeSourceStates = nodeRole.getTransitionMap().stream().map(x -> x.getSourceState().getName()).distinct().collect(Collectors.toList());
-                            var nodeDestinationStates = nodeRole.getTransitionMap().stream().map(x -> x.getSourceState().getName()).distinct().collect(Collectors.toList());
+                            var nodeDestinationStates = nodeRole.getTransitionMap().stream().map(x -> x.getDestinationState().getName()).distinct().collect(Collectors.toList());
                             var nodeStates = nodeSourceStates;
                             nodeStates.addAll(nodeDestinationStates);
                             nodeStates = nodeStates.stream().distinct().collect(Collectors.toList());
