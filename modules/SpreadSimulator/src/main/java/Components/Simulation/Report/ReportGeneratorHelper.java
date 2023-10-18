@@ -34,14 +34,12 @@ public class ReportGeneratorHelper {
             }
         }
 
-        String path = ConfigLoader.reportsPath;
-
-        File directory = new File(path + filename);
+        File directory = new File(ConfigLoader.reportsPath + filename);
         if (!directory.exists()) {
             directory.mkdirs();
         }
 
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(path + filename + "/" + filename + ".csv"))) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(ConfigLoader.reportsPath + filename + "/" + filename + ".csv"))) {
             // Write the headers
             writer.write("step," + String.join(",", csvData.keySet()));
             writer.newLine();
@@ -68,12 +66,12 @@ public class ReportGeneratorHelper {
 
     public static void GenerateExcelJXL(List<SimulationStepReport> reports, String filename) {
         try {
-            File directory = new File("reports/"+filename);
+            File directory = new File(ConfigLoader.reportsPath+filename);
             if (!directory.exists()) {
                 directory.mkdirs();
             }
 
-            WritableWorkbook workbook = Workbook.createWorkbook(new File("reports/"+filename+"/" + filename + ".xls"));
+            WritableWorkbook workbook = Workbook.createWorkbook(new File(ConfigLoader.reportsPath+filename+"/" + filename + ".xls"));
             WritableSheet sheet = workbook.createSheet("Simulation Report", 0);
 
             // LinkedHashMap to maintain insertion order
