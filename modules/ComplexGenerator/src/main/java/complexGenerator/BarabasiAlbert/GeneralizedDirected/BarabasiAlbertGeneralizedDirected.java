@@ -124,7 +124,7 @@ public class BarabasiAlbertGeneralizedDirected implements Generator {
                         }
                     }
 
-                    if (nodeDestination != null && !edgeExists(container, nodeSource, nodeDestination) && nodeDestination.getId() != nodeSource.getId()) {
+                    if (nodeDestination != null && !edgeExistsFromSourceToDestination(nodeSource, nodeDestination) && nodeDestination.getId() != nodeSource.getId()) {
                         EdgeDraft edge = container.factory().newEdgeDraft();
 
                         boolean invert = invertSourceAndDestination(nodeSource, nodeDestination);
@@ -157,8 +157,8 @@ public class BarabasiAlbertGeneralizedDirected implements Generator {
                 nodeSource = nodesList.get(randomIndex).getFirst();
                 summedDegree -= nodesList.get(randomIndex).getSecond();
 
-                List<Pair<NodeDraft, Integer>> connectedNodes = getNodesConnceted(container, nodesList, nodeSource);
-                if (connectedNodes.size() > 0) {
+                List<Pair<NodeDraft, Integer>> connectedNodes = getNodesConncetedFromSource(nodesList, nodeSource);
+                if (!connectedNodes.isEmpty()) {
                     int nodeConnectionToDeleteIndex = random.nextInt(connectedNodes.size());
                     nodeOldDestination = connectedNodes.get(nodeConnectionToDeleteIndex).getFirst();
                     int newDestinationIndex = -1;
@@ -176,8 +176,8 @@ public class BarabasiAlbertGeneralizedDirected implements Generator {
                         }
                     }
 
-                    if (nodeNewDestination != null && nodeOldDestination != null && !edgeExists(container, nodeSource, nodeNewDestination) && nodeNewDestination.getId() != nodeSource.getId()) {
-                        var edgeToRemove = getEdge(container, nodeSource, nodeOldDestination).get();
+                    if (nodeNewDestination != null && nodeOldDestination != null && !edgeExistsFromSourceToDestination(nodeSource, nodeNewDestination) && nodeNewDestination.getId() != nodeSource.getId()) {
+                        var edgeToRemove = getEdgeDirected(container, nodeSource, nodeOldDestination).get();
                         container.removeEdge(edgeToRemove);
                         edges.remove(edgeToRemove);
                         connectedNodes.set(nodeConnectionToDeleteIndex, new Pair(nodeOldDestination, connectedNodes.get(nodeConnectionToDeleteIndex).getSecond() - 1));
@@ -219,7 +219,7 @@ public class BarabasiAlbertGeneralizedDirected implements Generator {
                         }
                     }
 
-                    if (nodeDestination != null && !edgeExists(container, nodeSource, nodeDestination) && nodeDestination.getId() != nodeSource.getId()) {
+                    if (nodeDestination != null && !edgeExistsFromSourceToDestination(nodeSource, nodeDestination) && nodeDestination.getId() != nodeSource.getId()) {
                         EdgeDraft edge = container.factory().newEdgeDraft();
                         edge.setSource(nodeSource);
                         edge.setTarget(nodeDestination);
@@ -253,16 +253,16 @@ public class BarabasiAlbertGeneralizedDirected implements Generator {
         return false;
     }
 
-    private List<Pair<NodeDraft, Integer>> getNodesConnceted(ContainerLoader container, ArrayList<Pair<NodeDraft, Integer>> nodesList, NodeDraft nodeSource) {
-        return nodesList.stream().filter(nodeDestination -> edgeExists(container, nodeSource, nodeDestination.getFirst())).collect(Collectors.toList());
+    private List<Pair<NodeDraft, Integer>> getNodesConncetedFromSource(ArrayList<Pair<NodeDraft, Integer>> nodesList, NodeDraft nodeSource) {
+        return nodesList.stream().filter(nodeDestination -> edgeExistsFromSourceToDestination(nodeSource, nodeDestination.getFirst())).collect(Collectors.toList());
     }
 
-    private boolean edgeExists(ContainerLoader container, NodeDraft sourceNode, NodeDraft tergetNode) {
-        return edges.stream().anyMatch(x -> (x.getSource() == sourceNode && x.getTarget() == tergetNode) || (x.getSource() == tergetNode && x.getTarget() == sourceNode));
+    private boolean edgeExistsFromSourceToDestination(NodeDraft sourceNode, NodeDraft tergetNode) {
+        return edges.stream().anyMatch(x -> (x.getSource() == sourceNode && x.getTarget() == tergetNode));
     }
 
-    private Optional<EdgeDraft> getEdge(ContainerLoader container, NodeDraft sourceNode, NodeDraft tergetNode) {
-        return edges.stream().filter(x -> (x.getSource() == sourceNode && x.getTarget() == tergetNode) || (x.getSource() == tergetNode && x.getTarget() == sourceNode) )
+    private Optional<EdgeDraft> getEdgeDirected(ContainerLoader container, NodeDraft sourceNode, NodeDraft tergetNode) {
+        return edges.stream().filter(x -> (x.getSource() == sourceNode && x.getTarget() == tergetNode))
                 .findFirst();
     }
 
