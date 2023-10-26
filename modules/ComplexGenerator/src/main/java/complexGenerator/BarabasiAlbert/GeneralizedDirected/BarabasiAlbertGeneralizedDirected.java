@@ -18,14 +18,7 @@
  * You should have received a copy of the GNU General Public License
  * along with Gephi.  If not, see <http://www.gnu.org/licenses/>.
  */
-package complexGenerator.BarabasiAlbert.Generalized;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.Random;
-
-import java.util.stream.Collectors;
+package complexGenerator.BarabasiAlbert.GeneralizedDirected;
 
 import complexGenerator.BarabasiAlbert.Utils.Pair;
 import org.gephi.io.generator.spi.Generator;
@@ -38,6 +31,12 @@ import org.gephi.utils.progress.Progress;
 import org.gephi.utils.progress.ProgressTicket;
 import org.openide.util.Lookup;
 import org.openide.util.lookup.ServiceProvider;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import java.util.Random;
+import java.util.stream.Collectors;
 
 /**
  * Generates an undirected not necessarily connected graph.
@@ -58,7 +57,7 @@ import org.openide.util.lookup.ServiceProvider;
  */
 
 @ServiceProvider(service = Generator.class)
-public class BarabasiAlbertGeneralized implements Generator {
+public class BarabasiAlbertGeneralizedDirected implements Generator {
     private boolean cancel = false;
     private ProgressTicket progressTicket;
     private int    N  = 50;
@@ -70,7 +69,7 @@ public class BarabasiAlbertGeneralized implements Generator {
     NodeDraft[] nodes;
     List<EdgeDraft> edges;
 
-    public BarabasiAlbertGeneralized() {
+    public BarabasiAlbertGeneralizedDirected() {
         edges = new ArrayList<>();
     }
 
@@ -78,7 +77,7 @@ public class BarabasiAlbertGeneralized implements Generator {
     public void generate(ContainerLoader container) {
         Progress.start(progressTicket, N);
         Random random = new Random();
-        container.setEdgeDefault(EdgeDirectionDefault.UNDIRECTED);
+        container.setEdgeDefault(EdgeDirectionDefault.DIRECTED);
         edges = new ArrayList<>();
 
         // Timestamps
@@ -127,8 +126,16 @@ public class BarabasiAlbertGeneralized implements Generator {
 
                     if (nodeDestination != null && !edgeExists(container, nodeSource, nodeDestination) && nodeDestination.getId() != nodeSource.getId()) {
                         EdgeDraft edge = container.factory().newEdgeDraft();
-                        edge.setSource(nodeSource);
-                        edge.setTarget(nodeDestination);
+
+                        boolean invert = invertSourceAndDestination(nodeSource, nodeDestination);
+
+                        if (invert) {
+                            edge.setSource(nodeDestination);
+                            edge.setTarget(nodeSource);
+                        } else {
+                            edge.setSource(nodeSource);
+                            edge.setTarget(nodeDestination);
+                        }
                         edge.addInterval(et + "", N + "");
                         container.addEdge(edge);
                         edges.add(edge);
@@ -233,6 +240,19 @@ public class BarabasiAlbertGeneralized implements Generator {
         progressTicket = null;
     }
 
+    private boolean invertSourceAndDestination(NodeDraft nodeSource, NodeDraft nodeDestination) {
+        long targetPower = edges.stream().filter(edgeDraft -> edgeDraft.getTarget().equals(nodeSource)).count();
+        long sourcePower = edges.stream().filter(edgeDraft -> edgeDraft.getTarget().equals(nodeDestination)).count();
+
+        Random random = new Random();
+        double probabilityValue = random.nextDouble();
+
+        if (probabilityValue > (double) targetPower /(targetPower+sourcePower)) {
+            return true;
+        }
+        return false;
+    }
+
     private List<Pair<NodeDraft, Integer>> getNodesConnceted(ContainerLoader container, ArrayList<Pair<NodeDraft, Integer>> nodesList, NodeDraft nodeSource) {
         return nodesList.stream().filter(nodeDestination -> edgeExists(container, nodeSource, nodeDestination.getFirst())).collect(Collectors.toList());
     }
@@ -288,12 +308,12 @@ public class BarabasiAlbertGeneralized implements Generator {
 
     @Override
     public String getName() {
-        return "Generalized Barabasi-Albert Scale Free model";
+        return "Generalized Barabasi-Albert Scale Free model [Directed]";
     }
 
     @Override
     public GeneratorUI getUI() {
-        return Lookup.getDefault().lookup(IBarabasiAlbertGeneralizedUI.class);
+        return Lookup.getDefault().lookup(IBarabasiAlbertGeneralizedDirectedUI.class);
     }
 
     @Override

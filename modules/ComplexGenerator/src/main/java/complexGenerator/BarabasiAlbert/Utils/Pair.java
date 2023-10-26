@@ -1,4 +1,4 @@
-package complexGenerator.BarabasiAlbert.Generalized;
+package complexGenerator.BarabasiAlbert.Utils;
 
 public class Pair<A, B> {
     private A first;

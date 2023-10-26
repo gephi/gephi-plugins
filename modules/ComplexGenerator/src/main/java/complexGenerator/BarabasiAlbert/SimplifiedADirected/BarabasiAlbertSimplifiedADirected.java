@@ -18,7 +18,7 @@
  * You should have received a copy of the GNU General Public License
  * along with Gephi.  If not, see <http://www.gnu.org/licenses/>.
  */
-package complexGenerator.BarabasiAlbert.SimplifiedAUndirected;
+package complexGenerator.BarabasiAlbert.SimplifiedADirected;
 
 import java.util.Random;
 import org.gephi.io.generator.spi.Generator;
