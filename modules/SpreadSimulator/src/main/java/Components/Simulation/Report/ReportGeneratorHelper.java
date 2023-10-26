@@ -17,8 +17,6 @@ import org.jfree.data.xy.XYSeriesCollection;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
@@ -50,12 +48,12 @@ public class ReportGeneratorHelper {
             }
         }
 
-        File directory = new File(ConfigLoader.reportsPath + filename);
+        File directory = new File(ConfigLoader.folderReports + filename);
         if (!directory.exists()) {
             directory.mkdirs();
         }
 
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(ConfigLoader.reportsPath + filename + "/" + filename + ".csv"))) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(ConfigLoader.folderReports + filename + "/" + filename + ".csv"))) {
             // Write the headers
             writer.write("step," + String.join(",", csvData.keySet()));
             writer.newLine();
@@ -82,12 +80,12 @@ public class ReportGeneratorHelper {
 
     public static void generateExcelJXL(List<SimulationStepReport> reports, String filename) {
         try {
-            File directory = new File(ConfigLoader.reportsPath+filename);
+            File directory = new File(ConfigLoader.folderReports +filename);
             if (!directory.exists()) {
                 directory.mkdirs();
             }
 
-            WritableWorkbook workbook = Workbook.createWorkbook(new File(ConfigLoader.reportsPath+filename+"/" + filename + ".xls"));
+            WritableWorkbook workbook = Workbook.createWorkbook(new File(ConfigLoader.folderReports +filename+"/" + filename + ".xls"));
             WritableSheet sheet = workbook.createSheet("Simulation Report", 0);
 
             // LinkedHashMap to maintain insertion order
@@ -202,7 +200,11 @@ public class ReportGeneratorHelper {
         saveAsImageButton.addActionListener(e -> {
             for (JFreeChart chart : chartList) {
                 try {
-                    ChartUtilities.saveChartAsPNG(new File("chart" + chartList.indexOf(chart) + ".png"), chart, 1200, 800);
+                    File directory = new File(ConfigLoader.folderReports + fileName);
+                    if (!directory.exists()) {
+                        directory.mkdirs();
+                    }
+                    ChartUtilities.saveChartAsPNG(new File(ConfigLoader.folderReports + fileName + "/" + "chart_" + (chartList.indexOf(chart)+1) + ".png"), chart, 1200, 800);
                 } catch (IOException ex) {
                     throw new RuntimeException(ex);
                 }
