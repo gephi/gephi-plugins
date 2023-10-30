@@ -44,7 +44,7 @@ public class BlueskyGephi {
     private final static String NBPREF_QUERY_ISDEEPSEARCH = "query.isDeepSearch";
     private final static String NBPREF_QUERY_ISLIMITCRAWLACTIVE = "query.isLimitCrawlActive";
     private final static String NBPREF_QUERY_LIMITCRAWL = "query.limitCrawl";
-     
+
     private final Preferences nbPref = NbPreferences.forModule(BlueskyGephi.class);
     // If ATProto get released and decentralized, this will change to adapt to other instances
     final private AtClient client = new AtClient("bsky.social");
@@ -52,7 +52,7 @@ public class BlueskyGephi {
 
     public BlueskyGephi() {
         initProjectAndWorkspace();
-        
+
     }
 
     private void initProjectAndWorkspace() {
@@ -110,27 +110,30 @@ public class BlueskyGephi {
     public boolean getIsDeepSearch() {
         return nbPref.getBoolean(NBPREF_QUERY_ISDEEPSEARCH, true);
     }
-    
-   public void setIsLimitCrawlActive(boolean isLimitCrawlActive){
-         nbPref.putBoolean(NBPREF_QUERY_ISLIMITCRAWLACTIVE, isLimitCrawlActive);
+
+    public void setIsLimitCrawlActive(boolean isLimitCrawlActive) {
+        nbPref.putBoolean(NBPREF_QUERY_ISLIMITCRAWLACTIVE, isLimitCrawlActive);
     }
-  public boolean getIsLimitCrawlActive(){
+
+    public boolean getIsLimitCrawlActive() {
         return nbPref.getBoolean(NBPREF_QUERY_ISLIMITCRAWLACTIVE, true);
     }
 
-      
-   public void setLimitCrawl(int limitCrawl){
-         nbPref.putInt(NBPREF_QUERY_LIMITCRAWL, limitCrawl);
+    public void setLimitCrawl(int limitCrawl) {
+        nbPref.putInt(NBPREF_QUERY_LIMITCRAWL, limitCrawl);
     }
-  public int getLimitCrawl(){
+
+    public int getLimitCrawl() {
         return nbPref.getInt(NBPREF_QUERY_LIMITCRAWL, 50);
     }
+
     private Node createNode(Identity i) {
 
         Node node = graphModel.getGraph().getNode(i.getDid());
         if (node == null) {
             node = graphModel.factory().newNode(i.getDid());
             node.setLabel(i.getHandle());
+            node.setAttribute("Description", i.getDescription());
             node.setSize(10);
             node.setColor(Color.GRAY);
             node.setX((float) ((0.01 + Math.random()) * 1000) - 500);
@@ -161,12 +164,11 @@ public class BlueskyGephi {
             Set<String> foaf = new HashSet<>();
 
             private void process(String actor, boolean isDeepSearch, Optional<Integer> limitCrawl) {
-                
+
                 try {
                     if (isFollowsActive) {
-                        List<AppBskyGraphGetFollows> responses = client.appBskyGraphGetFollows(actor,limitCrawl);
+                        List<AppBskyGraphGetFollows> responses = client.appBskyGraphGetFollows(actor, limitCrawl);
 
-                       
                         for (var response : responses) {
                             graphModel.getGraph().writeLock();
                             Identity subject = response.getSubject();
@@ -182,14 +184,12 @@ public class BlueskyGephi {
                             graphModel.getGraph().writeUnlock();
 
                         }
-                        
-                  
+
                     }
 
                     if (isFollowersActive) {
-                        List<AppBskyGraphGetFollowers> responses = client.appBskyGraphGetFollowers(actor,limitCrawl);
+                        List<AppBskyGraphGetFollowers> responses = client.appBskyGraphGetFollowers(actor, limitCrawl);
 
-                        
                         for (var response : responses) {
                             graphModel.getGraph().writeLock();
                             Identity subject = response.getSubject();
@@ -204,21 +204,21 @@ public class BlueskyGephi {
                             }
                             graphModel.getGraph().writeUnlock();
                         }
-                 
+
                     }
-                } catch(Exception e){
-                     Exceptions.printStackTrace(e);
+                } catch (Exception e) {
+                    Exceptions.printStackTrace(e);
                 } finally {
                 }
             }
 
             @Override
             public void run() {
-                
-                if(actor!=null){
-                      this.setName("[Bsky] fetching" + actor);
+
+                if (actor != null) {
+                    this.setName("[Bsky] fetching" + actor);
                 } else {
-                         this.setName("[Bsky] fetching List");
+                    this.setName("[Bsky] fetching List");
                 }
                 progressTicket = Lookup.getDefault()
                         .lookup(ProgressTicketProvider.class)
@@ -229,25 +229,24 @@ public class BlueskyGephi {
                         });
                 Progress.start(progressTicket);
                 Progress.switchToIndeterminate(progressTicket);
-              
-                
-                if(listInit!=null){
+
+                if (listInit != null) {
                     this.foaf.addAll(listInit);
                 }
-                if(actor!=null){
-                    process(actor, isDeepSearch,Optional.empty());
+                if (actor != null) {
+                    process(actor, isDeepSearch, Optional.empty());
                 }
-                if (listInit!=null||isDeepSearch ) {
+                if (listInit != null || isDeepSearch) {
                     Progress.switchToDeterminate(progressTicket, foaf.size());
                     for (var foafActor : foaf) {
-                        Progress.setDisplayName(progressTicket, "[Bsky] fetching "+actor+" n+1 > "+foafActor);
-                        if(getIsLimitCrawlActive()){
-                            process(foafActor, false,Optional.of(getLimitCrawl()));
+                        Progress.setDisplayName(progressTicket, "[Bsky] fetching " + actor + " n+1 > " + foafActor);
+                        if (getIsLimitCrawlActive()) {
+                            process(foafActor, false, Optional.of(getLimitCrawl()));
                         } else {
-                            process(foafActor, false,Optional.empty());
+                            process(foafActor, false, Optional.empty());
                         }
                         Progress.progress(progressTicket);
-                        
+
                     }
                 }
                 Progress.finish(progressTicket);
@@ -256,31 +255,41 @@ public class BlueskyGephi {
         t.start();
 
     }
+
     private Stream<String> manageList(String listId) {
-         List<AppBskyGraphGetList> list = client.appBskyGraphGetList(listId);
-         return list.stream().flatMap(x->x.getItems().stream().map(y->y.getSubject().getDid()));
-        
-    }
-    public void fetchFollowerFollowsFromActors(List<String> actors, boolean isFollowsActive, boolean isFollowersActive, boolean isBlocksActive) {
-        graphModel = Lookup.getDefault().lookup(GraphController.class).getGraphModel();
-        actors.stream().forEach(actor -> fetchFollowerFollowsFromActor(actor,null, isFollowsActive, isFollowersActive, getIsDeepSearch()));
+        List<AppBskyGraphGetList> list = client.appBskyGraphGetList(listId);
+        return list.stream().flatMap(x -> x.getItems().stream().map(y -> y.getSubject().getDid()));
+
     }
 
-     
+    private void initGraphTable() {
+        // Create necessary model for the graph entities
+        if (!graphModel.getNodeTable().hasColumn("Description")) {
+            graphModel.getNodeTable().addColumn("Description", String.class);
+        }
+    }
+
+    public void fetchFollowerFollowsFromActors(List<String> actors, boolean isFollowsActive, boolean isFollowersActive, boolean isBlocksActive) {
+        graphModel = Lookup.getDefault().lookup(GraphController.class).getGraphModel();
+        initGraphTable();
+        actors.stream().forEach(actor -> fetchFollowerFollowsFromActor(actor, null, isFollowsActive, isFollowersActive, getIsDeepSearch()));
+    }
+
     public void fetchFollowerFollowsFromActors(List<String> actors) {
         graphModel = Lookup.getDefault().lookup(GraphController.class).getGraphModel();
-       actors
-        .stream()
-        .filter(x -> !x.contains("app.bsky.graph.list"))
-        .forEach(actor -> fetchFollowerFollowsFromActor(actor,null, getIsFollowsActive(), getIsFollowersActive(), getIsDeepSearch()));
-       
+        initGraphTable();
+        actors
+                .stream()
+                .filter(x -> !x.contains("app.bsky.graph.list"))
+                .forEach(actor -> fetchFollowerFollowsFromActor(actor, null, getIsFollowsActive(), getIsFollowersActive(), getIsDeepSearch()));
+
         List<String> listActor = actors
                 .stream()
                 .filter(x -> x.contains("app.bsky.graph.list"))
                 .flatMap(this::manageList)
                 .collect(Collectors.toList());
-     
-        fetchFollowerFollowsFromActor(null,listActor, getIsFollowsActive(), getIsFollowersActive(), getIsDeepSearch());
-        
+
+        fetchFollowerFollowsFromActor(null, listActor, getIsFollowsActive(), getIsFollowersActive(), getIsDeepSearch());
+
     }
 }
