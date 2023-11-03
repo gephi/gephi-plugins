@@ -1,0 +1,5 @@
+Manifest-Version: 1.0
+OpenIDE-Module-Name: CPM plugin
+OpenIDE-Module-Short-Description: Clique Percolation Method implementation
+OpenIDE-Module-Long-Description: Simple algorithm for detecting overlapping communities based on node centeric method.
+OpenIDE-Module-Display-Category: Tool
