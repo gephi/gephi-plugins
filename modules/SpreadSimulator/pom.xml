@@ -23,12 +23,6 @@
             <scope>compile</scope>
         </dependency>
         <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
-            <version>1.18.28</version>
-            <scope>compile</scope>
-        </dependency>
-        <dependency>
             <groupId>org.netbeans.api</groupId>
             <artifactId>org-openide-util-lookup</artifactId>
         </dependency>
@@ -41,6 +35,11 @@
             <artifactId>graph-api</artifactId>
             <version>0.10.0</version>
             <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.gephi</groupId>
+            <artifactId>core-library-wrapper</artifactId>
+            <version>0.10.0</version>
         </dependency>
         <dependency>
             <groupId>org.gephi</groupId>
@@ -72,11 +71,6 @@
             <artifactId>org-openide-util</artifactId>
             <version>RELEASE160</version>
         </dependency>
-        <dependency>
-            <groupId>org.netbeans.api</groupId>
-            <artifactId>org-openide-util-ui</artifactId>
-            <version>RELEASE160</version>
-        </dependency>
 
         <dependency>
             <groupId>org.gephi</groupId>
@@ -90,10 +84,6 @@
             <version>0.10.0</version>
         </dependency>
 
-        <dependency>
-            <groupId>org.netbeans.api</groupId>
-            <artifactId>org-openide-windows</artifactId>
-        </dependency>
         <dependency>
             <groupId>org.netbeans.api</groupId>
             <artifactId>org-openide-windows</artifactId>

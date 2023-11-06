@@ -2,7 +2,6 @@ package ConfigLoader;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Properties;
 
@@ -26,7 +25,7 @@ public class ConfigLoader {
     public static final String modelBuilderLabelTransition = getProperty("modelBuilder.label.transition");
     public static final String folderSimulationBuilderModels = getProperty("folder.simulationBuilder.models");
     public static final String modelBuilderLabelState = getProperty("modelBuilder.label.state");
-    public static final String reportsPath = getProperty("reports.path");
+    public static final String folderReports = getProperty("folder.reports");
     public static final String folderSimulationBuilderSimulations = getProperty("folder.simulationBuilder.simulations");
 
     static String getProperty(String name) {
