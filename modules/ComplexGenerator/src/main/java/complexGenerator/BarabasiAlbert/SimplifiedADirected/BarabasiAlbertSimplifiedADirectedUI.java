@@ -1,4 +1,4 @@
-package complexGenerator.BarabasiAlbert.SimplifiedAUndirected;
+package complexGenerator.BarabasiAlbert.SimplifiedADirected;
 
 import Helpers.GenericParamForm.GenericUI;
 import complexGenerator.BarabasiAlbert.SimplifiedA.IBarabasiAlbertSimplifiedAUI;

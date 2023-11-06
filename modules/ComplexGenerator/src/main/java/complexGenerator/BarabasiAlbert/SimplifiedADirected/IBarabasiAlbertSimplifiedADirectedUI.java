@@ -1,4 +1,4 @@
-package complexGenerator.BarabasiAlbert.SimplifiedAUndirected;
+package complexGenerator.BarabasiAlbert.SimplifiedADirected;
 
 import org.gephi.io.generator.spi.GeneratorUI;
 

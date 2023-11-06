@@ -1,4 +1,4 @@
-package complexGenerator.BarabasiAlbert.SimplifiedBUndirected;
+package complexGenerator.BarabasiAlbert.SimplifiedBDirected;
 
 import Helpers.GenericParamForm.GenericUI;
 import org.openide.util.lookup.ServiceProvider;
