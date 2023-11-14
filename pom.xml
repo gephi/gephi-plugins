@@ -79,6 +79,7 @@
         <module>modules/OrderedLayout</module>
         <module>modules/OpenSeadragonPlugin</module>
         <module>modules/WordCloudPlugin</module>
+      <module>modules/BlueskyGephi</module>
     </modules>
 
     <!-- Properties -->
