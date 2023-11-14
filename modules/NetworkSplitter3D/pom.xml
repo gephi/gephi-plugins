@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <artifactId>gephi-plugin-parent</artifactId>
+        <groupId>org.gephi</groupId>
+        <version>0.10.0</version>
+    </parent>
+
+    <groupId>org.alexandrebarao</groupId>
+    <artifactId>network-splitter-3d</artifactId>
+    <version>1.0.0</version>
+    <packaging>nbm</packaging>
+
+    <name>Network Splitter 3D</name>
+
+    <dependencies>
+        <!-- Insert dependencies here -->
+        <dependency>
+            <groupId>org.gephi</groupId>
+            <artifactId>layout-api</artifactId>
+        </dependency>
+       <dependency>
+            <groupId>org.gephi</groupId>
+            <artifactId>graph-api</artifactId>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.netbeans.utilities</groupId>
+                <artifactId>nbm-maven-plugin</artifactId>
+                <configuration>
+                    <licenseName>GPL v3</licenseName>
+                    <licenseFile>gpl-3.0.txt</licenseFile>
+                    <author>Alexandre Barão</author>
+                    <authorEmail>barao.alexandre@gmail.com</authorEmail>
+                    <authorUrl>https://pt.linkedin.com/in/alexandrebarao</authorUrl>
+                    <sourceCodeUrl>https://github.com/alexandrebarao</sourceCodeUrl>
+                    <publicPackages>
+                        <!-- Insert public packages -->
+                    </publicPackages>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+</project>
+
+

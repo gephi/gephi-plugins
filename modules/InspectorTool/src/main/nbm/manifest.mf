@@ -1,0 +1,5 @@
+Manifest-Version: 1.0
+OpenIDE-Module-Name: Inspector
+OpenIDE-Module-Short-Description: Inspect the nodes of your graph interactively
+OpenIDE-Module-Long-Description: Inspector lets you view the node attributes directly from the Overview window. <br>After installation, simply locate the Inspector tool in the Toolbar and enable. Whenever your cursor hovers over a node, its attributes are displayed in a small overlay right next to the cursor.
+OpenIDE-Module-Display-Category: Tool

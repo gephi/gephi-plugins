@@ -1,0 +1,7 @@
+Manifest-Version: 1.0
+OpenIDE-Module-Name: Node Color Manager
+OpenIDE-Module-Short-Description: Share node colors among multiple graph
+OpenIDE-Module-Long-Description: Useful if you want to keep the same node to be the same color across different graph/projects, by using a file to keep track of node colors among multiple graph.
+    Note that the tool identify nodes by their labels, so your graph must have unique label for each node. If two or more node has same label, only one will be restored. When restore from file, only the nodes which match the labels in file would be colored, others will remain their original color.
+    Source code: https://github.com/songjinghe/gephi-plugins-1, more details: https://github.com/songjinghe/gephi-plugins-1/wiki
+OpenIDE-Module-Display-Category: Tool

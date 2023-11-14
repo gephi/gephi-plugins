@@ -1,0 +1,7 @@
+Manifest-Version: 1.0
+OpenIDE-Module-Name: VectorStatistics
+OpenIDE-Module-Requires: org.openide.windows.WindowManager
+OpenIDE-Module-Short-Description: Measures the distance and direction based on the edges in the graph.
+OpenIDE-Module-Long-Description: Calculates a) The average distance and the standard deviation between nodes for a collection of edges. 
+                                            b) The resulting vector size and direction, given a collection of egdes.
+OpenIDE-Module-Display-Category: Metric

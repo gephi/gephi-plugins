@@ -1,0 +1,6 @@
+Manifest-Version: 1.0
+OpenIDE-Module-Name: Oracle Driver
+OpenIDE-Module-Short-Description: Import from Oracle database
+OpenIDE-Module-Long-Description: Import data from an Oracle database using Oracle full client or Instant Client.
+OpenIDE-Module-Display-Category: Import
+OpenIDE-Module-Localizing-Bundle: uk/co/oracletroubadour/gephi/plugins/Bundle.properties

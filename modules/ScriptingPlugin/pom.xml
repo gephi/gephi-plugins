@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <artifactId>gephi-plugin-parent</artifactId>
+        <groupId>org.gephi</groupId>
+        <version>0.10.0</version>
+    </parent>
+
+    <groupId>org.gephi</groupId>
+    <artifactId>scripting.plugin</artifactId>
+    <version>0.9.3</version>
+    <packaging>nbm</packaging>
+
+    <name>ScriptingPlugin</name>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.netbeans.api</groupId>
+            <artifactId>org-openide-windows</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.netbeans.api</groupId>
+            <artifactId>org-netbeans-modules-settings</artifactId>
+        </dependency>
+        <dependency>
+            <artifactId>graph-api</artifactId>
+            <groupId>org.gephi</groupId>
+        </dependency>
+        <dependency>
+            <groupId>org.gephi</groupId>
+            <artifactId>filters-plugin</artifactId>
+        </dependency>
+        <dependency>
+            <artifactId>org-openide-util-lookup</artifactId>
+            <groupId>org.netbeans.api</groupId>
+        </dependency>
+        <dependency>
+            <artifactId>org-openide-util</artifactId>
+            <groupId>org.netbeans.api</groupId>
+        </dependency>
+        <dependency>
+            <artifactId>org-openide-modules</artifactId>
+            <groupId>org.netbeans.api</groupId>
+        </dependency>
+        <dependency>
+            <artifactId>core-library-wrapper</artifactId>
+            <groupId>org.gephi</groupId>
+        </dependency>
+        <dependency>
+            <artifactId>project-api</artifactId>
+            <groupId>org.gephi</groupId>
+        </dependency>
+        <dependency>
+            <artifactId>filters-api</artifactId>
+            <groupId>org.gephi</groupId>
+        </dependency>
+        <dependency>
+            <groupId>gython</groupId>
+            <artifactId>gython</artifactId>
+            <version>1.0</version>
+        </dependency>
+    </dependencies>
+    
+    <repositories>
+        <repository>
+            <id>gephi-thirdparty</id>
+            <url>https://raw.github.com/gephi/gephi/mvn-thirdparty-repo/</url>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+    </repositories>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.netbeans.utilities</groupId>
+                <artifactId>nbm-maven-plugin</artifactId>
+                <configuration>
+                    <licenseName>Apache 2.0</licenseName>
+                    <author>Luiz Ribeiro</author>
+                    <homePageUrl>https://github.com/gephi/gephi/wiki/Scripting-Plugin</homePageUrl>
+                    <sourceCodeUrl>https://github.com/gephi/gephi-plugins/tree/python-scripting-plugin</sourceCodeUrl>
+                    <nbmResources>
+                        <nbmResource>
+                            <directory>${basedir}/py</directory>
+                            <targetPath>py</targetPath>
+                        </nbmResource>
+                    </nbmResources>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+</project>
+
+

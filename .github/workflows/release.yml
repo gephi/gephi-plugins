@@ -1,0 +1,38 @@
+name: release
+
+on:
+  push:
+    branches: [ master-forge ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Maven Central Repository
+        uses: actions/setup-java@v2
+        with:
+          java-version: '11'
+          distribution: 'temurin'
+          gpg-private-key: ${{ secrets.GPG_PRIVATE_KEY }}
+          gpg-passphrase: GPG_PASSPHRASE
+
+      - name: Get NBM Keystore
+        run: |
+          echo "${{ secrets.NBM_KEYSTORE }}" > keystore.ks.asc
+          gpg -d --passphrase "${{ secrets.NBM_KEYSTORE_ENC_PASSPHRASE }}" --batch keystore.ks.asc > keystore.ks
+
+      - name: Build and publish package Linux
+        run: mvn --batch-mode -Djava.awt.headless=true -Dkeystore.password=${{ secrets.KEYSTORE_PASSWD }} package -P release
+        env:
+          GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
+
+      - name: Configure Git user
+        run: |
+          git config --global user.email "github-action@users.noreply.github.com"
+          git config --global user.name "GitHub Actions"
+
+      - name: Update autoupdate content on gh-pages
+        run: mvn scm-publish:publish-scm -P release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

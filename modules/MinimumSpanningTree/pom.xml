@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <artifactId>gephi-plugin-parent</artifactId>
+        <groupId>org.gephi</groupId>
+        <version>0.10.0</version>
+    </parent>
+
+    <groupId>com.carlschroedl.gephi</groupId>
+    <artifactId>spanning-tree-plugin</artifactId>
+    <version>1.0.0</version>
+    <packaging>nbm</packaging>
+
+    <name>Minimum Spanning Tree Plugin</name>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.netbeans.api</groupId>
+            <artifactId>org-openide-util</artifactId>
+        </dependency>
+    <dependency>
+      <groupId>org.gephi</groupId>
+      <artifactId>statistics-api</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.gephi</groupId>
+      <artifactId>utils-longtask</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.gephi</groupId>
+      <artifactId>graph-api</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.netbeans.api</groupId>
+      <artifactId>org-openide-util-lookup</artifactId>
+    </dependency>
+    <dependency>
+        <groupId>org.gephi</groupId>
+        <artifactId>io-importer-api</artifactId>
+    </dependency>
+    <dependency>
+        <groupId>org.gephi</groupId>
+        <artifactId>io-importer-plugin</artifactId>
+    </dependency>
+    <dependency>
+        <groupId>org.netbeans.modules</groupId>
+        <artifactId>org-netbeans-modules-masterfs</artifactId> <!-- See http://wiki.netbeans.org/UsingFileSystemsMasterfs -->
+        <scope>test</scope>
+    </dependency>
+    <dependency>
+        <groupId>junit</groupId>
+        <artifactId>junit</artifactId>
+        <version>4.10</version>
+        <scope>test</scope>
+    </dependency>
+        <dependency>
+            <groupId>org.gephi</groupId>
+            <artifactId>filters-api</artifactId>
+            <scope>test</scope>
+            <type>jar</type>
+        </dependency>
+        <dependency>
+            <groupId>org.gephi</groupId>
+            <artifactId>filters-plugin</artifactId>
+            <scope>test</scope>
+            <type>jar</type>
+        </dependency>
+        <dependency>
+            <groupId>org.gephi</groupId>
+            <artifactId>filters-impl</artifactId>
+            <scope>test</scope>
+            <type>jar</type>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.netbeans.utilities</groupId>
+                <artifactId>nbm-maven-plugin</artifactId>
+                <configuration>
+                    <licenseName>gpl-3.0</licenseName>
+                    <licenseFile>gpl-3.0.txt</licenseFile>
+                    <author>Carl Schroedl carlschroedl@gmail.com</author>
+                    <sourceCodeUrl>https://github.com/carlschroedl/gephi-plugins</sourceCodeUrl>
+                    <homePageUrl>https://github.com/carlschroedl/gephi-plugins/tree/minimum-spanning-tree-plugin</homePageUrl>
+                    <publicPackages>
+                        <publicPackage>com.carlschroedl.gephi.plugin.minimumspanningtree</publicPackage>
+                    </publicPackages>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>2.15</version>
+            </plugin>
+        </plugins>
+    </build>
+    <reporting>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.netbeans.utilities</groupId>
+                <artifactId>cobertura-maven-plugin</artifactId>
+                <version>2.6</version>
+            </plugin>
+        </plugins>
+    </reporting>
+</project>

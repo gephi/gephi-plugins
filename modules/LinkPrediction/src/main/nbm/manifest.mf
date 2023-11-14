@@ -1,0 +1,5 @@
+Manifest-Version: 1.0
+OpenIDE-Module-Name: Link Prediction
+OpenIDE-Module-Short-Description: Link-prediction plugin for Gephi, which allows to predict the next edges to be formed using different prediction algorithms.
+OpenIDE-Module-Long-Description: Link-prediction plugin for Gephi, which allows to predict the next edges to be formed using different prediction algorithms. Edges that are added to the network based on the prediction are marked accordingly. Users can limit the number of edges predicted. The plugin contains an evaluation component, which allows to compare the quality of the different algorithms.
+OpenIDE-Module-Display-Category: Filter

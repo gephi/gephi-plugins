@@ -1,0 +1,6 @@
+Manifest-Version: 1.0
+OpenIDE-Module-Name: MdsLayout
+OpenIDE-Module-Short-Description: This plugin takes a set of coordinates on 2 dimensions and creates a layout based on those coordinates.
+OpenIDE-Module-Long-Description: This plugin takes a set of coordinates on 2 dimensions and creates a layout based on this coordinates. This plugin was created to be used with the MDS Statistics plugin, but can use other coordinates as input as well.
+OpenIDE-Module-Display-Category: Layout
+OpenIDE-Module-Localizing-Bundle: org/wouterspekkink/plugins/layout/mdslayout/Bundle.properties

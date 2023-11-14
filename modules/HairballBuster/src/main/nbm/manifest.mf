@@ -1,0 +1,5 @@
+Manifest-Version: 1.0
+OpenIDE-Module-Name: Hairball Buster
+OpenIDE-Module-Short-Description: Implementation of Hairball Buster Graph Analytic Triage Approach for Gephi.
+OpenIDE-Module-Long-Description: Hairball Buster (HB) (also called node-neighbor centrality or NNC) is an approach to graph analytic triage that uses simple calculations and visualization to quickly understand and compare graphs. Rather than displaying highly interconnected graphs as `hairballs' that are difficult to understand, HB provides a simple standard visual representation of a graph and its metrics.
+OpenIDE-Module-Display-Category: Layout

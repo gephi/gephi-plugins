@@ -1,0 +1,5 @@
+Manifest-Version: 1.0
+OpenIDE-Module-Name: Prestige Plugin
+OpenIDE-Module-Short-Description: Plugin calculates several prestige metrics
+OpenIDE-Module-Long-Description: Plugin calculates indegree prestige, domain prestige, proximity prestige and rank prestige on directed graphs.
+OpenIDE-Module-Display-Category: Metric

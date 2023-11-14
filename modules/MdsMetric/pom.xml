@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <artifactId>gephi-plugin-parent</artifactId>
+        <groupId>org.gephi</groupId>
+        <version>0.10.0</version>
+    </parent>
+
+    <groupId>wouterspekkink</groupId>
+    <artifactId>mdsmetric</artifactId>
+    <version>0.9.3</version>
+    <packaging>nbm</packaging>
+
+    <name>MdsMetric</name>
+
+    <dependencies>
+        <!-- Insert dependencies here -->
+        <dependency>
+             <groupId>org.gephi</groupId>
+             <artifactId>graph-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.gephi</groupId>
+            <artifactId>utils-longtask</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.gephi</groupId>
+            <artifactId>statistics-api</artifactId>
+            <type>jar</type>
+        </dependency>
+        <dependency>
+            <groupId>org.netbeans.api</groupId>
+            <artifactId>org-openide-util-lookup</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.netbeans.api</groupId>
+            <artifactId>org-openide-util</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>uni-konstanz.de.algo</groupId>
+            <artifactId>mdsj</artifactId>
+            <version>0.2</version>
+        </dependency>
+            
+
+    </dependencies>
+    
+    <repositories>
+        <repository>
+            <id>gephi-thirdparty</id>
+            <url>https://raw.github.com/gephi/gephi/mvn-thirdparty-repo/</url>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+    </repositories>
+    
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.netbeans.utilities</groupId>
+                <artifactId>nbm-maven-plugin</artifactId>
+                <configuration>
+                    <licenseName>GPL 3.0</licenseName>
+                    <author>Wouter Spekkink</author>
+                    <authorEmail>wouterspekkink@gmail.com</authorEmail>
+                    <authorUrl>www.wouterspekkink.org</authorUrl>
+                    <sourceCodeUrl>https://github.com/WouterSpekkink/gephi-plugins/tree/mds_metric</sourceCodeUrl>
+                    <publicPackages>
+                        <!-- Insert public packages -->
+                    </publicPackages>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+</project>
+
+

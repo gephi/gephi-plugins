@@ -1,0 +1,6 @@
+Manifest-Version: 1.0
+OpenIDE-Module-Localizing-Bundle: at/granul/gephi/shpexporter/Bundle.properties
+OpenIDE-Module-Name: shp-export
+OpenIDE-Module-Short-Description: Shape File Exporter
+OpenIDE-Module-Long-Description: Module to export Gephi layouts to shp-files
+OpenIDE-Module-Display-Category: Export

@@ -1,0 +1,5 @@
+Manifest-Version: 1.0
+OpenIDE-Module-Name: Kleinberg Generator
+OpenIDE-Module-Short-Description: Kleinberg model's generator.
+OpenIDE-Module-Long-Description: Gephi generator plugin of Kleiberg small-world model.
+OpenIDE-Module-Display-Category: Generator

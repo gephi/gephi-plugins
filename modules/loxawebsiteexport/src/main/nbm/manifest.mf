@@ -1,0 +1,16 @@
+Manifest-Version: 1.0
+OpenIDE-Module-Name: Loxa Web Site Export
+OpenIDE-Module-Short-Description: Help you to publish your analysis like a Web page
+OpenIDE-Module-Long-Description: <p>Loxa Web Site Export Plugin, is a plugin 
+   whose purpose is to allow easy publication of the analysis, descriptions and findings when applying 
+   the concepts of social network analysis using Gephi. The result of running this plugin is a fully 
+   functional website of easy customization, thereby allowing to publish the results of their work.</p><br/> 
+   <b>Features:</b><br/><ul><li><p>Lets build a Web site from a Gephi project.</p></li>
+   <li><p>For each workspace in your project, you will see: a interactive network (using sigmajs), statistics (number of nodes and arcs, weight and density of the graph), description of the analysis and files to download (graph - csv format and image - pdf format).</p></li>
+   <li><p>You can choose visual efects for your graphs.</p></li>
+   <li><p>The analysis information is stored in a JSON file for easy editing, which supports HTML tags to enhance your presentation.</p></li>
+   <li><p>The most important and significant findings are displayed in the bottom of the image.</p></li> 
+   <li><p>Full AJAX for asynchronous calls to see statistics for each analysis.</p></li> 
+   <li><p>It works in most modern browsers (tested: Safari, Firefox, Chrome, Internet Explorer).</li></ul> 
+   <p>If you need help, please visit <a href="http://www.j4loxa.com/sna/gephi/plugins/tutorial.html">Loxa Web Site Export Tutorial</a></p>
+OpenIDE-Module-Display-Category: Export

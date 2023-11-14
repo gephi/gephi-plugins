@@ -1,0 +1,3 @@
+Manifest-Version: 1.0
+OpenIDE-Module-Localizing-Bundle: org/gephi/lib/jetty/Bundle.properties
+AutoUpdate-Show-In-Client: false

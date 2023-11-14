@@ -1,0 +1,5 @@
+Manifest-Version: 1.0
+OpenIDE-Module-Name: Circle Pack
+OpenIDE-Module-Short-Description: Packs circles based on hierarchical data
+OpenIDE-Module-Long-Description: Packs circles using Mike Bostock's circle packing algorithm 
+OpenIDE-Module-Display-Category: Layout

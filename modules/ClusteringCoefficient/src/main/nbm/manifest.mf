@@ -1,0 +1,5 @@
+Manifest-Version: 1.0
+OpenIDE-Module-Name: Clustering Coefficient
+OpenIDE-Module-Short-Description: Measure of the degree to which nodes in a graph tend to cluster together.
+OpenIDE-Module-Long-Description: Clustering coefficient is a measure of the degree to which nodes in a graph tend to cluster together. Evidence suggests that in most real-world networks, and in particular social networks, nodes tend to create tightly knit groups characterised by a relatively high density of ties; this likelihood tends to be greater than the average probability of a tie randomly established between two nodes.
+OpenIDE-Module-Display-Category: Metric
