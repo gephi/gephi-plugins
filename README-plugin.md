@@ -16,7 +16,7 @@ This plugin is made available through the [CeCILL-B licence](http://www.cecill.i
 
 # Installation
 
-The installation is done through a custom "update center". See [https://github.com/Wimmics/update-semanticwebimport](installation).
+The installation is done through a custom "update center". See [installatio](nhttps://github.com/Wimmics/update-semanticwebimport).
 
 # Disclaimer
 
