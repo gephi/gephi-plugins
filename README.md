@@ -1,3 +1,7 @@
+For documentation specific to this plugin, see [README-plugin.md](README-plugin.md). 
+
+What follows is the general-purpose documentation of the gephi-plugins, which can be found in [https://github.com/gephi/gephi-plugins/blob/master/README.md](README.md).
+
 # Gephi Plugins
 
 This repository is an out-of-the-box development environment for Gephi plugins. Gephi plugins are implemented in Java and can extend [Gephi](https://gephi.org) in many different ways, adding or improving features. Getting started is easy with this repository but also checkout the [Bootcamp](https://github.com/gephi/gephi-plugins-bootcamp) for examples of plugins you can create. 

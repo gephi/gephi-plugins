@@ -4,7 +4,7 @@
 
     <groupId>org.gephi</groupId>
     <artifactId>gephi-plugins</artifactId>
-    <version>0.10.0</version>
+    <version>0.10.1</version>
     <packaging>pom</packaging>
 
     <name>gephi-plugins</name>
@@ -12,12 +12,13 @@
     <!-- List of modules -->
     <modules>
         <!-- Add here the paths of all modules (e.g. <module>modules/MyModule</module>) -->
+        <module>modules/SemanticWebImport</module>
     </modules>
     
     <!-- Properties -->
     <properties>
         <!-- Version of Gephi building plugins against. Plugins with anterior versions will be ignored -->
-        <gephi.version>0.10.0</gephi.version>
+        <gephi.version>0.10.1</gephi.version>
         <clusters.path>${project.build.directory}/plugins_clusters</clusters.path>
         <github.global.server>github</github.global.server>
     </properties>
@@ -77,6 +78,22 @@
         <pluginManagement>
             <plugins>
                 <plugin>
+                    <groupId>org.apache.netbeans.utilities</groupId>
+                    <artifactId>nb-repository-plugin</artifactId>
+                    <configuration>
+                        <netbeansInstallDirectory>${project.build.directory}/gephi-${gephi.version}</netbeansInstallDirectory>
+                        <netbeansNbmDirectory>/Users/edemairy/Developpement/update-semanticwebimport</netbeansNbmDirectory>
+                        <!--                        <forcedVersion>a.b.c</forcedVersion> -->
+                    </configuration>
+                </plugin>
+                <plugin>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <configuration>
+                        <source>11</source>
+                        <target>11</target>
+                    </configuration>
+                </plugin>
+                <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-dependency-plugin</artifactId>
                     <version>3.2.0</version>
@@ -84,7 +101,7 @@
                 <plugin>
                     <groupId>org.apache.netbeans.utilities</groupId>
                     <artifactId>nbm-maven-plugin</artifactId>
-                    <version>4.5</version>
+                    <version>4.8</version>
                     <extensions>true</extensions>
                 </plugin>
                 <plugin>
