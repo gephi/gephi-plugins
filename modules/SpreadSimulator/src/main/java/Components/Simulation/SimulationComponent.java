@@ -2,6 +2,7 @@ package Components.Simulation;
 
 import Components.Simulation.Simulation.Simulation;
 import Components.Simulation.Simulation.SimulationAll;
+import Components.Simulation.Simulation.SimulationRelativeFreeNodes;
 import Components.Simulation.Simulation.SimulationRelativeNodes;
 import ConfigLoader.ConfigLoader;
 import Helper.ApplySimulationHelper;
@@ -94,6 +95,7 @@ public class SimulationComponent extends TopComponent {
                         simulation = new SimulationRelativeNodes(graph, simulationModel);
                         break;
                     case RelativeFreeNodes:
+                        simulation = new SimulationRelativeFreeNodes(graph, simulationModel);
                         break;
                     default:
                         break;
