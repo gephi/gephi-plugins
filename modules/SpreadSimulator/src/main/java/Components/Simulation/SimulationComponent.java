@@ -1,9 +1,6 @@
 package Components.Simulation;
 
-import Components.Simulation.Simulation.Simulation;
-import Components.Simulation.Simulation.SimulationAll;
-import Components.Simulation.Simulation.SimulationRelativeFreeNodes;
-import Components.Simulation.Simulation.SimulationRelativeNodes;
+import Components.Simulation.Simulation.*;
 import ConfigLoader.ConfigLoader;
 import Helper.ApplySimulationHelper;
 import Helper.ObjectMapperHelper;
@@ -88,8 +85,10 @@ public class SimulationComponent extends TopComponent {
                         simulation = new SimulationAll(graph, simulationModel);
                         break;
                     case RelativeEdges:
+                        simulation = new SimulationRelativeEdges(graph, simulationModel);
                         break;
                     case RelativeFreeEdges:
+                        simulation = new SimulationRelativeFreeEdges(graph, simulationModel);
                         break;
                     case RelativeNodes:
                         simulation = new SimulationRelativeNodes(graph, simulationModel);
