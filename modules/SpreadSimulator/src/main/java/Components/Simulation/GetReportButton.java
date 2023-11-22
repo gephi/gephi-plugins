@@ -3,6 +3,9 @@ package Components.Simulation;
 import Components.Simulation.Report.ReportGeneratorHelper;
 
 import java.util.UUID;
+
+import Components.Simulation.Simulation.Simulation;
+import Components.Simulation.Simulation.SimulationAll;
 import org.joda.time.DateTime;
 
 import javax.swing.*;
