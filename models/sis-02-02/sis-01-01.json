@@ -1,0 +1,28 @@
+{
+  "name": "S-I-S-1.0",
+  "transitionMap": [
+    {
+      "transitionType": "conditionProbability",
+      "sourceState": {
+        "name": "susceptible"
+      },
+      "destinationState": {
+        "name": "infected"
+      },
+      "probability": 0.2,
+      "provocativeNeighborName": [
+        "infected"
+      ]
+    },
+    {
+      "transitionType": "noConditionProbability",
+      "sourceState": {
+        "name": "infected"
+      },
+      "destinationState": {
+        "name": "susceptible"
+      },
+      "probability": 0.2
+    }
+  ]
+}
