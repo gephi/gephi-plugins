@@ -51,7 +51,8 @@ public class Grid implements Generator {
     private ProgressTicket progressTicket;
     private int w = 3;
     private int h = 5;
-    private boolean looped = false;
+    private boolean loopedW = false;
+    private boolean loopedH = false;
 
     @Override
     public void generate(ContainerLoader container) {
@@ -73,12 +74,17 @@ public class Grid implements Generator {
         }
         for (int i = 0; i < w; i++) {
             for (int j = 0; j < h; j++) {
-                AddTopEdge(container, nodeArray, i, j);
-                AddBottomEdge(container, nodeArray, i, j);
-                if(looped){
+                if (loopedH) {
+                    AddTopLoppedEdge(container, nodeArray, i, j);
+                    AddBottomLoopedEdge(container, nodeArray, i, j);
+                } else {
+                    AddTopEdge(container, nodeArray, i, j);
+                    AddBottomEdge(container, nodeArray, i, j);
+                }
+                if (loopedW) {
                     AddLeftLoopedEdge(container, nodeArray, i, j);
                     AddRightLoopedEdge(container, nodeArray, i, j);
-                }else{
+                } else {
                     AddLeftEdge(container, nodeArray, i, j);
                     AddRightEdge(container, nodeArray, i, j);
                 }
@@ -100,8 +106,9 @@ public class Grid implements Generator {
 
     private void AddRightLoopedEdge(ContainerLoader container, NodeDraft[][] nodeArray, int i, int j) {
         var edge = container.factory().newEdgeDraft();
+        var targetI = (i + 1) % w;
         edge.setSource(nodeArray[j][i]);
-        edge.setTarget(nodeArray[j][i + 1 % w]);
+        edge.setTarget(nodeArray[j][targetI]);
         container.addEdge(edge);
     }
 
@@ -116,8 +123,9 @@ public class Grid implements Generator {
 
     private void AddLeftLoopedEdge(ContainerLoader container, NodeDraft[][] nodeArray, int i, int j) {
         var edge = container.factory().newEdgeDraft();
+        var targetI = (i - 1) < 0 ? w - 1 : i - 1;
         edge.setSource(nodeArray[j][i]);
-        edge.setTarget(nodeArray[j][i - 1 == 0 ? w : i - 1]);
+        edge.setTarget(nodeArray[j][targetI]);
         container.addEdge(edge);
     }
 
@@ -130,6 +138,14 @@ public class Grid implements Generator {
         }
     }
 
+    private void AddBottomLoopedEdge(ContainerLoader container, NodeDraft[][] nodeArray, int i, int j) {
+        var edge = container.factory().newEdgeDraft();
+        var targetJ = (j + 1) % h;
+        edge.setSource(nodeArray[j][i]);
+        edge.setTarget(nodeArray[targetJ][i]);
+        container.addEdge(edge);
+    }
+
     private void AddTopEdge(ContainerLoader container, NodeDraft[][] nodeArray, int i, int j) {
         if (j > 0) {
             var edge = container.factory().newEdgeDraft();
@@ -137,6 +153,14 @@ public class Grid implements Generator {
             edge.setTarget(nodeArray[j - 1][i]);
             container.addEdge(edge);
         }
+    }
+
+    private void AddTopLoppedEdge(ContainerLoader container, NodeDraft[][] nodeArray, int i, int j) {
+        var edge = container.factory().newEdgeDraft();
+        var targetJ = (j - 1) < 0 ? h - 1 : j - 1;
+        edge.setSource(nodeArray[j][i]);
+        edge.setTarget(nodeArray[targetJ][i]);
+        container.addEdge(edge);
     }
 
     public int getr() {
@@ -151,8 +175,12 @@ public class Grid implements Generator {
         this.w = w;
     }
 
-    public void setlooped(boolean looped) {
-        this.looped = looped;
+    public void setloopedW(boolean loopedW) {
+        this.loopedW = loopedW;
+    }
+
+    public void setloopedH(boolean loopedH) {
+        this.loopedH = loopedH;
     }
 
     public void seth(int h) {
