@@ -9,7 +9,7 @@
       "destinationState": {
         "name": "informed"
       },
-      "probability": 0.2,
+      "probability": 0.4,
       "provocativeNeighborName": [
         "informed"
       ]
@@ -22,7 +22,7 @@
       "destinationState": {
         "name": "disinformed"
       },
-      "probability": 0.3,
+      "probability": 0.5,
       "provocativeNeighborName": [
         "disinformed"
       ]

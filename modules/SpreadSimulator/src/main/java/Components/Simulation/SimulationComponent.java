@@ -1,5 +1,6 @@
 package Components.Simulation;
 
+import Components.Simulation.Simulation.*;
 import ConfigLoader.ConfigLoader;
 import Helper.ApplySimulationHelper;
 import Helper.ObjectMapperHelper;
@@ -7,7 +8,6 @@ import SimulationModel.Interaction.RelativeEdgesInteraction;
 import SimulationModel.Interaction.RelativeFreeEdgesInteraction;
 import SimulationModel.Interaction.RelativeFreeNodesInteraction;
 import SimulationModel.Interaction.RelativeNodesInteraction;
-import SimulationModel.Node.NodeRole;
 import SimulationModel.Node.NodeRoleDecorator;
 import SimulationModel.Node.NodeStateDecorator;
 import SimulationModel.SimulationModel;
@@ -80,7 +80,25 @@ public class SimulationComponent extends TopComponent {
                 var path = new File(ConfigLoader.folderSimulationTmp + ConfigLoader.folderSimulationTmpFilename);
                 var content = new String(Files.readAllBytes(Paths.get(path.getAbsolutePath())));
                 var simulationModel = mapper.readValue(content, SimulationModel.class);
-                simulation = new Simulation(graph, simulationModel);
+                switch (simulationModel.getInteraction().getInteractionType()){
+                    case All:
+                        simulation = new SimulationAll(graph, simulationModel);
+                        break;
+                    case RelativeEdges:
+                        simulation = new SimulationRelativeEdges(graph, simulationModel);
+                        break;
+                    case RelativeFreeEdges:
+                        simulation = new SimulationRelativeFreeEdges(graph, simulationModel);
+                        break;
+                    case RelativeNodes:
+                        simulation = new SimulationRelativeNodes(graph, simulationModel);
+                        break;
+                    case RelativeFreeNodes:
+                        simulation = new SimulationRelativeFreeNodes(graph, simulationModel);
+                        break;
+                    default:
+                        break;
+                }
                 initComponents();
                 revalidate();
                 repaint();
@@ -128,7 +146,7 @@ public class SimulationComponent extends TopComponent {
 
         int row = 1;
         int padding = 4;
-        for (NodeRoleDecorator role : simulation.nodeRoleDecoratorList) {
+        for (NodeRoleDecorator role : simulation.getNodeRoleDecoratorList()) {
             addRoleToPanel(panel, role, gbc, row, padding);
             row += 3;
             for (NodeStateDecorator state : role.getNodeStates()) {

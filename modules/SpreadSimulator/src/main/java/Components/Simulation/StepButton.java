@@ -1,12 +1,11 @@
 package Components.Simulation;
 
-import SimulationModel.Node.NodeRoleDecorator;
-import org.gephi.graph.api.Graph;
+import Components.Simulation.Simulation.Simulation;
+import Components.Simulation.Simulation.SimulationAll;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.List;
 
 public class StepButton extends JButton {
 
