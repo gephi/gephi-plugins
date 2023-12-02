@@ -74,7 +74,7 @@ public class AdvancedAssigmentButton extends JButton {
             centralityRateDropdown = new JComboBox<>(centralityRateOptions);
             centralityRateDropdown.setAlignmentX(Component.LEFT_ALIGNMENT);
 
-            descendingCheckbox = new JCheckBox("descending");
+            descendingCheckbox = new JCheckBox("ascending");
 
             var applyButton = new JButton("Apply");
             applyButton.addActionListener(new ApplyChangesListener());

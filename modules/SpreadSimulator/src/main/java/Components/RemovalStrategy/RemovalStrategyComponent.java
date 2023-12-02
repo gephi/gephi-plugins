@@ -35,7 +35,7 @@ public class RemovalStrategyComponent extends TopComponent {
     private Graph graph;
     JTextField numOfNodesInput;
     JComboBox centralityRateDropdown;
-    JCheckBox descendingCheckbox;
+    JCheckBox ascendingCheckbox;
 
     public RemovalStrategyComponent() {
         initComponents();
@@ -78,7 +78,7 @@ public class RemovalStrategyComponent extends TopComponent {
         centralityRateDropdown = new JComboBox<>(centralityRateOptions);
         centralityRateDropdown.setAlignmentX(Component.LEFT_ALIGNMENT);
 
-        descendingCheckbox = new JCheckBox("descending");
+        ascendingCheckbox = new JCheckBox("ascending");
 
         var applyButton = new JButton("Apply");
         applyButton.addActionListener(new ApplyChangesListener());
@@ -93,7 +93,7 @@ public class RemovalStrategyComponent extends TopComponent {
         contentPanel.add(Box.createVerticalStrut(5));
         contentPanel.add(centralityRateDropdown);
         contentPanel.add(Box.createVerticalStrut(10));
-        contentPanel.add(descendingCheckbox);
+        contentPanel.add(ascendingCheckbox);
         contentPanel.add(buttonPanel);
 
         add(contentPanel, BorderLayout.NORTH);
@@ -122,35 +122,35 @@ public class RemovalStrategyComponent extends TopComponent {
             var numOfNodes = Integer.valueOf(numOfNodesString);
             switch (centralityMethod) {
                 case "Random":
-                    RandomNStrategy(graph, numOfNodes, !descendingCheckbox.isSelected());
+                    RandomNStrategy(graph, numOfNodes, !ascendingCheckbox.isSelected());
                     break;
                 case "Random-Random":
-                    RandomRandomStrategy(graph, numOfNodes, !descendingCheckbox.isSelected());
+                    RandomRandomStrategy(graph, numOfNodes, !ascendingCheckbox.isSelected());
                 case "Closeness":
-                    GraphDistanceClosenessStatisticOption(graph, numOfNodes, !descendingCheckbox.isSelected());
+                    GraphDistanceClosenessStatisticOption(graph, numOfNodes, !ascendingCheckbox.isSelected());
                     break;
                 case "Harmonic Closeness":
-                    GraphDistanceHarmonicClosenessStatisticOption(graph, numOfNodes, !descendingCheckbox.isSelected());
+                    GraphDistanceHarmonicClosenessStatisticOption(graph, numOfNodes, !ascendingCheckbox.isSelected());
                     break;
                 case "Betwenness":
-                    GraphDistanceBetweenessStatisticOption(graph, numOfNodes, !descendingCheckbox.isSelected());
+                    GraphDistanceBetweenessStatisticOption(graph, numOfNodes, !ascendingCheckbox.isSelected());
                     break;
                 case "Degree":
-                    DegreeStatisticOption(graph, numOfNodes, !descendingCheckbox.isSelected());
+                    DegreeStatisticOption(graph, numOfNodes, !ascendingCheckbox.isSelected());
                     break;
                 case "Eigenvector":
-                    EigenvectorStatisticOption(graph, numOfNodes, !descendingCheckbox.isSelected());
+                    EigenvectorStatisticOption(graph, numOfNodes, !ascendingCheckbox.isSelected());
                     break;
                 case "HITS - authority":
-                    HITSAuthorityStatisticOption(graph, numOfNodes, !descendingCheckbox.isSelected());
+                    HITSAuthorityStatisticOption(graph, numOfNodes, !ascendingCheckbox.isSelected());
                 case "HITS - hub":
-                    HITSHubStatisticOption(graph, numOfNodes, !descendingCheckbox.isSelected());
+                    HITSHubStatisticOption(graph, numOfNodes, !ascendingCheckbox.isSelected());
                     break;
                 case "Eccentricity":
-                    GraphDistanceEccentricityStatisticOption(graph, numOfNodes, !descendingCheckbox.isSelected());
+                    GraphDistanceEccentricityStatisticOption(graph, numOfNodes, !ascendingCheckbox.isSelected());
                     break;
                 case "Modularity":
-                    GraphDistanceModularityStatisticOption(graph, numOfNodes, !descendingCheckbox.isSelected());
+                    GraphDistanceModularityStatisticOption(graph, numOfNodes, !ascendingCheckbox.isSelected());
                     break;
                 default:
                     JOptionPane.showMessageDialog(null, "Not implemented method yet.");
@@ -159,7 +159,7 @@ public class RemovalStrategyComponent extends TopComponent {
             JOptionPane.showMessageDialog(null, "Changes have been imposed.");
         }
 
-        private void RandomNStrategy(Graph graph, Integer numOfNodes, Boolean descending) {
+        private void RandomNStrategy(Graph graph, Integer numOfNodes, Boolean ascending) {
             Node[] nodes = graph.getNodes().toArray();
             var rnd = new Random();
             for (int i = 0; i < numOfNodes; i++) {
@@ -169,7 +169,7 @@ public class RemovalStrategyComponent extends TopComponent {
             }
         }
 
-        private void RandomRandomStrategy(Graph graph, Integer numOfNodes, Boolean descending) {
+        private void RandomRandomStrategy(Graph graph, Integer numOfNodes, Boolean ascending) {
             Node[] nodes = graph.getNodes().toArray();
             var rnd = new Random();
             for (int i = 0; i < numOfNodes; i++) {
@@ -182,70 +182,70 @@ public class RemovalStrategyComponent extends TopComponent {
             }
         }
 
-        private void GraphDistanceClosenessStatisticOption(Graph graph, Integer numOfNodes, Boolean descending) {
+        private void GraphDistanceClosenessStatisticOption(Graph graph, Integer numOfNodes, Boolean ascending) {
             var eigenvector = new GraphDistance();
             eigenvector.setDirected(false);
             eigenvector.execute(graph);
-            StatisticsOptions(graph, numOfNodes, descending, "closnesscentrality");
+            StatisticsOptions(graph, numOfNodes, ascending, "closnesscentrality");
         }
 
-        private void GraphDistanceHarmonicClosenessStatisticOption(Graph graph, Integer numOfNodes, Boolean descending) {
+        private void GraphDistanceHarmonicClosenessStatisticOption(Graph graph, Integer numOfNodes, Boolean ascending) {
             var eigenvector = new GraphDistance();
             eigenvector.setDirected(false);
             eigenvector.execute(graph);
-            StatisticsOptions(graph, numOfNodes, descending, "harmonicclosnesscentrality");
+            StatisticsOptions(graph, numOfNodes, ascending, "harmonicclosnesscentrality");
         }
 
-        private void GraphDistanceBetweenessStatisticOption(Graph graph, Integer numOfNodes, Boolean descending) {
+        private void GraphDistanceBetweenessStatisticOption(Graph graph, Integer numOfNodes, Boolean ascending) {
             var eigenvector = new GraphDistance();
             eigenvector.setDirected(false);
             eigenvector.execute(graph);
-            StatisticsOptions(graph, numOfNodes, descending, "betweenesscentrality");
+            StatisticsOptions(graph, numOfNodes, ascending, "betweenesscentrality");
         }
 
-        private void DegreeStatisticOption(Graph graph, Integer numOfNodes, Boolean descending) {
+        private void DegreeStatisticOption(Graph graph, Integer numOfNodes, Boolean ascending) {
             var degree = new Degree();
             degree.execute(graph);
-            StatisticsOptions(graph, numOfNodes, descending, "Degree");
+            StatisticsOptions(graph, numOfNodes, ascending, "Degree");
         }
 
-        private void EigenvectorStatisticOption(Graph graph, Integer numOfNodes, Boolean descending) {
+        private void EigenvectorStatisticOption(Graph graph, Integer numOfNodes, Boolean ascending) {
             var eigenvector = new EigenvectorCentrality();
             eigenvector.setDirected(false);
             eigenvector.execute(graph);
-            StatisticsOptions(graph, numOfNodes, descending, "eigencentrality");
+            StatisticsOptions(graph, numOfNodes, ascending, "eigencentrality");
         }
 
-        private void HITSAuthorityStatisticOption(Graph graph, Integer numOfNodes, Boolean descending) {
+        private void HITSAuthorityStatisticOption(Graph graph, Integer numOfNodes, Boolean ascending) {
             var hits = new Hits();
             hits.execute(graph);
-            StatisticsOptions(graph, numOfNodes, descending, "Authority");
+            StatisticsOptions(graph, numOfNodes, ascending, "Authority");
         }
 
-        private void HITSHubStatisticOption(Graph graph, Integer numOfNodes, Boolean descending) {
+        private void HITSHubStatisticOption(Graph graph, Integer numOfNodes, Boolean ascending) {
             var hits = new Hits();
             hits.execute(graph);
-            StatisticsOptions(graph, numOfNodes, descending, "Hub");
+            StatisticsOptions(graph, numOfNodes, ascending, "Hub");
         }
 
-        private void GraphDistanceEccentricityStatisticOption(Graph graph, Integer numOfNodes, Boolean descending) {
+        private void GraphDistanceEccentricityStatisticOption(Graph graph, Integer numOfNodes, Boolean ascending) {
             var eigenvector = new GraphDistance();
             eigenvector.setDirected(false);
             eigenvector.execute(graph);
-            StatisticsOptions(graph, numOfNodes, descending, "eccentricity");
+            StatisticsOptions(graph, numOfNodes, ascending, "eccentricity");
         }
 
-        private void GraphDistanceModularityStatisticOption(Graph graph, Integer numOfNodes, Boolean descending) {
+        private void GraphDistanceModularityStatisticOption(Graph graph, Integer numOfNodes, Boolean ascending) {
             var eigenvector = new Modularity();
             eigenvector.execute(graph);
-            StatisticsOptions(graph, numOfNodes, descending, "modularity_class");
+            StatisticsOptions(graph, numOfNodes, ascending, "modularity_class");
         }
 
 
-        private void StatisticsOptions(Graph graph, Integer numOfNodes, Boolean descending, String attributeName) {
+        private void StatisticsOptions(Graph graph, Integer numOfNodes, Boolean ascending, String attributeName) {
             var nodes = Arrays.stream(graph.getNodes().toArray()).collect(Collectors.toList());
             nodes.sort(Comparator.comparingDouble(node -> Double.parseDouble(node.getAttribute(attributeName).toString())));
-            if (descending) {
+            if (ascending) {
                 Collections.reverse(nodes);
             }
             for (int i = 0; i < numOfNodes; i++) {
