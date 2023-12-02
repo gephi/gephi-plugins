@@ -1,7 +1,6 @@
 package Components.Simulation;
 
 import Components.Simulation.Simulation.Simulation;
-import Components.Simulation.Simulation.SimulationAll;
 import ConfigLoader.ConfigLoader;
 import javax.swing.*;
 import java.awt.*;
