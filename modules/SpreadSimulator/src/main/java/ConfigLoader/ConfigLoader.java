@@ -16,8 +16,10 @@ public class ConfigLoader {
     public static final String colNameModelBuilderProbability = getProperty("colName.modelBuilder.probability");
     public static final String colNameModelBuilderTransitionType = getProperty("colName.modelBuilder.transitionType");
     public static final String buttonLabelRunSimulation = getProperty("button.label.runSimulation");
+    public static final String buttonLabelRunSimulationSeries = getProperty("button.label.runSimulationSeries");
     public static final String colNameModelBuilderProvocativeNeighbours = getProperty("colName.modelBuilder.provocativeNeighbours");
     public static final String colNameNewNodeState = getProperty("colName.newNodeState");
+    public static final String colNameRootState = getProperty("colName.rootState");
     public static final String colNameNodeState = getProperty("colName.nodeState");
     public static final String messageErrorUnknowTransitionType = getProperty("message.error.unknowTransitionType");
     public static final String colNameNodeRole = getProperty("colName.nodeRole");

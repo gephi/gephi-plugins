@@ -32,7 +32,7 @@ public class SimulationAll extends Simulation {
             table.addColumn(ConfigLoader.colNameNewNodeState, String.class);
         var nodes = graph.getNodes();
 
-        var selectedNodes = new ArrayList<> (List.of(nodes.toArray()));;
+        var selectedNodes = new ArrayList<> (List.of(nodes.toArray()));
 
         for (Node node : selectedNodes) {
             node.setAttribute(ConfigLoader.colNameNewNodeState, node.getAttribute(ConfigLoader.colNameNodeState).toString());
