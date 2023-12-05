@@ -75,7 +75,7 @@ public class SimulationComponent extends TopComponent {
         add(new StepButton(currentSimulation, this));
         add(new SimulationButton(currentSimulation, this));
         add(new SimulationSeriesButton(currentSimulation, this));
-        add(new GetReportButton(currentSimulation, this));
+        add(new GetReportButton(this));
     }
 
     private boolean isGraphValid() {
