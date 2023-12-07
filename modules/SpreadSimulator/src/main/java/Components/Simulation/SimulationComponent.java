@@ -11,6 +11,8 @@ import SimulationModel.Interaction.RelativeNodesInteraction;
 import SimulationModel.Node.NodeRoleDecorator;
 import SimulationModel.Node.NodeStateDecorator;
 import SimulationModel.SimulationModel;
+import lombok.Getter;
+import lombok.Setter;
 import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.gephi.graph.api.Graph;
@@ -28,6 +30,8 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
 
 @ConvertAsProperties(dtd = "-//Simulation//Simulation//EN", autostore = false)
 @TopComponent.Description(preferredID = "Simulation",
@@ -41,7 +45,11 @@ import java.nio.file.Paths;
 public class SimulationComponent extends TopComponent {
 
     private Graph graph;
-    private Simulation simulation;
+    @Getter
+    private Simulation currentSimulation;
+    private List<Simulation> simulationList;
+    private Integer simulationSeries;
+    private SimulationModel simulationModel;
 
     public SimulationComponent() {
         initComponents();
@@ -56,52 +64,80 @@ public class SimulationComponent extends TopComponent {
         initButton.addActionListener(this::initButtonActionPerformed);
         add(initButton);
 
+
         if (!isGraphValid()) {
             return;
         }
-
+        JButton seriesButton = new JButton("New series");
+        seriesButton.addActionListener(this::seriesButtonActionPerformed);
+        add(seriesButton);
         add(generateInfoFieldsForRolesAndStates());
-        add(new StepButton(simulation, this));
-        add(new SimulationButton(simulation, this));
-        add(new GetReportButton(simulation, this));
+        add(new StepButton(currentSimulation, this));
+        add(new SimulationButton(currentSimulation, this));
+        add(new SimulationSeriesButton(currentSimulation, this));
+        add(new GetReportButton(this));
+        add(new GetSeriesReportButton(this));
     }
 
     private boolean isGraphValid() {
         return graph != null && ApplySimulationHelper.ValidateGraph(graph);
     }
 
+    private void seriesButtonActionPerformed(ActionEvent e) {
+        NewSeries();
+    }
+
+    public void NewSeries() {
+        if(currentSimulation != null)
+        {
+            simulationList.add(currentSimulation);
+            simulationSeries = simulationList.size() + 1;
+            var nodes =  new ArrayList<> (List.of(graph.getNodes().toArray()));
+            nodes.forEach(node -> node.setAttribute(ConfigLoader.colNameNodeState.toString(), node.getAttribute(ConfigLoader.colNameRootState).toString()));
+            ApplySimulationHelper.PaintGraph(nodes, currentSimulation.getNodeRoleDecoratorList());
+        }
+        switch (simulationModel.getInteraction().getInteractionType()){
+            case All:
+                currentSimulation = new SimulationAll(graph, simulationModel);
+                break;
+            case RelativeEdges:
+                currentSimulation = new SimulationRelativeEdges(graph, simulationModel);
+                break;
+            case RelativeFreeEdges:
+                currentSimulation = new SimulationRelativeFreeEdges(graph, simulationModel);
+                break;
+            case RelativeNodes:
+                currentSimulation = new SimulationRelativeNodes(graph, simulationModel);
+                break;
+            case RelativeFreeNodes:
+                currentSimulation = new SimulationRelativeFreeNodes(graph, simulationModel);
+                break;
+            default:
+                break;
+        }
+        initComponents();
+        revalidate();
+        repaint();
+    }
+
     private void initButtonActionPerformed(ActionEvent e) {
         try {
-            graph = Lookup.getDefault().lookup(GraphController.class).getGraphModel().getGraph();
+            simulationSeries = 1;
+            simulationList = new ArrayList<Simulation>();
+            var graphModel = Lookup.getDefault().lookup(GraphController.class).getGraphModel();
+            var table = graphModel.getNodeTable();
+            table.addColumn(ConfigLoader.colNameRootState.toString(), String.class);
+            graph = graphModel.getGraph();
             if (!ApplySimulationHelper.ValidateGraph(graph)) {
                 JOptionPane.showMessageDialog(null, "This is not a valid graph model");
             } else {
+                var nodes =  new ArrayList<> (List.of(graph.getNodes().toArray()));
+                nodes.forEach(node -> node.setAttribute(ConfigLoader.colNameRootState.toString(), node.getAttribute(ConfigLoader.colNameNodeState).toString()));
                 var mapper = ObjectMapperHelper.CustomObjectMapperCreator();
                 var path = new File(ConfigLoader.folderSimulationTmp + ConfigLoader.folderSimulationTmpFilename);
                 var content = new String(Files.readAllBytes(Paths.get(path.getAbsolutePath())));
-                var simulationModel = mapper.readValue(content, SimulationModel.class);
-                switch (simulationModel.getInteraction().getInteractionType()){
-                    case All:
-                        simulation = new SimulationAll(graph, simulationModel);
-                        break;
-                    case RelativeEdges:
-                        simulation = new SimulationRelativeEdges(graph, simulationModel);
-                        break;
-                    case RelativeFreeEdges:
-                        simulation = new SimulationRelativeFreeEdges(graph, simulationModel);
-                        break;
-                    case RelativeNodes:
-                        simulation = new SimulationRelativeNodes(graph, simulationModel);
-                        break;
-                    case RelativeFreeNodes:
-                        simulation = new SimulationRelativeFreeNodes(graph, simulationModel);
-                        break;
-                    default:
-                        break;
-                }
-                initComponents();
-                revalidate();
-                repaint();
+                this.simulationModel = mapper.readValue(content, SimulationModel.class);
+                seriesButtonActionPerformed(e);
             }
         } catch (NullPointerException ex) {
             JOptionPane.showMessageDialog(null, "Set up graph model first");
@@ -114,15 +150,19 @@ public class SimulationComponent extends TopComponent {
         }
     }
 
+
     private JScrollPane generateInfoFieldsForRolesAndStates() {
         var panel = new JPanel();
         panel.setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
 
-        var stepLabel = new JLabel("Step: " + simulation.getStep().toString());
+        var simulationSeriesLabel = new JLabel("Simulation Series: " + simulationSeries.toString());
+        panel.add(simulationSeriesLabel);
+
+        var stepLabel = new JLabel("Step: " + currentSimulation.getStep().toString());
         panel.add(stepLabel);
 
-        var interaction = simulation.getSimulationModel().getInteraction();
+        var interaction = currentSimulation.getSimulationModel().getInteraction();
         var interactionMessage = "";
         switch (interaction.getInteractionType()){
             case All:
@@ -146,7 +186,7 @@ public class SimulationComponent extends TopComponent {
 
         int row = 1;
         int padding = 4;
-        for (NodeRoleDecorator role : simulation.getNodeRoleDecoratorList()) {
+        for (NodeRoleDecorator role : currentSimulation.getNodeRoleDecoratorList()) {
             addRoleToPanel(panel, role, gbc, row, padding);
             row += 3;
             for (NodeStateDecorator state : role.getNodeStates()) {

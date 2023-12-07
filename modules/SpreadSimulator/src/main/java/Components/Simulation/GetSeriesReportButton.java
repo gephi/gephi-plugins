@@ -1,20 +1,17 @@
 package Components.Simulation;
 
 import Components.Simulation.Report.ReportGeneratorHelper;
-
-import java.util.UUID;
-
-import Components.Simulation.Simulation.Simulation;
 import org.joda.time.DateTime;
 
 import javax.swing.*;
+import java.util.UUID;
 
-public class GetReportButton extends JButton {
+public class GetSeriesReportButton extends JButton {
     private final SimulationComponent simulationComponent;
     private String fileName;
 
-    public GetReportButton(SimulationComponent simulationComponent) {
-        this.setText("Get Report");
+    public GetSeriesReportButton(SimulationComponent simulationComponent) {
+        this.setText("Get Series Report");
         this.simulationComponent = simulationComponent;
         this.addActionListener(e -> GetReport());
     }
