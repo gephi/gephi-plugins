@@ -10,10 +10,6 @@ import org.openide.util.lookup.ServiceProvider;
 
 import javax.swing.*;
 
-/**
- *
- * @author Mir Saman Tajbakhsh
- */
 @ServiceProvider(service = StatisticsUI.class)
 public class CPMUI implements StatisticsUI {
 

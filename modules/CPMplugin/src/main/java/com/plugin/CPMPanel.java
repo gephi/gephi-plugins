@@ -8,10 +8,7 @@ package com.plugin;/*
 import javax.swing.*;
 import java.awt.*;
 
-/**
- *
- * @author Mir Saman Tajbakhsh
- */
+
 public class CPMPanel extends JPanel {
 
     JTextField kvalue;

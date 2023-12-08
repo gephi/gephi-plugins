@@ -1,8 +1,5 @@
-package com.plugin;/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+package com.plugin;
+
 
 import org.gephi.graph.api.*;
 import org.gephi.utils.longtask.spi.LongTask;
@@ -11,9 +8,7 @@ import org.openide.util.Lookup;
 
 import java.util.*;
 
-/**
- * @author Account
- */
+
 public class CPM implements org.gephi.statistics.spi.Statistics, LongTask {
 
     private String report = "";
@@ -85,7 +80,6 @@ public class CPM implements org.gephi.statistics.spi.Statistics, LongTask {
                     b3 = g.getEdge(vi, n) != null;
 
             if (b1 && (b2 || b3)) {
-                //TODO check degree of n and vi
                 output.addElement(n);
             }
         }
@@ -99,7 +93,8 @@ public class CPM implements org.gephi.statistics.spi.Statistics, LongTask {
                 if (firstNode == secondNode) {
                     continue;
                 }
-                if (g.getEdge(firstNode, secondNode) == null && g.getEdge(secondNode, firstNode) == null) { //One edge is missing in the Bk+1 clique
+                if (g.getEdge(firstNode, secondNode) == null &&
+                        g.getEdge(secondNode, firstNode) == null) { //One edge is missing in the Bk+1 clique
                     return false;
                 }
             }
@@ -217,7 +212,7 @@ public class CPM implements org.gephi.statistics.spi.Statistics, LongTask {
             for (Node vj : nodes) {
                 if ((vi != vj) && (getSharedNodes(vi, vj) == k - 1)) {
                     if (g.isDirected()) {
-                        edges.add(gm.factory().newEdge(vi, vj,true));
+                        edges.add(gm.factory().newEdge(vi, vj, true));
                     } else {
                         edges.add(gm.factory().newEdge(vi, vj, false));
                     }
