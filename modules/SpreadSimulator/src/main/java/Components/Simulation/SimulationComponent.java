@@ -123,6 +123,7 @@ public class SimulationComponent extends TopComponent {
     private void initButtonActionPerformed(ActionEvent e) {
         try {
             simulationSeries = 1;
+            currentSimulation = null;
             simulationList = new ArrayList<Simulation>();
             var graphModel = Lookup.getDefault().lookup(GraphController.class).getGraphModel();
             var table = graphModel.getNodeTable();
