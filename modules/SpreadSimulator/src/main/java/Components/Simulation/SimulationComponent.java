@@ -116,8 +116,8 @@ public class SimulationComponent extends TopComponent {
                 break;
         }
         initComponents();
-        revalidate();
         repaint();
+        revalidate();
     }
 
     private void initButtonActionPerformed(ActionEvent e) {
