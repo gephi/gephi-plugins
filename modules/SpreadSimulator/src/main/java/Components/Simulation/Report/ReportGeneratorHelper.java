@@ -234,12 +234,12 @@ public class ReportGeneratorHelper {
         JButton saveAsImageButton = new JButton("Save as IMAGE");
 
         saveAsCSVButton.addActionListener(e -> {
-            generateCSV(reports, fileName);
+//            generateCSV(reports, fileName);
             System.out.println("SAVED AS CSV");
         });
 
         saveAsXLSXButton.addActionListener(e -> {
-            generateExcelJXL(report, fileName);
+//            generateExcelJXL(report, fileName);
             System.out.println("SAVED AS XLSX");
         });
 
