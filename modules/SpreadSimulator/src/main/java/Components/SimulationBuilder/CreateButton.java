@@ -16,6 +16,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -38,6 +39,7 @@ public class CreateButton extends JButton {
     private void showModelFolders() {
         JDialog customDialog = new JDialog();
         var folderListPanel = new JPanel();
+        simulationBuilderComponent.advancedRules = new HashMap<>();
         folderListPanel.setLayout((new BoxLayout(folderListPanel, BoxLayout.Y_AXIS)));
         folderListPanel.setSize(400, 300);
         File folder = new File(ConfigLoader.folderSimulationBuilderModels);
