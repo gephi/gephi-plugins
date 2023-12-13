@@ -9,7 +9,7 @@ import java.util.List;
 
 public class SimulationSeriesButton extends JButton {
     private final SimulationComponent simulationComponent;
-    private final Simulation simulation;
+    private Simulation simulation;
     private List<Simulation> simulationList;
     private Integer simulationsNumber;
     private Integer conductSteps;
@@ -30,7 +30,7 @@ public class SimulationSeriesButton extends JButton {
         if (dialog.isSuccessful()) {
             for(int i = 1; i < simulationsNumber; i++){
                 runSimulation();
-                simulationComponent.NewSeries();
+                this.simulation = simulationComponent.NewSeries(simulation);
             }
             runSimulation();
         }
