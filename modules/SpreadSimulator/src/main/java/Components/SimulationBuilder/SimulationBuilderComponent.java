@@ -11,6 +11,7 @@ import org.openide.windows.TopComponent;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.HashMap;
 import java.util.List;
 
 @ConvertAsProperties(dtd = "-//Simulation//SimulationBuilder//EN", autostore = false)
@@ -29,9 +30,11 @@ public class SimulationBuilderComponent extends TopComponent {
     @Setter
     @Getter
     private List<NodeRoleDecorator> nodeRoles;
+    public HashMap<String, List<AdvancedRule>> advancedRules;
 
     public SimulationBuilderComponent() {
         simulationModel = new SimulationModel();
+        advancedRules = new HashMap<>();
         initComponents();
         setName("Simulation Builder");
         setToolTipText("Simulation Builder");
@@ -49,7 +52,7 @@ public class SimulationBuilderComponent extends TopComponent {
         if (nodeRoles == null || nodeRoles.size() == 0)
             return;
 
-        var modelStatisticInput = new ModelStatisticsDynamicInput().generate(nodeRoles);
+        var modelStatisticInput = new ModelStatisticsDynamicInput(this).generate(nodeRoles);
         add(modelStatisticInput);
 
         var apply = new ApplyButton(this);

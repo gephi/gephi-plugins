@@ -116,17 +116,19 @@ public class SimulationComponent extends TopComponent {
                 break;
         }
         initComponents();
-        revalidate();
         repaint();
+        revalidate();
     }
 
     private void initButtonActionPerformed(ActionEvent e) {
         try {
             simulationSeries = 1;
+            currentSimulation = null;
             simulationList = new ArrayList<Simulation>();
             var graphModel = Lookup.getDefault().lookup(GraphController.class).getGraphModel();
             var table = graphModel.getNodeTable();
-            table.addColumn(ConfigLoader.colNameRootState.toString(), String.class);
+            if(table.getColumn(ConfigLoader.colNameRootState.toString()) == null)
+                table.addColumn(ConfigLoader.colNameRootState.toString(), String.class);
             graph = graphModel.getGraph();
             if (!ApplySimulationHelper.ValidateGraph(graph)) {
                 JOptionPane.showMessageDialog(null, "This is not a valid graph model");
