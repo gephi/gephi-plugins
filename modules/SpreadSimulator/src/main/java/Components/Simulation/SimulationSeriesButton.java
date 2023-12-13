@@ -34,6 +34,9 @@ public class SimulationSeriesButton extends JButton {
             }
             runSimulation();
         }
+        simulationComponent.initComponents();
+        simulationComponent.repaint();
+        simulationComponent.revalidate();
     }
 
     private void runSimulation() {
@@ -54,8 +57,8 @@ public class SimulationSeriesButton extends JButton {
         }
 
         simulationComponent.initComponents();
-        simulationComponent.revalidate();
         simulationComponent.repaint();
+        simulationComponent.revalidate();
     }
 
     private class CustomInputDialog extends JDialog {
