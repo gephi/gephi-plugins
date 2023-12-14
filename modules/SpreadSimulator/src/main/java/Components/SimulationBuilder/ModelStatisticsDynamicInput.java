@@ -10,6 +10,12 @@ import java.awt.*;
 import java.util.List;
 public class ModelStatisticsDynamicInput {
 
+    public SimulationBuilderComponent component;
+
+    public ModelStatisticsDynamicInput(SimulationBuilderComponent component){
+        this.component = component;
+    }
+
     public JScrollPane generate(List<NodeRoleDecorator> nodeRoles){
         var panel = new JPanel();
 
@@ -32,21 +38,11 @@ public class ModelStatisticsDynamicInput {
             gbc.gridy = row++;
             panel.add(new JLabel("Coverage:"), gbc);
             gbc.gridx = 1;
-            JTextField roleCoverageField = new JTextField(10); // 10 columns wide
+            JTextField roleCoverageField = new JTextField(10);
             roleCoverageField.setText(role.getCoverage().toString());
 
+            roleCoverageField.getDocument().addDocumentListener(new NodeRoleListener(role, roleCoverageField));
             panel.add(roleCoverageField, gbc);
-
-            gbc.gridy = row++;
-            gbc.gridx = 0;
-            panel.add(new JLabel("MinCoverage:"), gbc);
-            gbc.gridx = 1;
-            JTextField roleMinCoverageField = new JTextField(10); // 10 columns wide
-            roleMinCoverageField.setText(role.getMinCoverage().toString());
-
-            roleCoverageField.getDocument().addDocumentListener(new NodeRoleListener(role, roleCoverageField, roleMinCoverageField));
-            roleMinCoverageField.getDocument().addDocumentListener(new NodeRoleListener(role, roleCoverageField, roleMinCoverageField));
-            panel.add(roleMinCoverageField, gbc);
 
             for (NodeStateDecorator state : role.getNodeStates()) {
                 gbc.insets = new Insets(padding, padding, padding, padding);
@@ -55,32 +51,36 @@ public class ModelStatisticsDynamicInput {
 
                 JLabel stateLabel = new JLabel("NodeState: " + state.getNodeState().getName());
                 currentFont = stateLabel.getFont();
-                stateLabel.setFont(currentFont.deriveFont(currentFont.getStyle() | Font.BOLD, currentFont.getSize())); // Wytłuszczenie i zwiększenie rozmiaru o 2 punkty
+                stateLabel.setFont(currentFont.deriveFont(currentFont.getStyle() | Font.BOLD, currentFont.getSize()));
                 panel.add(stateLabel, gbc);
 
                 gbc.gridx = 1;
-                var advancedButton = new AdvancedAssigmentButton(role.getNodeRole(), state);
-                panel.add(advancedButton, gbc);
+                var addRuleButton = new AdvancedAssigmentButton(role.getNodeRole(), state, this);
+                panel.add(addRuleButton, gbc);
 
                 gbc.gridx = 0;
                 gbc.gridy = row++;
                 panel.add(new JLabel("Coverage:"), gbc);
                 gbc.gridx = 1;
-                JTextField stateCoverageField = new JTextField(10); // 10 columns wide
+                JTextField stateCoverageField = new JTextField(10);
                 stateCoverageField.setText(state.getCoverage().toString());
+                stateCoverageField.getDocument().addDocumentListener(new NodeStateListener(state, stateCoverageField));
                 panel.add(stateCoverageField, gbc);
 
                 gbc.gridy = row++;
                 gbc.gridx = 0;
-                panel.add(new JLabel("MinCoverage:"), gbc);
-                gbc.gridx = 1;
-                JTextField stateMinCoverageField = new JTextField(10);
-                stateMinCoverageField.setText(state.getMinCoverage().toString());
+                var advancedStateRules = component.advancedRules.get(role.getNodeRole().getName()+ "_" + state.getNodeState().getName());
+                if (advancedStateRules != null && !advancedStateRules.isEmpty()) {
+                    for (int i = 0; i < advancedStateRules.size(); i++) {
+                        AdvancedRule rule = advancedStateRules.get(i);
+                        gbc.gridy = row++;
+                        gbc.gridx = 0;
+                        panel.add(new JLabel(rule.toString()), gbc);
+                        gbc.gridx = 1;
+                        panel.add(new RemoveRuleButton(component, role, state, rule), gbc);
+                    }
+                }
 
-                stateCoverageField.getDocument().addDocumentListener(new NodeStateListener(state, stateCoverageField, stateMinCoverageField));
-                stateMinCoverageField.getDocument().addDocumentListener(new NodeStateListener(state, stateCoverageField, stateMinCoverageField));
-
-                panel.add(stateMinCoverageField, gbc);
             }
             gbc.gridy = row++;
             gbc.gridx = 0;
@@ -100,12 +100,10 @@ public class ModelStatisticsDynamicInput {
 
         private NodeRoleDecorator nodeRole;
         private JTextField coverage;
-        private JTextField minCoverage;
 
-        public NodeRoleListener(NodeRoleDecorator nodeRole, JTextField coverage, JTextField minCoverage) {
+        public NodeRoleListener(NodeRoleDecorator nodeRole, JTextField coverage) {
             this.nodeRole = nodeRole;
             this.coverage = coverage;
-            this.minCoverage = minCoverage;
         }
 
         @Override
@@ -126,7 +124,6 @@ public class ModelStatisticsDynamicInput {
         private void update() {
             try {
                 nodeRole.setCoverage(Double.parseDouble(coverage.getText()));
-                nodeRole.setMinCoverage(Integer.parseInt(minCoverage.getText()));
             } catch (NumberFormatException ex) {
             }
         }
@@ -136,12 +133,10 @@ public class ModelStatisticsDynamicInput {
 
         private NodeStateDecorator nodeState;
         private JTextField coverage;
-        private JTextField minCoverage;
 
-        public NodeStateListener(NodeStateDecorator nodeState, JTextField coverage, JTextField minCoverage) {
+        public NodeStateListener(NodeStateDecorator nodeState, JTextField coverage) {
             this.nodeState = nodeState;
             this.coverage = coverage;
-            this.minCoverage = minCoverage;
         }
 
         @Override
@@ -162,11 +157,8 @@ public class ModelStatisticsDynamicInput {
         private void update() {
             try {
                 nodeState.setCoverage(Double.parseDouble(coverage.getText()));
-                nodeState.setMinCoverage(Integer.parseInt(minCoverage.getText()));
             } catch (NumberFormatException ex) {
             }
         }
     }
-
-
 }

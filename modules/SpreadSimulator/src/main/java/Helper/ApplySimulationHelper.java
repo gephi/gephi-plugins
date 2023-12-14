@@ -104,6 +104,9 @@ public class ApplySimulationHelper {
 
         if(table.hasColumn("NodeState"))
             table.removeColumn("NodeState");
+
+        if(table.hasColumn("RootState"))
+            table.removeColumn("RootState");
     }
 
 
