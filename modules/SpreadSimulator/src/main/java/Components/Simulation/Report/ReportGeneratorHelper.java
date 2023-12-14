@@ -21,6 +21,7 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -28,6 +29,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 public class ReportGeneratorHelper {
@@ -148,62 +150,116 @@ public class ReportGeneratorHelper {
     }
 
     public static void generateSeriesReport(List<List<SimulationStepReport>> reports, String fileName) {
-        ArrayList<ArrayList<List<Pair<String, Map<Integer, Integer>>>>> allSeries = new ArrayList<>();
-        ArrayList<List<Pair<String, Map<Integer, Integer>>>> oneSeries = new ArrayList<>();
+        Integer stepsCount = reports.get(0).size();
+        Integer roleCount = reports.get(0).get(0).getRoleReports().size();
 
-        for (int l = 0; l < reports.size(); l++) {
-            int roleCount = reports.get(l).get(0).getRoleReports().size();
-            for (int i = 0; i < roleCount; i++) {
-                List<Pair<String, Map<Integer, Integer>>> resultForRole = getValuesFromReport(reports.get(l), i);
-                oneSeries.add(resultForRole);
-            }
-            allSeries.add(oneSeries);
-            oneSeries = new ArrayList<>();
-        }
+        Map<Integer, List<SimulationStepReport>> sortedStep = reports.stream().flatMap(Collection::stream)
+                .collect(Collectors.groupingBy(
+                        SimulationStepReport::getStep,
+                        Collectors.toList()
+                ));
 
-        List<List<Pair<String, Map<Integer, Integer>>>> roles = new ArrayList<>();
-        for (int i = 0; i < allSeries.get(0).size(); i++) {
-            int finalI = i;
-            roles.add(allSeries.stream()
-                    .map(series -> series.get(finalI))
-                    .flatMap(Collection::stream)
-                    .collect(Collectors.toList()));
-        }
-
-        List<List<Pair<String, Map<Integer, Double>>>> allAvgValues = new ArrayList<>();
-        for (int i = 0; i < roles.size(); i++) {
-            List<Pair<String, Map<Integer, Double>>> valuesForRole = new ArrayList<>();
-            List<String> nodesNames = roles.get(i)
-                    .stream()
-                    .map(Pair::first)
-                    .distinct()
-                    .collect(Collectors.toList());
-            for (int l = 0; l < nodesNames.size(); l++) {
-                int finalL = l;
-                Map<Integer, Double> values;
-                values = roles.get(i)
-                        .stream()
-                        .filter(step -> Objects.equals(step.first(), nodesNames.get(finalL)))
-                        .flatMap(step -> step.second().entrySet().stream())
+        List<Map<String, Map<String, Double>>> allSteps = sortedStep.entrySet()
+                .stream()
+                .map(Map.Entry::getValue)
+                .map(step -> step.stream()
+                        .flatMap(simulationStepReport -> simulationStepReport.getRoleReports().stream()
+                                .flatMap(roleReport -> roleReport.getStatesReport().stream()
+                                        .map(state -> new AbstractMap.SimpleEntry<>(
+                                                new AbstractMap.SimpleEntry<>(roleReport.getNodeRoleName(), state.getNodeStateName()),
+                                                state)))
+                        )
                         .collect(Collectors.groupingBy(
-                                entry -> entry.getKey(),
-                                Collectors.averagingInt(entry -> entry.getValue())
-                        ));
-                Pair<String, Map<Integer, Double>> valuesWithNodeName = Pair.of(nodesNames.get(finalL), values);
-                valuesForRole.add(valuesWithNodeName);
-            }
-            allAvgValues.add(valuesForRole);
-        }
-        allAvgValues.size();
+                                entry -> entry.getKey().getKey(),
+                                Collectors.groupingBy(
+                                        entry -> entry.getKey().getValue(),
+                                        Collectors.summingDouble(entry -> entry.getValue().getNumberOfNodes())
+                                )
+                        ))
+                ).collect(Collectors.toList());
 
+        List<Map<String, Map<String, Double>>> groupedByRoleName = allSteps.stream()
+                .map(map -> map.entrySet().stream()
+                        .collect(Collectors.groupingBy(
+                                Map.Entry::getKey,
+                                Collectors.mapping(
+                                        Map.Entry::getValue,
+                                        Collectors.toList()
+                                )))
+                        .values()
+                        .stream()
+                        .map(list -> list.stream()
+                                .map(innerMap -> {
+                                    Map<String, Map<String, Double>> tempMap = new HashMap<>();
+                                    tempMap.put(map.keySet().iterator().next(), innerMap);
+                                    return tempMap;
+                                })
+                                .collect(Collectors.toList()))
+                        .collect(Collectors.toList()))
+                .flatMap(Collection::stream)
+                .flatMap(Collection::stream)
+                .collect(Collectors.toList());
+
+        Set<String> uniqueKeys = allSteps.stream()
+                .flatMap(map -> map.keySet().stream())
+                .collect(Collectors.toSet());
+
+        List<List<Map<String, Map<String, Double>>>> sortedByRoleName = uniqueKeys.stream()
+                .map(key -> groupedByRoleName.stream()
+                        .map(map -> map.getOrDefault(key, null))
+                        .filter(Objects::nonNull)
+                        .map(filteredMap -> Map.of(key, filteredMap))
+                        .collect(Collectors.toList())
+                )
+                .collect(Collectors.toList());
+
+        List<List<Map<String, Map<String, Double>>>> transformed = sortedByRoleName.stream()
+                .map(list -> list.stream()
+                        .map(map -> map.entrySet().stream()
+                                .collect(Collectors.toMap(
+                                        Map.Entry::getKey,
+                                        entry -> entry.getValue().entrySet().stream()
+                                                .collect(Collectors.toMap(
+                                                        Map.Entry::getKey,
+                                                        stateEntry -> stateEntry.getValue() / stepsCount
+                                                ))
+                                ))
+                        )
+                        .collect(Collectors.toList())
+                )
+                .collect(Collectors.toList());
+
+        List<SimulationStepReport> exampleReport = new ArrayList<>(reports.get(0));
+
+        exampleReport.forEach(simulationStepReport -> {
+            int step = simulationStepReport.getStep();
+
+            simulationStepReport.getRoleReports().forEach(roleReport -> {
+                String nodeRoleName = roleReport.getNodeRoleName();
+
+                roleReport.getStatesReport().forEach(statesReport -> {
+                    String nodeStateName = statesReport.getNodeStateName();
+                    Double newValue = findValue(transformed, nodeRoleName, nodeStateName, step);
+
+                    if (newValue != null) {
+                        statesReport.setNumberOfNodes(newValue);
+                    }
+                });
+            });
+        });
+
+
+
+// Generowanie raportu
         JFrame graphFrame = new JFrame("Frame");
         JPanel graphPanel = new JPanel();
         graphPanel.setLayout(new BoxLayout(graphPanel, BoxLayout.PAGE_AXIS));
 
         List<JFreeChart> chartList = new ArrayList<>(List.of());
+        for (int i = 0; i < roleCount; i++) {
+            List<Pair<String, Map<Integer, Double>>> resultForRole = getValuesFromReport(exampleReport, i);
 
-        for(int i=0; i<allAvgValues.size(); i++) {
-            List<XYSeries> listOfSeries = allAvgValues.get(i).stream().map(pair -> ChartUtils.createXYSeries(pair.value(), pair.key())).collect(Collectors.toList());
+            List<XYSeries> listOfSeries = resultForRole.stream().map(pair -> ChartUtils.createXYSeries(pair.value(), pair.key())).collect(Collectors.toList());
 
             XYSeriesCollection dataset = new XYSeriesCollection();
             for (XYSeries series : listOfSeries) {
@@ -211,7 +267,7 @@ public class ReportGeneratorHelper {
             }
 
             JFreeChart chart = ChartFactory.createXYLineChart(
-                    reports.get(i).get(0).getRoleReports().get(i).getNodeRoleName(),
+                    exampleReport.get(0).getRoleReports().get(i).getNodeRoleName(),
                     "Time",
                     "Count",
                     dataset,
@@ -234,12 +290,12 @@ public class ReportGeneratorHelper {
         JButton saveAsImageButton = new JButton("Save as IMAGE");
 
         saveAsCSVButton.addActionListener(e -> {
-//            generateCSV(reports, fileName);
+            generateCSV(exampleReport, fileName);
             System.out.println("SAVED AS CSV");
         });
 
         saveAsXLSXButton.addActionListener(e -> {
-//            generateExcelJXL(report, fileName);
+            generateExcelJXL(exampleReport, fileName);
             System.out.println("SAVED AS XLSX");
         });
 
@@ -272,6 +328,14 @@ public class ReportGeneratorHelper {
 
     }
 
+    public static Double findValue (List<List<Map<String, Map<String, Double>>>> transformed, String nodeRoleName, String roleReportName, int step) {
+        return transformed.stream().filter(nodeRole -> nodeRole.get(step - 1).containsKey(nodeRoleName))
+                .map(e -> e.get(step - 1))
+                .map(e -> e.values().stream().map(reportName -> reportName.get(roleReportName)).collect(Collectors.toList()).get(0))
+                .collect(Collectors.toList()).get(0);
+
+
+    }
     public static void generateReport(List<SimulationStepReport> report, String fileName) {
         JFrame graphFrame = new JFrame("Frame");
         JPanel graphPanel = new JPanel();
@@ -281,7 +345,7 @@ public class ReportGeneratorHelper {
 
         List<JFreeChart> chartList = new ArrayList<>(List.of());
         for (int i = 0; i < roleCount; i++) {
-            List<Pair<String, Map<Integer, Integer>>> resultForRole = getValuesFromReport(report, i);
+            List<Pair<String, Map<Integer, Double>>> resultForRole = getValuesFromReport(report, i);
 
             List<XYSeries> listOfSeries = resultForRole.stream().map(pair -> ChartUtils.createXYSeries(pair.value(), pair.key())).collect(Collectors.toList());
 
@@ -351,14 +415,14 @@ public class ReportGeneratorHelper {
         graphFrame.setVisible(true);
     }
 
-    private static List<Pair<String, Map<Integer, Integer>>> getValuesFromReport(List<SimulationStepReport> report, int roleNumber) {
+    private static List<Pair<String, Map<Integer, Double>>> getValuesFromReport(List<SimulationStepReport> report, int roleNumber) {
         List<SimulationStepReport.NodeRoleReport> correctRoleList = report.stream().map(step -> step.getRoleReports().get(roleNumber)).collect(Collectors.toList());
         int statesNumber = correctRoleList.get(0).getStatesReport().size();
 
-        List<Pair<String, Map<Integer, Integer>>> listOfMapValues = new ArrayList<>();
+        List<Pair<String, Map<Integer, Double>>> listOfMapValues = new ArrayList<>();
         for (int i = 0; i < statesNumber; i++) {
 
-            Map<Integer, Integer> valuesMap = new HashMap<>();
+            Map<Integer, Double> valuesMap = new HashMap<>();
             int finalI = i;
             String stateName = correctRoleList.get(roleNumber).getStatesReport().get(finalI).getNodeStateName();
 
@@ -370,12 +434,14 @@ public class ReportGeneratorHelper {
                         .filter(stateElement -> Objects.equals(stateElement.getNodeStateName(), stateName))
                         .findFirst()
                         .map(SimulationStepReport.NodeRoleReport.StateElement::getNumberOfNodes)
-                        .orElse(0));
+                        .orElse(0.0));
             }
-            Pair<String, Map<Integer, Integer>> mapOfValues = Pair.of(stateName, valuesMap);
+            Pair<String, Map<Integer, Double>> mapOfValues = Pair.of(stateName, valuesMap);
             listOfMapValues.add(mapOfValues);
         }
 
         return listOfMapValues;
     }
+
+
 }

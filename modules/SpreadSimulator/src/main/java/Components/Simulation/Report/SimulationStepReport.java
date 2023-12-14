@@ -3,6 +3,7 @@ import SimulationModel.Node.NodeRoleDecorator;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -30,16 +31,17 @@ public class SimulationStepReport {
                 var stateName = nodeState.getNodeState().getName();
                 var numOfNodes = nodeState.getMinCoverage();
                 var coverage = nodeState.getCoverage();
-                return new StateElement(stateName, numOfNodes, coverage);
+                return new StateElement(stateName, Double.valueOf(numOfNodes), coverage);
             }).collect(Collectors.toList());
         }
 
         @AllArgsConstructor
         @NoArgsConstructor
         @Getter
+        @Setter
         public class StateElement{
             private String nodeStateName;
-            private Integer numberOfNodes;
+            private Double numberOfNodes;
             private Double coverage;
         }
     }
