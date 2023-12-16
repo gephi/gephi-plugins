@@ -1,0 +1,5 @@
+Manifest-Version: 1.0
+OpenIDE-Module-Name: GephiPlugin
+OpenIDE-Module-Short-Description: A plugin for gephi
+OpenIDE-Module-Long-Description: A plugin for gephi
+OpenIDE-Module-Display-Category: Tool
