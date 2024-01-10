@@ -20,7 +20,7 @@ import java.util.stream.Collectors;
 
 @Getter
 @Setter
-public abstract class Simulation {
+public abstract class Simulation implements Cloneable {
     protected   Integer step;
     protected Graph graph;
     protected SimulationModel simulationModel;
@@ -87,5 +87,14 @@ public abstract class Simulation {
     private Color GetStateColor(NodeStateDecorator state) {
         var nodes = Arrays.asList(graph.getNodes().toArray());
         return nodes.stream().filter(node -> node.getAttribute(ConfigLoader.colNameNodeState).equals(state.getNodeState().getName())).collect(Collectors.toList()).get(0).getColor();
+    }
+
+    @Override
+    public Simulation clone() {
+        try {
+            return (Simulation) super.clone();
+        } catch (CloneNotSupportedException e) {
+            throw new AssertionError();
+        }
     }
 }

@@ -1,17 +1,23 @@
 package Components.Simulation;
 
 import Components.Simulation.Report.ReportGeneratorHelper;
+import Components.Simulation.Report.SimulationStepReport;
+import Components.Simulation.Simulation.Simulation;
 import org.joda.time.DateTime;
 
 import javax.swing.*;
+import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 public class GetSeriesReportButton extends JButton {
     private final SimulationComponent simulationComponent;
+    private List<Simulation> simulationList;
     private String fileName;
 
-    public GetSeriesReportButton(SimulationComponent simulationComponent) {
+    public GetSeriesReportButton(SimulationComponent simulationComponent, List<Simulation> simulationList) {
         this.setText("Get Series Report");
+        this.simulationList = simulationList;
         this.simulationComponent = simulationComponent;
         this.addActionListener(e -> GetReport());
     }
@@ -19,6 +25,8 @@ public class GetSeriesReportButton extends JButton {
     public void GetReport(){
         UUID uuid = UUID.randomUUID();
         fileName = "SimulationReport_" + DateTime.now().toString("yyyy-MM-dd-HH-mm-ss");
-        ReportGeneratorHelper.generateReport(simulationComponent.getCurrentSimulation().getReport(), fileName);
+        List<List<SimulationStepReport>> listOfAllSimulations = simulationList.stream().map(Simulation::getReport).collect(Collectors.toList());
+        listOfAllSimulations.add(simulationComponent.getCurrentSimulation().getReport());
+        ReportGeneratorHelper.generateSeriesReport(listOfAllSimulations, fileName);
     }
 }

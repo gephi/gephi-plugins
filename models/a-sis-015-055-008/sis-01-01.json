@@ -1,5 +1,5 @@
 {
-  "name": "S-I-S-0.15-0.55-0.08",
+  "name": "S-I-S-0.15-0.08-0.055",
   "transitionMap": [
     {
       "transitionType": "conditionProbability",

@@ -76,7 +76,7 @@ public class SimulationComponent extends TopComponent {
         add(new SimulationButton(currentSimulation, this));
         add(new SimulationSeriesButton(currentSimulation, this));
         add(new GetReportButton(this));
-        add(new GetSeriesReportButton(this));
+        add(new GetSeriesReportButton(this, simulationList));
     }
 
     private boolean isGraphValid() {
@@ -84,13 +84,13 @@ public class SimulationComponent extends TopComponent {
     }
 
     private void seriesButtonActionPerformed(ActionEvent e) {
-        NewSeries();
+        NewSeries(currentSimulation);
     }
 
-    public void NewSeries() {
+    public Simulation NewSeries(Simulation currentSimulation) {
         if(currentSimulation != null)
         {
-            simulationList.add(currentSimulation);
+            simulationList.add(currentSimulation.clone());
             simulationSeries = simulationList.size() + 1;
             var nodes =  new ArrayList<> (List.of(graph.getNodes().toArray()));
             nodes.forEach(node -> node.setAttribute(ConfigLoader.colNameNodeState.toString(), node.getAttribute(ConfigLoader.colNameRootState).toString()));
@@ -98,26 +98,27 @@ public class SimulationComponent extends TopComponent {
         }
         switch (simulationModel.getInteraction().getInteractionType()){
             case All:
-                currentSimulation = new SimulationAll(graph, simulationModel);
+                this.currentSimulation = new SimulationAll(graph, simulationModel);
                 break;
             case RelativeEdges:
-                currentSimulation = new SimulationRelativeEdges(graph, simulationModel);
+                this.currentSimulation = new SimulationRelativeEdges(graph, simulationModel);
                 break;
             case RelativeFreeEdges:
-                currentSimulation = new SimulationRelativeFreeEdges(graph, simulationModel);
+                this.currentSimulation = new SimulationRelativeFreeEdges(graph, simulationModel);
                 break;
             case RelativeNodes:
-                currentSimulation = new SimulationRelativeNodes(graph, simulationModel);
+                this.currentSimulation = new SimulationRelativeNodes(graph, simulationModel);
                 break;
             case RelativeFreeNodes:
-                currentSimulation = new SimulationRelativeFreeNodes(graph, simulationModel);
+                this.currentSimulation = new SimulationRelativeFreeNodes(graph, simulationModel);
                 break;
             default:
                 break;
         }
         initComponents();
-        repaint();
         revalidate();
+        repaint();
+        return this.currentSimulation;
     }
 
     private void initButtonActionPerformed(ActionEvent e) {
