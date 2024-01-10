@@ -273,7 +273,7 @@ public class ReportGeneratorHelper {
                     dataset,
                     PlotOrientation.VERTICAL,
                     true,
-                    false,
+                    true,
                     false);
 
             chartList.add(chart);
@@ -281,7 +281,31 @@ public class ReportGeneratorHelper {
             ChartPanel chartPanel = new ChartPanel(chart);
             chartPanel.setPreferredSize(new Dimension(1200, 800));
             graphPanel.add(chartPanel);
+
+            //            Charts for each searies
+            for (XYSeries series : listOfSeries) {
+                XYSeriesCollection datasetForEach = new XYSeriesCollection();
+                datasetForEach.addSeries(series);
+
+                JFreeChart chartForSeries = ChartFactory.createXYLineChart(
+                        exampleReport.get(0).getRoleReports().get(i).getNodeRoleName(),
+                        "Time",
+                        "Count",
+                        datasetForEach,
+                        PlotOrientation.VERTICAL,
+                        true,
+                        true,
+                        false);
+
+                chartList.add(chartForSeries);
+
+                ChartPanel panelForSeries = new ChartPanel(chartForSeries);
+                panelForSeries.setPreferredSize(new Dimension(1200, 800));
+                graphPanel.add(panelForSeries);
+            }
         }
+
+
 
 //        Button section
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
@@ -349,6 +373,7 @@ public class ReportGeneratorHelper {
 
             List<XYSeries> listOfSeries = resultForRole.stream().map(pair -> ChartUtils.createXYSeries(pair.value(), pair.key())).collect(Collectors.toList());
 
+//            One Chart for all series
             XYSeriesCollection dataset = new XYSeriesCollection();
             for (XYSeries series : listOfSeries) {
                 dataset.addSeries(series);
@@ -361,7 +386,7 @@ public class ReportGeneratorHelper {
                     dataset,
                     PlotOrientation.VERTICAL,
                     true,
-                    false,
+                    true,
                     false);
 
             chartList.add(chart);
@@ -369,6 +394,27 @@ public class ReportGeneratorHelper {
             ChartPanel chartPanel = new ChartPanel(chart);
             chartPanel.setPreferredSize(new Dimension(1200, 800));
             graphPanel.add(chartPanel);
+
+            //            Charts for each searies
+            for (XYSeries series : listOfSeries) {
+                XYSeriesCollection datasetForEach = new XYSeriesCollection();
+                datasetForEach.addSeries(series);
+
+                JFreeChart chartForSeries = ChartFactory.createXYLineChart(
+                        report.get(0).getRoleReports().get(i).getNodeRoleName(),
+                        "Time",
+                        "Count",
+                        datasetForEach,
+                        PlotOrientation.VERTICAL,
+                        true,
+                        true,
+                        false);
+
+                chartList.add(chartForSeries);
+                ChartPanel panelForSeries = new ChartPanel(chartForSeries);
+                panelForSeries.setPreferredSize(new Dimension(1200, 800));
+                graphPanel.add(panelForSeries);
+            }
         }
 
 //      Button section
