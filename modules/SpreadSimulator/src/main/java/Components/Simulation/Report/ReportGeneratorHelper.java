@@ -150,8 +150,8 @@ public class ReportGeneratorHelper {
     }
 
     public static void generateSeriesReport(List<List<SimulationStepReport>> reports, String fileName) {
-        Integer stepsCount = reports.get(0).size();
         Integer roleCount = reports.get(0).get(0).getRoleReports().size();
+        Integer seriesCount = reports.size();
 
         Map<Integer, List<SimulationStepReport>> sortedStep = reports.stream().flatMap(Collection::stream)
                 .collect(Collectors.groupingBy(
@@ -221,7 +221,7 @@ public class ReportGeneratorHelper {
                                         entry -> entry.getValue().entrySet().stream()
                                                 .collect(Collectors.toMap(
                                                         Map.Entry::getKey,
-                                                        stateEntry -> stateEntry.getValue() / stepsCount
+                                                        stateEntry -> stateEntry.getValue() / seriesCount
                                                 ))
                                 ))
                         )
