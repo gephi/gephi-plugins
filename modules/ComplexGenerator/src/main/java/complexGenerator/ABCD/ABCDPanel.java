@@ -1,7 +1,6 @@
 package complexGenerator.ABCD;
 
 import Helpers.GenericParamForm.GenericPanel;
-import complexGenerator.BalancedTree.BalancedTreeParams;
 
 public class ABCDPanel extends GenericPanel<ABCDParams> {
     @Override

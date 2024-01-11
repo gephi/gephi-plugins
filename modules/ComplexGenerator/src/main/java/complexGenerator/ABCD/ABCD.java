@@ -1,12 +1,15 @@
 package complexGenerator.ABCD;
 
 import complexGenerator.BarabasiAlbert.Utils.Pair;
+import lombok.Getter;
+import lombok.Setter;
 import org.gephi.io.generator.spi.Generator;
 import org.gephi.io.generator.spi.GeneratorUI;
 import org.gephi.io.importer.api.ContainerLoader;
 import org.gephi.io.importer.api.EdgeDirectionDefault;
 import org.gephi.io.importer.api.EdgeDraft;
 import org.gephi.io.importer.api.NodeDraft;
+import org.gephi.utils.progress.Progress;
 import org.gephi.utils.progress.ProgressTicket;
 import org.openide.util.Lookup;
 import org.openide.util.lookup.ServiceProvider;
@@ -28,33 +31,51 @@ import java.util.stream.IntStream;
 public class ABCD implements Generator {
     private boolean cancel = false;
     private ProgressTicket progressTicket;
+
+    @Getter
+    @Setter
     private Integer n = 1000;
+    @Getter
+    @Setter
     private Double Imax = 1000.0;
 
     //    Communities
+    @Getter
+    @Setter
     private Integer cmin = 10;
+    @Getter
+    @Setter
     private Integer cmax = 100;
+    @Getter
+    @Setter
     private Double beta = 3.5;
 
     //    Nodes
+    @Getter
+    @Setter
     private Integer wmin = 2; // Minimum degree
+    @Getter
+    @Setter
     private Integer wmax = 10; // Maximum degree
+    @Getter
+    @Setter
     private Double gamma = 2.0; // Degree power law exponent
 
     //    Connecting
+    @Getter
+    @Setter
     private Double xi = 0.1;
 
     @Override
     public void generate(ContainerLoader container) {
+        Progress.start(progressTicket, n - 1);
         container.setEdgeDefault(EdgeDirectionDefault.UNDIRECTED);
         List<Integer> W = generateDegreeSequence();
         List<Integer> C = generateCommunitySizes();
         List<List<Integer>> assigned = assignNodesToCommunities(W, C);
         Set<Pair<Integer, Integer>> generated = generateABCDGraph(assigned, W, container);
-//        Progress.start(progressTicket, n - 1);
-//        container.setEdgeDefault(EdgeDirectionDefault.UNDIRECTED);
-//        Progress.finish(progressTicket);
-//        progressTicket = null;
+        Progress.finish(progressTicket);
+        progressTicket = null;
     }
 
     public Set<Pair<Integer, Integer>> generateABCDGraph(List<List<Integer>> communityAssignments, List<Integer> W, ContainerLoader container) {
@@ -173,12 +194,6 @@ public class ABCD implements Generator {
                 .filter(index -> wNodes.get(index) >= getNodeDegree(index, allEdges))
                 .collect(Collectors.toList());
 
-//        List<Integer> filteredNodes = IntStream.range(0, wNodes.size())
-//                .filter(index -> !communityNodesIndexes.contains(index))
-//                .mapToObj(wNodes::get)
-//                .filter(edge -> edge >= getNodeDegree(edge, allEdges))
-//                .collect(Collectors.toList());
-
         if (!filteredNodesIndexes.isEmpty()) {
             return filteredNodesIndexes.get(rand.nextInt(filteredNodesIndexes.size()));
         }
@@ -276,7 +291,6 @@ public class ABCD implements Generator {
 
         return position;
     }
-
 
     //    Nodes
     public List<Integer> generateDegreeSequence() {
