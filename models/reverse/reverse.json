@@ -1,0 +1,28 @@
+{
+  "name": "simple-simulation",
+  "transitionMap": [
+    {
+      "transitionType": "noConditionProbability",
+      "sourceState": {
+        "name": "susceptible"
+      },
+      "destinationState": {
+        "name": "infected"
+      },
+      "probability": 0
+    },
+    {
+      "transitionType": "conditionProbability",
+      "sourceState": {
+        "name": "infected"
+      },
+      "destinationState": {
+        "name": "susceptible"
+      },
+      "probability": 0.2,
+      "provocativeNeighborName": [
+        "susceptible"
+      ]
+    }
+  ]
+}

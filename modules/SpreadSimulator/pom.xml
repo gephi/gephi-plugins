@@ -119,6 +119,10 @@
             <groupId>org.gephi</groupId>
             <artifactId>io-exporter-api</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.gephi</groupId>
+            <artifactId>algorithms-plugin</artifactId>
+        </dependency>
 
     </dependencies>
 
