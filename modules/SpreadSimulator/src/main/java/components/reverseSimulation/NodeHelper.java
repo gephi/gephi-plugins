@@ -1,5 +1,6 @@
 package components.reverseSimulation;
 
+import components.reverseSimulation.model.NodeData;
 import org.gephi.algorithms.shortestpath.DijkstraShortestPathAlgorithm;
 import org.gephi.graph.api.Column;
 import org.gephi.graph.api.Graph;
@@ -10,6 +11,7 @@ import org.gephi.statistics.plugin.GraphDistance;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class NodeHelper {
@@ -75,4 +77,11 @@ public class NodeHelper {
         dijkstra.compute();
         return 1.0 / (dijkstra.getDistances().values().stream().mapToDouble(Double::doubleValue).sum() * count);
     }
+
+    public static Optional<Node> findNodeInGraphById(Node node, Graph graph) {
+        return Arrays.stream(graph.getNodes().toArray())
+                .filter(graphNode -> graphNode.getStoreId() == node.getStoreId())
+                .findFirst();
+    }
+
 }

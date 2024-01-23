@@ -2,11 +2,14 @@ package components.reverseSimulation;
 
 import components.reverseSimulation.buttons.ChangeModelButton;
 import components.reverseSimulation.buttons.GetReportButton;
+import components.reverseSimulation.buttons.GetSeriesReportButton;
 import components.reverseSimulation.buttons.ShowResultButton;
+import components.reverseSimulation.buttons.SimulationSeriesButton;
 import components.reverseSimulation.buttons.StartSimulationButton;
 import components.reverseSimulation.buttons.StepButton;
 import components.reverseSimulation.buttons.UsePredictSimulationButton;
 import components.reverseSimulation.buttons.UseReverseSeriesSimulationButton;
+import components.reverseSimulation.model.NodeData;
 import components.simulation.Simulation;
 import components.simulation.SimulationAll;
 import components.simulation.SimulationRelativeEdges;
@@ -14,6 +17,11 @@ import components.simulation.SimulationRelativeFreeEdges;
 import components.simulation.SimulationRelativeFreeNodes;
 import components.simulation.SimulationRelativeNodes;
 import components.simulationLogic.SimulationComponent;
+import configLoader.ConfigLoader;
+import helper.ApplySimulationHelper;
+import org.gephi.graph.api.GraphController;
+import org.gephi.graph.api.Node;
+import org.openide.util.Lookup;
 import simulationModel.node.NodeRoleDecorator;
 import simulationModel.SimulationModel;
 import lombok.Getter;
@@ -27,7 +35,9 @@ import org.openide.windows.TopComponent;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @ConvertAsProperties(dtd = "-//Simulation//ReverseSimulation//EN", autostore = false)
 @TopComponent.Description(preferredID = "ReverseSimulation",
@@ -42,11 +52,15 @@ import java.util.List;
 @Setter
 public class ReverseSimulationComponent extends TopComponent {
 
+    public static final String INITIAL_STATE = "initialState";
     private String modelName;
     private Graph graph;
+    private Graph initialGraph;
     private Simulation currentSimulation;
     private Simulation lastStepSimulation;
     private List<Simulation> simulationList;
+    private List<List<NodeData>> lastStepSimulationList;
+    private Integer simulationSeries;
     private SimulationModel simulationModel;
     private int reverseSimulationState = 0;
     private List<NodeRoleDecorator> nodeRoles;
@@ -102,18 +116,66 @@ public class ReverseSimulationComponent extends TopComponent {
 
             add(new StepButton(currentSimulation, this));
             add(new StartSimulationButton(currentSimulation, this));
+            JButton seriesButton = new JButton("New series");
+            seriesButton.addActionListener(this::seriesButtonActionPerformed);
+            add(seriesButton);
+            add(new SimulationSeriesButton(currentSimulation, this));
             add(new ShowResultButton(this));
             add(new GetReportButton(this));
+            add(new GetSeriesReportButton(this));
 
             var stepLabel = new JLabel("Step: " + currentSimulation.getStep().toString());
+            var seriesLabel = new JLabel("Series: " + (getSimulationSeries() == null ? 0 : getSimulationSeries().toString()));
             add(stepLabel);
+            add(seriesLabel);
         } else if (reverseSimulationState == 2) {
             JButton placeholderButton = new JButton("Placeholder");
             add(placeholderButton);
         }
     }
 
+    private void seriesButtonActionPerformed(ActionEvent e) {
+        NewSeries(currentSimulation);
+    }
 
+    public Simulation NewSeries(Simulation currentSimulation) {
+        if(currentSimulation != null)
+        {
+            simulationList.add(currentSimulation.clone());
+            simulationSeries = simulationList.size() + 1;
+            var nodes = new ArrayList<>(List.of(graph.getNodes().toArray()));
+            var nodesLastStepState = new ArrayList<NodeData>();
+            nodes.forEach(node -> {
+                    nodesLastStepState.add(new NodeData(node));
+                    node.setAttribute(ConfigLoader.colNameNodeState, node.getAttribute(INITIAL_STATE));
+            });
+            lastStepSimulationList.add(nodesLastStepState);
+            ApplySimulationHelper.PaintGraph(nodes, currentSimulation.getNodeRoleDecoratorList());
+        }
+        switch (simulationModel.getInteraction().getInteractionType()){
+            case All:
+                this.currentSimulation = new SimulationAll(graph, simulationModel);
+                break;
+            case RelativeEdges:
+                this.currentSimulation = new SimulationRelativeEdges(graph, simulationModel);
+                break;
+            case RelativeFreeEdges:
+                this.currentSimulation = new SimulationRelativeFreeEdges(graph, simulationModel);
+                break;
+            case RelativeNodes:
+                this.currentSimulation = new SimulationRelativeNodes(graph, simulationModel);
+                break;
+            case RelativeFreeNodes:
+                this.currentSimulation = new SimulationRelativeFreeNodes(graph, simulationModel);
+                break;
+            default:
+                break;
+        }
+        initComponents();
+        revalidate();
+        repaint();
+        return this.currentSimulation;
+    }
 
     private boolean wasRanSimulation() {
         Simulation simulation = SimulationComponent.getInstance().getCurrentSimulation();
@@ -124,8 +186,15 @@ public class ReverseSimulationComponent extends TopComponent {
     }
 
     private void initButtonActionPerformed(ActionEvent e) {
+        simulationSeries = 1;
+        simulationList = new ArrayList<Simulation>();
+        lastStepSimulationList = new ArrayList<>();
         this.setSimulationModel(SimulationComponent.getInstance().getSimulationModel());
         this.setGraph(SimulationComponent.getInstance().getGraph());
+        var table = graph.getModel().getNodeTable();
+        if(table.getColumn(INITIAL_STATE) == null)
+            table.addColumn(INITIAL_STATE, String.class);
+        List.of(graph.getNodes().toArray()).forEach(node -> node.setAttribute(INITIAL_STATE, node.getAttribute(ConfigLoader.colNameNodeState)));
         switch (simulationModel.getInteraction().getInteractionType()){
             case All:
                 this.lastStepSimulation = currentSimulation;
