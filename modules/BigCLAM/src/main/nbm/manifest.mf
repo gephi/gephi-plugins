@@ -1,0 +1,5 @@
+Manifest-Version: 1.0
+OpenIDE-Module-Name: Big CLAM Plugin for Gephi
+OpenIDE-Module-Short-Description: BigCLAM Plugin for Gephi
+OpenIDE-Module-Long-Description: Introducing the BigCLAM algorithm plugin for Gephi, a cutting-edge tool for community detection and network analysis. This plugin seamlessly integrates the efficient and scalable BigCLAM algorithm, allowing users to uncover hidden structures, identify key influencers, and visualize community dynamics in large-scale networks with ease.
+OpenIDE-Module-Display-Category: Tool
