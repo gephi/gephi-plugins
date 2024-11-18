@@ -1,5 +1,7 @@
 .DS_Store
 **/target/**
+/target/
+/nb-configuration.xml
 
 # Created by https://www.gitignore.io/api/maven,eclipse,netbeans,intellij
 # Edit at https://www.gitignore.io/?templates=maven,eclipse,netbeans,intellij
@@ -179,3 +181,5 @@ nbdist/
 # End of https://www.gitignore.io/api/maven,eclipse,netbeans,intellij
 
 .java-version
+>>>>>>> gephi-plugins/master
+/log.txt

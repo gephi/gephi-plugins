@@ -1,0 +1,5 @@
+Manifest-Version: 1.0
+OpenIDE-Module-Name: SemanticWebImport
+OpenIDE-Module-Short-Description: Allow to configure the view of rdf and rdfs files.
+OpenIDE-Module-Long-Description: The purpose of this plugin is:
+OpenIDE-Module-Display-Category: Import

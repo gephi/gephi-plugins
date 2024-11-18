@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE rdf:RDF [
+   <!ENTITY humans   "http://www.inria.fr/2007/09/11/humans.rdfs"> 
+   <!ENTITY xsd      "http://www.w3.org/2001/XMLSchema#"> ]>
+ 
+<rdf:RDF  
+   xmlns:rdf ="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+   xmlns:xsd ="&xsd;" 
+   xmlns     ="&humans;#" 
+   xml:base  ="&humans;-instances" >
+   
+<Man rdf:ID="Harry">
+  <name>Harry</name>
+  <hasChild rdf:resource="#John"/>
+  <hasSpouse rdf:resource="#Sophie"/>
+</Man>
+ 
+   
+<Person rdf:ID="John">
+  <name>John</name>
+	<shoesize>14</shoesize>
+	<age>37</age>
+</Person>
+
+<Person rdf:ID="Mark">
+  <name>Mark</name>
+	<shoesize>8</shoesize>
+	<age>14</age>
+	<shirtsize>9</shirtsize>
+	<trouserssize>36</trouserssize>
+	<hasFather rdf:resource="#John"/>
+</Person>
+
+<Person rdf:ID="Eve">
+  <rdf:type rdf:resource="&humans;#Lecturer"/>
+	<hasSpouse rdf:resource="#David"/>
+	<name>Eve</name>
+	<hasFriend rdf:resource="#Alice"/>
+</Person>
+
+<Person rdf:ID="David">
+  <rdf:type rdf:resource="&humans;#Researcher"/>
+  <hasFriend rdf:resource="#Gaston"/>
+	<name>David</name>
+</Person>
+
+<Woman rdf:ID="Alice">
+	<hasFriend rdf:resource="#John"/>
+	<name>Alice</name>
+</Woman>
+
+<Man rdf:ID="Jack">
+	<hasFriend rdf:resource="#Alice"/>
+	<hasChild rdf:resource="#Harry"/>
+	<name>Jack</name>
+</Man>
+
+<Woman rdf:ID="Flora">
+  <age>95</age>
+	<hasSpouse rdf:resource="#Gaston"/>
+	<hasChild rdf:resource="#Pierre"/>
+	<name>Flora</name>
+</Woman>
+
+<Person rdf:ID="Laura">
+	<hasFriend rdf:resource="#Alice"/>
+	<name>Laura</name>
+</Person>
+
+<Woman rdf:ID="Jennifer">
+	<hasSpouse rdf:resource="#John"/>
+	<name>Jennifer</name>
+</Woman>
+
+<Man rdf:ID="Lucas">
+	<shoesize>7</shoesize>
+	<trouserssize>28</trouserssize>
+	<age>12</age>
+	<shirtsize>8</shirtsize>
+	<name>Lucas</name>
+	<hasMother rdf:resource="#Catherine"/>
+</Man>
+
+<Man rdf:ID="Gaston">
+  <rdf:type rdf:resource="&humans;#Researcher"/>
+	<shoesize>11</shoesize>
+	<trouserssize>38</trouserssize>
+	<age>102</age>
+	<shirtsize>12</shirtsize>
+	<name>Gaston</name>
+	<hasChild rdf:resource="#Pierre"/>
+	<hasChild rdf:resource="#Jack"/>
+</Man>
+
+<Lecturer rdf:about="#Laura"/>
+
+<Person rdf:ID="William">
+	<hasSpouse rdf:resource="#Laura"/>
+	<shoesize>10</shoesize>
+	<age>42</age>
+	<trouserssize>46</trouserssize>
+	<shirtsize>13</shirtsize>
+	<name>William</name>
+</Person>
+
+<Man rdf:ID="Pierre">
+	<shoesize>8</shoesize>
+	<age>71</age>
+	<trouserssize>30</trouserssize>
+	<shirtsize>9</shirtsize>
+	<name>Pierre</name>
+</Man>
+
+<Person rdf:ID="Karl">
+	<hasSpouse rdf:resource="#Catherine"/>
+	<hasFriend rdf:resource="#Sophie"/>
+	<shoesize>7</shoesize>
+	<age>36</age>
+	<shirtsize>9</shirtsize>
+	<trouserssize>40</trouserssize>
+</Person>
+
+
+<Woman rdf:ID="Catherine">
+  <hasMother rdf:resource="#Laura"/>
+</Woman>
+
+<Researcher rdf:about="#Laura">
+  <name>Laura</name>
+</Researcher>
+
+<Person rdf:about="#John">
+	<shirtsize>12</shirtsize>
+	<trouserssize>44</trouserssize>
+	<hasParent rdf:resource="#Sophie"/>
+</Person>
+
+</rdf:RDF>
