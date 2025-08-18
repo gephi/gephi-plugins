@@ -11,12 +11,12 @@
     <groupId>ouestware</groupId>
     <artifactId>neo4j-plugin</artifactId>
     <name>Neo4j Plugin</name>
-    <version>4.0.1</version>
+    <version>5.0.0</version>
     <packaging>nbm</packaging>
 
     <properties>
-        <neo4j.driver.version>4.3.4</neo4j.driver.version>
-        <testcontainers.version>1.17.3</testcontainers.version>
+        <neo4j.driver.version>5.28.9</neo4j.driver.version>
+        <testcontainers.version>1.21.3</testcontainers.version>
         <rxjava.version>2.2.21</rxjava.version>
     </properties>
 
@@ -112,9 +112,6 @@
                     <licenseName>Apache 2.0</licenseName>
                     <licenseFile>Apache v2.txt</licenseFile>
                     <author>Benoit Simard</author>
-                    <authorEmail>contact@bsimard.com</authorEmail>
-                    <authorUrl>https://wwww.ouestware.com/en</authorUrl>
-                    <sourceCodeUrl>https://github.com/gephi/gephi-plugins</sourceCodeUrl>
                     <publicPackages>
                         <!-- Insert public packages -->
                     </publicPackages>
