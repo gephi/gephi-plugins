@@ -1,0 +1,5 @@
+Manifest-Version: 1.0
+OpenIDE-Module-Name: JPEG Exporter
+OpenIDE-Module-Short-Description: Plugin to export in jpeg format
+OpenIDE-Module-Long-Description: Plugin to export in jpeg format
+OpenIDE-Module-Display-Category: Export
