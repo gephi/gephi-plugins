@@ -4,7 +4,7 @@
 
     <groupId>org.gephi</groupId>
     <artifactId>gephi-plugin-parent</artifactId>
-    <version>0.10.0</version>
+    <version>0.11.0-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <name>gephi-plugins-parent</name>
@@ -46,11 +46,11 @@
     <!-- Properties -->
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <gephi.version>0.10.0</gephi.version>
-        <netbeans.version>RELEASE160</netbeans.version>
+        <gephi.version>0.11.0-SNAPSHOT</gephi.version>
+        <netbeans.version>RELEASE290</netbeans.version>
 
         <!-- Java compilation settings -->
-        <javac.release>11</javac.release>
+        <javac.release>17</javac.release>
         <javac.xlint>-Xlint:all</javac.xlint>
         <javac.showDeprecation>true</javac.showDeprecation>
         <javac.showWarnings>true</javac.showWarnings>
@@ -63,9 +63,12 @@
     <!-- Repositories -->
     <repositories>
         <repository>
-            <id>oss-sonatype</id>
-            <name>oss-sonatype</name>
-            <url>https://oss.sonatype.org/content/repositories/snapshots/</url>
+            <id>central-portal-snapshots</id>
+            <name>Central Portal Snapshots</name>
+            <url>https://central.sonatype.com/repository/maven-snapshots/</url>
+            <releases>
+                <enabled>false</enabled>
+            </releases>
             <snapshots>
                 <enabled>true</enabled>
             </snapshots>
@@ -198,6 +201,11 @@
             <dependency>
                 <groupId>org.gephi</groupId>
                 <artifactId>visualization</artifactId>
+                <version>${gephi.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.gephi</groupId>
+                <artifactId>visualization-engine</artifactId>
                 <version>${gephi.version}</version>
             </dependency>
             <dependency>
@@ -362,11 +370,6 @@
             </dependency>
             <dependency>
                 <groupId>org.gephi</groupId>
-                <artifactId>desktop-tools</artifactId>
-                <version>${gephi.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.gephi</groupId>
                 <artifactId>timeline-api</artifactId>
                 <version>${gephi.version}</version>
             </dependency>
@@ -398,6 +401,16 @@
             <dependency>
                 <groupId>org.gephi</groupId>
                 <artifactId>desktop-search</artifactId>
+                <version>${gephi.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.gephi</groupId>
+                <artifactId>desktop-attributes</artifactId>
+                <version>${gephi.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.gephi</groupId>
+                <artifactId>batik-wrapper</artifactId>
                 <version>${gephi.version}</version>
             </dependency>
             <dependency>
@@ -545,9 +558,8 @@
         <plugins>
             <!-- Compiler -->
             <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.10.0</version>
+                <version>3.13.0</version>
                 <configuration>
                     <release>${javac.release}</release>
                     <showDeprecation>${javac.showDeprecation}</showDeprecation>
@@ -564,7 +576,7 @@
                 <groupId>org.apache.netbeans.utilities</groupId>
                 <artifactId>nbm-maven-plugin</artifactId>
                 <extensions>true</extensions>
-                <version>4.5</version>
+                <version>14.3</version>
                 <configuration>
                     <cluster>plugins</cluster>
                     <!-- This can be overridden in child POMs but is needed in most cases -->
@@ -623,7 +635,7 @@
             </build>
         </profile>
 
-        <!-- Custom profile only used to release this pom to sonatype-->
+        <!-- Custom profile only used to release this pom to Maven Central -->
         <profile>
             <id>release-pom</id>
             <build>
@@ -632,7 +644,7 @@
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-gpg-plugin</artifactId>
-                        <version>1.6</version>
+                        <version>3.0.1</version>
                         <executions>
                             <execution>
                                 <id>sign-artifacts</id>
@@ -649,29 +661,20 @@
                             </gpgArguments>
                         </configuration>
                     </plugin>
-                    
-                    <!-- Nexus staging, https://oss.sonatype.org/ -->
+
+                    <!-- Maven Central -->
                     <plugin>
-                        <groupId>org.sonatype.plugins</groupId>
-                        <artifactId>nexus-staging-maven-plugin</artifactId>
-                        <version>1.6.8</version>
+                        <groupId>org.sonatype.central</groupId>
+                        <artifactId>central-publishing-maven-plugin</artifactId>
+                        <version>0.10.0</version>
                         <extensions>true</extensions>
                         <configuration>
-                            <serverId>ossrh</serverId>
-                            <nexusUrl>https://oss.sonatype.org/</nexusUrl>
-                            <autoReleaseAfterClose>true</autoReleaseAfterClose>
+                            <publishingServerId>central</publishingServerId>
+                            <autoPublish>true</autoPublish>
                         </configuration>
                     </plugin>
                 </plugins>
             </build>
         </profile>
     </profiles>
-
-    <!-- Locations of the artifacts published -->
-    <distributionManagement>
-        <snapshotRepository>
-            <id>ossrh</id>
-            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
-        </snapshotRepository>
-    </distributionManagement>
 </project>
