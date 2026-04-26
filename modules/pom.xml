@@ -576,7 +576,7 @@
                 <groupId>org.apache.netbeans.utilities</groupId>
                 <artifactId>nbm-maven-plugin</artifactId>
                 <extensions>true</extensions>
-                <version>14.3</version>
+                <version>14.4</version>
                 <configuration>
                     <cluster>plugins</cluster>
                     <!-- This can be overridden in child POMs but is needed in most cases -->
