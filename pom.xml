@@ -4,7 +4,7 @@
 
     <groupId>org.gephi</groupId>
     <artifactId>gephi-plugins</artifactId>
-    <version>0.10.0</version>
+    <version>0.11.0-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <name>gephi-plugins</name>
@@ -14,7 +14,7 @@
         <!-- Add here the paths of all modules (e.g. <module>modules/MyModule</module>) -->
         <module>modules/GeoLayout</module>
         <module>modules/KBraceFilter</module>
-        <module>modules/LinkfluencePlugin</module>
+<!--        <module>modules/LinkfluencePlugin</module> need to upgrade out of joda.time -->
         <module>modules/Multimode-Networks</module>
         <module>modules/JsonExporter</module>
         <module>modules/SigmaExporter</module>
@@ -27,7 +27,7 @@
         <module>modules/JettyWrapper</module>
         <module>modules/StreamingServer</module>
         <module>modules/CircularLayout</module>
-<!--        <module>modules/SemanticWebImport</module>-->
+<!--&lt;!&ndash;        <module>modules/SemanticWebImport</module>&ndash;&gt;-->
         <module>modules/loxawebsiteexport</module>
         <module>modules/Export-To-Earth</module>
         <module>modules/MapOfCountries</module>
@@ -35,7 +35,7 @@
         <module>modules/TwitterStreamingImporterV2</module>
         <module>modules/IsometricLayout</module>
         <module>modules/NetworkSplitter3D</module>
-        <module>modules/ExcelCsvImporter</module>
+<!--        <module>modules/ExcelCsvImporter</module> joda.time-->
         <module>modules/OracleDriver</module>
         <module>modules/Lineage</module>
         <module>modules/MdsLayout</module>
@@ -46,17 +46,17 @@
         <module>modules/MdsMetric</module>
         <module>modules/VectorCalculator</module>
         <module>modules/PrestigePlugin</module>
-        <module>modules/HttpGraph</module>
+<!--        <module>modules/HttpGraph</module>-->
         <module>modules/MinimumSpanningTree</module>
         <module>modules/SimilarityComputer</module>
-<!--        <module>modules/AgensGraphPlugin</module>-->
+<!--&lt;!&ndash;        <module>modules/AgensGraphPlugin</module>&ndash;&gt;-->
         <module>modules/PolygonShapedNodes</module>
         <module>modules/ScalePlugin</module>
         <module>modules/CirclePack</module>
-<!--        &lt;!&ndash;<module>modules/SHPExporter</module> Dependency fails: Could not find artifact org.geotools:gt-api:jar:17.2 in osgeo (http://download.osgeo.org/webdav/geotools/)&ndash;&gt;-->
+<!--&lt;!&ndash;        &lt;!&ndash;<module>modules/SHPExporter</module> Dependency fails: Could not find artifact org.geotools:gt-api:jar:17.2 in osgeo (http://download.osgeo.org/webdav/geotools/)&ndash;&gt;&ndash;&gt;-->
         <module>modules/newmangirvan</module>
-<!--        <module>modules/image-preview</module>-->
-        <module>modules/polinodeExporter</module>
+<!--&lt;!&ndash;        <module>modules/image-preview</module>&ndash;&gt;-->
+<!--        <module>modules/polinodeExporter</module> something with a netbeans dependency -->
         <module>modules/LeidenAlgorithm</module>
         <module>modules/BridgingPlugin</module>
         <module>modules/BoundingDiametersSuite</module>
@@ -68,28 +68,26 @@
         <module>modules/columnCalculator</module>
         <module>modules/GroupPartition</module>
         <module>modules/HairballBuster</module>
-        <module>modules/ForceAtlas3D</module>
-        <module>modules/InspectorTool</module>
+<!--        <module>modules/ForceAtlas3D</module>-->
+<!--        <module>modules/InspectorTool</module>-->
         <module>modules/ErGenerator</module>
         <module>modules/KatzCentrality</module>
         <module>modules/PositionRanking</module>
-        <module>modules/Neo4jPlugin</module>
+<!--        <module>modules/Neo4jPlugin</module>-->
         <module>modules/LinkPrediction</module>
 		<module>modules/WebPublishPlugin</module>
         <module>modules/OrderedLayout</module>
         <module>modules/OpenSeadragonPlugin</module>
-        <module>modules/WordCloudPlugin</module>
-      <module>modules/BlueskyGephi</module>
+<!--        <module>modules/WordCloudPlugin</module>-->
+        <module>modules/BlueskyGephi</module>
     </modules>
 
     <!-- Properties -->
     <properties>
         <!-- Version of Gephi building plugins against. Plugins with anterior versions will be ignored -->
-        <gephi.version>0.10.0</gephi.version>
+        <gephi.version>0.11.0-SNAPSHOT</gephi.version>
         <clusters.path>${project.build.directory}/plugins_clusters</clusters.path>
         <github.global.server>github</github.global.server>
-        <maven.compiler.source>11</maven.compiler.source>
-        <maven.compiler.target>11</maven.compiler.target>
     </properties>
 
     <!-- SCM -->
@@ -100,28 +98,20 @@
     </scm>
 
     <!-- Repositories -->
+    <!-- Note: if testing against a snapshot version of gephi-maven-plugin, a <pluginRepositories> entry for central-portal-snapshots must be added back -->
     <repositories>
         <repository>
-            <id>oss-sonatype</id>
-            <name>oss-sonatype</name>
-            <url>https://oss.sonatype.org/content/repositories/snapshots/</url>
+            <name>Central Portal Snapshots</name>
+            <id>central-portal-snapshots</id>
+            <url>https://central.sonatype.com/repository/maven-snapshots/</url>
+            <releases>
+                <enabled>false</enabled>
+            </releases>
             <snapshots>
                 <enabled>true</enabled>
             </snapshots>
         </repository>
     </repositories>
-
-    <!-- Plugin Repositories -->
-    <pluginRepositories>
-        <pluginRepository>
-            <id>oss-sonatype</id>
-            <name>oss-sonatype</name>
-            <url>https://oss.sonatype.org/content/repositories/snapshots/</url>
-            <snapshots>
-                <enabled>true</enabled>
-            </snapshots>
-        </pluginRepository>
-    </pluginRepositories>
 
     <!-- For site only -->
     <distributionManagement>
@@ -149,12 +139,12 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-dependency-plugin</artifactId>
-                    <version>3.2.0</version>
+                    <version>3.6.1</version>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.netbeans.utilities</groupId>
                     <artifactId>nbm-maven-plugin</artifactId>
-                    <version>4.5</version>
+                    <version>14.4</version>
                     <extensions>true</extensions>
                 </plugin>
                 <plugin>
@@ -165,7 +155,13 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-scm-publish-plugin</artifactId>
-                    <version>3.1.0</version>
+                    <version>3.2.1</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.sonatype.central</groupId>
+                    <artifactId>central-publishing-maven-plugin</artifactId>
+                    <version>0.10</version>
+                    <extensions>true</extensions>
                 </plugin>
             </plugins>
         </pluginManagement>
@@ -225,7 +221,7 @@
                 <groupId>org.apache.netbeans.utilities</groupId>
                 <artifactId>nbm-maven-plugin</artifactId>
                 <configuration>
-                    <nbmBuildDir>${clusters.path}</nbmBuildDir>
+                    <clusterBuildDir>${clusters.path}</clusterBuildDir>
                 </configuration>
                 <executions>
                     <execution>
@@ -246,6 +242,23 @@
 
     <!-- Custom profile only used to build and package all modules at once -->
     <profiles>
+        <profile>
+            <id>release-pom</id>
+            <build>
+                <plugins>
+                    <!-- Maven central -->
+                    <plugin>
+                        <groupId>org.sonatype.central</groupId>
+                        <artifactId>central-publishing-maven-plugin</artifactId>
+                        <extensions>true</extensions>
+                        <configuration>
+                            <publishingServerId>central</publishingServerId>
+                            <autoPublish>true</autoPublish>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
         <profile>
             <id>release</id>
             <build>
