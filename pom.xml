@@ -76,7 +76,7 @@
                 <plugin>
                     <groupId>org.apache.netbeans.utilities</groupId>
                     <artifactId>nbm-maven-plugin</artifactId>
-                    <version>14.3</version>
+                    <version>14.4</version>
                     <extensions>true</extensions>
                 </plugin>
                 <plugin>
