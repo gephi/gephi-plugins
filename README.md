@@ -6,7 +6,7 @@ This repository is an out-of-the-box development environment for Gephi plugins. 
 
 ### Requirements
 
-Developing Gephi plugins requires JDK 11 or later and [Maven](http://maven.apache.org/).
+Developing Gephi plugins requires JDK 17 or later and [Maven](http://maven.apache.org/).
 
 ### Create a plugin
 
