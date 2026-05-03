@@ -15,7 +15,7 @@
         }
       ],
       "category": "Layout",
-      "last_update": "January 9, 2023",
+      "last_update": "May 3, 2026",
       "images": [
         {
           "image": "imgs/geolayout-plugin/geolayout_example.png",
@@ -60,6 +60,11 @@
         "0.10.0": {
           "url": "0.10/geolayout-plugin-1.0.0.nbm",
           "last_update": "January 9, 2023",
+          "plugin_version": "1.0.0"
+        },
+        "0.11.1": {
+          "url": "0.11/geolayout-plugin-1.0.0.nbm",
+          "last_update": "May 3, 2026",
           "plugin_version": "1.0.0"
         }
       },
@@ -405,7 +410,7 @@
         }
       ],
       "category": "Export",
-      "last_update": "January 9, 2023",
+      "last_update": "May 3, 2026",
       "images": null,
       "versions": {
         "0.8.2": {
@@ -436,6 +441,11 @@
         "0.10.0": {
           "url": "0.10/exporttoearth-1.0.0.nbm",
           "last_update": "January 9, 2023",
+          "plugin_version": "1.0.0"
+        },
+        "0.11.1": {
+          "url": "0.11/exporttoearth-1.0.0.nbm",
+          "last_update": "May 3, 2026",
           "plugin_version": "1.0.0"
         }
       },
@@ -484,7 +494,7 @@
         }
       ],
       "category": "Filter",
-      "last_update": "January 9, 2023",
+      "last_update": "May 3, 2026",
       "images": [
         {
           "image": "imgs/kbrace-filter/kbrace-img.png",
@@ -525,6 +535,11 @@
         "0.10.0": {
           "url": "0.10/kbrace-filter-1.1.0.nbm",
           "last_update": "January 9, 2023",
+          "plugin_version": "1.1.0"
+        },
+        "0.11.1": {
+          "url": "0.11/kbrace-filter-1.1.0.nbm",
+          "last_update": "May 3, 2026",
           "plugin_version": "1.1.0"
         }
       },
@@ -763,7 +778,7 @@
         }
       ],
       "category": "Layout",
-      "last_update": "January 9, 2023",
+      "last_update": "May 3, 2026",
       "images": [
         {
           "image": "imgs/network-splitter-3d/example-0-networksplitter3d-layout.png",
@@ -800,6 +815,11 @@
           "url": "0.10/network-splitter-3d-1.0.0.nbm",
           "last_update": "January 9, 2023",
           "plugin_version": "1.0.0"
+        },
+        "0.11.1": {
+          "url": "0.11/network-splitter-3d-1.0.0.nbm",
+          "last_update": "May 3, 2026",
+          "plugin_version": "1.0.0"
         }
       },
       "sourcecode": "https://github.com/alexandrebarao",
@@ -820,7 +840,7 @@
         }
       ],
       "category": "Layout",
-      "last_update": "January 9, 2023",
+      "last_update": "May 3, 2026",
       "images": [
         {
           "image": "imgs/force-atlas-3d/fa3d.png",
@@ -841,6 +861,11 @@
         "0.10.0": {
           "url": "0.10/force-atlas-3d-1.2.1.nbm",
           "last_update": "January 9, 2023",
+          "plugin_version": "1.2.1"
+        },
+        "0.11.1": {
+          "url": "0.11/force-atlas-3d-1.2.1.nbm",
+          "last_update": "May 3, 2026",
           "plugin_version": "1.2.1"
         }
       },
@@ -1089,7 +1114,7 @@
         }
       ],
       "category": "Metric",
-      "last_update": "January 9, 2023",
+      "last_update": "May 3, 2026",
       "images": null,
       "versions": {
         "0.8.2": {
@@ -1120,6 +1145,11 @@
         "0.10.0": {
           "url": "0.10/lineage-0.9.3.nbm",
           "last_update": "January 9, 2023",
+          "plugin_version": "0.9.3"
+        },
+        "0.11.1": {
+          "url": "0.11/lineage-0.9.3.nbm",
+          "last_update": "May 3, 2026",
           "plugin_version": "0.9.3"
         }
       },
@@ -1481,7 +1511,7 @@
         }
       ],
       "category": "Other Category",
-      "last_update": "January 9, 2023",
+      "last_update": "May 3, 2026",
       "images": null,
       "versions": {
         "0.8.2": {
@@ -1518,6 +1548,11 @@
           "url": "0.10/multimode-1.1.1.nbm",
           "last_update": "January 9, 2023",
           "plugin_version": "1.1.1"
+        },
+        "0.11.1": {
+          "url": "0.11/multimode-1.1.1.nbm",
+          "last_update": "May 3, 2026",
+          "plugin_version": "1.1.1"
         }
       },
       "sourcecode": "https://github.com/gephi/gephi-plugins/tree/multimode-plugin",
@@ -1538,7 +1573,7 @@
         }
       ],
       "category": "Export",
-      "last_update": "January 9, 2023",
+      "last_update": "May 3, 2026",
       "images": null,
       "versions": {
         "0.8.2": {
@@ -1575,6 +1610,11 @@
           "url": "0.10/jsonexporter-plugin-2.0.0.nbm",
           "last_update": "January 9, 2023",
           "plugin_version": "2.0.0"
+        },
+        "0.11.1": {
+          "url": "0.11/jsonexporter-plugin-2.0.0.nbm",
+          "last_update": "May 3, 2026",
+          "plugin_version": "2.0.0"
         }
       },
       "sourcecode": "http://github.com/oxfordinternetinstitute/gephi-plugins",
@@ -1595,7 +1635,7 @@
         }
       ],
       "category": "Export",
-      "last_update": "January 9, 2023",
+      "last_update": "May 3, 2026",
       "images": null,
       "versions": {
         "0.8.2": {
@@ -1632,6 +1672,11 @@
           "url": "0.10/sigmaexporter-0.9.0.nbm",
           "last_update": "January 9, 2023",
           "plugin_version": "0.9.0"
+        },
+        "0.11.1": {
+          "url": "0.11/sigmaexporter-0.9.0.nbm",
+          "last_update": "May 3, 2026",
+          "plugin_version": "0.9.0"
         }
       },
       "sourcecode": "http://github.com/oxfordinternetinstitute/gephi-plugins",
@@ -1652,7 +1697,7 @@
         }
       ],
       "category": "Tool",
-      "last_update": "January 9, 2023",
+      "last_update": "May 3, 2026",
       "images": null,
       "versions": {
         "0.9.0": {
@@ -1684,6 +1729,11 @@
           "url": "0.10/gephi-plugin-node-color-manager-1.0.0.nbm",
           "last_update": "January 9, 2023",
           "plugin_version": "1.0.0"
+        },
+        "0.11.1": {
+          "url": "0.11/gephi-plugin-node-color-manager-1.0.0.nbm",
+          "last_update": "May 3, 2026",
+          "plugin_version": "1.0.0"
         }
       },
       "sourcecode": "https://github.com/gephi/gephi-plugins/gephi-plugin-node-color-manager",
@@ -1704,7 +1754,7 @@
         }
       ],
       "category": "Layout",
-      "last_update": "February 20, 2023",
+      "last_update": "May 3, 2026",
       "images": [
         {
           "image": "imgs/gephigraphviz/GraphVizLayout_example.png",
@@ -1750,6 +1800,11 @@
           "url": "0.10/gephigraphviz-1.0.1.nbm",
           "last_update": "February 20, 2023",
           "plugin_version": "1.0.1"
+        },
+        "0.11.1": {
+          "url": "0.11/gephigraphviz-1.0.1.nbm",
+          "last_update": "May 3, 2026",
+          "plugin_version": "1.0.1"
         }
       },
       "sourcecode": "https://github.com/chunky/gephi-plugins",
@@ -1770,7 +1825,7 @@
         }
       ],
       "category": "Import",
-      "last_update": "January 28, 2023",
+      "last_update": "May 3, 2026",
       "images": null,
       "versions": {
         "0.8.2": {
@@ -1802,6 +1857,11 @@
           "url": "0.10/graphstreaming-1.0.5.zip",
           "last_update": "January 28, 2023",
           "plugin_version": "1.0.5"
+        },
+        "0.11.1": {
+          "url": "0.11/graphstreaming-1.0.5.zip",
+          "last_update": "May 3, 2026",
+          "plugin_version": "1.0.5"
         }
       },
       "sourcecode": "https://github.com/panisson/gephi-plugins/tree/graph-streaming",
@@ -1822,7 +1882,7 @@
         }
       ],
       "category": "Layout",
-      "last_update": "January 9, 2023",
+      "last_update": "May 3, 2026",
       "images": null,
       "versions": {
         "0.8.2": {
@@ -1853,6 +1913,11 @@
         "0.10.0": {
           "url": "0.10/circularlayout-0.9.3.nbm",
           "last_update": "January 9, 2023",
+          "plugin_version": "0.9.3"
+        },
+        "0.11.1": {
+          "url": "0.11/circularlayout-0.9.3.nbm",
+          "last_update": "May 3, 2026",
           "plugin_version": "0.9.3"
         }
       },
@@ -1924,7 +1989,7 @@
         }
       ],
       "category": "Export",
-      "last_update": "January 9, 2023",
+      "last_update": "May 3, 2026",
       "images": [
         {
           "image": "imgs/loxawebsiteexport/logo_final.png",
@@ -1960,6 +2025,11 @@
         "0.10.0": {
           "url": "0.10/loxawebsiteexport-0.3.3.nbm",
           "last_update": "January 9, 2023",
+          "plugin_version": "0.3.3"
+        },
+        "0.11.1": {
+          "url": "0.11/loxawebsiteexport-0.3.3.nbm",
+          "last_update": "May 3, 2026",
           "plugin_version": "0.3.3"
         }
       },
@@ -2101,7 +2171,7 @@
         }
       ],
       "category": "Layout",
-      "last_update": "January 9, 2023",
+      "last_update": "May 3, 2026",
       "images": [
         {
           "image": "imgs/isometric-layout/example-0-isometric-layout.png",
@@ -2137,6 +2207,11 @@
         "0.10.0": {
           "url": "0.10/isometric-layout-1.0.0.nbm",
           "last_update": "January 9, 2023",
+          "plugin_version": "1.0.0"
+        },
+        "0.11.1": {
+          "url": "0.11/isometric-layout-1.0.0.nbm",
+          "last_update": "May 3, 2026",
           "plugin_version": "1.0.0"
         }
       },
@@ -2231,7 +2306,7 @@
         }
       ],
       "category": "Import",
-      "last_update": "January 9, 2023",
+      "last_update": "May 3, 2026",
       "images": null,
       "versions": {
         "0.9.1": {
@@ -2257,6 +2332,11 @@
         "0.10.0": {
           "url": "0.10/oracle-driver-0.0.1.nbm",
           "last_update": "January 9, 2023",
+          "plugin_version": "0.0.1"
+        },
+        "0.11.1": {
+          "url": "0.11/oracle-driver-0.0.1.nbm",
+          "last_update": "May 3, 2026",
           "plugin_version": "0.0.1"
         }
       },
@@ -2335,7 +2415,7 @@
         }
       ],
       "category": "Layout",
-      "last_update": "January 9, 2023",
+      "last_update": "May 3, 2026",
       "images": null,
       "versions": {
         "0.8.2": {
@@ -2367,6 +2447,11 @@
           "url": "0.10/mdslayout-0.10.0.nbm",
           "last_update": "January 9, 2023",
           "plugin_version": "0.10.0"
+        },
+        "0.11.1": {
+          "url": "0.11/mdslayout-0.11.1.nbm",
+          "last_update": "May 3, 2026",
+          "plugin_version": "0.11.1"
         }
       },
       "sourcecode": "https://github.com/WouterSpekkink/gephi-plugins/tree/mdslayout",
@@ -2387,7 +2472,7 @@
         }
       ],
       "category": "Filter",
-      "last_update": "January 9, 2023",
+      "last_update": "May 3, 2026",
       "images": null,
       "versions": {
         "0.9.1": {
@@ -2414,6 +2499,11 @@
           "url": "0.10/graphfilter-1.0.0.nbm",
           "last_update": "January 9, 2023",
           "plugin_version": "1.0.0"
+        },
+        "0.11.1": {
+          "url": "0.11/graphfilter-1.0.0.nbm",
+          "last_update": "May 3, 2026",
+          "plugin_version": "1.0.0"
         }
       },
       "sourcecode": "https://github.com/ypanagis/gephi-plugins",
@@ -2434,7 +2524,7 @@
         }
       ],
       "category": "Tool",
-      "last_update": "January 9, 2023",
+      "last_update": "May 3, 2026",
       "images": [
         {
           "image": "imgs/givecolortonodes/1.illustration.png",
@@ -2479,6 +2569,11 @@
           "url": "0.10/givecolortonodes-1.0.0.nbm",
           "last_update": "January 9, 2023",
           "plugin_version": "1.0.0"
+        },
+        "0.11.1": {
+          "url": "0.11/givecolortonodes-1.0.0.nbm",
+          "last_update": "May 3, 2026",
+          "plugin_version": "1.0.0"
         }
       },
       "sourcecode": "https://github.com/seinecle/gephi-plugins/tree/GiveColorsToNodes",
@@ -2499,7 +2594,7 @@
         }
       ],
       "category": "Tool",
-      "last_update": "January 9, 2023",
+      "last_update": "May 3, 2026",
       "images": [
         {
           "image": "imgs/givecolortoedges/colourwheel.png",
@@ -2536,6 +2631,11 @@
           "url": "0.10/givecolortoedges-1.0.0.nbm",
           "last_update": "January 9, 2023",
           "plugin_version": "1.0.0"
+        },
+        "0.11.1": {
+          "url": "0.11/givecolortoedges-1.0.0.nbm",
+          "last_update": "May 3, 2026",
+          "plugin_version": "1.0.0"
         }
       },
       "sourcecode": "https://github.com/seinecle/gephi-plugins/tree/GiveColorsToEdges",
@@ -2556,7 +2656,7 @@
         }
       ],
       "category": "Layout",
-      "last_update": "January 9, 2023",
+      "last_update": "May 3, 2026",
       "images": [
         {
           "image": "imgs/gravity-plugin/FA2snake.png",
@@ -2596,6 +2696,11 @@
           "url": "0.10/gravity-plugin-1.0.0.nbm",
           "last_update": "January 9, 2023",
           "plugin_version": "1.0.0"
+        },
+        "0.11.1": {
+          "url": "0.11/gravity-plugin-1.0.0.nbm",
+          "last_update": "May 3, 2026",
+          "plugin_version": "1.0.0"
         }
       },
       "sourcecode": "https://github.com/suryanash/gephi-plugins",
@@ -2616,7 +2721,7 @@
         }
       ],
       "category": "Metric",
-      "last_update": "January 9, 2023",
+      "last_update": "May 3, 2026",
       "images": [
         {
           "image": "imgs/mdsmetric/img.png",
@@ -2653,6 +2758,11 @@
           "url": "0.10/mdsmetric-0.9.3.nbm",
           "last_update": "January 9, 2023",
           "plugin_version": "0.9.3"
+        },
+        "0.11.1": {
+          "url": "0.11/mdsmetric-0.9.3.nbm",
+          "last_update": "May 3, 2026",
+          "plugin_version": "0.9.3"
         }
       },
       "sourcecode": "https://github.com/WouterSpekkink/gephi-plugins/tree/mds_metric",
@@ -2673,7 +2783,7 @@
         }
       ],
       "category": "Metric",
-      "last_update": "January 9, 2023",
+      "last_update": "May 3, 2026",
       "images": null,
       "versions": {
         "0.9.1": {
@@ -2700,6 +2810,11 @@
           "url": "0.10/vector-calculator-0.5.0.nbm",
           "last_update": "January 9, 2023",
           "plugin_version": "0.5.0"
+        },
+        "0.11.1": {
+          "url": "0.11/vector-calculator-0.5.0.nbm",
+          "last_update": "May 3, 2026",
+          "plugin_version": "0.5.0"
         }
       },
       "sourcecode": "https://github.com/d99joper/gephi-plugins/tree/master/modules/VectorCalculator/",
@@ -2720,7 +2835,7 @@
         }
       ],
       "category": "Metric",
-      "last_update": "January 9, 2023",
+      "last_update": "May 3, 2026",
       "images": null,
       "versions": {
         "0.9.1": {
@@ -2746,6 +2861,11 @@
         "0.10.0": {
           "url": "0.10/prestige-plugin-1.0.1.nbm",
           "last_update": "January 9, 2023",
+          "plugin_version": "1.0.1"
+        },
+        "0.11.1": {
+          "url": "0.11/prestige-plugin-1.0.1.nbm",
+          "last_update": "May 3, 2026",
           "plugin_version": "1.0.1"
         }
       },
@@ -2814,7 +2934,7 @@
         }
       ],
       "category": "Other Category",
-      "last_update": "January 9, 2023",
+      "last_update": "May 3, 2026",
       "images": [
         {
           "image": "imgs/spanning-tree-plugin/after-running-minimum-spanning-tree.png",
@@ -2854,6 +2974,11 @@
           "url": "0.10/spanning-tree-plugin-1.0.0.nbm",
           "last_update": "January 9, 2023",
           "plugin_version": "1.0.0"
+        },
+        "0.11.1": {
+          "url": "0.11/spanning-tree-plugin-1.0.0.nbm",
+          "last_update": "May 3, 2026",
+          "plugin_version": "1.0.0"
         }
       },
       "sourcecode": "https://github.com/carlschroedl/gephi-plugins",
@@ -2874,7 +2999,7 @@
         }
       ],
       "category": "Import",
-      "last_update": "January 9, 2023",
+      "last_update": "May 3, 2026",
       "images": [
         {
           "image": "imgs/SimilarityComputer/no-weights.png",
@@ -2910,6 +3035,11 @@
           "url": "0.10/SimilarityComputer-1.1.4.nbm",
           "last_update": "January 9, 2023",
           "plugin_version": "1.1.4"
+        },
+        "0.11.1": {
+          "url": "0.11/SimilarityComputer-1.1.4.nbm",
+          "last_update": "May 3, 2026",
+          "plugin_version": "1.1.4"
         }
       },
       "sourcecode": "https://github.com/seinecle/gephi-plugins/tree/similaritycomputer",
@@ -2930,7 +3060,7 @@
         }
       ],
       "category": "Layout",
-      "last_update": "January 9, 2023",
+      "last_update": "May 3, 2026",
       "images": null,
       "versions": {
         "0.8.2": {
@@ -2961,6 +3091,11 @@
         "0.10.0": {
           "url": "0.10/mapofcountries-1.5.1.nbm",
           "last_update": "January 9, 2023",
+          "plugin_version": "1.5.1"
+        },
+        "0.11.1": {
+          "url": "0.11/mapofcountries-1.5.1.nbm",
+          "last_update": "May 3, 2026",
           "plugin_version": "1.5.1"
         }
       },
@@ -3014,7 +3149,7 @@
         }
       ],
       "category": "Preview",
-      "last_update": "January 9, 2023",
+      "last_update": "May 3, 2026",
       "images": null,
       "versions": {
         "0.8.2": {
@@ -3046,6 +3181,11 @@
           "url": "0.10/polygon-shaped-nodes-1.0.1.nbm",
           "last_update": "January 9, 2023",
           "plugin_version": "1.0.1"
+        },
+        "0.11.1": {
+          "url": "0.11/polygon-shaped-nodes-1.0.1.nbm",
+          "last_update": "May 3, 2026",
+          "plugin_version": "1.0.1"
         }
       },
       "sourcecode": "http://github.com/iachan/gephi-plugins",
@@ -3066,7 +3206,7 @@
         }
       ],
       "category": "Layout",
-      "last_update": "January 9, 2023",
+      "last_update": "May 3, 2026",
       "images": null,
       "versions": {
         "0.9.1": {
@@ -3093,6 +3233,11 @@
           "url": "0.10/scale-plugin-1.1.0.nbm",
           "last_update": "January 9, 2023",
           "plugin_version": "1.1.0"
+        },
+        "0.11.1": {
+          "url": "0.11/scale-plugin-1.1.0.nbm",
+          "last_update": "May 3, 2026",
+          "plugin_version": "1.1.0"
         }
       },
       "sourcecode": "https://github.com/weihs/gephi-plugins",
@@ -3113,7 +3258,7 @@
         }
       ],
       "category": "Layout",
-      "last_update": "January 9, 2023",
+      "last_update": "May 3, 2026",
       "images": null,
       "versions": {
         "0.9.1": {
@@ -3139,6 +3284,11 @@
         "0.10.0": {
           "url": "0.10/circle-pack-1.0.0.nbm",
           "last_update": "January 9, 2023",
+          "plugin_version": "1.0.0"
+        },
+        "0.11.1": {
+          "url": "0.11/circle-pack-1.0.0.nbm",
+          "last_update": "May 3, 2026",
           "plugin_version": "1.0.0"
         }
       },
@@ -3192,7 +3342,7 @@
         }
       ],
       "category": "Clustering",
-      "last_update": "January 9, 2023",
+      "last_update": "May 3, 2026",
       "images": null,
       "versions": {
         "0.9.2": {
@@ -3213,6 +3363,11 @@
         "0.10.0": {
           "url": "0.10/newman-girvan-plugin-1.0.0.nbm",
           "last_update": "January 9, 2023",
+          "plugin_version": "1.0.0"
+        },
+        "0.11.1": {
+          "url": "0.11/newman-girvan-plugin-1.0.0.nbm",
+          "last_update": "May 3, 2026",
           "plugin_version": "1.0.0"
         }
       },
@@ -3271,7 +3426,7 @@
         }
       ],
       "category": "Export",
-      "last_update": "January 9, 2023",
+      "last_update": "May 3, 2026",
       "images": null,
       "versions": {
         "0.9.2": {
@@ -3293,6 +3448,11 @@
           "url": "0.10/polinodeexporter-0.9.3.nbm",
           "last_update": "January 9, 2023",
           "plugin_version": "0.9.3"
+        },
+        "0.11.1": {
+          "url": "0.11/polinodeexporter-0.9.3.nbm",
+          "last_update": "May 3, 2026",
+          "plugin_version": "0.9.3"
         }
       },
       "sourcecode": "http://github.com/Polinode/gephi-plugins",
@@ -3313,7 +3473,7 @@
         }
       ],
       "category": "Clustering",
-      "last_update": "January 9, 2023",
+      "last_update": "May 3, 2026",
       "images": null,
       "versions": {
         "0.9.2": {
@@ -3335,6 +3495,11 @@
           "url": "0.10/leiden-algorithm-gephi-plugin-1.0.0.nbm",
           "last_update": "January 9, 2023",
           "plugin_version": "1.0.0"
+        },
+        "0.11.1": {
+          "url": "0.11/leiden-algorithm-gephi-plugin-1.0.0.nbm",
+          "last_update": "May 3, 2026",
+          "plugin_version": "1.0.0"
         }
       },
       "sourcecode": "http://github.com/vtraag/gephi-leiden-plugin",
@@ -3355,7 +3520,7 @@
         }
       ],
       "category": "Metric",
-      "last_update": "January 9, 2023",
+      "last_update": "May 3, 2026",
       "images": null,
       "versions": {
         "0.9.2": {
@@ -3377,6 +3542,11 @@
           "url": "0.10/bridge-gephi-plugin-1.0.1.nbm",
           "last_update": "January 9, 2023",
           "plugin_version": "1.0.1"
+        },
+        "0.11.1": {
+          "url": "0.11/bridge-gephi-plugin-1.0.1.nbm",
+          "last_update": "May 3, 2026",
+          "plugin_version": "1.0.1"
         }
       },
       "sourcecode": "https://github.com/santosardr/gephi-plugins",
@@ -3397,7 +3567,7 @@
         }
       ],
       "category": "Metric",
-      "last_update": "January 28, 2023",
+      "last_update": "May 3, 2026",
       "images": null,
       "versions": {
         "0.9.2": {
@@ -3419,6 +3589,11 @@
           "url": "0.10/boundingdiametersssuite-0.0.1.zip",
           "last_update": "January 28, 2023",
           "plugin_version": "0.0.1"
+        },
+        "0.11.1": {
+          "url": "0.11/boundingdiametersssuite-0.0.1.zip",
+          "last_update": "May 3, 2026",
+          "plugin_version": "0.0.1"
         }
       },
       "sourcecode": "http://github.com/alexiooo/gephi-plugins",
@@ -3439,7 +3614,7 @@
         }
       ],
       "category": "Tool",
-      "last_update": "January 9, 2023",
+      "last_update": "May 3, 2026",
       "images": null,
       "versions": {
         "0.9.2": {
@@ -3461,6 +3636,11 @@
           "url": "0.10/dbscan-gephi-plugin-1.0.0.nbm",
           "last_update": "January 9, 2023",
           "plugin_version": "1.0.0"
+        },
+        "0.11.1": {
+          "url": "0.11/dbscan-gephi-plugin-1.0.0.nbm",
+          "last_update": "May 3, 2026",
+          "plugin_version": "1.0.0"
         }
       },
       "sourcecode": "https://github.com/jaknowakowski/gephi-plugins",
@@ -3481,7 +3661,7 @@
         }
       ],
       "category": "Metric",
-      "last_update": "January 9, 2023",
+      "last_update": "May 3, 2026",
       "images": null,
       "versions": {
         "0.9.2": {
@@ -3503,6 +3683,11 @@
           "url": "0.10/clustering-coefficient-gephi-plugin-1.0.0.nbm",
           "last_update": "January 9, 2023",
           "plugin_version": "1.0.0"
+        },
+        "0.11.1": {
+          "url": "0.11/clustering-coefficient-gephi-plugin-1.0.0.nbm",
+          "last_update": "May 3, 2026",
+          "plugin_version": "1.0.0"
         }
       },
       "sourcecode": "https://github.com/kuchara02/gephi-plugins",
@@ -3523,7 +3708,7 @@
         }
       ],
       "category": "Generator",
-      "last_update": "January 9, 2023",
+      "last_update": "May 3, 2026",
       "images": null,
       "versions": {
         "0.9.2": {
@@ -3545,6 +3730,11 @@
           "url": "0.10/kleinberg-generator-1.0.0.nbm",
           "last_update": "January 9, 2023",
           "plugin_version": "1.0.0"
+        },
+        "0.11.1": {
+          "url": "0.11/kleinberg-generator-1.0.0.nbm",
+          "last_update": "May 3, 2026",
+          "plugin_version": "1.0.0"
         }
       },
       "sourcecode": "https://github.com/Rzepin/gephi-plugins",
@@ -3565,7 +3755,7 @@
         }
       ],
       "category": "Data Laboratory",
-      "last_update": "January 9, 2023",
+      "last_update": "May 3, 2026",
       "images": null,
       "versions": {
         "0.9.2": {
@@ -3587,6 +3777,11 @@
           "url": "0.10/column-calculator-1.0.1.nbm",
           "last_update": "January 9, 2023",
           "plugin_version": "1.0.1"
+        },
+        "0.11.1": {
+          "url": "0.11/column-calculator-1.0.1.nbm",
+          "last_update": "May 3, 2026",
+          "plugin_version": "1.0.1"
         }
       },
       "sourcecode": "https://github.com/oscarfont/gephi-plugins/tree/gh-column-calculator-plugin",
@@ -3607,7 +3802,7 @@
         }
       ],
       "category": "Other Category",
-      "last_update": "January 9, 2023",
+      "last_update": "May 3, 2026",
       "images": [
         {
           "image": "imgs/group-partition-gephi-plugin/menu.png",
@@ -3634,6 +3829,11 @@
           "url": "0.10/group-partition-gephi-plugin-1.0.1.nbm",
           "last_update": "January 9, 2023",
           "plugin_version": "1.0.1"
+        },
+        "0.11.1": {
+          "url": "0.11/group-partition-gephi-plugin-1.0.1.nbm",
+          "last_update": "May 3, 2026",
+          "plugin_version": "1.0.1"
         }
       },
       "sourcecode": "https://github.com/sergipuig/gephi-plugins",
@@ -3654,7 +3854,7 @@
         }
       ],
       "category": "Layout",
-      "last_update": "January 9, 2023",
+      "last_update": "May 3, 2026",
       "images": null,
       "versions": {
         "0.9.2": {
@@ -3675,6 +3875,11 @@
         "0.10.0": {
           "url": "0.10/hairball-buster-0.9.3.nbm",
           "last_update": "January 9, 2023",
+          "plugin_version": "0.9.3"
+        },
+        "0.11.1": {
+          "url": "0.11/hairball-buster-0.9.3.nbm",
+          "last_update": "May 3, 2026",
           "plugin_version": "0.9.3"
         }
       },
@@ -3769,7 +3974,7 @@
         }
       ],
       "category": "Generator",
-      "last_update": "January 9, 2023",
+      "last_update": "May 3, 2026",
       "images": null,
       "versions": {
         "0.9.6": {
@@ -3780,6 +3985,11 @@
         "0.10.0": {
           "url": "0.10/er-generator-1.0.1.nbm",
           "last_update": "January 9, 2023",
+          "plugin_version": "1.0.1"
+        },
+        "0.11.1": {
+          "url": "0.11/er-generator-1.0.1.nbm",
+          "last_update": "May 3, 2026",
           "plugin_version": "1.0.1"
         }
       },
@@ -3801,7 +4011,7 @@
         }
       ],
       "category": "Metric",
-      "last_update": "January 9, 2023",
+      "last_update": "May 3, 2026",
       "images": [
         {
           "image": "imgs/katz-centrality/KatzCentralityFormula.png",
@@ -3817,6 +4027,11 @@
         "0.10.0": {
           "url": "0.10/katz-centrality-1.0.1.nbm",
           "last_update": "January 9, 2023",
+          "plugin_version": "1.0.1"
+        },
+        "0.11.1": {
+          "url": "0.11/katz-centrality-1.0.1.nbm",
+          "last_update": "May 3, 2026",
           "plugin_version": "1.0.1"
         }
       },
@@ -3838,7 +4053,7 @@
         }
       ],
       "category": "Appearance",
-      "last_update": "January 9, 2023",
+      "last_update": "May 3, 2026",
       "images": [
         {
           "image": "imgs/position-ranking-plugin/panel.png",
@@ -3863,6 +4078,11 @@
         "0.10.0": {
           "url": "0.10/position-ranking-plugin-2.0.1.nbm",
           "last_update": "January 9, 2023",
+          "plugin_version": "2.0.1"
+        },
+        "0.11.1": {
+          "url": "0.11/position-ranking-plugin-2.0.1.nbm",
+          "last_update": "May 3, 2026",
           "plugin_version": "2.0.1"
         }
       },
@@ -3926,7 +4146,7 @@
         }
       ],
       "category": "Filter",
-      "last_update": "January 9, 2023",
+      "last_update": "May 3, 2026",
       "images": [
         {
           "image": "imgs/link-prediction/graph_init.png",
@@ -3942,6 +4162,11 @@
         "0.10.0": {
           "url": "0.10/link-prediction-1.3.1.nbm",
           "last_update": "January 9, 2023",
+          "plugin_version": "1.3.1"
+        },
+        "0.11.1": {
+          "url": "0.11/link-prediction-1.3.1.nbm",
+          "last_update": "May 3, 2026",
           "plugin_version": "1.3.1"
         }
       },
@@ -3963,7 +4188,7 @@
         }
       ],
       "category": "Export",
-      "last_update": "February 7, 2023",
+      "last_update": "May 3, 2026",
       "images": null,
       "versions": {
         "0.9.6": {
@@ -3974,6 +4199,11 @@
         "0.10.0": {
           "url": "0.10/web-publish-plugin-1.1.1.nbm",
           "last_update": "February 7, 2023",
+          "plugin_version": "1.1.1"
+        },
+        "0.11.1": {
+          "url": "0.11/web-publish-plugin-1.1.1.nbm",
+          "last_update": "May 3, 2026",
           "plugin_version": "1.1.1"
         }
       },
@@ -3995,7 +4225,7 @@
         }
       ],
       "category": "Layout",
-      "last_update": "January 28, 2023",
+      "last_update": "May 3, 2026",
       "images": [
         {
           "image": "imgs/orderedlayout/img.png",
@@ -4006,6 +4236,11 @@
         "0.10.0": {
           "url": "0.10/orderedlayout-1.0.0.nbm",
           "last_update": "January 28, 2023",
+          "plugin_version": "1.0.0"
+        },
+        "0.11.1": {
+          "url": "0.11/orderedlayout-1.0.0.nbm",
+          "last_update": "May 3, 2026",
           "plugin_version": "1.0.0"
         }
       },
@@ -4027,7 +4262,7 @@
         }
       ],
       "category": "Export",
-      "last_update": "February 19, 2023",
+      "last_update": "May 3, 2026",
       "images": [
         {
           "image": "imgs/openseadragon-export/logo.png",
@@ -4043,6 +4278,11 @@
         "0.10.0": {
           "url": "0.10/openseadragon-export-2.0.2.nbm",
           "last_update": "February 19, 2023",
+          "plugin_version": "2.0.2"
+        },
+        "0.11.1": {
+          "url": "0.11/openseadragon-export-2.0.2.nbm",
+          "last_update": "May 3, 2026",
           "plugin_version": "2.0.2"
         }
       },
