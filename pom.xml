@@ -12,6 +12,13 @@
     <!-- List of modules -->
     <modules>
         <!-- Add here the paths of all modules (e.g. <module>modules/MyModule</module>) -->
+
+
+        <module>modules/BearkatCentralization</module>
+
+
+        <module>modules/BearkatCentralization</module>
+
         <module>modules/GeoLayout</module>
         <module>modules/KBraceFilter</module>
 <!--        Needs to migrate away from Joda Time-->
@@ -86,6 +93,7 @@
 <!--        <module>modules/WordCloudPlugin</module>-->
 <!--        Needs to not create a project at start-->
 <!--        <module>modules/BlueskyGephi</module>-->
+
     </modules>
     
     <!-- Properties -->
