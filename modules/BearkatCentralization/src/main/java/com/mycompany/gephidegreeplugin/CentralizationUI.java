@@ -38,7 +38,7 @@ public class CentralizationUI implements StatisticsUI {
 
   @Override
 public String getDisplayName() {
-    return "Centralization";
+    return "Bearkat Centralization";
 }
 
     @Override

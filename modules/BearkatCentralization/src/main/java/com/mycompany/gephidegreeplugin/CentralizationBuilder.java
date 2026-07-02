@@ -9,7 +9,7 @@ public class CentralizationBuilder implements StatisticsBuilder {
 
    @Override
 public String getName() {
-    return "Centralization";
+    return "Bearkat Centralization";
 }
 
     @Override
