@@ -4331,7 +4331,7 @@
         }
       ],
       "category": "Import",
-      "last_update": "July 29, 2026",
+      "last_update": "July 30, 2026",
       "images": null,
       "versions": {
         "0.10.0": {
@@ -4340,9 +4340,9 @@
           "plugin_version": "0.1.0"
         },
         "0.11.1": {
-          "url": "0.11/bluesky-gephi-0.2.1.nbm",
-          "last_update": "July 29, 2026",
-          "plugin_version": "0.2.1"
+          "url": "0.11/bluesky-gephi-0.2.2.nbm",
+          "last_update": "July 30, 2026",
+          "plugin_version": "0.2.2"
         }
       },
       "sourcecode": "https://github.com/totetmatt/gephi-plugins.git",

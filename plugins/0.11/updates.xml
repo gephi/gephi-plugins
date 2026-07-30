@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
 <!DOCTYPE module_updates PUBLIC "-//NetBeans//DTD Autoupdate Catalog 2.8//EN" "https://netbeans.apache.org/dtds/autoupdate-catalog-2_8.dtd">
-<module_updates timestamp="27/42/12/29/07/2026">
+<module_updates timestamp="23/37/09/30/07/2026">
 
 
 
-<module codenamebase="fr.totetmatt.bluesky.gephi" distribution="bluesky-gephi-0.2.1.nbm" downloadsize="1858291" homepage="http://github.com/gephi/gephi-plugins/bluesky-gephi" moduleauthor="totetmatt" needsrestart="true" releasedate="2026/07/29" targetcluster="plugins">
+<module codenamebase="fr.totetmatt.bluesky.gephi" distribution="bluesky-gephi-0.2.2.nbm" downloadsize="1864483" homepage="http://github.com/gephi/gephi-plugins/bluesky-gephi" moduleauthor="totetmatt" needsrestart="true" releasedate="2026/07/30" targetcluster="plugins">
         
-    <manifest OpenIDE-Module="fr.totetmatt.bluesky.gephi" OpenIDE-Module-Display-Category="Import" OpenIDE-Module-Implementation-Version="0.2.1" OpenIDE-Module-Long-Description="Import network from Bluesky / AtProtocol" OpenIDE-Module-Module-Dependencies="org.openide.awt &gt; 7.99, org.gephi.visualization.api &gt; 0.11.1, org.gephi.datalab.api &gt; 0.11.1, org.openide.windows &gt; 6.108, org.netbeans.modules.settings/1 &gt; 1.80, org.openide.util.lookup &gt; 8.65, org.openide.util &gt; 9.39, org.gephi.graph.api &gt; 0.11.1, org.gephi.project.api &gt; 0.11.1, org.gephi.desktop.project &gt; 0.11.1, org.gephi.utils.longtask &gt; 0.11.1" OpenIDE-Module-Name="Bluesky Gephi" OpenIDE-Module-Requires="org.openide.modules.ModuleFormat1" OpenIDE-Module-Short-Description="Import network from Bluesky / AtProtocol" OpenIDE-Module-Specification-Version="0.2.1"/>
+    <manifest OpenIDE-Module="fr.totetmatt.bluesky.gephi" OpenIDE-Module-Display-Category="Import" OpenIDE-Module-Implementation-Version="0.2.2" OpenIDE-Module-Long-Description="Import network from Bluesky / AtProtocol" OpenIDE-Module-Module-Dependencies="org.openide.awt &gt; 7.99, org.gephi.visualization.api &gt; 0.11.1, org.gephi.datalab.api &gt; 0.11.1, org.openide.windows &gt; 6.108, org.netbeans.modules.settings/1 &gt; 1.80, org.openide.util.lookup &gt; 8.65, org.openide.util &gt; 9.39, org.gephi.graph.api &gt; 0.11.1, org.gephi.project.api &gt; 0.11.1, org.gephi.desktop.project &gt; 0.11.1, org.gephi.utils.longtask &gt; 0.11.1" OpenIDE-Module-Name="Bluesky Gephi" OpenIDE-Module-Requires="org.openide.modules.ModuleFormat1" OpenIDE-Module-Short-Description="Import network from Bluesky / AtProtocol" OpenIDE-Module-Specification-Version="0.2.2"/>
     
-    <message_digest algorithm="SHA-512" value="702c9f037373caedc38e455e7ad5c70ab4ed5e6602a1d9ff5af3f8bca24ff3d0e430acd9ea55e19fcc5c8899bf8df74c87091a7bec33787211e009aedfde4e6f"/>
+    <message_digest algorithm="SHA-512" value="3d1be059c8455d3a37a9d606b364695302100f1e36ee39dee01ab96bf027068f4bad93ae1e729dc17590348d8ef5e6591f122b5aaceb99589205c7da4c7a19f6"/>
 </module>
 
 <module codenamebase="nl.liacs.boundingdiameters" distribution="boundingdiameters-0.0.1.nbm" downloadsize="12981" homepage="http://github.com/gephi/gephi-plugins/boundingdiameters" license="1A1A526B" needsrestart="true" releasedate="2026/05/03" targetcluster="plugins">
