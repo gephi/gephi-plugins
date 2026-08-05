@@ -85,7 +85,7 @@
         <!-- Needs to migrate to new Visualization API -->
 <!--        <module>modules/WordCloudPlugin</module>-->
 <!--        Needs to not create a project at start-->
-<!--        <module>modules/BlueskyGephi</module>-->
+        <module>modules/BlueskyGephi</module>
         <module>modules/GephiMcp</module>
     </modules>
     

@@ -11,7 +11,7 @@ import java.util.List;
  *
  * @author totetmatt
  */
-public class AppBskyGraphGetList {
+public class AppBskyGraphGetList implements Paged {
     private List<Subject> items;
     private String cursor;
     

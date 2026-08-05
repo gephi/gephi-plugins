@@ -9,7 +9,7 @@
 
     <groupId>fr.totetmatt</groupId>
     <artifactId>bluesky-gephi</artifactId>
-    <version>0.1.0</version>
+    <version>0.2.3</version>
     <packaging>nbm</packaging>
 
     <name>Bluesky Gephi</name>

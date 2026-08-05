@@ -7,7 +7,7 @@ package fr.totetmatt.blueskygephi.atproto;
 import java.net.URI;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
-import java.util.HashMap;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 public class AtContext {
@@ -27,18 +27,13 @@ public class AtContext {
         return URI.create(formatUrl(host, lexicon));
     }
 
-    public URI getURIForLexicon(String lexicon, HashMap<String, String> parameters) {
+    public URI getURIForLexicon(String lexicon, Map<String, String> parameters) {
 
         String url_parameters = parameters.entrySet().stream().map(x
                 -> URLEncoder.encode(x.getKey(), StandardCharsets.UTF_8) + "=" + URLEncoder.encode(x.getValue(), StandardCharsets.UTF_8)
         ).collect(Collectors.joining("&"));
 
         return URI.create(formatUrl(host, lexicon) + "?" + url_parameters);
-    }
-
-    public URI getURIForLexicon(String lexicon, String parameters) {
-
-        return URI.create(formatUrl(host, lexicon) + "?" + parameters);
     }
 
 }

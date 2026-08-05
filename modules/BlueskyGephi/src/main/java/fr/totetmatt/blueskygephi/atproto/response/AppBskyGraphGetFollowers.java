@@ -7,7 +7,7 @@ package fr.totetmatt.blueskygephi.atproto.response;
 import fr.totetmatt.blueskygephi.atproto.response.common.Identity;
 import java.util.List;
 
-public class AppBskyGraphGetFollowers {
+public class AppBskyGraphGetFollowers implements Paged {
 
     private Identity subject;
 
