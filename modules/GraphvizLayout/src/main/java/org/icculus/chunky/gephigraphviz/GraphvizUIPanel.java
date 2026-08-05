@@ -36,7 +36,7 @@ import java.net.URI;
  */
 public class GraphvizUIPanel extends javax.swing.JPanel {
 
-    GraphvizLayout gvl = null;
+    transient GraphvizLayout gvl = null;
     
     /** Creates new form GraphvizUIPanel */
     public GraphvizUIPanel(GraphvizLayout gvl) {
@@ -62,24 +62,20 @@ public class GraphvizUIPanel extends javax.swing.JPanel {
 
         jButton1 = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
-        algoCombo = new javax.swing.JComboBox();
+        algoCombo = new javax.swing.JComboBox<String>();
         jLabel2 = new javax.swing.JLabel();
-        rankdirCombo = new javax.swing.JComboBox();
+        rankdirCombo = new javax.swing.JComboBox<String>();
         jLabel4 = new javax.swing.JLabel();
         concentrateCheck = new javax.swing.JCheckBox();
         jLabel5 = new javax.swing.JLabel();
-        overlapCombo = new javax.swing.JComboBox();
+        overlapCombo = new javax.swing.JComboBox<String>();
         jLabel3 = new javax.swing.JLabel();
         dotBinary = new javax.swing.JTextField();
 
         setLayout(new java.awt.GridBagLayout());
 
         jButton1.setText(org.openide.util.NbBundle.getMessage(GraphvizUIPanel.class, "GraphvizUIPanel.jButton1.text")); // NOI18N
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
-            }
-        });
+        jButton1.addActionListener(evt -> jButton1ActionPerformed(evt));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridwidth = java.awt.GridBagConstraints.REMAINDER;
         gridBagConstraints.insets = new java.awt.Insets(4, 4, 4, 4);
@@ -174,6 +170,8 @@ public class GraphvizUIPanel extends javax.swing.JPanel {
             public void keyTyped(java.awt.event.KeyEvent evt) {
                 dotBinaryKeyTyped(evt);
             }
+
+            @Override
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 dotBinaryKeyReleased(evt);
             }
