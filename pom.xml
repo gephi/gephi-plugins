@@ -86,6 +86,7 @@
 <!--        <module>modules/WordCloudPlugin</module>-->
 <!--        Needs to not create a project at start-->
         <module>modules/BlueskyGephi</module>
+        <module>modules/GephiAI</module>
     </modules>
     
     <!-- Properties -->
