@@ -4,7 +4,7 @@
 
     <groupId>org.gephi</groupId>
     <artifactId>gephi-plugins</artifactId>
-    <version>0.11.1</version>
+    <version>0.11.3</version>
     <packaging>pom</packaging>
 
     <name>gephi-plugins</name>
@@ -91,7 +91,7 @@
     <!-- Properties -->
     <properties>
         <!-- Version of Gephi building plugins against. Plugins with anterior versions will be ignored -->
-        <gephi.version>0.11.1</gephi.version>
+        <gephi.version>0.11.3</gephi.version>
         <clusters.path>${project.build.directory}/plugins_clusters</clusters.path>
         <github.global.server>github</github.global.server>
     </properties>
