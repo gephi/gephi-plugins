@@ -28,6 +28,15 @@ import java.util.concurrent.Callable;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.SwingUtilities;
+import org.gephi.appearance.api.AppearanceController;
+import org.gephi.appearance.api.AppearanceModel;
+import org.gephi.appearance.api.Function;
+import org.gephi.appearance.api.Partition;
+import org.gephi.appearance.api.PartitionFunction;
+import org.gephi.appearance.api.RankingFunction;
+import org.gephi.appearance.plugin.PartitionElementColorTransformer;
+import org.gephi.appearance.plugin.RankingElementColorTransformer;
+import org.gephi.appearance.plugin.RankingNodeSizeTransformer;
 import org.gephi.graph.api.Column;
 import org.gephi.graph.api.Edge;
 import org.gephi.graph.api.Graph;
@@ -108,6 +117,10 @@ public class GephiControlService {
 
     private StatisticsController getStatisticsController() {
         return Lookup.getDefault().lookup(StatisticsController.class);
+    }
+
+    private AppearanceController getAppearanceController() {
+        return Lookup.getDefault().lookup(AppearanceController.class);
     }
 
     @SuppressWarnings("unchecked")
@@ -1421,6 +1434,18 @@ public class GephiControlService {
 
     // ─── Appearance: Color/Size by Attribute ─────────────────────────
 
+    /**
+     * Colors nodes by a column partition through Gephi's own {@link AppearanceController} /
+     * {@link Partition} — the same machinery the Desktop Appearance panel drives — instead
+     * of painting {@code Color} directly onto each node. That sharing matters: the colors
+     * land on the workspace's shared {@code AppearanceModel}, so a human opening the
+     * Appearance panel afterwards sees the same partition selected with the same colors,
+     * not just a paint job with no trace of how it happened.
+     *
+     * <p>{@code AppearanceController.transform()} always mutates the currently VISIBLE
+     * (filtered) graph, never the full one — see {@code addViewInfo} below, which reports
+     * that scope so a caller isn't surprised when a filter is active.
+     */
     public JsonObject colorByPartition(String columnName, Map<String, int[]> colorMap) {
         Workspace ws = currentWorkspace();
         if (ws == null) return error("No project open");
@@ -1430,22 +1455,40 @@ public class GephiControlService {
             Column col = gm.getNodeTable().getColumn(columnName);
             if (col == null) return error("Column not found: " + columnName);
 
-            // Collect distinct values
-            java.util.Map<String, Color> palette = new java.util.LinkedHashMap<>();
+            AppearanceController ac = getAppearanceController();
+            if (ac == null) return error("Appearance controller unavailable");
+            ac.setUsePartitionLocalScale(false);
+            AppearanceModel am = ac.getModel();
+            Function function = am.getNodeFunction(col, PartitionElementColorTransformer.class);
+            if (!(function instanceof PartitionFunction)) {
+                return error("Column not eligible for partition coloring: " + columnName);
+            }
+            Partition partition = ((PartitionFunction) function).getPartition();
+
+            // Values actually given an explicit (non-default) color, so the reported count
+            // below matches "elements whose value we colored" rather than every element the
+            // transform touches (untouched values fall back to Partition.DEFAULT_COLOR).
+            java.util.Set<Object> configuredValues = new java.util.LinkedHashSet<>();
+            int paletteSize;
             if (colorMap != null && !colorMap.isEmpty()) {
                 for (Map.Entry<String, int[]> e : colorMap.entrySet()) {
+                    Object value = convertStatValue(e.getKey(), col.getTypeClass());
+                    if (value == null) continue; // key didn't match the column's value type
                     int[] c = e.getValue();
-                    palette.put(e.getKey(), new Color(c[0], c[1], c[2]));
+                    partition.setColor(value, new Color(c[0], c[1], c[2]));
+                    configuredValues.add(value);
                 }
+                paletteSize = colorMap.size();
             } else {
-                // Auto-generate palette
-                java.util.Set<String> values = new java.util.LinkedHashSet<>();
-                Node[] allNodes = graph.getNodes().toArray();
-                for (Node n : allNodes) {
+                // Auto-generate palette: distinct values in encounter order, cycling the
+                // default 12-color palette. partition.setColors(graph, colors) would instead
+                // leave every value past colors.length at the DEFAULT_COLOR fallback rather
+                // than cycling, so the array is built and applied by hand here.
+                java.util.Set<Object> values = new java.util.LinkedHashSet<>();
+                for (Node n : graph.getNodes().toArray()) {
                     Object v = n.getAttribute(col);
-                    if (v != null) values.add(v.toString());
+                    if (v != null) values.add(v);
                 }
-
                 Color[] defaultPalette = {
                     new Color(31, 119, 180), new Color(255, 127, 14), new Color(44, 160, 44),
                     new Color(214, 39, 40), new Color(148, 103, 189), new Color(140, 86, 75),
@@ -1453,28 +1496,29 @@ public class GephiControlService {
                     new Color(23, 190, 207), new Color(174, 199, 232), new Color(255, 187, 120)
                 };
                 int idx = 0;
-                for (String v : values) {
-                    palette.put(v, defaultPalette[idx % defaultPalette.length]);
+                for (Object v : values) {
+                    partition.setColor(v, defaultPalette[idx % defaultPalette.length]);
                     idx++;
                 }
+                configuredValues.addAll(values);
+                paletteSize = values.size();
             }
 
+            ac.transform(function);
+
             int colored = 0;
-            lockWrite(graph);
+            Graph visible = gm.getGraphVisible();
+            lockRead(visible);
             try {
-                for (Node n : graph.getNodes().toArray()) {
+                for (Node n : visible.getNodes().toArray()) {
                     Object v = n.getAttribute(col);
-                    if (v != null) {
-                        Color c = palette.get(v.toString());
-                        if (c != null) {
-                            n.setColor(c);
-                            colored++;
-                        }
-                    }
+                    if (v != null && configuredValues.contains(v)) colored++;
                 }
-            } finally { unlockWrite(graph); }
+            } finally { visible.readUnlock(); }
+
             JsonObject r = success("Colored " + colored + " nodes by " + columnName);
-            r.addProperty("partitions", palette.size());
+            r.addProperty("partitions", paletteSize);
+            addViewInfo(r, gm, true);
             return r;
         } catch (Exception e) { return error("Failed: " + e.getMessage()); }
     }
@@ -1529,6 +1573,13 @@ public class GephiControlService {
             + " via the statistics tools) or check the columns list");
     }
 
+    /**
+     * Colors nodes by a numeric ranking through Gephi's own {@link AppearanceController} /
+     * {@link RankingElementColorTransformer} gradient — see {@link #colorByPartition} above
+     * for why that sharing (and the visible-graph scope reported via {@code addViewInfo})
+     * matters. The two-stop min/max gradient here is mathematically the same linear
+     * interpolation the old per-node loop did by hand.
+     */
     public JsonObject colorByRanking(String columnName, int rMin, int gMin, int bMin, int rMax, int gMax, int bMax) {
         Workspace ws = currentWorkspace();
         if (ws == null) return error("No project open");
@@ -1540,36 +1591,45 @@ public class GephiControlService {
 
             double[] mm = numericRange(graph, col);
             if (mm == null) return error("No numeric values in column " + columnName);
-            double min = mm[0], max = mm[1];
-            double range = max - min;
-            if (range == 0) range = 1;
+
+            AppearanceController ac = getAppearanceController();
+            if (ac == null) return error("Appearance controller unavailable");
+            ac.setUseRankingLocalScale(false);
+            AppearanceModel am = ac.getModel();
+            Function function = am.getNodeFunction(col, RankingElementColorTransformer.class);
+            if (!(function instanceof RankingFunction)) return columnNotFound(columnName);
+            RankingElementColorTransformer transformer = function.getTransformer();
+            // setColors() alone leaves the gradient's default 3-entry position array
+            // ({0, 0.5, 1}) mismatched against this 2-color stop list — LinearGradient.getValue()
+            // then indexes colors[2] for any normalized value above 0.5 and throws
+            // ArrayIndexOutOfBoundsException. Reset positions to match the 2-stop gradient.
+            transformer.setColorPositions(new float[] {0f, 1f});
+            transformer.setColors(new Color[] {new Color(rMin, gMin, bMin), new Color(rMax, gMax, bMax)});
+
+            ac.transform(function);
 
             int colored = 0;
-            lockWrite(graph);
+            Graph visible = gm.getGraphVisible();
+            lockRead(visible);
             try {
-                for (Node n : graph.getNodes().toArray()) {
-                    Object v = n.getAttribute(col);
-                    if (v instanceof Number) {
-                        double t = (((Number) v).doubleValue() - min) / range;
-                        int r = (int)(rMin + t * (rMax - rMin));
-                        int g = (int)(gMin + t * (gMax - gMin));
-                        int b = (int)(bMin + t * (bMax - bMin));
-                        n.setColor(new Color(
-                            Math.max(0, Math.min(255, r)),
-                            Math.max(0, Math.min(255, g)),
-                            Math.max(0, Math.min(255, b))
-                        ));
-                        colored++;
-                    }
+                for (Node n : visible.getNodes().toArray()) {
+                    if (n.getAttribute(col) instanceof Number) colored++;
                 }
-            } finally { unlockWrite(graph); }
+            } finally { visible.readUnlock(); }
+
             JsonObject res = success("Colored " + colored + " nodes by ranking on " + columnName);
-            res.addProperty("min_value", min);
-            res.addProperty("max_value", max);
+            res.addProperty("min_value", mm[0]);
+            res.addProperty("max_value", mm[1]);
+            addViewInfo(res, gm, true);
             return res;
         } catch (Exception e) { return error("Failed: " + e.getMessage()); }
     }
 
+    /**
+     * Sizes nodes by a numeric ranking through Gephi's own {@link AppearanceController} /
+     * {@link RankingNodeSizeTransformer} — see {@link #colorByPartition} above for why that
+     * sharing (and the visible-graph scope reported via {@code addViewInfo}) matters.
+     */
     public JsonObject sizeByRanking(String columnName, float minSize, float maxSize) {
         Workspace ws = currentWorkspace();
         if (ws == null) return error("No project open");
@@ -1581,25 +1641,32 @@ public class GephiControlService {
 
             double[] mm = numericRange(graph, col);
             if (mm == null) return error("No numeric values in column " + columnName);
-            double min = mm[0], max = mm[1];
-            double range = max - min;
-            if (range == 0) range = 1;
+
+            AppearanceController ac = getAppearanceController();
+            if (ac == null) return error("Appearance controller unavailable");
+            ac.setUseRankingLocalScale(false);
+            AppearanceModel am = ac.getModel();
+            Function function = am.getNodeFunction(col, RankingNodeSizeTransformer.class);
+            if (!(function instanceof RankingFunction)) return columnNotFound(columnName);
+            RankingNodeSizeTransformer transformer = function.getTransformer();
+            transformer.setMinSize(minSize);
+            transformer.setMaxSize(maxSize);
+
+            ac.transform(function);
 
             int sized = 0;
-            lockWrite(graph);
+            Graph visible = gm.getGraphVisible();
+            lockRead(visible);
             try {
-                for (Node n : graph.getNodes().toArray()) {
-                    Object v = n.getAttribute(col);
-                    if (v instanceof Number) {
-                        double t = (((Number) v).doubleValue() - min) / range;
-                        n.setSize((float)(minSize + t * (maxSize - minSize)));
-                        sized++;
-                    }
+                for (Node n : visible.getNodes().toArray()) {
+                    if (n.getAttribute(col) instanceof Number) sized++;
                 }
-            } finally { unlockWrite(graph); }
+            } finally { visible.readUnlock(); }
+
             JsonObject res = success("Sized " + sized + " nodes by " + columnName);
-            res.addProperty("min_value", min);
-            res.addProperty("max_value", max);
+            res.addProperty("min_value", mm[0]);
+            res.addProperty("max_value", mm[1]);
+            addViewInfo(res, gm, true);
             return res;
         } catch (Exception e) { return error("Failed: " + e.getMessage()); }
     }
@@ -3868,8 +3935,9 @@ public class GephiControlService {
 
     /**
      * Color edges by an edge-column partition (relationship type, time period,
-     * weight tier, …) — the edge twin of colorByPartition. Mirrors it exactly:
-     * per-value palette (supplied or auto), then edge.setColor per row.
+     * weight tier, …) — the edge twin of {@link #colorByPartition}. Mirrors it exactly,
+     * including the reasons for going through {@link AppearanceController} and the
+     * visible-graph scope reported via {@code addViewInfo}.
      */
     public JsonObject colorEdgesByPartition(String columnName, Map<String, int[]> colorMap) {
         Workspace ws = currentWorkspace();
@@ -3880,17 +3948,32 @@ public class GephiControlService {
             Column col = gm.getEdgeTable().getColumn(columnName);
             if (col == null) return error("Edge column not found: " + columnName);
 
-            java.util.Map<String, Color> palette = new java.util.LinkedHashMap<>();
+            AppearanceController ac = getAppearanceController();
+            if (ac == null) return error("Appearance controller unavailable");
+            ac.setUsePartitionLocalScale(false);
+            AppearanceModel am = ac.getModel();
+            Function function = am.getEdgeFunction(col, PartitionElementColorTransformer.class);
+            if (!(function instanceof PartitionFunction)) {
+                return error("Edge column not eligible for partition coloring: " + columnName);
+            }
+            Partition partition = ((PartitionFunction) function).getPartition();
+
+            java.util.Set<Object> configuredValues = new java.util.LinkedHashSet<>();
+            int paletteSize;
             if (colorMap != null && !colorMap.isEmpty()) {
                 for (Map.Entry<String, int[]> e : colorMap.entrySet()) {
+                    Object value = convertStatValue(e.getKey(), col.getTypeClass());
+                    if (value == null) continue; // key didn't match the column's value type
                     int[] c = e.getValue();
-                    palette.put(e.getKey(), new Color(c[0], c[1], c[2]));
+                    partition.setColor(value, new Color(c[0], c[1], c[2]));
+                    configuredValues.add(value);
                 }
+                paletteSize = colorMap.size();
             } else {
-                java.util.Set<String> values = new java.util.LinkedHashSet<>();
+                java.util.Set<Object> values = new java.util.LinkedHashSet<>();
                 for (Edge ed : graph.getEdges().toArray()) {
                     Object v = ed.getAttribute(col);
-                    if (v != null) values.add(v.toString());
+                    if (v != null) values.add(v);
                 }
                 Color[] defaultPalette = {
                     new Color(31, 119, 180), new Color(255, 127, 14), new Color(44, 160, 44),
@@ -3899,22 +3982,29 @@ public class GephiControlService {
                     new Color(23, 190, 207), new Color(174, 199, 232), new Color(255, 187, 120)
                 };
                 int idx = 0;
-                for (String v : values) { palette.put(v, defaultPalette[idx % defaultPalette.length]); idx++; }
+                for (Object v : values) {
+                    partition.setColor(v, defaultPalette[idx % defaultPalette.length]);
+                    idx++;
+                }
+                configuredValues.addAll(values);
+                paletteSize = values.size();
             }
 
+            ac.transform(function);
+
             int colored = 0;
-            lockWrite(graph);
+            Graph visible = gm.getGraphVisible();
+            lockRead(visible);
             try {
-                for (Edge ed : graph.getEdges().toArray()) {
+                for (Edge ed : visible.getEdges().toArray()) {
                     Object v = ed.getAttribute(col);
-                    if (v != null) {
-                        Color c = palette.get(v.toString());
-                        if (c != null) { ed.setColor(c); colored++; }
-                    }
+                    if (v != null && configuredValues.contains(v)) colored++;
                 }
-            } finally { unlockWrite(graph); }
+            } finally { visible.readUnlock(); }
+
             JsonObject r = success("Colored " + colored + " edges by " + columnName);
-            r.addProperty("partitions", palette.size());
+            r.addProperty("partitions", paletteSize);
+            addViewInfo(r, gm, true);
             return r;
         } catch (Exception e) { return error("Failed: " + e.getMessage()); }
     }
