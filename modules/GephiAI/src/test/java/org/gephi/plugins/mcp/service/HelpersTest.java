@@ -16,14 +16,8 @@
 package org.gephi.plugins.mcp.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.nio.file.Files;
 import java.util.List;
 import org.junit.jupiter.api.Test;
 
@@ -160,86 +154,4 @@ class HelpersTest {
             LAYOUTS.get(GephiControlService.bestLayoutMatch(LAYOUTS, "chtermanrein")));
     }
 
-    // ── screenshot helpers (gephi_export_screenshot's async-completion detection) ─
-
-    @Test
-    void pollForNewFileFindsAFileWrittenAfterPollingStarts() throws Exception {
-        File dir = Files.createTempDirectory("poll-test-").toFile();
-        try {
-            Thread writer = new Thread(() -> {
-                try {
-                    Thread.sleep(50);
-                    new File(dir, "shot.png").createNewFile();
-                } catch (Exception ignored) { }
-            });
-            writer.start();
-            File found = GephiControlService.pollForNewFile(dir, 2_000);
-            writer.join();
-            assertEquals("shot.png", found.getName());
-        } finally {
-            deleteRecursively(dir);
-        }
-    }
-
-    @Test
-    void pollForNewFileReturnsNullOnTimeoutWhenDirStaysEmpty() throws Exception {
-        File dir = Files.createTempDirectory("poll-test-").toFile();
-        try {
-            assertNull(GephiControlService.pollForNewFile(dir, 100));
-        } finally {
-            deleteRecursively(dir);
-        }
-    }
-
-    @Test
-    void waitForStableFileSizeTrueOnceWritesStop() throws Exception {
-        File f = File.createTempFile("stable-test-", ".png");
-        try {
-            writeBytes(f, new byte[]{1, 2, 3});
-            assertTrue(GephiControlService.waitForStableFileSize(f, 1_000));
-        } finally {
-            f.delete();
-        }
-    }
-
-    @Test
-    void waitForStableFileSizeFalseOnEmptyFile() throws Exception {
-        File f = File.createTempFile("stable-test-empty-", ".png");
-        try {
-            assertFalse(GephiControlService.waitForStableFileSize(f, 150));
-        } finally {
-            f.delete();
-        }
-    }
-
-    @Test
-    void deleteDirQuietlyRemovesFilesAndDirectory() throws Exception {
-        File dir = Files.createTempDirectory("cleanup-test-").toFile();
-        writeBytes(new File(dir, "a.png"), new byte[]{1});
-        writeBytes(new File(dir, "b.png"), new byte[]{2});
-        assertEquals(2, dir.listFiles().length);
-
-        GephiControlService.deleteDirQuietly(dir);
-
-        assertFalse(dir.exists());
-    }
-
-    @Test
-    void deleteDirQuietlyToleratesAlreadyEmptyDirectory() throws Exception {
-        File dir = Files.createTempDirectory("cleanup-test-empty-").toFile();
-        GephiControlService.deleteDirQuietly(dir);
-        assertFalse(dir.exists());
-    }
-
-    private static void writeBytes(File f, byte[] data) throws IOException {
-        try (FileOutputStream out = new FileOutputStream(f)) {
-            out.write(data);
-        }
-    }
-
-    private static void deleteRecursively(File f) {
-        File[] children = f.listFiles();
-        if (children != null) for (File c : children) deleteRecursively(c);
-        f.delete();
-    }
 }

@@ -2567,9 +2567,12 @@ public class GephiControlService {
      * scaleFactor: a multiplier on the current on-screen canvas size (not literal pixel
      * width/height like exportPng — Gephi's screenshot API only supports a scale factor).
      *
-     * takeScreenshot() is asynchronous (queued against the render engine's next frame via
-     * a LongTaskExecutor), so this polls a dedicated fresh temp directory for the resulting
-     * file rather than assuming completion on return.
+     * Since Gephi 0.11.3, ScreenshotController.takeScreenshot(scale, transparent, file) writes
+     * straight to {@code file} — independent of the toolbar's auto-save/default-directory/
+     * scale/transparency settings and without ever showing a file chooser — and returns a
+     * Future<File> that completes only once the PNG is fully written to disk. That replaces
+     * the previous approach of pointing the shared toolbar settings at a temp directory and
+     * polling it for a new, size-stable file.
      */
     public JsonObject exportScreenshot(String filePath, int scaleFactor, boolean transparentBackground) {
         Workspace ws = currentWorkspace();
@@ -2577,102 +2580,38 @@ public class GephiControlService {
 
         File targetFile = new File(filePath);
         File targetDir = targetFile.getAbsoluteFile().getParentFile();
-        File captureDir;
+        if (targetDir != null) targetDir.mkdirs();
+
+        // ScreenshotController is not independently registered in Lookup — it is only
+        // reachable via VisualizationController.getScreenshotController() (the same
+        // VisualizationController singleton getSelection/focusView already use).
+        org.gephi.visualization.api.VisualizationController vc = Lookup.getDefault()
+            .lookup(org.gephi.visualization.api.VisualizationController.class);
+        if (vc == null) return error("Visualization controller not available");
+        org.gephi.visualization.api.ScreenshotController sc = vc.getScreenshotController();
+        if (sc == null) return error("Screenshot controller not available");
+
+        java.util.concurrent.Future<File> future =
+            sc.takeScreenshot(scaleFactor, transparentBackground, targetFile);
         try {
-            captureDir = java.nio.file.Files.createTempDirectory("gephi-screenshot-").toFile();
-        } catch (java.io.IOException e) {
-            return error("Could not create temp capture directory: " + e.getMessage());
-        }
-
-        try {
-            runOnEDT(() -> {
-                // ScreenshotController is not independently registered in Lookup — it is only
-                // reachable via VisualizationController.getScreenshotController() (the same
-                // VisualizationController singleton getSelection/focusView already use).
-                org.gephi.visualization.api.VisualizationController vc = Lookup.getDefault()
-                    .lookup(org.gephi.visualization.api.VisualizationController.class);
-                if (vc == null) throw new RuntimeException("Visualization controller not available");
-                org.gephi.visualization.api.ScreenshotController sc = vc.getScreenshotController();
-                if (sc == null) throw new RuntimeException("Screenshot controller not available");
-                // These four settings are shared with Gephi's own toolbar screenshot button,
-                // and ScreenshotController exposes setters only, so their previous values
-                // cannot be read back and restored exactly. What must not happen is leaving
-                // auto-save enabled while pointing at captureDir, which this method deletes:
-                // the user's next manual screenshot would then save into a directory that no
-                // longer exists. Auto-save is therefore turned back off and the directory
-                // pointed somewhere real, which returns the toolbar button to its normal
-                // save-dialog behaviour rather than to a silent failure.
-                try {
-                    sc.setAutoSave(true);
-                    sc.setDefaultDirectory(captureDir);
-                    sc.setScaleFactor(scaleFactor);
-                    sc.setTransparentBackground(transparentBackground);
-                    sc.takeScreenshot();
-                } finally {
-                    sc.setAutoSave(false);
-                    sc.setDefaultDirectory(new File(System.getProperty("user.home")));
-                }
-                return null;
-            });
-
-            File written = pollForNewFile(captureDir, 10_000);
-            if (written == null) {
-                return error("Screenshot did not complete within 10s — the render engine may be busy, "
-                    + "retry, or fully restart Gephi if this persists");
-            }
-            if (!waitForStableFileSize(written, 5_000)) {
-                return error("Screenshot file did not finish writing within 5s");
-            }
-
-            if (targetDir != null) targetDir.mkdirs();
-            java.nio.file.Files.move(written.toPath(), targetFile.toPath(),
-                java.nio.file.StandardCopyOption.REPLACE_EXISTING);
+            // Called from the HTTP handler thread, never the EDT — the Future's own
+            // Javadoc forbids blocking on it from the EDT.
+            future.get(15, java.util.concurrent.TimeUnit.SECONDS);
 
             JsonObject r = success("Exported to " + filePath);
             r.addProperty("scale_factor", scaleFactor);
             r.addProperty("selection_aware", true);
             return r;
+        } catch (java.util.concurrent.TimeoutException e) {
+            future.cancel(true);  // cooperative cancel of the in-flight tiled render
+            return error("Screenshot did not complete within 15s — the render engine may be busy, "
+                + "retry, or fully restart Gephi if this persists");
+        } catch (java.util.concurrent.ExecutionException e) {
+            Throwable cause = e.getCause() != null ? e.getCause() : e;
+            return error("Screenshot export failed: " + cause.getMessage());
         } catch (Exception e) {
             return error("Screenshot export failed: " + e.getMessage());
-        } finally {
-            deleteDirQuietly(captureDir);
         }
-    }
-
-    /** Poll a directory for the first file to appear in it, up to timeoutMs. */
-    static File pollForNewFile(File dir, long timeoutMs) {
-        long deadline = System.currentTimeMillis() + timeoutMs;
-        while (System.currentTimeMillis() < deadline) {
-            File[] files = dir.listFiles();
-            if (files != null && files.length > 0) return files[0];
-            try { Thread.sleep(150); } catch (InterruptedException e) {
-                Thread.currentThread().interrupt();
-                return null;
-            }
-        }
-        return null;
-    }
-
-    /** Wait for a file's size to stop changing between polls (write-in-progress guard). */
-    static boolean waitForStableFileSize(File file, long timeoutMs) {
-        long deadline = System.currentTimeMillis() + timeoutMs;
-        long lastSize = -1;
-        while (System.currentTimeMillis() < deadline) {
-            long size = file.length();
-            if (size > 0 && size == lastSize) return true;
-            lastSize = size;
-            try { Thread.sleep(100); } catch (InterruptedException e) {
-                Thread.currentThread().interrupt();
-                return false;
-            }
-        }
-        return file.length() == lastSize && lastSize > 0;
-    }
-
-    static void deleteDirQuietly(File dir) {
-        File[] files = dir.listFiles();
-        if (files != null) for (File f : files) f.delete();
-        dir.delete();
     }
 
     /**
