@@ -245,7 +245,7 @@ public class GephiControlService {
      * EdgeIterable directly — always iterate .toArray(). A live iterator
      * auto-acquires the graph read lock in its constructor and releases it only
      * on exhaustion or doBreak(); an early break, return, or exception leaks the
-     * hold, and because NanoHTTPD threads die after their request, the leak is
+     * hold, and since nothing else ever unlocks on that thread's behalf, the leak is
      * permanent and wedges every future write (found the hard way; see
      * GraphOpsTest#earlyBreakOverToArraySnapshotLeavesNoReadHold).
      */
@@ -3642,7 +3642,7 @@ public class GephiControlService {
         // writeLock() (filterVisible via setVisibleView; the two exports process the
         // query through the same path). Hold our deadlock-safe lock first so those
         // calls re-enter instead of queuing behind the renderer — exactly the
-        // mitigation resetFilters uses, and these run on a NanoHTTPD thread too.
+        // mitigation resetFilters uses, and these run on an HTTP request thread too.
         Graph lockGraph = gm.getGraph();
         JsonObject r;
         switch (act) {

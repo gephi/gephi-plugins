@@ -33,7 +33,7 @@ import org.openide.util.Lookup;
  * visualization-api only and degrades to a no-op wherever there is no engine
  * (Gephi Toolkit, headless, or older Gephi versions).
  *
- * Pause/resume is reference-counted: NanoHTTPD serves requests on multiple
+ * Pause/resume is reference-counted: the API server handles requests on multiple
  * threads, so concurrent write sections must not resume the renderer while a
  * sibling section still holds it paused.
  */

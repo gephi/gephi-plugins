@@ -34,8 +34,8 @@ import org.junit.jupiter.api.Test;
  * stop-and-start failed with {@code RejectedExecutionException} for the rest of the session,
  * and the only sign of it was the "Layout already running" message that follows.
  *
- * <p>The plugin's own smoke test used to step around this by calling NanoHTTPD's {@code stop()}
- * directly rather than {@code stopServer()}, which is what pointed at the defect: when a test
+ * <p>The plugin's own smoke test used to step around this by calling the server's own
+ * {@code stop()} directly rather than {@code stopServer()}, which is what pointed at the defect: when a test
  * avoids a code path to stay green, the path is worth looking at.
  */
 class ServiceRestartTest {

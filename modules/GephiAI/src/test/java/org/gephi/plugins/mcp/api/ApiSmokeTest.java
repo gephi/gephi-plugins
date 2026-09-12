@@ -57,7 +57,7 @@ class ApiSmokeTest {
             String badIndexBody = read(deleteWithParam.getErrorStream());
             assertTrue(badIndexBody.contains("query parameter"), badIndexBody);
         } finally {
-            // NanoHTTPD's own stop(); avoids shutting down the shared service
+            // The server's own stop(); avoids shutting down the shared service
             // singleton that other tests in the suite may still use.
             server.stop();
         }
