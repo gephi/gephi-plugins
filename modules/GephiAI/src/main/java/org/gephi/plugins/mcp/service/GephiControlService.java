@@ -25,10 +25,6 @@ import javax.imageio.ImageIO;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
-import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.SwingUtilities;
@@ -54,6 +50,8 @@ import org.gephi.filters.spi.FilterProperty;
 import org.gephi.io.importer.api.Container;
 import org.gephi.io.importer.api.ImportController;
 import org.gephi.io.processor.spi.Processor;
+import org.gephi.layout.api.LayoutController;
+import org.gephi.layout.api.LayoutModel;
 import org.gephi.layout.spi.Layout;
 import org.gephi.layout.spi.LayoutBuilder;
 import org.gephi.layout.spi.LayoutProperty;
@@ -73,20 +71,6 @@ public class GephiControlService {
 
     private static final Logger LOGGER = Logger.getLogger(GephiControlService.class.getName());
     private static GephiControlService instance;
-
-    private final AtomicBoolean layoutRunning = new AtomicBoolean(false);
-    private volatile String currentLayoutName = null;
-    private volatile Future<?> layoutFuture = null;
-    // Not final: shutdown() kills it, and the server can be stopped and restarted from
-    // Tools > Gephi AI Server without the service singleton being recreated. A final
-    // executor left every later layout failing with RejectedExecutionException for the
-    // rest of the session. Always reach it through layoutExecutor().
-    private ExecutorService layoutExecutor = Executors.newSingleThreadExecutor();
-    // Config staged by setLayoutProperties (configure-only); the next runLayout of
-    // the same algorithm applies it. Lets set-then-run work without setLayoutProperties
-    // itself starting a layout.
-    private volatile Map<String, Object> pendingLayoutProps = null;
-    private volatile String pendingLayoutAlgo = null;
 
     // Human click journal: the person's node clicks in the Gephi window,
     // recorded by a passive viz-event listener so the model can resolve
@@ -115,6 +99,10 @@ public class GephiControlService {
 
     private GraphController getGraphController() {
         return Lookup.getDefault().lookup(GraphController.class);
+    }
+
+    private LayoutController getLayoutController() {
+        return Lookup.getDefault().lookup(LayoutController.class);
     }
 
     @SuppressWarnings("unchecked")
@@ -340,6 +328,12 @@ public class GephiControlService {
      * (ForceAtlas 2 picks scalingRatio 2.0 vs 10.0 off the node count).
      */
     private Layout findLayout(String algo) {
+        LayoutBuilder builder = findLayoutBuilder(algo);
+        return builder == null ? null : buildLayout(builder);
+    }
+
+    /** The {@link LayoutBuilder} matching {@code algo} (see bestLayoutMatch), or null. */
+    private LayoutBuilder findLayoutBuilder(String algo) {
         java.util.List<LayoutBuilder> builders = new java.util.ArrayList<>();
         java.util.List<String> names = new java.util.ArrayList<>();
         for (LayoutBuilder b : Lookup.getDefault().lookupAll(LayoutBuilder.class)) {
@@ -347,8 +341,12 @@ public class GephiControlService {
             names.add(b.getName());
         }
         int idx = bestLayoutMatch(names, algo);
-        if (idx < 0) return null;
-        Layout layout = builders.get(idx).buildLayout();
+        return idx < 0 ? null : builders.get(idx);
+    }
+
+    /** A fresh, ready-to-use {@link Layout} instance from {@code builder} (graph model attached, defaults reset). */
+    private Layout buildLayout(LayoutBuilder builder) {
+        Layout layout = builder.buildLayout();
         if (layout == null) return null;
         // Separate failure paths: a missing graph model must not skip the reset, which is
         // the part that actually keeps OpenOrd and Yifan Hu from running on zeros.
@@ -356,13 +354,13 @@ public class GephiControlService {
             GraphModel gm = currentGraphModel();
             if (gm != null) layout.setGraphModel(gm);
         } catch (Exception e) {
-            LOGGER.log(Level.WARNING, "setGraphModel failed for layout: " + algo, e);
+            LOGGER.log(Level.WARNING, "setGraphModel failed for layout: " + builder.getName(), e);
         }
         try {
             layout.resetPropertiesValues();
         } catch (Exception e) {
             // A layout that rejects the reset is still usable on its own defaults.
-            LOGGER.log(Level.WARNING, "resetPropertiesValues failed for layout: " + algo, e);
+            LOGGER.log(Level.WARNING, "resetPropertiesValues failed for layout: " + builder.getName(), e);
         }
         return layout;
     }
@@ -1607,49 +1605,45 @@ public class GephiControlService {
         return runLayout(algo, iterations, null);
     }
 
+    /**
+     * Runs a layout through Gephi's own {@link LayoutController}/{@link LayoutModel} — the
+     * same per-workspace machinery the Desktop UI's Layout panel drives — instead of a
+     * hand-rolled executor. That sharing matters: it keeps a layout started here from
+     * blocking (or being blocked by) one in a different workspace, it stops automatically
+     * if the workspace closes mid-run, and it keeps the Layout panel's Run/Stop button and
+     * a human clicking "Run" there in sync with what the AI is doing, instead of the two
+     * racing to mutate the same graph with no shared lock at all.
+     */
     public JsonObject runLayout(String algo, int iterations, Map<String, Object> properties) {
         try {
             Workspace ws = currentWorkspace();
             if (ws == null) return error("No project open");
-            GraphModel gm = getGraphController().getGraphModel(ws);
-            Layout layout = findLayout(algo);
-            if (layout == null) return error("Layout not found: " + algo);
-            layout.setGraphModel(gm);
-            // Apply inline properties, or config staged earlier by setLayoutProperties.
-            if (properties == null && pendingLayoutProps != null && algo.equals(pendingLayoutAlgo)) {
-                properties = pendingLayoutProps;
+            LayoutController lc = getLayoutController();
+            if (lc == null) return error("Layout controller unavailable");
+            LayoutModel model = lc.getModel();
+            if (model == null) return error("No project open");
+            if (model.isRunning()) return error("Layout already running");
+
+            LayoutBuilder builder = findLayoutBuilder(algo);
+            if (builder == null) return error("Layout not found: " + algo);
+
+            // Reuse the layout staged by setLayoutProperties for this same algorithm so its
+            // configured values survive into the run; a different algorithm, inline
+            // properties, or no staged layout all start fresh on Gephi's real defaults.
+            Layout staged = model.getSelectedLayout();
+            Layout layout;
+            if (properties == null && staged != null && staged.getBuilder() == builder) {
+                layout = staged;
+            } else {
+                layout = buildLayout(builder);
+                if (layout == null) return error("Layout not found: " + algo);
+                if (properties != null) applyLayoutProperties(layout, properties);
+                lc.setLayout(layout);
             }
-            pendingLayoutProps = null;
-            pendingLayoutAlgo = null;
-            if (properties != null) applyLayoutProperties(layout, properties);
-            final Layout fl = layout;
-            final int iters = iterations > 0 ? iterations : 1000;
-            if (!layoutRunning.compareAndSet(false, true)) return error("Layout already running");
-            currentLayoutName = algo;
-            try {
-                layoutFuture = layoutExecutor().submit(() -> {
-                    try {
-                        fl.initAlgo();
-                        for (int i = 0; i < iters && layoutRunning.get() && fl.canAlgo(); i++) fl.goAlgo();
-                    } catch (Exception e) { LOGGER.log(Level.WARNING, "Layout error", e); }
-                    finally {
-                        // endAlgo() is where Gephi layouts release the graph model and their
-                        // column observers — it must run even when goAlgo() throws, or those
-                        // leak for the life of the workspace.
-                        try { fl.endAlgo(); }
-                        catch (Exception e) { LOGGER.log(Level.WARNING, "Layout endAlgo error", e); }
-                        layoutRunning.set(false);
-                        currentLayoutName = null;
-                    }
-                });
-            } catch (RuntimeException submitFailure) {
-                // RejectedExecutionException (executor already shut down): without this reset
-                // the flag stays true and every later run reports "Layout already running"
-                // for the rest of the session.
-                layoutRunning.set(false);
-                currentLayoutName = null;
-                throw submitFailure;
-            }
+            layout.setGraphModel(getGraphController().getGraphModel(ws));
+
+            lc.executeLayout(iterations > 0 ? iterations : 1000);
+
             JsonObject r = new JsonObject();
             r.addProperty("success", true);
             r.addProperty("layout", algo);
@@ -1659,21 +1653,26 @@ public class GephiControlService {
     }
 
     public JsonObject stopLayout() {
-        if (!layoutRunning.get()) return success("No layout running");
-        layoutRunning.set(false);
-        // cancel(false): the cooperative layoutRunning flag already stops the loop at the
-        // next iteration. Interrupting instead (cancel(true)) can throw InterruptedException
-        // out of goAlgo() mid-iteration (OpenOrd synchronizes worker threads on a barrier),
-        // and a layout that took a read lock without a finally then leaks it permanently.
-        if (layoutFuture != null) layoutFuture.cancel(false);
+        LayoutController lc = getLayoutController();
+        LayoutModel model = lc != null ? lc.getModel() : null;
+        if (model == null || !model.isRunning()) return success("No layout running");
+        lc.stopLayout();
         return success("Layout stopped");
     }
 
     public JsonObject getLayoutStatus() {
         JsonObject r = new JsonObject();
         r.addProperty("success", true);
-        r.addProperty("running", layoutRunning.get());
-        if (currentLayoutName != null) r.addProperty("layout", currentLayoutName);
+        LayoutController lc = getLayoutController();
+        LayoutModel model = lc != null ? lc.getModel() : null;
+        boolean running = model != null && model.isRunning();
+        r.addProperty("running", running);
+        if (running) {
+            Layout selected = model.getSelectedLayout();
+            if (selected != null && selected.getBuilder() != null) {
+                r.addProperty("layout", selected.getBuilder().getName());
+            }
+        }
         return r;
     }
 
@@ -1761,22 +1760,22 @@ public class GephiControlService {
     }
 
     /**
-     * Configure a layout's properties WITHOUT running it. The config is staged so
-     * the next runLayout of the same algorithm applies it — set-then-run works,
-     * and this call no longer hijacks the layout executor (which broke a following
-     * run_layout with "Layout already running"). Prefer run_layout(properties=...)
-     * to configure and run in one step.
+     * Configure a layout's properties WITHOUT running it. The layout is selected in the
+     * workspace's {@link LayoutModel} (same as picking it in the Desktop Layout panel) so
+     * the next runLayout of the same algorithm reuses it and its configured values — set-
+     * then-run works without this call itself starting anything. Prefer
+     * run_layout(properties=...) to configure and run in one step.
      */
     public JsonObject setLayoutProperties(String algo, Map<String, Object> properties, int iterations) {
         try {
             Workspace ws = currentWorkspace();
             if (ws == null) return error("No project open");
+            LayoutController lc = getLayoutController();
+            if (lc == null) return error("Layout controller unavailable");
             Layout layout = findLayout(algo);
             if (layout == null) return error("Layout not found: " + algo);
-            layout.setGraphModel(currentGraphModel());
             applyLayoutProperties(layout, properties);
-            pendingLayoutProps = properties;
-            pendingLayoutAlgo = algo;
+            lc.setLayout(layout);
             JsonObject r = new JsonObject();
             r.addProperty("success", true);
             r.addProperty("layout", algo);
@@ -3083,17 +3082,15 @@ public class GephiControlService {
 
     // ─── Shutdown ────────────────────────────────────────────────────
 
-    /** The layout executor, recreated if a previous shutdown() killed it. */
-    private synchronized ExecutorService layoutExecutor() {
-        if (layoutExecutor == null || layoutExecutor.isShutdown()) {
-            layoutExecutor = Executors.newSingleThreadExecutor();
-        }
-        return layoutExecutor;
-    }
-
+    /**
+     * Stopping the HTTP server no longer needs to touch any layout state: runLayout now
+     * runs through Gephi's own per-workspace LayoutController/LayoutModel, which is shared
+     * with the Desktop Layout panel and owned by Gephi core, not by this service. A layout
+     * in flight — whether the AI or the human started it — is left running exactly as it
+     * would be if the human toggled the panel themselves; the server's on/off state has no
+     * more business stopping it than closing a different panel would.
+     */
     public void shutdown() {
-        layoutRunning.set(false);
-        layoutExecutor.shutdownNow();
     }
 
     /**
