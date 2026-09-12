@@ -54,6 +54,14 @@
         </dependency>
         <dependency>
             <groupId>org.gephi</groupId>
+            <artifactId>io-exporter-preview</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.gephi</groupId>
+            <artifactId>core-library-wrapper</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.gephi</groupId>
             <artifactId>io-importer-api</artifactId>
         </dependency>
         <dependency>
@@ -87,6 +95,10 @@
         <dependency>
             <groupId>org.gephi</groupId>
             <artifactId>timeline-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.gephi</groupId>
+            <artifactId>desktop-project</artifactId>
         </dependency>
 
         <!-- NetBeans Platform APIs (versions managed by gephi-plugin-parent) -->

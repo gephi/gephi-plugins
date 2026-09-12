@@ -40,8 +40,11 @@ import org.gephi.graph.api.GraphModel;
 import org.gephi.graph.api.Node;
 import org.gephi.graph.api.Table;
 import org.gephi.io.exporter.api.ExportController;
+import org.gephi.io.exporter.preview.PDFExporter;
+import org.gephi.io.exporter.preview.PNGExporter;
 import org.gephi.io.exporter.spi.Exporter;
 import org.gephi.io.exporter.spi.GraphExporter;
+import org.apache.pdfbox.pdmodel.common.PDRectangle;
 import org.gephi.filters.api.FilterController;
 import org.gephi.filters.api.Query;
 import org.gephi.filters.spi.CategoryBuilder;
@@ -2420,10 +2423,12 @@ public class GephiControlService {
             ExportController ec = Lookup.getDefault().lookup(ExportController.class);
             Exporter exporter = ec.getExporter("png");
             if (exporter == null) return error("PNG exporter not available");
-
-            // Set dimensions via reflection (PNGExporter is in plugin, not API)
-            setViaReflection(exporter, "width", w);
-            setViaReflection(exporter, "height", h);
+            if (!(exporter instanceof PNGExporter)) {
+                return error("Unexpected PNG exporter implementation: " + exporter.getClass().getName());
+            }
+            PNGExporter pngExporter = (PNGExporter) exporter;
+            pngExporter.setWidth(w);
+            pngExporter.setHeight(h);
 
             if (exporter instanceof GraphExporter) {
                 ((GraphExporter) exporter).setWorkspace(ws);
@@ -2622,8 +2627,12 @@ public class GephiControlService {
                 ExportController ec = Lookup.getDefault().lookup(ExportController.class);
                 Exporter exporter = ec.getExporter("pdf");
                 if (exporter == null) return error("PDF exporter not available");
-                if (w > 0) setViaReflection(exporter, "width", w);
-                if (h > 0) setViaReflection(exporter, "height", h);
+                if (!(exporter instanceof PDFExporter)) {
+                    return error("Unexpected PDF exporter implementation: " + exporter.getClass().getName());
+                }
+                // PDFExporter has no setWidth/setHeight (unlike PNGExporter) — page
+                // dimensions are set via setPageSize(PDRectangle) instead, in points.
+                if (w > 0 && h > 0) ((PDFExporter) exporter).setPageSize(new PDRectangle(w, h));
                 if (exporter instanceof GraphExporter) ((GraphExporter) exporter).setWorkspace(ws);
                 ec.exportFile(new File(filePath), exporter);
                 return success("Exported to " + filePath);
