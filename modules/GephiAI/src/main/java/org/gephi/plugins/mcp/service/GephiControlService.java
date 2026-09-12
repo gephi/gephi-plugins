@@ -63,6 +63,7 @@ import org.gephi.preview.types.DependantOriginalColor;
 import org.gephi.preview.types.EdgeColor;
 import org.gephi.project.api.ProjectController;
 import org.gephi.project.api.Workspace;
+import org.gephi.statistics.api.StatisticsController;
 import org.gephi.statistics.spi.Statistics;
 import org.gephi.statistics.spi.StatisticsBuilder;
 import org.openide.util.Lookup;
@@ -103,6 +104,10 @@ public class GephiControlService {
 
     private LayoutController getLayoutController() {
         return Lookup.getDefault().lookup(LayoutController.class);
+    }
+
+    private StatisticsController getStatisticsController() {
+        return Lookup.getDefault().lookup(StatisticsController.class);
     }
 
     @SuppressWarnings("unchecked")
@@ -1844,11 +1849,23 @@ public class GephiControlService {
             public void switchToIndeterminate() {}
         };
 
+    /**
+     * Runs a statistic through Gephi's own {@link StatisticsController} — the same entry
+     * point the Desktop Statistics panel uses — instead of calling
+     * {@code Statistics.execute(graphModel)} directly. That sharing matters: it registers
+     * the finished report in the workspace's {@code StatisticsModel}, so a run triggered
+     * here shows up in the Statistics panel's report history and is persisted with the
+     * project, exactly as if a human had clicked "Run" there; and for a
+     * {@link org.gephi.statistics.spi.DynamicStatistics} implementation it drives the real
+     * windowed {@code loop()}/{@code end()} sequence instead of silently only calling
+     * {@code execute()} once.
+     */
     private JsonObject runStatistic(String builderName, Map<String, Object> params) {
         try {
             Workspace ws = currentWorkspace();
             if (ws == null) return error("No project open");
-            GraphModel gm = currentGraphModel();
+            StatisticsController sc = getStatisticsController();
+            if (sc == null) return error("Statistics controller unavailable");
 
             // Find statistics builder by name
             StatisticsBuilder matchedBuilder = null;
@@ -1893,8 +1910,9 @@ public class GephiControlService {
                 ((org.gephi.utils.longtask.spi.LongTask) stat).setProgressTicket(NOOP_TICKET);
             }
 
-            // Execute
-            stat.execute(gm);
+            // Execute — dispatches to executeStatic/executeDynamic and, on completion,
+            // registers the report on the workspace's StatisticsModel (see method doc above).
+            sc.execute(stat);
 
             // Build result
             JsonObject r = new JsonObject();
