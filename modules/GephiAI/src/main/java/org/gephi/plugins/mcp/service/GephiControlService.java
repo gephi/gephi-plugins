@@ -390,15 +390,29 @@ public class GephiControlService {
 
     // ─── Project Management ──────────────────────────────────────────
 
+    /*
+     * THREADING NOTE: these project/workspace operations used to run their bodies
+     * through runOnEDT. Gephi's own ProjectControllerImpl now actively warns against
+     * that (see ProjectControllerImpl.warnIfEventDispatchThread): its mutating methods
+     * notify project/workspace listeners synchronously and, for open/save, block on a
+     * LongTaskExecutor Future — calling them from the EDT freezes the whole interface
+     * for the duration and, if a listener needs the EDT to proceed, can deadlock it.
+     * Gephi's desktop UI itself never calls these from the EDT; it marshals them to a
+     * dedicated background "Project IO" thread instead. The HTTP handler thread calling
+     * into this service already is such a background thread, so these now just run on
+     * the calling thread directly, same as the graph mutation methods elsewhere in
+     * this file (see the styling/filter THREADING NOTE below).
+     */
+
     public JsonObject createProject(String name) {
-        return runOnEDT(() -> {
+        try {
             ProjectController pc = getProjectController();
             pc.newProject();
             Workspace ws = pc.getCurrentWorkspace();
             JsonObject r = success("Project created");
             r.addProperty("workspace_id", ws != null ? ws.getId() : -1);
             return r;
-        });
+        } catch (Exception e) { return error("Failed: " + e.getMessage()); }
     }
 
     public JsonObject openProject(String filePath) {
@@ -411,45 +425,39 @@ public class GephiControlService {
             // deserializes into a queryable model — the "open reports success but the
             // graph is blank" bug. Verified: open works as the first action on a fresh
             // instance and fails only when a project is already open; Gephi's own
-            // File>Open closes first. closeCurrentProject touches UI, so run it on EDT.
+            // File>Open closes first.
             if (pc.hasCurrentProject()) {
-                runOnEDT(() -> { pc.closeCurrentProject(); return null; });
+                pc.closeCurrentProject();
             }
-            // openProject(File) off the EDT: it blocks on a LongTaskExecutor Future
-            // whose completion needs a free EDT.
             pc.openProject(file);
         } catch (Exception e) {
             return error("Failed to open project: " + e.getMessage());
         }
         // Report the actual loaded counts so an empty result is never a silent success.
-        return runOnEDT(() -> {
-            JsonObject r = success("Project opened");
-            Workspace cur = getProjectController().getCurrentWorkspace();
-            int nodes = 0, edges = 0;
-            if (cur != null) {
-                Graph g = getGraphController().getGraphModel(cur).getGraph();
-                nodes = g.getNodeCount();
-                edges = g.getEdgeCount();
-            }
-            r.addProperty("node_count", nodes);
-            r.addProperty("edge_count", edges);
-            if (nodes == 0) r.addProperty("warning", "opened but no nodes are in the current workspace");
-            return r;
-        });
+        JsonObject r = success("Project opened");
+        Workspace cur = getProjectController().getCurrentWorkspace();
+        int nodes = 0, edges = 0;
+        if (cur != null) {
+            Graph g = getGraphController().getGraphModel(cur).getGraph();
+            nodes = g.getNodeCount();
+            edges = g.getEdgeCount();
+        }
+        r.addProperty("node_count", nodes);
+        r.addProperty("edge_count", edges);
+        if (nodes == 0) r.addProperty("warning", "opened but no nodes are in the current workspace");
+        return r;
     }
 
     public JsonObject saveProject(String filePath) {
-        return runOnEDT(() -> {
-            try {
-                ProjectController pc = getProjectController();
-                pc.saveProject(pc.getCurrentProject(), new File(filePath));
-                return success("Project saved");
-            } catch (Exception e) { return error("Failed: " + e.getMessage()); }
-        });
+        try {
+            ProjectController pc = getProjectController();
+            pc.saveProject(pc.getCurrentProject(), new File(filePath));
+            return success("Project saved");
+        } catch (Exception e) { return error("Failed: " + e.getMessage()); }
     }
 
     public JsonObject getProjectInfo() {
-        return runOnEDT(() -> {
+        try {
             Workspace ws = currentWorkspace();
             JsonObject r = new JsonObject();
             r.addProperty("success", true);
@@ -466,27 +474,25 @@ public class GephiControlService {
                 r.addProperty("has_project", false);
             }
             return r;
-        });
+        } catch (Exception e) { return error("Failed: " + e.getMessage()); }
     }
 
     // ─── Workspace Management ────────────────────────────────────────
 
     public JsonObject newWorkspace() {
-        return runOnEDT(() -> {
-            try {
-                ProjectController pc = getProjectController();
-                if (pc.getCurrentProject() == null) return error("No project open");
-                Workspace ws = pc.newWorkspace(pc.getCurrentProject());
-                pc.openWorkspace(ws);
-                JsonObject r = success("Workspace created");
-                r.addProperty("workspace_id", ws.getId());
-                return r;
-            } catch (Exception e) { return error("Failed: " + e.getMessage()); }
-        });
+        try {
+            ProjectController pc = getProjectController();
+            if (pc.getCurrentProject() == null) return error("No project open");
+            Workspace ws = pc.newWorkspace(pc.getCurrentProject());
+            pc.openWorkspace(ws);
+            JsonObject r = success("Workspace created");
+            r.addProperty("workspace_id", ws.getId());
+            return r;
+        } catch (Exception e) { return error("Failed: " + e.getMessage()); }
     }
 
     public JsonObject listWorkspaces() {
-        return runOnEDT(() -> {
+        try {
             ProjectController pc = getProjectController();
             if (pc.getCurrentProject() == null) return error("No project open");
             JsonArray arr = new JsonArray();
@@ -511,11 +517,11 @@ public class GephiControlService {
             r.addProperty("success", true);
             r.add("workspaces", arr);
             return r;
-        });
+        } catch (Exception e) { return error("Failed: " + e.getMessage()); }
     }
 
     public JsonObject switchWorkspace(int index) {
-        return runOnEDT(() -> {
+        try {
             ProjectController pc = getProjectController();
             if (pc.getCurrentProject() == null) return error("No project open");
             int i = 0;
@@ -527,11 +533,11 @@ public class GephiControlService {
                 i++;
             }
             return error("Workspace index out of range: " + index);
-        });
+        } catch (Exception e) { return error("Failed: " + e.getMessage()); }
     }
 
     public JsonObject deleteWorkspace(int index) {
-        return runOnEDT(() -> {
+        try {
             ProjectController pc = getProjectController();
             if (pc.getCurrentProject() == null) return error("No project open");
             int i = 0;
@@ -543,46 +549,42 @@ public class GephiControlService {
                 i++;
             }
             return error("Workspace index out of range: " + index);
-        });
+        } catch (Exception e) { return error("Failed: " + e.getMessage()); }
     }
 
     public JsonObject duplicateWorkspace(int index) {
-        return runOnEDT(() -> {
-            ProjectController pc = getProjectController();
-            if (pc.getCurrentProject() == null) return error("No project open");
-            int i = 0;
-            for (Workspace ws : pc.getCurrentProject().getWorkspaces()) {
-                if (i == index) {
-                    try {
-                        Workspace copy = pc.duplicateWorkspace(ws);
-                        pc.openWorkspace(copy);
-                        JsonObject r = success("Workspace duplicated");
-                        r.addProperty("workspace_id", copy.getId());
-                        return r;
-                    } catch (Exception e) { return error("Failed: " + e.getMessage()); }
-                }
-                i++;
+        ProjectController pc = getProjectController();
+        if (pc.getCurrentProject() == null) return error("No project open");
+        int i = 0;
+        for (Workspace ws : pc.getCurrentProject().getWorkspaces()) {
+            if (i == index) {
+                try {
+                    Workspace copy = pc.duplicateWorkspace(ws);
+                    pc.openWorkspace(copy);
+                    JsonObject r = success("Workspace duplicated");
+                    r.addProperty("workspace_id", copy.getId());
+                    return r;
+                } catch (Exception e) { return error("Failed: " + e.getMessage()); }
             }
-            return error("Workspace index out of range: " + index);
-        });
+            i++;
+        }
+        return error("Workspace index out of range: " + index);
     }
 
     public JsonObject renameWorkspace(int index, String name) {
-        return runOnEDT(() -> {
-            ProjectController pc = getProjectController();
-            if (pc.getCurrentProject() == null) return error("No project open");
-            int i = 0;
-            for (Workspace ws : pc.getCurrentProject().getWorkspaces()) {
-                if (i == index) {
-                    try {
-                        pc.renameWorkspace(ws, name);
-                        return success("Workspace renamed to: " + name);
-                    } catch (Exception e) { return error("Failed: " + e.getMessage()); }
-                }
-                i++;
+        ProjectController pc = getProjectController();
+        if (pc.getCurrentProject() == null) return error("No project open");
+        int i = 0;
+        for (Workspace ws : pc.getCurrentProject().getWorkspaces()) {
+            if (i == index) {
+                try {
+                    pc.renameWorkspace(ws, name);
+                    return success("Workspace renamed to: " + name);
+                } catch (Exception e) { return error("Failed: " + e.getMessage()); }
             }
-            return error("Workspace index out of range: " + index);
-        });
+            i++;
+        }
+        return error("Workspace index out of range: " + index);
     }
 
     // ─── Node Operations ─────────────────────────────────────────────
