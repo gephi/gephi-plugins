@@ -4,7 +4,7 @@
     <parent>
         <artifactId>gephi-plugin-parent</artifactId>
         <groupId>org.gephi</groupId>
-        <version>0.9.3</version>
+        <version>0.11.3</version>
     </parent>
 
     <groupId>org.gephi</groupId>
@@ -47,24 +47,19 @@
                     <licenseFile>gpl-3.0.txt</licenseFile>
                     <author>Alexis Jacomy</author>
                     <homePageUrl>https://gephi.org/plugins/#/plugin/geolayout-plugin</homePageUrl>
-                    <sourceCodeUrl>https://github.com/gephi/gephi-plugins/tree/geolayout-plugin</sourceCodeUrl>
                     <publicPackages>
                     </publicPackages>
                 </configuration>
             </plugin>
+
+            <plugin>
+                <groupId>org.gephi</groupId>
+                <artifactId>gephi-maven-plugin</artifactId>
+                <configuration>
+                    <sourceCodeUrl>https://github.com/gephi/gephi-plugins/tree/geolayout-plugin</sourceCodeUrl>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
-
-    <!-- Snapshot Repositories (only needed if developing against a SNAPSHOT version) -->
-    <repositories>
-        <repository>
-            <id>oss-sonatype</id>
-            <name>oss-sonatype</name>
-            <url>https://oss.sonatype.org/content/repositories/snapshots/</url>
-            <snapshots>
-                <enabled>true</enabled>
-            </snapshots>
-        </repository>
-    </repositories>
 </project>
 
