@@ -231,26 +231,6 @@ public class GephiControlService {
         }
     }
 
-    /**
-     * Refresh the preview model after a graph mutation, on the calling thread.
-     * PreviewController.refreshPreview() only rebuilds the plain PreviewModel data
-     * (it touches no Swing/AWT component); Gephi's own desktop UI already runs it off
-     * the EDT (PreviewUIControllerImpl hops to a plain background thread for the same
-     * call) specifically so a full item rebuild never freezes the interface. Failures
-     * are logged, not surfaced: by the time this runs the graph mutation has already
-     * been applied, and returning an error for a cosmetic refresh would tell the
-     * client a destructive operation failed when it did not, inviting a double-apply
-     * retry.
-     */
-    private void refreshPreview(Workspace ws) {
-        try {
-            PreviewController pc = Lookup.getDefault().lookup(PreviewController.class);
-            if (pc != null) pc.refreshPreview(ws);
-        } catch (RuntimeException e) {
-            LOGGER.log(Level.WARNING, "Preview refresh failed after graph mutation", e);
-        }
-    }
-
     private static volatile java.lang.reflect.Field READ_LOCK_FIELD;
 
     /*
@@ -1370,8 +1350,7 @@ public class GephiControlService {
      * timeout (misreporting "Gephi's UI thread is unresponsive"), and — worse — the
      * abandoned EDT task still ran later, applying a destructive mutation after the HTTP
      * call had already reported failure, so a client retry applied it twice. They now run
-     * on the calling thread, like clearGraph and addNodeToModel always have. The preview
-     * refresh (refreshPreview) runs on the calling thread too — see its own Javadoc.
+     * on the calling thread, like clearGraph and addNodeToModel always have.
      */
 
     public JsonObject setEdgeColor(String source, String target, int r, int g, int b, int a) {
@@ -2148,7 +2127,6 @@ public class GephiControlService {
             lockWrite(g);
             try { for (Node n : toRemove) g.removeNode(n); }
             finally { unlockWrite(g); }
-            refreshPreview(ws);
             JsonObject r = success("Filtered by degree [" + minDegree + ", " + maxDegree + "]");
             r.addProperty("removed", toRemove.size());
             r.addProperty("remaining_nodes", g.getNodeCount());
@@ -2179,7 +2157,6 @@ public class GephiControlService {
             lockWrite(g);
             try { for (Edge e : toRemove) g.removeEdge(e); }
             finally { unlockWrite(g); }
-            refreshPreview(ws);
             JsonObject r = success("Filtered edges by weight [" + minWeight + ", " + maxWeight + "]");
             r.addProperty("removed", toRemove.size());
             r.addProperty("remaining_edges", g.getEdgeCount());
@@ -2900,8 +2877,6 @@ public class GephiControlService {
                 }
                 for (Node n : isolates) g.removeNode(n);
             } finally { unlockWrite(g); }
-            // Refresh preview so exports reflect the filtered graph (outside the lock)
-            refreshPreview(ws);
             JsonObject r = success("Removed " + isolates.size() + " isolated nodes");
             r.addProperty("removed", isolates.size());
             r.addProperty("remaining_nodes", g.getNodeCount());
@@ -2948,9 +2923,6 @@ public class GephiControlService {
                 for (Node n : toRemove) g.removeNode(n);
             } finally { unlockWrite(g); }
 
-            // Refresh preview so exports reflect the filtered graph (outside the lock)
-            refreshPreview(ws);
-
             JsonObject r = success("Ego network extracted for " + nodeId);
             r.addProperty("kept_nodes", keep.size());
             r.addProperty("removed_nodes", toRemove.size());
@@ -2960,7 +2932,7 @@ public class GephiControlService {
 
     public JsonObject extractGiantComponent() {
         // Statistics must run OFF the EDT (they dispatch UI work to EDT internally).
-        // Node removal and the preview refresh run on the calling thread too — neither needs it.
+        // Node removal runs on the calling thread too — it doesn't need it either.
         try {
             Workspace ws = currentWorkspace();
             if (ws == null) return error("No project open");
@@ -3013,8 +2985,7 @@ public class GephiControlService {
             }
 
             // Remove nodes on the calling thread — graph mutation needs only the graph
-            // write lock (see the threading note above setEdgeColor); the preview refresh
-            // afterward runs on the calling thread too.
+            // write lock (see the threading note above setEdgeColor).
             java.util.List<Node> toRemove = new java.util.ArrayList<>();
             for (Node n : allNodes) {
                 Object v = n.getAttribute(fccCol);
@@ -3024,7 +2995,6 @@ public class GephiControlService {
             lockWrite(g);
             try { for (Node n : toRemove) g.removeNode(n); }
             finally { unlockWrite(g); }
-            refreshPreview(ws);
             JsonObject r = success("Giant component extracted");
             r.addProperty("kept_nodes", giantSize);
             r.addProperty("removed_nodes", toRemove.size());
