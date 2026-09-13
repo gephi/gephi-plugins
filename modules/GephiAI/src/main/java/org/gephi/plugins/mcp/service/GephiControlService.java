@@ -1312,18 +1312,23 @@ public class GephiControlService {
 
     // ─── Appearance: Individual Node/Edge Styling ────────────────────
 
+    /**
+     * Node color/size are plain fields on the Node object (NodeImpl.setColor/setSize just
+     * write an int/float, no checkWriteLock) — unlike addNode/removeNode, which mutate
+     * NodeStore's internal structure and do enforce the write lock. Gephi's own
+     * AppearanceController.transform() (see colorByPartition/colorByRanking/sizeByRanking
+     * below) sets these same properties on every node in the graph under nothing more than
+     * a live NodeIterable's read lock, so a single-node set needs no write lock either.
+     */
     public JsonObject setNodeColor(String id, int r, int g, int b, int a) {
         try {
             Workspace ws = currentWorkspace();
             if (ws == null) return error("No project open");
             Graph graph = currentGraphModel().getGraph();
-            lockWrite(graph);
-            try {
-                Node n = graph.getNode(id);
-                if (n == null) return error("Node not found: " + id);
-                n.setColor(new Color(r, g, b, a));
-                return success("Node color set");
-            } finally { unlockWrite(graph); }
+            Node n = graph.getNode(id);
+            if (n == null) return error("Node not found: " + id);
+            n.setColor(new Color(r, g, b, a));
+            return success("Node color set");
         } catch (Exception e) { return error("Failed: " + e.getMessage()); }
     }
 
@@ -1332,13 +1337,10 @@ public class GephiControlService {
             Workspace ws = currentWorkspace();
             if (ws == null) return error("No project open");
             Graph graph = currentGraphModel().getGraph();
-            lockWrite(graph);
-            try {
-                Node n = graph.getNode(id);
-                if (n == null) return error("Node not found: " + id);
-                n.setSize(size);
-                return success("Node size set to " + size);
-            } finally { unlockWrite(graph); }
+            Node n = graph.getNode(id);
+            if (n == null) return error("Node not found: " + id);
+            n.setSize(size);
+            return success("Node size set to " + size);
         } catch (Exception e) { return error("Failed: " + e.getMessage()); }
     }
 
@@ -1375,26 +1377,23 @@ public class GephiControlService {
             Workspace ws = currentWorkspace();
             if (ws == null) return error("No project open");
             Graph graph = currentGraphModel().getGraph();
-            lockWrite(graph);
-            try {
-                int set = 0, notFound = 0;
-                for (Map<String, Object> nc : nodeColors) {
-                    String id = (String) nc.get("id");
-                    Node n = graph.getNode(id);
-                    if (n == null) { notFound++; continue; }
-                    int r = ((Number) nc.get("r")).intValue();
-                    int g = ((Number) nc.get("g")).intValue();
-                    int b = ((Number) nc.get("b")).intValue();
-                    int a = nc.containsKey("a") ? ((Number) nc.get("a")).intValue() : 255;
-                    n.setColor(new Color(r, g, b, a));
-                    set++;
-                }
-                JsonObject res = new JsonObject();
-                res.addProperty("success", true);
-                res.addProperty("set", set);
-                res.addProperty("not_found", notFound);
-                return res;
-            } finally { unlockWrite(graph); }
+            int set = 0, notFound = 0;
+            for (Map<String, Object> nc : nodeColors) {
+                String id = (String) nc.get("id");
+                Node n = graph.getNode(id);
+                if (n == null) { notFound++; continue; }
+                int r = ((Number) nc.get("r")).intValue();
+                int g = ((Number) nc.get("g")).intValue();
+                int b = ((Number) nc.get("b")).intValue();
+                int a = nc.containsKey("a") ? ((Number) nc.get("a")).intValue() : 255;
+                n.setColor(new Color(r, g, b, a));
+                set++;
+            }
+            JsonObject res = new JsonObject();
+            res.addProperty("success", true);
+            res.addProperty("set", set);
+            res.addProperty("not_found", notFound);
+            return res;
         } catch (Exception e) { return error("Failed: " + e.getMessage()); }
     }
 
@@ -1404,13 +1403,12 @@ public class GephiControlService {
         try {
             Graph graph = currentGraphModel().getGraph();
             Color defaultColor = new Color(r, g, b);
-            lockWrite(graph);
-            try {
-                for (Node n : graph.getNodes().toArray()) {
-                    n.setColor(defaultColor);
-                    n.setSize(size);
-                }
-            } finally { unlockWrite(graph); }
+            // toArray, not the live iterable: breaking out of an auto-locked iterator
+            // before exhaustion leaks its read hold permanently (see ITERATION RULE above).
+            for (Node n : graph.getNodes().toArray()) {
+                n.setColor(defaultColor);
+                n.setSize(size);
+            }
             return success("Appearance reset for all nodes");
         } catch (Exception e) { return error("Failed: " + e.getMessage()); }
     }
@@ -2626,7 +2624,7 @@ public class GephiControlService {
             // PDFExporter has no setWidth/setHeight (unlike PNGExporter) — page
             // dimensions are set via setPageSize(PDRectangle) instead, in points.
             if (w > 0 && h > 0) ((PDFExporter) exporter).setPageSize(new PDRectangle(w, h));
-            if (exporter instanceof GraphExporter) ((GraphExporter) exporter).setWorkspace(ws);
+            if (exporter instanceof GraphExporter) exporter.setWorkspace(ws);
             ec.exportFile(new File(filePath), exporter);
             return success("Exported to " + filePath);
         } catch (IllegalArgumentException e) {
@@ -2643,7 +2641,7 @@ public class GephiControlService {
             ExportController ec = Lookup.getDefault().lookup(ExportController.class);
             Exporter exporter = ec.getExporter("svg");
             if (exporter == null) return error("SVG exporter not available");
-            if (exporter instanceof GraphExporter) ((GraphExporter) exporter).setWorkspace(ws);
+            if (exporter instanceof GraphExporter) exporter.setWorkspace(ws);
             ec.exportFile(new File(filePath), exporter);
             return success("Exported to " + filePath);
         } catch (Exception e) { return error("Export failed: " + e.getMessage()); }
@@ -2663,7 +2661,7 @@ public class GephiControlService {
             if (exporter == null) return error("GraphML exporter not available");
             if (exporter instanceof GraphExporter) {
                 ((GraphExporter) exporter).setExportVisible(visible);
-                ((GraphExporter) exporter).setWorkspace(ws);
+                exporter.setWorkspace(ws);
             }
             ec.exportFile(new File(filePath), exporter);
             JsonObject r = success("Exported to " + filePath);
