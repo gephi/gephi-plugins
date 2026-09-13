@@ -232,16 +232,20 @@ public class GephiControlService {
     }
 
     /**
-     * Preview refresh on the EDT — the one piece of the former runOnEDT bodies that
-     * belongs there (it touches Swing-backed preview state). Failures are logged, not
-     * surfaced: by the time this runs the graph mutation has already been applied, and
-     * returning an error for a cosmetic refresh would tell the client a destructive
-     * operation failed when it did not, inviting a double-apply retry.
+     * Refresh the preview model after a graph mutation, on the calling thread.
+     * PreviewController.refreshPreview() only rebuilds the plain PreviewModel data
+     * (it touches no Swing/AWT component); Gephi's own desktop UI already runs it off
+     * the EDT (PreviewUIControllerImpl hops to a plain background thread for the same
+     * call) specifically so a full item rebuild never freezes the interface. Failures
+     * are logged, not surfaced: by the time this runs the graph mutation has already
+     * been applied, and returning an error for a cosmetic refresh would tell the
+     * client a destructive operation failed when it did not, inviting a double-apply
+     * retry.
      */
-    private void refreshPreviewOnEDT(Workspace ws) {
+    private void refreshPreview(Workspace ws) {
         try {
             PreviewController pc = Lookup.getDefault().lookup(PreviewController.class);
-            if (pc != null) runOnEDT(() -> { pc.refreshPreview(ws); return null; });
+            if (pc != null) pc.refreshPreview(ws);
         } catch (RuntimeException e) {
             LOGGER.log(Level.WARNING, "Preview refresh failed after graph mutation", e);
         }
@@ -1366,8 +1370,8 @@ public class GephiControlService {
      * timeout (misreporting "Gephi's UI thread is unresponsive"), and — worse — the
      * abandoned EDT task still ran later, applying a destructive mutation after the HTTP
      * call had already reported failure, so a client retry applied it twice. They now run
-     * on the calling thread, like clearGraph and addNodeToModel always have. Only the
-     * preview refresh still hops to the EDT (refreshPreviewOnEDT).
+     * on the calling thread, like clearGraph and addNodeToModel always have. The preview
+     * refresh (refreshPreview) runs on the calling thread too — see its own Javadoc.
      */
 
     public JsonObject setEdgeColor(String source, String target, int r, int g, int b, int a) {
@@ -2144,7 +2148,7 @@ public class GephiControlService {
             lockWrite(g);
             try { for (Node n : toRemove) g.removeNode(n); }
             finally { unlockWrite(g); }
-            refreshPreviewOnEDT(ws);
+            refreshPreview(ws);
             JsonObject r = success("Filtered by degree [" + minDegree + ", " + maxDegree + "]");
             r.addProperty("removed", toRemove.size());
             r.addProperty("remaining_nodes", g.getNodeCount());
@@ -2175,7 +2179,7 @@ public class GephiControlService {
             lockWrite(g);
             try { for (Edge e : toRemove) g.removeEdge(e); }
             finally { unlockWrite(g); }
-            refreshPreviewOnEDT(ws);
+            refreshPreview(ws);
             JsonObject r = success("Filtered edges by weight [" + minWeight + ", " + maxWeight + "]");
             r.addProperty("removed", toRemove.size());
             r.addProperty("remaining_edges", g.getEdgeCount());
@@ -2186,247 +2190,243 @@ public class GephiControlService {
     // ─── Preview Settings ────────────────────────────────────────────
 
     public JsonObject getPreviewSettings() {
-        return runOnEDT(() -> {
-            Workspace ws = currentWorkspace();
-            if (ws == null) return error("No project open");
-            try {
-                PreviewController pc = Lookup.getDefault().lookup(PreviewController.class);
-                PreviewModel pm = pc.getModel(ws);
-                if (pm == null) return error("Preview model not available");
+        Workspace ws = currentWorkspace();
+        if (ws == null) return error("No project open");
+        try {
+            PreviewController pc = Lookup.getDefault().lookup(PreviewController.class);
+            PreviewModel pm = pc.getModel(ws);
+            if (pm == null) return error("Preview model not available");
 
-                JsonObject settings = new JsonObject();
-                // Get commonly used properties
-                for (PreviewProperty prop : pm.getProperties().getProperties()) {
-                    String name = prop.getName();
-                    Object val = prop.getValue();
-                    if (val != null) {
-                        if (val instanceof Color) {
-                            Color c = (Color) val;
+            JsonObject settings = new JsonObject();
+            // Get commonly used properties
+            for (PreviewProperty prop : pm.getProperties().getProperties()) {
+                String name = prop.getName();
+                Object val = prop.getValue();
+                if (val != null) {
+                    if (val instanceof Color) {
+                        Color c = (Color) val;
+                        settings.addProperty(name, String.format("#%02x%02x%02x", c.getRed(), c.getGreen(), c.getBlue()));
+                    } else if (val instanceof Number) {
+                        settings.addProperty(name, (Number) val);
+                    } else if (val instanceof Boolean) {
+                        settings.addProperty(name, (Boolean) val);
+                    } else if (val instanceof java.awt.Font) {
+                        java.awt.Font f = (java.awt.Font) val;
+                        String style = f.isBold() && f.isItalic() ? "BoldItalic" : f.isBold() ? "Bold" : f.isItalic() ? "Italic" : "Plain";
+                        settings.addProperty(name, f.getFamily() + " " + f.getSize() + " " + style);
+                    } else if (val instanceof EdgeColor) {
+                        EdgeColor ec = (EdgeColor) val;
+                        if (ec.getMode() == EdgeColor.Mode.ORIGINAL) settings.addProperty(name, "original");
+                        else if (ec.getMode() == EdgeColor.Mode.MIXED) settings.addProperty(name, "mixed");
+                        else if (ec.getCustomColor() != null) {
+                            Color c = ec.getCustomColor();
                             settings.addProperty(name, String.format("#%02x%02x%02x", c.getRed(), c.getGreen(), c.getBlue()));
-                        } else if (val instanceof Number) {
-                            settings.addProperty(name, (Number) val);
-                        } else if (val instanceof Boolean) {
-                            settings.addProperty(name, (Boolean) val);
-                        } else if (val instanceof java.awt.Font) {
-                            java.awt.Font f = (java.awt.Font) val;
-                            String style = f.isBold() && f.isItalic() ? "BoldItalic" : f.isBold() ? "Bold" : f.isItalic() ? "Italic" : "Plain";
-                            settings.addProperty(name, f.getFamily() + " " + f.getSize() + " " + style);
-                        } else if (val instanceof EdgeColor) {
-                            EdgeColor ec = (EdgeColor) val;
-                            if (ec.getMode() == EdgeColor.Mode.ORIGINAL) settings.addProperty(name, "original");
-                            else if (ec.getMode() == EdgeColor.Mode.MIXED) settings.addProperty(name, "mixed");
-                            else if (ec.getCustomColor() != null) {
-                                Color c = ec.getCustomColor();
-                                settings.addProperty(name, String.format("#%02x%02x%02x", c.getRed(), c.getGreen(), c.getBlue()));
-                            } else settings.addProperty(name, ec.getMode().toString().toLowerCase());
-                        } else if (val instanceof DependantColor) {
-                            DependantColor dc = (DependantColor) val;
-                            if (dc.getMode() == DependantColor.Mode.PARENT) settings.addProperty(name, "parent");
-                            else if (dc.getMode() == DependantColor.Mode.DARKER) settings.addProperty(name, "darker");
-                            else if (dc.getCustomColor() != null) {
-                                Color c = dc.getCustomColor();
-                                settings.addProperty(name, String.format("#%02x%02x%02x", c.getRed(), c.getGreen(), c.getBlue()));
-                            } else settings.addProperty(name, "parent");
-                        } else if (val instanceof DependantOriginalColor) {
-                            DependantOriginalColor doc = (DependantOriginalColor) val;
-                            if (doc.getMode() == DependantOriginalColor.Mode.ORIGINAL) settings.addProperty(name, "original");
-                            else if (doc.getMode() == DependantOriginalColor.Mode.PARENT) settings.addProperty(name, "parent");
-                            else if (doc.getCustomColor() != null) {
-                                Color c = doc.getCustomColor();
-                                settings.addProperty(name, String.format("#%02x%02x%02x", c.getRed(), c.getGreen(), c.getBlue()));
-                            } else settings.addProperty(name, "original");
-                        } else {
-                            settings.addProperty(name, val.toString());
-                        }
+                        } else settings.addProperty(name, ec.getMode().toString().toLowerCase());
+                    } else if (val instanceof DependantColor) {
+                        DependantColor dc = (DependantColor) val;
+                        if (dc.getMode() == DependantColor.Mode.PARENT) settings.addProperty(name, "parent");
+                        else if (dc.getMode() == DependantColor.Mode.DARKER) settings.addProperty(name, "darker");
+                        else if (dc.getCustomColor() != null) {
+                            Color c = dc.getCustomColor();
+                            settings.addProperty(name, String.format("#%02x%02x%02x", c.getRed(), c.getGreen(), c.getBlue()));
+                        } else settings.addProperty(name, "parent");
+                    } else if (val instanceof DependantOriginalColor) {
+                        DependantOriginalColor doc = (DependantOriginalColor) val;
+                        if (doc.getMode() == DependantOriginalColor.Mode.ORIGINAL) settings.addProperty(name, "original");
+                        else if (doc.getMode() == DependantOriginalColor.Mode.PARENT) settings.addProperty(name, "parent");
+                        else if (doc.getCustomColor() != null) {
+                            Color c = doc.getCustomColor();
+                            settings.addProperty(name, String.format("#%02x%02x%02x", c.getRed(), c.getGreen(), c.getBlue()));
+                        } else settings.addProperty(name, "original");
+                    } else {
+                        settings.addProperty(name, val.toString());
                     }
                 }
-
-                // Include background color if not already captured by the main loop
-                try {
-                    Object bgVal = pm.getProperties().getValue("background.color");
-                    if (bgVal instanceof Color) {
-                        Color c = (Color) bgVal;
-                        settings.addProperty("background.color", String.format("#%02x%02x%02x", c.getRed(), c.getGreen(), c.getBlue()));
-                    }
-                } catch (Exception ignored) {}
-
-                JsonObject r = new JsonObject();
-                r.addProperty("success", true);
-                r.add("settings", settings);
-                return r;
-            } catch (Exception e) {
-                return error("Failed: " + e.getMessage());
             }
-        });
+
+            // Include background color if not already captured by the main loop
+            try {
+                Object bgVal = pm.getProperties().getValue("background.color");
+                if (bgVal instanceof Color) {
+                    Color c = (Color) bgVal;
+                    settings.addProperty("background.color", String.format("#%02x%02x%02x", c.getRed(), c.getGreen(), c.getBlue()));
+                }
+            } catch (Exception ignored) {}
+
+            JsonObject r = new JsonObject();
+            r.addProperty("success", true);
+            r.add("settings", settings);
+            return r;
+        } catch (Exception e) {
+            return error("Failed: " + e.getMessage());
+        }
     }
 
     public JsonObject setPreviewSettings(Map<String, Object> settings) {
-        return runOnEDT(() -> {
-            Workspace ws = currentWorkspace();
-            if (ws == null) return error("No project open");
-            try {
-                PreviewController pc = Lookup.getDefault().lookup(PreviewController.class);
-                PreviewModel pm = pc.getModel(ws);
-                if (pm == null) return error("Preview model not available");
+        Workspace ws = currentWorkspace();
+        if (ws == null) return error("No project open");
+        try {
+            PreviewController pc = Lookup.getDefault().lookup(PreviewController.class);
+            PreviewModel pm = pc.getModel(ws);
+            if (pm == null) return error("Preview model not available");
 
-                int set = 0;
-                for (Map.Entry<String, Object> e : settings.entrySet()) {
-                    String key = e.getKey();
-                    Object val = e.getValue();
-                    if (val == null) continue;  // Skip null values to avoid corrupting preview model
+            int set = 0;
+            for (Map.Entry<String, Object> e : settings.entrySet()) {
+                String key = e.getKey();
+                Object val = e.getValue();
+                if (val == null) continue;  // Skip null values to avoid corrupting preview model
 
-                    // Background color: set on the preview model under Gephi's canonical key
-                    // (PreviewProperty.BACKGROUND_COLOR) so the Preview panel, the renderers,
-                    // and exportPng's export-time read all share one source of truth. The old
-                    // cached exportBackgroundColor field was process-wide sticky state: once
-                    // set it tinted every later export in every workspace and project, even
-                    // after the user changed the background in Gephi's own Preview panel.
-                    if ("background.color".equalsIgnoreCase(key) || "backgroundColor".equalsIgnoreCase(key)) {
-                        try {
-                            String hex = val.toString().trim();
-                            if (hex.startsWith("#")) hex = hex.substring(1);
-                            Color bgColor = new Color(Integer.parseInt(hex, 16));
-                            PreviewProperty bgProp = pm.getProperties().getProperty(PreviewProperty.BACKGROUND_COLOR);
-                            if (bgProp != null) {
-                                bgProp.setValue(bgColor);
-                            } else {
-                                pm.getProperties().putValue(PreviewProperty.BACKGROUND_COLOR, bgColor);
-                            }
-                            set++;
-                        } catch (NumberFormatException nfe) {
-                            LOGGER.warning("MCP: Invalid background color: " + val);
+                // Background color: set on the preview model under Gephi's canonical key
+                // (PreviewProperty.BACKGROUND_COLOR) so the Preview panel, the renderers,
+                // and exportPng's export-time read all share one source of truth. The old
+                // cached exportBackgroundColor field was process-wide sticky state: once
+                // set it tinted every later export in every workspace and project, even
+                // after the user changed the background in Gephi's own Preview panel.
+                if ("background.color".equalsIgnoreCase(key) || "backgroundColor".equalsIgnoreCase(key)) {
+                    try {
+                        String hex = val.toString().trim();
+                        if (hex.startsWith("#")) hex = hex.substring(1);
+                        Color bgColor = new Color(Integer.parseInt(hex, 16));
+                        PreviewProperty bgProp = pm.getProperties().getProperty(PreviewProperty.BACKGROUND_COLOR);
+                        if (bgProp != null) {
+                            bgProp.setValue(bgColor);
+                        } else {
+                            pm.getProperties().putValue(PreviewProperty.BACKGROUND_COLOR, bgColor);
                         }
-                        continue;
-                    }
-
-                    PreviewProperty prop = pm.getProperties().getProperty(key);
-                    if (prop == null) {
-                        // Property registry may not be initialized in this workspace
-                        // (e.g. Preview never opened). putValue works regardless and
-                        // renderers read it at export time. Non-scalar values are
-                        // never valid preview properties — storing one corrupts the
-                        // model, so skip them.
-                        if (val instanceof Map || val instanceof List) {
-                            LOGGER.warning("MCP: Skipping non-scalar preview value for " + key);
-                            continue;
-                        }
-                        Object coerced = val;
-                        if (val instanceof String) {
-                            String sv = ((String) val).trim();
-                            if (sv.equalsIgnoreCase("true") || sv.equalsIgnoreCase("false")) coerced = Boolean.parseBoolean(sv);
-                            else {
-                                try { coerced = Float.parseFloat(sv); } catch (NumberFormatException ignore) { }
-                            }
-                        } else if (val instanceof Number) {
-                            coerced = ((Number) val).floatValue();
-                        } else if (val instanceof Boolean) {
-                            coerced = val;
-                        }
-                        pm.getProperties().putValue(key, coerced);
                         set++;
+                    } catch (NumberFormatException nfe) {
+                        LOGGER.warning("MCP: Invalid background color: " + val);
+                    }
+                    continue;
+                }
+
+                PreviewProperty prop = pm.getProperties().getProperty(key);
+                if (prop == null) {
+                    // Property registry may not be initialized in this workspace
+                    // (e.g. Preview never opened). putValue works regardless and
+                    // renderers read it at export time. Non-scalar values are
+                    // never valid preview properties — storing one corrupts the
+                    // model, so skip them.
+                    if (val instanceof Map || val instanceof List) {
+                        LOGGER.warning("MCP: Skipping non-scalar preview value for " + key);
                         continue;
                     }
-                    if (prop != null) {
-                        // Convert value based on property type
-                        Class<?> type = prop.getType();
-                        try {
-                            if (type == Color.class && val instanceof String) {
-                                String hex = (String) val;
-                                if (hex.startsWith("#")) hex = hex.substring(1);
-                                prop.setValue(new Color(Integer.parseInt(hex, 16)));
-                            } else if (type == Boolean.class || type == boolean.class) {
-                                prop.setValue(Boolean.parseBoolean(val.toString()));
-                            } else if (type == Float.class || type == float.class) {
-                                prop.setValue(Float.parseFloat(val.toString()));
-                            } else if (type == Integer.class || type == int.class) {
-                                prop.setValue(Integer.parseInt(val.toString()));
-                            } else if (type == java.awt.Font.class && val instanceof String) {
-                                // Parse font string like "Courier New 12 Bold" -> Font object
-                                // Everything before first digit = name, first number = size, rest = style
-                                String fontStr = val.toString().trim();
-                                String name = "Arial";
-                                int fontSize = 12;
-                                int fontStyle = java.awt.Font.PLAIN;
-                                int numStart = -1;
-                                for (int ci = 0; ci < fontStr.length(); ci++) {
-                                    if (Character.isDigit(fontStr.charAt(ci))) { numStart = ci; break; }
-                                }
-                                if (numStart > 0) {
-                                    name = fontStr.substring(0, numStart).trim();
-                                    String[] rest = fontStr.substring(numStart).trim().split("\\s+");
-                                    try { fontSize = Integer.parseInt(rest[0]); } catch (NumberFormatException ignored) {}
-                                    for (int pi = 1; pi < rest.length; pi++) {
-                                        if ("Bold".equalsIgnoreCase(rest[pi])) fontStyle |= java.awt.Font.BOLD;
-                                        else if ("Italic".equalsIgnoreCase(rest[pi])) fontStyle |= java.awt.Font.ITALIC;
-                                    }
-                                } else if (numStart < 0) {
-                                    name = fontStr;
-                                }
-                                prop.setValue(new java.awt.Font(name, fontStyle, fontSize));
-                            } else if (type == java.awt.Font.class) {
-                                continue; // Non-string font value, skip
-                            } else if (type == DependantColor.class && val instanceof String) {
-                                String s = val.toString().trim().toLowerCase();
-                                if ("parent".equals(s)) {
-                                    prop.setValue(new DependantColor(DependantColor.Mode.PARENT));
-                                } else if ("darker".equals(s)) {
-                                    prop.setValue(new DependantColor(DependantColor.Mode.DARKER));
-                                } else if (s.startsWith("#")) {
-                                    prop.setValue(new DependantColor(new Color(Integer.parseInt(s.substring(1), 16))));
-                                } else { continue; }
-                            } else if (type == DependantOriginalColor.class && val instanceof String) {
-                                String s = val.toString().trim().toLowerCase();
-                                if ("parent".equals(s)) {
-                                    prop.setValue(new DependantOriginalColor(DependantOriginalColor.Mode.PARENT));
-                                } else if ("original".equals(s)) {
-                                    prop.setValue(new DependantOriginalColor(DependantOriginalColor.Mode.ORIGINAL));
-                                } else if (s.startsWith("#")) {
-                                    prop.setValue(new DependantOriginalColor(new Color(Integer.parseInt(s.substring(1), 16))));
-                                } else { continue; }
-                            } else if (type == EdgeColor.class && val instanceof String) {
-                                // For "source"/"target": color edges individually instead of using
-                                // EdgeColor mode (which corrupts SVG rendering in Gephi 0.10)
-                                String s = val.toString().trim().toLowerCase();
-                                if ("source".equals(s) || "target".equals(s)) {
-                                    boolean useSource = "source".equals(s);
-                                    Graph graph = currentGraphModel().getGraph();
-                                    Node[] graphNodes = graph.getNodes().toArray();
-                                    Edge[] graphEdges = graph.getEdges().toArray();
-                                    java.util.Map<Node, Color> nodeColors = new java.util.HashMap<>();
-                                    for (Node n : graphNodes) nodeColors.put(n, n.getColor());
-                                    for (Edge edge : graphEdges) {
-                                        Node ref = useSource ? edge.getSource() : edge.getTarget();
-                                        Color c = nodeColors.get(ref);
-                                        if (c != null) edge.setColor(c);
-                                    }
-                                    prop.setValue(new EdgeColor(EdgeColor.Mode.ORIGINAL));
-                                } else if ("mixed".equals(s)) {
-                                    prop.setValue(new EdgeColor(EdgeColor.Mode.MIXED));
-                                } else if ("original".equals(s)) {
-                                    prop.setValue(new EdgeColor(EdgeColor.Mode.ORIGINAL));
-                                } else if (s.startsWith("#")) {
-                                    prop.setValue(new EdgeColor(new Color(Integer.parseInt(s.substring(1), 16))));
-                                } else { continue; }
-                            } else {
-                                continue; // Skip unknown types
-                            }
-                            set++;
-                        } catch (NumberFormatException nfe) {
-                            LOGGER.warning("MCP: Invalid number/color value for " + key + ": " + val);
-                            continue;
-                        } catch (Exception ex) {
-                            LOGGER.warning("MCP: Failed to set preview property " + key + ": " + ex.getMessage());
-                            continue;
+                    Object coerced = val;
+                    if (val instanceof String) {
+                        String sv = ((String) val).trim();
+                        if (sv.equalsIgnoreCase("true") || sv.equalsIgnoreCase("false")) coerced = Boolean.parseBoolean(sv);
+                        else {
+                            try { coerced = Float.parseFloat(sv); } catch (NumberFormatException ignore) { }
                         }
+                    } else if (val instanceof Number) {
+                        coerced = ((Number) val).floatValue();
+                    } else if (val instanceof Boolean) {
+                        coerced = val;
+                    }
+                    pm.getProperties().putValue(key, coerced);
+                    set++;
+                    continue;
+                }
+                if (prop != null) {
+                    // Convert value based on property type
+                    Class<?> type = prop.getType();
+                    try {
+                        if (type == Color.class && val instanceof String) {
+                            String hex = (String) val;
+                            if (hex.startsWith("#")) hex = hex.substring(1);
+                            prop.setValue(new Color(Integer.parseInt(hex, 16)));
+                        } else if (type == Boolean.class || type == boolean.class) {
+                            prop.setValue(Boolean.parseBoolean(val.toString()));
+                        } else if (type == Float.class || type == float.class) {
+                            prop.setValue(Float.parseFloat(val.toString()));
+                        } else if (type == Integer.class || type == int.class) {
+                            prop.setValue(Integer.parseInt(val.toString()));
+                        } else if (type == java.awt.Font.class && val instanceof String) {
+                            // Parse font string like "Courier New 12 Bold" -> Font object
+                            // Everything before first digit = name, first number = size, rest = style
+                            String fontStr = val.toString().trim();
+                            String name = "Arial";
+                            int fontSize = 12;
+                            int fontStyle = java.awt.Font.PLAIN;
+                            int numStart = -1;
+                            for (int ci = 0; ci < fontStr.length(); ci++) {
+                                if (Character.isDigit(fontStr.charAt(ci))) { numStart = ci; break; }
+                            }
+                            if (numStart > 0) {
+                                name = fontStr.substring(0, numStart).trim();
+                                String[] rest = fontStr.substring(numStart).trim().split("\\s+");
+                                try { fontSize = Integer.parseInt(rest[0]); } catch (NumberFormatException ignored) {}
+                                for (int pi = 1; pi < rest.length; pi++) {
+                                    if ("Bold".equalsIgnoreCase(rest[pi])) fontStyle |= java.awt.Font.BOLD;
+                                    else if ("Italic".equalsIgnoreCase(rest[pi])) fontStyle |= java.awt.Font.ITALIC;
+                                }
+                            } else if (numStart < 0) {
+                                name = fontStr;
+                            }
+                            prop.setValue(new java.awt.Font(name, fontStyle, fontSize));
+                        } else if (type == java.awt.Font.class) {
+                            continue; // Non-string font value, skip
+                        } else if (type == DependantColor.class && val instanceof String) {
+                            String s = val.toString().trim().toLowerCase();
+                            if ("parent".equals(s)) {
+                                prop.setValue(new DependantColor(DependantColor.Mode.PARENT));
+                            } else if ("darker".equals(s)) {
+                                prop.setValue(new DependantColor(DependantColor.Mode.DARKER));
+                            } else if (s.startsWith("#")) {
+                                prop.setValue(new DependantColor(new Color(Integer.parseInt(s.substring(1), 16))));
+                            } else { continue; }
+                        } else if (type == DependantOriginalColor.class && val instanceof String) {
+                            String s = val.toString().trim().toLowerCase();
+                            if ("parent".equals(s)) {
+                                prop.setValue(new DependantOriginalColor(DependantOriginalColor.Mode.PARENT));
+                            } else if ("original".equals(s)) {
+                                prop.setValue(new DependantOriginalColor(DependantOriginalColor.Mode.ORIGINAL));
+                            } else if (s.startsWith("#")) {
+                                prop.setValue(new DependantOriginalColor(new Color(Integer.parseInt(s.substring(1), 16))));
+                            } else { continue; }
+                        } else if (type == EdgeColor.class && val instanceof String) {
+                            // For "source"/"target": color edges individually instead of using
+                            // EdgeColor mode (which corrupts SVG rendering in Gephi 0.10)
+                            String s = val.toString().trim().toLowerCase();
+                            if ("source".equals(s) || "target".equals(s)) {
+                                boolean useSource = "source".equals(s);
+                                Graph graph = currentGraphModel().getGraph();
+                                Node[] graphNodes = graph.getNodes().toArray();
+                                Edge[] graphEdges = graph.getEdges().toArray();
+                                java.util.Map<Node, Color> nodeColors = new java.util.HashMap<>();
+                                for (Node n : graphNodes) nodeColors.put(n, n.getColor());
+                                for (Edge edge : graphEdges) {
+                                    Node ref = useSource ? edge.getSource() : edge.getTarget();
+                                    Color c = nodeColors.get(ref);
+                                    if (c != null) edge.setColor(c);
+                                }
+                                prop.setValue(new EdgeColor(EdgeColor.Mode.ORIGINAL));
+                            } else if ("mixed".equals(s)) {
+                                prop.setValue(new EdgeColor(EdgeColor.Mode.MIXED));
+                            } else if ("original".equals(s)) {
+                                prop.setValue(new EdgeColor(EdgeColor.Mode.ORIGINAL));
+                            } else if (s.startsWith("#")) {
+                                prop.setValue(new EdgeColor(new Color(Integer.parseInt(s.substring(1), 16))));
+                            } else { continue; }
+                        } else {
+                            continue; // Skip unknown types
+                        }
+                        set++;
+                    } catch (NumberFormatException nfe) {
+                        LOGGER.warning("MCP: Invalid number/color value for " + key + ": " + val);
+                        continue;
+                    } catch (Exception ex) {
+                        LOGGER.warning("MCP: Failed to set preview property " + key + ": " + ex.getMessage());
+                        continue;
                     }
                 }
-                JsonObject r = success("Set " + set + " preview properties");
-                r.addProperty("properties_set", set);
-                return r;
-            } catch (Exception e) {
-                return error("Failed: " + e.getMessage());
             }
-        });
+            JsonObject r = success("Set " + set + " preview properties");
+            r.addProperty("properties_set", set);
+            return r;
+        } catch (Exception e) {
+            return error("Failed: " + e.getMessage());
+        }
     }
 
     // ─── Export ───────────────────────────────────────────────────────
@@ -2441,23 +2441,21 @@ public class GephiControlService {
      *        written via addViewInfo, so a filtered export is never silent about it.
      */
     public JsonObject exportGexf(String filePath, boolean visible) {
-        return runOnEDT(() -> {
-            Workspace ws = currentWorkspace();
-            if (ws == null) return error("No project open");
-            try {
-                ExportController ec = Lookup.getDefault().lookup(ExportController.class);
-                Exporter exporter = ec.getExporter("gexf");
-                if (exporter == null) return error("GEXF exporter not available");
-                if (exporter instanceof GraphExporter) {
-                    ((GraphExporter) exporter).setExportVisible(visible);
-                    ((GraphExporter) exporter).setWorkspace(ws);
-                }
-                ec.exportFile(new File(filePath), exporter);
-                JsonObject r = success("Exported to " + filePath);
-                addViewInfo(r, currentGraphModel(), visible);
-                return r;
-            } catch (Exception e) { return error("Export failed: " + e.getMessage()); }
-        });
+        Workspace ws = currentWorkspace();
+        if (ws == null) return error("No project open");
+        try {
+            ExportController ec = Lookup.getDefault().lookup(ExportController.class);
+            Exporter exporter = ec.getExporter("gexf");
+            if (exporter == null) return error("GEXF exporter not available");
+            if (exporter instanceof GraphExporter) {
+                ((GraphExporter) exporter).setExportVisible(visible);
+                ((GraphExporter) exporter).setWorkspace(ws);
+            }
+            ec.exportFile(new File(filePath), exporter);
+            JsonObject r = success("Exported to " + filePath);
+            addViewInfo(r, currentGraphModel(), visible);
+            return r;
+        } catch (Exception e) { return error("Export failed: " + e.getMessage()); }
     }
 
     /** GEXF export returned inline as a string — no file round-trip. */
@@ -2473,37 +2471,34 @@ public class GephiControlService {
      *        read endpoints never described.
      */
     public JsonObject exportGexfContent(boolean visible) {
-        return runOnEDT(() -> {
-            Workspace ws = currentWorkspace();
-            if (ws == null) return error("No project open");
-            try {
-                ExportController ec = Lookup.getDefault().lookup(ExportController.class);
-                Exporter exporter = ec.getExporter("gexf");
-                if (exporter == null) return error("GEXF exporter not available");
-                if (exporter instanceof GraphExporter) {
-                    ((GraphExporter) exporter).setExportVisible(visible);
-                    ((GraphExporter) exporter).setWorkspace(ws);
-                }
-                java.io.StringWriter sw = new java.io.StringWriter();
-                ec.exportWriter(sw, (org.gephi.io.exporter.spi.CharacterExporter) exporter);
-                JsonObject r = success("GEXF exported inline");
-                addViewInfo(r, currentGraphModel(), visible);
-                r.addProperty("content", sw.toString());
-                return r;
-            } catch (Exception e) { return error("Export failed: " + e.getMessage()); }
-        });
+        Workspace ws = currentWorkspace();
+        if (ws == null) return error("No project open");
+        try {
+            ExportController ec = Lookup.getDefault().lookup(ExportController.class);
+            Exporter exporter = ec.getExporter("gexf");
+            if (exporter == null) return error("GEXF exporter not available");
+            if (exporter instanceof GraphExporter) {
+                ((GraphExporter) exporter).setExportVisible(visible);
+                ((GraphExporter) exporter).setWorkspace(ws);
+            }
+            java.io.StringWriter sw = new java.io.StringWriter();
+            ec.exportWriter(sw, (org.gephi.io.exporter.spi.CharacterExporter) exporter);
+            JsonObject r = success("GEXF exported inline");
+            addViewInfo(r, currentGraphModel(), visible);
+            r.addProperty("content", sw.toString());
+            return r;
+        } catch (Exception e) { return error("Export failed: " + e.getMessage()); }
     }
 
     public JsonObject exportPng(String filePath, int w, int h) {
         // Runs on the calling thread: rendering the export and compositing the
         // background below (ImageIO.read, a full BufferedImage copy, ImageIO.write —
-        // at a default 1920x1080) is far too heavy for the EDT and needs nothing from
-        // it. Only the preview refresh hops to the EDT.
+        // at a default 1920x1080) needs nothing from the EDT. No explicit preview
+        // refresh here either — PNGExporter.execute() calls PreviewController.refreshPreview()
+        // itself before rendering, so doing it again here would just rebuild it twice.
         Workspace ws = currentWorkspace();
         if (ws == null) return error("No project open");
         try {
-            refreshPreviewOnEDT(ws);
-
             ExportController ec = Lookup.getDefault().lookup(ExportController.class);
             Exporter exporter = ec.getExporter("png");
             if (exporter == null) return error("PNG exporter not available");
@@ -2638,49 +2633,43 @@ public class GephiControlService {
     }
 
     public JsonObject exportPdf(String filePath, int w, int h) {
-        return runOnEDT(() -> {
-            Workspace ws = currentWorkspace();
-            if (ws == null) return error("No project open");
-            try {
-                Graph g = currentGraphModel().getGraph();
-                if (g.getNodeCount() == 0) return error("Cannot export PDF: graph has no nodes");
-                PreviewController previewController = Lookup.getDefault().lookup(PreviewController.class);
-                if (previewController != null) previewController.refreshPreview(ws);
-
-                ExportController ec = Lookup.getDefault().lookup(ExportController.class);
-                Exporter exporter = ec.getExporter("pdf");
-                if (exporter == null) return error("PDF exporter not available");
-                if (!(exporter instanceof PDFExporter)) {
-                    return error("Unexpected PDF exporter implementation: " + exporter.getClass().getName());
-                }
-                // PDFExporter has no setWidth/setHeight (unlike PNGExporter) — page
-                // dimensions are set via setPageSize(PDRectangle) instead, in points.
-                if (w > 0 && h > 0) ((PDFExporter) exporter).setPageSize(new PDRectangle(w, h));
-                if (exporter instanceof GraphExporter) ((GraphExporter) exporter).setWorkspace(ws);
-                ec.exportFile(new File(filePath), exporter);
-                return success("Exported to " + filePath);
-            } catch (IllegalArgumentException e) {
-                return error("Export failed: graph nodes may not be positioned — run a layout first");
-            } catch (Exception e) { return error("Export failed: " + e.getMessage()); }
-        });
+        Workspace ws = currentWorkspace();
+        if (ws == null) return error("No project open");
+        try {
+            Graph g = currentGraphModel().getGraph();
+            if (g.getNodeCount() == 0) return error("Cannot export PDF: graph has no nodes");
+            // No explicit preview refresh here — PDFExporter.execute() calls
+            // PreviewController.refreshPreview() itself before rendering.
+            ExportController ec = Lookup.getDefault().lookup(ExportController.class);
+            Exporter exporter = ec.getExporter("pdf");
+            if (exporter == null) return error("PDF exporter not available");
+            if (!(exporter instanceof PDFExporter)) {
+                return error("Unexpected PDF exporter implementation: " + exporter.getClass().getName());
+            }
+            // PDFExporter has no setWidth/setHeight (unlike PNGExporter) — page
+            // dimensions are set via setPageSize(PDRectangle) instead, in points.
+            if (w > 0 && h > 0) ((PDFExporter) exporter).setPageSize(new PDRectangle(w, h));
+            if (exporter instanceof GraphExporter) ((GraphExporter) exporter).setWorkspace(ws);
+            ec.exportFile(new File(filePath), exporter);
+            return success("Exported to " + filePath);
+        } catch (IllegalArgumentException e) {
+            return error("Export failed: graph nodes may not be positioned — run a layout first");
+        } catch (Exception e) { return error("Export failed: " + e.getMessage()); }
     }
 
     public JsonObject exportSvg(String filePath) {
-        return runOnEDT(() -> {
-            Workspace ws = currentWorkspace();
-            if (ws == null) return error("No project open");
-            try {
-                PreviewController previewController = Lookup.getDefault().lookup(PreviewController.class);
-                if (previewController != null) previewController.refreshPreview(ws);
-
-                ExportController ec = Lookup.getDefault().lookup(ExportController.class);
-                Exporter exporter = ec.getExporter("svg");
-                if (exporter == null) return error("SVG exporter not available");
-                if (exporter instanceof GraphExporter) ((GraphExporter) exporter).setWorkspace(ws);
-                ec.exportFile(new File(filePath), exporter);
-                return success("Exported to " + filePath);
-            } catch (Exception e) { return error("Export failed: " + e.getMessage()); }
-        });
+        Workspace ws = currentWorkspace();
+        if (ws == null) return error("No project open");
+        try {
+            // No explicit preview refresh here — SVGExporter.execute() calls
+            // PreviewController.refreshPreview() itself before rendering.
+            ExportController ec = Lookup.getDefault().lookup(ExportController.class);
+            Exporter exporter = ec.getExporter("svg");
+            if (exporter == null) return error("SVG exporter not available");
+            if (exporter instanceof GraphExporter) ((GraphExporter) exporter).setWorkspace(ws);
+            ec.exportFile(new File(filePath), exporter);
+            return success("Exported to " + filePath);
+        } catch (Exception e) { return error("Export failed: " + e.getMessage()); }
     }
 
     public JsonObject exportGraphml(String filePath) {
@@ -2689,23 +2678,21 @@ public class GephiControlService {
 
     /** @param visible see exportGexf — same contract, response self-declares the view. */
     public JsonObject exportGraphml(String filePath, boolean visible) {
-        return runOnEDT(() -> {
-            Workspace ws = currentWorkspace();
-            if (ws == null) return error("No project open");
-            try {
-                ExportController ec = Lookup.getDefault().lookup(ExportController.class);
-                Exporter exporter = ec.getExporter("graphml");
-                if (exporter == null) return error("GraphML exporter not available");
-                if (exporter instanceof GraphExporter) {
-                    ((GraphExporter) exporter).setExportVisible(visible);
-                    ((GraphExporter) exporter).setWorkspace(ws);
-                }
-                ec.exportFile(new File(filePath), exporter);
-                JsonObject r = success("Exported to " + filePath);
-                addViewInfo(r, currentGraphModel(), visible);
-                return r;
-            } catch (Exception e) { return error("Export failed: " + e.getMessage()); }
-        });
+        Workspace ws = currentWorkspace();
+        if (ws == null) return error("No project open");
+        try {
+            ExportController ec = Lookup.getDefault().lookup(ExportController.class);
+            Exporter exporter = ec.getExporter("graphml");
+            if (exporter == null) return error("GraphML exporter not available");
+            if (exporter instanceof GraphExporter) {
+                ((GraphExporter) exporter).setExportVisible(visible);
+                ((GraphExporter) exporter).setWorkspace(ws);
+            }
+            ec.exportFile(new File(filePath), exporter);
+            JsonObject r = success("Exported to " + filePath);
+            addViewInfo(r, currentGraphModel(), visible);
+            return r;
+        } catch (Exception e) { return error("Export failed: " + e.getMessage()); }
     }
 
     public JsonObject exportCsv(String filePath, String separator, String target) {
@@ -2913,8 +2900,8 @@ public class GephiControlService {
                 }
                 for (Node n : isolates) g.removeNode(n);
             } finally { unlockWrite(g); }
-            // Refresh preview so exports reflect the filtered graph (EDT hop; outside the lock)
-            refreshPreviewOnEDT(ws);
+            // Refresh preview so exports reflect the filtered graph (outside the lock)
+            refreshPreview(ws);
             JsonObject r = success("Removed " + isolates.size() + " isolated nodes");
             r.addProperty("removed", isolates.size());
             r.addProperty("remaining_nodes", g.getNodeCount());
@@ -2961,8 +2948,8 @@ public class GephiControlService {
                 for (Node n : toRemove) g.removeNode(n);
             } finally { unlockWrite(g); }
 
-            // Refresh preview so exports reflect the filtered graph (EDT hop; outside the lock)
-            refreshPreviewOnEDT(ws);
+            // Refresh preview so exports reflect the filtered graph (outside the lock)
+            refreshPreview(ws);
 
             JsonObject r = success("Ego network extracted for " + nodeId);
             r.addProperty("kept_nodes", keep.size());
@@ -2973,7 +2960,7 @@ public class GephiControlService {
 
     public JsonObject extractGiantComponent() {
         // Statistics must run OFF the EDT (they dispatch UI work to EDT internally).
-        // Only node removal and preview refresh need the EDT.
+        // Node removal and the preview refresh run on the calling thread too — neither needs it.
         try {
             Workspace ws = currentWorkspace();
             if (ws == null) return error("No project open");
@@ -3026,8 +3013,8 @@ public class GephiControlService {
             }
 
             // Remove nodes on the calling thread — graph mutation needs only the graph
-            // write lock (see the threading note above setEdgeColor); only the preview
-            // refresh hops to the EDT.
+            // write lock (see the threading note above setEdgeColor); the preview refresh
+            // afterward runs on the calling thread too.
             java.util.List<Node> toRemove = new java.util.ArrayList<>();
             for (Node n : allNodes) {
                 Object v = n.getAttribute(fccCol);
@@ -3037,7 +3024,7 @@ public class GephiControlService {
             lockWrite(g);
             try { for (Node n : toRemove) g.removeNode(n); }
             finally { unlockWrite(g); }
-            refreshPreviewOnEDT(ws);
+            refreshPreview(ws);
             JsonObject r = success("Giant component extracted");
             r.addProperty("kept_nodes", giantSize);
             r.addProperty("removed_nodes", toRemove.size());
@@ -3047,45 +3034,43 @@ public class GephiControlService {
     }
 
     public JsonObject setEdgeThicknessByWeight(float minThickness, float maxThickness) {
-        return runOnEDT(() -> {
-            Workspace ws = currentWorkspace();
-            if (ws == null) return error("No project open");
-            try {
-                PreviewController pc = Lookup.getDefault().lookup(PreviewController.class);
-                PreviewModel pm = pc.getModel(ws);
-                if (pm == null) return error("Preview model not available");
+        Workspace ws = currentWorkspace();
+        if (ws == null) return error("No project open");
+        try {
+            PreviewController pc = Lookup.getDefault().lookup(PreviewController.class);
+            PreviewModel pm = pc.getModel(ws);
+            if (pm == null) return error("Preview model not available");
 
-                // Set edge thickness to be rescaled based on weight
-                // Use the preview property for edge thickness
-                PreviewProperty edgeThicknessProp = pm.getProperties().getProperty("edge.thickness");
-                if (edgeThicknessProp != null) {
-                    edgeThicknessProp.setValue(minThickness);
-                }
-
-                // Set rescale weight property if available
-                PreviewProperty rescaleProp = pm.getProperties().getProperty("edge.rescale-weight");
-                if (rescaleProp != null) {
-                    rescaleProp.setValue(true);
-                }
-
-                PreviewProperty rescaleMinProp = pm.getProperties().getProperty("edge.rescale-weight.min");
-                if (rescaleMinProp != null) {
-                    rescaleMinProp.setValue(minThickness);
-                }
-
-                PreviewProperty rescaleMaxProp = pm.getProperties().getProperty("edge.rescale-weight.max");
-                if (rescaleMaxProp != null) {
-                    rescaleMaxProp.setValue(maxThickness);
-                }
-
-                JsonObject r = success("Edge thickness configured by weight");
-                r.addProperty("min_thickness", minThickness);
-                r.addProperty("max_thickness", maxThickness);
-                return r;
-            } catch (Exception e) {
-                return error("Failed: " + e.getMessage());
+            // Set edge thickness to be rescaled based on weight
+            // Use the preview property for edge thickness
+            PreviewProperty edgeThicknessProp = pm.getProperties().getProperty("edge.thickness");
+            if (edgeThicknessProp != null) {
+                edgeThicknessProp.setValue(minThickness);
             }
-        });
+
+            // Set rescale weight property if available
+            PreviewProperty rescaleProp = pm.getProperties().getProperty("edge.rescale-weight");
+            if (rescaleProp != null) {
+                rescaleProp.setValue(true);
+            }
+
+            PreviewProperty rescaleMinProp = pm.getProperties().getProperty("edge.rescale-weight.min");
+            if (rescaleMinProp != null) {
+                rescaleMinProp.setValue(minThickness);
+            }
+
+            PreviewProperty rescaleMaxProp = pm.getProperties().getProperty("edge.rescale-weight.max");
+            if (rescaleMaxProp != null) {
+                rescaleMaxProp.setValue(maxThickness);
+            }
+
+            JsonObject r = success("Edge thickness configured by weight");
+            r.addProperty("min_thickness", minThickness);
+            r.addProperty("max_thickness", maxThickness);
+            return r;
+        } catch (Exception e) {
+            return error("Failed: " + e.getMessage());
+        }
     }
 
     public JsonObject resetFilters() {
@@ -3961,26 +3946,24 @@ public class GephiControlService {
 
     /** @param visible see exportGexf — same contract, response self-declares the view. */
     public JsonObject exportByFormat(String filePath, String format, boolean visible) {
-        return runOnEDT(() -> {
-            Workspace ws = currentWorkspace();
-            if (ws == null) return error("No project open");
-            if (filePath == null || format == null) return error("Missing 'file' or 'format'");
-            try {
-                ExportController ec = Lookup.getDefault().lookup(ExportController.class);
-                Exporter exporter = ec.getExporter(format);
-                if (exporter == null) return error("No exporter for format: " + format
-                    + " (try vna, pajek, dl, spreadsheet, gdf, gml, json, gexf, graphml, csv)");
-                if (exporter instanceof GraphExporter) {
-                    ((GraphExporter) exporter).setExportVisible(visible);
-                    ((GraphExporter) exporter).setWorkspace(ws);
-                }
-                ec.exportFile(new File(filePath), exporter);
-                JsonObject r = success("Exported to " + filePath);
-                r.addProperty("format", format);
-                addViewInfo(r, currentGraphModel(), visible);
-                return r;
-            } catch (Exception e) { return error("Export failed: " + e.getMessage()); }
-        });
+        Workspace ws = currentWorkspace();
+        if (ws == null) return error("No project open");
+        if (filePath == null || format == null) return error("Missing 'file' or 'format'");
+        try {
+            ExportController ec = Lookup.getDefault().lookup(ExportController.class);
+            Exporter exporter = ec.getExporter(format);
+            if (exporter == null) return error("No exporter for format: " + format
+                + " (try vna, pajek, dl, spreadsheet, gdf, gml, json, gexf, graphml, csv)");
+            if (exporter instanceof GraphExporter) {
+                ((GraphExporter) exporter).setExportVisible(visible);
+                ((GraphExporter) exporter).setWorkspace(ws);
+            }
+            ec.exportFile(new File(filePath), exporter);
+            JsonObject r = success("Exported to " + filePath);
+            r.addProperty("format", format);
+            addViewInfo(r, currentGraphModel(), visible);
+            return r;
+        } catch (Exception e) { return error("Export failed: " + e.getMessage()); }
     }
 
     // ─── Timeline / dynamic (Group G) ────────────────────────────────
