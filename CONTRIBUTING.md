@@ -377,3 +377,43 @@ triggered by a fixed inactivity window, only by a real block a fork-based PR can
 The same applies to maintainer-driven bulk updates across many plugins at once (e.g. a Gephi version
 bump): push to a short-lived branch and open a PR into `master-forge` rather than committing to it
 directly, so the change still gets a CI run before landing.
+
+### Documenting a plugin in master-forge's `<modules>` list
+
+`master-forge`'s root `pom.xml` is the source of truth for which plugins are currently built and
+published, so its `<modules>` list is also the only place that records where each plugin's code
+actually comes from. Precede every `<module>` entry with three one-line comments, in this order:
+
+```xml
+<!-- name: <the plugin's own display name> -->
+<!-- origin: fork (<github-owner>/<repo>) -->
+<!-- status: active -->
+<module>modules/<Folder></module>
+```
+
+- **name** is what the plugin calls itself — `OpenIDE-Module-Name` in `manifest.mf`, or the
+  `Bundle.properties` key it points to via `OpenIDE-Module-Localizing-Bundle` — not the `modules/`
+  folder name, which is often close but not guaranteed to match.
+- **origin** is `fork (<owner>/<repo>)` for the normal case: a contributor's fork stays the source of
+  truth for future updates (see "Maintaining a plugin after approval" above). Use
+  `branch (<branch-name>)` when a maintainer has adopted the plugin onto its own branch in this
+  repository instead (per "When a plugin's fork stops being a reliable source of truth" above). If
+  neither can be determined — e.g. history predating PR-linked commits — use
+  `unknown (git author: <name>)` rather than guessing.
+- **status** is `active` for a plugin currently building, or `disabled — <reason>` when the
+  `<module>` line itself is commented out. Keep the reason short but specific enough that a future
+  maintainer knows what needs fixing before re-enabling it (e.g. a dependency that no longer
+  resolves, or an API the plugin needs to migrate off of) — not just that something's wrong.
+
+A disabled entry comments out all four lines:
+
+```xml
+<!-- name: Linkfluence Plugin -->
+<!-- origin: fork (eduramiba/gephi-plugins) -->
+<!-- status: disabled — needs to migrate away from Joda Time -->
+<!-- <module>modules/LinkfluencePlugin</module> -->
+```
+
+Update these comments whenever a plugin's status or origin changes — disabling or re-enabling it,
+or adopting an unresponsive contributor's plugin onto a branch — don't leave them describing a
+stale state.
