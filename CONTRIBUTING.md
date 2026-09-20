@@ -346,3 +346,34 @@ See "Gephi platform conventions" above for the reasoning; on review, check that 
 - The PR targets the `master-forge` branch for a plugin submission or update, not `master` (see
   README's "Submit a plugin"). A PR against `master` touching only `modules/` is itself worth
   questioning.
+
+## Maintaining a plugin after approval
+
+Once merged into `master-forge`, a plugin's contributor keeps their fork as the source of truth for
+future updates — the flow is identical to the initial submission (see README's "Update a plugin"):
+sync the fork with `master`, commit there, and open a new PR against `master-forge`. Don't grant a
+contributor write access to this repository, or a branch of it, by default; a normal PR is the
+standard path for every update, not just the first one.
+
+### When a plugin's fork stops being a reliable source of truth
+
+Some plugin maintainers go unresponsive, or their fork disappears. When that blocks an update the
+plugin genuinely needs (e.g. following a new Gephi release) and there's no fork-based PR to wait on,
+a maintainer can adopt the plugin onto its own branch instead. Decide this case by case — it's not
+triggered by a fixed inactivity window, only by a real block a fork-based PR can't route around.
+
+- Cut a branch named after the plugin (e.g. `geolayout-plugin`) from its current state in
+  `master-forge`.
+- Grant write access to that branch only, via a branch protection rule scoped to the name pattern —
+  to whoever is adopting maintenance (a `gephi-plugins` maintainer, or a new vetted community
+  adopter). Never grant blanket write access to the whole repository for this.
+- Changes still land on `master-forge` only through a PR from that branch, the same as a fork would
+  — never a direct push. `master-forge` is a merge/build target, not something to develop against
+  directly, and `build.yml` (the main CI workflow) explicitly excludes `master-forge` from its
+  triggers, so a direct push there skips CI entirely.
+- Never fork `master-forge` itself for this, or anything else — it aggregates every plugin in one
+  multi-module build, so a fork of it drags in every other plugin along with the one being adopted.
+
+The same applies to maintainer-driven bulk updates across many plugins at once (e.g. a Gephi version
+bump): push to a short-lived branch and open a PR into `master-forge` rather than committing to it
+directly, so the change still gets a CI run before landing.
