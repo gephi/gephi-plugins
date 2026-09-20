@@ -414,6 +414,32 @@ A disabled entry comments out all four lines:
 <!-- <module>modules/LinkfluencePlugin</module> -->
 ```
 
+**Suites** (a plugin split across multiple `modules/` folders — API/Impl/UI, or a bundled dependency
+like the streaming plugin's `JettyWrapper`) share one origin and one status, so don't repeat the same
+three comments once per folder. Precede the whole run of `<module>` lines with a single block
+instead, using the suite's main module for `name` — the one module in the group whose `manifest.mf`
+does *not* set `AutoUpdate-Show-In-Client: false`. That flag is how the other modules (API, Impl,
+UI, or a bundled library) mark themselves as implementation details hidden from Gephi's plugin
+manager, so its absence is what identifies the module the suite is actually known as:
+
+```xml
+<!-- name: Graph Streaming -->
+<!-- origin: fork (panisson/gephi-plugins) -->
+<!-- status: active -->
+<module>modules/GraphStreaming</module>
+<module>modules/DesktopStreaming</module>
+<module>modules/StreamingAPI</module>
+<module>modules/StreamingImpl</module>
+<module>modules/JettyWrapper</module>
+<module>modules/StreamingServer</module>
+```
+
+Only group modules that share **both** the same origin and the same status — two folders from the
+same fork owner but a different PR are two separate plugin submissions, not a suite, and keep their
+own three-comment block each. If one module in an otherwise-grouped suite is later disabled while its
+siblings stay active, split it back out into its own block rather than forcing a mismatched status
+into the shared one.
+
 Update these comments whenever a plugin's status or origin changes — disabling or re-enabling it,
 or adopting an unresponsive contributor's plugin onto a branch — don't leave them describing a
 stale state.
