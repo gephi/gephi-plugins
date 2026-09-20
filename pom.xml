@@ -145,12 +145,12 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-dependency-plugin</artifactId>
-                    <version>3.6.1</version>
+                    <version>3.11.0</version>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.netbeans.utilities</groupId>
                     <artifactId>nbm-maven-plugin</artifactId>
-                    <version>14.4</version>
+                    <version>14.5</version>
                     <extensions>true</extensions>
                 </plugin>
                 <plugin>
@@ -161,12 +161,12 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-scm-publish-plugin</artifactId>
-                    <version>3.2.1</version>
+                    <version>3.3.0</version>
                 </plugin>
                 <plugin>
                     <groupId>org.sonatype.central</groupId>
                     <artifactId>central-publishing-maven-plugin</artifactId>
-                    <version>0.10.0</version>
+                    <version>0.11.0</version>
                     <extensions>true</extensions>
                 </plugin>
             </plugins>
