@@ -19,4 +19,9 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
       - name: Build and validate project
-        run: mvn -B package --file pom.xml
+        run: |
+          if ! grep -q '<module>' pom.xml; then
+            echo "No plugin modules present in pom.xml; skipping build/validate (see test-generation workflow for scaffold validation)."
+            exit 0
+          fi
+          mvn -B package --file pom.xml
