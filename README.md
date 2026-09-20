@@ -194,8 +194,7 @@ It's the same thing. We say module because Gephi is a modular application and is
 
 This error appears when you try to run a module. To run Gephi with your plugin you need to run the `gephi-plugins` project, not your module.
 
-## Best practices
+## Contributing
 
-### Code quality
-
-- Write your code in English, so it can be best reviewed and maintained.
+See [CONTRIBUTING.md](CONTRIBUTING.md) for code-quality expectations and, for maintainers, the
+checklist used to review plugin submission PRs.
