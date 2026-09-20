@@ -2,10 +2,14 @@ name: test-generation
 
 # Integration test for the plugin generation process (gephi-maven-plugin's
 # generate/validate/build-metadata/create-autoupdate goals). Runs on every
-# master commit so a version bump of gephi-maven-plugin in pom.xml is
-# regression-tested before real plugin repos pick it up.
+# master commit and on PRs targeting master (master has no plugin modules of
+# its own, so build.yml's build_and_test can't validate scaffold changes) so
+# a version bump of gephi-maven-plugin in pom.xml is regression-tested before
+# real plugin repos pick it up.
 on:
   push:
+    branches: [ master ]
+  pull_request:
     branches: [ master ]
 
 jobs:
