@@ -326,6 +326,7 @@
         <!-- origin: fork (totetmatt/gephi-plugins) -->
         <!-- status: active — caveat: previously disabled for auto-creating a project on startup; re-enabled without a confirmed fix, verify -->
         <module>modules/BlueskyGephi</module>
+        <module>modules/GephiAI</module>
     </modules>
     
     <!-- Properties -->
