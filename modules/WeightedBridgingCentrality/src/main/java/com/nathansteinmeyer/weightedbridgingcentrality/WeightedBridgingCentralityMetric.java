@@ -209,60 +209,60 @@ public class WeightedBridgingCentralityMetric extends GraphDistance {
             BFS_Initialization(Pred, sigma, dist, s_index, Number_of_Nodes);
 
             java.util.PriorityQueue<Map.Entry<Node, Double>> Q =
-        new java.util.PriorityQueue<>(
-                java.util.Comparator.comparingDouble(Map.Entry::getValue));
+                    new java.util.PriorityQueue<>(
+                            java.util.Comparator.comparingDouble(Map.Entry::getValue));
 
-Q.add(new java.util.AbstractMap.SimpleEntry<Node, Double>(s, 0.0));
+            Q.add(new java.util.AbstractMap.SimpleEntry<Node, Double>(s, 0.0));
 
-while (!Q.isEmpty()) {
-    Map.Entry<Node, Double> current = Q.poll();
-    Node v = current.getKey();
+            while (!Q.isEmpty()) {
+                Map.Entry<Node, Double> current = Q.poll();
+                Node v = current.getKey();
 
-    int v_index = indicies.get(v);
+                int v_index = indicies.get(v);
 
-    // Ignore outdated entries in the priority queue.
-    if (current.getValue() > dist[v_index]) {
-        continue;
-    }
+                // Ignore outdated entries in the priority queue.
+                if (current.getValue() > dist[v_index]) {
+                    continue;
+                }
 
-    S.push(v);
+                S.push(v);
 
-    EdgeIterable edgeIter = getEdgeIter(graph, v, directed);
+                EdgeIterable edgeIter = getEdgeIter(graph, v, directed);
 
-    for (Edge edge : edgeIter) {
+                for (Edge edge : edgeIter) {
 
-        Node reachable = graph.getOpposite(v, edge);
-        int r_index = indicies.get(reachable);
+                    Node reachable = graph.getOpposite(v, edge);
+                    int r_index = indicies.get(reachable);
 
-        // Edge weight is interpreted as connection strength.
-        // Convert strength to effective distance: distance = 1 / weight.
-        double weight = edge.getWeight();
+                    // Edge weight is interpreted as connection strength.
+                    // Convert strength to effective distance: distance = 1 / weight.
+                    double weight = edge.getWeight();
 
-        if (weight <= 0) {
-            continue;
-        }
+                    if (weight <= 0) {
+                        continue;
+                    }
 
-        double edgeDistance = 1.0 / weight;
-        double newDistance = dist[v_index] + edgeDistance;
+                    double edgeDistance = 1.0 / weight;
+                    double newDistance = dist[v_index] + edgeDistance;
 
-        // Found a strictly shorter path.
-        if (newDistance < dist[r_index]) {
-            dist[r_index] = newDistance;
-            sigma[r_index] = sigma[v_index];
+                    // Found a strictly shorter path.
+                    if (newDistance < dist[r_index]) {
+                        dist[r_index] = newDistance;
+                        sigma[r_index] = sigma[v_index];
 
-            Pred[r_index].clear();
-            Pred[r_index].addLast(v);
+                        Pred[r_index].clear();
+                        Pred[r_index].addLast(v);
 
-            Q.add(new java.util.AbstractMap.SimpleEntry<Node, Double>(
-                    reachable, newDistance));
+                        Q.add(new java.util.AbstractMap.SimpleEntry<Node, Double>(
+                                reachable, newDistance));
 
-        // Found another shortest path of equal length.
-        } else if (Math.abs(newDistance - dist[r_index]) < 1e-10) {
-            sigma[r_index] = sigma[r_index] + sigma[v_index];
-            Pred[r_index].addLast(v);
-        }
-    }
-}
+                    // Found another shortest path of equal length.
+                    } else if (Math.abs(newDistance - dist[r_index]) < 1e-10) {
+                        sigma[r_index] = sigma[r_index] + sigma[v_index];
+                        Pred[r_index].addLast(v);
+                    }
+                }
+            }
 
             // -------------
             //All nodes and its connections had its paths length computed. 
