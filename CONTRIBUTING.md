@@ -374,6 +374,10 @@ triggered by a fixed inactivity window, only by a real block a fork-based PR can
   triggers, so a direct push there skips CI entirely.
 - Never fork `master-forge` itself for this, or anything else — it aggregates every plugin in one
   multi-module build, so a fork of it drags in every other plugin along with the one being adopted.
+  Merging `master-forge` *into* the adopted branch has the same effect via a merge commit instead of
+  a fork, and is just as much a mistake — the branch should only ever merge `master` to stay in sync.
+  The `<modules>`-list conflict against `master-forge` gets resolved when the PR actually lands, not
+  by pre-merging every other plugin's tree onto this branch beforehand.
 
 The same applies to maintainer-driven bulk updates across many plugins at once (e.g. a Gephi version
 bump): push to a short-lived branch and open a PR into `master-forge` rather than committing to it
