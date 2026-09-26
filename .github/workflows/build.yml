@@ -12,11 +12,16 @@ jobs:
   build_and_test:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - name: Set up JDK 11
-        uses: actions/setup-java@v2
+      - uses: actions/checkout@v6
+      - name: Set up JDK 17
+        uses: actions/setup-java@v5
         with:
-          java-version: '11'
+          java-version: '17'
           distribution: 'temurin'
       - name: Build and validate project
-        run: mvn -B package --file pom.xml
+        run: |
+          if [ -z "$(find modules -mindepth 2 -maxdepth 2 -name pom.xml 2>/dev/null)" ]; then
+            echo "No plugin modules present under modules/; skipping build/validate (see test-generation workflow for scaffold validation)."
+            exit 0
+          fi
+          mvn -B package --file pom.xml

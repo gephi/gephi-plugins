@@ -16,5 +16,5 @@
 * [ ] Did you merged with the `master` branch to get the latest updates?
 * [ ] Did you build and test the plugin successfully locally?
 * [ ] Did you include metadata (e.g. plugin author, license) in the `pom.xml` file
-* [ ] Did you make sure NOT to include any unecessary files in your PR?
+* [ ] Did you make sure NOT to include any unnecessary files in your PR?
 * [ ] Did you write unit tests to test your plugin functionalities?
