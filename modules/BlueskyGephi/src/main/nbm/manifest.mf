@@ -1,0 +1,5 @@
+Manifest-Version: 1.0
+OpenIDE-Module-Name: Bluesky Gephi
+OpenIDE-Module-Short-Description: Import network from Bluesky / AtProtocol
+OpenIDE-Module-Long-Description: Import network from Bluesky / AtProtocol
+OpenIDE-Module-Display-Category: Import

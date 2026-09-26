@@ -1,0 +1,5 @@
+Manifest-Version: 1.0
+OpenIDE-Module-Name: Column Calculator
+OpenIDE-Module-Short-Description: Data Laboratory merge strategy for column calculations
+OpenIDE-Module-Long-Description: It works like Open Office Calc Functions, which allow you to use formula to combine cells to obtain a result in another cell. With the new Merge Strategy called "Apply Custom Formula", you can create a new column combining different Number Columns by a formula.
+OpenIDE-Module-Display-Category: Data Laboratory

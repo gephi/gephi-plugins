@@ -4,25 +4,338 @@
 
     <groupId>org.gephi</groupId>
     <artifactId>gephi-plugins</artifactId>
-    <version>0.11.3</version>
+    <version>0.11.1</version>
     <packaging>pom</packaging>
 
     <name>gephi-plugins</name>
-
-    <!-- List of modules -->
+    
+    <!-- List of modules. Every entry is preceded by three comments — name, origin, status — see
+         CONTRIBUTING.md's "Documenting a plugin in master-forge's <modules> list" section (on the
+         master branch) for the full convention. -->
     <modules>
         <!-- Add here the paths of all modules (e.g. <module>modules/MyModule</module>) -->
-        <module>modules/Neo4jPlugin</module>
-    </modules>
 
+        <!-- name: GeoLayout -->
+        <!-- origin: branch (geolayout-plugin) -->
+        <!-- status: active -->
+        <module>modules/GeoLayout</module>
+
+        <!-- name: KBrace Filter -->
+        <!-- origin: fork (mbastian/gephi-plugins) -->
+        <!-- status: active -->
+        <module>modules/KBraceFilter</module>
+
+        <!-- name: Linkfluence Plugin -->
+        <!-- origin: fork (eduramiba/gephi-plugins) -->
+        <!-- status: disabled — needs to migrate away from Joda Time -->
+        <!-- <module>modules/LinkfluencePlugin</module> -->
+
+        <!-- name: MultimodeNetworksTransformationPlugin -->
+        <!-- origin: fork (totetmatt/gephi-plugins) -->
+        <!-- status: active -->
+        <module>modules/Multimode-Networks</module>
+
+        <!-- name: JSON Exporter -->
+        <!-- origin: fork (oxfordinternetinstitute/gephi-plugins) -->
+        <!-- status: active -->
+        <module>modules/JsonExporter</module>
+
+        <!-- name: Sigma Exporter -->
+        <!-- origin: fork (oxfordinternetinstitute/gephi-plugins) -->
+        <!-- status: active -->
+        <module>modules/SigmaExporter</module>
+
+        <!-- name: Node Color Manager -->
+        <!-- origin: fork (TGraphDB/gephi-demo) -->
+        <!-- status: active -->
+        <module>modules/NodeColorManager</module>
+
+        <!-- name: Graphviz Layout -->
+        <!-- origin: fork (chunky/gephi-plugins) -->
+        <!-- status: active -->
+        <module>modules/GraphvizLayout</module>
+
+        <!-- name: Graph Streaming -->
+        <!-- origin: fork (panisson/gephi-plugins) -->
+        <!-- status: active -->
+        <module>modules/GraphStreaming</module>
+        <module>modules/DesktopStreaming</module>
+        <module>modules/StreamingAPI</module>
+        <module>modules/StreamingImpl</module>
+        <module>modules/JettyWrapper</module>
+        <module>modules/StreamingServer</module>
+
+        <!-- name: Circular Layout -->
+        <!-- origin: fork (mgroeninger/gephi-plugins) -->
+        <!-- status: active -->
+        <module>modules/CircularLayout</module>
+
+        <!-- name: SemanticWebImport -->
+        <!-- origin: unknown (git author: Erwan Demairy) -->
+        <!-- status: disabled — reason not recorded -->
+        <!-- <module>modules/SemanticWebImport</module> -->
+
+        <!-- name: Loxa Web Site Export -->
+        <!-- origin: fork (jorgaf/gephi-plugins) -->
+        <!-- status: active -->
+        <module>modules/loxawebsiteexport</module>
+
+        <!-- name: ExportToEarth -->
+        <!-- origin: fork (shepdl/gephi-plugins) -->
+        <!-- status: active -->
+        <module>modules/Export-To-Earth</module>
+
+        <!-- name: Map Of Countries -->
+        <!-- origin: unknown (git author: Clement Levallois) -->
+        <!-- status: active -->
+        <module>modules/MapOfCountries</module>
+
+        <!-- name: Scripting Plugin -->
+        <!-- origin: branch (python-scripting-plugin) -->
+        <!-- status: disabled — reason not recorded -->
+        <!-- <module>modules/ScriptingPlugin</module> -->
+
+        <!-- name: Twitter Streaming Importer V2 -->
+        <!-- origin: fork (totetmatt/gephi-plugins) -->
+        <!-- status: disabled — reason not recorded -->
+        <!-- <module>modules/TwitterStreamingImporterV2</module> -->
+
+        <!-- name: Isometric Layout -->
+        <!-- origin: fork (alexandrebarao/gephi-plugins) -->
+        <!-- status: active -->
+        <module>modules/IsometricLayout</module>
+
+        <!-- name: Network Splitter 3D -->
+        <!-- origin: fork (alexandrebarao/gephi-plugins) -->
+        <!-- status: active -->
+        <module>modules/NetworkSplitter3D</module>
+
+        <!-- name: Convert Excel and csv files to networks -->
+        <!-- origin: unknown (git author: Clement Levallois) -->
+        <!-- status: disabled — needs to migrate away from Joda Time -->
+        <!-- <module>modules/ExcelCsvImporter</module> -->
+
+        <!-- name: Oracle Driver -->
+        <!-- origin: fork (sturton/gephi-plugins) -->
+        <!-- status: active -->
+        <module>modules/OracleDriver</module>
+
+        <!-- name: Lineage -->
+        <!-- origin: fork (WouterSpekkink/gephi-plugins) -->
+        <!-- status: active -->
+        <module>modules/Lineage</module>
+
+        <!-- name: MdsLayout -->
+        <!-- origin: fork (WouterSpekkink/gephi-plugins) -->
+        <!-- status: active -->
+        <module>modules/MdsLayout</module>
+
+        <!-- name: FilterFromFile -->
+        <!-- origin: fork (ypanagis/gephi-plugins) -->
+        <!-- status: active -->
+        <module>modules/filterfromfile</module>
+
+        <!-- name: Give Colors To Nodes -->
+        <!-- origin: fork (seinecle/gephi-plugins) -->
+        <!-- status: active -->
+        <module>modules/GiveColorToNodes</module>
+
+        <!-- name: Give Colors To Edges -->
+        <!-- origin: fork (seinecle/gephi-plugins) -->
+        <!-- status: active -->
+        <module>modules/GiveColorToEdges</module>
+
+        <!-- name: MultiGravity ForceAtlas 2 -->
+        <!-- origin: fork (suryarastogi/gephi-plugins) -->
+        <!-- status: active -->
+        <module>modules/GravityPlugin</module>
+
+        <!-- name: MdsMetric -->
+        <!-- origin: fork (WouterSpekkink/gephi-plugins) -->
+        <!-- status: active -->
+        <module>modules/MdsMetric</module>
+
+        <!-- name: VectorStatistics -->
+        <!-- origin: fork (d99joper/gephi-plugins) -->
+        <!-- status: active -->
+        <module>modules/VectorCalculator</module>
+
+        <!-- name: Prestige Plugin -->
+        <!-- origin: fork (michihenninger/gephi-plugin) -->
+        <!-- status: active -->
+        <module>modules/PrestigePlugin</module>
+
+        <!-- name: HttpGraph -->
+        <!-- origin: fork (phreakocious/HTTP-Graph) -->
+        <!-- status: disabled — cannot resolve dependency javax.annotation:com.springsource.javax.annotation:1.0.0 -->
+        <!-- <module>modules/HttpGraph</module> -->
+
+        <!-- name: Minimum Spanning Tree -->
+        <!-- origin: fork (carlschroedl/gephi-plugins) -->
+        <!-- status: active -->
+        <module>modules/MinimumSpanningTree</module>
+
+        <!-- name: Similarity Computer -->
+        <!-- origin: fork (seinecle/gephi-plugins) -->
+        <!-- status: active -->
+        <module>modules/SimilarityComputer</module>
+
+        <!-- name: AgensGraph Plugin -->
+        <!-- origin: fork (skaiworldwide-oss/gephi-plugins) -->
+        <!-- status: disabled — reason not recorded -->
+        <!-- <module>modules/AgensGraphPlugin</module> -->
+
+        <!-- name: Polygon Shaped Nodes -->
+        <!-- origin: fork (iachan/gephi-plugins) -->
+        <!-- status: active -->
+        <module>modules/PolygonShapedNodes</module>
+
+        <!-- name: scale layout plugin -->
+        <!-- origin: fork (weihs/gephi-plugins) -->
+        <!-- status: active -->
+        <module>modules/ScalePlugin</module>
+
+        <!-- name: Circle Pack -->
+        <!-- origin: fork (sasakiassociates/gephi-plugins) -->
+        <!-- status: active -->
+        <module>modules/CirclePack</module>
+
+        <!-- name: shp-export -->
+        <!-- origin: fork (romanseidl/gephi-plugins) -->
+        <!-- status: disabled — dependency fails: org.geotools:gt-api:jar:17.2 not resolvable from osgeo -->
+        <!-- <module>modules/SHPExporter</module> -->
+
+        <!-- name: Newman-Girvan Clustering -->
+        <!-- origin: fork (jSh4rk/gephi-plugins) -->
+        <!-- status: active -->
+        <module>modules/newmangirvan</module>
+
+        <!-- name: Image Preview -->
+        <!-- origin: fork (totetmatt/gephi-plugins) -->
+        <!-- status: disabled — reason not recorded -->
+        <!-- <module>modules/image-preview</module> -->
+
+        <!-- name: Polinode Exporter -->
+        <!-- origin: fork (Polinode/gephi-plugins) -->
+        <!-- status: active -->
+        <module>modules/polinodeExporter</module>
+
+        <!-- name: Leiden Algorithm -->
+        <!-- origin: fork (vtraag/gephi-leiden-plugin) -->
+        <!-- status: active -->
+        <module>modules/LeidenAlgorithm</module>
+
+        <!-- name: Bridging Centrality Plugin -->
+        <!-- origin: fork (santosardr/gephi-plugins) -->
+        <!-- status: active -->
+        <module>modules/BridgingPlugin</module>
+
+        <!-- name: BoundingDiameters Suite -->
+        <!-- origin: fork (alexkeizer/BoundingDiameters) -->
+        <!-- status: active -->
+        <module>modules/BoundingDiametersSuite</module>
+        <module>modules/BoundingDiameters</module>
+        <module>modules/BoundingDiametersUI</module>
+
+        <!-- name: dbscan -->
+        <!-- origin: unknown (git author: jaknowakowski) -->
+        <!-- status: active -->
+        <module>modules/dbscan</module>
+
+        <!-- name: Clustering Coefficient -->
+        <!-- origin: branch (clustering-coefficient-plugin) -->
+        <!-- status: active -->
+        <module>modules/ClusteringCoefficient</module>
+
+        <!-- name: Kleinberg Generator -->
+        <!-- origin: unknown (git author: JakubRz) -->
+        <!-- status: active -->
+        <module>modules/KleinbergGenerator</module>
+
+        <!-- name: Column Calculator -->
+        <!-- origin: branch (datalab-column-calculator-plugin) -->
+        <!-- status: active -->
+        <module>modules/columnCalculator</module>
+
+        <!-- name: Groups By Partition -->
+        <!-- origin: fork (s-puig/GroupPartition — repo now deleted) -->
+        <!-- status: active -->
+        <module>modules/GroupPartition</module>
+
+        <!-- name: Hairball Buster -->
+        <!-- origin: branch (hairball-buster-plugin) -->
+        <!-- status: active -->
+        <module>modules/HairballBuster</module>
+
+        <!-- name: Force Atlas 3D -->
+        <!-- origin: fork (seinecle/ForceAtlas3D — repo now deleted) -->
+        <!-- status: active -->
+        <module>modules/ForceAtlas3D</module>
+
+        <!-- name: Inspector -->
+        <!-- origin: fork (atopion/gephi-plugins) -->
+        <!-- status: disabled — needs to migrate to new Visualization API -->
+        <!-- <module>modules/InspectorTool</module> -->
+
+        <!-- name: Erdős-Rényi Generator -->
+        <!-- origin: fork (elwin013/gephi-plugins) -->
+        <!-- status: active -->
+        <module>modules/ErGenerator</module>
+
+        <!-- name: Katz Centrality -->
+        <!-- origin: branch (katz-centrality-plugin) -->
+        <!-- status: active -->
+        <module>modules/KatzCentrality</module>
+
+        <!-- name: Position Ranking -->
+        <!-- origin: branch (position-ranking-plugin) -->
+        <!-- status: active -->
+        <module>modules/PositionRanking</module>
+
+        <!-- name: Neo4j plugin -->
+        <!-- origin: branch (neo4j-bolt-plugin) -->
+        <!-- status: active -->
+        <module>modules/Neo4jPlugin</module>
+
+        <!-- name: Link Prediction -->
+        <!-- origin: fork (romanutti/gephi-plugins) -->
+        <!-- status: active -->
+        <module>modules/LinkPrediction</module>
+
+        <!-- name: Web Publish Plugin -->
+        <!-- origin: branch (web-publish-plugin) -->
+        <!-- status: active -->
+        <module>modules/WebPublishPlugin</module>
+
+        <!-- name: Ordered Layout -->
+        <!-- origin: fork (WouterSpekkink/gephi-plugins) -->
+        <!-- status: active -->
+        <module>modules/OrderedLayout</module>
+
+        <!-- name: OpenSeadragon Export -->
+        <!-- origin: branch (openseadragon-plugin) -->
+        <!-- status: active -->
+        <module>modules/OpenSeadragonPlugin</module>
+
+        <!-- name: Word Cloud plugin -->
+        <!-- origin: fork (seinecle/gephi-plugins-word-cloud) -->
+        <!-- status: disabled — needs to migrate to new Visualization API -->
+        <!-- <module>modules/WordCloudPlugin</module> -->
+
+        <!-- name: Bluesky Gephi -->
+        <!-- origin: fork (totetmatt/gephi-plugins) -->
+        <!-- status: active — caveat: previously disabled for auto-creating a project on startup; re-enabled without a confirmed fix, verify -->
+        <module>modules/BlueskyGephi</module>
+    </modules>
+    
     <!-- Properties -->
     <properties>
         <!-- Version of Gephi building plugins against. Plugins with anterior versions will be ignored -->
-        <gephi.version>0.11.3</gephi.version>
+        <gephi.version>0.11.1</gephi.version>
         <clusters.path>${project.build.directory}/plugins_clusters</clusters.path>
         <github.global.server>github</github.global.server>
     </properties>
-
+    
     <!-- SCM -->
     <scm>
         <connection>scm:git:git://github.com/gephi/gephi-plugins.git</connection>
@@ -64,7 +377,7 @@
             <type>tar.gz</type>
         </dependency>
     </dependencies>
-
+    
     <build>
         <!-- Plugins installed with versions -->
         <pluginManagement>
@@ -98,7 +411,7 @@
                 </plugin>
             </plugins>
         </pluginManagement>
-
+        
         <!-- Plugins -->
         <plugins>
             <!-- Configure gephi-maven-plugin -->
@@ -124,7 +437,7 @@
                     </execution>
                 </executions>
             </plugin>
-
+            
             <!-- Unpack the localization dependency -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -148,7 +461,7 @@
                     </execution>
                 </executions>
             </plugin>
-
+            
             <!-- NBM Plugin -->
             <plugin>
                 <groupId>org.apache.netbeans.utilities</groupId>
@@ -172,7 +485,7 @@
             </plugin>
         </plugins>
     </build>
-
+    
     <!-- Custom profile only used to build and package all modules at once -->
     <profiles>
         <profile>

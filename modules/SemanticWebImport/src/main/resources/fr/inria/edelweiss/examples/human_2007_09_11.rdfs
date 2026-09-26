@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE rdf [
+   <!ENTITY humans   "http://www.inria.fr/2007/09/11/humans.rdfs"> 
+   <!ENTITY rdfs     "http://www.w3.org/2000/01/rdf-schema">
+    ]>
+
+<rdf:RDF  
+   xmlns:rdf ="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:rdfs="&rdfs;#"
+   xmlns     ="&rdfs;#" 
+   xml:base  ="&humans;" >
+
+<Class rdf:ID="Animal">
+  <label xml:lang="en">animal</label>
+  <comment xml:lang="en">a living organism characterized by voluntary movement.</comment>
+  <label xml:lang="fr">animal</label>
+  <comment xml:lang="fr">être vivant doué de sensibilite de mobilité.</comment>
+</Class>
+
+<Class rdf:ID="Male">
+  <subClassOf rdf:resource="#Animal"/>
+  <label xml:lang="en">male</label>
+  <comment xml:lang="en">an animal that produces gametes (spermatozoa) that can fertilize female gametes (ova).</comment>
+  <label xml:lang="fr">mâle</label>
+  <comment xml:lang="fr">individu appartenant au sexe qui possède le pouvoir de fécondation.</comment>
+</Class>
+
+<Class rdf:ID="Female">
+  <subClassOf rdf:resource="#Animal"/>
+  <label xml:lang="en">female</label>
+  <comment xml:lang="en"> an animal that produces gametes (ova) that can be fertilized by male gametes (spermatozoa).</comment>
+  <label xml:lang="fr">femelle</label>
+  <comment xml:lang="fr">animal appartenant au sexe apte à produire des ovules.</comment>
+</Class>
+
+<Class rdf:ID="Man">
+  <subClassOf rdf:resource="#Person"/>
+  <subClassOf rdf:resource="#Male"/>
+  <label xml:lang="en">man</label>
+  <comment xml:lang="en">an adult male person</comment>
+  <label xml:lang="fr">homme</label>
+  <comment xml:lang="fr">mâle adulte de l'espèce humaine.</comment>
+</Class>
+
+<Class rdf:ID="Person">
+  <subClassOf rdf:resource="#Animal"/>
+  <label xml:lang="en">person</label>
+  <label xml:lang="en">human being</label>
+  <label xml:lang="en">human</label>
+  <comment xml:lang="en">a member of the human species</comment>
+  <label xml:lang="fr">personne</label>
+  <label xml:lang="fr">être humain</label>
+  <label xml:lang="fr">humain</label>
+  <label xml:lang="fr">homme</label>
+  <comment xml:lang="fr">un membre de l'espèce humaine.</comment>
+</Class>
+
+<Class rdf:ID="Lecturer">
+  <subClassOf rdf:resource="#Person"/>
+  <label xml:lang="en">lecturer</label>
+  <comment xml:lang="en">someone who lectures professionally</comment>
+  <label xml:lang="fr">professeur</label>
+  <comment xml:lang="fr">personne qui enseigne une discipline, une technique, un art.</comment>
+</Class>
+
+
+<Class rdf:ID="Researcher">
+  <subClassOf rdf:resource="#Person"/>
+  <label xml:lang="en">researcher</label>
+  <label xml:lang="en">scientist</label>
+  <comment xml:lang="en">a person who devotes himself to doing research</comment>
+  <label xml:lang="fr">chercheur</label>
+  <label xml:lang="fr">scientifique</label>
+  <comment xml:lang="fr">personne adonnée à des recherches spécialisées.</comment>
+</Class>
+
+<Class rdf:ID="Woman">
+  <subClassOf rdf:resource="#Person"/>
+  <subClassOf rdf:resource="#Female"/>
+  <label xml:lang="en">woman</label>
+  <comment xml:lang="en">an adult female person</comment>
+  <label xml:lang="fr">femme</label>
+  <comment xml:lang="fr">femelle adulte de l'espèce humaine.</comment>
+</Class>
+
+<rdf:Property rdf:ID="hasAncestor">
+  <domain rdf:resource="#Animal"/>
+  <range rdf:resource="#Animal"/>
+  <label xml:lang="en">has for ancestor</label>
+  <comment xml:lang="en">relation between an animal and another animal from which it is descended.</comment>
+  <label xml:lang="fr">a pour ancêtre</label>
+  <comment xml:lang="fr">relation entre un animal et un autre animal duquel il descend.</comment>
+</rdf:Property>
+
+<rdf:Property rdf:ID="hasParent">
+  <subPropertyOf rdf:resource="#hasAncestor"/>
+  <label xml:lang="en">has for parent</label>
+  <comment xml:lang="en">relation between an animal and another animal which gave birth to it.</comment>
+  <label xml:lang="fr">a pour parent</label>
+  <comment xml:lang="fr">relation entre un animal et un autre animal qui lui a donné naissance.</comment>
+</rdf:Property>
+
+<rdf:Property rdf:ID="hasChild">
+  <label xml:lang="en">has for child</label>
+  <comment xml:lang="en">relation between an animal and another animal to which it gave birth.</comment>
+  <label xml:lang="fr">a pour enfant</label>
+  <comment xml:lang="fr">relation entre un animal et un autre animal auquel il a donné naissance.</comment>
+</rdf:Property> 
+
+<rdf:Property rdf:ID="hasFather">
+  <subPropertyOf rdf:resource="#hasParent"/>
+  <range rdf:resource="#Male"/>
+  <label xml:lang="en">has for father</label>
+  <comment xml:lang="en">to have for parent a male.</comment>
+  <label xml:lang="fr">a pour père</label>
+  <comment xml:lang="fr">avoir pour parent un mâle.</comment>
+</rdf:Property>
+
+<rdf:Property rdf:ID="hasMother">
+  <subPropertyOf rdf:resource="#hasParent"/>
+  <range rdf:resource="#Female"/>
+  <label xml:lang="en">has for mother</label>
+  <comment xml:lang="en">to have for parent a female.</comment>
+  <label xml:lang="fr">a pour mère</label>
+  <comment xml:lang="fr">avoir pour parent un femmelle.</comment>
+</rdf:Property>
+
+<rdf:Property rdf:ID="hasBrother">
+  <domain rdf:resource="#Animal"/>
+  <range rdf:resource="#Male"/>
+  <label xml:lang="en">has for brother</label>
+  <comment xml:lang="en">relation with a male who has the same parents.</comment>
+  <label xml:lang="fr">a pour frère</label>
+  <comment xml:lang="fr">relation avec un mâle ayant les mêmes parents.</comment>
+</rdf:Property>
+
+<rdf:Property rdf:ID="hasSister">
+  <domain rdf:resource="#Animal"/>
+  <range rdf:resource="#Female"/>
+  <label xml:lang="en">has for sister</label>
+  <comment xml:lang="en">relation with a female who has the same parents.</comment>
+  <label xml:lang="fr">a pour soeur</label>
+  <comment xml:lang="fr">relation avec une femelle ayant les mêmes parents.</comment>
+</rdf:Property>
+
+<rdf:Property rdf:ID="hasFriend">
+  <domain rdf:resource="#Person"/>
+  <range rdf:resource="#Person"/>
+  <label xml:lang="en">has for friend</label>
+  <comment xml:lang="en">relation between a person and another person he or she knows well and regards with affection and trust.</comment>
+  <label xml:lang="fr">a pour ami</label>
+  <comment xml:lang="fr">relation entre une personne et une autre personne qui est l'objet d'un attachement privilégié.</comment>
+</rdf:Property>
+
+<rdf:Property rdf:ID="name">
+  <label xml:lang="en">name</label>
+  <label xml:lang="fr">nom</label>
+  <comment xml:lang="en">designation of something.</comment>
+  <comment xml:lang="fr">désignation de quelque chose.</comment>
+</rdf:Property>
+
+<rdf:Property rdf:ID="shoesize">
+  <domain rdf:resource="#Person"/>
+  <label xml:lang="en">shoe size</label>
+  <label xml:lang="en">size</label>
+  <label xml:lang="fr">pointure</label>
+  <comment xml:lang="en">express in some way the approximate length of the shoes for a person.</comment>
+  <comment xml:lang="fr">taille, exprimée en points, des chaussures d'une personne.</comment>
+</rdf:Property>
+
+<rdf:Property rdf:ID="age">
+  <label xml:lang="en">age</label>
+  <label xml:lang="fr">âge</label>
+  <comment xml:lang="en">complete existence duration.</comment>
+  <comment xml:lang="fr">durée complète d'existence.</comment>
+</rdf:Property>
+
+<rdf:Property rdf:ID="shirtsize">
+  <domain rdf:resource="#Person"/>
+  <label xml:lang="en">shirt size</label>
+  <label xml:lang="en">size</label>
+  <label xml:lang="fr">taille de chemise</label>
+  <label xml:lang="fr">taille</label>
+  <comment xml:lang="en">express in some way the approximate dimensions of the shirts of a person.</comment>
+  <comment xml:lang="fr">dimensions approximatives des chemises portées par une personne.</comment>
+</rdf:Property>
+
+<rdf:Property rdf:ID="trouserssize">
+  <domain rdf:resource="#Person"/>
+  <label xml:lang="en">trousers size</label>
+  <label xml:lang="en">size</label>
+  <label xml:lang="fr">taille de pantalon</label>
+  <label xml:lang="fr">taille</label>
+  <comment xml:lang="en">express in some way the approximate dimensions of the trousers of a person.</comment>
+  <comment xml:lang="fr">dimensions approximatives des pantalons portés par une personne.</comment>
+</rdf:Property>
+
+<rdf:Property rdf:ID="hasSpouse">
+  <domain rdf:resource="#Person"/>
+  <range rdf:resource="#Person"/>
+  <label xml:lang="en">has for spouse</label>
+  <label xml:lang="fr">est en ménage avec</label>
+  <comment xml:lang="en">a person's partner in marriage.</comment>
+  <comment xml:lang="fr">le partenaire d'une personne dans un mariage.</comment>
+</rdf:Property>
+
+</rdf:RDF>
+

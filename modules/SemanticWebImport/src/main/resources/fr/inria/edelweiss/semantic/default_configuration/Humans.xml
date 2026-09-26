@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+<comment>SparqlDriver</comment>
+<entry key="Name">Humans</entry>
+<entry key="SparqlRequest">construct{
+  ?x ?r ?y
+} where {
+  ?x ?r ?y
+}</entry>
+<entry key="SparqlDriver">fr.inria.edelweiss.sparql.corese.CoreseDriver</entry>
+<entry key="rdfResourceList">/fr/inria/edelweiss/examples/human_2007_09_11.rdf;/fr/inria/edelweiss/examples/human_2007_09_11.rdfs;/fr/inria/edelweiss/examples/human_2007_09_11.rul</entry>
+</properties>

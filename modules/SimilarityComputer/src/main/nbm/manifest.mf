@@ -1,0 +1,6 @@
+Manifest-Version: 1.0
+OpenIDE-Module-Name: Similarity Computer
+OpenIDE-Module-Localizing-Bundle: net/clementlevallois/wizard/Bundle.properties
+OpenIDE-Module-Display-Category: Import
+OpenIDE-Module-Short-Description: Creates a network between entities, based on their similarities.
+OpenIDE-Module-Long-Description: <h2>Create a network of entities based on their similarities</h2><br><br><h3>Release History:</h3><b>Version 1.1 (Feb 2017)</b><br>-> Release for Gephi 0.9.1 with additional features.<b>Version 1.0 (September 2014)</b><br>-> Initial release.<br>

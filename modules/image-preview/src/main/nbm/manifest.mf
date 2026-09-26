@@ -1,0 +1,7 @@
+Manifest-Version: 1.3
+OpenIDE-Module-Localizing-Bundle: org/yale/cs/graphics/gephi/imagepreview/Bundle.properties
+OpenIDE-Module-Name: Image Preview
+OpenIDE-Module-Requires: org.openide.windows.WindowManager
+OpenIDE-Module-Short-Description: Image Preview
+OpenIDE-Module-Long-Description: Image Preview
+OpenIDE-Module-Display-Category: Preview

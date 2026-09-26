@@ -1,0 +1,17 @@
+Manifest-Version: 1.0
+OpenIDE-Module-Localizing-Bundle: com/polinode/polinodeexporter/Bundle.properties
+OpenIDE-Module-Name: Polinode Exporter
+OpenIDE-Module-Short-Description: Export a graph from Gephi to Polinode to share it interactively online
+OpenIDE-Module-Long-Description: This plugin allows you to export your graph from Gephi to Polinode.
+    Polinode is a web-based platform for visualizing, analyzing and sharing graphs online.<br /><br />
+    In order to use the plugin you will first want to <a href="https://app.polinode.com/free-trial">signup</a> for a Polinode account.
+    Once signed-up you can create a set of API keys by clicking on your name at the top right hand corner of the application
+    and then clicking on Account Settings then API Keys.<br /><br />
+    These API credentials will need to be entered into a dialogue that will appear in Gephi under <b>File -> Export -> To Polinode...</b> 
+    once you have added this plugin. Simply add your API credentials, type a name for your network and an optional description 
+    and select whether the network should be a public or private network in Polinode.<br /><br />
+    A public network in Polinode is one that everyone can view / access and you can share that network with others by simply
+    sharing a link, i.e. they don't need a Polinode account to access the network.
+    A private network is only accessible by you plus anyone you explicitly grant permission to access the network - anyone 
+    accessing a private network will need a Polinode account.
+OpenIDE-Module-Display-Category: Export

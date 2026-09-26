@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+<comment>SparqlDriver</comment>
+<entry key="Name">DBPedia</entry>
+<entry key="SparqlRequest">construct{
+  ?x ?r ?y
+} where {
+  ?x ?r ?y
+}
+ limit 100</entry>
+<entry key="restSparqlEndPointURL">http://dbpedia.org/sparql</entry>
+<entry key="SparqlDriver">fr.inria.edelweiss.sparql.restdriver.SparqlRestEndPointDriver</entry>
+<entry key="restSparqlEndPointQuery">query</entry>
+<entry key="rdfResourceList"/>
+</properties>

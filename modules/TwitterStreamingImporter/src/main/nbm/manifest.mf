@@ -1,0 +1,5 @@
+Manifest-Version: 1.0
+OpenIDE-Module-Name: TwitterStreamingImporter
+OpenIDE-Module-Short-Description: Realtime Twitter Graph Importer
+OpenIDE-Module-Long-Description: <p>⚠⚠ <b>Deprecated plugin, please use Twitter Streaming Importer V2 ⚠⚠</b></p> 
+OpenIDE-Module-Display-Category: Import
