@@ -36,3 +36,19 @@ jobs:
         run: mvn scm-publish:publish-scm -P release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      # gephi.github.io is a static build that reads plugins.json at build time, so it needs an
+      # explicit rebuild whenever this workflow updates gh-pages.
+      - name: Get website deploy token
+        uses: actions/create-github-app-token@v2
+        id: website-app-token
+        with:
+          app-id: ${{ secrets.GEPHI_WEBSITE_DEPLOY_APP_ID }}
+          private-key: ${{ secrets.GEPHI_WEBSITE_DEPLOY_APP_PRIVATE_KEY }}
+          owner: gephi
+          repositories: gephi.github.io
+
+      - name: Trigger gephi.github.io rebuild
+        env:
+          GH_TOKEN: ${{ steps.website-app-token.outputs.token }}
+        run: gh workflow run deploy.yml --repo gephi/gephi.github.io --ref main
