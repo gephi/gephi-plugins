@@ -325,7 +325,8 @@ See "Gephi platform conventions" above for the reasoning; on review, check that 
 ### File hygiene
 
 - No build artifacts committed (`target/`, `*.class`, stray `*.jar` outside a deliberately vendored
-  native dependency).
+  native dependency, or a built `*.nbm` file — the packaged plugin binary the build produces, not
+  something to submit as source).
 - No IDE metadata committed (`.idea/`, `.classpath`, `.project`, `*.iml`) unless the existing plugin
   already tracks it as a convention.
 - No secrets, tokens, or credentials anywhere in the diff.
