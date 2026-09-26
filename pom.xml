@@ -293,9 +293,9 @@
         <module>modules/PositionRanking</module>
 
         <!-- name: Neo4j plugin -->
-        <!-- origin: fork (sim51/gephi-plugins — repo now deleted) -->
-        <!-- status: disabled — reason not recorded -->
-        <!-- <module>modules/Neo4jPlugin</module> -->
+        <!-- origin: branch (neo4j-bolt-plugin) -->
+        <!-- status: active -->
+        <module>modules/Neo4jPlugin</module>
 
         <!-- name: Link Prediction -->
         <!-- origin: fork (romanutti/gephi-plugins) -->
