@@ -1,0 +1,109 @@
+/*
+package org.robertpalermo.distancebackbone;
+
+import org.gephi.graph.api.*;
+import java.util.*;
+
+public class DistanceBackboneProcessor {
+    private final Graph graph;
+
+    public DistanceBackboneProcessor(GraphModel graphModel) {
+        this.graph = graphModel.getUndirectedGraph(); 
+    }
+
+    
+    public void compute() {
+        
+        // Removes self loops instead of just throwing an error like in the Python code.
+        List<Edge> toRemove = new ArrayList<>();
+        for (Edge edge : graph.getEdges()) {
+            if (edge.getSource().equals(edge.getTarget())) {
+                toRemove.add(edge);
+            }
+        }
+        for (Edge edge : toRemove) {
+            graph.removeEdge(edge);
+        }
+        
+        List<Node> nodes = new ArrayList<>();
+        for (Node node : graph.getNodes()) {
+            nodes.add(node);
+        }
+
+
+        nodes.sort(Comparator.comparingDouble(graph::getDegree));
+
+        for (Node u : nodes) {
+            Map<Node, Double> distances = dijkstra(u);
+
+
+            List<Edge> edges = new ArrayList<>();
+            for (Edge e : graph.getEdges(u)) {
+                edges.add(e);
+            }
+
+            for (Edge edge : edges) {
+                Node v = edge.getSource().equals(u) ? edge.getTarget() : edge.getSource();
+                double directWeight = edge.getWeight();
+
+
+                if (distances.containsKey(v) && distances.get(v) < directWeight) {
+                    graph.removeEdge(edge);
+                }
+            }
+        }
+    }
+
+    
+    // Only works for the metric backbone.
+    private Map<Node, Double> dijkstra(Node source) {
+        Map<Node, Double> dist = new HashMap<>();
+        PriorityQueue<NodeDistance> queue = new PriorityQueue<>(Comparator.comparingDouble(nd -> nd.distance));
+        dist.put(source, 0.0);
+        queue.add(new NodeDistance(source, 0.0));
+
+        while (!queue.isEmpty()) {
+            NodeDistance current = queue.poll();
+            Node u = current.node;
+            double currentDist = current.distance;
+
+            if (currentDist > dist.get(u)) continue;
+
+            for (Edge edge : graph.getEdges(u)) {
+                Node v = edge.getSource().equals(u) ? edge.getTarget() : edge.getSource();
+                double weight = edge.getWeight();
+                double alt = dist.get(u) + weight;
+
+                if (!dist.containsKey(v) || alt < dist.get(v)) {
+                    dist.put(v, alt);
+                    queue.add(new NodeDistance(v, alt));
+                }
+            }
+        }
+
+        return dist;
+    }
+
+
+    private static class NodeDistance {
+        Node node;
+        double distance;
+
+        NodeDistance(Node node, double distance) {
+            this.node = node;
+            this.distance = distance;
+        }
+    }
+}
+*/
+
+
+
+
+My Manifest file: 
+Manifest-Version: 1.0
+OpenIDE-Module-Name: Distance Backbone Toolbox
+OpenIDE-Module-Short-Description: Finds the metric and ultrametric backbone of weighted networks. They are very small subgraphs that preserve important structural and dynamical network features.
+OpenIDE-Module-Long-Description: This plugin allows you to compute the metric and ultrametric distance backbones defined in Simas et al 2021 [https://doi.org/10.1093/comnet/cnab021]. For larger networks, we recommend using the Python library distanceclosure [https://github.com/CASCI-lab/distanceclosure].
+OpenIDE-Module-Display-Category: Metric
+OpenIDE-Module-Author: Robert Palermo

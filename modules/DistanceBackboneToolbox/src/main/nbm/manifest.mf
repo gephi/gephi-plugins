@@ -1,0 +1,17 @@
+Manifest-Version: 1.0
+OpenIDE-Module-Name: Distance Backbone Toolbox
+OpenIDE-Module-Short-Description: Finds the metric and ultrametric backbone of weighted networks. They are very small subgraphs that preserve important structural and dynamical network features.
+OpenIDE-Module-Long-Description: <html>
+ <p>This plugin allows you to compute the metric and ultrametric distance 
+ backbones defined in Simas et al 2021 (<a href="https://doi.org/10.1093/com
+ net/cnab021">doi:10.1093/comnet/cnab021</a>). For larger networks, we recom
+ mend the Python library distanceclosure (<a href="https://github.com/CASCI-l
+ ab/distanceclosure">github.com/CASCI-lab/distanceclosure</a>).</p>
+ <p>These backbones are parameter-free, algebraically principled network spar
+ sifications that remove edges violating generalized triangle inequalities, r
+ endering them redundant for shortest-path computations. The ultrametric back
+ bone generalizes the minimum spanning tree to directed graphs and is a subgr
+ aph of the metric backbone for both directed and undirected networks.</p>
+ <p>NOTE: The distance measure of a given edge, d<sub>ij</sub>, must be labelled 
+ 'weight'.</p></html>
+OpenIDE-Module-Display-Category: Metric
