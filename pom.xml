@@ -326,6 +326,11 @@
         <!-- origin: fork (totetmatt/gephi-plugins) -->
         <!-- status: active — caveat: previously disabled for auto-creating a project on startup; re-enabled without a confirmed fix, verify -->
         <module>modules/BlueskyGephi</module>
+
+        <!-- name: Weighted Bridging Centrality -->
+        <!-- origin: fork (natesteinmeyer/gephi-plugins) -->
+        <!-- status: active -->
+        <module>modules/WeightedBridgingCentrality</module>
     </modules>
     
     <!-- Properties -->
