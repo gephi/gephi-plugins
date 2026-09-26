@@ -19,7 +19,7 @@ public class WeightedBridgingCentralityMetricPanel extends javax.swing.JPanel {
     public void setDirected(boolean directed) {
         isDirectedCheckBox.setSelected(directed);
     }
-    
+
     public void directedCheckBox(boolean enabled) {
         isDirectedCheckBox.setEnabled(enabled);
         isDirectedLabel.setEnabled(enabled);
@@ -32,7 +32,7 @@ public class WeightedBridgingCentralityMetricPanel extends javax.swing.JPanel {
     public void setNormalized(boolean normalized) {
         isNormalizedCheckBox.setSelected(normalized);
     }
-    
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -41,106 +41,61 @@ public class WeightedBridgingCentralityMetricPanel extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jPanel1 = new javax.swing.JPanel();
-        jPanel2 = new javax.swing.JPanel();
-        titleLabel = new javax.swing.JLabel();
-        isDirectedLabel = new javax.swing.JLabel();
+        header = new org.jdesktop.swingx.JXHeader();
         isDirectedCheckBox = new javax.swing.JCheckBox();
-        jSeparator1 = new javax.swing.JSeparator();
-        isNormalizedLabel = new javax.swing.JLabel();
+        isDirectedLabel = new javax.swing.JLabel();
         isNormalizedCheckBox = new javax.swing.JCheckBox();
+        isNormalizedLabel = new javax.swing.JLabel();
 
-        setPreferredSize(new java.awt.Dimension(340, 194));
+        setPreferredSize(new java.awt.Dimension(500, 280));
 
-        jPanel1.setPreferredSize(new java.awt.Dimension(340, 194));
-        jPanel1.setLayout(new java.awt.BorderLayout());
-
-        jPanel2.setPreferredSize(new java.awt.Dimension(340, 194));
-
-        titleLabel.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
-        titleLabel.setText(org.openide.util.NbBundle.getMessage(WeightedBridgingCentralityMetricPanel.class, "WeightedBridgingCentralityMetricPanel.titleLabel.text")); // NOI18N
+        header.setDescription(org.openide.util.NbBundle.getMessage(WeightedBridgingCentralityMetricPanel.class, "WeightedBridgingCentralityMetricPanel.header.description")); // NOI18N
+        header.setTitle(org.openide.util.NbBundle.getMessage(WeightedBridgingCentralityMetricPanel.class, "WeightedBridgingCentralityMetricPanel.header.title")); // NOI18N
 
         isDirectedLabel.setText(org.openide.util.NbBundle.getMessage(WeightedBridgingCentralityMetricPanel.class, "WeightedBridgingCentralityMetricPanel.isDirectedLabel.text")); // NOI18N
-        isDirectedLabel.setMaximumSize(new java.awt.Dimension(110, 23));
-        isDirectedLabel.setMinimumSize(new java.awt.Dimension(110, 23));
 
         isNormalizedLabel.setText(org.openide.util.NbBundle.getMessage(WeightedBridgingCentralityMetricPanel.class, "WeightedBridgingCentralityMetricPanel.isNormalizedLabel.text")); // NOI18N
-        isNormalizedLabel.setMaximumSize(new java.awt.Dimension(110, 23));
-        isNormalizedLabel.setMinimumSize(new java.awt.Dimension(110, 23));
-
-        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
-        jPanel2.setLayout(jPanel2Layout);
-        jPanel2Layout.setHorizontalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(isNormalizedCheckBox)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(isNormalizedLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(isDirectedCheckBox)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(isDirectedLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(56, 56, 56)
-                        .addComponent(titleLabel)))
-                .addContainerGap(497, Short.MAX_VALUE))
-        );
-        jPanel2Layout.setVerticalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(23, 23, 23)
-                .addComponent(titleLabel)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(isDirectedCheckBox)
-                    .addComponent(isDirectedLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(isNormalizedLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 23, Short.MAX_VALUE)
-                        .addGap(157, 157, 157))
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(isNormalizedCheckBox)
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
-        );
-
-        jPanel1.add(jPanel2, java.awt.BorderLayout.CENTER);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(header, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
             .addGroup(layout.createSequentialGroup()
-                .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 803, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(isDirectedCheckBox)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(isDirectedLabel))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(isNormalizedCheckBox)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(isNormalizedLabel)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 283, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(header, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(isDirectedCheckBox)
+                    .addComponent(isDirectedLabel))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(isNormalizedCheckBox)
+                    .addComponent(isNormalizedLabel))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private org.jdesktop.swingx.JXHeader header;
     private javax.swing.JCheckBox isDirectedCheckBox;
     private javax.swing.JLabel isDirectedLabel;
     private javax.swing.JCheckBox isNormalizedCheckBox;
     private javax.swing.JLabel isNormalizedLabel;
-    private javax.swing.JPanel jPanel1;
-    private javax.swing.JPanel jPanel2;
-    private javax.swing.JSeparator jSeparator1;
-    private javax.swing.JLabel titleLabel;
     // End of variables declaration//GEN-END:variables
 }
