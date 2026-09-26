@@ -7,6 +7,7 @@ import org.gephi.statistics.spi.Statistics;
 import org.gephi.statistics.spi.StatisticsUI;
 import org.openide.util.Lookup;
 import org.openide.util.NbBundle;
+import org.openide.util.NbPreferences;
 import org.openide.util.lookup.ServiceProvider;
 
 /**
@@ -16,29 +17,10 @@ import org.openide.util.lookup.ServiceProvider;
 @ServiceProvider(service = StatisticsUI.class)
 public class WeightedBridgingCentralityMetricUI implements StatisticsUI {
 
-    private final StatSettings settings = new StatSettings();
-    
+    private static final String NORMALIZED_PREF = "Normalized";
+
     private WeightedBridgingCentralityMetricPanel panel;
     private WeightedBridgingCentralityMetric metric;
-    
-    private boolean isDirected;
-    private boolean isNormalized;
-
-    public void setDirected(boolean isDirected) {
-        this.isDirected = isDirected;
-    }
-
-    public boolean isDirected() {
-        return isDirected;
-    }
-    
-    public void setNormalized(boolean isNormalized) {
-        this.isNormalized = isNormalized;
-    }
-
-    public boolean isNormalized() {
-        return isNormalized;
-    }
 
     public JPanel getSettingsPanel() {
         panel = new WeightedBridgingCentralityMetricPanel();
@@ -50,9 +32,9 @@ public class WeightedBridgingCentralityMetricUI implements StatisticsUI {
         metric = (WeightedBridgingCentralityMetric) ststcs;
         
         if ( panel != null ) {
-            
-            metric.setNormalized( true ); // default
-            
+
+            metric.setNormalized(NbPreferences.forModule(WeightedBridgingCentralityMetricUI.class).getBoolean(NORMALIZED_PREF, true));
+
             panel.setDirected(metric.isDirected());
             panel.setNormalized(metric.isNormalized());
             
@@ -66,7 +48,7 @@ public class WeightedBridgingCentralityMetricUI implements StatisticsUI {
         if (panel != null) {
             metric.setDirected(panel.isDirected());
             metric.setNormalized(panel.isNormalized());
-            settings.save(metric);
+            NbPreferences.forModule(WeightedBridgingCentralityMetricUI.class).putBoolean(NORMALIZED_PREF, metric.isNormalized());
         }
         panel = null;
         metric = null;
@@ -102,15 +84,6 @@ public class WeightedBridgingCentralityMetricUI implements StatisticsUI {
      */
     public int getPosition() {
         return 200;
-    }
-    
-    
-    private static class StatSettings {
-
-        private void save(WeightedBridgingCentralityMetric stat) {
-            stat.isDirected();
-            stat.isNormalized();
-        }
     }
 
 }
