@@ -4319,12 +4319,12 @@
       "authors": [
         {
           "name": "Benoit Simard",
-          "email": "contact@bsimard.com",
-          "link": "https://wwww.ouestware.com/en"
+          "email": null,
+          "link": null
         }
       ],
       "category": "Import",
-      "last_update": "January 10, 2023",
+      "last_update": "September 26, 2026",
       "images": [
         {
           "image": "imgs/neo4j-plugin/neo4j-logo.png",
@@ -4346,9 +4346,14 @@
           "url": "0.10/neo4j-plugin-4.0.1.nbm",
           "last_update": "January 10, 2023",
           "plugin_version": "4.0.1"
+        },
+        "0.11.3": {
+          "url": "0.11/neo4j-plugin-5.0.1.nbm",
+          "last_update": "September 26, 2026",
+          "plugin_version": "5.0.1"
         }
       },
-      "sourcecode": "https://github.com/gephi/gephi-plugins",
+      "sourcecode": "https://github.com/gephi/gephi-plugins/neo4j-plugin",
       "homepage": null
     },
     {
