@@ -59,30 +59,10 @@
         <!-- origin: fork (panisson/gephi-plugins) -->
         <!-- status: active -->
         <module>modules/GraphStreaming</module>
-
-        <!-- name: Desktop Streaming -->
-        <!-- origin: fork (panisson/gephi-plugins) -->
-        <!-- status: active -->
         <module>modules/DesktopStreaming</module>
-
-        <!-- name: Streaming API -->
-        <!-- origin: fork (panisson/gephi-plugins) -->
-        <!-- status: active -->
         <module>modules/StreamingAPI</module>
-
-        <!-- name: Streaming Impl -->
-        <!-- origin: fork (panisson/gephi-plugins) -->
-        <!-- status: active -->
         <module>modules/StreamingImpl</module>
-
-        <!-- name: Jetty Wrapper -->
-        <!-- origin: fork (panisson/gephi-plugins) -->
-        <!-- status: active -->
         <module>modules/JettyWrapper</module>
-
-        <!-- name: Streaming Server -->
-        <!-- origin: fork (panisson/gephi-plugins) -->
-        <!-- status: active -->
         <module>modules/StreamingServer</module>
 
         <!-- name: Circular Layout -->
@@ -254,15 +234,7 @@
         <!-- origin: fork (alexkeizer/BoundingDiameters) -->
         <!-- status: active -->
         <module>modules/BoundingDiametersSuite</module>
-
-        <!-- name: BoundingDiameters -->
-        <!-- origin: fork (alexkeizer/BoundingDiameters) -->
-        <!-- status: active -->
         <module>modules/BoundingDiameters</module>
-
-        <!-- name: BoundingDiameters UI -->
-        <!-- origin: fork (alexkeizer/BoundingDiameters) -->
-        <!-- status: active -->
         <module>modules/BoundingDiametersUI</module>
 
         <!-- name: dbscan -->
