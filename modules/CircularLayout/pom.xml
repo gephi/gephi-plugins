@@ -46,10 +46,6 @@
     </dependency>
     <dependency>
       <groupId>org.gephi</groupId>
-      <artifactId>ui-utils</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.gephi</groupId>
       <artifactId>project-api</artifactId>
     </dependency>
   </dependencies>

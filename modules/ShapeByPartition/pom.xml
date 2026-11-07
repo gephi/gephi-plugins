@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <artifactId>gephi-plugin-parent</artifactId>
+        <groupId>org.gephi</groupId>
+        <version>0.11.1</version>
+    </parent>
+
+    <groupId>org.gephi.plugins</groupId>
+    <artifactId>shape-by-partition</artifactId>
+    <version>1.2.0</version>
+    <packaging>nbm</packaging>
+
+    <name>Shape by Partition</name>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.gephi</groupId>
+            <artifactId>graph-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.gephi</groupId>
+            <artifactId>preview-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.gephi</groupId>
+            <artifactId>preview-plugin</artifactId>
+        </dependency>
+        <!-- Wraps PDFBox, whose content stream the PDF export path writes to. -->
+        <dependency>
+            <groupId>org.gephi</groupId>
+            <artifactId>core-library-wrapper</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.netbeans.api</groupId>
+            <artifactId>org-openide-util</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.netbeans.api</groupId>
+            <artifactId>org-openide-util-lookup</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.netbeans.api</groupId>
+            <artifactId>org-netbeans-modules-nbjunit</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+    <properties>
+        <jacoco.branch.minimum>0.71</jacoco.branch.minimum>
+    </properties>
+
+    <build>
+        <plugins>
+            <plugin>
+                <!-- JDK 23+ disables annotation processing by default; without full
+                     processing, @ServiceProvider never generates the META-INF/services
+                     entry and Gephi cannot discover the renderer. -->
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <proc>full</proc>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.netbeans.utilities</groupId>
+                <artifactId>nbm-maven-plugin</artifactId>
+                <configuration>
+                    <licenseName>Apache 2.0</licenseName>
+                    <licenseFile>LICENSE.txt</licenseFile>
+                    <author>Matt Artz</author>
+                    <authorUrl>https://www.mattartz.me</authorUrl>
+                    <sourceCodeUrl>https://github.com/gephi/gephi-plugins/tree/master-forge/modules/ShapeByPartition</sourceCodeUrl>
+                    <homePageUrl>https://github.com/gephi/gephi-plugins/tree/master-forge/modules/ShapeByPartition</homePageUrl>
+                    <publicPackages>
+                        <!-- Insert public packages -->
+                    </publicPackages>
+                </configuration>
+            </plugin>
+            <!-- Branch-coverage floor: it only ratchets up. Raise jacoco.branch.minimum
+                 when coverage rises; never lower it to get a build through. -->
+            <plugin>
+                <groupId>org.jacoco</groupId>
+                <artifactId>jacoco-maven-plugin</artifactId>
+                <version>0.8.14</version>
+                <executions>
+                    <execution>
+                        <id>prepare-agent</id>
+                        <goals><goal>prepare-agent</goal></goals>
+                    </execution>
+                    <execution>
+                        <id>report</id>
+                        <phase>test</phase>
+                        <goals><goal>report</goal></goals>
+                    </execution>
+                    <execution>
+                        <id>check</id>
+                        <phase>test</phase>
+                        <goals><goal>check</goal></goals>
+                        <configuration>
+                            <rules>
+                                <rule>
+                                    <element>BUNDLE</element>
+                                    <limits>
+                                        <limit>
+                                            <counter>BRANCH</counter>
+                                            <value>COVEREDRATIO</value>
+                                            <minimum>${jacoco.branch.minimum}</minimum>
+                                        </limit>
+                                    </limits>
+                                </rule>
+                            </rules>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+</project>
+
+
