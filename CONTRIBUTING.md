@@ -338,8 +338,8 @@ See "Gephi platform conventions" above for the reasoning; on review, check that 
 - Tests are not disabled or skipped (`@Ignore`, `-DskipTests` baked into the module's own `pom.xml`)
   to force a green build.
 - The PR's "Run SPI contract tests on changed plugins" CI step passes. It runs
-  `gephi-plugins-tests`' contract tests (e.g. `LayoutContractTest` for layouts) against each changed
-  module; locally, `mvn install` then `.github/contract-tests/run.sh modules/<Folder>`.
+  `gephi-plugins-tests`' contract tests for every SPI implementation each changed module registers;
+  locally, `mvn install` then `.github/contract-tests/run.sh modules/<Folder>`.
 
 ### PR completeness
 

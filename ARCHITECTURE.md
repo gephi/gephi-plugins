@@ -44,13 +44,13 @@ plugin repos pick it up. `pr.yml` builds PRs targeting `master-forge`. All workf
 `master` and reach `master-forge` through the regular `master` merge.
 
 `build.yml` and `pr.yml` also run SPI contract tests from
-[`gephi-plugins-tests`](https://github.com/gephi/gephi-plugins-tests) (e.g. `LayoutContractTest`,
-which checks every `LayoutBuilder` a plugin registers) against each plugin: `build.yml` on every
-module of the branch, `pr.yml` only on the modules the PR changes. The harness lives in
-`.github/contract-tests/`, so neither plugins nor `gephi-plugin-parent` declare anything for it,
-and plugins built against an older `gephi-plugin-parent` are tested against the current
-`gephi.version`. To run it locally: `mvn install`, then `.github/contract-tests/run.sh
-modules/<Folder>`.
+[`gephi-plugins-tests`](https://github.com/gephi/gephi-plugins-tests) against each plugin. These
+check that every SPI implementation a plugin registers (found through `Lookup`) behaves as Gephi
+expects, for each SPI the library covers. `build.yml` runs them on every module of the branch,
+`pr.yml` only on the modules the PR changes. The harness lives in `.github/contract-tests/`, so
+neither plugins nor `gephi-plugin-parent` declare anything for it, and plugins built against an
+older `gephi-plugin-parent` are tested against the current `gephi.version`. To run it locally:
+`mvn install`, then `.github/contract-tests/run.sh modules/<Folder>`.
 
 ## How Gephi can be extended
 
