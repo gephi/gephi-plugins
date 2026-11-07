@@ -339,7 +339,9 @@ See "Gephi platform conventions" above for the reasoning; on review, check that 
   to force a green build.
 - The PR's "Run SPI contract tests on changed plugins" CI step passes. It runs
   `gephi-plugins-tests`' contract tests for every SPI implementation each changed module registers;
-  locally, `mvn install` then `.github/contract-tests/run.sh modules/<Folder>`.
+  locally, `mvn install` then `.github/contract-tests/run.sh modules/<Folder>`. The step runs the
+  PR's own copy of `.github/`, so a pass only counts if the PR leaves `.github/` untouched (see
+  "Build actually passes" above).
 
 ### PR completeness
 

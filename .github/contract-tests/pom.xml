@@ -55,6 +55,13 @@
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>3.6.1</version>
                 <configuration>
+                    <!-- Headless, with the same module access Gephi's launcher grants (gephi.conf) -->
+                    <argLine>-Djava.awt.headless=true --add-opens=java.base/java.net=ALL-UNNAMED --add-opens=java.base/java.nio=ALL-UNNAMED --add-opens=java.desktop/javax.swing=ALL-UNNAMED --add-exports=java.desktop/sun.awt=ALL-UNNAMED</argLine>
+                    <systemPropertyVariables>
+                        <!-- Only test implementations from the plugin's own jar, not the ones its
+                             dependencies (e.g. core layout-plugin) register -->
+                        <gephi.plugins.tests.jar>${plugin.artifactId}-${plugin.version}.jar</gephi.plugins.tests.jar>
+                    </systemPropertyVariables>
                     <dependenciesToScan>
                         <dependency>org.gephi:gephi-plugins-tests</dependency>
                     </dependenciesToScan>

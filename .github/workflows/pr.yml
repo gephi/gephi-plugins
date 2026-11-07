@@ -22,9 +22,20 @@ jobs:
         run: mvn -B install --file pom.xml
       - name: Run SPI contract tests on changed plugins
         run: |
-          CHANGED=$(git diff --name-only HEAD^1 HEAD -- modules/ | cut -d/ -f1-2 | sort -u)
-          if [ -z "$CHANGED" ]; then
+          CHANGED_FILES=$(git -c core.quotePath=false diff --name-only HEAD^1 HEAD)
+          # A root pom.xml change (gephi.version bump, re-enabled <module>, ...) or a harness change
+          # can affect every plugin, so test them all
+          if grep -qxE 'pom\.xml|\.github/contract-tests/.*' <<< "$CHANGED_FILES"; then
+            exec .github/contract-tests/run.sh
+          fi
+          FOLDERS=()
+          while IFS= read -r folder; do
+            if [ -d "$folder" ]; then
+              FOLDERS+=("$folder")
+            fi
+          done < <(grep '^modules/' <<< "$CHANGED_FILES" | cut -d/ -f1-2 | sort -u)
+          if [ ${#FOLDERS[@]} -eq 0 ]; then
             echo "No plugin modules changed; skipping."
             exit 0
           fi
-          .github/contract-tests/run.sh $CHANGED
+          .github/contract-tests/run.sh "${FOLDERS[@]}"
