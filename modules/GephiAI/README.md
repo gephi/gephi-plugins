@@ -11,7 +11,7 @@ is not required for this plugin to build or install.
 
 ## Quick start
 
-- Requires Gephi 0.11.3 or later.
+- Requires Gephi 0.11.4 or later.
 - Install the plugin in Gephi and restart.
 - The API starts automatically and listens on `http://127.0.0.1:8080`.
 - Open **Tools > Gephi AI Server** to see whether it is running and on which URL,
