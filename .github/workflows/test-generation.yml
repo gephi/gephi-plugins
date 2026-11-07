@@ -49,7 +49,12 @@ jobs:
           grep -q '<module>modules/CiIntegrationTestPlugin</module>' pom.xml
 
       - name: Build, validate and generate the autoupdate site
-        run: mvn -B package -P release --file pom.xml
+        run: mvn -B install -P release --file pom.xml
+
+      # The fixture implements no SPI, so this runs no test cases: it checks the contract-test
+      # harness still resolves gephi-plugins-tests and gephi-plugin-parent for this gephi.version.
+      - name: Run SPI contract tests against the fixture
+        run: .github/contract-tests/run.sh modules/CiIntegrationTestPlugin
 
       - name: Assert the generation process produced a working autoupdate site
         run: |

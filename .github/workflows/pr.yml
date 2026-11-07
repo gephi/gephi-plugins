@@ -1,0 +1,30 @@
+name: PR
+
+on:
+  pull_request:
+    branches:
+      - master-forge
+
+jobs:
+  build_and_test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          # The PR's merge commit and its first parent (the base), to diff against
+          fetch-depth: 2
+      - name: Set up JDK 17
+        uses: actions/setup-java@v5
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+      - name: Build project with Maven
+        run: mvn -B install --file pom.xml
+      - name: Run SPI contract tests on changed plugins
+        run: |
+          CHANGED=$(git diff --name-only HEAD^1 HEAD -- modules/ | cut -d/ -f1-2 | sort -u)
+          if [ -z "$CHANGED" ]; then
+            echo "No plugin modules changed; skipping."
+            exit 0
+          fi
+          .github/contract-tests/run.sh $CHANGED
