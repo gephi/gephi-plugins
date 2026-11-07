@@ -331,6 +331,10 @@
         <!-- origin: fork (natesteinmeyer/gephi-plugins) -->
         <!-- status: active -->
         <module>modules/WeightedBridgingCentrality</module>
+
+        <!-- name: Shape by Partition -->
+        <!-- origin: fork (MattArtzAnthro/gephi-plugins) -->
+        <!-- status: active -->
         <module>modules/ShapeByPartition</module>
     </modules>
     
