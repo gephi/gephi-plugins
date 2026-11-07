@@ -115,7 +115,7 @@ enough for the vast majority of plugins.
 
 Every plugin's `pom.xml` inherits from `org.gephi:gephi-plugin-parent` — an artifact built from this
 repo's `parent-pom` branch, published to Maven Central, and versioned alongside Gephi itself (e.g.
-`0.11.3`). It supplies:
+`0.11.4`). It supplies:
 
 - Java/compiler settings (JDK 17 target).
 - A `<dependencyManagement>` entry for every Gephi and NetBeans Platform module a plugin might
