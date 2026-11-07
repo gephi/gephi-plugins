@@ -14,7 +14,7 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <gephi-plugins-tests.version>1.0.0</gephi-plugins-tests.version>
+        <gephi-plugins-tests.version>1.1.0</gephi-plugins-tests.version>
     </properties>
 
     <!-- Align the plugin's Gephi/NetBeans dependencies on the current gephi.version, so plugins
