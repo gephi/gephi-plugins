@@ -16,7 +16,8 @@ public class MinimumSpanningTree implements Statistics, LongTask {
 
     private boolean cancel = false;
     private ProgressTicket progressTicket;
-    private MinimumSpanningTreeAlgorithm stAlgorithm;
+    // Set by the thread running the statistics, and read when cancelling from another
+    private volatile MinimumSpanningTreeAlgorithm stAlgorithm;
     
     private boolean directed;
     
@@ -49,7 +50,9 @@ public class MinimumSpanningTree implements Statistics, LongTask {
 
     @Override   //delegate
     public boolean cancel() {
-        return stAlgorithm.cancel();
+        // Can be called right as the run starts, before the algorithm exists
+        MinimumSpanningTreeAlgorithm algorithm = stAlgorithm;
+        return algorithm != null && algorithm.cancel();
     }
 
     @Override
