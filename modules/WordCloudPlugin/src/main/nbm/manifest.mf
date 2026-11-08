@@ -1,0 +1,4 @@
+Manifest-Version: 1.0
+OpenIDE-Module-Requires: org.openide.windows.WindowManager
+OpenIDE-Module-Display-Category: Tool
+OpenIDE-Module-Localizing-Bundle: net/clementlevallois/wordcloud/Bundle.properties

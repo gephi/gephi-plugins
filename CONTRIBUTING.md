@@ -337,6 +337,11 @@ See "Gephi platform conventions" above for the reasoning; on review, check that 
   using the `org-netbeans-modules-nbjunit` dependency per `README.md`'s testing section.
 - Tests are not disabled or skipped (`@Ignore`, `-DskipTests` baked into the module's own `pom.xml`)
   to force a green build.
+- The PR's "Run SPI contract tests on changed plugins" CI step passes. It runs
+  `gephi-plugins-tests`' contract tests for every SPI implementation each changed module registers;
+  locally, `mvn install` then `.github/contract-tests/run.sh modules/<Folder>`. The step runs the
+  PR's own copy of `.github/`, so a pass only counts if the PR leaves `.github/` untouched (see
+  "Build actually passes" above).
 
 ### PR completeness
 

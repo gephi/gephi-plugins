@@ -1,0 +1,5 @@
+Manifest-Version: 1.0
+OpenIDE-Module-Name: AgensGraph Plugin
+OpenIDE-Module-Short-Description: Importer for AgensGraph
+OpenIDE-Module-Long-Description: Importer for AgensGraph
+OpenIDE-Module-Display-Category: Import

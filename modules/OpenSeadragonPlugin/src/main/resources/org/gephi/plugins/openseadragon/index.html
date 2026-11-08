@@ -1,0 +1,49 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+    <head>
+        <title>Gephi OpenSeadragon Export</title>
+        <!-- Copy the code below on your HTML file or header -->
+        <script src="js/openseadragon.min.js" type="text/javascript"></script>
+        <script type="text/javascript">
+            var openSeaDragonMap = undefined;
+            document.addEventListener("readystatechange", event => { 
+                if (event.target.readyState === "complete") {
+                    openSeaDragonMap  = OpenSeadragon({
+                            id:              "seadragon",
+                            tileSources:     "map/map.xml"
+                        });
+                    }
+            });
+        </script>
+        <style type="text/css">
+            body {
+                margin: 0px;
+                font-family: Verdana, Geneva, Tahoma, sans-serif;
+            }
+            #container {
+                display: flex;
+                flex-direction: column;
+                justify-content: space-evenly;
+            }
+            #seadragon {
+                width: 100vw;
+                height: 85vh;
+                background-color: Black;
+            }
+         
+        </style>
+    </head>
+
+    <body>
+        <div id="container">
+            <div class="map">
+                <div id="seadragon"></div>
+            </div>
+            <div>
+                <h1>Gephi OpenSeadragon</h1>
+                <p>Check <a href="https://github.com/gephi/gephi-plugins/tree/openseadragon-plugin/modules/OpenSeadragonPlugin">documentation</a> how to properly run locally.</p>
+            </div>
+        </div>
+    </body>
+</html>

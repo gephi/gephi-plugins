@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<graphml xmlns="http://graphml.graphdrawing.org/xmlns">
+<key attr.name="label" attr.type="string" for="node" id="label"/>
+<key attr.name="Edge Label" attr.type="string" for="edge" id="edgelabel"/>
+<key attr.name="weight" attr.type="double" for="edge" id="weight"/>
+<key attr.name="Edge Id" attr.type="string" for="edge" id="edgeid"/>
+<key attr.name="r" attr.type="int" for="node" id="r"/>
+<key attr.name="g" attr.type="int" for="node" id="g"/>
+<key attr.name="b" attr.type="int" for="node" id="b"/>
+<key attr.name="x" attr.type="float" for="node" id="x"/>
+<key attr.name="y" attr.type="float" for="node" id="y"/>
+<key attr.name="size" attr.type="float" for="node" id="size"/>
+<key attr.name="Spanning Tree" attr.type="int" for="edge" id="spanningtree"/>
+<graph edgedefault="undirected">
+<node id="1">
+<data key="label">A</data>
+<data key="size">10.0</data>
+<data key="r">153</data>
+<data key="g">153</data>
+<data key="b">153</data>
+<data key="x">-803.79083</data>
+<data key="y">468.90408</data>
+</node>
+<node id="2">
+<data key="label">B</data>
+<data key="size">10.0</data>
+<data key="r">153</data>
+<data key="g">153</data>
+<data key="b">153</data>
+<data key="x">-322.76938</data>
+<data key="y">309.8298</data>
+</node>
+<node id="3">
+<data key="label">C</data>
+<data key="size">10.0</data>
+<data key="r">153</data>
+<data key="g">153</data>
+<data key="b">153</data>
+<data key="x">180.48137</data>
+<data key="y">422.68173</data>
+</node>
+<node id="4">
+<data key="label">D</data>
+<data key="size">10.0</data>
+<data key="r">153</data>
+<data key="g">153</data>
+<data key="b">153</data>
+<data key="x">-742.79016</data>
+<data key="y">84.87608</data>
+</node>
+<node id="5">
+<data key="label">E</data>
+<data key="size">10.0</data>
+<data key="r">153</data>
+<data key="g">153</data>
+<data key="b">153</data>
+<data key="x">-24.206144</data>
+<data key="y">126.68831</data>
+</node>
+<node id="6">
+<data key="label">F</data>
+<data key="size">10.0</data>
+<data key="r">153</data>
+<data key="g">153</data>
+<data key="b">153</data>
+<data key="x">-356.45273</data>
+<data key="y">-55.374596</data>
+</node>
+<node id="7">
+<data key="label">G</data>
+<data key="size">10.0</data>
+<data key="r">153</data>
+<data key="g">153</data>
+<data key="b">153</data>
+<data key="x">379.0692</data>
+<data key="y">-145.16986</data>
+</node>
+<edge source="1" target="2">
+<data key="edgelabel">7.0</data>
+<data key="weight">7.0</data>
+<data key="spanningtree">1</data>
+</edge>
+<edge source="1" target="4">
+<data key="edgelabel">5.0</data>
+<data key="weight">5.0</data>
+<data key="spanningtree">1</data>
+</edge>
+<edge source="2" target="3">
+<data key="edgelabel">8.0</data>
+<data key="weight">8.0</data>
+<data key="spanningtree">0</data>
+</edge>
+<edge source="2" target="4">
+<data key="edgelabel">9.0</data>
+<data key="weight">9.0</data>
+<data key="spanningtree">0</data>
+</edge>
+<edge source="2" target="5">
+<data key="edgelabel">7.0</data>
+<data key="weight">7.0</data>
+<data key="spanningtree">1</data>
+</edge>
+<edge source="3" target="5">
+<data key="edgelabel">5.0</data>
+<data key="weight">5.0</data>
+<data key="spanningtree">1</data>
+</edge>
+<edge source="4" target="5">
+<data key="edgelabel">15.0</data>
+<data key="weight">15.0</data>
+<data key="spanningtree">0</data>
+</edge>
+<edge source="4" target="6">
+<data key="edgelabel">6.0</data>
+<data key="weight">6.0</data>
+<data key="spanningtree">1</data>
+</edge>
+<edge source="5" target="6">
+<data key="edgelabel">8.0</data>
+<data key="weight">8.0</data>
+<data key="spanningtree">0</data>
+</edge>
+<edge source="5" target="7">
+<data key="edgelabel">9.0</data>
+<data key="weight">9.0</data>
+<data key="spanningtree">1</data>
+</edge>
+<edge source="6" target="7">
+<data key="edgelabel">11.0</data>
+<data key="weight">11.0</data>
+<data key="spanningtree">0</data>
+</edge>
+</graph>
+</graphml>

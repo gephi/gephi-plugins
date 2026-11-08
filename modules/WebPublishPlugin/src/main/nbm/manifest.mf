@@ -1,0 +1,4 @@
+Manifest-Version: 1.0
+OpenIDE-Module-Name: Web Publish Plugin
+OpenIDE-Module-Display-Category: Export
+OpenIDE-Module-Localizing-Bundle: net/clementlevallois/web/publish/plugin/controller/Bundle.properties

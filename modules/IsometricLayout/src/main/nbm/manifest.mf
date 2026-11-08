@@ -1,0 +1,5 @@
+Manifest-Version: 1.0
+OpenIDE-Module-Name: Isometric Layout
+OpenIDE-Module-Short-Description: This layout uses an isometric perspective to visualize networks.
+OpenIDE-Module-Long-Description: Generates 3D isometric coordinates for all network nodes (x,y,z) and can be also used to split a network into distinct Z-Layers.
+OpenIDE-Module-Display-Category: Layout

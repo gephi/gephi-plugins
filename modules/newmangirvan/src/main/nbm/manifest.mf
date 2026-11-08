@@ -1,0 +1,5 @@
+Manifest-Version: 1.0
+OpenIDE-Module-Name: Newman-Girvan Clustering
+OpenIDE-Module-Short-Description: Girvan-Newman clustering algorithm
+OpenIDE-Module-Long-Description: This plugin clusters a given graph using the Girvan-Newman algorithm. 
+OpenIDE-Module-Display-Category: Clustering

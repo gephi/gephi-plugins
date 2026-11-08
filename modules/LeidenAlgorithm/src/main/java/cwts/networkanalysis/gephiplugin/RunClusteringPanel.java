@@ -1,0 +1,493 @@
+package cwts.networkanalysis.gephiplugin;
+
+import cwts.networkanalysis.gephiplugin.RunClustering.Algorithm;
+import cwts.networkanalysis.gephiplugin.RunClustering.QualityFunction;
+import javax.swing.ToolTipManager;
+
+public class RunClusteringPanel extends javax.swing.JPanel
+{
+
+    private String previous;
+
+    private final int previousDismissDelay;
+
+    public Algorithm getAlgorithm()
+    {
+        switch (this.comboBoxAlgorithm.getSelectedIndex())
+        {
+            case 0: return Algorithm.LEIDEN;
+            case 1: return Algorithm.LOUVAIN;
+            default: return Algorithm.LEIDEN;
+        }
+    }
+
+    public QualityFunction getQualityFunction()
+    {
+        switch (this.comboBoxQualityFunction.getSelectedIndex())
+        {
+            case 0: return QualityFunction.CPM;
+            case 1: return QualityFunction.MODULARITY;
+            default: return QualityFunction.CPM;
+        }
+    }
+
+    public boolean getUseEdgeWeights()
+    {
+        return checkBoxUseEdgeWeights.isSelected();
+    }
+
+    public double getResolution()
+    {
+        return Double.valueOf(textFieldResolution.getText());
+    }
+
+    public int getNIterations()
+    {
+       int nIterations = Integer.valueOf(textFieldNIterations.getText());
+       if (nIterations <= 0)
+           throw new NumberFormatException("Expecting positive number of iterations.");
+       return nIterations;
+    }
+
+    public int getNRestarts()
+    {
+       int nRestarts = Integer.valueOf(textFieldNRestarts.getText());
+       if (nRestarts <= 0)
+           throw new NumberFormatException("Expecting positive number of restarts.");
+       return nRestarts;
+    }
+
+    public int getRandomSeed()
+    {
+       return Integer.valueOf(textFieldSeed.getText());
+    }
+
+    public boolean getUseRandomSeed()
+    {
+        return checkBoxRandomSeed.isSelected();
+    }
+
+    public void setAlgorithm(Algorithm algorithm)
+    {
+        switch (algorithm)
+        {
+            case LEIDEN: comboBoxAlgorithm.setSelectedIndex(0); break;
+            case LOUVAIN: comboBoxAlgorithm.setSelectedIndex(1); break;
+            default: comboBoxAlgorithm.setSelectedIndex(0);
+        }
+    }
+
+    public void setQualityFunction(QualityFunction qualityFunction)
+    {
+        switch (qualityFunction)
+        {
+            case CPM: comboBoxQualityFunction.setSelectedIndex(0); break;
+            case MODULARITY: comboBoxQualityFunction.setSelectedIndex(1); break;
+            default: comboBoxQualityFunction.setSelectedIndex(0);
+        }
+    }
+
+    public void setUseEdgeWeights(boolean useEdgeWeights)
+    {
+        checkBoxUseEdgeWeights.setSelected(useEdgeWeights);
+    }
+
+    public void setResolution(double resolution)
+    {
+        textFieldResolution.setText(String.valueOf(resolution));
+    }
+
+    public void setNIterations(int nIterations)
+    {
+       textFieldNIterations.setText(String.valueOf(nIterations));
+    }
+
+    public void setNRestarts(int nRestarts)
+    {
+       textFieldNRestarts.setText(String.valueOf(nRestarts));
+    }
+
+    public void setRandomSeed(int seed)
+    {
+       textFieldSeed.setText(String.valueOf(seed));
+    }
+
+    public void setUseRandomSeed(boolean useRandomSeed)
+    {
+        checkBoxRandomSeed.setSelected(useRandomSeed);
+    }
+
+    /**
+     * Creates new form RunClusteringPanel
+     */
+    public RunClusteringPanel()
+    {
+        initComponents();
+
+        // Show the tooltip (approximately) indefinitely, but remember previous setting.
+        previousDismissDelay = ToolTipManager.sharedInstance().getDismissDelay();
+        ToolTipManager.sharedInstance().setDismissDelay(Integer.MAX_VALUE);
+
+        textFieldResolution.addFocusListener(new java.awt.event.FocusAdapter()
+        {
+            @Override
+            public void focusGained(java.awt.event.FocusEvent evt)
+            {
+                textFieldFocusGained(evt);
+            }
+        });
+
+        textFieldNIterations.addFocusListener(new java.awt.event.FocusAdapter()
+        {
+            @Override
+            public void focusGained(java.awt.event.FocusEvent evt)
+            {
+                textFieldFocusGained(evt);
+            }
+        });
+
+        textFieldNRestarts.addFocusListener(new java.awt.event.FocusAdapter()
+        {
+            @Override
+            public void focusGained(java.awt.event.FocusEvent evt)
+            {
+                textFieldFocusGained(evt);
+            }
+        });
+
+        textFieldSeed.addFocusListener(new java.awt.event.FocusAdapter()
+        {
+            @Override
+            public void focusGained(java.awt.event.FocusEvent evt)
+            {
+                textFieldFocusGained(evt);
+            }
+        });
+    }
+
+    /**
+     * This method is called from within the constructor to initialize the form.
+     * WARNING: Do NOT modify this code. The content of this method is always
+     * regenerated by the Form Editor.
+     */
+    @SuppressWarnings("unchecked")
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+    private void initComponents()
+    {
+
+        jLabel1 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
+        jLabel6 = new javax.swing.JLabel();
+        comboBoxAlgorithm = new javax.swing.JComboBox<>();
+        comboBoxQualityFunction = new javax.swing.JComboBox<>();
+        textFieldResolution = new javax.swing.JTextField();
+        textFieldNIterations = new javax.swing.JTextField();
+        textFieldNRestarts = new javax.swing.JTextField();
+        textFieldSeed = new javax.swing.JTextField();
+        checkBoxRandomSeed = new javax.swing.JCheckBox();
+        checkBoxUseEdgeWeights = new javax.swing.JCheckBox();
+
+        addContainerListener(new java.awt.event.ContainerAdapter()
+        {
+            public void componentRemoved(java.awt.event.ContainerEvent evt)
+            {
+                formComponentRemoved(evt);
+            }
+        });
+
+        jLabel1.setText(org.openide.util.NbBundle.getMessage(RunClusteringPanel.class, "RunClusteringPanel.jLabel1.text")); // NOI18N
+
+        jLabel2.setText(org.openide.util.NbBundle.getMessage(RunClusteringPanel.class, "RunClusteringPanel.jLabel2.text")); // NOI18N
+
+        jLabel3.setText(org.openide.util.NbBundle.getMessage(RunClusteringPanel.class, "RunClusteringPanel.jLabel3.text")); // NOI18N
+
+        jLabel4.setText(org.openide.util.NbBundle.getMessage(RunClusteringPanel.class, "RunClusteringPanel.jLabel4.text")); // NOI18N
+
+        jLabel5.setText(org.openide.util.NbBundle.getMessage(RunClusteringPanel.class, "RunClusteringPanel.jLabel5.text")); // NOI18N
+
+        jLabel6.setText(org.openide.util.NbBundle.getMessage(RunClusteringPanel.class, "RunClusteringPanel.jLabel6.text")); // NOI18N
+
+        comboBoxAlgorithm.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Leiden algorithm", "Louvain algorithm" }));
+        comboBoxAlgorithm.setToolTipText(org.openide.util.NbBundle.getMessage(RunClusteringPanel.class, "RunClusteringPanel.comboBoxAlgorithm.toolTipText")); // NOI18N
+        comboBoxAlgorithm.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
+                comboBoxAlgorithmActionPerformed(evt);
+            }
+        });
+
+        comboBoxQualityFunction.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Constant Potts Model (CPM)", "Modularity" }));
+        comboBoxQualityFunction.setToolTipText(org.openide.util.NbBundle.getMessage(RunClusteringPanel.class, "RunClusteringPanel.comboBoxQualityFunction.toolTipText")); // NOI18N
+        comboBoxQualityFunction.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
+                comboBoxQualityFunctionActionPerformed(evt);
+            }
+        });
+
+        textFieldResolution.setText(org.openide.util.NbBundle.getMessage(RunClusteringPanel.class, "RunClusteringPanel.textFieldResolution.text")); // NOI18N
+        textFieldResolution.setToolTipText(org.openide.util.NbBundle.getMessage(RunClusteringPanel.class, "RunClusteringPanel.textFieldResolution.toolTipText")); // NOI18N
+        textFieldResolution.addFocusListener(new java.awt.event.FocusAdapter()
+        {
+            public void focusLost(java.awt.event.FocusEvent evt)
+            {
+                textFieldResolutionFocusLost(evt);
+            }
+        });
+        textFieldResolution.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
+                textFieldResolutionActionPerformed(evt);
+            }
+        });
+
+        textFieldNIterations.setText(org.openide.util.NbBundle.getMessage(RunClusteringPanel.class, "RunClusteringPanel.textFieldNIterations.text")); // NOI18N
+        textFieldNIterations.setToolTipText(org.openide.util.NbBundle.getMessage(RunClusteringPanel.class, "RunClusteringPanel.textFieldNIterations.toolTipText")); // NOI18N
+        textFieldNIterations.addFocusListener(new java.awt.event.FocusAdapter()
+        {
+            public void focusLost(java.awt.event.FocusEvent evt)
+            {
+                textFieldNIterationsFocusLost(evt);
+            }
+        });
+
+        textFieldNRestarts.setText(org.openide.util.NbBundle.getMessage(RunClusteringPanel.class, "RunClusteringPanel.textFieldNRestarts.text")); // NOI18N
+        textFieldNRestarts.setToolTipText(org.openide.util.NbBundle.getMessage(RunClusteringPanel.class, "RunClusteringPanel.textFieldNRestarts.toolTipText")); // NOI18N
+        textFieldNRestarts.addFocusListener(new java.awt.event.FocusAdapter()
+        {
+            public void focusLost(java.awt.event.FocusEvent evt)
+            {
+                textFieldNRestartsFocusLost(evt);
+            }
+        });
+
+        textFieldSeed.setText(org.openide.util.NbBundle.getMessage(RunClusteringPanel.class, "RunClusteringPanel.textFieldSeed.text")); // NOI18N
+        textFieldSeed.setToolTipText(org.openide.util.NbBundle.getMessage(RunClusteringPanel.class, "RunClusteringPanel.textFieldSeed.toolTipText")); // NOI18N
+        textFieldSeed.addFocusListener(new java.awt.event.FocusAdapter()
+        {
+            public void focusLost(java.awt.event.FocusEvent evt)
+            {
+                textFieldSeedFocusLost(evt);
+            }
+        });
+        textFieldSeed.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
+                textFieldSeedActionPerformed(evt);
+            }
+        });
+
+        checkBoxRandomSeed.setText(org.openide.util.NbBundle.getMessage(RunClusteringPanel.class, "RunClusteringPanel.checkBoxRandomSeed.text")); // NOI18N
+        checkBoxRandomSeed.setToolTipText(org.openide.util.NbBundle.getMessage(RunClusteringPanel.class, "RunClusteringPanel.checkBoxRandomSeed.toolTipText")); // NOI18N
+        checkBoxRandomSeed.addChangeListener(new javax.swing.event.ChangeListener()
+        {
+            public void stateChanged(javax.swing.event.ChangeEvent evt)
+            {
+                checkBoxRandomSeedStateChanged(evt);
+            }
+        });
+
+        checkBoxUseEdgeWeights.setSelected(true);
+        checkBoxUseEdgeWeights.setText(org.openide.util.NbBundle.getMessage(RunClusteringPanel.class, "RunClusteringPanel.checkBoxUseEdgeWeights.text")); // NOI18N
+        checkBoxUseEdgeWeights.setToolTipText(org.openide.util.NbBundle.getMessage(RunClusteringPanel.class, "RunClusteringPanel.checkBoxUseEdgeWeights.toolTipText")); // NOI18N
+        checkBoxUseEdgeWeights.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
+                checkBoxUseEdgeWeightsActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
+        this.setLayout(layout);
+        layout.setHorizontalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addGroup(layout.createSequentialGroup()
+                            .addComponent(jLabel5)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                            .addComponent(comboBoxAlgorithm, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGroup(layout.createSequentialGroup()
+                            .addComponent(jLabel6)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                            .addComponent(comboBoxQualityFunction, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addGroup(layout.createSequentialGroup()
+                            .addComponent(jLabel2)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                            .addComponent(textFieldNIterations))
+                        .addGroup(layout.createSequentialGroup()
+                            .addComponent(jLabel3)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                            .addComponent(textFieldNRestarts))
+                        .addGroup(layout.createSequentialGroup()
+                            .addComponent(jLabel4)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                            .addComponent(textFieldSeed, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                            .addComponent(checkBoxRandomSeed))
+                        .addGroup(layout.createSequentialGroup()
+                            .addComponent(jLabel1)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                            .addComponent(textFieldResolution))
+                        .addGroup(layout.createSequentialGroup()
+                            .addGap(108, 108, 108)
+                            .addComponent(checkBoxUseEdgeWeights))))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {jLabel1, jLabel2, jLabel3, jLabel4, jLabel5, jLabel6});
+
+        layout.setVerticalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel5)
+                    .addComponent(comboBoxAlgorithm, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel6)
+                    .addComponent(comboBoxQualityFunction, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(checkBoxUseEdgeWeights, javax.swing.GroupLayout.PREFERRED_SIZE, 18, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel1)
+                    .addComponent(textFieldResolution, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel2)
+                    .addComponent(textFieldNIterations, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel3)
+                    .addComponent(textFieldNRestarts, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel4)
+                    .addComponent(textFieldSeed, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(checkBoxRandomSeed))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {jLabel1, jLabel2, jLabel3, jLabel4, jLabel5, jLabel6});
+
+    }// </editor-fold>//GEN-END:initComponents
+
+    private void comboBoxAlgorithmActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_comboBoxAlgorithmActionPerformed
+    {//GEN-HEADEREND:event_comboBoxAlgorithmActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_comboBoxAlgorithmActionPerformed
+
+    private void comboBoxQualityFunctionActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_comboBoxQualityFunctionActionPerformed
+    {//GEN-HEADEREND:event_comboBoxQualityFunctionActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_comboBoxQualityFunctionActionPerformed
+
+    private void textFieldResolutionActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_textFieldResolutionActionPerformed
+    {//GEN-HEADEREND:event_textFieldResolutionActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_textFieldResolutionActionPerformed
+
+    private void checkBoxRandomSeedStateChanged(javax.swing.event.ChangeEvent evt)//GEN-FIRST:event_checkBoxRandomSeedStateChanged
+    {//GEN-HEADEREND:event_checkBoxRandomSeedStateChanged
+        this.textFieldSeed.setEnabled(!this.checkBoxRandomSeed.isSelected());
+    }//GEN-LAST:event_checkBoxRandomSeedStateChanged
+
+    private void textFieldResolutionFocusLost(java.awt.event.FocusEvent evt)//GEN-FIRST:event_textFieldResolutionFocusLost
+    {//GEN-HEADEREND:event_textFieldResolutionFocusLost
+        // TODO add your handling code here:
+        try
+        {
+            getResolution();
+        }
+        catch (NumberFormatException ex)
+        {
+            textFieldResolution.setText(previous);
+        }
+    }//GEN-LAST:event_textFieldResolutionFocusLost
+
+    private void textFieldNIterationsFocusLost(java.awt.event.FocusEvent evt)//GEN-FIRST:event_textFieldNIterationsFocusLost
+    {//GEN-HEADEREND:event_textFieldNIterationsFocusLost
+        try
+        {
+            getNIterations();
+        }
+        catch (NumberFormatException ex)
+        {
+            textFieldNIterations.setText(previous);
+        }
+    }//GEN-LAST:event_textFieldNIterationsFocusLost
+
+    private void textFieldNRestartsFocusLost(java.awt.event.FocusEvent evt)//GEN-FIRST:event_textFieldNRestartsFocusLost
+    {//GEN-HEADEREND:event_textFieldNRestartsFocusLost
+        try
+        {
+            getNRestarts();
+        }
+        catch (NumberFormatException ex)
+        {
+            textFieldNRestarts.setText(previous);
+        }
+    }//GEN-LAST:event_textFieldNRestartsFocusLost
+
+    private void textFieldSeedFocusLost(java.awt.event.FocusEvent evt)//GEN-FIRST:event_textFieldSeedFocusLost
+    {//GEN-HEADEREND:event_textFieldSeedFocusLost
+        try
+        {
+            getRandomSeed();
+        }
+        catch (NumberFormatException ex)
+        {
+            textFieldSeed.setText(previous);
+        }
+    }//GEN-LAST:event_textFieldSeedFocusLost
+
+    private void checkBoxUseEdgeWeightsActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_checkBoxUseEdgeWeightsActionPerformed
+    {//GEN-HEADEREND:event_checkBoxUseEdgeWeightsActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_checkBoxUseEdgeWeightsActionPerformed
+
+    private void textFieldSeedActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_textFieldSeedActionPerformed
+    {//GEN-HEADEREND:event_textFieldSeedActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_textFieldSeedActionPerformed
+
+    private void formComponentRemoved(java.awt.event.ContainerEvent evt)//GEN-FIRST:event_formComponentRemoved
+    {//GEN-HEADEREND:event_formComponentRemoved
+        ToolTipManager.sharedInstance().setDismissDelay(previousDismissDelay);
+    }//GEN-LAST:event_formComponentRemoved
+
+    private void textFieldFocusGained(java.awt.event.FocusEvent evt)
+    {
+        previous = ((javax.swing.JTextField)evt.getComponent()).getText();
+    }
+
+    // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JCheckBox checkBoxRandomSeed;
+    private javax.swing.JCheckBox checkBoxUseEdgeWeights;
+    private javax.swing.JComboBox<String> comboBoxAlgorithm;
+    private javax.swing.JComboBox<String> comboBoxQualityFunction;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JTextField textFieldNIterations;
+    private javax.swing.JTextField textFieldNRestarts;
+    private javax.swing.JTextField textFieldResolution;
+    private javax.swing.JTextField textFieldSeed;
+    // End of variables declaration//GEN-END:variables
+}

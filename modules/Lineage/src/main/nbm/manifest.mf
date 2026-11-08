@@ -1,0 +1,6 @@
+Manifest-Version: 1.0
+OpenIDE-Module-Name: Lineage
+OpenIDE-Module-Short-Description: The lineage plugin identifies the ancestors and descendants of a user-selected origin node in a directed graph.
+OpenIDE-Module-Long-Description: The lineage plugin requires the user to identify an 'origin' node. The plugin then identifies all the ancestors and descendants of that nodes, and marks them as such. It also counts the number of steps that the ancestors and descendants are removed from the origin.
+OpenIDE-Module-Display-Category: Metric
+OpenIDE-Module-Localizing-Bundle: org/wouterspekkink/plugins/metric/lineage/Bundle.properties

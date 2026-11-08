@@ -24,4 +24,7 @@ jobs:
             echo "No plugin modules present under modules/; skipping build/validate (see test-generation workflow for scaffold validation)."
             exit 0
           fi
-          mvn -B package --file pom.xml
+          mvn -B install --file pom.xml
+      - name: Run SPI contract tests
+        if: hashFiles('modules/*/pom.xml') != ''
+        run: .github/contract-tests/run.sh
