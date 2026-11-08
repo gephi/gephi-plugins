@@ -50,6 +50,7 @@ package org.imperial.gdo.scale;
 
 import java.util.logging.Logger;
 import java.util.ArrayList;
+import java.util.Objects;
 import java.util.List;
 import java.util.logging.Level;
 import org.gephi.graph.api.Graph;
@@ -82,6 +83,11 @@ public class ScaleLayout extends AbstractLayout implements Layout {
 
     @Override
     public void goAlgo() {
+        if (!graphModel.getNodeTable().hasColumn("part")) {
+            // The nodes to scale are the ones of a part, there is nothing to scale without the column
+            setConverged(true);
+            return;
+        }
         graph = graphModel.getGraphVisible();
         graph.readLock();
         int partNodeCount=0;
@@ -90,7 +96,7 @@ public class ScaleLayout extends AbstractLayout implements Layout {
         
             for(Node n : graph.getNodes()) {
                                     
-                if (n.getAttribute("part").equals(getPart())) {
+                if (Objects.equals(n.getAttribute("part"), getPart())) {
                     partNodeCount += 1;
                 }
                
@@ -98,7 +104,7 @@ public class ScaleLayout extends AbstractLayout implements Layout {
             Logger.getLogger("").log(Level.INFO,"nodecount{0}",partNodeCount);           
             double xMean = 0, yMean = 0;
             for (Node n : graph.getNodes()) {
-                if (n.getAttribute("part").equals(getPart())) {
+                if (Objects.equals(n.getAttribute("part"), getPart())) {
                     xMean += n.x();
                     yMean += n.y();
                 }
@@ -107,7 +113,7 @@ public class ScaleLayout extends AbstractLayout implements Layout {
             yMean /= partNodeCount;
             
             for (Node n : graph.getNodes()) {
-                if (n.getAttribute("part").equals(getPart())) {
+                if (Objects.equals(n.getAttribute("part"), getPart())) {
                     double dx = (n.x() - xMean) * getXScale();
                     double dy = (n.y() - yMean) * getYScale();
                     
