@@ -13,6 +13,8 @@ public class ClusteringCoefficientStatistic implements Statistics, LongTask {
 
     @Override
     public void execute(GraphModel graphModel) {
+        // The flag is shared and was never cleared, so after one cancellation no later run calculated anything
+        cancel = false;
         if (ClusteringCoefficientUI.triangleMethod) {
             TriangleClusteringCoefficientAlgorithm tcc = new TriangleClusteringCoefficientAlgorithm(graphModel);
             report = tcc.calculate();

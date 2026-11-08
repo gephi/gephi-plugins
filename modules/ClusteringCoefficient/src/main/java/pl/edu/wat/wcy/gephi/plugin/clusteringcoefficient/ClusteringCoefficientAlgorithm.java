@@ -24,8 +24,9 @@ public class ClusteringCoefficientAlgorithm {
         } else {
             graphModel.getNodeTable().addColumn(COF_ATTR, Double.class);
         }
-        allNodes = graphModel.getGraph().getNodes();
         this.graph = graphModel.getGraphVisible();
+        // The neighbors are read in the visible view, which fails for the nodes that are not part of it
+        allNodes = this.graph.getNodes();
     }
 
     public String calculate() {
@@ -49,7 +50,9 @@ public class ClusteringCoefficientAlgorithm {
         final double[] cSum = {0f};
         final AtomicLong size = new AtomicLong();
         allNodes.forEach(node -> {
-            double c = (Double) node.getAttribute(COF_ATTR);
+            // Nodes left out when the calculation is cancelled have no value
+            final Double value = (Double) node.getAttribute(COF_ATTR);
+            double c = value == null ? 0 : value;
             cSum[0] += c;
             report += "Node " + node.getId() + ": C = " + String.valueOf(c) + "\n";
             size.getAndIncrement();
