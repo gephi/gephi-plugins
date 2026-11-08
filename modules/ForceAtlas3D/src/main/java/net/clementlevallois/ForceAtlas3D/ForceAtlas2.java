@@ -109,22 +109,26 @@ public class ForceAtlas2 implements Layout {
             this.timeInterval = graphModel.getTimeBoundsVisible();
         }
         graph.readLock();
-        Node[] nodes = graph.getNodes().toArray();
+        try {
+            Node[] nodes = graph.getNodes().toArray();
 
-        // Initialise layout data
-        for (Node n : nodes) {
-            if (n.getLayoutData() == null || !(n.getLayoutData() instanceof ForceAtlas2LayoutData)) {
-                ForceAtlas2LayoutData nLayout = new ForceAtlas2LayoutData();
-                n.setLayoutData((LayoutData) nLayout);
+            // Initialise layout data
+            for (Node n : nodes) {
+                if (n.getLayoutData() == null || !(n.getLayoutData() instanceof ForceAtlas2LayoutData)) {
+                    ForceAtlas2LayoutData nLayout = new ForceAtlas2LayoutData();
+                    n.setLayoutData((LayoutData) nLayout);
+                }
+                ForceAtlas2LayoutData nLayout = n.getLayoutData();
+                nLayout.mass = 1 + graph.getDegree(n);
+                nLayout.old_dx = 0;
+                nLayout.old_dy = 0;
+                nLayout.old_dz = 0;
+                nLayout.dx = 0;
+                nLayout.dy = 0;
+                nLayout.dz = 0;
             }
-            ForceAtlas2LayoutData nLayout = n.getLayoutData();
-            nLayout.mass = 1 + graph.getDegree(n);
-            nLayout.old_dx = 0;
-            nLayout.old_dy = 0;
-            nLayout.old_dz = 0;
-            nLayout.dx = 0;
-            nLayout.dy = 0;
-            nLayout.dz = 0;
+        } finally {
+            graph.readUnlockAll();
         }
 
 //        nodeClass = VizController.getInstance().getModelClassLibrary().getNodeClass();
@@ -264,7 +268,7 @@ public class ForceAtlas2 implements Layout {
                     double factor = 0.1 * speed / (1f + speed * Math.sqrt(swinging));
 
                     double df = Math.sqrt(Math.pow(nLayout.dx, 2) + Math.pow(nLayout.dy, 2) + Math.pow(nLayout.dz, 2));
-                    factor = Math.min(factor * df, 10.) / df;
+                    factor = df == 0 ? 0 : Math.min(factor * df, 10.) / df;
 
                     double x = n.x() + nLayout.dx * factor;
                     double y = n.y() + nLayout.dy * factor;
