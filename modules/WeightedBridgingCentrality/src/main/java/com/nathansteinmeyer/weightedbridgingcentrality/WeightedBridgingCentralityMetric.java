@@ -193,7 +193,8 @@ public class WeightedBridgingCentralityMetric extends GraphDistance {
 
         Progress.start(progressTicket, Number_of_Nodes);
         //Weighted shortest-path search to calculate all shortest paths from node s to t
-        for (Node s : graph.getNodes()) {
+        NodeIterable nodeIterable = graph.getNodes();
+        for (Node s : nodeIterable) {
             //The below structures are candidates to performance improvments: 
             //Creates a stack for each node, ...
             Stack<Node> S = new Stack<Node>();
@@ -298,6 +299,8 @@ public class WeightedBridgingCentralityMetric extends GraphDistance {
             count++;
 
             if (cancelled) {
+                // Leaving the loop early keeps the graph read-locked unless the iterable is told
+                nodeIterable.doBreak();
                 return nodeBetweenness;
             }
 
