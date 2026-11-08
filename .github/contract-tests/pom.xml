@@ -14,7 +14,7 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <gephi-plugins-tests.version>1.1.0</gephi-plugins-tests.version>
+        <gephi-plugins-tests.version>1.2.0</gephi-plugins-tests.version>
     </properties>
 
     <!-- Align the plugin's Gephi/NetBeans dependencies on the current gephi.version, so plugins
@@ -61,6 +61,8 @@
                         <!-- Only test implementations from the plugin's own jar, not the ones its
                              dependencies (e.g. core layout-plugin) register -->
                         <gephi.plugins.tests.jar>${plugin.artifactId}-${plugin.version}.jar</gephi.plugins.tests.jar>
+                        <!-- Where the tests write their warnings (checks that don't fail the build), read by run.sh -->
+                        <gephi.plugins.tests.warnings>${project.build.directory}/contract-warnings.tsv</gephi.plugins.tests.warnings>
                     </systemPropertyVariables>
                     <dependenciesToScan>
                         <dependency>org.gephi:gephi-plugins-tests</dependency>
