@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- CI harness running gephi-plugins-tests' SPI contract tests against a single plugin module
+     already installed in the local Maven repository. Driven by run.sh in
+     this folder, which passes gephi.version (from the root pom.xml) and the plugin's coordinates.
+     Plugins don't need to declare anything for this: neither their pom.xml nor
+     gephi-plugin-parent reference gephi-plugins-tests. -->
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>org.gephi</groupId>
+    <artifactId>gephi-plugins-contract-tests</artifactId>
+    <version>1.0.0</version>
+    <packaging>jar</packaging>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <gephi-plugins-tests.version>1.2.0</gephi-plugins-tests.version>
+    </properties>
+
+    <!-- Align the plugin's Gephi/NetBeans dependencies on the current gephi.version, so plugins
+         built against an older gephi-plugin-parent are tested against the Gephi release they'll
+         run in -->
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.gephi</groupId>
+                <artifactId>gephi-plugin-parent</artifactId>
+                <version>${gephi.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.gephi</groupId>
+            <artifactId>gephi-plugins-tests</artifactId>
+            <version>${gephi-plugins-tests.version}</version>
+            <type>test-jar</type>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>${plugin.groupId}</groupId>
+            <artifactId>${plugin.artifactId}</artifactId>
+            <version>${plugin.version}</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>3.6.1</version>
+                <configuration>
+                    <!-- Headless, with the same module access Gephi's launcher grants (gephi.conf) -->
+                    <argLine>-Djava.awt.headless=true --add-opens=java.base/java.net=ALL-UNNAMED --add-opens=java.base/java.nio=ALL-UNNAMED --add-opens=java.desktop/javax.swing=ALL-UNNAMED --add-exports=java.desktop/sun.awt=ALL-UNNAMED</argLine>
+                    <systemPropertyVariables>
+                        <!-- Only test implementations from the plugin's own jar, not the ones its
+                             dependencies (e.g. core layout-plugin) register -->
+                        <gephi.plugins.tests.jar>${plugin.artifactId}-${plugin.version}.jar</gephi.plugins.tests.jar>
+                        <!-- Where the tests write their warnings (checks that don't fail the build), read by run.sh -->
+                        <gephi.plugins.tests.warnings>${project.build.directory}/contract-warnings.tsv</gephi.plugins.tests.warnings>
+                    </systemPropertyVariables>
+                    <dependenciesToScan>
+                        <dependency>org.gephi:gephi-plugins-tests</dependency>
+                    </dependenciesToScan>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+</project>

@@ -38,9 +38,21 @@ different purposes on three different branches. Confusion here (e.g. "why is `<m
 `build.yml` (the main CI workflow) runs on every branch push *except* `master-forge`, `master`,
 `parent-pom`, and `gh-pages` — i.e. on the feature/topic branches contributors actually push to.
 `test-generation.yml` runs on `master` and is an integration test for the scaffold itself: it runs
-`generate`, `package`, and the `release` profile's `build-metadata`/`create-autoupdate` goals against
+`generate`, `install`, and the `release` profile's `build-metadata`/`create-autoupdate` goals against
 a throwaway fixture plugin, so a `gephi-maven-plugin` version bump in `pom.xml` is caught before real
-plugin repos pick it up.
+plugin repos pick it up. It also checks the SPI contract-test harness (below) still resolves and
+runs test cases for the current `gephi.version`. `pr.yml` builds PRs targeting `master-forge`. All workflow files live on
+`master` and reach `master-forge` through the regular `master` merge.
+
+`build.yml` and `pr.yml` also run SPI contract tests from
+[`gephi-plugins-tests`](https://github.com/gephi/gephi-plugins-tests) against each plugin. These
+check that every SPI implementation a plugin registers (found through `Lookup`, ignoring the ones
+its dependencies register) behaves as Gephi expects, for each SPI the library covers. `build.yml`
+runs them on every module of the branch. `pr.yml` runs them on the modules the PR changes, or on
+every module when it changes the root `pom.xml` or the harness. The harness lives in `.github/contract-tests/`, so
+neither plugins nor `gephi-plugin-parent` declare anything for it, and plugins built against an
+older `gephi-plugin-parent` are tested against the current `gephi.version`. To run it locally:
+`mvn install`, then `.github/contract-tests/run.sh modules/<Folder>`.
 
 ## How Gephi can be extended
 
@@ -144,7 +156,8 @@ everything above. Its goals, bound in this repo's root `pom.xml` or invoked dire
 ## Root files
 
 ```text
-.github/workflows/   # build.yml (feature branches), test-generation.yml (master), release-pom.yml (parent-pom)
+.github/workflows/   # build.yml (feature branches), pr.yml (PRs to master-forge), test-generation.yml (master), release-pom.yml (parent-pom)
+.github/contract-tests/  # CI harness running gephi-plugins-tests' SPI contract tests against plugin modules
 modules/             # one folder per plugin/suite; empty <modules> list on master until you add one
 plugins/             # static assets (images) used by the gephi.org plugin listing, not source code
 pom.xml              # reactor POM for this checkout's plugin modules — NOT the plugin parent POM

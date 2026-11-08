@@ -10,10 +10,32 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
+        with:
+          # The PR's merge commit and its first parent (the base), to diff against
+          fetch-depth: 2
       - name: Set up JDK 17
         uses: actions/setup-java@v5
         with:
           java-version: '17'
           distribution: 'temurin'
       - name: Build project with Maven
-        run: mvn -B package --file pom.xml
+        run: mvn -B install --file pom.xml
+      - name: Run SPI contract tests on changed plugins
+        run: |
+          CHANGED_FILES=$(git -c core.quotePath=false diff --name-only HEAD^1 HEAD)
+          # A root pom.xml change (gephi.version bump, re-enabled <module>, ...) or a harness change
+          # can affect every plugin, so test them all
+          if grep -qxE 'pom\.xml|\.github/contract-tests/.*' <<< "$CHANGED_FILES"; then
+            exec .github/contract-tests/run.sh
+          fi
+          FOLDERS=()
+          while IFS= read -r folder; do
+            if [ -d "$folder" ]; then
+              FOLDERS+=("$folder")
+            fi
+          done < <(grep '^modules/' <<< "$CHANGED_FILES" | cut -d/ -f1-2 | sort -u)
+          if [ ${#FOLDERS[@]} -eq 0 ]; then
+            echo "No plugin modules changed; skipping."
+            exit 0
+          fi
+          .github/contract-tests/run.sh "${FOLDERS[@]}"
