@@ -102,20 +102,24 @@ public class OrderedLayout implements Layout {
         graph = graphModel.getGraphVisible();
 
         graph.readLock();
-        Node[] nodes = graph.getNodes().toArray();
+        try {
+            Node[] nodes = graph.getNodes().toArray();
 
-        // Initialise layout data
-        for (Node n : nodes) {
-            if (n.getLayoutData() == null || !(n.getLayoutData() instanceof OrderedLayoutData)) {
-                OrderedLayoutData nLayout = new OrderedLayoutData();
-                n.setLayoutData(nLayout);
+            // Initialise layout data
+            for (Node n : nodes) {
+                if (n.getLayoutData() == null || !(n.getLayoutData() instanceof OrderedLayoutData)) {
+                    OrderedLayoutData nLayout = new OrderedLayoutData();
+                    n.setLayoutData(nLayout);
+                }
+                OrderedLayoutData nLayout = n.getLayoutData();
+                nLayout.mass = 1 + graph.getDegree(n);
+                nLayout.old_dx = 0;
+                nLayout.old_dy = 0;
+                nLayout.dx = 0;
+                nLayout.dy = 0;
             }
-            OrderedLayoutData nLayout = n.getLayoutData();
-            nLayout.mass = 1 + graph.getDegree(n);
-            nLayout.old_dx = 0;
-            nLayout.old_dy = 0;
-            nLayout.dx = 0;
-            nLayout.dy = 0;
+        } finally {
+            graph.readUnlockAll();
         }
         pool = Executors.newFixedThreadPool(threadCount);
         currentThreadCount = threadCount;
