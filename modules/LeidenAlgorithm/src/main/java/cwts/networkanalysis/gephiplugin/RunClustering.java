@@ -17,6 +17,7 @@ import org.gephi.graph.api.Node;
 import org.gephi.graph.api.Table;
 import org.gephi.statistics.spi.Statistics;
 import org.gephi.utils.longtask.spi.LongTask;
+import org.gephi.utils.progress.Progress;
 import org.gephi.utils.progress.ProgressTicket;
 
 public class RunClustering implements Statistics, LongTask
@@ -26,14 +27,15 @@ public class RunClustering implements Statistics, LongTask
 
     private ProgressTicket progress;
 
-    protected boolean useEdgeWeights;
-    protected boolean useRandomSeed;
-    protected int randomSeed;
-    protected int nIterations;
-    protected int nRestarts;
-    protected double resolution;
-    protected RunClustering.Algorithm algorithm;
-    protected RunClustering.QualityFunction qualityFunction;
+    // The same defaults as the user interface starts with, the statistics can be run without it
+    protected boolean useEdgeWeights = true;
+    protected boolean useRandomSeed = false;
+    protected int randomSeed = 0;
+    protected int nIterations = 10;
+    protected int nRestarts = 1;
+    protected double resolution = 0.01;
+    protected RunClustering.Algorithm algorithm = RunClustering.Algorithm.LEIDEN;
+    protected RunClustering.QualityFunction qualityFunction = RunClustering.QualityFunction.CPM;
 
     private Clustering clustering;
     private double quality;
@@ -80,11 +82,27 @@ public class RunClustering implements Statistics, LongTask
     public void execute(GraphModel gm)
     {
         Graph graph = gm.getUndirectedGraphVisible();
+        if (graph.getNodeCount() == 0)
+        {
+            // The algorithms can't work on a network without nodes
+            clustering = new Clustering(0);
+            quality = 0.0;
+            return;
+        }
         graph.readLock();
         DynamicIntArray[] edges = new DynamicIntArray[2];
         edges[0] = new DynamicIntArray(graph.getEdgeCount());
         edges[1] = new DynamicIntArray(graph.getEdgeCount());
         DynamicDoubleArray edgeWeights = new DynamicDoubleArray(graph.getEdgeCount());
+
+        // The network needs consecutive node indices, which the store ids are not in a filtered view
+        int[] nodeIndices = new int[gm.getMaxNodeStoreId()];
+        int index = 0;
+        for (Node node : graph.getNodes())
+        {
+            nodeIndices[node.getStoreId()] = index++;
+        }
+
         for (Node node : graph.getNodes())
         {
             for (Node neighbor : new HashSet<>(graph.getNeighbors(node).toCollection()))
@@ -98,9 +116,13 @@ public class RunClustering implements Statistics, LongTask
                     for (Edge edge : graph.getEdges(node, neighbor))
                         w += useEdgeWeights ? edge.getWeight() : 1.0;
 
-                    edges[0].append(node.getStoreId());
-                    edges[1].append(neighbor.getStoreId());
-                    edgeWeights.append(w);
+                    // The algorithms need positive weights, other edges are left out
+                    if (w > 0.0)
+                    {
+                        edges[0].append(nodeIndices[node.getStoreId()]);
+                        edges[1].append(nodeIndices[neighbor.getStoreId()]);
+                        edgeWeights.append(w);
+                    }
                 }
             }
         }
@@ -139,7 +161,7 @@ public class RunClustering implements Statistics, LongTask
         Clustering initialClustering = new Clustering(network.getNNodes());
         Clustering maxClustering = initialClustering.clone();
 
-        progress.start(nRestarts*nIterations);
+        Progress.start(progress, nRestarts*nIterations);
         double maxQuality = clusteringAlgorithm.calcQuality(network, maxClustering);
         for (int restart = 0; restart < nRestarts; restart++)
         {
@@ -147,7 +169,7 @@ public class RunClustering implements Statistics, LongTask
             for (int itr = 0; itr < nIterations; itr++)
             {
                 clusteringAlgorithm.improveClustering(network, clustering);
-                progress.progress(restart*nIterations + itr);
+                Progress.progress(progress, restart*nIterations + itr);
                 if (isCanceled)
                     break;
             }
@@ -162,17 +184,17 @@ public class RunClustering implements Statistics, LongTask
             if (isCanceled)
                 break;
         }
-        progress.finish();
+        Progress.finish(progress);
 
         clustering = maxClustering;
         clustering.orderClustersByNNodes();
 
         quality = clusteringAlgorithm.calcQuality(network, clustering);
 
-        saveClustering(graph);
+        saveClustering(graph, nodeIndices);
     }
 
-    private void saveClustering(Graph graph)
+    private void saveClustering(Graph graph, int[] nodeIndices)
     {
         graph.readLock();
         Table nodeTable = graph.getModel().getNodeTable();
@@ -184,7 +206,7 @@ public class RunClustering implements Statistics, LongTask
 
         for (Node n : graph.getNodes())
         {
-            n.setAttribute(modCol, clustering.getCluster(n.getStoreId()));
+            n.setAttribute(modCol, clustering.getCluster(nodeIndices[n.getStoreId()]));
         }
         graph.readUnlock();
     }
