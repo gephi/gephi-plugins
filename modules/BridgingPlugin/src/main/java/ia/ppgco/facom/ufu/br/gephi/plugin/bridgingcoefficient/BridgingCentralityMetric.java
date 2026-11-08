@@ -194,7 +194,8 @@ public class BridgingCentralityMetric extends GraphDistance implements Statistic
 
         Progress.start(progressTicket, Number_of_Nodes);
         //Bread First Search (BFS) to calculate all the shortest paths from node s to t
-        for (Node s : graph.getNodes()) {
+        NodeIterable nodeIterable = graph.getNodes();
+        for (Node s : nodeIterable) {
             //The below structures are candidates to performance improvments: 
             //Creates a stack for each node, ...
             Stack<Node> S = new Stack<Node>();
@@ -288,6 +289,8 @@ public class BridgingCentralityMetric extends GraphDistance implements Statistic
             count++;
 
             if (cancelled) {
+                // Leaving the loop early keeps the graph read-locked unless the iterable is told
+                nodeIterable.doBreak();
                 return nodeBetweenness;
             }
 
@@ -344,7 +347,8 @@ public class BridgingCentralityMetric extends GraphDistance implements Statistic
             }
 
             // normaliza o resultado
-            if (normalized) {
+            // Normalizing divides by (n - 1) * (n - 2), which is 0 below three nodes
+            if (normalized && Number_of_Nodes > 2) {
                 nodeBetweenness[s_index] /= directed ? (Number_of_Nodes - 1) * (Number_of_Nodes - 2) : (Number_of_Nodes - 1) * (Number_of_Nodes - 2) / 2;
             }
         }
@@ -513,6 +517,11 @@ public class BridgingCentralityMetric extends GraphDistance implements Statistic
         while (it.hasNext()) {
             Node t = (Node) it.next();
             d += 1.0 / graph.getDegree(t);
+        }
+
+        // An isolated node has no neighbors to bridge, 1 / 0 would give Infinity or NaN
+        if (d == 0.0) {
+            return 0.0;
         }
 
         return n / d;
