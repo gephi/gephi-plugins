@@ -50,6 +50,7 @@ package org.imperial.gdo.scale;
 
 import java.util.logging.Logger;
 import java.util.ArrayList;
+import java.util.Objects;
 import java.util.List;
 import java.util.logging.Level;
 import org.gephi.graph.api.Graph;
@@ -83,6 +84,11 @@ public class ScaleLayout2 extends AbstractLayout implements Layout {
 
     @Override
     public void goAlgo() {
+        if (!graphModel.getNodeTable().hasColumn("part")) {
+            // The nodes to scale are the ones of a part, there is nothing to scale without the column
+            setConverged(true);
+            return;
+        }
         graph = graphModel.getGraphVisible();
         graph.readLock();
         
@@ -93,7 +99,7 @@ public class ScaleLayout2 extends AbstractLayout implements Layout {
                 int partNodeCount=0;
                 for (Node n : graph.getNodes()) {
                     
-                    if (n.getAttribute("part").equals(currentPart)) {
+                    if (Objects.equals(n.getAttribute("part"), currentPart)) {
                         partNodeCount += 1;
                     }
                     
@@ -101,7 +107,7 @@ public class ScaleLayout2 extends AbstractLayout implements Layout {
                 
                 double xMean = 0, yMean = 0;
                 for (Node n : graph.getNodes()) {
-                    if (n.getAttribute("part").equals(currentPart)) {
+                    if (Objects.equals(n.getAttribute("part"), currentPart)) {
                         xMean += n.x();
                         yMean += n.y();
                     }
@@ -110,7 +116,7 @@ public class ScaleLayout2 extends AbstractLayout implements Layout {
                 yMean /= partNodeCount;
                 
                 for (Node n : graph.getNodes()) {
-                    if (n.getAttribute("part").equals(currentPart)) {
+                    if (Objects.equals(n.getAttribute("part"), currentPart)) {
                         double dx = (n.x() - xMean) * getXScale();
                         double dy = (n.y() - yMean) * getYScale();
                         
