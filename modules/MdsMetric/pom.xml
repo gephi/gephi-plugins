@@ -9,7 +9,7 @@
 
     <groupId>wouterspekkink</groupId>
     <artifactId>mdsmetric</artifactId>
-    <version>0.9.3</version>
+    <version>0.9.4</version>
     <packaging>nbm</packaging>
 
     <name>MdsMetric</name>
