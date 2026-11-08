@@ -4613,13 +4613,13 @@
         }
       ],
       "category": "Metric",
-      "last_update": "September 26, 2026",
+      "last_update": "November 8, 2026",
       "images": null,
       "versions": {
         "0.11.3": {
-          "url": "0.11/weighted-bridging-centrality-1.0.0.nbm",
-          "last_update": "September 26, 2026",
-          "plugin_version": "1.0.0"
+          "url": "0.11/weighted-bridging-centrality-1.0.1.nbm",
+          "last_update": "November 8, 2026",
+          "plugin_version": "1.0.1"
         }
       },
       "sourcecode": "https://github.com/gephi/gephi-plugins/weighted-bridging-centrality",

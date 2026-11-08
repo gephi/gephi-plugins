@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
 <!DOCTYPE module_updates PUBLIC "-//NetBeans//DTD Autoupdate Catalog 2.8//EN" "https://netbeans.apache.org/dtds/autoupdate-catalog-2_8.dtd">
-<module_updates timestamp="23/24/17/08/11/2026">
+<module_updates timestamp="22/31/17/08/11/2026">
 
 
 
@@ -443,12 +443,12 @@
     <message_digest algorithm="SHA-512" value="b12be04ee503ea48d1fd2a58fc2b4870ec1a62ef605079ebe3b1e43e9ccabad8aa388f96092f40a93f23b68f4594e4f35e15a3fde41d05ad6c6f19552c0693ce"/>
 </module>
 
-<module codenamebase="com.nathansteinmeyer.weighted.bridging.centrality" distribution="weighted-bridging-centrality-1.0.0.nbm" downloadsize="32669" homepage="http://github.com/gephi/gephi-plugins/weighted-bridging-centrality" license="39254D94" moduleauthor="Nathan Steinmeyer" needsrestart="true" releasedate="2026/09/26" targetcluster="plugins">
+<module codenamebase="com.nathansteinmeyer.weighted.bridging.centrality" distribution="weighted-bridging-centrality-1.0.1.nbm" downloadsize="32719" homepage="http://github.com/gephi/gephi-plugins/weighted-bridging-centrality" license="39254D94" moduleauthor="Nathan Steinmeyer" needsrestart="true" releasedate="2026/11/08" targetcluster="plugins">
         
-    <manifest OpenIDE-Module="com.nathansteinmeyer.weighted.bridging.centrality" OpenIDE-Module-Display-Category="Metric" OpenIDE-Module-Implementation-Version="1.0.0" OpenIDE-Module-Long-Description="Calculates weighted betweenness centrality and weighted bridging centrality for networks in which edge weights represent connection strength. Edge strength is converted to effective distance using d = 1/w, so stronger connections correspond to shorter paths. Weighted betweenness centrality is calculated using weighted shortest paths, while weighted bridging centrality combines this measure with the standard bridging coefficient. This plugin is based on and extends the Bridging Centrality Plugin from the santosardr/gephi-plugins repository, adding support for weighted shortest-path calculations." OpenIDE-Module-Module-Dependencies="org.gephi.statistics.api &gt; 0.11.1, org.gephi.graph.api &gt; 0.11.1, org.gephi.statistics.plugin &gt; 0.11.1, org.gephi.utils.longtask &gt; 0.11.1, org.gephi.ui.utils &gt; 0.11.1, org.gephi.ui.library.wrapper &gt; 0.11.1, org.gephi.utils &gt; 0.11.1, org.gephi.core.library.wrapper &gt; 0.11.1, org.openide.util &gt; 9.39, org.openide.util.lookup &gt; 8.65" OpenIDE-Module-Name="Weighted Bridging Centrality" OpenIDE-Module-Requires="org.openide.modules.ModuleFormat1" OpenIDE-Module-Short-Description="Calculates weighted betweenness and bridging centrality using edge strength as inverse distance." OpenIDE-Module-Specification-Version="1.0.0"/>
+    <manifest OpenIDE-Module="com.nathansteinmeyer.weighted.bridging.centrality" OpenIDE-Module-Display-Category="Metric" OpenIDE-Module-Implementation-Version="1.0.1" OpenIDE-Module-Long-Description="Calculates weighted betweenness centrality and weighted bridging centrality for networks in which edge weights represent connection strength. Edge strength is converted to effective distance using d = 1/w, so stronger connections correspond to shorter paths. Weighted betweenness centrality is calculated using weighted shortest paths, while weighted bridging centrality combines this measure with the standard bridging coefficient. This plugin is based on and extends the Bridging Centrality Plugin from the santosardr/gephi-plugins repository, adding support for weighted shortest-path calculations." OpenIDE-Module-Module-Dependencies="org.gephi.statistics.api &gt; 0.11.1, org.gephi.graph.api &gt; 0.11.1, org.gephi.statistics.plugin &gt; 0.11.1, org.gephi.utils.longtask &gt; 0.11.1, org.gephi.ui.utils &gt; 0.11.1, org.gephi.ui.library.wrapper &gt; 0.11.1, org.gephi.utils &gt; 0.11.1, org.gephi.core.library.wrapper &gt; 0.11.1, org.openide.util &gt; 9.39, org.openide.util.lookup &gt; 8.65" OpenIDE-Module-Name="Weighted Bridging Centrality" OpenIDE-Module-Requires="org.openide.modules.ModuleFormat1" OpenIDE-Module-Short-Description="Calculates weighted betweenness and bridging centrality using edge strength as inverse distance." OpenIDE-Module-Specification-Version="1.0.1"/>
         
 
-    <message_digest algorithm="SHA-512" value="6305bc9f4241303b21b0dcfac237d0a24bf766479523e2f56f5b22b007897e27270eea6f478e3a36207a2f8d521adb52a1a75f186812e0a313eb0047e1788c34"/>
+    <message_digest algorithm="SHA-512" value="8a918689c2e85dd2497df045a8adfa8287d4141b56a47764d286497b2f6ba0aee14311217a6c06130f81712f3194fa7fc7258fdcb912ad5984bd5ea081cb68b0"/>
 </module>
 
 <license name="5C743DF9">Copyright (c) 2016, Dave Shepard
