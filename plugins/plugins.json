@@ -2826,7 +2826,7 @@
         }
       ],
       "category": "Metric",
-      "last_update": "September 26, 2026",
+      "last_update": "November 8, 2026",
       "images": [
         {
           "image": "imgs/mdsmetric/img.png",
@@ -2870,9 +2870,9 @@
           "plugin_version": "0.9.3"
         },
         "0.11.3": {
-          "url": "0.11/mdsmetric-0.9.3.nbm",
-          "last_update": "September 26, 2026",
-          "plugin_version": "0.9.3"
+          "url": "0.11/mdsmetric-0.9.4.nbm",
+          "last_update": "November 8, 2026",
+          "plugin_version": "0.9.4"
         }
       },
       "sourcecode": "https://github.com/WouterSpekkink/gephi-plugins/tree/mds_metric",
