@@ -96,6 +96,11 @@ public class VectorStatistics implements Statistics {
 
     @Override
     public void execute(GraphModel gm) {
+        if (latAttribute == null || lonAttribute == null) {
+            report = "<html><body>Select the node columns that hold the latitude and the longitude.</body></html>";
+            return;
+        }
+
         Graph graph = gm.getDirectedGraphVisible();
 
         graph.readLock();
@@ -145,6 +150,8 @@ public class VectorStatistics implements Statistics {
             CreateReport();
         } catch (Exception e) {
             Exceptions.printStackTrace(e);
+            report = "<html><body>The edge lengths could not be calculated, check that the selected latitude and "
+                    + "longitude columns hold a number for every node.</body></html>";
         } finally {
             //Unlock graph
             graph.readUnlockAll();
