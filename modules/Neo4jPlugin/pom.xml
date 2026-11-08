@@ -16,7 +16,7 @@
 
     <properties>
         <neo4j.driver.version>5.28.9</neo4j.driver.version>
-        <testcontainers.version>1.21.3</testcontainers.version>
+        <testcontainers.version>1.21.4</testcontainers.version>
         <rxjava.version>2.2.21</rxjava.version>
     </properties>
 
