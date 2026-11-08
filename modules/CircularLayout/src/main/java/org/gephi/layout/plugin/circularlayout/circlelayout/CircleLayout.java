@@ -78,7 +78,7 @@ public class CircleLayout extends LayoutHelper implements Layout
       {
          if (!n.isFixed())
          {
-            tmpcirc += (n.size() * 2);
+            tmpcirc += (nodeSize(n) * 2);
          }
       }
       tmpcirc     = (tmpcirc * 1.2);
@@ -109,7 +109,7 @@ public class CircleLayout extends LayoutHelper implements Layout
          {
             if (this.isNodePlacementNoOverlap())
             {
-               noderadius = (n.size());
+               noderadius = (nodeSize(n));
                double noderadian = (theta * noderadius * 1.2);
                nodeCoords = this.cartCoors(radius, 1, lasttheta + noderadian);
                lasttheta += (noderadius * 2 * theta * 1.2);

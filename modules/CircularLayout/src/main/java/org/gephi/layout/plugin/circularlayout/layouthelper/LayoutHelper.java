@@ -43,6 +43,8 @@ import org.gephi.layout.plugin.circularlayout.nodecomparator.NodeComparator;
  */
 public abstract class LayoutHelper implements Layout
 {
+   private static final double MIN_NODE_SIZE = 1.0;
+
    private final LayoutBuilder layoutBuilder;
    protected GraphModel        graphModel;
    private boolean             converged;
@@ -282,6 +284,15 @@ public abstract class LayoutHelper implements Layout
       map.put(CircularDirection.CCW, Bundle.Layout_NodePlacement_CCW());
       map.put(CircularDirection.CW, Bundle.Layout_NodePlacement_CW());
       return map;
+   }
+
+   /**
+    * The room a node takes on the circle. Nodes are spaced by their size, so a node without size (e.g. one that was
+    * ranked down to zero) would give a circle with no circumference and NaN positions.
+    */
+   protected static double nodeSize(Node n)
+   {
+      return Math.max(n.size(), MIN_NODE_SIZE);
    }
 
    public float[] cartCoors(double radius, int whichInt, double theta)
