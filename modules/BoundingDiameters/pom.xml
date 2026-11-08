@@ -10,7 +10,7 @@
     
     <groupId>nl.liacs</groupId>
     <artifactId>boundingdiameters</artifactId>
-    <version>0.0.1</version>
+    <version>0.0.2</version>
     <packaging>nbm</packaging>
 
     <name>BoundingDiameters</name>
