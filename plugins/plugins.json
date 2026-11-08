@@ -3737,7 +3737,7 @@
         }
       ],
       "category": "Metric",
-      "last_update": "September 26, 2026",
+      "last_update": "November 8, 2026",
       "images": null,
       "versions": {
         "0.9.2": {
@@ -3766,9 +3766,9 @@
           "plugin_version": "0.0.1"
         },
         "0.11.3": {
-          "url": "0.11/boundingdiametersssuite-0.0.1.zip",
-          "last_update": "September 26, 2026",
-          "plugin_version": "0.0.1"
+          "url": "0.11/boundingdiametersssuite-0.0.2.zip",
+          "last_update": "November 8, 2026",
+          "plugin_version": "0.0.2"
         }
       },
       "sourcecode": "http://github.com/alexiooo/gephi-plugins",
@@ -4054,7 +4054,7 @@
         }
       ],
       "category": "Layout",
-      "last_update": "September 26, 2026",
+      "last_update": "November 8, 2026",
       "images": null,
       "versions": {
         "0.9.2": {
@@ -4083,9 +4083,9 @@
           "plugin_version": "0.9.3"
         },
         "0.11.3": {
-          "url": "0.11/hairball-buster-0.9.3.nbm",
-          "last_update": "September 26, 2026",
-          "plugin_version": "0.9.3"
+          "url": "0.11/hairball-buster-0.9.4.nbm",
+          "last_update": "November 8, 2026",
+          "plugin_version": "0.9.4"
         }
       },
       "sourcecode": "https://github.com/gephi/gephi-plugins/tree/hairball-buster-plugin",
