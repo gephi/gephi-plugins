@@ -3226,9 +3226,9 @@
           "plugin_version": "1.0.0"
         },
         "0.11.4": {
-          "url": "0.11/spanning-tree-plugin-1.0.0.nbm",
+          "url": "0.11/spanning-tree-plugin-1.0.1.nbm",
           "last_update": "November 8, 2026",
-          "plugin_version": "1.0.0"
+          "plugin_version": "1.0.1"
         }
       },
       "sourcecode": "https://github.com/carlschroedl/gephi-plugins",
@@ -4924,6 +4924,33 @@
       },
       "sourcecode": "https://github.com/gephi/gephi-plugins/tree/master-forge/modules/ShapeByPartition",
       "homepage": "https://github.com/gephi/gephi-plugins/tree/master-forge/modules/ShapeByPartition"
+    },
+    {
+      "id": "gephi-ai",
+      "name": "Gephi AI",
+      "short_description": "Control Gephi with AI assistants like Claude via the Model Context Protocol.",
+      "long_description": "Lets AI assistants such as Claude work in Gephi with you: create projects, build and edit graphs, run layouts, compute statistics, and export results, all from a conversation. The plugin runs a local HTTP API that a Model Context Protocol server connects to. The API listens on 127.0.0.1 only, on port 8080 by default, and can be started, stopped, and moved to another port from Tools, Gephi AI Server.\n\nDeveloped by Matt Artz (https://www.mattartz.me | ORCID: https://orcid.org/0000-0002-3822-1429)\nSource: https://github.com/MattArtzAnthro/gephi-ai",
+      "readme": "# Gephi AI\n\nThis plugin lets an AI assistant drive Gephi. It runs a small HTTP API inside\nGephi Desktop, so an assistant such as Claude can create projects, build and\nedit graphs, run layouts and statistics, style and filter the result, and export\nit, while you watch the work happen in the Gephi window.\n\nThe plugin is the Gephi half of the system. The assistant talks to it through a\nseparate Model Context Protocol server, which is distributed independently and\nis not required for this plugin to build or install.\n\n## Quick start\n\n- Requires Gephi 0.11.4 or later.\n- Install the plugin in Gephi and restart.\n- The API starts automatically and listens on `http://127.0.0.1:8080`.\n- Open **Tools \u003e Gephi AI Server** to see whether it is running and on which URL,\n  to stop or start it, and to change the port. The port setting persists and\n  takes effect the next time the server starts.\n- Point an MCP client at the companion server. Setup instructions are at\n  https://github.com/MattArtzAnthro/gephi-ai\n\nCheck that it is running from a terminal:\n\n```\ncurl http://127.0.0.1:8080/health\n```\n\nOpening that URL in a browser returns `403` by design. See below.\n\n## Scope and safety\n\nThe listener binds to the loopback interface only, so it is not reachable from\nthe network.\n\nTwo checks keep it that way. A request whose `Host` header names anything but a\nloopback address is refused, which blocks DNS rebinding. A request carrying\n`Origin` or `Sec-Fetch-Site` is also refused, because both are set by browsers\nand cannot be forged by page JavaScript. Without that second check a page the\nuser merely visits could call the API with `mode: \"no-cors\"`, and although the\nbrowser would hide the reply, the side effect would already have happened.\nLocal clients such as the companion server send neither header.\n\nBeyond that there is no authentication, so any process running as you can drive\nthe API. The API is read and write: an assistant driving it can delete nodes,\nclear a workspace, and overwrite files you name. Save your work before a long\nsession.\n\n## Licence\n\nApache License 2.0. See `LICENSE`.\n",
+      "license": "Apache 2.0",
+      "authors": [
+        {
+          "name": "Matt Artz",
+          "email": null,
+          "link": "https://www.mattartz.me"
+        }
+      ],
+      "category": "Tool",
+      "last_update": "November 8, 2026",
+      "images": null,
+      "versions": {
+        "0.11.4": {
+          "url": "0.11/gephi-ai-1.6.1.nbm",
+          "last_update": "November 8, 2026",
+          "plugin_version": "1.6.1"
+        }
+      },
+      "sourcecode": "https://github.com/MattArtzAnthro/gephi-ai",
+      "homepage": "https://github.com/MattArtzAnthro/gephi-ai"
     }
   ]
 }
