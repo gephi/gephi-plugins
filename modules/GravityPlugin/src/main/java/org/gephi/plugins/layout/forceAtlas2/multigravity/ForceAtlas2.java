@@ -114,102 +114,106 @@ public class ForceAtlas2 implements Layout {
         graph = graphModel.getGraphVisible();
 
         graph.readLock();
-        Node[] nodes = graph.getNodes().toArray();
+        try {
+            Node[] nodes = graph.getNodes().toArray();
 
-        // Initialise layout data
-        // Gravity sources adjustment parameters
-        double min_x = Double.POSITIVE_INFINITY;
-        double max_x = 0;
-        double min_y = Double.POSITIVE_INFINITY;
-        double max_y = 0;
-        int missing = 0;
+            // Initialise layout data
+            // Gravity sources adjustment parameters
+            double min_x = Double.POSITIVE_INFINITY;
+            double max_x = 0;
+            double min_y = Double.POSITIVE_INFINITY;
+            double max_y = 0;
+            int missing = 0;
 
-        for (Node n : nodes) {
-            if (n.getLayoutData() == null || !(n.getLayoutData() instanceof ForceAtlas2LayoutData)) {
-                ForceAtlas2LayoutData nLayout = new ForceAtlas2LayoutData();
-                n.setLayoutData(nLayout);
+            for (Node n : nodes) {
+                if (n.getLayoutData() == null || !(n.getLayoutData() instanceof ForceAtlas2LayoutData)) {
+                    ForceAtlas2LayoutData nLayout = new ForceAtlas2LayoutData();
+                    n.setLayoutData(nLayout);
+                }
+
+                // Calculating data for multiple sources of gravity
+                double gravity_y = 0.0;
+                double gravity_x = 0.0;
+                // Try to access gravity_x and gravity_y attributes
+                try {
+                    gravity_x = ((Number) n.getAttribute(GRAVITY_ATTR_X)).doubleValue();
+                } catch (IllegalArgumentException ex) {
+                    missing++;
+                } catch (NullPointerException ex) {
+                    missing++;
+                }
+
+                try {
+                    gravity_y = ((Number) n.getAttribute(GRAVITY_ATTR_Y)).doubleValue();
+                } catch (IllegalArgumentException ex) {
+                    missing++;
+                } catch (NullPointerException ex) {
+                    missing++;
+                }
+
+                // Calculate gravity range to scale down if needed
+                if (gravity_x < min_x) {
+                    min_x = gravity_x;
+                }
+                if (gravity_x > max_x) {
+                    max_x = gravity_x;
+                }
+                if (gravity_y < min_y) {
+                    min_y = gravity_y;
+                }
+                if (gravity_y > max_y) {
+                    max_y = gravity_y;
+                }
+
+                ForceAtlas2LayoutData nLayout = n.getLayoutData();
+                nLayout.mass = 1 + graph.getDegree(n);
+                nLayout.old_dx = 0;
+                nLayout.old_dy = 0;
+                nLayout.dx = 0;
+                nLayout.dy = 0;
             }
 
-            // Calculating data for multiple sources of gravity
-            double gravity_y = 0.0;
-            double gravity_x = 0.0;
-            // Try to access gravity_x and gravity_y attributes
-            try {
-                gravity_x = ((Number) n.getAttribute(GRAVITY_ATTR_X)).doubleValue();
-            } catch (IllegalArgumentException ex) {
-                missing++;
-            } catch (NullPointerException ex) {
-                missing++;
+            // Scaling down gravity_x
+            double range_x = max_x - min_x;
+            double scale_x = 1;
+            if (range_x > MAX_GRAVITY) {
+                scale_x = range_x / MAX_GRAVITY;
+            }
+            // Scaling down gravity_y
+            double range_y = max_y - min_y;
+            double scale_y = 1;
+            if (range_y > MAX_GRAVITY) {
+                scale_y = range_y / MAX_GRAVITY;
             }
 
-            try {
-                gravity_y = ((Number) n.getAttribute(GRAVITY_ATTR_Y)).doubleValue();
-            } catch (IllegalArgumentException ex) {
-                missing++;
-            } catch (NullPointerException ex) {
-                missing++;
+            // Setting Layout data for gravity sources
+            for (Node n : nodes) {
+                double gravity_y = 0.0;
+                double gravity_x = 0.0;
+
+                try {
+                    gravity_x = ((Number) n.getAttribute(GRAVITY_ATTR_X)).doubleValue();
+                } catch (IllegalArgumentException ex) {
+                } catch (NullPointerException ex) {
+                }
+
+                try {
+                    gravity_y = ((Number) n.getAttribute(GRAVITY_ATTR_Y)).doubleValue();
+                } catch (IllegalArgumentException ex) {
+                } catch (NullPointerException ex) {
+                }
+
+                ForceAtlas2LayoutData nLayout = n.getLayoutData();
+                //Center middle source of gravity
+                nLayout.gravity_x = ((((gravity_x - min_x) - range_x / 2) / scale_x));
+                nLayout.gravity_y = ((((gravity_y - min_y) - range_y / 2) / scale_y));
             }
 
-            // Calculate gravity range to scale down if needed
-            if (gravity_x < min_x) {
-                min_x = gravity_x;
+            if (missing > 0) {
+                Logger.getLogger("").log(Level.INFO, "Some nodes missing attributes({0}) ''gravity_x'' or ''gravity_y'', using 0.0 instead", missing);
             }
-            if (gravity_x > max_x) {
-                max_x = gravity_x;
-            }
-            if (gravity_y < min_y) {
-                min_y = gravity_y;
-            }
-            if (gravity_y > max_y) {
-                max_y = gravity_y;
-            }
-
-            ForceAtlas2LayoutData nLayout = n.getLayoutData();
-            nLayout.mass = 1 + graph.getDegree(n);
-            nLayout.old_dx = 0;
-            nLayout.old_dy = 0;
-            nLayout.dx = 0;
-            nLayout.dy = 0;
-        }
-
-        // Scaling down gravity_x
-        double range_x = max_x - min_x;
-        double scale_x = 1;
-        if (range_x > MAX_GRAVITY) {
-            scale_x = range_x / MAX_GRAVITY;
-        }
-        // Scaling down gravity_y
-        double range_y = max_y - min_y;
-        double scale_y = 1;
-        if (range_y > MAX_GRAVITY) {
-            scale_y = range_y / MAX_GRAVITY;
-        }
-
-        // Setting Layout data for gravity sources
-        for (Node n : nodes) {
-            double gravity_y = 0.0;
-            double gravity_x = 0.0;
-
-            try {
-                gravity_x = ((Number) n.getAttribute(GRAVITY_ATTR_X)).doubleValue();
-            } catch (IllegalArgumentException ex) {
-            } catch (NullPointerException ex) {
-            }
-
-            try {
-                gravity_y = ((Number) n.getAttribute(GRAVITY_ATTR_Y)).doubleValue();
-            } catch (IllegalArgumentException ex) {
-            } catch (NullPointerException ex) {
-            }
-
-            ForceAtlas2LayoutData nLayout = n.getLayoutData();
-            //Center middle source of gravity
-            nLayout.gravity_x = ((((gravity_x - min_x) - range_x / 2) / scale_x));
-            nLayout.gravity_y = ((((gravity_y - min_y) - range_y / 2) / scale_y));
-        }
-
-        if (missing > 0) {
-            Logger.getLogger("").log(Level.INFO, "Some nodes missing attributes({0}) ''gravity_x'' or ''gravity_y'', using 0.0 instead", missing);
+        } finally {
+            graph.readUnlockAll();
         }
 
         pool = Executors.newFixedThreadPool(threadCount);
@@ -308,6 +312,11 @@ public class ForceAtlas2 implements Layout {
                 totalEffectiveTraction += nLayout.mass * 0.5 * Math.sqrt(Math.pow(nLayout.old_dx + nLayout.dx, 2) + Math.pow(nLayout.old_dy + nLayout.dy, 2));
             }
         }
+        // Nothing moves, and 0 / 0 would make the speed NaN for good
+        if (totalSwinging == 0 && totalEffectiveTraction == 0) {
+            graph.readUnlockAll();
+            return;
+        }
         // We want that swingingMovement < tolerance * convergenceMovement
 
         // Optimize jitter tolerance
@@ -356,7 +365,7 @@ public class ForceAtlas2 implements Layout {
                     double factor = 0.1 * speed / (1f + Math.sqrt(speed * swinging));
 
                     double df = Math.sqrt(Math.pow(nLayout.dx, 2) + Math.pow(nLayout.dy, 2));
-                    factor = Math.min(factor * df, 10.) / df;
+                    factor = df == 0 ? 0 : Math.min(factor * df, 10.) / df;
 
                     double x = n.x() + nLayout.dx * factor;
                     double y = n.y() + nLayout.dy * factor;
