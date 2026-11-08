@@ -226,6 +226,7 @@ class ApiRoutingTest {
         "POST | /import/graphml | {} | 'file'",
         "POST | /import/csv | {} | 'file'",
         "POST | /import/file | {} | 'file'",
+        "POST | /graph/generate | {\"model\": \"random\"} | 'nodes'",
     })
     void requiredValuesAreNamedWhenMissing(String method, String path, String body, String expected)
         throws Exception {
@@ -363,6 +364,11 @@ class ApiRoutingTest {
         ok(call("POST", "/appearance/ranking/color", "{\"column\": \"score\"}"));
         ok(call("POST", "/appearance/edge/thickness-by-weight", "{\"min_thickness\": 1, \"max_thickness\": 4}"));
         ok(call("POST", "/appearance/reset", "{}"));
+        assertEquals(153, model().getGraph().getNode("e").getColor().getRed());
+        assertEquals(20f, model().getGraph().getNode("e").size(), 1e-4,
+            "a colour reset with no size asked for wiped the size ranking");
+        ok(call("POST", "/appearance/reset", "{\"size\": 7}"));
+        assertEquals(7f, model().getGraph().getNode("e").size(), 1e-4);
     }
 
     @Test

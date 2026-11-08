@@ -47,15 +47,46 @@ class SaveProjectTest {
     }
 
     @Test
-    void saveIntoAMissingFolderIsReportedAsFailed(@TempDir Path dir) {
+    void saveIntoAMissingFolderCreatesIt(@TempDir Path dir) {
         ProjectController pc = Lookup.getDefault().lookup(ProjectController.class);
         pc.closeCurrentProject();
         pc.newProject();
+        Path target = dir.resolve("new-folder").resolve("x.gephi");
+
+        JsonObject r = GephiControlService.getInstance().saveProject(target.toString());
+
+        assertTrue(r.get("success").getAsBoolean(), r.toString());
+        assertTrue(Files.isRegularFile(target));
+    }
+
+    @Test
+    void saveWhereNoFolderCanBeMadeIsReportedAsFailed(@TempDir Path dir) throws Exception {
+        ProjectController pc = Lookup.getDefault().lookup(ProjectController.class);
+        pc.closeCurrentProject();
+        pc.newProject();
+        Path blocker = Files.writeString(dir.resolve("a-file"), "x");
 
         JsonObject r = GephiControlService.getInstance()
-            .saveProject(dir.resolve("no-such-folder").resolve("x.gephi").toString());
+            .saveProject(blocker.resolve("x.gephi").toString());
 
         assertFalse(r.get("success").getAsBoolean(), r.toString());
+    }
+
+    @Test
+    void exportsCreateTheirFolder(@TempDir Path dir) {
+        ProjectController pc = Lookup.getDefault().lookup(ProjectController.class);
+        pc.closeCurrentProject();
+        pc.newProject();
+        Path gexf = dir.resolve("out").resolve("g.gexf");
+        Path csv = dir.resolve("tables").resolve("nodes.csv");
+
+        JsonObject g = GephiControlService.getInstance().exportGexf(gexf.toString(), false);
+        JsonObject c = GephiControlService.getInstance().exportCsv(csv.toString(), ",", "nodes");
+
+        assertTrue(g.get("success").getAsBoolean(), g.toString());
+        assertTrue(Files.isRegularFile(gexf));
+        assertTrue(c.get("success").getAsBoolean(), c.toString());
+        assertTrue(Files.isRegularFile(csv));
     }
 
     @Test

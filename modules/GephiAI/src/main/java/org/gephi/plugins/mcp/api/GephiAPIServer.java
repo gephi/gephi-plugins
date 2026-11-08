@@ -261,6 +261,7 @@ public class GephiAPIServer implements HttpHandler {
             // "busy" here (persistently) means Gephi is wedged and needs a restart.
             result.addProperty("graph_lock", service.graphLockProbe());
             result.add("graph_lock_stats", service.graphLockStats());
+            result.add("renderer", service.rendererStats());
             // No side effects here: /health is a pure liveness probe that clients may
             // poll at any frequency. The node click listener is installed once at
             // plugin startup by Installer, as soon as the visualization controller is
@@ -615,7 +616,9 @@ public class GephiAPIServer implements HttpHandler {
             int r = body != null && body.has("r") ? body.get("r").getAsInt() : 153;
             int g = body != null && body.has("g") ? body.get("g").getAsInt() : 153;
             int b = body != null && body.has("b") ? body.get("b").getAsInt() : 153;
-            float size = body != null && body.has("size") ? body.get("size").getAsFloat() : 10f;
+            // No size given: sizes stay as they are, so a colour reset keeps a size ranking.
+            Float size = body != null && body.has("size") && !body.get("size").isJsonNull()
+                ? body.get("size").getAsFloat() : null;
             return service.resetAppearance(r, g, b, size);
         }
 
@@ -1067,6 +1070,18 @@ public class GephiAPIServer implements HttpHandler {
             }
             return service.importFile(body.get("file").getAsString(), floatOrNull(body, "max_node_size"),
                 body.has("mode") ? body.get("mode").getAsString() : null);
+        }
+
+        if ("/graph/generate".equals(uri) && "POST".equals(method)) {
+            if (body == null || !body.has("model") || !body.has("nodes")) {
+                return errorResult("Missing 'model' or 'nodes'");
+            }
+            Float k = floatOrNull(body, "edges_per_node");
+            Long seed = body.has("seed") && !body.get("seed").isJsonNull() ? body.get("seed").getAsLong() : null;
+            Double p = body.has("wiring_probability") && !body.get("wiring_probability").isJsonNull()
+                ? body.get("wiring_probability").getAsDouble() : null;
+            return service.generateGraph(body.get("model").getAsString(), body.get("nodes").getAsInt(),
+                k == null ? null : k.intValue(), p, seed);
         }
 
         return errorResult("Unknown endpoint: " + method + " " + uri);

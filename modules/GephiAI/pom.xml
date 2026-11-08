@@ -12,7 +12,7 @@
 
     <groupId>org.gephi.plugins</groupId>
     <artifactId>gephi-ai</artifactId>
-    <version>1.5.2</version>
+    <version>1.6.1</version>
     <packaging>nbm</packaging>
 
     <name>Gephi AI</name>
@@ -75,6 +75,22 @@
         <dependency>
             <groupId>org.gephi</groupId>
             <artifactId>visualization-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.gephi</groupId>
+            <artifactId>visualization</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.gephi</groupId>
+            <artifactId>visualization-engine</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.gephi</groupId>
+            <artifactId>io-generator-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.gephi</groupId>
+            <artifactId>io-generator-plugin</artifactId>
         </dependency>
         <dependency>
             <groupId>org.gephi</groupId>

@@ -58,6 +58,77 @@ class LayoutPropertyNamesTest {
         assertEquals(true, value(layout, "strongGravityMode"));
     }
 
+    /**
+     * A run reports the value each matched setting holds after it was set, read back from the
+     * layout under the property's key, so the caller can confirm what was used.
+     */
+    @Test
+    void appliedSettingsAreReadBackFromTheLayoutUnderTheirKeys() throws Exception {
+        Layout layout = new ForceAtlas2Builder().buildLayout();
+        Map<String, Object> props = new LinkedHashMap<>();
+        props.put("gravity", 5);
+        props.put("LinLog mode", true);
+        props.put("preventOverlap", true);
+
+        List<String> unapplied = GephiControlService.applyLayoutProperties(layout, props);
+        com.google.gson.JsonObject applied = GephiControlService.appliedLayoutSettings(layout, props);
+
+        assertEquals(List.of("preventOverlap"), unapplied);
+        assertEquals(5.0, applied.get("gravity").getAsDouble(), 1e-9);
+        assertEquals(true, applied.get("linLogMode").getAsBoolean());
+        assertEquals(2, applied.size(), applied.toString());
+    }
+
+    /** The run, the status after it, and a staged setting all report the value Gephi holds. */
+    @Test
+    void runStatusAndStagingReportTheSettingsUsed() throws Exception {
+        org.gephi.project.api.ProjectController pc =
+            org.openide.util.Lookup.getDefault().lookup(org.gephi.project.api.ProjectController.class);
+        pc.closeCurrentProject();
+        pc.newProject();
+        GephiControlService service = GephiControlService.getInstance();
+        service.generateGraph("preferential_attachment", 30, 1, null, 1L);
+
+        com.google.gson.JsonObject staged = service.setLayoutProperties("ForceAtlas 2", Map.of("gravity", 3), 0);
+        assertEquals(3.0, staged.getAsJsonObject("staged").get("gravity").getAsDouble(), 1e-9, staged.toString());
+
+        com.google.gson.JsonObject run = service.runLayout("ForceAtlas 2", 5, Map.of("gravity", 5));
+        assertTrue(run.get("success").getAsBoolean(), run.toString());
+        assertEquals(5.0, run.getAsJsonObject("applied").get("gravity").getAsDouble(), 1e-9, run.toString());
+        // Agents read a bare "applied" as the server repeating the request and set out to verify
+        // it by other means; the reply says where the values come from.
+        assertTrue(run.get("applied_note").getAsString().contains("read back from the layout"), run.toString());
+        assertTrue(run.get("applied_note").getAsString().contains("gephi_get_layout_properties"), run.toString());
+        for (int i = 0; i < 200 && service.getLayoutStatus().get("running").getAsBoolean(); i++) {
+            Thread.sleep(25);
+        }
+
+        com.google.gson.JsonObject last = service.getLayoutStatus().getAsJsonObject("last_run");
+        assertEquals("ForceAtlas 2", last.get("layout").getAsString(), last.toString());
+        assertEquals(5, last.get("iterations").getAsInt());
+        assertEquals(5.0, last.getAsJsonObject("applied").get("gravity").getAsDouble(), 1e-9, last.toString());
+        assertTrue(last.get("applied_note").getAsString().contains("read back from the layout"), last.toString());
+    }
+
+    /**
+     * The listing gives the short key run_layout takes and says its values are defaults: agents
+     * read "ForceAtlas2.gravity.name = 1.0" after a gravity-5 run as proof the setting was lost.
+     */
+    @Test
+    void thePropertyListingGivesTheKeyToPassAndSaysItShowsDefaults() {
+        com.google.gson.JsonObject r = GephiControlService.getInstance().getLayoutProperties("ForceAtlas 2");
+
+        assertTrue(r.get("values_are").getAsString().startsWith("defaults"), r.toString());
+        boolean found = false;
+        for (com.google.gson.JsonElement e : r.getAsJsonArray("properties")) {
+            com.google.gson.JsonObject p = e.getAsJsonObject();
+            if ("gravity".equals(p.has("key") ? p.get("key").getAsString() : null)) {
+                found = true;
+            }
+        }
+        assertTrue(found, "no property with key \"gravity\": " + r);
+    }
+
     @Test
     void displayNamesAndOtherCasesStillCountAsMatches() throws Exception {
         Layout layout = new ForceAtlas2Builder().buildLayout();

@@ -39,6 +39,9 @@ import org.gephi.graph.api.Graph;
 import org.gephi.graph.api.GraphController;
 import org.gephi.graph.api.GraphModel;
 import org.gephi.graph.api.Node;
+import org.gephi.preview.api.PreviewController;
+import org.gephi.preview.api.PreviewProperties;
+import org.gephi.preview.api.PreviewProperty;
 import org.gephi.project.api.ProjectController;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -195,6 +198,9 @@ class WorkspaceToolsTest {
         assertEquals(8, s.get("node_count").getAsInt());
         assertEquals(7, s.get("edge_count").getAsInt());
         assertFalse(s.get("is_directed").getAsBoolean());
+        // Undirected: each tie fills one of n(n-1)/2 pairs and adds to two degrees.
+        assertEquals(2.0 * 7 / (8 * 7), s.get("density").getAsDouble(), 1e-12);
+        assertEquals(2.0 * 7 / 8, s.get("average_degree").getAsDouble(), 1e-12);
 
         assertTrue(ok(service.getGraphType()).get("undirected").getAsBoolean());
 
@@ -208,6 +214,51 @@ class WorkspaceToolsTest {
         }
         assertTrue(found, cols.toString());
         assertTrue(ok(service.getColumns("edge")).getAsJsonArray("columns").size() > 0);
+    }
+
+    /**
+     * A directed tie fills one of n(n-1) ordered pairs, as Gephi's own Density statistic counts
+     * them. The undirected formula reported twice the density on a directed graph.
+     */
+    @Test
+    void directedDensityCountsOrderedPairs() {
+        ProjectController pc = Lookup.getDefault().lookup(ProjectController.class);
+        pc.closeCurrentProject();
+        pc.newProject();
+        GraphModel dm = Lookup.getDefault().lookup(GraphController.class).getGraphModel();
+        Graph g = dm.getDirectedGraph();
+        for (String id : new String[] {"p", "q", "r", "s"}) {
+            g.addNode(dm.factory().newNode(id));
+        }
+        String[][] ties = {{"p", "q"}, {"q", "p"}, {"q", "r"}};
+        for (String[] t : ties) {
+            g.addEdge(dm.factory().newEdge(g.getNode(t[0]), g.getNode(t[1]), true));
+        }
+
+        JsonObject s = ok(service.getGraphStats(false));
+
+        assertTrue(s.get("is_directed").getAsBoolean());
+        assertEquals(3.0 / (4 * 3), s.get("density").getAsDouble(), 1e-12);
+        // Edges per node: the mean in-degree, which equals the mean out-degree (Gephi's convention).
+        assertEquals(3.0 / 4, s.get("average_degree").getAsDouble(), 1e-12);
+    }
+
+    /** The listing carries the index the switch, delete and compare tools take, not only Gephi's id. */
+    @Test
+    void theWorkspaceListingGivesTheIndexTheOtherToolsTake() {
+        ProjectController pc = Lookup.getDefault().lookup(ProjectController.class);
+        pc.newWorkspace(pc.getCurrentProject());
+        pc.newWorkspace(pc.getCurrentProject());
+
+        JsonArray list = ok(service.listWorkspaces()).getAsJsonArray("workspaces");
+
+        assertEquals(3, list.size());
+        for (int i = 0; i < list.size(); i++) {
+            JsonObject w = list.get(i).getAsJsonObject();
+            assertEquals(i, w.get("index").getAsInt(), w.toString());
+            ok(service.switchWorkspace(i));
+            assertEquals(w.get("id").getAsInt(), pc.getCurrentWorkspace().getId(), w.toString());
+        }
     }
 
     // ─── Statistics ──────────────────────────────────────────────────
@@ -495,6 +546,25 @@ class WorkspaceToolsTest {
         Graph g = gm.getGraph();
         Edge ab = GephiControlService.findEdge(g, node("a"), node("b"));
         assertEquals(new Color(0, 114, 178), withoutAlpha(ab.getColor()));
+    }
+
+    @Test
+    void textSettingFromAPluginRendererIsSet() {
+        // Third-party renderers (Shape by Partition's column and legend title, for example)
+        // register String-typed properties; Gephi core registers none.
+        PreviewProperties props = Lookup.getDefault().lookup(PreviewController.class)
+            .getModel().getProperties();
+        props.addProperty(PreviewProperty.createProperty(this, "test.text", String.class,
+            "Text", "A text setting", PreviewProperty.CATEGORY_NODES).setValue(""));
+        Map<String, Object> settings = new HashMap<>();
+        settings.put("test.text", " Field of Study ");
+        JsonObject r = ok(service.setPreviewSettings(settings));
+        assertEquals(1, r.get("properties_set").getAsInt(), r.toString());
+        assertEquals(" Field of Study ", props.getStringValue("test.text"));
+
+        settings.put("test.text", 12.0);
+        assertEquals(0, ok(service.setPreviewSettings(settings)).get("properties_set").getAsInt());
+        assertEquals(" Field of Study ", props.getStringValue("test.text"));
     }
 
     // ─── Export ──────────────────────────────────────────────────────

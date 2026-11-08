@@ -80,6 +80,8 @@ public class GephiControlService {
     // itself starting a layout.
     private volatile Map<String, Object> pendingLayoutProps = null;
     private volatile String pendingLayoutAlgo = null;
+    /** The last layout started: algorithm, iterations and the settings read back, for get_layout_status. */
+    private volatile JsonObject lastLayoutRun = null;
 
     // Human click journal: the person's node clicks in the Gephi window,
     // recorded by a passive viz-event listener so the model can resolve
@@ -210,9 +212,10 @@ public class GephiControlService {
      * finished, in this plugin or in Gephi, releases its hold only on exhaustion), a blocking
      * writeLock() waits forever and every reader queued behind it waits too, with no holder
      * left for a thread dump to show. Short timed tryLock() attempts, retried for up to ~15s,
-     * turn that into a "graph busy" error the caller can report. graphstore's GraphLock has
-     * no timed acquisition, so the underlying ReentrantReadWriteLock is reached by reflection;
-     * if it cannot be, this falls back to the blocking lock. Once held, any Gephi-internal
+     * turn that into a "graph busy" error the caller can report. GraphLock offers a timed
+     * acquisition for reads only (a queued timed writer would stall new readers), so the
+     * underlying WriteLock is reached by reflection; if it cannot be, this falls back to the
+     * blocking lock. Once held, any Gephi-internal
      * writeLock() on this same thread (setVisibleView, etc.) re-enters for free, which is why
      * callers wrap those calls too.
      */
@@ -227,13 +230,16 @@ public class GephiControlService {
             while (!wl.tryLock(120, java.util.concurrent.TimeUnit.MILLISECONDS)) {
                 if (System.nanoTime() > deadline) {
                     throw new RuntimeException(
-                        "Graph is busy (another task, such as a running statistic, holds the lock); please retry");
+                        "Graph is busy (another task, such as a running statistic, holds the lock); please retry ("
+                            + describeLock(g) + ")");
                 }
                 Thread.sleep(5);
             }
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
             throw new RuntimeException("Interrupted while acquiring the write lock");
+        } catch (RuntimeException e) {
+            throw e;  // the busy message above, which the caller shows as it is
         } catch (Throwable t) {
             // Any other failure here (e.g. a classloading Error, which is not an Exception
             // and would otherwise skip every catch(Exception) up the call chain and kill the
@@ -246,8 +252,6 @@ public class GephiControlService {
     static void unlockWrite(Graph g) {
         g.writeUnlock();
     }
-
-    private static volatile java.lang.reflect.Field READ_LOCK_FIELD;
 
     /*
      * ITERATION RULE (wedge prevention): never iterate a live NodeIterable /
@@ -263,22 +267,23 @@ public class GephiControlService {
      * Timed read-lock acquisition. Plain readLock() parks unboundedly in the lock's
      * wait queue; when a writer is already parked (Gephi's own blocking writeLock())
      * every new reader queues behind it and the request hangs until the client's
-     * timeout — the chronic "health answers but nothing else does" symptom. A timed
-     * tryLock turns that into an immediate, actionable error instead.
+     * timeout, the chronic "health answers but nothing else does" symptom. A timed
+     * tryReadLock turns that into an immediate, actionable error instead.
      */
     static void lockRead(Graph g) {
-        java.util.concurrent.locks.ReentrantReadWriteLock.ReadLock rl = readLockHandle(g);
-        if (rl == null) {
-            g.readLock();
-            return;
-        }
-        long deadline = System.nanoTime() + 10_000_000_000L;
+        lockRead(g, 10_000_000_000L);
+    }
+
+    /** lockRead with its overall wait, in nanoseconds; package-private for tests. */
+    static void lockRead(Graph g, long timeoutNanos) {
+        org.gephi.graph.api.GraphLock lock = g.getLock();
+        long deadline = System.nanoTime() + timeoutNanos;
         try {
-            while (!rl.tryLock(120, java.util.concurrent.TimeUnit.MILLISECONDS)) {
+            while (!lock.tryReadLock(120, java.util.concurrent.TimeUnit.MILLISECONDS)) {
                 if (System.nanoTime() > deadline) {
                     throw new RuntimeException(
-                        "Graph is busy (lock unavailable) — if this persists, Gephi is wedged; fully quit and "
-                            + "reopen it");
+                        "Graph is busy (lock unavailable): if this persists, Gephi is wedged; fully quit and "
+                            + "reopen it (" + describeLock(g) + ")");
                 }
                 Thread.sleep(5);
             }
@@ -288,24 +293,17 @@ public class GephiControlService {
         }
     }
 
-    /** The underlying ReentrantReadWriteLock.ReadLock behind Graph.getLock(), or null if unreachable. */
-    static java.util.concurrent.locks.ReentrantReadWriteLock.ReadLock readLockHandle(Graph g) {
+    /**
+     * The graph lock's live state for a "busy" message, so a leaked read hold (read holds while
+     * nothing runs) can be told from a long statistic. Never throws.
+     */
+    static String describeLock(Graph g) {
         try {
             org.gephi.graph.api.GraphLock lock = g.getLock();
-            if (lock == null) {
-                return null;
-            }
-            java.lang.reflect.Field f = READ_LOCK_FIELD;
-            if (f == null || !f.getDeclaringClass().isInstance(lock)) {
-                f = lock.getClass().getDeclaredField("readLock");
-                f.setAccessible(true);
-                READ_LOCK_FIELD = f;
-            }
-            Object v = f.get(lock);
-            return (v instanceof java.util.concurrent.locks.ReentrantReadWriteLock.ReadLock)
-                ? (java.util.concurrent.locks.ReentrantReadWriteLock.ReadLock) v : null;
+            return lock.getReadLockCount() + " read holds, write lock "
+                + (lock.isWriteLocked() ? "held" : "free") + ", " + lock.getQueueLength() + " threads waiting";
         } catch (Throwable t) {
-            return null;
+            return "lock state unavailable";
         }
     }
 
@@ -525,12 +523,12 @@ public class GephiControlService {
             if (project == null) {
                 return error("No project open");
             }
-            File file = new File(filePath).getAbsoluteFile();
+            File file = outputFile(filePath);
             // Checked first: a save that fails inside Gephi reports it in a dialog, which leaves
             // this call waiting until someone closes it.
             File dir = file.getParentFile();
             if (dir == null || !dir.isDirectory()) {
-                return error("The folder " + dir + " does not exist");
+                return error("The folder " + dir + " does not exist and could not be created");
             }
             if (!dir.canWrite() || (file.exists() && !file.canWrite())) {
                 return error("Gephi cannot write to " + file.getPath());
@@ -616,8 +614,12 @@ public class GephiControlService {
             }
             JsonArray arr = new JsonArray();
             Workspace current = pc.getCurrentWorkspace();
+            int index = 0;
             for (Workspace ws : pc.getCurrentProject().getWorkspaces()) {
                 JsonObject o = new JsonObject();
+                // The position is what switch, delete, rename, duplicate and compare take; the Gephi
+                // id is not, and the two diverge as soon as a workspace is deleted.
+                o.addProperty("index", index++);
                 o.addProperty("id", ws.getId());
                 o.addProperty("name", ws.getName() != null ? ws.getName() : "Workspace " + ws.getId());
                 o.addProperty("current", ws.equals(current));
@@ -1645,8 +1647,12 @@ public class GephiControlService {
             try {
                 int nc = g.getNodeCount();
                 int ec = g.getEdgeCount();
-                double density = nc > 1 ? (2.0 * ec) / (nc * (nc - 1)) : 0;
-                double avgDeg = nc > 0 ? (2.0 * ec) / nc : 0;
+                // As the Gephi Density and Average Degree statistics count them: a directed tie
+                // fills one of n(n-1) ordered pairs and adds one to the mean in-degree and the mean
+                // out-degree; an undirected tie fills one of n(n-1)/2 pairs and adds to two degrees.
+                double ties = gm.isDirected() ? ec : 2.0 * ec;
+                double density = nc > 1 ? ties / ((double) nc * (nc - 1)) : 0;
+                double avgDeg = nc > 0 ? ties / nc : 0;
                 JsonObject r = new JsonObject();
                 r.addProperty("success", true);
                 r.addProperty("node_count", nc);
@@ -2048,7 +2054,8 @@ public class GephiControlService {
         }
     }
 
-    public JsonObject resetAppearance(int r, int g, int b, float size) {
+    /** Every node to one colour, and to one size when {@code size} is not null. */
+    public JsonObject resetAppearance(int r, int g, int b, Float size) {
         Workspace ws = currentWorkspace();
         if (ws == null) {
             return error("No project open");
@@ -2060,9 +2067,12 @@ public class GephiControlService {
             // before exhaustion leaks its read hold permanently (see ITERATION RULE above).
             for (Node n : graph.getNodes().toArray()) {
                 n.setColor(defaultColor);
-                n.setSize(size);
+                if (size != null) {
+                    n.setSize(size);
+                }
             }
-            return success("Appearance reset for all nodes");
+            return success(size != null ? "Colour and size reset for all nodes"
+                : "Colour reset for all nodes; sizes kept");
         } catch (Exception e) {
             return failure("Failed: ", e);
         }
@@ -2536,10 +2546,20 @@ public class GephiControlService {
             final int panelIters = iterations > 0 ? iterations : 1000;
             final java.util.List<String> unapplied =
                 startLayoutThroughController(lc, layout, properties, panelIters, this::onEdt);
+            JsonObject applied = appliedLayoutSettings(layout, properties);
+            JsonObject lastRun = new JsonObject();
+            lastRun.addProperty("layout", algo);
+            lastRun.addProperty("iterations", panelIters);
+            lastRun.add("applied", applied);
+            lastRun.addProperty("applied_note", APPLIED_NOTE);
+            lastLayoutRun = lastRun;
             JsonObject r = new JsonObject();
             r.addProperty("success", true);
             r.addProperty("layout", algo);
             r.addProperty("status", "running");
+            r.addProperty("iterations", panelIters);
+            r.add("applied", applied.deepCopy());
+            r.addProperty("applied_note", APPLIED_NOTE);
             reportUnapplied(r, unapplied, algo);
             return r;
         } catch (Exception e) {
@@ -2564,6 +2584,10 @@ public class GephiControlService {
         r.addProperty("running", running);
         if (running && lc.getModel().getSelectedBuilder() != null) {
             r.addProperty("layout", lc.getModel().getSelectedBuilder().getName());
+        }
+        JsonObject lastRun = lastLayoutRun;
+        if (lastRun != null) {
+            r.add("last_run", lastRun.deepCopy());
         }
         return r;
     }
@@ -2598,6 +2622,10 @@ public class GephiControlService {
             if (props != null) {
                 for (LayoutProperty prop : props) {
                     JsonObject o = new JsonObject();
+                    String key = layoutPropertyKey(prop);
+                    if (!key.isEmpty()) {
+                        o.addProperty("key", key);
+                    }
                     o.addProperty("name", prop.getCanonicalName() != null ? prop.getCanonicalName()
                         : prop.getProperty().getDisplayName());
                     o.addProperty("display_name", prop.getProperty().getDisplayName());
@@ -2616,6 +2644,9 @@ public class GephiControlService {
             JsonObject r = new JsonObject();
             r.addProperty("success", true);
             r.addProperty("algorithm", algo);
+            r.addProperty("values_are", "defaults of a fresh layout, never what a run or a staged setting"
+                + " used; read applied in the gephi_run_layout result or last_run in gephi_get_layout_status."
+                + " Pass the key to gephi_run_layout.");
             r.add("properties", arr);
             return r;
         } catch (Exception e) {
@@ -2640,22 +2671,10 @@ public class GephiControlService {
             return unapplied;
         }
         for (LayoutProperty prop : props) {
-            String canonicalName = prop.getCanonicalName() != null ? prop.getCanonicalName() : "";
-            String displayName = prop.getProperty().getDisplayName();
-            // Extract middle key from "AlgoName.propertyKey.name" pattern
-            String canonicalKey = "";
-            if (!canonicalName.isEmpty()) {
-                String[] parts = canonicalName.split("\\.");
-                if (parts.length >= 3) {
-                    canonicalKey = parts[parts.length - 2];
-                }
-            }
             Object val = null;
             for (Map.Entry<String, Object> e : properties.entrySet()) {
                 String k = e.getKey();
-                if ((!canonicalKey.isEmpty() && k.equalsIgnoreCase(canonicalKey))
-                    || k.equalsIgnoreCase(displayName)
-                    || (!canonicalName.isEmpty() && k.equalsIgnoreCase(canonicalName))) {
+                if (layoutPropertyMatches(prop, k)) {
                     matched.add(k);
                     if (val == null) {
                         val = e.getValue();
@@ -2680,6 +2699,72 @@ public class GephiControlService {
             }
         }
         return unapplied;
+    }
+
+    /**
+     * Said with every applied block. Agents took a bare applied block for the server repeating the
+     * request and spent many calls checking it another way, including against the defaults that
+     * gephi_get_layout_properties reports.
+     */
+    static final String APPLIED_NOTE = "These values were read back from the layout after the settings"
+        + " were set, so they are what this run uses. gephi_get_layout_properties shows defaults only and"
+        + " cannot confirm a setting.";
+
+    /** The middle part of an "AlgoName.propertyKey.name" canonical name, or "" when there is none. */
+    private static String layoutPropertyKey(LayoutProperty prop) {
+        String canonicalName = prop.getCanonicalName() != null ? prop.getCanonicalName() : "";
+        String[] parts = canonicalName.split("\\.");
+        return parts.length >= 3 ? parts[parts.length - 2] : "";
+    }
+
+    /** Whether a key from the caller names this property: its key, display name or canonical name, any case. */
+    private static boolean layoutPropertyMatches(LayoutProperty prop, String key) {
+        String canonicalName = prop.getCanonicalName() != null ? prop.getCanonicalName() : "";
+        String canonicalKey = layoutPropertyKey(prop);
+        return (!canonicalKey.isEmpty() && key.equalsIgnoreCase(canonicalKey))
+            || key.equalsIgnoreCase(prop.getProperty().getDisplayName())
+            || (!canonicalName.isEmpty() && key.equalsIgnoreCase(canonicalName));
+    }
+
+    /**
+     * The value each requested setting holds now, read back from the layout under the property
+     * key (its display name when it has none), so a caller can confirm what a run used instead of
+     * inferring it from the absence of unapplied_params. Keys that matched nothing are left out.
+     */
+    static JsonObject appliedLayoutSettings(Layout layout, Map<String, Object> properties) {
+        JsonObject applied = new JsonObject();
+        LayoutProperty[] props = layout.getProperties();
+        if (properties == null || props == null) {
+            return applied;
+        }
+        for (LayoutProperty prop : props) {
+            boolean asked = false;
+            for (String k : properties.keySet()) {
+                asked |= layoutPropertyMatches(prop, k);
+            }
+            if (!asked) {
+                continue;
+            }
+            String key = layoutPropertyKey(prop);
+            if (key.isEmpty()) {
+                key = prop.getProperty().getDisplayName();
+            }
+            Object value;
+            try {
+                value = prop.getProperty().getValue();
+            } catch (Exception e) {
+                LOGGER.log(Level.FINE, "Reading layout property " + key + " failed", e);
+                continue;
+            }
+            if (value instanceof Number) {
+                applied.addProperty(key, (Number) value);
+            } else if (value instanceof Boolean) {
+                applied.addProperty(key, (Boolean) value);
+            } else if (value != null) {
+                applied.addProperty(key, value.toString());
+            }
+        }
+        return applied;
     }
 
     /** Adds unapplied_params and a warning to a layout response when any key matched nothing. */
@@ -2715,7 +2800,7 @@ public class GephiControlService {
             }
             layout.setGraphModel(currentGraphModel());
             final java.util.List<String> unapplied = applyLayoutProperties(layout, properties);
-            pendingLayoutProps = properties;
+            pendingLayoutProps = properties == null ? null : new java.util.LinkedHashMap<>(properties);
             pendingLayoutAlgo = algo;
             JsonObject r = new JsonObject();
             r.addProperty("success", true);
@@ -2723,6 +2808,7 @@ public class GephiControlService {
             r.addProperty("configured", true);
             r.addProperty("running", false);
             r.addProperty("note", "properties staged; the next run_layout of this algorithm applies them");
+            r.add("staged", appliedLayoutSettings(layout, properties));
             reportUnapplied(r, unapplied, algo);
             return r;
         } catch (Exception e) {
@@ -2836,11 +2922,58 @@ public class GephiControlService {
             return t;
         });
 
+    /** The stack Gephi 0.11.4 gives its own statistic workers (gephi#3327). */
+    static final long STATISTIC_STACK_BYTES = 128L * 1024 * 1024;
+
+    /**
+     * Runs {@code work} on a worker with Gephi's statistic stack size and waits for it, so a
+     * statistic that recurses once per node of a long path (connected components on a deep
+     * directed graph) does not overflow the request thread's small stack. Whatever it throws is
+     * thrown here. If the request is interrupted, {@code cancel} stops the statistic, so it does
+     * not go on writing columns after its request has given up.
+     */
+    static void runOnStatisticThread(Runnable work, Runnable cancel) {
+        java.util.concurrent.atomic.AtomicReference<Throwable> thrown =
+            new java.util.concurrent.atomic.AtomicReference<>();
+        Thread worker = new Thread(null, () -> {
+            try {
+                work.run();
+            } catch (Throwable t) {
+                thrown.set(t);
+            }
+        }, "Gephi AI statistic", STATISTIC_STACK_BYTES);
+        worker.setDaemon(true);
+        worker.start();
+        try {
+            worker.join();
+        } catch (InterruptedException e) {
+            cancel.run();
+            worker.interrupt();
+            try {
+                worker.join(STATISTIC_STOP_GRACE_MS);
+            } catch (InterruptedException again) {
+                // Already interrupted; the flag is restored below.
+            }
+            Thread.currentThread().interrupt();
+            throw new RuntimeException("Interrupted while a statistic was running; it was stopped");
+        }
+        Throwable t = thrown.get();
+        if (t instanceof RuntimeException) {
+            throw (RuntimeException) t;
+        }
+        if (t instanceof Error) {
+            throw (Error) t;
+        }
+        if (t != null) {
+            throw new RuntimeException(t);
+        }
+    }
+
     /**
      * Run {@code work}, cancelling {@code task} if it is still running after {@code timeoutMs}.
      * Returns true when the deadline stopped it. A timeout of 0 or less runs without a deadline.
-     * Gephi's modularity can loop forever (gephi#1630); its loop checks the cancel flag, so this
-     * ends the run and releases the graph lock it holds.
+     * A statistic that outlasts its deadline is cancelled (statistic loops check the cancel flag),
+     * so it releases the graph lock it holds instead of keeping every write waiting.
      */
     static boolean runWithDeadline(Runnable work, org.gephi.utils.longtask.spi.LongTask task,
         long timeoutMs) {
@@ -2898,6 +3031,42 @@ public class GephiControlService {
 
     /** A statistic with no deadline is waited for this long before it is reported as still running. */
     static final long STATISTIC_WAIT_CAP_MS = 60L * 60 * 1000;
+
+    /** How a wait for the panel's callback ended. */
+    enum PanelWait { FINISHED, TIMED_OUT, LOST }
+
+    /**
+     * Waits for the panel's callback, for at most {@code waitMs}. The panel clears a statistic's
+     * running mark just before it calls back; a mark that is gone with no callback after
+     * {@link #PANEL_FINISH_GRACE_MS} means the run ended without reporting (Gephi sends a failure
+     * in the panel's own completion code to its error handler, not to this listener), so the wait
+     * ends there instead of at the one-hour cap.
+     */
+    static PanelWait awaitPanelRun(java.util.concurrent.CountDownLatch done, long waitMs, PanelRunMark mark)
+        throws InterruptedException {
+        final long deadline = System.nanoTime() + waitMs * 1_000_000L;
+        while (true) {
+            long leftMs = (deadline - System.nanoTime()) / 1_000_000L;
+            if (leftMs <= 0) {
+                return PanelWait.TIMED_OUT;
+            }
+            if (done.await(Math.min(leftMs, 1000), java.util.concurrent.TimeUnit.MILLISECONDS)) {
+                return PanelWait.FINISHED;
+            }
+            if (!mark.isMarked()
+                && !done.await(PANEL_FINISH_GRACE_MS, java.util.concurrent.TimeUnit.MILLISECONDS)) {
+                return PanelWait.LOST;
+            }
+        }
+    }
+
+    /** Hand-over states: not started yet, started on the interface thread, given up by the caller. */
+    static final int HAND_OVER_PENDING = 0;
+    static final int HAND_OVER_STARTED = 1;
+    static final int HAND_OVER_ABANDONED = 2;
+
+    /** How long a run whose running mark has gone may still report back. */
+    static final long PANEL_FINISH_GRACE_MS = 2000;
     /** After a deadline cancels a statistic, how long to wait for it to actually stop. */
     static final long STATISTIC_STOP_GRACE_MS = 30_000;
 
@@ -2967,6 +3136,142 @@ public class GephiControlService {
     }
 
     /**
+     * What the plugin can see of Gephi's running mark for one statistic. Gephi's Statistics panel
+     * marks a statistic running inside {@code execute()}, before it hands it to the controller, and
+     * clears the mark when the run ends, before it calls back.
+     */
+    interface PanelRunMark extends AutoCloseable {
+
+        /** For callers that cannot observe the panel: always marked, so the panel is trusted. */
+        PanelRunMark TRUSTED = new PanelRunMark() {
+            @Override
+            public boolean isMarked() {
+                return true;
+            }
+
+            @Override
+            public boolean wasEverMarked() {
+                return true;
+            }
+
+            @Override
+            public void close() {
+            }
+        };
+
+        /** Whether the statistic is marked running now. */
+        boolean isMarked();
+
+        /** Whether it has been marked at any point since watching began. */
+        boolean wasEverMarked();
+
+        @Override
+        void close();
+    }
+
+    /**
+     * Whether this Statistics model shows this statistic as running. Its public interface shows
+     * one running instance per statistic class; another instance of the same class (a run the
+     * person started from the panel) is ambiguous, and the panel is trusted rather than risk a
+     * second run. So is a model with no panel entry for the statistic.
+     */
+    static boolean panelIsRunning(org.gephi.desktop.statistics.api.StatisticsModelUI model, Statistics stat,
+        java.util.Collection<? extends org.gephi.statistics.spi.StatisticsUI> uis) {
+        if (model == null) {
+            return false;
+        }
+        boolean checked = false;
+        for (org.gephi.statistics.spi.StatisticsUI ui : uis) {
+            if (ui.getStatisticsClass() != null && ui.getStatisticsClass().equals(stat.getClass())) {
+                checked = true;
+                if (model.getRunning(ui) != null) {
+                    return true;
+                }
+            }
+        }
+        return !checked;
+    }
+
+    /** Statistics instances a Statistics model has shown as running, recorded by its one listener. */
+    private static final java.util.Set<Statistics> SEEN_MARKED =
+        java.util.Collections.synchronizedSet(java.util.Collections.newSetFromMap(new java.util.WeakHashMap<>()));
+
+    /** Statistics models that already carry the plugin's listener. */
+    private static final java.util.Set<org.gephi.desktop.statistics.api.StatisticsModelUI> HOOKED =
+        java.util.Collections.synchronizedSet(java.util.Collections.newSetFromMap(new java.util.WeakHashMap<>()));
+
+    /** Records the statistics a model now shows as running. */
+    private static void recordMarked(org.gephi.desktop.statistics.api.StatisticsModelUI model,
+        java.util.Collection<? extends org.gephi.statistics.spi.StatisticsUI> uis) {
+        for (org.gephi.statistics.spi.StatisticsUI ui : uis) {
+            Statistics running = model.getRunning(ui);
+            if (running != null) {
+                SEEN_MARKED.add(running);
+            }
+        }
+    }
+
+    /**
+     * Watches every workspace's Statistics model for this statistic's running mark. The panel
+     * marks the model it is bound to, which after a workspace change can be another workspace's,
+     * so all of them are watched. Each model gets one listener, added once and never removed:
+     * Gephi keeps listeners in a plain list that its statistic worker iterates, so adding and
+     * removing one per run would race with it. The listener records every statistic it sees
+     * marked, which catches a mark set and cleared between two checks.
+     */
+    static PanelRunMark watchPanel(Statistics stat,
+        java.util.Collection<org.gephi.desktop.statistics.api.StatisticsModelUI> models,
+        java.util.Collection<? extends org.gephi.statistics.spi.StatisticsUI> uis) {
+        for (org.gephi.desktop.statistics.api.StatisticsModelUI m : models) {
+            if (HOOKED.add(m)) {
+                m.addChangeListener(e -> recordMarked(m, uis));
+            }
+        }
+        final java.util.function.BooleanSupplier marked = () -> {
+            for (org.gephi.desktop.statistics.api.StatisticsModelUI m : models) {
+                if (panelIsRunning(m, stat, uis)) {
+                    SEEN_MARKED.add(stat);
+                    return true;
+                }
+            }
+            return false;
+        };
+        return new PanelRunMark() {
+            @Override
+            public boolean isMarked() {
+                return marked.getAsBoolean();
+            }
+
+            @Override
+            public boolean wasEverMarked() {
+                return marked.getAsBoolean() || SEEN_MARKED.contains(stat);
+            }
+
+            @Override
+            public void close() {
+                SEEN_MARKED.remove(stat);
+            }
+        };
+    }
+
+    /** {@link #watchPanel} over the current project's workspaces. */
+    static PanelRunMark watchPanel(Statistics stat) {
+        java.util.List<org.gephi.desktop.statistics.api.StatisticsModelUI> models = new java.util.ArrayList<>();
+        ProjectController pc = Lookup.getDefault().lookup(ProjectController.class);
+        Project project = pc == null ? null : pc.getCurrentProject();
+        if (project != null) {
+            for (Workspace w : project.getWorkspaces()) {
+                org.gephi.desktop.statistics.api.StatisticsModelUI m =
+                    w.getLookup().lookup(org.gephi.desktop.statistics.api.StatisticsModelUI.class);
+                if (m != null) {
+                    models.add(m);
+                }
+            }
+        }
+        return watchPanel(stat, models, Lookup.getDefault().lookupAll(StatisticsUI.class));
+    }
+
+    /**
      * Run a statistic through Gephi's Statistics panel when the desktop interface is present, so
      * the panel shows it running, its result and its report, as if the user had clicked Run.
      * Without the panel (headless, tests) the statistic runs directly. Returns true when the
@@ -2975,12 +3280,20 @@ public class GephiControlService {
     static boolean executeStatistic(Statistics stat, GraphModel gm, long timeoutMs,
         org.gephi.desktop.statistics.api.StatisticsControllerUI panel,
         java.util.function.Consumer<Runnable> onEdt) throws InterruptedException {
+        return executeStatistic(stat, gm, timeoutMs, panel, onEdt, s -> PanelRunMark.TRUSTED);
+    }
+
+    static boolean executeStatistic(Statistics stat, GraphModel gm, long timeoutMs,
+        org.gephi.desktop.statistics.api.StatisticsControllerUI panel,
+        java.util.function.Consumer<Runnable> onEdt,
+        java.util.function.Function<Statistics, PanelRunMark> watch) throws InterruptedException {
         if (panel == null) {
             if (stat instanceof org.gephi.utils.longtask.spi.LongTask) {
-                return runWithDeadline(() -> stat.execute(gm),
-                    (org.gephi.utils.longtask.spi.LongTask) stat, timeoutMs);
+                org.gephi.utils.longtask.spi.LongTask task = (org.gephi.utils.longtask.spi.LongTask) stat;
+                return runWithDeadline(() -> runOnStatisticThread(() -> stat.execute(gm), task::cancel),
+                    task, timeoutMs);
             }
-            stat.execute(gm);
+            runOnStatisticThread(() -> stat.execute(gm), () -> { });
             return false;
         }
         java.util.concurrent.CountDownLatch done = new java.util.concurrent.CountDownLatch(1);
@@ -3000,10 +3313,66 @@ public class GephiControlService {
                     done.countDown();
                 }
             };
-        onEdt.accept(() -> panel.execute(stat, listener));
+        // The watch is built on the interface thread right before execute(): the Statistics window
+        // binds the panel to a newly selected workspace on that same thread, so whichever model
+        // the panel marks is one being watched. If the hand-over times out before this step
+        // starts, the step must not start the statistic later, behind the caller's back; if it
+        // has already started, it is waited for.
+        final java.util.concurrent.atomic.AtomicInteger handOver = new java.util.concurrent.atomic.AtomicInteger();
+        final java.util.concurrent.atomic.AtomicReference<PanelRunMark> markRef =
+            new java.util.concurrent.atomic.AtomicReference<>();
+        final java.util.concurrent.CountDownLatch handedOver = new java.util.concurrent.CountDownLatch(1);
+        Runnable onInterfaceThread = () -> {
+            if (!handOver.compareAndSet(HAND_OVER_PENDING, HAND_OVER_STARTED)) {
+                return;
+            }
+            try {
+                markRef.set(watch.apply(stat));
+                panel.execute(stat, listener);
+            } finally {
+                handedOver.countDown();
+            }
+        };
+        try {
+            onEdt.accept(onInterfaceThread);
+        } catch (RuntimeException e) {
+            if (handOver.compareAndSet(HAND_OVER_PENDING, HAND_OVER_ABANDONED)) {
+                throw e;
+            }
+            if (!handedOver.await(STATISTIC_STOP_GRACE_MS, java.util.concurrent.TimeUnit.MILLISECONDS)) {
+                throw e;
+            }
+        }
+        PanelRunMark mark = markRef.get();
+        if (mark == null) {
+            throw new IllegalStateException("Gephi's Statistics panel was not reached");
+        }
+        try {
+            // The panel marks a statistic inside execute() before handing it over, so one never
+            // marked was declined (its model not yet bound after a workspace change) and will
+            // never run or report back. It is run directly instead.
+            if (done.getCount() > 0 && !mark.wasEverMarked()) {
+                LOGGER.info("Gephi's Statistics panel did not take " + stat.getClass().getSimpleName()
+                    + "; running it directly");
+                return executeStatistic(stat, gm, timeoutMs, null, onEdt, watch);
+            }
+            return awaitPanelResult(stat, timeoutMs, done, failure, mark);
+        } finally {
+            mark.close();
+        }
+    }
+
+    private static boolean awaitPanelResult(Statistics stat, long timeoutMs,
+        java.util.concurrent.CountDownLatch done, java.util.concurrent.atomic.AtomicReference<Throwable> failure,
+        PanelRunMark mark) throws InterruptedException {
         boolean stopped = false;
         long wait = timeoutMs > 0 ? timeoutMs : STATISTIC_WAIT_CAP_MS;
-        if (!done.await(wait, java.util.concurrent.TimeUnit.MILLISECONDS)) {
+        PanelWait outcome = awaitPanelRun(done, wait, mark);
+        if (outcome == PanelWait.LOST) {
+            throw new IllegalStateException(stat.getClass().getSimpleName() + " ended in Gephi's Statistics"
+                + " panel without reporting back, so its result cannot be confirmed; run it again.");
+        }
+        if (outcome == PanelWait.TIMED_OUT) {
             if (timeoutMs <= 0 || !(stat instanceof org.gephi.utils.longtask.spi.LongTask)) {
                 throw new IllegalStateException("The statistic is still running in Gephi after "
                     + (wait / 60000) + " minutes; stop it from Gephi's Statistics panel.");
@@ -3027,14 +3396,20 @@ public class GephiControlService {
      * saved for it, so the settings go on after selection, starting from the layout's defaults
      * as a directly run layout does; selecting it again makes the panel show them. Returns the
      * setting names that matched no property.
+     *
+     * <p>Selection and settings are two event-thread tasks. In a workspace with no saved settings
+     * for the layout, Gephi's Layout panel answers the selection by posting a load of the default
+     * preset to the event thread, and with no preset saved that load resets the layout to its
+     * defaults. Posted inside one task, the reset ran after the settings and the layout ran on
+     * defaults; the second task is queued behind it, so the settings go on last.
      */
     static java.util.List<String> startLayoutThroughController(org.gephi.layout.api.LayoutController lc,
         Layout layout, Map<String, Object> properties,
         int iterations,
         java.util.function.Consumer<Runnable> onEdt) {
         java.util.List<String> unapplied = new java.util.ArrayList<>();
+        onEdt.accept(() -> lc.setLayout(layout));
         onEdt.accept(() -> {
-            lc.setLayout(layout);
             try {
                 layout.resetPropertiesValues();
             } catch (Exception e) {
@@ -3137,7 +3512,8 @@ public class GephiControlService {
                 stopped = executeStatistic(stat, gm, timeoutMs,
                     statisticsPanelFor(ws,
                         Lookup.getDefault().lookup(org.gephi.desktop.statistics.api.StatisticsControllerUI.class)),
-                    this::onEdt);
+                    this::onEdt,
+                    GephiControlService::watchPanel);
             } finally {
                 RUNNING_STATISTICS.remove(stat);
                 stoppedOnRequest = STOP_REQUESTED.remove(stat);
@@ -3151,10 +3527,7 @@ public class GephiControlService {
             if (stopped) {
                 // A cancelled run writes nothing, so the column still holds the previous run.
                 JsonObject r = error(matchedBuilder.getName() + " did not finish within "
-                    + (timeoutMs / 1000) + " s and was stopped; its column was not updated."
-                    + ("Modularity".equals(builderName)
-                    ? " Gephi's modularity occasionally never converges (gephi#1630);"
-                    + " running it again usually finishes normally." : ""));
+                    + (timeoutMs / 1000) + " s and was stopped; its column was not updated.");
                 r.addProperty("stopped", true);
                 return r;
             }
@@ -3765,6 +4138,12 @@ public class GephiControlService {
         if (!(val instanceof String)) {
             return false;
         }
+        if (type == String.class) {
+            // Plugin renderers register text settings (a column name, a legend title); the
+            // value is kept as written, since column ids and titles are case-sensitive.
+            prop.setValue(val);
+            return true;
+        }
         String s = val.toString().trim().toLowerCase();
         if (type == DependantColor.class) {
             if ("parent".equals(s)) {
@@ -3860,6 +4239,19 @@ public class GephiControlService {
 
     // ─── Export ───────────────────────────────────────────────────────
 
+    /**
+     * The file an export writes, with its folder created first, so saving into a new folder
+     * works. If the folder cannot be made, the write that follows fails and reports it.
+     */
+    static File outputFile(String filePath) {
+        File file = new File(filePath).getAbsoluteFile();
+        File dir = file.getParentFile();
+        if (dir != null && !dir.isDirectory() && !dir.mkdirs()) {
+            LOGGER.fine("Could not create " + dir);
+        }
+        return file;
+    }
+
     public JsonObject exportGexf(String filePath) {
         return exportGexf(filePath, true);
     }
@@ -3884,7 +4276,7 @@ public class GephiControlService {
                 ((GraphExporter) exporter).setExportVisible(visible);
                 ((GraphExporter) exporter).setWorkspace(ws);
             }
-            ec.exportFile(new File(filePath), exporter);
+            ec.exportFile(outputFile(filePath), exporter);
             JsonObject r = success("Exported to " + filePath);
             addViewInfo(r, currentGraphModel(), visible);
             return r;
@@ -3958,7 +4350,7 @@ public class GephiControlService {
                 ((GraphExporter) exporter).setWorkspace(ws);
             }
 
-            ec.exportFile(new File(filePath), exporter);
+            ec.exportFile(outputFile(filePath), exporter);
 
             // Post-process: composite onto the preview model's background color.
             // Gephi's PNG exporter renders a transparent background; this fills it.
@@ -4024,10 +4416,10 @@ public class GephiControlService {
             return error("No project open");
         }
 
-        File targetFile = new File(filePath).getAbsoluteFile();
+        File targetFile = outputFile(filePath);
         File targetDir = targetFile.getParentFile();
-        if (targetDir != null) {
-            targetDir.mkdirs();
+        if (targetDir != null && !targetDir.isDirectory()) {
+            return error("Could not create the folder " + targetDir + " for the screenshot");
         }
 
         // ScreenshotController is not independently registered in Lookup — it is only
@@ -4041,6 +4433,18 @@ public class GephiControlService {
         org.gephi.visualization.api.ScreenshotController sc = vc.getScreenshotController();
         if (sc == null) {
             return error("Screenshot controller not available");
+        }
+        // Until the graph canvas exists and draws, Gephi's screenshot fails with "No rendering
+        // engine available" (seen on the first call after Gephi starts). Wait for it briefly.
+        try {
+            if (!awaitRendererReady(() -> vizEngine().map(e -> java.util.OptionalLong.of(e.getFrameCount()))
+                .orElse(java.util.OptionalLong.empty()), RENDERER_READY_BUDGET_MS)) {
+                return error("Gephi's graph view is not drawing yet, so there is nothing to capture: show the"
+                    + " Overview tab, wait for the graph to appear, and try again");
+            }
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            return error("Interrupted while waiting for Gephi's graph view");
         }
 
         // This takeScreenshot writes straight to the file, whatever the toolbar's screenshot
@@ -4155,7 +4559,7 @@ public class GephiControlService {
             if (exporter instanceof GraphExporter) {
                 exporter.setWorkspace(ws);
             }
-            ec.exportFile(new File(filePath), exporter);
+            ec.exportFile(outputFile(filePath), exporter);
             JsonObject r = success("Exported to " + filePath);
             r.addProperty("page", landscape ? "US Letter, landscape (11 x 8.5 in)"
                 : "US Letter, portrait (8.5 x 11 in)");
@@ -4183,7 +4587,7 @@ public class GephiControlService {
             if (exporter instanceof GraphExporter) {
                 exporter.setWorkspace(ws);
             }
-            ec.exportFile(new File(filePath), exporter);
+            ec.exportFile(outputFile(filePath), exporter);
             return success("Exported to " + filePath);
         } catch (Exception e) {
             return failure("Export failed: ", e);
@@ -4212,7 +4616,7 @@ public class GephiControlService {
                 ((GraphExporter) exporter).setExportVisible(visible);
                 exporter.setWorkspace(ws);
             }
-            ec.exportFile(new File(filePath), exporter);
+            ec.exportFile(outputFile(filePath), exporter);
             JsonObject r = success("Exported to " + filePath);
             addViewInfo(r, currentGraphModel(), visible);
             return r;
@@ -4238,7 +4642,7 @@ public class GephiControlService {
             GraphModel gm = currentGraphModel();
             String csvText = buildCsv(gm, separator, target);
             try (java.io.Writer fw = new java.io.OutputStreamWriter(
-                     new java.io.FileOutputStream(filePath), java.nio.charset.StandardCharsets.UTF_8)) {
+                     new java.io.FileOutputStream(outputFile(filePath)), java.nio.charset.StandardCharsets.UTF_8)) {
                 fw.write(csvText);
             }
             JsonObject r = success("Exported to " + filePath);
@@ -4369,119 +4773,261 @@ public class GephiControlService {
                     return error("Import failed - unsupported format or empty file");
                 }
 
-                boolean append = "append".equalsIgnoreCase(mode);
-                if (mode != null && !append && !"new_workspace".equalsIgnoreCase(mode)
-                    && !"new".equalsIgnoreCase(mode)) {
-                    return error("Unknown import mode '" + mode + "': use \"new_workspace\" (the default)"
-                        + " or \"append\"");
-                }
-                ProjectController pc = getProjectController();
-                if (pc.getCurrentProject() == null) {
-                    onProjectThread(() -> {
-                        pc.newProject();
-                        return null;
-                    });
-                }
-                Workspace previous = currentWorkspace();
-                boolean previousEmpty = false;
-                if (previous != null) {
-                    Graph pg = getGraphController().getGraphModel(previous).getGraph();
-                    previousEmpty = pg.getNodeCount() == 0 && pg.getEdgeCount() == 0;
-                }
-                if (append && previous == null) {
-                    return error("No workspace to append to");
-                }
-
-                Processor processor = findProcessor(append ? "AppendProcessor" : "DefaultProcessor");
-                if (processor == null) {
-                    processor = Lookup.getDefault().lookup(Processor.class);
-                }
-                if (processor == null) {
-                    return error("No processor found");
-                }
-
-                // Gephi's import containers auto-scale by default: before processing, its
-                // DefaultScaler recenters every node on the centroid, rescales sizes into
-                // 4 to 100, and scales positions by the same ratio (clamped to +/-5000).
-                // That would rewrite the viz:position and viz:size values the file carries,
-                // so an export followed by an import would not round-trip. With auto-scale
-                // off, files without positions still get spread out at random when the
-                // container closes, and their sizes are kept as written.
-                c.getLoader().setAutoScale(false);
-
-                JsonArray issues = new JsonArray();
-                addIssues(issues, c.getReport(), 20);
-                Workspace importedWs;
-                try {
-                    // A null workspace lets the processor create one whose settings match the file.
-                    importedWs = ic.process(c, processor, append ? previous : null);
-                } catch (Exception e) {
-                    JsonObject err = error("Import failed: " + e.getMessage() + (append
-                        ? ". The file's time format or id type differs from this workspace's; import it"
-                        + " without mode \"append\" to open it in its own workspace." : ""));
-                    addIssues(issues, processor.getReport(), 20);
-                    if (issues.size() > 0) {
-                        err.add("import_issues", issues);
-                    }
-                    return err;
-                }
-                addIssues(issues, processor.getReport(), 20);
-                Workspace ws = importedWs != null ? importedWs : previous;
-                // Named after the file, as Gephi names a workspace opened from File > Open.
-                final boolean tidy = !append && previousEmpty && previous != null && previous != ws;
-                if (!append && ws != null && ws != previous) {
-                    onProjectThread(() -> {
-                        pc.renameWorkspace(ws, file.getName());
-                        if (tidy) {
-                            // The import already made its workspace current; switching to it
-                            // again would close and reopen it for nothing.
-                            if (pc.getCurrentWorkspace() != ws) {
-                                pc.openWorkspace(ws);
-                            }
-                            pc.deleteWorkspace(previous);
-                        }
-                        return null;
-                    });
-                }
-
-                // Optional, and off by default. Capping rewrites viz:size values the file
-                // actually carries, so importing and re-exporting would silently change the
-                // user's data. It stays available because oversized nodes from GEXF can hide
-                // the whole graph, but only when the caller asks for it.
-                int capped = 0;
-                if (maxNodeSize != null && maxNodeSize > 0) {
-                    Graph importedGraph = getGraphController().getGraphModel(ws).getGraph();
-                    lockWrite(importedGraph);
-                    try {
-                        for (Node n : importedGraph.getNodes().toArray()) {
-                            if (n.size() > maxNodeSize) {
-                                n.setSize(maxNodeSize.floatValue());
-                                capped++;
-                            }
-                        }
-                    } finally {
-                        unlockWrite(importedGraph);
-                    }
-                }
-
-                Workspace effectiveWs = importedWs != null ? importedWs : ws;
-                final Graph g = getGraphController().getGraphModel(effectiveWs).getGraph();
-                JsonObject r = success("Imported from " + file.getName());
-                r.addProperty("import_mode", append ? "append" : "new_workspace");
-                if (issues.size() > 0) {
-                    r.add("import_issues", issues);
-                }
-                if (capped > 0) {
-                    r.addProperty("nodes_size_capped", capped);
-                    r.addProperty("max_node_size", maxNodeSize);
-                }
-                r.addProperty("node_count", g.getNodeCount());
-                r.addProperty("edge_count", g.getEdgeCount());
-                return r;
+                return loadContainer(c, file.getName(), "Imported from " + file.getName(), maxNodeSize, mode);
             } catch (Exception e) {
                 return failure("Import failed: ", e);
             }
         }
+    }
+
+    /** Largest graph the preferential-attachment generator is asked for. */
+    static final int GENERATE_MAX_NODES = 100_000;
+    /** The random generator tests every pair of nodes, so it is held to fewer. */
+    static final int GENERATE_MAX_RANDOM_NODES = 20_000;
+    /** Largest edge count a generated graph may have (exact for preferential attachment, expected for random). */
+    static final long GENERATE_MAX_EXPECTED_EDGES = 2_000_000L;
+
+    /**
+     * Why a preferential-attachment graph of {@code nodes} nodes with {@code k} edges per node is
+     * refused, or null when it may be made. Its edge count is exact: a star of {@code k} edges, then
+     * {@code k} edges for each later node.
+     */
+    static String preferentialAttachmentRefusal(int nodes, int k) {
+        if (nodes < 2 || nodes > GENERATE_MAX_NODES) {
+            return "nodes must be between 2 and " + GENERATE_MAX_NODES;
+        }
+        if (k < 1 || k >= nodes) {
+            return "edges_per_node must be at least 1 and less than nodes (" + nodes + ")";
+        }
+        long edges = k + (long) (nodes - k - 1) * k;
+        if (edges > GENERATE_MAX_EXPECTED_EDGES) {
+            return "A preferential-attachment graph of " + nodes + " nodes with " + k + " edges per node has "
+                + edges + " edges, more than " + GENERATE_MAX_EXPECTED_EDGES + "; lower nodes or edges_per_node";
+        }
+        return null;
+    }
+
+    /**
+     * Why a random graph of {@code nodes} nodes with wiring probability {@code p} is refused, or
+     * null when it may be made. Its edge count is the expected one, {@code p} times the pairs.
+     */
+    static String randomGraphRefusal(int nodes, double p) {
+        if (nodes < 2 || nodes > GENERATE_MAX_RANDOM_NODES) {
+            return "nodes must be between 2 and " + GENERATE_MAX_RANDOM_NODES
+                + " for the random model, which tests every pair of nodes";
+        }
+        if (!(p > 0 && p <= 1)) {
+            return "wiring_probability must be greater than 0 and at most 1";
+        }
+        double expected = p * nodes * (nodes - 1.0) / 2;
+        if (expected > GENERATE_MAX_EXPECTED_EDGES) {
+            return "A random graph of " + nodes + " nodes with wiring_probability " + p + " expects about "
+                + Math.round(expected) + " edges, more than " + GENERATE_MAX_EXPECTED_EDGES
+                + "; lower nodes or wiring_probability";
+        }
+        return null;
+    }
+
+    /**
+     * Makes a graph with one of Gephi's generators and loads it into a new workspace, as Gephi's
+     * File > Generate does. "preferential_attachment" (Barabasi-Albert, Gephi 0.11.4) starts from a
+     * star of {@code edgesPerNode + 1} nodes and attaches each later node to that many existing
+     * nodes chosen in proportion to their degree; a seed is chosen and reported when none is
+     * given, so the graph can be made again. "random" (Erdos-Renyi) links each pair of nodes with
+     * {@code probability}; Gephi's random generator takes no seed, so it cannot be reproduced.
+     */
+    public JsonObject generateGraph(String model, int nodes, Integer edgesPerNode, Double probability, Long seed) {
+        String m = model == null ? "" : model.trim().toLowerCase(java.util.Locale.ROOT);
+        final org.gephi.io.generator.spi.Generator generator;
+        final String name;
+        JsonObject settings = new JsonObject();
+        switch (m) {
+            case "preferential_attachment":
+            case "barabasi_albert": {
+                int k = edgesPerNode == null ? 2 : edgesPerNode;
+                String refusal = preferentialAttachmentRefusal(nodes, k);
+                if (refusal != null) {
+                    return error(refusal);
+                }
+                long s = seed != null ? seed : java.util.concurrent.ThreadLocalRandom.current().nextLong();
+                org.gephi.io.generator.plugin.ScaleFreeGraph g = new org.gephi.io.generator.plugin.ScaleFreeGraph();
+                g.setNumberOfNodes(nodes);
+                g.setEdgesPerNode(k);
+                g.setSeed(s);
+                generator = g;
+                name = "Preferential attachment (" + nodes + " nodes, " + k + " per node, seed " + s + ")";
+                settings.addProperty("model", "preferential_attachment");
+                settings.addProperty("edges_per_node", k);
+                settings.addProperty("seed", s);
+                settings.addProperty("reproducible", true);
+                break;
+            }
+            case "random":
+            case "erdos_renyi": {
+                double p = probability == null ? 0.05 : probability;
+                String refusal = randomGraphRefusal(nodes, p);
+                if (refusal != null) {
+                    return error(refusal);
+                }
+                org.gephi.io.generator.plugin.RandomGraph g = new org.gephi.io.generator.plugin.RandomGraph();
+                g.setNumberOfNodes(nodes);
+                g.setWiringProbability(p);
+                generator = g;
+                name = "Random graph (" + nodes + " nodes, p " + p + ")";
+                settings.addProperty("model", "random");
+                settings.addProperty("wiring_probability", p);
+                settings.addProperty("reproducible", false);
+                settings.addProperty("note", "Gephi's random graph generator takes no seed, so this graph cannot"
+                    + " be made again; save or export it to keep it.");
+                break;
+            }
+            default:
+                return error("Unknown model '" + model + "': use \"preferential_attachment\" or \"random\"");
+        }
+        try {
+            Container c = Lookup.getDefault().lookup(Container.Factory.class).newContainer();
+            c.setSource(generator.getName());
+            c.setReport(new org.gephi.io.importer.api.Report());
+            // Both models are undirected. The generators set no edge type, so without this the
+            // default of the container made every generated graph directed.
+            c.getLoader().setEdgeDefault(org.gephi.io.importer.api.EdgeDirectionDefault.UNDIRECTED);
+            generator.generate(c.getLoader());
+            JsonObject r = loadContainer(c, name, "Generated " + name, null, null);
+            if (r.get("success").getAsBoolean()) {
+                settings.entrySet().forEach(e -> r.add(e.getKey(), e.getValue()));
+                r.addProperty("directed", false);
+                r.addProperty("workspace", name);
+            }
+            return r;
+        } catch (Exception e) {
+            return failure("Generating the graph failed: ", e);
+        }
+    }
+
+    /**
+     * Loads a filled import container the way {@link #importFile} loads a file: into a new
+     * workspace named {@code name} by default (an empty workspace that was open is removed), or
+     * appended to the current one with {@code mode} "append". Reports Gephi's import issues and
+     * the resulting counts. Used for files and for generated graphs.
+     */
+    private JsonObject loadContainer(Container c, String name, String message, Float maxNodeSize, String mode)
+        throws Exception {
+        ImportController ic = Lookup.getDefault().lookup(ImportController.class);
+        boolean append = "append".equalsIgnoreCase(mode);
+        if (mode != null && !append && !"new_workspace".equalsIgnoreCase(mode)
+            && !"new".equalsIgnoreCase(mode)) {
+            return error("Unknown import mode '" + mode + "': use \"new_workspace\" (the default)"
+                + " or \"append\"");
+        }
+        ProjectController pc = getProjectController();
+        if (pc.getCurrentProject() == null) {
+            onProjectThread(() -> {
+                pc.newProject();
+                return null;
+            });
+        }
+        Workspace previous = currentWorkspace();
+        boolean previousEmpty = false;
+        if (previous != null) {
+            Graph pg = getGraphController().getGraphModel(previous).getGraph();
+            // Only an untouched workspace is clutter: empty and still under Gephi's default
+            // name. One the person named is a decision, and stays.
+            org.gephi.project.api.WorkspaceInformation info =
+                previous.getLookup().lookup(org.gephi.project.api.WorkspaceInformation.class);
+            String previousName = info == null ? "" : info.getName();
+            previousEmpty = pg.getNodeCount() == 0 && pg.getEdgeCount() == 0
+                && previousName != null && previousName.matches("Workspace \\d+");
+        }
+        if (append && previous == null) {
+            return error("No workspace to append to");
+        }
+
+        Processor processor = findProcessor(append ? "AppendProcessor" : "DefaultProcessor");
+        if (processor == null) {
+            processor = Lookup.getDefault().lookup(Processor.class);
+        }
+        if (processor == null) {
+            return error("No processor found");
+        }
+
+        // Gephi's import containers auto-scale by default: before processing, its
+        // DefaultScaler recenters every node on the centroid, rescales sizes into
+        // 4 to 100, and scales positions by the same ratio (clamped to +/-5000).
+        // That would rewrite the viz:position and viz:size values the file carries,
+        // so an export followed by an import would not round-trip. With auto-scale
+        // off, files without positions still get spread out at random when the
+        // container closes, and their sizes are kept as written.
+        c.getLoader().setAutoScale(false);
+
+        JsonArray issues = new JsonArray();
+        addIssues(issues, c.getReport(), 20);
+        Workspace importedWs;
+        try {
+            // A null workspace lets the processor create one whose settings match the file.
+            importedWs = ic.process(c, processor, append ? previous : null);
+        } catch (Exception e) {
+            JsonObject err = error("Import failed: " + e.getMessage() + (append
+                ? ". The file's time format or id type differs from this workspace's; import it"
+                + " without mode \"append\" to open it in its own workspace." : ""));
+            addIssues(issues, processor.getReport(), 20);
+            if (issues.size() > 0) {
+                err.add("import_issues", issues);
+            }
+            return err;
+        }
+        addIssues(issues, processor.getReport(), 20);
+        Workspace ws = importedWs != null ? importedWs : previous;
+        // Named after the file, as Gephi names a workspace opened from File > Open.
+        final boolean tidy = !append && previousEmpty && previous != null && previous != ws;
+        if (!append && ws != null && ws != previous) {
+            onProjectThread(() -> {
+                pc.renameWorkspace(ws, name);
+                if (tidy) {
+                    // The import already made its workspace current; switching to it
+                    // again would close and reopen it for nothing.
+                    if (pc.getCurrentWorkspace() != ws) {
+                        pc.openWorkspace(ws);
+                    }
+                    pc.deleteWorkspace(previous);
+                }
+                return null;
+            });
+        }
+
+        // Optional, and off by default. Capping rewrites viz:size values the file
+        // actually carries, so importing and re-exporting would silently change the
+        // user's data. It stays available because oversized nodes from GEXF can hide
+        // the whole graph, but only when the caller asks for it.
+        int capped = 0;
+        if (maxNodeSize != null && maxNodeSize > 0) {
+            Graph importedGraph = getGraphController().getGraphModel(ws).getGraph();
+            lockWrite(importedGraph);
+            try {
+                for (Node n : importedGraph.getNodes().toArray()) {
+                    if (n.size() > maxNodeSize) {
+                        n.setSize(maxNodeSize.floatValue());
+                        capped++;
+                    }
+                }
+            } finally {
+                unlockWrite(importedGraph);
+            }
+        }
+
+        Workspace effectiveWs = importedWs != null ? importedWs : ws;
+        final Graph g = getGraphController().getGraphModel(effectiveWs).getGraph();
+        JsonObject r = success(message);
+        r.addProperty("import_mode", append ? "append" : "new_workspace");
+        if (issues.size() > 0) {
+            r.add("import_issues", issues);
+        }
+        if (capped > 0) {
+            r.addProperty("nodes_size_capped", capped);
+            r.addProperty("max_node_size", maxNodeSize);
+        }
+        r.addProperty("node_count", g.getNodeCount());
+        r.addProperty("edge_count", g.getEdgeCount());
+        return r;
     }
 
     /** Collect up to {@code limit} import issues (level and message) from a report. */
@@ -4792,13 +5338,38 @@ public class GephiControlService {
             }
             GraphModel gm = currentGraphModel();
             Graph g = gm.getGraph();
-            // setVisibleView() takes Gephi's own blocking write lock; hold our deadlock-safe
-            // lock first so that call re-enters instead of queuing behind the renderer.
+            FilterController fc = Lookup.getDefault().lookup(FilterController.class);
+            org.gephi.filters.api.FilterModel fm = fc == null ? null : fc.getModel();
+            // A filter still being computed would apply its result after the reset and bring
+            // itself back, so let it finish first.
+            awaitFilterApplied(fm);
+            // Turn the filter off through Gephi's filter controller, as the Filters panel's own
+            // Filter button does, so the panel stops showing it as active and a refresh cannot
+            // bring it back. Clearing takes Gephi's blocking write lock; holding the plugin's
+            // deadlock-safe lock first lets those calls re-enter instead of queuing.
             lockWrite(g);
             try {
-                gm.setVisibleView(null);
+                if (fm != null && fm.isFiltering()) {
+                    fc.filterVisible(null);
+                }
+                if (fm != null && fm.isSelecting()) {
+                    fc.selectVisible(null);
+                }
+                if (fm == null) {
+                    gm.setVisibleView(null);
+                }
             } finally {
                 unlockWrite(g);
+            }
+            awaitFilterApplied(fm);
+            if (!gm.getVisibleView().isMainView()) {
+                // A view set some other way than through the Filters panel.
+                lockWrite(g);
+                try {
+                    gm.setVisibleView(null);
+                } finally {
+                    unlockWrite(g);
+                }
             }
             return success("Filters reset - full graph view restored");
         } catch (Exception e) {
@@ -4811,6 +5382,114 @@ public class GephiControlService {
     /** Layouts run in Gephi's own LayoutController, which outlives the server, so stopping it leaves them alone. */
     public void shutdown() {
     }
+
+    /** The running render engine, empty until the graph canvas has been created. */
+    private static java.util.Optional<? extends org.gephi.viz.engine.VizEngine<?, ?>> vizEngine() {
+        org.gephi.visualization.api.VisualizationController vc =
+            Lookup.getDefault().lookup(org.gephi.visualization.api.VisualizationController.class);
+        return vc instanceof org.gephi.visualization.VizController
+            ? ((org.gephi.visualization.VizController) vc).getEngine() : java.util.Optional.empty();
+    }
+
+    /**
+     * Reads the renderer's two counters (Gephi 0.11.4). The engine commits world updates many
+     * times a second even when nothing changes, so frames that advance while world updates do
+     * not mean the world updaters are blocked, usually on the graph lock: the screen keeps
+     * showing the last picture while Gephi is hung. "not_drawing" means no frames at all.
+     */
+    static String rendererState(long framesAdvanced, long worldUpdatesAdvanced) {
+        if (framesAdvanced <= 0) {
+            return "not_drawing";
+        }
+        return worldUpdatesAdvanced > 0 ? "ok" : "stalled";
+    }
+
+    /**
+     * Waits until the renderer exists and has drawn a frame, for at most {@code budgetMs}.
+     * {@code frames} gives the frame count, or empty while there is no engine.
+     */
+    static boolean awaitRendererReady(java.util.function.Supplier<java.util.OptionalLong> frames, long budgetMs)
+        throws InterruptedException {
+        final long deadline = System.nanoTime() + budgetMs * 1_000_000L;
+        long first = -1;
+        while (true) {
+            java.util.OptionalLong now = frames.get();
+            if (now.isPresent()) {
+                if (first < 0) {
+                    first = now.getAsLong();
+                } else if (now.getAsLong() > first) {
+                    return true;
+                }
+            }
+            if (System.nanoTime() > deadline) {
+                return false;
+            }
+            Thread.sleep(25);
+        }
+    }
+
+    /**
+     * The renderer's counters, sampled twice, and the state they show: "not_started" until the
+     * graph canvas exists, then "ok", "stalled" or "not_drawing" (see {@link #rendererState}).
+     */
+    public JsonObject rendererStats() {
+        try {
+            return rendererStats(() -> vizEngine().map(e -> new long[] {e.getFrameCount(), e.getWorldUpdateCount()}),
+                RENDERER_SAMPLE_MS, RENDERER_STALL_CONFIRM_MS);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            JsonObject o = new JsonObject();
+            o.addProperty("state", "unknown");
+            return o;
+        }
+    }
+
+    /**
+     * {@link #rendererStats()} over any source of {frames, world updates}, empty while there is
+     * no engine.
+     */
+    static JsonObject rendererStats(java.util.function.Supplier<java.util.Optional<long[]>> counters, long sampleMs,
+        long confirmMs) throws InterruptedException {
+        JsonObject o = new JsonObject();
+        try {
+            java.util.Optional<long[]> first = counters.get();
+            if (first.isEmpty()) {
+                o.addProperty("state", "not_started");
+                return o;
+            }
+            Thread.sleep(sampleMs);
+            long[] now = counters.get().orElse(first.get());
+            String state = rendererState(now[0] - first.get()[0], now[1] - first.get()[1]);
+            // A single slow world update (a very large graph, or a screenshot pausing updates)
+            // also leaves frames drawn without new world updates. Only updates that stay frozen
+            // for the confirmation time are a stall.
+            long watched = sampleMs;
+            while ("stalled".equals(state) && watched < confirmMs) {
+                Thread.sleep(sampleMs);
+                watched += sampleMs;
+                now = counters.get().orElse(now);
+                if (now[1] > first.get()[1]) {
+                    state = "ok";
+                }
+            }
+            o.addProperty("state", state);
+            if ("stalled".equals(state)) {
+                o.addProperty("stalled_for_ms", watched);
+            }
+            o.addProperty("frames", now[0]);
+            o.addProperty("world_updates", now[1]);
+        } catch (RuntimeException e) {
+            o.addProperty("state", "unknown");
+        }
+        return o;
+    }
+
+    /** How long /health watches the renderer's counters. */
+    static final long RENDERER_SAMPLE_MS = 250;
+    /** How long world updates must stay frozen, with frames still drawn, before it is a stall. */
+    static final long RENDERER_STALL_CONFIRM_MS = 2000;
+    /** How long a screenshot waits for the graph view to start drawing. */
+    static final long RENDERER_READY_BUDGET_MS = 10_000;
 
     /**
      * Cheap wedge detector for /health: try the graph read lock briefly.
@@ -4825,22 +5504,21 @@ public class GephiControlService {
                 return "none";
             }
             Graph g = gm.getGraph();
-            java.util.concurrent.locks.ReentrantReadWriteLock.ReadLock rl = readLockHandle(g);
-            if (rl == null) {
-                return "unknown";
-            }
-            if (rl.tryLock(150, java.util.concurrent.TimeUnit.MILLISECONDS)) {
-                rl.unlock();
+            if (g.getLock().tryReadLock(150, java.util.concurrent.TimeUnit.MILLISECONDS)) {
+                g.readUnlock();
                 return "ok";
             }
             return "busy";
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            return "unknown";
         } catch (Throwable t) {
             return "unknown";
         }
     }
 
     /**
-     * Live counters from the underlying ReentrantReadWriteLock: active read holds,
+     * Live counters from GraphLock: active read holds,
      * write-locked flag, and queued threads. Diagnostic companion to graphLockProbe;
      * a nonzero reader count while Gephi is idle means a leaked read hold (the
      * precursor of a permanent wedge). All values -1 when unreachable.
@@ -4859,16 +5537,9 @@ public class GephiControlService {
             if (lock == null) {
                 return o;
             }
-            java.lang.reflect.Field f = lock.getClass().getDeclaredField("readWriteLock");
-            f.setAccessible(true);
-            Object v = f.get(lock);
-            if (v instanceof java.util.concurrent.locks.ReentrantReadWriteLock) {
-                java.util.concurrent.locks.ReentrantReadWriteLock rwl =
-                    (java.util.concurrent.locks.ReentrantReadWriteLock) v;
-                o.addProperty("readers", rwl.getReadLockCount());
-                o.addProperty("write_locked", rwl.isWriteLocked());
-                o.addProperty("queued", rwl.getQueueLength());
-            }
+            o.addProperty("readers", lock.getReadLockCount());
+            o.addProperty("write_locked", lock.isWriteLocked());
+            o.addProperty("queued", lock.getQueueLength());
         } catch (Throwable t) {
             // leave the -1 defaults
         }
@@ -5536,12 +6207,10 @@ public class GephiControlService {
                 r = success("Filter applied to the visible graph");
                 r.addProperty("nodes_before", nodesBefore);
                 r.addProperty("edges_before", edgesBefore);
-                // filterVisible ends in setVisibleView, which does not finish swapping the
-                // view before it returns. Reading the counts straight away reported the
-                // pre-filter numbers, telling the caller the filter removed nothing when it
-                // had removed half the graph. Wait briefly for the view to settle, and say
-                // so rather than publishing a number that has not stopped moving.
-                boolean settled = awaitVisibleViewSettled(gm, nodesBefore);
+                // filterVisible computes its result in the background and returns before the
+                // view is swapped, so reading the counts at once reported the pre-filter
+                // numbers. Gephi's filter model says when the result has been applied.
+                boolean settled = awaitFilterApplied(fc.getModel());
                 r.addProperty("nodes_after", gm.getGraphVisible().getNodeCount());
                 r.addProperty("edges_after", gm.getGraphVisible().getEdgeCount());
                 if (!settled) {
@@ -5549,9 +6218,8 @@ public class GephiControlService {
                 }
                 break;
             case "new_workspace":
-                // Materializes the filtered subgraph into a fresh workspace — the
-                // memory-safe way to filter repeatedly (hidden GraphView elements
-                // otherwise stay resident).
+                // Materializes the filtered subgraph into a fresh workspace, so later
+                // work runs on the subgraph alone and the original stays as it was.
                 lockWrite(lockGraph);
                 try {
                     fc.exportToNewWorkspace(query);
@@ -5580,37 +6248,35 @@ public class GephiControlService {
         return r;
     }
 
+    /** How long a filter's result may take to be applied before its counts are called provisional. */
+    static final long FILTER_APPLY_BUDGET_MS = 30_000;
+
     /**
-     * Waits briefly for the visible view to stop changing after a filter is applied.
-     * Returns true once two consecutive reads agree (and, when the filter actually
-     * removed something, once the count has moved off its pre-filter value); false if
-     * it was still moving when the budget ran out, so the caller can say the number is
-     * provisional instead of presenting a moving value as final.
+     * Waits until Gephi has applied the current filter's result. Since Gephi 0.11.4 the filter
+     * model reports a result being computed or applied as running. Returns false if it was still
+     * running when the budget ran out, so the caller can say the counts are provisional.
      */
-    private static boolean awaitVisibleViewSettled(GraphModel gm, int before) {
-        final long budgetMs = 1500;
-        final long deadline = System.currentTimeMillis() + budgetMs;
-        int last = -1;
-        boolean moved = false;
-        while (System.currentTimeMillis() < deadline) {
-            int now = gm.getGraphVisible().getNodeCount();
-            if (now != before) {
-                moved = true;
+    static boolean awaitFilterApplied(org.gephi.filters.api.FilterModel model) {
+        return awaitFilterApplied(model, FILTER_APPLY_BUDGET_MS);
+    }
+
+    static boolean awaitFilterApplied(org.gephi.filters.api.FilterModel model, long budgetMs) {
+        if (model == null) {
+            return true;
+        }
+        final long deadline = System.nanoTime() + budgetMs * 1_000_000L;
+        while (model.isRunning()) {
+            if (System.nanoTime() > deadline) {
+                return false;
             }
-            if (now == last && (moved || now != before)) {
-                return true;
-            }
-            last = now;
             try {
-                Thread.sleep(25);
+                Thread.sleep(10);
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
                 return false;
             }
         }
-        // A filter that legitimately keeps every node never moves off `before`; treat a
-        // stable reading as settled rather than reporting it as provisional forever.
-        return gm.getGraphVisible().getNodeCount() == last;
+        return true;
     }
 
     // ─── Combined filters ────────────────────────────────────────────
@@ -5785,7 +6451,7 @@ public class GephiControlService {
             }
             if (act.equals("select")) {
                 r = success("Filters applied to the visible graph");
-                final boolean settled = awaitVisibleViewSettled(gm, gm.getGraphVisible().getNodeCount());
+                final boolean settled = awaitFilterApplied(fc.getModel());
                 r.addProperty("nodes_before", nodesBefore);
                 r.addProperty("edges_before", edgesBefore);
                 r.addProperty("nodes_after", gm.getGraphVisible().getNodeCount());
@@ -6566,7 +7232,7 @@ public class GephiControlService {
                 ((GraphExporter) exporter).setExportVisible(visible);
                 ((GraphExporter) exporter).setWorkspace(ws);
             }
-            ec.exportFile(new File(filePath), exporter);
+            ec.exportFile(outputFile(filePath), exporter);
             JsonObject r = success("Exported to " + filePath);
             r.addProperty("format", format);
             addViewInfo(r, currentGraphModel(), visible);
