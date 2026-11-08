@@ -1,0 +1,1272 @@
+/*
+ * Copyright 2026 Matt Artz
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package org.gephi.plugins.mcp.api;
+
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+import com.sun.net.httpserver.HttpExchange;
+import com.sun.net.httpserver.HttpHandler;
+import com.sun.net.httpserver.HttpServer;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.InetSocketAddress;
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import org.gephi.plugins.mcp.service.GephiControlService;
+
+public class GephiAPIServer implements HttpHandler {
+
+    private static final Logger LOGGER = Logger.getLogger(GephiAPIServer.class.getName());
+    private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
+    private final GephiControlService service;
+    private final int port;
+    private volatile HttpServer httpServer;
+    private volatile ExecutorService executor;
+
+    public GephiAPIServer(int port) {
+        this.port = port;
+        this.service = GephiControlService.getInstance();
+    }
+
+    @Override
+    public void handle(HttpExchange exchange) throws IOException {
+        try {
+            String uri = exchange.getRequestURI().getPath();
+            String method = exchange.getRequestMethod();
+
+            // FINE, not INFO: a client polling /health or /layout/status would otherwise
+            // fill messages.log for the whole session. Start and stop stay at INFO.
+            LOGGER.fine(() -> "Gephi AI API: " + method + " " + uri);
+
+            // Defense against DNS-rebinding: the API is reachable only from local
+            // processes (the MCP server is a local Python process, not a browser).
+            // Reject any request whose Host header points at a non-local name, which
+            // is how a malicious web page would try to reach 127.0.0.1 via a rebound
+            // hostname. Requests with no Host header (e.g. raw curl) are allowed.
+            if (!isNonBrowserRequest(exchange.getRequestHeaders().getFirst("Origin"),
+                exchange.getRequestHeaders().getFirst("Sec-Fetch-Site"))) {
+                JsonObject error = new JsonObject();
+                error.addProperty("success", false);
+                error.addProperty("error", "Forbidden: this API is not reachable from a browser");
+                sendJson(exchange, 403, error);
+                return;
+            }
+
+            if (!isLoopbackHost(exchange.getRequestHeaders().getFirst("Host"))) {
+                JsonObject error = new JsonObject();
+                error.addProperty("success", false);
+                error.addProperty("error", "Forbidden: requests must target localhost");
+                sendJson(exchange, 403, error);
+                return;
+            }
+
+            if ("OPTIONS".equals(method)) {
+                sendText(exchange, 200, "");
+                return;
+            }
+
+            try {
+                JsonObject requestBody = null;
+                if ("POST".equals(method) || "PUT".equals(method)) {
+                    WelcomeCloser.closeIfOpen();
+                    String body = readBody(exchange.getRequestBody(),
+                        exchange.getRequestHeaders().getFirst("Content-Length"));
+                    if (body != null && !body.isEmpty()) {
+                        requestBody = JsonParser.parseString(body).getAsJsonObject();
+                    }
+                }
+
+                Map<String, String> params = parseQuery(exchange.getRequestURI().getRawQuery());
+                JsonObject result = routeRequest(uri, method, params, requestBody);
+
+                int status = result.has("success") && result.get("success").getAsBoolean() ? 200 : 400;
+
+                sendJson(exchange, status, result);
+
+            } catch (Exception e) {
+                LOGGER.log(Level.WARNING, "API error", e);
+                JsonObject error = new JsonObject();
+                error.addProperty("success", false);
+                error.addProperty("error", describeFailure(method, uri, e));
+                sendJson(exchange, 500, error);
+            }
+        } finally {
+            exchange.close();
+        }
+    }
+
+    /**
+     * The error text for a request that threw. A value of the wrong JSON type (an object where
+     * an id belongs, text where a number belongs) makes Gson throw with a bare type name such as
+     * "JsonObject", or with no message at all, which left the caller an empty or meaningless
+     * error. The text names the request and says what kind of problem it was.
+     */
+    static String describeFailure(String method, String uri, Exception e) {
+        String detail = e.getClass().getSimpleName() + (e.getMessage() == null ? "" : ": " + e.getMessage());
+        if (e instanceof com.google.gson.JsonParseException || e instanceof IllegalStateException
+            || e instanceof UnsupportedOperationException || e instanceof NumberFormatException
+            || e instanceof ClassCastException || e instanceof IndexOutOfBoundsException) {
+            return "Could not read the request to " + method + " " + uri
+                + ": the body is not a JSON object, or a value in it is missing or of the wrong type ("
+                + detail + ")";
+        }
+        return detail;
+    }
+
+    private void sendJson(HttpExchange exchange, int status, JsonObject body) throws IOException {
+        sendText(exchange, status, GSON.toJson(body), "application/json");
+    }
+
+    private void sendText(HttpExchange exchange, int status, String body) throws IOException {
+        sendText(exchange, status, body, "text/plain");
+    }
+
+    private void sendText(HttpExchange exchange, int status, String body, String contentType) throws IOException {
+        byte[] bytes = body.getBytes(StandardCharsets.UTF_8);
+        exchange.getResponseHeaders().set("Content-Type", contentType);
+        if (bytes.length == 0) {
+            // 0 would switch sendResponseHeaders to chunked encoding; -1 means "no body".
+            exchange.sendResponseHeaders(status, -1);
+        } else {
+            exchange.sendResponseHeaders(status, bytes.length);
+            try (OutputStream os = exchange.getResponseBody()) {
+                os.write(bytes);
+            }
+        }
+    }
+
+    /** Query string parsing (application/x-www-form-urlencoded), same shape as NanoHTTPD's getParms(). */
+    static Map<String, String> parseQuery(String rawQuery) {
+        Map<String, String> params = new HashMap<>();
+        if (rawQuery == null || rawQuery.isEmpty()) {
+            return params;
+        }
+        for (String pair : rawQuery.split("&")) {
+            if (pair.isEmpty()) {
+                continue;
+            }
+            int eq = pair.indexOf('=');
+            String key = eq >= 0 ? pair.substring(0, eq) : pair;
+            String value = eq >= 0 ? pair.substring(eq + 1) : "";
+            params.put(urlDecode(key), urlDecode(value));
+        }
+        return params;
+    }
+
+    /** Percent- and plus-decoded as UTF-8; text that is not valid percent-encoding is kept as sent. */
+    private static String urlDecode(String s) {
+        try {
+            return URLDecoder.decode(s, StandardCharsets.UTF_8);
+        } catch (IllegalArgumentException e) {
+            return s;
+        }
+    }
+
+    /**
+     * True when the request did not come from a browser.
+     *
+     * <p>The Host check below stops DNS rebinding, but not a page the user is merely visiting
+     * calling {@code fetch("http://127.0.0.1:8080/...", {mode:"no-cors"})}. That request carries
+     * a loopback Host and a CORS-safelisted content type, so it passes every other check, and
+     * although CORS hides the reply the side effect has already happened. Destructive endpoints
+     * and the export endpoints, which write to a caller-supplied path, are reachable that way.
+     *
+     * <p>Browsers set {@code Origin} on such a request and {@code Sec-Fetch-Site} on every
+     * request, and page JavaScript can neither forge nor suppress them. Legitimate clients here
+     * are local processes, which send neither, so refusing on either header costs nothing and
+     * closes the hole. Kept package-private and static so it is unit-testable without a server.
+     */
+    static boolean isNonBrowserRequest(String origin, String secFetchSite) {
+        boolean hasOrigin = origin != null && !origin.trim().isEmpty();
+        boolean hasFetchSite = secFetchSite != null && !secFetchSite.trim().isEmpty();
+        return !hasOrigin && !hasFetchSite;
+    }
+
+    /**
+     * Reads a request body of {@code contentLength} bytes (the raw Content-Length header,
+     * possibly null, in which case the stream is read to its end) and decodes it as UTF-8.
+     * Request bodies are JSON, which is UTF-8, whatever charset the Content-Type names or
+     * omits. Package-private and static so it can be unit-tested without a live server.
+     */
+    static String readBody(InputStream in, String contentLength) throws IOException {
+        if (contentLength == null || contentLength.isBlank()) {
+            return new String(in.readAllBytes(), StandardCharsets.UTF_8);
+        }
+        long length = Long.parseLong(contentLength.trim());
+        if (length <= 0) {
+            return "";
+        }
+        return new String(in.readNBytes((int) length), StandardCharsets.UTF_8);
+    }
+
+    /**
+     * True when {@code host} (a raw HTTP Host header value, possibly null or with a
+     * port and/or IPv6 brackets) names the loopback interface. A null/empty header is
+     * allowed (non-browser clients like the MCP server may omit it); any non-loopback
+     * name is rejected, which is what blocks DNS-rebinding attacks from a web page.
+     * Package-private and static so it can be unit-tested without a live server.
+     */
+    static boolean isLoopbackHost(String host) {
+        if (host == null || host.isEmpty()) {
+            return true;
+        }
+        String name = host;
+        int colon = name.lastIndexOf(':');
+        if (colon > -1 && name.indexOf(']') < colon) {
+            name = name.substring(0, colon);
+        }
+        name = name.replace("[", "").replace("]", "").trim().toLowerCase();
+        return name.equals("127.0.0.1") || name.equals("localhost") || name.equals("::1");
+    }
+
+    @SuppressWarnings("unchecked")
+    private JsonObject routeRequest(String uri, String method, Map<String, String> params, JsonObject body) {
+
+        // ─── Health ──────────────────────────────────────────────────
+
+        if ("/health".equals(uri) || "/".equals(uri)) {
+            JsonObject result = new JsonObject();
+            result.addProperty("success", true);
+            result.addProperty("service", "Gephi AI API");
+            result.addProperty("version", moduleVersion());
+            String gephi = gephiVersion();
+            if (gephi != null) {
+                result.addProperty("gephi_version", gephi);
+            }
+            result.addProperty("status", "running");
+            // "busy" here (persistently) means Gephi is wedged and needs a restart.
+            result.addProperty("graph_lock", service.graphLockProbe());
+            result.add("graph_lock_stats", service.graphLockStats());
+            result.add("renderer", service.rendererStats());
+            // No side effects here: /health is a pure liveness probe that clients may
+            // poll at any frequency. The node click listener is installed once at
+            // plugin startup by Installer, as soon as the visualization controller is
+            // available, and again defensively by /selection (GephiControlService.
+            // getSelection calls ensureClickListener itself).
+            return result;
+        }
+
+        // ─── Human selection journal ─────────────────────────────────
+
+        if ("/selection".equals(uri) && "GET".equals(method)) {
+            // Default false, matching the Python tool: peeking must not consume.
+            boolean clear = "true".equalsIgnoreCase(params.get("clear"));
+            return service.getSelection(clear);
+        }
+
+        // ─── View / camera (teaching mode) ───────────────────────────
+
+        if ("/view/focus".equals(uri) && "POST".equals(method)) {
+            String mode = body != null && body.has("mode") ? body.get("mode").getAsString() : "graph";
+            String id = body != null && body.has("id") ? body.get("id").getAsString() : null;
+            String source = body != null && body.has("source") ? body.get("source").getAsString() : null;
+            String target = body != null && body.has("target") ? body.get("target").getAsString() : null;
+            Double x = body != null && body.has("x") ? body.get("x").getAsDouble() : null;
+            Double y = body != null && body.has("y") ? body.get("y").getAsDouble() : null;
+            Double w = body != null && body.has("w") ? body.get("w").getAsDouble() : null;
+            Double h = body != null && body.has("h") ? body.get("h").getAsDouble() : null;
+            Double zoom = body != null && body.has("zoom") ? body.get("zoom").getAsDouble() : null;
+            java.util.List<String> select = null;
+            if (body != null && body.has("select")) {
+                select = new java.util.ArrayList<>();
+                for (com.google.gson.JsonElement el : body.get("select").getAsJsonArray()) {
+                    select.add(el.getAsString());
+                }
+            }
+            return service.focusView(mode, id, source, target, x, y, w, h, zoom, select);
+        }
+
+        if ("/view/selection".equals(uri) && "POST".equals(method)) {
+            String mode = body != null && body.has("mode") ? body.get("mode").getAsString() : "rectangle";
+            return service.setSelectionMode(mode);
+        }
+
+        if ("/perspective".equals(uri) && "GET".equals(method)) {
+            return service.getPerspective();
+        }
+
+        if ("/perspective/switch".equals(uri) && "POST".equals(method)) {
+            if (body == null || !body.has("name")) {
+                return errorResult("Missing 'name'");
+            }
+            return service.switchPerspective(body.get("name").getAsString());
+        }
+
+        // ─── Project ─────────────────────────────────────────────────
+
+        if ("/project/new".equals(uri) && "POST".equals(method)) {
+            String name = body != null && body.has("name") ? body.get("name").getAsString() : "New Project";
+            return service.createProject(name);
+        }
+
+        if ("/project/open".equals(uri) && "POST".equals(method)) {
+            if (body == null || !body.has("file")) {
+                return errorResult("Missing 'file' parameter");
+            }
+            return service.openProject(body.get("file").getAsString());
+        }
+
+        if ("/project/save".equals(uri) && "POST".equals(method)) {
+            if (body == null || !body.has("file")) {
+                return errorResult("Missing 'file' parameter");
+            }
+            return service.saveProject(body.get("file").getAsString());
+        }
+
+        if ("/project/info".equals(uri) && "GET".equals(method)) {
+            return service.getProjectInfo();
+        }
+
+        // ─── Workspace ───────────────────────────────────────────────
+
+        if ("/workspace/new".equals(uri) && "POST".equals(method)) {
+            return service.newWorkspace();
+        }
+
+        if ("/workspace/list".equals(uri) && "GET".equals(method)) {
+            return service.listWorkspaces();
+        }
+
+        if ("/workspace/switch".equals(uri) && "POST".equals(method)) {
+            if (body == null || !body.has("index")) {
+                return errorResult("Missing 'index'");
+            }
+            return service.switchWorkspace(body.get("index").getAsInt());
+        }
+
+        if ("/workspace/delete".equals(uri) && "DELETE".equals(method)) {
+            // The workspace index arrives as a query parameter (?index=N). Request
+            // bodies are parsed for POST and PUT only, so a JSON body on this DELETE
+            // was never readable; the query parameter is the supported form.
+            int index = parseIntParam(params.get("index"), -1);
+            if (index < 0) {
+                return errorResult("Missing 'index' query parameter");
+            }
+            return service.deleteWorkspace(index);
+        }
+
+        if ("/workspace/duplicate".equals(uri) && "POST".equals(method)) {
+            if (body == null || !body.has("index")) {
+                return errorResult("Missing 'index'");
+            }
+            return service.duplicateWorkspace(body.get("index").getAsInt());
+        }
+
+        if ("/workspace/rename".equals(uri) && "POST".equals(method)) {
+            if (body == null || !body.has("index") || !body.has("name")) {
+                return errorResult("Missing 'index' or 'name'");
+            }
+            return service.renameWorkspace(body.get("index").getAsInt(), body.get("name").getAsString());
+        }
+
+        // ─── Nodes ───────────────────────────────────────────────────
+
+        if ("/graph/node/add".equals(uri) && "POST".equals(method)) {
+            if (body == null || !body.has("id")) {
+                return errorResult("Missing 'id' parameter");
+            }
+            String id = body.get("id").getAsString();
+            String label = body.has("label") ? body.get("label").getAsString() : null;
+            Map<String, Object> attrs = null;
+            if (body.has("attributes") && body.get("attributes").isJsonObject()) {
+                attrs = GSON.fromJson(body.get("attributes"), Map.class);
+            }
+            return service.addNode(id, label, attrs);
+        }
+
+        if ("/graph/nodes/add".equals(uri) && "POST".equals(method)) {
+            if (body == null || !body.has("nodes")) {
+                return errorResult("Missing 'nodes' array");
+            }
+            List<Map<String, Object>> nodes = GSON.fromJson(body.get("nodes"), List.class);
+            return service.addNodes(nodes);
+        }
+
+        if (uri.startsWith("/graph/node/") && uri.length() > "/graph/node/".length() && "DELETE".equals(method)) {
+            String nodeId = uri.substring("/graph/node/".length());
+            if (nodeId.isEmpty()) {
+                return errorResult("Missing node ID");
+            }
+            return service.removeNode(nodeId);
+        }
+
+        if ("/graph/nodes/remove".equals(uri) && "POST".equals(method)) {
+            if (body == null || !body.has("ids")) {
+                return errorResult("Missing 'ids' array");
+            }
+            List<String> ids = GSON.fromJson(body.get("ids"), List.class);
+            return service.bulkRemoveNodes(ids);
+        }
+
+        if ("/graph/nodes".equals(uri) && "GET".equals(method)) {
+            int limit = parseIntParam(params.get("limit"), 100);
+            int offset = parseIntParam(params.get("offset"), 0);
+            return service.queryNodes(params.get("column"), params.get("value"), params.get("contains"),
+                doubleParamOrNull(params.get("min")), doubleParamOrNull(params.get("max")),
+                limit, offset, visibleParam(params, false), params.get("sort_by"),
+                !"false".equalsIgnoreCase(params.get("descending")), params.get("columns"));
+        }
+
+        if (uri.startsWith("/graph/node/get/") && "GET".equals(method)) {
+            String nodeId = uri.substring("/graph/node/get/".length());
+            if (nodeId.isEmpty()) {
+                return errorResult("Missing node ID");
+            }
+            return service.getNode(nodeId);
+        }
+
+        if ("/graph/node/label".equals(uri) && "POST".equals(method)) {
+            if (body == null || !body.has("id") || !body.has("label")) {
+                return errorResult("Missing 'id' or 'label'");
+            }
+            return service.setNodeLabel(body.get("id").getAsString(), body.get("label").getAsString());
+        }
+
+        if ("/graph/node/position".equals(uri) && "POST".equals(method)) {
+            if (body == null || !body.has("id")) {
+                return errorResult("Missing 'id'");
+            }
+            float x = body.has("x") ? body.get("x").getAsFloat() : 0;
+            float y = body.has("y") ? body.get("y").getAsFloat() : 0;
+            return service.setNodePosition(body.get("id").getAsString(), x, y);
+        }
+
+        if ("/graph/nodes/positions".equals(uri) && "POST".equals(method)) {
+            if (body == null || !body.has("positions")) {
+                return errorResult("Missing 'positions' array");
+            }
+            List<Map<String, Object>> positions = GSON.fromJson(body.get("positions"), List.class);
+            return service.batchSetPositions(positions);
+        }
+
+        // ─── Edges ───────────────────────────────────────────────────
+
+        if ("/graph/edge/add".equals(uri) && "POST".equals(method)) {
+            if (body == null || !body.has("source") || !body.has("target")) {
+                return errorResult("Missing 'source' or 'target'");
+            }
+            String source = body.get("source").getAsString();
+            String target = body.get("target").getAsString();
+            Double weight = body.has("weight") ? body.get("weight").getAsDouble() : 1.0;
+            boolean directed = !body.has("directed") || body.get("directed").getAsBoolean();
+            String edgeType = body.has("edge_type") ? body.get("edge_type").getAsString() : null;
+            return service.addEdge(source, target, weight, directed, edgeType);
+        }
+
+        if ("/graph/edges/add".equals(uri) && "POST".equals(method)) {
+            if (body == null || !body.has("edges")) {
+                return errorResult("Missing 'edges' array");
+            }
+            List<Map<String, Object>> edges = GSON.fromJson(body.get("edges"), List.class);
+            return service.addEdges(edges);
+        }
+
+        if ("/graph/edge/remove".equals(uri) && "POST".equals(method)) {
+            if (body == null || !body.has("source") || !body.has("target")) {
+                return errorResult("Missing 'source' or 'target'");
+            }
+            return service.removeEdge(body.get("source").getAsString(), body.get("target").getAsString());
+        }
+
+        if ("/graph/edge/weight".equals(uri) && "POST".equals(method)) {
+            if (body == null || !body.has("source") || !body.has("target") || !body.has("weight")) {
+                return errorResult("Missing 'source', 'target', or 'weight'");
+            }
+            return service.setEdgeWeight(
+                body.get("source").getAsString(),
+                body.get("target").getAsString(),
+                body.get("weight").getAsDouble()
+            );
+        }
+
+        if ("/graph/edge/label".equals(uri) && "POST".equals(method)) {
+            if (body == null || !body.has("source") || !body.has("target") || !body.has("label")) {
+                return errorResult("Missing 'source', 'target', or 'label'");
+            }
+            return service.setEdgeLabel(
+                body.get("source").getAsString(),
+                body.get("target").getAsString(),
+                body.get("label").getAsString()
+            );
+        }
+
+        if ("/graph/edges".equals(uri) && "GET".equals(method)) {
+            int limit = parseIntParam(params.get("limit"), 100);
+            int offset = parseIntParam(params.get("offset"), 0);
+            return service.queryEdges(limit, offset, visibleParam(params, false));
+        }
+
+        // ─── Graph Stats & Type ──────────────────────────────────────
+
+        if ("/graph/stats".equals(uri) && "GET".equals(method)) {
+            return service.getGraphStats(visibleParam(params, false));
+        }
+
+        if ("/graph/type".equals(uri) && "GET".equals(method)) {
+            return service.getGraphType();
+        }
+
+        // ─── Attributes / Columns ────────────────────────────────────
+
+        if ("/graph/columns".equals(uri) && "GET".equals(method)) {
+            String target = params.getOrDefault("target", "node");
+            return service.getColumns(target);
+        }
+
+        if ("/graph/columns/add".equals(uri) && "POST".equals(method)) {
+            if (body == null || !body.has("name") || !body.has("type")) {
+                return errorResult("Missing 'name' or 'type'");
+            }
+            String target = body.has("target") ? body.get("target").getAsString() : "node";
+            return service.addColumn(body.get("name").getAsString(), body.get("type").getAsString(), target);
+        }
+
+        if ("/graph/node/attributes".equals(uri) && "POST".equals(method)) {
+            if (body == null || !body.has("id") || !body.has("attributes")) {
+                return errorResult("Missing 'id' or 'attributes'");
+            }
+            Map<String, Object> attrs = GSON.fromJson(body.get("attributes"), Map.class);
+            return service.setNodeAttributes(body.get("id").getAsString(), attrs);
+        }
+
+        if ("/graph/nodes/attributes".equals(uri) && "POST".equals(method)) {
+            if (body == null || !body.has("updates")) {
+                return errorResult("Missing 'updates' array");
+            }
+            List<Map<String, Object>> updates = GSON.fromJson(body.get("updates"), List.class);
+            return service.batchSetNodeAttributes(updates);
+        }
+
+        if ("/graph/edge/attributes".equals(uri) && "POST".equals(method)) {
+            if (body == null || !body.has("source") || !body.has("target") || !body.has("attributes")) {
+                return errorResult("Missing 'source', 'target', or 'attributes'");
+            }
+            Map<String, Object> attrs = GSON.fromJson(body.get("attributes"), Map.class);
+            return service.setEdgeAttributes(
+                body.get("source").getAsString(),
+                body.get("target").getAsString(),
+                attrs
+            );
+        }
+
+        // ─── Appearance ──────────────────────────────────────────────
+
+        if ("/appearance/node/color".equals(uri) && "POST".equals(method)) {
+            if (body == null || !body.has("id")) {
+                return errorResult("Missing 'id'");
+            }
+            int r = body.has("r") ? body.get("r").getAsInt() : 0;
+            int g = body.has("g") ? body.get("g").getAsInt() : 0;
+            int b = body.has("b") ? body.get("b").getAsInt() : 0;
+            int a = body.has("a") ? body.get("a").getAsInt() : 255;
+            return service.setNodeColor(body.get("id").getAsString(), r, g, b, a);
+        }
+
+        if ("/appearance/node/size".equals(uri) && "POST".equals(method)) {
+            if (body == null || !body.has("id") || !body.has("size")) {
+                return errorResult("Missing 'id' or 'size'");
+            }
+            return service.setNodeSize(body.get("id").getAsString(), body.get("size").getAsFloat());
+        }
+
+        if ("/appearance/edge/color".equals(uri) && "POST".equals(method)) {
+            if (body == null || !body.has("source") || !body.has("target")) {
+                return errorResult("Missing 'source' or 'target'");
+            }
+            int r = body.has("r") ? body.get("r").getAsInt() : 0;
+            int g = body.has("g") ? body.get("g").getAsInt() : 0;
+            int b = body.has("b") ? body.get("b").getAsInt() : 0;
+            int a = body.has("a") ? body.get("a").getAsInt() : 255;
+            return service.setEdgeColor(body.get("source").getAsString(), body.get("target").getAsString(), r, g, b, a);
+        }
+
+        if ("/appearance/nodes/color".equals(uri) && "POST".equals(method)) {
+            if (body == null || !body.has("nodes")) {
+                return errorResult("Missing 'nodes' array");
+            }
+            List<Map<String, Object>> nodes = GSON.fromJson(body.get("nodes"), List.class);
+            return service.batchSetNodeColors(nodes);
+        }
+
+        if ("/appearance/reset".equals(uri) && "POST".equals(method)) {
+            int r = body != null && body.has("r") ? body.get("r").getAsInt() : 153;
+            int g = body != null && body.has("g") ? body.get("g").getAsInt() : 153;
+            int b = body != null && body.has("b") ? body.get("b").getAsInt() : 153;
+            // No size given: sizes stay as they are, so a colour reset keeps a size ranking.
+            Float size = body != null && body.has("size") && !body.get("size").isJsonNull()
+                ? body.get("size").getAsFloat() : null;
+            return service.resetAppearance(r, g, b, size);
+        }
+
+        if ("/appearance/partition/color".equals(uri) && "POST".equals(method)) {
+            if (body == null || !body.has("column")) {
+                return errorResult("Missing 'column'");
+            }
+            String column = body.get("column").getAsString();
+            Map<String, int[]> colorMap = null;
+            if (body.has("colors") && body.get("colors").isJsonObject()) {
+                colorMap = new HashMap<>();
+                JsonObject colors = body.getAsJsonObject("colors");
+                for (String key : colors.keySet()) {
+                    List<Number> rgb = GSON.fromJson(colors.get(key), List.class);
+                    colorMap.put(key, new int[]{rgb.get(0).intValue(), rgb.get(1).intValue(), rgb.get(2).intValue()});
+                }
+            }
+            return service.colorByPartition(column, colorMap);
+        }
+
+        if ("/appearance/edge/partition-color".equals(uri) && "POST".equals(method)) {
+            if (body == null || !body.has("column")) {
+                return errorResult("Missing 'column'");
+            }
+            String column = body.get("column").getAsString();
+            Map<String, int[]> colorMap = null;
+            if (body.has("colors") && body.get("colors").isJsonObject()) {
+                colorMap = new HashMap<>();
+                JsonObject colors = body.getAsJsonObject("colors");
+                for (String key : colors.keySet()) {
+                    List<Number> rgb = GSON.fromJson(colors.get(key), List.class);
+                    colorMap.put(key, new int[]{rgb.get(0).intValue(), rgb.get(1).intValue(), rgb.get(2).intValue()});
+                }
+            }
+            return service.colorEdgesByPartition(column, colorMap);
+        }
+
+        if ("/appearance/ranking/color".equals(uri) && "POST".equals(method)) {
+            if (body == null || !body.has("column")) {
+                return errorResult("Missing 'column'");
+            }
+            String column = body.get("column").getAsString();
+            int minRed = body.has("r_min") ? body.get("r_min").getAsInt() : 255;
+            int minGreen = body.has("g_min") ? body.get("g_min").getAsInt() : 255;
+            int minBlue = body.has("b_min") ? body.get("b_min").getAsInt() : 200;
+            int maxRed = body.has("r_max") ? body.get("r_max").getAsInt() : 255;
+            int maxGreen = body.has("g_max") ? body.get("g_max").getAsInt() : 0;
+            int maxBlue = body.has("b_max") ? body.get("b_max").getAsInt() : 0;
+            return service.colorByRanking(column, minRed, minGreen, minBlue, maxRed, maxGreen, maxBlue);
+        }
+
+        if ("/appearance/ranking/size".equals(uri) && "POST".equals(method)) {
+            if (body == null || !body.has("column")) {
+                return errorResult("Missing 'column'");
+            }
+            float minSize = body.has("min_size") ? body.get("min_size").getAsFloat() : 5f;
+            float maxSize = body.has("max_size") ? body.get("max_size").getAsFloat() : 50f;
+            Double cap = body.has("cap") && !body.get("cap").isJsonNull() ? body.get("cap").getAsDouble() : null;
+            return service.sizeByRanking(body.get("column").getAsString(), minSize, maxSize, cap);
+        }
+
+        // ─── Layout ──────────────────────────────────────────────────
+
+        if ("/layout/run".equals(uri) && "POST".equals(method)) {
+            if (body == null || !body.has("algorithm")) {
+                return errorResult("Missing 'algorithm'");
+            }
+            String algo = body.get("algorithm").getAsString();
+            int iterations = body.has("iterations") ? body.get("iterations").getAsInt() : 1000;
+            // Inline properties: configure and run in one step.
+            if (body.has("properties") && body.get("properties").isJsonObject()) {
+                Map<String, Object> properties = GSON.fromJson(body.get("properties"), Map.class);
+                return service.runLayout(algo, iterations, properties);
+            }
+            return service.runLayout(algo, iterations);
+        }
+
+        if ("/layout/stop".equals(uri) && "POST".equals(method)) {
+            return service.stopLayout();
+        }
+
+        if ("/layout/status".equals(uri) && "GET".equals(method)) {
+            return service.getLayoutStatus();
+        }
+
+        if ("/layout/available".equals(uri) && "GET".equals(method)) {
+            return service.getAvailableLayouts();
+        }
+
+        if ("/layout/properties".equals(uri) && "GET".equals(method)) {
+            String algo = params.get("algorithm");
+            if (algo == null || algo.isEmpty()) {
+                return errorResult("Missing 'algorithm' parameter");
+            }
+            return service.getLayoutProperties(algo);
+        }
+
+        if ("/layout/properties".equals(uri) && "POST".equals(method)) {
+            if (body == null || !body.has("algorithm") || !body.has("properties")) {
+                return errorResult("Missing 'algorithm' or 'properties'");
+            }
+            String algo = body.get("algorithm").getAsString();
+            Map<String, Object> properties = GSON.fromJson(body.get("properties"), Map.class);
+            int iterations = body.has("iterations") ? body.get("iterations").getAsInt() : 1000;
+            return service.setLayoutProperties(algo, properties, iterations);
+        }
+
+        // ─── Statistics ──────────────────────────────────────────────
+
+        if ("/statistics/modularity".equals(uri) && "POST".equals(method)) {
+            double res = body != null && body.has("resolution") ? body.get("resolution").getAsDouble() : 1.0;
+            long timeoutMs = body != null && body.has("timeout_ms") ? body.get("timeout_ms").getAsLong() : 0;
+            return service.computeModularity(res, timeoutMs);
+        }
+
+        if ("/statistics/stop".equals(uri) && "POST".equals(method)) {
+            return service.stopStatistics();
+        }
+
+        if ("/statistics/available".equals(uri) && "GET".equals(method)) {
+            return service.listStatistics();
+        }
+
+        if ("/statistics/run".equals(uri) && "POST".equals(method)) {
+            if (body == null || !body.has("name")) {
+                return errorResult("Missing 'name'");
+            }
+            Map<String, Object> statParams = null;
+            if (body.has("params") && body.get("params").isJsonObject()) {
+                statParams = GSON.fromJson(body.get("params"), Map.class);
+            }
+            return service.runStatisticByName(body.get("name").getAsString(), statParams);
+        }
+
+        if ("/statistics/degree".equals(uri) && "POST".equals(method)) {
+            return service.computeDegree();
+        }
+
+        if ("/statistics/betweenness".equals(uri) && "POST".equals(method)) {
+            return service.computeBetweenness();
+        }
+
+        if ("/statistics/pagerank".equals(uri) && "POST".equals(method)) {
+            return service.computePageRank();
+        }
+
+        if ("/statistics/connected-components".equals(uri) && "POST".equals(method)) {
+            return service.computeConnectedComponents();
+        }
+
+        if ("/statistics/clustering-coefficient".equals(uri) && "POST".equals(method)) {
+            return service.computeClusteringCoefficient();
+        }
+
+        if ("/statistics/avg-path-length".equals(uri) && "POST".equals(method)) {
+            return service.computeAvgPathLength();
+        }
+
+        if ("/statistics/hits".equals(uri) && "POST".equals(method)) {
+            return service.computeHITS();
+        }
+
+        if ("/statistics/eigenvector".equals(uri) && "POST".equals(method)) {
+            return service.computeEigenvectorCentrality();
+        }
+
+        // ─── Graph Operations ────────────────────────────────────────
+
+        if ("/graph/clear".equals(uri) && "POST".equals(method)) {
+            return service.clearGraph();
+        }
+
+        // ─── Filters ─────────────────────────────────────────────────
+
+        if ("/filter/degree".equals(uri) && "POST".equals(method)) {
+            int min = body != null && body.has("min") ? body.get("min").getAsInt() : 0;
+            int max = body != null && body.has("max") ? body.get("max").getAsInt() : 0;
+            boolean dryRun = body != null && body.has("dry_run") && body.get("dry_run").getAsBoolean();
+            return service.filterByDegreeRange(min, max, dryRun);
+        }
+
+        if ("/filter/edge-weight".equals(uri) && "POST".equals(method)) {
+            double min = body != null && body.has("min") ? body.get("min").getAsDouble() : 0;
+            double max = body != null && body.has("max") ? body.get("max").getAsDouble() : 0;
+            boolean dryRun = body != null && body.has("dry_run") && body.get("dry_run").getAsBoolean();
+            return service.filterByEdgeWeight(min, max, dryRun);
+        }
+
+        if ("/filter/remove-isolates".equals(uri) && "POST".equals(method)) {
+            return service.removeIsolates(body != null && body.has("dry_run") && body.get("dry_run").getAsBoolean());
+        }
+
+        if ("/filter/ego-network".equals(uri) && "POST".equals(method)) {
+            if (body == null || !body.has("node_id")) {
+                return errorResult("Missing 'node_id'");
+            }
+            String nodeId = body.get("node_id").getAsString();
+            int depth = body.has("depth") ? body.get("depth").getAsInt() : 1;
+            return service.extractEgoNetwork(nodeId, depth);
+        }
+
+        if ("/filter/giant-component".equals(uri) && "POST".equals(method)) {
+            return service.extractGiantComponent();
+        }
+
+        if ("/filter/reset".equals(uri) && "POST".equals(method)) {
+            return service.resetFilters();
+        }
+
+        if ("/filter/list".equals(uri) && "GET".equals(method)) {
+            return service.listFilters();
+        }
+
+        if ("/filter/apply".equals(uri) && "POST".equals(method)) {
+            if (body == null || !body.has("name")) {
+                return errorResult("Missing 'name'");
+            }
+            String fname = body.get("name").getAsString();
+            Map<String, Object> filterParams = body.has("params") ? GSON.fromJson(body.get("params"), Map.class) : null;
+            String action = body.has("action") ? body.get("action").getAsString() : "select";
+            String column = body.has("column") ? body.get("column").getAsString() : null;
+            return service.applyFilter(fname, filterParams, action, column);
+        }
+
+        if ("/filter/combine".equals(uri) && "POST".equals(method)) {
+            if (body == null || !body.has("filters") || !body.get("filters").isJsonArray()) {
+                return errorResult("Missing 'filters' list");
+            }
+            List<Map<String, Object>> specs = GSON.fromJson(body.get("filters"), List.class);
+            return service.applyFilters(specs, str(body, "combine"), str(body, "action"), str(body, "column"),
+                body.has("dry_run") && body.get("dry_run").getAsBoolean());
+        }
+
+        // ─── Time ────────────────────────────────────────────────────
+
+        if ("/time/from-columns".equals(uri) && "POST".equals(method)) {
+            if (body == null) {
+                return errorResult("Missing body");
+            }
+            return service.setTimeFromColumns(str(body, "target"), str(body, "start"), str(body, "end"),
+                str(body, "date_format"), bool(body, "check_only"));
+        }
+
+        if ("/time/slice".equals(uri) && "POST".equals(method)) {
+            if (body == null || !body.has("start") || !body.has("end")) {
+                return errorResult("Missing 'start' or 'end'");
+            }
+            return service.timeSlice(body.get("start").getAsDouble(), body.get("end").getAsDouble());
+        }
+
+        // ─── Paths ───────────────────────────────────────────────────
+
+        if ("/graph/shortest-path".equals(uri) && "POST".equals(method)) {
+            if (body == null || !body.has("source") || !body.has("target")) {
+                return errorResult("Missing 'source' or 'target'");
+            }
+            boolean follow = !body.has("follow_direction") || body.get("follow_direction").getAsBoolean();
+            return service.findShortestPath(body.get("source").getAsString(), body.get("target").getAsString(),
+                str(body, "weighting"), follow, str(body, "mark_column"));
+        }
+
+        // ─── Data Laboratory ─────────────────────────────────────────
+
+        if ("/datalab/column/edit".equals(uri) && "POST".equals(method)) {
+            if (body == null || !body.has("column") || !body.has("action")) {
+                return errorResult("Missing 'column' or 'action'");
+            }
+            return service.editColumn(str(body, "target"), str(body, "column"), str(body, "action"),
+                str(body, "value"), str(body, "type"), str(body, "new_name"), bool(body, "check_only"));
+        }
+
+        if ("/datalab/frequencies".equals(uri) && "POST".equals(method)) {
+            if (body == null || !body.has("column")) {
+                return errorResult("Missing 'column'");
+            }
+            String target = body.has("target") ? body.get("target").getAsString() : "node";
+            return service.columnValueFrequencies(target, body.get("column").getAsString());
+        }
+
+        if ("/datalab/duplicates".equals(uri) && "POST".equals(method)) {
+            if (body == null || !body.has("column")) {
+                return errorResult("Missing 'column'");
+            }
+            String target = body.has("target") ? body.get("target").getAsString() : "node";
+            boolean cs = body.has("case_sensitive") && body.get("case_sensitive").getAsBoolean();
+            return service.detectDuplicates(target, body.get("column").getAsString(), cs);
+        }
+
+        if ("/datalab/merge-nodes".equals(uri) && "POST".equals(method)) {
+            if (body == null || !body.has("ids")) {
+                return errorResult("Missing 'ids'");
+            }
+            java.util.List<String> ids = GSON.fromJson(body.get("ids"), java.util.List.class);
+            String into = body.has("into") ? body.get("into").getAsString() : null;
+            return service.mergeNodes(ids, into);
+        }
+
+        if ("/datalab/regex-column".equals(uri) && "POST".equals(method)) {
+            if (body == null || !body.has("column") || !body.has("new_column") || !body.has("regex")) {
+                return errorResult("Missing 'column', 'new_column', or 'regex'");
+            }
+            String target = body.has("target") ? body.get("target").getAsString() : "node";
+            return service.createRegexColumn(target, body.get("column").getAsString(),
+                body.get("new_column").getAsString(), body.get("regex").getAsString());
+        }
+
+        // ─── Timeline (read-only) ────────────────────────────────────
+        // NOTE: there is deliberately NO write endpoint here. Driving Gephi's
+        // timeline from outside (setInterval/setEnabled, or a time-derived
+        // setVisibleView) wedges the EDT, and Gephi's own shutdown runs on the
+        // EDT — so a wedged timeline op makes the app impossible to quit
+        // normally (Force Quit only). getTimeline is a pure read and is safe.
+
+        if ("/timeline".equals(uri) && "GET".equals(method)) {
+            return service.getTimeline();
+        }
+
+        // ─── Edge Appearance ────────────────────────────────────────
+
+        if ("/appearance/edge/thickness-by-weight".equals(uri) && "POST".equals(method)) {
+            float minThickness = body != null && body.has("min_thickness")
+                ? body.get("min_thickness").getAsFloat() : 1f;
+            float maxThickness = body != null && body.has("max_thickness")
+                ? body.get("max_thickness").getAsFloat() : 5f;
+            return service.setEdgeThicknessByWeight(minThickness, maxThickness);
+        }
+
+        // ─── Preview ─────────────────────────────────────────────────
+
+        if ("/preview/settings".equals(uri) && "GET".equals(method)) {
+            return service.getPreviewSettings();
+        }
+
+        if ("/preview/settings".equals(uri) && "POST".equals(method)) {
+            if (body == null) {
+                return errorResult("Missing request body");
+            }
+            // Body shape is flat {property: value}; unwrap the common client
+            // mistake of nesting everything under a "settings" key so it does
+            // not get stored as a junk preview property named "settings".
+            JsonObject effective = body;
+            if (body.size() == 1 && body.has("settings") && body.get("settings").isJsonObject()) {
+                effective = body.getAsJsonObject("settings");
+            }
+            Map<String, Object> settings = GSON.fromJson(effective, Map.class);
+            return service.setPreviewSettings(settings);
+        }
+
+        // ─── Export ──────────────────────────────────────────────────
+
+        if ("/export/gexf".equals(uri) && "POST".equals(method)) {
+            // no "file" (or inline:true) -> return the GEXF as a string in "content"
+            if (body == null || !body.has("file")
+                || (body.has("inline") && body.get("inline").getAsBoolean())) {
+                return service.exportGexfContent(visibleBody(body, true));
+            }
+            return service.exportGexf(body.get("file").getAsString(), visibleBody(body, true));
+        }
+
+        if ("/export/format".equals(uri) && "POST".equals(method)) {
+            if (body == null || !body.has("file") || !body.has("format")) {
+                return errorResult("Missing 'file' or 'format'");
+            }
+            return service.exportByFormat(body.get("file").getAsString(), body.get("format").getAsString(),
+                visibleBody(body, true));
+        }
+
+        if ("/export/png".equals(uri) && "POST".equals(method)) {
+            if (body == null || !body.has("file")) {
+                return errorResult("Missing 'file'");
+            }
+            String file = body.get("file").getAsString();
+            int w = body.has("width") ? body.get("width").getAsInt() : 1920;
+            int h = body.has("height") ? body.get("height").getAsInt() : 1080;
+            return service.exportPng(file, w, h);
+        }
+
+        if ("/export/screenshot".equals(uri) && "POST".equals(method)) {
+            if (body == null || !body.has("file")) {
+                return errorResult("Missing 'file'");
+            }
+            String file = body.get("file").getAsString();
+            int scale = body.has("scale") ? body.get("scale").getAsInt() : 2;
+            boolean transparent = body.has("transparent_background")
+                && body.get("transparent_background").getAsBoolean();
+            return service.exportScreenshot(file, scale, transparent);
+        }
+
+        if ("/export/pdf".equals(uri) && "POST".equals(method)) {
+            if (body == null || !body.has("file")) {
+                return errorResult("Missing 'file'");
+            }
+            return service.exportPdf(body.get("file").getAsString());
+        }
+
+        if ("/export/svg".equals(uri) && "POST".equals(method)) {
+            if (body == null || !body.has("file")) {
+                return errorResult("Missing 'file'");
+            }
+            return service.exportSvg(body.get("file").getAsString());
+        }
+
+        if ("/export/graphml".equals(uri) && "POST".equals(method)) {
+            if (body == null || !body.has("file")) {
+                return errorResult("Missing 'file'");
+            }
+            return service.exportGraphml(body.get("file").getAsString(), visibleBody(body, true));
+        }
+
+        if ("/export/csv".equals(uri) && "POST".equals(method)) {
+            if (body == null || !body.has("file")) {
+                return errorResult("Missing 'file'");
+            }
+            String file = body.get("file").getAsString();
+            String separator = body.has("separator") ? body.get("separator").getAsString() : ",";
+            String target = body.has("target") ? body.get("target").getAsString() : "nodes";
+            return service.exportCsv(file, separator, target);
+        }
+
+        // ─── Import ──────────────────────────────────────────────────
+
+        if ("/import/gexf".equals(uri) && "POST".equals(method)) {
+            if (body == null || !body.has("file")) {
+                return errorResult("Missing 'file'");
+            }
+            return service.importFile(body.get("file").getAsString(), floatOrNull(body, "max_node_size"),
+                body.has("mode") ? body.get("mode").getAsString() : null);
+        }
+
+        if ("/import/graphml".equals(uri) && "POST".equals(method)) {
+            if (body == null || !body.has("file")) {
+                return errorResult("Missing 'file'");
+            }
+            return service.importFile(body.get("file").getAsString(), floatOrNull(body, "max_node_size"),
+                body.has("mode") ? body.get("mode").getAsString() : null);
+        }
+
+        if ("/import/csv".equals(uri) && "POST".equals(method)) {
+            if (body == null || !body.has("file")) {
+                return errorResult("Missing 'file'");
+            }
+            return service.importFile(body.get("file").getAsString(), floatOrNull(body, "max_node_size"),
+                body.has("mode") ? body.get("mode").getAsString() : null);
+        }
+
+        if ("/import/file".equals(uri) && "POST".equals(method)) {
+            if (body == null || !body.has("file")) {
+                return errorResult("Missing 'file'");
+            }
+            return service.importFile(body.get("file").getAsString(), floatOrNull(body, "max_node_size"),
+                body.has("mode") ? body.get("mode").getAsString() : null);
+        }
+
+        if ("/graph/generate".equals(uri) && "POST".equals(method)) {
+            if (body == null || !body.has("model") || !body.has("nodes")) {
+                return errorResult("Missing 'model' or 'nodes'");
+            }
+            Float k = floatOrNull(body, "edges_per_node");
+            Long seed = body.has("seed") && !body.get("seed").isJsonNull() ? body.get("seed").getAsLong() : null;
+            Double p = body.has("wiring_probability") && !body.get("wiring_probability").isJsonNull()
+                ? body.get("wiring_probability").getAsDouble() : null;
+            return service.generateGraph(body.get("model").getAsString(), body.get("nodes").getAsInt(),
+                k == null ? null : k.intValue(), p, seed);
+        }
+
+        return errorResult("Unknown endpoint: " + method + " " + uri);
+    }
+
+    /**
+     * Reads an optional {@code visible} query parameter. When absent the endpoint keeps the
+     * view it has always used, so wiring this changes no existing caller. Every affected
+     * response also states which view it used and whether a filter is active, so the two
+     * can no longer disagree silently.
+     */
+    static Double doubleParamOrNull(String v) {
+        if (v == null || v.isBlank()) {
+            return null;
+        }
+        try {
+            return Double.parseDouble(v.trim());
+        } catch (NumberFormatException e) {
+            return null;
+        }
+    }
+
+    static boolean visibleParam(Map<String, String> params, boolean dflt) {
+        String v = params == null ? null : params.get("visible");
+        if (v == null) {
+            return dflt;
+        }
+        String t = v.trim();
+        if (t.isEmpty()) {
+            return dflt;
+        }
+        if ("true".equalsIgnoreCase(t) || "1".equals(t)) {
+            return true;
+        }
+        if ("false".equalsIgnoreCase(t) || "0".equals(t)) {
+            return false;
+        }
+        // Anything else is not a decision. Falling back to the endpoint's default beats
+        // reading unrecognised text as "false", which would silently switch an export
+        // from the filtered graph to the whole graph on a typo.
+        return dflt;
+    }
+
+    /** The {@code visible} flag from a JSON body, defaulting to the endpoint's historical view. */
+    static boolean visibleBody(JsonObject body, boolean dflt) {
+        if (body == null || !body.has("visible") || body.get("visible").isJsonNull()) {
+            return dflt;
+        }
+        com.google.gson.JsonElement e = body.get("visible");
+        // Only a real JSON boolean decides. Gson would read the string "banana" as false,
+        // which is the same silent-switch trap the query parameter avoids above.
+        if (e.isJsonPrimitive() && e.getAsJsonPrimitive().isBoolean()) {
+            return e.getAsBoolean();
+        }
+        return dflt;
+    }
+
+    /**
+     * The module's own version, read from the manifest the build generates from the POM.
+     * A literal here drifts from the POM the first time someone bumps one and not the other,
+     * and the drift is invisible until a user reports the wrong version.
+     */
+    static String moduleVersion() {
+        try {
+            org.openide.modules.ModuleInfo info =
+                org.openide.modules.Modules.getDefault().ownerOf(GephiAPIServer.class);
+            if (info != null && info.getSpecificationVersion() != null) {
+                return info.getSpecificationVersion().toString();
+            }
+        } catch (Throwable t) {
+            // Not running inside the platform (unit tests, or a future API change).
+        }
+        String fromPackage = GephiAPIServer.class.getPackage() == null
+            ? null : GephiAPIServer.class.getPackage().getImplementationVersion();
+        return fromPackage != null ? fromPackage : "unknown";
+    }
+
+    /**
+     * The running Gephi's version: the specification version of its project API module, which
+     * Gephi releases carry as the Gephi version. Null when it cannot be read. Outside Gephi's
+     * module system (unit tests) it is read from that module's jar manifest.
+     */
+    static String gephiVersion() {
+        Class<?> api = org.gephi.project.api.ProjectController.class;
+        try {
+            org.openide.modules.ModuleInfo module = org.openide.modules.Modules.getDefault().ownerOf(api);
+            if (module != null && module.getSpecificationVersion() != null) {
+                return module.getSpecificationVersion().toString();
+            }
+        } catch (Throwable ignore) { /* outside Gephi's module system */
+        }
+        try {
+            java.net.URL jar = api.getProtectionDomain().getCodeSource().getLocation();
+            try (java.util.jar.JarFile f = new java.util.jar.JarFile(new java.io.File(jar.toURI()))) {
+                return f.getManifest().getMainAttributes().getValue("OpenIDE-Module-Specification-Version");
+            }
+        } catch (Exception ignore) {
+            return null;
+        }
+    }
+
+    /** An optional float from a JSON body, or null when absent or not a number. */
+    static boolean bool(JsonObject body, String key) {
+        return body != null && body.has(key) && !body.get(key).isJsonNull() && body.get(key).getAsBoolean();
+    }
+
+    static String str(JsonObject body, String key) {
+        return body != null && body.has(key) && !body.get(key).isJsonNull() ? body.get(key).getAsString() : null;
+    }
+
+    static Float floatOrNull(JsonObject body, String key) {
+        if (body == null || !body.has(key) || body.get(key).isJsonNull()) {
+            return null;
+        }
+        try {
+            return body.get(key).getAsFloat();
+        } catch (RuntimeException e) {
+            return null;
+        }
+    }
+
+    private int parseIntParam(String value, int defaultValue) {
+        if (value == null) {
+            return defaultValue;
+        }
+        try {
+            return Integer.parseInt(value);
+        } catch (NumberFormatException e) {
+            return defaultValue;
+        }
+    }
+
+    private JsonObject errorResult(String message) {
+        JsonObject result = new JsonObject();
+        result.addProperty("success", false);
+        result.addProperty("error", message);
+        return result;
+    }
+
+    public void startServer() throws IOException {
+        httpServer = HttpServer.create(new InetSocketAddress("127.0.0.1", port), 0);
+        httpServer.createContext("/", this);
+        // Daemon threads: the listener must never keep the JVM alive on Gephi
+        // shutdown. With non-daemon threads, a missed/slow stop() would hang close.
+        executor = Executors.newCachedThreadPool(r -> {
+            Thread t = new Thread(r, "Gephi-AI-HTTP");
+            t.setDaemon(true);
+            return t;
+        });
+        httpServer.setExecutor(executor);
+        httpServer.start();
+        LOGGER.info("Gephi AI API started on http://127.0.0.1:" + getListeningPort());
+    }
+
+    /**
+     * Stops the HTTP listener only, leaving the shared {@link GephiControlService} singleton
+     * alone. Kept separate from {@link #stopServer()} so a test can tear down its own listener
+     * without shutting down state other tests in the suite may still rely on.
+     */
+    public void stop() {
+        if (httpServer != null) {
+            // Up to one second for a request still being answered; the Installer bounds the whole stop at three.
+            httpServer.stop(1);
+            httpServer = null;
+        }
+        if (executor != null) {
+            executor.shutdownNow();
+            executor = null;
+        }
+    }
+
+    public void stopServer() {
+        stop();
+        service.shutdown();
+        LOGGER.info("Gephi AI API stopped");
+    }
+
+    /** True while the HTTP listener is bound and accepting connections. */
+    public boolean isAlive() {
+        return httpServer != null;
+    }
+
+    /** The bound port, or -1 when the server has not been started. */
+    public int getListeningPort() {
+        HttpServer s = httpServer;
+        return s != null ? s.getAddress().getPort() : -1;
+    }
+}
