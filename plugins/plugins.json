@@ -860,7 +860,7 @@
         }
       ],
       "category": "Layout",
-      "last_update": "September 26, 2026",
+      "last_update": "November 8, 2026",
       "images": [
         {
           "image": "imgs/force-atlas-3d/fa3d.png",
@@ -889,9 +889,9 @@
           "plugin_version": "1.2.1"
         },
         "0.11.3": {
-          "url": "0.11/force-atlas-3d-1.2.1.nbm",
-          "last_update": "September 26, 2026",
-          "plugin_version": "1.2.1"
+          "url": "0.11/force-atlas-3d-1.2.2.nbm",
+          "last_update": "November 8, 2026",
+          "plugin_version": "1.2.2"
         }
       },
       "sourcecode": "https://github.com/gephi/gephi-plugins/tree/force-atlas3d-plugin",
@@ -2756,7 +2756,7 @@
         }
       ],
       "category": "Layout",
-      "last_update": "September 26, 2026",
+      "last_update": "November 8, 2026",
       "images": [
         {
           "image": "imgs/gravity-plugin/FA2snake.png",
@@ -2803,9 +2803,9 @@
           "plugin_version": "1.0.0"
         },
         "0.11.3": {
-          "url": "0.11/gravity-plugin-1.0.0.nbm",
-          "last_update": "September 26, 2026",
-          "plugin_version": "1.0.0"
+          "url": "0.11/gravity-plugin-1.0.1.nbm",
+          "last_update": "November 8, 2026",
+          "plugin_version": "1.0.1"
         }
       },
       "sourcecode": "https://github.com/suryanash/gephi-plugins",
@@ -4460,7 +4460,7 @@
         }
       ],
       "category": "Layout",
-      "last_update": "September 26, 2026",
+      "last_update": "November 8, 2026",
       "images": [
         {
           "image": "imgs/orderedlayout/img.png",
@@ -4479,9 +4479,9 @@
           "plugin_version": "1.0.0"
         },
         "0.11.3": {
-          "url": "0.11/orderedlayout-1.0.0.nbm",
-          "last_update": "September 26, 2026",
-          "plugin_version": "1.0.0"
+          "url": "0.11/orderedlayout-1.0.1.nbm",
+          "last_update": "November 8, 2026",
+          "plugin_version": "1.0.1"
         }
       },
       "sourcecode": "https://github.com/WouterSpekkink/gephi-plugins",
@@ -4624,6 +4624,46 @@
       },
       "sourcecode": "https://github.com/gephi/gephi-plugins/weighted-bridging-centrality",
       "homepage": null
+    },
+    {
+      "id": "shape-by-partition",
+      "name": "Shape by Partition",
+      "short_description": "Assign node shape automatically from a categorical attribute, the shape equivalent of color by partition.",
+      "long_description": "Renders each node as one of eight shapes (circle, square, triangle, diamond, star, cross, downward triangle, and hexagon) chosen by its value in a categorical node column. Every shape matches the area of the circle it replaces, so node size reads the same across categories, and corners are softened so small marks stay clean.\u003cp\u003eCategories are ordered by node count, largest first, which is the same order the Appearance panel uses when it assigns colors to a partition. Coloring and shaping by the same column therefore agree.\u003c/p\u003e\u003cp\u003eNodes with no value in the column are drawn as circles, and color, size, border, and opacity are left to the default renderer.\u003c/p\u003e\u003cp\u003eShape is worth spending when colour and position cannot carry the variable: on an attribute that cuts across the clusters rather than naming them, and that does not already track node size. It is also the encoding that survives greyscale printing and colourblind readers, where a colour palette collapses.\u003c/p\u003e\u003cp\u003eA legend beside the graph says which shape stands for which category, in the preview and in exports. Name the column the node colours encode in \"Colour legend column\" and the legend explains colour as well, when that column matches the colours exactly.\u003c/p\u003e\u003cp\u003eShapes appear in Preview and its PNG, SVG and PDF exports. The Overview window keeps drawing circles, because it is drawn by a separate engine this plugin does not extend.\u003c/p\u003e\u003cp\u003eIf you also use Polygon Shaped Nodes or another plugin that draws nodes or arrows, choose which one draws them in Preview \u003e Manage Renderers.\u003c/p\u003e\u003cp\u003eEdges and arrowheads meet each shape\u0027s outline, not the circle Gephi assumes, so arrows stay visible and point at the shape.\u003c/p\u003e\u003cp\u003eThe renderer replaces the built-in node renderer on install, so there is nothing to enable. Set \"Shape partition column\" in the Preview settings under Nodes, then refresh. Leaving it empty reads a column named shape_partition instead, so a dataset that carries that column is shaped on import with nothing to configure.\u003c/p\u003e",
+      "readme": "## Shape by Partition\n\nAssign node shape automatically from a categorical attribute, the shape\nequivalent of color by partition.\n\nGephi can already map a partition onto node color. It cannot map one onto node\nshape, because a node has no shape property: shape only exists at render time.\nThis plugin adds a Preview renderer that reads a categorical node column and\ndraws each node as the shape assigned to its category.\n\n![Five communities coloured by group and shaped by a role that cuts across them](src/img/network.png)\n\n### What it covers\n\n| | Shapes? |\n|---|---|\n| **Preview** tab | Yes |\n| PNG, SVG, and PDF exports | Yes, with a legend |\n| **Overview** (the main graph window) | **No.** Nodes there stay circles. |\n| **Appearance** panel | No. Shapes are set in Preview, from a column. |\n| Saved `.gephi` projects and GEXF files | The column is saved, so the shapes come back when the file is reopened. GEXF\u0027s own `viz:shape` field is not written or read. |\n\nCircles in Overview are not a bug. Overview is drawn by a separate OpenGL\nengine that this plugin does not extend, and Gephi has no shape property on\nnodes that Overview could read, so the shapes exist only where Preview draws\nthe graph. Overview is for exploring; the figure you publish comes from\nPreview, and that is where the shapes are.\n\n### Using it\n\n1. Open the **Preview** tab.\n2. Under **Nodes**, set **Shape partition column** to the name of the node\n   column holding the categories.\n3. Refresh.\n\nA legend appears beside the graph, saying which shape stands for which\ncategory. Turn it off with **Shape legend**, or give it a heading with **Shape\nlegend title** (left empty, it uses the column\u0027s title). Both are under\n**Nodes**.\n\nWhen colour encodes a different column from shape, name that column in\n**Colour legend column** and the legend adds its colours below the shapes. One\nkey then explains both, for example shape for discipline and colour for project\ngroup. **Colour legend title** gives that section a heading (left empty, it\nuses the column\u0027s title).\n\nOr set nothing: with the column field empty the renderer reads a node column\nnamed `shape_partition`. A file that ships that column is shaped on import with\nnothing to configure, and any tool that can write a node attribute can drive\nthe plugin without touching Preview properties at all. A name that *is* given\nand does not resolve is never quietly replaced by the convention, because a map\nthat looks right and means something else is worse than circles.\n\n### Other plugins that draw nodes or arrows\n\n\u003e **If you also use Polygon Shaped Nodes, or any other plugin that draws nodes\n\u003e or arrows, only one of them can be on at a time.** Choose which in\n\u003e **Preview \u003e Manage Renderers**. If shapes do not appear after installing this\n\u003e plugin, check there first.\n\nThis plugin replaces two of Gephi\u0027s built-in Preview renderers and adds one:\n\n| Renderer | What it does | Replaces |\n|---|---|---|\n| Shape by Partition | Draws each node as its category\u0027s shape | Gephi\u0027s node renderer |\n| Arrows (Shape by Partition) | Ends edges and arrowheads on each shape\u0027s outline | Gephi\u0027s arrow renderer |\n| Shape legend (Shape by Partition) | Draws the key beside the graph | Nothing; it is new |\n\nReplacing is what makes it work with nothing to enable: when a plugin renderer\nextends a built-in one, Gephi drops the built-in, so the two never draw the\nsame node twice. Without the arrow renderer, an arrowhead stops short of a\ntriangle\u0027s base or disappears under a star\u0027s point, and the edge\u0027s direction is\nlost. Edges to circular nodes are drawn exactly as before.\n\nWhen two installed plugins replace the same built-in renderer, Gephi turns on\nonly the one with the lowest service position and leaves the other off. This\nplugin registers its node renderer at 310 and its arrow renderer at 210.\n\n### When shape is worth spending\n\nShape is a low-capacity channel. Spend it only where it buys something colour\nand position cannot, or it is decoration that costs legibility. Four questions,\nin order:\n\n1. **Does the layout already show this?** If the attribute is the community\n   structure, the layout has drawn it and colour has reinforced it. A third\n   encoding of the same variable adds nothing.\n2. **Is it independent of degree?** If the categories differ systematically in\n   degree, node size already separates them and shape is redundant again. This\n   is the trap that is easiest to miss, because it looks like a success: the\n   categories *are* visually distinct, just not because of their shape.\n3. **Is colour already spent?** Shape earns its place when colour is carrying a\n   different variable, so the map holds two facts instead of one.\n4. **Does anyone need to locate these categories in the structure?** Shape is\n   good at \"where do the X sit relative to the clusters\", which is a homophily\n   or contamination question. It is poor at comparing quantities.\n\nThe strongest case is the one that survives all four: an attribute that is\ncategorical, spatially mixed, degree-independent, and analytically wanted. In\nGephi terms, if a partition-quality check reports the attribute as **not**\nmatching the topology, and you still want to see it, shape is the channel left.\n\nAttributes drawn from observational data often fail question 2, because the\nsame process that generates a category generates degree: institutions have more\nfollowers and are institutions, managers are hubs and are managers. Check the\nmean degree per category before committing the channel.\n\n### The case that needs no argument: greyscale and colourblind readers\n\nColour distinctions collapse in greyscale, and a great many figures are still\nprinted that way. Shape survives.\n\nMeasured on a real published palette of seven categories, converted with the\nstandard luminance weights, four had a near-twin:\n\n| Pair | Distance out of 255 |\n|---|---|\n| closest | 1.7 |\n| next | 5.1 |\n| next | 5.8 |\n| next | 11.5 |\n\nTwo categories 1.7 apart are the same grey. In the same image every shape\nremained readable. If a figure has to work in print, shape is not a nicety.\n\n### How categories become shapes\n\nCategories are ordered by node count, largest first, and take shapes in this\norder:\n\n![The eight shapes, in the order categories receive them](src/img/shapes.png)\n\n| Order | Shape |\n|---|---|\n| 1 | Circle |\n| 2 | Square |\n| 3 | Triangle |\n| 4 | Diamond |\n| 5 | Star |\n| 6 | Cross |\n| 7 | Triangle, pointing down |\n| 8 | Hexagon |\n\nThe order puts the most distinct outlines first. The first five are the ones\ngephi/gephi#1291 asked for. The cross comes next because nothing else has its\nsilhouette. The downward triangle and the hexagon come last: one differs from\nan earlier shape only by orientation, and the other is the closest to a circle\nonce nodes are small.\n\nThat is the same ordering rule the Appearance panel uses when it assigns colors\nto a partition, so coloring and shaping by the same column agree with each\nother: the largest category takes both the first color and the first shape.\nTies in count are broken by the value itself, so the assignment does not move\nbetween runs.\n\nNodes with no value in the column are drawn as circles by the default renderer,\nwith their color, size, border, and opacity untouched.\n\nThe column name is matched against column ids first and column titles second,\nbecause the Data Laboratory shows titles and an import can leave the two\ndifferent: a GEXF attribute declared `\u003cattribute id\u003d\"0\" title\u003d\"team\"/\u003e`\nproduces a column titled \"team\" whose id is \"0\". A name matching neither leaves\nthe graph drawn as circles, and says so in the log.\n\n### Limits worth knowing\n\n- **Five categories, not eight.** The vocabulary holds eight, but readers stop\n  telling outlines apart well before that, especially at small node sizes. Past\n  eight, shapes repeat and two categories become indistinguishable. The plugin\n  logs a warning in both cases. Group the small categories first.\n- **Shape needs marks at roughly 3% of the layout extent.** This is the\n  practical ceiling, and it is a ratio, not a resolution. A network drawn with\n  its largest node under 1% of the extent renders shape as coloured dots no\n  matter how many pixels the export has. Measured on one network at two\n  densities:\n\n  | | Full network | Filtered |\n  |---|---|---|\n  | Nodes | 2,929 | 849 |\n  | Layout extent | 9,755 | 3,215 |\n  | Largest node | 75 | 105 |\n  | Node as share of extent | 0.8% | 3.3% |\n  | Smallest mark at export | ~5 px | ~23 px |\n  | Shape readable | no | yes |\n\n  The fix is fewer nodes or a tighter layout, not a larger canvas.\n- **Shapes match the circle\u0027s area, not its outline.** Readers judge the size\n  of a mark by its area, so a square and a circle of the same node size should\n  look the same size. Shapes drawn inside the circle instead look smaller, from\n  a third smaller for a square to a speck for a star, and node size stops\n  meaning the same thing across categories. Shapes with corners are then\n  trimmed a little, by at most a sixth of the area, because a triangle at full\n  area looks heavier than the circle beside it. The cost is that a triangle\u0027s\n  tip or a star\u0027s points reach slightly past the node\u0027s circle.\n- **Corners are softened**, and borders join round. Sharp vertices are where\n  small marks look jagged, and where a thick border draws a spike past the\n  node.\n- **The column is named, not picked from a list.** Preview properties are typed\n  values rather than live column choosers, so the column name is typed in.\n\n### The legend\n\n![The legend beside a graph whose colour and shape both encode role](src/img/legend.png)\n\nGephi\u0027s exports carry no key, and tools that build one from Gephi\u0027s own colour\nand size mappings cannot see shapes, so the plugin draws its own. It is built\nfrom the same assignment the nodes are drawn with, so it cannot disagree with\nthe map.\n\n- **Placement.** Beside the graph, to the right and level with its top, so it\n  never covers a node. Exports grow to make room for it.\n- **Order.** Largest category first, the order the shapes were assigned in.\n- **Colour.** When every category has one colour of its own, as when colour and\n  shape encode the same column, the symbols take those colours and the key\n  explains both. Otherwise the symbols are grey, so the key does not suggest a\n  colour meaning that is not there.\n- **Colour section.** With **Colour legend column** set, a second section\n  below the shapes lists that column\u0027s groups with their colours, as circles,\n  largest first. It is drawn only when the column explains the colours exactly:\n  every group in one colour and no colour shared by two groups. Otherwise it\n  stays off and the log says which group or colour broke the match. Gephi does\n  not record which column the colours came from, and a detected community and\n  the grouping it recovers can split the nodes identically, so the column is\n  named rather than guessed.\n- **No value.** Nodes without a value are drawn as circles, like the first\n  category. The key lists them as \"no value\" so a reader can tell.\n- **Long partitions.** After 16 rows the rest are counted (\"+ 4 more\"), not\n  listed.\n- **Scale and type.** Symbols are about as large as a typical node, within\n  limits that keep them legible on a graph of tiny nodes. Text uses the node\n  label font, and turns light on a dark background.\n- **SVG.** The key is its own group, `\u003cg id\u003d\"shape-legend\"\u003e`, so it can be\n  moved or restyled in a vector editor.\n\n### Output\n\nThe renderers draw to the on-screen preview and to the SVG, PDF, and PNG\nexports, legend included.\n\n### Building\n\nFrom the repository root:\n\n```bash\nmvn -pl modules/ShapeByPartition clean package\n```\n\nBuild with JDK 21, as the repository\u0027s CI does. The POM enables annotation\nprocessing explicitly, because from JDK 23 javac no longer runs processors by\ndefault and the `@ServiceProvider` registration would be silently left out of\nthe jar, producing a plugin that installs and never appears.\n\n### Licence\n\nApache License 2.0. See `LICENSE.txt`.\n",
+      "license": "Apache 2.0",
+      "authors": [
+        {
+          "name": "Matt Artz",
+          "email": null,
+          "link": "https://www.mattartz.me"
+        }
+      ],
+      "category": "Preview",
+      "last_update": "November 8, 2026",
+      "images": [
+        {
+          "image": "imgs/shape-by-partition/legend.png",
+          "thumbnail": "imgs/shape-by-partition/legend-thumbnail.png"
+        },
+        {
+          "image": "imgs/shape-by-partition/network.png",
+          "thumbnail": "imgs/shape-by-partition/network-thumbnail.png"
+        },
+        {
+          "image": "imgs/shape-by-partition/shapes.png",
+          "thumbnail": "imgs/shape-by-partition/shapes-thumbnail.png"
+        }
+      ],
+      "versions": {
+        "0.11.3": {
+          "url": "0.11/shape-by-partition-1.2.0.nbm",
+          "last_update": "November 8, 2026",
+          "plugin_version": "1.2.0"
+        }
+      },
+      "sourcecode": "https://github.com/gephi/gephi-plugins/tree/master-forge/modules/ShapeByPartition",
+      "homepage": "https://github.com/gephi/gephi-plugins/tree/master-forge/modules/ShapeByPartition"
     }
   ]
 }
