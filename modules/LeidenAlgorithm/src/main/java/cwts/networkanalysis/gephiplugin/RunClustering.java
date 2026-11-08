@@ -7,9 +7,7 @@ import cwts.networkanalysis.LouvainAlgorithm;
 import cwts.networkanalysis.Network;
 import cwts.util.DynamicDoubleArray;
 import cwts.util.DynamicIntArray;
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Random;
 import org.gephi.graph.api.Column;
 import org.gephi.graph.api.Edge;
@@ -98,10 +96,11 @@ public class RunClustering implements Statistics, LongTask
         DynamicDoubleArray edgeWeights = new DynamicDoubleArray(graph.getEdgeCount());
 
         // The network needs consecutive node indices, which the store ids are not in a filtered view
-        Map<Integer, Integer> nodeIndices = new HashMap<>();
+        int[] nodeIndices = new int[gm.getMaxNodeStoreId()];
+        int index = 0;
         for (Node node : graph.getNodes())
         {
-            nodeIndices.put(node.getStoreId(), nodeIndices.size());
+            nodeIndices[node.getStoreId()] = index++;
         }
 
         for (Node node : graph.getNodes())
@@ -120,8 +119,8 @@ public class RunClustering implements Statistics, LongTask
                     // The algorithms need positive weights, other edges are left out
                     if (w > 0.0)
                     {
-                        edges[0].append(nodeIndices.get(node.getStoreId()));
-                        edges[1].append(nodeIndices.get(neighbor.getStoreId()));
+                        edges[0].append(nodeIndices[node.getStoreId()]);
+                        edges[1].append(nodeIndices[neighbor.getStoreId()]);
                         edgeWeights.append(w);
                     }
                 }
@@ -195,7 +194,7 @@ public class RunClustering implements Statistics, LongTask
         saveClustering(graph, nodeIndices);
     }
 
-    private void saveClustering(Graph graph, Map<Integer, Integer> nodeIndices)
+    private void saveClustering(Graph graph, int[] nodeIndices)
     {
         graph.readLock();
         Table nodeTable = graph.getModel().getNodeTable();
@@ -207,7 +206,7 @@ public class RunClustering implements Statistics, LongTask
 
         for (Node n : graph.getNodes())
         {
-            n.setAttribute(modCol, clustering.getCluster(nodeIndices.get(n.getStoreId())));
+            n.setAttribute(modCol, clustering.getCluster(nodeIndices[n.getStoreId()]));
         }
         graph.readUnlock();
     }
