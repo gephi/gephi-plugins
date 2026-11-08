@@ -89,6 +89,10 @@ public class HairballBuster implements Layout {
 
         List<Node> nodeList = new ArrayList<>(0);
         nodeList.addAll(Arrays.asList(graph.getNodes().toArray()));
+        if (nodeList.isEmpty()) {
+            // Nothing to plot, and the axes are drawn from the first and last node
+            return;
+        }
 
         if (natural) {
             saveGraphLayout(nodeList, graph);
