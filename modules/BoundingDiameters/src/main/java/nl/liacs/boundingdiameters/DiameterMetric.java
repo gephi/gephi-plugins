@@ -83,6 +83,15 @@ public class DiameterMetric implements Statistics, LongTask{
         
         Graph graph = graphModel.getUndirectedGraph();
 
+        if (graph.getNodeCount() == 0) {
+            // No component to look for the giant one in, the report is built from empty results
+            eccLower = new int[0];
+            diameter = 0;
+            radius = 0;
+            peripherySize = 0;
+            centerSize = 0;
+            return;
+        }
         
         initializeStartValues(graph);
         
