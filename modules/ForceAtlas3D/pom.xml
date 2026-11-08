@@ -9,7 +9,7 @@
 
     <groupId>net.clementlevallois</groupId>
     <artifactId>force-atlas-3d</artifactId>
-    <version>1.2.1</version>
+    <version>1.2.2</version>
     <packaging>nbm</packaging>
 
     <name>ForceAtlas3D</name>
