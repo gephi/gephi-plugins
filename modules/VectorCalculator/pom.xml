@@ -9,7 +9,7 @@
 
     <groupId>personable.solutions</groupId>
     <artifactId>vector-calculator</artifactId>
-    <version>0.5.0</version>
+    <version>0.5.1</version>
     <packaging>nbm</packaging>
 
     <name>VectorCalculator</name>

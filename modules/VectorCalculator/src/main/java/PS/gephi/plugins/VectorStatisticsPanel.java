@@ -12,11 +12,14 @@ import org.openide.util.Lookup;
 public class VectorStatisticsPanel extends javax.swing.JPanel {
 
     public String getLatitudeColumnName() {
-        return ddlLat.getSelectedItem().toString();
+        // Nothing is selected when the graph has no numeric column
+        Object item = ddlLat.getSelectedItem();
+        return item == null ? null : item.toString();
     }
 
     public String getLongitudeColumnName() {
-        return ddlLon.getSelectedItem().toString();
+        Object item = ddlLon.getSelectedItem();
+        return item == null ? null : item.toString();
     }
 
     public VectorStatisticsPanel() {
