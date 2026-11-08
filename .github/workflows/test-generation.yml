@@ -49,7 +49,23 @@ jobs:
           grep -q '<module>modules/CiIntegrationTestPlugin</module>' pom.xml
 
       - name: Build, validate and generate the autoupdate site
-        run: mvn -B package -P release --file pom.xml
+        run: mvn -B install -P release --file pom.xml
+
+      # The fixture implements no SPI, so this runs no test cases: it checks the contract-test
+      # harness still resolves gephi-plugins-tests and gephi-plugin-parent for this gephi.version.
+      - name: Run SPI contract tests against the fixture
+        run: .github/contract-tests/run.sh modules/CiIntegrationTestPlugin
+
+      # Positive control: core Gephi's layout-plugin implements a covered SPI, so the harness must
+      # run actual test cases against it. Guards against the harness silently testing nothing.
+      - name: Check the contract-test harness runs test cases
+        run: |
+          set -e
+          GEPHI_VERSION=$(sed -nE 's/.*<gephi\.version>(.*)<\/gephi\.version>.*/\1/p' pom.xml | head -1)
+          rm -rf .github/contract-tests/target
+          mvn -B -f .github/contract-tests/pom.xml test -Dgephi.version="$GEPHI_VERSION" \
+            -Dplugin.groupId=org.gephi -Dplugin.artifactId=layout-plugin -Dplugin.version="$GEPHI_VERSION"
+          grep -ho 'tests="[0-9]*"' .github/contract-tests/target/surefire-reports/TEST-*.xml | grep -qv 'tests="0"'
 
       - name: Assert the generation process produced a working autoupdate site
         run: |

@@ -24,6 +24,8 @@ Requires JDK 17 and Maven.
 - Build and validate every plugin currently listed in `pom.xml`: `mvn clean package`
 - Build/test a single plugin module: `mvn -pl modules/<ModuleName> clean package`
 - Run a single module's unit tests only: `mvn -pl modules/<ModuleName> test`
+- Run the SPI contract tests CI runs (from `gephi-plugins-tests`) on a module, after `mvn install`:
+  `.github/contract-tests/run.sh modules/<ModuleName>`
 - Run Gephi with the module(s) installed (build first): `mvn org.gephi:gephi-maven-plugin:run`
 - IDE run/debug configs are defined in `nbactions.xml`; the IntelliJ debug setup (remote debugger +
   `-Drun.params.debug` VM option) is documented in `README.md`.
