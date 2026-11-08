@@ -2893,7 +2893,7 @@
         }
       ],
       "category": "Metric",
-      "last_update": "September 26, 2026",
+      "last_update": "November 8, 2026",
       "images": null,
       "versions": {
         "0.9.1": {
@@ -2927,9 +2927,9 @@
           "plugin_version": "0.5.0"
         },
         "0.11.3": {
-          "url": "0.11/vector-calculator-0.5.0.nbm",
-          "last_update": "September 26, 2026",
-          "plugin_version": "0.5.0"
+          "url": "0.11/vector-calculator-0.5.1.nbm",
+          "last_update": "November 8, 2026",
+          "plugin_version": "0.5.1"
         }
       },
       "sourcecode": "https://github.com/d99joper/gephi-plugins/tree/master/modules/VectorCalculator/",
