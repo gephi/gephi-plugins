@@ -46,10 +46,8 @@ import java.util.HashMap;
 import java.util.Map;
 import org.gephi.graph.api.Edge;
 import org.gephi.graph.api.Graph;
-import org.gephi.graph.api.GraphController;
 import org.gephi.graph.api.GraphModel;
 import org.gephi.graph.api.Node;
-import org.openide.util.Lookup;
 
 /**
  *
@@ -76,10 +74,8 @@ public class ShapeFileReader {
 
         InputStream shapes = ShapeFileReader.class.getResourceAsStream("/resources/coordinates.txt");
         InputStream shapesDistricts = ShapeFileReader.class.getResourceAsStream("/resources/Australian states.csv");
-        GraphController gc = Lookup.getDefault().lookup(GraphController.class);
-        GraphModel gm = gc.getGraphModel();
-
-        gr = gm.getGraph();
+        // The model of the graph being laid out, the current workspace's is not the one of a graph in a test or a script
+        GraphModel gm = gr.getModel();
 
         Node node;
         Edge edge;
