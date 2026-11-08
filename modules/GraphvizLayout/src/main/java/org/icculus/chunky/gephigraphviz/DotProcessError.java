@@ -101,7 +101,7 @@ public class DotProcessError extends javax.swing.JPanel {
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         Desktop desktop = Desktop.getDesktop();
         try {
-            desktop.browse(new URI("http://www.graphviz.org/"));
+            desktop.browse(new URI("https://www.graphviz.org/"));
         } catch (Exception ex) {
             ex.printStackTrace();
         }

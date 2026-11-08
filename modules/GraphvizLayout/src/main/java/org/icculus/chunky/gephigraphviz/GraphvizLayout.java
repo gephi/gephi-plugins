@@ -105,15 +105,15 @@ public class GraphvizLayout extends AbstractLayout implements Layout {
             graph.readLock();
         
             for (final Node n : this.graph.getNodes()) {
-		dotfile.append("\"").append(n.getId()).append("\"");
+                dotfile.append(n.getId());
                 dotfile.append(" [");
                 dotfile.append("pos=\"").append(n.x()).append(',').append(n.y()).append('"');
                 dotfile.append("];\n");
             }
             for (final Edge e : this.graph.getEdges()) {
-		dotfile.append("\"").append(e.getSource().getId()).append("\"");
+                dotfile.append(e.getSource().getId());
                 dotfile.append(edgearrow);
-		dotfile.append("\"").append(e.getTarget().getId()).append("\"");
+                dotfile.append(e.getTarget().getId());
                 dotfile.append(" [weight=");
                 dotfile.append(e.getWeight());
                 dotfile.append("];\n");
