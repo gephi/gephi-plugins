@@ -9,7 +9,7 @@
 
     <groupId>pl.edu.wat.wcy.student</groupId>
     <artifactId>clustering-coefficient-gephi-plugin</artifactId>
-    <version>1.0.0</version>
+    <version>1.0.1</version>
     <packaging>nbm</packaging>
 
     <name>Clustering Coefficient</name>
