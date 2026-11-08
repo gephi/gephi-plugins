@@ -201,7 +201,7 @@ public class RadialAxisLayout extends LayoutHelper implements Layout
                   }
                   if (order == 0)
                   {
-                     double noderadius = n.size();
+                     double noderadius = nodeSize(n);
                      circ += noderadius * 2;
                      SparBaseList.add(n);
                   }
@@ -230,7 +230,7 @@ public class RadialAxisLayout extends LayoutHelper implements Layout
       double[] ArraySparTheta  = new double[(int)SparArrayCount];
       for (Node n : SparBaseList)
       {
-         double noderadius = (n.size());
+         double noderadius = (nodeSize(n));
          double noderadian = (theta * noderadius * this.dScalingWidth);
          ArraySparTheta[group]  = lasttheta + noderadian;
          ArraySparLength[group] = noderadius * this.dScalingWidth;
@@ -256,7 +256,7 @@ public class RadialAxisLayout extends LayoutHelper implements Layout
                tmpsparlength = ArraySparLength[position.group];
                tmpspartheta  = ArraySparTheta[position.group];
 
-               double noderadius = (n.size());
+               double noderadius = (nodeSize(n));
                if (this.boolSparSpiral)
                {
                   nodeCoords = this.cartCoors(tmpsparlength + radius + (noderadius * this.dScalingWidth), 1, tmpspartheta + (position.order * (thetainc / SparNodeCount[position.group])));

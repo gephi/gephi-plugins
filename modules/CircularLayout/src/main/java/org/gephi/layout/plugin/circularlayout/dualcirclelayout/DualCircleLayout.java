@@ -90,11 +90,11 @@ public class DualCircleLayout extends LayoutHelper implements Layout
          {
             if (index < this.secondarynodecount)
             {
-               tmpsecondarycirc += (n.size() * 2);
+               tmpsecondarycirc += (nodeSize(n) * 2);
             }
             else
             {
-               tmpprimarycirc += (n.size() * 2);
+               tmpprimarycirc += (nodeSize(n) * 2);
             }
             index++;
          }
@@ -137,7 +137,7 @@ public class DualCircleLayout extends LayoutHelper implements Layout
             if (index < this.secondarynodecount)
             {
                //Draw secondary circle
-               double noderadius = (n.size());
+               double noderadius = (nodeSize(n));
                //This step is hackish... but it makes small numbers of nodes symetrical on both the secondary circles.
                if (secondary_scale > 2)
                {
@@ -153,7 +153,7 @@ public class DualCircleLayout extends LayoutHelper implements Layout
             }
             else
             {
-               double noderadius = (n.size());
+               double noderadius = (nodeSize(n));
                double noderadian = (primary_theta * noderadius * 1.2 * primary_scale);
                if (index == this.secondarynodecount)
                {
