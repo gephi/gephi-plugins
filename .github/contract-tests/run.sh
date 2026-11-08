@@ -6,7 +6,9 @@
 #
 # With no arguments, every module in the root pom.xml's <modules> list is tested. Otherwise only
 # NBM modules under the given folders are; a folder outside the reactor (e.g. a disabled plugin)
-# is skipped with a warning. Modules must be installed in the local Maven repository first
+# is skipped with a warning. Checks that are only advisory (e.g. a layout adding nodes) don't fail
+# the run: they are reported as warning annotations, and in the job summary when running on GitHub
+# Actions. Modules must be installed in the local Maven repository first
 # (mvn install): a module that is missing there, or was rebuilt since, fails instead of testing a
 # stale jar.
 set -euo pipefail
@@ -75,6 +77,44 @@ if [ ${#TARGETS[@]} -eq 0 ]; then
   exit 0
 fi
 
+# Advisory test warnings, one "plugin<TAB>check<TAB>message" entry each
+WARNINGS_FILE="$HARNESS_DIR/target/contract-warnings.tsv"
+WARNINGS=()
+
+# Workflow command data can't contain %, the warnings are single lines already
+annotation_escape() {
+  printf '%s' "$1" | sed -e 's/%/%25/g'
+}
+
+# Plugin names and messages come from the plugin's code, so don't let them format the summary
+markdown_escape() {
+  printf '%s' "$1" | sed -e 's/&/\&amp;/g' -e 's/</\&lt;/g' -e 's/>/\&gt;/g' -e 's/|/\\|/g' -e 's/`/\\`/g'
+}
+
+collect_warnings() {
+  [ -f "$WARNINGS_FILE" ] || return 0
+  local check message
+  while IFS=$'\t' read -r check message; do
+    WARNINGS+=("$1"$'\t'"$check"$'\t'"$message")
+    echo "::warning title=SPI contract test warning::$(annotation_escape "$1: $check: $message")"
+  done < "$WARNINGS_FILE"
+}
+
+# The jars of the modules that depend on the one being tested, installed in the local repository. A plugin split in
+# modules keeps parts of it (e.g. its user interface) in modules that depend on the main one, and the tests look
+# those up too.
+dependent_jars() {
+  local packaging group artifact version basedir repo jar
+  while IFS='|' read -r packaging group artifact version basedir _ repo; do
+    [ "$packaging" = nbm ] || continue
+    [ "$artifact" != "$1" ] || continue
+    grep -q "<artifactId>$1</artifactId>" "$basedir/pom.xml" || continue
+    jar="$repo/${group//.//}/$artifact/$version/$artifact-$version.jar"
+    [ -f "$jar" ] && echo "$jar"
+  done <<< "$PROJECTS"
+  return 0
+}
+
 PASSED=()
 FAILED=()
 for target in "${TARGETS[@]}"; do
@@ -92,19 +132,43 @@ for target in "${TARGETS[@]}"; do
     continue
   fi
 
+  EXTRA_ARGS=()
+  EXTRA_JARS=$(dependent_jars "$artifact" | paste -sd, -)
+  if [ -n "$EXTRA_JARS" ]; then
+    EXTRA_ARGS=(-Dmaven.test.additionalClasspath="$EXTRA_JARS")
+  fi
+
   rm -rf "$HARNESS_DIR/target"
   echo "::group::Contract tests: $gav"
   if mvn -B -ntp -f "$HARNESS_DIR/pom.xml" test -Dgephi.version="$GEPHI_VERSION" \
-      -Dplugin.groupId="$group" -Dplugin.artifactId="$artifact" -Dplugin.version="$version"; then
+      -Dplugin.groupId="$group" -Dplugin.artifactId="$artifact" -Dplugin.version="$version" \
+      ${EXTRA_ARGS[@]+"${EXTRA_ARGS[@]}"}; then
     echo "::endgroup::"
   else
     echo "::endgroup::"
     echo "::error::SPI contract tests failed for $gav"
+    collect_warnings "$gav"
     FAILED+=("$gav")
     continue
   fi
+  collect_warnings "$gav"
   PASSED+=("$gav")
 done
+
+if [ ${#WARNINGS[@]} -gt 0 ] && [ -n "${GITHUB_STEP_SUMMARY:-}" ]; then
+  {
+    echo "### SPI contract test warnings"
+    echo
+    echo "These checks don't fail the build, but are worth a look in review."
+    echo
+    echo "| Plugin | Check | Warning |"
+    echo "| --- | --- | --- |"
+    for warning in "${WARNINGS[@]}"; do
+      IFS=$'\t' read -r gav check message <<< "$warning"
+      echo "| $(markdown_escape "$gav") | $(markdown_escape "$check") | $(markdown_escape "$message") |"
+    done
+  } >> "$GITHUB_STEP_SUMMARY"
+fi
 
 if [ ${#PASSED[@]} -gt 0 ]; then
   echo "SPI contract tests passed for: ${PASSED[*]}"
