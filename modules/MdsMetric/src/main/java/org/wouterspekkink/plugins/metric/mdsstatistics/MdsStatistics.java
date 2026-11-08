@@ -47,6 +47,7 @@ import org.gephi.graph.api.Column;
 import org.gephi.graph.api.Graph;
 import org.gephi.graph.api.GraphModel;
 import org.gephi.graph.api.Node;
+import org.gephi.graph.api.NodeIterable;
 import org.gephi.graph.api.Edge;
 import org.gephi.statistics.spi.Statistics;
 import org.gephi.graph.api.DirectedGraph;
@@ -132,7 +133,7 @@ public class MdsStatistics implements Statistics, LongTask {
             //The conditional below prevents a Gephi-crashing error when the plugin
             //is run on an empty graph.
             if (N == 0) {
-                graph.readUnlock();
+                // The finally block releases the lock
                 return;
             }
             HashMap<Node, Integer> indicies = createIndiciesMap(graph);
@@ -200,7 +201,9 @@ public class MdsStatistics implements Statistics, LongTask {
                 int n_index = indicies.get(n);
 
                 for (int i = 0; i < numberDimensions; i++) {
-                    n.setAttribute(columns[i], output[i][n_index]);
+                    double value = output[i][n_index];
+                    // A single node has no distances to scale, which gives NaN
+                    n.setAttribute(columns[i], Double.isFinite(value) ? value : 0.0);
                 }
             }
         } finally {
@@ -217,7 +220,8 @@ public class MdsStatistics implements Statistics, LongTask {
         Progress.start(progress, graph.getNodeCount());
         int count = 0;
 
-        for (Node s : graph.getNodes()) {
+        NodeIterable nodeIterable = graph.getNodes();
+        for (Node s : nodeIterable) {
             Stack<Node> S = new Stack<Node>();
 
             LinkedList<Node>[] P = new LinkedList[n];
@@ -257,7 +261,9 @@ public class MdsStatistics implements Statistics, LongTask {
             }
             count++;
             if (isCanceled) {
-                graph.readUnlockAll();
+                // Leaving the loop early keeps the graph read-locked unless the iterable is told, execute() releases
+                // the lock it took
+                nodeIterable.doBreak();
                 return distances;
             }
             Progress.progress(progress, count);
