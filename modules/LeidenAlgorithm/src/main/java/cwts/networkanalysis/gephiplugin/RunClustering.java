@@ -40,8 +40,6 @@ public class RunClustering implements Statistics, LongTask
     protected RunClustering.QualityFunction qualityFunction = RunClustering.QualityFunction.CPM;
 
     private Clustering clustering;
-    // The network uses consecutive node indices, the ids of the nodes in a filtered view are not
-    private Map<Integer, Integer> nodeIndices;
     private double quality;
 
     private boolean isCanceled = false;
@@ -88,7 +86,7 @@ public class RunClustering implements Statistics, LongTask
         Graph graph = gm.getUndirectedGraphVisible();
         if (graph.getNodeCount() == 0)
         {
-            // The clustering algorithms can't work on a network without nodes
+            // The algorithms can't work on a network without nodes
             clustering = new Clustering(0);
             quality = 0.0;
             return;
@@ -98,9 +96,14 @@ public class RunClustering implements Statistics, LongTask
         edges[0] = new DynamicIntArray(graph.getEdgeCount());
         edges[1] = new DynamicIntArray(graph.getEdgeCount());
         DynamicDoubleArray edgeWeights = new DynamicDoubleArray(graph.getEdgeCount());
-        nodeIndices = new HashMap<>();
+
+        // The network needs consecutive node indices, which the store ids are not in a filtered view
+        Map<Integer, Integer> nodeIndices = new HashMap<>();
         for (Node node : graph.getNodes())
+        {
             nodeIndices.put(node.getStoreId(), nodeIndices.size());
+        }
+
         for (Node node : graph.getNodes())
         {
             for (Node neighbor : new HashSet<>(graph.getNeighbors(node).toCollection()))
@@ -114,8 +117,7 @@ public class RunClustering implements Statistics, LongTask
                     for (Edge edge : graph.getEdges(node, neighbor))
                         w += useEdgeWeights ? edge.getWeight() : 1.0;
 
-                    // The algorithms need positive edge weights, an edge with a zero or negative weight can't
-                    // pull its nodes together and is left out
+                    // The algorithms need positive weights, other edges are left out
                     if (w > 0.0)
                     {
                         edges[0].append(nodeIndices.get(node.getStoreId()));
@@ -190,10 +192,10 @@ public class RunClustering implements Statistics, LongTask
 
         quality = clusteringAlgorithm.calcQuality(network, clustering);
 
-        saveClustering(graph);
+        saveClustering(graph, nodeIndices);
     }
 
-    private void saveClustering(Graph graph)
+    private void saveClustering(Graph graph, Map<Integer, Integer> nodeIndices)
     {
         graph.readLock();
         Table nodeTable = graph.getModel().getNodeTable();
