@@ -1,0 +1,5 @@
+Manifest-Version: 1.0
+OpenIDE-Module-Name: Community Clusters
+OpenIDE-Module-Short-Description: Layout that gathers each community of a network into its own cluster.
+OpenIDE-Module-Long-Description: A force layout that gives every community a home position and pulls its nodes towards it, while ties and repulsion shape the inside of each cluster. Communities are read from a node column (default modularity_class) or, if no such column exists, detected with the built-in Leiden algorithm.
+OpenIDE-Module-Display-Category: Layout

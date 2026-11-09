@@ -340,6 +340,11 @@
         <!-- origin: fork (MattArtzAnthro/gephi-plugins) -->
         <!-- status: active -->
         <module>modules/GephiAI</module>
+      
+        <!-- name: Community Clusters -->
+        <!-- origin: fork (johanm/gephi-plugins) -->
+        <!-- status: active -->
+        <module>modules/CommunityClusters</module>
     </modules>
     
     <!-- Properties -->
