@@ -4951,6 +4951,33 @@
       },
       "sourcecode": "https://github.com/MattArtzAnthro/gephi-ai",
       "homepage": "https://github.com/MattArtzAnthro/gephi-ai"
+    },
+    {
+      "id": "community-clusters",
+      "name": "Community Clusters",
+      "short_description": "Layout that gathers each community of a network into its own cluster.",
+      "long_description": "A force layout that gives every community a home position and pulls its nodes towards it, while ties and repulsion shape the inside of each cluster. Communities are read from a node column (default modularity_class) or, if no such column exists, detected with the built-in Leiden algorithm.",
+      "readme": "# Community Clusters\n\nGephi layout plugin that gathers each community of a network into its own cluster.\nSee `MANUAL.md` for usage and a description of every setting.\n\n## Build and run\n\n```bat\ncd /d C:\\gephidev\\gephi-plugins\nmvn clean package\nmvn org.gephi:gephi-maven-plugin:run\n```\n\nThe module must be listed in the root `pom.xml`:\n\n```xml\n\u003cmodule\u003emodules/CommunityClusters\u003c/module\u003e\n```\n\n## Source files\n\n| File | Role |\n|---|---|\n| `CommunityClusters.java` | The Gephi layout: properties, reading the graph, writing positions |\n| `CommunityClustersBuilder.java` | Registers the layout with Gephi |\n| `ClusterForceSimulation.java` | The force simulation (pure Java) |\n| `CirclePacker.java` | Packs one circle per cluster to give each a home position |\n| `Leiden.java` | Community detection (pure Java) |\n| `Bundle.properties` | All user-visible text (setting names, descriptions, layout name) |\n| `src/test/java/...` | JUnit tests for Leiden, the circle packer and the force simulation |\n\n\n## Tests\n\n`mvn clean package` runs the unit tests automatically. To run only this module\u0027s tests:\n\n```bat\nmvn -pl modules/CommunityClusters -am test\n```\n\n## License\n\nApache License 2.0, see `LICENSE`.\n\n## Credits\n\nThe layout is inspired by Fierăscu, S. I. (2026). *SoFab: Network analysis for research and practice* (Version 0.9.0) [Computer software].\n",
+      "license": "Apache 2.0",
+      "authors": [
+        {
+          "name": "Johan Myrberger",
+          "email": "johan@thekillerattitude.com",
+          "link": ""
+        }
+      ],
+      "category": "Layout",
+      "last_update": "November 9, 2026",
+      "images": null,
+      "versions": {
+        "0.11.4": {
+          "url": "0.11/community-clusters-0.1.0.nbm",
+          "last_update": "November 9, 2026",
+          "plugin_version": "0.1.0"
+        }
+      },
+      "sourcecode": "https://github.com/johanm/gephi-plugins.git",
+      "homepage": null
     }
   ]
 }
