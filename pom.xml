@@ -15,6 +15,12 @@
     <modules>
         <!-- Add here the paths of all modules (e.g. <module>modules/MyModule</module>) -->
 
+
+        <module>modules/BearkatCentralization</module>
+
+
+        <module>modules/BearkatCentralization</module>
+
         <!-- name: GeoLayout -->
         <!-- origin: branch (geolayout-plugin) -->
         <!-- status: active -->
@@ -316,6 +322,11 @@
         <!-- origin: branch (openseadragon-plugin) -->
         <!-- status: active -->
         <module>modules/OpenSeadragonPlugin</module>
+        <!-- Needs to migrate to new Visualization API -->
+<!--        <module>modules/WordCloudPlugin</module>-->
+<!--        Needs to not create a project at start-->
+<!--        <module>modules/BlueskyGephi</module>-->
+
 
         <!-- name: Word Cloud plugin -->
         <!-- origin: fork (seinecle/gephi-plugins-word-cloud) -->
