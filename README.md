@@ -127,6 +127,14 @@ There are two options. The first option is what the `generate` task does: it put
 
 The second option is preferable when the short or long description have too many characters as the manifest format is pretty restrictive.  
 
+#### How to add screenshots to my plugin's page on gephi.org?
+
+Put the images in a `src/img` folder inside your plugin folder (e.g. `modules/MyPlugin/src/img/`). PNG, JPG and GIF files are supported and file names must not contain spaces. When the plugin is released, the images are published along with it and shown on the [plugins page](https://gephi.org/desktop/plugins/); a thumbnail is generated for each image, and files with `-thumbnail` in their name are ignored.
+
+Images are sorted alphabetically and the first one is used as the main image in the plugins list and on the plugin's page, the others appear as a gallery. To choose the main image, name it so it comes first (e.g. `1-main.png`).
+
+Building the plugin prints a warning when `src/img` is missing or contains no images.
+
 #### How to add a new module?
 
 This applies for suite plugins with multiple modules. Besides creating the module folder, edit the `pom.xml` file and add the folder path to `<modules>`, like in this example:
