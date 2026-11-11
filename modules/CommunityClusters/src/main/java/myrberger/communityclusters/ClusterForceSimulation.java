@@ -16,12 +16,12 @@ final class ClusterForceSimulation {
         double tieLen = 24;          // link distance on top of the two node radii
         double tieStr = 1;           // multiplies the per-tie strength
         double spacing = 2;          // extra room kept by the collision force
-        double clusterPull = 0.14;   // pull towards the cluster's home
-        double cooling = 0.0228;     // alphaDecay
+        double clusterPull = 0.1;    // pull towards the cluster's home
+        double cooling = 0.03;       // alphaDecay (about 230 steps per run)
         double interTieFactor = 0.03;// strength multiplier for ties between clusters
         double scale = 1;            // multiplies all distances
         double repelDistanceMax = 140;
-        long seed = 42;
+        long seed = 4711;
         boolean resetPositions = true;
     }
 
@@ -256,15 +256,88 @@ final class ClusterForceSimulation {
         }
     }
 
+    /** Graphs up to this size use the exact pairwise repulsion; larger ones use Barnes-Hut. */
+    private static final int EXACT_LIMIT = 400;
+    /** Below this size the Barnes-Hut queries run on one thread. */
+    private static final int PARALLEL_LIMIT = 1500;
+
+    /** Average number of candidate neighbours per node above which the tree is used. */
+    private static final double CROWDED_CANDIDATES = 150;
+
+    private final RepulsionTree tree = new RepulsionTree();
+    /** Test hook: force one mode. null = choose by graph size. */
+    Boolean forceExactRepulsion = null;
+
     /** Many-body repulsion with a hard distance cut-off (d3's forceManyBody with distanceMax). */
     private void applyCharge() {
+        if (n < 2 || p.repel == 0) {
+            return;
+        }
+        if (forceExactRepulsion != null) {
+            if (forceExactRepulsion) {
+                applyChargeExact();
+            } else {
+                applyChargeBarnesHut();
+            }
+            return;
+        }
+        if (n <= EXACT_LIMIT) {
+            applyChargeExact();
+            return;
+        }
+        // Spread-out nodes: the simple neighbour search is cheapest. Crowded nodes (big clusters):
+        // the number of neighbours explodes, so switch to the tree.
+        buildGrid(x, y, p.repelDistanceMax * p.scale);
+        if (gridWorkPerNode() <= CROWDED_CANDIDATES) {
+            chargeFromGrid();
+        } else {
+            applyChargeBarnesHut();
+        }
+    }
+
+    void applyChargeBarnesHut() {
+        double dMax = p.repelDistanceMax * p.scale;
+        double dMax2 = dMax * dMax;
+        double k = -p.repel * p.scale * p.scale * alpha;
+        tree.build(x, y, n);
+        if (n >= PARALLEL_LIMIT) {
+            // every node only writes its own velocity, and the jiggle is deterministic,
+            // so the result does not depend on how the work is split between threads
+            java.util.stream.IntStream.range(0, n).parallel().forEach(new java.util.function.IntConsumer() {
+                private final ThreadLocal<int[]> stack = ThreadLocal.withInitial(() -> new int[RepulsionTree.stackSize()]);
+
+                @Override
+                public void accept(int i) {
+                    if (!fixed[i]) {
+                        tree.accumulate(i, k, dMax2, vx, vy, stack.get());
+                    }
+                }
+            });
+        } else {
+            int[] stack = new int[RepulsionTree.stackSize()];
+            for (int i = 0; i < n; i++) {
+                if (!fixed[i]) {
+                    tree.accumulate(i, k, dMax2, vx, vy, stack);
+                }
+            }
+        }
+    }
+
+    /** Exact pairwise repulsion with a hard distance cut-off. Used for small graphs and as a reference in tests. */
+    void applyChargeExact() {
+        double dMax = p.repelDistanceMax * p.scale;
+        buildGrid(x, y, dMax);
+        chargeFromGrid();
+    }
+
+    /** Pairwise repulsion using the grid that was just built for the repulsion cut-off. */
+    private void chargeFromGrid() {
         if (n < 2 || p.repel == 0) {
             return;
         }
         double dMax = p.repelDistanceMax * p.scale;
         double dMax2 = dMax * dMax;
         double strength = -p.repel * p.scale * p.scale;
-        buildGrid(x, y, dMax);
         for (int i = 0; i < n; i++) {
             if (fixed[i]) {
                 continue;
@@ -299,6 +372,27 @@ final class ClusterForceSimulation {
                 }
             }
         }
+    }
+
+    /** Average number of nodes in the 3x3 cells around a node, for the grid that is currently built. */
+    private double gridWorkPerNode() {
+        double work = 0;
+        for (int cy = 0; cy < gh; cy++) {
+            for (int cx = 0; cx < gw; cx++) {
+                int here = cellStart[cy * gw + cx + 1] - cellStart[cy * gw + cx];
+                if (here == 0) {
+                    continue;
+                }
+                int around = 0;
+                for (int yy = Math.max(0, cy - 1); yy <= Math.min(gh - 1, cy + 1); yy++) {
+                    for (int xx = Math.max(0, cx - 1); xx <= Math.min(gw - 1, cx + 1); xx++) {
+                        around += cellStart[yy * gw + xx + 1] - cellStart[yy * gw + xx];
+                    }
+                }
+                work += (double) here * around;
+            }
+        }
+        return work / Math.max(1, n);
     }
 
     /** d3's forceCollide with strength 1 and one iteration. */

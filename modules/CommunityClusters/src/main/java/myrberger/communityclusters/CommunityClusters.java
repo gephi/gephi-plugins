@@ -1,6 +1,7 @@
 package myrberger.communityclusters;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -59,11 +60,11 @@ public class CommunityClusters implements Layout {
         tieLength = 24.0;
         tieStrength = 1.0;
         nodeSpacing = 2.0;
-        clusterPull = 0.14;
-        settlingSpeed = 0.0228;
+        clusterPull = 0.1;
+        settlingSpeed = 0.03;
         interClusterTieFactor = 0.03;
         scale = 1.0;
-        randomSeed = 42;
+        randomSeed = 4711;
         resolution = 1.0;
         saveClusters = true;
         resetPositions = true;
@@ -83,100 +84,109 @@ public class CommunityClusters implements Layout {
         if (graphModel == null) {
             return;
         }
+        // Step 1: copy what we need out of the graph. The lock is held only for this.
         Graph graph = graphModel.getGraphVisible();
+        Node[] ns;
+        double[] radius;
+        double[] sx;
+        double[] sy;
+        boolean[] fixed;
+        int[] es;
+        int[] ed;
+        double[] ew;
+        int[] cluster = null;
         graph.readLock();
         try {
-            nodes = graph.getNodes().toArray();
-            int n = nodes.length;
+            ns = graph.getNodes().toArray();
+            int n = ns.length;
             if (n == 0) {
                 return;
             }
             Map<Node, Integer> index = new HashMap<>(n * 2);
-            double[] radius = new double[n], sx = new double[n], sy = new double[n];
-            boolean[] fixed = new boolean[n];
-            double maxSize = 0;
+            radius = new double[n];
+            sx = new double[n];
+            sy = new double[n];
+            fixed = new boolean[n];
             for (int i = 0; i < n; i++) {
-                Node node = nodes[i];
+                Node node = ns[i];
                 index.put(node, i);
                 radius[i] = Math.max(1.0, node.size());
-                maxSize = Math.max(maxSize, radius[i]);
                 sx[i] = node.x();
                 sy[i] = node.y();
                 fixed[i] = node.isFixed();
             }
-
-            List<int[]> pairs = new ArrayList<>();
-            List<Double> weights = new ArrayList<>();
+            int m = graph.getEdgeCount();
+            es = new int[m];
+            ed = new int[m];
+            ew = new double[m];
+            int c = 0;
             for (Edge e : graph.getEdges()) {
                 Integer s = index.get(e.getSource());
                 Integer t = index.get(e.getTarget());
-                if (s != null && t != null) {
-                    pairs.add(new int[]{s, t});
-                    weights.add(e.getWeight());
+                if (s != null && t != null && c < m) {
+                    es[c] = s;
+                    ed[c] = t;
+                    ew[c] = e.getWeight();
+                    c++;
                 }
             }
-            int[] es = new int[pairs.size()], ed = new int[pairs.size()];
-            for (int i = 0; i < es.length; i++) {
-                es[i] = pairs.get(i)[0];
-                ed[i] = pairs.get(i)[1];
+            if (c < m) {
+                es = Arrays.copyOf(es, c);
+                ed = Arrays.copyOf(ed, c);
+                ew = Arrays.copyOf(ew, c);
             }
-
-            double[] ew = new double[es.length];
-            for (int i = 0; i < ew.length; i++) {
-                ew[i] = weights.get(i);
+            Column col = findColumn(clusterColumn);
+            if (col != null) {
+                cluster = readColumnClusters(ns, col);
             }
-            int[] cluster = readClusters(nodes, es, ed, ew);
-
-            ClusterForceSimulation.Params p = new ClusterForceSimulation.Params();
-            p.repel = repulsion;
-            p.tieLen = tieLength;
-            p.tieStr = tieStrength;
-            p.spacing = nodeSpacing;
-            p.clusterPull = clusterPull;
-            p.cooling = settlingSpeed;
-            p.interTieFactor = interClusterTieFactor;
-            p.scale = scale;
-            p.seed = randomSeed;
-            p.resetPositions = resetPositions;
-            lastCluster = cluster;
-            sim = new ClusterForceSimulation(radius, cluster, fixed, sx, sy, es, ed, p);
         } finally {
             graph.readUnlock();
         }
-        if (pendingSave && nodes != null && lastCluster != null) {
-            saveClusterColumn(nodes, lastCluster);
+
+        // Step 2: the heavy work, without holding any graph lock.
+        if (cluster == null) {
+            if (clusterColumn != null && !clusterColumn.trim().isEmpty()) {
+                LOG.log(Level.INFO, "Node column \"{0}\" not found; detecting clusters with Leiden instead.",
+                        clusterColumn);
+            }
+            cluster = Leiden.run(ns.length, es, ed, ew, resolution, randomSeed);
+            pendingSave = saveClusters;
+        }
+        ClusterForceSimulation.Params p = new ClusterForceSimulation.Params();
+        p.repel = repulsion;
+        p.tieLen = tieLength;
+        p.tieStr = tieStrength;
+        p.spacing = nodeSpacing;
+        p.clusterPull = clusterPull;
+        p.cooling = settlingSpeed;
+        p.interTieFactor = interClusterTieFactor;
+        p.scale = scale;
+        p.seed = randomSeed;
+        p.resetPositions = resetPositions;
+        lastCluster = cluster;
+        nodes = ns;
+        sim = new ClusterForceSimulation(radius, cluster, fixed, sx, sy, es, ed, p);
+
+        if (pendingSave) {
+            saveClusterColumn(ns, cluster);
         }
         pendingSave = false;
     }
 
-    /**
-     * Cluster index per node: read from the chosen node column, or, when no column is given or it does not
-     * exist, detected with Leiden (modularity, resolution and seed from the properties).
-     */
-    private int[] readClusters(Node[] nodes, int[] es, int[] ed, double[] ew) {
-        int n = nodes.length;
-        Column col = findColumn(clusterColumn);
-        if (col != null) {
-            int[] out = new int[n];
-            Map<String, Integer> ids = new HashMap<>();
-            for (int i = 0; i < n; i++) {
-                Object v = nodes[i].getAttribute(col);
-                String key = v == null ? "" : String.valueOf(v);
-                Integer id = ids.get(key);
-                if (id == null) {
-                    id = ids.size();
-                    ids.put(key, id);
-                }
-                out[i] = id;
+    /** One cluster index per node, from the values of the given column (called with the graph lock held). */
+    private int[] readColumnClusters(Node[] ns, Column col) {
+        int[] out = new int[ns.length];
+        Map<String, Integer> ids = new HashMap<>();
+        for (int i = 0; i < ns.length; i++) {
+            Object v = ns[i].getAttribute(col);
+            String key = v == null ? "" : String.valueOf(v);
+            Integer id = ids.get(key);
+            if (id == null) {
+                id = ids.size();
+                ids.put(key, id);
             }
-            return out;
+            out[i] = id;
         }
-        if (clusterColumn != null && !clusterColumn.trim().isEmpty()) {
-            LOG.log(Level.WARNING, "Node column \"{0}\" not found; detecting clusters with Leiden instead.",
-                    clusterColumn);
-        }
-        int[] out = Leiden.run(n, es, ed, ew, resolution, randomSeed);
-        pendingSave = saveClusters;
         return out;
     }
 
@@ -218,17 +228,19 @@ public class CommunityClusters implements Layout {
 
     @Override
     public void goAlgo() {
-        if (sim == null || nodes == null || graphModel == null) {
+        ClusterForceSimulation current = sim;
+        Node[] current_nodes = nodes;
+        if (current == null || current_nodes == null || graphModel == null) {
             return;
         }
+        current.tick(); // pure computation on our own arrays, so no graph lock is needed here
         Graph graph = graphModel.getGraphVisible();
         graph.readLock();
         try {
-            sim.tick();
-            for (int i = 0; i < nodes.length; i++) {
-                if (!nodes[i].isFixed()) {
-                    nodes[i].setX((float) sim.x[i]);
-                    nodes[i].setY((float) sim.y[i]);
+            for (int i = 0; i < current_nodes.length; i++) {
+                if (!current_nodes[i].isFixed()) {
+                    current_nodes[i].setX((float) current.x[i]);
+                    current_nodes[i].setY((float) current.y[i]);
                 }
             }
         } finally {
@@ -254,7 +266,10 @@ public class CommunityClusters implements Layout {
             String clusters = msg("CommunityClusters.category.clusters");
             String forces = msg("CommunityClusters.category.forces");
             String run = msg("CommunityClusters.category.run");
-            props.add(property(String.class, clusters, "clusterColumn", "getClusterColumn", "setClusterColumn"));
+            props.add(LayoutProperty.createProperty(this, String.class,
+                    msg("CommunityClusters.clusterColumn.name"), clusters, "clusterColumn",
+                    msg("CommunityClusters.clusterColumn.desc"), "getClusterColumn", "setClusterColumn",
+                    ClusterColumnEditor.class));
             props.add(property(Double.class, clusters, "resolution", "getResolution", "setResolution"));
             props.add(property(Boolean.class, clusters, "saveClusters", "getSaveClusters", "setSaveClusters"));
             props.add(property(Double.class, clusters, "clusterPull", "getClusterPull", "setClusterPull"));
