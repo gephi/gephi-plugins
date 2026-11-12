@@ -9,7 +9,7 @@
 
     <groupId>myrberger</groupId>
     <artifactId>community-clusters</artifactId>
-    <version>0.1.0</version>
+    <version>1.0.0</version>
     <packaging>nbm</packaging>
 
     <name>Community Clusters</name>

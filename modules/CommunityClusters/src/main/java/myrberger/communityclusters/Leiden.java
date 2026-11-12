@@ -15,6 +15,11 @@ import java.util.Random;
 final class Leiden {
 
     private static final double THETA = 0.01; // randomness of the refinement step
+    /**
+     * Passes over the whole graph. Graphs with real community structure settle after 2-3; graphs
+     * without it would keep going for tiny gains, so the loop is capped.
+     */
+    private static final int MAX_ROUNDS = 4;
     private static final double EPS = 1e-12;
 
     private Leiden() {
@@ -72,7 +77,7 @@ final class Leiden {
             part[i] = i;
         }
         // Leiden is iterated: each pass starts from the previous partition, until nothing changes
-        for (int round = 0; round < 10; round++) {
+        for (int round = 0; round < MAX_ROUNDS; round++) {
             int[] next = pass(g0, part, resolution, twoM, rng);
             renumber(next, new int[n]);
             boolean same = Arrays.equals(part, next);
