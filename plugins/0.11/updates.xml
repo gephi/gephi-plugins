@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
 <!DOCTYPE module_updates PUBLIC "-//NetBeans//DTD Autoupdate Catalog 2.8//EN" "https://netbeans.apache.org/dtds/autoupdate-catalog-2_8.dtd">
-<module_updates timestamp="41/13/07/09/11/2026">
+<module_updates timestamp="47/13/20/12/11/2026">
 
 
 
@@ -71,12 +71,12 @@
     <message_digest algorithm="SHA-512" value="ae5cf878e324f0674516a01c49fbbf8140c155fe013cc3a0960025f5111d8ec6f05c694a66f6631fed6b1b97848a64caed2051835522c50f4a77113100307e29"/>
 </module>
 
-<module codenamebase="myrberger.community.clusters" distribution="community-clusters-0.1.0.nbm" downloadsize="34607" homepage="http://github.com/gephi/gephi-plugins/community-clusters" license="9FFD5444" moduleauthor="Johan Myrberger" needsrestart="true" releasedate="2026/11/09" targetcluster="plugins">
+<module codenamebase="myrberger.community.clusters" distribution="community-clusters-1.0.0.nbm" downloadsize="45229" homepage="http://github.com/gephi/gephi-plugins/community-clusters" license="9FFD5444" moduleauthor="Johan Myrberger" needsrestart="true" releasedate="2026/11/12" targetcluster="plugins">
         
-    <manifest OpenIDE-Module="myrberger.community.clusters" OpenIDE-Module-Display-Category="Layout" OpenIDE-Module-Implementation-Version="0.1.0" OpenIDE-Module-Long-Description="A force layout that gives every community a home position and pulls its nodes towards it, while ties and repulsion shape the inside of each cluster. Communities are read from a node column (default modularity_class) or, if no such column exists, detected with the built-in Leiden algorithm." OpenIDE-Module-Module-Dependencies="org.gephi.layout.api &gt; 0.11.4, org.gephi.graph.api &gt; 0.11.4, org.openide.util.lookup &gt; 8.65, org.openide.util &gt; 9.39" OpenIDE-Module-Name="Community Clusters" OpenIDE-Module-Requires="org.openide.modules.ModuleFormat1" OpenIDE-Module-Short-Description="Layout that gathers each community of a network into its own cluster." OpenIDE-Module-Specification-Version="0.1.0"/>
+    <manifest OpenIDE-Module="myrberger.community.clusters" OpenIDE-Module-Display-Category="Layout" OpenIDE-Module-Implementation-Version="1.0.0" OpenIDE-Module-Long-Description="Arranges a network so that each community forms its own visible cluster. Any field that is categorical, numerical or alphanumerical, can be used as the Cluster column (for example modularity_class from Statistics &gt; Modularity). Or choose none and the plugin detects communities itself with the Leiden algorithm. Clusters are packed apart from each other and the nodes inside a cluster are placed by their ties. Settings control cluster separation, repulsion, tie length, node spacing and more. By Johan Myrberger, https://www.linkedin.com/in/myrberger/" OpenIDE-Module-Module-Dependencies="org.gephi.layout.api &gt; 0.11.4, org.gephi.graph.api &gt; 0.11.4, org.openide.util.lookup &gt; 8.65, org.openide.util &gt; 9.39" OpenIDE-Module-Name="Community Clusters" OpenIDE-Module-Requires="org.openide.modules.ModuleFormat1" OpenIDE-Module-Short-Description="Layout that gathers each community of a network into its own cluster." OpenIDE-Module-Specification-Version="1.0.0"/>
         
 
-    <message_digest algorithm="SHA-512" value="f0cb106f8393b6d9d5f07703a04abd36ee8c865b287678712e5079729b805d355ded0e30aabe1b75151e116a873c0236602e6440f5856d53e248e1919bbd55fb"/>
+    <message_digest algorithm="SHA-512" value="b7d1a617062670efd20e3e8140c12f504221d4c84373795cc0c5c3e8267179ca63b3683866477a1c431d2680b766d63ba38d2f9f35aa16a2c5043dfea4ba4515"/>
 </module>
 
 <module codenamebase="pl.edu.wat.wcy.student.dbscan.gephi.plugin" distribution="dbscan-gephi-plugin-1.0.0.nbm" downloadsize="18228" homepage="http://github.com/gephi/gephi-plugins/dbscan-gephi-plugin" moduleauthor="Jakub Nowakowski" needsrestart="true" releasedate="2026/11/08" targetcluster="plugins">
