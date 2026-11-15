@@ -82,7 +82,7 @@
                 <plugin>
                     <groupId>org.gephi</groupId>
                     <artifactId>gephi-maven-plugin</artifactId>
-                    <version>1.4.1</version>
+                    <version>1.4.2</version>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
@@ -106,6 +106,9 @@
                 <artifactId>gephi-maven-plugin</artifactId>
                 <configuration>
                     <metadataUrl>https://gephi.org/gephi-plugins/plugins/</metadataUrl>
+                    <!-- Gephi reads updates.xml from raw.githubusercontent.com. This makes it download plugins
+                         through gephi.org instead, where a Cloudflare Worker counts them (see gephi.github.io) -->
+                    <downloadUrl>https://gephi.org/gephi-plugins/plugins/</downloadUrl>
                     <gephiDirectory>${project.build.directory}/gephi-${gephi.version}</gephiDirectory>
                     <outputDirectory>${project.build.directory}/site/plugins/</outputDirectory>
                     <skipUnchangedVersions>true</skipUnchangedVersions>
