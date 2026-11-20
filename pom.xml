@@ -106,8 +106,6 @@
                 <artifactId>gephi-maven-plugin</artifactId>
                 <configuration>
                     <metadataUrl>https://gephi.org/gephi-plugins/plugins/</metadataUrl>
-                    <!-- Gephi reads updates.xml from raw.githubusercontent.com. This makes it download plugins
-                         through gephi.org instead, where a Cloudflare Worker counts them (see gephi.github.io) -->
                     <downloadUrl>https://gephi.org/gephi-plugins/plugins/</downloadUrl>
                     <gephiDirectory>${project.build.directory}/gephi-${gephi.version}</gephiDirectory>
                     <outputDirectory>${project.build.directory}/site/plugins/</outputDirectory>
