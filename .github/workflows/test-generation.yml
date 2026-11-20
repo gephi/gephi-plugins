@@ -77,3 +77,4 @@ jobs:
           test -f "$UPDATES_XML"
           test -f "$NBM_FILE"
           grep -q 'codenamebase="org.gephi.citest.ci.integration.test.plugin"' "$UPDATES_XML"
+          grep -q "distribution=\"https://gephi.org/gephi-plugins/plugins/${GEPHI_MINOR}/ci-integration-test-plugin-1.0.0.nbm\"" "$UPDATES_XML"
