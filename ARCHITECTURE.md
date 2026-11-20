@@ -150,7 +150,7 @@ everything above. Its goals, bound in this repo's root `pom.xml` or invoked dire
 | `generate` | Invoked manually | Interactively scaffolds a new plugin module and adds it to `pom.xml`'s `<modules>` |
 | `validate` | Bound to the `validate` phase (every `mvn package`) | Checks every listed module's manifest/pom configuration is well-formed; fails the build with a specific reason if not |
 | `run` | Invoked manually | Downloads/builds the matching Gephi distribution and launches it with the current modules installed, for manual testing |
-| `build-metadata` / `create-autoupdate` | Bound to the `package` phase under the `release` profile | Generates the autoupdate site (`updates.xml` + `.nbm` files) published to `metadataUrl` — this is what powers Gephi's in-app Plugin Manager and the gephi.org plugin listing |
+| `build-metadata` / `create-autoupdate` | Bound to the `package` phase under the `release` profile | Generates the autoupdate site (`updates.xml` + `.nbm` files) published to `metadataUrl` — this is what powers Gephi's in-app Plugin Manager and the gephi.org plugin listing. Gephi reads `updates.xml` from raw.githubusercontent.com, but its plugin links use `downloadUrl` on gephi.org, where a Cloudflare Worker counts downloads (`workers/plugin-downloads` in [gephi.github.io](https://github.com/gephi/gephi.github.io)) |
 | `migrate` | Invoked manually | Helps update an existing plugin's configuration when the target Gephi version changes |
 
 ## Root files
