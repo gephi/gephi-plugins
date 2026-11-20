@@ -29,51 +29,61 @@
       "versions": {
         "0.8.2": {
           "url": "0.8.2/org-gephi-plugins-layout-geo.nbm",
+          "download_url": null,
           "last_update": "January 4, 2013",
           "plugin_version": null
         },
         "0.9.0": {
           "url": "0.9.0/geolayout-plugin-0.9.0.nbm",
+          "download_url": null,
           "last_update": "February 11, 2016",
           "plugin_version": null
         },
         "0.9.1": {
           "url": "0.9.1/geolayout-plugin-0.9.1.2.nbm",
+          "download_url": null,
           "last_update": "August 10, 2017",
           "plugin_version": null
         },
         "0.9.2": {
           "url": "0.9.2/geolayout-plugin-0.9.2.2.nbm",
+          "download_url": null,
           "last_update": "June 3, 2020",
           "plugin_version": null
         },
         "0.9.3": {
           "url": "0.9/geolayout-plugin-0.9.3.nbm",
+          "download_url": null,
           "last_update": "April 7, 2022",
           "plugin_version": "0.9.3"
         },
         "0.9.6": {
           "url": "0.9/geolayout-plugin-1.0.0.nbm",
+          "download_url": null,
           "last_update": "June 28, 2022",
           "plugin_version": "1.0.0"
         },
         "0.10.0": {
           "url": "0.10/geolayout-plugin-1.0.0.nbm",
+          "download_url": null,
           "last_update": "January 9, 2023",
           "plugin_version": "1.0.0"
         },
         "0.11.1": {
           "url": "0.11/geolayout-plugin-1.0.0.nbm",
+          "download_url": null,
           "last_update": "May 3, 2026",
           "plugin_version": "1.0.0"
         },
         "0.11.3": {
           "url": "0.11/geolayout-plugin-1.0.0.nbm",
+          "download_url": null,
           "last_update": "September 26, 2026",
           "plugin_version": "1.0.0"
         },
         "0.11.4": {
           "url": "0.11/geolayout-plugin-1.0.0.nbm",
+          "download_url": null,
           "last_update": "November 8, 2026",
           "plugin_version": "1.0.0"
         }
@@ -106,31 +116,37 @@
       "versions": {
         "0.9.0": {
           "url": "0.9.0/linkfluence-plugin-0.9.0.nbm",
+          "download_url": null,
           "last_update": "February 11, 2016",
           "plugin_version": null
         },
         "0.9.1": {
           "url": "0.9.1/linkfluence-plugin-0.9.0.nbm",
+          "download_url": null,
           "last_update": "August 10, 2017",
           "plugin_version": null
         },
         "0.9.2": {
           "url": "0.9.2/linkfluence-plugin-0.9.0.nbm",
+          "download_url": null,
           "last_update": "June 3, 2020",
           "plugin_version": null
         },
         "0.9.3": {
           "url": "0.9/linkfluence-plugin-0.9.0.nbm",
+          "download_url": null,
           "last_update": "April 7, 2022",
           "plugin_version": "0.9.0"
         },
         "0.9.6": {
           "url": "0.9/linkfluence-plugin-0.9.0.nbm",
+          "download_url": null,
           "last_update": "June 24, 2022",
           "plugin_version": "0.9.0"
         },
         "0.10.0": {
           "url": "0.10/linkfluence-plugin-0.9.0.nbm",
+          "download_url": null,
           "last_update": "January 9, 2023",
           "plugin_version": "0.9.0"
         }
@@ -163,6 +179,7 @@
       "versions": {
         "0.8.2": {
           "url": "0.8.2/labelpropagationclustering1.1.nbm",
+          "download_url": null,
           "last_update": "June 23, 2014",
           "plugin_version": null
         }
@@ -195,6 +212,7 @@
       "versions": {
         "0.8.2": {
           "url": "0.8.2/cz-cvut-fit-krizeji1-girvan_newman.nbm",
+          "download_url": null,
           "last_update": "May 30, 2014",
           "plugin_version": null
         }
@@ -231,6 +249,7 @@
       "versions": {
         "0.8.2": {
           "url": "0.8.2/cz-cvut-fit-krizeji1-markov_cluster.nbm",
+          "download_url": null,
           "last_update": "May 30, 2014",
           "plugin_version": null
         }
@@ -263,6 +282,7 @@
       "versions": {
         "0.8.2": {
           "url": "0.8.2/cz-cvut-fit-krizeji1-mcode.nbm",
+          "download_url": null,
           "last_update": "May 29, 2014",
           "plugin_version": null
         }
@@ -290,6 +310,7 @@
       "versions": {
         "0.8.2": {
           "url": "0.8.2/org-i9-GCViz1.nbm",
+          "download_url": null,
           "last_update": "November 7, 2013",
           "plugin_version": null
         }
@@ -322,6 +343,7 @@
       "versions": {
         "0.8.2": {
           "url": "0.8.2/de-uni_leipzig-informatik-asv-gephi-chinesewhispers4.nbm",
+          "download_url": null,
           "last_update": "June 21, 2015",
           "plugin_version": null
         }
@@ -354,6 +376,7 @@
       "versions": {
         "0.8.2": {
           "url": "0.8.2/org-gephi-recast_manipulator-1.nbm",
+          "download_url": null,
           "last_update": "February 19, 2013",
           "plugin_version": null
         }
@@ -398,6 +421,7 @@
       "versions": {
         "0.8.2": {
           "url": "0.8.2/",
+          "download_url": null,
           "last_update": "December 14, 2015",
           "plugin_version": null
         }
@@ -425,46 +449,55 @@
       "versions": {
         "0.8.2": {
           "url": "0.8.2/com-hypercities-exporttoearth1.nbm",
+          "download_url": null,
           "last_update": "May 26, 2013",
           "plugin_version": null
         },
         "0.9.1": {
           "url": "0.9.1/exporttoearth-1.0.0.nbm",
+          "download_url": null,
           "last_update": "August 10, 2017",
           "plugin_version": null
         },
         "0.9.2": {
           "url": "0.9.2/exporttoearth-1.0.0.nbm",
+          "download_url": null,
           "last_update": "June 3, 2020",
           "plugin_version": null
         },
         "0.9.3": {
           "url": "0.9/exporttoearth-1.0.0.nbm",
+          "download_url": null,
           "last_update": "April 7, 2022",
           "plugin_version": "1.0.0"
         },
         "0.9.6": {
           "url": "0.9/exporttoearth-1.0.0.nbm",
+          "download_url": null,
           "last_update": "June 24, 2022",
           "plugin_version": "1.0.0"
         },
         "0.10.0": {
           "url": "0.10/exporttoearth-1.0.0.nbm",
+          "download_url": null,
           "last_update": "January 9, 2023",
           "plugin_version": "1.0.0"
         },
         "0.11.1": {
           "url": "0.11/exporttoearth-1.0.0.nbm",
+          "download_url": null,
           "last_update": "May 3, 2026",
           "plugin_version": "1.0.0"
         },
         "0.11.3": {
           "url": "0.11/exporttoearth-1.0.0.nbm",
+          "download_url": null,
           "last_update": "September 26, 2026",
           "plugin_version": "1.0.0"
         },
         "0.11.4": {
           "url": "0.11/exporttoearth-1.0.0.nbm",
+          "download_url": null,
           "last_update": "November 8, 2026",
           "plugin_version": "1.0.0"
         }
@@ -492,6 +525,7 @@
       "versions": {
         "0.8.2": {
           "url": "0.8.2/cs-arizona-edu-topedgeweightfilter.nbm",
+          "download_url": null,
           "last_update": "May 11, 2015",
           "plugin_version": null
         }
@@ -524,51 +558,61 @@
       "versions": {
         "0.8.2": {
           "url": "0.8.2/org-gephi-plugins-filter-kbrace.nbm",
+          "download_url": null,
           "last_update": "January 4, 2013",
           "plugin_version": null
         },
         "0.9.0": {
           "url": "0.9.0/kbrace-filter-1.0.0.nbm",
+          "download_url": null,
           "last_update": "February 11, 2016",
           "plugin_version": null
         },
         "0.9.1": {
           "url": "0.9.1/kbrace-filter-1.0.0.nbm",
+          "download_url": null,
           "last_update": "August 10, 2017",
           "plugin_version": null
         },
         "0.9.2": {
           "url": "0.9.2/kbrace-filter-1.0.0.nbm",
+          "download_url": null,
           "last_update": "June 3, 2020",
           "plugin_version": null
         },
         "0.9.3": {
           "url": "0.9/kbrace-filter-1.1.0.nbm",
+          "download_url": null,
           "last_update": "April 7, 2022",
           "plugin_version": "1.1.0"
         },
         "0.9.6": {
           "url": "0.9/kbrace-filter-1.1.0.nbm",
+          "download_url": null,
           "last_update": "June 24, 2022",
           "plugin_version": "1.1.0"
         },
         "0.10.0": {
           "url": "0.10/kbrace-filter-1.1.0.nbm",
+          "download_url": null,
           "last_update": "January 9, 2023",
           "plugin_version": "1.1.0"
         },
         "0.11.1": {
           "url": "0.11/kbrace-filter-1.1.0.nbm",
+          "download_url": null,
           "last_update": "May 3, 2026",
           "plugin_version": "1.1.0"
         },
         "0.11.3": {
           "url": "0.11/kbrace-filter-1.1.0.nbm",
+          "download_url": null,
           "last_update": "September 26, 2026",
           "plugin_version": "1.1.0"
         },
         "0.11.4": {
           "url": "0.11/kbrace-filter-1.1.0.nbm",
+          "download_url": null,
           "last_update": "November 8, 2026",
           "plugin_version": "1.1.0"
         }
@@ -596,6 +640,7 @@
       "versions": {
         "0.8.2": {
           "url": "0.8.2/org-daniel-generator-bamodel-ageing.nbm",
+          "download_url": null,
           "last_update": "December 31, 2014",
           "plugin_version": null
         }
@@ -632,6 +677,7 @@
       "versions": {
         "0.8.2": {
           "url": "0.8.2/net.tum_.graphml-layout17.nbm",
+          "download_url": null,
           "last_update": "November 13, 2014",
           "plugin_version": null
         }
@@ -659,6 +705,7 @@
       "versions": {
         "0.8.2": {
           "url": "0.8.2/umberto-G_RandomWaypointMobilityModel.nbm",
+          "download_url": null,
           "last_update": "April 14, 2013",
           "plugin_version": null
         }
@@ -686,6 +733,7 @@
       "versions": {
         "0.8.2": {
           "url": "0.8.2/complex-generators.zip",
+          "download_url": null,
           "last_update": "February 13, 2013",
           "plugin_version": null
         }
@@ -722,6 +770,7 @@
       "versions": {
         "0.8.2": {
           "url": "0.8.2/GephiSimilarityComputer1.0.2.nbm",
+          "download_url": null,
           "last_update": "September 12, 2015",
           "plugin_version": null
         }
@@ -754,6 +803,7 @@
       "versions": {
         "0.8.2": {
           "url": "0.8.2/org-ualberta-virtuosoimporter.nbm",
+          "download_url": null,
           "last_update": "May 30, 2013",
           "plugin_version": null
         }
@@ -786,6 +836,7 @@
       "versions": {
         "0.8.2": {
           "url": "0.8.2/com-ngrain-Random3DLayout6.nbm",
+          "download_url": null,
           "last_update": "May 14, 2014",
           "plugin_version": null
         }
@@ -818,46 +869,55 @@
       "versions": {
         "0.8.2": {
           "url": "0.8.2/org-alexandrebarao-networksplitter3d.nbm",
+          "download_url": null,
           "last_update": "May 7, 2014",
           "plugin_version": null
         },
         "0.9.1": {
           "url": "0.9.1/network-splitter-3d-1.0.0.nbm",
+          "download_url": null,
           "last_update": "August 10, 2017",
           "plugin_version": null
         },
         "0.9.2": {
           "url": "0.9.2/network-splitter-3d-1.0.0.nbm",
+          "download_url": null,
           "last_update": "June 3, 2020",
           "plugin_version": null
         },
         "0.9.3": {
           "url": "0.9/network-splitter-3d-1.0.0.nbm",
+          "download_url": null,
           "last_update": "April 7, 2022",
           "plugin_version": "1.0.0"
         },
         "0.9.6": {
           "url": "0.9/network-splitter-3d-1.0.0.nbm",
+          "download_url": null,
           "last_update": "June 24, 2022",
           "plugin_version": "1.0.0"
         },
         "0.10.0": {
           "url": "0.10/network-splitter-3d-1.0.0.nbm",
+          "download_url": null,
           "last_update": "January 9, 2023",
           "plugin_version": "1.0.0"
         },
         "0.11.1": {
           "url": "0.11/network-splitter-3d-1.0.0.nbm",
+          "download_url": null,
           "last_update": "May 3, 2026",
           "plugin_version": "1.0.0"
         },
         "0.11.3": {
           "url": "0.11/network-splitter-3d-1.0.0.nbm",
+          "download_url": null,
           "last_update": "September 26, 2026",
           "plugin_version": "1.0.0"
         },
         "0.11.4": {
           "url": "0.11/network-splitter-3d-1.0.0.nbm",
+          "download_url": null,
           "last_update": "November 8, 2026",
           "plugin_version": "1.0.0"
         }
@@ -890,31 +950,37 @@
       "versions": {
         "0.8.2": {
           "url": "0.8.2/net-clementlevallois-ForceAtlas3D_1.11.nbm",
+          "download_url": null,
           "last_update": "October 19, 2014",
           "plugin_version": null
         },
         "0.9.6": {
           "url": "0.9/force-atlas-3d-1.2.1.nbm",
+          "download_url": null,
           "last_update": "July 2, 2022",
           "plugin_version": "1.2.1"
         },
         "0.10.0": {
           "url": "0.10/force-atlas-3d-1.2.1.nbm",
+          "download_url": null,
           "last_update": "January 9, 2023",
           "plugin_version": "1.2.1"
         },
         "0.11.1": {
           "url": "0.11/force-atlas-3d-1.2.1.nbm",
+          "download_url": null,
           "last_update": "May 3, 2026",
           "plugin_version": "1.2.1"
         },
         "0.11.3": {
           "url": "0.11/force-atlas-3d-1.2.2.nbm",
+          "download_url": null,
           "last_update": "November 8, 2026",
           "plugin_version": "1.2.2"
         },
         "0.11.4": {
           "url": "0.11/force-atlas-3d-1.2.2.nbm",
+          "download_url": null,
           "last_update": "November 8, 2026",
           "plugin_version": "1.2.2"
         }
@@ -942,6 +1008,7 @@
       "versions": {
         "0.8.2": {
           "url": "0.8.2/com-cna-multipartiteLayout.nbm",
+          "download_url": null,
           "last_update": "June 1, 2013",
           "plugin_version": null
         }
@@ -974,6 +1041,7 @@
       "versions": {
         "0.8.2": {
           "url": "0.8.2/org-maktas-hiveplot.nbm",
+          "download_url": null,
           "last_update": "May 21, 2013",
           "plugin_version": null
         }
@@ -1006,6 +1074,7 @@
       "versions": {
         "0.8.2": {
           "url": "0.8.2/org-vijesh-concentric5.nbm",
+          "download_url": null,
           "last_update": "March 18, 2013",
           "plugin_version": null
         }
@@ -1046,6 +1115,7 @@
       "versions": {
         "0.8.2": {
           "url": "0.8.2/net-clementlevallois-alphabeticalsorter_1.1.nbm",
+          "download_url": null,
           "last_update": "October 19, 2014",
           "plugin_version": null
         }
@@ -1078,6 +1148,7 @@
       "versions": {
         "0.8.2": {
           "url": "0.8.2/org-gephi-plugins-layout-noverlap1.nbm",
+          "download_url": null,
           "last_update": "January 4, 2013",
           "plugin_version": null
         }
@@ -1110,6 +1181,7 @@
       "versions": {
         "0.8.2": {
           "url": "0.8.2/org-gephi-layout-plugin-openord1.nbm",
+          "download_url": null,
           "last_update": "January 4, 2013",
           "plugin_version": null
         }
@@ -1142,6 +1214,7 @@
       "versions": {
         "0.8.2": {
           "url": "0.8.2/cz-cvut-fit-gephi-layeredlayout1.nbm",
+          "download_url": null,
           "last_update": "January 31, 2013",
           "plugin_version": null
         }
@@ -1169,46 +1242,55 @@
       "versions": {
         "0.8.2": {
           "url": "0.8.2/org-wouterspekkink-lineage2.nbm",
+          "download_url": null,
           "last_update": "December 15, 2015",
           "plugin_version": null
         },
         "0.9.1": {
           "url": "0.9.1/lineage-0.9.1.nbm",
+          "download_url": null,
           "last_update": "August 10, 2017",
           "plugin_version": null
         },
         "0.9.2": {
           "url": "0.9.2/lineage-0.9.2.nbm",
+          "download_url": null,
           "last_update": "June 3, 2020",
           "plugin_version": null
         },
         "0.9.3": {
           "url": "0.9/lineage-0.9.3.nbm",
+          "download_url": null,
           "last_update": "June 24, 2022",
           "plugin_version": "0.9.3"
         },
         "0.9.6": {
           "url": "0.9/lineage-0.9.3.nbm",
+          "download_url": null,
           "last_update": "June 24, 2022",
           "plugin_version": "0.9.3"
         },
         "0.10.0": {
           "url": "0.10/lineage-0.9.3.nbm",
+          "download_url": null,
           "last_update": "January 9, 2023",
           "plugin_version": "0.9.3"
         },
         "0.11.1": {
           "url": "0.11/lineage-0.9.3.nbm",
+          "download_url": null,
           "last_update": "May 3, 2026",
           "plugin_version": "0.9.3"
         },
         "0.11.3": {
           "url": "0.11/lineage-0.9.3.nbm",
+          "download_url": null,
           "last_update": "September 26, 2026",
           "plugin_version": "0.9.3"
         },
         "0.11.4": {
           "url": "0.11/lineage-0.9.3.nbm",
+          "download_url": null,
           "last_update": "November 8, 2026",
           "plugin_version": "0.9.3"
         }
@@ -1241,6 +1323,7 @@
       "versions": {
         "0.8.2": {
           "url": "0.8.2/com-carlschroedl-gephi-spanningtree.nbm",
+          "download_url": null,
           "last_update": "February 21, 2015",
           "plugin_version": null
         }
@@ -1268,6 +1351,7 @@
       "versions": {
         "0.8.2": {
           "url": "0.8.2/org-urmiauniversity-it-mst-cliquedetector.nbm",
+          "download_url": null,
           "last_update": "February 14, 2015",
           "plugin_version": null
         }
@@ -1326,6 +1410,7 @@
       "versions": {
         "0.8.2": {
           "url": "0.8.2/org-gephi-LinkCommunities-plugin.nbm",
+          "download_url": null,
           "last_update": "July 3, 2013",
           "plugin_version": null
         }
@@ -1353,6 +1438,7 @@
       "versions": {
         "0.8.2": {
           "url": "0.8.2/org-liborm-CCDisjoint1.nbm",
+          "download_url": null,
           "last_update": "April 3, 2013",
           "plugin_version": null
         }
@@ -1385,6 +1471,7 @@
       "versions": {
         "0.8.2": {
           "url": "0.8.2/umberto-WeightedClusterCoefficient1.nbm",
+          "download_url": null,
           "last_update": "April 14, 2013",
           "plugin_version": null
         }
@@ -1417,6 +1504,7 @@
       "versions": {
         "0.8.2": {
           "url": "0.8.2/cz-cvut-fit-gephi-snametrics3.nbm",
+          "download_url": null,
           "last_update": "July 3, 2013",
           "plugin_version": null
         }
@@ -1453,6 +1541,7 @@
       "versions": {
         "0.8.2": {
           "url": "0.8.2/cz-cvut-fit-krizeji1-MultiColourRenderer.nbm",
+          "download_url": null,
           "last_update": "May 7, 2014",
           "plugin_version": null
         }
@@ -1485,6 +1574,7 @@
       "versions": {
         "0.8.2": {
           "url": "0.8.2/org-yale-cs-graphics-gephi-imagepreview.nbm",
+          "download_url": null,
           "last_update": "July 19, 2014",
           "plugin_version": null
         }
@@ -1517,6 +1607,7 @@
       "versions": {
         "0.8.2": {
           "url": "0.8.2/org-ilis-cliquepercolation.nbm",
+          "download_url": null,
           "last_update": "October 16, 2015",
           "plugin_version": null
         }
@@ -1549,6 +1640,7 @@
       "versions": {
         "0.8.2": {
           "url": "0.8.2/org-urmiauniversity-it-mst-cpm3.nbm",
+          "download_url": null,
           "last_update": "November 6, 2015",
           "plugin_version": null
         }
@@ -1576,51 +1668,61 @@
       "versions": {
         "0.8.2": {
           "url": "0.8.2/cz-cvut-fit-gephi-multimode1.nbm",
+          "download_url": null,
           "last_update": "January 31, 2013",
           "plugin_version": null
         },
         "0.9.0": {
           "url": "0.9.0/multimode-1.0.0.nbm",
+          "download_url": null,
           "last_update": "February 11, 2016",
           "plugin_version": null
         },
         "0.9.1": {
           "url": "0.9.1/multimode-1.0.1.nbm",
+          "download_url": null,
           "last_update": "August 10, 2017",
           "plugin_version": null
         },
         "0.9.2": {
           "url": "0.9.2/multimode-1.1.0.nbm",
+          "download_url": null,
           "last_update": "June 3, 2020",
           "plugin_version": null
         },
         "0.9.3": {
           "url": "0.9/multimode-1.1.0.nbm",
+          "download_url": null,
           "last_update": "April 7, 2022",
           "plugin_version": "1.1.0"
         },
         "0.9.6": {
           "url": "0.9/multimode-1.1.1.nbm",
+          "download_url": null,
           "last_update": "June 29, 2022",
           "plugin_version": "1.1.1"
         },
         "0.10.0": {
           "url": "0.10/multimode-1.1.1.nbm",
+          "download_url": null,
           "last_update": "January 9, 2023",
           "plugin_version": "1.1.1"
         },
         "0.11.1": {
           "url": "0.11/multimode-1.1.1.nbm",
+          "download_url": null,
           "last_update": "May 3, 2026",
           "plugin_version": "1.1.1"
         },
         "0.11.3": {
           "url": "0.11/multimode-1.1.1.nbm",
+          "download_url": null,
           "last_update": "September 26, 2026",
           "plugin_version": "1.1.1"
         },
         "0.11.4": {
           "url": "0.11/multimode-1.1.1.nbm",
+          "download_url": null,
           "last_update": "November 8, 2026",
           "plugin_version": "1.1.1"
         }
@@ -1648,51 +1750,61 @@
       "versions": {
         "0.8.2": {
           "url": "0.8.2/uk-ac-ox-oii-jsonexporter9.nbm",
+          "download_url": null,
           "last_update": "August 9, 2013",
           "plugin_version": null
         },
         "0.9.0": {
           "url": "0.9.0/jsonexporter-plugin-2.0.0.nbm",
+          "download_url": null,
           "last_update": "February 11, 2016",
           "plugin_version": null
         },
         "0.9.1": {
           "url": "0.9.1/jsonexporter-plugin-2.0.0.nbm",
+          "download_url": null,
           "last_update": "August 10, 2017",
           "plugin_version": null
         },
         "0.9.2": {
           "url": "0.9.2/jsonexporter-plugin-2.0.0.nbm",
+          "download_url": null,
           "last_update": "June 3, 2020",
           "plugin_version": null
         },
         "0.9.3": {
           "url": "0.9/jsonexporter-plugin-2.0.0.nbm",
+          "download_url": null,
           "last_update": "April 7, 2022",
           "plugin_version": "2.0.0"
         },
         "0.9.6": {
           "url": "0.9/jsonexporter-plugin-2.0.0.nbm",
+          "download_url": null,
           "last_update": "June 24, 2022",
           "plugin_version": "2.0.0"
         },
         "0.10.0": {
           "url": "0.10/jsonexporter-plugin-2.0.0.nbm",
+          "download_url": null,
           "last_update": "January 9, 2023",
           "plugin_version": "2.0.0"
         },
         "0.11.1": {
           "url": "0.11/jsonexporter-plugin-2.0.0.nbm",
+          "download_url": null,
           "last_update": "May 3, 2026",
           "plugin_version": "2.0.0"
         },
         "0.11.3": {
           "url": "0.11/jsonexporter-plugin-2.0.0.nbm",
+          "download_url": null,
           "last_update": "September 26, 2026",
           "plugin_version": "2.0.0"
         },
         "0.11.4": {
           "url": "0.11/jsonexporter-plugin-2.0.0.nbm",
+          "download_url": null,
           "last_update": "November 8, 2026",
           "plugin_version": "2.0.0"
         }
@@ -1720,51 +1832,61 @@
       "versions": {
         "0.8.2": {
           "url": "0.8.2/uk-ac-ox-oii-sigmaexporter2.nbm",
+          "download_url": null,
           "last_update": "August 9, 2013",
           "plugin_version": null
         },
         "0.9.0": {
           "url": "0.9.0/sigmaexporter-0.9.0.nbm",
+          "download_url": null,
           "last_update": "February 11, 2016",
           "plugin_version": null
         },
         "0.9.1": {
           "url": "0.9.1/sigmaexporter-0.9.0.nbm",
+          "download_url": null,
           "last_update": "August 10, 2017",
           "plugin_version": null
         },
         "0.9.2": {
           "url": "0.9.2/sigmaexporter-0.9.0.nbm",
+          "download_url": null,
           "last_update": "June 3, 2020",
           "plugin_version": null
         },
         "0.9.3": {
           "url": "0.9/sigmaexporter-0.9.0.nbm",
+          "download_url": null,
           "last_update": "April 7, 2022",
           "plugin_version": "0.9.0"
         },
         "0.9.6": {
           "url": "0.9/sigmaexporter-0.9.0.nbm",
+          "download_url": null,
           "last_update": "June 24, 2022",
           "plugin_version": "0.9.0"
         },
         "0.10.0": {
           "url": "0.10/sigmaexporter-0.9.0.nbm",
+          "download_url": null,
           "last_update": "January 9, 2023",
           "plugin_version": "0.9.0"
         },
         "0.11.1": {
           "url": "0.11/sigmaexporter-0.9.0.nbm",
+          "download_url": null,
           "last_update": "May 3, 2026",
           "plugin_version": "0.9.0"
         },
         "0.11.3": {
           "url": "0.11/sigmaexporter-0.9.0.nbm",
+          "download_url": null,
           "last_update": "September 26, 2026",
           "plugin_version": "0.9.0"
         },
         "0.11.4": {
           "url": "0.11/sigmaexporter-0.9.0.nbm",
+          "download_url": null,
           "last_update": "November 8, 2026",
           "plugin_version": "0.9.0"
         }
@@ -1792,46 +1914,55 @@
       "versions": {
         "0.9.0": {
           "url": "0.9.0/gephi-plugin-node-color-manager-1.0.0.nbm",
+          "download_url": null,
           "last_update": "February 11, 2016",
           "plugin_version": null
         },
         "0.9.1": {
           "url": "0.9.1/gephi-plugin-node-color-manager-1.0.0.nbm",
+          "download_url": null,
           "last_update": "August 10, 2017",
           "plugin_version": null
         },
         "0.9.2": {
           "url": "0.9.2/gephi-plugin-node-color-manager-1.0.0.nbm",
+          "download_url": null,
           "last_update": "June 3, 2020",
           "plugin_version": null
         },
         "0.9.3": {
           "url": "0.9/gephi-plugin-node-color-manager-1.0.0.nbm",
+          "download_url": null,
           "last_update": "April 7, 2022",
           "plugin_version": "1.0.0"
         },
         "0.9.6": {
           "url": "0.9/gephi-plugin-node-color-manager-1.0.0.nbm",
+          "download_url": null,
           "last_update": "June 24, 2022",
           "plugin_version": "1.0.0"
         },
         "0.10.0": {
           "url": "0.10/gephi-plugin-node-color-manager-1.0.0.nbm",
+          "download_url": null,
           "last_update": "January 9, 2023",
           "plugin_version": "1.0.0"
         },
         "0.11.1": {
           "url": "0.11/gephi-plugin-node-color-manager-1.0.0.nbm",
+          "download_url": null,
           "last_update": "May 3, 2026",
           "plugin_version": "1.0.0"
         },
         "0.11.3": {
           "url": "0.11/gephi-plugin-node-color-manager-1.0.0.nbm",
+          "download_url": null,
           "last_update": "September 26, 2026",
           "plugin_version": "1.0.0"
         },
         "0.11.4": {
           "url": "0.11/gephi-plugin-node-color-manager-1.0.0.nbm",
+          "download_url": null,
           "last_update": "November 8, 2026",
           "plugin_version": "1.0.0"
         }
@@ -1868,51 +1999,61 @@
       "versions": {
         "0.8.2": {
           "url": "0.8.2/org-icculus-chunky-gephigraphviz3.nbm",
+          "download_url": null,
           "last_update": "April 25, 2015",
           "plugin_version": null
         },
         "0.9.0": {
           "url": "0.9.0/gephigraphviz-1.0.0.nbm",
+          "download_url": null,
           "last_update": "February 11, 2016",
           "plugin_version": null
         },
         "0.9.1": {
           "url": "0.9.1/gephigraphviz-1.0.0.nbm",
+          "download_url": null,
           "last_update": "August 10, 2017",
           "plugin_version": null
         },
         "0.9.2": {
           "url": "0.9.2/gephigraphviz-1.0.0.nbm",
+          "download_url": null,
           "last_update": "June 3, 2020",
           "plugin_version": null
         },
         "0.9.3": {
           "url": "0.9/gephigraphviz-1.0.0.nbm",
+          "download_url": null,
           "last_update": "April 7, 2022",
           "plugin_version": "1.0.0"
         },
         "0.9.6": {
           "url": "0.9/gephigraphviz-1.0.0.nbm",
+          "download_url": null,
           "last_update": "June 24, 2022",
           "plugin_version": "1.0.0"
         },
         "0.10.0": {
           "url": "0.10/gephigraphviz-1.0.1.nbm",
+          "download_url": null,
           "last_update": "February 20, 2023",
           "plugin_version": "1.0.1"
         },
         "0.11.1": {
           "url": "0.11/gephigraphviz-1.0.1.nbm",
+          "download_url": null,
           "last_update": "May 3, 2026",
           "plugin_version": "1.0.1"
         },
         "0.11.3": {
           "url": "0.11/gephigraphviz-1.0.1.nbm",
+          "download_url": null,
           "last_update": "September 26, 2026",
           "plugin_version": "1.0.1"
         },
         "0.11.4": {
           "url": "0.11/gephigraphviz-1.0.1.nbm",
+          "download_url": null,
           "last_update": "November 8, 2026",
           "plugin_version": "1.0.1"
         }
@@ -1940,46 +2081,55 @@
       "versions": {
         "0.8.2": {
           "url": "0.8.2/org-gephi-graphstreaming.nbm",
+          "download_url": null,
           "last_update": "April 18, 2013",
           "plugin_version": null
         },
         "0.9.1": {
           "url": "0.9.1/graphstreaming-1.0.3.zip",
+          "download_url": null,
           "last_update": "August 10, 2017",
           "plugin_version": null
         },
         "0.9.2": {
           "url": "0.9.2/graphstreaming-1.0.3.zip",
+          "download_url": null,
           "last_update": "June 3, 2020",
           "plugin_version": null
         },
         "0.9.3": {
           "url": "0.9/graphstreaming-1.0.3.zip",
+          "download_url": null,
           "last_update": "April 7, 2022",
           "plugin_version": "1.0.3"
         },
         "0.9.6": {
           "url": "0.9/graphstreaming-1.0.3.zip",
+          "download_url": null,
           "last_update": "June 24, 2022",
           "plugin_version": "1.0.3"
         },
         "0.10.0": {
           "url": "0.10/graphstreaming-1.0.5.zip",
+          "download_url": null,
           "last_update": "January 28, 2023",
           "plugin_version": "1.0.5"
         },
         "0.11.1": {
           "url": "0.11/graphstreaming-1.0.5.zip",
+          "download_url": null,
           "last_update": "May 3, 2026",
           "plugin_version": "1.0.5"
         },
         "0.11.3": {
           "url": "0.11/graphstreaming-1.0.5.zip",
+          "download_url": null,
           "last_update": "September 26, 2026",
           "plugin_version": "1.0.5"
         },
         "0.11.4": {
           "url": "0.11/graphstreaming-1.0.5.zip",
+          "download_url": null,
           "last_update": "November 8, 2026",
           "plugin_version": "1.0.5"
         }
@@ -2007,46 +2157,55 @@
       "versions": {
         "0.8.2": {
           "url": "0.8.2/org-gephi-layout-plugin-circularlayout2.nbm",
+          "download_url": null,
           "last_update": "March 2, 2013",
           "plugin_version": null
         },
         "0.9.1": {
           "url": "0.9.1/circularlayout-0.9.1.nbm",
+          "download_url": null,
           "last_update": "August 10, 2017",
           "plugin_version": null
         },
         "0.9.2": {
           "url": "0.9.2/circularlayout-0.9.2.nbm",
+          "download_url": null,
           "last_update": "June 3, 2020",
           "plugin_version": null
         },
         "0.9.3": {
           "url": "0.9/circularlayout-0.9.3.nbm",
+          "download_url": null,
           "last_update": "April 7, 2022",
           "plugin_version": "0.9.3"
         },
         "0.9.6": {
           "url": "0.9/circularlayout-0.9.3.nbm",
+          "download_url": null,
           "last_update": "June 24, 2022",
           "plugin_version": "0.9.3"
         },
         "0.10.0": {
           "url": "0.10/circularlayout-0.9.3.nbm",
+          "download_url": null,
           "last_update": "January 9, 2023",
           "plugin_version": "0.9.3"
         },
         "0.11.1": {
           "url": "0.11/circularlayout-0.9.3.nbm",
+          "download_url": null,
           "last_update": "May 3, 2026",
           "plugin_version": "0.9.3"
         },
         "0.11.3": {
           "url": "0.11/circularlayout-0.9.4.nbm",
+          "download_url": null,
           "last_update": "November 8, 2026",
           "plugin_version": "0.9.4"
         },
         "0.11.4": {
           "url": "0.11/circularlayout-0.9.4.nbm",
+          "download_url": null,
           "last_update": "November 8, 2026",
           "plugin_version": "0.9.4"
         }
@@ -2087,16 +2246,19 @@
       "versions": {
         "0.8.2": {
           "url": "0.8.2/fr-inria-edelweiss-semantic3.nbm",
+          "download_url": null,
           "last_update": "July 3, 2013",
           "plugin_version": null
         },
         "0.9.1": {
           "url": "0.9.1/semantic-1.0.0.nbm",
+          "download_url": null,
           "last_update": "August 10, 2017",
           "plugin_version": null
         },
         "0.9.2": {
           "url": "0.9.2/semantic-1.0.0.nbm",
+          "download_url": null,
           "last_update": "June 3, 2020",
           "plugin_version": null
         }
@@ -2129,46 +2291,55 @@
       "versions": {
         "0.8.2": {
           "url": "0.8.2/ec-loxa-sna-gephi-031.nbm",
+          "download_url": null,
           "last_update": "June 22, 2013",
           "plugin_version": null
         },
         "0.9.1": {
           "url": "0.9.1/loxawebsiteexport-0.3.2.nbm",
+          "download_url": null,
           "last_update": "August 10, 2017",
           "plugin_version": null
         },
         "0.9.2": {
           "url": "0.9.2/loxawebsiteexport-0.3.2.nbm",
+          "download_url": null,
           "last_update": "June 3, 2020",
           "plugin_version": null
         },
         "0.9.3": {
           "url": "0.9/loxawebsiteexport-0.3.2.nbm",
+          "download_url": null,
           "last_update": "April 7, 2022",
           "plugin_version": "0.3.2"
         },
         "0.9.6": {
           "url": "0.9/loxawebsiteexport-0.3.2.nbm",
+          "download_url": null,
           "last_update": "June 24, 2022",
           "plugin_version": "0.3.2"
         },
         "0.10.0": {
           "url": "0.10/loxawebsiteexport-0.3.3.nbm",
+          "download_url": null,
           "last_update": "January 9, 2023",
           "plugin_version": "0.3.3"
         },
         "0.11.1": {
           "url": "0.11/loxawebsiteexport-0.3.3.nbm",
+          "download_url": null,
           "last_update": "May 3, 2026",
           "plugin_version": "0.3.3"
         },
         "0.11.3": {
           "url": "0.11/loxawebsiteexport-0.3.3.nbm",
+          "download_url": null,
           "last_update": "September 26, 2026",
           "plugin_version": "0.3.3"
         },
         "0.11.4": {
           "url": "0.11/loxawebsiteexport-0.3.3.nbm",
+          "download_url": null,
           "last_update": "November 8, 2026",
           "plugin_version": "0.3.3"
         }
@@ -2201,31 +2372,37 @@
       "versions": {
         "0.8.2": {
           "url": "0.8.2/scripting-plugin-0.1.0-2.zip",
+          "download_url": null,
           "last_update": "February 12, 2013",
           "plugin_version": null
         },
         "0.9.1": {
           "url": "0.9.1/scripting.plugin-0.9.1.2.nbm",
+          "download_url": null,
           "last_update": "August 10, 2017",
           "plugin_version": null
         },
         "0.9.2": {
           "url": "0.9.2/scripting.plugin-0.9.2.nbm",
+          "download_url": null,
           "last_update": "June 3, 2020",
           "plugin_version": null
         },
         "0.9.3": {
           "url": "0.9/scripting.plugin-0.9.3.nbm",
+          "download_url": null,
           "last_update": "June 24, 2022",
           "plugin_version": "0.9.3"
         },
         "0.9.6": {
           "url": "0.9/scripting.plugin-0.9.3.nbm",
+          "download_url": null,
           "last_update": "June 24, 2022",
           "plugin_version": "0.9.3"
         },
         "0.10.0": {
           "url": "0.10/scripting.plugin-0.9.3.nbm",
+          "download_url": null,
           "last_update": "January 9, 2023",
           "plugin_version": "0.9.3"
         }
@@ -2274,21 +2451,25 @@
       "versions": {
         "0.9.1": {
           "url": "0.9.1/twitter-streaming-importer-1.1.1.nbm",
+          "download_url": null,
           "last_update": "August 10, 2017",
           "plugin_version": null
         },
         "0.9.2": {
           "url": "0.9.2/twitter-streaming-importer-1.4.3.nbm",
+          "download_url": null,
           "last_update": "October 5, 2021",
           "plugin_version": null
         },
         "0.9.3": {
           "url": "0.9/twitter-streaming-importer-1.4.4.nbm",
+          "download_url": null,
           "last_update": "June 24, 2022",
           "plugin_version": "1.4.4"
         },
         "0.9.6": {
           "url": "0.9/twitter-streaming-importer-1.4.4.nbm",
+          "download_url": null,
           "last_update": "June 24, 2022",
           "plugin_version": "1.4.4"
         }
@@ -2321,46 +2502,55 @@
       "versions": {
         "0.8.2": {
           "url": "0.8.2/org-alexandrebarao-isometriclayout.nbm",
+          "download_url": null,
           "last_update": "April 9, 2014",
           "plugin_version": null
         },
         "0.9.1": {
           "url": "0.9.1/isometric-layout-1.0.0.nbm",
+          "download_url": null,
           "last_update": "August 10, 2017",
           "plugin_version": null
         },
         "0.9.2": {
           "url": "0.9.2/isometric-layout-1.0.0.nbm",
+          "download_url": null,
           "last_update": "June 3, 2020",
           "plugin_version": null
         },
         "0.9.3": {
           "url": "0.9/isometric-layout-1.0.0.nbm",
+          "download_url": null,
           "last_update": "April 7, 2022",
           "plugin_version": "1.0.0"
         },
         "0.9.6": {
           "url": "0.9/isometric-layout-1.0.0.nbm",
+          "download_url": null,
           "last_update": "June 24, 2022",
           "plugin_version": "1.0.0"
         },
         "0.10.0": {
           "url": "0.10/isometric-layout-1.0.0.nbm",
+          "download_url": null,
           "last_update": "January 9, 2023",
           "plugin_version": "1.0.0"
         },
         "0.11.1": {
           "url": "0.11/isometric-layout-1.0.0.nbm",
+          "download_url": null,
           "last_update": "May 3, 2026",
           "plugin_version": "1.0.0"
         },
         "0.11.3": {
           "url": "0.11/isometric-layout-1.0.0.nbm",
+          "download_url": null,
           "last_update": "September 26, 2026",
           "plugin_version": "1.0.0"
         },
         "0.11.4": {
           "url": "0.11/isometric-layout-1.0.0.nbm",
+          "download_url": null,
           "last_update": "November 8, 2026",
           "plugin_version": "1.0.0"
         }
@@ -2409,31 +2599,37 @@
       "versions": {
         "0.8.2": {
           "url": "0.8.2/ExcelCsvImporter-1.43.nbm",
+          "download_url": null,
           "last_update": "November 25, 2014",
           "plugin_version": null
         },
         "0.9.1": {
           "url": "0.9.1/ExcelCsvImporter-1.0.0.nbm",
+          "download_url": null,
           "last_update": "August 10, 2017",
           "plugin_version": null
         },
         "0.9.2": {
           "url": "0.9.2/ExcelCsvImporter-1.0.0.nbm",
+          "download_url": null,
           "last_update": "June 3, 2020",
           "plugin_version": null
         },
         "0.9.3": {
           "url": "0.9/ExcelCsvImporter-1.0.0.nbm",
+          "download_url": null,
           "last_update": "April 7, 2022",
           "plugin_version": "1.0.0"
         },
         "0.9.6": {
           "url": "0.9/ExcelCsvImporter-1.0.0.nbm",
+          "download_url": null,
           "last_update": "June 24, 2022",
           "plugin_version": "1.0.0"
         },
         "0.10.0": {
           "url": "0.10/ExcelCsvImporter-1.4.4.nbm",
+          "download_url": null,
           "last_update": "January 9, 2023",
           "plugin_version": "1.4.4"
         }
@@ -2461,41 +2657,49 @@
       "versions": {
         "0.9.1": {
           "url": "0.9.1/oracle-driver-0.0.1.nbm",
+          "download_url": null,
           "last_update": "August 10, 2017",
           "plugin_version": null
         },
         "0.9.2": {
           "url": "0.9.2/oracle-driver-0.0.1.nbm",
+          "download_url": null,
           "last_update": "June 3, 2020",
           "plugin_version": null
         },
         "0.9.3": {
           "url": "0.9/oracle-driver-0.0.1.nbm",
+          "download_url": null,
           "last_update": "April 7, 2022",
           "plugin_version": "0.0.1"
         },
         "0.9.6": {
           "url": "0.9/oracle-driver-0.0.1.nbm",
+          "download_url": null,
           "last_update": "June 24, 2022",
           "plugin_version": "0.0.1"
         },
         "0.10.0": {
           "url": "0.10/oracle-driver-0.0.1.nbm",
+          "download_url": null,
           "last_update": "January 9, 2023",
           "plugin_version": "0.0.1"
         },
         "0.11.1": {
           "url": "0.11/oracle-driver-0.0.1.nbm",
+          "download_url": null,
           "last_update": "May 3, 2026",
           "plugin_version": "0.0.1"
         },
         "0.11.3": {
           "url": "0.11/oracle-driver-0.0.1.nbm",
+          "download_url": null,
           "last_update": "September 26, 2026",
           "plugin_version": "0.0.1"
         },
         "0.11.4": {
           "url": "0.11/oracle-driver-0.0.1.nbm",
+          "download_url": null,
           "last_update": "November 8, 2026",
           "plugin_version": "0.0.1"
         }
@@ -2528,31 +2732,37 @@
       "versions": {
         "0.8.2": {
           "url": "0.8.2/org-wouterspekkink-eventgraphlayout.nbm",
+          "download_url": null,
           "last_update": "September 21, 2014",
           "plugin_version": null
         },
         "0.9.1": {
           "url": "0.9.1/eventgraphlayout-1.0.0.nbm",
+          "download_url": null,
           "last_update": "August 10, 2017",
           "plugin_version": null
         },
         "0.9.2": {
           "url": "0.9.2/eventgraphlayout-1.0.0.nbm",
+          "download_url": null,
           "last_update": "June 3, 2020",
           "plugin_version": null
         },
         "0.9.3": {
           "url": "0.9/eventgraphlayout-1.0.0.nbm",
+          "download_url": null,
           "last_update": "April 7, 2022",
           "plugin_version": "1.0.0"
         },
         "0.9.6": {
           "url": "0.9/eventgraphlayout-1.0.0.nbm",
+          "download_url": null,
           "last_update": "June 24, 2022",
           "plugin_version": "1.0.0"
         },
         "0.10.0": {
           "url": "0.10/eventgraphlayout-1.0.0.nbm",
+          "download_url": null,
           "last_update": "January 9, 2023",
           "plugin_version": "1.0.0"
         }
@@ -2580,46 +2790,55 @@
       "versions": {
         "0.8.2": {
           "url": "0.8.2/org-wouterspekkink-mdslayout1.nbm",
+          "download_url": null,
           "last_update": "March 18, 2015",
           "plugin_version": null
         },
         "0.9.1": {
           "url": "0.9.1/mdslayout-0.9.1.nbm",
+          "download_url": null,
           "last_update": "August 10, 2017",
           "plugin_version": null
         },
         "0.9.2": {
           "url": "0.9.2/mdslayout-0.9.2.nbm",
+          "download_url": null,
           "last_update": "June 3, 2020",
           "plugin_version": null
         },
         "0.9.3": {
           "url": "0.9/mdslayout-0.9.3.nbm",
+          "download_url": null,
           "last_update": "June 24, 2022",
           "plugin_version": "0.9.3"
         },
         "0.9.6": {
           "url": "0.9/mdslayout-0.9.3.nbm",
+          "download_url": null,
           "last_update": "June 24, 2022",
           "plugin_version": "0.9.3"
         },
         "0.10.0": {
           "url": "0.10/mdslayout-0.10.0.nbm",
+          "download_url": null,
           "last_update": "January 9, 2023",
           "plugin_version": "0.10.0"
         },
         "0.11.1": {
           "url": "0.11/mdslayout-0.11.1.nbm",
+          "download_url": null,
           "last_update": "May 3, 2026",
           "plugin_version": "0.11.1"
         },
         "0.11.3": {
           "url": "0.11/mdslayout-0.11.1.nbm",
+          "download_url": null,
           "last_update": "September 26, 2026",
           "plugin_version": "0.11.1"
         },
         "0.11.4": {
           "url": "0.11/mdslayout-0.11.1.nbm",
+          "download_url": null,
           "last_update": "November 8, 2026",
           "plugin_version": "0.11.1"
         }
@@ -2647,41 +2866,49 @@
       "versions": {
         "0.9.1": {
           "url": "0.9.1/graphfilter-1.0.0.nbm",
+          "download_url": null,
           "last_update": "August 10, 2017",
           "plugin_version": null
         },
         "0.9.2": {
           "url": "0.9.2/graphfilter-1.0.0.nbm",
+          "download_url": null,
           "last_update": "June 3, 2020",
           "plugin_version": null
         },
         "0.9.3": {
           "url": "0.9/graphfilter-1.0.0.nbm",
+          "download_url": null,
           "last_update": "April 7, 2022",
           "plugin_version": "1.0.0"
         },
         "0.9.6": {
           "url": "0.9/graphfilter-1.0.0.nbm",
+          "download_url": null,
           "last_update": "June 24, 2022",
           "plugin_version": "1.0.0"
         },
         "0.10.0": {
           "url": "0.10/graphfilter-1.0.0.nbm",
+          "download_url": null,
           "last_update": "January 9, 2023",
           "plugin_version": "1.0.0"
         },
         "0.11.1": {
           "url": "0.11/graphfilter-1.0.0.nbm",
+          "download_url": null,
           "last_update": "May 3, 2026",
           "plugin_version": "1.0.0"
         },
         "0.11.3": {
           "url": "0.11/graphfilter-1.0.0.nbm",
+          "download_url": null,
           "last_update": "September 26, 2026",
           "plugin_version": "1.0.0"
         },
         "0.11.4": {
           "url": "0.11/graphfilter-1.0.0.nbm",
+          "download_url": null,
           "last_update": "November 8, 2026",
           "plugin_version": "1.0.0"
         }
@@ -2722,46 +2949,55 @@
       "versions": {
         "0.8.2": {
           "url": "0.8.2/net-clementlevallois-givecolortonodes_1.1.nbm",
+          "download_url": null,
           "last_update": "May 7, 2015",
           "plugin_version": null
         },
         "0.9.1": {
           "url": "0.9.1/givecolortonodes-1.0.0.nbm",
+          "download_url": null,
           "last_update": "August 10, 2017",
           "plugin_version": null
         },
         "0.9.2": {
           "url": "0.9.2/givecolortonodes-1.0.0.nbm",
+          "download_url": null,
           "last_update": "June 3, 2020",
           "plugin_version": null
         },
         "0.9.3": {
           "url": "0.9/givecolortonodes-1.0.0.nbm",
+          "download_url": null,
           "last_update": "April 7, 2022",
           "plugin_version": "1.0.0"
         },
         "0.9.6": {
           "url": "0.9/givecolortonodes-1.0.0.nbm",
+          "download_url": null,
           "last_update": "June 24, 2022",
           "plugin_version": "1.0.0"
         },
         "0.10.0": {
           "url": "0.10/givecolortonodes-1.0.0.nbm",
+          "download_url": null,
           "last_update": "January 9, 2023",
           "plugin_version": "1.0.0"
         },
         "0.11.1": {
           "url": "0.11/givecolortonodes-1.0.0.nbm",
+          "download_url": null,
           "last_update": "May 3, 2026",
           "plugin_version": "1.0.0"
         },
         "0.11.3": {
           "url": "0.11/givecolortonodes-1.0.0.nbm",
+          "download_url": null,
           "last_update": "September 26, 2026",
           "plugin_version": "1.0.0"
         },
         "0.11.4": {
           "url": "0.11/givecolortonodes-1.0.0.nbm",
+          "download_url": null,
           "last_update": "November 8, 2026",
           "plugin_version": "1.0.0"
         }
@@ -2794,46 +3030,55 @@
       "versions": {
         "0.8.2": {
           "url": "0.8.2/net-clementlevallois-givecolortoedges-1.0.nbm",
+          "download_url": null,
           "last_update": "May 11, 2015",
           "plugin_version": null
         },
         "0.9.1": {
           "url": "0.9.1/givecolortoedges-1.0.0.nbm",
+          "download_url": null,
           "last_update": "August 10, 2017",
           "plugin_version": null
         },
         "0.9.2": {
           "url": "0.9.2/givecolortoedges-1.0.0.nbm",
+          "download_url": null,
           "last_update": "June 3, 2020",
           "plugin_version": null
         },
         "0.9.3": {
           "url": "0.9/givecolortoedges-1.0.0.nbm",
+          "download_url": null,
           "last_update": "April 7, 2022",
           "plugin_version": "1.0.0"
         },
         "0.9.6": {
           "url": "0.9/givecolortoedges-1.0.0.nbm",
+          "download_url": null,
           "last_update": "June 24, 2022",
           "plugin_version": "1.0.0"
         },
         "0.10.0": {
           "url": "0.10/givecolortoedges-1.0.0.nbm",
+          "download_url": null,
           "last_update": "January 9, 2023",
           "plugin_version": "1.0.0"
         },
         "0.11.1": {
           "url": "0.11/givecolortoedges-1.0.0.nbm",
+          "download_url": null,
           "last_update": "May 3, 2026",
           "plugin_version": "1.0.0"
         },
         "0.11.3": {
           "url": "0.11/givecolortoedges-1.0.0.nbm",
+          "download_url": null,
           "last_update": "September 26, 2026",
           "plugin_version": "1.0.0"
         },
         "0.11.4": {
           "url": "0.11/givecolortoedges-1.0.0.nbm",
+          "download_url": null,
           "last_update": "November 8, 2026",
           "plugin_version": "1.0.0"
         }
@@ -2874,41 +3119,49 @@
       "versions": {
         "0.9.1": {
           "url": "0.9.1/gravity-plugin-1.0.0.nbm",
+          "download_url": null,
           "last_update": "August 10, 2017",
           "plugin_version": null
         },
         "0.9.2": {
           "url": "0.9.2/gravity-plugin-1.0.0.nbm",
+          "download_url": null,
           "last_update": "June 3, 2020",
           "plugin_version": null
         },
         "0.9.3": {
           "url": "0.9/gravity-plugin-1.0.0.nbm",
+          "download_url": null,
           "last_update": "April 7, 2022",
           "plugin_version": "1.0.0"
         },
         "0.9.6": {
           "url": "0.9/gravity-plugin-1.0.0.nbm",
+          "download_url": null,
           "last_update": "June 24, 2022",
           "plugin_version": "1.0.0"
         },
         "0.10.0": {
           "url": "0.10/gravity-plugin-1.0.0.nbm",
+          "download_url": null,
           "last_update": "January 9, 2023",
           "plugin_version": "1.0.0"
         },
         "0.11.1": {
           "url": "0.11/gravity-plugin-1.0.0.nbm",
+          "download_url": null,
           "last_update": "May 3, 2026",
           "plugin_version": "1.0.0"
         },
         "0.11.3": {
           "url": "0.11/gravity-plugin-1.0.1.nbm",
+          "download_url": null,
           "last_update": "November 8, 2026",
           "plugin_version": "1.0.1"
         },
         "0.11.4": {
           "url": "0.11/gravity-plugin-1.0.1.nbm",
+          "download_url": null,
           "last_update": "November 8, 2026",
           "plugin_version": "1.0.1"
         }
@@ -2941,46 +3194,55 @@
       "versions": {
         "0.8.2": {
           "url": "0.8.2/org-wouterspekkink-mdsstatistics5.nbm",
+          "download_url": null,
           "last_update": "September 29, 2015",
           "plugin_version": null
         },
         "0.9.1": {
           "url": "0.9.1/mdsmetric-0.9.1.nbm",
+          "download_url": null,
           "last_update": "August 10, 2017",
           "plugin_version": null
         },
         "0.9.2": {
           "url": "0.9.2/mdsmetric-0.9.2.nbm",
+          "download_url": null,
           "last_update": "June 3, 2020",
           "plugin_version": null
         },
         "0.9.3": {
           "url": "0.9/mdsmetric-0.9.3.nbm",
+          "download_url": null,
           "last_update": "June 24, 2022",
           "plugin_version": "0.9.3"
         },
         "0.9.6": {
           "url": "0.9/mdsmetric-0.9.3.nbm",
+          "download_url": null,
           "last_update": "June 24, 2022",
           "plugin_version": "0.9.3"
         },
         "0.10.0": {
           "url": "0.10/mdsmetric-0.9.3.nbm",
+          "download_url": null,
           "last_update": "January 9, 2023",
           "plugin_version": "0.9.3"
         },
         "0.11.1": {
           "url": "0.11/mdsmetric-0.9.3.nbm",
+          "download_url": null,
           "last_update": "May 3, 2026",
           "plugin_version": "0.9.3"
         },
         "0.11.3": {
           "url": "0.11/mdsmetric-0.9.4.nbm",
+          "download_url": null,
           "last_update": "November 8, 2026",
           "plugin_version": "0.9.4"
         },
         "0.11.4": {
           "url": "0.11/mdsmetric-0.9.4.nbm",
+          "download_url": null,
           "last_update": "November 8, 2026",
           "plugin_version": "0.9.4"
         }
@@ -3008,41 +3270,49 @@
       "versions": {
         "0.9.1": {
           "url": "0.9.1/vector-calculator-0.5.0.nbm",
+          "download_url": null,
           "last_update": "August 10, 2017",
           "plugin_version": null
         },
         "0.9.2": {
           "url": "0.9.2/vector-calculator-0.5.0.nbm",
+          "download_url": null,
           "last_update": "June 3, 2020",
           "plugin_version": null
         },
         "0.9.3": {
           "url": "0.9/vector-calculator-0.5.0.nbm",
+          "download_url": null,
           "last_update": "April 7, 2022",
           "plugin_version": "0.5.0"
         },
         "0.9.6": {
           "url": "0.9/vector-calculator-0.5.0.nbm",
+          "download_url": null,
           "last_update": "June 24, 2022",
           "plugin_version": "0.5.0"
         },
         "0.10.0": {
           "url": "0.10/vector-calculator-0.5.0.nbm",
+          "download_url": null,
           "last_update": "January 9, 2023",
           "plugin_version": "0.5.0"
         },
         "0.11.1": {
           "url": "0.11/vector-calculator-0.5.0.nbm",
+          "download_url": null,
           "last_update": "May 3, 2026",
           "plugin_version": "0.5.0"
         },
         "0.11.3": {
           "url": "0.11/vector-calculator-0.5.1.nbm",
+          "download_url": null,
           "last_update": "November 8, 2026",
           "plugin_version": "0.5.1"
         },
         "0.11.4": {
           "url": "0.11/vector-calculator-0.5.1.nbm",
+          "download_url": null,
           "last_update": "November 8, 2026",
           "plugin_version": "0.5.1"
         }
@@ -3070,41 +3340,49 @@
       "versions": {
         "0.9.1": {
           "url": "0.9.1/prestige-plugin-1.0.0.nbm",
+          "download_url": null,
           "last_update": "August 10, 2017",
           "plugin_version": null
         },
         "0.9.2": {
           "url": "0.9.2/prestige-plugin-1.0.0.nbm",
+          "download_url": null,
           "last_update": "June 3, 2020",
           "plugin_version": null
         },
         "0.9.3": {
           "url": "0.9/prestige-plugin-1.0.0.nbm",
+          "download_url": null,
           "last_update": "April 7, 2022",
           "plugin_version": "1.0.0"
         },
         "0.9.6": {
           "url": "0.9/prestige-plugin-1.0.0.nbm",
+          "download_url": null,
           "last_update": "June 24, 2022",
           "plugin_version": "1.0.0"
         },
         "0.10.0": {
           "url": "0.10/prestige-plugin-1.0.1.nbm",
+          "download_url": null,
           "last_update": "January 9, 2023",
           "plugin_version": "1.0.1"
         },
         "0.11.1": {
           "url": "0.11/prestige-plugin-1.0.1.nbm",
+          "download_url": null,
           "last_update": "May 3, 2026",
           "plugin_version": "1.0.1"
         },
         "0.11.3": {
           "url": "0.11/prestige-plugin-1.0.1.nbm",
+          "download_url": null,
           "last_update": "September 26, 2026",
           "plugin_version": "1.0.1"
         },
         "0.11.4": {
           "url": "0.11/prestige-plugin-1.0.1.nbm",
+          "download_url": null,
           "last_update": "November 8, 2026",
           "plugin_version": "1.0.1"
         }
@@ -3132,26 +3410,31 @@
       "versions": {
         "0.8.2": {
           "url": "0.8.2/net-phreakocious-httpgraph.nbm",
+          "download_url": null,
           "last_update": "February 27, 2013",
           "plugin_version": null
         },
         "0.9.1": {
           "url": "0.9.1/httpgraph-1.0.8.nbm",
+          "download_url": null,
           "last_update": "August 10, 2017",
           "plugin_version": null
         },
         "0.9.2": {
           "url": "0.9.2/httpgraph-1.0.8.nbm",
+          "download_url": null,
           "last_update": "June 3, 2020",
           "plugin_version": null
         },
         "0.9.6": {
           "url": "0.9/httpgraph-1.0.9.nbm",
+          "download_url": null,
           "last_update": "September 2, 2022",
           "plugin_version": "1.0.9"
         },
         "0.10.0": {
           "url": "0.10/httpgraph-1.0.10.nbm",
+          "download_url": null,
           "last_update": "January 9, 2023",
           "plugin_version": "1.0.10"
         }
@@ -3192,41 +3475,49 @@
       "versions": {
         "0.9.1": {
           "url": "0.9.1/spanning-tree-plugin-1.0.0.nbm",
+          "download_url": null,
           "last_update": "August 10, 2017",
           "plugin_version": null
         },
         "0.9.2": {
           "url": "0.9.2/spanning-tree-plugin-1.0.0.nbm",
+          "download_url": null,
           "last_update": "June 3, 2020",
           "plugin_version": null
         },
         "0.9.3": {
           "url": "0.9/spanning-tree-plugin-1.0.0.nbm",
+          "download_url": null,
           "last_update": "April 7, 2022",
           "plugin_version": "1.0.0"
         },
         "0.9.6": {
           "url": "0.9/spanning-tree-plugin-1.0.0.nbm",
+          "download_url": null,
           "last_update": "June 24, 2022",
           "plugin_version": "1.0.0"
         },
         "0.10.0": {
           "url": "0.10/spanning-tree-plugin-1.0.0.nbm",
+          "download_url": null,
           "last_update": "January 9, 2023",
           "plugin_version": "1.0.0"
         },
         "0.11.1": {
           "url": "0.11/spanning-tree-plugin-1.0.0.nbm",
+          "download_url": null,
           "last_update": "May 3, 2026",
           "plugin_version": "1.0.0"
         },
         "0.11.3": {
           "url": "0.11/spanning-tree-plugin-1.0.0.nbm",
+          "download_url": null,
           "last_update": "September 26, 2026",
           "plugin_version": "1.0.0"
         },
         "0.11.4": {
           "url": "0.11/spanning-tree-plugin-1.0.1.nbm",
+          "download_url": null,
           "last_update": "November 8, 2026",
           "plugin_version": "1.0.1"
         }
@@ -3263,41 +3554,49 @@
       "versions": {
         "0.9.1": {
           "url": "0.9.1/SimilarityComputer-1.1.3.nbm",
+          "download_url": null,
           "last_update": "August 10, 2017",
           "plugin_version": null
         },
         "0.9.2": {
           "url": "0.9.2/SimilarityComputer-1.1.3.nbm",
+          "download_url": null,
           "last_update": "June 3, 2020",
           "plugin_version": null
         },
         "0.9.3": {
           "url": "0.9/SimilarityComputer-1.1.3.nbm",
+          "download_url": null,
           "last_update": "April 7, 2022",
           "plugin_version": "1.1.3"
         },
         "0.9.6": {
           "url": "0.9/SimilarityComputer-1.1.3.nbm",
+          "download_url": null,
           "last_update": "June 24, 2022",
           "plugin_version": "1.1.3"
         },
         "0.10.0": {
           "url": "0.10/SimilarityComputer-1.1.4.nbm",
+          "download_url": null,
           "last_update": "January 9, 2023",
           "plugin_version": "1.1.4"
         },
         "0.11.1": {
           "url": "0.11/SimilarityComputer-1.1.4.nbm",
+          "download_url": null,
           "last_update": "May 3, 2026",
           "plugin_version": "1.1.4"
         },
         "0.11.3": {
           "url": "0.11/SimilarityComputer-1.1.4.nbm",
+          "download_url": null,
           "last_update": "September 26, 2026",
           "plugin_version": "1.1.4"
         },
         "0.11.4": {
           "url": "0.11/SimilarityComputer-1.1.4.nbm",
+          "download_url": null,
           "last_update": "November 8, 2026",
           "plugin_version": "1.1.4"
         }
@@ -3325,46 +3624,55 @@
       "versions": {
         "0.8.2": {
           "url": "0.8.2/net-clementlevallois-1.4.1.nbm",
+          "download_url": null,
           "last_update": "August 5, 2015",
           "plugin_version": null
         },
         "0.9.1": {
           "url": "0.9.1/mapofcountries-1.5.1.nbm",
+          "download_url": null,
           "last_update": "August 10, 2017",
           "plugin_version": null
         },
         "0.9.2": {
           "url": "0.9.2/mapofcountries-1.5.1.nbm",
+          "download_url": null,
           "last_update": "June 3, 2020",
           "plugin_version": null
         },
         "0.9.3": {
           "url": "0.9/mapofcountries-1.5.1.nbm",
+          "download_url": null,
           "last_update": "April 7, 2022",
           "plugin_version": "1.5.1"
         },
         "0.9.6": {
           "url": "0.9/mapofcountries-1.5.1.nbm",
+          "download_url": null,
           "last_update": "June 24, 2022",
           "plugin_version": "1.5.1"
         },
         "0.10.0": {
           "url": "0.10/mapofcountries-1.5.1.nbm",
+          "download_url": null,
           "last_update": "January 9, 2023",
           "plugin_version": "1.5.1"
         },
         "0.11.1": {
           "url": "0.11/mapofcountries-1.5.1.nbm",
+          "download_url": null,
           "last_update": "May 3, 2026",
           "plugin_version": "1.5.1"
         },
         "0.11.3": {
           "url": "0.11/mapofcountries-1.5.2.nbm",
+          "download_url": null,
           "last_update": "November 8, 2026",
           "plugin_version": "1.5.2"
         },
         "0.11.4": {
           "url": "0.11/mapofcountries-1.5.2.nbm",
+          "download_url": null,
           "last_update": "November 8, 2026",
           "plugin_version": "1.5.2"
         }
@@ -3392,11 +3700,13 @@
       "versions": {
         "0.9.1": {
           "url": "0.9.1/agensgraph-plugin-1.0.0.nbm",
+          "download_url": null,
           "last_update": "August 10, 2017",
           "plugin_version": null
         },
         "0.9.2": {
           "url": "0.9.2/agensgraph-plugin-1.0.0.nbm",
+          "download_url": null,
           "last_update": "June 3, 2020",
           "plugin_version": null
         }
@@ -3424,46 +3734,55 @@
       "versions": {
         "0.8.2": {
           "url": "0.8.2/org-zeager-polygonnodes.nbm",
+          "download_url": null,
           "last_update": "June 9, 2015",
           "plugin_version": null
         },
         "0.9.1": {
           "url": "0.9.1/polygon-shaped-nodes-1.0.0.nbm",
+          "download_url": null,
           "last_update": "August 10, 2017",
           "plugin_version": null
         },
         "0.9.2": {
           "url": "0.9.2/polygon-shaped-nodes-1.0.0.nbm",
+          "download_url": null,
           "last_update": "June 3, 2020",
           "plugin_version": null
         },
         "0.9.3": {
           "url": "0.9/polygon-shaped-nodes-1.0.0.nbm",
+          "download_url": null,
           "last_update": "April 7, 2022",
           "plugin_version": "1.0.0"
         },
         "0.9.6": {
           "url": "0.9/polygon-shaped-nodes-1.0.1.nbm",
+          "download_url": null,
           "last_update": "June 28, 2022",
           "plugin_version": "1.0.1"
         },
         "0.10.0": {
           "url": "0.10/polygon-shaped-nodes-1.0.1.nbm",
+          "download_url": null,
           "last_update": "January 9, 2023",
           "plugin_version": "1.0.1"
         },
         "0.11.1": {
           "url": "0.11/polygon-shaped-nodes-1.0.1.nbm",
+          "download_url": null,
           "last_update": "May 3, 2026",
           "plugin_version": "1.0.1"
         },
         "0.11.3": {
           "url": "0.11/polygon-shaped-nodes-1.0.1.nbm",
+          "download_url": null,
           "last_update": "September 26, 2026",
           "plugin_version": "1.0.1"
         },
         "0.11.4": {
           "url": "0.11/polygon-shaped-nodes-1.0.1.nbm",
+          "download_url": null,
           "last_update": "November 8, 2026",
           "plugin_version": "1.0.1"
         }
@@ -3491,41 +3810,49 @@
       "versions": {
         "0.9.1": {
           "url": "0.9.1/scale-plugin-1.1.0.nbm",
+          "download_url": null,
           "last_update": "August 10, 2017",
           "plugin_version": null
         },
         "0.9.2": {
           "url": "0.9.2/scale-plugin-1.1.0.nbm",
+          "download_url": null,
           "last_update": "June 3, 2020",
           "plugin_version": null
         },
         "0.9.3": {
           "url": "0.9/scale-plugin-1.1.0.nbm",
+          "download_url": null,
           "last_update": "April 7, 2022",
           "plugin_version": "1.1.0"
         },
         "0.9.6": {
           "url": "0.9/scale-plugin-1.1.0.nbm",
+          "download_url": null,
           "last_update": "June 24, 2022",
           "plugin_version": "1.1.0"
         },
         "0.10.0": {
           "url": "0.10/scale-plugin-1.1.0.nbm",
+          "download_url": null,
           "last_update": "January 9, 2023",
           "plugin_version": "1.1.0"
         },
         "0.11.1": {
           "url": "0.11/scale-plugin-1.1.0.nbm",
+          "download_url": null,
           "last_update": "May 3, 2026",
           "plugin_version": "1.1.0"
         },
         "0.11.3": {
           "url": "0.11/scale-plugin-1.1.1.nbm",
+          "download_url": null,
           "last_update": "November 8, 2026",
           "plugin_version": "1.1.1"
         },
         "0.11.4": {
           "url": "0.11/scale-plugin-1.1.1.nbm",
+          "download_url": null,
           "last_update": "November 8, 2026",
           "plugin_version": "1.1.1"
         }
@@ -3553,41 +3880,49 @@
       "versions": {
         "0.9.1": {
           "url": "0.9.1/circle-pack-1.0.0.nbm",
+          "download_url": null,
           "last_update": "August 10, 2017",
           "plugin_version": null
         },
         "0.9.2": {
           "url": "0.9.2/circle-pack-1.0.0.nbm",
+          "download_url": null,
           "last_update": "June 3, 2020",
           "plugin_version": null
         },
         "0.9.3": {
           "url": "0.9/circle-pack-1.0.0.nbm",
+          "download_url": null,
           "last_update": "April 7, 2022",
           "plugin_version": "1.0.0"
         },
         "0.9.6": {
           "url": "0.9/circle-pack-1.0.0.nbm",
+          "download_url": null,
           "last_update": "June 24, 2022",
           "plugin_version": "1.0.0"
         },
         "0.10.0": {
           "url": "0.10/circle-pack-1.0.0.nbm",
+          "download_url": null,
           "last_update": "January 9, 2023",
           "plugin_version": "1.0.0"
         },
         "0.11.1": {
           "url": "0.11/circle-pack-1.0.0.nbm",
+          "download_url": null,
           "last_update": "May 3, 2026",
           "plugin_version": "1.0.0"
         },
         "0.11.3": {
           "url": "0.11/circle-pack-1.0.0.nbm",
+          "download_url": null,
           "last_update": "September 26, 2026",
           "plugin_version": "1.0.0"
         },
         "0.11.4": {
           "url": "0.11/circle-pack-1.0.0.nbm",
+          "download_url": null,
           "last_update": "November 8, 2026",
           "plugin_version": "1.0.0"
         }
@@ -3615,11 +3950,13 @@
       "versions": {
         "0.8.2": {
           "url": "0.8.2/at-granul-gephi-shpexporter.nbm",
+          "download_url": null,
           "last_update": "April 16, 2013",
           "plugin_version": null
         },
         "0.9.2": {
           "url": "0.9.2/shpexporter-1.1.0.nbm",
+          "download_url": null,
           "last_update": "June 3, 2019",
           "plugin_version": null
         }
@@ -3647,36 +3984,43 @@
       "versions": {
         "0.9.2": {
           "url": "0.9.2/newman-girvan-plugin-1.0.0.nbm",
+          "download_url": null,
           "last_update": "June 3, 2020",
           "plugin_version": null
         },
         "0.9.3": {
           "url": "0.9/newman-girvan-plugin-1.0.0.nbm",
+          "download_url": null,
           "last_update": "April 7, 2022",
           "plugin_version": "1.0.0"
         },
         "0.9.6": {
           "url": "0.9/newman-girvan-plugin-1.0.0.nbm",
+          "download_url": null,
           "last_update": "June 24, 2022",
           "plugin_version": "1.0.0"
         },
         "0.10.0": {
           "url": "0.10/newman-girvan-plugin-1.0.0.nbm",
+          "download_url": null,
           "last_update": "January 9, 2023",
           "plugin_version": "1.0.0"
         },
         "0.11.1": {
           "url": "0.11/newman-girvan-plugin-1.0.0.nbm",
+          "download_url": null,
           "last_update": "May 3, 2026",
           "plugin_version": "1.0.0"
         },
         "0.11.3": {
           "url": "0.11/newman-girvan-plugin-1.0.0.nbm",
+          "download_url": null,
           "last_update": "September 26, 2026",
           "plugin_version": "1.0.0"
         },
         "0.11.4": {
           "url": "0.11/newman-girvan-plugin-1.0.0.nbm",
+          "download_url": null,
           "last_update": "November 8, 2026",
           "plugin_version": "1.0.0"
         }
@@ -3704,16 +4048,19 @@
       "versions": {
         "0.9.2": {
           "url": "0.9.2/imagepreview-1.0.0.nbm",
+          "download_url": null,
           "last_update": "June 3, 2020",
           "plugin_version": null
         },
         "0.9.3": {
           "url": "0.9/imagepreview-1.0.0.nbm",
+          "download_url": null,
           "last_update": "April 7, 2022",
           "plugin_version": "1.0.0"
         },
         "0.9.6": {
           "url": "0.9/imagepreview-1.0.0.nbm",
+          "download_url": null,
           "last_update": "June 24, 2022",
           "plugin_version": "1.0.0"
         }
@@ -3741,36 +4088,43 @@
       "versions": {
         "0.9.2": {
           "url": "0.9.2/polinodeexporter-0.9.2.nbm",
+          "download_url": null,
           "last_update": "June 3, 2020",
           "plugin_version": null
         },
         "0.9.3": {
           "url": "0.9/polinodeexporter-0.9.3.nbm",
+          "download_url": null,
           "last_update": "June 24, 2022",
           "plugin_version": "0.9.3"
         },
         "0.9.6": {
           "url": "0.9/polinodeexporter-0.9.3.nbm",
+          "download_url": null,
           "last_update": "June 24, 2022",
           "plugin_version": "0.9.3"
         },
         "0.10.0": {
           "url": "0.10/polinodeexporter-0.9.3.nbm",
+          "download_url": null,
           "last_update": "January 9, 2023",
           "plugin_version": "0.9.3"
         },
         "0.11.1": {
           "url": "0.11/polinodeexporter-0.9.3.nbm",
+          "download_url": null,
           "last_update": "May 3, 2026",
           "plugin_version": "0.9.3"
         },
         "0.11.3": {
           "url": "0.11/polinodeexporter-0.9.3.nbm",
+          "download_url": null,
           "last_update": "September 26, 2026",
           "plugin_version": "0.9.3"
         },
         "0.11.4": {
           "url": "0.11/polinodeexporter-0.9.3.nbm",
+          "download_url": null,
           "last_update": "November 8, 2026",
           "plugin_version": "0.9.3"
         }
@@ -3798,36 +4152,43 @@
       "versions": {
         "0.9.2": {
           "url": "0.9.2/leiden-algorithm-gephi-plugin-1.0.0.nbm",
+          "download_url": null,
           "last_update": "June 3, 2020",
           "plugin_version": null
         },
         "0.9.3": {
           "url": "0.9/leiden-algorithm-gephi-plugin-1.0.0.nbm",
+          "download_url": null,
           "last_update": "April 7, 2022",
           "plugin_version": "1.0.0"
         },
         "0.9.6": {
           "url": "0.9/leiden-algorithm-gephi-plugin-1.0.0.nbm",
+          "download_url": null,
           "last_update": "June 24, 2022",
           "plugin_version": "1.0.0"
         },
         "0.10.0": {
           "url": "0.10/leiden-algorithm-gephi-plugin-1.0.0.nbm",
+          "download_url": null,
           "last_update": "January 9, 2023",
           "plugin_version": "1.0.0"
         },
         "0.11.1": {
           "url": "0.11/leiden-algorithm-gephi-plugin-1.0.0.nbm",
+          "download_url": null,
           "last_update": "May 3, 2026",
           "plugin_version": "1.0.0"
         },
         "0.11.3": {
           "url": "0.11/leiden-algorithm-gephi-plugin-1.0.1.nbm",
+          "download_url": null,
           "last_update": "November 8, 2026",
           "plugin_version": "1.0.1"
         },
         "0.11.4": {
           "url": "0.11/leiden-algorithm-gephi-plugin-1.0.1.nbm",
+          "download_url": null,
           "last_update": "November 8, 2026",
           "plugin_version": "1.0.1"
         }
@@ -3855,36 +4216,43 @@
       "versions": {
         "0.9.2": {
           "url": "0.9.2/bridge-gephi-plugin-1.0.1.nbm",
+          "download_url": null,
           "last_update": "June 3, 2020",
           "plugin_version": null
         },
         "0.9.3": {
           "url": "0.9/bridge-gephi-plugin-1.0.1.nbm",
+          "download_url": null,
           "last_update": "April 7, 2022",
           "plugin_version": "1.0.1"
         },
         "0.9.6": {
           "url": "0.9/bridge-gephi-plugin-1.0.1.nbm",
+          "download_url": null,
           "last_update": "June 24, 2022",
           "plugin_version": "1.0.1"
         },
         "0.10.0": {
           "url": "0.10/bridge-gephi-plugin-1.0.1.nbm",
+          "download_url": null,
           "last_update": "January 9, 2023",
           "plugin_version": "1.0.1"
         },
         "0.11.1": {
           "url": "0.11/bridge-gephi-plugin-1.0.1.nbm",
+          "download_url": null,
           "last_update": "May 3, 2026",
           "plugin_version": "1.0.1"
         },
         "0.11.3": {
           "url": "0.11/bridge-gephi-plugin-1.0.2.nbm",
+          "download_url": null,
           "last_update": "November 8, 2026",
           "plugin_version": "1.0.2"
         },
         "0.11.4": {
           "url": "0.11/bridge-gephi-plugin-1.0.2.nbm",
+          "download_url": null,
           "last_update": "November 8, 2026",
           "plugin_version": "1.0.2"
         }
@@ -3912,36 +4280,43 @@
       "versions": {
         "0.9.2": {
           "url": "0.9.2/boundingdiametersssuite-0.0.1.zip",
+          "download_url": null,
           "last_update": "June 3, 2020",
           "plugin_version": null
         },
         "0.9.3": {
           "url": "0.9/boundingdiametersssuite-0.0.1.zip",
+          "download_url": null,
           "last_update": "April 7, 2022",
           "plugin_version": "0.0.1"
         },
         "0.9.6": {
           "url": "0.9/boundingdiametersssuite-0.0.1.zip",
+          "download_url": null,
           "last_update": "June 24, 2022",
           "plugin_version": "0.0.1"
         },
         "0.10.0": {
           "url": "0.10/boundingdiametersssuite-0.0.1.zip",
+          "download_url": null,
           "last_update": "January 28, 2023",
           "plugin_version": "0.0.1"
         },
         "0.11.1": {
           "url": "0.11/boundingdiametersssuite-0.0.1.zip",
+          "download_url": null,
           "last_update": "May 3, 2026",
           "plugin_version": "0.0.1"
         },
         "0.11.3": {
           "url": "0.11/boundingdiametersssuite-0.0.2.zip",
+          "download_url": null,
           "last_update": "November 8, 2026",
           "plugin_version": "0.0.2"
         },
         "0.11.4": {
           "url": "0.11/boundingdiametersssuite-0.0.2.zip",
+          "download_url": null,
           "last_update": "November 8, 2026",
           "plugin_version": "0.0.2"
         }
@@ -3969,36 +4344,43 @@
       "versions": {
         "0.9.2": {
           "url": "0.9.2/dbscan-gephi-plugin-1.0.0.nbm",
+          "download_url": null,
           "last_update": "June 3, 2020",
           "plugin_version": null
         },
         "0.9.3": {
           "url": "0.9/dbscan-gephi-plugin-1.0.0.nbm",
+          "download_url": null,
           "last_update": "April 7, 2022",
           "plugin_version": "1.0.0"
         },
         "0.9.6": {
           "url": "0.9/dbscan-gephi-plugin-1.0.0.nbm",
+          "download_url": null,
           "last_update": "June 24, 2022",
           "plugin_version": "1.0.0"
         },
         "0.10.0": {
           "url": "0.10/dbscan-gephi-plugin-1.0.0.nbm",
+          "download_url": null,
           "last_update": "January 9, 2023",
           "plugin_version": "1.0.0"
         },
         "0.11.1": {
           "url": "0.11/dbscan-gephi-plugin-1.0.0.nbm",
+          "download_url": null,
           "last_update": "May 3, 2026",
           "plugin_version": "1.0.0"
         },
         "0.11.3": {
           "url": "0.11/dbscan-gephi-plugin-1.0.0.nbm",
+          "download_url": null,
           "last_update": "September 26, 2026",
           "plugin_version": "1.0.0"
         },
         "0.11.4": {
           "url": "0.11/dbscan-gephi-plugin-1.0.0.nbm",
+          "download_url": null,
           "last_update": "November 8, 2026",
           "plugin_version": "1.0.0"
         }
@@ -4026,36 +4408,43 @@
       "versions": {
         "0.9.2": {
           "url": "0.9.2/clustering-coefficient-gephi-plugin-1.0.0.nbm",
+          "download_url": null,
           "last_update": "June 3, 2020",
           "plugin_version": null
         },
         "0.9.3": {
           "url": "0.9/clustering-coefficient-gephi-plugin-1.0.0.nbm",
+          "download_url": null,
           "last_update": "April 7, 2022",
           "plugin_version": "1.0.0"
         },
         "0.9.6": {
           "url": "0.9/clustering-coefficient-gephi-plugin-1.0.0.nbm",
+          "download_url": null,
           "last_update": "June 24, 2022",
           "plugin_version": "1.0.0"
         },
         "0.10.0": {
           "url": "0.10/clustering-coefficient-gephi-plugin-1.0.0.nbm",
+          "download_url": null,
           "last_update": "January 9, 2023",
           "plugin_version": "1.0.0"
         },
         "0.11.1": {
           "url": "0.11/clustering-coefficient-gephi-plugin-1.0.0.nbm",
+          "download_url": null,
           "last_update": "May 3, 2026",
           "plugin_version": "1.0.0"
         },
         "0.11.3": {
           "url": "0.11/clustering-coefficient-gephi-plugin-1.0.1.nbm",
+          "download_url": null,
           "last_update": "November 8, 2026",
           "plugin_version": "1.0.1"
         },
         "0.11.4": {
           "url": "0.11/clustering-coefficient-gephi-plugin-1.0.1.nbm",
+          "download_url": null,
           "last_update": "November 8, 2026",
           "plugin_version": "1.0.1"
         }
@@ -4083,36 +4472,43 @@
       "versions": {
         "0.9.2": {
           "url": "0.9.2/kleinberg-generator-1.0.0.nbm",
+          "download_url": null,
           "last_update": "June 3, 2020",
           "plugin_version": null
         },
         "0.9.3": {
           "url": "0.9/kleinberg-generator-1.0.0.nbm",
+          "download_url": null,
           "last_update": "April 7, 2022",
           "plugin_version": "1.0.0"
         },
         "0.9.6": {
           "url": "0.9/kleinberg-generator-1.0.0.nbm",
+          "download_url": null,
           "last_update": "June 24, 2022",
           "plugin_version": "1.0.0"
         },
         "0.10.0": {
           "url": "0.10/kleinberg-generator-1.0.0.nbm",
+          "download_url": null,
           "last_update": "January 9, 2023",
           "plugin_version": "1.0.0"
         },
         "0.11.1": {
           "url": "0.11/kleinberg-generator-1.0.0.nbm",
+          "download_url": null,
           "last_update": "May 3, 2026",
           "plugin_version": "1.0.0"
         },
         "0.11.3": {
           "url": "0.11/kleinberg-generator-1.0.0.nbm",
+          "download_url": null,
           "last_update": "September 26, 2026",
           "plugin_version": "1.0.0"
         },
         "0.11.4": {
           "url": "0.11/kleinberg-generator-1.0.0.nbm",
+          "download_url": null,
           "last_update": "November 8, 2026",
           "plugin_version": "1.0.0"
         }
@@ -4140,36 +4536,43 @@
       "versions": {
         "0.9.2": {
           "url": "0.9.2/column-calculator-1.0.1.nbm",
+          "download_url": null,
           "last_update": "June 3, 2020",
           "plugin_version": null
         },
         "0.9.3": {
           "url": "0.9/column-calculator-1.0.1.nbm",
+          "download_url": null,
           "last_update": "April 7, 2022",
           "plugin_version": "1.0.1"
         },
         "0.9.6": {
           "url": "0.9/column-calculator-1.0.1.nbm",
+          "download_url": null,
           "last_update": "June 24, 2022",
           "plugin_version": "1.0.1"
         },
         "0.10.0": {
           "url": "0.10/column-calculator-1.0.1.nbm",
+          "download_url": null,
           "last_update": "January 9, 2023",
           "plugin_version": "1.0.1"
         },
         "0.11.1": {
           "url": "0.11/column-calculator-1.0.1.nbm",
+          "download_url": null,
           "last_update": "May 3, 2026",
           "plugin_version": "1.0.1"
         },
         "0.11.3": {
           "url": "0.11/column-calculator-1.0.1.nbm",
+          "download_url": null,
           "last_update": "September 26, 2026",
           "plugin_version": "1.0.1"
         },
         "0.11.4": {
           "url": "0.11/column-calculator-1.0.1.nbm",
+          "download_url": null,
           "last_update": "November 8, 2026",
           "plugin_version": "1.0.1"
         }
@@ -4202,36 +4605,43 @@
       "versions": {
         "0.9.2": {
           "url": "0.9.2/group-partition-gephi-plugin-1.0.0.nbm",
+          "download_url": null,
           "last_update": "June 3, 2020",
           "plugin_version": null
         },
         "0.9.3": {
           "url": "0.9/group-partition-gephi-plugin-1.0.0.nbm",
+          "download_url": null,
           "last_update": "April 7, 2022",
           "plugin_version": "1.0.0"
         },
         "0.9.6": {
           "url": "0.9/group-partition-gephi-plugin-1.0.1.nbm",
+          "download_url": null,
           "last_update": "July 3, 2022",
           "plugin_version": "1.0.1"
         },
         "0.10.0": {
           "url": "0.10/group-partition-gephi-plugin-1.0.1.nbm",
+          "download_url": null,
           "last_update": "January 9, 2023",
           "plugin_version": "1.0.1"
         },
         "0.11.1": {
           "url": "0.11/group-partition-gephi-plugin-1.0.1.nbm",
+          "download_url": null,
           "last_update": "May 3, 2026",
           "plugin_version": "1.0.1"
         },
         "0.11.3": {
           "url": "0.11/group-partition-gephi-plugin-1.0.1.nbm",
+          "download_url": null,
           "last_update": "September 26, 2026",
           "plugin_version": "1.0.1"
         },
         "0.11.4": {
           "url": "0.11/group-partition-gephi-plugin-1.0.1.nbm",
+          "download_url": null,
           "last_update": "November 8, 2026",
           "plugin_version": "1.0.1"
         }
@@ -4259,36 +4669,43 @@
       "versions": {
         "0.9.2": {
           "url": "0.9.2/hairball-buster-0.9.2.nbm",
+          "download_url": null,
           "last_update": "octubre 5, 2021",
           "plugin_version": null
         },
         "0.9.3": {
           "url": "0.9/hairball-buster-0.9.3.nbm",
+          "download_url": null,
           "last_update": "April 7, 2022",
           "plugin_version": "0.9.3"
         },
         "0.9.6": {
           "url": "0.9/hairball-buster-0.9.3.nbm",
+          "download_url": null,
           "last_update": "June 24, 2022",
           "plugin_version": "0.9.3"
         },
         "0.10.0": {
           "url": "0.10/hairball-buster-0.9.3.nbm",
+          "download_url": null,
           "last_update": "January 9, 2023",
           "plugin_version": "0.9.3"
         },
         "0.11.1": {
           "url": "0.11/hairball-buster-0.9.3.nbm",
+          "download_url": null,
           "last_update": "May 3, 2026",
           "plugin_version": "0.9.3"
         },
         "0.11.3": {
           "url": "0.11/hairball-buster-0.9.4.nbm",
+          "download_url": null,
           "last_update": "November 8, 2026",
           "plugin_version": "0.9.4"
         },
         "0.11.4": {
           "url": "0.11/hairball-buster-0.9.4.nbm",
+          "download_url": null,
           "last_update": "November 8, 2026",
           "plugin_version": "0.9.4"
         }
@@ -4316,11 +4733,13 @@
       "versions": {
         "0.9.6": {
           "url": "0.9/twitter-v2-2.0.4.nbm",
+          "download_url": null,
           "last_update": "December 3, 2022",
           "plugin_version": "2.0.4"
         },
         "0.10.0": {
           "url": "0.10/twitter-v2-2.0.5.nbm",
+          "download_url": null,
           "last_update": "January 9, 2023",
           "plugin_version": "2.0.5"
         }
@@ -4357,11 +4776,13 @@
       "versions": {
         "0.9.6": {
           "url": "0.9/inspector-tool-0.2.1.nbm",
+          "download_url": null,
           "last_update": "July 3, 2022",
           "plugin_version": "0.2.1"
         },
         "0.10.0": {
           "url": "0.10/inspector-tool-0.2.1.nbm",
+          "download_url": null,
           "last_update": "January 9, 2023",
           "plugin_version": "0.2.1"
         }
@@ -4389,26 +4810,31 @@
       "versions": {
         "0.9.6": {
           "url": "0.9/er-generator-1.0.1.nbm",
+          "download_url": null,
           "last_update": "July 17, 2022",
           "plugin_version": "1.0.1"
         },
         "0.10.0": {
           "url": "0.10/er-generator-1.0.1.nbm",
+          "download_url": null,
           "last_update": "January 9, 2023",
           "plugin_version": "1.0.1"
         },
         "0.11.1": {
           "url": "0.11/er-generator-1.0.1.nbm",
+          "download_url": null,
           "last_update": "May 3, 2026",
           "plugin_version": "1.0.1"
         },
         "0.11.3": {
           "url": "0.11/er-generator-1.0.1.nbm",
+          "download_url": null,
           "last_update": "September 26, 2026",
           "plugin_version": "1.0.1"
         },
         "0.11.4": {
           "url": "0.11/er-generator-1.0.1.nbm",
+          "download_url": null,
           "last_update": "November 8, 2026",
           "plugin_version": "1.0.1"
         }
@@ -4441,26 +4867,31 @@
       "versions": {
         "0.9.6": {
           "url": "0.9/katz-centrality-1.0.1.nbm",
+          "download_url": null,
           "last_update": "September 10, 2022",
           "plugin_version": "1.0.1"
         },
         "0.10.0": {
           "url": "0.10/katz-centrality-1.0.1.nbm",
+          "download_url": null,
           "last_update": "January 9, 2023",
           "plugin_version": "1.0.1"
         },
         "0.11.1": {
           "url": "0.11/katz-centrality-1.0.1.nbm",
+          "download_url": null,
           "last_update": "May 3, 2026",
           "plugin_version": "1.0.1"
         },
         "0.11.3": {
           "url": "0.11/katz-centrality-1.0.1.nbm",
+          "download_url": null,
           "last_update": "September 26, 2026",
           "plugin_version": "1.0.1"
         },
         "0.11.4": {
           "url": "0.11/katz-centrality-1.0.1.nbm",
+          "download_url": null,
           "last_update": "November 8, 2026",
           "plugin_version": "1.0.1"
         }
@@ -4497,31 +4928,37 @@
       "versions": {
         "0.8.2": {
           "url": "0.8.2/org-gephi-plugins-spatialranking1.nbm",
+          "download_url": null,
           "last_update": "January 4, 2013",
           "plugin_version": null
         },
         "0.9.6": {
           "url": "0.9/position-ranking-plugin-2.0.0.nbm",
+          "download_url": null,
           "last_update": "September 6, 2022",
           "plugin_version": "2.0.0"
         },
         "0.10.0": {
           "url": "0.10/position-ranking-plugin-2.0.1.nbm",
+          "download_url": null,
           "last_update": "January 9, 2023",
           "plugin_version": "2.0.1"
         },
         "0.11.1": {
           "url": "0.11/position-ranking-plugin-2.0.1.nbm",
+          "download_url": null,
           "last_update": "May 3, 2026",
           "plugin_version": "2.0.1"
         },
         "0.11.3": {
           "url": "0.11/position-ranking-plugin-2.0.1.nbm",
+          "download_url": null,
           "last_update": "September 26, 2026",
           "plugin_version": "2.0.1"
         },
         "0.11.4": {
           "url": "0.11/position-ranking-plugin-2.0.1.nbm",
+          "download_url": null,
           "last_update": "November 8, 2026",
           "plugin_version": "2.0.1"
         }
@@ -4554,26 +4991,31 @@
       "versions": {
         "0.8.2": {
           "url": "0.8.2/neo4j-plugin-2.1.3.zip",
+          "download_url": null,
           "last_update": "August 7, 2014",
           "plugin_version": null
         },
         "0.9.6": {
           "url": "0.9/neo4j-plugin-4.0.0.nbm",
+          "download_url": null,
           "last_update": "September 8, 2022",
           "plugin_version": "4.0.0"
         },
         "0.10.0": {
           "url": "0.10/neo4j-plugin-4.0.1.nbm",
+          "download_url": null,
           "last_update": "January 10, 2023",
           "plugin_version": "4.0.1"
         },
         "0.11.3": {
           "url": "0.11/neo4j-plugin-5.0.1.nbm",
+          "download_url": null,
           "last_update": "September 26, 2026",
           "plugin_version": "5.0.1"
         },
         "0.11.4": {
           "url": "0.11/neo4j-plugin-5.0.1.nbm",
+          "download_url": null,
           "last_update": "November 8, 2026",
           "plugin_version": "5.0.1"
         }
@@ -4606,26 +5048,31 @@
       "versions": {
         "0.9.6": {
           "url": "0.9/link-prediction-1.3.1.nbm",
+          "download_url": null,
           "last_update": "September 10, 2022",
           "plugin_version": "1.3.1"
         },
         "0.10.0": {
           "url": "0.10/link-prediction-1.3.1.nbm",
+          "download_url": null,
           "last_update": "January 9, 2023",
           "plugin_version": "1.3.1"
         },
         "0.11.1": {
           "url": "0.11/link-prediction-1.3.1.nbm",
+          "download_url": null,
           "last_update": "May 3, 2026",
           "plugin_version": "1.3.1"
         },
         "0.11.3": {
           "url": "0.11/link-prediction-1.3.1.nbm",
+          "download_url": null,
           "last_update": "September 26, 2026",
           "plugin_version": "1.3.1"
         },
         "0.11.4": {
           "url": "0.11/link-prediction-1.3.1.nbm",
+          "download_url": null,
           "last_update": "November 8, 2026",
           "plugin_version": "1.3.1"
         }
@@ -4653,26 +5100,31 @@
       "versions": {
         "0.9.6": {
           "url": "0.9/web-publish-plugin-1.0.0.nbm",
+          "download_url": null,
           "last_update": "September 30, 2022",
           "plugin_version": "1.0.0"
         },
         "0.10.0": {
           "url": "0.10/web-publish-plugin-1.1.1.nbm",
+          "download_url": null,
           "last_update": "February 7, 2023",
           "plugin_version": "1.1.1"
         },
         "0.11.1": {
           "url": "0.11/web-publish-plugin-1.1.1.nbm",
+          "download_url": null,
           "last_update": "May 3, 2026",
           "plugin_version": "1.1.1"
         },
         "0.11.3": {
           "url": "0.11/web-publish-plugin-1.1.1.nbm",
+          "download_url": null,
           "last_update": "September 26, 2026",
           "plugin_version": "1.1.1"
         },
         "0.11.4": {
           "url": "0.11/web-publish-plugin-1.1.1.nbm",
+          "download_url": null,
           "last_update": "November 8, 2026",
           "plugin_version": "1.1.1"
         }
@@ -4705,21 +5157,25 @@
       "versions": {
         "0.10.0": {
           "url": "0.10/orderedlayout-1.0.0.nbm",
+          "download_url": null,
           "last_update": "January 28, 2023",
           "plugin_version": "1.0.0"
         },
         "0.11.1": {
           "url": "0.11/orderedlayout-1.0.0.nbm",
+          "download_url": null,
           "last_update": "May 3, 2026",
           "plugin_version": "1.0.0"
         },
         "0.11.3": {
           "url": "0.11/orderedlayout-1.0.1.nbm",
+          "download_url": null,
           "last_update": "November 8, 2026",
           "plugin_version": "1.0.1"
         },
         "0.11.4": {
           "url": "0.11/orderedlayout-1.0.1.nbm",
+          "download_url": null,
           "last_update": "November 8, 2026",
           "plugin_version": "1.0.1"
         }
@@ -4752,26 +5208,31 @@
       "versions": {
         "0.8.2": {
           "url": "0.8.2/seadragon-web-export.zip",
+          "download_url": null,
           "last_update": "January 4, 2013",
           "plugin_version": null
         },
         "0.10.0": {
           "url": "0.10/openseadragon-export-2.0.2.nbm",
+          "download_url": null,
           "last_update": "February 19, 2023",
           "plugin_version": "2.0.2"
         },
         "0.11.1": {
           "url": "0.11/openseadragon-export-2.0.2.nbm",
+          "download_url": null,
           "last_update": "May 3, 2026",
           "plugin_version": "2.0.2"
         },
         "0.11.3": {
           "url": "0.11/openseadragon-export-2.0.2.nbm",
+          "download_url": null,
           "last_update": "September 26, 2026",
           "plugin_version": "2.0.2"
         },
         "0.11.4": {
           "url": "0.11/openseadragon-export-2.0.2.nbm",
+          "download_url": null,
           "last_update": "November 8, 2026",
           "plugin_version": "2.0.2"
         }
@@ -4799,6 +5260,7 @@
       "versions": {
         "0.10.0": {
           "url": "0.10/word-cloud-plugin-1.1.1.nbm",
+          "download_url": null,
           "last_update": "June 21, 2023",
           "plugin_version": "1.1.1"
         }
@@ -4826,21 +5288,25 @@
       "versions": {
         "0.10.0": {
           "url": "0.10/bluesky-gephi-0.1.0.nbm",
+          "download_url": null,
           "last_update": "November 14, 2023",
           "plugin_version": "0.1.0"
         },
         "0.11.1": {
           "url": "0.11/bluesky-gephi-0.2.3.nbm",
+          "download_url": null,
           "last_update": "July 31, 2026",
           "plugin_version": "0.2.3"
         },
         "0.11.3": {
           "url": "0.11/bluesky-gephi-0.2.3.nbm",
+          "download_url": null,
           "last_update": "September 26, 2026",
           "plugin_version": "0.2.3"
         },
         "0.11.4": {
           "url": "0.11/bluesky-gephi-0.2.3.nbm",
+          "download_url": null,
           "last_update": "November 8, 2026",
           "plugin_version": "0.2.3"
         }
@@ -4868,11 +5334,13 @@
       "versions": {
         "0.11.3": {
           "url": "0.11/weighted-bridging-centrality-1.0.1.nbm",
+          "download_url": null,
           "last_update": "November 8, 2026",
           "plugin_version": "1.0.1"
         },
         "0.11.4": {
           "url": "0.11/weighted-bridging-centrality-1.0.1.nbm",
+          "download_url": null,
           "last_update": "November 8, 2026",
           "plugin_version": "1.0.1"
         }
@@ -4913,11 +5381,13 @@
       "versions": {
         "0.11.3": {
           "url": "0.11/shape-by-partition-1.2.0.nbm",
+          "download_url": null,
           "last_update": "November 8, 2026",
           "plugin_version": "1.2.0"
         },
         "0.11.4": {
           "url": "0.11/shape-by-partition-1.2.0.nbm",
+          "download_url": null,
           "last_update": "November 8, 2026",
           "plugin_version": "1.2.0"
         }
@@ -4945,6 +5415,7 @@
       "versions": {
         "0.11.4": {
           "url": "0.11/gephi-ai-1.6.1.nbm",
+          "download_url": null,
           "last_update": "November 8, 2026",
           "plugin_version": "1.6.1"
         }
@@ -4977,6 +5448,7 @@
       "versions": {
         "0.11.4": {
           "url": "0.11/community-clusters-1.0.0.nbm",
+          "download_url": null,
           "last_update": "November 12, 2026",
           "plugin_version": "1.0.0"
         }
