@@ -1,0 +1,89 @@
+package org.alexandrebarao.networksplitter3d;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+
+import org.gephi.graph.api.Column;
+import org.gephi.graph.api.Graph;
+import org.gephi.graph.api.GraphModel;
+import org.gephi.graph.api.Node;
+import org.gephi.graph.api.Table;
+import org.junit.Test;
+
+public class NetworkSplitter3DTest {
+
+    @Test
+    public void runsAfterAColumnWasRemoved() {
+        GraphModel graphModel = GraphModel.Factory.newInstance();
+        Table nodeTable = graphModel.getNodeTable();
+        // Removing a column leaves its slot empty, columns are no longer numbered 0..countColumns()-1
+        nodeTable.addColumn("removed", Integer.class);
+        nodeTable.addColumn("kept", Integer.class);
+        nodeTable.removeColumn("removed");
+        Node[] nodes = addNodes(graphModel, 3);
+
+        run(graphModel, 0);
+
+        Column result = nodeTable.getColumn(NetworkSplitter3D.SPLITTER_Z_VALUE);
+        assertNotNull(result);
+        for (Node node : nodes) {
+            assertEquals(0, node.getAttribute(result));
+        }
+    }
+
+    @Test
+    public void usesAZColumnStoredAfterARemovedColumn() {
+        GraphModel graphModel = GraphModel.Factory.newInstance();
+        Table nodeTable = graphModel.getNodeTable();
+        nodeTable.addColumn("removed", Integer.class);
+        Column z = nodeTable.addColumn("height", "Height [z]", Integer.class, 0);
+        nodeTable.removeColumn("removed");
+        Node[] nodes = addNodes(graphModel, 3);
+        for (int i = 0; i < nodes.length; i++) {
+            nodes[i].setAttribute(z, i);
+        }
+
+        run(graphModel, 2);
+
+        Column result = nodeTable.getColumn(NetworkSplitter3D.SPLITTER_Z_VALUE);
+        for (int i = 0; i < nodes.length; i++) {
+            assertEquals(i, nodes[i].getAttribute(result));
+        }
+    }
+
+    @Test
+    public void findingTheZColumnDoesNotLeaveTheTableLocked() {
+        GraphModel graphModel = GraphModel.Factory.newInstance();
+        Table nodeTable = graphModel.getNodeTable();
+        nodeTable.addColumn("height", "Height [z]", Integer.class, 0);
+        nodeTable.addColumn("other", Integer.class);
+        addNodes(graphModel, 2);
+
+        run(graphModel, 1);
+
+        assertEquals(0, nodeTable.getLock().getHoldCount());
+        assertEquals(0, graphModel.getGraph().getLock().getReadHoldCount());
+    }
+
+    private static Node[] addNodes(GraphModel graphModel, int count) {
+        Graph graph = graphModel.getGraph();
+        Node[] nodes = new Node[count];
+        for (int i = 0; i < count; i++) {
+            nodes[i] = graphModel.factory().newNode("n" + i);
+            graph.addNode(nodes[i]);
+        }
+        return nodes;
+    }
+
+    private static void run(GraphModel graphModel, int zLevels) {
+        NetworkSplitter3D layout = new NetworkSplitter3D(new NetworkSplitter3DBuilder());
+        layout.setGraphModel(graphModel);
+        layout.resetPropertiesValues();
+        layout.setZlevels(zLevels);
+        layout.initAlgo();
+        while (layout.canAlgo()) {
+            layout.goAlgo();
+        }
+        layout.endAlgo();
+    }
+}
