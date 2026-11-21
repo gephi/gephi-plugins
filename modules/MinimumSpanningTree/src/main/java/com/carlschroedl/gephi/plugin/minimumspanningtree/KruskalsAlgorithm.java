@@ -69,12 +69,14 @@ public class KruskalsAlgorithm extends MinimumSpanningTreeAlgorithm {
                 edgeQ.add(new KEdge(e));
             }//endforeach
 
-            //By definition, a tree of n node must have n-1 edges
+            //By definition, a tree of n node must have n-1 edges. A graph that
+            //isn't connected has no spanning tree, only a spanning forest with
+            //fewer edges, so the loop also stops once every edge was examined
             int finishSize = graph.getNodeCount() - 1;
 
             KEdge tempKEdge; //KEdge popped off the PriorityQueue
 
-            while (edgesInST < finishSize) {
+            while (edgesInST < finishSize && !edgeQ.isEmpty()) {
                 tempKEdge = edgeQ.remove();
                 if (tempKEdge.getSource().getDjsPointer().find()
                         != tempKEdge.getTarget().getDjsPointer().find()) {
