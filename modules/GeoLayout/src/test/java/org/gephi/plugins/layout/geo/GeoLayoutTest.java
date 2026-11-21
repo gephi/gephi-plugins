@@ -1,6 +1,7 @@
 package org.gephi.plugins.layout.geo;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
@@ -135,6 +136,116 @@ public class GeoLayoutTest {
         }
 
         assertEquals(0, graphModel.getGraphVisible().getLock().getReadHoldCount());
+    }
+
+    @Test
+    public void columnsPickedInAnotherGraphModelAreReadInTheCurrentOne() {
+        GraphModel other = graphModelWithMoreColumns("latitude", "longitude");
+
+        GraphModel graphModel = GraphModel.Factory.newInstance();
+        Node a = addNode(graphModel, "a", 10.0, 0.0);
+        Node b = addNode(graphModel, "b", 20.0, 10.0);
+
+        GeoLayout layout = newLayout(graphModel, "Equirectangular");
+        layout.setCentered(false);
+        // As when a layout preset saved in another workspace is applied: the columns belong to that workspace
+        layout.setLatitude(other.getNodeTable().getColumn("latitude"));
+        layout.setLongitude(other.getNodeTable().getColumn("longitude"));
+        run(layout);
+
+        assertEquals(Math.toRadians(10.0) * layout.getScale(), a.y(), 1e-2);
+        assertEquals(0.0, a.x(), 1e-2);
+        assertEquals(Math.toRadians(20.0) * layout.getScale(), b.y(), 1e-2);
+        assertEquals(Math.toRadians(10.0) * layout.getScale(), b.x(), 1e-2);
+    }
+
+    @Test
+    public void columnsPickedInAnotherGraphModelWithTheSameIndexesAreReadInTheCurrentOne() {
+        GraphModel other = GraphModel.Factory.newInstance();
+        other.getNodeTable().addColumn("latitude", Double.class);
+        other.getNodeTable().addColumn("longitude", Double.class);
+
+        GraphModel graphModel = GraphModel.Factory.newInstance();
+        Node a = addNode(graphModel, "a", 10.0, 0.0);
+        Node b = addNode(graphModel, "b", 20.0, 10.0);
+
+        GeoLayout layout = newLayout(graphModel, "Equirectangular");
+        layout.setCentered(false);
+        layout.setLatitude(other.getNodeTable().getColumn("latitude"));
+        layout.setLongitude(other.getNodeTable().getColumn("longitude"));
+        run(layout);
+
+        assertEquals(Math.toRadians(10.0) * layout.getScale(), a.y(), 1e-2);
+        assertEquals(Math.toRadians(20.0) * layout.getScale(), b.y(), 1e-2);
+        assertEquals(Math.toRadians(10.0) * layout.getScale(), b.x(), 1e-2);
+    }
+
+    @Test
+    public void columnsOfAnotherGraphModelWithoutACounterpartLeavePositionsUnchanged() {
+        GraphModel other = graphModelWithMoreColumns("lat_deg", "lon_deg");
+
+        GraphModel graphModel = GraphModel.Factory.newInstance();
+        Node n = addNode(graphModel, "paris", 48.85, 2.35);
+        n.setX(12f);
+        n.setY(-7f);
+
+        GeoLayout layout = newLayout(graphModel, "Mercator");
+        layout.setLatitude(other.getNodeTable().getColumn("lat_deg"));
+        layout.setLongitude(other.getNodeTable().getColumn("lon_deg"));
+
+        layout.initAlgo();
+        assertFalse(layout.canAlgo());
+        // A controller only calls goAlgo() while canAlgo() is true, but calling it anyway must not fail
+        layout.goAlgo();
+
+        assertEquals(12f, n.x(), 0f);
+        assertEquals(-7f, n.y(), 0f);
+        assertEquals(0, graphModel.getGraphVisible().getLock().getReadHoldCount());
+    }
+
+    @Test
+    public void aColumnRemovedFromTheNodeTableLeavesPositionsUnchanged() {
+        GraphModel graphModel = GraphModel.Factory.newInstance();
+        Node n = addNode(graphModel, "paris", 48.85, 2.35);
+        n.setX(12f);
+        n.setY(-7f);
+
+        GeoLayout layout = newLayout(graphModel, "Mercator");
+        graphModel.getNodeTable().removeColumn("latitude");
+
+        layout.initAlgo();
+        assertFalse(layout.canAlgo());
+        layout.goAlgo();
+
+        assertEquals(12f, n.x(), 0f);
+        assertEquals(-7f, n.y(), 0f);
+        assertEquals(0, graphModel.getGraphVisible().getLock().getReadHoldCount());
+    }
+
+    @Test
+    public void aColumnReplacedInTheNodeTableIsReadAgain() {
+        GraphModel graphModel = GraphModel.Factory.newInstance();
+        Node n = addNode(graphModel, "paris", 48.85, 2.35);
+
+        GeoLayout layout = newLayout(graphModel, "Equirectangular");
+        layout.setCentered(false);
+        graphModel.getNodeTable().removeColumn("latitude");
+        graphModel.getNodeTable().addColumn("latitude", Double.class);
+        n.setAttribute("latitude", 30.0);
+        run(layout);
+
+        assertEquals(Math.toRadians(30.0) * layout.getScale(), n.y(), 1e-2);
+        assertEquals(Math.toRadians(2.35) * layout.getScale(), n.x(), 1e-2);
+    }
+
+    private static GraphModel graphModelWithMoreColumns(String latitudeId, String longitudeId) {
+        // Two extra columns come first, so latitude and longitude get indexes that are empty in a model made by addNode()
+        GraphModel graphModel = GraphModel.Factory.newInstance();
+        graphModel.getNodeTable().addColumn("population", Double.class);
+        graphModel.getNodeTable().addColumn("rank", Double.class);
+        graphModel.getNodeTable().addColumn(latitudeId, Double.class);
+        graphModel.getNodeTable().addColumn(longitudeId, Double.class);
+        return graphModel;
     }
 
     private static GeoLayout newLayout(GraphModel graphModel, String projection) {
