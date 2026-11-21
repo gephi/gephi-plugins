@@ -107,6 +107,13 @@ public class GephiAPIServer implements HttpHandler {
 
                 sendJson(exchange, status, result);
 
+            } catch (IOException e) {
+                // Only reading the request body and writing the reply throw this, and either means the
+                // client has gone (it timed out, or its process ended). There is nobody to send an error
+                // to, and no fault in Gephi to report, so the log line carries no exception: Gephi's
+                // crash reporter sends every logged exception, at any level, as a bug report.
+                LOGGER.log(Level.FINE, "Gephi AI API: lost the client during {0} {1}: {2}",
+                    new Object[]{method, uri, e.toString()});
             } catch (Exception e) {
                 LOGGER.log(Level.WARNING, "API error", e);
                 JsonObject error = new JsonObject();
