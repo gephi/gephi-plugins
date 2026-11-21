@@ -141,6 +141,17 @@ public class NetworkSplitter3D implements Layout {
 
         Graph graph = graphModel.getGraphVisible();
         graph.readLock();
+        try {
+            layoutNodes(graph);
+        } finally {
+            graph.readUnlockAll();
+        }
+
+        endAlgo();
+    }
+
+    // Computes the z-levels and places the nodes, the caller holds the graph read lock.
+    private void layoutNodes(Graph graph) {
 
         ////////////////////////////////////////////////////
         // Store X,Y,Z coordinates of the current layout
@@ -259,10 +270,6 @@ public class NetworkSplitter3D implements Layout {
             }
 
         }
-
-        graph.readUnlockAll();
-
-        endAlgo();
     }
 
     @Override
@@ -332,7 +339,7 @@ public class NetworkSplitter3D implements Layout {
 
             z = ((Number) (n.getAttribute(col))).doubleValue();
 
-        } else if (col.getTypeClass() == String.class) {
+        } else if (col.getTypeClass() == String.class && n.getAttribute(col) != null) {
 
             try {
                 z = Double.parseDouble(((String) (n.getAttribute(col))).trim());
