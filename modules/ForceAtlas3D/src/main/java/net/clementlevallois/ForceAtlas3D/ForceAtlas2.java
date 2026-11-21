@@ -223,7 +223,14 @@ public class ForceAtlas2 implements Layout {
             try {
                 future.get();
             } catch (InterruptedException ex) {
-                Exceptions.printStackTrace(ex);
+                // The layout controller interrupts the layout thread when a stop request isn't honoured in time. This is a
+                // cancellation and not an error: stop the repulsion tasks and leave the iteration without applying the
+                // forces of a partial repulsion. The interrupt is kept for the caller, canAlgo() is false while it is set.
+                Thread.currentThread().interrupt();
+                for (Future task : threads) {
+                    task.cancel(true);
+                }
+                return;
             } catch (ExecutionException ex) {
                 Exceptions.printStackTrace(ex);
             }
@@ -322,7 +329,8 @@ public class ForceAtlas2 implements Layout {
 
     @Override
     public boolean canAlgo() {
-        return graphModel != null;
+        // The layout thread is interrupted when the layout is stopped and doesn't stop in time
+        return graphModel != null && !Thread.currentThread().isInterrupted();
     }
 
     @Override

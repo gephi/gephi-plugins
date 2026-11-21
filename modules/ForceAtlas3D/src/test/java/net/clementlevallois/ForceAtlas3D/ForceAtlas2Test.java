@@ -3,11 +3,26 @@ package net.clementlevallois.ForceAtlas3D;
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
+import java.lang.reflect.Field;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.FutureTask;
 import java.util.concurrent.RejectedExecutionException;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicReference;
+import java.util.logging.Handler;
+import java.util.logging.LogRecord;
+import java.util.logging.Logger;
 import org.gephi.graph.api.Configuration;
 import org.gephi.graph.api.Edge;
 import org.gephi.graph.api.Graph;
@@ -74,6 +89,170 @@ public class ForceAtlas2Test {
         }
 
         assertEquals(0, graphModel.getGraphVisible().getLock().getReadHoldCount());
+    }
+
+    @Test
+    public void stoppingTheLayoutWhileItWaitsForTheRepulsionIsNotReportedAsAnError() throws Exception {
+        GraphModel graphModel = staticWeightsGraph(false);
+        ForceAtlas2 layout = newLayout(graphModel, 1.);
+        layout.initAlgo();
+        assertTrue(layout.canAlgo());
+
+        // Keep the only worker busy, so the repulsion tasks wait in the queue and the layout thread waits for them
+        ExecutorService pool = poolOf(layout);
+        CountDownLatch busy = new CountDownLatch(1);
+        CountDownLatch release = new CountDownLatch(1);
+        pool.submit(() -> {
+            busy.countDown();
+            try {
+                release.await();
+            } catch (InterruptedException ignored) {
+            }
+        });
+        assertTrue(busy.await(10, TimeUnit.SECONDS));
+
+        CrashReporter reporter = new CrashReporter();
+        AtomicReference<Throwable> failure = new AtomicReference<>();
+        AtomicBoolean interruptKept = new AtomicBoolean();
+        AtomicBoolean canContinue = new AtomicBoolean(true);
+        AtomicInteger locksHeld = new AtomicInteger(-1);
+        Thread layoutThread = new Thread(() -> {
+            try {
+                // What the layout controller does on its thread, until it checks whether to go on
+                layout.goAlgo();
+                interruptKept.set(Thread.currentThread().isInterrupted());
+                canContinue.set(layout.canAlgo());
+                locksHeld.set(graphModel.getGraphVisible().getLock().getReadHoldCount());
+            } catch (Throwable t) {
+                failure.set(t);
+            }
+        }, "layout");
+        layoutThread.setDaemon(true);
+        try {
+            layoutThread.start();
+            awaitWaitingForATask(layoutThread);
+
+            // The controller does this when a stop request isn't honoured in time
+            layoutThread.interrupt();
+            layoutThread.join(TimeUnit.SECONDS.toMillis(5));
+
+            assertTrue("Stopping the layout is not an error to report: " + reporter.reported(), reporter.reported().isEmpty());
+            assertFalse("The layout should leave the iteration when interrupted, it keeps waiting for the repulsion",
+                    layoutThread.isAlive());
+        } finally {
+            release.countDown();
+            reporter.close();
+            pool.shutdown();
+        }
+
+        assertNull("The layout failed: " + failure.get(), failure.get());
+        assertTrue("The interrupt must be kept for the caller", interruptKept.get());
+        assertFalse("The controller's loop would go on running the layout", canContinue.get());
+        assertEquals("The graph is still locked", 0, locksHeld.get());
+
+        // The repulsion tasks that were still queued were cancelled: they never ran, no node moved
+        assertTrue(pool.awaitTermination(10, TimeUnit.SECONDS));
+        for (Node n : graphModel.getGraph().getNodes()) {
+            ForceAtlas2LayoutData data = n.getLayoutData();
+            assertEquals(n.getId() + " got a force", 0., Math.abs(data.dx) + Math.abs(data.dy) + Math.abs(data.dz), 0.);
+        }
+        layout.endAlgo();
+    }
+
+    @Test
+    public void aRepulsionTaskStopsWhenItsThreadIsInterrupted() {
+        AtomicInteger forces = new AtomicInteger();
+        ForceFactory.RepulsionForce counting = ForceFactory.builder.new RepulsionForce() {
+            @Override
+            public void apply(Node n1, Node n2) {
+                forces.incrementAndGet();
+            }
+
+            @Override
+            public void apply(Node n, Region r) {
+                forces.incrementAndGet();
+            }
+
+            @Override
+            public void apply(Node n, double g) {
+                forces.incrementAndGet();
+            }
+        };
+        Node[] nodes = staticWeightsGraph(false).getGraph().getNodes().toArray();
+        for (Node n : nodes) {
+            n.setLayoutData(new ForceAtlas2LayoutData());
+        }
+
+        for (boolean barnesHut : new boolean[]{false, true}) {
+            Region region = null;
+            if (barnesHut) {
+                region = new Region(nodes);
+                region.buildSubRegions();
+            }
+            NodesThread task = new NodesThread(nodes, 0, nodes.length, barnesHut, 1.2, 1., counting, 40., region, counting);
+
+            task.run();
+            assertTrue("The task applies forces, barnesHut " + barnesHut, forces.getAndSet(0) > 0);
+
+            Thread.currentThread().interrupt();
+            try {
+                task.run();
+            } finally {
+                // Don't leave the test thread interrupted
+                Thread.interrupted();
+            }
+            assertEquals("barnesHut " + barnesHut, 0, forces.get());
+        }
+    }
+
+    /**
+     * What Gephi's crash reporter does with the log: every record that carries a Throwable becomes a crash report
+     */
+    private static final class CrashReporter extends Handler {
+
+        private final List<Throwable> reported = Collections.synchronizedList(new ArrayList<Throwable>());
+
+        CrashReporter() {
+            Logger.getLogger("").addHandler(this);
+        }
+
+        @Override
+        public void publish(LogRecord record) {
+            if (record.getThrown() != null) {
+                reported.add(record.getThrown());
+            }
+        }
+
+        @Override
+        public void flush() {
+        }
+
+        @Override
+        public void close() {
+            Logger.getLogger("").removeHandler(this);
+        }
+
+        List<Throwable> reported() {
+            return new ArrayList<Throwable>(reported);
+        }
+    }
+
+    private static ExecutorService poolOf(ForceAtlas2 layout) throws Exception {
+        Field pool = ForceAtlas2.class.getDeclaredField("pool");
+        pool.setAccessible(true);
+        return (ExecutorService) pool.get(layout);
+    }
+
+    private static void awaitWaitingForATask(Thread thread) throws InterruptedException {
+        long deadline = System.nanoTime() + TimeUnit.SECONDS.toNanos(10);
+        while (System.nanoTime() < deadline) {
+            if (thread.getState() == Thread.State.WAITING
+                    && Arrays.stream(thread.getStackTrace()).anyMatch(f -> f.getClassName().equals(FutureTask.class.getName()))) {
+                return;
+            }
+            Thread.sleep(1);
+        }
+        fail("The layout never waited for a repulsion task");
     }
 
     /**
