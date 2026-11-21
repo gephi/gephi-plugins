@@ -96,6 +96,7 @@ public class ForceAtlas2 implements Layout {
     private int currentThreadCount;
     double outboundAttCompensation = 1;
     private ExecutorService pool;
+    private volatile boolean cancelled;
     private static final double MAX_GRAVITY = 100;
     private double gravityXRatio;
     private double gravityYRatio;
@@ -107,6 +108,7 @@ public class ForceAtlas2 implements Layout {
 
     @Override
     public void initAlgo() {
+        cancelled = false;
         speed = 1.;
         speedEfficiency = 1.;
 
@@ -290,7 +292,15 @@ public class ForceAtlas2 implements Layout {
             try {
                 future.get();
             } catch (InterruptedException ex) {
-                Exceptions.printStackTrace(ex);
+                // Core interrupts a run that has not stopped a few seconds after Stop: that is a cancellation. Drop
+                // what the workers have not done, leave the positions as they were and keep the interrupt for the
+                // caller
+                cancelled = true;
+                for (Future<?> pending : threads) {
+                    pending.cancel(true);
+                }
+                Thread.currentThread().interrupt();
+                return;
             } catch (ExecutionException ex) {
                 Exceptions.printStackTrace(ex);
             }
@@ -407,7 +417,7 @@ public class ForceAtlas2 implements Layout {
 
     @Override
     public boolean canAlgo() {
-        return graphModel != null;
+        return graphModel != null && !cancelled;
     }
 
     @Override

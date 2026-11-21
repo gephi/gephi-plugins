@@ -1,6 +1,8 @@
 package org.gephi.plugins.layout.forceAtlas2.multigravity;
 
+import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
@@ -109,6 +111,41 @@ public class ForceAtlas2Test {
         }
     }
 
+    @Test
+    public void interruptingTheLayoutThreadCancelsThePass() {
+        // Core interrupts the thread of a layout that is still running a few seconds after Stop was pressed. The
+        // pass is then waiting for its workers: with Barnes-Hut off and a single worker, the first one is still
+        // busy when the pass asks for its result
+        GraphModel model = randomGraph(8000);
+        ForceAtlas2 layout = new ForceAtlas2(new ForceAtlas2Builder());
+        layout.setGraphModel(model);
+        layout.setBarnesHutOptimize(false);
+        layout.setThreadsCount(1);
+        float[] before = positions(model);
+
+        boolean interruptedAfterPass;
+        boolean canAlgoAfterPass;
+        int readHoldsAfterPass;
+        layout.initAlgo();
+        try {
+            Thread.currentThread().interrupt();
+            layout.goAlgo();
+            interruptedAfterPass = Thread.currentThread().isInterrupted();
+            canAlgoAfterPass = layout.canAlgo();
+            readHoldsAfterPass = model.getGraphVisible().getLock().getReadHoldCount();
+        } finally {
+            // Core goes on to end the layout with the thread still interrupted
+            layout.endAlgo();
+        }
+
+        assertTrue("An interrupt is a cancellation, nothing may be logged as a failure, got " + logged,
+            logged.isEmpty());
+        assertTrue("The interrupt must be left for the caller", interruptedAfterPass);
+        assertFalse("The layout must not run another pass", canAlgoAfterPass);
+        assertEquals("The pass must release the graph read lock", 0, readHoldsAfterPass);
+        assertArrayEquals("A cancelled pass must not move the nodes", before, positions(model), 0f);
+    }
+
     private static GraphModel randomGraph(int nodeCount) {
         GraphModel model = GraphModel.Factory.newInstance();
         Graph graph = model.getGraph();
@@ -124,6 +161,16 @@ public class ForceAtlas2Test {
             graph.addEdge(model.factory().newEdge(nodes[i], nodes[random.nextInt(i)], 0, 1.0, false));
         }
         return model;
+    }
+
+    private static float[] positions(GraphModel model) {
+        Node[] nodes = model.getGraph().getNodes().toArray();
+        float[] positions = new float[nodes.length * 2];
+        for (int i = 0; i < nodes.length; i++) {
+            positions[2 * i] = nodes[i].x();
+            positions[2 * i + 1] = nodes[i].y();
+        }
+        return positions;
     }
 
     private static void assertFinitePositions(GraphModel model) {
