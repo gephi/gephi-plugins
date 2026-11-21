@@ -1,5 +1,6 @@
 package cz.cvut.fit.gephi.multimode;
 
+import org.gephi.graph.api.Column;
 import org.gephi.graph.api.Edge;
 import org.gephi.graph.api.GraphController;
 import org.gephi.graph.api.GraphModel;
@@ -26,6 +27,23 @@ final class TestGraphs {
         Lookup.getDefault().lookup(ProjectController.class).newProject();
         GraphModel model = Lookup.getDefault().lookup(GraphController.class).getGraphModel();
         model.getNodeTable().addColumn(KIND, String.class);
+        return model;
+    }
+
+    /**
+     * Opens another workspace in the current project, as the user does, and returns its graph model. It holds a node
+     * and the columns of the model given, as when a file with the same attributes is opened: they are equal to the
+     * columns of that model, but they are other columns and can't be read on the nodes of the other graph.
+     */
+    static GraphModel openOtherWorkspace(GraphModel first) {
+        Lookup.getDefault().lookup(ProjectController.class).openNewWorkspace();
+        GraphModel model = Lookup.getDefault().lookup(GraphController.class).getGraphModel();
+        for (Column column : first.getNodeTable().toArray()) {
+            if (!model.getNodeTable().hasColumn(column.getId())) {
+                model.getNodeTable().addColumn(column.getId(), column.getTypeClass());
+            }
+        }
+        model.getUndirectedGraph().addNode(model.factory().newNode("other"));
         return model;
     }
 

@@ -2,8 +2,8 @@ package cz.cvut.fit.gephi.multimode;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -11,17 +11,21 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.BooleanSupplier;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.SwingUtilities;
 import org.gephi.graph.api.Column;
+import org.gephi.graph.api.Graph;
 import org.gephi.graph.api.GraphModel;
 import org.gephi.graph.api.Node;
 import org.gephi.graph.api.UndirectedGraph;
 import org.gephi.project.api.ProjectController;
+import org.gephi.utils.longtask.api.LongTaskExecutor;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -34,6 +38,7 @@ import org.openide.util.Lookup;
 public class MultiModeWindowTopComponentTest {
 
     private final List<Node> kindB = new ArrayList<Node>();
+    private GraphModel model;
     private UndirectedGraph graph;
     private MultiModeWindowTopComponent panel;
     private JButton load;
@@ -50,7 +55,7 @@ public class MultiModeWindowTopComponentTest {
 
     @Before
     public void openThePanelOnABipartiteGraph() throws Exception {
-        GraphModel model = TestGraphs.newProjectModel();
+        model = TestGraphs.newProjectModel();
         graph = model.getUndirectedGraph();
         Node[] a = new Node[3];
         Node[] b = new Node[3];
@@ -219,6 +224,218 @@ public class MultiModeWindowTopComponentTest {
         assertFalse(load.isEnabled());
     }
 
+    @Test
+    public void anAttributeWhoseNameIsNotInLowerCaseIsKeptWhenPicked() {
+        Column group = model.getNodeTable().addColumn("Group Name", String.class);
+        for (Node node : kindB) {
+            node.setAttribute(group, "x");
+        }
+
+        load.doClick(0);
+        for (int i = 0; i < attributes.getItemCount(); i++) {
+            if (attributes.getItemAt(i) == group) {
+                attributes.setSelectedIndex(i);
+            }
+        }
+
+        assertEquals("the column of this graph is not reset", group, attributes.getSelectedItem());
+        assertEquals("the values null and x are listed", 4, firstMatrix.getItemCount());
+        assertTrue(start.isEnabled());
+    }
+
+    @Test(timeout = 60000)
+    public void aPickWaitingForTheEventThreadWhenAnotherWorkspaceIsOpenedIsNotReadOnTheNewGraph() throws Exception {
+        loadAndSelectKind();
+        int kind = attributes.getSelectedIndex();
+        AtomicReference<Throwable> pick = new AtomicReference<Throwable>();
+
+        whileTheEventThreadIsBusy(() -> {
+            // The click on the attribute list is waiting for the event thread when the workspace is switched, in the
+            // background, and is handled before the reset which the switch posts
+            SwingUtilities.invokeLater(() -> pick.set(pickOrFail(attributes, kind)));
+            TestGraphs.openOtherWorkspace(model);
+        });
+
+        assertNull("a column of the previous workspace can't be read on the new graph", pick.get());
+        assertEquals(0, attributes.getItemCount());
+        assertFalse(start.isEnabled());
+    }
+
+    @Test(timeout = 60000)
+    public void aFirstPickWaitingForTheEventThreadWhenAnotherWorkspaceIsOpenedIsNotReadOnTheNewGraph()
+            throws Exception {
+        int kind = loadAndFindKind(); // no values are listed yet, the pick is the first one since Load
+        AtomicReference<Throwable> pick = new AtomicReference<Throwable>();
+
+        whileTheEventThreadIsBusy(() -> {
+            SwingUtilities.invokeLater(() -> pick.set(pickOrFail(attributes, kind)));
+            TestGraphs.openOtherWorkspace(model);
+        });
+
+        assertNull("a column of the previous workspace can't be read on the new graph", pick.get());
+        assertEquals(0, attributes.getItemCount());
+        assertFalse(start.isEnabled());
+    }
+
+    @Test(timeout = 60000)
+    public void aPickWaitingForTheEventThreadWhenTheProjectIsClosedDoesNotNeedAGraph() throws Exception {
+        loadAndSelectKind();
+        int kind = attributes.getSelectedIndex();
+        AtomicReference<Throwable> pick = new AtomicReference<Throwable>();
+
+        whileTheEventThreadIsBusy(() -> {
+            SwingUtilities.invokeLater(() -> pick.set(pickOrFail(attributes, kind)));
+            Lookup.getDefault().lookup(ProjectController.class).closeCurrentProject();
+        });
+
+        assertNull("there is no graph to read once the project is closed", pick.get());
+        assertEquals(0, attributes.getItemCount());
+    }
+
+    @Test(timeout = 60000)
+    public void valuesListedAgainAfterARunAreNotReadOnAnotherWorkspace() throws Exception {
+        loadAndSelectKind();
+        firstMatrix.setSelectedItem(combination(firstMatrix, "A", "B"));
+        secondMatrix.setSelectedItem(combination(secondMatrix, "B", "A"));
+        removeNodes.setSelected(true);
+        LongTaskExecutor executor = field("executor");
+        AtomicReference<Throwable> uncaught = new AtomicReference<Throwable>();
+        Thread.UncaughtExceptionHandler previous = Thread.getDefaultUncaughtExceptionHandler();
+        Thread.setDefaultUncaughtExceptionHandler((thread, error) -> uncaught.compareAndSet(null, error));
+        try {
+            whileTheEventThreadIsBusy(() -> {
+                start.doClick(0);
+                waitUntil(() -> graph.getNodeCount() == 3);
+                // Once the run is over the values are to be listed again, which waits for the event thread, and the
+                // workspace is switched before it gets to it
+                waitUntil(() -> !executor.isRunning());
+                TestGraphs.openOtherWorkspace(model);
+            });
+            flushEventQueue();
+        } finally {
+            Thread.setDefaultUncaughtExceptionHandler(previous);
+        }
+
+        assertNull("the values can't be listed from the graph of another workspace", uncaught.get());
+        assertEquals(0, attributes.getItemCount());
+    }
+
+    @Test(timeout = 60000)
+    public void aRunWaitingForTheEventThreadWhenAnotherWorkspaceIsOpenedIsNotStarted() throws Exception {
+        loadAndSelectKind();
+        firstMatrix.setSelectedItem(combination(firstMatrix, "A", "B"));
+        secondMatrix.setSelectedItem(combination(secondMatrix, "B", "A"));
+        LongTaskExecutor executor = field("executor");
+        AtomicReference<Graph> locked = new AtomicReference<Graph>();
+
+        try {
+            whileTheEventThreadIsBusy(() -> {
+                // The click on Run is waiting for the event thread when the workspace is switched
+                SwingUtilities.invokeLater(() -> start.doClick(0));
+                Graph otherGraph = TestGraphs.openOtherWorkspace(model).getGraph();
+                // A run started on that graph would have to wait for it
+                otherGraph.writeLock();
+                locked.set(otherGraph);
+            });
+            Thread.sleep(200); // time for a run to start and wait for the graph, if nothing holds it back
+
+            assertFalse("a run can't be started with a column of the previous workspace", executor.isRunning());
+        } finally {
+            if (locked.get() != null) {
+                locked.get().writeUnlock();
+            }
+        }
+        assertEquals(6, graph.getNodeCount());
+        assertEquals(6, graph.getEdgeCount());
+    }
+
+    @Test
+    public void aColumnDeletedAfterLoadResetsThePanelWhenAValueIsPicked() {
+        loadAndSelectKind();
+        model.getNodeTable().removeColumn(model.getNodeTable().getColumn(TestGraphs.KIND));
+
+        firstMatrix.setSelectedItem(combination(firstMatrix, "A", "B"));
+
+        assertEquals("the column is not in the graph any more", 0, attributes.getItemCount());
+        assertEquals(0, firstMatrix.getItemCount());
+        assertEquals(0, secondMatrix.getItemCount());
+        assertFalse(start.isEnabled());
+        assertTrue("the columns left can be loaded", load.isEnabled());
+    }
+
+    @Test
+    public void aColumnDeletedAfterLoadResetsThePanelWhenTheAttributeIsPickedAgain() {
+        loadAndSelectKind();
+        model.getNodeTable().removeColumn(model.getNodeTable().getColumn(TestGraphs.KIND));
+
+        attributes.setSelectedIndex(attributes.getSelectedIndex());
+
+        assertEquals(0, attributes.getItemCount());
+        assertEquals(0, firstMatrix.getItemCount());
+        assertFalse(start.isEnabled());
+    }
+
+    @Test(timeout = 60000)
+    public void aRunIsNotStartedWithAColumnDeletedAfterLoad() throws Exception {
+        loadAndSelectKind();
+        firstMatrix.setSelectedItem(combination(firstMatrix, "A", "B"));
+        secondMatrix.setSelectedItem(combination(secondMatrix, "B", "A"));
+        model.getNodeTable().removeColumn(model.getNodeTable().getColumn(TestGraphs.KIND));
+        LongTaskExecutor executor = field("executor");
+
+        graph.writeLock(); // a run started in spite of the column would wait for the graph
+        try {
+            start.doClick(0);
+            Thread.sleep(200); // time for a run to start and wait for the graph, if nothing holds it back
+
+            assertFalse("a run can't be started with a column which is gone", executor.isRunning());
+        } finally {
+            graph.writeUnlock();
+        }
+        assertEquals("the column is not in the graph any more", 0, attributes.getItemCount());
+        assertEquals(0, firstMatrix.getItemCount());
+        assertFalse(start.isEnabled());
+        assertEquals(6, graph.getNodeCount());
+    }
+
+    /**
+     * Runs the action while the event thread is held, as when it is busy with something else, then lets it go and
+     * waits for what the action posted to it.
+     */
+    private static void whileTheEventThreadIsBusy(ThrowingRunnable action) throws Exception {
+        CountDownLatch release = new CountDownLatch(1);
+        SwingUtilities.invokeLater(() -> {
+            try {
+                release.await(30, TimeUnit.SECONDS);
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            }
+        });
+        try {
+            action.run();
+        } finally {
+            release.countDown();
+        }
+        flushEventQueue();
+    }
+
+    private interface ThrowingRunnable {
+
+        void run() throws Exception;
+    }
+
+    /**
+     * What choosing an entry of the popup list does, with what it throws returned.
+     */
+    private static Throwable pickOrFail(JComboBox<?> box, int index) {
+        try {
+            box.setSelectedIndex(index);
+            return null;
+        } catch (Throwable t) {
+            return t;
+        }
+    }
+
     /**
      * What clicking Run does, whether the button looks enabled or not.
      */
@@ -230,15 +447,22 @@ public class MultiModeWindowTopComponentTest {
     }
 
     private void loadAndSelectKind() {
+        attributes.setSelectedIndex(loadAndFindKind());
+    }
+
+    /**
+     * Loads the columns, as Load does, and returns the position of the kind column in the list, which is not
+     * selected.
+     */
+    private int loadAndFindKind() {
         load.doClick(0);
         for (int i = 0; i < attributes.getItemCount(); i++) {
             Object item = attributes.getItemAt(i);
             if (item instanceof Column && TestGraphs.KIND.equals(((Column) item).getId())) {
-                attributes.setSelectedIndex(i);
-                return;
+                return i;
             }
         }
-        fail("the kind column is not listed");
+        throw new AssertionError("the kind column is not listed");
     }
 
     private static void waitUntil(BooleanSupplier condition) throws InterruptedException {

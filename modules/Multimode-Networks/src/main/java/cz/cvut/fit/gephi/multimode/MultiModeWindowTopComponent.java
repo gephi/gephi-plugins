@@ -291,11 +291,16 @@ public final class MultiModeWindowTopComponent extends TopComponent {
         secondMatrix.removeAllItems();
         start.setEnabled(false);
         if (attributes.getSelectedIndex() > 0) {
-            Column col = (Column) attributes.getSelectedItem();
+            GraphModel graphModel = Lookup.getDefault().lookup(GraphController.class).getGraphModel();
+            Column col = selectedColumn(graphModel);
+            if (col == null) {
+                // The attribute listed is not a column of this graph, the attributes have to be loaded again
+                clearAttributes();
+                return;
+            }
 
             // load all possible values of attribute
-            GraphController graphController = Lookup.getDefault().lookup(GraphController.class);
-            Graph graph = graphController.getGraphModel().getGraphVisible();
+            Graph graph = graphModel.getGraphVisible();
             Node[] nodes = graph.getNodes().toArray();
             Set<String> vals = new HashSet<String>();
             for (Node n : nodes) {
@@ -322,12 +327,16 @@ public final class MultiModeWindowTopComponent extends TopComponent {
         // TODO reaction on selected first matrix                
         secondMatrix.removeAllItems();
         if (attributes.getSelectedIndex() > 0) {
-
-            Column col = (Column) attributes.getSelectedItem();
+            GraphModel graphModel = Lookup.getDefault().lookup(GraphController.class).getGraphModel();
+            Column col = selectedColumn(graphModel);
+            if (col == null) {
+                // The attribute listed is not a column of this graph, the attributes have to be loaded again
+                clearAttributes();
+                return;
+            }
 
             // load all possible values of attribute
-            GraphController graphController = Lookup.getDefault().lookup(GraphController.class);
-            Graph graph = graphController.getGraphModel().getGraphVisible();
+            Graph graph = graphModel.getGraphVisible();
             Node[] nodes = graph.getNodes().toArray();
             Set<String> vals = new HashSet<String>();
             for (Node n : nodes) {
@@ -357,20 +366,25 @@ public final class MultiModeWindowTopComponent extends TopComponent {
     }//GEN-LAST:event_firstMatrixActionPerformed
 
     private void startActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_startActionPerformed
-        Object column = attributes.getSelectedItem();
         ValueCombination first = (ValueCombination) firstMatrix.getSelectedItem();
         ValueCombination second = (ValueCombination) secondMatrix.getSelectedItem();
         // The run may have to wait for others: the model of the workspace it is started in is kept, as the
         // current workspace may be another one by the time the run starts
         GraphModel graphModel = Lookup.getDefault().lookup(GraphController.class).getGraphModel();
-        if (graphModel == null || !(column instanceof Column) || first == null || second == null) {
+        Column column = selectedColumn(graphModel);
+        if (column == null) {
+            // The attribute listed is not a column of this graph, the attributes have to be loaded again
+            clearAttributes();
+            return;
+        }
+        if (first == null || second == null) {
             // The values listed do not match the graph, there is nothing to run
             start.setEnabled(false);
             return;
         }
 
         LongTaskTransformation longTask = new LongTaskTransformation(
-                (Column) column,
+                column,
                 first.getFirst(),
                 first.getSecond(),
                 second.getSecond(),
@@ -500,6 +514,27 @@ public final class MultiModeWindowTopComponent extends TopComponent {
         firstMatrix.setEnabled(false);
         secondMatrix.setEnabled(false);
         start.setEnabled(false);
+    }
+
+    /**
+     * Returns the attribute selected if it is a column of the node table of the given graph model, and null if it
+     * isn't or if there is no graph model.
+     * <p>
+     * The columns are listed when they are loaded and may be stale by the time they are read: the reset which goes
+     * with a workspace change only runs once the event thread gets to it, after the picks and clicks already waiting,
+     * and nothing tells the panel that a column was deleted. The column of another table, or a deleted one, can't be
+     * read on the nodes of the graph. Columns with the same id and type are equal even when they belong to different
+     * workspaces, so they are compared by identity.
+     */
+    private Column selectedColumn(GraphModel graphModel) {
+        Object item = attributes.getSelectedItem();
+        if (graphModel != null && item instanceof Column) {
+            Column column = (Column) item;
+            if (graphModel.getNodeTable().getColumn(column.getId()) == column) {
+                return column;
+            }
+        }
+        return null;
     }
 
     private boolean isProjectWorkspaceOk(){
