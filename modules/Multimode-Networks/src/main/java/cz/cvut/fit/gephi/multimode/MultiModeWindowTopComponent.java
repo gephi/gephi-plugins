@@ -16,7 +16,7 @@ import org.netbeans.api.settings.ConvertAsProperties;
 import org.openide.awt.ActionID;
 import org.openide.awt.ActionReference;
 import org.openide.util.Lookup;
-import org.openide.util.NbBundle.Messages;
+import org.openide.util.NbBundle;
 import org.openide.windows.TopComponent;
 
 /**
@@ -34,11 +34,6 @@ import org.openide.windows.TopComponent;
  */)
 @TopComponent.OpenActionRegistration(displayName = "#CTL_MultiModeWindowAction",
         preferredID = "MultiModeWindowTopComponent")
-@Messages({
-    "CTL_MultiModeWindowAction=MultiMode Projections",
-    "CTL_MultiModeWindowTopComponent=MultiMode Networks Projection",
-    "HINT_MultiModeWindowTopComponent=Enables projection of multimode networks"
-})
 /**
  * @author Jaroslav Kuchar
  */
@@ -46,8 +41,8 @@ public final class MultiModeWindowTopComponent extends TopComponent {
     private final ProjectController projectController;
     public MultiModeWindowTopComponent() {
         initComponents();
-        setName(Bundle.CTL_MultiModeWindowTopComponent());
-        setToolTipText(Bundle.HINT_MultiModeWindowTopComponent());
+        setName(NbBundle.getMessage(MultiModeWindowTopComponent.class, "CTL_MultiModeWindowTopComponent"));
+        setToolTipText(NbBundle.getMessage(MultiModeWindowTopComponent.class, "HINT_MultiModeWindowTopComponent"));
         
         // Make sure project and workspace exists
         projectController = Lookup.getDefault().lookup(ProjectController.class);
@@ -352,17 +347,27 @@ public final class MultiModeWindowTopComponent extends TopComponent {
                 secondMatrix.setSelectedIndex(0);
             }
 
-            start.setEnabled(true);
+            // Nothing can be run when the value picked on the left is no longer in the graph
+            start.setEnabled(firstMatrix.getSelectedItem() != null && secondMatrix.getItemCount() > 0);
         }
     }//GEN-LAST:event_firstMatrixActionPerformed
 
     private void startActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_startActionPerformed
+        Object column = attributes.getSelectedItem();
+        ValueCombination first = (ValueCombination) firstMatrix.getSelectedItem();
+        ValueCombination second = (ValueCombination) secondMatrix.getSelectedItem();
+        if (!(column instanceof Column) || first == null || second == null) {
+            // The values listed do not match the graph, there is nothing to run
+            start.setEnabled(false);
+            return;
+        }
+
         LongTaskExecutor executor = new LongTaskExecutor(true);
         LongTaskTransformation longTask = new LongTaskTransformation(
-                (Column) attributes.getSelectedItem(), 
-                ((ValueCombination) firstMatrix.getSelectedItem()).getFirst(), 
-                ((ValueCombination) firstMatrix.getSelectedItem()).getSecond(),
-                ((ValueCombination) secondMatrix.getSelectedItem()).getSecond(), 
+                (Column) column,
+                first.getFirst(),
+                first.getSecond(),
+                second.getSecond(),
                 Float.parseFloat(threshold.getText()),
                 removeEdges.isSelected(), removeNodes.isSelected(),proportional.isSelected(),directed.isSelected());
         executor.execute(longTask, longTask, "Transformation...", null);
