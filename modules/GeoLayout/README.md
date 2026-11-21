@@ -22,4 +22,6 @@ The available projections are:
 * [Winkel Tripel](http://en.wikipedia.org/wiki/Winkel_tripel_projection)
 * [Equirectangular](https://en.wikipedia.org/wiki/Equirectangular_projection)
 
-And if, for any reason, some of your nodes do not have valid values on the selected attributes (for latitude and longitude), they will be displayed on a line on the bottom of your graph (then, you can delete them or do what you want). Also make sure your latitude and longitude columns are of a numeric type, not 'string'.
+Latitudes and longitudes are in degrees. A node has valid coordinates when its latitude is between -90 and 90 and its longitude is between -360 and 360 (so both -180..180 and 0..360 work). If, for any reason, some of your nodes do not have valid values on the selected attributes (missing, or a latitude out of range, for example because latitude and longitude were swapped), they will be displayed on a line at the bottom of your graph (then, you can delete them or do what you want). Also make sure your latitude and longitude columns are of a numeric type, not 'string'.
+
+The Mercator projections can't show the poles, so latitudes beyond ±85.05° (the usual Web Mercator limit) are drawn at that limit.
