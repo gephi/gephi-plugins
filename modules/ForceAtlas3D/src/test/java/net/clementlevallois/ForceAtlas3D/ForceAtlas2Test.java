@@ -205,6 +205,46 @@ public class ForceAtlas2Test {
         }
     }
 
+    @Test
+    public void barnesHutSwitchedOnDuringAnIterationDoesNotFailTheRepulsion() {
+        // Read as off to decide whether to build the region, then as on when the repulsion tasks are created
+        assertAnIterationUsesOneBarnesHutValue(false, true);
+    }
+
+    @Test
+    public void barnesHutSwitchedOffDuringAnIterationIsUsedConsistently() {
+        assertAnIterationUsesOneBarnesHutValue(true, false);
+    }
+
+    /**
+     * An iteration has to compute what it does when the option keeps the value it was first read as
+     */
+    private static void assertAnIterationUsesOneBarnesHutValue(boolean first, boolean then) {
+        GraphModel steadyGraph = staticWeightsGraph(false);
+        ForceAtlas2 steady = newLayout(steadyGraph, 1.);
+        steady.setBarnesHutOptimize(first);
+        double[] expected = layOut(steady, steadyGraph, 1);
+
+        // and that has to differ from what the other value computes, or the test shows nothing
+        GraphModel otherGraph = staticWeightsGraph(false);
+        ForceAtlas2 other = newLayout(otherGraph, 1.);
+        other.setBarnesHutOptimize(then);
+        assertFalse(Arrays.equals(expected, layOut(other, otherGraph, 1)));
+
+        GraphModel changingGraph = staticWeightsGraph(false);
+        ForceAtlas2 changing = newLayout(new ChangingBarnesHut(first, then), changingGraph, 1.);
+        CrashReporter reporter = new CrashReporter();
+        double[] positions;
+        try {
+            positions = layOut(changing, changingGraph, 1);
+        } finally {
+            reporter.close();
+        }
+
+        assertTrue("A repulsion task failed and was reported: " + reporter.reported(), reporter.reported().isEmpty());
+        assertArrayEquals(expected, positions, 0.);
+    }
+
     /**
      * What Gephi's crash reporter does with the log: every record that carries a Throwable becomes a crash report
      */
@@ -234,6 +274,28 @@ public class ForceAtlas2Test {
 
         List<Throwable> reported() {
             return new ArrayList<Throwable>(reported);
+        }
+    }
+
+    /**
+     * A layout whose Barnes-Hut option answers differently on its successive reads, as it does when the user changes
+     * the option while the layout runs
+     */
+    private static final class ChangingBarnesHut extends ForceAtlas2 {
+
+        private final boolean first;
+        private final boolean then;
+        private final AtomicInteger reads = new AtomicInteger();
+
+        ChangingBarnesHut(boolean first, boolean then) {
+            super(new ForceAtlas2Builder());
+            this.first = first;
+            this.then = then;
+        }
+
+        @Override
+        public Boolean isBarnesHutOptimize() {
+            return reads.getAndIncrement() == 0 ? first : then;
         }
     }
 
@@ -308,7 +370,10 @@ public class ForceAtlas2Test {
     }
 
     private static ForceAtlas2 newLayout(GraphModel graphModel, double edgeWeightInfluence) {
-        ForceAtlas2 layout = new ForceAtlas2(new ForceAtlas2Builder());
+        return newLayout(new ForceAtlas2(new ForceAtlas2Builder()), graphModel, edgeWeightInfluence);
+    }
+
+    private static ForceAtlas2 newLayout(ForceAtlas2 layout, GraphModel graphModel, double edgeWeightInfluence) {
         layout.setGraphModel(graphModel);
         // One thread and distinct positions keep the layout deterministic
         layout.setThreadsCount(1);
@@ -320,7 +385,10 @@ public class ForceAtlas2Test {
      * Runs the layout and returns the finite x, y and z of the nodes
      */
     private static double[] layOut(GraphModel graphModel, double edgeWeightInfluence, int iterations) {
-        ForceAtlas2 layout = newLayout(graphModel, edgeWeightInfluence);
+        return layOut(newLayout(graphModel, edgeWeightInfluence), graphModel, iterations);
+    }
+
+    private static double[] layOut(ForceAtlas2 layout, GraphModel graphModel, int iterations) {
         layout.initAlgo();
         try {
             for (int i = 0; i < iterations; i++) {

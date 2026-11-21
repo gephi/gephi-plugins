@@ -89,7 +89,6 @@ public class ForceAtlas2 implements Layout {
     private boolean strongGravityMode;
     private int threadCount;
     private int currentThreadCount;
-    private Region rootRegion;
     double outboundAttCompensation = 1;
     //Dynamic Weight
     private Interval timeInterval;
@@ -192,7 +191,10 @@ public class ForceAtlas2 implements Layout {
         }
 
         // If Barnes Hut active, initialize root region
-        if (isBarnesHutOptimize()) {
+        // The option can be changed while the layout runs: read it once, the region and the repulsion tasks must agree
+        boolean barnesHutOptimize = isBarnesHutOptimize();
+        Region rootRegion = null;
+        if (barnesHutOptimize) {
             rootRegion = new Region(nodes);
             rootRegion.buildSubRegions();
         }
@@ -216,7 +218,7 @@ public class ForceAtlas2 implements Layout {
                 t > 0; t--) {
             int from = (int) Math.floor(nodes.length * (t - 1) / taskCount);
             int to = (int) Math.floor(nodes.length * t / taskCount);
-            Future future = pool.submit(new NodesThread(nodes, from, to, isBarnesHutOptimize(), getBarnesHutTheta(), getGravity(), (isStrongGravityMode()) ? (ForceFactory.builder.getStrongGravity(getScalingRatio(), threeD)) : (Repulsion), getScalingRatio(), rootRegion, Repulsion));
+            Future future = pool.submit(new NodesThread(nodes, from, to, barnesHutOptimize, getBarnesHutTheta(), getGravity(), (isStrongGravityMode()) ? (ForceFactory.builder.getStrongGravity(getScalingRatio(), threeD)) : (Repulsion), getScalingRatio(), rootRegion, Repulsion));
             threads.add(future);
         }
         for (Future future : threads) {
