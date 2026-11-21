@@ -227,7 +227,16 @@ public class ForceAtlas2 implements Layout {
         }
         graph = graphModel.getGraphVisible();
 
+        // Core does not call endAlgo() when a pass throws, so the lock must not outlive the pass
         graph.readLock();
+        try {
+            runPass();
+        } finally {
+            graph.readUnlockAll();
+        }
+    }
+
+    private void runPass() {
         Node[] nodes = graph.getNodes().toArray();
         Edge[] edges = graph.getEdges().toArray();
 
@@ -316,7 +325,6 @@ public class ForceAtlas2 implements Layout {
         }
         // Nothing moves, and 0 / 0 would make the speed NaN for good
         if (totalSwinging == 0 && totalEffectiveTraction == 0) {
-            graph.readUnlockAll();
             return;
         }
         // We want that swingingMovement < tolerance * convergenceMovement
@@ -395,7 +403,6 @@ public class ForceAtlas2 implements Layout {
                 }
             }
         }
-        graph.readUnlockAll();
     }
 
     @Override

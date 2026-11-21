@@ -1,6 +1,8 @@
 package org.gephi.plugins.layout.forceAtlas2.multigravity;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -78,6 +80,33 @@ public class ForceAtlas2Test {
 
         assertTrue("A pass must not fail because Barnes-Hut was switched on, got " + logged, logged.isEmpty());
         assertFinitePositions(model);
+    }
+
+    @Test
+    public void aFailingPassDoesNotLeaveTheGraphLocked() {
+        GraphModel model = randomGraph(10);
+        ForceAtlas2 layout = new ForceAtlas2(new ForceAtlas2Builder()) {
+            @Override
+            public Double getScalingRatio() {
+                throw new IllegalStateException("failure in the middle of a pass");
+            }
+        };
+        layout.setGraphModel(model);
+
+        layout.initAlgo();
+        try {
+            try {
+                layout.goAlgo();
+                fail("The pass was expected to fail");
+            } catch (IllegalStateException expected) {
+            }
+
+            // Core never calls endAlgo() when a pass throws, so nothing else releases the lock
+            assertEquals("The failed pass must release the graph read lock", 0,
+                model.getGraphVisible().getLock().getReadHoldCount());
+        } finally {
+            layout.endAlgo();
+        }
     }
 
     private static GraphModel randomGraph(int nodeCount) {
