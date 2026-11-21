@@ -22,6 +22,7 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Callable;
@@ -187,10 +188,32 @@ public class GephiControlService {
     /**
      * A request that failed with an exception: logs it with its stack trace, so a failure inside
      * Gephi leaves a trace that can be reported, and returns the error to the caller.
+     *
+     * <p>A file that cannot be read or written (another program holds it open, the folder is missing
+     * or read-only, the disk is full) is not a fault in Gephi. The caller still gets the reason, but
+     * the log gets a line without the exception: Gephi's crash reporter sends every logged exception,
+     * at any level, as a bug report.
      */
     static JsonObject failure(String prefix, Exception e) {
+        IOException io = findIoException(e);
+        if (io != null) {
+            String reason = io.getLocalizedMessage() != null ? io.getLocalizedMessage() : io.toString();
+            LOGGER.log(Level.INFO, "{0}{1}", new Object[]{prefix, reason});
+            return error(prefix + reason);
+        }
         LOGGER.log(Level.WARNING, prefix + e.getMessage(), e);
         return error(prefix + e.getMessage());
+    }
+
+    /** The first {@link IOException} among {@code t} and its causes, or null. */
+    static IOException findIoException(Throwable t) {
+        // Bounded, so causes that loop back on each other cannot hang a request.
+        for (int depth = 0; t != null && depth < 10; depth++, t = t.getCause()) {
+            if (t instanceof IOException) {
+                return (IOException) t;
+            }
+        }
+        return null;
     }
 
     private Workspace currentWorkspace() {
