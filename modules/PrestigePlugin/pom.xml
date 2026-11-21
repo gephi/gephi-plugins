@@ -9,7 +9,7 @@
 
     <groupId>ch.michihenninger</groupId>
     <artifactId>prestige-plugin</artifactId>
-    <version>1.0.1</version>
+    <version>1.0.2</version>
     <packaging>nbm</packaging>
 
     <name>Prestige Plugin</name>
