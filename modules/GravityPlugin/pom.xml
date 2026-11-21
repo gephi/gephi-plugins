@@ -9,7 +9,7 @@
 
     <groupId>proj.sr3213</groupId>
     <artifactId>gravity-plugin</artifactId>
-    <version>1.0.1</version>
+    <version>1.0.2</version>
     <packaging>nbm</packaging>
 
     <name>Gravity Plugin</name>
@@ -32,6 +32,11 @@
         <dependency>
             <groupId>org.netbeans.api</groupId>
             <artifactId>org-openide-util</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.netbeans.api</groupId>
+            <artifactId>org-netbeans-modules-nbjunit</artifactId>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 
