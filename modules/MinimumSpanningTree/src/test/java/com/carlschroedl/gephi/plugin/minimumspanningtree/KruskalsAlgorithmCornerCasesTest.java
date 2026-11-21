@@ -1,5 +1,6 @@
 package com.carlschroedl.gephi.plugin.minimumspanningtree;
 
+import java.lang.reflect.Proxy;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -12,6 +13,7 @@ import org.gephi.graph.api.Edge;
 import org.gephi.graph.api.GraphModel;
 import org.gephi.graph.api.Node;
 import org.gephi.project.api.ProjectController;
+import org.gephi.utils.progress.ProgressTicket;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -19,6 +21,7 @@ import org.openide.util.Lookup;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 /**
@@ -115,6 +118,31 @@ public class KruskalsAlgorithmCornerCasesTest {
 
         assertNoFailureLogged();
         assertEquals(ids("a-b light", "b-c"), edgesInSpanningTree(graphModel));
+    }
+
+    @Test
+    public void testCancelledFirstRunRemovesTheColumnItCreated() {
+        GraphModel graphModel = loader.fromScratch();
+        Node[] nodes = addNodes(graphModel, 4);
+        addEdge(graphModel, "a-b", nodes[0], nodes[1], 1);
+        addEdge(graphModel, "b-c", nodes[1], nodes[2], 2);
+        addEdge(graphModel, "c-d", nodes[2], nodes[3], 3);
+        addEdge(graphModel, "a-d", nodes[0], nodes[3], 4);
+
+        KruskalsAlgorithm algorithm = new KruskalsAlgorithm();
+        // Cancels from the first progress report, as the cancel button does while the algorithm runs
+        algorithm.setProgressTicket((ProgressTicket) Proxy.newProxyInstance(
+                ProgressTicket.class.getClassLoader(), new Class<?>[]{ProgressTicket.class},
+                (proxy, method, args) -> {
+                    if (method.getName().equals("progress")) {
+                        algorithm.cancel();
+                    }
+                    return null;
+                }));
+        algorithm.execute(graphModel);
+
+        assertNoFailureLogged();
+        assertNull(graphModel.getEdgeTable().getColumn(KruskalsAlgorithm.SPANNING_TREE_COLUMN_ID));
     }
 
     private void execute(GraphModel graphModel) {

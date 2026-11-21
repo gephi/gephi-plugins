@@ -48,7 +48,7 @@ public class KruskalsAlgorithm extends MinimumSpanningTreeAlgorithm {
         Column stEdgeCol = edgeTable.getColumn(SPANNING_TREE_COLUMN_ID);
 
         if (stEdgeCol == null) {
-            edgeTable.addColumn(SPANNING_TREE_COLUMN_ID, ST_COL_NAME, Integer.class, NOT_IN_SPANNING_TREE);
+            stEdgeCol = edgeTable.addColumn(SPANNING_TREE_COLUMN_ID, ST_COL_NAME, Integer.class, NOT_IN_SPANNING_TREE);
         }
 
         //</new attributes for the spanning tree>
