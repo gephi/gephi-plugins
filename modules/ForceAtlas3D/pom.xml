@@ -9,7 +9,7 @@
 
     <groupId>net.clementlevallois</groupId>
     <artifactId>force-atlas-3d</artifactId>
-    <version>1.2.2</version>
+    <version>1.2.3</version>
     <packaging>nbm</packaging>
 
     <name>ForceAtlas3D</name>
@@ -51,6 +51,11 @@
     <dependency>
       <groupId>org.gephi</groupId>
       <artifactId>project-api</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.netbeans.api</groupId>
+      <artifactId>org-netbeans-modules-nbjunit</artifactId>
+      <scope>test</scope>
     </dependency>
   </dependencies>
 

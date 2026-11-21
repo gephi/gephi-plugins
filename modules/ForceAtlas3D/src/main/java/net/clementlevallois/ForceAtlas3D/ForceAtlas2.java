@@ -162,6 +162,14 @@ public class ForceAtlas2 implements Layout {
         }
 
         graph.readLock();
+        try {
+            iterate();
+        } finally {
+            graph.readUnlockAll();
+        }
+    }
+
+    private void iterate() {
         Node[] nodes = graph.getNodes().toArray();
         Edge[] edges = graph.getEdges().toArray();
         // Initialise layout data
@@ -310,8 +318,6 @@ public class ForceAtlas2 implements Layout {
                 }
             }
         }
-
-        graph.readUnlockAll();
     }
 
     @Override
@@ -591,7 +597,8 @@ public class ForceAtlas2 implements Layout {
     }
 
     private double getWeight(Edge edge) {
-        if (timeInterval != null) {
+        // A static weight can't be read over an interval, even when other elements of the graph hold times
+        if (timeInterval != null && edge.hasDynamicWeight()) {
             return edge.getWeight(timeInterval);
         } else {
             return edge.getWeight();
