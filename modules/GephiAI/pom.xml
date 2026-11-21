@@ -12,7 +12,7 @@
 
     <groupId>org.gephi.plugins</groupId>
     <artifactId>gephi-ai</artifactId>
-    <version>1.6.1</version>
+    <version>1.6.2</version>
     <packaging>nbm</packaging>
 
     <name>Gephi AI</name>
