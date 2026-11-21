@@ -198,12 +198,12 @@ public class BlueskyGephi {
 
     /**
      * Reports a failure to the user without the raw NetBeans stack-trace dialog:
-     * the full technical detail (with stack trace) is logged for debugging, while
-     * the user sees a concise, non-blocking notification bubble with an
-     * actionable reason.
+     * the technical detail is logged for debugging (see
+     * {@link #logFailure(Logger, String, String, Throwable)}), while the user sees
+     * a concise, non-blocking notification bubble with an actionable reason.
      */
     private void reportError(String title, String detail, Throwable t) {
-        logger.log(Level.WARNING, title + " - " + detail, t);
+        logFailure(logger, title, detail, t);
         EventQueue.invokeLater(() -> {
             Icon icon = UIManager.getIcon("OptionPane.warningIcon");
             if (icon == null) {
@@ -213,6 +213,23 @@ public class BlueskyGephi {
             NotificationDisplayer.getDefault().notify(title, icon, detail, null,
                     NotificationDisplayer.Priority.HIGH);
         });
+    }
+
+    /**
+     * Logs a failure that the user is also told about. Gephi's crash reporter
+     * sends every logged record that carries a {@link Throwable} to the
+     * developers. An {@link AtProtoException} (rejected input, expired login,
+     * rate limit, no network) is an expected failure that the notification
+     * already explains, so it is logged as a plain message, with its cause in the
+     * text. Any other exception is a bug in the plugin and keeps its stack trace.
+     */
+    static void logFailure(Logger log, String title, String detail, Throwable t) {
+        if (t instanceof AtProtoException) {
+            Throwable cause = t.getCause();
+            log.log(Level.WARNING, title + " - " + detail + (cause == null ? "" : " (caused by " + cause + ")"));
+        } else {
+            log.log(Level.WARNING, title + " - " + detail, t);
+        }
     }
 
     private void fetchFollowerFollowsFromActor(String actor, List<String> listInit, boolean isFollowsActive, boolean isFollowersActive, boolean isDeepSearch) {
