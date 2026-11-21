@@ -2,6 +2,7 @@ package cz.cvut.fit.gephi.multimode;
 
 import java.util.HashSet;
 import java.util.Set;
+import javax.swing.SwingUtilities;
 
 import org.gephi.graph.api.Column;
 import org.gephi.graph.api.Graph;
@@ -53,19 +54,19 @@ public final class MultiModeWindowTopComponent extends TopComponent {
             }
 
             public void select(Workspace wrkspc) {
-                checkPluginEnabling();
+                workspaceChanged();
             }
 
             public void unselect(Workspace wrkspc) {
-                checkPluginEnabling();
+                workspaceChanged();
             }
 
             public void close(Workspace wrkspc) {
-                checkPluginEnabling();
+                workspaceChanged();
             }
 
             public void disable() {
-                checkPluginEnabling();
+                workspaceChanged();
             }
         });
     }
@@ -370,13 +371,14 @@ public final class MultiModeWindowTopComponent extends TopComponent {
                 second.getSecond(),
                 Float.parseFloat(threshold.getText()),
                 removeEdges.isSelected(), removeNodes.isSelected(),proportional.isSelected(),directed.isSelected());
-        executor.execute(longTask, longTask, "Transformation...", null);
-
-        if (attributes.getItemCount() > 0 && (removeEdges.isSelected() || removeNodes.isSelected())) {
-            firstMatrix.removeAllItems();
-            secondMatrix.removeAllItems();
-            attributes.setSelectedIndex(attributes.getSelectedIndex());
-        }
+        final boolean removing = removeEdges.isSelected() || removeNodes.isSelected();
+        executor.execute(longTask, () -> {
+            longTask.run();
+            if (removing) {
+                // The values listed were read before the run removed nodes and edges
+                SwingUtilities.invokeLater(this::listValuesAgain);
+            }
+        }, "Transformation...", null);
     }//GEN-LAST:event_startActionPerformed
 
     private void loadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loadActionPerformed
@@ -467,6 +469,34 @@ public final class MultiModeWindowTopComponent extends TopComponent {
         // TODO read your settings according to their version
     }
     
+    /**
+     * Lists the values of the selected attribute again, from the graph as it is now.
+     */
+    private void listValuesAgain() {
+        if (attributes.getItemCount() > 0) {
+            firstMatrix.removeAllItems();
+            secondMatrix.removeAllItems();
+            attributes.setSelectedIndex(attributes.getSelectedIndex());
+        }
+    }
+
+    private void workspaceChanged() {
+        checkPluginEnabling();
+        // The attributes and values listed belong to the graph of the previous workspace and can't be
+        // used with the new one, they have to be loaded again
+        SwingUtilities.invokeLater(this::clearAttributes);
+    }
+
+    private void clearAttributes() {
+        attributes.removeAllItems();
+        firstMatrix.removeAllItems();
+        secondMatrix.removeAllItems();
+        attributes.setEnabled(false);
+        firstMatrix.setEnabled(false);
+        secondMatrix.setEnabled(false);
+        start.setEnabled(false);
+    }
+
     private boolean isProjectWorkspaceOk(){
         return projectController.getCurrentProject()!= null && 
                projectController.getCurrentWorkspace() != null;

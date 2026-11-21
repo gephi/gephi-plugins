@@ -9,18 +9,23 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.function.BooleanSupplier;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
+import javax.swing.SwingUtilities;
 import org.gephi.graph.api.Column;
 import org.gephi.graph.api.GraphModel;
 import org.gephi.graph.api.Node;
 import org.gephi.graph.api.UndirectedGraph;
+import org.gephi.project.api.ProjectController;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.openide.util.Lookup;
 
 /**
  * Drives the real panel the way the user does: load the columns, pick the column, the values to
@@ -33,6 +38,7 @@ public class MultiModeWindowTopComponentTest {
     private MultiModeWindowTopComponent panel;
     private JButton load;
     private JButton start;
+    private JCheckBox removeNodes;
     private JComboBox<?> attributes;
     private JComboBox<?> firstMatrix;
     private JComboBox<?> secondMatrix;
@@ -61,6 +67,7 @@ public class MultiModeWindowTopComponentTest {
         panel = new MultiModeWindowTopComponent();
         load = field("load");
         start = field("start");
+        removeNodes = field("removeNodes");
         attributes = field("attributes");
         firstMatrix = field("firstMatrix");
         secondMatrix = field("secondMatrix");
@@ -121,6 +128,53 @@ public class MultiModeWindowTopComponentTest {
         assertEquals(6, graph.getNodeCount());
     }
 
+    @Test(timeout = 60000)
+    public void matricesAreListedAgainOnceARunHasRemovedNodes() throws Exception {
+        loadAndSelectKind();
+        firstMatrix.setSelectedItem(combination(firstMatrix, "A", "B"));
+        secondMatrix.setSelectedItem(combination(secondMatrix, "B", "A"));
+        removeNodes.setSelected(true);
+
+        start.doClick(0);
+
+        // the B nodes are removed by the run, and only A is left to pick from
+        waitUntil(() -> graph.getNodeCount() == 3);
+        waitUntil(() -> listed(firstMatrix).equals(Arrays.asList("A - A")));
+        assertEquals(Arrays.asList("A - A"), listed(firstMatrix));
+        assertEquals(Arrays.asList("A - A"), listed(secondMatrix));
+        assertTrue(start.isEnabled());
+    }
+
+    @Test
+    public void matricesAreClearedWhenAnotherWorkspaceIsOpened() throws Exception {
+        loadAndSelectKind();
+        assertTrue(start.isEnabled());
+
+        Lookup.getDefault().lookup(ProjectController.class).openNewWorkspace();
+        flushEventQueue();
+
+        assertEquals("the columns belong to the graph of the other workspace", 0, attributes.getItemCount());
+        assertEquals(0, firstMatrix.getItemCount());
+        assertEquals(0, secondMatrix.getItemCount());
+        assertFalse(start.isEnabled());
+        assertTrue("the columns of the new workspace can be loaded", load.isEnabled());
+    }
+
+    @Test
+    public void matricesAreClearedWhenTheProjectIsClosed() throws Exception {
+        loadAndSelectKind();
+        assertTrue(start.isEnabled());
+
+        Lookup.getDefault().lookup(ProjectController.class).closeCurrentProject();
+        flushEventQueue();
+
+        assertEquals(0, attributes.getItemCount());
+        assertEquals(0, firstMatrix.getItemCount());
+        assertEquals(0, secondMatrix.getItemCount());
+        assertFalse(start.isEnabled());
+        assertFalse(load.isEnabled());
+    }
+
     /**
      * What clicking Run does, whether the button looks enabled or not.
      */
@@ -148,6 +202,28 @@ public class MultiModeWindowTopComponentTest {
         while (!condition.getAsBoolean() && System.nanoTime() < deadline) {
             Thread.sleep(10);
         }
+    }
+
+    private static void flushEventQueue() throws Exception {
+        SwingUtilities.invokeAndWait(() -> {
+        });
+    }
+
+    /**
+     * The items of the combo box, as read on the event thread where the panel updates it.
+     */
+    private static List<String> listed(JComboBox<?> box) {
+        List<String> items = new ArrayList<String>();
+        try {
+            SwingUtilities.invokeAndWait(() -> {
+                for (int i = 0; i < box.getItemCount(); i++) {
+                    items.add(String.valueOf(box.getItemAt(i)));
+                }
+            });
+        } catch (Exception e) {
+            throw new IllegalStateException(e);
+        }
+        return items;
     }
 
     private static ValueCombination combination(JComboBox<?> box, String first, String second) {
