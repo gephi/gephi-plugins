@@ -148,6 +148,17 @@ public class IsometricLayout implements Layout {
         }
 
         graph.readLock();
+        try {
+            layoutNodes(graph);
+        } finally {
+            graph.readUnlock();
+        }
+        endAlgo();
+
+    }
+
+    // Computes the z-levels and places the nodes, the caller holds the graph read lock.
+    private void layoutNodes(Graph graph) {
 
         // Iterate on all nodes
         int nodeCount = graph.getNodeCount();
@@ -225,9 +236,6 @@ public class IsometricLayout implements Layout {
 
         }
 
-        graph.readUnlock();
-        endAlgo();
-
     }
 
     public double getDataLaboratoryValue(Node n, Column col) {
@@ -238,7 +246,7 @@ public class IsometricLayout implements Layout {
 
             z = ((Number) (n.getAttribute(col))).doubleValue();
 
-        } else if (col.getTypeClass() == String.class) {
+        } else if (col.getTypeClass() == String.class && n.getAttribute(col) != null) {
 
             try {
                 z = Double.parseDouble(((String) (n.getAttribute(col))).trim());
