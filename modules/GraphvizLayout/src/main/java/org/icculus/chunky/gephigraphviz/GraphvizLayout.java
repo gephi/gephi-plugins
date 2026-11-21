@@ -31,7 +31,9 @@ import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.MissingResourceException;
@@ -51,6 +53,17 @@ import org.openide.util.Exceptions;
 import org.openide.util.NbBundle;
 
 public class GraphvizLayout extends AbstractLayout implements Layout {
+
+    private static final Logger LOG = Logger.getLogger(GraphvizLayout.class.getName());
+
+    // Graphviz never sees Gephi's node ids. The node at index i of the array given to
+    // toDot() is written as n<i>, a plain identifier that dot writes back unquoted. Gephi ids
+    // can be of any type and contain any character, and dot removes the quotes around an id
+    // when it doesn't need them, so they can't be matched reliably in its output.
+    private static final String DOT_NODE_PREFIX = "n";
+    private static final Pattern DOT_NODE_POSITION = Pattern.compile(
+            "^\\s*" + DOT_NODE_PREFIX + "(?<index>\\d+)\\s+\\[[^\\]]*?(?<=[\\[,\\s])pos=\"(?<pos>[^\"]*)\"",
+            Pattern.MULTILINE);
 
     // http://www.graphviz.org/doc/info/attrs.html
     private String algoName = "dot";
@@ -73,10 +86,12 @@ public class GraphvizLayout extends AbstractLayout implements Layout {
         setConverged(false);
     }
 
-    @Override
-    public void goAlgo() {
-        // Prepare input
-        final StringBuffer dotfile = new StringBuffer();
+    /**
+     * Writes the visible graph in the dot language, naming each node after its index in
+     * {@code nodes}. The caller holds the graph's read lock.
+     */
+    String toDot(final Node[] nodes) {
+        final StringBuilder dotfile = new StringBuilder();
 
         String graphtype;
         String edgearrow;
@@ -101,24 +116,35 @@ public class GraphvizLayout extends AbstractLayout implements Layout {
             dotfile.append("concentrate=true;\n");
         }
 
+        final Map<Node, Integer> indices = new HashMap<>();
+        for (int i = 0; i < nodes.length; i++) {
+            final Node n = nodes[i];
+            indices.put(n, i);
+            dotfile.append(DOT_NODE_PREFIX).append(i);
+            dotfile.append(" [");
+            dotfile.append("pos=\"").append(n.x()).append(',').append(n.y()).append('"');
+            dotfile.append("];\n");
+        }
+        for (final Edge e : this.graph.getEdges()) {
+            dotfile.append(DOT_NODE_PREFIX).append(indices.get(e.getSource()));
+            dotfile.append(edgearrow);
+            dotfile.append(DOT_NODE_PREFIX).append(indices.get(e.getTarget()));
+            dotfile.append(" [weight=");
+            dotfile.append(e.getWeight());
+            dotfile.append("];\n");
+        }
+        dotfile.append("}\n");
+        return dotfile.toString();
+    }
+
+    @Override
+    public void goAlgo() {
+        final Node[] nodes;
+        final String dotfile;
+        graph.readLock();
         try {
-            graph.readLock();
-        
-            for (final Node n : this.graph.getNodes()) {
-		dotfile.append("\"").append(n.getId()).append("\"");
-                dotfile.append(" [");
-                dotfile.append("pos=\"").append(n.x()).append(',').append(n.y()).append('"');
-                dotfile.append("];\n");
-            }
-            for (final Edge e : this.graph.getEdges()) {
-		dotfile.append("\"").append(e.getSource().getId()).append("\"");
-                dotfile.append(edgearrow);
-		dotfile.append("\"").append(e.getTarget().getId()).append("\"");
-                dotfile.append(" [weight=");
-                dotfile.append(e.getWeight());
-                dotfile.append("];\n");
-            }
-            dotfile.append("}\n");
+            nodes = graph.getNodes().toArray();
+            dotfile = toDot(nodes);
         } finally {
             graph.readUnlock();
         }
@@ -139,7 +165,7 @@ public class GraphvizLayout extends AbstractLayout implements Layout {
                 inputForGraphviz.append(dotfile);
             }
 
-            processOutput(dotprocess);
+            processOutput(dotprocess, nodes);
         } catch (IOException ex) {
             JOptionPane.showMessageDialog(null, new DotProcessError(ex), "Graphviz process error", JOptionPane.ERROR_MESSAGE);
         } finally {
@@ -254,43 +280,26 @@ public class GraphvizLayout extends AbstractLayout implements Layout {
         this.overlap = overlap;
     }
 
-    private void processOutput(final Process dotprocess) {
+    private void processOutput(final Process dotprocess, final Node[] nodes) {
         assert dotprocess != null;
+        final StringBuilder entireOutput = new StringBuilder();
         try (InputStream in = dotprocess.getInputStream()) {
 
             final BufferedReader outputFromGraphviz = new BufferedReader(new InputStreamReader(in));
-            StringBuilder entireOutput = new StringBuilder();
             String line;
             while ((line = outputFromGraphviz.readLine()) != null) {
                 entireOutput.append(line);
                 entireOutput.append("\n");
             }
-            
-	    final String regex = "^\\s*\"(?<nodeid>\\S+)\"\\s+\\[[^\\]]*?[, ]?pos=\"(?<pos>[^\"]+?)\".*?\\]";
-            final Pattern pat = Pattern.compile(regex, Pattern.MULTILINE | Pattern.CASE_INSENSITIVE | Pattern.DOTALL);
-            Matcher matcher = pat.matcher(entireOutput.toString());
-            while(matcher.find()) {
-                final String nodeid = matcher.group("nodeid");
-                
-                final Node n = graph.getNode(nodeid);
-                if(null == n) {
-                    Logger.getLogger("").log(Level.WARNING, "Cannot find nodeid \"{0}\" from matcher group \"{1}\"", new Object[] { nodeid, matcher.group() } );
-                    continue;
-                }
-                String pos = matcher.group("pos");
-                String[] pair = pos.trim().split("[, ]");
-                if(pair.length != 2) {
-                    Logger.getLogger("").log(Level.WARNING, "Don''t know what to do with coordinates != 2; {0}", pos);
-                    continue;
-                }
-                BigDecimal x_bd = new BigDecimal(pair[0]);
-                BigDecimal y_bd = new BigDecimal(pair[1]);
-                n.setX(x_bd.floatValue());
-                n.setY(y_bd.floatValue());
-            }
-             
         } catch (IOException e) {
             Exceptions.printStackTrace(e);            
+        }
+
+        final int positioned = applyPositions(entireOutput, nodes);
+        if (positioned < nodes.length) {
+            LOG.log(Level.WARNING, "Graphviz gave a position to {0} of {1} nodes",
+                    new Object[] { positioned, nodes.length });
+            LOG.log(Level.FINE, "Graphviz output:\n{0}", entireOutput);
         }
 
         try (InputStream err = dotprocess.getErrorStream()) {
@@ -299,10 +308,48 @@ public class GraphvizLayout extends AbstractLayout implements Layout {
             final BufferedReader errorsFromGraphviz = new BufferedReader(glue);
             String line;
             while ((line = errorsFromGraphviz.readLine()) != null) {
-                Logger.getLogger("").warning(line);
+                LOG.warning(line);
             }
         } catch (IOException e) {
             Exceptions.printStackTrace(e);            
         }
+    }
+
+    /**
+     * Moves each node to the position Graphviz gave it in {@code dotOutput}, where node
+     * {@code n<i>} is {@code nodes[i]} as written by {@link #toDot(Node[])}.
+     *
+     * @return the number of nodes moved
+     */
+    static int applyPositions(final CharSequence dotOutput, final Node[] nodes) {
+        int positioned = 0;
+        final Matcher matcher = DOT_NODE_POSITION.matcher(dotOutput);
+        while (matcher.find()) {
+            final String pos = matcher.group("pos");
+            final String[] pair = pos.trim().split("[, ]");
+            if (pair.length != 2) {
+                LOG.log(Level.WARNING, "Don''t know what to do with coordinates != 2; {0}", pos);
+                continue;
+            }
+            final int index;
+            final float x;
+            final float y;
+            try {
+                index = Integer.parseInt(matcher.group("index"));
+                x = new BigDecimal(pair[0]).floatValue();
+                y = new BigDecimal(pair[1]).floatValue();
+            } catch (NumberFormatException e) {
+                LOG.log(Level.WARNING, "Can''t read node position from \"{0}\"", matcher.group());
+                continue;
+            }
+            if (index >= nodes.length) {
+                LOG.log(Level.WARNING, "Graphviz returned unknown node \"{0}\"", matcher.group());
+                continue;
+            }
+            nodes[index].setX(x);
+            nodes[index].setY(y);
+            positioned++;
+        }
+        return positioned;
     }
 }
