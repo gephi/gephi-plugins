@@ -9,7 +9,7 @@
 
     <groupId>org.gephi</groupId>
     <artifactId>geolayout-plugin</artifactId>
-    <version>1.0.0</version>
+    <version>1.0.1</version>
     <packaging>nbm</packaging>
 
     <name>GeoLayoutPlugin</name>
@@ -34,6 +34,11 @@
         <dependency>
             <groupId>org.netbeans.api</groupId>
             <artifactId>org-openide-util</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.netbeans.api</groupId>
+            <artifactId>org-netbeans-modules-nbjunit</artifactId>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 

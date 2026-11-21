@@ -73,6 +73,7 @@ public class GeoLayout implements Layout {
     private Column latitude;
     private Column longitude;
     private final boolean radian = false;
+    private static final double MAX_MERCATOR_LATITUDE = 85.0511287798;
     private String projection = "Mercator";
     public static String[] rows = {
         "Mercator",
@@ -116,24 +117,47 @@ public class GeoLayout implements Layout {
 
     @Override
     public void goAlgo() {
+        Graph graph = graphModel.getGraphVisible();
+
+        graph.readLock();
+        try {
+            project(graph);
+        } finally {
+            graph.readUnlockAll();
+        }
+
+        if (!looping) {
+            cancel = true;
+        } else {
+            try {
+                //Sleep some time
+                Thread.sleep(loopingDelay);
+            } catch (InterruptedException ex) {
+                Exceptions.printStackTrace(ex);
+            }
+        }
+    }
+
+    private void project(Graph graph) {
         double lon, lat;
         float nodeX, nodeY;
         float averageX = 0;
         float averageY = 0;
-        Graph graph = graphModel.getGraphVisible();
-
-        graph.readLock();
 
         List<Node> validNodes = new ArrayList<Node>();
         List<Node> invalidNodes = new ArrayList<Node>();
 
         // Set valid and non valid nodes:
         for (Node n : graph.getNodes()) {
-            if (n.getAttribute(latitude) != null && n.getAttribute(longitude) != null) {
+            if (hasValidCoordinates(graph, n)) {
                 validNodes.add(n);
             } else {
                 invalidNodes.add(n);
             }
+        }
+
+        if (validNodes.isEmpty()) {
+            return;
         }
 
         // Mercantor
@@ -154,7 +178,7 @@ public class GeoLayout implements Layout {
                 if (n.getLayoutData() == null || !(n.getLayoutData() instanceof GeoLayoutData)) {
                     n.setLayoutData(new GeoLayoutData());
                 }
-                lat = getNodeLatitude(graph, n);
+                lat = clampToMercatorRange(getNodeLatitude(graph, n));
                 lon = getNodeLongitude(graph, n);
 
                 lat = Math.toRadians(lat);
@@ -180,7 +204,7 @@ public class GeoLayout implements Layout {
                     n.setLayoutData(new GeoLayoutData());
                 }
 
-                lat = getNodeLatitude(graph, n);
+                lat = clampToMercatorRange(getNodeLatitude(graph, n));
                 lon = getNodeLongitude(graph, n);
 
                 lat = Math.toRadians(lat);
@@ -389,7 +413,7 @@ public class GeoLayout implements Layout {
             averageY = averageY / validNodes.size();
         }
 
-        if (validNodes.size() > 0 && invalidNodes.size() > 0) {
+        if (!invalidNodes.isEmpty()) {
             Node tempNode = validNodes.get(0);
             double xMin = tempNode.x();
             double xMax = tempNode.x();
@@ -411,18 +435,16 @@ public class GeoLayout implements Layout {
                 }
             }
 
-            if (invalidNodes.size() > 1) {
-                double i = 0;
-                double step = (xMax - xMin) / (invalidNodes.size() - 1);
-                for (Node n : invalidNodes) {
-                    n.setX((float) (xMin + i * step));
-                    n.setY((float) (yMin - step));
-                    i++;
-                }
-            } else {
-                tempNode = invalidNodes.get(0);
-                tempNode.setX(10000);
-                tempNode.setY(10000);
+            double step = invalidNodes.size() > 1 ? (xMax - xMin) / (invalidNodes.size() - 1) : 0;
+            if (step <= 0) {
+                // A single node, or valid nodes all on one meridian: keep the row visible below the map
+                step = Math.abs(scale) / 10;
+            }
+            double i = 0;
+            for (Node n : invalidNodes) {
+                n.setX((float) (xMin + i * step));
+                n.setY((float) (yMin - step));
+                i++;
             }
         }
 
@@ -436,19 +458,21 @@ public class GeoLayout implements Layout {
                 n.setY(nodeY);
             }
         }
+    }
 
-        graph.readUnlock();
-
-        if (!looping) {
-            cancel = true;
-        } else {
-            try {
-                //Sleep some time
-                Thread.sleep(loopingDelay);
-            } catch (InterruptedException ex) {
-                Exceptions.printStackTrace(ex);
-            }
+    private boolean hasValidCoordinates(Graph graph, Node n) {
+        Object lat = n.getAttribute(latitude, graph.getView());
+        Object lon = n.getAttribute(longitude, graph.getView());
+        if (!(lat instanceof Number) || !(lon instanceof Number)) {
+            return false;
         }
+        return Math.abs(((Number) lat).doubleValue()) <= 90
+                && Math.abs(((Number) lon).doubleValue()) <= 360;
+    }
+
+    // Mercator sends the poles to infinity, so latitudes are clamped to the Web Mercator bounds
+    private static double clampToMercatorRange(double lat) {
+        return Math.max(-MAX_MERCATOR_LATITUDE, Math.min(MAX_MERCATOR_LATITUDE, lat));
     }
 
     private double getNodeLatitude(Graph graph, Node n) {
@@ -559,7 +583,9 @@ public class GeoLayout implements Layout {
     }
 
     public void setScale(Double scale) {
-        this.scale = scale;
+        if (scale != null && Double.isFinite(scale)) {
+            this.scale = scale;
+        }
     }
 
     public Column getLatitude() {
