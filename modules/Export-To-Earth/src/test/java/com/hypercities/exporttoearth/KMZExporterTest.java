@@ -9,6 +9,7 @@ import de.micromata.opengis.kml.v_2_2_0.Style;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.zip.ZipEntry;
@@ -93,6 +94,24 @@ public class KMZExporterTest {
         assertEquals("style_1", lineStyle.getAttribute("id"));
         assertEquals(3.0, Double.parseDouble(text(lineStyle, "width")), 0.0);
         assertEquals("7f0000ff", text(lineStyle, "color"));
+    }
+
+    /**
+     * Kml.marshal prints the exception and returns false when it fails, which must
+     * not end in a KMZ file reported as written.
+     */
+    @Test
+    public void testWriteKMZFailsWhenTheKmlCannotBeMarshalled() {
+        Kml kml = new Kml() {
+            @Override
+            public boolean marshal(OutputStream outputstream) {
+                return false;
+            }
+        };
+        KMZExporter exporter = new KMZExporter();
+        exporter.setOutputStream(new ByteArrayOutputStream());
+
+        assertThrows(IOException.class, () -> exporter.writeKMZ(kml, new IconRenderer(32)));
     }
 
     private static Map<String, byte[]> unzip(byte[] kmz) throws IOException {
