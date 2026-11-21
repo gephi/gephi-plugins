@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
 <!DOCTYPE module_updates PUBLIC "-//NetBeans//DTD Autoupdate Catalog 2.8//EN" "https://netbeans.apache.org/dtds/autoupdate-catalog-2_8.dtd">
-<module_updates timestamp="05/02/19/20/11/2026">
+<module_updates timestamp="05/21/15/21/11/2026">
 
 
 
@@ -164,12 +164,12 @@
     <message_digest algorithm="SHA-512" value="25acf67223b192b07e1209f2db8a5f79573bdf180d48a6dd1598e7ec35a585f0dea6c2477b2bd51aa78527999ee9f372643211b5c594cfcf1a68281d03a4861b"/>
 </module>
 
-<module codenamebase="org.icculus.chunky.gephigraphviz" distribution="https://gephi.org/gephi-plugins/plugins/0.11/gephigraphviz-1.0.1.nbm" downloadsize="49851" homepage="http://github.com/gephi/gephi-plugins/gephigraphviz" license="E0509B40" moduleauthor="Gary &quot;ChunkyKs&quot; Briggs" needsrestart="true" releasedate="2026/11/08" targetcluster="plugins">
+<module codenamebase="org.icculus.chunky.gephigraphviz" distribution="https://gephi.org/gephi-plugins/plugins/0.11/gephigraphviz-1.0.2.nbm" downloadsize="50554" homepage="http://github.com/gephi/gephi-plugins/gephigraphviz" license="E0509B40" moduleauthor="Gary &quot;ChunkyKs&quot; Briggs" needsrestart="true" releasedate="2026/11/21" targetcluster="plugins">
         
-    <manifest OpenIDE-Module="org.icculus.chunky.gephigraphviz" OpenIDE-Module-Display-Category="Layout" OpenIDE-Module-Implementation-Version="1.0.1" OpenIDE-Module-Long-Description="A simple plugin that calls graphviz at the command line and uses it to lay out a graph. Graphviz has a selection of very high-quality layout algorithms available." OpenIDE-Module-Module-Dependencies="org.openide.nodes &gt; 7.76, org.openide.util.lookup &gt; 8.65, org.gephi.graph.api &gt; 0.11.1, org.gephi.layout.plugin &gt; 0.11.1, org.openide.util &gt; 9.39, org.gephi.layout.api &gt; 0.11.1, org.gephi.ui.utils &gt; 0.11.1, org.gephi.project.api &gt; 0.11.1" OpenIDE-Module-Name="Graphviz Layout" OpenIDE-Module-Requires="org.openide.modules.ModuleFormat1" OpenIDE-Module-Short-Description="Graphiz Layout Plugin" OpenIDE-Module-Specification-Version="1.0.1"/>
+    <manifest OpenIDE-Module="org.icculus.chunky.gephigraphviz" OpenIDE-Module-Display-Category="Layout" OpenIDE-Module-Implementation-Version="1.0.2" OpenIDE-Module-Long-Description="A simple plugin that calls graphviz at the command line and uses it to lay out a graph. Graphviz has a selection of very high-quality layout algorithms available." OpenIDE-Module-Module-Dependencies="org.openide.nodes &gt; 7.76, org.openide.util.lookup &gt; 8.65, org.gephi.graph.api &gt; 0.11.1, org.gephi.layout.plugin &gt; 0.11.1, org.openide.util &gt; 9.39, org.gephi.layout.api &gt; 0.11.1, org.gephi.ui.utils &gt; 0.11.1, org.gephi.project.api &gt; 0.11.1" OpenIDE-Module-Name="Graphviz Layout" OpenIDE-Module-Requires="org.openide.modules.ModuleFormat1" OpenIDE-Module-Short-Description="Graphiz Layout Plugin" OpenIDE-Module-Specification-Version="1.0.2"/>
         
 
-    <message_digest algorithm="SHA-512" value="04909f7a2d1817784396ea90dfa9e2c7c333d58f4059a09d4abe1a7a0a5837025d164c2b9d625ace0f2b6b717eb5d7d8da867bcca23aea6974d48c6960335fe2"/>
+    <message_digest algorithm="SHA-512" value="48569523e28435c35f0b151dd69fa5c171debcb27501485ba08a4e5c4ae68dd2a1021bc07e2f6b3148d6e5203f302c596f7f6e976a61e45e451a9d71c932bd25"/>
 </module>
 
 <module codenamebase="upf.group.partition.gephi.plugin" distribution="https://gephi.org/gephi-plugins/plugins/0.11/group-partition-gephi-plugin-1.0.1.nbm" downloadsize="19671" homepage="http://github.com/gephi/gephi-plugins/group-partition-gephi-plugin" license="4923300D" moduleauthor="Sergi Puig, Marc Torrelles" needsrestart="true" releasedate="2026/11/08" targetcluster="plugins">

@@ -1985,7 +1985,7 @@
         }
       ],
       "category": "Layout",
-      "last_update": "November 8, 2026",
+      "last_update": "November 21, 2026",
       "images": [
         {
           "image": "imgs/gephigraphviz/GraphVizLayout_example.png",
@@ -2052,10 +2052,10 @@
           "plugin_version": "1.0.1"
         },
         "0.11.4": {
-          "url": "0.11/gephigraphviz-1.0.1.nbm",
-          "download_url": null,
-          "last_update": "November 8, 2026",
-          "plugin_version": "1.0.1"
+          "url": "0.11/gephigraphviz-1.0.2.nbm",
+          "download_url": "https://gephi.org/gephi-plugins/plugins/0.11/gephigraphviz-1.0.2.nbm",
+          "last_update": "November 21, 2026",
+          "plugin_version": "1.0.2"
         }
       },
       "sourcecode": "https://github.com/chunky/gephi-plugins",
