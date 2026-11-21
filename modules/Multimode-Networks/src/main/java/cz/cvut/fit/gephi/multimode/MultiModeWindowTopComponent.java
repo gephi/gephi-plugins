@@ -7,6 +7,7 @@ import javax.swing.SwingUtilities;
 import org.gephi.graph.api.Column;
 import org.gephi.graph.api.Graph;
 import org.gephi.graph.api.GraphController;
+import org.gephi.graph.api.GraphModel;
 import org.gephi.graph.api.Node;
 import org.gephi.graph.api.Table;
 import org.gephi.project.api.ProjectController;
@@ -40,6 +41,8 @@ import org.openide.windows.TopComponent;
  */
 public final class MultiModeWindowTopComponent extends TopComponent {
     private final ProjectController projectController;
+    // A single background executor for all the runs, which are queued and executed one after the other
+    private final LongTaskExecutor executor = new LongTaskExecutor(true);
     public MultiModeWindowTopComponent() {
         initComponents();
         setName(NbBundle.getMessage(MultiModeWindowTopComponent.class, "CTL_MultiModeWindowTopComponent"));
@@ -357,13 +360,15 @@ public final class MultiModeWindowTopComponent extends TopComponent {
         Object column = attributes.getSelectedItem();
         ValueCombination first = (ValueCombination) firstMatrix.getSelectedItem();
         ValueCombination second = (ValueCombination) secondMatrix.getSelectedItem();
-        if (!(column instanceof Column) || first == null || second == null) {
+        // The run may have to wait for others: the model of the workspace it is started in is kept, as the
+        // current workspace may be another one by the time the run starts
+        GraphModel graphModel = Lookup.getDefault().lookup(GraphController.class).getGraphModel();
+        if (graphModel == null || !(column instanceof Column) || first == null || second == null) {
             // The values listed do not match the graph, there is nothing to run
             start.setEnabled(false);
             return;
         }
 
-        LongTaskExecutor executor = new LongTaskExecutor(true);
         LongTaskTransformation longTask = new LongTaskTransformation(
                 (Column) column,
                 first.getFirst(),
@@ -373,7 +378,7 @@ public final class MultiModeWindowTopComponent extends TopComponent {
                 removeEdges.isSelected(), removeNodes.isSelected(),proportional.isSelected(),directed.isSelected());
         final boolean removing = removeEdges.isSelected() || removeNodes.isSelected();
         executor.execute(longTask, () -> {
-            longTask.run();
+            longTask.run_online(graphModel);
             if (removing) {
                 // The values listed were read before the run removed nodes and edges
                 SwingUtilities.invokeLater(this::listValuesAgain);

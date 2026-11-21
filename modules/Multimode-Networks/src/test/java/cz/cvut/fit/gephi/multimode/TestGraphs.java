@@ -4,7 +4,6 @@ import org.gephi.graph.api.Edge;
 import org.gephi.graph.api.GraphController;
 import org.gephi.graph.api.GraphModel;
 import org.gephi.graph.api.Node;
-import org.gephi.graph.api.UndirectedGraph;
 import org.gephi.project.api.ProjectController;
 import org.openide.util.Lookup;
 
@@ -38,9 +37,12 @@ final class TestGraphs {
     }
 
     static Edge addEdge(GraphModel model, Node a, Node b, double weight) {
-        UndirectedGraph graph = model.getUndirectedGraph();
-        Edge edge = model.factory().newEdge(a, b, 0, weight, false);
-        graph.addEdge(edge);
+        return addEdge(model, a, b, weight, false);
+    }
+
+    static Edge addEdge(GraphModel model, Node source, Node target, double weight, boolean directed) {
+        Edge edge = model.factory().newEdge(source, target, 0, weight, directed);
+        model.getGraph().addEdge(edge);
         return edge;
     }
 }

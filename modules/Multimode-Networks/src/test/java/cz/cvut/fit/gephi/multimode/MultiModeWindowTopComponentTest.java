@@ -145,6 +145,50 @@ public class MultiModeWindowTopComponentTest {
         assertTrue(start.isEnabled());
     }
 
+    @Test(timeout = 60000)
+    public void runsAreExecutedOneAfterTheOther() throws Exception {
+        loadAndSelectKind();
+        firstMatrix.setSelectedItem(combination(firstMatrix, "A", "B"));
+        secondMatrix.setSelectedItem(combination(secondMatrix, "B", "A"));
+
+        graph.writeLock(); // the runs have to wait for the graph
+        try {
+            start.doClick(0);
+            start.doClick(0);
+            waitUntil(() -> threadsRunningTheTransformation() > 0);
+            Thread.sleep(200); // time for the second run to start, if nothing holds it back
+            assertEquals("the second run has to wait for the first one", 1, threadsRunningTheTransformation());
+        } finally {
+            graph.writeUnlock();
+        }
+
+        waitUntil(() -> graph.getEdgeCount() == 9);
+        assertEquals(9, graph.getEdgeCount());
+    }
+
+    @Test(timeout = 60000)
+    public void aRunWaitingForAnotherOneStillWorksOnTheWorkspaceItWasStartedIn() throws Exception {
+        loadAndSelectKind();
+        firstMatrix.setSelectedItem(combination(firstMatrix, "A", "B"));
+        secondMatrix.setSelectedItem(combination(secondMatrix, "B", "A"));
+
+        graph.writeLock(); // the first run waits for the graph
+        try {
+            start.doClick(0);
+            // The second run, which removes the B nodes, waits for the first one: the user moves on to another
+            // workspace in the meantime
+            removeNodes.setSelected(true);
+            start.doClick(0);
+            Lookup.getDefault().lookup(ProjectController.class).openNewWorkspace();
+            flushEventQueue();
+        } finally {
+            graph.writeUnlock();
+        }
+
+        waitUntil(() -> graph.getNodeCount() == 3);
+        assertEquals("the B nodes are removed from the graph the run was started on", 3, graph.getNodeCount());
+    }
+
     @Test
     public void matricesAreClearedWhenAnotherWorkspaceIsOpened() throws Exception {
         loadAndSelectKind();
@@ -202,6 +246,13 @@ public class MultiModeWindowTopComponentTest {
         while (!condition.getAsBoolean() && System.nanoTime() < deadline) {
             Thread.sleep(10);
         }
+    }
+
+    private static long threadsRunningTheTransformation() {
+        return Thread.getAllStackTraces().values().stream()
+                .filter(stack -> Arrays.stream(stack)
+                        .anyMatch(frame -> frame.getClassName().equals(LongTaskTransformation.class.getName())))
+                .count();
     }
 
     private static void flushEventQueue() throws Exception {
