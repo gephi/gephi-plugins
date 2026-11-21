@@ -129,9 +129,10 @@ public class IsometricLayout implements Layout {
 
         Table nodeTable = graph.getModel().getNodeTable();
 
-        for (int i = 0; i < nodeTable.countColumns(); i++) {
-
-            Column c = nodeTable.getColumn(i);
+        // Column indexes are not renumbered when a column is removed, so countColumns() is not an upper
+        // bound for getColumn(int). Walk the existing columns with toArray(): a for-each over the table
+        // would leave it locked when the loop breaks.
+        for (Column c : nodeTable.toArray()) {
 
             if (c.getTitle().toLowerCase().contains("[z]")) {
                 columnZ = c;

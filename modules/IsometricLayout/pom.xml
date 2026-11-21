@@ -9,7 +9,7 @@
 
     <groupId>org.alexandrebarao</groupId>
     <artifactId>isometric-layout</artifactId>
-    <version>1.0.0</version>
+    <version>1.0.1</version>
     <packaging>nbm</packaging>
 
     <name>Isometric Layout</name>
@@ -23,6 +23,11 @@
         <dependency>
             <groupId>org.gephi</groupId>
             <artifactId>graph-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.netbeans.api</groupId>
+            <artifactId>org-netbeans-modules-nbjunit</artifactId>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 
