@@ -47,7 +47,9 @@ public abstract class AbstractComboBoxEditor extends PropertyEditorSupport {
         if (getValue() == null) {
             return "No Selection";
         }
-        return comboValues.get(getValue().toString());
+        String text = comboValues.get(getValue().toString());
+        // A value that is not an option anymore (e.g. a deleted column) is ignored by the layout
+        return text != null ? text : "No Selection";
     }
 
     @Override

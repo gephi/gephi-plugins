@@ -4,6 +4,8 @@
 package org.gephi.plugin.CirclePack;
 
 import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.gephi.graph.api.*;
 import org.gephi.layout.spi.Layout;
@@ -12,6 +14,8 @@ import org.gephi.layout.spi.LayoutProperty;
 import org.openide.util.Exceptions;
 
 public class CirclePackLayout implements Layout {
+
+    private static final Logger LOGGER = Logger.getLogger(CirclePackLayout.class.getName());
 
     //Architecture
     private final LayoutBuilder builder;
@@ -42,16 +46,21 @@ public class CirclePackLayout implements Layout {
 
     @Override
     public void goAlgo() {
+        final boolean directed = graphModel.isDirected() || graphModel.isMixed();
         ArrayList<String> attributesToUse = new ArrayList<>();
 
         for (String att : Arrays.asList(hierarchy1, hierarchy2, hierarchy3, hierarchy4, hierarchy5)) {
             if (att != null && !att.equals("No Selection")) {
-                attributesToUse.add(att);
+                if (canGroupBy(att, directed)) {
+                    attributesToUse.add(att);
+                } else {
+                    LOGGER.log(Level.WARNING, "Circle Pack ignores the hierarchy level ''{0}'', it is not available on this graph", att);
+                }
             }
         }
 
         final Graph graph;
-        if (graphModel.isDirected() || graphModel.isMixed()) {
+        if (directed) {
             graph = graphModel.getDirectedGraphVisible();
         } else {
             graph = graphModel.getGraphVisible();
@@ -108,6 +117,24 @@ public class CirclePackLayout implements Layout {
             graph.readUnlockAll();
         }
         endAlgo();
+    }
+
+    /**
+     * Whether a hierarchy level can be read on the graph. Levels are plain names that outlive the graph they were
+     * chosen on (layout presets, saved projects, a column deleted afterwards), so a column the node table lacks, or
+     * In/Out Degree on a graph without directed edges, is skipped like "No Selection" instead of failing the run.
+     */
+    private boolean canGroupBy(String att, boolean directed) {
+        switch (att) {
+            case "NodeID":
+            case "Degree":
+                return true;
+            case "InDegree":
+            case "OutDegree":
+                return directed;
+            default:
+                return graphModel.getNodeTable().hasColumn(att);
+        }
     }
 
     public void setNode(Graph graph, CircleWrap parentCircle) {
