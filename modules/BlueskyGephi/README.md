@@ -18,6 +18,8 @@ Keep in mind current atproto access point from bluesky is quite permissive and m
 ## Fetch from user
 You can fetch network from user from multiple way :
 - Put one or multiple (separated by line return) handles or dids inside the plugin textarea and click on "Go!" 
+  - A handle is the full name of an account, like `alice.bsky.social` (a leading `@` is ignored), and a did looks like `did:plc:...`
+  - The plugin doesn't search: a keyword or a display name isn't a handle, so it is reported as invalid and nothing is fetched for it
 - You can right click on a node and select contextual menu item related to the plugin 
   - **Bluesky Fetch default data** , will fetch network based on the current configuration on the plugin panel
   - **Fetch followers only data**, will fetch only the followers of the node

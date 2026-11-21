@@ -1,6 +1,7 @@
 package fr.totetmatt.blueskygephi;
 
 import fr.totetmatt.blueskygephi.atproto.AtClient;
+import fr.totetmatt.blueskygephi.atproto.AtIdentifier;
 import fr.totetmatt.blueskygephi.atproto.AtIdentity;
 import fr.totetmatt.blueskygephi.atproto.AtProtoException;
 import fr.totetmatt.blueskygephi.atproto.response.common.Identity;
@@ -428,7 +429,7 @@ public class BlueskyGephi {
         graphModel = Lookup.getDefault().lookup(GraphController.class).getGraphModel();
         initGraphTable();
         actors.stream()
-                .map(String::trim)
+                .map(AtIdentifier::clean)
                 .filter(actor -> !actor.isEmpty())
                 .forEach(actor -> fetchFollowerFollowsFromActor(actor, null, isFollowsActive, isFollowersActive, getIsDeepSearch()));
     }
@@ -444,7 +445,7 @@ public class BlueskyGephi {
         initGraphTable();
 
         List<String> cleanActors = actors.stream()
-                .map(String::trim)
+                .map(AtIdentifier::clean)
                 .filter(x -> !x.isEmpty())
                 .collect(Collectors.toList());
 
