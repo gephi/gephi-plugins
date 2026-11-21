@@ -163,19 +163,27 @@ public class Installer extends ModuleInstall {
      * never interleave.
      */
     synchronized String startNow() {
+        return startNow(getPreferredPort());
+    }
+
+    /** {@link #startNow()} on a given port, so a test can start on a port it holds or chooses. */
+    synchronized String startNow(int port) {
         if (stopped) {
             return null; // The module was disabled or stopped while the start was pending.
         }
         if (isRunningNow()) {
             return null;
         }
-        int port = getPreferredPort();
         GephiAPIServer s = new GephiAPIServer(port);
         try {
             s.startServer();
         } catch (IOException e) {
             String detail = e.getLocalizedMessage() != null ? e.getLocalizedMessage() : e.toString();
-            LOGGER.log(Level.SEVERE, "Gephi AI server failed to bind port " + port, e);
+            // A port that another program holds is for the user to fix, and the message returned below
+            // tells them how. The log line carries no exception: Gephi's crash reporter sends every
+            // logged exception, at any level, as a bug report.
+            LOGGER.log(Level.WARNING, "Gephi AI server failed to bind port {0}: {1}",
+                new Object[]{Integer.toString(port), detail});
             return NbBundle.getMessage(Installer.class, "Installer.error.bindFailed",
                 Integer.toString(port), detail);
         }
