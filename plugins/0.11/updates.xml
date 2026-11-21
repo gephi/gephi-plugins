@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
 <!DOCTYPE module_updates PUBLIC "-//NetBeans//DTD Autoupdate Catalog 2.8//EN" "https://netbeans.apache.org/dtds/autoupdate-catalog-2_8.dtd">
-<module_updates timestamp="05/21/15/21/11/2026">
+<module_updates timestamp="59/56/15/21/11/2026">
 
 
 
@@ -125,12 +125,12 @@
     <message_digest algorithm="SHA-512" value="440b88fb08f38b8a7c196c7cfdf0afeff1dfdd7c41f28488376bd0edc513afcac553e53e04a2c6fc94d96918c4bf06a7df98fc0020736c9515c62e340ef27273"/>
 </module>
 
-<module codenamebase="org.gephi.geolayout.plugin" distribution="https://gephi.org/gephi-plugins/plugins/0.11/geolayout-plugin-1.0.0.nbm" downloadsize="27318" homepage="https://gephi.org/plugins/#/plugin/geolayout-plugin" license="671322F0" moduleauthor="Alexis Jacomy" needsrestart="true" releasedate="2026/11/08" targetcluster="plugins">
+<module codenamebase="org.gephi.geolayout.plugin" distribution="https://gephi.org/gephi-plugins/plugins/0.11/geolayout-plugin-1.0.1.nbm" downloadsize="27802" homepage="https://gephi.org/plugins/#/plugin/geolayout-plugin" license="671322F0" moduleauthor="Alexis Jacomy" needsrestart="true" releasedate="2026/11/21" targetcluster="plugins">
         
-    <manifest OpenIDE-Module="org.gephi.geolayout.plugin" OpenIDE-Module-Display-Category="Layout" OpenIDE-Module-Implementation-Version="1.0.0" OpenIDE-Module-Long-Description="This plugin contains the &quot;GeoLayout&quot;, which displays your graph based on geocoded attributes (i.e. latitude and longitude) and standard projections." OpenIDE-Module-Module-Dependencies="org.gephi.layout.api &gt; 0.11.1, org.gephi.graph.api &gt; 0.11.1, org.gephi.ui.utils &gt; 0.11.1, org.openide.util.lookup &gt; 8.65, org.openide.util &gt; 9.39" OpenIDE-Module-Name="GeoLayout" OpenIDE-Module-Requires="org.openide.modules.ModuleFormat1" OpenIDE-Module-Short-Description="A layout to display geocoded data" OpenIDE-Module-Specification-Version="1.0.0"/>
+    <manifest OpenIDE-Module="org.gephi.geolayout.plugin" OpenIDE-Module-Display-Category="Layout" OpenIDE-Module-Implementation-Version="1.0.1" OpenIDE-Module-Long-Description="This plugin contains the &quot;GeoLayout&quot;, which displays your graph based on geocoded attributes (i.e. latitude and longitude) and standard projections." OpenIDE-Module-Module-Dependencies="org.gephi.layout.api &gt; 0.11.1, org.gephi.graph.api &gt; 0.11.1, org.gephi.ui.utils &gt; 0.11.1, org.openide.util.lookup &gt; 8.65, org.openide.util &gt; 9.39" OpenIDE-Module-Name="GeoLayout" OpenIDE-Module-Requires="org.openide.modules.ModuleFormat1" OpenIDE-Module-Short-Description="A layout to display geocoded data" OpenIDE-Module-Specification-Version="1.0.1"/>
         
 
-    <message_digest algorithm="SHA-512" value="f7add1dc2c5ab3dc92bf4dcf45f57ac665c74b9dbe2fc5f79ca9c827336ac19ac046e0d1e16c226a073b4075ef7e84f3690cbe6308354da1c408c5e18605b912"/>
+    <message_digest algorithm="SHA-512" value="212206fb7d5b974835c0d5cac04e206cfa84d43de10c1800c70882611ae7909d315d0068f2de1fc1f5f0c7fdac1d36ba840d1f026b95ac0f21b43ca2e32edaf1"/>
 </module>
 
 <module codenamebase="org.gephi.plugins.gephi.ai" distribution="https://gephi.org/gephi-plugins/plugins/0.11/gephi-ai-1.6.1.nbm" downloadsize="439666" homepage="https://github.com/MattArtzAnthro/gephi-ai" license="709031F9" moduleauthor="Matt Artz" needsrestart="true" releasedate="2026/11/08" targetcluster="plugins">
