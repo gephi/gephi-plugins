@@ -1,0 +1,5 @@
+Manifest-Version: 1.0
+OpenIDE-Module-Name: Multi Node Lineage
+OpenIDE-Module-Short-Description: Identifies the ancestors and descendants of a set of nodes.
+OpenIDE-Module-Long-Description: Identifies the ancestors and descendants of a set of nodes. Attributes are added to the nodes to record the results. These attributes can be used for further analysis (e.g filtering).
+OpenIDE-Module-Display-Category: Metric
