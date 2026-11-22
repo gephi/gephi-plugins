@@ -1,0 +1,5 @@
+Manifest-Version: 1.0
+OpenIDE-Module-Name: Bearkat Centralization
+OpenIDE-Module-Short-Description: Computes multiple graph centralization metrics from a single Gephi Statistics report.
+OpenIDE-Module-Long-Description: Bearkat Centralization computes degree, weighted degree, in-degree, out-degree, betweenness, eigenvector, closeness, and harmonic closeness centralization from a single Statistics report. The plugin also exports node-level values to the Data Laboratory and supports both directed and undirected networks.
+OpenIDE-Module-Display-Category: Metric
