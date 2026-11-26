@@ -185,6 +185,7 @@ class ApiRoutingTest {
         "POST | /graph/edge/add | {\"source\": \"a\"} | 'target'",
         "POST | /graph/edges/add | {} | 'edges'",
         "POST | /graph/edge/remove | {\"target\": \"a\"} | 'source'",
+        "POST | /graph/edges/remove | {} | 'edges'",
         "POST | /graph/edge/weight | {\"source\": \"a\", \"target\": \"b\"} | 'weight'",
         "POST | /graph/edge/label | {\"source\": \"a\", \"target\": \"b\"} | 'label'",
         "POST | /graph/columns/add | {\"name\": \"n\"} | 'type'",
@@ -315,6 +316,21 @@ class ApiRoutingTest {
         assertEquals(2, page.getAsJsonArray("edges").size());
         ok(call("POST", "/graph/edge/remove", "{\"source\": \"c\", \"target\": \"d\"}"));
         assertEquals(3, model().getGraph().getEdgeCount());
+    }
+
+    @Test
+    void manyEdgesAreRemovedInOneRequest() throws Exception {
+        JsonObject r = ok(call("POST", "/graph/edges/remove", "{\"edges\": ["
+            + "{\"source\": \"a\", \"target\": \"b\"},"
+            + "{\"source\": \"c\", \"target\": \"d\"},"
+            + "{\"source\": \"a\", \"target\": \"e\"},"
+            + "{\"source\": \"a\", \"target\": \"nobody\"},"
+            + "{\"source\": \"a\"}]}"));
+        assertEquals(2, r.get("removed").getAsInt());
+        assertEquals(3, r.get("not_found").getAsInt());
+        JsonObject left = ok(call("GET", "/graph/edges?limit=10"));
+        assertEquals(2, left.get("edges").getAsJsonArray().size(), left.toString());
+        assertEquals(5, ok(call("GET", "/graph/nodes?limit=10")).get("count").getAsInt());
     }
 
     @Test

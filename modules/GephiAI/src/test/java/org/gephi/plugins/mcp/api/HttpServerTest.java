@@ -107,6 +107,13 @@ class HttpServerTest {
     }
 
     @Test
+    void healthReportsTheOperatingSystem() throws Exception {
+        // A server under WSL rewrites file paths only for a Gephi that runs on Windows.
+        String r = get("/health");
+        assertTrue(r.contains("\"os\": \"" + System.getProperty("os.name") + "\""), r);
+    }
+
+    @Test
     void optionsIsAnsweredWithNoBody() throws Exception {
         String[] r = send("OPTIONS /health HTTP/1.1\r\nHost: 127.0.0.1\r\nConnection: close\r\n\r\n");
         assertEquals("200", r[0]);

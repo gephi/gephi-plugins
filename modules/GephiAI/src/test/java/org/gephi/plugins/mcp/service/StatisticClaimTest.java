@@ -16,6 +16,7 @@
 
 package org.gephi.plugins.mcp.service;
 
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -35,6 +36,7 @@ class StatisticClaimTest {
     @AfterEach
     void clear() {
         GephiControlService.RUNNING_STATISTICS.clear();
+        GephiControlService.STOP_REQUESTED.clear();
     }
 
     @Test
@@ -57,5 +59,51 @@ class StatisticClaimTest {
         assertNull(GephiControlService.claimStatistic(first, "Modularity"));
         GephiControlService.RUNNING_STATISTICS.remove(first);
         assertNull(GephiControlService.claimStatistic(new Modularity(), "Modularity"));
+    }
+
+    /** A stop that reaches a run after it was released would leave a mark nothing ever clears. */
+    @Test
+    void stopDoesNotMarkARunThatHasEnded() {
+        Modularity stat = new Modularity();
+        assertNull(GephiControlService.claimStatistic(stat, "Modularity"));
+        assertFalse(GephiControlService.releaseStatistic(stat));
+
+        assertFalse(GephiControlService.markStopRequested(stat));
+        assertTrue(GephiControlService.STOP_REQUESTED.isEmpty());
+    }
+
+    @Test
+    void stopMarksARunStillClaimedAndTheReleaseReportsIt() {
+        Modularity stat = new Modularity();
+        assertNull(GephiControlService.claimStatistic(stat, "Modularity"));
+
+        assertTrue(GephiControlService.markStopRequested(stat));
+        assertTrue(GephiControlService.releaseStatistic(stat), "the release did not report the stop");
+        assertTrue(GephiControlService.STOP_REQUESTED.isEmpty());
+    }
+
+    /**
+     * A request that gives up on a statistic still running in Gephi keeps it recorded as running:
+     * a stop request must still reach it, and a second run of it must still be refused.
+     */
+    @Test
+    void statisticStillRunningStaysClaimedUntilItEnds() throws Exception {
+        Modularity stat = new Modularity();
+        assertNull(GephiControlService.claimStatistic(stat, "Modularity"));
+        java.util.concurrent.CountDownLatch ended = new java.util.concurrent.CountDownLatch(1);
+
+        final Thread watch = GephiControlService.releaseWhenEnded(stat,
+            new GephiControlService.StatisticStillRunningException("still running", ended::await));
+
+        Thread.sleep(100);
+        assertNotNull(GephiControlService.claimStatistic(new Modularity(), "Modularity"),
+            "a second run started beside one still running");
+        assertTrue(GephiControlService.markStopRequested(stat), "a stop could not reach the running statistic");
+
+        ended.countDown();
+        watch.join(5_000);
+        assertFalse(watch.isAlive());
+        assertNull(GephiControlService.claimStatistic(new Modularity(), "Modularity"));
+        assertFalse(GephiControlService.STOP_REQUESTED.contains(stat));
     }
 }
