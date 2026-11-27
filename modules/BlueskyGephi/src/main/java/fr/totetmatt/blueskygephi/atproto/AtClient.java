@@ -261,12 +261,26 @@ public class AtClient {
         return waitMs;
     }
 
+    /**
+     * Fails before any request on an actor that the API would answer with HTTP
+     * 400 ("Invalid AT identifier"), so the user gets an actionable message and
+     * Bluesky is not sent input it is known to reject.
+     */
+    private static void requireIdentifier(String actor) {
+        if (!AtIdentifier.isValid(actor)) {
+            throw new AtProtoException("\"" + actor + "\" is not a valid Bluesky handle or DID. "
+                    + "Use a full handle such as alice.bsky.social, or a DID such as did:plc:...");
+        }
+    }
+
     public void appBskyGraphGetFollowers(String actor, Optional<Integer> maxPages, Consumer<AppBskyGraphGetFollowers> onPage, LongConsumer onWaiting) {
+        requireIdentifier(actor);
         paginate("app.bsky.graph.getFollowers", Map.of("actor", actor, "limit", "100"),
                 AppBskyGraphGetFollowers.class, maxPages, onPage, onWaiting);
     }
 
     public void appBskyGraphGetFollows(String actor, Optional<Integer> maxPages, Consumer<AppBskyGraphGetFollows> onPage, LongConsumer onWaiting) {
+        requireIdentifier(actor);
         paginate("app.bsky.graph.getFollows", Map.of("actor", actor, "limit", "100"),
                 AppBskyGraphGetFollows.class, maxPages, onPage, onWaiting);
     }
