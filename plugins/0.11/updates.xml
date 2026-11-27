@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
 <!DOCTYPE module_updates PUBLIC "-//NetBeans//DTD Autoupdate Catalog 2.8//EN" "https://netbeans.apache.org/dtds/autoupdate-catalog-2_8.dtd">
-<module_updates timestamp="25/04/12/27/11/2026">
+<module_updates timestamp="31/08/12/27/11/2026">
 
 
 
@@ -382,11 +382,11 @@
     <message_digest algorithm="SHA-512" value="2056480c7cf73dd76cfd27200d806f2e23abfebcecb4e4bb0d5175ac1087e53c014474131c791223df827ad03adc5095884a3e65e03a534d1e6802f400982f99"/>
 </module>
 
-<module codenamebase="ch.michihenninger.prestige.plugin" distribution="https://gephi.org/gephi-plugins/plugins/0.11/prestige-plugin-1.0.1.nbm" downloadsize="2404326" homepage="http://github.com/gephi/gephi-plugins/prestige-plugin" moduleauthor="Michael Henninger" needsrestart="true" releasedate="2026/11/08" targetcluster="plugins">
+<module codenamebase="ch.michihenninger.prestige.plugin" distribution="https://gephi.org/gephi-plugins/plugins/0.11/prestige-plugin-1.0.2.nbm" downloadsize="2404314" homepage="http://github.com/gephi/gephi-plugins/prestige-plugin" moduleauthor="Michael Henninger" needsrestart="true" releasedate="2026/11/27" targetcluster="plugins">
         
-    <manifest OpenIDE-Module="ch.michihenninger.prestige.plugin" OpenIDE-Module-Display-Category="Metric" OpenIDE-Module-Implementation-Version="1.0.1" OpenIDE-Module-Long-Description="Plugin calculates indegree prestige, domain prestige, proximity prestige and rank prestige on directed graphs." OpenIDE-Module-Module-Dependencies="org.openide.util.lookup &gt; 8.65, org.openide.util &gt; 9.39, org.gephi.graph.api &gt; 0.11.1, org.gephi.ui.library.wrapper &gt; 0.11.1, org.gephi.statistics.api &gt; 0.11.1, org.gephi.utils.longtask &gt; 0.11.1, org.gephi.statistics.plugin &gt; 0.11.1, org.gephi.core.library.wrapper &gt; 0.11.1" OpenIDE-Module-Name="Prestige Plugin" OpenIDE-Module-Requires="org.openide.modules.ModuleFormat1" OpenIDE-Module-Short-Description="Plugin calculates several prestige metrics" OpenIDE-Module-Specification-Version="1.0.1"/>
+    <manifest OpenIDE-Module="ch.michihenninger.prestige.plugin" OpenIDE-Module-Display-Category="Metric" OpenIDE-Module-Implementation-Version="1.0.2" OpenIDE-Module-Long-Description="Plugin calculates indegree prestige, domain prestige, proximity prestige and rank prestige on directed graphs." OpenIDE-Module-Module-Dependencies="org.openide.util.lookup &gt; 8.65, org.openide.util &gt; 9.39, org.gephi.graph.api &gt; 0.11.1, org.gephi.ui.library.wrapper &gt; 0.11.1, org.gephi.statistics.api &gt; 0.11.1, org.gephi.utils.longtask &gt; 0.11.1, org.gephi.statistics.plugin &gt; 0.11.1, org.gephi.core.library.wrapper &gt; 0.11.1" OpenIDE-Module-Name="Prestige Plugin" OpenIDE-Module-Requires="org.openide.modules.ModuleFormat1" OpenIDE-Module-Short-Description="Plugin calculates several prestige metrics" OpenIDE-Module-Specification-Version="1.0.2"/>
     
-    <message_digest algorithm="SHA-512" value="687d21af63fde6abde1ba883f798911ff696cd8867c7dde0436342c2d68537c374658a7a868bbd7efc58deef0e05a3dca13b75a09e136b31c224f8b10f844abf"/>
+    <message_digest algorithm="SHA-512" value="48ba7e510bf4956d825ff7ad5a667847e7ab0d71f4768dc54e7664007d8b5d5fe825ebcd2c136fc72ba02b0678c712d458f0cdae358216bcae183c4b1a88889a"/>
 </module>
 
 <module codenamebase="net.clementlevallois.web.publish.plugin" distribution="https://gephi.org/gephi-plugins/plugins/0.11/web-publish-plugin-1.1.1.nbm" downloadsize="303551" homepage="http://github.com/gephi/gephi-plugins/web-publish-plugin" license="864AC530" moduleauthor="Clement Levallois" needsrestart="true" releasedate="2026/11/08" targetcluster="plugins">
