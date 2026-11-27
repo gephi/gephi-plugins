@@ -78,8 +78,34 @@ public class GephiControlService {
     // Config staged by setLayoutProperties (configure-only); the next runLayout of
     // the same algorithm applies it. Lets set-then-run work without setLayoutProperties
     // itself starting a layout.
-    private volatile Map<String, Object> pendingLayoutProps = null;
-    private volatile String pendingLayoutAlgo = null;
+    /**
+     * Settings staged by setLayoutProperties for the next run, with the layout they were made
+     * for. One value, so a run takes the settings and their layout together or not at all.
+     */
+    private final java.util.concurrent.atomic.AtomicReference<StagedLayout> stagedLayout =
+        new java.util.concurrent.atomic.AtomicReference<>();
+
+    /** Staged layout settings, named by the layout's own name so any accepted spelling finds them. */
+    static final class StagedLayout {
+        final String layoutName;
+        final Map<String, Object> properties;
+
+        StagedLayout(String layoutName, Map<String, Object> properties) {
+            this.layoutName = layoutName;
+            this.properties = properties;
+        }
+    }
+
+    /** The name Gephi gives a layout, the same for every spelling a request may use for it. */
+    static String layoutName(Layout layout, String asked) {
+        try {
+            String name = layout.getBuilder() == null ? null : layout.getBuilder().getName();
+            return name == null ? asked : name;
+        } catch (RuntimeException e) {
+            return asked;
+        }
+    }
+
     /** The last layout started: algorithm, iterations and the settings read back, for get_layout_status. */
     private volatile JsonObject lastLayoutRun = null;
 
@@ -1461,6 +1487,47 @@ public class GephiControlService {
         }
     }
 
+    /**
+     * Removes many edges under one write lock, each named by the ids of its two ends. A pair
+     * with no such edge is counted in {@code not_found} and the rest are still removed.
+     */
+    public JsonObject removeEdges(List<Map<String, Object>> edges) {
+        try {
+            Workspace ws = currentWorkspace();
+            if (ws == null) {
+                return error("No project open");
+            }
+            Graph g = currentGraphModel().getGraph();
+            lockWrite(g);
+            try {
+                int removed = 0;
+                int notFound = 0;
+                for (Map<String, Object> pair : edges) {
+                    Object source = pair == null ? null : pair.get("source");
+                    Object target = pair == null ? null : pair.get("target");
+                    Node s = source == null ? null : nodeById(g, source.toString());
+                    Node t = target == null ? null : nodeById(g, target.toString());
+                    Edge e = s == null || t == null ? null : findEdge(g, s, t);
+                    if (e == null) {
+                        notFound++;
+                        continue;
+                    }
+                    g.removeEdge(e);
+                    removed++;
+                }
+                JsonObject r = new JsonObject();
+                r.addProperty("success", true);
+                r.addProperty("removed", removed);
+                r.addProperty("not_found", notFound);
+                return r;
+            } finally {
+                unlockWrite(g);
+            }
+        } catch (Exception e) {
+            return failure("Failed: ", e);
+        }
+    }
+
     public JsonObject setEdgeWeight(String source, String target, double weight) {
         try {
             Workspace ws = currentWorkspace();
@@ -2530,18 +2597,19 @@ public class GephiControlService {
                 return error("Layout not found: " + algo);
             }
             layout.setGraphModel(gm);
-            // Apply inline properties, or config staged earlier by setLayoutProperties.
-            if (properties == null && pendingLayoutProps != null && algo.equals(pendingLayoutAlgo)) {
-                properties = pendingLayoutProps;
-            }
-            pendingLayoutProps = null;
-            pendingLayoutAlgo = null;
             org.gephi.layout.api.LayoutController lc = layoutController();
             if (lc == null) {
                 return error("Gephi's layout controller is not available");
             }
             if (lc.getModel().isRunning()) {
                 return error("Layout already running");
+            }
+            // Apply inline properties, or config staged earlier by setLayoutProperties. Staged
+            // settings are taken only by a run that starts, so a refused run leaves them for the
+            // next one, and they are used only for the layout they were staged for.
+            StagedLayout staged = stagedLayout.getAndSet(null);
+            if (properties == null && staged != null && staged.layoutName.equals(layoutName(layout, algo))) {
+                properties = staged.properties;
             }
             final int panelIters = iterations > 0 ? iterations : 1000;
             final java.util.List<String> unapplied =
@@ -2800,8 +2868,8 @@ public class GephiControlService {
             }
             layout.setGraphModel(currentGraphModel());
             final java.util.List<String> unapplied = applyLayoutProperties(layout, properties);
-            pendingLayoutProps = properties == null ? null : new java.util.LinkedHashMap<>(properties);
-            pendingLayoutAlgo = algo;
+            stagedLayout.set(properties == null ? null
+                : new StagedLayout(layoutName(layout, algo), new java.util.LinkedHashMap<>(properties)));
             JsonObject r = new JsonObject();
             r.addProperty("success", true);
             r.addProperty("layout", algo);
@@ -2955,6 +3023,11 @@ public class GephiControlService {
                 // Already interrupted; the flag is restored below.
             }
             Thread.currentThread().interrupt();
+            if (worker.isAlive()) {
+                throw new StatisticStillRunningException(
+                    "Interrupted while a statistic was running; it was told to stop and has not yet",
+                    worker::join);
+            }
             throw new RuntimeException("Interrupted while a statistic was running; it was stopped");
         }
         Throwable t = thrown.get();
@@ -3092,6 +3165,72 @@ public class GephiControlService {
     static final java.util.Set<Statistics> STOP_REQUESTED = java.util.concurrent.ConcurrentHashMap.newKeySet();
 
     /**
+     * Marks a statistic as stopped by request, if it is still recorded as running. A run that has
+     * ended is not marked: nothing would ever clear the mark.
+     */
+    static boolean markStopRequested(Statistics stat) {
+        synchronized (RUNNING_STATISTICS) {
+            if (!RUNNING_STATISTICS.containsKey(stat)) {
+                return false;
+            }
+            STOP_REQUESTED.add(stat);
+            return true;
+        }
+    }
+
+    /** Ends a statistic's record as running. Returns whether it was stopped by request. */
+    static boolean releaseStatistic(Statistics stat) {
+        synchronized (RUNNING_STATISTICS) {
+            RUNNING_STATISTICS.remove(stat);
+            return STOP_REQUESTED.remove(stat);
+        }
+    }
+
+    /**
+     * A request gave up on a statistic that is still running in Gephi. {@link #awaitEnd} returns
+     * when the statistic has ended, so its record as running can last until then.
+     */
+    static final class StatisticStillRunningException extends IllegalStateException {
+        private static final long serialVersionUID = 1L;
+        private final transient InterruptibleWait end;
+
+        StatisticStillRunningException(String message, InterruptibleWait end) {
+            super(message);
+            this.end = end;
+        }
+
+        void awaitEnd() throws InterruptedException {
+            if (end != null) {
+                end.await();
+            }
+        }
+    }
+
+    /** A wait that can be interrupted. */
+    interface InterruptibleWait {
+        void await() throws InterruptedException;
+    }
+
+    /**
+     * Keeps a statistic recorded as running until it ends, on a daemon thread. Until then a stop
+     * request still reaches it and a second run of it is still refused.
+     */
+    static Thread releaseWhenEnded(Statistics stat, StatisticStillRunningException running) {
+        Thread watch = new Thread(() -> {
+            try {
+                running.awaitEnd();
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            } finally {
+                releaseStatistic(stat);
+            }
+        }, "Gephi AI statistic watch");
+        watch.setDaemon(true);
+        watch.start();
+        return watch;
+    }
+
+    /**
      * Stops every statistic Gephi AI started that is still running. A stopped run writes
      * nothing, so the columns keep their earlier values. Statistics that offer no way to stop
      * them are named, so the user knows to wait or to stop them from Gephi.
@@ -3101,7 +3240,9 @@ public class GephiControlService {
         JsonArray unstoppable = new JsonArray();
         for (Map.Entry<Statistics, String> e : new java.util.ArrayList<>(RUNNING_STATISTICS.entrySet())) {
             if (e.getKey() instanceof org.gephi.utils.longtask.spi.LongTask) {
-                STOP_REQUESTED.add(e.getKey());
+                if (!markStopRequested(e.getKey())) {
+                    continue; // it ended between the copy above and here
+                }
                 ((org.gephi.utils.longtask.spi.LongTask) e.getKey()).cancel();
                 stopped.add(e.getValue());
             } else {
@@ -3365,6 +3506,13 @@ public class GephiControlService {
     private static boolean awaitPanelResult(Statistics stat, long timeoutMs,
         java.util.concurrent.CountDownLatch done, java.util.concurrent.atomic.AtomicReference<Throwable> failure,
         PanelRunMark mark) throws InterruptedException {
+        return awaitPanelResult(stat, timeoutMs, done, failure, mark, STATISTIC_STOP_GRACE_MS);
+    }
+
+    /** awaitPanelResult with the wait for a cancelled statistic to stop; package-private for tests. */
+    static boolean awaitPanelResult(Statistics stat, long timeoutMs,
+        java.util.concurrent.CountDownLatch done, java.util.concurrent.atomic.AtomicReference<Throwable> failure,
+        PanelRunMark mark, long stopGraceMs) throws InterruptedException {
         boolean stopped = false;
         long wait = timeoutMs > 0 ? timeoutMs : STATISTIC_WAIT_CAP_MS;
         PanelWait outcome = awaitPanelRun(done, wait, mark);
@@ -3374,14 +3522,15 @@ public class GephiControlService {
         }
         if (outcome == PanelWait.TIMED_OUT) {
             if (timeoutMs <= 0 || !(stat instanceof org.gephi.utils.longtask.spi.LongTask)) {
-                throw new IllegalStateException("The statistic is still running in Gephi after "
-                    + (wait / 60000) + " minutes; stop it from Gephi's Statistics panel.");
+                throw new StatisticStillRunningException("The statistic is still running in Gephi after "
+                    + (wait / 60000) + " minutes; stop it with stop_statistic or from Gephi's"
+                    + " Statistics panel.", done::await);
             }
             ((org.gephi.utils.longtask.spi.LongTask) stat).cancel();
             stopped = true;
-            if (!done.await(STATISTIC_STOP_GRACE_MS, java.util.concurrent.TimeUnit.MILLISECONDS)) {
-                throw new IllegalStateException("The statistic was stopped at its deadline but has"
-                    + " not finished; restart Gephi if it keeps running.");
+            if (!done.await(stopGraceMs, java.util.concurrent.TimeUnit.MILLISECONDS)) {
+                throw new StatisticStillRunningException("The statistic was stopped at its deadline but has"
+                    + " not finished; restart Gephi if it keeps running.", done::await);
             }
         }
         if (failure.get() != null) {
@@ -3504,6 +3653,7 @@ public class GephiControlService {
             }
             boolean stopped;
             boolean stoppedOnRequest;
+            boolean stillRunning = false;
             String busy = claimStatistic(stat, matchedBuilder.getName());
             if (busy != null) {
                 return error(busy);
@@ -3514,9 +3664,14 @@ public class GephiControlService {
                         Lookup.getDefault().lookup(org.gephi.desktop.statistics.api.StatisticsControllerUI.class)),
                     this::onEdt,
                     GephiControlService::watchPanel);
+            } catch (StatisticStillRunningException running) {
+                // Still running in Gephi: it stays recorded as running until it ends, so a stop
+                // request reaches it and a second run of it is refused.
+                stillRunning = true;
+                releaseWhenEnded(stat, running);
+                throw running;
             } finally {
-                RUNNING_STATISTICS.remove(stat);
-                stoppedOnRequest = STOP_REQUESTED.remove(stat);
+                stoppedOnRequest = !stillRunning && releaseStatistic(stat);
             }
             if (stoppedOnRequest) {
                 JsonObject r = error(matchedBuilder.getName() + " was stopped before it finished;"

@@ -258,6 +258,8 @@ public class GephiAPIServer implements HttpHandler {
                 result.addProperty("gephi_version", gephi);
             }
             result.addProperty("status", "running");
+            // Lets a server under WSL hand a Windows Gephi paths it can open (\\wsl$\...).
+            result.addProperty("os", System.getProperty("os.name"));
             // "busy" here (persistently) means Gephi is wedged and needs a restart.
             result.addProperty("graph_lock", service.graphLockProbe());
             result.add("graph_lock_stats", service.graphLockStats());
@@ -490,6 +492,14 @@ public class GephiAPIServer implements HttpHandler {
                 return errorResult("Missing 'source' or 'target'");
             }
             return service.removeEdge(body.get("source").getAsString(), body.get("target").getAsString());
+        }
+
+        if ("/graph/edges/remove".equals(uri) && "POST".equals(method)) {
+            if (body == null || !body.has("edges")) {
+                return errorResult("Missing 'edges' array");
+            }
+            List<Map<String, Object>> edges = GSON.fromJson(body.get("edges"), List.class);
+            return service.removeEdges(edges);
         }
 
         if ("/graph/edge/weight".equals(uri) && "POST".equals(method)) {

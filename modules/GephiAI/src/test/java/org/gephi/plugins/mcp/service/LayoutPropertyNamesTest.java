@@ -142,4 +142,83 @@ class LayoutPropertyNamesTest {
         assertEquals(true, value(layout, "linLogMode"));
         assertEquals(0.5, ((Number) value(layout, "scalingRatio")).doubleValue(), 1e-9);
     }
+
+    private static GephiControlService serviceWithGraph() {
+        org.gephi.project.api.ProjectController pc =
+            org.openide.util.Lookup.getDefault().lookup(org.gephi.project.api.ProjectController.class);
+        pc.closeCurrentProject();
+        pc.newProject();
+        GephiControlService service = GephiControlService.getInstance();
+        service.generateGraph("preferential_attachment", 30, 1, null, 1L);
+        return service;
+    }
+
+    private static void waitUntilNoLayoutRuns(GephiControlService service) throws InterruptedException {
+        for (int i = 0; i < 400 && service.getLayoutStatus().get("running").getAsBoolean(); i++) {
+            Thread.sleep(25);
+        }
+        assertEquals(false, service.getLayoutStatus().get("running").getAsBoolean());
+    }
+
+    /** "forceatlas2" and "ForceAtlas 2" name one layout, so settings staged under one reach a run under the other. */
+    @Test
+    void stagedSettingsReachARunThatSpellsTheLayoutAnotherWay() throws Exception {
+        GephiControlService service = serviceWithGraph();
+        try {
+            assertTrue(service.setLayoutProperties("forceatlas2", Map.of("gravity", 3), 0)
+                .get("success").getAsBoolean());
+
+            com.google.gson.JsonObject run = service.runLayout("ForceAtlas 2", 5, null);
+
+            assertTrue(run.get("success").getAsBoolean(), run.toString());
+            assertEquals(3.0, run.getAsJsonObject("applied").get("gravity").getAsDouble(), 1e-9, run.toString());
+        } finally {
+            service.stopLayout();
+            waitUntilNoLayoutRuns(service);
+        }
+    }
+
+    /** A run refused because a layout is running must not use up the settings staged for it. */
+    @Test
+    void refusedRunLeavesStagedSettingsForTheNextRun() throws Exception {
+        GephiControlService service = serviceWithGraph();
+        try {
+            assertTrue(service.runLayout("ForceAtlas 2", 500_000_000, null).get("success").getAsBoolean());
+            service.setLayoutProperties("ForceAtlas 2", Map.of("gravity", 7), 0);
+
+            com.google.gson.JsonObject refused = service.runLayout("ForceAtlas 2", 5, null);
+            assertEquals(false, refused.get("success").getAsBoolean(), refused.toString());
+            assertTrue(refused.get("error").getAsString().contains("already running"), refused.toString());
+
+            service.stopLayout();
+            waitUntilNoLayoutRuns(service);
+            com.google.gson.JsonObject run = service.runLayout("ForceAtlas 2", 5, null);
+
+            assertTrue(run.get("success").getAsBoolean(), run.toString());
+            assertEquals(7.0, run.getAsJsonObject("applied").get("gravity").getAsDouble(), 1e-9, run.toString());
+        } finally {
+            service.stopLayout();
+            waitUntilNoLayoutRuns(service);
+        }
+    }
+
+    /** Settings staged for one layout are not handed to a run of another, and do not outlive it. */
+    @Test
+    void stagedSettingsAreNotUsedByAnotherLayout() throws Exception {
+        GephiControlService service = serviceWithGraph();
+        try {
+            service.setLayoutProperties("ForceAtlas 2", Map.of("gravity", 9), 0);
+
+            com.google.gson.JsonObject other = service.runLayout("Fruchterman Reingold", 5, null);
+            assertTrue(other.get("success").getAsBoolean(), other.toString());
+            assertEquals(0, other.getAsJsonObject("applied").size(), other.toString());
+            waitUntilNoLayoutRuns(service);
+
+            com.google.gson.JsonObject run = service.runLayout("ForceAtlas 2", 5, null);
+            assertEquals(0, run.getAsJsonObject("applied").size(), run.toString());
+        } finally {
+            service.stopLayout();
+            waitUntilNoLayoutRuns(service);
+        }
+    }
 }

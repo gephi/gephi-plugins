@@ -54,7 +54,8 @@ class SourceRulesTest {
         "Installer#stopNow",
         "GephiAPIServer#startServer",
         "GephiControlService#DEADLINES",
-        "GephiControlService#runOnStatisticThread");
+        "GephiControlService#runOnStatisticThread",
+        "GephiControlService#releaseWhenEnded");
 
     private static final Pattern LOCK_CALL =
         Pattern.compile("^\\s*(?:(lockRead|lockWrite)\\(\\w+\\)|\\w+\\.(readLock|writeLock)\\(\\));");

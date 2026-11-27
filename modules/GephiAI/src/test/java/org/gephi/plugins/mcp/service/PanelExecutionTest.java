@@ -551,6 +551,36 @@ class PanelExecutionTest {
             });
     }
 
+    /**
+     * A statistic cancelled at its deadline that does not stop within the grace period is still
+     * running. The failure says so in a form the caller can wait on, so the run stays recorded.
+     */
+    @Test
+    void statisticThatOutlivesItsStopIsReportedAsStillRunning() throws Exception {
+        SlowStat stat = new SlowStat(0);
+        java.util.concurrent.CountDownLatch done = new java.util.concurrent.CountDownLatch(1);
+
+        GephiControlService.StatisticStillRunningException running = org.junit.jupiter.api.Assertions.assertThrows(
+            GephiControlService.StatisticStillRunningException.class,
+            () -> GephiControlService.awaitPanelResult(stat, 50, done,
+                new java.util.concurrent.atomic.AtomicReference<>(), GephiControlService.PanelRunMark.TRUSTED, 50));
+
+        assertTrue(stat.cancelled.get(), "the deadline did not cancel the statistic");
+        Thread waiter = new Thread(() -> {
+            try {
+                running.awaitEnd();
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            }
+        });
+        waiter.start();
+        waiter.join(200);
+        assertTrue(waiter.isAlive(), "the wait for the statistic's end returned while it was running");
+        done.countDown();
+        waiter.join(5_000);
+        assertFalse(waiter.isAlive());
+    }
+
     @Test
     void stopWithNothingRunningSaysSo() {
         com.google.gson.JsonObject r = GephiControlService.getInstance().stopStatistics();
