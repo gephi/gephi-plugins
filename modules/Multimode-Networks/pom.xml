@@ -9,7 +9,7 @@
 
     <groupId>cz.cvut.fit.gephi</groupId>
     <artifactId>multimode</artifactId>
-    <version>1.1.1</version>
+    <version>1.1.2</version>
     <packaging>nbm</packaging>
 
     <name>Multimode-Networks</name>
@@ -50,6 +50,11 @@
         <dependency>
             <groupId>org.gephi</groupId>
             <artifactId>project-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.netbeans.api</groupId>
+            <artifactId>org-netbeans-modules-nbjunit</artifactId>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 

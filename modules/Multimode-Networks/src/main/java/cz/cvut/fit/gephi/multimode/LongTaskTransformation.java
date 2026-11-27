@@ -53,6 +53,13 @@ public class LongTaskTransformation implements LongTask, Runnable {
         execute(graphModel, false);
     }
 
+    /**
+     * Runs on the given graph model, whichever workspace is the current one by the time it starts.
+     */
+    public void run_online(GraphModel graphModel) {
+        execute(graphModel, true);
+    }
+
     @Override
     public void run() {
         // graph
@@ -68,7 +75,6 @@ public class LongTaskTransformation implements LongTask, Runnable {
         }
 
         try {
-            final GraphController graphController = Lookup.getDefault().lookup(GraphController.class);
             final Graph graph;
             if (considerDirected) {
                 graph = graphModel.getDirectedGraphVisible();
@@ -79,8 +85,6 @@ public class LongTaskTransformation implements LongTask, Runnable {
             // on undirected graph
             final boolean isDirectedGraph = graph.isDirected();
 
-            final Node[] nodes = graph.getNodes().toArray();
-
             final int nullEdgeType = graph.getModel().getEdgeType(null);
 
             // matrix axis
@@ -88,78 +92,95 @@ public class LongTaskTransformation implements LongTask, Runnable {
             final List<Node> firstVertical = new ArrayList<Node>();
             final List<Node> secondHorizontal = new ArrayList<Node>();
             final List<Node> secondVertical = new ArrayList<Node>();
-            for (Node n : nodes) {
-                String nodeValue;
-                Object val = n.getAttribute(attributeColumn);
-                if (val != null) {
-                    nodeValue = val.toString();
-                } else {
-                    nodeValue = "null";
-                }
-                // matrix axis
-                if (nodeValue.equals(inDimension)) {
-                    firstVertical.add(n);
-                }
-                if (nodeValue.equals(commonDimension)) {
-                    firstHorizontal.add(n);
-                    secondVertical.add(n);
-                }
-                if (nodeValue.equals(outDimension)) {
-                    secondHorizontal.add(n);
-                }
-            }
 
-            if (cancelled) {
-                return;
-            }
+            final Matrix firstMatrix;
+            final Matrix firstUnweightMatrix;
+            final float[] firstWeights;
+            final float[] firstUnweightWeights;
+            final Matrix secondMatrix;
+            final Matrix secondUnweightMatrix;
+            final float[] secondWeights;
 
-            if (online) {
-                Progress.progress(progressTicket, "Matrix generation");
-            }
+            // The nodes are used until all the matrices are built, no other thread may remove them in the
+            // meantime. The graph is released before it is modified, as it can't be written while it is read.
+            graph.readLock();
+            try {
+                final Node[] nodes = graph.getNodes().toArray();
+                for (Node n : nodes) {
+                    String nodeValue;
+                    Object val = n.getAttribute(attributeColumn);
+                    if (val != null) {
+                        nodeValue = val.toString();
+                    } else {
+                        nodeValue = "null";
+                    }
+                    // matrix axis
+                    if (nodeValue.equals(inDimension)) {
+                        firstVertical.add(n);
+                    }
+                    if (nodeValue.equals(commonDimension)) {
+                        firstHorizontal.add(n);
+                        secondVertical.add(n);
+                    }
+                    if (nodeValue.equals(outDimension)) {
+                        secondHorizontal.add(n);
+                    }
+                }
 
-            // first matrix
-            final Matrix firstMatrix = new Matrix(firstVertical.size(), firstHorizontal.size());
-            final Matrix firstUnweightMatrix = new Matrix(firstVertical.size(), firstHorizontal.size());
-            final float[] firstWeights = new float[firstVertical.size()];
-            final float[] firstUnweightWeights = new float[firstVertical.size()];
+                if (cancelled) {
+                    return;
+                }
 
-            for (int i = 0; i < firstVertical.size(); i++) {
-                final Node node = firstVertical.get(i);
-                final Set<Node> intersection = new HashSet<Node>(Arrays.asList(graph.getNeighbors(node).toArray()));
-                intersection.retainAll(firstHorizontal);
-                if (!intersection.isEmpty()) {
-                    for (Node neighbour : intersection) {
-                        int j = firstHorizontal.indexOf(neighbour);
-                        double w = getAllEdgesWeightSum(graph, node, neighbour);
-                        if (w > 0) {
-                            firstWeights[i] += w * w;
-                            firstUnweightWeights[i] += 1;
-                            firstMatrix.set(i, j, w);
-                            firstUnweightMatrix.set(i, j, 1);
+                if (online) {
+                    Progress.progress(progressTicket, "Matrix generation");
+                }
+
+                // first matrix
+                firstMatrix = new Matrix(firstVertical.size(), firstHorizontal.size());
+                firstUnweightMatrix = new Matrix(firstVertical.size(), firstHorizontal.size());
+                firstWeights = new float[firstVertical.size()];
+                firstUnweightWeights = new float[firstVertical.size()];
+
+                for (int i = 0; i < firstVertical.size(); i++) {
+                    final Node node = firstVertical.get(i);
+                    final Set<Node> intersection = new HashSet<Node>(Arrays.asList(graph.getNeighbors(node).toArray()));
+                    intersection.retainAll(firstHorizontal);
+                    if (!intersection.isEmpty()) {
+                        for (Node neighbour : intersection) {
+                            int j = firstHorizontal.indexOf(neighbour);
+                            double w = getAllEdgesWeightSum(graph, node, neighbour);
+                            if (w > 0) {
+                                firstWeights[i] += w * w;
+                                firstUnweightWeights[i] += 1;
+                                firstMatrix.set(i, j, w);
+                                firstUnweightMatrix.set(i, j, 1);
+                            }
                         }
                     }
                 }
-            }
 
-            // second matrix
-            final Matrix secondMatrix = new Matrix(secondVertical.size(), secondHorizontal.size());
-            final Matrix secondUnweightMatrix = new Matrix(secondVertical.size(), secondHorizontal.size());
-            final float[] secondWeights = new float[secondHorizontal.size()];
-            for (int i = 0; i < secondVertical.size(); i++) {
-                final Node node = secondVertical.get(i);
-                final Set<Node> intersection = new HashSet<Node>(Arrays.asList(graph.getNeighbors(node).toArray()));
-                intersection.retainAll(secondHorizontal);
-                if (!intersection.isEmpty()) {
-                    for (Node neighbour : intersection) {
-                        int j = secondHorizontal.indexOf(neighbour);
-                        double w = getAllEdgesWeightSum(graph, node, neighbour);
-                        if (w > 0) {
-                            secondWeights[j] += w * w;
-                            secondMatrix.set(i, j, w);
-                            secondUnweightMatrix.set(i, j, 1);
+                // second matrix
+                secondMatrix = new Matrix(secondVertical.size(), secondHorizontal.size());
+                secondUnweightMatrix = new Matrix(secondVertical.size(), secondHorizontal.size());
+                secondWeights = new float[secondHorizontal.size()];
+                for (int i = 0; i < secondVertical.size(); i++) {
+                    final Node node = secondVertical.get(i);
+                    final Set<Node> intersection = new HashSet<Node>(Arrays.asList(graph.getNeighbors(node).toArray()));
+                    intersection.retainAll(secondHorizontal);
+                    if (!intersection.isEmpty()) {
+                        for (Node neighbour : intersection) {
+                            int j = secondHorizontal.indexOf(neighbour);
+                            double w = getAllEdgesWeightSum(graph, node, neighbour);
+                            if (w > 0) {
+                                secondWeights[j] += w * w;
+                                secondMatrix.set(i, j, w);
+                                secondUnweightMatrix.set(i, j, 1);
+                            }
                         }
                     }
                 }
+            } finally {
+                graph.readUnlockAll();
             }
 
             if (cancelled) {
@@ -234,7 +255,7 @@ public class LongTaskTransformation implements LongTask, Runnable {
                 Progress.progress(progressTicket, "Creating new edges");
             }
 
-            final Table edgeTable = graphController.getGraphModel().getEdgeTable();
+            final Table edgeTable = graphModel.getEdgeTable();
             final Column MMNT;
             if (!edgeTable.hasColumn("MMNT-EdgeType")) {
                 MMNT = edgeTable.addColumn("MMNT-EdgeType", String.class);
@@ -268,7 +289,7 @@ public class LongTaskTransformation implements LongTask, Runnable {
                     }
                 }
             } else {
-                final Table nodeTable = graphController.getGraphModel().getNodeTable();
+                final Table nodeTable = graphModel.getNodeTable();
                 final Column edgeStrengthCol;
                 if (!edgeTable.hasColumn("MM-Strength")) {
                     edgeStrengthCol = edgeTable.addColumn("MM-Strength", Float.class);

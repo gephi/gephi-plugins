@@ -2,10 +2,12 @@ package cz.cvut.fit.gephi.multimode;
 
 import java.util.HashSet;
 import java.util.Set;
+import javax.swing.SwingUtilities;
 
 import org.gephi.graph.api.Column;
 import org.gephi.graph.api.Graph;
 import org.gephi.graph.api.GraphController;
+import org.gephi.graph.api.GraphModel;
 import org.gephi.graph.api.Node;
 import org.gephi.graph.api.Table;
 import org.gephi.project.api.ProjectController;
@@ -16,7 +18,7 @@ import org.netbeans.api.settings.ConvertAsProperties;
 import org.openide.awt.ActionID;
 import org.openide.awt.ActionReference;
 import org.openide.util.Lookup;
-import org.openide.util.NbBundle.Messages;
+import org.openide.util.NbBundle;
 import org.openide.windows.TopComponent;
 
 /**
@@ -34,20 +36,17 @@ import org.openide.windows.TopComponent;
  */)
 @TopComponent.OpenActionRegistration(displayName = "#CTL_MultiModeWindowAction",
         preferredID = "MultiModeWindowTopComponent")
-@Messages({
-    "CTL_MultiModeWindowAction=MultiMode Projections",
-    "CTL_MultiModeWindowTopComponent=MultiMode Networks Projection",
-    "HINT_MultiModeWindowTopComponent=Enables projection of multimode networks"
-})
 /**
  * @author Jaroslav Kuchar
  */
 public final class MultiModeWindowTopComponent extends TopComponent {
     private final ProjectController projectController;
+    // A single background executor for all the runs, which are queued and executed one after the other
+    private final LongTaskExecutor executor = new LongTaskExecutor(true);
     public MultiModeWindowTopComponent() {
         initComponents();
-        setName(Bundle.CTL_MultiModeWindowTopComponent());
-        setToolTipText(Bundle.HINT_MultiModeWindowTopComponent());
+        setName(NbBundle.getMessage(MultiModeWindowTopComponent.class, "CTL_MultiModeWindowTopComponent"));
+        setToolTipText(NbBundle.getMessage(MultiModeWindowTopComponent.class, "HINT_MultiModeWindowTopComponent"));
         
         // Make sure project and workspace exists
         projectController = Lookup.getDefault().lookup(ProjectController.class);
@@ -58,19 +57,19 @@ public final class MultiModeWindowTopComponent extends TopComponent {
             }
 
             public void select(Workspace wrkspc) {
-                checkPluginEnabling();
+                workspaceChanged();
             }
 
             public void unselect(Workspace wrkspc) {
-                checkPluginEnabling();
+                workspaceChanged();
             }
 
             public void close(Workspace wrkspc) {
-                checkPluginEnabling();
+                workspaceChanged();
             }
 
             public void disable() {
-                checkPluginEnabling();
+                workspaceChanged();
             }
         });
     }
@@ -292,11 +291,16 @@ public final class MultiModeWindowTopComponent extends TopComponent {
         secondMatrix.removeAllItems();
         start.setEnabled(false);
         if (attributes.getSelectedIndex() > 0) {
-            Column col = (Column) attributes.getSelectedItem();
+            GraphModel graphModel = Lookup.getDefault().lookup(GraphController.class).getGraphModel();
+            Column col = selectedColumn(graphModel);
+            if (col == null) {
+                // The attribute listed is not a column of this graph, the attributes have to be loaded again
+                clearAttributes();
+                return;
+            }
 
             // load all possible values of attribute
-            GraphController graphController = Lookup.getDefault().lookup(GraphController.class);
-            Graph graph = graphController.getGraphModel().getGraphVisible();
+            Graph graph = graphModel.getGraphVisible();
             Node[] nodes = graph.getNodes().toArray();
             Set<String> vals = new HashSet<String>();
             for (Node n : nodes) {
@@ -323,12 +327,16 @@ public final class MultiModeWindowTopComponent extends TopComponent {
         // TODO reaction on selected first matrix                
         secondMatrix.removeAllItems();
         if (attributes.getSelectedIndex() > 0) {
-
-            Column col = (Column) attributes.getSelectedItem();
+            GraphModel graphModel = Lookup.getDefault().lookup(GraphController.class).getGraphModel();
+            Column col = selectedColumn(graphModel);
+            if (col == null) {
+                // The attribute listed is not a column of this graph, the attributes have to be loaded again
+                clearAttributes();
+                return;
+            }
 
             // load all possible values of attribute
-            GraphController graphController = Lookup.getDefault().lookup(GraphController.class);
-            Graph graph = graphController.getGraphModel().getGraphVisible();
+            Graph graph = graphModel.getGraphVisible();
             Node[] nodes = graph.getNodes().toArray();
             Set<String> vals = new HashSet<String>();
             for (Node n : nodes) {
@@ -352,26 +360,44 @@ public final class MultiModeWindowTopComponent extends TopComponent {
                 secondMatrix.setSelectedIndex(0);
             }
 
-            start.setEnabled(true);
+            // Nothing can be run when the value picked on the left is no longer in the graph
+            start.setEnabled(firstMatrix.getSelectedItem() != null && secondMatrix.getItemCount() > 0);
         }
     }//GEN-LAST:event_firstMatrixActionPerformed
 
     private void startActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_startActionPerformed
-        LongTaskExecutor executor = new LongTaskExecutor(true);
+        ValueCombination first = (ValueCombination) firstMatrix.getSelectedItem();
+        ValueCombination second = (ValueCombination) secondMatrix.getSelectedItem();
+        // The run may have to wait for others: the model of the workspace it is started in is kept, as the
+        // current workspace may be another one by the time the run starts
+        GraphModel graphModel = Lookup.getDefault().lookup(GraphController.class).getGraphModel();
+        Column column = selectedColumn(graphModel);
+        if (column == null) {
+            // The attribute listed is not a column of this graph, the attributes have to be loaded again
+            clearAttributes();
+            return;
+        }
+        if (first == null || second == null) {
+            // The values listed do not match the graph, there is nothing to run
+            start.setEnabled(false);
+            return;
+        }
+
         LongTaskTransformation longTask = new LongTaskTransformation(
-                (Column) attributes.getSelectedItem(), 
-                ((ValueCombination) firstMatrix.getSelectedItem()).getFirst(), 
-                ((ValueCombination) firstMatrix.getSelectedItem()).getSecond(),
-                ((ValueCombination) secondMatrix.getSelectedItem()).getSecond(), 
+                column,
+                first.getFirst(),
+                first.getSecond(),
+                second.getSecond(),
                 Float.parseFloat(threshold.getText()),
                 removeEdges.isSelected(), removeNodes.isSelected(),proportional.isSelected(),directed.isSelected());
-        executor.execute(longTask, longTask, "Transformation...", null);
-
-        if (attributes.getItemCount() > 0 && (removeEdges.isSelected() || removeNodes.isSelected())) {
-            firstMatrix.removeAllItems();
-            secondMatrix.removeAllItems();
-            attributes.setSelectedIndex(attributes.getSelectedIndex());
-        }
+        final boolean removing = removeEdges.isSelected() || removeNodes.isSelected();
+        executor.execute(longTask, () -> {
+            longTask.run_online(graphModel);
+            if (removing) {
+                // The values listed were read before the run removed nodes and edges
+                SwingUtilities.invokeLater(this::listValuesAgain);
+            }
+        }, "Transformation...", null);
     }//GEN-LAST:event_startActionPerformed
 
     private void loadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loadActionPerformed
@@ -462,6 +488,55 @@ public final class MultiModeWindowTopComponent extends TopComponent {
         // TODO read your settings according to their version
     }
     
+    /**
+     * Lists the values of the selected attribute again, from the graph as it is now.
+     */
+    private void listValuesAgain() {
+        if (attributes.getItemCount() > 0) {
+            firstMatrix.removeAllItems();
+            secondMatrix.removeAllItems();
+            attributes.setSelectedIndex(attributes.getSelectedIndex());
+        }
+    }
+
+    private void workspaceChanged() {
+        checkPluginEnabling();
+        // The attributes and values listed belong to the graph of the previous workspace and can't be
+        // used with the new one, they have to be loaded again
+        SwingUtilities.invokeLater(this::clearAttributes);
+    }
+
+    private void clearAttributes() {
+        attributes.removeAllItems();
+        firstMatrix.removeAllItems();
+        secondMatrix.removeAllItems();
+        attributes.setEnabled(false);
+        firstMatrix.setEnabled(false);
+        secondMatrix.setEnabled(false);
+        start.setEnabled(false);
+    }
+
+    /**
+     * Returns the attribute selected if it is a column of the node table of the given graph model, and null if it
+     * isn't or if there is no graph model.
+     * <p>
+     * The columns are listed when they are loaded and may be stale by the time they are read: the reset which goes
+     * with a workspace change only runs once the event thread gets to it, after the picks and clicks already waiting,
+     * and nothing tells the panel that a column was deleted. The column of another table, or a deleted one, can't be
+     * read on the nodes of the graph. Columns with the same id and type are equal even when they belong to different
+     * workspaces, so they are compared by identity.
+     */
+    private Column selectedColumn(GraphModel graphModel) {
+        Object item = attributes.getSelectedItem();
+        if (graphModel != null && item instanceof Column) {
+            Column column = (Column) item;
+            if (graphModel.getNodeTable().getColumn(column.getId()) == column) {
+                return column;
+            }
+        }
+        return null;
+    }
+
     private boolean isProjectWorkspaceOk(){
         return projectController.getCurrentProject()!= null && 
                projectController.getCurrentWorkspace() != null;
