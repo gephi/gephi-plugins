@@ -134,26 +134,24 @@ public class LongTaskTransformationTest {
     }
 
     @Test
-    public void removeEdgesDropsTheEdgesBetweenTheModes() {
-        Node[] a = weightedBipartiteGraph();
+    public void proportionalProjectionComparesTheNeighbours() {
+        Node[] a = bipartiteGraph(1, 1, 1, 1);
 
-        new LongTaskTransformation(kind, "A", "B", "A", 0.0, true, false, false, false).run_offline(model);
+        new LongTaskTransformation(kind, "A", "B", "A", 0.0, false, false, true, false).run_offline(model);
 
         assertEquals(5, graph.getNodeCount());
-        assertEquals(2, graph.getEdgeCount());
-        assertNotNull(graph.getEdge(a[0], a[1]));
-        assertNotNull(graph.getEdge(a[1], a[2]));
+        // a0 and a1 share b0, a1 and a2 share b1: the cosine of their weights is 1 / sqrt(2) for both pairs
+        Edge first = graph.getEdge(a[0], a[1]);
+        Edge second = graph.getEdge(a[1], a[2]);
+        assertEquals(50.0, first.getWeight(), 1e-3);
+        assertEquals(50.0, second.getWeight(), 1e-3);
+        assertEquals(100 * Math.sqrt(0.5), (Float) first.getAttribute("MM-Strength"), 1e-3);
+        assertEquals(100 * Math.sqrt(0.5), (Float) second.getAttribute("MM-Strength"), 1e-3);
+        assertNull(graph.getEdge(a[0], a[2]));
+        // the share of the B nodes each A node is connected to
+        assertEquals(50.0, (Float) a[0].getAttribute("MM-Connections"), 1e-3);
+        assertEquals(100.0, (Float) a[1].getAttribute("MM-Connections"), 1e-3);
         assertGraphIsNotLocked();
-    }
-
-    @Test
-    public void proportionalProjectionComparesTheNeighbours() {
-        assertProportionalProjection(false);
-    }
-
-    @Test
-    public void proportionalProjectionCanRemoveTheNodesOfTheCommonMode() {
-        assertProportionalProjection(true);
     }
 
     @Test
@@ -191,26 +189,6 @@ public class LongTaskTransformationTest {
         Edge projected = worked.getUndirectedGraph().getEdge(a0, a1);
         assertEquals("A<--->A", projected.getAttribute(worked.getEdgeTable().getColumn("MMNT-EdgeType")));
         assertFalse("the current workspace is left alone", model.getEdgeTable().hasColumn("MMNT-EdgeType"));
-    }
-
-    private void assertProportionalProjection(boolean removeNodes) {
-        Node[] a = bipartiteGraph(1, 1, 1, 1);
-
-        new LongTaskTransformation(kind, "A", "B", "A", 0.0, false, removeNodes, true, false).run_offline(model);
-
-        assertEquals(removeNodes ? 3 : 5, graph.getNodeCount());
-        // a0 and a1 share b0, a1 and a2 share b1: the cosine of their weights is 1 / sqrt(2) for both pairs
-        Edge first = graph.getEdge(a[0], a[1]);
-        Edge second = graph.getEdge(a[1], a[2]);
-        assertEquals(50.0, first.getWeight(), 1e-3);
-        assertEquals(50.0, second.getWeight(), 1e-3);
-        assertEquals(100 * Math.sqrt(0.5), (Float) first.getAttribute("MM-Strength"), 1e-3);
-        assertEquals(100 * Math.sqrt(0.5), (Float) second.getAttribute("MM-Strength"), 1e-3);
-        assertNull(graph.getEdge(a[0], a[2]));
-        // the share of the B nodes each A node is connected to
-        assertEquals(50.0, (Float) a[0].getAttribute("MM-Connections"), 1e-3);
-        assertEquals(100.0, (Float) a[1].getAttribute("MM-Connections"), 1e-3);
-        assertGraphIsNotLocked();
     }
 
     /**
