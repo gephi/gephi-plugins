@@ -15,7 +15,7 @@
         }
       ],
       "category": "Layout",
-      "last_update": "November 21, 2026",
+      "last_update": "November 27, 2026",
       "images": [
         {
           "image": "imgs/geolayout-plugin/geolayout_example.png",
@@ -82,10 +82,10 @@
           "plugin_version": "1.0.0"
         },
         "0.11.4": {
-          "url": "0.11/geolayout-plugin-1.0.1.nbm",
-          "download_url": "https://gephi.org/gephi-plugins/plugins/0.11/geolayout-plugin-1.0.1.nbm",
-          "last_update": "November 21, 2026",
-          "plugin_version": "1.0.1"
+          "url": "0.11/geolayout-plugin-1.0.2.nbm",
+          "download_url": "https://gephi.org/gephi-plugins/plugins/0.11/geolayout-plugin-1.0.2.nbm",
+          "last_update": "November 27, 2026",
+          "plugin_version": "1.0.2"
         }
       },
       "sourcecode": "https://github.com/gephi/gephi-plugins/tree/geolayout-plugin",
@@ -940,7 +940,7 @@
         }
       ],
       "category": "Layout",
-      "last_update": "November 8, 2026",
+      "last_update": "November 27, 2026",
       "images": [
         {
           "image": "imgs/force-atlas-3d/fa3d.png",
@@ -979,10 +979,10 @@
           "plugin_version": "1.2.2"
         },
         "0.11.4": {
-          "url": "0.11/force-atlas-3d-1.2.2.nbm",
-          "download_url": null,
-          "last_update": "November 8, 2026",
-          "plugin_version": "1.2.2"
+          "url": "0.11/force-atlas-3d-1.2.3.nbm",
+          "download_url": "https://gephi.org/gephi-plugins/plugins/0.11/force-atlas-3d-1.2.3.nbm",
+          "last_update": "November 27, 2026",
+          "plugin_version": "1.2.3"
         }
       },
       "sourcecode": "https://github.com/gephi/gephi-plugins/tree/force-atlas3d-plugin",
@@ -1663,7 +1663,7 @@
         }
       ],
       "category": "Other Category",
-      "last_update": "November 8, 2026",
+      "last_update": "November 27, 2026",
       "images": null,
       "versions": {
         "0.8.2": {
@@ -1721,10 +1721,10 @@
           "plugin_version": "1.1.1"
         },
         "0.11.4": {
-          "url": "0.11/multimode-1.1.1.nbm",
-          "download_url": null,
-          "last_update": "November 8, 2026",
-          "plugin_version": "1.1.1"
+          "url": "0.11/multimode-1.1.2.nbm",
+          "download_url": "https://gephi.org/gephi-plugins/plugins/0.11/multimode-1.1.2.nbm",
+          "last_update": "November 27, 2026",
+          "plugin_version": "1.1.2"
         }
       },
       "sourcecode": "https://github.com/gephi/gephi-plugins/tree/multimode-plugin",
