@@ -2492,7 +2492,7 @@
         }
       ],
       "category": "Layout",
-      "last_update": "November 8, 2026",
+      "last_update": "November 27, 2026",
       "images": [
         {
           "image": "imgs/isometric-layout/example-0-isometric-layout.png",
@@ -2549,10 +2549,10 @@
           "plugin_version": "1.0.0"
         },
         "0.11.4": {
-          "url": "0.11/isometric-layout-1.0.0.nbm",
-          "download_url": null,
-          "last_update": "November 8, 2026",
-          "plugin_version": "1.0.0"
+          "url": "0.11/isometric-layout-1.0.1.nbm",
+          "download_url": "https://gephi.org/gephi-plugins/plugins/0.11/isometric-layout-1.0.1.nbm",
+          "last_update": "November 27, 2026",
+          "plugin_version": "1.0.1"
         }
       },
       "sourcecode": "https://github.com/alexandrebarao",
@@ -3101,7 +3101,7 @@
         }
       ],
       "category": "Layout",
-      "last_update": "November 8, 2026",
+      "last_update": "November 27, 2026",
       "images": [
         {
           "image": "imgs/gravity-plugin/FA2snake.png",
@@ -3160,10 +3160,10 @@
           "plugin_version": "1.0.1"
         },
         "0.11.4": {
-          "url": "0.11/gravity-plugin-1.0.1.nbm",
-          "download_url": null,
-          "last_update": "November 8, 2026",
-          "plugin_version": "1.0.1"
+          "url": "0.11/gravity-plugin-1.0.2.nbm",
+          "download_url": "https://gephi.org/gephi-plugins/plugins/0.11/gravity-plugin-1.0.2.nbm",
+          "last_update": "November 27, 2026",
+          "plugin_version": "1.0.2"
         }
       },
       "sourcecode": "https://github.com/suryanash/gephi-plugins",
@@ -3457,7 +3457,7 @@
         }
       ],
       "category": "Other Category",
-      "last_update": "November 8, 2026",
+      "last_update": "November 27, 2026",
       "images": [
         {
           "image": "imgs/spanning-tree-plugin/after-running-minimum-spanning-tree.png",
@@ -3516,10 +3516,10 @@
           "plugin_version": "1.0.0"
         },
         "0.11.4": {
-          "url": "0.11/spanning-tree-plugin-1.0.1.nbm",
-          "download_url": null,
-          "last_update": "November 8, 2026",
-          "plugin_version": "1.0.1"
+          "url": "0.11/spanning-tree-plugin-1.0.2.nbm",
+          "download_url": "https://gephi.org/gephi-plugins/plugins/0.11/spanning-tree-plugin-1.0.2.nbm",
+          "last_update": "November 27, 2026",
+          "plugin_version": "1.0.2"
         }
       },
       "sourcecode": "https://github.com/carlschroedl/gephi-plugins",
@@ -3875,7 +3875,7 @@
         }
       ],
       "category": "Layout",
-      "last_update": "November 8, 2026",
+      "last_update": "November 27, 2026",
       "images": null,
       "versions": {
         "0.9.1": {
@@ -3921,10 +3921,10 @@
           "plugin_version": "1.0.0"
         },
         "0.11.4": {
-          "url": "0.11/circle-pack-1.0.0.nbm",
-          "download_url": null,
-          "last_update": "November 8, 2026",
-          "plugin_version": "1.0.0"
+          "url": "0.11/circle-pack-1.0.1.nbm",
+          "download_url": "https://gephi.org/gephi-plugins/plugins/0.11/circle-pack-1.0.1.nbm",
+          "last_update": "November 27, 2026",
+          "plugin_version": "1.0.1"
         }
       },
       "sourcecode": "https://github.com/sasakiassociates/gephi-plugins/tree/circlePack",
@@ -5147,7 +5147,7 @@
         }
       ],
       "category": "Layout",
-      "last_update": "November 8, 2026",
+      "last_update": "November 27, 2026",
       "images": [
         {
           "image": "imgs/orderedlayout/img.png",
@@ -5174,10 +5174,10 @@
           "plugin_version": "1.0.1"
         },
         "0.11.4": {
-          "url": "0.11/orderedlayout-1.0.1.nbm",
-          "download_url": null,
-          "last_update": "November 8, 2026",
-          "plugin_version": "1.0.1"
+          "url": "0.11/orderedlayout-1.0.2.nbm",
+          "download_url": "https://gephi.org/gephi-plugins/plugins/0.11/orderedlayout-1.0.2.nbm",
+          "last_update": "November 27, 2026",
+          "plugin_version": "1.0.2"
         }
       },
       "sourcecode": "https://github.com/WouterSpekkink/gephi-plugins",
@@ -5410,14 +5410,14 @@
         }
       ],
       "category": "Tool",
-      "last_update": "November 8, 2026",
+      "last_update": "November 27, 2026",
       "images": null,
       "versions": {
         "0.11.4": {
-          "url": "0.11/gephi-ai-1.6.1.nbm",
-          "download_url": null,
-          "last_update": "November 8, 2026",
-          "plugin_version": "1.6.1"
+          "url": "0.11/gephi-ai-1.7.0.nbm",
+          "download_url": "https://gephi.org/gephi-plugins/plugins/0.11/gephi-ai-1.7.0.nbm",
+          "last_update": "November 27, 2026",
+          "plugin_version": "1.7.0"
         }
       },
       "sourcecode": "https://github.com/MattArtzAnthro/gephi-ai",
