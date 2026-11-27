@@ -9,7 +9,7 @@
 
     <groupId>com.hypercities</groupId>
     <artifactId>exporttoearth</artifactId>
-    <version>1.0.0</version>
+    <version>1.0.1</version>
     <packaging>nbm</packaging>
 
     <name>Export-To-Earth</name>
@@ -39,10 +39,29 @@
             <groupId>org.gephi</groupId>
             <artifactId>utils-longtask</artifactId>
         </dependency>
+        <!-- JavaAPIforKml writes KML through JAXB. The JAXB 2.2 implementation it brings
+             calls setAccessible on ClassLoader.defineClass when it builds its first context,
+             which fails on JDK 17 because java.base does not open java.lang. jaxb-runtime
+             2.3 does not generate accessor classes, so it is used instead. -->
         <dependency>
             <groupId>de.micromata.jak</groupId>
             <artifactId>JavaAPIforKml</artifactId>
             <version>2.2.1</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>com.sun.xml.bind</groupId>
+                    <artifactId>jaxb-impl</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>com.sun.xml.bind</groupId>
+                    <artifactId>jaxb-xjc</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>org.glassfish.jaxb</groupId>
+            <artifactId>jaxb-runtime</artifactId>
+            <version>2.3.9</version>
         </dependency>
         <dependency>
             <groupId>junit</groupId>

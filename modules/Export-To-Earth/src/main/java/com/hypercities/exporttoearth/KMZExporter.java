@@ -371,11 +371,14 @@ public class KMZExporter implements GraphExporter, ByteExporter, LongTask {
         return true;
     }
 
-    private void writeKMZ(Kml kml, IconRenderer icons) throws IOException {
+    void writeKMZ(Kml kml, IconRenderer icons) throws IOException {
         ZipOutputStream out = new ZipOutputStream(outputStream);
         ZipEntry entry = new ZipEntry("doc.kml");
         out.putNextEntry(entry);
-        kml.marshal(out);
+        // Kml.marshal reports a failure through its result, it does not throw
+        if (!kml.marshal(out)) {
+            throw new IOException("The KML document could not be written");
+        }
 
         icons.renderToKMZ(out);
         out.close();
