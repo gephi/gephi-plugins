@@ -89,7 +89,6 @@ public class ForceAtlas2 implements Layout {
     private boolean strongGravityMode;
     private int threadCount;
     private int currentThreadCount;
-    private Region rootRegion;
     double outboundAttCompensation = 1;
     //Dynamic Weight
     private Interval timeInterval;
@@ -162,6 +161,14 @@ public class ForceAtlas2 implements Layout {
         }
 
         graph.readLock();
+        try {
+            iterate();
+        } finally {
+            graph.readUnlockAll();
+        }
+    }
+
+    private void iterate() {
         Node[] nodes = graph.getNodes().toArray();
         Edge[] edges = graph.getEdges().toArray();
         // Initialise layout data
@@ -184,7 +191,10 @@ public class ForceAtlas2 implements Layout {
         }
 
         // If Barnes Hut active, initialize root region
-        if (isBarnesHutOptimize()) {
+        // The option can be changed while the layout runs: read it once, the region and the repulsion tasks must agree
+        boolean barnesHutOptimize = isBarnesHutOptimize();
+        Region rootRegion = null;
+        if (barnesHutOptimize) {
             rootRegion = new Region(nodes);
             rootRegion.buildSubRegions();
         }
@@ -208,14 +218,21 @@ public class ForceAtlas2 implements Layout {
                 t > 0; t--) {
             int from = (int) Math.floor(nodes.length * (t - 1) / taskCount);
             int to = (int) Math.floor(nodes.length * t / taskCount);
-            Future future = pool.submit(new NodesThread(nodes, from, to, isBarnesHutOptimize(), getBarnesHutTheta(), getGravity(), (isStrongGravityMode()) ? (ForceFactory.builder.getStrongGravity(getScalingRatio(), threeD)) : (Repulsion), getScalingRatio(), rootRegion, Repulsion));
+            Future future = pool.submit(new NodesThread(nodes, from, to, barnesHutOptimize, getBarnesHutTheta(), getGravity(), (isStrongGravityMode()) ? (ForceFactory.builder.getStrongGravity(getScalingRatio(), threeD)) : (Repulsion), getScalingRatio(), rootRegion, Repulsion));
             threads.add(future);
         }
         for (Future future : threads) {
             try {
                 future.get();
             } catch (InterruptedException ex) {
-                Exceptions.printStackTrace(ex);
+                // The layout controller interrupts the layout thread when a stop request isn't honoured in time. This is a
+                // cancellation and not an error: stop the repulsion tasks and leave the iteration without applying the
+                // forces of a partial repulsion. The interrupt is kept for the caller, canAlgo() is false while it is set.
+                Thread.currentThread().interrupt();
+                for (Future task : threads) {
+                    task.cancel(true);
+                }
+                return;
             } catch (ExecutionException ex) {
                 Exceptions.printStackTrace(ex);
             }
@@ -310,13 +327,12 @@ public class ForceAtlas2 implements Layout {
                 }
             }
         }
-
-        graph.readUnlockAll();
     }
 
     @Override
     public boolean canAlgo() {
-        return graphModel != null;
+        // The layout thread is interrupted when the layout is stopped and doesn't stop in time
+        return graphModel != null && !Thread.currentThread().isInterrupted();
     }
 
     @Override
@@ -591,7 +607,8 @@ public class ForceAtlas2 implements Layout {
     }
 
     private double getWeight(Edge edge) {
-        if (timeInterval != null) {
+        // A static weight can't be read over an interval, even when other elements of the graph hold times
+        if (timeInterval != null && edge.hasDynamicWeight()) {
             return edge.getWeight(timeInterval);
         } else {
             return edge.getWeight();
