@@ -94,9 +94,9 @@ public class ForceAtlas2 implements Layout {
     private boolean strongGravityMode;
     private int threadCount;
     private int currentThreadCount;
-    private Region rootRegion;
     double outboundAttCompensation = 1;
     private ExecutorService pool;
+    private volatile boolean cancelled;
     private static final double MAX_GRAVITY = 100;
     private double gravityXRatio;
     private double gravityYRatio;
@@ -108,6 +108,7 @@ public class ForceAtlas2 implements Layout {
 
     @Override
     public void initAlgo() {
+        cancelled = false;
         speed = 1.;
         speedEfficiency = 1.;
 
@@ -228,7 +229,16 @@ public class ForceAtlas2 implements Layout {
         }
         graph = graphModel.getGraphVisible();
 
+        // Core does not call endAlgo() when a pass throws, so the lock must not outlive the pass
         graph.readLock();
+        try {
+            runPass();
+        } finally {
+            graph.readUnlockAll();
+        }
+    }
+
+    private void runPass() {
         Node[] nodes = graph.getNodes().toArray();
         Edge[] edges = graph.getEdges().toArray();
 
@@ -246,8 +256,11 @@ public class ForceAtlas2 implements Layout {
             nLayout.dy = 0;
         }
 
-        // If Barnes Hut active, initialize root region
-        if (isBarnesHutOptimize()) {
+        // If Barnes Hut active, initialize root region. Users can switch it while the layout runs, so it is read
+        // once: the region only exists when it is on, and every worker must get the same answer
+        final boolean barnesHut = isBarnesHutOptimize();
+        Region rootRegion = null;
+        if (barnesHut) {
             rootRegion = new Region(nodes);
             rootRegion.buildSubRegions();
         }
@@ -272,14 +285,22 @@ public class ForceAtlas2 implements Layout {
         for (int t = taskCount; t > 0; t--) {
             int from = (int) Math.floor(nodes.length * (t - 1) / taskCount);
             int to = (int) Math.floor(nodes.length * t / taskCount);
-            Future future = pool.submit(new NodesThread(nodes, from, to, isBarnesHutOptimize(), getBarnesHutTheta(), getGravity(), (isStrongGravityMode()) ? (ForceFactory.builder.getStrongGravity(getScalingRatio(), gravityXRatio, gravityYRatio)) : (Repulsion), getScalingRatio(), rootRegion, Repulsion));
+            Future future = pool.submit(new NodesThread(nodes, from, to, barnesHut, getBarnesHutTheta(), getGravity(), (isStrongGravityMode()) ? (ForceFactory.builder.getStrongGravity(getScalingRatio(), gravityXRatio, gravityYRatio)) : (Repulsion), getScalingRatio(), rootRegion, Repulsion));
             threads.add(future);
         }
         for (Future future : threads) {
             try {
                 future.get();
             } catch (InterruptedException ex) {
-                Exceptions.printStackTrace(ex);
+                // Core interrupts a run that has not stopped a few seconds after Stop: that is a cancellation. Drop
+                // what the workers have not done, leave the positions as they were and keep the interrupt for the
+                // caller
+                cancelled = true;
+                for (Future<?> pending : threads) {
+                    pending.cancel(true);
+                }
+                Thread.currentThread().interrupt();
+                return;
             } catch (ExecutionException ex) {
                 Exceptions.printStackTrace(ex);
             }
@@ -314,7 +335,6 @@ public class ForceAtlas2 implements Layout {
         }
         // Nothing moves, and 0 / 0 would make the speed NaN for good
         if (totalSwinging == 0 && totalEffectiveTraction == 0) {
-            graph.readUnlockAll();
             return;
         }
         // We want that swingingMovement < tolerance * convergenceMovement
@@ -393,12 +413,11 @@ public class ForceAtlas2 implements Layout {
                 }
             }
         }
-        graph.readUnlockAll();
     }
 
     @Override
     public boolean canAlgo() {
-        return graphModel != null;
+        return graphModel != null && !cancelled;
     }
 
     @Override
