@@ -47,17 +47,22 @@ public class PrestigeUI implements StatisticsUI {
 
     @Override
     public void unsetup() {
-        // Take settings from panel
-        prestigeStats.setCalculateIndegree(settings.isIndegree());
-        prestigeStats.setCalculateProximity(settings.isProximity());
-        prestigeStats.setCalculateDomain(settings.isDomain());
-        prestigeStats.setCalculateRank(settings.isRank());
-        if (settings.isRank()) {
-            prestigeStats.setRankDoLogTransformation(settings.isRankLogTransformation());
-            prestigeStats.setRankProminenceAttributeId(settings.getProminenceAttributeId());
+        // Gephi calls unsetup() when the settings dialog is closed and again once the statistics has finished,
+        // by which time the panel has been released. Callers running the statistics without the dialog never
+        // had a panel. In both cases the statistics keeps the settings it already has.
+        if (settings != null && prestigeStats != null) {
+            // Take settings from panel
+            prestigeStats.setCalculateIndegree(settings.isIndegree());
+            prestigeStats.setCalculateProximity(settings.isProximity());
+            prestigeStats.setCalculateDomain(settings.isDomain());
+            prestigeStats.setCalculateRank(settings.isRank());
+            if (settings.isRank()) {
+                prestigeStats.setRankDoLogTransformation(settings.isRankLogTransformation());
+                prestigeStats.setRankProminenceAttributeId(settings.getProminenceAttributeId());
 
-            Double defaultIfNan = extractDefaultIfNan();
-            prestigeStats.setRankDefaultValueIfNan(defaultIfNan);
+                Double defaultIfNan = extractDefaultIfNan();
+                prestigeStats.setRankDefaultValueIfNan(defaultIfNan);
+            }
         }
 
         // Reset settings panel
