@@ -72,6 +72,10 @@ public class NodesThread implements Runnable {
     public void run() {
         // Repulsion
         for (int n1Index = from; n1Index < to; n1Index++) {
+            // Stop as soon as the task is cancelled, the layout may be over by then
+            if (Thread.currentThread().isInterrupted()) {
+                return;
+            }
             Node n1 = nodes[n1Index];
             for (int n2Index = 0; n2Index < n1Index; n2Index++) {
                 Node n2 = nodes[n2Index];

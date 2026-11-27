@@ -137,151 +137,161 @@ public class OrderedLayout implements Layout {
         double ord;
         
         graph.readLock();
-        Node[] nodes = graph.getNodes().toArray();
-        Edge[] edges = graph.getEdges().toArray();
+        try {
+            Node[] nodes = graph.getNodes().toArray();
+            Edge[] edges = graph.getEdges().toArray();
 
-        ArrayList<Node> validNodes = new ArrayList<Node>();
+            ArrayList<Node> validNodes = new ArrayList<Node>();
 
-        for (Node n : nodes) {
-            if (n.getAttribute(order) != null) {
-                validNodes.add(n);
+            for (Node n : nodes) {
+                if (n.getAttribute(order) != null) {
+                    validNodes.add(n);
+                }
             }
-        }
 
-        // Initialise layout data
-        for (Node n : nodes) {
-            if (n.getLayoutData() == null || !(n.getLayoutData() instanceof OrderedLayoutData)) {
-                OrderedLayoutData nLayout = new OrderedLayoutData();
-                n.setLayoutData(nLayout);
+            // Initialise layout data
+            for (Node n : nodes) {
+                if (n.getLayoutData() == null || !(n.getLayoutData() instanceof OrderedLayoutData)) {
+                    OrderedLayoutData nLayout = new OrderedLayoutData();
+                    n.setLayoutData(nLayout);
+                }
+                OrderedLayoutData nLayout = n.getLayoutData();
+                nLayout.mass = 1 + graph.getDegree(n);
+                nLayout.dx = 0;
+                nLayout.dy = 0;
+                nLayout.old_dx = nLayout.dx;
+                nLayout.old_dy = nLayout.dy;
+
             }
-            OrderedLayoutData nLayout = n.getLayoutData();
-            nLayout.mass = 1 + graph.getDegree(n);
-            nLayout.dx = 0;
-            nLayout.dy = 0;
-            nLayout.old_dx = nLayout.dx;
-            nLayout.old_dy = nLayout.dy;
+            // Repulsion (and gravity)
+            // NB: Muti-threaded
+            RepulsionForce Repulsion = ForceFactory.builder.buildRepulsion(getScalingRatio());
 
-        }
-        // Repulsion (and gravity)
-        // NB: Muti-threaded
-        RepulsionForce Repulsion = ForceFactory.builder.buildRepulsion(getScalingRatio());
-
-        int taskCount = 8 * currentThreadCount;  // The threadPool Executor Service will manage the fetching of tasks and threads.
-        // We make more tasks than threads because some tasks may need more time to compute.
-        ArrayList<Future> threads = new ArrayList();
-        for (int t = taskCount; t > 0; t--) {
-            int from = (int) Math.floor(nodes.length * (t - 1) / taskCount);
-            int to = (int) Math.floor(nodes.length * t / taskCount);
-            Future future = pool.submit(new NodesThread(nodes, from, to, getGravity(), (isStrongGravityMode()) ? (ForceFactory.builder.getStrongGravity(getScalingRatio())) : (Repulsion), getScalingRatio(), Repulsion));
-            threads.add(future);
-        }
-        for (Future future : threads) {
-            try {
-                future.get();
-            } catch (InterruptedException ex) {
-                Exceptions.printStackTrace(ex);
-            } catch (ExecutionException ex) {
-                Exceptions.printStackTrace(ex);
+            int taskCount = 8 * currentThreadCount;  // The threadPool Executor Service will manage the fetching of tasks and threads.
+            // We make more tasks than threads because some tasks may need more time to compute.
+            ArrayList<Future> threads = new ArrayList();
+            for (int t = taskCount; t > 0; t--) {
+                int from = (int) Math.floor(nodes.length * (t - 1) / taskCount);
+                int to = (int) Math.floor(nodes.length * t / taskCount);
+                Future future = pool.submit(new NodesThread(nodes, from, to, getGravity(), (isStrongGravityMode()) ? (ForceFactory.builder.getStrongGravity(getScalingRatio())) : (Repulsion), getScalingRatio(), Repulsion));
+                threads.add(future);
             }
-        }
-
-        //Attraction
-        AttractionForce Attraction = ForceFactory.builder.buildAttraction(1);
-        for (Edge e : edges) {
-            Attraction.apply(e.getSource(), e.getTarget(), 1);
-        }
-        // Auto adjust speed
-        double totalSwinging = 0d;  // How much irregular movement
-        double totalEffectiveTraction = 0d;  // Hom much useful movement
-        for (Node n : nodes) {
-            OrderedLayoutData nLayout = n.getLayoutData();
-            if (!n.isFixed()) {
-                double swinging = Math.sqrt(Math.pow(nLayout.old_dx - nLayout.dx, 2) + Math.pow(nLayout.old_dy - nLayout.dy, 2));
-                totalSwinging += nLayout.mass * swinging;   // If the node has a burst change of direction, then it's not converging.
-                totalEffectiveTraction += nLayout.mass * 0.5 * Math.sqrt(Math.pow(nLayout.old_dx + nLayout.dx, 2) + Math.pow(nLayout.old_dy + nLayout.dy, 2));
-            }
-        }
-        // We want that swingingMovement < tolerance * convergenceMovement
-        double targetSpeed = getJitterTolerance() * getJitterTolerance() * totalEffectiveTraction / totalSwinging;
-
-        // But the speed shoudn't rise too much too quickly, since it would make the convergence drop dramatically.
-        double maxRise = 0.5;   // Max rise: 50%
-        speed = speed + Math.min(targetSpeed - speed, maxRise * speed);
-
-        // Apply Forces 
-        for (Node n : validNodes) {
-            //AttributeRow row = (AttributeRow) n.getNodeData().getAttributes();
-            OrderedLayoutData nLayout = n.getLayoutData();
-
-            if (!n.isFixed()) {
-
-                // Adaptive auto-speed: the speed of each node is lowered
-                // when the node swings.
-                double swinging = Math.sqrt((nLayout.old_dx - nLayout.dx) * (nLayout.old_dx - nLayout.dx) + (nLayout.old_dy - nLayout.dy) * (nLayout.old_dy - nLayout.dy));
-                //double factor = speed / (1f + Math.sqrt(speed * swinging));
-                double factor = speed / (1f + speed * Math.sqrt(swinging));
-
-                double x = n.x() + nLayout.dx * factor;
-                double y = n.y() + nLayout.dy * factor;
-
-                //ord = (Double) n.getAttribute(order, graph.getView());
-                ord = ((Number) n.getAttribute(order)).doubleValue();
-
-                double averageX = 0;
-                double averageY = 0;
-
-                ord = ord * (double) orderScale;
-                float ordFloat = (float) ord;
-
-                if (vertical)
-                {
-                    if (inverted) {
-                        n.setY(ordFloat);
-                    } else {
-                        n.setY(-ordFloat);
+            for (Future future : threads) {
+                try {
+                    future.get();
+                } catch (InterruptedException ex) {
+                    // Gephi stops a layout that doesn't end in time by interrupting its thread: cancel the repulsion
+                    // tasks that are not done, keep the interrupt for the caller, and leave this pass without
+                    // applying the partial forces
+                    for (Future pending : threads) {
+                        pending.cancel(true);
                     }
-                    if (force) {
+                    Thread.currentThread().interrupt();
+                    return;
+                } catch (ExecutionException ex) {
+                    Exceptions.printStackTrace(ex);
+                }
+            }
+
+            //Attraction
+            AttractionForce Attraction = ForceFactory.builder.buildAttraction(1);
+            for (Edge e : edges) {
+                Attraction.apply(e.getSource(), e.getTarget(), 1);
+            }
+            // Auto adjust speed
+            double totalSwinging = 0d;  // How much irregular movement
+            double totalEffectiveTraction = 0d;  // Hom much useful movement
+            for (Node n : nodes) {
+                OrderedLayoutData nLayout = n.getLayoutData();
+                if (!n.isFixed()) {
+                    double swinging = Math.sqrt(Math.pow(nLayout.old_dx - nLayout.dx, 2) + Math.pow(nLayout.old_dy - nLayout.dy, 2));
+                    totalSwinging += nLayout.mass * swinging;   // If the node has a burst change of direction, then it's not converging.
+                    totalEffectiveTraction += nLayout.mass * 0.5 * Math.sqrt(Math.pow(nLayout.old_dx + nLayout.dx, 2) + Math.pow(nLayout.old_dy + nLayout.dy, 2));
+                }
+            }
+            // We want that swingingMovement < tolerance * convergenceMovement
+            double targetSpeed = getJitterTolerance() * getJitterTolerance() * totalEffectiveTraction / totalSwinging;
+
+            // But the speed shoudn't rise too much too quickly, since it would make the convergence drop dramatically.
+            double maxRise = 0.5;   // Max rise: 50%
+            speed = speed + Math.min(targetSpeed - speed, maxRise * speed);
+
+            // Apply Forces
+            for (Node n : validNodes) {
+                //AttributeRow row = (AttributeRow) n.getNodeData().getAttributes();
+                OrderedLayoutData nLayout = n.getLayoutData();
+
+                if (!n.isFixed()) {
+
+                    // Adaptive auto-speed: the speed of each node is lowered
+                    // when the node swings.
+                    double swinging = Math.sqrt((nLayout.old_dx - nLayout.dx) * (nLayout.old_dx - nLayout.dx) + (nLayout.old_dy - nLayout.dy) * (nLayout.old_dy - nLayout.dy));
+                    //double factor = speed / (1f + Math.sqrt(speed * swinging));
+                    double factor = speed / (1f + speed * Math.sqrt(swinging));
+
+                    double x = n.x() + nLayout.dx * factor;
+                    double y = n.y() + nLayout.dy * factor;
+
+                    //ord = (Double) n.getAttribute(order, graph.getView());
+                    ord = ((Number) n.getAttribute(order)).doubleValue();
+
+                    double averageX = 0;
+                    double averageY = 0;
+
+                    ord = ord * (double) orderScale;
+                    float ordFloat = (float) ord;
+
+                    if (vertical)
+                    {
+                        if (inverted) {
+                            n.setY(ordFloat);
+                        } else {
+                            n.setY(-ordFloat);
+                        }
+                        if (force) {
+                            n.setX((float) x);
+                        } else {
+                            n.setX(n.x());
+                        }
+                    } else {
+                        if (inverted) {
+                            n.setX(-ordFloat);
+                        } else {
+                            n.setX(ordFloat);
+                        }
+                        if (force) {
+                            n.setY((float) y);
+                        } else {
+                            n.setY(n.y());
+                        }
+                    }
+                    if (center) {
+                        averageX += x;
+                        averageY += y;
+
+                        averageX = averageX / nodes.length;
+                        averageY = averageY / nodes.length;
+
+                        x = n.x() - averageX;
+                        y = n.y() - averageY;
+
                         n.setX((float) x);
-                    } else {
-                        n.setX(n.x());
-                    }
-                } else {
-                    if (inverted) {
-                        n.setX(-ordFloat);
-                    } else {
-                        n.setX(ordFloat);
-                    }
-                    if (force) {
                         n.setY((float) y);
-                    } else {
-                        n.setY(n.y());
+
                     }
-                }
-                if (center) {
-                    averageX += x;
-                    averageY += y;
-
-                    averageX = averageX / nodes.length;
-                    averageY = averageY / nodes.length;
-
-                    x = n.x() - averageX;
-                    y = n.y() - averageY;
-
-                    n.setX((float) x);
-                    n.setY((float) y);
 
                 }
 
             }
-
+        } finally {
+            graph.readUnlockAll();
         }
-
-        graph.readUnlockAll();
     }
 
     @Override
     public boolean canAlgo() {
-        return graphModel != null && order != null;
+        // A run whose thread is interrupted was stopped, another pass would only be interrupted again
+        return graphModel != null && order != null && !Thread.currentThread().isInterrupted();
     }
 
     @Override
