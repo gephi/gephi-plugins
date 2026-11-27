@@ -72,6 +72,9 @@ public class GeoLayout implements Layout {
     private boolean centered = true;
     private Column latitude;
     private Column longitude;
+    // The two columns above as found in the node table of the graph model, set at the start of each pass
+    private Column nodeLatitude;
+    private Column nodeLongitude;
     private final boolean radian = false;
     private static final double MAX_MERCATOR_LATITUDE = 85.0511287798;
     private String projection = "Mercator";
@@ -139,6 +142,12 @@ public class GeoLayout implements Layout {
     }
 
     private void project(Graph graph) {
+        nodeLatitude = nodeColumn(latitude);
+        nodeLongitude = nodeColumn(longitude);
+        if (nodeLatitude == null || nodeLongitude == null) {
+            return;
+        }
+
         double lon, lat;
         float nodeX, nodeY;
         float averageX = 0;
@@ -460,9 +469,18 @@ public class GeoLayout implements Layout {
         }
     }
 
+    // A column picked in another workspace (e.g. through a saved layout preset), or removed since, can't be read from
+    // the nodes of this graph model: use the column with the same id in its node table instead
+    private Column nodeColumn(Column column) {
+        if (column == null || graphModel == null) {
+            return null;
+        }
+        return graphModel.getNodeTable().getColumn(column.getId());
+    }
+
     private boolean hasValidCoordinates(Graph graph, Node n) {
-        Object lat = n.getAttribute(latitude, graph.getView());
-        Object lon = n.getAttribute(longitude, graph.getView());
+        Object lat = n.getAttribute(nodeLatitude, graph.getView());
+        Object lon = n.getAttribute(nodeLongitude, graph.getView());
         if (!(lat instanceof Number) || !(lon instanceof Number)) {
             return false;
         }
@@ -476,12 +494,12 @@ public class GeoLayout implements Layout {
     }
 
     private double getNodeLatitude(Graph graph, Node n) {
-        Number lat = (Number) n.getAttribute(latitude, graph.getView());
+        Number lat = (Number) n.getAttribute(nodeLatitude, graph.getView());
         return lat.doubleValue();
     }
 
     private double getNodeLongitude(Graph graph, Node n) {
-        Number lat = (Number) n.getAttribute(longitude, graph.getView());
+        Number lat = (Number) n.getAttribute(nodeLongitude, graph.getView());
         return lat.doubleValue();
     }
 
@@ -491,7 +509,7 @@ public class GeoLayout implements Layout {
 
     @Override
     public boolean canAlgo() {
-        return !cancel && latitude != null && longitude != null;
+        return !cancel && nodeColumn(latitude) != null && nodeColumn(longitude) != null;
     }
 
     @Override
