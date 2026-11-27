@@ -859,7 +859,7 @@
         }
       ],
       "category": "Layout",
-      "last_update": "November 8, 2026",
+      "last_update": "November 27, 2026",
       "images": [
         {
           "image": "imgs/network-splitter-3d/example-0-networksplitter3d-layout.png",
@@ -916,10 +916,10 @@
           "plugin_version": "1.0.0"
         },
         "0.11.4": {
-          "url": "0.11/network-splitter-3d-1.0.0.nbm",
-          "download_url": null,
-          "last_update": "November 8, 2026",
-          "plugin_version": "1.0.0"
+          "url": "0.11/network-splitter-3d-1.0.1.nbm",
+          "download_url": "https://gephi.org/gephi-plugins/plugins/0.11/network-splitter-3d-1.0.1.nbm",
+          "last_update": "November 27, 2026",
+          "plugin_version": "1.0.1"
         }
       },
       "sourcecode": "https://github.com/alexandrebarao",
@@ -5273,7 +5273,7 @@
       "name": "Bluesky Gephi",
       "short_description": "Import network from Bluesky / AtProtocol",
       "long_description": "Import network from Bluesky / AtProtocol",
-      "readme": "# Bluesky Gephi\n\nThis plugin allow you to visualize and explore the network of users in bluesky via the atprotocol.\n\n# Quick start\n- Get a bluesky account\n- Generate a password https://bsky.app/settings/app-passwords\n- Install the plugin in Gephi\n- Open Gephi\n- Put handle and password information\n- Search for yourself\n- Graph of your connection should appears.\n\n# Docs\n\nKeep in mind current atproto access point from bluesky is quite permissive and might change in the future.\n\n## Fetch from user\nYou can fetch network from user from multiple way :\n- Put one or multiple (separated by line return) handles or dids inside the plugin textarea and click on \"Go!\" \n- You can right click on a node and select contextual menu item related to the plugin \n  - **Bluesky Fetch default data** , will fetch network based on the current configuration on the plugin panel\n  - **Fetch followers only data**, will fetch only the followers of the node\n  - **Fetch follows only data**, will fetch only the follows of the node\n\n## Deep Search\nBy activating **Fetch also n+1**, the plugin will fetch the selected handles network **and also** the network of the handles found.\n\n/!\\ Keep in mind that this can be very long as some users has a long list of followers or follows. /!\\\n\n## Crawl Limit\nTo have the list of the followers and follows of a user, the atproto api is build in a way that the application need to loop over multiple\n\"pages\". It means that for hub user, that have a high number of followers and follows (10k, 100k,1M) it might take an important amount of time \nto retrive information for this kind of user.\n\nTherefore, there is a possibility to limit this by only retriving a fraction of the followers and follows in order to speedup the exploration.\n\nIt\u0027s ok to do that if analysing theses hub isn\u0027t your main goal, as if theses hub are highly connected, they will automatically appears on the relationship\nof other users.\n",
+      "readme": "# Bluesky Gephi\n\nThis plugin allow you to visualize and explore the network of users in bluesky via the atprotocol.\n\n# Quick start\n- Get a bluesky account\n- Generate a password https://bsky.app/settings/app-passwords\n- Install the plugin in Gephi\n- Open Gephi\n- Put handle and password information\n- Search for yourself\n- Graph of your connection should appears.\n\n# Docs\n\nKeep in mind current atproto access point from bluesky is quite permissive and might change in the future.\n\n## Fetch from user\nYou can fetch network from user from multiple way :\n- Put one or multiple (separated by line return) handles or dids inside the plugin textarea and click on \"Go!\" \n  - A handle is the full name of an account, like `alice.bsky.social` (a leading `@` is ignored), and a did looks like `did:plc:...`\n  - The plugin doesn\u0027t search: a keyword or a display name isn\u0027t a handle, so it is reported as invalid and nothing is fetched for it\n- You can right click on a node and select contextual menu item related to the plugin \n  - **Bluesky Fetch default data** , will fetch network based on the current configuration on the plugin panel\n  - **Fetch followers only data**, will fetch only the followers of the node\n  - **Fetch follows only data**, will fetch only the follows of the node\n\n## Deep Search\nBy activating **Fetch also n+1**, the plugin will fetch the selected handles network **and also** the network of the handles found.\n\n/!\\ Keep in mind that this can be very long as some users has a long list of followers or follows. /!\\\n\n## Crawl Limit\nTo have the list of the followers and follows of a user, the atproto api is build in a way that the application need to loop over multiple\n\"pages\". It means that for hub user, that have a high number of followers and follows (10k, 100k,1M) it might take an important amount of time \nto retrive information for this kind of user.\n\nTherefore, there is a possibility to limit this by only retriving a fraction of the followers and follows in order to speedup the exploration.\n\nIt\u0027s ok to do that if analysing theses hub isn\u0027t your main goal, as if theses hub are highly connected, they will automatically appears on the relationship\nof other users.\n",
       "license": "Apache 2.0",
       "authors": [
         {
@@ -5283,7 +5283,7 @@
         }
       ],
       "category": "Import",
-      "last_update": "November 8, 2026",
+      "last_update": "November 27, 2026",
       "images": null,
       "versions": {
         "0.10.0": {
@@ -5305,10 +5305,10 @@
           "plugin_version": "0.2.3"
         },
         "0.11.4": {
-          "url": "0.11/bluesky-gephi-0.2.3.nbm",
-          "download_url": null,
-          "last_update": "November 8, 2026",
-          "plugin_version": "0.2.3"
+          "url": "0.11/bluesky-gephi-0.2.4.nbm",
+          "download_url": "https://gephi.org/gephi-plugins/plugins/0.11/bluesky-gephi-0.2.4.nbm",
+          "last_update": "November 27, 2026",
+          "plugin_version": "0.2.4"
         }
       },
       "sourcecode": "https://github.com/totetmatt/gephi-plugins.git",

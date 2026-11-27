@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
 <!DOCTYPE module_updates PUBLIC "-//NetBeans//DTD Autoupdate Catalog 2.8//EN" "https://netbeans.apache.org/dtds/autoupdate-catalog-2_8.dtd">
-<module_updates timestamp="31/08/12/27/11/2026">
+<module_updates timestamp="13/01/13/27/11/2026">
 
 
 
-<module codenamebase="fr.totetmatt.bluesky.gephi" distribution="https://gephi.org/gephi-plugins/plugins/0.11/bluesky-gephi-0.2.3.nbm" downloadsize="1873224" homepage="http://github.com/gephi/gephi-plugins/bluesky-gephi" moduleauthor="totetmatt" needsrestart="true" releasedate="2026/11/08" targetcluster="plugins">
+<module codenamebase="fr.totetmatt.bluesky.gephi" distribution="https://gephi.org/gephi-plugins/plugins/0.11/bluesky-gephi-0.2.4.nbm" downloadsize="1874938" homepage="http://github.com/gephi/gephi-plugins/bluesky-gephi" moduleauthor="totetmatt" needsrestart="true" releasedate="2026/11/27" targetcluster="plugins">
         
-    <manifest OpenIDE-Module="fr.totetmatt.bluesky.gephi" OpenIDE-Module-Display-Category="Import" OpenIDE-Module-Implementation-Version="0.2.3" OpenIDE-Module-Long-Description="Import network from Bluesky / AtProtocol" OpenIDE-Module-Module-Dependencies="org.openide.awt &gt; 7.99, org.gephi.visualization.api &gt; 0.11.1, org.gephi.datalab.api &gt; 0.11.1, org.openide.windows &gt; 6.108, org.netbeans.modules.settings/1 &gt; 1.80, org.openide.util.lookup &gt; 8.65, org.openide.util &gt; 9.39, org.gephi.graph.api &gt; 0.11.1, org.gephi.project.api &gt; 0.11.1, org.gephi.desktop.project &gt; 0.11.1, org.gephi.utils.longtask &gt; 0.11.1" OpenIDE-Module-Name="Bluesky Gephi" OpenIDE-Module-Requires="org.openide.modules.ModuleFormat1" OpenIDE-Module-Short-Description="Import network from Bluesky / AtProtocol" OpenIDE-Module-Specification-Version="0.2.3"/>
+    <manifest OpenIDE-Module="fr.totetmatt.bluesky.gephi" OpenIDE-Module-Display-Category="Import" OpenIDE-Module-Implementation-Version="0.2.4" OpenIDE-Module-Long-Description="Import network from Bluesky / AtProtocol" OpenIDE-Module-Module-Dependencies="org.openide.awt &gt; 7.99, org.gephi.visualization.api &gt; 0.11.1, org.gephi.datalab.api &gt; 0.11.1, org.openide.windows &gt; 6.108, org.netbeans.modules.settings/1 &gt; 1.80, org.openide.util.lookup &gt; 8.65, org.openide.util &gt; 9.39, org.gephi.graph.api &gt; 0.11.1, org.gephi.project.api &gt; 0.11.1, org.gephi.desktop.project &gt; 0.11.1, org.gephi.utils.longtask &gt; 0.11.1" OpenIDE-Module-Name="Bluesky Gephi" OpenIDE-Module-Requires="org.openide.modules.ModuleFormat1" OpenIDE-Module-Short-Description="Import network from Bluesky / AtProtocol" OpenIDE-Module-Specification-Version="0.2.4"/>
     
-    <message_digest algorithm="SHA-512" value="3ce8a90895c26ceae8aa6910b7f6f69625fe54b5c747245021d458a8ea2a3952b1b4ba3a6afb12e54d26e5b2cff10397b68e2804b1c4d46feb20737b7edca5ad"/>
+    <message_digest algorithm="SHA-512" value="323f5791a7659365f8d358770f2eb7582b14b8942c5440df9a07d59b93d859f0f61ffd1fadb3c23a4ef3cbdf283c5c7ea7f096cf3eb21305fec3c034b88a11ce"/>
 </module>
 
 <module codenamebase="nl.liacs.boundingdiameters" distribution="https://gephi.org/gephi-plugins/plugins/0.11/boundingdiameters-0.0.2.nbm" downloadsize="13031" homepage="http://github.com/gephi/gephi-plugins/boundingdiameters" license="1A1A526B" needsrestart="true" releasedate="2026/11/08" targetcluster="plugins">
@@ -315,12 +315,12 @@
     <message_digest algorithm="SHA-512" value="58306a9de64275516df11cfe9e039eb018ac9b6dcf154933bcadcb04933ea5a9ac3dad2a791500c8565955fe75e3549f4a3bcb9f526272096e3f4861e6c57c87"/>
 </module>
 
-<module codenamebase="org.alexandrebarao.network.splitter.3d" distribution="https://gephi.org/gephi-plugins/plugins/0.11/network-splitter-3d-1.0.0.nbm" downloadsize="25101" homepage="http://github.com/gephi/gephi-plugins/network-splitter-3d" license="671322F0" moduleauthor="Alexandre Barão" needsrestart="true" releasedate="2026/11/08" targetcluster="plugins">
+<module codenamebase="org.alexandrebarao.network.splitter.3d" distribution="https://gephi.org/gephi-plugins/plugins/0.11/network-splitter-3d-1.0.1.nbm" downloadsize="25183" homepage="http://github.com/gephi/gephi-plugins/network-splitter-3d" license="671322F0" moduleauthor="Alexandre Barão" needsrestart="true" releasedate="2026/11/27" targetcluster="plugins">
         
-    <manifest OpenIDE-Module="org.alexandrebarao.network.splitter.3d" OpenIDE-Module-Display-Category="Layout" OpenIDE-Module-Implementation-Version="1.0.0" OpenIDE-Module-Long-Description="Network Splitter 3D Z-Layers are user-defined clusters and can be used in Gephi ranking and/or partition procedures. You can also use this plugin to rotate your graph over the X-Axis. " OpenIDE-Module-Module-Dependencies="org.gephi.layout.api &gt; 0.11.1, org.gephi.graph.api &gt; 0.11.1" OpenIDE-Module-Name="Network Splitter 3D" OpenIDE-Module-Requires="org.openide.modules.ModuleFormat1" OpenIDE-Module-Short-Description="This layout can be used to split a network layout into distinct Z-Layers. E.g. after using layouts such as: Yifan Hu, Fruchterman Reingold, Force Atlas, Circular, Layered, OpenOrd, etc." OpenIDE-Module-Specification-Version="1.0.0"/>
+    <manifest OpenIDE-Module="org.alexandrebarao.network.splitter.3d" OpenIDE-Module-Display-Category="Layout" OpenIDE-Module-Implementation-Version="1.0.1" OpenIDE-Module-Long-Description="Network Splitter 3D Z-Layers are user-defined clusters and can be used in Gephi ranking and/or partition procedures. You can also use this plugin to rotate your graph over the X-Axis. " OpenIDE-Module-Module-Dependencies="org.gephi.layout.api &gt; 0.11.1, org.gephi.graph.api &gt; 0.11.1" OpenIDE-Module-Name="Network Splitter 3D" OpenIDE-Module-Requires="org.openide.modules.ModuleFormat1" OpenIDE-Module-Short-Description="This layout can be used to split a network layout into distinct Z-Layers. E.g. after using layouts such as: Yifan Hu, Fruchterman Reingold, Force Atlas, Circular, Layered, OpenOrd, etc." OpenIDE-Module-Specification-Version="1.0.1"/>
         
 
-    <message_digest algorithm="SHA-512" value="d7aa8cb8e74639f73b96c11fe281c790afffadf5c504ead3f7bf959c1269db335999381d1184a76660d1860c8e358ad3a661b3f71a87ccec7a65f478dbfe05b5"/>
+    <message_digest algorithm="SHA-512" value="37e73cc28c6b29d9cc6af6d02809e835ce2fb3c8752607db135bb391edd9547c3716ccf39babbf70ef7fa59561de415bf9bcfaeb343e037f4837c7e856c745c6"/>
 </module>
 
 <module codenamebase="org.fernuni.theoinf.fapra.newman.girvan.plugin" distribution="https://gephi.org/gephi-plugins/plugins/0.11/newman-girvan-plugin-1.0.0.nbm" downloadsize="32979" homepage="http://github.com/gephi/gephi-plugins/newman-girvan-plugin" moduleauthor="Andrej Sibirski" needsrestart="true" releasedate="2026/11/08" targetcluster="plugins">
