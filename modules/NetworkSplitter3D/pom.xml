@@ -24,11 +24,6 @@
             <groupId>org.gephi</groupId>
             <artifactId>graph-api</artifactId>
         </dependency>
-        <dependency>
-            <groupId>org.netbeans.api</groupId>
-            <artifactId>org-netbeans-modules-nbjunit</artifactId>
-            <scope>test</scope>
-        </dependency>
     </dependencies>
 
     <build>
